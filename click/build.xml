@@ -180,10 +180,10 @@
    	  <copy file="framework/src/net/sf/click/control/calendar.gif"
    	        todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <delete quiet="false" failonerror="false">
-         <fileset dir="webapps/click-documentation/docs/examples-api" includes="**/*.html"/>
+         <fileset dir="webapps/click-examples/javadoc" includes="**/*.html"/>
       </delete>
       <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
-               destdir="webapps/click-documentation/docs/examples-api"
+               destdir="webapps/click-examples/javadoc"
                author="true"
                version="true"
                verbose="false"
@@ -200,7 +200,7 @@
             todir="webapps/click-documentation/docs/click-api"/>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
-            todir="webapps/click-documentation/docs/examples-api"/>
+            todir="webapps/click-examples/javadoc"/>
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>

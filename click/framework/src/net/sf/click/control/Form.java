@@ -30,21 +30,22 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a Form control: &nbsp; &lt;form method='POST'&gt;.
  *
- * <table class='htmlHeader' cellspacing='6'>
+ * <table class='htmlHeader' cellspacing='12'>
  * <tr>
  * <td>
  * 
- * <table class='form' cellspacing='2'>
+ * <table class='fields'>
  * <tr>
  * <td align='left'><label>Username</label><span class="red">*</span></td>
- * <td align='left'><input type='text' name='username' value='' size='20'   maxlength='20' /></td>
+ * <td align='left'><input type='text' name='username' value='' size='20' maxlength='20' /></td>
  * </tr>
  * <tr>
  * <td align='left'><label>Password</label><span class="red">*</span></td>
- * <td align='left'><input type='password' name='password' value='' size='20'   maxlength='20' /></td>
+ * <td align='left'><input type='password' name='password' value='' size='20' maxlength='20' /></td>
  * </tr>
- * <tr><td colspan='2'>&nbsp;</td></tr>
- * <tr align='left'><td colspan='2'>
+ * </table>
+ * <table class="buttons">
+ * <tr><td>
  * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/>
  * </td></tr>
  * </table>
@@ -87,7 +88,7 @@ import net.sf.click.util.ClickUtils;
  *         form.add(okButton);
  *
  *         Submit cancelButton = new Submit(" Cancel ");
- *         cancelButton.setListener(this, "<span class="green">onCancelClic</span>");
+ *         cancelButton.setListener(this, "<span class="green">onCancelClick</span>");
  *         form.add(cancelButton);
  *     }
  *
@@ -127,6 +128,20 @@ import net.sf.click.util.ClickUtils;
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  * 
+ * <a name="auto-layout"><h4>Auto Layout</h4></a>
+ * 
+ * If you include a form variable in your template the form will be
+ * automatically layed out and rendered.
+ * 
+ * <ul>
+ *  <li>form.css</li>
+ *  <li>fieldAlign</li>
+ *  <li>labelAlign</li>
+ *  <li>labelPosition</li>
+ *  <li>errorPosition</li>
+ * </ul>
+ *
+ * 
  * <a name="manual-layout"><h4>Manual Layout</h4></a>
  * 
  * You can also manually layout the Form in the page template specifying
@@ -138,14 +153,23 @@ import net.sf.click.util.ClickUtils;
  *
  * Whenever including your own Form markup in a page template or Velocity macro,
  * always specify the form {@link #method} and include a hidden field which
- * specifies the {@link #name} of the Form. For example:
+ * specifies the {@link #name} of the Form. The hidden field is used by Click
+ * to determine which form was posted on a page which may contain multiple forms.
+ * <p/>
+ * A manually layed out example is provided below:
  *
  * <div class="code">
- * &lt;form method="<span class="red">POST</span>" name="<span class="red">form</span>" action="<span class="blue">$request.requestURI</span>&gt;
- *   &lt;input type="<span class="red">hidden</span>" name="<span class="red">form_name</span>" value="<span class="green">form</span>"/&gt; 
- *   Username: $form.fields.usernameField &lt;br/&gt;
- *   Password: $form.fields.passwordField &lt;br/&gt;
- *   $form.fields.okSubmit
+ * &lt;form method="<span class="maroon">POST</span>" name="<span class="maroon">form</span>" action="<span class="blue">$request</span>.requestURI&gt;
+ *   &lt;input type="<span class="maroon">hidden</span>" name="<span class="maroon">form_name</span>" value="<span class="blue">$form</span>.name"/&gt;
+ *   &lt;pre&gt;
+ *   
+ *   Username: <span class="blue">$form</span>.fields.usernameField
+ * 
+ *   Password: <span class="blue">$form</span>.fields.passwordField
+ * 
+ *   <span class="blue">$form</span>.fields.okSubmit
+ * 
+ *   &lt;/pre&gt;
  * &lt;form&gt;
  * </div>
  * 

@@ -54,8 +54,6 @@
 
 #end
 
-#end
-
 
 #***********************************
  * Write source inspection toolbar
@@ -63,10 +61,11 @@
 
 #macro( writeSourceToolbar $java $html )
 
-<a href="$context/source-viewer.htm?filename=WEB-INF/src/$java">Page</a>,
-<a href="$context/source-viewer.htm?filename=$html">HTML</a>,
-<a href="$context/source-viewer.htm?filename=WEB-INF/click.xml">Click</a>,
-<a href="$context/source-viewer.htm?filename=WEB-INF/web.xml">Web</a>,
+<a href="$context/source-viewer.htm?filename=WEB-INF/src/$java">Page</a>, &nbsp;
+<a href="$context/source-viewer.htm?filename=$html">HTML</a>, &nbsp;
+<a href="$context/source-viewer.htm?filename=WEB-INF/click.xml">Click</a>, &nbsp;
+<a href="$context/source-viewer.htm?filename=WEB-INF/web.xml">Web</a>, &nbsp;
+<a href="$context/javadoc/index.html">Javadoc API</a>, &nbsp;
 <a href="$context/index.html">Examples</a>
 
 <hr>
