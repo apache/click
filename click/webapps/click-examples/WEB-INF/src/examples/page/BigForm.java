@@ -8,6 +8,7 @@ import net.sf.click.control.DoubleField;
 import net.sf.click.control.EmailField;
 import net.sf.click.control.Form;
 import net.sf.click.control.IntegerField;
+import net.sf.click.control.Label;
 import net.sf.click.control.PasswordField;
 import net.sf.click.control.Reset;
 import net.sf.click.control.Select;
@@ -29,7 +30,9 @@ public class BigForm extends Page {
     public void onInit() {
         Form form = new Form("form", getContext());
         addControl(form);
-        
+
+        form.add(new Label("<b>My Details</b>"));
+
         TextField textField = new TextField("Username");
         textField.setRequired(true);
         textField.setMinLength(6);
@@ -52,6 +55,9 @@ public class BigForm extends Page {
         integerField.setRequired(true);
         form.add(integerField);
         
+        form.add(new Label("<hr/>"));
+        form.add(new Label("<b>Order Details</b>"));
+        
         DoubleField doubleField = new DoubleField("Retail Price");
         doubleField.setValue("99.95");
         form.add(doubleField);
@@ -72,9 +78,9 @@ public class BigForm extends Page {
         form.add(yearField);
         
         Checkbox checkbox = new Checkbox("Contact me");
-        checkbox.setTitle("Please have a Sales Representative contact me");
+        checkbox.setTitle("Please contact me before delivery");
         form.add(checkbox);
-        
+       
         Select select = new Select("Delivery type");
         select.addAll(DELIVERY_OPTIONS);
         select.setRequired(true);

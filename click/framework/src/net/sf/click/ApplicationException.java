@@ -22,7 +22,7 @@ import java.io.PrintWriter;
  * Provides an unchecked Click application exception.
  * <p/>
  * This RuntimeException  should be used when the calling
- * code cannot manage an error. The ApplicationException may be thrown 
+ * code cannot manage an error. The ApplicationException may be thrown
  * by the Click runtime environment if there is a configuration error or some
  * unmanagable error.
  * <p/>

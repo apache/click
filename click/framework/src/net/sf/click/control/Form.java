@@ -232,7 +232,7 @@ public class Form implements Control {
      * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value: 
      * &nbsp; <tt>MIDDLE</tt>
      */
-    protected int errorsPosition = LEFT;
+    protected int errorsPosition = MIDDLE;
 
     /** The ordered list of field values, excluding buttons */
     protected final List fieldList = new ArrayList();
@@ -297,7 +297,7 @@ public class Form implements Control {
         if (field == null) {
             throw new IllegalArgumentException("field parameter cannot be null");
         }
-        if (fields.containsKey(field.getName())) {
+        if (fields.containsKey(field.getName()) && !(field instanceof Label)) {
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
         }
@@ -426,7 +426,7 @@ public class Form implements Control {
      * 
      * @param position the form errors position
      */
-    public void seErrorsPosition(int position) {
+    public void setErrorsPosition(int position) {
         if (position != TOP && position != MIDDLE && position != BOTTOM) {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
@@ -713,71 +713,29 @@ public class Form implements Control {
         buffer.append(getName());
         buffer.append("'>\n");
         
-        // Render fields
-        buffer.append("<table class='fields'>\n");
         int hiddenCount = 0;
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-
-            Field field = (Field) fieldList.get(i);
-
-            if (!field.isHidden()) {
-                buffer.append("<tr>\n");
-                
-                // Write out label
-                if (getLabelsPosition() == LEFT) {
-                    buffer.append("<td align='");
-                    buffer.append(labelAlign);
-                    buffer.append("'>");
-                } else {
-                    buffer.append("<td valign='top'>");
-                }
-                
-                if (field.isRequired()) {
-                    buffer.append(labelRequiredPrefix);
-                }
-                buffer.append("<label");
-                buffer.append(field.getDisabled());
-                buffer.append(">");
-                buffer.append(field.getLabel());
-                buffer.append("</label>");
-                if (field.isRequired()){
-                    buffer.append(labelRequiredSuffix);
-                } 
-                
-                if (getLabelsPosition() == LEFT) {
-                    buffer.append("</td>\n");
-                    buffer.append("<td align='left'>");
-                } else {
-                    buffer.append("<br>");
-                }
-                
-                // Write out field
-                buffer.append(field);
-                buffer.append("</td>\n");
-                buffer.append("</tr>\n");
-
-            } else {
-                hiddenCount++;
-            }
-        }
-        buffer.append("</table>\n");
+        Field fieldWithError = null;
         
-        // Render field errors
-        Field fieldWithError = renderErrors(buffer, process);
-        
-        // Render buttons
-        buffer.append("<table class='buttons'>\n");
-        buffer.append("<tr><td>");
-        if (buttonList.isEmpty()) {
-            buffer.append("<input type='submit' value='Submit'>");
-        } else {
-            for (int i = 0, size = buttonList.size(); i < size; i++) {
-                Button button = (Button) buttonList.get(i);
-                buffer.append(button);
-            }
-        }
-        buffer.append("</td></tr>\n");
-        buffer.append("</table>\n");
+        // Render fields, errors and buttons
+        switch (getErrorsPosition()) {
+        case TOP:
+            fieldWithError = renderErrors(buffer, process);
+            hiddenCount = renderFields(buffer);
+            renderButtons(buffer);           
+            break;
+        case MIDDLE:
+            hiddenCount = renderFields(buffer);
+            fieldWithError = renderErrors(buffer, process);
+            renderButtons(buffer);
+            break;
+        case BOTTOM:
+            hiddenCount = renderFields(buffer);
+            renderButtons(buffer);       
+            fieldWithError = renderErrors(buffer, process);
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid errorsPositon");
+        } 
 
         // Render hidden fields
         if (hiddenCount > 0) {
@@ -824,6 +782,82 @@ public class Form implements Control {
 
         return buffer.toString();
     }  
+    
+    /**
+     * Render the non hidden Form Fields to the string buffer and return a
+     * count of hidden fields.
+     * 
+     * @param buffer the StringBuffer to render to
+     * @return the number of hidden Fields
+     */
+    protected int renderFields(StringBuffer buffer) {
+        int hiddenCount = 0;
+        
+        buffer.append("<table class='fields'>\n");
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            
+            Field field = (Field) fieldList.get(i);
+
+            if (!field.isHidden()) {
+                
+                if (field instanceof Label) {
+                    buffer.append("<tr><td colspan='2' align='");
+                    buffer.append(getLabelAlign());
+                    buffer.append("'");
+                    if (field.hasAttributes()) {
+                        ClickUtils.renderAttributes
+                            (field.getAttributes(), buffer);
+                    }
+                    buffer.append(">");
+                    buffer.append(field);
+                    buffer.append("</td></tr>\n");
+                    
+                } else {
+                    buffer.append("<tr>\n");
+                    
+                    // Write out label
+                    if (getLabelsPosition() == LEFT) {
+                        buffer.append("<td align='");
+                        buffer.append(getLabelAlign());
+                        buffer.append("'>");
+                    } else {
+                        buffer.append("<td valign='top'>");
+                    }
+                    
+                    if (field.isRequired()) {
+                        buffer.append(labelRequiredPrefix);
+                    }
+                    buffer.append("<label");
+                    buffer.append(field.getDisabled());
+                    buffer.append(">");
+                    buffer.append(field.getLabel());
+                    buffer.append("</label>");
+                    if (field.isRequired()){
+                        buffer.append(labelRequiredSuffix);
+                    } 
+                    
+                    if (getLabelsPosition() == LEFT) {
+                        buffer.append("</td>\n");
+                        buffer.append("<td align='left'>");
+                    } else {
+                        buffer.append("<br>");
+                    }
+                    
+                    // Write out field
+                    buffer.append(field);
+                    buffer.append("</td>\n");
+                    buffer.append("</tr>\n");
+                }
+
+            } else {
+                hiddenCount++;
+            }
+        }
+        buffer.append("</table>\n");   
+        
+        return hiddenCount;
+    }
     
     /**
      * Render the form errors to the given buffer is form processed and 
@@ -912,6 +946,24 @@ public class Form implements Control {
         }
         
         return fieldWithError;
+    }
+    
+    /**
+     * Render the Form Buttons to the string buffer.
+     * 
+     * @param buffer the StringBuffer to render to
+     */
+    protected void renderButtons(StringBuffer buffer) {
+        if (!buttonList.isEmpty()) {
+            buffer.append("<table class='buttons'>\n");
+            buffer.append("<tr><td>");
+            for (int i = 0, size = buttonList.size(); i < size; i++) {
+                Button button = (Button) buttonList.get(i);
+                buffer.append(button);
+            }
+            buffer.append("</td></tr>\n");
+            buffer.append("</table>\n");           
+        }
     }
 }
 
