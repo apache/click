@@ -33,13 +33,13 @@ import org.apache.commons.lang.StringEscapeUtils;
  * <pre class="codeJava">
  * <span class="kw">public void</span> onGet() {
  *    Date date = order.deliveryDate();
- *    addModel("<span class="red">deliveryDate</span>", date);
+ *    addModel("<span class="st">deliveryDate</span>", date);
  * } </pre>
  *
  * In the page template we use the format object:
  *
  * <pre class="codeHtml">
- * Delivery date: <span class="blue">$format</span>.date(<span class="red">$deliveryDate</span>, "dd MMM yyyy") </pre>
+ * Delivery date: <span class="red">$format</span>.date(<span class="st">$deliveryDate</span>, "dd MMM yyyy") </pre>
  *
  * Which renders the output as:
  *
@@ -53,7 +53,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * using the syntax:
  *
  * <pre class="codeConfig">
- * &lt;format classname="<span class="green">com.mycorp.utils.Format</span>"/&gt; </pre>
+ * &lt;format classname="<span class="st">com.mycorp.utils.Format</span>"/&gt; </pre>
  *
  * The format class must provide a no-args public constructor . After a Page is
  * created its <a href="../Page.html#format">format</a> property is set.

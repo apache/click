@@ -58,7 +58,7 @@ Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt
      * @see Page#onGet()
      */</span>
     <span class="kw">public void</span> onGet() {
-        addModel("<span class="red">time</span>", <span class="kw">new</span> Date());
+        addModel("<span class="st">time</span>", <span class="kw">new</span> Date());
     }
 } 
 </pre>
@@ -71,7 +71,7 @@ And then we have the page template <span class="blue">hello-world.htm</span>:
   
     &lt;h2&gt;Hello World&lt;/h2&gt;
     
-    Hello world from Click at <span class="red">$time</span>
+    Hello world from Click at <span class="st">$time</span>
     
   &lt;/body&gt;
 &lt;/html&gt; 
@@ -116,27 +116,27 @@ method.
      * @see Page#onInit()
      */</span>
     <span class="kw">public void</span> onInit() {
-        form = <span class="kw">new</span> Form("<span class="red">form</span>", getContext());
+        form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
         addControl(form);
 
-        usernameField = <span class="kw">new</span> TextField("Username");
+        usernameField = <span class="kw">new</span> TextField(<span class="st">"Username"</span>);
         usernameField.setRequired(<span class="kw">true</span>);
         form.add(usernameField);
 
-        passwordField = <span class="kw">new</span> PasswordField("Password");
+        passwordField = <span class="kw">new</span> PasswordField(<span class="st">"Password"</span>);
         passwordField.setRequired(<span class="kw">true</span>);
         form.add(passwordField);
 
-        Submit okButton = <span class="kw">new</span> Submit("   OK   ");
-        okButton.setListener(<span class="kw">this</span>, "<span class="blue">onOkClicked</span>");
+        Submit okButton = <span class="kw">new</span> Submit(<span class="st">"   OK   "</span>);
+        okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
         form.add(okButton);
 
-        Submit cancelButton = <span class="kw">new</span> Submit("Cancel");
-        cancelButton.setListener(<span class="kw">this</span>, "<span class="blue">onCancelClicked</span>");
+        Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">"Cancel"</span>);
+        cancelButton.setListener(<span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
         form.add(cancelButton);
     }
 
-    <span class="kw">public boolean</span> <span class="blue">onOkClicked</span>() {
+    <span class="kw">public boolean</span> onOkClicked() {
         <span class="kw">if</span> (form.isValid()) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
@@ -144,18 +144,18 @@ method.
             User user = UserDatabase.getUser(username);
 
             <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
-                getContext().setSessionAttribute("user", user);
-                setRedirect("<span class="navy">secure.htm</span>");
+                getContext().setSessionAttribute(<span class="st">"user"</span>, user);
+                setRedirect(<span class="st">"secure.htm"</span>);
 
             } <span class="kw">else</span> {     
-                form.setError(getMessage("authentication-error"));           
+                form.setError(getMessage(<span class="st">"authentication-error"</span>));           
             }
         }
         <span class="kw">return true</span>;
     }
 
-    <span class="kw">public boolean</span> <span class="blue">onCancelClicked()</span> {
-        setRedirect("<span class="navy">index.htm</span>");
+    <span class="kw">public boolean</span> onCancelClicked() {
+        setRedirect(<span class="st">"index.htm"</span>);
         <span class="kw">return false</span>;
     }
 } 

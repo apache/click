@@ -42,16 +42,16 @@ import net.sf.click.util.ClickUtils;
  * <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
  *
  *     <span class="kw">public void</span> onInit() {
- *         ActionLink link = <span class="kw">new</span> ActionLink("<span class="blue">logoutLink</span>");
- *         link.setListener(<span class="kw">this</span>, "onLogoutClick");
+ *         ActionLink link = <span class="kw">new</span> ActionLink(<span class="st">"logoutLink"</span>);
+ *         link.setListener(<span class="kw">this</span>, <span class="st">"onLogoutClick"</span>);
  *         addControl(link);
  *     }
  *
  *     <span class="kw">public boolean</span> onLogoutClick() {
- *         <span class="kw">if</span> (getContext().getSessionAttribute("user") != <span class="kw">null</span>) {
+ *         <span class="kw">if</span> (getContext().getSessionAttribute(<span class="st">"user"</span>) != <span class="kw">null</span>) {
  *            getContext().getSession().invalidate();
  *         }
- *         setForward("logout");
+ *         setForward(<span class="st">"logout"</span>);
  *
  *         <span class="kw">return false</span>;
  *     }
@@ -98,12 +98,12 @@ import net.sf.click.util.ClickUtils;
  *     ActionLink detailsLink;
  *
  *     <span class="kw">public void</span> onInit() {
- *         addLink = <span class="kw">new</span> ActionLink("<span class="blue">addLink</span>");
- *         addLink.setListener(<span class="kw">this</span>, "onAddClick");
+ *         addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>);
+ *         addLink.setListener(<span class="kw">this</span>, <span class="st">"onAddClick"</span>);
  *         addControl(addLink);
  *
- *         detailsLink = <span class="kw">new</span> ActionLink("<span class="blue">detailsLink</span>");
- *         detailsLink.setListener(<span class="kw">this</span>, "onDetailsClick");
+ *         detailsLink = <span class="kw">new</span> ActionLink(<span class="st">"detailsLink"</span>);
+ *         detailsLink.setListener(<span class="kw">this</span>, <span class="st">"onDetailsClick"</span>);
  *         addControl(detailsLink);
  *     }
  *
@@ -113,7 +113,7 @@ import net.sf.click.util.ClickUtils;
  *         Product product = ProductDatabase.getProduct(productId);
  *
  *         <span class="cm">// Add product to basket</span>
- *         List basket = (List) getContext().getSessionAttribute("basket");
+ *         List basket = (List) getContext().getSessionAttribute(<span class="st">"basket"</span>);
  *         basket.add(product);
  *
  *         <span class="kw">return true</span>;
@@ -125,8 +125,8 @@ import net.sf.click.util.ClickUtils;
  *         Product product = ProductDatabase.getProduct(productId);
  *
  *         <span class="cm">// Store the product in the request and display in the details page</span>
- *         getContext().setRequestAttribute("product", product);
- *         setForward("productDetails.html");
+ *         getContext().setRequestAttribute(<span class="st">"product"</span>, product);
+ *         setForward(<span class="st">"productDetails.html"</span>);
  *
  *         <span class="kw">return false</span>;
  *     }

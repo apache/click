@@ -21,9 +21,10 @@ package net.sf.click.control;
  * rules to auto rendered forms. For example:
  *
  * <pre class="codeJava">
- * Form form = new Form(getContext(), "form");
+ * Form form = <span class="kw">new</span> Form(getContext(), <span class="st">"form"</span>);
  * ..
- * form.add(new Label("&lt;hr/&gt;")); </pre>
+ * 
+ * form.add(<span class="kw">new</span> Label(<span class="st">"&lt;hr/&gt;"</span>)); </pre>
  *
  * HTML output:
  * <pre class="codeHtml">

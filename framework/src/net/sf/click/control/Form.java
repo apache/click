@@ -62,58 +62,58 @@ import net.sf.click.util.ClickUtils;
  * The example below illustrates a Form being used in a login Page.
  *
  * <pre class="codeJava">
- * public class Login extends Page {
+ * <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
  *
  *     Form form;
  *     TextField usernameField;
  *     PasswordField passwordField;
  *
- *     public void onInit() {
- *         form = new Form("<span class='blue'>form</span>", getContext());
+ *     <span class="kw">public void</span> onInit() {
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         addControl(form);
  *
- *         usernameField = new TextField("Username");
+ *         usernameField = <span class="kw">new</span> TextField(<span class="st">"Username"</span>);
  *         usernameField.setMaxLength(20);
  *         usernameField.setMinLength(5);
- *         usernameField.setRequired(true);
+ *         usernameField.setRequired(<span class="kw">true</span>);
  *         form.add(usernameField);
  *
- *         passwordField = new PasswordField("Password");
+ *         passwordField = <span class="kw">new</span> PasswordField(<span class="st">"Password"</span>);
  *         passwordField.setMaxLength(20);
  *         passwordField.setMinLength(5);
- *         passwordField.setRequired(true);
+ *         passwordField.setRequired(<span class="kw">true</span>);
  *         form.add(passwordField);
  *
- *         Submit okButton = new Submit("  OK  ");
- *         okButton.setListener(this, "<span class="green">onOkClick</span>");
+ *         Submit okButton = <span class="kw">new</span> Submit(<span class="st">"  OK  "</span>);
+ *         okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClick"</span>);
  *         form.add(okButton);
  *
- *         Submit cancelButton = new Submit(" Cancel ");
- *         cancelButton.setListener(this, "<span class="green">onCancelClick</span>");
+ *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">" Cancel "</span>);
+ *         cancelButton.setListener(<span class="kw">this</span>, <span class="st">"onCancelClick"</span>);
  *         form.add(cancelButton);
  *     }
  *
- *     public boolean <span class="green">onOkClick</span>() {
- *         if (form.isValid()) {
+ *     <span class="kw">public boolean</span> onOkClick() {
+ *         <span class="kw">if</span> (form.isValid()) {
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
  *
  *             User user = UserDatabase.getUser(username);
  *
- *             if (user != null && user.getPassword().equals(password)) {
- *                 getContext().setSessionAttribute("user", user);
- *                 setRedirect("home.htm");
+ *             <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
+ *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
+ *                 setRedirect(<span class="st">"home.htm"</span>);
  *             }
- *             else {
- *                  form.setError(getMessage("authentication-error"));
+ *             <span class="kw">else</span> {
+ *                  form.setError(getMessage(<span class="st">"authentication-error"</span>));
  *             }
  *         }
- *         return true;
+ *         <span class="kw">return true</span>;
  *     }
  *
- *     public boolean <span class="green">onCancelClick</span>() {
- *         setRedirect("index.htm");
- *         return false;
+ *     <span class="kw">public boolean</span> onCancelClick() {
+ *         setRedirect(<span class="st">"index.htm"</span>);
+ *         <span class="kw">return false</span>;
  *     }
  * } </pre>
  *
@@ -130,16 +130,22 @@ import net.sf.click.util.ClickUtils;
  * <a name="auto-layout"><h4>Auto Layout</h4></a>
  *
  * If you include a form variable in your template the form will be
- * automatically layed out and rendered.
+ * automatically layed out and rendered. Auto layout, form and field rendering
+ * options include:
  *
- * <ul style="margin-top: 0.5em;">
- *  <li>form.css</li>
- *  <li>fieldAlign</li>
- *  <li>labelAlign</li>
- *  <li>labelPosition</li>
- *  <li>errorPosition</li>
- * </ul>
- *
+ * <table style="margin-left: 1em;" cellpadding="3">
+ * <tr>
+ * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; ["left", "center", "right"]</td>
+ * </tr><tr>
+ * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>[LEFT, TOP]</tt></td>
+ * </tr><tr>
+ * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>[TOP, MIDDLE, BOTTOM]</tt></td>
+ * </tr><tr>
+ * <td>click/form.css</td> <td>form CSS styles, located under web root directory</td>
+ * </tr><tr>
+ * <td>/click-control.properties</td> <td>form and field messages and HTML, located under classpath</td>
+ * </tr>
+ * </table>
  *
  * <a name="manual-layout"><h4>Manual Layout</h4></a>
  *

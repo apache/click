@@ -55,7 +55,7 @@ public interface Control {
      *
      * <pre class="codeJava">
      * <span class="kw">public boolean</span> onClick() {
-     *     System.out.println("onClick called");
+     *     System.out.println(<span class="st">"onClick called"</span>);
      *     <span class="kw">return true</span>;
      * } </pre>
      *

@@ -48,34 +48,34 @@ import net.sf.click.util.ClickUtils;
  * page template using the model "count" value.
  *
  * <pre class="codeJava">
- * public class CountPage extends Page {
+ * <span class="kw">public class</span> CountPage <span class="kw">extends</span> Page {
  *
- *     private HiddenField counterField;
+ *     HiddenField counterField;
  *
- *     public onInit() {
- *         Form form = new Form("form");
+ *     <span class="kw">public void</span> onInit() {
+ *         Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  *         addControl(form);
  *
- *         counterField = new HiddenField("counterField", Integer.class);
+ *         counterField = <span class="kw">new</span> HiddenField(<span class="st">"counterField"</span>, Integer.<span class="kw">class</span>);
  *         form.add(counterField);
  *
- *         form.add(new Submit(" OK "));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">" OK "</span>));
  *     }
  *
- *     public void onGet() {
- *         Integer count = new Integer(0);
+ *     <span class="kw">public void</span> onGet() {
+ *         Integer count = <span class="kw">new</span> Integer(0);
  *
  *         counterField.setValue(count);
- *         addModel("count", count);
+ *         addModel(<span class="st">"count"</span>, count);
  *     }
  *
- *     public void onPost() {
+ *     <span class="kw">public void</span> onPost() {
  *         Integer count = (Integer) counterField.getValueObject();
  *
- *         count = new Integer(count.intValue() + 1);
+ *         count = <span class="kw">new</span> Integer(count.intValue() + 1);
  *
  *         counterField.setValue(count);
- *         addModel("count", count);
+ *         addModel(<span class="st">"count"</span>, count);
  *     }
  * } </pre>
  *

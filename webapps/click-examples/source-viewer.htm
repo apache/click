@@ -6,15 +6,15 @@
 
 <body>
 #if ($name)
- <h2>Source: $name</h2>
+ <h1>Source: $name</h1>
 #else
- <h2>Source</h2>
+ <h1>Source</h1>
 #end
 
-<a href="$context/index.html">Examples</a>, &nbsp;
-<a href="$context/javadoc/index.html">Javadoc API</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=WEB-INF/click.xml">Click</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=WEB-INF/web.xml">Web</a>
+<a href="$context/index.html" title="Examples Homepage">Examples</a>, &nbsp;
+<a href="$context/javadoc/index.html" title="Examples HTML Javadoc API">Javadoc API</a>, &nbsp;
+<a href="$context/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>, &nbsp;
+<a href="$context/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>
 
 <hr/>
  

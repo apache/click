@@ -60,29 +60,29 @@ import java.util.List;
  *     IntegerField expiryField;
  *
  *     <span class="kw">public void</span> onInit() {
- *         form = <span class="kw">new</span> Form("form", getContext());
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         addControl(form);
  *
- *         creditCardField = <span class="kw">new</span> CreditCardField("Credit Card");
+ *         creditCardField = <span class="kw">new</span> CreditCardField(<span class="st">"Credit Card"</span>);
  *         creditCardField.setRequired(<span class="kw">true</span>);
  *         form.add(creditCardField);
  *
- *         expiryField = <span class="kw">new</span> IntegerField("Expiry Date");
+ *         expiryField = <span class="kw">new</span> IntegerField(<span class="st">"Expiry Date"</span>);
  *         expiryField.setRequired(<span class="kw">true</span>);
  *         expiryField.setMinLength(4);
  *         expiryField.setMaxLength(4);
  *         expiryField.setSize(4);
  *         form.add(expiryField);
  *
- *         form.add(<span class="kw">new</span> Submit("  OK  "));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"  OK  "</span>));
  *
- *         Submit cancelButton = <span class="kw">new</span> Submit(" Cancel ");
- *         cancelButton.setListener(<span class="kw">this</span>, "onCancelClick");
+ *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">" Cancel "</span>);
+ *         cancelButton.setListener(<span class="kw">this</span>, "<span class="st">onCancelClick"</span>);
  *         form.add(cancelButton);
  *     }
  *
  *     <span class="kw">public boolean</span> onCancelClick() {
- *         setRedirect("index.htm");
+ *         setRedirect(<span class="st">"index.htm"</span>);
  *         <span class="kw">return false</span>;
  *     }
  *
