@@ -1,1 +1,1 @@
-<Context docBase="${catalina.home}/webapps/click-examples"/>
+<Context path="/click-examples" docBase="${catalina.home}/webapps/click-examples" reloadable="true"/>
