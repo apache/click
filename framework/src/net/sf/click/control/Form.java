@@ -354,12 +354,12 @@ public class Form implements Control {
     protected static String labelRequiredSuffix = "";
     
     protected static final String JAVASCRIPT_IMPORTS = 
-        "<link rel='stylesheet' type='text/css' href='$/click/form.css' title='style'>\n" +
-        "<script type='text/javascript' src='$/click/form.js'></script>" +
+        "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
+        "<script type='text/javascript' src='$/click/control.js'></script>" +
         "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
     
     protected static final String STYLESHEET_IMPORT = 
-        "<link rel='stylesheet' type='text/css' href='$/click/form.css' title='style'>";
+        "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>";
 
     static {
         ResourceBundle bundle =
@@ -380,6 +380,9 @@ public class Form implements Control {
 
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
+    
+    // TODO: columns doc.
+    protected int columns = 1;
 
     /** The form context. */
     protected Context context;
@@ -564,6 +567,15 @@ public class Form implements Control {
     public List getButtonList() {
         return buttonList;
     }
+    
+    // TODO: doco
+    public int getColumns() {
+        return columns;
+    }
+    
+    public void setColumns(int columns) {
+       this.columns = columns;
+    }
 
     /**
      * @see Control#getContext()
@@ -668,8 +680,8 @@ public class Form implements Control {
 
     /**
      * Return the HTML head import statement for the CSS stylesheet
-     * click/form.css. If JavaScript is enabled a import statement for
-     * click/form.js will also be included.
+     * click/control.css. If JavaScript is enabled a import statement for
+     * click/control.js will also be included.
      *
      * @see #jsEnabled
      *
@@ -972,20 +984,26 @@ public class Form implements Control {
      *
      * @param buffer the StringBuffer to render to
      * @return the number of hidden Fields
-     */
+     */  
     protected int renderFields(StringBuffer buffer) {
         int hiddenCount = 0;
 
         buffer.append("<table class='fields'>\n");
+        
+        int column = 1;
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
-
+            
             Field field = (Field) fieldList.get(i);
 
             if (!field.isHidden()) {
 
+                if (column == 1) {
+                    buffer.append("<tr>\n");
+                }
+                
                 if (field instanceof Label) {
-                    buffer.append("<tr><td colspan='2' align='");
+                    buffer.append("<td colspan='2' align='");
                     buffer.append(getLabelAlign());
                     buffer.append("'");
                     if (field.hasAttributes()) {
@@ -994,11 +1012,9 @@ public class Form implements Control {
                     }
                     buffer.append(">");
                     buffer.append(field);
-                    buffer.append("</td></tr>\n");
+                    buffer.append("</td>\n");
 
                 } else {
-                    buffer.append("<tr>\n");
-
                     // Write out label
                     if (getLabelsPosition() == LEFT) {
                         buffer.append("<td align='");
@@ -1030,12 +1046,19 @@ public class Form implements Control {
                     // Write out field
                     buffer.append(field);
                     buffer.append("</td>\n");
-                    buffer.append("</tr>\n");
                 }
-
+                
+                if (column == columns) {
+                    buffer.append("</tr>\n");
+                    column = 1;
+                } else {
+                    column++;
+                }
+                
             } else {
                 hiddenCount++;
             }
+            
         }
         buffer.append("</table>\n");
 

@@ -67,12 +67,12 @@ import java.util.Date;
  * @author Malcolm Edgar
  */
 public class DateField extends TextField {
+    
+    /** The JavaScript DHTML Calendar pattern. */
+    protected String calendarPattern;
 
-    /**
-     * The date format pattern value, default value: &nbsp;
-     * "<tt>dd MMM yyyy</tt>"
-     */
-    protected String formatPattern = "dd MMM yyyy";
+    /** The date format pattern value. */
+    protected String formatPattern;
 
     /** The date format. */
     protected SimpleDateFormat dateFormat;
@@ -83,15 +83,27 @@ public class DateField extends TextField {
      * Construct the Date Field with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
+     * <p/>
+     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
      *
      * @param label the label of the field
      */
     public DateField(String label) {
         super(label);
-        setAttribute("onBlur", "javascript:checkDate(this);");
+        setAttribute("id", getName() + "-field");
+        setFormatPattern("dd MMM yyyy");
     }
 
     // ------------------------------------------------------ Public Attributes
+    
+    /**
+     * Return the JavaScript DHTML Calendar pattern.
+     * 
+     * @return the JavaScript DHTML Calendar pattern
+     */
+    public String getCalendarPattern() {
+        return calendarPattern;
+    }
 
     /**
      * Return the field Date value, or null if value was empty or a parsing
@@ -154,7 +166,11 @@ public class DateField extends TextField {
      * @param pattern the SimpleDateFormat pattern.
      */
     public void setFormatPattern(String pattern) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Null pattern parameter");
+        }
         formatPattern = pattern;
+        calendarPattern = parseDateFormatPattern(pattern);
     }
 
     /**
@@ -192,6 +208,10 @@ public class DateField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
+        if (formatPattern == null) {
+            throw new IllegalStateException("dateFormat attribute is null");
+        }
+        
         value = getRequestValue();
 
         int length = value.length();
@@ -208,6 +228,7 @@ public class DateField extends TextField {
 
             } else {
                 SimpleDateFormat dateFormat = getDateFormat();
+                dateFormat.setLenient(false);
 
                 boolean parsedOk = false;
                 try {
@@ -247,17 +268,11 @@ public class DateField extends TextField {
         String textField = super.toString();
         buffer.append(textField);
 
-        buffer.append("<input type='hidden' name='dateHidden' value='");
-        buffer.append(System.currentTimeMillis());
-        buffer.append("'>");
-
-        buffer.append("<input type='hidden' name='formatHidden' value='");
-        buffer.append(formatPattern);
-        buffer.append("'>");
-
         buffer.append("<img align='middle' hspace='2' style='cursor:hand' src='");
         buffer.append(getForm().getContext().getRequest().getContextPath());
-        buffer.append("/click/calendar.gif' onClick='javascript:goCalendar(this);'");
+        buffer.append("/click/calendar.gif' id='");
+        buffer.append(getName());
+        buffer.append("-button' ");
 
         String calendarTitle = getMessage("calendar-image-title");
         if (calendarTitle != null) {
@@ -265,11 +280,108 @@ public class DateField extends TextField {
             buffer.append(calendarTitle);
             buffer.append("' title='");
             buffer.append(calendarTitle);
-            buffer.append("'>");
+            buffer.append("'>\n");
         } else {
-            buffer.append(">");
+            buffer.append(">\n");
         }
+        
+        buffer.append("<script type='text/javascript'>\n");
+        buffer.append("Calendar.setup({ \n");
+        buffer.append(" inputField : '");
+        buffer.append(getName());
+        buffer.append("-field', \n");
+        buffer.append(" ifFormat :    '");
+        buffer.append(getCalendarPattern());
+        buffer.append("', \n");
+        buffer.append(" button : '");
+        buffer.append(getName());
+        buffer.append("-button', \n");
+        buffer.append(" align :    'cr', \n");
+        buffer.append(" singleClick : true \n");
+        buffer.append("});\n");
+        buffer.append("</script> \n");
 
         return buffer.toString();
+    }
+    
+    /**
+     * Return the JavaScript Calendar pattern for the given Java DateFormat
+     * pattern.
+     * 
+     * @param pattern the Java DateFormat pattern
+     * @return JavaScript Calendar pattern
+     */
+    protected String parseDateFormatPattern(String pattern) {
+        StringBuffer jsPattern = new StringBuffer(20);
+        int tokenStart = -1;
+        int tokenEnd = -1;
+        
+        for (int i = 0; i < pattern.length(); i++) {
+            char aChar = pattern.charAt(i);    
+System.err.print("["+i+","+tokenStart+","+tokenEnd+"]="+aChar);
+            // If character is in SimpleDateFormat pattern character set
+            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {      
+System.err.println(" N");               
+                if (tokenStart > -1) {
+                    tokenEnd = i;
+                }
+            } else {
+System.err.println(" Y"); 
+                if (tokenStart == -1) {
+                    tokenStart = i;                
+                }
+            }
+
+            if (tokenStart > -1) {
+                
+                if (tokenEnd == -1 && i == pattern.length() -1) {
+                    tokenEnd = pattern.length();
+                }
+
+                if (tokenEnd > -1) {
+                    String token = pattern.substring(tokenStart, tokenEnd);
+                    
+                    if ("yyyy".equals(token)) {
+                        jsPattern.append("%Y");
+                    } else if ("yy".equals(token)) {
+                        jsPattern.append("%y");
+                    } else if ("MMMM".equals(token)) {
+                        jsPattern.append("%B");
+                    } else if ("MMM".equals(token)) {
+                        jsPattern.append("%b");
+                    } else if ("MM".equals(token)) {
+                        jsPattern.append("%m");
+                    } else if ("dd".equals(token)) {
+                        jsPattern.append("%e");
+                    } else if ("EEEE".equals(token)) {
+                        jsPattern.append("%A");
+                    } else if ("EEE".equals(token)) {
+                        jsPattern.append("%a");
+                    } else if ("EE".equals(token)) {
+                        jsPattern.append("%a");
+                    } else if ("E".equals(token)) {
+                        jsPattern.append("%a");
+                    } else if ("aaa".equals(token)) {
+                        jsPattern.append("%p");
+                    } else if ("aa".equals(token)) {
+                        jsPattern.append("%p");
+                    } else if ("a".equals(token)) {
+                        jsPattern.append("%p");
+                    }
+                    
+                    System.err.println("token["+tokenStart+","+tokenEnd+"]='" + token + "'");
+                    tokenStart = -1;
+                    tokenEnd = -1;
+                }
+            }
+            
+            if (tokenStart == -1 && tokenEnd == -1) {
+                if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
+                    jsPattern.append(aChar);
+                }
+            }
+        }
+        
+        return jsPattern.toString();
     }
 }

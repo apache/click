@@ -16,6 +16,10 @@ a:visited {
   color: white;
 }
 
+.menu:hover {
+  color: yellow;
+}
+
 h1  { 
   font-size: 24px;
   font-weight: bold;

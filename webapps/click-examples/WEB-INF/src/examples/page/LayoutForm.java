@@ -28,15 +28,19 @@ public class LayoutForm extends EditCustomer {
         POSITION_OPTIONS.add(new Select.Option("middle", "Middle"));
         POSITION_OPTIONS.add(new Select.Option("bottom", "Buttom"));
     }
+    
+    static final String[] COLUMNS = { "1", "2", "3", "4" };
 
     HiddenField errorsPositionHidden = new HiddenField("errorsPosition", Integer.class);
     HiddenField labelsPositionHidden = new HiddenField("labelsPosition", Integer.class);
     HiddenField labelAlignHidden= new HiddenField("labelAlign", String.class);
+    HiddenField columnsHidden = new HiddenField("columns", Integer.class);
 
     Form styleForm;
     Select labelsPositionSelect;
     Select errorsPositionSelect;
     Select labelAlignSelect;
+    Select columnsSelect;
 
     public void onInit() {
         super.onInit();
@@ -48,6 +52,8 @@ public class LayoutForm extends EditCustomer {
         form.add(labelsPositionHidden);
         labelAlignHidden.setValue("left");
         form.add(labelAlignHidden);
+        columnsHidden.setValue(new Integer(1));
+        form.add(columnsHidden);
 
         // Unset EditCustomer.onOkClick() listener
         okButton.setListener(null, null);
@@ -74,6 +80,12 @@ public class LayoutForm extends EditCustomer {
         errorsPositionSelect.setTitle("Form errors position");
         errorsPositionSelect.setValue("middle");
         styleForm.add(errorsPositionSelect);
+        
+        columnsSelect = new Select("Columns");
+        columnsSelect.addAll(COLUMNS);
+        columnsSelect.setTitle("Form columns");
+        columnsSelect.setValue("1");
+        styleForm.add(columnsSelect);
 
         Submit applyButton = new Submit("   Apply Layout   ");
         applyButton.setTitle("Apply the layout to the form");
@@ -88,10 +100,12 @@ public class LayoutForm extends EditCustomer {
     public void onPost() {
         Integer errorsPosition = (Integer) errorsPositionHidden.getValueObject();
         Integer labelsPosition = (Integer) labelsPositionHidden.getValueObject();
+        Integer columns = (Integer) columnsHidden.getValueObject();
 
         form.setErrorsPosition(errorsPosition.intValue());
         form.setLabelsPosition(labelsPosition.intValue());
         form.setLabelAlign(labelAlignHidden.getValue());
+        form.setColumns(columns.intValue());
 
         if (errorsPosition.intValue() == Form.TOP) {
             errorsPositionSelect.setValue("top");
@@ -107,6 +121,7 @@ public class LayoutForm extends EditCustomer {
             labelsPositionSelect.setValue("top");
         }
         labelAlignSelect.setValue(labelAlignHidden.getValue());
+        columnsSelect.setValue(String.valueOf(columns.intValue()));
     }
 
     /**
@@ -132,8 +147,9 @@ public class LayoutForm extends EditCustomer {
             labelsPositionHidden.setValue(new Integer(Form.TOP));
         }
 
-        labelAlignHidden.setValue(labelAlignSelect.getValue());
-
+        labelAlignHidden.setValue(labelAlignSelect.getValue());        
+        columnsHidden.setValue(Integer.valueOf(columnsSelect.getValue()));
+        
         return true;
     }
 
