@@ -34,7 +34,7 @@ import net.sf.click.util.ClickUtils;
  * to the previous page.
  *
  * <pre class="codeJava">
- * Button backButton = new Button(" &lt Back ");
+ * Button backButton = <span class="kw">new</span> Button(" &lt Back ");
  * backButton.setOnClick("history.back();");
  * backButton.setTitle("Return to previous page");
  * form.add(backButton); </pre>

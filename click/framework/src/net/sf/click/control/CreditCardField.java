@@ -52,50 +52,51 @@ import java.util.List;
  *
  * An example page using CreditCardField is provided below:
  *
- * <div class="code">public class PaymentPage extends Page {
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> PaymentPage <span class="kw">extends</span> Page {
  *
  *     Form form;
  *     CreditCardField creditCardField;
  *     IntegerField expiryField;
  *
- *     public void onInit() {
- *         form = new Form("form", getContext());
+ *     <span class="kw">public void</span> onInit() {
+ *         form = <span class="kw">new</span> Form("form", getContext());
  *         addControl(form);
  *
- *         creditCardField = new CreditCardField("Credit Card");
- *         creditCardField.setRequired(true);
+ *         creditCardField = <span class="kw">new</span> CreditCardField("Credit Card");
+ *         creditCardField.setRequired(<span class="kw">true</span>);
  *         form.add(creditCardField);
  *
- *         expiryField = new IntegerField("Expiry Date");
- *         expiryField.setRequired(true);
+ *         expiryField = <span class="kw">new</span> IntegerField("Expiry Date");
+ *         expiryField.setRequired(<span class="kw">true</span>);
  *         expiryField.setMinLength(4);
  *         expiryField.setMaxLength(4);
  *         expiryField.setSize(4);
  *         form.add(expiryField);
  *
- *         form.add(new Submit("  OK  "));
+ *         form.add(<span class="kw">new</span> Submit("  OK  "));
  *
- *         Submit cancelButton = new Submit(" Cancel ");
- *         cancelButton.setListener(this, "onCancelClick");
+ *         Submit cancelButton = <span class="kw">new</span> Submit(" Cancel ");
+ *         cancelButton.setListener(<span class="kw">this</span>, "onCancelClick");
  *         form.add(cancelButton);
  *     }
  *
- *     public boolean onCancelClick() {
+ *     <span class="kw">public boolean</span> onCancelClick() {
  *         setRedirect("index.htm");
- *         return false;
+ *         <span class="kw">return false</span>;
  *     }
  *
- *     public void onPost() {
- *         if (form.isValid()) {
+ *     <span class="kw">public void</span> onPost() {
+ *         <span class="kw">if</span> (form.isValid()) {
  *             String cardType = creditCardField.getCardType();
  *             Long cardNumber = creditCardField.getCardNumber();
  *             String expiryDate = expiryField.getInteger();
  *
- *             // Make payment
+ *             <span class="cm">// Make payment</span>
  *             ..
  *         }
  *     }
- * } </div>
+ * } </pre>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"

@@ -54,9 +54,9 @@ public interface Control {
      * An example event listener method would be:
      *
      * <pre class="codeJava">
-     * public boolean onClick() {
+     * <span class="kw">public boolean</span> onClick() {
      *     System.out.println("onClick called");
-     *     return true;
+     *     <span class="kw">return true</span>;
      * } </pre>
      *
      * @param listener the listener object with the named method to invoke

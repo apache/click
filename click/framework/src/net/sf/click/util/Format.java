@@ -31,7 +31,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * For example the following Page code adds a date to the model:
  *
  * <pre class="codeJava">
- * public void onGet() {
+ * <span class="kw">public void</span> onGet() {
  *    Date date = order.deliveryDate();
  *    addModel("<span class="red">deliveryDate</span>", date);
  * } </pre>

@@ -67,13 +67,29 @@ a:visited { color: blue; }
 
 .codeJava 
 {
-	background-color: #fffff7;
+	background-color: white;
 }
 
 .codeHtml 
 {
 	border: 1px solid #97A9FF;
 	background-color: white;
+}
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
 }
 
 /*  form.css */

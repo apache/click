@@ -43,47 +43,38 @@ import org.apache.velocity.exception.ParseErrorException;
  * the ErrorPage. For example to rollback a Connection if an SQLException occured:
  *
  * <pre class="codeJava">
- * package com.mycorp.util;
+ * <span class="kw">package</span> com.mycorp.util;
  *
- * import java.sql.Connection;
- * import java.sql.SQLException;
- * import net.sf.click.util.ErrorPage;
+ * <span class="kw">import</span> java.sql.Connection;
+ * <span class="kw">import</span> java.sql.SQLException;
+ * <span class="kw">import</span> net.sf.click.util.ErrorPage;
  *
- * public class MyCorpErrorPage extends ErrorPage {
+ * <span class="kw">public class</span> MyCorpErrorPage <span class="kw">extends</span> ErrorPage {
  *
- *     /**
+ *     <span class="jd">/**
  *      * @see Page#onDestroy()
- *      * /
- *     public void onDestroy() {
+ *      * /</span>
+ *     <span class="kw">public void</span> onDestroy() {
  *         Exception errror = getError();
  *
- *         if (error instanceof SQLException) {
- *             rollbackAndClose();
- *         }
- *         else {
- *             Throwable cause = error.getCause();
+ *         <span class="kw">if</span> (error <span class="kw">instanceof</span> SQLException ||
+ *             error.getCause() <span class="kw">instanceof</span> SQLException) {
+
+ *             Connection connection =
+ *                 ConnectionProviderThreadLocal.getConnection();
  *
- *             if (cause instanceof SQLException) {
- *                 rollbackAndClose();
- *             }
- *         }
- *     }
- *
- *     protected void rollbackAndClose() {
- *         Connection connection =
- *             ConnectionProviderThreadLocal.getConnection();
- *
- *         if (connection != null) {
- *             try {
- *                 connection.rollback();
- *             }
- *             catch (SQLException sqle) {
- *             }
- *             finally {
- *                 try {
- *                     connection.close();
+ *             <span class="kw">if</span> (connection != <span class="kw">null</span>) {
+ *                 <span class="kw">try</span> {
+ *                     connection.rollback();
  *                 }
- *                 catch (SQLException sqle) {
+ *                 <span class="kw">catch</span> (SQLException sqle) {
+ *                 }
+ *                 <span class="kw">finally</span> {
+ *                     <span class="kw">try</span> {
+ *                         connection.close();
+ *                     }
+ *                     <span class="kw">catch</span> (SQLException sqle) {
+ *                     }
  *                 }
  *             }
  *         }
