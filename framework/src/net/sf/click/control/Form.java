@@ -27,6 +27,8 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Provides a Form control: &nbsp; &lt;form method='POST'&gt;.
  *
@@ -282,22 +284,27 @@ import net.sf.click.util.ClickUtils;
  *
  * <h4>Configuring Macros</h4>
  *
- * To configure your application pick up your velocimacro file
- * (e.g. <tt>macro.vm</tt>) you will need to include a <tt>velocity.properties</tt> file
- * in your applications <tt>WEB-INF</tt> directory. See configuration topic
- * <a target="topic" href="../../../../../configuration.html#velocity-properties">
- * Velocity Properties</a> for more info.
+ * To configure your application to use your macros you can:
+ * <ul>
+ *  <li>
+ *   Put your macros if a file called <span class="st"><tt>macro.vm</tt></span>
+ *   in your applications root directory.
+ *  </li>
+ *  <li>
+ *   Put your macros in the auto deployed 
+ *   <span class="st"><tt>click/VM_global_macro.vm</tt></span> file.
+ *  </li>
+ *  <li>
+ *   Create a custom named macro file and reference it in a
+ *   <span class="st"><tt>WEB-INF/velocity.properties</tt></span>
+ *   file under the property named
+ *   <tt>velocimacro.library</tt>. See configuration topic
+ *   <a target="topic" href="../../../../../configuration.html#velocity-properties">Velocity Properties</a> 
+ *   for more info.
+ *  </li>
+ * </ul>
  *
- * <pre class="codeConfig">
- * WEB-INF/velocity.properties </pre>
- *
- * In your <tt>velocity.properties</tt> file add a reference to your custom
- * macro file <tt>macro.vm</tt>.  For example:
- *
- * <pre class="codeConfig">
- * velocimacro.library=<span class="blue">macro.vm</span> </pre>
- *
- * <p/>
+ * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.3">FORM</a>
@@ -345,6 +352,14 @@ public class Form implements Control {
 
     /** The label-required-suffix resource property. */
     protected static String labelRequiredSuffix = "";
+    
+    protected static final String JAVASCRIPT_IMPORTS = 
+        "<link rel='stylesheet' type='text/css' href='$/click/form.css' title='style'>\n" +
+        "<script type='text/javascript' src='$/click/form.js'></script>" +
+        "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
+    
+    protected static final String STYLESHEET_IMPORT = 
+        "<link rel='stylesheet' type='text/css' href='$/click/form.css' title='style'>";
 
     static {
         ResourceBundle bundle =
@@ -662,21 +677,13 @@ public class Form implements Control {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String contextPath = context.getRequest().getContextPath();
-
-        if (jsEnabled) {
-
-            return "<link rel='stylesheet' type='text/css' href='"
-                   + contextPath + "/click/form.css' title='style'>\n"
-                   + "<script type='text/javascript' "
-                   + "src='" + contextPath + "/click/form.js'></script>";
-
+        String path = context.getRequest().getContextPath(); 
+        
+        if (jsEnabled) {        
+            return StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path);
         } else {
-
-            return "<link rel='stylesheet' type='text/css' href='"
-                   + contextPath + "/click/form.css' title='style'>";
-
-        }
+            return StringUtils.replace(STYLESHEET_IMPORT, "$", path);
+        } 
     }
 
     /**

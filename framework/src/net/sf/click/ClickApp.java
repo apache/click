@@ -103,6 +103,11 @@ class ClickApp implements EntityResolver {
      * "<tt>VM_global_library.vm</tt>"
      */
     static final String VM_FILE_NAME = "VM_global_library.vm";
+    
+    /**
+     * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>"
+     */
+    static final String MACRO_VM_FILE_NAME = "macro.vm";
 
     /** The production application mode. */
     static final int PRODUCTION = 0;
@@ -388,6 +393,10 @@ class ClickApp implements EntityResolver {
             // Deploy JavaScript file
             deployFile("/net/sf/click/control/form.js", clickTarget,
                        CLICK_PATH, "form.js");
+            
+            // Deploy JavaScript file
+            deployFile("/net/sf/click/control/calendar-en.js", clickTarget,
+                       CLICK_PATH, "calendar-en.js");
 
             // Deploy page not found file
             deployFile("/net/sf/click/not-found.htm", clickTarget,
@@ -619,8 +628,21 @@ class ClickApp implements EntityResolver {
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
                      ServletLogger.class.getName());
 
-        velProps.put("velocimacro.library", CLICK_PATH + File.separator
-                     + VM_FILE_NAME);
+        // If 'macro.vm' exists set it as default VM library, otherwise use
+        // 'click/VM_global_library.vm'
+        String macroPath = context.getRealPath("/" + MACRO_VM_FILE_NAME);
+        if (macroPath != null) {
+            File file = new File(macroPath);
+            if (file.canRead() && file.isFile()) {
+                velProps.put("velocimacro.library", MACRO_VM_FILE_NAME);
+            } else {
+                velProps.put("velocimacro.library", CLICK_PATH + File.separator
+                        + VM_FILE_NAME);
+            }
+        } else {
+            velProps.put("velocimacro.library", CLICK_PATH + File.separator
+                         + VM_FILE_NAME);
+        }
 
         // Load user velocity properties.
         Properties userProperties = new Properties();
