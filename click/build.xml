@@ -19,18 +19,6 @@
    	        classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
-   
-   <target name="archive" description="archive the framework">
-      <delete dir="bin"/>
-      <mkdir dir="bin"/>
-      <delete dir="deploy"/>
-      <mkdir dir="deploy"/>
-      <delete dir="framework/classes"/>
-      <mkdir dir="framework/classes"/>
-      <delete dir="webapps/click-examples/WEB-INF/classes"/>
-      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
-	  <zip destfile="../click-${version}.zip" basedir="."/>
-   </target>
 
    <target name="build-framework" description="compile and build framework JARs">
       <delete dir="${dir.deploy}" quiet="false"/>
@@ -65,6 +53,23 @@
          </fileset>
       </jar>  
    </target>
+ 
+   <target name="build-release" 
+           depends="build-framework, build-webapps, javadoc" 
+           description="build release ZIP file">
+      <delete file="../click-${version}.zip"/>  
+      <zip destfile="../click-${version}.zip">
+         <fileset dir="." casesensitive="yes"> 
+            <exclude name=".**"/> 
+            <exclude name="TODO.txt"/>   
+            <exclude name="bin/**"/>    
+            <exclude name="framework/classes/**"/>
+            <exclude name="tracker/**"/> 
+            <exclude name="webapps/click-blank/WEB-INF/classes/**"/>  
+            <exclude name="webapps/click-examples/WEB-INF/classes/**"/>  
+         </fileset>
+      </zip>
+   </target>  
 
    <target name="build-webapps" description="build web application WAR files">
       <!--  "click-blank" WAR  -->
@@ -124,33 +129,6 @@
 	  <replacetabs srcdir="framework/src" includes="**/*.java"/>
 	  <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
 	  <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
-   </target> 
-	
-   <target name="examples" description="build and deploy examples"> 
-      <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
-      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
-	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
-           destdir="webapps/click-examples/WEB-INF/classes" 
-           debug="true">
-         <classpath> 
-     	    <pathelement location="lib/${jar.servlet}"/>
-           <pathelement location="${dir.deploy}/click-${version}.jar"/>
-         </classpath>
-      </javac>
-      <copy todir="webapps/click-examples/WEB-INF/classes">
-         <fileset dir="webapps/click-examples/WEB-INF/src">
-            <exclude name="**/*.java"/>
-     	    <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
-      <war destfile="${dir.deploy}/click-examples.war"
-           webxml="webapps/click-examples/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-${version}.jar"/>
-         <fileset dir="webapps/click-examples">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
-	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 	
    <target name="javadoc" description="create Javadoc HTML">
@@ -202,9 +180,9 @@
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>   
 
-   <target name="tomcat-setup" description="Setup Tomcat logging">
-      <copy todir="${dir.appserver}/.." verbose="true">
-         <fileset dir="tomcat"/>  
+   <target name="setup-tomcat-logging" description="Setup Tomcat logging">
+      <copy todir="${dir.tomcat}" verbose="true">
+         <fileset dir="server/tomcat"/>  
       </copy>
    </target>  
    

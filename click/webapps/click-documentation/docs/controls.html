@@ -118,7 +118,10 @@ returning false in a event handler you can skip this step and forward to the nex
 
 <a name="control-class"><h2>Control Classes</h2></a>
 
-The major <a target="topic" href="api/net/sf/click/control/package-summary.html">net.sf.click.control</a> package objects are: 
+Control classes are defined in the package 
+<a target="topic" href="api/net/sf/click/control/package-summary.html">net.sf.click.control</a>,
+with most controls mapping to a HTML element. The control package classes are depicted below in Figure 3.
+
 <p/>
 
 <img src="../images/control-package-class-diagram.png"/>
@@ -127,26 +130,37 @@ The major <a target="topic" href="api/net/sf/click/control/package-summary.html"
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
 </p>
 
-Key classes include:
+The key control classes include:
 <ul>
-<li><a target="topic" href="click-api/net/sf/click/Control.html">Control</a>
-&nbsp; - &nbsp; todo
-methods   
+<li><a href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
+- provides a anchor link which can invoke callback listeners. 
 <p></li>
-<li><a target="topic" href="api/net/sf/click/control/ActionLink.html">ActionLink</a>
-- which provides an &lt;a&gt; <tt>href</tt> attribute which can call command
-methods   
+<li><a href="click-api/net/sf/click/control/Field.html">Field</a>
+- provides the abstract form field control.
 <p></li>
-<li><a target="topic" href="api/net/sf/click/control/Form.html">Form</a>
-- which provides Form processing and validation   
+<li><a href="click-api/net/sf/click/control/Form.html">Form</a>
+- provides a form control for processing, validation and rendering.   
 <p></li>
-<li><a target="topic" href="api/net/sf/click/control/Field.html">Field</a>
-- which provides Form processing and validation   
+<li><a href="click-api/net/sf/click/control/Submit.html">Submit</a>
+- provides a input type submit control which can invoke callback listeners.  
+<p></li>
+<li><a href="click-api/net/sf/click/control/TextField.html">TextField</a>
+- provides a input type text control which can invoke callback listeners.  
 <p></li>
 </ul> 
 
+The control classes are designed to support subclassing for customised
+behaviour. All control fields have protected visibility and have public 
+accessor methods.
+<p/>
+You can also aggrigate controls to build more complex controls. For example the 
+<a href="click-api/net/sf/click/control/CreditCardField.html">CreditCardField</a>
+uses a <a href="click-api/net/sf/click/control/Select.html">Select</a>
+control to render the different credit card types. 
 
 <a name="message-properties"><h2>Message Properties</h2></a>
+
+TODO:
 
 <pre class="codeConfig">
 # Click Control messages

@@ -52,9 +52,9 @@ import org.apache.velocity.exception.ParseErrorException;
  * public class MyCorpErrorPage extends ErrorPage {
  *
  *     /**
- *      * @see Page#onFinally()
+ *      * @see Page#onDestroy()
  *      * /
- *     public void onFinally() {
+ *     public void onDestroy() {
  *         Exception errror = getError();
  *
  *         if (error instanceof SQLException) {
