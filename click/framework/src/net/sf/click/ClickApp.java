@@ -729,7 +729,7 @@ class ClickApp implements EntityResolver {
 
         final static int ERROR_ID = 3;
 
-        static final String PREFIX = "Click";
+        static final String PREFIX = " Click";
 
         ServletContext servletContext = null;
 
