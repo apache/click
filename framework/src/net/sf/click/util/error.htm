@@ -33,7 +33,7 @@ td.header {
   </tr>
   <tr>
    <td colspan="2" bgcolor="#EOEOEO">
-    <b>Page template:</b> $pagePath <br/><br/>
+    <b>Page template:</b> $templatePath <br/><br/>
     <tt>
     $template
     </tt>
@@ -74,6 +74,11 @@ td.header {
   <tr>
    <td><b>Path</b></td><td>
 #if( $page ) $page.path #else &nbsp; #end
+   </td>
+  </tr>
+    <tr>
+   <td><b>Template</b></td><td>
+#if( $page ) $page.template #else &nbsp; #end
    </td>
   </tr>
  </table>
