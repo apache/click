@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body> 
+   
+<h1>Pages</h1>
+Pages are the heart of web applications. In Click, Pages encapsulate the processing of 
+HTML requests and the rendering of HTML responses. The section discusses Click pages 
+and covers to following topics:
+<ul>
+  <li><a href="#page-class">Classes</a> - page Java classes<p/>
+  </li>
+  <li><a href="#page-execution">Execution</a> - page execution sequence<p/>
+  </li>
+  <li><a href="#page-navigation">Navigation</a> - navigation between pages<p/>
+  </li>
+  <li><a href="#page-security">Security</a> - page security model<p/>
+  </li>
+  <li><a href="#page-configuration">Configuration</a> - setting up pages<p/>
+  </li>
+  <li><a href="#page-error-handling">Error Handling</a> - page error handling model<p/>
+  </li>
+  <li><a href="#page-page-found">Page Not Found</a> - page not found handling<p/>
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+
+In Click, a logical page is composed of a Java class and a Velocity template, with these
+components being defined in page elements of the 
+<a target="topic" href="configuration.html#application-configuration">click.xml</a> file.
+
+<blockquote>
+<pre>
+&lt;page path="<font color="red">search.htm</font>" classname="<font color="blue">com.mycorp.page.Search</font>"/&gt;
+</pre>
+</blockquote>
+
+The path attribute specifies the location of the page Velocity template, and the classname
+attribute specifies the page Java class name.
+
+<a name="page-class"><h2>Classes</h2></a>
+
+All custom Click pages must subclass the
+<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> base class.
+The Page class and its associated companion classes, Context and Control, are depicted 
+below in Figure 1.
+
+<p/>
+<img src="../images/click-class-diagram.png"/>
+<h4>Figure 1. &nbsp; Page Class Diagram</h4>
+
+The Page class provides a model attribute which is used to hold all the objects that
+are rendered in the page's Velocity template. The model may also contain
+<a target="topic" href="click-api/net/sf/click/Control.html">Control</a> objects, which
+provide user interface controls on the Page.
+<p/>
+Pages also have an associated  
+<a target="topic" href="click-api/net/sf/click/Context.html">Context</a> object
+which references all the javax.servlet objects associated with the request. When 
+programming in Click you use the Context object to access HttpServletRequest attributes, 
+parameters and the HttpSession object.
+<p/>
+The Page class provide a number of empty handler methods which subclasses can override to
+provide functionality:
+<ul>
+  <li>onInit()</li>
+  <li>onSecurityCheck()</li>
+  <li>onGet()</li>
+  <li>onPost()</li>
+  <li>onFinally()</li>
+</ul>
+The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
+so when you create Page subclasses you must ensure you don't add an incompatible
+constructur. By convention in Click you place initialization code in an <tt>onInit()</tt>
+method and you generally don't implement a constructor.
+
+<a name="page-execution"><h2>Execution</h2></a>
+
+The GET request execution sequence for Pages is summarised below in the Figure 2.
+
+<p/>
+<img src="../images/get-sequence-diagram.png"/>
+<h4>Figure 2. &nbsp; GET Request Sequence Diagram</h4>
+
+
+Stepping through this GET request sequence, a new Page instance is created and the 
+attributes for the Page are set (context, format, headers, path). Next the <tt>onInit()</tt>
+method is invoked. This is where you typically place your initialization code.
+<p/>
+The next method invoked is the <tt>onSecurityCheck()</tt> handler. This method can used to 
+ensure the user is authorized to access the page, and if necessary can abort any 
+further processing.
+<p/>
+The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
+Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
+If any of the Control's <tt>onProcess()</tt> methods return false, processing of 
+subsequent controls and the Page's <tt>onGet()</tt> method is aborted.
+<p/>
+If everything is executing normally the Page's <tt>onGet()</tt> method is now called.
+<p/>
+The next step is rendering the page template to generate the displayed HTML. The
+ClickServlet gets the model from the Page as well as the path to its template. It then
+merges the template with the page model and writes out results to the HttpServletResponse.
+When the model is being merged with the template, any Controls in the model may be
+rendered using their <tt>toString()</tt> method.
+<p/>
+The final step in this sequence is invoking the Page's <tt>onFinally()</tt> method. This 
+method can be used to clean up resource associated with the Page before it is garbage
+collected. The <tt>onFinally()</tt> method is garanteed to be called even if an exception
+occurs in the previous steps.
+<p/>
+The execution sequence for POST requests is almost identical, except the <tt>onPost()</tt>
+method is invoked instead on <tt>onGet()</tt>. See the 
+<a href="../images/post-sequence-diagram.png">POST Request Sequence Diagram</a>.
+<p/>
+Another view on the execution flow of Pages is illustrated in the Activity diagram below.
+<p/>
+<img src="../images/activity-diagram.png"/>
+<h4>Figure 3. &nbsp; Page Execution Activity Diagram</h4>
+
+
+
+<a name="page-navigation"><h2>Navigation</h2></a>
+
+
+<a name="page-security"><h2>Security</h2></a>
+
+
+<a name="page-configuration"><h2>Configuration</h2></a>
+
+
+<a name="page-error-handing"><h2>Error Handling</h2></a>
+
+
+<a name="page-not-found"><h2>Page Not Found</h2></a>
+
+
+</body>
+</html>

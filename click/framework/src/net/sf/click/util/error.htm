@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>Error Page</title>
+<style>
+body {
+  font-family: verdana, arial, sans-serif;
+}
+td.header {
+  color: white;
+  background: navy;
+}
+</style>
+</head>
+
+<body>
+ <h1>Error Page</h1>
+ 
+ The application encountered an unexpected error.
+ 
+ #if( !($mode == "production") )
+ 
+ <p/>
+
+ <table border="1" cellspacing="1" cellpadding="4" width="100%">
+#if( $isParseError )
+  <tr>
+   <td colspan="2" class="header"> &nbsp; <b>Page Parsing Error</b></td>
+  </tr>  
+  <tr>
+   <td width="12%" valign="top"><b>Message</b></td>
+   	<td><small>$errorMessage &nbsp;</small></td>
+  </tr>
+  <tr>
+   <td colspan="2" bgcolor="#EOEOEO">
+    <b>Page template:</b> $pagePath <br/><br/>
+    <tt>
+    $template
+    </tt>
+   </td>
+  </tr>
+#else 
+  <tr>
+   <td colspan="2" class="header"><b>Exception</b></td>
+  </tr>
+  <tr>
+   <td width="12%"><b>Message</b></td>
+   <td>$errorMessage &nbsp;</td>
+  </tr>
+  <tr>
+   <td width="12%"><b>Class</b></td>
+   <td>$errorClass</td>
+  </tr>
+  <tr>
+   <td colspan="2">
+    <b>Stack trace</b><br/>
+    <small>$errorStackTrace</small>
+   </td>
+  </tr>
+#end
+ </table>
+
+ <br/> 
+ 
+ <table border="1"  cellspacing="1" cellpadding="4" width="100%">
+  <tr>
+   <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
+  </tr>
+  <tr>
+   <td width="12%"><b>Classname</b></td><td>
+#if( $page ) $page.class.name #else &nbsp; #end
+   </td>
+  </tr>
+  <tr>
+   <td><b>Path</b></td><td>
+#if( $page ) $page.path #else &nbsp; #end
+   </td>
+  </tr>
+ </table>
+  
+ <br/> 
+ 
+ <table border="1" cellspacing="1" cellpadding="4" width="100%">
+  <tr>
+   <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
+  </tr>
+  <tr valign="top">
+   <td width="12%"><b>Method</b></td><td>
+   	$request.method
+   </td>
+  </tr>
+  <tr valign="top">
+   <td><b>URL</b></td>
+   <td><a href="$request.requestURL">$request.requestURL</a></td>
+  </tr>
+  <tr valign="top">
+   <td><b>Query</b></td><td>
+#if( $request.query ) $request.query #else &nbsp; #end    
+   </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Parameters</b></td><td>
+#foreach( $key in $requestParams.keySet() )   	
+ $key='$requestParams.get($key)' &nbsp;
+#end
+   &nbsp;
+   </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Attributes</b></td><td>
+#foreach( $key in $requestAttributes.keySet() )   	
+ $key='$requestAttributes.get($key)' &nbsp;
+#end
+   &nbsp;
+   </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Headers</b></td><td>
+    <small>
+#foreach( $key in $requestHeaders.keySet() )   	
+ $key='$requestHeaders.get($key)' <br/>
+#end
+    </small>
+   </td>
+  </tr>
+ </table>
+ 
+ #end <!-- if not "production" mode -->
+
+</body>
+</html>

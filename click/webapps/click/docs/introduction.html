@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+
+<body>
+<h1>Introduction</h1>
+Click is a simple J2EE web application framework for commercial Java developers.
+<p>
+Click is an open source project, licensed using the 
+<a href="LICENSE.txt">Apache</a> license.
+<p>
+Click uses the event based programming model for processing Servlet requests and 
+<a target='topic' href='velocity/velocity.html'>Velocity</a> for rendering 
+the response.  
+<p>
+This framework uses a single servlet, called
+<a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>, to
+act as a request dispatcher. When a request arrives ClickServlet creates a 
+<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> object to 
+processes the request and then uses the page's Velocity template to render the 
+results.
+<p>
+Page provide a simple thread safe programming environment, with a new
+page instance is created for each servlet request.
+<p>
+Possibly the best way to see how Click works is to dive right in and look at an 
+example.
+
+<h2>Click Example</h2>
+A Hello World example in Click would look something like this. You would have a
+<tt>click.xml</tt> configuration file which defines our Hello World page class
+and its Velocity template:<blockquote><pre>
+&lt;click-app&gt;  
+  &lt;pages&gt; 
+    &lt;<b>page</b> path="<font color="blue">hello-world.htm</font>" classname="<font color="red">examples.page.HelloWorld</font>"/&gt; 
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre></blockquote>
+
+Next we have our <tt>examples.page.HelloWorld</tt> class:<blockquote><pre>
+package examples.page;
+
+import java.util.Date;
+import net.sf.click.Page;
+
+public <font color="red">HelloWorld</font> extends Page {
+
+    public void onGet() {
+        addModel("<b><font color="red">time</font></b>", new Date());
+    }
+}
+</pre></blockquote>
+And then we have the associated "<font color="blue">hello-world.htm</font>" page 
+template:<blockquote><pre>
+&lt;html&gt;
+ &lt;body&gt;
+  &lt;h2&gt;Hello World&lt;/h2&gt;
+  Hello world from Click at <b>$<font color="red">time</font></b>
+ &lt;/body&gt;
+&lt;/html&gt;
+</pre></blockquote>
+
+At runtime the ClickSerlvet maps a GET <font color="blue">hello-world.htm</font> 
+request to our class and creates a new <font color="red"><tt>HelloWorld</tt></font> page instance. 
+The ClickServlet then invokes the page's <tt>onGet()</tt> method. This method creates a 
+new <tt>Date</tt> object and adds it to the page model as a value called 
+<b><font color="red">time</font></b>.
+<p/>
+The page model is then merged with the template which subsitutes the 
+<b>$<font color="red">time</font></b> parameter with the <tt>Date</tt> object. 
+Velocity then renders the template which looks something like this:
+<blockquote>
+<table bgcolor="lightgrey" cellpadding="12" cellspacing="12">
+<tr>
+ <td>
+ <h2><font color="navy">Hello World</font></h2>
+ Hello world from Click at Wed May 28 15:52:29 EST 2005
+ </td>
+</tr>
+</table>
+</blockquote>
+
+Next dive into the <a target="topic" href="pages.html">Pages</a> to have a closer look at
+how this works.
+
+</body>
+</html>

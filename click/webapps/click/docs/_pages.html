@@ -1,0 +1,141 @@
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></meta>
+ <link rel="stylesheet" type="text/css" href="../help.css"></link>
+</head>
+<body>
+<h1>TODO: rewrite</h1>  
+  
+<h1>Pages</h1>
+<p/>
+Pages provide the HTML templates which render command model data. Click can 
+support both Velocity pages and JSP pages in the same application. 
+
+<h3>Configuration</h3>
+
+Click pages are setup the <tt>pages</tt> element of the application 
+<a target="topic" href="configuration.html#application-configuration">configuration</a> 
+file. The <tt>pages</tt> element DTD description is defined below: 
+
+<blockquote><pre>&lt;!ELEMENT <font color="blue">pages</font> (<font color="blue">page</font>*, <font color="blue">common-headers</font>?)&gt;
+</pre></blockquote>
+
+An application may contain many pages. These pages may also have a set of
+common HTTP headers contained in the <tt>common-headers</tt> element. 
+<p>
+The <tt>page</tt> element naturally enough describes configuration of a Click 
+page.
+
+The <tt>page</tt> element DTD description is defined below: 
+
+<blockquote><pre>&lt;!ELEMENT <font color="blue">page</font> (<font color="blue">header</font>*)&gt;
+   &lt;!ATTLIST page <font color="blue">name</font> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST page <font color="blue">path</font> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST page <font color="blue">type</font> (template|resource) "template"&gt;
+   &lt;!ATTLIST page <font color="blue">content-type</font> CDATA #FIXED "text/html"&gt;
+</pre></blockquote>
+
+The Click page is made up of a series of attributes which define it. These attributes are:
+<ul>
+<li>name 
+&nbsp; - &nbsp; the name of the page, must be unique
+<p></li>
+<li>path
+&nbsp; - &nbsp; the page resource path
+<p></li>
+<li>type
+&nbsp; - &nbsp; the type of page, either Velocity template or JSP resource, 
+defaults to Velocity <tt>template</tt>
+<p></li>
+<li>content-type
+&nbsp; - &nbsp; the HTTP response content type, defaults to <tt>text/html</tt>
+<p></li>
+</ul>
+
+For example an application may configure the home, login and logout pages as:
+<blockquote><pre>&lt;pages&gt;
+   &lt;page name="home" path="index.html"/&gt;
+   &lt;page name="login" path="login.html"/&gt;
+   &lt;page name="logout" path="logout.html"/&gt;
+&lt;/pages&gt;
+</pre></blockquote>
+
+<h4>Headers</h4>
+
+A page may also contain a series of HTTP <tt>header</tt> elements which are set
+in the <tt>HttpServletResponse</tt>.
+are made available to a command via the 
+<a target="topic" href="api/net/sf/click/command/CommandContext.html#getProperties()">CommandContext</a> 
+object. 
+
+The properties are returned in an unmodifiable <tt>Map</tt>. Properties can 
+be of the <tt>java.lang</tt> type <tt>String</tt>, <tt>Integer</tt>, <tt>Boolean</tt> 
+or <tt>Double</tt>.
+<p>
+The <tt>header</tt> element DTD description is defined below: 
+
+<blockquote><pre>&lt;!ELEMENT <font color="blue">header</font> (#PCDATA)&gt;
+   &lt;!ATTLIST header <font color="blue">name</font> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <font color="blue">value</font> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <font color="blue">type</font> (String|Integer|Date) "String"&gt;   
+</pre></blockquote>
+
+
+
+<h4>Velocity Templates & JSPs</h4>
+
+<h4>Configuration</h4>
+
+* name, path, type
+<p>
+* headers
+<p>
+* common headers
+<p>
+
+<h4>Velocity Context</h4>
+
+
+If the target page type is '<tt>template</tt>', e.g. a Velocity template,
+the model data will be used to populate a <tt>VelocityContext</tt>. If
+the target page type is '<tt>resource</tt>', such as a JSP, then the
+model data will be added to the <tt>HttpServletRequest</tt> as an
+attributes using model key names.
+<p>
+For Velocity templates developers should access the model data using
+model data key name:<blockquote><pre>// Command code
+getModel().put("<b>title</b>", "President Robin Smith");
+
+&lt!-- Template code --&gt;
+&lt;h1&gt; $<b>title</b> &lt;/h1&gt;<pre></blockquote>
+With JSPs developers should access the model data via the named request
+attribute:<blockquote><pre>// Command code
+getModel().put("<b>title</b>", "President Robin Smith");
+
+&lt!-- JSP code --&gt;
+&lt;h1&gt; &lt;%= request.getAttribute("<b>title</b>") %&gt; &lt;/h1&gt;
+<pre></blockquote>
+If the target page type is '<tt>template</tt>' then the
+<a href="api/net/sf/click/App.html"><tt>App</tt></a> object and the 
+<tt>HttpServletRequest</tt> object
+will be put in the <tt>VelocityContext</tt> using the reserved names
+"<tt>app</tt>" and "<tt>request</tt>".
+If the target page type is '<tt>resource</tt>' then the
+{@link net.sf.click.App} object will be added as a request attribute
+using the reserved name "<tt>app</tt>".
+If any model objects are displaced by these additions,
+warning messages will be logged.
+<p>
+The returned model data must not be null, otherwise a
+{@link net.sf.click.ApplicationException} will be thrown by the
+{@link net.sf.click.ClickServlet}. <p>
+
+<h3>Error Page</h3>
+discuss the error page and its auto deployment to click/error.html
+
+<h3>Navigration</h3>
+discuss App object and how to create links, and the global_macro.vm and the
+#macro( writeCommandsMenu )
+
+</pre></body>
+</html>

@@ -1,0 +1,266 @@
+/*
+ * Copyright 2004 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.sf.click.control;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
+
+import net.sf.click.ApplicationException;
+import net.sf.click.util.ClickUtils;
+
+/**
+ * Provides a Hidden Field control: &nbsp; &lt;input type='hidden'&gt;.
+ * <p/>
+ * The HiddenField control is useful for storing state information in a Form,
+ * such as object ids, instead of using the Session object. This control is 
+ * capable of supporting the following classes:<blockquote><ul>
+ * <li>Boolean</li>
+ * <li>Date</li>
+ * <li>Double</li>
+ * <li>Float</li>
+ * <li>Integer</li>
+ * <li>Long</li>
+ * <li>Short</li>
+ * <li>String</li>
+ * <li>Serializable</li>
+ * </ul></blockquote>
+ * <p/>
+ * Serializable non-primitive objects will be serialized, compressed and
+ * Base64 encoded, using {@link net.sf.click.util.ClickUtils#encode(Object)} 
+ * method, and decoded using the corresponding
+ * {@link net.sf.click.util.ClickUtils#decode(String)} method.
+ * <p/>
+ * An example is provided below which uses a hidden field to count the number of 
+ * times a form is submitted:<blockquote><pre>
+ * public class CountPage extends Page {
+ *
+ *     private HiddenField counterField;
+ *
+ *     public onInit() {
+ *         Form form = new Form("form");
+ *         addControl(form);
+ *
+ *         counterField = new HiddenField("counterField", Integer.class);
+ *         form.add(counterField);
+ *
+ *         form.add(new Submit(" OK "));
+ *     }
+ * 
+ *     public void onGet() {
+ *         Integer count = new Integer(0);
+ * 
+ *         counterField.setValueObject(count);
+ *         addModel("count", count);
+ *     }
+ *
+ *     public void onPost() {
+ *         Integer count = (Integer) counterField.getValueObject();
+ * 
+ *         count = new Integer(count.intValue() + 1);
+ *
+ *         counterField.setValueObject(count);
+ *         addModel("count", count);
+ *     }
+ * }
+ * </pre>
+ * </blockquote>
+ * <p/>
+ * See also W3C HTML reference
+ * <a title="W3C HTML 4.01 Specification" 
+ *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
+ * 
+ * @author Malcolm Edgar
+ */
+public class HiddenField extends Field {
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The field value. */
+    protected Object value;
+
+    /** The value Object Class. */
+    protected final Class valueClass;
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Construct a HiddenField with the given name and Class.
+     *
+     * @param name the name of the hidden field
+     * @param valueClass the Class of the value Object
+     */
+    public HiddenField(String name, Class valueClass) {
+        this.name = name;
+        this.valueClass = valueClass;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Returns true.
+     *
+     * @see Field#isHidden()
+     */
+    public boolean isHidden() {
+        return true;
+    }
+    
+    /**
+     * Process the HiddenField submission. If the value can be parsed the 
+     * controls listener will be invoked.
+     * <p/>
+     * If the value Class is not:<ul>
+     * <li>String</li>
+     * <li>Integer</li>
+     * <li>Boolean</li>
+     * <li>Double</li>
+     * <li>Float</li>
+     * <li>Long</li>
+     * <li>Short</li>
+     * <li>Date</li>
+     * <li>Serializable</li>
+     * </ul>
+     * <p/>
+     * The value object will be set with the HiddenField's string value.
+     *
+     * @see net.sf.click.Control#onProcess()
+     */
+    public boolean onProcess() {        
+        String aValue = getContext().getRequest().getParameter(name);
+
+        if (valueClass == String.class) {
+            value = aValue;
+
+        } else if (aValue != null && aValue.length() > 0) {
+
+            if (valueClass == String.class) {
+                value = aValue;
+            } else if (valueClass == Integer.class) {
+                value = Integer.valueOf(aValue);
+            } else if (valueClass == Boolean.class) {
+                value = Boolean.valueOf(aValue);
+            } else if (valueClass == Double.class) {
+                value = Double.valueOf(aValue);
+            } else if (valueClass == Float.class) {
+                value = Float.valueOf(aValue);
+            } else if (valueClass == Long.class) {
+                value = Long.valueOf(aValue);
+            } else if (valueClass == Short.class) {
+                value = Short.valueOf(aValue);
+            } else if (Date.class.isAssignableFrom(valueClass)) {
+                long time = Long.parseLong(aValue);
+                value = new Date(time);
+            } else if (Serializable.class.isAssignableFrom(valueClass)) {
+                try {
+                    value = ClickUtils.decode(aValue);
+                } catch (ClassNotFoundException cnfe) {
+                    String msg =
+                        "could not decode value for hidden field: " + aValue;
+                    throw new ApplicationException(msg, cnfe);
+                } catch (IOException ioe) {
+                    String msg =
+                        "could not decode value for hidden field: " + aValue;
+                    throw new ApplicationException(msg, ioe);
+                }
+            } else {
+                value = aValue;
+            }
+        } else {
+            value = null;
+        }
+
+        return invokeListener();
+    }
+
+    /**
+     * Return the HTML rendered Hidden Field string.
+     *
+     * @see Object#toString()
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(20);
+
+        buffer.append("<input type='hidden' name='");
+        buffer.append(getName());
+        buffer.append("' value='");
+        if (valueClass == String.class
+            || valueClass == Integer.class
+            || valueClass == Boolean.class
+            || valueClass == Double.class
+            || valueClass == Float.class
+            || valueClass == Long.class
+            || valueClass == Short.class) {
+
+            buffer.append(getValue());
+
+        } else if (value instanceof Date) {
+            buffer.append(((Date)value).getTime());
+
+        } else if (value instanceof Serializable) {
+            try {
+                buffer.append(ClickUtils.encode(value));
+            } catch (IOException ioe) {
+                String msg =
+                    "could not encode value for hidden field: " + value;
+                throw new ApplicationException(msg, ioe);
+            }
+        } else {
+            buffer.append(getValue());
+        }
+        buffer.append("'/>");
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return the registed Class for the Hidden Field value Object.
+     *
+     * @return the registered Class for the Hidden Field value Object
+     */
+    public Class getValueClass() {
+        return valueClass;
+    }
+
+    /**
+     * Return the value Object.
+     *
+     * @return the value Object
+     */
+    public Object getValueObject() {
+        return value;
+    }
+
+    /**
+     * Sets the value Object.
+     *
+     * @param value the value Object to set
+     */
+    public void setValueObject(Object value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Null value parameter");
+        }
+        
+        if (value.getClass() != valueClass) {
+            String msg = "The value.getClass() must be the same as the " +
+                    "HiddenField valueClass property.";
+            throw new IllegalArgumentException(msg);
+        }
+        
+        this.value = value;
+    }
+}
+

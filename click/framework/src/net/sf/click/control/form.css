@@ -1,0 +1,22 @@
+a.error {
+	color: red;
+}
+input.disabled {
+	background: lightgrey;
+}
+input.error {
+	background: yellow;
+}
+select.error {
+	background: yellow;
+}
+span.error {
+	color: red;
+}
+label.required {
+	font-weight: bold;
+}
+table.form {
+	border: 0;
+	vertical-align: baseline; 
+}

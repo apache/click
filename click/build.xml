@@ -1,0 +1,197 @@
+<project name="click2" default="build-framework" basedir=".">
+
+   <!-- Project Properties -->
+   <property file="./build.properties"/>
+   <property name="dir.deploy" value="deploy"/>
+   <property name="dir.lib" value="lib"/>
+   <property name="dir.test" value="test"/>
+   <property name="dir.temp" value="temp"/>
+   <property name="jar.codec" value="commons-codec-1.1.jar"/>
+   <property name="jar.jdom" value="jdom-1.0.jar"/>
+   <property name="jar.lang" value="commons-lang-2.0.jar"/>
+   <property name="jar.log4j" value="log4j-1.2.8.jar"/>
+   <property name="jar.servlet" value="servlet-2.3.1.jar"/>
+   <property name="jar.velocity" value="velocity-dep-1.4.jar"/>   
+   <property name="name" value="click"/>
+   <property name="version" value="0.2"/>
+
+   <!-- Tasks -->
+   
+   <target name="archive" description="archive the framework">
+      <delete dir="bin"/>
+      <mkdir dir="bin"/>
+      <delete dir="deploy"/>
+      <mkdir dir="deploy"/>
+      <delete dir="framework/classes"/>
+      <mkdir dir="framework/classes"/>
+      <delete dir="webapps/click/WEB-INF/classes"/>
+      <mkdir dir="webapps/click/WEB-INF/classes"/>
+	  <zip destfile="../click2.zip" basedir="."/>
+   </target>
+
+   <target name="build-framework" description="compile and build framework JARs">
+      <mkdir dir="deploy"/>
+      <property name="dir.source" value="framework/src"/>
+      <property name="dir.classes" value="framework/classes"/>
+      <delete dir="${dir.classes}" quiet="false"/>
+      <mkdir dir="${dir.classes}"/>
+      <copy todir="${dir.classes}">
+         <fileset dir="${dir.source}">
+            <exclude name="**/*.java"/>
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="**/Test*">
+         <classpath>
+            <fileset dir="lib">
+              <include name="**/*.jar"/>
+            </fileset>
+         </classpath>
+      </javac>
+      <jar destfile="${dir.deploy}/${name}-${version}.jar" basedir="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
+      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>      
+      <unzip src="${dir.lib}/${jar.log4j}" dest="${dir.classes}"/>      
+      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
+	  <jar destfile="${dir.deploy}/${name}-all-${version}.jar">
+         <fileset dir="${dir.classes}">
+            <exclude name="org/apache/log4j/chainsaw/**"/>
+            <exclude name="org/apache/velocity/anakia/**"/>
+            <exclude name="org/apache/velocity/test/**"/>
+            <exclude name="org/apache/velocity/texen/**"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <target name="build-webapps">
+      <delete dir="webapps/click/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/click/WEB-INF/classes"/>
+	  <javac srcdir="webapps/click/WEB-INF/src" 
+             destdir="webapps/click/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+         	<pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+         </classpath>
+      </javac>
+      <copy todir="webapps/click/WEB-INF/classes">
+         <fileset dir="webapps/click/WEB-INF/src">
+            <exclude name="**/*.java"/>
+         	<exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <war destfile="${dir.deploy}/click.war"
+           webxml="webapps/click/WEB-INF/web.xml">
+         <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+         <fileset dir="webapps/click">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   	
+      <delete dir="webapps/imode/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/imode/WEB-INF/classes"/>
+  	  <javac srcdir="webapps/imode/WEB-INF/src" 
+               destdir="webapps/imode/WEB-INF/classes" 
+               debug="true">
+           <classpath> 
+           	<pathelement location="lib/${jar.servlet}"/>
+              <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+           </classpath>
+        </javac>
+        <copy todir="webapps/imode/WEB-INF/classes">
+           <fileset dir="webapps/imode/WEB-INF/src">
+              <exclude name="**/*.java"/>
+           	<exclude name="**/package.html"/>
+           </fileset>
+        </copy>
+        <war destfile="${dir.deploy}/imode.war"
+             webxml="webapps/imode/WEB-INF/web.xml">
+           <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+           <fileset dir="webapps/imode">
+              <exclude name="**/web.xml"/>
+           </fileset>
+        </war>  
+   </target>
+
+   <target name="javadoc" description="create Javadoc HTML">
+      <javadoc sourcepath="framework/src"
+               destdir="webapps/click/docs/click-api"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click API"
+               doctitle="Click API">
+         <classpath>
+            <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+         </classpath>
+         <packageset dir="framework/src"/>
+      </javadoc>
+   	  <copy file="framework/src/net/sf/click/control/calendar.gif"
+   	        todir="webapps/click/docs/click-api/net/sf/click/control"/>
+      <javadoc sourcepath="webapps/click/WEF-INF/src"
+               destdir="webapps/click/docs/examples-api"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Examples"
+               doctitle="Click Examples API">
+        <classpath>
+           <pathelement location="lib/${jar.servlet}"/>
+           <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+        </classpath>
+         <packageset dir="webapps/click/WEB-INF/src"/>
+      </javadoc>
+      <copy file="framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="webapps/click/docs/click-api"/>
+      <copy file="framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="webapps/click/docs/examples-api"/>
+      <copy file="framework/stylesheet.css"
+      	    overwrite="true"
+            todir="webapps/click/docs/servlet-api"/>
+      <copy file="framework/src/net/sf/click/click.dtd"
+    	    overwrite="true"
+            todir="webapps/click/docs"/>
+   </target>   
+
+   <target name="deploy-webapps" description="deploy web apps to app server"> 
+      <copy file="${dir.deploy}/click.war" todir="${dir.appserver}"/>
+   </target>
+	
+   <!-- i-mode development -->
+	
+   <target name="build-imode">
+      <delete dir="webapps/imode/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/imode/WEB-INF/classes"/>
+  	  <javac srcdir="webapps/imode/WEB-INF/src" 
+	         destdir="webapps/imode/WEB-INF/classes" 
+	         debug="true">
+	      <classpath> 
+	         <pathelement location="lib/${jar.servlet}"/>
+	         <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+	      </classpath>
+       </javac>
+       <copy todir="webapps/imode/WEB-INF/classes">
+	      <fileset dir="webapps/imode/WEB-INF/src">
+	         <exclude name="**/*.java"/>
+	      	 <exclude name="**/package.html"/>
+	      </fileset>
+       </copy>
+	   <war destfile="${dir.deploy}/imode.war"
+	        webxml="webapps/imode/WEB-INF/web.xml">
+	      <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+	      <fileset dir="webapps/imode">
+	         <exclude name="**/web.xml"/>
+	      </fileset>
+	   </war>  
+   </target>
+	
+   <target name="deploy-imode" description="deploy web apps to app server"> 
+      <copy file="${dir.deploy}/imode.war" todir="${dir.appserver}"/>
+   </target>
+	
+
+</project>
