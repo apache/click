@@ -14,12 +14,12 @@ public class Secure extends Page {
      * @see Page#onSecurityCheck()
      */
     public boolean onSecurityCheck() {
-        if (getContext().getSessionAttribute("user") == null) {
-            setRedirect("login.htm");
-            return false;
+        if (getContext().hasSession()) {
+            return true;
             
         } else {
-            return true;
+            setRedirect("login.htm");
+            return false;
         }
     }
 

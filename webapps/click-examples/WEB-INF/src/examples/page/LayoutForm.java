@@ -117,7 +117,7 @@ public class LayoutForm extends EditCustomer {
      * @return false to stop processing
      */
     public boolean onCancelClick() {
-        setRedirect("examples.html");
+        setRedirect("index.html");
         return false;
     }
 }

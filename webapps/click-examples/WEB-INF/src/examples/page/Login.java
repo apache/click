@@ -47,6 +47,19 @@ public class Login extends Page {
         cancelButton.setListener(this, "onCancelClicked");
         form.add(cancelButton);
     }
+    
+    /**
+     * @see Page#onSecurityCheck()
+     */
+    public boolean onSecurityCheck() {
+        if (getContext().hasSession()) {
+            setRedirect("secure.htm");
+            return false;
+            
+        } else {
+            return true;
+        }
+    } 
 
     public boolean onOkClicked() {
         if (form.isValid()) {
@@ -70,7 +83,7 @@ public class Login extends Page {
     }
 
     public boolean onCancelClicked() {
-        setRedirect("examples.html");
+        setRedirect("index.html");
 
         return false;
     }
