@@ -141,8 +141,11 @@ set the Page's forward property. For example to forward to a page with a path
 <span class="html">index.htm</span>:
 
 <pre class="codeJava">
-public void onPost() {
-   // Process form post
+<span class="jd">/**
+ * @see Page#onPost()
+ */</span>
+<span class="kw">public void</span> onPost() {
+   <span class="cm">// Process form post</span>
    ..
    
    setForward("<font color="blue">index.htm</font>");
@@ -162,14 +165,14 @@ add a customer object as request parameter which is displayed in the template of
 forwarded page.
 
 <pre class="codeJava">
-public boolean onViewClick() {
+<span class="kw">public boolean</span> onViewClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
     
    getContext().setRequestAttribute("<font color="red">customer</font>", customer);
    setForward("<font color="blue">view-customer.htm</font>");
    
-   return false;
+   <span class="kw">return false</span>;
 } 
 </pre>
 
@@ -202,14 +205,14 @@ everything it needs without having its associated Page object being created. Our
 example would be:
 
 <pre class="codeJava">
-public boolean onViewClick() {
+<span class="kw">public boolean</span> onViewClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
     
    addModel("<font color="red">customer</font>", customer);
    setPath("<font color="blue">view-customer.htm</font>");
    
-   return false;
+   <span class="kw">return false</span>;
 } 
 </pre>
 
@@ -235,9 +238,9 @@ An example of a redirect to a <span class="html">logout.htm</span>
 page is provided below:
 
 <pre class="codeJava">
-public boolean onLogoutClick() {
+<span class="kw">public boolean</span> onLogoutClick() {
    setRedirect("<font color="blue">logout.htm</font>");
-   return false;
+   <span class="kw">return false</span>;
 } 
 </pre>
 
@@ -254,23 +257,23 @@ redirects to the <span class="html">trans-complete.htm</span> page with the
 transaction id encoded in the URL.
 
 <pre class="codeJava">
-public class Payment extends Page {
+<span class="kw">public class</span> Payment <span class="kw">extends</span> Page {
    ..
    
-   public boolean onOkClick() {
-      if (form.isValid()) {
-         // Process payment
+   <span class="kw">public boolean</span> onOkClick() {
+      <span class="kw">if</span> (form.isValid()) {
+         <span class="cm">// Process payment</span>
          ..
          
-         // Get transaction id
+         <span class="cm">// Get transaction id</span>
          Long id = ..
    
          setRedirect("<font color="blue">trans-complete.htm</font>?<font color="red">trans-id</font>=" + id);
       
-         return false; 
+         <span class="kw">return false</span>; 
       } 
   
-      return true;
+      <span class="kw">return true</span>;
    }
    
    ..
@@ -282,14 +285,17 @@ then get the transaction id through the request parameter
 <tt>"<span color="red">trans-id</span>"</tt>:
 
 <pre class="codeJava">
-public class TransComplete extends Page {
+<span class="kw">public class</span> TransComplete <span class="kw">extends</span> Page {
    ..
    
-   public void onInit() {
+   <span class="jd">/**
+    * @see Page#onInit()
+    */</span>
+   <span class="kw">public void</span> onInit() {
       String id = getContext().getRequest().getParameter("<font color="red">trans-id</font>");
    
-      if (id != null) {
-         // Get transaction details
+      <span class="kw">if</span> (id != <span class="kw">null</span>) {
+         <span class="cm">// Get transaction details</span>
          ..
       }
    }
@@ -319,16 +325,19 @@ when a user successfully authenticates. This Secure page then checks to make sur
 the user has a session, otherwise the request is redirected to the login page.
 
 <pre class="codeJava">
-public class Secure extends Page {
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
 
-    public boolean onSecurityCheck() {
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
     
-        if (getContext().hasSession()) {
-            return true;
+        <span class="kw">if</span> (getContext().hasSession()) {
+            <span class="kw">return true</span>;
             
-        } else {
+        } <span class="kw">else</span> (
             setRedirect("login.htm");
-            return false;
+            <span class="kw">return false</span>;
         }
     }
 } 
@@ -340,16 +349,19 @@ Container. For instance to ensure users have been authenticated by the Serlvet C
 you could use a Secure page of:
 
 <pre class="codeJava">
-public class Secure extends Page {
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
 
-    public boolean onSecurityCheck() {
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
     
-        if (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != null) {
-            return true;
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
+            <span class="kw">return true</span>;
             
-        } else {
+        } <span class="kw">else</span> (
             setRedirect("login.htm");
-            return false;
+            <span class="kw">return false</span>;
         }
     }
 }
@@ -362,16 +374,19 @@ in the "admin" role can access the page, otherwise users are redirected to the l
 Application Admin pages would extend this secure page to provide their funcationality.
 
 <pre class="codeJava">
-public class AdminPage extends Page {
+<span class="kw">public class</span> AdminPage <span class="kw">extends</span> Page {
 
-    public boolean onSecurityCheck() {
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
     
-        if (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>("admin")) {
-            return true;
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>("admin")) {
+            <span class="kw">return true</span>;
 
-        } else {
+        } <span class="kw">else</span> (
             setRedirect("login.htm?");
-            return false;
+            <span class="kw">return false</span>;
         }
     }
 }
@@ -382,9 +397,12 @@ To logout using the application or container based security models you would sim
 invalidate the session.
 
 <pre class="codeJava">
-public class Logout extends Page {
+<span class="kw">public class</span> Logout <span class="kw">extends</span> Page {
 
-    public boolean onInit() {
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public boolean</span> onInit() {
         getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
     }
 } 
