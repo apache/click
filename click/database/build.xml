@@ -1,8 +1,9 @@
-<project name="database" default="start" basedir=".">
+<project name="database" default="startup" basedir=".">
 
    <!-- Project Properties -->
    <property name="jar.mckoidb" value="mckoidb-1.0.3.jar"/>
-   <property name="jar.mkjdbc" value="mkjdbc-1.0.3.jar"/> 
+   <property name="jar.mkjdbc" value="mkjdbc-1.0.3.jar"/>
+   <property name="jar.query-tool" value="query-tool.jar"/>  
  
    <!-- TrackMan Tasks -->
    
@@ -31,13 +32,13 @@
       </sql>
    </target> 
    
-   <target name="start" description="start McKoid Database engine">
+   <target name="startup" description="startup McKoid Database engine">
      <java jar="lib/${jar.mckoidb}"
            fork="true"
            failonerror="true"/>
    </target> 
     
-   <target name="stop" description="stop McKoid Database engine">
+   <target name="shutdown" description="shutdown McKoid Database engine">
       <sql driver="com.mckoi.JDBCDriver"
            url="jdbc:mckoi://localhost:9157"
            userid="system"
@@ -61,6 +62,7 @@
          <arg value='-p'/>    
          <arg value='"manager"'/> 
          <classpath>
+            <pathelement location="lib/${jar.query-tool}"/>  
             <pathelement location="lib/${jar.mckoidb}"/>  
          </classpath>   
       </java>

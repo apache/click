@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping package="trackman.domain">
+
+	<class name="Category" table="Category">
+		<id name="id" type="long" column="category_id">
+         <generator class="sequence">
+            <param name="sequence">category_seq</param>
+         </generator>
+		</id>
+      <property name="sortOrder" column="sort_order"/>
+      <property name="description"/>
+      <property name="active"/>
+	</class>
+   
+   <class name="Change" table="Changes">
+		<id name="id" type="long" column="change_id">
+         <generator class="sequence">
+            <param name="sequence">changes_seq</param>
+         </generator>
+		</id>
+      <many-to-one name="issue" column="issue_id" not-null="true"/>
+      <property name="description" column="description"/>
+      <many-to-one name="createdBy" column="created_by" not-null="true"/>
+      <property name="createdAt" column="created_at" type="timestamp"/>
+	</class>
+   
+   <class name="Issue" table="Issues">
+		<id name="id" column="issue_id">
+         <generator class="sequence">
+            <param name="sequence">issues_seq</param>
+         </generator>
+		</id>
+		<many-to-one name="status" column="status_id"/> 
+      <many-to-one name="severity" column="severity_id"/>
+      <many-to-one name="priority" column="priority_id"/>
+      <many-to-one name="category" column="category_id"/>
+      <many-to-one name="version" column="version_id"/>
+      <property name="summary"/>
+      <property name="description"/>
+      <many-to-one name="createdBy" column="created_by"/>
+      <property name="createdAt" column="created_at" type="timestamp"/>
+      <many-to-one name="updatedBy" column="updated_by"/>
+      <property name="updatedAt" column="updated_at" type="timestamp"/>
+      <set name="changes" inverse="true" lazy="true">
+            <key column="issue_id"/>
+            <one-to-many class="Change"/>
+      </set>
+      <set name="notes" inverse="true" lazy="true">
+            <key column="issue_id"/>
+            <one-to-many class="Note"/>
+      </set>
+      <set name="resolutions" inverse="true" lazy="true">
+            <key column="issue_id"/>
+            <one-to-many class="Resolution"/>
+      </set>
+	</class>
+   
+   <class name="Note" table="Notes">
+		<id name="id" type="long" column="note_id">
+         <generator class="sequence">
+            <param name="sequence">notes_seq</param>
+         </generator>
+		</id>
+      <many-to-one name="issue" column="issue_id" not-null="true"/>
+      <property name="description" column="description"/>
+      <many-to-one name="createdBy" column="created_by" not-null="true"/>
+      <property name="createdAt" column="created_at" type="timestamp"/>
+	</class>
+   
+	<class name="Priority" table="Priority">
+		<id name="id" type="long" column="priority_id">
+         <generator class="sequence">
+            <param name="sequence">priority_seq</param>
+         </generator>
+		</id>
+      <property name="sortOrder" column="sort_order"/>
+      <property name="description"/>
+      <property name="active"/>
+	</class>
+   
+   <class name="Resolution" table="Resolution">
+		<id name="id" type="long" column="resolution_id">
+         <generator class="sequence">
+            <param name="sequence">resolution_seq</param>
+         </generator>
+		</id>
+      <many-to-one name="issue" column="issue_id" not-null="true"/>
+      <property name="description" column="description"/>
+      <many-to-one name="createdBy" column="created_by" not-null="true"/>
+      <property name="createdAt" column="created_at" type="timestamp"/>
+	</class>
+   
+	<class name="Severity" table="Severity">
+		<id name="id" type="long" column="severity_id">
+         <generator class="sequence">
+            <param name="sequence">severity_seq</param>
+         </generator>
+		</id>
+      <property name="sortOrder" column="sort_order"/>
+      <property name="description"/>
+      <property name="active"/>
+	</class>
+   
+	<class name="Status" table="Status">
+		<id name="id" type="long" column="status_id">
+         <generator class="sequence">
+            <param name="sequence">status_seq</param>
+         </generator>
+		</id>
+      <property name="sortOrder" column="sort_order"/>
+      <property name="description"/>
+      <property name="active"/>
+	</class>
+   
+	<class name="User" table="Users">
+		<id name="username">
+			<generator class="assigned"/>
+		</id>
+		<property name="password"/>
+      <property name="email"/>
+      <property name="telephone"/>
+      <property name="mobile"/>
+      <property name="fax"/>
+      <property name="adminUser" column="admin_user"/>
+      <property name="active" column="active"/>
+      <property name="createdBy" column="created_by"/>
+      <property name="createdAt" column="created_at" type="timestamp"/>
+      <property name="updatedBy" column="updated_by"/>
+      <property name="updatedAt" column="updated_at" type="timestamp"/>
+	</class>
+   
+	<class name="Version" table="Version">
+		<id name="id" type="long" column="version_id">
+         <generator class="sequence">
+            <param name="sequence">version_seq</param>
+         </generator>
+		</id>
+      <property name="sortOrder" column="sort_order"/>
+      <property name="description"/>
+      <property name="active"/>
+	</class>
+</hibernate-mapping>
