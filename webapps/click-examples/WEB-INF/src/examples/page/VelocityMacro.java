@@ -17,7 +17,7 @@ import examples.control.InvestmentSelect;
  *
  * @author Malcolm Edgar
  */
-public class VelocityMacro extends Page {
+public class VelocityMacro extends BorderedPage {
 
     Form form;
     HiddenField idField;
@@ -33,7 +33,7 @@ public class VelocityMacro extends Page {
     /**
      * @see Page#onInit()
      */
-    public void onInit() {
+    public void onInit() {     
         form = new Form("form", getContext());
         addControl(form);
 

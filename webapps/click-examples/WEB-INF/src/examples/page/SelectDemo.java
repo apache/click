@@ -1,6 +1,5 @@
 package examples.page;
 
-import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
@@ -11,7 +10,7 @@ import net.sf.click.control.Select.Option;
  *
  * @author Malcolm Edgar
  */
-public class SelectDemo extends Page {
+public class SelectDemo extends BorderedPage {
 
     Form form;
     Select genderSelect;

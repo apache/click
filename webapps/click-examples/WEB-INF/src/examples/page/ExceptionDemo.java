@@ -9,7 +9,9 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class Exception extends Page {
+public class ExceptionDemo extends BorderedPage {
+    
+    String template;
 
     /**
      * @see Page#onInit()
@@ -17,9 +19,13 @@ public class Exception extends Page {
     public void onInit() {
         System.err.println(toString() + " onInit() invoked");
 
-        ActionLink brokenPageLink = new ActionLink("brokenPageLink");
-        brokenPageLink.setListener(this, "onBrokenPageClick");
-        addControl(brokenPageLink);
+        ActionLink brokenContentLink = new ActionLink("brokenContentLink");
+        brokenContentLink.setListener(this, "onBrokenContentClick");
+        addControl(brokenContentLink);
+        
+        ActionLink brokenTemplateLink = new ActionLink("brokenTemplateLink");
+        brokenTemplateLink.setListener(this, "onBrokenTemplateClick");
+        addControl(brokenTemplateLink);
 
         ActionLink exceptionLink = new ActionLink("exceptionLink");
         exceptionLink.setListener(this, "onExceptionClick");
@@ -29,15 +35,28 @@ public class Exception extends Page {
         missingMethodLink.setListener(this, "missingMethodClick");
         addControl(missingMethodLink);
     }
+    
+    public boolean onBrokenContentClick() {
+        setPath("broken-content.htm");
+        return true;
+    }
 
-    public boolean onBrokenPageClick() {
-        setPath("broken-page.htm");
-
+    public boolean onBrokenTemplateClick() {
+        template = "broken-template.htm";
         return true;
     }
 
     public boolean onExceptionClick() {
         throw new NullPointerException("Oh No...");
+    }
+    
+    /**
+     * Override getTemplate so we can stuff things up.
+     *
+     * @see Page#getTemplate()
+     */
+    public String getTemplate() {
+        return (template != null) ? template : super.getTemplate();
     }
 
     /**

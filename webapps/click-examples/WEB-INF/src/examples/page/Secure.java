@@ -8,7 +8,7 @@ import net.sf.click.Page;
  *
  * @author Malcolm Edgar
  */
-public class Secure extends Page {
+public class Secure extends BorderedPage {
 
     /**
      * @see Page#onSecurityCheck()

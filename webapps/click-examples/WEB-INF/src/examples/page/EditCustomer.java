@@ -19,7 +19,7 @@ import examples.domain.CustomerDatabase;
  *
  * @author Malcolm Edgar
  */
-public class EditCustomer extends Page {
+public class EditCustomer extends BorderedPage {
 
     Form form;
     HiddenField idField;

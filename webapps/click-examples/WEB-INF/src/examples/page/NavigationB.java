@@ -1,10 +1,8 @@
 package examples.page;
 
-
 /**
  * Provides an navigation example Page demonstrating forward and redirect
  * page navigation. See NavigationA page for details.
- *
  *
  * @author Malcolm Edgar
  */

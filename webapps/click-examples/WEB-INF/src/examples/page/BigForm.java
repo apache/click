@@ -1,6 +1,5 @@
 package examples.page;
 
-import net.sf.click.Page;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.CreditCardField;
 import net.sf.click.control.DateField;
@@ -23,7 +22,7 @@ import net.sf.click.control.TextField;
  *
  * @author Malcolm Edgar
  */
-public class BigForm extends Page {
+public class BigForm extends BorderedPage {
 
     String DELIVERY_OPTIONS[] = {
             "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"

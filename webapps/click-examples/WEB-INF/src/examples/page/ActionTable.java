@@ -9,7 +9,7 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class ActionTable extends Page {
+public class ActionTable extends BorderedPage {
 
     ActionLink viewLink;
     ActionLink editLink;

@@ -1,14 +1,3 @@
-<html>
-<head>	
-<title>Click Examples - Exceptions</title>
-<link rel="stylesheet" type="text/css" href="style.css" title="Style">
-</head>	
-<body>
- 	
-<h1>Exceptions</h1> 
-
-#writeSourceToolbar( "examples/page/Exception.java" "exception.htm" )
-
 Click <a href="$exceptionLink.href">here</a> to cause an NullPointerException in 
 this Page.
 <p>
@@ -20,11 +9,16 @@ This type of exception will occur if you miss spell a method name when setting a
 Control listener.
 </blockquote>
 
-Click <a href="$brokenPageLink.href">here</a> to view a broken page template.
+Click <a href="$brokenTemplateLink.href">here</a> to view a broken page template.
 <blockquote>
 This exception originates from a Velocity ParseErrorException while parsing
 the page template. This type of exception is pretty rare. Most of the time 
 Velocity will ignore template errors and simply render the invalid template code.
+</blockquote>
+
+Click <a href="$brokenContentLink.href">here</a> to view a broken page content.
+<blockquote>
+TODO...
 </blockquote>
 
 Click <a href="missing.htm">missing.htm</a> to view page not found handling.
@@ -34,5 +28,3 @@ When the ClickServlet cannot find a requested page it will render the
 You can custome is this page templates to suite your own needs.
 </blockquote>
 
-</body>
-</html>

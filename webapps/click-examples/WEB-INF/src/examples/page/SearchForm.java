@@ -1,6 +1,5 @@
 package examples.page;
 
-import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
@@ -14,7 +13,7 @@ import examples.domain.CustomerDatabase;
  *
  * @author Malcolm Edgar
  */
-public class SearchForm extends Page {
+public class SearchForm extends BorderedPage {
 
     static final String[] SEARCH_TYPES = { "ID", "Name", "Age" };
 
