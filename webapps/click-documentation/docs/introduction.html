@@ -34,15 +34,17 @@ examples.
 <h2>Click Example</h2>
 A Hello World example in Click would look something like this. You would have a
 <tt>click.xml</tt> configuration file which defines our Hello World page class
-and its Velocity page template:<blockquote><pre>
+and its Velocity page template:
+<div class="code">
 &lt;click-app&gt;  
   &lt;pages&gt; 
     &lt;page path="<font color="blue">hello-world.htm</font>" classname="<font color="green">examples.page.HelloWorld</font>"/&gt; 
   &lt;/pages&gt;
 &lt;/click-app&gt; 
-</pre></blockquote>
+</div>
 
-Next we have our page class <font color="green"><tt>examples.page.HelloWorld</tt></font>:<blockquote><pre>
+Next we have our page class <font color="green"><tt>examples.page.HelloWorld</tt></font>:
+<div class="code">
 package examples.page;
 
 import java.util.Date;
@@ -54,15 +56,19 @@ public HelloWorld extends Page {
         addModel("<font color="red">time</font>", new Date());
     }
 }
-</pre></blockquote>
-And then we have the page template <font color="blue">hello-world.htm</font>:<blockquote><pre>
+</div>
+And then we have the page template <font color="blue">hello-world.htm</font>:
+<div class="code">
 &lt;html&gt;
- &lt;body&gt;
-  &lt;h2&gt;Hello World&lt;/h2&gt;
-  Hello world from Click at $<font color="red">time</font>
- &lt;/body&gt;
+  &lt;body&gt;
+  
+    &lt;h2&gt;Hello World&lt;/h2&gt;
+    
+    Hello world from Click at $<font color="red">time</font>
+    
+  &lt;/body&gt;
 &lt;/html&gt;
-</pre></blockquote>
+</div>
 
 At runtime the ClickSerlvet maps a GET <font color="blue">hello-world.htm</font> 
 request to our page class <font color="green"><tt>example.page.HelloWorld</tt></font> and creates a new instance. 
@@ -92,8 +98,7 @@ Page which demonstrate Click controls.
 <p/>
 First we have a Login page class which setups up a login form in the <tt>onInit()</tt>
 method.
-<blockquote>
-<pre>
+<div class="code">
 public class Login extends Page {
 
     Form form;
@@ -144,18 +149,20 @@ public class Login extends Page {
         return false;
     }
 }
-  
-</pre> 
-</blockquote>
+</div>
 
-Next we have the Login page template <font color="blue">login.htm</font>:<blockquote><pre>
+Next we have the Login page template <font color="blue">login.htm</font>:
+<div class="code">
 &lt;html&gt;
- &lt;body&gt;
-  &lt;h2&gt;Login&lt;/h2&gt;
-  $<font color="red">form</font>
- &lt;/body&gt;
+  &lt;body&gt;
+  
+    &lt;h2&gt;Login&lt;/h2&gt;
+    
+    $<font color="red">form</font>
+    
+  &lt;/body&gt;
 &lt;/html&gt;
-</pre></blockquote>
+</div>
 
 When the Login page is first requested the $<font color="red">form</font> object will 
 automatically render itself as:

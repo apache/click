@@ -210,8 +210,7 @@ public class Form implements Control {
         errorsPrefix = bundle.getString("errors-prefix");
         errorsSuffix = bundle.getString("errors-suffix");
         labelRequiredPrefix = bundle.getString("label-required-prefix");
-        labelRequiredSuffix = bundle.getString("label-required-suffix");
-        
+        labelRequiredSuffix = bundle.getString("label-required-suffix");  
     }
 
     // ----------------------------------------------------- Instance Variables
@@ -364,6 +363,32 @@ public class Form implements Control {
             attributes.put(name, value);
         } else {
             attributes.remove(name);
+        }
+    }
+    
+    
+    /**
+     * Return the form attributes Map.
+     * 
+     * @return the form attributes Map.
+     */
+    public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap(5);
+        }
+        return attributes;
+    }
+    
+    /**
+     * Return true if the form has attributes or false otherwise.
+     * 
+     * @return true if the form has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        if (attributes != null && !attributes.isEmpty()) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -706,7 +731,9 @@ public class Form implements Control {
         buffer.append("' action='");
         buffer.append(getContext().getRequest().getRequestURI());
         buffer.append("'");
-        ClickUtils.renderAttributes(attributes, buffer);
+        if (hasAttributes()) {
+            ClickUtils.renderAttributes(getAttributes(), buffer);
+        }
         buffer.append(">\n");
         
         buffer.append("<input name='form_name' type='hidden' value='");

@@ -23,7 +23,7 @@ and covers to following topics:
   </li>
   <li><a href="#page-error-handling">Error Handling</a> - page error handling model<p/>
   </li>
-  <li><a href="#page-page-found">Page Not Found</a> - page not found handling<p/>
+  <li><a href="#page-not-found">Page Not Found</a> - page not found handling<p/>
   </li>
 </ul>
 
@@ -33,11 +33,9 @@ In Click, a logical page is composed of a Java class and a Velocity template, wi
 components being defined in page elements of the 
 <a target="topic" href="configuration.html#application-configuration">click.xml</a> file.
 
-<blockquote>
-<pre>
+<div class="code">
 &lt;page path="<font color="red">search.htm</font>" classname="<font color="blue">com.mycorp.page.Search</font>"/&gt;
-</pre>
-</blockquote>
+</div>
 
 The path attribute specifies the location of the page Velocity template, and the classname
 attribute specifies the page Java class name.
@@ -134,16 +132,15 @@ To forward to another page using the servlet
 <a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
 set the Page's forward property. For example to forward to a page with a path 
 <tt>"<font color="blue">index.htm</font>"</tt>:
-<blockquote>
-<pre>
+<div class="code">
 public void onPost() {
    // Process form post
    ..
    
    setForward("<font color="blue">index.htm</font>");
 }
-</pre>
-</blockquote>
+</div>
+
 This will invoke a new Page class instance mapped to the path 
 <tt>"<font color="blue">index.htm</font>"</tt>. Note when a request is forwarded to another Page, 
 the controls on the second page will not be processed. This prevents confusion and bugs,
@@ -155,8 +152,7 @@ When you forward to another page the request parameters are maintained. This is 
 of passing through state information through with the request. For example to you could
 add a customer object as request parameter which is displayed in the template of the 
 forwarded page.
-<blockquote>
-<pre>
+<div class="code">
 public boolean onViewClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
@@ -166,25 +162,24 @@ public boolean onViewClick() {
    
    return false;
 }
-</pre>
-</blockquote>
+</div>
 
 Forwarded to page template <tt>"<font color="blue">view-customer.htm</font>"</tt>:
 
 <blockquote>
 <pre>
 &lt;html&gt;
-&lt;head&gt;
- &lt;title&gt;Customer Details&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
- &lt;h1&gt;Customer Details&lt;/h1&gt;
- &lt;pre&gt;
-  Full Name: $<font color="red">customer</font>.fullName
-  Email:     $<font color="red">customer</font>.email
-  Telephone: $<font color="red">customer</font>.telephone
- &lt;/pre&gt;
-&lt;/body&gt;
+ &lt;head&gt;
+   &lt;title&gt;Customer Details&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+   &lt;h1&gt;Customer Details&lt;/h1&gt;
+   &lt;pre&gt;
+     Full Name: $<font color="red">customer</font>.fullName
+     Email:     $<font color="red">customer</font>.email
+     Telephone: $<font color="red">customer</font>.telephone
+    &lt;/pre&gt;
+  &lt;/body&gt;
 &lt;/html&gt;
 </pre>
 </blockquote>
@@ -198,8 +193,7 @@ An alternative to forwarding to a new page is to simply set the path to the new
 page template to render. With this approach the page template  being rendered must have 
 everything it needs without having its associated Page object being created. Our modified 
 example would be:
-<blockquote>
-<pre>
+<div class="code">
 public boolean onViewClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
@@ -209,8 +203,7 @@ public boolean onViewClick() {
    
    return false;
 }
-</pre>
-</blockquote>
+</div>
 Note how the <font color="red">customer</font> object is passed through to the template in the Page model. This
 approach of using the Page model is not available when you forward to another Page, as
 the first Page object is "finalized" before the second Page object is created and any
@@ -230,14 +223,12 @@ it also means that all the page and request information is lost.
 <p/>
 An example of a redirect to a <tt>"<font color="blue">logout.htm</font>"</tt>
 page is provided below:
-<blockquote>
-<pre>
+<div class="code">
 public boolean onLogoutClick() {
    setRedirect("<font color="blue">logout.htm</font>");
    return false;
 }
-</pre>
-</blockquote>
+</div>
 
 <h4>Redirect Parameter Passing</h4>
 
@@ -250,8 +241,7 @@ In the example below a user will click on an OK button to confirm a payment. The
 <tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
 redirects to the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page with the
 transaction id encoded in the URL.
-<blockquote>
-<pre>
+<div class="code">
 public class Payment extends Page {
    ..
    
@@ -273,13 +263,12 @@ public class Payment extends Page {
    
    ..
 }
-</pre>
-</blockquote>
+</div>
+
 The Page class for the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page can 
 then get the transaction id through the request parameter 
 <tt>"<font color="red">trans-id</font>"</tt>:
-<blockquote>
-<pre>
+<div class="code">
 public class TransComplete extends Page {
    ..
    
@@ -294,8 +283,7 @@ public class TransComplete extends Page {
    
    ..
 }
-</pre>
-</blockquote>
+</div>
 
 <h4>Post Redirect</h4>
 The parameter passing example above is also an example of a Post Redirect. The Post
@@ -317,8 +305,7 @@ to ensure the user is logged in. In this example the login page adds a "user" ob
 the session when a user successfully authenticates. This Secure page then checks to make sure
 this session attribute is present, otherwise the request is redirected back to the login
 page.
-<blockquote>
-<pre>
+<div class="code">
 public class Secure extends Page {
 
     public boolean onSecurityCheck() {
@@ -332,15 +319,13 @@ public class Secure extends Page {
         }
     }
 }
-</pre>
-</blockquote>
+</div>
 
 <h4>Container Authentication</h4>
 Alternatively you can also use the security services provided by the J2EE Servlet 
 Container. For instance to ensure users have been authenticated by the Serlvet Container
 you could use a Secure page of:
-<blockquote>
-<pre>
+<div class="code">
 public class Secure extends Page {
 
     public boolean onSecurityCheck() {
@@ -354,16 +339,14 @@ public class Secure extends Page {
         }
     }
 }
-</pre>
-</blockquote>
+</div>
 
 <h4>Container Access Control</h4>
 The Servlet Container also provides facilities to enforce role based access control 
 (authorization). The example below is a base page to ensure only users
 in the "admin" role can access the page, otherwise users are redirected to the login page.
 Application Admin pages would extend this secure page to provide their funcationality.
-<blockquote>
-<pre>
+<div class="code">
 public class AdminPage extends Page {
 
     public boolean onSecurityCheck() {
@@ -377,32 +360,52 @@ public class AdminPage extends Page {
         }
     }
 }
-</pre>
-</blockquote>
+</div>
 
 <h4>Logging Out</h4>
 To logout using the application or container based security models you would simply 
 invalidate the session.
-<blockquote>
-<pre>
+<div class="code">
 public class Logout extends Page {
 
     public boolean onInit() {
         getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
     }
 }
-</pre>
-</blockquote>
+</div>
 
 For more information of the J2EE Servlet security facilities see the Servlet
 <a target="topic" href="http://java.sun.com/products/servlet/reference/api/index.html">Specification</a>.
 
-<a name="page-error-handing"><h2>Error Handling</h2></a>
+<a name="page-error-handling"><h2>Error Handling</h2></a>
 
-Template exceptions may not be displayed when gzip encoding header has been set.
+If an Exception occurs processing a Page object or rendering a page template the error
+is delegated to the registered error.htm
+
+TODO:
 
 <a name="page-not-found"><h2>Page Not Found</h2></a>
 
+If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
+it will use the registered "not-found.htm" page. The Click not found page is automatically configured as:
+<div class="code">
+&lt;page path="<font color="red">click/not-found.htm</font>" classname="<font color="blue">net.sf.click.Page</font>"/&gt;
+</div>
+
+You can override the default configuration and specify your own class, but you cannot change the path.
+<p/>
+When the ClickSevlet starts up it checks to see whether the <tt>not-found.htm</tt> template exists in the 
+<tt>click</tt> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
+<p/>
+You can tailor the "<tt>click/not-found.htm</tt>" template to suite you own needs. This page template
+has access to the usual Click parameters:
+<ul>
+  <li>$context</li>
+  <li>$format</li>
+  <li>$request</li>
+  <li>$response</li>
+  <li>$session</li>
+</ul>
 
 </body>
 </html>
