@@ -18,7 +18,7 @@ package tracker.page;
 import net.sf.click.Page;
 
 /**
- * Provides TODO: header
+ * Provides the Tracker Home page.
  *
  * @author Malcolm Edgar
  */

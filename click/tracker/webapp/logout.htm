@@ -1,5 +1,13 @@
 <h3>Log Out</h3> 
-     
-<p>$user you are now logged out.</p>
+ 
+<p/>
 
-<p>Click on any menu to log back in.</p>
+#if ($user)    
+ $user you are now logged out.
+#else
+ You are now logged out.
+#end
+
+<p/>
+
+Click on any menu to log back in.
