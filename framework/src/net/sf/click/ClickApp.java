@@ -35,9 +35,10 @@ import net.sf.click.util.ClickUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
-import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -48,7 +49,8 @@ import org.xml.sax.SAXException;
 
 /**
  * Application the Click application object which defines the
- * application's configuration.
+ * application's configuration, intializes the Velocity Engine and provides
+ * page templates.
  *
  * @author Malcolm Edgar
  */
@@ -133,6 +135,9 @@ class ClickApp implements EntityResolver {
 
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
+    
+    /** The VelocityEngine instance. */
+    private final VelocityEngine velocityEngine = new VelocityEngine();
 
     /**
      * Initialize the click application using the given servlet context.
@@ -159,6 +164,16 @@ class ClickApp implements EntityResolver {
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
+            
+            // Set ServletContext instance for WebappLoader
+            velocityEngine.setApplicationAttribute
+                (ServletContext.class.getName(), context);
+            
+            // Load velocity properties
+            Properties properties = getVelocityProperties(context);
+        
+            // Initialize VelocityEngine
+            velocityEngine.init(properties);
 
             // Load the format class
             loadFormatClass(rootElm);
@@ -171,9 +186,6 @@ class ClickApp implements EntityResolver {
 
             // Deploy the application files if not present
             deployFiles(context);
-
-            // Load the velocity properties.
-            loadVelocityProperties(DEFAULT_VEL_PROPS, context);
 
             // Cache page templates.
             loadTemplates();
@@ -318,8 +330,7 @@ class ClickApp implements EntityResolver {
      * @throw Exception if Velocity error occurs
      */
     Template getTemplate(String path) throws Exception {
-        //return velocityEngine.getTemplate(path);
-        return Velocity.getTemplate(path);
+        return velocityEngine.getTemplate(path);
     }
 
     // -------------------------------------------------------- Private Methods
@@ -570,62 +581,56 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadVelocityProperties(String filename, ServletContext context)
-        throws Exception {
+    private Properties getVelocityProperties(ServletContext context)
+            throws Exception {
 
         final Properties velProps = new Properties();
 
-        // Initialize velocity runtime properties.
-        velProps.put("resource.loader", "file");
+        // Set default velocity runtime properties.
 
-        velProps.put("file.resource.loader.class",
-            "org.apache.velocity.runtime.resource.loader.FileResourceLoader");
+        velProps.setProperty(RuntimeConstants.RESOURCE_LOADER, "webapp");
+        velProps.setProperty("webapp.resource.loader.class", 
+                             WebappLoader.class.getName());
 
         if (mode == PRODUCTION || mode == PROFILE) {
-            velProps.put("file.resource.loader.cache", "true");
-            velProps.put("file.resource.loader.modificationCheckInterval", "0");
+            velProps.put("webapp.resource.loader.cache", "true");
+            velProps.put("webapp.resource.loader.modificationCheckInterval",
+                         "0");
             velProps.put("velocimacro.library.autoreload", "false");
         } else {
-            velProps.put("file.resource.loader.cache", "false");
+            velProps.put("webapp.resource.loader.cache", "false");
             velProps.put("velocimacro.library.autoreload", "true");
         }
 
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                     "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
+                "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
         velProps.put("runtime.log.logsystem.log4j.category", VELOCITY_LOGGER);
 
-        velProps.put("velocimacro.library",
-                     CLICK_PATH + File.separator + VM_FILE_NAME);
+        velProps.put("velocimacro.library", CLICK_PATH + File.separator
+                     + VM_FILE_NAME);
 
         // Load user velocity properties.
         Properties userProperties = new Properties();
 
-        if (filename != null) {
-            if (filename.toUpperCase().indexOf("WEB-INF") == -1) {
-                filename = "WEB-INF/" + filename;
-            }
+        String filename = DEFAULT_VEL_PROPS;
 
-            InputStream inputStream = context.getResourceAsStream(filename);
+        InputStream inputStream = context.getResourceAsStream(filename);
 
-            if (inputStream != null) {
+        if (inputStream != null) {
+            try {
+                userProperties.load(inputStream);
+
+            } catch (IOException ioe) {
+                String message = "error loading velocity properties file: "
+                        + filename;
+                logger.error(message, ioe);
+
+            } finally {
                 try {
-                    userProperties.load(inputStream);
-
+                    inputStream.close();
                 } catch (IOException ioe) {
-                    String message =
-                        "error loading velocity properties file: " + filename;
-                    logger.error(message, ioe);
-
-                } finally {
-                    try {
-                        inputStream.close();
-                    } catch (IOException ioe) {
-                        // ignore
-                    }
+                    // ignore
                 }
-            } else if (!filename.equals(DEFAULT_VEL_PROPS)) {
-                throw new RuntimeException
-                    ("could not find velocity properties file: " + filename);
             }
         }
 
@@ -636,44 +641,12 @@ class ClickApp implements EntityResolver {
 
             Object pop = velProps.put(entry.getKey(), entry.getValue());
             if (pop != null && logger.isDebugEnabled()) {
-                String message =
-                    "user velocity property '" + entry.getKey() + "="
-                    + entry.getValue() + "' replaced default value '" + pop
-                    + "'";
+                String message = "user velocity property '" + entry.getKey()
+                        + "=" + entry.getValue() + "' replaced default value '"
+                        + pop + "'";
                 logger.debug(message);
             }
         }
-
-        // Set the real servlet path used to initialize velocity runtime.
-        String realServletPath = context.getRealPath("/");
-
-        // Setup Velocity file resouce loader path.
-        String fileResourcePath =
-            velProps.getProperty("file.resource.loader.path");
-        if (fileResourcePath != null) {
-            if (realServletPath != null) {
-                if (fileResourcePath.startsWith(realServletPath)) {
-                    velProps.put
-                        ("file.resource.loader.path", fileResourcePath);
-                } else {
-                    velProps.put("file.resource.loader.path",
-                        realServletPath + fileResourcePath);
-                }
-            } else {
-                velProps.put
-                    ("file.resource.loader.path", fileResourcePath);
-            }
-        } else {
-            if (realServletPath != null) {
-                velProps.put
-                    ("file.resource.loader.path", realServletPath);
-            } else {
-                velProps.put("file.resource.loader.path", "/");
-            }
-        }
-
-        // Initialise VelocityEngine
-        Velocity.init(velProps);
 
         if (logger.isDebugEnabled()) {
             TreeMap sortedPropMap = new TreeMap();
@@ -686,6 +659,8 @@ class ClickApp implements EntityResolver {
 
             logger.debug("velocity properties: " + sortedPropMap);
         }
+
+        return velProps;
     }
 
     private static Map loadHeadersMap(Element parentElm) {

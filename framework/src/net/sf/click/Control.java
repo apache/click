@@ -87,13 +87,13 @@ public interface Control {
      * <p/>
      * These controls may be processed by the ClickServlet, as with the
      * {@link net.sf.click.control.ActionLink} and {@link net.sf.click.control.Form}
-     * controls), or they maybe processed by the Form, in the case of
+     * controls, or they maybe processed by the Form, in the case of
      * {@link net.sf.click.control.Field} controls.
      * <p/>
      * When a control is processed it should return true if the Page should
-     * continue event processing, or false no other controls should be processed
-     * and the {@link Page#onGet()} or {@link Page#onPost()} methods should
-     * not be invoked.
+     * continue event processing, or false if no other controls should be 
+     * processed and the {@link Page#onGet()} or {@link Page#onPost()} methods 
+     * should not be invoked.
      *
      * @return true to continue Page event processing or false otherwise
      */

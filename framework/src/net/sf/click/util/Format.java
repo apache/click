@@ -21,6 +21,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Provides the default Velocity template format object. A format object
  * is added to the Velocity Context using the name "<span class="blue">format</span>", 
@@ -171,6 +173,43 @@ public class Format {
             return "&nbsp;";
         }
     }
+    
+    
+    /**
+     * Escape the given object value as a HTML string, or "&amp;nbsp;"
+     * if the object is null. 
+     * <p>
+     * Implementation is provided by Jakarta Commons Lang utility:
+     * <tt>StringEscapeUtils.escapeHtml(String)</tt>
+     * 
+     * @param value unescaped HTML
+     * @return the HTML escaped string
+     */
+    public String html(Object value) {
+        if (value != null) {
+            return StringEscapeUtils.escapeHtml(value.toString());
+        } else {
+            return "&nbsp;";
+        }
+    }
+    
+    /**
+     * Escape the given object value as a JavaScript string, or "" if the object 
+     * is null. 
+     * <p>
+     * Implementation is provided by Jakarta Commons Lang utility:
+     * <tt>StringEscapeUtils.escapeJavaScript(String)</tt>
+     * 
+     * @param value unescaped JavaScript
+     * @return the JavaScript escaped string
+     */
+    public String javascript(String value) {
+        if (value != null) {
+            return StringEscapeUtils.escapeJavaScript(value);
+        } else {
+            return "";
+        }
+    }
 
     /**
      * Return a percentage formatted number string using number. If the number
@@ -222,5 +261,4 @@ public class Format {
             return "&nbsp;";
         }
     }
-
 }

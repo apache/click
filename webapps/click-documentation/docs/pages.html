@@ -21,7 +21,7 @@ and covers to following topics:
   </li>
   <li><a href="#page-security">Security</a> - page security model
   </li>
-  <li><a href="#page-error-handling">Error Handling</a> - page error handling model
+  <li><a href="#page-error-handling">Error Handling</a> - page error handling
   </li>
   <li><a href="#page-not-found">Page Not Found</a> - page not found handling
   </li>
@@ -122,7 +122,7 @@ method is invoked instead on <tt>onGet()</tt>. See the
 <p/>
 Another view on the execution flow of Pages is illustrated in the Activity diagram below.
 <p/>
-<img src="../images/activity-diagram.png"/>
+<a name="activity-diagram"><img src="../images/activity-diagram.png"/></a>
 <p class="diagram">
 <b>Figure 3. &nbsp; Page Execution Activity Diagram</b>
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
@@ -183,9 +183,9 @@ Forwarded to page template <span class="html">view-customer.htm</span>:
  &lt;body&gt;
    &lt;h1&gt;Customer Details&lt;/h1&gt;
    &lt;pre&gt;
-     Full Name: $<font color="red">customer</font>.fullName
-     Email:     $<font color="red">customer</font>.email
-     Telephone: $<font color="red">customer</font>.telephone
+     Full Name: <span class="red">$customer</span>.fullName
+     Email:     <span class="red">$customer</span>.email
+     Telephone: <span class="red">$customer</span>.telephone
     &lt;/pre&gt;
   &lt;/body&gt;
 &lt;/html&gt; 
@@ -442,22 +442,22 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
 has access to the usual Click objects:
 <ul>
-  <li><span class="">$context</span> &nbsp; - &nbsp;
+  <li><span class="red">$context</span> &nbsp; - &nbsp;
     the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  
-  <li><span class="">$format</span> &nbsp; - &nbsp; 
+  <li><span class="red">$format</span> &nbsp; - &nbsp; 
     the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
     object for formatting the display of objects.
   </li>
-  <li><span class="">$request</span> &nbsp; - &nbsp; 
+  <li><span class="red">$request</span> &nbsp; - &nbsp; 
     the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
     object.
   </li>
-  <li><span class="">$response</span> &nbsp; - &nbsp; 
+  <li><span class="red">$response</span> &nbsp; - &nbsp; 
     the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
     object.
   </li>
-  <li><span class="">$session</span> &nbsp; - &nbsp; 
+  <li><span class="red">$session</span> &nbsp; - &nbsp; 
    the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
    for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
   </li>

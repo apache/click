@@ -171,17 +171,13 @@
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-all-${version}.jar"/>
          </classpath>
-         <packageset dir="framework/src"/>
+         <packageset dir="framework/src">
+           <include name="net/**"/>
+           <exclude name="org/**"/>
+         </packageset>
       </javadoc>
-      <!--
- 	  <replace dir="webapps/click-documentation/docs/click-api" 
- 		     token='onload="windowTitle();"' summary="true">
- 	     <include name="**/*.html"/>
- 	  	<replacetoken></replacetoken>
- 	  </replace>
- 	  -->
-   	  <copy file="framework/src/net/sf/click/control/calendar.gif"
-   	        todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
+   	<copy file="framework/src/net/sf/click/control/calendar.gif"
+   	      todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <delete quiet="false" failonerror="false">
          <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
       </delete>
