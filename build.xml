@@ -207,9 +207,6 @@
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
-      <copy file="framework/src/net/sf/click/click.dtd"
-    	    overwrite="true"
-            todir="webapps/click-documentation/docs"/>
    </target>   
 
 </project>
