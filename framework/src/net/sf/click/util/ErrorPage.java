@@ -86,7 +86,6 @@ import org.apache.velocity.exception.ParseErrorException;
  * <li>{@link #error} - the error causing exception</li>
  * <li>{@link #mode} - the Click application mode</li>
  * <li>{@link #page} - the Page object in error</tt>
- *  <li>{@link #templatePath} - the path of the template with the error</li>
  * </ul>
  *
  * @author Malcolm Edgar
@@ -107,9 +106,6 @@ public class ErrorPage extends Page {
 
     /** The page in error. */
     protected Page page;
-    
-    /** The target page template path. */
-    protected String templatePath;
 
     // --------------------------------------------------------- Public Methods
 
@@ -173,7 +169,6 @@ public class ErrorPage extends Page {
      */
     public void setPage(Page page) {
         this.page = page;
-        templatePath = page.getTemplate();
     }
 
     /**
@@ -203,21 +198,23 @@ public class ErrorPage extends Page {
         addModel("mode", getMode());
         addModel("page", getPage());
         addModel("isParseError", new Boolean(isParseError()));
-        
-        // TODO: report of template
  
         if (error instanceof ParseErrorException) {
+            
+            String templatePath = getPage().getTemplate();
+
             addModel("templatePath", templatePath);
 
             String errorMessage = getParseMessage(error);
 
             addModel("errorMessage", errorMessage);
 
-            if (templatePath != null) {
-                int errorLine = getErrorLine(error.getMessage());
-                getModel().put("template", getTemplate(templatePath, errorLine));
-            }
-
+            int errorLine = getErrorLine(error.getMessage());
+            String templateErrorSection = 
+                getTemplateErrorSection(templatePath, errorLine);
+            
+            getModel().put("templateErrorSection", templateErrorSection); 
+                    
         } else {
             Throwable cause = null;
             if (error instanceof ServletException) {
@@ -297,7 +294,7 @@ public class ErrorPage extends Page {
      * @param errorLine the parse error causing line number to highlight
      * @return a HTML rendered section of the parsing error page template
      */
-    protected String getTemplate(String pagePath, int errorLine) {
+    protected String getTemplateErrorSection(String pagePath, int errorLine) {
 
         StringBuffer buffer = new StringBuffer();
 
@@ -433,7 +430,7 @@ public class ErrorPage extends Page {
                         ("Could not parse line number", nfe);
                     break;
                 }
-            }
+            } 
 
             if (!atFound && token.equals("at")) {
                 atFound = true;

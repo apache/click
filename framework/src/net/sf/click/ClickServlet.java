@@ -32,11 +32,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.SessionMap;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.io.VelocityWriter;
 import org.apache.velocity.util.SimplePool;
 
@@ -446,6 +448,15 @@ public class ClickServlet extends HttpServlet {
 
             template.merge(context, velocityWriter);
 
+        } catch (ParseErrorException error) {
+            // Parse error probably occured in content, as output has already
+            // been written to write out an error message before it is closed.
+            if (!page.getTemplate().equals(page.getPath())) {
+                velocityWriter.write(getParsingErrorMessage(error, page));
+            }
+            
+            throw error;
+            
         } finally {
             try {
                 if (velocityWriter != null) {
@@ -657,4 +668,30 @@ public class ClickServlet extends HttpServlet {
             }
         }
     }
+    
+    /**
+     * Return a HTML page parsing error message.
+     * 
+     * @param e the Velocity parsing error
+     * @param page the page which caused the error
+     * @return a HTML page parsing error message
+     */
+    protected String getParsingErrorMessage(ParseErrorException e, Page page) {
+        StringBuffer buffer = new StringBuffer(5000);
+        
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'><tr>");
+        buffer.append("<td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
+        buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
+        buffer.append(page.getClass().getName());
+        buffer.append("</td></tr><tr><td width='12%'><b>Path</b></td><td>");
+        buffer.append(page.getPath());
+        buffer.append("</td></tr><tr><td><b width='12%'>Template</b></td><td>");
+        buffer.append(page.getTemplate());
+        buffer.append("</td></tr><td valign='top' colspan='2'><b>Stack trace</b><br><tt>");
+        buffer.append(ClickUtils.toStackTrace(e));
+        buffer.append("</tt></td></tr></table>");
+        
+        return buffer.toString();
+    }
+
 }

@@ -43,14 +43,14 @@ import java.util.ResourceBundle;
  * </tt>
  * <li>Call {@link #onGet()} for any additional processing.</li>
  * <li>Render the page merging the {@link #model} with the
- * Velocity template defined by the {@link #path}.</li>
+ * Velocity template defined by the {@link #getTemplate()}.</li>
  * <li>Call {@link #onDestroy()} to clean up any resources.</li>
  * </ol></blockquote>
  * For POST requests the default execution path is identical, except the
  * {@link #onPost()} method is called instead of {@link #onGet()}.
  * <p/>
  * When a Velocity template is rendered the ClickServlet uses Pages:<ul>
- * <li>the {@link #path} to find the Velocity
+ * <li>the {@link #getTemplate()} to find the Velocity
  * template.</li>
  * <li>the {@link #model} to populate the Velocity Context</tt>
  * <li>the {@link #format} to add to the Velocity Context</tt>
@@ -357,13 +357,44 @@ public class Page {
     }
     
     /**
-     * Return the path of the page template to render. By default this method
+     * Return the path of the page template to render, by default this method
      * returns {@link #getPath()}.
      * <p/>
      * Pages can override this method to return an alternative page template. 
      * This is very useful when implementing an standardized look and feel for
-     * a web site. You can return the default template, which uses the
-     * Velocity <tt>#include($path)</tt> to render customized page content.
+     * a web site. The example below provides a BorderedPage base Page which 
+     * other site templated Pages should extend. 
+     *
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
+     *     <span class="kw">public</span> String getTemplate() {
+     *         <span class="kw">return</span> <span class="st">"border.htm"</span>;  
+     *     }
+     * } </pre>
+     * 
+     * The BorderedPage returns the page border template <span class="st">"border.htm"</span>: 
+     * 
+     * <pre class="codeHtml">
+     * &lt;html&gt;
+     *   &lt;head&gt;
+     *     &lt;title&gt; <span class="blue">$title</span> &lt;/title&gt;
+     *     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+     *   &lt;/head&gt;
+     *   &lt;body&gt;
+     * 
+     *     &lt;h1&gt; <span class="blue">$title</span> &lt;/h1&gt;
+     *     &lt;hr/&gt;
+     * 
+     *     <span class="red">#parse</span>( <span class="blue">$path</span> )
+     * 
+     *   &lt;/body&gt;
+     * &lt;/html&gt; </pre>
+     * 
+     * Other pages insert their content into this template, via their 
+     * {@link #path} property using the Velocity 
+     * <a href="../../../../velocity/vtl-reference-guide.html#parse">#parse</a>
+     * directive. Note the <span class="blue">$path</span> value is automatically 
+     * added to the VelocityContext by the ClickServlet.
      * 
      * @return the path of the page template to render, by default returns
      * {@link #getPath()}.
