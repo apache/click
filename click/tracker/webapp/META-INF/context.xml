@@ -1,5 +1,17 @@
-<Context docBase="${catalina.home}/webapps/tracker">
+<Context path="/tracker" docBase="${catalina.home}/webapps/tracker">
 
+   <Realm
+      className="org.apache.catalina.realm.JDBCRealm" 
+      connectionName="scout"
+      connectionPassword="compass"
+      connectionURL="jdbc:mckoi://localhost:9157/Tracker"
+      driverName="com.mckoi.JDBCDriver"
+      roleNameCol="rolename"
+      userCredCol="password"
+      userNameCol="username"
+      userRoleTable="User_Roles"
+      userTable="Users"/>
+          
    <Resource 
       name="jdbc/tracker" 
       auth="Container" 
@@ -12,15 +24,5 @@
       password="compass" 
       driverClassName="com.mckoi.JDBCDriver"
       url="jdbc:mckoi://localhost:9157/Tracker"/>
-      
-   <Realm 
-      className="org.apache.catalina.realm.DataSourceRealm" 
-      debug="99"
-      dataSourceName="jdbc/tracker"
-      userTable="Users" 
-      userNameCol="username" 
-      userCredCol="password"
-      userRoleTable="User_Roles" 
-      roleNameCol="rolename"/>
 
 </Context>
