@@ -51,6 +51,15 @@ h4  {
   text-decoration: none;
 }
 
+.code {
+	font-family: courier;
+	margin-top: 1em;
+	margin-left: 3em;
+	margin-bottom: 1em;
+	white-space: pre;
+}
+
+/* TODO check values from form.css */
 a.error {
 	color: red;
 }

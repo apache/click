@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package net.sf.click.control;
 
 /**
- * Provides an Label display control. The Label control performs no server side 
+ * Provides a Label display control. The Label control performs no server side 
  * processing.
  *
  * @author Malcolm Edgar

@@ -240,7 +240,7 @@ public class HiddenField extends Field {
     }
 
     /**
-     * @see Field#setValue(String)
+     * @see Field#setValue(Object)
      */
     public void setValue(Object value) {
         if ((value != null) && (value.getClass() != valueClass)) {
