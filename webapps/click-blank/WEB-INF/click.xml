@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <click-app>
   <pages>
-    <page path="pages/welcome.htm" classname="net.sf.click.Page"/>
+    <page path="welcome.htm" classname="net.sf.click.Page"/>
   </pages>
 </click-app>
