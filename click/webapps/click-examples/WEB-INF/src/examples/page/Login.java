@@ -47,7 +47,7 @@ public class Login extends Page {
         cancelButton.setListener(this, "onCancelClicked");
         form.add(cancelButton);
     }
-    
+
     /**
      * @see Page#onSecurityCheck()
      */
@@ -55,11 +55,11 @@ public class Login extends Page {
         if (getContext().hasSession()) {
             setRedirect("secure.htm");
             return false;
-            
+
         } else {
             return true;
         }
-    } 
+    }
 
     public boolean onOkClicked() {
         if (form.isValid()) {
@@ -72,8 +72,8 @@ public class Login extends Page {
                 getContext().setSessionAttribute("user", user);
                 setRedirect("secure.htm");
 
-            } else {        
-                form.setError(getMessage("authentication-error"));           
+            } else {
+                form.setError(getMessage("authentication-error"));
             }
         }
 

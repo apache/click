@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +24,11 @@ import javax.servlet.http.HttpSession;
 /**
  * Provides the HTTP request context information for pages. A new Context object
  * will be created for each Page.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class Context {
-    
+
     /** The servlet context. */
     protected final ServletContext context;
 
@@ -43,12 +43,12 @@ public class Context {
 
     /** The http session. */
     protected HttpSession session;
-    
+
     /** The HTTP method is POST flag. */
     protected final boolean isPost;
 
     /**
-     * 
+     *
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
@@ -96,7 +96,7 @@ public class Context {
     public ServletContext getServletContext() {
         return context;
     }
-    
+
     /**
      * Return the user's HttpSession, creating one if neccessary.
      *
@@ -108,55 +108,55 @@ public class Context {
         }
         return session;
     }
-    
+
     /**
-     * Return the page resouce path from the request (Request URI path - Request 
+     * Return the page resouce path from the request (Request URI path - Request
      * Context path). For example:
      * <pre>
      * http://www.mycorp.com/banking/secure/login.html  ->  secure/login.html
      * </pre>
-     * 
+     *
      * @return the page resource path from the request
      */
     public String getResourcePath() {
         int length = request.getContextPath().length();
         return request.getRequestURI().substring(length + 1);
     }
-    
+
     /**
      * Return true if the request has been forwarded. With a forwarded request
      * the URL and URI ends are different.
-     * 
+     *
      * @return true if the request has been forwarded
      */
     public boolean isForward() {
         String url = request.getRequestURL().toString();
-        
+
         return !url.endsWith(request.getRequestURI());
     }
-    
+
     /**
      * Return true if the HTTP request method is "POST".
-     * 
+     *
      * @return true if the HTTP request method is "POST"
      */
     public boolean isPost() {
         return isPost;
     }
-    
+
     /**
      * Return the named request attribute, or null if not defined.
-     * 
+     *
      * @param name the name of the request attribute
      * @return the named request attribute, or null if not defined
      */
     public Object getRequestAttribute(String name) {
         return request.getAttribute(name);
     }
-    
+
     /**
      * This method will set the named object in the HTTP request.
-     * 
+     *
      * @param name the storage name for the object in the request
      * @param value the object to store in the request
      */
@@ -169,7 +169,7 @@ public class Context {
      * <p/>
      * If the session is not defined this method will return null, and a
      * session will not be created.
-     * 
+     *
      * @param name the name of the session attribute
      * @return the named session attribute, or null if not defined
      */
@@ -180,22 +180,22 @@ public class Context {
             return null;
         }
     }
-    
+
     /**
      * This method will set the named object in the HttpSession.
      * <p/>
      * This method will create a session if one does not alerady exist.
-     * 
+     *
      * @param name the storage name for the object in the session
      * @param value the object to store in the session
      */
     public void setSessionAttribute(String name, Object value) {
         getSession().setAttribute(name, value);
     }
-    
+
     /**
      * Return true if a HttpSession exists, or false otherwise.
-     * 
+     *
      * @return true if a HttpSession exists, or false otherwise
      */
     public boolean hasSession() {

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,32 +19,33 @@ import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Button control: &nbsp; &lt;input type='button'&gt;.
- * <p/>
- * <table class='form'><tr><td>
+ *
+ * <table class='htmlHeader'>
+ * <tr><td>
  * <input type='button' value='Button' title='Button Control'/>
- * </td></tr></table>
- * <p/>
- * The Button control is used to render a JavaScript enabled button which can 
- * perform client side logic. The Button control provides no servier side 
+ * </td></tr>
+ * </table>
+ *
+ * The Button control is used to render a JavaScript enabled button which can
+ * perform client side logic. The Button control provides no servier side
  * processing. If server side processing is required use {@link Submit} instead.
  * <p/>
  * The example below adds a back button to a form, which when clicked returns
  * to the previous page.
- * <blockquote><pre>
- * // Java code
+ *
+ * <div class="code">// Java code
  * Button backButton = new Button(" &lt Back ");
  * backButton.setOnClick("history.back();");
  * backButton.setTitle("Return to previous page");
  * form.add(backButton);
  *
  * &lt;-- HTML output --&gt;
- * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();' 
- *        title='Return to previous page'/&gt;
- * </pre></blockquote>
+ * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();'
+ *        title='Return to previous page'&gt;
+ * </div>
  *
- * <p/>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @see Reset
@@ -93,19 +94,19 @@ public class Button extends Field {
     }
 
     /**
-     * Return the button type: 'button'.
+     * Return the input type: '<tt>button</tt>'
      *
-     * @return the button type: 'button'
+     * @return the input type: '<tt>button</tt>'
      */
     public String getType() {
         return "button";
-    } 
+    }
 
     // -------------------------------------------------------- Public Methods
-    
+
     /**
      * Returns true, as buttons perform no server side logic.
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {

@@ -20,17 +20,17 @@ import net.sf.click.control.TextField;
 
 /**
  * Provides a big form example which includes all the available Form Fields.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class BigForm extends Page {
-    
+
     String DELIVERY_OPTIONS[] = {
             "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"
     };
-    
+
     RadioGroup radioGroup;
-    
+
     public void onInit() {
         Form form = new Form("form", getContext());
         addControl(form);
@@ -44,100 +44,100 @@ public class BigForm extends Page {
         textField.setTitle("Your username must be between 6 and 12 characters");
         textField.setFocus(true);
         form.add(textField);
-        
+
         PasswordField passwordField = new PasswordField("Password");
         passwordField.setRequired(true);
         passwordField.setMinLength(6);
         passwordField.setMaxLength(20);
         form.add(passwordField);
-        
+
         EmailField emailField = new EmailField("Email");
         emailField.setRequired(true);
         form.add(emailField);
-        
+
         IntegerField integerField = new IntegerField("Customer Number");
         integerField.setRequired(true);
         form.add(integerField);
-        
+
         form.add(new Label("<hr/>"));
         form.add(new Label("<b>Order Details</b>"));
-        
+
         DoubleField doubleField = new DoubleField("Retail Price");
         doubleField.setValue("99.95");
         form.add(doubleField);
-        
+
         CreditCardField creditCardField = new CreditCardField("Credit Card");
         form.add(creditCardField);
-        
+
         IntegerField monthField = new IntegerField("Expiry Month");
         monthField.setMaxLength(2);
         monthField.setMinValue(1);
         monthField.setMaxValue(12);
         form.add(monthField);
-        
+
         IntegerField yearField = new IntegerField("Expiry Year");
         yearField.setMaxLength(4);
         yearField.setMinValue(2000);
         yearField.setMaxValue(2010);
         form.add(yearField);
-        
+
         Checkbox checkbox = new Checkbox("Contact me");
         checkbox.setTitle("Please contact me before delivery");
         form.add(checkbox);
-        
+
         radioGroup = new RadioGroup("Packaging", getContext());
-        radioGroup.setLayoutHorizontal(false);
-        radioGroup.add(new Radio("Protective"));
-        Radio radio = new Radio("Standard");
+        radioGroup.add(new Radio("Protective "));
+        Radio radio = new Radio("Standard ");
         radio.setListener(this, "subtest");
         radio.setChecked(true);
         radioGroup.add(radio);
-        radioGroup.add(new Radio("GIFT", "Gift Wrap"));
+        radioGroup.add(new Radio("GIFT", "Gift Wrap "));
         radioGroup.setListener(this, "test");
+     //   radioGroup.setValue("GIFT");
         form.add(radioGroup);
-       
+
         Select select = new Select("Delivery type");
         select.addAll(DELIVERY_OPTIONS);
         select.setRequired(true);
         select.setTitle("Type of delivery required");
         form.add(select);
-        
+
         DateField dateField = new DateField("Delivery date");
         form.add(dateField);
-        
+
         TextArea textArea = new TextArea("Delivery Notes");
         textArea.setTitle("Please tell us about any special delivery instructions");
         form.add(textArea);
-        
+
         Submit okButton = new Submit("    OK    ");
         okButton.setTitle("Submit the form");
         form.add(okButton);
-        
+
         Submit cancelButton = new Submit("  Cancel  ");
         cancelButton.setListener(this, "onCancelClick");
         cancelButton.setTitle("Return to Click Examples");
         form.add(cancelButton);
-        
+
         Reset reset = new Reset("  Reset  ");
         reset.setTitle("Undo any form changes");
         form.add(reset);
     }
-    
+
     /**
      * On a POST Cancel button submit redirect to "examples.html"
-     * 
+     *
      * @return true
      */
     public boolean onCancelClick() {
         setRedirect("index.html");
         return false;
     }
-    
+
     public boolean subtest() {
         System.err.println("SUB radio="+radioGroup.getName()+"="+radioGroup.getValue());
         return true;
     }
-    
+
     public boolean test() {
         System.err.println("BIG radio="+radioGroup.getName()+"="+radioGroup.getValue());
         return true;

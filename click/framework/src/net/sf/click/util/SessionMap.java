@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 /**
- * Provides a Map adaptor for HttpSession objects. A SessionMap instance is 
+ * Provides a Map adaptor for HttpSession objects. A SessionMap instance is
  * available in each Velocity page using the name "session".
  * <p/>
  * For example suppose we have a User object in the session with the
@@ -39,7 +39,7 @@ import javax.servlet.http.HttpSession;
  *   You are not logged on.
  * #end
  * </pre>
- * The ClickServlet adds a SessionMap instance to the Velocity Context before 
+ * The ClickServlet adds a SessionMap instance to the Velocity Context before
  * it merged with the page template.
  *
  * @author Malcolm.Edgar

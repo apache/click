@@ -6,13 +6,13 @@ import net.sf.click.Page;
 
 /**
  * Provides an ActionDemo example Page.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class ActionDemo extends Page {
 
     net.sf.click.control.ActionLink actionLink;
-    
+
     /**
      * @see Page#onInit()
      */
@@ -21,11 +21,11 @@ public class ActionDemo extends Page {
         actionLink.setListener(this, "onLinkClick");
         addControl(actionLink);
     }
-    
+
     public boolean onLinkClick() {
         String msg = getClass().getName() + ".onLinkClick invoked at " + (new Date());
         addModel("clicked", msg);
-        
+
         return true;
     }
 }

@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Java source code, HTML and XML examples rendering page.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class SourceViewer extends Page {
@@ -132,11 +132,11 @@ public class SourceViewer extends Page {
                 String keyword = VELOCITY_KEYWORDS[i];
                 line = renderVelocityKeywords(line, keyword);
             }
-            
+
             String renderedDollar = "<font color=\"red\">$</font>";
-            
+
             line = StringUtils.replace(line, "$", renderedDollar);
-            
+
         } else {
             line = ClickUtils.toHtmlEncodeNoBreaks(line);
         }

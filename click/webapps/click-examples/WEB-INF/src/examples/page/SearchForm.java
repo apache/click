@@ -15,35 +15,35 @@ import examples.domain.CustomerDatabase;
  * @author Malcolm Edgar
  */
 public class SearchForm extends Page {
-    
+
     static final String[] SEARCH_TYPES = { "ID", "Name", "Age" };
-    
+
     TextField textField;
     Select typeSelect;
-    
+
     public void onInit() {
         Form form = new Form("form", getContext());
         addControl(form);
-        
+
         textField = new TextField("Search");
         textField.setTitle("Enter customer info");
         form.add(textField);
-        
+
         typeSelect = new Select("type");
         typeSelect.addAll(SEARCH_TYPES);
         typeSelect.setTitle("Type of search");
         form.add(typeSelect);
-        
+
         Submit submit = new Submit(" Go ");
         submit.setTitle("Click Go to search");
         form.add(submit);
     }
-    
+
     public void onPost() {
         Customer customer = null;
         String value = textField.getValue().trim();
         String type = typeSelect.getValue().toLowerCase();
-        
+
         if (type.equals("id")) {
             customer = CustomerDatabase.findCustomerByID(value);
         }
@@ -53,7 +53,7 @@ public class SearchForm extends Page {
         else if (type.equals("age")) {
             customer = CustomerDatabase.findCustomerByAge(value);
         }
-        
+
         if (customer != null) {
             addModel("customerDetail", customer);
         }

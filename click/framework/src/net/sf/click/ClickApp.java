@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -59,7 +59,7 @@ import org.xml.sax.SAXException;
  * @author Malcolm Edgar
  */
 class ClickApp implements EntityResolver {
-    
+
     /**
      * The default Click configuration filename: &nbsp;
      * "<tt>/WEB-INF/click.xml</tt>"
@@ -94,12 +94,12 @@ class ClickApp implements EntityResolver {
 
     /** The error page file name: &nbsp; "<tt>error.html</tt>" */
     static final String ERROR_FILE_NAME = "error.htm";
-    
+
     static final String ERROR_PATH = CLICK_PATH + "/" + ERROR_FILE_NAME;
 
     /** The page not found file name: &nbsp; "<tt>not-found.html</tt>" */
     static final String NOT_FOUND_FILE_NAME = "not-found.htm";
-    
+
     static final String NOT_FOUND_PATH = CLICK_PATH + "/" + NOT_FOUND_FILE_NAME;
 
     /**
@@ -119,21 +119,21 @@ class ClickApp implements EntityResolver {
 
     /** The debug application mode. */
     static final int DEBUG = 3;
-    
-    static final String[] MODE_VALUES = 
+
+    static final String[] MODE_VALUES =
         { "production", "profile", "development", "debug" };
 
     // -------------------------------------------------------- Package Members
 
     /** The format class. */
     private Class formatClass;
-    
+
     /** The application logger. */
     private final Logger logger = Logger.getLogger(ClickApp.class);
 
     /** The application mode: [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG ] */
     private int mode;
-    
+
     /** The page not found Page configuration element. */
     private PageElm notFoundPage;
 
@@ -151,7 +151,7 @@ class ClickApp implements EntityResolver {
         InputStream inputStream = context.getResourceAsStream(DEFAULT_APP_CONFIG);
         if (inputStream == null) {
             throw new RuntimeException
-                ("could not find click app configuration file: " 
+                ("could not find click app configuration file: "
                  + DEFAULT_APP_CONFIG);
         }
 
@@ -165,7 +165,7 @@ class ClickApp implements EntityResolver {
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
-            
+
             // Load the format class
             loadFormatClass(rootElm);
 
@@ -177,10 +177,10 @@ class ClickApp implements EntityResolver {
 
             // Deploy the application files if not present
             deployFiles(context);
-            
+
             // Load the velocity properties.
             loadVelocityProperties(DEFAULT_VEL_PROPS, context);
-            
+
             // Cache page templates.
             loadTemplates();
 
@@ -188,9 +188,9 @@ class ClickApp implements EntityResolver {
             ClickUtils.close(inputStream);
         }
     }
-    
+
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * This method resolves the click.dtd for the XML parser using the
      * classpath resource: <tt>/net/sf/click/click.dtd</tt>
@@ -208,7 +208,7 @@ class ClickApp implements EntityResolver {
             throw new IOException("could not load resource: " + DTD_FILE_PATH);
         }
     }
-    
+
     // -------------------------------------------------------- Package Methods
 
     /**
@@ -220,11 +220,11 @@ class ClickApp implements EntityResolver {
     int getMode() {
         return mode;
     }
-    
+
     /**
      * Return the application mode String value: &nbsp; <tt>["production",
      * "profile", "development", "debug"].
-     * 
+     *
      * @return the application mode String value
      */
     String getModeValue() {
@@ -239,23 +239,23 @@ class ClickApp implements EntityResolver {
      */
     Class getPageClass(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
-        
+
         if (page != null) {
             return page.getPageClass();
         } else {
             return null;
         }
     }
-    
+
     /**
      * Return a new format object for page of the given path.
-     * 
+     *
      * @param path the path of the page
      * @return a new format object for page of the given path
      */
     Object getPageFormat(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
-        
+
         if (page != null) {
             try {
                 return page.getFormatClass().newInstance();
@@ -268,34 +268,34 @@ class ClickApp implements EntityResolver {
             return null;
         }
     }
-    
+
     /**
      * Return the headers of the page for the given path.
-     * 
+     *
      * @param path the path of the page
      * @return a Map of headers for the given page path
      */
     Map getPageHeaders(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
-        
+
         if (page != null) {
             return page.getHeaders();
         } else {
             return null;
         }
     }
-    
+
     /**
      * Return the page not found <tt>Page</tt> <tt>Class</tt>.
-     * 
+     *
      * @return the page not found <tt>Page</tt> <tt>Class</tt>
      */
     Class getNotFoundPageClass() {
         PageElm page = (PageElm) pageByPathMap.get(NOT_FOUND_PATH);
-        
+
         if (page != null) {
             return page.getPageClass();
-            
+
         } else {
             return net.sf.click.Page.class;
         }
@@ -303,15 +303,15 @@ class ClickApp implements EntityResolver {
 
     /**
      * Return the error handling page <tt>Page</tt> <tt>Class</tt>.
-     * 
+     *
      * @return the error handling page <tt>Page</tt> <tt>Class</tt>
      */
     Class getErrorPageClass() {
         PageElm page = (PageElm) pageByPathMap.get(ERROR_PATH);
-        
+
         if (page != null) {
             return page.getPageClass();
-            
+
         } else {
             return net.sf.click.util.ErrorPage.class;
         }
@@ -319,7 +319,7 @@ class ClickApp implements EntityResolver {
 
     /**
      * Return the Velocity Template for the give page path.
-     * 
+     *
      * @return the Velocity Template for the give page path
      * @throw Exception if Velocity error occurs
      */
@@ -437,7 +437,7 @@ class ClickApp implements EntityResolver {
 
     private void loadMode(Element rootElm) throws JDOMException {
         Element modeElm = rootElm.getChild("mode");
-        
+
         if (modeElm != null) {
             String modeValue = modeElm.getAttributeValue("value");
 
@@ -493,7 +493,7 @@ class ClickApp implements EntityResolver {
 
             pageByPathMap.put(ERROR_PATH, page);
         }
-        
+
         if (!pageByPathMap.containsKey(NOT_FOUND_PATH)) {
             ClickApp.PageElm page = new ClickApp.PageElm
                 ("net.sf.click.Page", NOT_FOUND_PATH, formatClass);
@@ -501,20 +501,20 @@ class ClickApp implements EntityResolver {
             pageByPathMap.put(NOT_FOUND_PATH, page);
         }
     }
-    
-    private void loadFormatClass(Element rootElm)  
+
+    private void loadFormatClass(Element rootElm)
         throws ClassNotFoundException, JDOMException {
-        
+
         Element formatElm = rootElm.getChild("format");
 
         if (formatElm != null) {
             String classname = formatElm.getAttributeValue("classname");
-            
+
             if (classname == null) {
                 throw new RuntimeException
-                    ("'format' element missing 'classname' attribute.");                
+                    ("'format' element missing 'classname' attribute.");
             }
-            
+
             formatClass = Class.forName(classname);
 
         } else {
@@ -541,9 +541,9 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadPages(Element rootElm) 
+    private void loadPages(Element rootElm)
         throws ClassNotFoundException, JDOMException {
-        
+
         Element pagesElm = rootElm.getChild("pages");
 
         if (pagesElm == null) {
@@ -561,24 +561,24 @@ class ClickApp implements EntityResolver {
         List pageList = pagesElm.getChildren();
         for (int i = 0; i < pageList.size(); i++) {
             Element pageElm = (Element) pageList.get(i);
-            
+
             if (pageElm.getName().equals("page")) {
-                ClickApp.PageElm page = 
+                ClickApp.PageElm page =
                         new ClickApp.PageElm(pageElm, headersMap, formatClass);
 
-                pageByPathMap.put(page.getPath(), page);    
-                
+                pageByPathMap.put(page.getPath(), page);
+
             } else {
                 String msg = "click.xml <pages> contains a non <page>"
                     + " element: <" + pageElm.getName() + "/>";
-                logger.warn(msg);    
+                logger.warn(msg);
             }
         }
     }
 
-    private void loadVelocityProperties(String filename, ServletContext context) 
+    private void loadVelocityProperties(String filename, ServletContext context)
         throws Exception {
-        
+
         final Properties velProps = new Properties();
 
         // Initialize velocity runtime properties.
@@ -677,7 +677,7 @@ class ClickApp implements EntityResolver {
                 velProps.put("file.resource.loader.path", "/");
             }
         }
-        
+
         // Initialise VelocityEngine
         Velocity.init(velProps);
 
@@ -693,19 +693,19 @@ class ClickApp implements EntityResolver {
             logger.debug("velocity properties: " + sortedPropMap);
         }
     }
-    
+
     private static Map loadHeadersMap(Element parentElm) {
         Map headersMap = new HashMap();
-       
+
         List headerList = parentElm.getChildren("header");
-        
+
         for (int i = 0, size = headerList.size(); i < size; i++) {
             Element header = (Element) headerList.get(i);
-            
+
             String name = header.getAttributeValue("name");
             String type = header.getAttributeValue("type");
             String propertyValue = header.getAttributeValue("value");
-            
+
             Object value = null;
 
             if (type == null || "String".equalsIgnoreCase(type)) {
@@ -721,53 +721,53 @@ class ClickApp implements EntityResolver {
                     + type;
                 throw new IllegalArgumentException(message);
             }
-            
+
             headersMap.put(name, value);
         }
-        
+
         return headersMap;
     }
-    
+
     // ---------------------------------------------------------- Inner Classes
-    
+
     /**
      * @author Malcolm
      */
     private static class PageElm {
-        
+
         private final Class formatClass;
 
         private final Map headers;
-        
+
         private final Class pageClass;
 
         private final String path;
 
         private PageElm(Element element, Map commonHeaders, Class formatClass)
             throws ClassNotFoundException, JDOMException {
-            
+
             // Set formatClass
             this.formatClass = formatClass;
 
             // Set headers
-            Map aggregationMap = new HashMap(commonHeaders);            
+            Map aggregationMap = new HashMap(commonHeaders);
             Map pageHeaders = loadHeadersMap(element);
             aggregationMap.putAll(pageHeaders);
             headers = Collections.unmodifiableMap(aggregationMap);
-            
+
             // Set pageClass
             String value = element.getAttributeValue("classname");
             value = (value != null) ? value : "net.sf.click.Page";
 
-            pageClass = Class.forName(value);          
-            
+            pageClass = Class.forName(value);
+
             // Set path
             path = element.getAttributeValue("path");
         }
 
-        private PageElm(String classname, String path, Class formatClass) 
+        private PageElm(String classname, String path, Class formatClass)
             throws ClassNotFoundException {
-            
+
             this.formatClass = formatClass;
             this.headers = Collections.EMPTY_MAP;
             pageClass = Class.forName(classname);
@@ -777,11 +777,11 @@ class ClickApp implements EntityResolver {
         private Class getFormatClass() {
             return formatClass;
         }
-        
+
         private Map getHeaders() {
             return headers;
         }
-        
+
         private Class getPageClass() {
             return pageClass;
         }

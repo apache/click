@@ -1,12 +1,12 @@
 /**
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,18 +24,19 @@ import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Action Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
- * <p/>
- * <table class='form'><tr><td>
- * <a href='' title='ActionLink Control'>ActionLink</a>
+ *
+ * <table class='htmlHeader'><tr><td>
+ * <a href='' title='ActionLink Control'>Action Link</a>
  * </td></tr></table>
- * <p/>
- * This control can render the "href" URL attribute using 
- * {@link #getHref()}, or the entire ActionLink anchor tag using 
+ *
+ * This control can render the "href" URL attribute using
+ * {@link #getHref()}, or the entire ActionLink anchor tag using
  * {@link #toString()}.
  * <p/>
- * ActionLink support invoking control listeners. An example of using ActionLink 
- * to call a logout method is illustrated below:<blockquote><pre>
- * public class MyPage extends Page {
+ * ActionLink support invoking control listeners. An example of using ActionLink
+ * to call a logout method is illustrated below:
+ *
+ * <div class="code">public class MyPage extends Page {
  *
  *     public void onInit() {
  *         ActionLink link = new ActionLink("<font color="blue">logoutLink</font>");
@@ -48,36 +49,46 @@ import net.sf.click.util.ClickUtils;
  *            getContext().getSession().invalidate();
  *         }
  *         setForward("logout");
- * 
+ *
  *         return false;
  *     }
- * }</pre></blockquote>
+ * }
+ * </div>
+ *
  * The corresponding template code is below. Note href is evaluated by Velocity
- * to {@link #getHref()}:<blockquote><pre>
+ * to {@link #getHref()}:<div class="code">
  * &lt;a href="$<font color="blue">logoutLink</font>.href" title="Click to Logout"&gt;Logout&lt;/a&gt;
- * </pre></blockquote>
+ * </div>
+ *
  * ActionLink can also support a value parameter which is accessable
- * using {@link #getValue()}. For example a products table could include rows
+ * using {@link #getValue()}.
+ * <p/>
+ * For example a products table could include rows
  * of products, each with a get product details ActionLink and add product
  * ActionLink. The ActionLinks include the product's id as a parameter to
  * the {@link #getHref(Object)} method, which is then available when the
- * control is processed:<pre>
- * &lt;table&gt;
- * #foreach( $product in $productList )
+ * control is processed:
+ *
+ * <div class="code">&lt;table&gt;
+ * <span class="red">#foreach</span>( $product in $<span class="green">productList</span> )
  *   &lt;tr&gt;
  *    &lt;td&gt;
  *      $product.name
  *    &lt;/td&gt;
  *    &lt;td&gt;
- *      &lt;a href="$<font color="blue">detailsLink</font>.getHref($product.id)" title="Get product information"&gt;Details&lt;/a&gt;
+ *      &lt;a href="$<span class="blue">detailsLink</span>.getHref($product.id)" title="Get product information"&gt;Details&lt;/a&gt;
  *    &lt;/td&gt;
  *    &lt;td&gt;
- *      &lt;a href="$<font color="blue">addLink</font>.getHref($product.id)" title="Add to basket"&gt;Add&lt;/a&gt;
+ *      &lt;a href="$<span class="blue">addLink</span>.getHref($product.id)" title="Add to basket"&gt;Add&lt;/a&gt;
  *    &lt;/td&gt;
  *   &lt;/tr&gt;
- * #end
- * &lt;/table&gt;</pre>
- * The corresponding Page class for this template is:<blockquote><pre>
+ * <span class="red">#end</span>
+ * &lt;/table&gt;
+ * </div>
+ *
+ * The corresponding Page class for this template is:
+ *
+ * <div class="code">
  * public class ProductsPage extends Page {
  *
  *     ActionLink addLink;
@@ -101,7 +112,7 @@ import net.sf.click.util.ClickUtils;
  *         // Add product to basket
  *         List basket = (List) getContext().getSessionAttribute("basket");
  *         basket.add(product);
- * 
+ *
  *         return true;
  *     }
  *
@@ -113,22 +124,22 @@ import net.sf.click.util.ClickUtils;
  *         // Store the product in the request and display in the details page
  *         getContext().setRequestAttribute("product", product);
  *         setForward("productDetails.html");
- * 
+ *
  *         return false;
  *     }
  *
  *     public void onGet() {
  *         // Display the list of available products
  *         List productList = ProductDatabase.getProducts();
- *         addModel("productList", productList);
+ *         addModel("<span class="green">productList</span>", productList);
  *     }
- * }</pre></blockquote>
- * 
- * <p/>
- * See also the W3C HTML reference: 
- * <a title="W3C HTML 4.01 Specification" 
+ * }
+ * </div>
+ *
+ * See also the W3C HTML reference:
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
- * 
+ *
  * @see Submit
  *
  * @author Malcolm Edgar
@@ -153,13 +164,13 @@ public class ActionLink implements Control {
 
     /** The context. */
     protected Context context;
-    
+
     /** The Field disabled value. */
     protected boolean disabled;
 
     /** The link name. */
     protected String name;
-    
+
     /** The link label. */
     protected String label;
 
@@ -185,11 +196,11 @@ public class ActionLink implements Control {
     }
 
     // ------------------------------------------------------ Public Attributes
-  
+
     /**
      * Return the link HTML attribute with the given name, or null if the
      * attribute does not exist.
-     * 
+     *
      * @param name the name of link HTML attribute
      * @return the link HTML attribute
      */
@@ -200,29 +211,29 @@ public class ActionLink implements Control {
             return null;
         }
     }
-    
+
     /**
      * Set the link attribute with the given attribute name and value. You would
      * generally use attributes if you were creating the entire ActionLink
      * programatically and rendering it with the {@link #toString()} method.
      * <p/>
      * For example:
-     * <blockquote><pre>
-     * // Java code
-     * ActionLink addLink = new ActionLink("<font color="blue">addLink</font>");
+     *
+     * <div class="code">// Java code
+     * ActionLink addLink = new ActionLink("<span class="blue">addLink</span>");
      * addLink.setLabel("Add");
      * addLink.setAttribute("title", "Add Product to Cart");
      * addLink.setAttribute("class", "table");
-     * 
+     *
      * &lt;-- Page template --&gt;
-     * $<font color="blue">addLink</font>
+     * $<span class="blue">addLink</span>
      *
      * &lt;-- HTML output --&gt;
      * &lt;a href='actionLink=addLink' class='table' title='Add Product to Cart'&gt;Add&lt;/a&gt;
-     * </pre></blockquote>
+     * </div>
      *
-     * @param name
-     * @param value
+     * @param name the attribute name
+     * @param value the attribute value
      * @throws IllegalArgumentException if name parameter is null
      */
     public void setAttribute(String name, String value) {
@@ -249,14 +260,14 @@ public class ActionLink implements Control {
     public boolean isClicked() {
         return clicked;
     }
-    
+
     /**
      * @see Control#getContext()
      */
     public Context getContext() {
         return context;
     }
-    
+
     /**
      * @see Control#setContext(Context)
      */
@@ -266,11 +277,11 @@ public class ActionLink implements Control {
         }
         this.context = context;
     }
-    
+
     /**
-     * Return HTML rendering string "disabled " if the ActionLink is disabled 
+     * Return HTML rendering string "disabled " if the ActionLink is disabled
      * or a blank string otherwise.
-     * 
+     *
      * @see #isDisabled()
      *
      * @return HTML rendering string for the ActionLink disabled status
@@ -287,7 +298,7 @@ public class ActionLink implements Control {
     public boolean isDisabled() {
         return disabled;
     }
-    
+
     /**
      * Set the disabled flag.
      *
@@ -296,7 +307,7 @@ public class ActionLink implements Control {
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
-    
+
     /**
      * Return the ActionLink anchor &lt;a&gt; tag href attribute for the
      * given value. This method will encode the URL with the session ID
@@ -334,10 +345,10 @@ public class ActionLink implements Control {
     public String getHref() {
         return getHref(getValue());
     }
-    
+
     /**
      * Return the label for the ActionLink.
-     * 
+     *
      * @return the label for the ActionLink
      */
     public String getLabel() {
@@ -346,20 +357,20 @@ public class ActionLink implements Control {
 
     /**
      * Set the label for the ActionLink.
-     * 
+     *
      * @param label the label for the ActionLink
      */
     public void setLabel(String label) {
         this.label = label;
     }
-    
+
     /**
      * @see net.sf.click.Control#getName()
      */
     public String getName() {
         return name;
     }
-    
+
     /**
      * @see net.sf.click.Control#setName(String)
      */
@@ -381,7 +392,7 @@ public class ActionLink implements Control {
     }
 
     /**
-     * Returns the action link <tt>Double</tt> value if the action link was 
+     * Returns the action link <tt>Double</tt> value if the action link was
      * processed and has a value, or null otherwise.
      *
      * @return the action link <tt>Double</tt> value if the action link was processed
@@ -395,7 +406,7 @@ public class ActionLink implements Control {
     }
 
     /**
-     * Returns the ActionLink <tt>Integer</tt> value if the ActionLink was 
+     * Returns the ActionLink <tt>Integer</tt> value if the ActionLink was
      * processed and has a value, or null otherwise.
      *
      * @return the ActionLink <tt>Integer</tt> value if the action link was processed
@@ -407,9 +418,9 @@ public class ActionLink implements Control {
             return null;
         }
     }
-    
+
     /**
-     * Returns the ActionLink <tt>Long</tt> value if the ActionLink was 
+     * Returns the ActionLink <tt>Long</tt> value if the ActionLink was
      * processed and has a value, or null otherwise.
      *
      * @return the ActionLink <tt>Long</tt> value if the action link was processed
@@ -421,7 +432,7 @@ public class ActionLink implements Control {
             return null;
         }
     }
-    
+
     /**
      * Set the ActionLink value.
      *
@@ -440,7 +451,7 @@ public class ActionLink implements Control {
     }
 
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * This method will set the {@link #isClicked()} property to true if the
      * ActionLink was clicked, and if an action callback listener was set
@@ -456,16 +467,16 @@ public class ActionLink implements Control {
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
-                
+
             } else {
                 return true;
             }
-            
+
         } else {
             return true;
         }
     }
-    
+
     /**
      * Return the HTML rendered anchor link string. This method
      * will render the entire anchor link including the tags, the label and
@@ -476,16 +487,16 @@ public class ActionLink implements Control {
      */
     public String toString() {
         StringBuffer buffer = new StringBuffer(100);
-        
+
         buffer.append("<a href='");
         buffer.append(getHref());
         buffer.append("'");
-        ClickUtils.renderAttributes(attributes, buffer); 
+        ClickUtils.renderAttributes(attributes, buffer);
         buffer.append(getDisabled());
         buffer.append(">");
         buffer.append(getLabel());
         buffer.append("</a>");
-        
+
         return buffer.toString();
     }
 }
