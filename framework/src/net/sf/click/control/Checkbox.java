@@ -132,7 +132,7 @@ public class Checkbox extends Field {
         checked = getContext().getRequest().getParameter(name) != null;
 
         if (required && !checked) {
-            error = getMessage(getContext(), "not-checked-error", getLabel());
+            error = getMessage("not-checked-error", getLabel());
         }
 
         return invokeListener();

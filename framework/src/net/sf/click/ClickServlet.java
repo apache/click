@@ -187,7 +187,7 @@ public class ClickServlet extends HttpServlet {
      * <p/>
      * If an exception occurs within this method the exception will be delegated
      * to: <p/> 
-     * {@link #handleException(HttpServletRequest, HttpServletResponse, boolean, Exception, Page)}
+     * {@link #handleException(HttpServletRequest, HttpServletResponse, boolean, Throwable, Page)}
      * 
      * @param request the servlet request to process
      * @param response the servlet response to render the results to
@@ -271,8 +271,13 @@ public class ClickServlet extends HttpServlet {
             }
             
         } catch (Exception e) {
-            
             handleException(request, response, isPost, e, page);
+            
+        } catch (ExceptionInInitializerError eiie) {
+            Throwable cause = eiie.getException();
+            cause = (cause != null) ? cause : eiie;
+            
+            handleException(request, response, isPost, cause, page);
             
         } finally {
             if (page != null) {
@@ -307,7 +312,7 @@ public class ClickServlet extends HttpServlet {
      * @param page the error causing page
      */
     protected void handleException(HttpServletRequest request, 
-        HttpServletResponse response, boolean isPost, Exception exception, 
+        HttpServletResponse response, boolean isPost, Throwable exception, 
         Page page) {
             
         if (logger.isDebugEnabled()) {

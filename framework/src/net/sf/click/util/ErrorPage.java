@@ -102,7 +102,7 @@ public class ErrorPage extends Page {
     protected static final int NUMB_LINES = 8;
     
     /** The error causing exception. */
-    protected Exception error;
+    protected Throwable error;
     
     /** 
      * The application mode: &nbsp;
@@ -123,7 +123,7 @@ public class ErrorPage extends Page {
      * 
      * @return the causing error
      */
-    public Exception getError() {
+    public Throwable getError() {
         return error;
     }
     
@@ -132,7 +132,7 @@ public class ErrorPage extends Page {
      * 
      * @param cause the causing error
      */
-    public void setError(Exception cause) {
+    public void setError(Throwable cause) {
         this.error = cause;
     }
     

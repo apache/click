@@ -63,6 +63,15 @@
    </target>
 
    <target name="build-webapps" description="build web application WAR files">
+   	  <!--  "click-blank" WAR  -->
+      <war destfile="${dir.deploy}/click-blank.war"
+           webxml="webapps/click-blank/WEB-INF/web.xml">
+         <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+         <fileset dir="webapps/click-blank">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+ 	  <!--  "click-documentation" WAR  -->
       <delete dir="webapps/click/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click/WEB-INF/classes"/>
 	  <javac srcdir="webapps/click/WEB-INF/src" 
@@ -79,15 +88,45 @@
          	<exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <war destfile="${dir.deploy}/click.war"
+      <war destfile="${dir.deploy}/click-documentation.war"
            webxml="webapps/click/WEB-INF/web.xml">
          <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
          <fileset dir="webapps/click">
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
+	  <!--  "click-examples" WAR  -->
+      <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
+	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
+             destdir="webapps/click-examples/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+       	    <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+         </classpath>
+      </javac>
+      <copy todir="webapps/click-examples/WEB-INF/classes">
+         <fileset dir="webapps/click-examples/WEB-INF/src">
+           <exclude name="**/*.java"/>
+       	   <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <war destfile="${dir.deploy}/click-examples.war"
+           webxml="webapps/click-examples/WEB-INF/web.xml">
+         <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+         <fileset dir="webapps/click-examples">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
    </target>
 
+   <target name="deploy-webapps" description="deploy web apps to app server"> 
+	  <copy file="${dir.deploy}/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
+	  <copy file="${dir.deploy}/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
+	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+	
    <target name="javadoc" description="create Javadoc HTML">
       <delete quiet="false" failonerror="false">
           <fileset dir="webapps/click/docs/click-api" includes="**/*.html"/>
@@ -110,7 +149,7 @@
       <delete quiet="false" failonerror="false">
          <fileset dir="webapps/click/docs/examples-api" includes="**/*.html"/>
       </delete>
-      <javadoc sourcepath="webapps/click/WEF-INF/src"
+      <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
                destdir="webapps/click/docs/examples-api"
                author="true"
                version="true"
@@ -136,9 +175,5 @@
     	    overwrite="true"
             todir="webapps/click/docs"/>
    </target>   
-
-   <target name="deploy-webapps" description="deploy web apps to app server"> 
-      <copy file="${dir.deploy}/click.war" todir="${dir.appserver}" overwrite="true"/>
-   </target>
 
 </project>

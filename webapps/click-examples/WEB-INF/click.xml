@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app>
+  <pages>
+    <page path="pages/action-demo.htm" classname="examples.page.ActionDemo"/>
+    <page path="pages/action-table.htm" classname="examples.page.ActionTable"/>
+    <page path="pages/big-form.htm" classname="examples.page.BigForm"/>
+    <page path="pages/edit-customer.htm" classname="examples.page.EditCustomer"/>
+    <page path="pages/exception.htm" classname="examples.page.Exception"/>
+    <page path="pages/hello-world.htm" classname="examples.page.HelloWorld"/>
+    <page path="pages/layout-form.htm" classname="examples.page.LayoutForm"/>
+    <page path="pages/login.htm" classname="examples.page.Login"/>
+    <page path="pages/logout.htm" classname="examples.page.Logout"/>
+    <page path="pages/navigation-a.htm" classname="examples.page.NavigationA"/>
+    <page path="pages/navigation-b.htm" classname="examples.page.NavigationB"/>
+    <page path="pages/search-form.htm" classname="examples.page.SearchForm"/>
+    <page path="pages/secure.htm" classname="examples.page.Secure"/>
+    <page path="pages/select-demo.htm" classname="examples.page.SelectDemo"/>
+    <page path="pages/simple-form.htm" classname="examples.page.SimpleForm"/>
+    <page path="pages/simple-table.htm" classname="examples.page.SimpleTable"/>
+    <page path="pages/source-viewer.htm" classname="examples.page.SourceViewer"/>
+  </pages>
+
+  <headers>
+    <header name="Pragma" value="no-cache"/>
+    <header name="Cache-Control" value="no-cache"/>
+    <header name="Expires" value="1" type="Date"/>
+    <header name="Content-Encoding" value="gzip"/>
+  </headers>
+
+  <mode value="debug"/>
+</click-app>

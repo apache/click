@@ -15,8 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.Context;
-
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
  * <p/>
@@ -28,7 +26,7 @@ import net.sf.click.Context;
  * IntegerField will validate the number when the control is processed and invoke
  * the control listener if there is no parsing error. 
  * <p/>
- * The IntegerField uses a JavaScript onKeyPress() numberFilter method to prevent 
+ * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent 
  * users from entering invalid characters. To enable number key filtering
  * reference the method {@link Form#getHtmlImports()} in the page template 
  * (imports form.js file). For example.<blockquote><pre>
@@ -150,7 +148,7 @@ public class IntegerField extends TextField {
      * <p/>
      * A field error message is displayed if a validation error occurs. 
      * These messages are defined in the resource bundle: <blockquote>
-     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>field-required-error</li>
@@ -162,14 +160,7 @@ public class IntegerField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
-        
-        value = context.getRequest().getParameter(name);
-        if (value != null) {
-            value = value.trim();
-        } else {
-            value = "";
-        }
+        value = getRequestValue();
 
         int length = value.length();
         if (length > 0) {
@@ -177,23 +168,23 @@ public class IntegerField extends TextField {
                 int intValue = Integer.parseInt(value);
                 if (intValue > maxvalue) {
                     Object[] args = new Object[] { getLabel(), new Integer(maxvalue) };
-                    error = getMessage(context, "number-maxvalue-error", args);
+                    setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
                 if (intValue < minvalue) {
                     Object[] args = new Object[] { getLabel(), new Integer(minvalue) };
-                    error = getMessage(context, "number-minvalue-error", args);
+                    setError(getMessage("number-minvalue-error", args));
                     return true;
                 }
 
                 return invokeListener();
 
             } catch (NumberFormatException nfe) {
-                error = getMessage(context, "integer-format-error", getLabel());
+                setError(getMessage("integer-format-error", getLabel()));
             }
         } else {
-            if (required) {
-                error = getMessage(context, "field-required-error", getLabel());
+            if (isRequired()) {
+                setError(getMessage("field-required-error", getLabel()));
             }
         }
         

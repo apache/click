@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -180,34 +179,27 @@ public class TextField extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
-        
-        value = context.getRequest().getParameter(name);
-        if (value != null) {
-            value = value.trim();
-        } else {
-            value = "";
-        }
+        value = getRequestValue();
 
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
-                error = getMessage(context, "field-minlength-error", args);
+                setError(getMessage("field-minlength-error", args));
                 return true;
             }
 
             if (getMaxLength() > 0 && length > getMaxLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
-                error = getMessage(context, "field-maxlength-error", args);
+                setError(getMessage("field-maxlength-error", args));
                 return true;
             }
 
             return invokeListener();
 
         } else {
-            if (required) {
-                error = getMessage(context, "field-required-error", getLabel());
+            if (isRequired()) {
+                setError(getMessage("field-required-error", getLabel()));
             }
         }
         

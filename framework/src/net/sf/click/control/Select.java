@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -373,7 +372,7 @@ public class Select extends Field {
      * <p/>
      * A field error message is displayed if a validation error occurs. 
      * These messages are defined in the resource bundle: <blockquote>
-     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>select-error</li>
@@ -382,8 +381,6 @@ public class Select extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
-        
         // Page developer has not initialized options
         if (optionList == null || optionList.isEmpty()) {
             return true;
@@ -392,13 +389,13 @@ public class Select extends Field {
         // Process single item select case, do the easy one first. 
         if (!isMultiple()) {
             // Load the selected item.
-            value = context.getRequest().getParameter(getName());
+            value = getContext().getRequest().getParameter(getName());
             
             if (value != null) {
                 Option firstOption = (Option) optionList.get(0);
                 
                 if (isRequired() && firstOption.getValue().equals(value)) {
-                    setError(getMessage(context, "select-error", getLabel()));
+                    setError(getMessage("select-error", getLabel()));
                     return true;
                     
                 } else {
@@ -414,7 +411,7 @@ public class Select extends Field {
             
             // Load the selected items.
             multipleValues = new ArrayList();
-            String[] values = context.getRequest().getParameterValues(getName());
+            String[] values = getContext().getRequest().getParameterValues(getName());
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
                     multipleValues.add(values[i]);
@@ -423,7 +420,7 @@ public class Select extends Field {
             
             if (isRequired()) {
                 if (multipleValues.isEmpty()) {
-                    setError(getMessage(context, "select-error", getLabel()));
+                    setError(getMessage("select-error", getLabel()));
                     return true; 
                     
                 } else {

@@ -1,0 +1,22 @@
+<html>
+<head>	
+<link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
+<title>Click Examples - Logout Page</title>
+</head>	
+<body>
+ 	
+<h2>Logout</h2> 
+
+#writeSourceToolbar( "examples/page/Logout.java" "pages/logout.htm" )
+
+#if( $user )
+<b>$user.fullname</b> you are now logged out.
+#else
+You are not logged in.
+#end
+
+<p/>
+To login click <a href="login.htm">here</a>.
+
+</body>
+</html>
