@@ -81,7 +81,6 @@ import org.apache.velocity.util.SimplePool;
  * improve performance later on. The Click start up and caching strategy is
  * configured with the Click application mode in the "<tt>click.xml</tt>" file.
  * See the User Guide for information on how to configure the application mode.
- * <p/>
  *
  * @author Malcolm Edgar
  */
@@ -388,7 +387,7 @@ public class ClickServlet extends HttpServlet {
      * then merges the template with the Context writing the result to the
      * HTTP servlet response.
      * <p/>
-     * This method was adapted from VelocityServlet.
+     * This method was adapted from org.apache.velocity.servlet.VelocityServlet.
      *
      * @param page the page template to merge
      * @throws Exception if an error occurs

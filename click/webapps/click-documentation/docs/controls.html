@@ -15,19 +15,11 @@ server side processing. This section covers the following topics:
 <ul>
   <li><a href="#control-interface">Control Interface</a> - describes the Control interface<p/>
   </li> 
+  <li><a href="#control-callback">Control Callback</a> - control event callback pattern<p/>
+  </li> 
   <li><a href="#control-class">Control Classes</a> - control Java classes<p/>
-  </li> 
-  <li><a href="#event-callback">Event Callback</a> - event callback listener pattern<p/>
-  </li> 
-  <li><a href="#forms">Control Interface</a> - todo<p/>
   </li>
-  <li><a href="#forms">ActionLinks</a> - todo<p/>
-  </li>  
-  <li><a href="#forms">Forms</a> - todo<p/>
-  </li> 
-  <li><a href="#forms">Fields</a> - todo<p/>
-  </li>
-  <li><a href="#control-properties">Control Properties</a> - todo<p/>
+  <li><a href="#message-properties">Message Properties</a> - control message properties<p/>
   </li> 
 </ul>
 <p>&nbsp;</p>
@@ -44,8 +36,8 @@ display to the user. Controls are equivalent to Visual Basic Controls or Delphi 
 <p/>
 Controls handle the processing of user input with the 
 <a target="topic" href="click-api/net/sf/click/Control.html#onProcess()">onProcess</a>
-method and rendering their HTML display using the toString() method. The sequence
-diagram below illustrates a Control being processed and rendering its display.
+method and rendering their HTML display using the toString() method. The execution
+sequence for Control being processed and rendered is illustrated below in Figure 1.
 <p/>
 
 <img src="../images/control-post-sequence-diagram.png"/>
@@ -55,16 +47,99 @@ diagram below illustrates a Control being processed and rendering its display.
 </p>
 
 
-In Click all control classes must extend the 
+In Click all control classes must implement the 
 <a target="topic" href="click-api/net/sf/click/Control.html">Control</a> interface.
-<p/>
-
+The Control interface is depicted below in Figure 2.
 <p>
 <img src="../images/control-class-diagram.png"/>
 <p class="diagram">
 <b>Figure 2. &nbsp; Control Interface Diagram</b>
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
 </p>
+Methods on the Control interface include:
+<ul>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getContext()">getContext()</a> /
+   <a href="click-api/net/sf/click/Control.html#setContext(net.sf.click.Context)">setContext()</a>
+   &nbsp; - &nbsp; provides access to the request <a href="click-api/net/sf/click/Context.html">Context</a>.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener()</a>
+   &nbsp; - &nbsp; set the control action callback listener.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getName()">getName()</a> /
+   <a href="click-api/net/sf/click/Control.html#setName(java.lang.String)">setName()</a>
+   &nbsp; - &nbsp; defines the controls name in the Page model or Form fields.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#onProcess()">onProcess()</a>
+   &nbsp; - &nbsp; process request event handler.
+  </li>
+    <li>
+    toString() &nbsp; - &nbsp; while not part of the Control interface, by convention <tt>toString()</tt>
+    is used to render the HTML display.
+  </li>
+</ul>
+
+<a name="control-callback"><h2>Control Callback</h2></a>
+
+Click Controls provide an event callback mechanism similar the java.awt.ActionListener callback.
+<p/>
+To define a control listener, simply set the listener object instance and the name of the
+listener method to be invoked. For example:
+
+<pre class="codeJava">
+public class SimpleCallback extends Page {
+
+    public void onInit() {
+        ActionLink clickLink = new ActionLink("onClick");
+        clickLink.<span class="red">setListener</span>(<span class="blue">this</span>, "<span class="blue">onClick</span>");
+        addControl(goLink);    
+    }
+    
+    public boolean <span class="blue">onClick</span>() {
+        System.out.println("onClick invoked");
+        return true;
+    }
+} </pre>
+
+The listener method can have any name but it must have take no parameters and must return a boolean or 
+java.lang.Boolean value. 
+<p/>
+When a callback method returns true the processing of other Controls will continue and the Pages onGet() 
+or onPost() event handler will be called. If a controls returns false not further Control processing
+will be performed and neiher of the Page onGet() or onPost() methods will be invoked. This execution
+logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
+<p/>
+Being able to stop further processing and do something else can be very handy. For example your 
+Pages onGet() or onPost() method may perform an expensive database query to display a table. By using 
+returning false in a event handler you can skip this step and forward to the next page.
+
+<pre class="codeJava">
+public class OrderPage extends Page {
+
+    public void onInit() {
+        Form form = new Form("form", getContext());
+        addControl(form);
+        
+        ..
+        
+        Submit cancelButton = new Submit(" Cancel ");
+        cancelButton.setListener(this, "<span class="blue">onCancelClick</span>");
+        form.add(cancelButton); 
+    }
+    
+    public boolean <span class="blue">onCancelClick</span>() {
+        setForward("products.htm");
+        return <span class="red">false</span>;
+    }
+    
+    public void onPost() {
+        // Lengthy credit authorization operation
+        ..
+    }
+} </pre>
 
 
 <a name="control-class"><h2>Control Classes</h2></a>
@@ -95,59 +170,12 @@ methods
 - which provides Form processing and validation   
 <p></li>
 </ul> 
-<a name="event-callback"><h2>Event Callback</h2></a>
 
-<pre class="codeJava">
-public class SimpleCallback extends Page {
 
-    public void onInit() {
-        ActionLink clickLink = new ActionLink("onClick");
-        clickLink.setListener(this, "<span class="blue">onClick</span>");
-        addControl(goLink);    
-    }
-    
-    public boolean <span class="blue">onClick</span>() {
-        System.out.println("onClick invoked");
-        return true;
-    }
-} </pre>
-
-// TODO: make this a form example
-
-<pre class="codeJava">
-public class LinkPage extends Page {
-
-    public void onInit() {
-        ActionLink goLink = new ActionLink("goLink");
-        goLink.setListener(this, "<span class="blue">onGoClick</span>");
-        addControl(goLink);
-        
-        ActionLink continueLink = new ActionLink("stopLink");
-        stopLink.setListener(this, "<span class="red">onStopClick</span>");
-        addControl(stopLink);       
-    }
-    
-    public boolean <span class="blue">onGoClick</span>() {
-        System.out.println("onGoClick invoked");
-        return true;
-    }
-    
-    public boolean <span class="red">onStopClick</span>() {
-        System.out.println("onLinkClick invoked");
-        return false;
-    }
-    
-    public void onGet() {
-        System.out.println("onGet invoked");
-    }
-} </pre>
-
-<a name="forms"><h2>Forms</h2></a>
-
-<a name="control-properties"><h2>Message Properties</h2></a>
+<a name="message-properties"><h2>Message Properties</h2></a>
 
 <pre class="codeConfig">
-# Click messages for 'net.sf.click.control' package
+# Click Control messages
 calendar-image-title=Calendar
 creditcard-number-error={0} is invalid
 date-format-error={0} is invalid. Date format is {1}

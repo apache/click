@@ -300,8 +300,8 @@ The table below details the Click application and Velocity runtime Log4J
 <tt>Logger</tt> levels, the Velocity template caching and ClickServlet load page on
 startup status for each application mode.
 <p>
-<table border="1" cellspacing="0" cellpadding="2">
-<tr style="{background:navy; color:white}">
+<table style="border: 1px solid black;" cellspacing="0" cellpadding="6">
+<tr style="background-color: navy; color: white;">
  <th align="center">Mode</th>
  <th align="center">Click Logger Level</th>
  <th align="center">Velocity Logger Level</th>
@@ -343,8 +343,8 @@ loaded once and cached. With caching enabled following Velocity runtime
 properties are set:
 
 <pre class="codeConfig">
-file.resource.loader.cache=true
-file.resource.loader.modificationCheckInterval=0
+webapp.resource.loader.cache=true
+webapp.resource.loader.modificationCheckInterval=0
 velocimacro.library.autoreload=false 
 </pre>
 
@@ -353,7 +353,7 @@ reloaded when ever they change. With caching disabled the the following Velocity
 runtime properties are set:
 
 <pre class="codeConfig">
-file.resource.loader.cache=false
+webapp.resource.loader.cache=false
 velocimacro.library.autoreload=true 
 </pre>
 
@@ -370,12 +370,11 @@ The Velocity runtime engine is configured through a series of properties when th
 <tt>ClickServlet</tt> starts up.  The default Velocity properties set are:
 
 <pre class="codeConfig">
-file.resource.loader.class=org.apache.velocity.runtime.resource.loader.FileResourceLoader
-file.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
-file.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
-file.resource.loader.path=<span class="red">servlets real path</span>
+resource.loader=webapp
 
-resource.loader=file
+webapp.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
+webapp.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
+webapp.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
 
 runtime.log.logsystem.class=org.apache.velocity.runtime.log.SimpleLog4JLogSystem
 runtime.log.logsystem.log4j.category=org.apache.velocity
@@ -399,7 +398,7 @@ property by adding a <tt>WEB-INF/velocity.properties</tt> file to our web
 application. In this file we would then define the property as:
 
 <pre class="codeConfig">
-velocimacro.library=<span class="blue">mycorp.vm</span>,click/VM_global_library.vm 
+velocimacro.library=<span class="blue">mycorp.vm</span> 
 </pre>
 
 Note do not place Velocity macros under the WEB-INF directory as the Velocity

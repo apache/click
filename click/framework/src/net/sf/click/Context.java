@@ -110,16 +110,39 @@ public class Context {
     }
 
     /**
-     * Return the page resouce path from the request (Request URI path - Request
-     * Context path). For example:
+     * Return the page resouce path from the request. For example:
      * <pre class="code">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.html</span>  ->  <span class="red">secure/login.html</span> </pre>
      *
      * @return the page resource path from the request
      */
     public String getResourcePath() {
-        int length = request.getContextPath().length();
-        return request.getRequestURI().substring(length + 1);
+        // Adapted from VelocityViewServlet.handleRequest() method:
+       
+        // If we get here from RequestDispatcher.include(), getServletPath()
+        // will return the original (wrong) URI requested.  The following special
+        // attribute holds the correct path.  See section 8.3 of the Servlet
+        // 2.3 specification.
+        
+        String path = (String) request.getAttribute("javax.servlet.include.servlet_path");
+        
+        // Also take into account the PathInfo stated on SRV.4.4 Request Path Elements.
+        String info = (String) request.getAttribute("javax.servlet.include.path_info");
+        
+        if (path == null) {
+            path = request.getServletPath();
+            info = request.getPathInfo();
+        }
+        
+        if (info != null) {
+            path += info;
+        }
+        
+        if ((path != null) && (path.charAt(0) == '/')) {
+            path = path.substring(1);
+        }
+        
+        return path;        
     }
 
     /**

@@ -37,7 +37,11 @@ li {
 
 p.diagram {
   margin-top: 0em;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
+}
+
+span.sparx {
+  font-style: italic;
 }
 
 .appnameText {
