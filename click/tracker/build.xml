@@ -45,6 +45,24 @@
          </fileset>
       </war>
    </target>
+ 
+   <target name="compile">
+      <javac srcdir="webapp/WEB-INF/src" 
+             destdir="webapp/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+            <fileset dir="lib">
+              <include name="**/*.jar"/>
+            </fileset>
+            <fileset dir="../lib">
+              <include name="**/*.jar"/>
+            </fileset> 
+            <pathelement location="../${dir.deploy}/click-${version}.jar"/>  
+            <pathelement location="${jar.hibernate}"/>
+            <pathelement location="${jar.log4j}"/>  
+         </classpath>
+      </javac>
+   </target>  
 
    <target name="deploy" description="deploy Tracker web app to Tomcat"> 
 	  <copy file="${dir.deploy}/tracker.war" todir="${dir.tomcat}/webapps" overwrite="true"/>
