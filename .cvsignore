@@ -4,3 +4,4 @@ deploy
 .classpath
 .project
 TODO.txt
+.checkstyle

@@ -22,17 +22,28 @@ public class LayoutForm extends EditCustomer {
         ALIGN_OPTIONS.add(new Select.Option("right", "Right"));
     }
     
-    HiddenField labelsPositionHidden = new HiddenField("formLayout", Integer.class);
+    static final List POSITION_OPTIONS = new ArrayList();
+    static {
+        POSITION_OPTIONS.add(new Select.Option("top", "Top"));
+        POSITION_OPTIONS.add(new Select.Option("middle", "Middle"));
+        POSITION_OPTIONS.add(new Select.Option("bottom", "Buttom"));
+    }
+   
+    HiddenField errorsPositionHidden = new HiddenField("errorsPosition", Integer.class);
+    HiddenField labelsPositionHidden = new HiddenField("labelsPosition", Integer.class);
     HiddenField labelAlignHidden= new HiddenField("labelAlign", String.class);
     
     Form styleForm;
     Select labelsPositionSelect;
+    Select errorsPositionSelect;
     Select labelAlignSelect;
 
     public void onInit() {
         super.onInit();
         
         // Add hidden form style field
+        errorsPositionHidden.setValue(new Integer(Form.MIDDLE));
+        form.add(errorsPositionHidden);
         labelsPositionHidden.setValue(new Integer(Form.LEFT));
         form.add(labelsPositionHidden);
         labelAlignHidden.setValue("left");
@@ -45,15 +56,22 @@ public class LayoutForm extends EditCustomer {
         // Add style form to modify the original forms layout
         styleForm = new Form("styleForm", getContext());
         addControl(styleForm);
+
+        labelAlignSelect = new Select("Label Align");
+        labelAlignSelect.addAll(ALIGN_OPTIONS);
+        labelAlignSelect.setTitle("Field label alignment");
+        styleForm.add(labelAlignSelect);
         
         labelsPositionSelect = new Select("Labels Position");
         labelsPositionSelect.add(new Select.Option("left", "Label on Left"));
         labelsPositionSelect.add(new Select.Option("top", "Label on Top"));
+        labelsPositionSelect.setTitle("Form labels position");
         styleForm.add(labelsPositionSelect);
         
-        labelAlignSelect = new Select("Label Align");
-        labelAlignSelect.addAll(ALIGN_OPTIONS);
-        styleForm.add(labelAlignSelect);
+        errorsPositionSelect = new Select("Errors Position");
+        errorsPositionSelect.addAll(POSITION_OPTIONS);
+        errorsPositionSelect.setTitle("Form errors position");
+        styleForm.add(errorsPositionSelect);    
         
         Submit applyButton = new Submit("   Apply Layout   ");
         applyButton.setTitle("Apply the layout to the form");
@@ -66,12 +84,22 @@ public class LayoutForm extends EditCustomer {
      * controls.
      */
     public void onPost() {
-        Integer formLayout = (Integer) labelsPositionHidden.getValueObject();
+        Integer errorsPosition = (Integer) errorsPositionHidden.getValueObject();
+        Integer labelsPosition = (Integer) labelsPositionHidden.getValueObject();
         
-        form.setLabelsPosition(formLayout.intValue());
+        form.setErrorsPosition(errorsPosition.intValue());
+        form.setLabelsPosition(labelsPosition.intValue());
         form.setLabelAlign(labelAlignHidden.getValue());
         
-        if (formLayout.intValue() == Form.LEFT) {
+        if (errorsPosition.intValue() == Form.TOP) {
+            errorsPositionSelect.setValue("top");
+        } else if (errorsPosition.intValue() == Form.MIDDLE) {
+            errorsPositionSelect.setValue("middle");
+        } else {
+            errorsPositionSelect.setValue("bottom");
+        }
+        
+        if (labelsPosition.intValue() == Form.LEFT) {
             labelsPositionSelect.setValue("left");
         } else {
             labelsPositionSelect.setValue("top");
@@ -85,8 +113,19 @@ public class LayoutForm extends EditCustomer {
      * @return true
      */
     public boolean onApplyClick() {
+        if (errorsPositionSelect.getValue().equals("top")) {
+            errorsPositionHidden.setValue(new Integer(Form.TOP)); 
+            
+        } else  if (errorsPositionSelect.getValue().equals("middle")) {
+            errorsPositionHidden.setValue(new Integer(Form.MIDDLE));
+
+        } else {
+            errorsPositionHidden.setValue(new Integer(Form.BOTTOM));               
+        }
+        
         if (labelsPositionSelect.getValue().equals("left")) {
-            labelsPositionHidden.setValue(new Integer(Form.LEFT));     
+            labelsPositionHidden.setValue(new Integer(Form.LEFT));
+            
         } else {
             labelsPositionHidden.setValue(new Integer(Form.TOP));               
         }

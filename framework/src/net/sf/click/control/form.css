@@ -17,19 +17,16 @@ span.error {
 	color: red;
 }
 table.fields {
-	border: solid;
 	border-width: 1px;
 	padding: 0;
 	vertical-align: baseline;
 }
 table.errors {
-	border: solid;
 	border-width: 1px;
 	padding: 0;
 	vertical-align: baseline;
 }
 table.buttons {
-	border: solid;
 	border-width: 1px;
 	padding: 0;
 	vertical-align: baseline;

@@ -172,6 +172,31 @@ public abstract class Field implements Control {
     }
     
     /**
+     * Return the Field attributes Map.
+     * 
+     * @return the field attributes Map.
+     */
+    public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap(5);
+        }
+        return attributes;
+    }
+    
+    /**
+     * Return true if the Field has attributes or false otherwise.
+     * 
+     * @return true if the Field has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        if (attributes != null && !attributes.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
      * @see Control#getContext()
      */
     public Context getContext() {
