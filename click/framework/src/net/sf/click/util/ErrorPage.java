@@ -86,7 +86,7 @@ import org.apache.velocity.exception.ParseErrorException;
  * <li>{@link #error} - the error causing exception</li>
  * <li>{@link #mode} - the Click application mode</li>
  * <li>{@link #page} - the Page object in error</tt>
- * <li>{@link #pagePath} - the path of the page with the error</li>
+ *  <li>{@link #templatePath} - the path of the template with the error</li>
  * </ul>
  *
  * @author Malcolm Edgar
@@ -107,9 +107,9 @@ public class ErrorPage extends Page {
 
     /** The page in error. */
     protected Page page;
-
-    /** The target page path of the error. */
-    protected String pagePath;
+    
+    /** The target page template path. */
+    protected String templatePath;
 
     // --------------------------------------------------------- Public Methods
 
@@ -173,7 +173,7 @@ public class ErrorPage extends Page {
      */
     public void setPage(Page page) {
         this.page = page;
-        pagePath = page.getPath();
+        templatePath = page.getTemplate();
     }
 
     /**
@@ -203,17 +203,19 @@ public class ErrorPage extends Page {
         addModel("mode", getMode());
         addModel("page", getPage());
         addModel("isParseError", new Boolean(isParseError()));
+        
+        // TODO: report of template
  
         if (error instanceof ParseErrorException) {
-            addModel("pagePath", pagePath);
+            addModel("templatePath", templatePath);
 
             String errorMessage = getParseMessage(error);
 
             addModel("errorMessage", errorMessage);
 
-            if (pagePath != null) {
+            if (templatePath != null) {
                 int errorLine = getErrorLine(error.getMessage());
-                getModel().put("template", getTemplate(pagePath, errorLine));
+                getModel().put("template", getTemplate(templatePath, errorLine));
             }
 
         } else {
