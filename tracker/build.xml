@@ -6,6 +6,7 @@
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
    <property name="jar.hibernate" value="${dir.hibernate}/hibernate2.jar"/>
+   <property name="jar.log4j" value="../server/tomcat/common/lib/log4j-1.2.9.jar"/>   
    <property name="jar.mkjdbc" value="database/lib/mkjdbc-1.0.3.jar"/>  
 
    <!-- Tasks -->
@@ -17,12 +18,15 @@
              destdir="webapp/WEB-INF/classes" 
              debug="true">
          <classpath> 
+            <fileset dir="lib">
+              <include name="**/*.jar"/>
+            </fileset>
             <fileset dir="../lib">
               <include name="**/*.jar"/>
             </fileset> 
-            <pathelement location="../${dir.deploy}/click-all-${version}.jar"/>  
+            <pathelement location="../${dir.deploy}/click-${version}.jar"/>  
             <pathelement location="${jar.hibernate}"/>
-            <pathelement location="${jar.mkjdbc}"/>
+            <pathelement location="${jar.log4j}"/>  
          </classpath>
       </javac>
       <copy todir="webapp/WEB-INF/classes">
@@ -36,7 +40,6 @@
       <war destfile="${dir.deploy}/tracker.war"
            webxml="webapp/WEB-INF/web.xml">
          <lib file="../${dir.deploy}/click-${version}.jar"/>
-         <lib file="${jar.mkjdbc}"/>  
          <fileset dir="webapp">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -46,5 +49,12 @@
    <target name="deploy" description="deploy Tracker web app to Tomcat"> 
 	  <copy file="${dir.deploy}/tracker.war" todir="${dir.tomcat}/webapps" overwrite="true"/>
    </target>
+ 
+   <target name="setup-tomcat-common" description="setup Tomcat common configuration">
+      <copy todir="${dir.tomcat}" verbose="true">
+         <fileset dir="../server/tomcat"/>  
+      </copy>
+      <copy file="${jar.mkjdbc}" todir="${dir.tomcat}/common/lib" overwrite="true"/>   
+   </target>    
 
 </project>
