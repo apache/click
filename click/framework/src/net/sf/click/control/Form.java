@@ -95,9 +95,7 @@ import net.sf.click.util.ClickUtils;
  *                 setRedirect("home.htm");
  *             }
  *             else {
- *                 String msg = "The system could not log you on.&lt;br&gt; Make sure "
- *                     + "your Username and password is correct, then try again.";
- *                 form.setError(msg);
+ *                  form.setError(getMessage("authentication-error")); 
  *             }
  *         }
  *         return true;
@@ -110,8 +108,8 @@ import net.sf.click.util.ClickUtils;
  * }
  * </div>
  *
- * The corresponding template code is below. The form will render itself using
- * its {@link #toString()} method.
+ * The forms corresponding template code is below. Note the form automatically
+ * renders itself when Velocity invokes its {@link #toString()} method.
  *
  * <div class="code">
  * <span class="blue">$form</span>
@@ -120,15 +118,53 @@ import net.sf.click.util.ClickUtils;
  * If a Form has been posted and processed, if it has an {@link #error} defined or
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
- * <p/>
- * Alternatively you can layout the Form in the page template specifying
+ * 
+ * <a name="manual-layout"><h4>Manual Layout</h4></a>
+ * 
+ * You can also manually layout the Form in the page template specifying
  * the fields using the named field notation:
  *
- * <div class="code">$form.{@link #fields}.usernameField
+ * <div class="code">
+ * $form.{@link #fields}.usernameField
  * </div>
  *
- * Or you can use the Form {@link #fieldList} and {@link #buttonList} properties
- * to layout a generic form.
+ * Whenever including your own Form markup in a page template or Velocity macro,
+ * always specify the form {@link #method} and include a hidden field which
+ * specifies the {@link #name} of the Form. For example:
+ *
+ * <div class="code">
+ * &lt;form method="<span class="green">POST</span>" name="<span class="green">form</span>" action="<span class="blue">$request.requestURI</span>&gt;
+ *   &lt;input type="<span class="green">hidden</span>" name="<span class="green">form_name</span>" value="<span class="green">form</span>"/&gt; 
+ *   Username: $form.fields.usernameField &lt;br/&gt;
+ *   Password: $form.fields.passwordField &lt;br/&gt;
+ *   $form.fields.okSubmit
+ * &lt;form&gt;
+ * </div>
+ * 
+ * <h4>Velocity Macros</h4>
+ * 
+ * Velocity 
+ * <a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">Macros</a>
+ * are a great way to encapsulate custom forms.
+ * 
+ * <div class="code">
+ * 
+ * #** Custom Form Macro Code **#
+ * #macro( <span class="blue">writeForm</span>[$form] )
+ *  &lt;form method='POST' name='$form.name' action='$request.requestURI'&gt;
+ *   &lt;input name='form_name' type='hidden' value='$form.name)'/&gt;
+ *   ..
+ *  &lt;/form&gt;
+ * 
+ * #end
+ * 
+ * &lt;-- HTML Code --&gt;
+ * #<span class="blue">writeForm</span>($form)
+ * 
+ * </div>
+ * 
+ * To create a generic form layout you can use the Form {@link #fieldList} and 
+ * {@link #buttonList} properties.
  *
  * <div class="code">
  * &lt;form method="POST" name="form" action="<span class="blue">$request.requestURI</span>"&gt;
@@ -155,17 +191,6 @@ import net.sf.click.util.ClickUtils;
  * &lt;/form&gt;
  * </div>
  *
- * Whenever including your own Form markup in a page template or Velocity macro,
- * always specify the form {@link #method} and include a hidden field which
- * specifies the {@link #name} of the Form, for example:
- *
- * <div class="code">
- * &lt;form method="<span class="green">POST</span>" name="<span class="green">searchForm</span>" action="<span class="blue">$request.requestURI</span>&gt;
- * &lt;input type="<span class="green">hidden</span>" name="<span class="green">form_name</span>" value="<span class="green">searchForm</span>"/&gt;
- * </div>
- *
- * The <span class="green">form_name</span> hidden field is used to ensure the
- * correct form is processed in a Page which may have multiple forms.
  * <p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

@@ -141,7 +141,9 @@ public class HiddenField extends Field {
     public void setValue(Object value) {
         if ((value != null) && (value.getClass() != valueClass)) {
             String msg = "The value.getClass() must be the same as the " +
-                         "HiddenField valueClass property.";
+                         "HiddenField valueClass: " + 
+                         ((valueClass != null) ? valueClass.getName() : "null");
+
             throw new IllegalArgumentException(msg);
         }
 

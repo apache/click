@@ -15,9 +15,9 @@
     <page path="search-form.htm" classname="examples.page.SearchForm"/>
     <page path="secure.htm" classname="examples.page.Secure"/>
     <page path="select-demo.htm" classname="examples.page.SelectDemo"/>
-    <page path="simple-form.htm" classname="examples.page.SimpleForm"/>
     <page path="simple-table.htm" classname="examples.page.SimpleTable"/>
     <page path="source-viewer.htm" classname="examples.page.SourceViewer"/>
+    <page path="velocity-macro.htm" classname="examples.page.VelocityMacro"/>
   </pages>
 
   <headers>
