@@ -19,6 +19,8 @@ and covers to following topics:
   </li>
   <li><a href="#page-navigation">Navigation</a> - navigation between pages
   </li>
+  <li><a href="#page-templating">Page Templating</a> - templating common page content
+  </li>
   <li><a href="#page-security">Security</a> - page security model
   </li>
   <li><a href="#page-error-handling">Error Handling</a> - page error handling
@@ -308,6 +310,110 @@ then get the transaction id through the request parameter
 The parameter passing example above is also an example of a Post Redirect. The Post
 Redirect technique is a very useful method of preventing users from submitting a form 
 twice by hitting the refresh button.
+
+
+<a name="page-templating"><h2>Page Templating</h2></a>
+
+Click supports page templating (a.k.a. <i>Tiles</i> in Struts) enabling you to
+create a standardized look and feel for your web application and greatly reducing
+the amount of HTML you need to maintain.
+<p/>
+To implement templating define a border template base Page 
+which content Pages should extend. The template base Page class overrides the
+Page <a href="click-api/net/sf/click/Page.html#getTemplate()">getTemplate()</a>
+method, returning the path of the border template to render. For example:
+
+<pre class="codeJava"><span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span class="kw">public</span> String getTemplate() {
+        <span class="kw">return</span> <span class="st">"border.htm"</span>;  
+    }
+} </pre>
+
+Note the default Page getTemplate() method simply returns the 
+<a href="click-api/net/sf/click/Page.html#path">path</a> property.
+<p/>
+The BorderedPage template <span class="blue">border.htm</span>: 
+
+<pre class="codeHtml">
+ &lt;html&gt;
+   &lt;head&gt;
+     &lt;title&gt;<span class="blue">$title</span>&lt;/title&gt;
+     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+ 
+     &lt;h2 class="title"&gt;<span class="blue">$title</span>&lt;/h2&gt;
+ 
+     <span class="red">#parse</span>(<span class="blue">$path</span>)
+ 
+   &lt;/body&gt;
+ &lt;/html&gt; </pre>
+ 
+Other pages insert their content into this template using the Velocity 
+<a href="velocity/vtl-reference-guide.html#parse">#parse</a> directive,
+passing it their contents <a href="click-api/net/sf/click/Page.html#path">path</a>.
+The <span class="blue">$path</span> value is automatically added to 
+the VelocityContext by the ClickServlet.
+<p/>
+An example bordered Home page is provided below:
+
+<pre class="codeJava"><span class="kw">public class</span> Home <span class="kw">extends</span> BorderedPage {
+   
+     <span class="jd">/**
+      * @see Page#onInit()
+      */</span>
+     <span class="kw">public void</span> onInit() {
+         addModel(<span class="st">"title"</span>, <span class="st">"Home"</span>);
+     }
+} </pre>
+
+The Home page's content <span class="blue">home.htm</span>:
+
+<pre class="codeHtml">
+&lt;b&gt;Welcome&lt;/b&gt; to Home page your starting point for the application.
+</pre>
+
+When a request is made for the Home page (home.htm) Velocity will
+merge the <span class="blue">border.htm</span> page and 
+<span class="blue">home.htm</span> page together returning:
+
+<pre class="codeHtml">
+ &lt;html&gt;
+   &lt;head&gt;
+     &lt;title&gt;Home&lt;/title&gt;
+     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+ 
+     &lt;h2 class="title"&gt;Home&lt;/h2&gt;
+ 
+     &lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point.
+ 
+   &lt;/body&gt;
+ &lt;/html&gt; </pre>
+ 
+Which may be rendered:
+ 
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ <h2 style="color: white; background-color: navy; padding: 0.25em; margin-top: 0em;">
+  Home
+ </h2>
+ <p>
+ <b>Welcome</b> to Home page your application starting point.
+ <p/>
+ </td>
+</tr>
+</table>
+
+Note how the Home page class defines a <span class="blue">title</span> model value 
+which is referenced in the <span class="blue">border.htm</span> template as <span class="blue">$title</span>.
+Each bordered page can define their own title which is rendered in this template.
 
 
 <a name="page-security"><h2>Security</h2></a>

@@ -81,10 +81,10 @@ At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span>
 request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
 The ClickServlet then invokes the page's <tt>onGet()</tt> method. This method creates a 
 new <tt>Date</tt> object and adds it to the page's model as a value called 
-<span class="red">time</span>.
+<span class="st">time</span>.
 <p/>
 The page model is then merged with the template which substitutes the 
-$<span class="red">time</span> parameter with the <tt>Date</tt> object. 
+<span class="st">$time</span> parameter with the <tt>Date</tt> object. 
 Velocity then renders the merged template which looks something like 
 
 <table class="htmlExample" cellspacing="12">
