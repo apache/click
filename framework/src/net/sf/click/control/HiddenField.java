@@ -171,21 +171,8 @@ public class HiddenField extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the HiddenField submission. If the value can be parsed the
-     * controls listener will be invoked.
-     * <p/>
-     * TODO: ambiguous wording??
-     * If the value Class is not:<ul>
-     * <li>String</li>
-     * <li>Integer</li>
-     * <li>Boolean</li>
-     * <li>Double</li>
-     * <li>Float</li>
-     * <li>Long</li>
-     * <li>Short</li>
-     * <li>Date</li>
-     * <li>Serializable</li>
-     * </ul>
+     * Process the HiddenField submission. If the value can be parsed any
+     * control listener will be invoked.
      * <p/>
      * The value object will be set with the HiddenField's string value.
      *
