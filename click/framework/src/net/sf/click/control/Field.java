@@ -32,17 +32,26 @@ import net.sf.click.util.ClickUtils;
  * The Form control acts a container for Field control instances. When a Form
  * is processed it will inturn process all the fields in contains. All Form
  * field controls must extend this abstract class.
- *
- * @author Malcolm
+ * <p/>
+ * Localizable field messages and error messages are defined in the resource
+ * bundle: <blockquote>
+ * <pre>/click-control.properties</pre></blockquote>
+ * You can modify these properties by copying this file into your applications
+ * root class path and editing these properties. <b>Note</b> when customizing
+ * the message properties you must include all the properties, not just the
+ * ones you want to override, otherwise MissingResourceExceptions may be
+ * thrown. 
+ * 
+ * @author Malcolm Edgar
  */
 public abstract class Field implements Control {
 
     // -------------------------------------------------------------- Constants
     
     /** 
-     * The package messages bundle name: &nbsp; <tt>net.sf.click.control.Message</tt>
+     * The package messages bundle name: &nbsp; <tt>click-control</tt>
      */
-    public static final String PACKAGE_MESSAGES = "net.sf.click.control.Message";
+    public static final String PACKAGE_MESSAGES = "click-control";
     
     /** The map of message resource bundles keyed on locale. */
     protected static final Map MESSAGE_BUNDLES = 
@@ -309,19 +318,15 @@ public abstract class Field implements Control {
      * Return the package resource bundle message for the named resource key
      * and the context's request locale.
      * 
-     * @param context the command context which provides the request locale
      * @param name resource name of the message
      * @return the named localized message for the package
      */
-    public String getMessage(Context context, String name) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
+    public String getMessage(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
         
-        Locale locale = context.getRequest().getLocale();
+        Locale locale = getContext().getRequest().getLocale();
       
         ResourceBundle bundle = 
             (ResourceBundle) MESSAGE_BUNDLES.get(locale);
@@ -338,16 +343,15 @@ public abstract class Field implements Control {
      * Return the formatted package message for the given resource name, message
      * format arguments and context request locale.
      * 
-     * @param context the command context which provides the request locale
      * @param name resource name of the message
      * @param args the message arguments to format
      * @return the named localized message for the package
      */
-     public String getMessage(Context context, String name, Object[] args) {
+     public String getMessage(String name, Object[] args) {
         if (args == null) {
             throw new IllegalArgumentException("Null args parameter");
         }
-        String value = getMessage(context, name);
+        String value = getMessage(name);
         
         return MessageFormat.format(value, args);
     }
@@ -356,14 +360,13 @@ public abstract class Field implements Control {
      * Return the formatted package message for the given resource name, message
      * format argument and context request locale.
      * 
-     * @param context the command context which provides the request locale
      * @param name resource name of the message
      * @param arg the message argument to format
      * @return the named localized message for the package
      */    
-    public String getMessage(Context context, String name, Object arg) {
+    public String getMessage(String name, Object arg) {
         Object[] args = new Object[] { arg };
-        return getMessage(context, name, args);
+        return getMessage(name, args);
     }
 
     /**
@@ -381,34 +384,6 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-    }
-
-    /**
-     * Return HTML JavaScript 'onBlur' attribute value. This method will return
-     * null if no event handler is defined.
-     *
-     * @return HTML JavaScript 'onBlur' attribute value for the Field
-     */
-    public String getOnBlur() {
-        if (attributes != null) {
-            return (String) attributes.get("onBlur");
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Return HTML JavaScript 'onKeyPress' attribute value for the Field. This
-     * method may return null if no event handler is defined.
-     *
-     * @return HTML JavaScript 'onKeyPress' attribute value for the Field
-     */
-    public String getOnKeyPress() {
-        if (attributes != null) {
-            return (String) attributes.get("onKeyPress");
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -497,6 +472,20 @@ public abstract class Field implements Control {
             
         } else {
             return true;
+        }
+    }
+    
+    /**
+     * Return the field's value from the request.
+     * 
+     * @return the field's value from the request
+     */
+    protected String getRequestValue() {
+        String value = getContext().getRequest().getParameter(getName());
+        if (value != null) {
+            return value.trim();
+        } else {
+            return "";
         }
     }
 }

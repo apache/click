@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.Context;
 
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
@@ -28,7 +27,7 @@ import net.sf.click.Context;
  * DoubleField will validate the number when the control is processed and invoke
  * the control listener if there is no parsing error. 
  * <p/>
- * The DoubleField uses a JavaScript onKeyPress() numberFilter method to prevent 
+ * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent 
  * users from entering invalid characters. To enable number key filtering
  * reference the method {@link Form#getHtmlImports()} in the page template 
  * (imports form.js file). For example.<blockquote><pre>
@@ -150,7 +149,7 @@ public class DoubleField extends TextField {
      * <p/>
      * A field error message is displayed if a validation error occurs. 
      * These messages are defined in the resource bundle: <blockquote>
-     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>double-format-error</li>
@@ -162,14 +161,7 @@ public class DoubleField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
-        
-        value = context.getRequest().getParameter(name);
-        if (value != null) {
-            value = value.trim();
-        } else {
-            value = "";
-        }
+        value = getRequestValue();
 
         int length = value.length();
         if (length > 0) {
@@ -178,24 +170,24 @@ public class DoubleField extends TextField {
 
                 if (maxvalue != Double.MAX_VALUE && doubleValue > maxvalue) {
                     Object[] args = new Object[] { getLabel(), new Double(maxvalue) };
-                    error = getMessage(context, "number-maxvalue-error", args);
+                    setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
                
                 if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
                     Object[] args = new Object[] { getLabel(), new Double(minvalue) };
-                    error = getMessage(context, "number-minvalue-error", args);
+                    setError(getMessage("number-minvalue-error", args));
                     return true;
                 }
 
                 return invokeListener();
 
             } catch (NumberFormatException nfe) {
-                error = getMessage(context, "double-format-error", getLabel());
+                setError(getMessage("double-format-error", getLabel()));
             }
         } else {
-            if (required) {
-                error = getMessage(context, "field-required-error", getLabel());
+            if (isRequired()) {
+                setError(getMessage("field-required-error", getLabel()));
             }
         }
         

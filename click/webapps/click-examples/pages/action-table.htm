@@ -1,0 +1,80 @@
+<html>
+<head>	
+<title>Click Examples - Action Table</title>
+<link rel="stylesheet" type="text/css" href="style.css" title="Style">
+</head>	
+<body>
+ 	
+<h2>Action Table</h2> 
+
+#writeSourceToolbar( "examples/page/ActionTable.java" "pages/action-table.htm" )
+
+This page provides an example of action links being used in a table.
+	
+<p>
+
+#if ($customers)
+<table border="1" cellspacing="0" cellpadding="6"> 
+ <tr bgcolor="navy">
+  <th>ID</th>
+  <th>Customer Name</th>
+  <th>Holdings</th>
+  <th>Edit</th>
+  <th>Delete</th>
+ </tr>
+#foreach( $customer in $customers )
+ #if( $velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
+  <td align="left">
+   $customer.id
+  </td>
+  <td align="left">
+   <a href="$viewLink.getHref($customer.id)">$customer.name</a>
+  </td> 
+  <td align="left">
+   $format.currency($customer.holdings)
+  </td>
+  <td align="center">
+   <a href="$editLink.getHref($customer.id)">
+    <img src="../images/edit.gif" alt="Edit" title="Edit" border="0" align="middle">
+   </a>
+  </td>
+  <td align="center">
+   <a href="$deleteLink.getHref($customer.id)" onclick="return window.confirm('Are you sure you want to delete this Customer?');">
+	  <img src="../images/delete.gif" alt="Delete" title="Delete" border="0" align="middle">
+   </a>
+  </td>
+ </tr>
+#end
+</table>
+#end <!-- If customers -->
+
+
+#if ($customerDetail) 
+<p>
+  
+<b>Customer Details</b>
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>Name</b></td><td>&nbsp;</td><td>$customerDetail.name</td>
+ </tr>
+ <tr>
+  <td><b>Email</b></td><td>&nbsp;</td>
+  <td><a style="{text-decoration:none;}" href="mailto:$customerDetail.email">$customerDetail.email</a></td>
+ </tr>
+ <tr>
+  <td><b>Age</b></td><td>&nbsp;</td><td>$customerDetail.age</td>
+ </tr>
+ <tr>
+  <td><b>Investments</b></td><td>&nbsp;</td><td>$customerDetail.investments</td>
+ </tr>
+ <tr>
+  <td><b>Holdings</b></td><td>&nbsp;</td><td>$format.currency($customerDetail.holdings)</td>
+ </tr>
+ <tr>
+  <td><b>Date Joined</b></td><td>&nbsp;</td><td>$format.date($customerDetail.dateJoined)</td>
+ </tr>
+</table>
+#end
+
+</body>
+</html>

@@ -46,7 +46,7 @@ import java.util.Date;
  * &lt;format classname="com.mycorp.utils.Format"/&gt;</pre></blockquote>
  * 
  * The format class must provide a no-args public constructor . After a Page is 
- * created its {@link net.sf.click.Page#format} property is set. 
+ * created its <a href="../Page.html#format">format</a> property is set. 
  * The ClickServlet will then add this property to the Velocity Context.
  * 
  * @author Malcolm Edgar

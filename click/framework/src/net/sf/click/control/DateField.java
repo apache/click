@@ -20,8 +20,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import net.sf.click.Context;
-
 /**
  * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
  * <p/>
@@ -180,7 +178,7 @@ public class DateField extends TextField {
      * <p/>
      * A field error message is displayed if a validation error occurs. 
      * These messages are defined in the resource bundle: <blockquote>
-     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>date-format-error</li>
@@ -192,25 +190,18 @@ public class DateField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
-        
-        value = context.getRequest().getParameter(name);
-        if (value != null) {
-            value = value.trim();
-        } else {
-            value = "";
-        }
+        value = getRequestValue();
 
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
-                error = getMessage(context, "field-minlength-error", args);
+                setError(getMessage("field-minlength-error", args));
                 return true;
 
             } else if (getMaxLength() > 0 && length > getMaxLength()) {
                 Object[] args = new Object[]{ getLabel(), new Integer(getMaxLength()) };
-                error = getMessage(context, "field-maxlength-error", args);
+                setError(getMessage("field-maxlength-error", args));
                 return true;
 
             } else {
@@ -223,7 +214,7 @@ public class DateField extends TextField {
 
                 } catch (ParseException pe) {
                     Object[] args = new Object[] { getLabel(), formatPattern };
-                    error = getMessage(context, "date-format-error", args);
+                    setError(getMessage("date-format-error", args));
                 }
 
                 // Dont want to invoke listener if unable to parse dateFormat.
@@ -236,8 +227,8 @@ public class DateField extends TextField {
             }
 
         } else {
-            if (required) {
-                error = getMessage(context, "field-required-error", getLabel());
+            if (isRequired()) {
+                setError(getMessage("field-required-error", getLabel()));
             }
             return true;
         }
@@ -266,7 +257,7 @@ public class DateField extends TextField {
         buffer.append(getForm().getContext().getRequest().getContextPath());
         buffer.append("/click/calendar.gif' onClick='javascript:goCalendar(this);'");
 
-        String calendarTitle = getMessage(getContext(), "calendar-image-title");
+        String calendarTitle = getMessage("calendar-image-title");
         if (calendarTitle != null) {
             buffer.append(" alt='");
             buffer.append(calendarTitle);

@@ -32,7 +32,7 @@ import java.io.PrintWriter;
  * <p/>
  * The {@link net.sf.click.ClickServlet} provides a top level error handler:
  * <blockquote>
- * {@link net.sf.click.ClickServlet#handleException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, boolean, Exception, Page)} 
+ * {@link net.sf.click.ClickServlet#handleException(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, boolean, Throwable, Page)} 
  * </blockquote>
  * This error handler will catch ApplicationExceptions and delegate them to the
  * configured "error.htm" page. The default error page class is

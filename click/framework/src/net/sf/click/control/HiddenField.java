@@ -207,15 +207,15 @@ public class HiddenField extends Field {
 
             buffer.append(getValue());
 
-        } else if (value instanceof Date) {
-            buffer.append(((Date)value).getTime());
+        } else if (getValueObject() instanceof Date) {
+            buffer.append(((Date)getValueObject()).getTime());
 
-        } else if (value instanceof Serializable) {
+        } else if (getValueObject() instanceof Serializable) {
             try {
-                buffer.append(ClickUtils.encode(value));
+                buffer.append(ClickUtils.encode(getValueObject()));
             } catch (IOException ioe) {
                 String msg =
-                    "could not encode value for hidden field: " + value;
+                    "could not encode value for hidden field: " + getValueObject();
                 throw new ApplicationException(msg, ioe);
             }
         } else {

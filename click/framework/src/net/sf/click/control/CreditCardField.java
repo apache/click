@@ -18,8 +18,6 @@ package net.sf.click.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.click.Context;
-
 /**
  * Provides a Credit Card control: &nbsp; &lt;input type='text'&gt;&lt;select&gt;.
  * <p/>
@@ -180,7 +178,7 @@ public class CreditCardField extends TextField {
      * <p/>
      * A field error message is displayed if a validation error occurs. 
      * These messages are defined in the resource bundle: <blockquote>
-     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>creditcard-number-error</li>
@@ -192,17 +190,10 @@ public class CreditCardField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        Context context = getContext();
+        value = getRequestValue();
         
-        cardType = context.getRequest().getParameter(SELECT_NAME);
-
-        value = context.getRequest().getParameter(name);
-        if (value != null) {
-            value = value.trim();
-        } else {
-            value = "";
-        }
-
+        cardType = getContext().getRequest().getParameter(SELECT_NAME);
+        
         // Strip spaces and '-' chars
         StringBuffer buffer = new StringBuffer(value.length());
         for (int i = 0, size = value.length(); i < size; i++) {
@@ -217,18 +208,18 @@ public class CreditCardField extends TextField {
         if (length > 0) {
             if (length < getMinLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
-                error = getMessage(context, "field-minlength-error", args);
+                setError(getMessage("field-minlength-error", args));
                 return true;
             }
             if (length > getMaxLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
-                error = getMessage(context, "field-maxlength-error", args);
+                setError(getMessage("field-maxlength-error", args));
                 return true;
             }
 
             // Shortest valid number is VISA with 13 digits
             if (length < 13) {
-                error = getMessage(context, "creditcard-number-error", getLabel());
+                setError(getMessage("creditcard-number-error", getLabel()));
                 return true;
             }
 
@@ -264,15 +255,15 @@ public class CreditCardField extends TextField {
                 }
 
                 if (!isValid) {
-                    error = getMessage(context, "creditcard-number-error", getLabel());
+                    setError(getMessage("creditcard-number-error", getLabel()));
                 }
             }
 
             return invokeListener();
 
         } else {
-            if (required) {
-                error = getMessage(context, "field-required-error",  getLabel());
+            if (isRequired()) {
+                setError(getMessage("field-required-error",  getLabel()));
             }
             
             return true;
