@@ -28,22 +28,26 @@ With Click you add objects to you page template using the Page's model. You can 
 using Velocities <span class="red">$</span> reference notation. By default the ClickServlet adds the 
 following objects page templates:
 <ul style="margin-bottom: 1.5em;">
-  <li><span class="red">$context</span> &nbsp; - &nbsp;
+  <li><span class="st">context</span> &nbsp; - &nbsp;
     the Servlet context path, e.g. <span class="blue">/mycorp</span>
   </li>  
-  <li><span class="red">$format</span> &nbsp; - &nbsp; 
+  <li><span class="st">format</span> &nbsp; - &nbsp; 
     the <a href="../click-api/net/sf/click/util/Format.html">Format</a> 
     object for formatting the display of objects.
   </li>
-  <li><span class="red">$request</span> &nbsp; - &nbsp; 
+  <li><span class="st">path</span> &nbsp; - &nbsp; 
+    the <a href="../click-api/net/sf/click/Page.html#path">path</a> 
+    of the page template to render.
+  </li>
+  <li><span class="st">request</span> &nbsp; - &nbsp; 
     the pages <a href="../servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
     object.
   </li>
-  <li><span class="red">$response</span> &nbsp; - &nbsp; 
+  <li><span class="st">response</span> &nbsp; - &nbsp; 
     the pages <a href="../servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
     object.
   </li>
-  <li><span class="red">$session</span> &nbsp; - &nbsp; 
+  <li><span class="st">session</span> &nbsp; - &nbsp; 
    the <a target="topic" href="../click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
    for the users <a href="../servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
   </li>
