@@ -428,7 +428,8 @@ public class ActionLink implements Control {
 
     /**
      * Return the ActionLink anchor &lt;a&gt; tag href attribute for the
-     * given value.
+     * given value. This method will encode the URL with the session ID
+     * if required using <tt>HttpServletResponse.encodeURL()</tt>.
      *
      * @param value the ActionLink value parameter
      * @return the ActionLink HTML href attribute
@@ -451,7 +452,7 @@ public class ActionLink implements Control {
             buffer.append(value);
         }
 
-        return buffer.toString();
+        return getContext().getResponse().encodeURL(buffer.toString());
     }
 
     /**
