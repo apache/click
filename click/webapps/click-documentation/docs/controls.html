@@ -94,13 +94,13 @@ public class SimpleCallback extends Page {
 
     public void onInit() {
         ActionLink clickLink = new ActionLink("onClick");
-        clickLink.<span class="red">setListener</span>(<span class="blue">this</span>, "<span class="blue">onClick</span>");
+        clickLink.<span class="green">setListener</span>(<span class="blue">this</span>, "<span class="blue">onClick</span>");
         addControl(goLink);    
     }
     
-    public boolean <span class="blue">onClick</span>() {
+    public <span class="red">boolean</span> <span class="blue">onClick</span>() {
         System.out.println("onClick invoked");
-        return true;
+        return <span class="red">true</span>;
     }
 } </pre>
 
@@ -113,34 +113,8 @@ will be performed and neiher of the Page onGet() or onPost() methods will be inv
 logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
 <p/>
 Being able to stop further processing and do something else can be very handy. For example your 
-Pages onGet() or onPost() method may perform an expensive database query to display a table. By using 
+Pages onGet() or onPost() method may perform an expensive database operation. By using 
 returning false in a event handler you can skip this step and forward to the next page.
-
-<pre class="codeJava">
-public class OrderPage extends Page {
-
-    public void onInit() {
-        Form form = new Form("form", getContext());
-        addControl(form);
-        
-        ..
-        
-        Submit cancelButton = new Submit(" Cancel ");
-        cancelButton.setListener(this, "<span class="blue">onCancelClick</span>");
-        form.add(cancelButton); 
-    }
-    
-    public boolean <span class="blue">onCancelClick</span>() {
-        setForward("products.htm");
-        return <span class="red">false</span>;
-    }
-    
-    public void onPost() {
-        // Lengthy credit authorization operation
-        ..
-    }
-} </pre>
-
 
 <a name="control-class"><h2>Control Classes</h2></a>
 
