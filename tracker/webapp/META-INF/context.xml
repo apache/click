@@ -1,8 +1,10 @@
 <Context docBase="${catalina.home}/webapps/tracker">
+
    <Resource 
       name="jdbc/tracker" 
       auth="Container" 
       type="javax.sql.DataSource"
+      debug="99"
       maxActive="20" 
       maxIdle="10" 
       maxWait="10000"
@@ -10,4 +12,15 @@
       password="compass" 
       driverClassName="com.mckoi.JDBCDriver"
       url="jdbc:mckoi://localhost:9157/Tracker"/>
+      
+   <Realm 
+      className="org.apache.catalina.realm.DataSourceRealm" 
+      debug="99"
+      dataSourceName="jdbc/tracker"
+      userTable="Users" 
+      userNameCol="username" 
+      userCredCol="password"
+      userRoleTable="User_Roles" 
+      roleNameCol="rolename"/>
+
 </Context>

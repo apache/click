@@ -2,18 +2,15 @@
 <head>
 <title>Dev Log</title>
 <link rel='stylesheet' type='text/css' href='style.css' title='style'/>
-#if( $form ) $form.getHtmlImports() #end
-
-#writeSetFocus()
 </head>
 
-<body topmargin="0" leftmargin="0" onload="javascript:setFocus();">
+<body topmargin="0" leftmargin="0">
 
 <table valign="top" border="0" cellSpacing="1" cellPadding="0" width="100%" height="100%">
 
  <!-- Header -->
  <tr>
-  <TD valign="bottom">
+  <td valign="bottom">
    <table cellspacing="0" cellpadding="0" border="0" valign="bottom">
     <tr>
      <td valign="center" noWrap align="right" bgcolor="#002866">&nbsp;        
@@ -22,17 +19,17 @@
      <td valign="top" align="right"><img height="25" src="images/curve.gif"></td>
     </tr>
    </table>
-  </TD>
-  <TD>&nbsp;</TD>
-  <TD valign="top" align="right" bgColor="white">&nbsp;<img src="images/logo.png" vspace="4" hspace="8"></TD>
- </TR>
+  </td>
+  <td>&nbsp;</td>
+  <td valign="top" align="right" bgColor="white">&nbsp;<img src="images/logo.png" vspace="4" hspace="8"></td>
+ </tr>
  
  <!-- Title -->
- <TR>
+ <tr>
   <td class="title" align="left" valign="center" colspan="3" width="100%">
-   &nbsp;&nbsp;Development Log
+   &nbsp;&nbsp;Tracker
   </td>
- </TR>
+ </tr>
  
  <!-- Main Start -->
  <tr valign="top">
@@ -44,7 +41,13 @@
      <td valign="top" width="100%" bgcolor="white">
       <br>
       <h3>Log On</h3>      
-      $form
+      <form method="POST" action="j_security_check">
+      <table border="1">
+       <tr><td>Username:</td><td><input type="text" name="j_username"/></td></tr>
+       <tr><td>Password:</td><td><input type="password" name="j_password"/></td></tr>
+       <tr><td colspan="2" align="center"><input type="submit" value=" OK " name="2K"/></td></tr>
+      </table>
+      </form>
      </td>
   
     </tr>
@@ -55,5 +58,5 @@
  
 </table>
        
-</BODY>
-</HTML>
+</body>
+</html>

@@ -137,7 +137,7 @@
    
 	<class name="UserRole" table="User_Roles">
       <composite-id>
-         <key-property name="rolename"/>
+         <key-property name="role" column="rolename"/>
          <key-many-to-one name="user" column="username"/>
       </composite-id>
 	</class>  

@@ -6,6 +6,7 @@
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
    <property name="jar.hibernate" value="${dir.hibernate}/hibernate2.jar"/>
+   <property name="jar.mkjdbc" value="database/lib/mkjdbc-1.0.3.jar"/>  
 
    <!-- Tasks -->
 
@@ -19,8 +20,9 @@
             <fileset dir="../lib">
               <include name="**/*.jar"/>
             </fileset> 
+            <pathelement location="../${dir.deploy}/click-all-${version}.jar"/>  
             <pathelement location="${jar.hibernate}"/>
-            <pathelement location="../${dir.deploy}/${name}-all-${version}.jar"/>
+            <pathelement location="${jar.mkjdbc}"/>
          </classpath>
       </javac>
       <copy todir="webapp/WEB-INF/classes">
@@ -33,14 +35,15 @@
       <mkdir dir="${dir.deploy}"/>  
       <war destfile="${dir.deploy}/tracker.war"
            webxml="webapp/WEB-INF/web.xml">
-         <lib file="../${dir.deploy}/${name}-all-${version}.jar"/>
+         <lib file="../${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="${jar.mkjdbc}"/>  
          <fileset dir="webapp">
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
    </target>
 
-   <target name="deploy-webapp" description="deploy web apps to app server"> 
+   <target name="deploy" description="deploy Tracker web app to Tomcat"> 
 	  <copy file="${dir.deploy}/tracker.war" todir="${dir.tomcat}/webapps" overwrite="true"/>
    </target>
 

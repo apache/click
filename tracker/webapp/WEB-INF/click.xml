@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app>
+  <pages>
+    <page path="welcome.htm" classname="net.sf.click.Page"/>
+    <page path="logout.htm" classname="tracker.page.Logout"/>
+  </pages>
+</click-app>
