@@ -92,7 +92,7 @@ config file.
 
 <a name="application-configuration"><h2>Application Configuration</h2></a>
 
-The heart of a Click appliation is the <tt>click.xml</tt> configuration file.
+The heart of a Click application is the <tt>click.xml</tt> configuration file.
 This file specifies the application pages, headers, the format object and the 
 applications mode. 
 
@@ -165,7 +165,7 @@ in the next topic.
 When the Click application starts up it will check all the page definitions. If there 
 is a critical configuration error the ClickSerlvet will log an <tt>ERROR</tt> message and throw a
 <a target="topic" href="servlet-api/javax/servlet/UnavailableException.html">UnavailableException</a>. 
-If this occurs the click application will be permanantly unavailable until the error is fixed 
+If this occurs the click application will be permanently unavailable until the error is fixed 
 and the web app is restarted.
 
 <a name="application-headers"><h3>Headers</h3></a>
@@ -338,7 +338,7 @@ velocimacro.library.autoreload=false
 </pre>
 
 When Velocity Caching is disabled Velocity templates and macros file are 
-reloaded when ever they change. With caching disabled the the following Velocity 
+reloaded when ever they change. With caching disabled the following Velocity 
 runtime properties are set:
 
 <pre class="codeConfig">
@@ -387,7 +387,7 @@ velocimacro.library=click/VM_global_library.vm
 See the Velocity
 <a target="topic" href="velocity/developer-guide.html#Velocity Configuration Keys and Values">Developer Guide</a>
 for details about these properties. Note in <tt>debug</tt> mode the ClickServlet will
-log the Velocity properites used when in starts up.
+log the Velocity properties used when in starts up.
 <p/>
 If you want to add some of your own Velocity properties, or replace Click's
 properties, add a <tt>velocity.properties</tt> file in the <tt>WEB-INF</tt> 
