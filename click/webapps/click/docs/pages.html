@@ -21,8 +21,6 @@ and covers to following topics:
   </li>
   <li><a href="#page-security">Security</a> - page security model<p/>
   </li>
-  <li><a href="#page-configuration">Configuration</a> - setting up pages<p/>
-  </li>
   <li><a href="#page-error-handling">Error Handling</a> - page error handling model<p/>
   </li>
   <li><a href="#page-page-found">Page Not Found</a> - page not found handling<p/>
@@ -125,14 +123,179 @@ Another view on the execution flow of Pages is illustrated in the Activity diagr
 <h4>Figure 3. &nbsp; Page Execution Activity Diagram</h4>
 
 
-
 <a name="page-navigation"><h2>Navigation</h2></a>
+
+Navigation between pages is achieved using forwards, redirects and setting the template 
+path.
+
+<h3>Forward</h3>
+
+To forward to another page using the servlet 
+<a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
+set the Page's forward property. For example to forward to a page with a path 
+<tt>"<font color="blue">index.htm</font>"</tt>:
+<blockquote>
+<pre>
+public void onPost() {
+   // Process form post
+   ..
+   
+   setForward("<font color="blue">index.htm</font>");
+}
+</pre>
+</blockquote>
+This will invoke a new Page class instance mapped to the path 
+<tt>"<font color="blue">index.htm</font>"</tt>. Note when a request is forwarded to another Page, 
+the controls on the second page will not be processed. This prevents confusion and bugs,
+like a form on the second page trying to process a POST request from the first page.
+<p/>
+When you forward to another page the request parameters are maintained. This is a handy way
+of passing through state information through with the request. For example to you could
+add a customer object as request parameter which is displayed in the template of the 
+forwarded page.
+<blockquote>
+<pre>
+public boolean onViewClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDatabase.getCustomer(id); 
+    
+   getContext().setRequestAttribute("<font color="red">customer</font>", customer);
+   setForward("<font color="blue">view-customer.htm</font>");
+   
+   return false;
+}
+</pre>
+</blockquote>
+
+Forwarded to page template <tt>"<font color="blue">view-customer.htm</font>"</tt>:
+
+<blockquote>
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+ &lt;title&gt;Customer Details&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+ &lt;h1&gt;Customer Details&lt;/h1&gt;
+ &lt;pre&gt;
+  Full Name: $<font color="red">customer</font>.fullName
+  Email:     $<font color="red">customer</font>.email
+  Telephone: $<font color="red">customer</font>.telephone
+ &lt;/pre&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</blockquote>
+
+Request attributes are automatically added to the Velocity Context object so are  
+available in the page template.
+
+<h3>Template Path</h3>
+
+An alternative to forwarding to a new page is to simply set the path to the new
+page template to render. With this approach the page template  being rendered must have 
+everything it needs without having its associated Page object being created. Our modified 
+example would be:
+<blockquote>
+<pre>
+public boolean onViewClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDatabase.getCustomer(id); 
+    
+   <b>addModel</b>("<font color="red">customer</font>", customer);
+   <b>setPath</b>("<font color="blue">view-customer.htm</font>");
+   
+   return false;
+}
+</pre>
+</blockquote>
+Note how the <font color="red">customer</font> object is passed through to the template in the Page model. This
+approach of using the Page model is not available when you forward to another Page, as
+the first Page object is "finalized" before the second Page object is created and any
+model values would be lost.
+
+<h3>Redirect</h3>
+
+Redirects are another very useful way to navigate between pages. See 
+HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
+for details.
+<p/>
+The great thing about
+redirects are that they provide a clean URL in the users browser which matches the page
+that they are viewing. This is important for when users want to bookmark a page.
+The downside of redirects are that they involve a communications round trip with the 
+users browser which requests the new page. Not only does this take time, it also means
+that all the page and request information is lost. 
+<p/>
+An example of a redirect to a <tt>"<font color="blue">logout.htm</font>"</tt>
+page is provided below:
+<blockquote>
+<pre>
+public boolean onLogoutClick() {
+   setRedirect("<font color="blue">logout.htm</font>");
+   return false;
+}
+</pre>
+</blockquote>
+
+A method of passing information between redirected pages is to use URL
+request parameters. The ClickServlet will encode the URL for you using
+HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url)
+method. 
+<p/>
+In the example below a user click on an OK button to confirm a payment. The 
+OK button handler processes the payment, gets the payment transaction id, and then 
+redirects to the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page with the
+transaction id encoded in the URL.
+<blockquote>
+<pre>
+public class Payment extends Page {
+   ..
+   
+   public boolean onOkClick() {
+      if (form.isValid()) {
+         // Process payment
+         ..
+         
+         // Get transaction id
+         Long id = ..
+   
+         setRedirect("<font color="blue">trans-complete.htm</font>?<font color="red">trans-id</font>=" + id);
+      
+         return false; 
+      } 
+  
+      return true;
+   }
+   
+   ..
+}
+</pre>
+</blockquote>
+The Page class for the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page can 
+then get the transaction id through the request parameter 
+<tt>"<font color="red">trans-id</font>"</tt>:
+<blockquote>
+<pre>
+public class TransComplete extends Page {
+   ..
+   
+   public void onInit() {
+      String id = getContext().getRequest().getParameter("<font color="red">trans-id</font>");
+   
+      if (id != null) {
+         // Get transaction details
+         ..
+      }
+   }
+   
+   ..
+}
+</pre>
+</blockquote>
 
 
 <a name="page-security"><h2>Security</h2></a>
-
-
-<a name="page-configuration"><h2>Configuration</h2></a>
 
 
 <a name="page-error-handing"><h2>Error Handling</h2></a>

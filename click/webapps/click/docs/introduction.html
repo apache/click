@@ -34,48 +34,47 @@ example.
 <h2>Click Example</h2>
 A Hello World example in Click would look something like this. You would have a
 <tt>click.xml</tt> configuration file which defines our Hello World page class
-and its Velocity template:<blockquote><pre>
+and its Velocity page template:<blockquote><pre>
 &lt;click-app&gt;  
   &lt;pages&gt; 
-    &lt;<b>page</b> path="<font color="blue">hello-world.htm</font>" classname="<font color="red">examples.page.HelloWorld</font>"/&gt; 
+    &lt;page path="<font color="blue">hello-world.htm</font>" classname="<font color="green">examples.page.HelloWorld</font>"/&gt; 
   &lt;/pages&gt;
 &lt;/click-app&gt; 
 </pre></blockquote>
 
-Next we have our <tt>examples.page.HelloWorld</tt> class:<blockquote><pre>
+Next we have our page class <font color="green"><tt>examples.page.HelloWorld</tt></font>:<blockquote><pre>
 package examples.page;
 
 import java.util.Date;
 import net.sf.click.Page;
 
-public <font color="red">HelloWorld</font> extends Page {
+public HelloWorld extends Page {
 
     public void onGet() {
-        addModel("<b><font color="red">time</font></b>", new Date());
+        addModel("<font color="red">time</font>", new Date());
     }
 }
 </pre></blockquote>
-And then we have the associated "<font color="blue">hello-world.htm</font>" page 
-template:<blockquote><pre>
+And then we have the page template <font color="blue">hello-world.htm</font>:<blockquote><pre>
 &lt;html&gt;
  &lt;body&gt;
   &lt;h2&gt;Hello World&lt;/h2&gt;
-  Hello world from Click at <b>$<font color="red">time</font></b>
+  Hello world from Click at $<font color="red">time</font>
  &lt;/body&gt;
 &lt;/html&gt;
 </pre></blockquote>
 
 At runtime the ClickSerlvet maps a GET <font color="blue">hello-world.htm</font> 
-request to our class and creates a new <font color="red"><tt>HelloWorld</tt></font> page instance. 
+request to our page class and creates a new <font color="green"><tt>HelloWorld</tt></font> instance. 
 The ClickServlet then invokes the page's <tt>onGet()</tt> method. This method creates a 
-new <tt>Date</tt> object and adds it to the page model as a value called 
-<b><font color="red">time</font></b>.
+new <tt>Date</tt> object and adds it to the page's model as a value called 
+<font color="red">time</font>.
 <p/>
 The page model is then merged with the template which subsitutes the 
-<b>$<font color="red">time</font></b> parameter with the <tt>Date</tt> object. 
-Velocity then renders the template which looks something like this:
+$<font color="red">time</font> parameter with the <tt>Date</tt> object. 
+Velocity then renders the merged template which looks something like this:
 <blockquote>
-<table bgcolor="lightgrey" cellpadding="12" cellspacing="12">
+<table border="1" cellpadding="12" cellspacing="0">
 <tr>
  <td>
  <h2><font color="navy">Hello World</font></h2>
