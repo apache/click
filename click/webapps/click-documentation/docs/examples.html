@@ -49,19 +49,22 @@ To build and deploy the web applications:
   <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
   an Ant installation.<p/>
   </li>
-  <li>Edit <tt>build.properties</tt> file and set the <tt>app.server.dir</tt>
-  property to point to your J2EE web container deployment directory. Note on
-  Windows ensure you replace any \ directory path characters with / characters,
-  otherwise Ant may not find the directory. For example:
+  <li>Edit <tt>build.properties</tt> file and set the <tt>dir.appserver</tt>
+  property to point to your J2EE web container deployment directory. For example:
   
   <pre class="codeConfig">
-  # appserver deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps/ </pre>
-  </li>
+  # App Server deployment directory
+  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps </pre>
   
+  Note on Windows ensure you replace any \ directory path characters with / otherwise 
+  Ant may not find the directory. <p>
+  </li>
   <li>Run the Ant build script targets:
   <pre class="codeConfig">
   ant build-framework build-webapps deploy-webapps </pre>
+  
+  These targets will build the Click framework, then build the example applications, 
+  and then copy the WAR files to your Application Servers deployment directory.
   </li>
 </ol>
 
