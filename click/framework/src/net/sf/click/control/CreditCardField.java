@@ -146,7 +146,7 @@ public class CreditCardField extends TextField {
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the selected Credit Card type: &nbsp; 
@@ -172,6 +172,8 @@ public class CreditCardField extends TextField {
         }
     }
 
+    // -------------------------------------------------------- Public Methods
+    
     /**
      * Process the Credit Card submission, using the card type to validate
      * the card number.

@@ -34,6 +34,8 @@ package net.sf.click.control;
  */
 public class PasswordField extends TextField {
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Construct the Password Field with the given label.
      * <p/>
@@ -45,7 +47,7 @@ public class PasswordField extends TextField {
         super(label);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Returns the 'password' input field type.

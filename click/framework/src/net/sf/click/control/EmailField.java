@@ -35,6 +35,8 @@ package net.sf.click.control;
  */
 public class EmailField extends TextField {
 
+    // ----------------------------------------------------------- Constructors
+    
     /**
      * Construct an Email Field with the given label and a default size of 30.
      * <p/>
@@ -47,6 +49,8 @@ public class EmailField extends TextField {
         size = 30;
     }
 
+    // -------------------------------------------------------- Public Methods
+    
     /**
      * Process the EmailField submission. If the Email value is valid the 
      * controls listener will be invoked.

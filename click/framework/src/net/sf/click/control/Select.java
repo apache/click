@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import net.sf.click.util.ClickUtils;
-
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
  * <p/>
@@ -161,6 +159,8 @@ import net.sf.click.util.ClickUtils;
  */
 public class Select extends Field {
 
+    // ----------------------------------------------------- Instance Variables
+
     /** The multiple options selectable flag. The default value is false. */
     protected boolean multiple;
 
@@ -176,7 +176,7 @@ public class Select extends Field {
      */
     protected List multipleValues;
 
-    // ----------------------------------------------------------- Constructor
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Create a Select field with the given label.
@@ -189,7 +189,7 @@ public class Select extends Field {
         super(label);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Add the given Option to the Select.
@@ -357,7 +357,9 @@ public class Select extends Field {
      */
     public void setOptionList(List options) {
         optionList = options;
-    }
+    }    
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Process the Select submission. 
@@ -464,7 +466,7 @@ public class Select extends Field {
             buffer.append("' ");
         }
         
-        ClickUtils.renderAttributes(attributes, buffer);
+        renderAttributes(buffer);
 
         if (isMultiple()) {
             buffer.append(" multiple");
@@ -498,6 +500,8 @@ public class Select extends Field {
 
         return buffer.toString();
     }
+
+    // ---------------------------------------------------------- Inner Classes
 
     /**
      * Provides a select Option element: &nbsp; &lt;option&gt;&lt;/option&gt;.
@@ -575,11 +579,15 @@ public class Select extends Field {
      */
     public static class Option {
         
+        // ------------------------------------------------- Instance Variables
+        
         /** The Options display label */
         protected final String label;
         
         /** The Option value. */
         protected final String value;
+        
+        // ------------------------------------------------------- Constructors
                
         /**
          * Create an Option with the given value and display label.
@@ -602,6 +610,8 @@ public class Select extends Field {
             this(value, value);
         }
         
+        // -------------------------------------------------- Public Attributes
+        
         /**
          * Return the Option display label.
          * 
@@ -619,6 +629,8 @@ public class Select extends Field {
         public String getValue() {
             return value;
         }
+        
+        // ----------------------------------------------------- Public Methods
         
         /**
          * Return a HTML rendered Option string.
@@ -689,12 +701,16 @@ public class Select extends Field {
      */
     public static class OptionGroup {
         
+        // ------------------------------------------------- Instance Variables
+        
         /** The groups child Option/OptGroup objects. */
         protected List children = new ArrayList();
         
         /** The label for the OptionGroup. */
         protected final String label;
-                
+        
+        // ------------------------------------------------------- Constructors
+        
         /**
          * Create an OptionGroup with the given display label.
          * 
@@ -703,6 +719,8 @@ public class Select extends Field {
         public OptionGroup(String label) {
             this.label = label;
         }
+        
+        // -------------------------------------------------- Public Attributes
         
         /**
          * Add the given Option or OptionGroup object to this group.
@@ -730,6 +748,8 @@ public class Select extends Field {
         public String getLabel() {
             return label;
         }
+        
+        // ----------------------------------------------------- Public Methods
         
         /**
          * Return a HTML rendered OptionGroup string.

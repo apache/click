@@ -17,14 +17,14 @@ package net.sf.click.control;
 
 
 /**
- * Provides a Checkbox control: &nbsp; &lt;input type='checkbox'&gt;.
+ * Provides a Radio control: &nbsp; &lt;input type='radio'&gt;.
  * <p/>
  * <table class='form'><tr>
- * <td>Checkbox</td>
- * <td><input type='checkbox' title='Checkbox Control'/></td>
+ * <td>Radio</td>
+ * <td><input type='radio' value='Radio Control'/></td>
  * </tr></table>
  * <p/>
- * Checkbox supports the {@link Field#required} property and Control listeners.
+ * TODO: radio javadoc
  * 
  * <p/>
  * See also W3C HTML reference
@@ -33,37 +33,67 @@ package net.sf.click.control;
  * 
  * @author Malcolm
  */
-public class Checkbox extends Field {
+public class Radio extends Field {
 
     // ----------------------------------------------------- Instance Variables
 
     /** The field checked value. */
     protected boolean checked;
-
+    
     // ----------------------------------------------------------- Constructors
-
+    
     /**
-     * Create a checkbox field with the given label.
-     *
-     * @param label the label of the field.
+     * Create a radio field.
      */
-    public Checkbox(String label) {
-        super(label);
+    public Radio() {
+    }
+    
+    /**
+     * Create a radio field with the given value.
+     *
+     * @param value the label of the field
+     */
+    public Radio(String value) {
+        setValue(value);
+    }
+    
+    /**
+     * Create a radio field with the given value and label.
+     *
+     * @param value the label of the field
+     * @param label the name of the field
+     */
+    public Radio(String value, String label) {
+        setValue(value);
+        setLabel(label);
+    }
+    
+    /**
+     * Create a radio field with the given value, label and name.
+     *
+     * @param value the label of the field
+     * @param label the label of the field
+     * @param name the name of the field
+     */
+    public Radio(String value, String label, String name) {
+        setValue(value);
+        setLabel(label);
+        setName(name);
     }
 
     // ------------------------------------------------------ Public Attributes
-
+    
     /**
-     * Return true if the checkbox is checked, or false otherwise.
+     * Return true if the radio is checked, or false otherwise.
      *
-     * @return true if the checkbox is checked.
+     * @return true if the radio is checked.
      */
     public boolean isChecked() {
         return checked;
     }
 
     /**
-     * Set the selected value of the checkbox.
+     * Set the selected value of the radio.
      *
      * @param value the selected value
      */
@@ -72,61 +102,36 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Return the input field type of: &nbsp; <tt>checkbox</tt>
+     * Return the input field type of: &nbsp; <tt>radio</tt>
      *
-     * @return the input field type &nbsp; <tt>checkbox</tt>
+     * @return the input field type &nbsp; <tt>radio</tt>
      */
     public String getType() {
-        return "checkbox";
+        return "radio";
     }
 
-    /**
-     * Returns "true" if the checkbox is checked, or false otherwise.
-     *
-     * @see Field#getValue()
-     */
-    public String getValue() {
-        return String.valueOf(checked);
-    }
+    // --------------------------------------------------------- Public Methods
     
     /**
-     * Set checked value of the field. If the given value is null, the checked
-     * value is set to false.
-     * 
-     * @see Field#setValue(Object)
-     */
-    public void setValue(Object value) {
-        if (value != null) {
-            checked = Boolean.getBoolean(value.toString());
-        } else {
-            checked = false;
-        }
-    }
-
-    /**
-     * Process the request Context setting the checked value and invoking 
-     * the controls listener if defined.
-     * <p/>
-     * If a checked value is {@link Field#required} and the Checkbox is not 
-     * checked the error message defined by <tt>not-checked-error</tt> 
-     * property will be displayed.
+     * Process the request Context setting the checked value if selected 
+     * and invoking the controls listener if defined.
      *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        checked = getContext().getRequest().getParameter(name) != null;
+        String value = getRequestValue();
+       
+        checked = getValue().equals(value);
 
-        if (required && !checked) {
-            error = getMessage("not-checked-error", getLabel());
+        if (checked) {
+            return invokeListener();
+        } else {
+            return true;
         }
-
-        return invokeListener();
     }
 
-    // -------------------------------------------------------- Public Methods
-
     /**
-     * Return the HTML rendered Checkbox string.
+     * Return the HTML rendered Radio string.
      *
      * @see Object#toString()
      */
@@ -137,26 +142,36 @@ public class Checkbox extends Field {
         buffer.append(getType());
         buffer.append("' name='");
         buffer.append(getName());
+        buffer.append("' value='");
+        buffer.append(getValue());
         buffer.append("'");
-        
-        renderAttributes(buffer);
-
-        if (checked) {
-            buffer.append("' checked ");
-        } else {
-            buffer.append("' ");
+        if (isChecked()) {
+            buffer.append(" checked");
         }
+        
         if (getTitle() != null) {
             buffer.append("title='");
             buffer.append(getTitle());
             buffer.append("'");
         }
+        
+        renderAttributes(buffer);
+
         buffer.append(getDisabled());
+         
         if (isValid()) {
             buffer.append(">");
         } else {
             buffer.append(" class='error'>");
         }
+        
+        if (getLabel() != null) {
+            buffer.append(getLabel());
+        } else {
+            buffer.append(getValue());
+        }
+        
+        buffer.append("</input>");
 
         return buffer.toString();
     }

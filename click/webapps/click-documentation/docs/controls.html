@@ -10,42 +10,110 @@
   
 <h1>Controls</h1>
 <p/>
-Click provides a number of HTML Controls which support server side processing. These controls
-are included in the Java package 
-<a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>. 
-
-<h3>HTML Controls</h3>
-
-The major <a target="topic" href="api/net/sf/click/html/package-summary.html">net.sf.click.html</a> package objects are: 
-
+Click provides a rich set of Controls which support client side rendering and
+server side processing. This section discusses Clicks HTML Controls and covers
+the following topics:
 <ul>
-<li><a target="topic" href="api/net/sf/click/html/ActionLink.html"><tt>ActionLink</tt></a>
-&nbsp; - &nbsp; which provides an &lt;a&gt; <tt>href</tt> attribute which can call command
-methods   
-<p></li>
-<li><a target="topic" href="api/net/sf/click/html/Form.html"><tt>Form</tt></a>
-&nbsp; - &nbsp; which provides Form processing and validation   
-<p></li>
-<li><a target="topic" href="api/net/sf/click/html/Field.html"><tt>Field</tt></a>
-&nbsp; - &nbsp; which provides Form processing and validation   
-<p></li>
-</ul> 
+  <li><a href="#control-class">Classes</a> - control Java classes<p/>
+  </li> 
+  <li><a href="#event-callback">Event Callback</a> - event callback listener pattern<p/>
+  </li> 
+  <li><a href="#forms">Control Interface</a> - todo<p/>
+  </li>
+  <li><a href="#forms">ActionLinks</a> - todo<p/>
+  </li>  
+  <li><a href="#forms">Forms</a> - todo<p/>
+  </li> 
+  <li><a href="#forms">Fields</a> - todo<p/>
+  </li>
+  <li><a href="#control-properties">Control Properties</a> - todo<p/>
+  </li> 
+</ul>
+<p>&nbsp;</p>
+
+
+While this section provides an overview how Controls work please see the 
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>. 
+which provides extensive information and examples.
+Javadoc 
+
+<a name="control-class"><h2>Classes</h2></a>
+
+The major <a target="topic" href="api/net/sf/click/control/package-summary.html">net.sf.click.control</a> package objects are: 
+<p/>
 
 <img src="../images/control-class-diagram.png"/><br/>
 <b>Class Diagram</b>
 
+<ul>
+<li><a target="topic" href="api/net/sf/click/Control.html">Control</a>
+&nbsp; - &nbsp; todo
+methods   
+<p></li>
+<li><a target="topic" href="api/net/sf/click/control/ActionLink.html">ActionLink</a>
+- which provides an &lt;a&gt; <tt>href</tt> attribute which can call command
+methods   
+<p></li>
+<li><a target="topic" href="api/net/sf/click/control/Form.html">Form</a>
+- which provides Form processing and validation   
+<p></li>
+<li><a target="topic" href="api/net/sf/click/control/Field.html">Field</a>
+- which provides Form processing and validation   
+<p></li>
+</ul> 
+<a name="event-callback"><h2>Event Callback</h2></a>
 
-<a target="topic" href="api/net/sf/click/html/ActionLink.html"><tt>ActionLink</tt></a>, 
-which is a which can call a 
-command method, and the 
-<a target="topic" href="api/net/sf/click/html/Form.html"><tt>Form</tt></a> 
-component and the 
-<a target="topic" href="api/net/sf/click/html/Field.html"><tt>Field</tt></a> 
-components contained within it.
+<div class="code">
+public class SimpleCallback extends Page {
 
-<h3>Conrol Properties</h3>
-<blockquote>
-<pre>
+    public void onInit() {
+        ActionLink clickLink = new ActionLink("onClick");
+        clickLink.setListener(this, "<span class="blue">onClick</span>");
+        addControl(goLink);    
+    }
+    
+    public boolean <span class="blue">onClick</span>() {
+        System.out.println("onClick invoked");
+        return true;
+    }
+}
+</div>
+
+// TODO: make this a form example
+
+<div class="code">
+public class LinkPage extends Page {
+
+    public void onInit() {
+        ActionLink goLink = new ActionLink("goLink");
+        goLink.setListener(this, "<span class="blue">onGoClick</span>");
+        addControl(goLink);
+        
+        ActionLink continueLink = new ActionLink("stopLink");
+        stopLink.setListener(this, "<span class="red">onStopClick</span>");
+        addControl(stopLink);       
+    }
+    
+    public boolean <span class="blue">onGoClick</span>() {
+        System.out.println("onGoClick invoked");
+        return true;
+    }
+    
+    public boolean <span class="red">onStopClick</span>() {
+        System.out.println("onLinkClick invoked");
+        return false;
+    }
+    
+    public void onGet() {
+        System.out.println("onGet invoked");
+    }
+}
+</div>
+
+<a name="forms"><h2>Forms</h2></a>
+
+<a name="control-properties"><h2>Control Properties</h2></a>
+<div class="code">
 # Click messages for 'net.sf.click.control' package
 calendar-image-title=Calendar
 creditcard-number-error={0} is invalid
@@ -66,8 +134,7 @@ not-checked-error=You must select {0}
 number-maxvalue-error={0} must not be larger than {1}
 number-minvalue-error={0} must not be smaller than {1}
 select-error=You must select a value for {0}
-</pre>
-</blockquote>
+</div>
 
 
 </body>

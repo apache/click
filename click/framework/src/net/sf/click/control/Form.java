@@ -279,7 +279,7 @@ public class Form implements Control {
         setContext(context);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Add the field to the form, and set the fields form property. The field 
@@ -659,6 +659,8 @@ public class Form implements Control {
         }
         return true;
     }
+
+    // --------------------------------------------------------- Public Methods
     
     /**
      * Process the Form when the Context request method is the same as the Forms,
@@ -809,6 +811,8 @@ public class Form implements Control {
 
         return buffer.toString();
     }  
+
+    // ------------------------------------------------------ Protected Methods
     
     /**
      * Render the non hidden Form Fields to the string buffer and return a

@@ -10,6 +10,8 @@ import net.sf.click.control.Form;
 import net.sf.click.control.IntegerField;
 import net.sf.click.control.Label;
 import net.sf.click.control.PasswordField;
+import net.sf.click.control.Radio;
+import net.sf.click.control.RadioGroup;
 import net.sf.click.control.Reset;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
@@ -26,6 +28,8 @@ public class BigForm extends Page {
     String DELIVERY_OPTIONS[] = {
             "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"
     };
+    
+    RadioGroup radioGroup;
     
     public void onInit() {
         Form form = new Form("form", getContext());
@@ -80,6 +84,17 @@ public class BigForm extends Page {
         Checkbox checkbox = new Checkbox("Contact me");
         checkbox.setTitle("Please contact me before delivery");
         form.add(checkbox);
+        
+        radioGroup = new RadioGroup("Packaging", getContext());
+        radioGroup.setLayoutHorizontal(false);
+        radioGroup.add(new Radio("Protective"));
+        Radio radio = new Radio("Standard");
+        radio.setListener(this, "subtest");
+        radio.setChecked(true);
+        radioGroup.add(radio);
+        radioGroup.add(new Radio("GIFT", "Gift Wrap"));
+        radioGroup.setListener(this, "test");
+        form.add(radioGroup);
        
         Select select = new Select("Delivery type");
         select.addAll(DELIVERY_OPTIONS);
@@ -116,5 +131,15 @@ public class BigForm extends Page {
     public boolean onCancelClick() {
         setRedirect("index.html");
         return false;
+    }
+    
+    public boolean subtest() {
+        System.err.println("SUB radio="+radioGroup.getName()+"="+radioGroup.getValue());
+        return true;
+    }
+    
+    public boolean test() {
+        System.err.println("BIG radio="+radioGroup.getName()+"="+radioGroup.getValue());
+        return true;
     }
 }

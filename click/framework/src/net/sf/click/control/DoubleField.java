@@ -67,7 +67,7 @@ public class DoubleField extends TextField {
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
     
     /**
      * Return the field Double value, or null if value was empty or a parsing 
@@ -143,6 +143,8 @@ public class DoubleField extends TextField {
         return minvalue;
     }
 
+    // -------------------------------------------------------- Public Methods
+    
     /**
      * Process the DoubleField submission. If the Double value can be parsed
      * the controls listener will be invoked.
