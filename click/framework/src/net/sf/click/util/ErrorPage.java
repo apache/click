@@ -230,8 +230,12 @@ public class ErrorPage extends Page {
                 addModel("errorStackTrace", ClickUtils.toStackTrace(cause));
 
             } else {
-                addModel("errorMessage",
-                        StringEscapeUtils.escapeHtml(error.getMessage()));
+                if (error.getMessage() != null) {
+                    addModel("errorMessage",
+                             StringEscapeUtils.escapeHtml(error.getMessage()));
+                } else {
+                    addModel("errorMessage", "&nbsp;");
+                }
                 addModel("errorClass", error.getClass().getName());
                 addModel("errorStackTrace", ClickUtils.toStackTrace(error));
             }

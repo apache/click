@@ -381,22 +381,22 @@ class ClickApp implements EntityResolver {
             // Deploy calendar image file
             deployFile("/net/sf/click/control/calendar.gif", clickTarget,
                        CLICK_PATH, "calendar.gif");
+       
+            // Deploy JavaScript file
+            deployFile("/net/sf/click/control/calendar-en.js", clickTarget,
+                       CLICK_PATH, "calendar-en.js");
+            
+            // Deploy CSS styles file
+            deployFile("/net/sf/click/control/control.css", clickTarget,
+                       CLICK_PATH, "control.css");
+
+            // Deploy JavaScript file
+            deployFile("/net/sf/click/control/control.js", clickTarget,
+                       CLICK_PATH, "control.js");
 
             // Deploy error page file
             deployFile("/net/sf/click/util/error.htm", clickTarget,
                        CLICK_PATH, "error.htm");
-
-            // Deploy CSS styles file
-            deployFile("/net/sf/click/control/form.css", clickTarget,
-                       CLICK_PATH, "form.css");
-
-            // Deploy JavaScript file
-            deployFile("/net/sf/click/control/form.js", clickTarget,
-                       CLICK_PATH, "form.js");
-            
-            // Deploy JavaScript file
-            deployFile("/net/sf/click/control/calendar-en.js", clickTarget,
-                       CLICK_PATH, "calendar-en.js");
 
             // Deploy page not found file
             deployFile("/net/sf/click/not-found.htm", clickTarget,

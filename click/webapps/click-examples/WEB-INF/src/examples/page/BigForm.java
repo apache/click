@@ -98,7 +98,11 @@ public class BigForm extends BorderedPage {
         form.add(select);
 
         DateField dateField = new DateField("Delivery date");
+        dateField.setFormatPattern("dd/MM/yy");
         form.add(dateField);
+        
+        DateField calendarField = new DateField("Shipping date");
+        form.add(calendarField);
 
         TextArea textArea = new TextArea("Delivery Notes");
         textArea.setTitle("Please tell us about any special delivery instructions");

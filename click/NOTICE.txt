@@ -4,6 +4,9 @@ The Apache Software Foundation (http://jakarta.apache.org/).
 This product includes the JDOM XML library, developed by 
 Jason Hunter and Brett McLaughlin (http://www.jdom.org/).
 
+This product includes the DHTML Calandar widget, developed by 
+Mihai Bazon (http://www.dynarch.com/).
+
 This product includes the Java API for Servlets, version 2.3,
 developed by Sun Microsystems Inc (http://www.sun.com). 
 Please note the Java Servlet API is NOT included in the 
