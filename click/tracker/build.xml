@@ -2,10 +2,10 @@
 
    <!-- Project Properties -->
    <property file="./build.properties"/>
-   <property file="../build.properties"/>  
+   <property file="../build.properties"/> 
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
-   <property name="jar.hibernate" value="${dir.hibernate}/hibernate2.jar"/>  
+   <property name="jar.hibernate" value="${dir.hibernate}/hibernate2.jar"/>
 
    <!-- Tasks -->
 
