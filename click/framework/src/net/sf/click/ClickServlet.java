@@ -601,6 +601,19 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
+        Object path = page.getPath();
+        if (path != null) {
+           pop = context.put("path", path);
+            if (pop != null) {
+                String msg = page.getClass().getName() + " on "
+                        + page.getPath()
+                        + " model contains an object keyed with reserved "
+                        + "name \"path\". The page model object " + pop
+                        + " has been replaced with the page path";
+                logger.warn(msg);
+            }
+        }
+        
         return context;
     }
 
