@@ -154,30 +154,33 @@ CREATE SEQUENCE resolutions_seq;
 GRANT SELECT ON resolutions_seq TO scout;
 
 
-INSERT INTO Status (status_id, sort_order, description, active) values (0, 0, 'Open', true);
-INSERT INTO Status (status_id, sort_order, description, active) values (1, 1, 'Assigned', true);
-INSERT INTO Status (status_id, sort_order, description, active) values (2, 2, 'Resolved', true);
-INSERT INTO Status (status_id, sort_order, description, active) values (3, 3, 'Closed', true);
-INSERT INTO Status (status_id, sort_order, description, active) values (4, 4, 'Duplicate', true);
+INSERT INTO Status (status_id, sort_order, description, active) VALUES (0, 0, 'Open', true);
+INSERT INTO Status (status_id, sort_order, description, active) VALUES (1, 1, 'Assigned', true);
+INSERT INTO Status (status_id, sort_order, description, active) VALUES (2, 2, 'Resolved', true);
+INSERT INTO Status (status_id, sort_order, description, active) VALUES (3, 3, 'Closed', true);
+INSERT INTO Status (status_id, sort_order, description, active) VALUES (4, 4, 'Duplicate', true);
 
-INSERT INTO Severity (severity_id, sort_order, description, active) values (0, 0, '', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (1, 1, 'Major', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (2, 2, 'Moderate', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (3, 3, 'Minor', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (4, 4, 'Blocking', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (5, 5, 'Tweak', true);
-INSERT INTO Severity (severity_id, sort_order, description, active) values (6, 6, 'Note', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (0, 0, '', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (1, 1, 'Major', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (2, 2, 'Moderate', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (3, 3, 'Minor', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (4, 4, 'Blocking', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (5, 5, 'Tweak', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) VALUES (6, 6, 'Note', true);
 
-INSERT INTO Priority (priority_id, sort_order, description, active) values (0, 0, '', true);
-INSERT INTO Priority (priority_id, sort_order, description, active) values (1, 1, 'High', true);
-INSERT INTO Priority (priority_id, sort_order, description, active) values (2, 2, 'Medium', true);
-INSERT INTO Priority (priority_id, sort_order, description, active) values (3, 3, 'Low', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) VALUES (0, 0, '', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) VALUES (1, 1, 'High', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) VALUES (2, 2, 'Medium', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) VALUES (3, 3, 'Low', true);
 
-INSERT INTO Category (category_id, sort_order, description, active) values (0, 0, '', true);
+INSERT INTO Category (category_id, sort_order, description, active) VALUES (0, 0, '', true);
 
-INSERT INTO Version (version_id, sort_order, description, active) values (0, 0, '', true);
+INSERT INTO Version (version_id, sort_order, description, active) VALUES (0, 0, '', true);
 
+INSERT INTO Users (username, password,  created_by, created_at, updated_by, updated_at) VALUES ('trackadmin', 'password', 'installer', DATEOB(), 'installer', DATEOB());
+INSERT INTO Users (username, password,  created_by, created_at, updated_by, updated_at) VALUES ('trackuser', 'password', 'installer', DATEOB(), 'installer', DATEOB());
 
-
-
+INSERT INTO User_Roles (username, rolename) VALUES ('trackadmin', 'administrator');
+INSERT INTO User_Roles (username, rolename) VALUES ('trackadmin', 'user');
+INSERT INTO User_Roles (username, rolename) VALUES ('trackuser', 'user');
 
