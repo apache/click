@@ -37,7 +37,7 @@ public class ServletLogger implements LogSystem
 
     protected int logLevel = DEBUG_ID;
 
-    public static final String PREFIX = "Velocity";
+    public static final String PREFIX = " Velocity";
 
     public static final String LOG_LEVEL =
         ServletLogger.class.getName() + ".LOG_LEVEL";
