@@ -13,51 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
-
-import java.sql.Timestamp;
+package tracker.domain;
 
 /**
- * Provides an abstract Description domain object.
+ * Provides an abstract Classification domain object.
  *
  * @author Malcolm Edgar
  */
-public abstract class Description {
-    
+public abstract class Classification {
+   
     protected long id;
     
-    protected Issue issue; 
+    protected long sortOrder;
     
     protected String description;
     
-    protected User createdBy; 
-    
-    protected Timestamp createdAt;
+    protected boolean active = true;
     
     public String toString() {
         return getClass().getName() + "[" +
             "id=" + id +
-            ",issue=" + issue +
+            ",sortOrder=" + sortOrder +
             ",description=" + description +
-            ",createdBy=" + createdBy +
-            ",createdAt=" + createdAt +
+            ",active=" + active +
             "]";
     }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    
+    public boolean isActive() {
+        return active;
     }
     
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public User getCreatedBy() {
-        return createdBy;
-    }
-    
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setActive(boolean active) {
+        this.active = active;
     }
     
     public String getDescription() {
@@ -76,11 +63,11 @@ public abstract class Description {
         this.id = id;
     }
     
-    public Issue getIssue() {
-        return issue;
+    public long getSortOrder() {
+        return sortOrder;
     }
     
-    public void setIssue(Issue issue) {
-        this.issue = issue;
+    public void setSortOrder(long sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }

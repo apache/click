@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
 
 
 /**
- * Provides Status domain object.
+ * Provides Version domain object.
  *
  * @author Malcolm Edgar
  */
-public class Status extends Classification {
- 
+public class Version extends Classification {
+
 }

@@ -13,32 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
 
 /**
- * Provides UserRole domain object.
+ * Provides Priority domain object.
  *
  * @author Malcolm Edgar
  */
-public class UserRole {
-    
-    protected User user;
-    
-    protected String rolename;
+public class Priority extends Classification {
 
-    public String getRolename() {
-        return rolename;
-    }
-    
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
-    }
-    
-    public User getUser() {
-        return user;
-    }
-    
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

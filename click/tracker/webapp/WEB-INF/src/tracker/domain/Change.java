@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
 
 
 /**
- * Provides Resolution domain object.
+ * Provides Change domain object.
  *
  * @author Malcolm Edgar
  */
-public class Resolution extends Description {
+public class Change extends Description {
 
 }

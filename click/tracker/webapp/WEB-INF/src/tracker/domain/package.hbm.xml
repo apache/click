@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-mapping PUBLIC 
 	"-//Hibernate/Hibernate Mapping DTD 2.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
-<hibernate-mapping package="trackman.domain">
+<hibernate-mapping package="tracker.domain">
 
 	<class name="Category" table="Category">
 		<id name="id" type="long" column="category_id">
@@ -124,13 +124,23 @@
       <property name="telephone"/>
       <property name="mobile"/>
       <property name="fax"/>
-      <property name="adminUser" column="admin_user"/>
       <property name="active" column="active"/>
       <property name="createdBy" column="created_by"/>
       <property name="createdAt" column="created_at" type="timestamp"/>
       <property name="updatedBy" column="updated_by"/>
       <property name="updatedAt" column="updated_at" type="timestamp"/>
+      <set name="roles" inverse="true" lazy="true">
+         <key column="username"/>
+         <one-to-many class="UserRole"/>
+      </set>
 	</class>
+   
+	<class name="UserRole" table="User_Roles">
+      <composite-id>
+         <key-property name="rolename"/>
+         <key-many-to-one name="user" column="username"/>
+      </composite-id>
+	</class>  
    
 	<class name="Version" table="Version">
 		<id name="id" type="long" column="version_id">

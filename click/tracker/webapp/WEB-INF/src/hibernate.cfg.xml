@@ -4,6 +4,6 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="show_sql">true</property>
-		<mapping resource="trackman/domain/package.hbm.xml"/>
+		<mapping resource="tracker/domain/package.hbm.xml"/>
 	</session-factory>
 </hibernate-configuration>

@@ -1,0 +1,47 @@
+<project name="tracker" default="build" basedir=".">
+
+   <!-- Project Properties -->
+   <property file="./build.properties"/>
+   <property file="../build.properties"/>  
+   <property name="dir.deploy" value="deploy"/>
+   <property name="dir.lib" value="lib"/>
+   <property name="jar.hibernate" value="${dir.hibernate}/hibernate2.jar"/>  
+
+   <!-- Tasks -->
+
+   <target name="build" description="build Tracker web application WAR file">
+      <delete dir="webapp/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapp/WEB-INF/classes"/>
+	   <javac srcdir="webapp/WEB-INF/src" 
+             destdir="webapp/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+            <fileset dir="../lib">
+              <include name="**/*.jar"/>
+            </fileset> 
+            <pathelement location="${jar.hibernate}"/>
+            <pathelement location="../${dir.deploy}/${name}-all-${version}.jar"/>
+         </classpath>
+      </javac>
+      <copy todir="webapp/WEB-INF/classes">
+         <fileset dir="webapp/WEB-INF/src">
+           <exclude name="**/*.java"/>
+       	   <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <delete dir="${dir.deploy}" quiet="false"/>
+      <mkdir dir="${dir.deploy}"/>  
+      <war destfile="${dir.deploy}/tracker.war"
+           webxml="webapp/WEB-INF/web.xml">
+         <lib file="../${dir.deploy}/${name}-all-${version}.jar"/>
+         <fileset dir="webapp">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+
+   <target name="deploy-webapp" description="deploy web apps to app server"> 
+	  <copy file="${dir.deploy}/tracker.war" todir="${dir.tomcat}/webapps" overwrite="true"/>
+   </target>
+
+</project>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.util;
+package tracker.util;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
