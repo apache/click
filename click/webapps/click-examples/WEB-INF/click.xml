@@ -5,7 +5,7 @@
     <page path="action-table.htm" classname="examples.page.ActionTable"/>
     <page path="big-form.htm" classname="examples.page.BigForm"/>
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
-    <page path="exception.htm" classname="examples.page.Exception"/>
+    <page path="exception.htm" classname="examples.page.ExceptionDemo"/>
     <page path="hello-world.htm" classname="examples.page.HelloWorld"/>
     <page path="layout-form.htm" classname="examples.page.LayoutForm"/>
     <page path="login.htm" classname="examples.page.Login"/>

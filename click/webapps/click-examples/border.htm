@@ -1,0 +1,16 @@
+<html>
+<head>	
+<title>Click Examples - $title</title>
+<link rel="stylesheet" type="text/css" href="style.css" title="Style">
+#if ($form) $form.htmlImports #end
+</head>	
+<body>
+ 	
+<h1>$title</h1> 
+
+#writeSourceToolbar( $srcPath $path )
+
+#parse($path)
+
+</body>
+</html>

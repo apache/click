@@ -9,16 +9,12 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class NavigationA extends Page {
+public class NavigationA extends BorderedPage {
 
     ActionLink forwardLink;
     ActionLink forwardParamLink;
     ActionLink redirectLink;
     ActionLink redirectParamLink;
-
-    public String getTarget() {
-        return "navigation-b.htm";
-    }
 
     /**
      * @see Page#onInit()
@@ -85,5 +81,9 @@ public class NavigationA extends Page {
     public boolean onRedirectParamClick() {
         setRedirect(getTarget() + "?param=" + redirectParamLink.getValue());
         return false;
+    }
+
+    public String getTarget() {
+        return "navigation-b.htm";
     }
 }

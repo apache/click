@@ -5,12 +5,12 @@ import java.util.Date;
 import net.sf.click.Page;
 
 /**
- * Provides HelloWorld world example Page. Possibly the simplest dynamic example you
- * can get.
+ * Provides HelloWorld world example Page. Possibly the simplest dynamic example 
+ * you can get.
  *
  * @author Malcolm Edgar
  */
-public class HelloWorld extends Page {
+public class HelloWorld extends BorderedPage {
 
     /**
      * @see Page#onGet()

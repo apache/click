@@ -10,7 +10,7 @@ import net.sf.click.Page;
  *
  * @author Malcolm Edgar
  */
-public class SimpleTable extends Page {
+public class SimpleTable extends BorderedPage {
 
     /**
      * @see Page#onGet()

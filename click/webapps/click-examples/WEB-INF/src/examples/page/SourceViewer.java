@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class SourceViewer extends Page {
+public class SourceViewer extends BorderedPage {
 
     private static final String COLOR = "navy";
 

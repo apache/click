@@ -1,13 +1,14 @@
 <html>
-<head>
-<title>Click Examples - Broken Page</title>	
+<head>	
+<title>Click Examples - $title</title>
 <link rel="stylesheet" type="text/css" href="style.css" title="Style">
+#if ($form) $form.htmlImports #end
 </head>	
 <body>
  	
-<h1>Broken Page</h1> 
+<h1>$title</h1> 
 
-#writeSourceToolbar( "examples/pages/HelloPage.java", "hello-world.htm" )
+#writeSourceToolbar( $srcPath , $path )
 
 Hello world from <b>Click</b> at $time
 <p>

@@ -13,7 +13,7 @@ import net.sf.click.control.TextField;
  *
  * @author Malcolm Edgar
  */
-public class Login extends Page {
+public class Login extends BorderedPage {
 
     Form form;
     TextField usernameField;
@@ -22,7 +22,7 @@ public class Login extends Page {
     /**
      * @see Page#onInit()
      */
-    public void onInit() {
+    public void onInit() {        
         form = new Form("form", getContext());
         addControl(form);
 

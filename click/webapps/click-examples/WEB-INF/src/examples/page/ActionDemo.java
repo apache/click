@@ -3,15 +3,16 @@ package examples.page;
 import java.util.Date;
 
 import net.sf.click.Page;
+import net.sf.click.control.ActionLink;
 
 /**
  * Provides an ActionDemo example Page.
  *
  * @author Malcolm Edgar
  */
-public class ActionDemo extends Page {
+public class ActionDemo extends BorderedPage {
 
-    net.sf.click.control.ActionLink actionLink;
+    ActionLink actionLink;
 
     /**
      * @see Page#onInit()
