@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Select</td>
  * <td>

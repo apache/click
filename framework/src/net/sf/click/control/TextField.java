@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Text Field control: &nbsp; &lt;input type='text'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Text Field</td>
  * <td><input type='text' value='string' title='TextField Control'/></td>

@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Password Field control: &nbsp; &lt;input type='password'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Password Field</td>
  * <td><input type='password' value='password' title='PasswordField Control'/></td>

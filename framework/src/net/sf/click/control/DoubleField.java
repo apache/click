@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Double Field</td>
  * <td><input type='text' value='3.541' title='DoubleField Control'/></td>

@@ -23,7 +23,7 @@ import java.util.Date;
 /**
  * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Date Field</td>
  * <td><input type='text' size='20' title='DateField Control' value='15 Mar 2006'/><input type='hidden'/><img align='middle' hspace='2' style='cursor:hand' src='calendar.gif' title='Calendar'/></td>

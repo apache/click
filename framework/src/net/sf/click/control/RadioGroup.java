@@ -23,7 +23,7 @@ import net.sf.click.Context;
 /**
  * Provides a RadioGroup control.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Radio Group</td>
  * <td>

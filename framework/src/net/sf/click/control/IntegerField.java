@@ -18,10 +18,12 @@ package net.sf.click.control;
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
  *
- * <table class='htmlHeader'><tr>
+ * <table class='htmlHeader' cellspacing='6'>
+ * <tr>
  * <td>Integer Field</td>
  * <td><input type='text' value='101' title='IntegerField Control'/></td>
- * </tr></table>
+ * </tr>
+ * </table>
  *
  * IntegerField will validate the number when the control is processed and invoke
  * the control listener if there is no parsing error.

@@ -30,7 +30,11 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a Form control: &nbsp; &lt;form method='POST'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
+ * <tr>
+ * <td>
+ * 
+ * <table class='form' cellspacing='2'>
  * <tr>
  * <td align='left'><label>Username</label><span class="red">*</span></td>
  * <td align='left'><input type='text' name='username' value='' size='20'   maxlength='20' /></td>
@@ -41,7 +45,11 @@ import net.sf.click.util.ClickUtils;
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'>
- * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/></td>
+ * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/>
+ * </td></tr>
+ * </table>
+ * 
+ * </td>
  * </tr>
  * </table>
  *
@@ -75,15 +83,15 @@ import net.sf.click.util.ClickUtils;
  *         form.add(passwordField);
  *
  *         Submit okButton = new Submit("  OK  ");
- *         okButton.setListener(this, "onOkClick");
+ *         okButton.setListener(this, "<span class="green">onOkClick</span>");
  *         form.add(okButton);
  *
  *         Submit cancelButton = new Submit(" Cancel ");
- *         cancelButton.setListener(this, "onCancelClick");
+ *         cancelButton.setListener(this, "<span class="green">onCancelClic</span>");
  *         form.add(cancelButton);
  *     }
  *
- *     public boolean onOkClick() {
+ *     public boolean <span class="green">onOkClick</span>() {
  *         if (form.isValid()) {
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
@@ -101,7 +109,7 @@ import net.sf.click.util.ClickUtils;
  *         return true;
  *     }
  *
- *     public boolean onCancelClick() {
+ *     public boolean <span class="green">onCancelClick</span>() {
  *         setRedirect("index.htm");
  *         return false;
  *     }
@@ -133,8 +141,8 @@ import net.sf.click.util.ClickUtils;
  * specifies the {@link #name} of the Form. For example:
  *
  * <div class="code">
- * &lt;form method="<span class="green">POST</span>" name="<span class="green">form</span>" action="<span class="blue">$request.requestURI</span>&gt;
- *   &lt;input type="<span class="green">hidden</span>" name="<span class="green">form_name</span>" value="<span class="green">form</span>"/&gt; 
+ * &lt;form method="<span class="red">POST</span>" name="<span class="red">form</span>" action="<span class="blue">$request.requestURI</span>&gt;
+ *   &lt;input type="<span class="red">hidden</span>" name="<span class="red">form_name</span>" value="<span class="green">form</span>"/&gt; 
  *   Username: $form.fields.usernameField &lt;br/&gt;
  *   Password: $form.fields.passwordField &lt;br/&gt;
  *   $form.fields.okSubmit
@@ -150,16 +158,16 @@ import net.sf.click.util.ClickUtils;
  * <div class="code">
  * 
  * #** Custom Form Macro Code **#
- * #macro( <span class="blue">writeForm</span>[$form] )
- *  &lt;form method='POST' name='$form.name' action='$request.requestURI'&gt;
- *   &lt;input name='form_name' type='hidden' value='$form.name)'/&gt;
+ * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
+ *  &lt;form method='POST' name='<span class="blue">$form.name</span>' action='<span class="blue">$request.requestURI</span>'&gt;
+ *   &lt;input name='form_name' type='hidden' value='<span class="blue">$form.name</span>)'/&gt;
  *   ..
  *  &lt;/form&gt;
  * 
- * #end
+ * <span class="red">#end</span>
  * 
  * &lt;-- HTML Code --&gt;
- * #<span class="blue">writeForm</span>($form)
+ * #<span class="green">writeForm</span>(<span class="blue">$form</span>)
  * 
  * </div>
  * 

@@ -20,7 +20,7 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a Button control: &nbsp; &lt;input type='button'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
  * <input type='button' value='Button' title='Button Control'/>
  * </td></tr>

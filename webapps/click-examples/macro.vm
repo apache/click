@@ -7,29 +7,52 @@
 
 <form method="POST" name="$form.name" action="$request.requestURI">
  <input type="hidden" name="form_name" value="$form.name"/>
+
  <table style="margin: 1em;">
  #foreach ($field in $form.fieldList)
-  #if( !$field.isHidden() && !$field.isValid() )
+
+  #if( !$field.hidden && !$field.valid )
   <tr>
-   <td colspan="2" style="color: red;"> $field.error </td>
+   <td>&nbsp;</td>
+   <td style="color: red;" align="left"> $field.error </td>
   </tr>
   #end
-  #if( !$field.isHidden() )
+
+  #if( $form.error ) 
   <tr>
-   <td> $field.label </td> <td> $field </td>
+   <td colspan="2" style="color: red;" align="left"> $form.error </td>
+  </tr>
+  #end
+
+  #if( !$field.hidden )
+  <tr>
+   <td align="right"> 
+    #if( $field.required ) 
+     <span style="font-weight: 700;">$field.label</span>:
+    #else
+     $field.label:
+    #end
+   </td> 
+   <td> $field </td>
   </tr>
   #end
  #end
+
   <tr><td>&nbsp;</td></tr>
+
   <tr>
-   <td colspan="2">
+   <td>&nbsp;</td>
+   <td align="left">
    #foreach ($button in $form.buttonList)
-    $button &nbsp;
+    $button 
    #end
    </td>
-  </tr>  
- </table>  
+  </tr> 
+ </table> 
+ 
 </form>
+
+#end
 
 #end
 

@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Reset control: &nbsp; &lt;input type='reset'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td><input type='reset' value='Reset' title='Reset Control'/></td>
  * </tr>

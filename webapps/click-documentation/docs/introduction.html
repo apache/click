@@ -79,7 +79,7 @@ new <tt>Date</tt> object and adds it to the page's model as a value called
 The page model is then merged with the template which subsitutes the 
 $<font color="red">time</font> parameter with the <tt>Date</tt> object. 
 Velocity then renders the merged template which looks something like this:
-<table class="htmlExample">
+<table class="htmlExample" cellspacing="12">
 <tr>
  <td>
  <h2><font color="navy">Hello World</font></h2>
@@ -164,14 +164,12 @@ Next we have the Login page template <font color="blue">login.htm</font>:
 
 When the Login page is first requested the $<font color="red">form</font> object will 
 automatically render itself as:
-<table class="htmlExample">
+<table class="htmlExample" cellspacing="12">
 <tr>
  <td>
   
  <h2><font color="navy">Login</font></h2>
- 
-<form>
-<input name='form_name' type='hidden' value='form'/>
+
 <table class='form'>
 <tr>
 <td align='left'><label >Username</label><font color="red">*</font></td>
@@ -184,7 +182,6 @@ automatically render itself as:
 <tr><td colspan='2'>&nbsp;</td></tr>
 <tr align='left'><td colspan='2'><input type='submit' name='ok' value='   OK   '/><input type='submit' name='cancel' value='Cancel'/></td></tr>
 </table>
-</form>
 
  </td>
 </tr>
@@ -198,14 +195,12 @@ Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the f
 invalid this method it does nothing.
 <p/>
 With all the event processing completed the form now renders the field validation errors.
-<table class="htmlExample">
+<table class="htmlExample" cellspacing="12">
 <tr>
  <td>
   
  <h2><font color="navy">Login</font></h2>
  
-<form>
-<input name='form_name' type='hidden' value='form'/>
 <table class='form'>
 <tr>
 <td align='left'><label >Username</label><font color="red">*</font></td>
@@ -219,8 +214,6 @@ With all the event processing completed the form now renders the field validatio
 <tr><td colspan='2'>&nbsp;</td></tr>
 <tr align='left'><td colspan='2'><input type='submit' name='ok' value='   OK   '/><input type='submit' name='cancel' value='Cancel'/></td></tr>
 </table>
-
-</form>
 
  </td>
 </tr>

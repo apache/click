@@ -7,6 +7,7 @@ import net.sf.click.control.EmailField;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.IntegerField;
+import net.sf.click.control.Reset;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import examples.control.InvestmentSelect;
@@ -67,6 +68,8 @@ public class VelocityMacro extends Page {
         cancelButton = new Submit(" Cancel ");
         cancelButton.setListener(this, "onCancelClick");
         form.add(cancelButton);
+        
+        form.add(new Reset("Reset"));
     }
 
     public boolean onCancelClick() {

@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Provides a Credit Card control: &nbsp; &lt;input type='text'&gt;&lt;select&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Credit Card</td>
  * <td><input type='text' title='CreditCard Control'/><select title='Card type'><option>VISA</option><option>MASTER</option>
