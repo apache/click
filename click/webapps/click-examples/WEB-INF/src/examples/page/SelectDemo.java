@@ -3,6 +3,7 @@ package examples.page;
 import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
+import net.sf.click.control.Submit;
 import net.sf.click.control.Select.Option;
 
 /**
@@ -11,11 +12,11 @@ import net.sf.click.control.Select.Option;
  * @author Malcolm Edgar
  */
 public class SelectDemo extends Page {
+    
     Form form;
     Select genderSelect;
     Select stateSelect;
-    
-    
+        
     public void onInit() {
         form = new Form("form", getContext());
         addControl(form);
@@ -39,6 +40,8 @@ public class SelectDemo extends Page {
         stateSelect.add("VIC");
         stateSelect.add("WA");
         form.add(stateSelect);
+        
+        form.add(new Submit("Sumbit"));
     }
     
     public void onPost() {        

@@ -33,8 +33,6 @@ import java.util.StringTokenizer;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import net.sf.click.ApplicationException;
-
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
@@ -196,7 +194,7 @@ public class ClickUtils {
                 String msg = 
                     "Invalid listener method, missing boolean return type: " +
                     targetMethod;
-                throw new ApplicationException(msg);
+                throw new RuntimeException(msg);
             }
     
         } catch (InvocationTargetException ite) {
@@ -209,26 +207,26 @@ public class ClickUtils {
                 String msg =
                     "Exception occured invoking public method: " + targetMethod;
     
-                throw new ApplicationException(msg, e);
+                throw new RuntimeException(msg, e);
     
             } else if (e instanceof Error) {
                 String msg =
                     "Error occured invoking public method: " + targetMethod;
     
-                throw new ApplicationException(msg, e);
+                throw new RuntimeException(msg, e);
     
             } else {
                 String msg =
                     "Error occured invoking public method: " + targetMethod;
     
-                throw new ApplicationException(msg, e);
+                throw new RuntimeException(msg, e);
             }
     
         } catch (Exception e) {
             String msg =
                 "Exception occured invoking public method: " + targetMethod;
     
-            throw new ApplicationException(msg, e);
+            throw new RuntimeException(msg, e);
         }
     }
    

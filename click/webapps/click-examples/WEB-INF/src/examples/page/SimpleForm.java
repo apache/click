@@ -2,6 +2,7 @@ package examples.page;
 
 import net.sf.click.Page;
 import net.sf.click.control.Form;
+import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 
 /**
@@ -25,6 +26,8 @@ public class SimpleForm extends Page {
         textField.setMinLength(5);
         textField.setRequired(true);
         form.add(textField);
+        
+        form.add(new Submit("Sumbit"));
     }
     
     /**

@@ -267,7 +267,7 @@ public class ClickServlet extends HttpServlet {
             } else {
                 String msg = 
                     "Path not defined for Page " + page.getClass().getName();
-                throw new ApplicationException(msg);
+                throw new RuntimeException(msg);
             }
             
         } catch (Exception e) {
@@ -303,7 +303,7 @@ public class ClickServlet extends HttpServlet {
      * &lt;page path="click/error.htm" classname="com.mycorp.util.ErrorPage"/&gt;
      * </pre></blockquote>
      * If the ErrorPage throws an exception, it will be logged as an error and
-     * then be rethrown nested inside a ApplicationException.
+     * then be rethrown nested inside a RuntimeException.
      * 
      * @param request the servlet request with the associated error
      * @param response the servlet response
@@ -357,13 +357,13 @@ public class ClickServlet extends HttpServlet {
             String message =
                 "handleError(): " + ex.toString() + " thrown while handling " 
                  + " error: " + exception.toString()
-                 + ". Now throwing ApplicationException";
+                 + ". Now throwing RuntimeException";
 
             logger.error(message, ex);
 
             log(message, ex);
             
-            throw new ApplicationException(ex);
+            throw new RuntimeException(ex);
             
         } finally {
             if (errorPage != null) {
@@ -510,7 +510,7 @@ public class ClickServlet extends HttpServlet {
             return newPage;
             
         } catch (Exception e) {
-            throw new ApplicationException(e);
+            throw new RuntimeException(e);
         }            
     }
     
