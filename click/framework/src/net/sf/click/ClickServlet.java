@@ -394,8 +394,14 @@ public class ClickServlet extends HttpServlet {
         
         OutputStream output = response.getOutputStream();
         
-        // If not an ErrorPage and has "gzip" Content-Encoding
-        if (!(page instanceof ErrorPage) && isContentEncodingGzip(page)) {
+        // If an ErrorPage clear any "Content-Encoding" "gzip" header 
+        // and dont compress the output stream
+        if (page instanceof ErrorPage) {
+            response.setHeader("Content-Encoding", null);
+        
+        // Else if Page has a "Content-Encoding" "gzip" header then we can
+        // look to compressing the output stream
+        } else if (isContentEncodingGzip(page)) {
             
             // If client accepts gzip encoding compress output stream
             String acceptEncoding = request.getHeader("Accept-Encoding");
@@ -404,7 +410,7 @@ public class ClickServlet extends HttpServlet {
                     output = new GZIPOutputStream(output, 4 * 1024);
                     response.setHeader("Content-Encoding", "gzip");
                 }
-            }
+            }            
         }
 
         if (page.getHeaders() != null) {
@@ -453,7 +459,6 @@ public class ClickServlet extends HttpServlet {
                 }
                 
             } catch (Exception e) {
-                e.printStackTrace();
                 // do nothing
             }
         }

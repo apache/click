@@ -298,14 +298,106 @@ public class TransComplete extends Page {
 <h4>Post Redirect</h4>
 The parameter passing example above is also an example of a Post Redirect. The Post
 Redirect technique is a very useful method of preventing users from submitting a form 
-twice by hitting the back button or the refresh button. As when the user hits 
+twice by hitting the refresh button.
 
 
 <a name="page-security"><h2>Security</h2></a>
 
+Pages provide an 
+<a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
+event handler which application pages override to implement authentication or
+authorization capabilities.
+
+<h4>Application Authentication</h4>
+Applications can use this method to implement their own security model. The example 
+class below provides a base Secure page class which other pages can extend
+to ensure the user is logged in. In this example the login page adds a "user" object to
+the session when a user successfully authenticates. This Secure page then checks to make sure
+this session attribute is present, otherwise the request is redirected back to the login
+page.
+<blockquote>
+<pre>
+public class Secure extends Page {
+
+    public boolean onSecurityCheck() {
+    
+        if (getContext().getSessionAttribute("user") != null) {
+            return true;
+            
+        } else {
+            setRedirect("login.htm");
+            return false;
+        }
+    }
+}
+</pre>
+</blockquote>
+
+<h4>Container Authentication</h4>
+Alternatively you can also use the security services provided by the J2EE Servlet 
+Container. For instance to ensure users have been authenticated by the Serlvet Container
+you could use a Secure page of:
+<blockquote>
+<pre>
+public class Secure extends Page {
+
+    public boolean onSecurityCheck() {
+    
+        if (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != null) {
+            return true;
+            
+        } else {
+            setRedirect("login.htm");
+            return false;
+        }
+    }
+}
+</pre>
+</blockquote>
+
+<h4>Container Access Control</h4>
+The Servlet Container also provides facilities to enforce role based access control 
+(authorization). The example below is a base page to ensure only users
+in the "admin" role can access the page, otherwise users are redirected to the login page.
+Application Admin pages would extend this secure page to provide their funcationality.
+<blockquote>
+<pre>
+public class AdminPage extends Page {
+
+    public boolean onSecurityCheck() {
+    
+        if (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>("admin")) {
+            return true;
+
+        } else {
+            setRedirect("login.htm?");
+            return false;
+        }
+    }
+}
+</pre>
+</blockquote>
+
+<h4>Logging Out</h4>
+To logout using the application or container based security models you would simply 
+invalidate the session.
+<blockquote>
+<pre>
+public class Logout extends Page {
+
+    public boolean onInit() {
+        getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
+    }
+}
+</pre>
+</blockquote>
+
+For more information of the J2EE Servlet security facilities see the Servlet
+<a target="topic" href="http://java.sun.com/products/servlet/reference/api/index.html">Specification</a>.
 
 <a name="page-error-handing"><h2>Error Handling</h2></a>
 
+Template exceptions may not be displayed when gzip encoding header has been set.
 
 <a name="page-not-found"><h2>Page Not Found</h2></a>
 

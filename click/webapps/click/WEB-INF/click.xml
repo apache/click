@@ -10,8 +10,8 @@
     <page path="examples/layout-form.htm" classname="examples.page.LayoutForm"/>
     <page path="examples/login.htm" classname="examples.page.Login"/>
     <page path="examples/logout.htm" classname="examples.page.Logout"/>
-    <page path="examples/navigation-a.htm" classname="examples.page.NavA"/>
-    <page path="examples/navigation-b.htm" classname="examples.page.NavB"/>
+    <page path="examples/navigation-a.htm" classname="examples.page.NavigationA"/>
+    <page path="examples/navigation-b.htm" classname="examples.page.NavigationB"/>
     <page path="examples/search-form.htm" classname="examples.page.SearchForm"/>
     <page path="examples/secure.htm" classname="examples.page.Secure"/>
     <page path="examples/select-demo.htm" classname="examples.page.SelectDemo"/>
@@ -19,11 +19,13 @@
     <page path="examples/simple-table.htm" classname="examples.page.SimpleTable"/>
     <page path="examples/source-viewer.htm" classname="examples.page.SourceViewer"/>
   </pages>
+
   <headers>
     <header name="Pragma" value="no-cache"/>
     <header name="Cache-Control" value="no-cache"/>
     <header name="Expires" value="1" type="Date"/>
     <header name="Content-Encoding" value="gzip"/>
   </headers>
+
   <mode value="debug"/>
 </click-app>
