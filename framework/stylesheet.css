@@ -12,15 +12,6 @@ body
 
 a:visited { color: blue; }
 
-.code 
-{
-	font-family: courier;
-	margin-top: 1em;
-	margin-left: 3em;
-	margin-bottom: 1.5em;
-	white-space: pre;
-}
-
 .red { color: red; }
 
 .green { color: green }
@@ -52,12 +43,16 @@ a:visited { color: blue; }
 }
 
 /* Code examples */
-.code {
+.code 
+{
 	font-family: courier;
-	font-size: 10pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
 	margin-top: 1em;
-	margin-left: 3em;
-	margin-bottom: 0em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
 	white-space: pre;
 }
 

@@ -13,7 +13,7 @@ import net.sf.click.control.TextField;
 import examples.control.InvestmentSelect;
 
 /**
- * TODO
+ * Provides a Velocity Macro example.
  *
  * @author Malcolm Edgar
  */

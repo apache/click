@@ -33,7 +33,7 @@ import net.sf.click.util.ClickUtils;
  * The example below adds a back button to a form, which when clicked returns
  * to the previous page.
  *
- * <div class="code">// Java code
+ * <div class="code"> // Java code
  * Button backButton = new Button(" &lt Back ");
  * backButton.setOnClick("history.back();");
  * backButton.setTitle("Return to previous page");
@@ -41,8 +41,7 @@ import net.sf.click.util.ClickUtils;
  *
  * &lt;-- HTML output --&gt;
  * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();'
- *        title='Return to previous page'&gt;
- * </div>
+ *        title='Return to previous page'&gt; </div>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"

@@ -34,8 +34,10 @@ import net.sf.click.util.ClickUtils;
  * field controls must extend this abstract class.
  * <p/>
  * Localizable field messages and error messages are defined in the resource
- * bundle: <blockquote>
- * <pre>/click-control.properties</pre></blockquote>
+ * bundle: 
+ * 
+ * <div class="code">/click-control.properties </div>
+ *
  * You can modify these properties by copying this file into your applications
  * root class path and editing these properties.
  * <p/>

@@ -72,8 +72,7 @@ import java.util.List;
  *             ..
  *         }
  *     }
- * }
- * </div>
+ * } </div>
  *
  * Rendered HTML:
  * <table class="htmlExample"><tr><td>
@@ -134,8 +133,7 @@ import java.util.List;
  *             ..
  *         }
  *     }
- * }
- * </div>
+ * } </div>
  *
  * Rendered HTML:
  * <table class="htmlExample"><tr><td>

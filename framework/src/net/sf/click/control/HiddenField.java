@@ -76,8 +76,7 @@ import net.sf.click.util.ClickUtils;
  *         counterField.setValue(count);
  *         addModel("count", count);
  *     }
- * }
- * </div>
+ * } </div>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"

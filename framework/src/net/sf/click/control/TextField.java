@@ -27,8 +27,7 @@ package net.sf.click.control;
  *
  * The example below shows how to a TextField to a Form, and how it will be
  * rendered as HTML.
- * <div class="code">
- * // Java code
+ * <div class="code">// Java code
  * TextField usernameField = new TextField("Username");
  * usernameField.setRequired(true);
  * usernameField.setSize(12);
@@ -37,8 +36,7 @@ package net.sf.click.control;
  * form.add(usernameField);
  *
  * &lt;-- HTML output --&gt;
- * &lt;input type='text' name='username' value='' size='12' maxlength='12'&gt;
- * </div>
+ * &lt;input type='text' name='username' value='' size='12' maxlength='12'&gt; </div>
  *
  * For another example using TextField see the {@link net.sf.click.control.Form}
  * Javadoc example.

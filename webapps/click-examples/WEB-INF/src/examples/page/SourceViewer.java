@@ -30,12 +30,12 @@ public class SourceViewer extends Page {
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
-            "i", "u", "ul", "ol", "li" };
+            "i", "u", "ul", "ol", "li", "form" };
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(", "#else",
             "#else(", "#elseif", "#elseif(", "#end", "#set", "#set(",
             "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
-            "#macro(", "#foreach", "#foreach("};
+            "#macro(", "#foreach", "#foreach(", "##", "#*", "*#" };
 
     private boolean isJava = false;
 
@@ -90,6 +90,9 @@ public class SourceViewer extends Page {
         isHtml = name.endsWith(".htm");
         if (!isHtml) {
             isHtml = name.endsWith(".html");
+        }
+        if (!isHtml) {
+            isHtml = name.endsWith(".vm");
         }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(
