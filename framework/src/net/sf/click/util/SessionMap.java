@@ -1,5 +1,5 @@
 /**
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,18 +27,19 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Provides a Map adaptor for HttpSession objects. A SessionMap instance is
- * available in each Velocity page using the name "session".
+ * available in each Velocity page using the name "<span class="blue">session</span>".
  * <p/>
  * For example suppose we have a User object in the session with the
  * attribute name "user" when a user is logged on.  We can display the users
  * name in the page when the are logged onto the system.
- * <pre>
- * #if( <b>$session</b>.user )
- *   <b>$session</b>.user.fullname you are logged on.
- * #else
+ * 
+ * <pre class="codeHtml">
+ * <span class="red">#if</span> (<span class="blue">$session</span>.user)
+ *   <span class="blue">$session</span>.user.fullname you are logged on.
+ * <span class="red">#else</span>
  *   You are not logged on.
- * #end
- * </pre>
+ * <span class="red">#end</span> </pre>
+ * 
  * The ClickServlet adds a SessionMap instance to the Velocity Context before
  * it merged with the page template.
  *

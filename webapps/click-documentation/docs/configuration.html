@@ -59,18 +59,19 @@ must be configured in the web application's <tt>/WEB-INF/web.xml</tt> file.
 A simple web application which maps all <tt>*.htm</tt> requests to a ClickServlet 
 is provided below.
 
-<div class="code">&lt;web-app>
+<pre class="codeConfig">
+&lt;web-app&gt;
   &lt;servlet&gt;
-    &lt;servlet-name&gt;<font color="blue">click-servlet</font>&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;<font color="red">net.sf.click.ClickServlet</font>&lt;/servlet-class&gt;
-    &lt;load-on-startup&gt;<font color="red">0</font>&lt;/load-on-startup&gt;
+    &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;<span class="red">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;<span class="red">0</span>&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
   &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;<font color="blue">click-servlet</font>&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;<font color="red">*.htm</font>&lt;/url-pattern&gt;
+    &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;<span class="red">*.htm</span>&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
 &lt;/web-app&gt;
-</div>
+</pre>
 
 By default the <tt>ClickServlet</tt> will attempt to load an application
 configuration file using the path: &nbsp; <tt>/WEB-INF/click.xml</tt>
@@ -104,32 +105,36 @@ See <a target='topic' href="click-dtd.html">Click DTD</a> for the click-app XML 
 <p/>
 A simple Click app config file is provided below:
 
-<div class="code">&lt;click-app&gt; 
+<pre class="codeConfig">
+&lt;click-app&gt; 
   &lt;pages&gt;
-    &lt;page path="<font color="blue">index.htm</font>" classname="<font color="blue">com.mycorp.page.Home</font>"/&gt;
-    &lt;page path="<font color="blue">login.htm</font>" classname="<font color="blue">com.mycorp.page.Login</font>"/&gt;
-    &lt;page path="<font color="blue">logout.htm</font>" classname="<font color="blue">com.mycorp.page.Logout</font>"/&gt;    
-    &lt;page path="<font color="blue">search.htm</font>" classname="<font color="blue">com.mycorp.page.Search</font>"/&gt;
+    &lt;page path="<span class="blue">index.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
+    &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
+    &lt;page path="<span class="blue">logout.htm</span>" classname="<span class="blue">com.mycorp.page.Logout</span>"/&gt;    
+    &lt;page path="<span class="blue">search.htm</span>" classname="<span class="blue">com.mycorp.page.Search</span>"/&gt;
   &lt;/pages&gt;
-&lt;/click-app&gt; </div>
+&lt;/click-app&gt; 
+</pre>
 
 <p>
 An example of a fully optioned up config file is:
 
-<div class="code">&lt;click-app&gt; 
+<pre class="codeConfig">
+&lt;click-app&gt; 
   &lt;pages&gt;
-    &lt;page path="<font color="blue">index.htm</font>" classname="<font color="blue">com.mycorp.page.Home</font>"/&gt;
-    &lt;page path="<font color="blue">login.htm</font>" classname="<font color="blue">com.mycorp.page.Login</font>"/&gt;
-    &lt;page path="<font color="blue">logout.htm</font>" classname="<font color="blue">com.mycorp.page.Logout</font>"/&gt;    
-    &lt;page path="<font color="blue">search.htm</font>" classname="<font color="blue">com.mycorp.page.Search</font>"/&gt;
+    &lt;page path="<span class="blue">index.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
+    &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
+    &lt;page path="<span class="blue">logout.htm</span>" classname="<span class="blue">com.mycorp.page.Logout</span>"/&gt;    
+    &lt;page path="<span class="blue">search.htm</span>" classname="<span class="blue">com.mycorp.page.Search</span>"/&gt;
   &lt;/pages&gt;
   &lt;headers&gt;
-    &lt;header name="<font color="blue">Pragma</font>" value="<font color="blue">no-cache</font>"/&gt;
-    &lt;header name="<font color="blue">Cache-Control</font>" value="<font color="blue">no-cache</font>"/&gt;
+    &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
   &lt;/headers&gt;
-  &lt;format classname="<font color="blue">com.mycorp.util.Format</font>"/&gt;
-  &lt;mode value="<font color="blue">debug</font>"/&gt;
-&lt;/click-app&gt; </div>
+  &lt;format classname="<span class="blue">com.mycorp.util.Format</span>"/&gt;
+  &lt;mode value="<span class="blue">debug</span>"/&gt;
+&lt;/click-app&gt; 
+</pre>
 
 
 <a name="application-pages"></a>
@@ -138,22 +143,26 @@ An example of a fully optioned up config file is:
 The first major element of the click-app is the mandatory <tt>pages</tt> element 
 which defines the list of Click pages.
 
-<div class="code">&lt;!ELEMENT <font color="blue">pages</font> (<font color="red">page</font>*)&gt; </div>
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="blue">pages</span> (<span class="red">page</span>*)&gt; 
+</pre>
 
-The <font color="red">page</font> element defines the Click application pages.
+The <span class="red">page</span> element defines the Click application pages.
 
-<div class="code">&lt;!ELEMENT <font color="red">page</font> (<font color="blue">header</font>*)&gt;
-   &lt;!ATTLIST page <font color="blue">path</font> CDATA #REQUIRED&gt;
-   &lt;!ATTLIST page <font color="blue">classname</font> CDATA #REQUIRED&gt; </div>
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
+   &lt;!ATTLIST page <span class="blue">path</span> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST page <span class="blue">classname</span> CDATA #REQUIRED&gt; 
+</pre>
 
-Each page <font color="blue">path</font> must be unique, as the Click application maps HTTP requests to the page paths.
+Each page <span class="blue">path</span> must be unique, as the Click application maps HTTP requests to the page paths.
 <p/>
 The Click application will create a new Page instance for the given request using
-the configured page <font color="blue">classname</font>. All pages must subclass 
+the configured page <span class="blue">classname</span>. All pages must subclass 
 <a target="topic" href="click-api/net/sf/click/Page.html">Page</a>  
 and provide a public no arguments constructor, so they can be instantiated.
 <p/>
-Pages can also define <font color="blue">header</font> values which are discussed
+Pages can also define <span class="blue">header</span> values which are discussed
 in the next topic.
 <p/>
 When the Click application starts up it will check all the page definitions. If there 
@@ -167,16 +176,20 @@ and the web app is restarted.
 The optional <tt>headers</tt> element defines a list of <tt>header</tt> elements
 which is applied to all pages.
 
-<div class="code">&lt;!ELEMENT <font color="blue">headers</font> (<font color="red">header</font>*)&gt; </div>
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="blue">headers</span> (<span class="red">header</span>*)&gt; 
+</pre>
 
-The <tt><font color="red">header</font></tt> element defines header name and value
+The <tt><span class="red">header</span></tt> element defines header name and value
 pairs which are applied to the 
 <a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>.
 
-<div class="code">&lt;!ELEMENT <font color="red">header</font> (#PCDATA)&gt;
-   &lt;!ATTLIST header <font color="blue">name</font> CDATA #REQUIRED&gt;
-   &lt;!ATTLIST header <font color="blue">value</font> CDATA #REQUIRED&gt;
-   &lt;!ATTLIST header <font color="blue">type</font> (String|Integer|Date) "String"&gt;</div>
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="red">header</span> (#PCDATA)&gt;
+   &lt;!ATTLIST header <span class="blue">name</span> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <span class="blue">value</span> CDATA #REQUIRED&gt;
+   &lt;!ATTLIST header <span class="blue">type</span> (String|Integer|Date) "String"&gt;
+</pre>
 
 Page headers are set after the Page has been constructed and before <tt>onInit()</tt> is called.
 Pages can then modify their 
@@ -188,24 +201,28 @@ Headers are typically used to switch off browser caching. You can do this indivi
 in pages or for all application pages by setting header values. For example to switch off
 caching in the login page, note the value for a Date type should be a long number value:
 
-<div class="code">&lt;page path="<font color="blue">login.htm</font>" classname="<font color="blue">com.mycorp.page.Login</font>"/&gt;
-  &lt;header name="<font color="blue">Pragma</font>" value="<font color="blue">no-cache</font>"/&gt;
-  &lt;header name="<font color="blue">Cache-Control</font>" value="<font color="blue">no-cache</font>"/&gt;
-  &lt;header name="<font color="blue">Expires</font>" value="<font color="blue">1</font>" type="<font color="blue">Date</font>"/&gt;
-&lt;/page&gt; </div>
+<pre class="codeConfig">
+&lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
+  &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
+  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
+  &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
+&lt;/page&gt; 
+</pre>
 
 To apply header values globally define header values in the headers element. For example:
 
-<div class="code">&lt;click-app&gt; 
+<pre class="codeConfig">
+&lt;click-app&gt; 
   &lt;pages&gt;
      ..
   &lt;/pages&gt;
   &lt;headers&gt;
-    &lt;header name="<font color="blue">Pragma</font>" value="<font color="blue">no-cache</font>"/&gt;
-    &lt;header name="<font color="blue">Cache-Control</font>" value="<font color="blue">no-cache</font>"/&gt;
-    &lt;header name="<font color="blue">Expires</font>" value="<font color="blue">1</font>" type="<font color="blue">Date</font>"/&gt;
+    &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
   &lt;/headers&gt;
-&lt;/click-app&gt; </div>
+&lt;/click-app&gt; 
+</pre>
 
 <h4>GZIP Encoding</h4>
 
@@ -213,7 +230,9 @@ By setting a "<tt>Content-Encoding</tt>" header value to "<tt>gzip</tt>" the Cli
 GZIP compression to the HTML output. The ClickServlet will only compression if there is a "<tt>Accept-Encoding</tt>" HTTP request header 
 which includes <tt>gzip</tt>.
 
-<div class="code">&lt;header name="<font color="blue">Content-Encoding</font>" value="<font color="blue">gzip</font>"/&gt; </div>
+<pre class="codeConfig">
+&lt;header name="<span class="blue">Content-Encoding</span>" value="<span class="blue">gzip</span>"/&gt; 
+</pre>
 
 Note there are alternative ways to apply HTTP compression such as using the Apache web server module
 <tt>mod_gzip</tt>, or using a ServletFilter.
@@ -224,29 +243,35 @@ Note there are alternative ways to apply HTTP compression such as using the Apac
 The optional <tt>format</tt> element defines the Format object classname which
 is applied to all pages.
 
-<div class="code">&lt;!ELEMENT <font color="blue">format</font> (#PCDATA)&gt;
-    &lt;ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format"&gt; </div>
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="blue">format</span> (#PCDATA)&gt;
+    &lt;ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format"&gt; 
+</pre>
 
 By default all Click pages are configured with a 
 <a target="topic" href="click-api/net/sf/click/util/Format.html">net.sf.click.util.Format</a>
 object. The format object made available in the Velocity page templates using the name 
-<tt>$<font color="blue">format</font></tt>.
+<tt>$<span class="blue">format</span></tt>.
 <p/>
 To specify a custom format class configure a <tt>format</tt> element in the click-app
 descriptor. For example:
 
-<div class="code">&lt;click-app&gt; 
+<pre class="codeConfig">
+&lt;click-app&gt; 
   ..
-  &lt;<font color="blue">format</font> classname="<font color="red">com.mycorp.util.CustomFormat</font>"/&gt;
-&lt;/click-app&gt; </div>
+  &lt;<span class="blue">format</span> classname="<span class="red">com.mycorp.util.CustomFormat</span>"/&gt;
+&lt;/click-app&gt; 
+</pre>
 
 
 <a name="application-mode"><h3>Mode</h3></a>
 
 The optional <tt>mode</tt> element defines the application logging and caching mode.
 
-<div class="code">&lt;!ELEMENT mode (#PCDATA)&gt;
-    &lt;ATTLIST mode value (<font color="blue">production</font>|<font color="blue">profile</font>|<font color="blue">development</font>|<font color="blue">debug</font>) "development"&gt;</div>
+<pre class="codeDtd">
+&lt;!ELEMENT mode (#PCDATA)&gt;
+    &lt;ATTLIST mode value (<span class="blue">production</span>|<span class="blue">profile</span>|<span class="blue">development</span>|<span class="blue">debug</span>) "development"&gt;
+</pre>
 
 By default Click applications run in <tt>development</tt> mode which switches off page
 template caching and provides <tt>INFO</tt> level logging. 
@@ -255,10 +280,12 @@ To change the default application mode configure a mode element in the click-app
 descriptor. For example to specify <tt>production</tt> mode you would add the 
 following mode element:
 
-<div class="code">&lt;click-app&gt;
+<pre class="codeConfig">
+&lt;click-app&gt;
   ..
-  &lt;<font color="blue">mode</font> value="<font color="red">production</font>"&gt;
-&lt;/click-app&gt; </div>
+  &lt;<span class="blue">mode</span> value="<span class="red">production</span>"&gt;
+&lt;/click-app&gt; 
+</pre>
 
 Application modes include:
 <ul>
@@ -282,28 +309,28 @@ startup status for each application mode.
  <th align="center">Load Pages on Startup</th>
 </tr>
 <tr>
- <td align="center"><tt><font color="blue">production</font></tt></td>
+ <td align="center"><tt><span class="blue">production</span></tt></td>
  <td align="center">WARN</td>
  <td align="center">ERROR</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
 </tr>
 <tr>
- <td align="center"><tt><font color="blue">profile</font></tt></td>
+ <td align="center"><tt><span class="blue">profile</span></tt></td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
 </tr>
 <tr>
- <td align="center"><tt><font color="blue">development</font></tt></td>
+ <td align="center"><tt><span class="blue">development</span></tt></td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
  <td align="center">No</td>
  <td align="center">No</td>
 </tr>
 <tr>
- <td align="center"><tt><font color="blue">debug</font></tt></td>
+ <td align="center"><tt><span class="blue">debug</span></tt></td>
  <td align="center">DEBUG</td>
  <td align="center">WARN</td>
  <td align="center">No</td>
@@ -315,22 +342,26 @@ When Velocity Caching is enabled Velocity page templates and macros files are
 loaded once and cached. With caching enabled following Velocity runtime 
 properties are set:
 
-<div class="code">file.resource.loader.cache=true
+<pre class="codeConfig">
+file.resource.loader.cache=true
 file.resource.loader.modificationCheckInterval=0
-velocimacro.library.autoreload=false </div>
+velocimacro.library.autoreload=false 
+</pre>
 
 When Velocity Caching is disabled Velocity templates and macros file are 
 reloaded when ever they change. With caching disabled the the following Velocity 
 runtime properties are set:
 
-<div class="code">file.resource.loader.cache=false
-velocimacro.library.autoreload=true </div>
+<pre class="codeConfig">
+file.resource.loader.cache=false
+velocimacro.library.autoreload=true 
+</pre>
 
 When an application is not in <tt>production</tt> mode the error page displays
 detailed debugging information. When the application mode is <tt>production</tt>
 no debug information is displayed to prevent sensitive information being displayed.
 This behaviour can be changed by modifying the 
-<font color="blue"><tt>error.htm</tt></font> page template.
+<span class="blue"><tt>error.htm</tt></span> page template.
 
 
 <a name="velocity-properties"><h2>Velocity Properties</h2></a>
@@ -338,7 +369,8 @@ This behaviour can be changed by modifying the
 The Velocity runtime engine is configured through a series of properties when the 
 <tt>ClickServlet</tt> starts up.  The default Velocity properties set are:
 
-<div class="code">file.resource.loader.class=org.apache.velocity.runtime.resource.loader.FileResourceLoader
+<pre class="codeConfig">
+file.resource.loader.class=org.apache.velocity.runtime.resource.loader.FileResourceLoader
 file.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
 file.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
 file.resource.loader.path=<span class="red">servlets real path</span>
@@ -349,7 +381,8 @@ runtime.log.logsystem.class=org.apache.velocity.runtime.log.SimpleLog4JLogSystem
 runtime.log.logsystem.log4j.category=org.apache.velocity
 
 velocimacro.library.autoreload=[true|false] <span class="green">depending on application mode</span>
-velocimacro.library=click/VM_global_library.vm </div>
+velocimacro.library=click/VM_global_library.vm 
+</pre>
 
 See the Velocity
 <a target="topic" href="velocity/developer-guide.html#Velocity Configuration Keys and Values">Developer Guide</a>
@@ -365,7 +398,9 @@ As a example say we have our own Velocity macro library called
 property by adding a <tt>WEB-INF/velocity.properties</tt> file to our web
 application. In this file we would then define the property as:
 
-<div class="code">velocimacro.library=<font color="blue">mycorp.vm</font>,click/VM_global_library.vm </div>
+<pre class="codeConfig">
+velocimacro.library=<span class="blue">mycorp.vm</span>,click/VM_global_library.vm 
+</pre>
 
 Note do not place Velocity macros under the WEB-INF directory as the Velocity
 ResourceManager will not be able to load them.
@@ -378,9 +413,10 @@ Click provides in built support for the
 logging. Pages can declare their own <tt>Logger</tt> instances and use the configured
 Log4J infrastructure. For example:  
 
-<div class="code">public class CustomerList extends Page {
+<pre class="codeJava">
+public class CustomerList extends Page {
 
-    static final <font color="blue">Logger</font> <span class="red">log</span> = <font color="blue">Logger</font>.getLogger(CustomerList.class);
+    static final <span class="red">Logger</span> <span class="blue">log</span> = <span class="red">Logger</span>.getLogger(CustomerList.class);
   
     public void onGet() {
         try {
@@ -388,19 +424,20 @@ Log4J infrastructure. For example:
         
             List customerList = CustomerDAO.findBySurname(surname);
 
-            if (<span class="red">log</span>.isDebugEnabled()) {
-                <span class="red">log</span>.debug("CustomerList for '" + surname + "'" +
+            if (<span class="blue">log</span>.isDebugEnabled()) {
+                <span class="blue">log</span>.debug("CustomerList for '" + surname + "'" +
                           " returned " + customerList.size() + " records.");
             }
 
             getModel().put("customerList", customerList);
             
         } catch (DAOException e) {
-            <span class="red">log</span>.error(daoe);
+            <span class="blue">log</span>.error(daoe);
             throw new RuntimeException(e);
         }
     }
-} </div>
+}
+</pre>
 
 The Click and the Velocity frameworks have their own Log4j logging categories, 
 which they send logging messages to at runtime. The level of these
@@ -411,7 +448,8 @@ The Log4j facility is configured using a classpath property file <tt>log4j.prope
 The Click framework includes a <tt>log4j.properties</tt> file in its JAR file. 
 This file provides the following default Log4j properties:
 
-<div class="code"># Set root category level to INFO and its only appender to A1.
+<pre class="codeConfig">
+# Set root category level to INFO and its only appender to A1.
 log4j.rootCategory=INFO, A1
 
 # A1 is set to be a ConsoleAppender. 
@@ -419,7 +457,8 @@ log4j.appender.A1=org.apache.log4j.ConsoleAppender
 
 # A1 uses PatternLayout.
 log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-log4j.appender.A1.layout.ConversionPattern=[%p] %c{1} %m%n </div>
+log4j.appender.A1.layout.ConversionPattern=[%p] %c{1} %m%n 
+</pre>
 
 This configuration will display all debug or higher logging messages to the console.
 

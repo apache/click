@@ -36,7 +36,8 @@ import net.sf.click.util.ClickUtils;
  * Localizable field messages and error messages are defined in the resource
  * bundle: 
  * 
- * <div class="code">/click-control.properties </div>
+ * <pre class="codeConfig">
+ * /click-control.properties </pre>
  *
  * You can modify these properties by copying this file into your applications
  * root class path and editing these properties.
@@ -143,13 +144,13 @@ public abstract class Field implements Control {
      * Set the Fields with the given HTML attribute name and value. These
      * attributes will be rendered as HTML attributes, for example:
      *
-     * <div class="code">// Java code
+     * <pre class="codeJava">
      * TextField textField = new TextField("Username");
-     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span");
+     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span"); </pre>
      *
-     * &lt;-- HTML output --&gt;
-     * &lt;input type='text' name='username' value='' <span class="blue">class</span>='<span class="red">login</span>'/&gt;
-     * </div>
+     * HTML output:
+     * <pre class="codeHtml">
+     * &lt;input type='text' name='username' value='' <span class="blue">class</span>='<span class="red">login</span>'/&gt; </pre>
      *
      * If there is an existing named attribute in the Field it will be replaced
      * with the new value. If the given attribute value is null, any existing

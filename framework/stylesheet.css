@@ -36,15 +36,14 @@ a:visited { color: blue; }
 {
   	border: 1px solid grey;
   	margin-top: 1em;
-  	margin-left: 3em;
+  	margin-left: 0em;
 	margin-bottom: 1em;
   	padding: 4px;
     vertical-align: baseline; 
 }
 
 /* Code examples */
-.code 
-{
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
 	font-family: courier;
 	border: 1px solid #AAAAAA;
 	background-color: #FAFAFA;
@@ -54,6 +53,27 @@ a:visited { color: blue; }
 	margin-left: 0em;
 	margin-right: 1.5em;
 	white-space: pre;
+}
+
+.codeConfig 
+{
+}
+
+.codeDtd 
+{
+	border: 1px solid #8f8ecf;
+	background-color: #fffcf7;
+}
+
+.codeJava 
+{
+	background-color: #fffff7;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
 }
 
 /*  form.css */

@@ -47,7 +47,8 @@ import net.sf.click.util.ClickUtils;
  * times a form is consecutively submitted. The count is displayed in the
  * page template using the model "count" value.
  *
- * <div class="code">public class CountPage extends Page {
+ * <pre class="codeJava">
+ * public class CountPage extends Page {
  *
  *     private HiddenField counterField;
  *
@@ -76,7 +77,7 @@ import net.sf.click.util.ClickUtils;
  *         counterField.setValue(count);
  *         addModel("count", count);
  *     }
- * } </div>
+ * } </pre>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"

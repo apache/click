@@ -36,15 +36,18 @@ A Hello World example in Click would look something like this. You would have a
 <tt>click.xml</tt> configuration file which defines our Hello World page class
 and its Velocity page template:
 
-<div class="code">&lt;click-app&gt;  
+<pre class="codeConfig">
+&lt;click-app&gt;  
   &lt;pages&gt; 
     &lt;page path="<span class="blue">hello-world.htm</span>" classname="<span class="green">examples.page.HelloWorld</span>"/&gt; 
   &lt;/pages&gt;
-&lt;/click-app&gt; </div>
+&lt;/click-app&gt; 
+</pre>
 
 Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt></span>:
 
-<div class="code">package examples.page;
+<pre class="codeJava" style="background-color: #fffff7;">
+package examples.page;
 
 import java.util.Date;
 import net.sf.click.Page;
@@ -54,11 +57,13 @@ public HelloWorld extends Page {
     public void onGet() {
         addModel("<span class="red">time</span>", new Date());
     }
-} </div>
+} 
+</pre>
 
 And then we have the page template <span class="blue">hello-world.htm</span>:
 
-<div class="code">&lt;html&gt;
+<pre class="codeHtml">
+&lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Hello World&lt;/h2&gt;
@@ -66,7 +71,8 @@ And then we have the page template <span class="blue">hello-world.htm</span>:
     Hello world from Click at $<span class="red">time</span>
     
   &lt;/body&gt;
-&lt;/html&gt; </div>
+&lt;/html&gt; 
+</pre>
 
 At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
 request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
@@ -76,7 +82,8 @@ new <tt>Date</tt> object and adds it to the page's model as a value called
 <p/>
 The page model is then merged with the template which subsitutes the 
 $<span class="red">time</span> parameter with the <tt>Date</tt> object. 
-Velocity then renders the merged template which looks something like this:
+Velocity then renders the merged template which looks something like 
+
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
@@ -95,7 +102,8 @@ Page which demonstrate Click controls.
 First we have a Login page class which setups up a login form in the <tt>onInit()</tt>
 method.
 
-<div class="code">public class Login extends Page {
+<pre class="codeJava">
+public class Login extends Page {
 
     Form form;
     TextField usernameField;
@@ -114,15 +122,15 @@ method.
         form.add(passwordField);
 
         Submit okButton = new Submit("   OK   ");
-        okButton.setListener(this, "<span class="maroon">onOkClicked</span>");
+        okButton.setListener(this, "<span class="blue">onOkClicked</span>");
         form.add(okButton);
 
         Submit cancelButton = new Submit("Cancel");
-        cancelButton.setListener(this, "<span class="maroon">onCancelClicked</span>");
+        cancelButton.setListener(this, "<span class="blue">onCancelClicked</span>");
         form.add(cancelButton);
     }
 
-    public boolean <span class="maroon">onOkClicked</span>() {
+    public boolean <span class="blue">onOkClicked</span>() {
         if (form.isValid()) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
@@ -131,7 +139,7 @@ method.
 
             if (user != null && user.getPassword().equals(password)) {
                 getContext().setSessionAttribute("user", user);
-                setRedirect("<span class="blue">secure.htm</span>");
+                setRedirect("<span class="navy">secure.htm</span>");
 
             } else {     
                 form.setError(getMessage("authentication-error"));           
@@ -140,26 +148,30 @@ method.
         return true;
     }
 
-    public boolean <span class="maroon">onCancelClicked()</span> {
-        setRedirect("<span class="blue">index.htm</span>");
+    public boolean <span class="blue">onCancelClicked()</span> {
+        setRedirect("<span class="navy">index.htm</span>");
         return false;
     }
-} </div>
+} 
+</pre>
 
 Next we have the Login page template <span class="blue">login.htm</span>:
 
-<div class="code">&lt;html&gt;
+<pre class="codeHtml">
+&lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Login&lt;/h2&gt;
     
-    $<span class="red">form</span>
+    <span class="red">$form</span>
     
   &lt;/body&gt;
-&lt;/html&gt; </div>
+&lt;/html&gt; 
+</pre>
 
 When the Login page is first requested the $<span class="red">form</span> object will 
 automatically render itself as:
+
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>

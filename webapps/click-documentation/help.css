@@ -51,7 +51,7 @@ h4  {
   text-decoration: none;
 }
 
-.code {
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
 	font-family: courier;
 	border: 1px solid #AAAAAA;
 	background-color: #FAFAFA;
@@ -63,7 +63,29 @@ h4  {
 	white-space: pre;
 }
 
-.htmlExample {
+.codeConfig 
+{
+}
+
+.codeDtd 
+{
+	border: 1px solid #8f8ecf;
+	background-color: #fffcf7;
+}
+
+.codeJava 
+{
+	background-color: #fffff7;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+.htmlExample 
+{
 	border: 1px solid gray;
 	border-spacing: 1em;
 	margin-top: 1em;
@@ -78,6 +100,8 @@ h4  {
 .blue { color: blue; }
 
 .maroon { color: maroon; }
+
+.navy { color: navy; }
 
 .html {
 	color: blue;

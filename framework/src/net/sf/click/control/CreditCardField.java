@@ -40,14 +40,15 @@ import java.util.List;
  * reference the method {@link Form#getHtmlImports()} in the page template
  * (imports click/form.js file). For example.
  *
- * <div class="code">&lt;html&gt;
+ * <pre class="codeHtml">
+ * &lt;html&gt;
  *  &lt;head&gt;
  *   <span class="blue">$form.htmlImports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
  *   <span class="blue">$form</span>
  *  &lt;/body&gt;
- * &lt;/html&gt; </div>
+ * &lt;/html&gt; </pre>
  *
  * An example page using CreditCardField is provided below:
  *
