@@ -7,10 +7,6 @@ a:visited {
   color: blue;
 }
 
-a.error:visited {
-  color: red;
-}
-
 h1  { 
   font-size: 24px;
   font-weight: bold;

@@ -28,7 +28,8 @@
    </target>
 
    <target name="build-framework" description="compile and build framework JARs">
-      <mkdir dir="deploy"/>
+   	  <delete dir="${dir.deploy}" quiet="false"/>
+      <mkdir dir="${dir.deploy}"/>
       <property name="dir.source" value="framework/src"/>
       <property name="dir.classes" value="framework/classes"/>
       <delete dir="${dir.classes}" quiet="false"/>
@@ -135,7 +136,7 @@
           <exclude name="**/web.xml"/>
        </fileset>
     </war>
-	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+	<copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 	
    <target name="javadoc" description="create Javadoc HTML">

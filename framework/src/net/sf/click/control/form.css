@@ -1,6 +1,9 @@
 a.error {
 	color: red;
 }
+a:visited.error {
+	color: red;
+}
 input.disabled {
 	background: lightgrey;
 }
@@ -13,7 +16,22 @@ select.error {
 span.error {
 	color: red;
 }
-table.form {
-	border: 0;
+table.fields {
+	border: solid;
+	border-width: 1px;
+	padding: 0;
 	vertical-align: baseline;
+}
+table.errors {
+	border: solid;
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.buttons {
+	border: solid;
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+	margin-top: 1em;
 }
