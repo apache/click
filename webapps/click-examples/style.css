@@ -7,6 +7,15 @@ a:visited {
   color: blue;
 }
 
+.menu {
+  color: white;
+  text-decoration: none;
+}
+
+.menu:visited {
+  color: white;
+}
+
 h1  { 
   font-size: 24px;
   font-weight: bold;

@@ -60,22 +60,3 @@
 
 #end
 
-
-#***********************************
- * Write source inspection toolbar
- **********************************#
-
-#macro( writeSourceToolbar $java $html )
-
-<a href="$context/index.html" title="Examples Homepage">Examples</a>, &nbsp;
-<a href="$context/javadoc/index.html" title="Examples HTML Javadoc API">Javadoc API</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=WEB-INF/src/$java" title="Page Java source">Java</a>, &nbsp;
-<a href="$context/source-viewer.htm?filename=$html" title="Page Template source">HTML</a>
-
-
-<hr>
-<br>
-
-#end
