@@ -108,7 +108,7 @@ public class BigForm extends Page {
      * @return true
      */
     public boolean onCancelClick() {
-        setRedirect("examples.html");
+        setRedirect("index.html");
         return false;
     }
 }

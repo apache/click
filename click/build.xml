@@ -111,7 +111,30 @@
 	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
-   <target name="deploy-examples" description="deploy web apps to app server"> 
+   <target name="examples" description="build and deploy examples"> 
+    <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
+    <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
+	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
+           destdir="webapps/click-examples/WEB-INF/classes" 
+           debug="true">
+       <classpath> 
+     	    <pathelement location="lib/${jar.servlet}"/>
+          <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+       </classpath>
+    </javac>
+    <copy todir="webapps/click-examples/WEB-INF/classes">
+       <fileset dir="webapps/click-examples/WEB-INF/src">
+         <exclude name="**/*.java"/>
+     	   <exclude name="**/package.html"/>
+       </fileset>
+    </copy>
+    <war destfile="${dir.deploy}/click-examples.war"
+         webxml="webapps/click-examples/WEB-INF/web.xml">
+       <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+       <fileset dir="webapps/click-examples">
+          <exclude name="**/web.xml"/>
+       </fileset>
+    </war>
 	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 	

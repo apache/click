@@ -1,6 +1,9 @@
 package examples.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +18,9 @@ import java.util.TreeMap;
  * @author Malcolm Edgar
  */
 public class CustomerDatabase {
+    
+    private static final SimpleDateFormat FORMAT 
+        = new SimpleDateFormat("yyyy-MM-dd");
 
     public static List getCustomersSortedByName() {
         List customers = new ArrayList(CUSTOMER_BY_NAME.values());
@@ -119,7 +125,7 @@ public class CustomerDatabase {
         customer.age = new Integer(41);
         customer.investments = "Residential Property";
         customer.holdings = new Double(34560);
-        customer.dateJoined = new java.sql.Date(101, 11, 03);
+        customer.dateJoined = createDate("1986-12-05");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -130,7 +136,7 @@ public class CustomerDatabase {
         customer.age = new Integer(50);
         customer.holdings = new Double(45030);
         customer.investments = "Options";
-        customer.dateJoined = new java.sql.Date(89, 5, 30);
+        customer.dateJoined = createDate("1989-05-03");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -141,7 +147,7 @@ public class CustomerDatabase {
         customer.age = new Integer(58);
         customer.holdings = new Double(90400);
         customer.investments = "Bonds";
-        customer.dateJoined = new java.sql.Date(92, 0, 19);
+        customer.dateJoined = createDate("1992-01-19");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -152,7 +158,7 @@ public class CustomerDatabase {
         customer.age = new Integer(27);
         customer.holdings = new Double(0);
         customer.investments = "None";
-        customer.dateJoined = new java.sql.Date(97, 6, 26);
+        customer.dateJoined = createDate("1997-06-26");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -163,7 +169,7 @@ public class CustomerDatabase {
         customer.age = new Integer(45);
         customer.holdings = new Double(430500.0);
         customer.investments = "Commercial Property";
-        customer.dateJoined = new java.sql.Date(103, 8, 14);
+        customer.dateJoined = createDate("2003-08-14");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -174,7 +180,7 @@ public class CustomerDatabase {
         customer.age = new Integer(52);
         customer.holdings = new Double(870000.0);
         customer.investments = "Residential Property";
-        customer.dateJoined = new java.sql.Date(83, 4, 19);
+        customer.dateJoined = createDate("1983-04-19");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
 
@@ -185,9 +191,17 @@ public class CustomerDatabase {
         customer.age = new Integer(48);
         customer.holdings = new Double(109000.0);
         customer.investments = "Options";
-        customer.dateJoined = new java.sql.Date(103, 6, 29);
+        customer.dateJoined = createDate("2003-06-29");
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
+    }
+    
+    private static Date createDate(String pattern) {
+        try {
+            return FORMAT.parse(pattern);
+        } catch (ParseException pe) {
+            return null;
+        }
     }
 
 }

@@ -1,6 +1,5 @@
 package examples.page;
 
-import examples.domain.User;
 import net.sf.click.Page;
 
 /**
@@ -14,10 +13,9 @@ public class Logout extends Page {
      * @see Page#onInit()
      */
     public void onInit() {
-        User user = (User) getContext().getSessionAttribute("user");
-        addModel("user", user);
-        
-        getContext().getSession().removeAttribute("user");
-        getContext().getSession().invalidate();  
+        if (getContext().hasSession()) {
+            addModel("user", getContext().getSessionAttribute("user"));
+            getContext().getSession().invalidate(); 
+        }          
     }
 }
