@@ -46,16 +46,19 @@ and its Velocity page template:
 
 Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt></span>:
 
-<pre class="codeJava" style="background-color: #fffff7;">
-package examples.page;
+<pre class="codeJava">
+<span class="kw">package</span> examples.page;
 
-import java.util.Date;
-import net.sf.click.Page;
+<span class="kw">import</span> java.util.Date;
+<span class="kw">import</span> net.sf.click.Page;
 
-public HelloWorld extends Page {
+<span class="kw">public</span> HelloWorld <span class="kw">extends</span> Page {
 
-    public void onGet() {
-        addModel("<span class="red">time</span>", new Date());
+    <span class="jd">/**
+     * @see Page#onGet()
+     */</span>
+    <span class="kw">public void</span> onGet() {
+        addModel("<span class="red">time</span>", <span class="kw">new</span> Date());
     }
 } 
 </pre>
@@ -103,54 +106,57 @@ First we have a Login page class which setups up a login form in the <tt>onInit(
 method.
 
 <pre class="codeJava">
-public class Login extends Page {
+<span class="kw">public class</span> Login <span class="kw">extends</span> Page {
 
     Form form;
     TextField usernameField;
     PasswordField passwordField;
 
-    public void onInit() {
-        form = new Form("<span class="red">form</span>", getContext());
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public void</span> onInit() {
+        form = <span class="kw">new</span> Form("<span class="red">form</span>", getContext());
         addControl(form);
 
-        usernameField = new TextField("Username");
+        usernameField = <span class="kw">new</span> TextField("Username");
         usernameField.setRequired(true);
         form.add(usernameField);
 
-        passwordField = new PasswordField("Password");
+        passwordField = <span class="kw">new</span> PasswordField("Password");
         passwordField.setRequired(true);
         form.add(passwordField);
 
-        Submit okButton = new Submit("   OK   ");
+        Submit okButton = <span class="kw">new</span> Submit("   OK   ");
         okButton.setListener(this, "<span class="blue">onOkClicked</span>");
         form.add(okButton);
 
-        Submit cancelButton = new Submit("Cancel");
+        Submit cancelButton = <span class="kw">new</span> Submit("Cancel");
         cancelButton.setListener(this, "<span class="blue">onCancelClicked</span>");
         form.add(cancelButton);
     }
 
-    public boolean <span class="blue">onOkClicked</span>() {
-        if (form.isValid()) {
+    <span class="kw">public boolean</span> <span class="blue">onOkClicked</span>() {
+        <span class="kw">if</span> (form.isValid()) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
 
             User user = UserDatabase.getUser(username);
 
-            if (user != null && user.getPassword().equals(password)) {
+            <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
                 getContext().setSessionAttribute("user", user);
                 setRedirect("<span class="navy">secure.htm</span>");
 
-            } else {     
+            } <span class="kw">else</span> {     
                 form.setError(getMessage("authentication-error"));           
             }
         }
-        return true;
+        <span class="kw">return true</span>;
     }
 
-    public boolean <span class="blue">onCancelClicked()</span> {
+    <span class="kw">public boolean</span> <span class="blue">onCancelClicked()</span> {
         setRedirect("<span class="navy">index.htm</span>");
-        return false;
+        <span class="kw">return false</span>;
     }
 } 
 </pre>

@@ -90,17 +90,20 @@ To define a control listener, simply set the listener object instance and the na
 listener method to be invoked. For example:
 
 <pre class="codeJava">
-public class SimpleCallback extends Page {
+<span class="kw">public class</span> SimpleCallback <span class="kw">extends</span> Page {
 
-    public void onInit() {
-        ActionLink clickLink = new ActionLink("onClick");
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public void</span> onInit() {
+        ActionLink clickLink = <span class="kw">new</span> ActionLink("onClick");
         clickLink.<span class="green">setListener</span>(<span class="blue">this</span>, "<span class="blue">onClick</span>");
         addControl(goLink);    
     }
     
-    public <span class="red">boolean</span> <span class="blue">onClick</span>() {
+    <span class="kw">public boolean</span> <span class="blue">onClick</span>() {
         System.out.println("onClick invoked");
-        return <span class="red">true</span>;
+        <span class="kw">return true</span>;
     }
 } </pre>
 
@@ -119,7 +122,7 @@ returning false in a event handler you can skip this step and forward to the nex
 <a name="control-class"><h2>Control Classes</h2></a>
 
 Control classes are defined in the package 
-<a target="topic" href="api/net/sf/click/control/package-summary.html">net.sf.click.control</a>,
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>,
 with most controls mapping to a HTML element. The control package classes are depicted below in Figure 3.
 
 <p/>

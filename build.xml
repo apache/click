@@ -1,4 +1,4 @@
-<project name="click2" default="build-framework" basedir=".">
+<project name="click" default="help" basedir=".">
 
    <!-- Project Properties -->
    <property file="./build.properties"/>
@@ -20,7 +20,7 @@
 
    <!-- Tasks -->
 
-   <target name="build-framework" description="compile and build framework JARs">
+   <target name="build-framework" description="build framework JAR file">
       <delete dir="${dir.deploy}" quiet="false"/>
       <mkdir dir="${dir.deploy}"/>
       <property name="dir.source" value="framework/src"/>
@@ -118,20 +118,39 @@
       </war>
    </target>
 
-   <target name="deploy-webapps" description="deploy web apps to app server"> 
+   <target name="deploy-webapps" description="copy WAR files to application server"> 
 	  <copy file="${dir.deploy}/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
 	  <copy file="${dir.deploy}/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
 	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
-   <target name="format-java" description="replace tabs and trim trailing spaces">
-	  <linetrim srcdir="framework/src" includes="**/*.java"/>
-	  <replacetabs srcdir="framework/src" includes="**/*.java"/>
-	  <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
-	  <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
+   <target name="format-java">
+	   <linetrim srcdir="framework/src" includes="**/*.java"/>
+	   <replacetabs srcdir="framework/src" includes="**/*.java"/>
+	   <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
+	   <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
    </target>
+ 
+   <target name="help" description="display the Help message">
+      <echo message="Click ${version} web application framework"/>
+      <echo message="==================================="/> 
+      <echo/>  
+      <echo message="Main targets:"/> 
+      <echo/>    
+      <echo message="build-framework       build framework JAR file"/> 
+      <echo message="build-release         build release ZIP file"/> 
+      <echo message="build-webapps         build web application WAR files"/> 
+      <echo message="deploy-webapps        copy WAR files to application server"/>
+      <echo message="help                  display the Help message"/>  
+      <echo message="javadoc               create Javadoc HTML files"/> 
+      <echo message="setup-tomcat-logging  setup Tomcat logging configuration"/>
+      <echo/>
+      <echo/>  
+      <echo message="Please ensure you have configured build.properties"/> 
+      <echo/>  
+   </target>  
 	
-   <target name="javadoc" description="create Javadoc HTML">
+   <target name="javadoc" description="create Javadoc HTML files">
       <delete quiet="false" failonerror="false">
           <fileset dir="webapps/click-documentation/docs/click-api" includes="**/*"/>
       </delete>
@@ -180,7 +199,7 @@
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>   
 
-   <target name="setup-tomcat-logging" description="Setup Tomcat logging">
+   <target name="setup-tomcat-logging" description="setup Tomcat logging configuration">
       <copy todir="${dir.tomcat}" verbose="true">
          <fileset dir="server/tomcat"/>  
       </copy>

@@ -65,7 +65,7 @@ span.sparx {
 }
 
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
-	font-family: courier;
+	font-family: Courier New, courier;
 	border: 1px solid #AAAAAA;
 	background-color: #FAFAFA;
 	padding: 1em;
@@ -88,7 +88,7 @@ span.sparx {
 
 .codeJava 
 {
-	background-color: #fffff7;
+	background-color: white;
 }
 
 .codeHtml 
@@ -104,6 +104,22 @@ span.sparx {
 	margin-top: 1em;
 	margin-bottom: 1.5em;
 	margin-left: 0em;
+}
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
 }
 
 .red { color: red; }
