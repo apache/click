@@ -314,7 +314,7 @@ public class Page {
     }
     
     /**
-     * The on initialization event handler. This event handler is invoked after
+     * The on Initialization event handler. This event handler is invoked after
      * the pages constructor has been called and all the page poperties have 
      * been set.
      * <p/>
@@ -330,7 +330,7 @@ public class Page {
     }
     
     /**
-     * The on security check event handler.
+     * The on Security Check event handler.
      * <p/>
      * Security check provides the Page an opportunity to check the users
      * security credentials before processing the Page. This method is called
@@ -354,7 +354,7 @@ public class Page {
     }
     
     /**
-     * The on GET request event handler. This event handler is invoked if the 
+     * The on Get request event handler. This event handler is invoked if the 
      * HTTP request method is "GET".  
      * <p/>
      * The event handler is invoked after {@link #onSecurityCheck()} has been 
@@ -366,7 +366,7 @@ public class Page {
     }
  
     /**
-     * The on POST request event handler. This event handler is invoked if the 
+     * The on Post request event handler. This event handler is invoked if the 
      * HTTP request method is "POST".  
      * <p/>
      * The event handler is invoked after {@link #onSecurityCheck()} has been 
@@ -378,7 +378,7 @@ public class Page {
     }
     
     /**
-     * The on finally request event handler. Subclasses may override this method
+     * The on Finally request event handler. Subclasses may override this method
      * to add any resource clean up code.
      * <p/>
      * This method is guaranteed to be called before the Page object reference 

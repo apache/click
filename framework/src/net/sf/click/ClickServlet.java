@@ -246,10 +246,13 @@ public class ClickServlet extends HttpServlet {
             }
             
             if (page.getRedirect() != null) {
+                String url = response.encodeRedirectURL(page.getRedirect());
+                
                 if (logger.isDebugEnabled()) {
-                    logger.debug("redirect=" + page.getRedirect());
-                }              
-                response.sendRedirect(page.getRedirect());
+                    logger.debug("redirect=" + url);
+                }
+                
+                response.sendRedirect(url);
                 
             } else if (page.getForward() != null) {
                 if (logger.isDebugEnabled()) {
