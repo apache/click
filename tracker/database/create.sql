@@ -1,9 +1,9 @@
 
-CREATE SCHEMA Trackman;
+CREATE SCHEMA Tracker;
 
-SET SCHEMA Trackman;
+SET SCHEMA Tracker;
 
-CREATE USER tracker SET PASSWORD 'compass';
+CREATE USER scout SET PASSWORD 'compass';
 
 CREATE TABLE Users (
 	username	VARCHAR(12)		NOT NULL UNIQUE,
@@ -12,7 +12,6 @@ CREATE TABLE Users (
 	telephone	VARCHAR(15),
 	mobile		VARCHAR(15),
 	fax			VARCHAR(15),
-	admin_user	BOOLEAN			DEFAULT false NOT NULL,
 	active		BOOLEAN			DEFAULT true NOT NULL,
 	created_by	VARCHAR(30)		NOT NULL,
 	created_at	TIMESTAMP		NOT NULL,
@@ -20,7 +19,7 @@ CREATE TABLE Users (
 	updated_at	TIMESTAMP		NOT NULL,
 	CONSTRAINT users_pk PRIMARY KEY (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Users TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Users TO scout;
 
 CREATE TABLE User_Roles (
 	username	VARCHAR(12)		NOT NULL,
@@ -28,7 +27,7 @@ CREATE TABLE User_Roles (
 	CONSTRAINT user_roles_pk PRIMARY KEY (username, rolename),
 	CONSTRAINT user_roles_fk1 FOREIGN KEY (username) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON User_Roles TO tracker;
+GRANT SELECT, INSERT, UPDATE ON User_Roles TO scout;
 
 CREATE TABLE Category (
 	category_id	INTEGER			NOT NULL UNIQUE,
@@ -37,9 +36,9 @@ CREATE TABLE Category (
 	active		BOOLEAN			DEFAULT true NOT NULL,	
 	CONSTRAINT category_pk PRIMARY KEY (category_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Category TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Category TO scout;
 CREATE SEQUENCE category_seq;
-GRANT SELECT ON category_seq TO tracker;
+GRANT SELECT ON category_seq TO scout;
 
 DROP TABLE IF EXISTS Priority;
 CREATE TABLE Priority (
@@ -49,9 +48,9 @@ CREATE TABLE Priority (
 	active		BOOLEAN			DEFAULT true NOT NULL,
 	CONSTRAINT priority_pk PRIMARY KEY (priority_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Priority TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Priority TO scout;
 CREATE SEQUENCE priority_seq;
-GRANT SELECT ON priority_seq TO tracker;
+GRANT SELECT ON priority_seq TO scout;
 
 CREATE TABLE Severity (
 	severity_id	INTEGER			NOT NULL UNIQUE,
@@ -60,9 +59,9 @@ CREATE TABLE Severity (
 	active		BOOLEAN			DEFAULT true NOT NULL,
 	CONSTRAINT severity_pk PRIMARY KEY (severity_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Severity TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Severity TO scout;
 CREATE SEQUENCE severity_seq;
-GRANT SELECT ON severity_seq TO tracker;
+GRANT SELECT ON severity_seq TO scout;
 
 CREATE TABLE Status (
 	status_id	INTEGER			NOT NULL UNIQUE,
@@ -71,9 +70,9 @@ CREATE TABLE Status (
 	active		BOOLEAN			DEFAULT true NOT NULL,
 	CONSTRAINT status_pk PRIMARY KEY (status_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Status TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Status TO scout;
 CREATE SEQUENCE status_seq;
-GRANT SELECT ON status_seq TO tracker;
+GRANT SELECT ON status_seq TO scout;
 
 CREATE TABLE Version (
 	version_id	INTEGER			NOT NULL UNIQUE,
@@ -82,9 +81,9 @@ CREATE TABLE Version (
 	active		BOOLEAN			DEFAULT true NOT NULL,
 	CONSTRAINT version_pk PRIMARY KEY (version_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Version TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Version TO scout;
 CREATE SEQUENCE version_seq;
-GRANT SELECT ON version_seq TO tracker;
+GRANT SELECT ON version_seq TO scout;
 
 CREATE TABLE Issues (
 	issue_id 	INTEGER 		NOT NULL UNIQUE,
@@ -108,9 +107,9 @@ CREATE TABLE Issues (
 	CONSTRAINT issues_fk6 FOREIGN KEY (created_by) REFERENCES Users (username),
 	CONSTRAINT issues_fk7 FOREIGN KEY (updated_by) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Issues TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Issues TO scout;
 CREATE SEQUENCE issues_seq;
-GRANT SELECT ON issues_seq TO tracker;
+GRANT SELECT ON issues_seq TO scout;
 
 CREATE TABLE Changes (
 	change_id	INTEGER			NOT NULL UNIQUE,
@@ -122,9 +121,9 @@ CREATE TABLE Changes (
 	CONSTRAINT changes_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
 	CONSTRAINT changes_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Changes TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Changes TO scout;
 CREATE SEQUENCE changes_seq;
-GRANT SELECT ON changes_seq TO tracker;
+GRANT SELECT ON changes_seq TO scout;
 
 CREATE TABLE Notes (
 	note_id		INTEGER			NOT NULL UNIQUE,
@@ -136,9 +135,9 @@ CREATE TABLE Notes (
 	CONSTRAINT notes_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
 	CONSTRAINT notes_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Notes TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Notes TO scout;
 CREATE SEQUENCE notes_seq;
-GRANT SELECT ON notes_seq TO tracker;
+GRANT SELECT ON notes_seq TO scout;
 
 CREATE TABLE Resolutions (
 	resolution_id	INTEGER			NOT NULL UNIQUE,
@@ -150,9 +149,9 @@ CREATE TABLE Resolutions (
 	CONSTRAINT resolutions_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
 	CONSTRAINT resolutions_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Resolutions TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Resolutions TO scout;
 CREATE SEQUENCE resolutions_seq;
-GRANT SELECT ON resolutions_seq TO tracker;
+GRANT SELECT ON resolutions_seq TO scout;
 
 
 INSERT INTO Status (status_id, sort_order, description, active) values (0, 0, 'Open', true);

@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
-
+package tracker.domain;
 
 /**
- * Provides Change domain object.
+ * Provides Severity domain object.
  *
  * @author Malcolm Edgar
  */
-public class Change extends Description {
-
+public class Severity extends Classification {
+   
 }

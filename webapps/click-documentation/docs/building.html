@@ -5,6 +5,9 @@
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+ th { text-align: left; }
+ </style>
 </head>
 <body>
   
@@ -37,43 +40,60 @@ To build and deploy the web applications:
 
 <h3>Dependencies</h3>
 
-<table style="border: solid 1px black">
+<table style="border: solid 1px black; border-spacing: 0.75em;">
 <tr>
-  <th>JAR</th><th>Version</th><th>Author</th><th>Description</th>
+  <th>Library</th>
+  <th>Version</th>
+  <th>JAR</th>
+  <th>Author</th>
+  <th>Description</th>
 </tr>
 <tr>
-  <td>servlet-2.3.1.jar</td>  
-  <td>2.3.1</td>
-  <td><a href="http://java.sun.com/products/servlet/">Sun Microsystems</a></td>
-  <td>J2EE Servlet Framework</td>
-</tr>
-<tr>
-  <td>velocity-dep-1.4.jar</td>  
+  <td>Java Runtime</td>  
   <td>1.4</td>
+  <td>n/a</td>
+  <td><a href="http://java.sun.com/j2se/">Sun Microsystems</a></td>
+  <td>J2SE Runtime Environment</td>
+</tr>
+<tr>
+  <td>Servlet API</td>
+  <td>2.3.1</td>
+  <td>servlet-2.3.1.jar</td>  
+  <td><a href="http://java.sun.com/products/servlet/">Sun Microsystems</a></td>
+  <td>J2EE Servlet API</td>
+</tr>
+<tr>
+  <td>Velocity Framework</td>
+  <td>1.4</td>
+  <td>velocity-dep-1.4.jar</td>  
   <td><a href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a></td>
-  <td>Velocity Template Framework</td>
+  <td>Velocity Templating Framework</td>
 </tr>
 <tr>
-  <td>jdom-1.0.jar</td>  
+  <td>JDOM Library</td>
   <td>1.0</td>
+  <td>jdom-1.0.jar</td>  
   <td><a href="http://www.jdom.org">JDOM.org</a></td>
-  <td>XML DOM Framework</td>
+  <td>Java DOM XML Library</td>
 </tr>
 <tr>
-  <td>log4j-1.2.9.jar</td>  
+  <td>Log4J Logging</td>
   <td>1.2.9</td>
+  <td>log4j-1.2.9.jar</td>  
   <td><a href="http://logging.apache.org/log4j/">Apache Logging Log4j</a></td>
-  <td>Logging Framework</td>
+  <td>Log4J Logging Library</td>
 </tr>
 <tr>
-  <td>commons-lang-2.0.jar</td>  
+  <td>Common Language</td>
   <td>2.0</td>
+  <td>commons-lang-2.0.jar</td>  
   <td><a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons lang</a></td>
   <td>General Language Utilities Library</td>
 </tr>
 <tr>
-  <td>commons-codec-1.1.jar</td>  
+  <td>Commons Codec</td>
   <td>1.1</td>
+  <td>commons-codec-1.1.jar</td>  
   <td><a href="http://jakarta.apache.org/commons/codec/">Jakarta Commons codec</a></td>
   <td>Encoding Decoding Library</td>
 </tr>

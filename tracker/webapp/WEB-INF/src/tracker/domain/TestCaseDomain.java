@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
 
 import java.util.Date;
 
 import junit.framework.TestCase;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import trackman.util.SessionProvider;
+import tracker.util.SessionProvider;
 
 /**
  * Provides domain package TestCase.

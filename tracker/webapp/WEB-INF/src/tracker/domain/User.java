@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Provides User domain object.
@@ -36,8 +37,6 @@ public class User {
     
     protected String fax;
     
-    protected boolean isAdminUser;
-    
     protected boolean isActive = true;
     
     protected String createdBy;
@@ -48,6 +47,8 @@ public class User {
     
     protected Date updatedAt;
     
+    protected Set roles;
+    
     public String toString() {
         return getClass().getName() + "[" +
             "username=" + username +
@@ -56,7 +57,6 @@ public class User {
             ",telephone=" + telephone +
             ",mobile=" + mobile +
             ",fax=" + fax +
-            ",isAdminUser=" + isAdminUser +
             ",isActive=" + isActive +
             ",createdBy=" + createdBy +
             ",createdAt=" + createdAt +
@@ -103,14 +103,6 @@ public class User {
         this.isActive = isActive;
     }
     
-    public boolean isAdminUser() {
-        return isAdminUser;
-    }
-    
-    public void setAdminUser(boolean isAdminUser) {
-        this.isAdminUser = isAdminUser;
-    }
-    
     public String getMobile() {
         return mobile;
     }
@@ -125,6 +117,14 @@ public class User {
     
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public Set getRoles() {
+        return roles;
+    }
+    
+    public void setRoles(Set roles) {
+        this.roles = roles;
     }
     
     public String getTelephone() {

@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
+package tracker.domain;
+
 
 /**
- * Provides Priority domain object.
+ * Provides Status domain object.
  *
  * @author Malcolm Edgar
  */
-public class Priority extends Classification {
-
+public class Status extends Classification {
+ 
 }

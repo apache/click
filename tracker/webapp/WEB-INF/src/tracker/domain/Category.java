@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package trackman.domain;
-
+package tracker.domain;
 
 /**
- * Provides Version domain object.
+ * Provides Category domain object.
  *
  * @author Malcolm Edgar
  */
-public class Version extends Classification {
-
+public class Category extends Classification {
 }
