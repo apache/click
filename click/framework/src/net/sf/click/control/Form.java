@@ -133,7 +133,7 @@ import net.sf.click.util.ClickUtils;
  * If you include a form variable in your template the form will be
  * automatically layed out and rendered.
  * 
- * <ul>
+ * <ul style="margin-top: 0.5em;">
  *  <li>form.css</li>
  *  <li>fieldAlign</li>
  *  <li>labelAlign</li>
@@ -151,78 +151,152 @@ import net.sf.click.util.ClickUtils;
  * $form.{@link #fields}.usernameField
  * </div>
  *
- * Whenever including your own Form markup in a page template or Velocity macro,
- * always specify the form {@link #method} and include a hidden field which
- * specifies the {@link #name} of the Form. The hidden field is used by Click
- * to determine which form was posted on a page which may contain multiple forms.
+ * Whenever including your own Form markup in a page template or Velocity macro
+ * always specify:
+ * <ul style="margin-top: 0.5em;">
+ *  <li><span class="maroon">method</span> 
+ *      - the form submission method <tt>["POST" | "GET"]</tt></li>
+ *  <li><span class="maroon">name</span> 
+ *      - the name of your form, important when using JavaScript</li>
+ *  <li><span class="maroon">action</span> 
+ *      - directs the Page where the form should be submitted to</li>
+ *  <li><span class="maroon">form_name</span> 
+ *      - include a hidden field which specifies the {@link #name} of the Form </li>
+ * </ul>
+ * The hidden field is used by Click to determine which form was posted on
+ * a page which may contain multiple forms. 
  * <p/>
- * A manually layed out example is provided below:
+ * An example of a manually layed out Login form is provided below:
  *
  * <div class="code">
- * &lt;form method="<span class="maroon">POST</span>" name="<span class="maroon">form</span>" action="<span class="blue">$request</span>.requestURI&gt;
- *   &lt;input type="<span class="maroon">hidden</span>" name="<span class="maroon">form_name</span>" value="<span class="blue">$form</span>.name"/&gt;
- *   &lt;pre&gt;
+ * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>&gt;
+ *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  *   
- *   Username: <span class="blue">$form</span>.fields.usernameField
+ *   &lt;table style="margin: 1em;"&gt;
  * 
- *   Password: <span class="blue">$form</span>.fields.passwordField
+ *     <span class="red">#if</span>( <span class="blue">$form.error</span> ) 
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
+ *     <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span> )
+ *       <span class="red">#if</span>( !<span class="blue">$field.hidden</span> && !<span class="blue">$field.valid</span> )
+ *       &lt;tr&gt;
+ *         &lt;td&gt; &amp;nbsp; &lt;/td&gt;
+ *         &lt;td style="color: red;"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
+ *       &lt;/tr&gt;
+ *       <span class="red">#end</span>
+ *     <span class="red">#end</span>
  * 
- *   <span class="blue">$form</span>.fields.okSubmit
+ *     &lt;tr&gt;
+ *       &lt;td&gt; Username: &lt;/td&gt;
+ *       &lt;td&gt; <span class="blue">$form.fields.usernameField</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt; Password: &lt;/td&gt;
+ *       &lt;td&gt; <span class="blue">$form.fields.passwordField</span> &lt;/td&gt;
+ *     &lt;/tr&gt; 
  * 
- *   &lt;/pre&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt; 
+ *         <span class="blue">$form.fields.okSubmit</span> 
+ *         <span class="blue">$form.fields.cancelSubmit</span>
+ *       &lt;/td&gt;
+ *     &lt;/tr&gt;
+ * 
+ *   &lt;/table&gt;
+ * 
  * &lt;form&gt;
  * </div>
  * 
+ * As you can see in this example most of the code and markup is generic and 
+ * could be reused. This is where Velocity Macros come in.
+ * 
  * <h4>Velocity Macros</h4>
  * 
- * Velocity 
- * <a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">Macros</a>
- * are a great way to encapsulate custom forms.
- * 
- * <div class="code">
- * 
- * #** Custom Form Macro Code **#
- * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
- *  &lt;form method='POST' name='<span class="blue">$form.name</span>' action='<span class="blue">$request.requestURI</span>'&gt;
- *   &lt;input name='form_name' type='hidden' value='<span class="blue">$form.name</span>)'/&gt;
- *   ..
- *  &lt;/form&gt;
- * 
- * <span class="red">#end</span>
- * 
- * &lt;-- HTML Code --&gt;
- * #<span class="green">writeForm</span>(<span class="blue">$form</span>)
- * 
- * </div>
- * 
+ * Velocity Macros 
+ * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
+ * are a great way to encapsulate customized forms. 
+ * <p/>
  * To create a generic form layout you can use the Form {@link #fieldList} and 
- * {@link #buttonList} properties.
+ * {@link #buttonList} properties within a Velocity macro.
+ * <p/>
+ * The example below provides a generic <span class="green">writeForm()</span> 
+ * macro which you could use through out an application. This Velocity macro code 
+ * would be contained in a macro file, e.g. <tt>macro.vm</tt>.
  *
  * <div class="code">
- * &lt;form method="POST" name="form" action="<span class="blue">$request.requestURI</span>"&gt;
- * &lt;input type="hidden" name="form_name" value="form"/&gt;
+ * #** Custom Form Macro Code **#
+ * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] ) 
+ *
+ * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$request.requestURI</span>&gt;
+ * &lt;input type="<span class="maroon">hidden</span>" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  * &lt;table width="100%"&gt;
- * <span class="red">#foreach (</span><span class="blue">$field</span> <span class="red">in </span><span class="blue">$form.fieldList</span><span class="red">)</span>
- *   <span class="red">#if( !</span><span class="blue">$field.isValid()</span> <span class="red">)</span>
+ *
+ * <span class="red">#if</span>( <span class="blue">$form.error</span> ) 
  *   &lt;tr&gt;
- *     &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
- *   &lt;/tr&gt;
- *   <span class="red">#end</span>
- *   &lt;tr&gt;
- *     &lt;td&gt; <span class="blue">$field.label</span> &lt;/td&gt; &lt;td&gt; $<span class="blue">field</span> &lt;/td&gt;
+ *     &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
  *   &lt;/tr&gt;
  * <span class="red">#end</span>
+ *
+ * <span class="red">#foreach (</span><span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span><span class="red">)</span>
+ *   <span class="red">#if</span>( !<span class="blue">$field.hidden</span> )
+ *     <span class="red">#if</span>( !<span class="blue">$field.valid</span> )
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
+ * 
+ *   &lt;tr&gt;
+ *     &lt;td&gt; <span class="blue">$field.label</span>: &lt;/td&gt; &lt;td&gt; <span class="blue">$field</span> &lt;/td&gt;
+ *   &lt;/tr&gt;
+ *   <span class="red">#end</span>
+ * <span class="red">#end</span>
+ * 
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
  *    <span class="red">#foreach (</span><span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span><span class="red">)</span>
  *      <span class="blue">$button</span> &amp;nbsp;
  *    <span class="red">#end</span>
  *    &lt;/td&gt;
- *   &lt;/tr&gt;
+ *  &lt;/tr&gt;
+ * 
  * &lt;/table&gt;
  * &lt;/form&gt;
+ * 
+ * <span class="red">#end</span>
  * </div>
- *
+ * 
+ * You would then call this macro in your Page template passing it your
+ * <span class="blue">form</span> object:
+ * <div class="code">
+ * &lt;!-- HTML Code --&gt;
+ * #<span class="green">writeForm</span>(<span class="blue">$form</span>)
+ * </div>
+ * 
+ * At render time Velocity will execute the macro using the given form and render
+ * the results to the response output stream.
+ * 
+ * <h5>Configuring Velocity Macros</h5>
+ * 
+ * To configure your application pick up your velocimacro file
+ * (e.g. <tt>macro.vm</tt>) you will need to include a <tt>velocity.properties</tt> file
+ * in your applications <tt>WEB-INF</tt> directory. See configuration topic
+ * <a target="topic" href="../../../../../configuration.html#velocity-properties">
+ * Velocity Properties</a> for more info.
+ * 
+ * <div class="code">
+ * WEB-INF/velocity.properties
+ * </div>
+ * 
+ * In your <tt>velocity.properties</tt> file add a reference to your custom
+ * macro file <tt>macro.vm</tt>, also making sure you included the default 
+ * Click macro file <tt>click/VM_global_library.vm</tt>.  For example:
+ * 
+ * <div class="code">
+ * velocimacro.library=<span class="blue">macro.vm</span>,click/VM_global_library.vm
+ * </div>
+ * 
  * <p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

@@ -1,5 +1,5 @@
 /**
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,23 +27,27 @@ import java.util.Date;
  * available in the Page for formatting objects.
  * <p/>
  * For example the following Page code adds a date to the model:
- * <blockquote><pre>
+ * <div class="code">
  * public void onGet() {
  *    Date date = order.deliveryDate();
- *    addModel("deliveryDate", date);
- * }</pre></blockquote>
+ *    addModel("<span class="red">deliveryDate</span>", date);
+ * }
+ * </div>
  * In the page template we use the format object:
- * <blockquote><pre>
- * Delivery date: <b>$format.date</b>($deliveryDate, "dd MMM yyyy")</pre></blockquote>
+ * <div class="code">
+ * Delivery date: <span class="blue">$format</span>.date(<span class="red">$deliveryDate</span>, "dd MMM yyyy")
+ * </div>
  *
  * Which renders the output as:
  * <blockquote>
- * Delivery date: 21 Jan 2004</blockquote>
+ * Delivery date: 21 Jan 2004
+ * </blockquote>
  *
  * The format object class can defined in the "click.xml" configuration file
  * using the syntax:
- * <blockquote><pre>
- * &lt;format classname="com.mycorp.utils.Format"/&gt;</pre></blockquote>
+ * <div class="code">
+ * &lt;format classname="com.mycorp.utils.Format"/&gt;
+ * </div>
  *
  * The format class must provide a no-args public constructor . After a Page is
  * created its <a href="../Page.html#format">format</a> property is set.

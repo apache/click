@@ -15,11 +15,11 @@ public class MyPage extends Page {
 
     public void onInit() {
         ActionLink actionLink = new ActionLink("link");
-        actionLink.setListener(this, "<span class="green">onLinkClick</span>");
+        actionLink.setListener(this, "<span class="maroon">onLinkClick</span>");
         addControl(actionLink);
     }
     
-    public boolean <span class="green">onLinkClick</span>() {
+    public boolean <span class="maroon">onLinkClick</span>() {
         System.out.println("onLinkClick invoked at " + (new Date());
         return true;
     }
