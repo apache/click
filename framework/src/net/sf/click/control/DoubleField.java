@@ -52,10 +52,10 @@ package net.sf.click.control;
 public class DoubleField extends TextField {
 
     /** The maximum field value. */
-    private double maxvalue = Double.MAX_VALUE;
+    protected double maxvalue = Double.MAX_VALUE;
 
     /** The minimum field value. */
-    private double minvalue = Double.MIN_VALUE;
+    protected double minvalue = Double.MIN_VALUE;
 
     /**
      * Construct the Double field with the given label.

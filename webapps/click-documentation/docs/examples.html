@@ -40,8 +40,8 @@ get you up and running as quickly as possible. These web applications include:
 </blockquote>
 <br/>
 
-<h3>Building and Deploying</h3>
-To build and deploy the web applications:
+<h3>Deploying Examples</h3>
+To deploy the example web applications:
 <ol>
   <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
   a JDK installation (1.4 or later).<p/>
@@ -50,21 +50,37 @@ To build and deploy the web applications:
   an Ant installation (1.6 or later).<p/>
   </li>
   <li>Edit <tt>build.properties</tt> file and set the <tt>dir.appserver</tt>
-  property to point to your J2EE web container deployment directory. For example:
+  property to point to your J2EE web container deployment directory. Also
+  set to <tt>dir.tomcat</tt> property if you are using Tomcat. For example:
   
   <pre class="codeConfig">
   # App Server deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps </pre>
+  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps 
+  
+  # Tomcat home directory, for task: setup-tomcat-logging
+  dir.tomcat=C:/java/jakarta-tomcat-5.5.7 </pre>
   
   Note on Windows ensure you replace any \ directory path characters with / otherwise 
   Ant may not find the directory. <p>
   </li>
-  <li>Run the Ant build script targets:
+  <li>Run the <i>optional</i> Tomcat Ant target:
   <pre class="codeConfig">
-  ant build-framework build-webapps deploy-webapps </pre>
+  ant setup-tomcat-logging </pre>
   
-  These targets will build the Click framework, then build the example applications, 
-  and then copy the WAR files to your Application Servers deployment directory.
+  This will copy the log4j and commons-logging jars <tt>into the tomcat/common/lib</tt>
+  directory, and will copy a log4j.properties into <tt>tomcat/common/classes</tt>.
+  This will provide clearer logging messages than the standard tomcat install.
+  </li>
+  <li>Run the Ant target:
+  <pre class="codeConfig">
+  ant deploy-webapps </pre>
+  
+  This will copy the example application WAR files to your Application Servers 
+  deployment directory.
+  <p/>
+  The example application WAR files come pre-built with the Click distribution.
+  You can also build the examples yourself. See the <a href="building.html">Building</a>
+  topic for more details.
   </li>
 </ol>
 

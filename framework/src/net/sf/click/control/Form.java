@@ -286,11 +286,10 @@ import net.sf.click.util.ClickUtils;
  * WEB-INF/velocity.properties </pre>
  *
  * In your <tt>velocity.properties</tt> file add a reference to your custom
- * macro file <tt>macro.vm</tt>, also making sure you included the default
- * Click macro file <tt>click/VM_global_library.vm</tt>.  For example:
+ * macro file <tt>macro.vm</tt>.  For example:
  *
  * <pre class="codeConfig">
- * velocimacro.library=<span class="blue">macro.vm</span>,click/VM_global_library.vm </pre>
+ * velocimacro.library=<span class="blue">macro.vm</span> </pre>
  *
  * <p/>
  * See also the W3C HTML reference:

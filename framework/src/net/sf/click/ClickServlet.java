@@ -285,7 +285,7 @@ public class ClickServlet extends HttpServlet {
 
         } finally {
             if (page != null) {
-                page.onFinally();
+                page.onDestroy();
             }
 
             if (!clickApp.isProductionMode()) {
@@ -323,7 +323,7 @@ public class ClickServlet extends HttpServlet {
         // Useful to log exceptions which may occur when causing page is
         // being rendered, as they may not be displayed in error page.
         logger.debug("handleException:", exception);
-        
+
         if (exception instanceof ServletException) {
             Throwable cause = ((ServletException) exception).getRootCause();
             logger.debug("ServletException.rootCause", cause);
@@ -368,7 +368,7 @@ public class ClickServlet extends HttpServlet {
 
         } finally {
             if (errorPage != null) {
-                errorPage.onFinally();
+                errorPage.onDestroy();
             }
         }
     }

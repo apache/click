@@ -72,7 +72,7 @@ provide functionality:
   <li><a href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onGet()">onGet()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onPost()">onPost()</a></li>
-  <li><a href="click-api/net/sf/click/Page.html#onFinally()">onFinally()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onDestroy()">onDestroy()</a></li>
 </ul>
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
@@ -111,9 +111,9 @@ merges the template with the page model and writes out results to the HttpServle
 When the model is being merged with the template, any Controls in the model may be
 rendered using their <tt>toString()</tt> method.
 <p/>
-The final step in this sequence is invoking the Page's <tt>onFinally()</tt> method. This 
+The final step in this sequence is invoking the Page's <tt>onDestroy()</tt> method. This 
 method can be used to clean up resource associated with the Page before it is garbage
-collected. The <tt>onFinally()</tt> method is garanteed to be called even if an exception
+collected. The <tt>onDestroy()</tt> method is garanteed to be called even if an exception
 occurs in the previous steps.
 <p/>
 The execution sequence for POST requests is almost identical, except the <tt>onPost()</tt>
@@ -216,7 +216,7 @@ public boolean onViewClick() {
 Note how the <font color="red">customer</font> object is passed through to the template in the Page model. This
 approach of using the Page model is not available when you forward to another Page, as
 the first Page object is 
-"<a target="topic" href="click-api/net/sf/click/Page.html#onFinally()">finalized</a>"
+"<a target="topic" href="click-api/net/sf/click/Page.html#onDestroy()">destroyed</a>"
 before the second Page object is created and any model values would be lost.
 
 <a name="page-redirect"><h3>Redirect</h3></a>

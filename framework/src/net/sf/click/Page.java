@@ -44,7 +44,7 @@ import java.util.ResourceBundle;
  * <li>Call {@link #onGet()} for any additional processing.</li>
  * <li>Render the page merging the {@link #model} with the
  * Velocity template defined by the {@link #path}.</li>
- * <li>Call {@link #onFinally()} to clean up any resources.</li>
+ * <li>Call {@link #onDestroy()} to clean up any resources.</li>
  * </ol></blockquote>
  * For POST requests the default execution path is identical, except the
  * {@link #onPost()} method is called instead of {@link #onGet()}.
@@ -417,13 +417,13 @@ public class Page {
     }
 
     /**
-     * The on Finally request event handler. Subclasses may override this method
+     * The on Destroy request event handler. Subclasses may override this method
      * to add any resource clean up code.
      * <p/>
      * This method is guaranteed to be called before the Page object reference
      * goes out of scope and is available for garbage collection.
      */
-    public void onFinally() {
+    public void onDestroy() {
     }
 
 }

@@ -7,6 +7,7 @@
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <style type="text/css">
  th { text-align: left; }
+ td { vertical-align: top }
  </style>
 </head>
 <body>
@@ -23,16 +24,28 @@ To build and deploy the web applications:
   an Ant installation (1.6 or later).<p/>
   </li>
   <li>Edit <tt>build.properties</tt> file and set the <tt>dir.appserver</tt>
-  property to point to your J2EE web container deployment directory. For example:
+  property to point to your J2EE web container deployment directory. Also
+  set to <tt>dir.tomcat</tt> property if you are using Tomcat. For example:
   
   <pre class="codeConfig">
   # App Server deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps </pre>
+  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps 
+  
+  # Tomcat home directory, for task: setup-tomcat-logging
+  dir.tomcat=C:/java/jakarta-tomcat-5.5.7 </pre>
   
   Note on Windows ensure you replace any \ directory path characters with / otherwise 
   Ant may not find the directory. <p>
   </li>
-  <li>Run the Ant build script targets:
+  <li>Run the <i>optional</i> Tomcat Ant target:
+  <pre class="codeConfig">
+  ant setup-tomcat-logging </pre>
+  
+  This will copy the log4j and commons-logging jars <tt>into the tomcat/common/lib</tt>
+  directory, and will copy a log4j.properties into <tt>tomcat/common/classes</tt>.
+  This will provide clearer logging messages than the standard tomcat install.
+  </li>
+  <li>Run the Ant targets:
   <pre class="codeConfig">
   ant build-framework build-webapps deploy-webapps </pre>
   
@@ -69,14 +82,14 @@ The Click framework has the following runtime dependencies.
 <tr>
   <td>Velocity Engine</td>
   <td>1.5-dev</td>
-  <td>velocity-dep-1.5-dev.jar <span class="red">*</span></td>  
+  <td>velocity-dep-1.5-dev.jar and source<span class="red">*</span></td>  
   <td><a href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a></td>
   <td>Velocity Templating Framework</td>
 </tr>
 <tr>
   <td>Velocity Tools</td>
   <td>1.1</td>
-  <td>WebappLoader <span class="red">*</span></td>  
+  <td>WebappLoader ServletLogger source<span class="red">*</span></td>  
   <td><a href="http://jakarta.apache.org/velocity/tools/">Jakarta Velocity Tools</a></td>
   <td>Velocity Tools Utility Library</td>
 </tr>
@@ -86,13 +99,6 @@ The Click framework has the following runtime dependencies.
   <td>jdom-1.0.jar <span class="red">*</span></td>  
   <td><a href="http://www.jdom.org">JDOM.org</a></td>
   <td>Java DOM XML Library</td>
-</tr>
-<tr>
-  <td>Log4J Logging</td>
-  <td>1.2.9</td>
-  <td>log4j-1.2.9.jar <span class="red">*</span></td>  
-  <td><a href="http://logging.apache.org/log4j/">Apache Logging Log4j</a></td>
-  <td>Log4J Logging Library</td>
 </tr>
 <tr>
   <td>Common Language</td>
@@ -110,8 +116,8 @@ The Click framework has the following runtime dependencies.
 </tr>
 </table>
 
-<span class="red">*</span> : marked libraries are included in the 
-<tt>click-all-x.jar</tt> file.
+<span class="red">*</span> : marked libraries and source are included in the 
+<tt>click.jar</tt> file.
 
 </body>
 </html>

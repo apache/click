@@ -15,6 +15,8 @@ public class Exception extends Page {
      * @see Page#onInit()
      */
     public void onInit() {
+        System.err.println(toString() + " onInit() invoked");
+
         ActionLink brokenPageLink = new ActionLink("brokenPageLink");
         brokenPageLink.setListener(this, "onBrokenPageClick");
         addControl(brokenPageLink);
@@ -36,6 +38,13 @@ public class Exception extends Page {
 
     public boolean onExceptionClick() {
         throw new NullPointerException("Oh No...");
+    }
+
+    /**
+     * @see Page#onDestroy()
+     */
+    public void onDestroy() {
+        System.err.println(toString() + " onDestroy() invoked");
     }
 
 }
