@@ -85,9 +85,12 @@ import org.apache.velocity.util.SimplePool;
  */
 public class ClickServlet extends HttpServlet {
 
-    // --------------------------------------------------------------- Contants
+	// --------------------------------------------------------------- Contants
+	
+	private static final long serialVersionUID = 3835158375989262128L;
 
-    /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
+
+	/** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
     protected final static String CLICK_FORWARD = "click-forward";
 
     // ------------------------------------------------------ Instance Varables
