@@ -1,12 +1,6 @@
-#*
- * Add your global application macros to this file
- * 
- *#
-
-
-#*
- * Write a source inspection toolbar
- *#
+#**********************************
+ * Write source inspection toolbar
+ *********************************#
 
 #macro( writeSourceToolbar $java $html )
 

@@ -1,4 +1,8 @@
-function numberFilter(event) {
+/************************************************
+ * Number filter to only allow number key values
+ * to be entered.
+ ***********************************************/
+function doubleFilter(event) {
     var keyCode;
     if (document.all) {
         keyCode = event.keyCode; 
@@ -8,20 +12,69 @@ function numberFilter(event) {
         keyCode = event.which;   
     }
   
-    if (keyCode >= 65 && keyCode <= 90) {
+    if (keyCode >= 33 && keyCode <= 44) {
         return false;
-    } else if (keyCode >= 97 && keyCode <= 122) {
+        
+    } else if (keyCode == 47) {
         return false;
+        
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+        
     } else {  
         return true;     
     }
 }
 
-/* 
+function integerFilter(event) {
+    var keyCode;
+    if (document.all) {
+        keyCode = event.keyCode; 
+    } else if (document.getElementById) {
+        keyCode = event.which;   
+    } else if (document.layers) {
+        keyCode = event.which;   
+    }
+    
+    if (keyCode >= 33 && keyCode <= 44) {
+        return false;
+        
+    } else if (keyCode >= 46 && keyCode <= 47) {
+        return false;
+        
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+        
+    } else {  
+        return true;     
+    }
+}
+
+ /************************************************************
+ * Write JavaScript "setFocus" script to set the focus to the 
+ * first field in any defined page form.
+ * 
+ * Activate this script by calling it from the body onload:
+ *   <body onload="javascript:setFocus();">
+ ************************************************************/
+function setFocus() {
+    if (document.forms[0]) {
+        for (i = 0; i < document.forms[0].elements.length; i++) {
+            if (document.forms[0].elements[i].type != "hidden" &&
+                document.forms[0].elements[i].disabled != true) {
+
+                document.forms[0].elements[i].focus();
+                return;
+            }
+        }
+    }	
+}
+
+/******************
  *  Pop Up Calendar 
  *  By Paul Geerts
  *  11 Oct 2002
-*/
+ ******************/
 
 // is the calendar created?
 var calDiv = null;
