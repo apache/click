@@ -11,10 +11,11 @@
 <h1>Controls</h1>
 <p/>
 Click provides a rich set of Controls which support client side rendering and
-server side processing. This section discusses Clicks HTML Controls and covers
-the following topics:
+server side processing. This section covers the following topics:
 <ul>
-  <li><a href="#control-class">Classes</a> - control Java classes<p/>
+  <li><a href="#control-interface">Control Interface</a> - describes the Control interface<p/>
+  </li> 
+  <li><a href="#control-class">Control Classes</a> - control Java classes<p/>
   </li> 
   <li><a href="#event-callback">Event Callback</a> - event callback listener pattern<p/>
   </li> 
@@ -37,14 +38,47 @@ While this section provides an overview how Controls work please see the
 which provides extensive information and examples.
 Javadoc 
 
-<a name="control-class"><h2>Classes</h2></a>
+<a name="control-interface"><h2>Control Interface</h2></a>
+In Click Controls provide the server side components that process user input, and render their
+display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
+<p/>
+Controls handle the processing of user input with the 
+<a target="topic" href="click-api/net/sf/click/Control.html#onProcess()">onProcess</a>
+method and rendering their HTML display using the toString() method. The sequence
+diagram below illustrates a Control being processed and rendering its display.
+<p/>
+
+<img src="../images/control-post-sequence-diagram.png"/>
+<p class="diagram">
+<b>Figure 1. &nbsp; Post Sequence Diagram</b> 
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+
+In Click all control classes must extend the 
+<a target="topic" href="click-api/net/sf/click/Control.html">Control</a> interface.
+<p/>
+
+<p>
+<img src="../images/control-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 2. &nbsp; Control Interface Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+
+<a name="control-class"><h2>Control Classes</h2></a>
 
 The major <a target="topic" href="api/net/sf/click/control/package-summary.html">net.sf.click.control</a> package objects are: 
 <p/>
 
-<img src="../images/control-class-diagram.png"/><br/>
-<b>Class Diagram</b>
+<img src="../images/control-package-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 3. &nbsp; Package Class Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
 
+Key classes include:
 <ul>
 <li><a target="topic" href="click-api/net/sf/click/Control.html">Control</a>
 &nbsp; - &nbsp; todo

@@ -31,6 +31,15 @@ h4  {
   font-weight: bold;
 }
 
+li {
+  margin-bottom: 1em;
+}
+
+p.diagram {
+  margin-top: 0em;
+  margin-bottom: 1em;
+}
+
 .appnameText {
   font-weight: bold;
   letter-spacing: 0.2em; 
