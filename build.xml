@@ -7,18 +7,16 @@
    <property name="jar.codec" value="commons-codec-1.1.jar"/>
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.8.jar"/>
+   <property name="jar.log4j" value="log4j-1.2.9.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
    <property name="jar.velocity" value="velocity-dep-1.4.jar"/>   
    <property name="name" value="click"/>
    <property name="version" value="0.2"/>
 	
-   <!-- ReplaceTabs: replace tabs Task Definition. -->
    <taskdef name="linetrim" 
    	        classname="dev.LineTrimTask" 
    	        classpath="lib/dev.jar"/>
 							
-   <!-- ReplaceTabs: replace tabs Task Definition. -->
    <taskdef name="replacetabs" 
    	        classname="dev.ReplaceTabsTask" 
    	        classpath="lib/dev.jar"/>
@@ -38,7 +36,7 @@
    </target>
 
    <target name="build-framework" description="compile and build framework JARs">
-   	  <delete dir="${dir.deploy}" quiet="false"/>
+      <delete dir="${dir.deploy}" quiet="false"/>
       <mkdir dir="${dir.deploy}"/>
       <property name="dir.source" value="framework/src"/>
       <property name="dir.classes" value="framework/classes"/>
@@ -63,7 +61,7 @@
       <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>      
       <unzip src="${dir.lib}/${jar.log4j}" dest="${dir.classes}"/>      
       <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
-	  <jar destfile="${dir.deploy}/${name}-all-${version}.jar">
+	   <jar destfile="${dir.deploy}/${name}-all-${version}.jar">
          <fileset dir="${dir.classes}">
             <exclude name="org/apache/log4j/chainsaw/**"/>
             <exclude name="org/apache/velocity/anakia/**"/>
@@ -74,10 +72,10 @@
    </target>
 
    <target name="build-webapps" description="build web application WAR files">
-   	  <!--  "click-blank" WAR  -->
-	  <copy file="framework/src/click-control.properties" 
+      <!--  "click-blank" WAR  -->
+	   <copy file="framework/src/click-control.properties" 
 	  	    todir="webapps/click-blank/WEB-INF/src"/>
-	  <copy file="framework/src/click-control.properties" 
+	   <copy file="framework/src/click-control.properties" 
 	  	    todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
@@ -86,7 +84,7 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
- 	  <!--  "click-documentation" WAR  -->
+ 	   <!--  "click-documentation" WAR  -->
       <war destfile="${dir.deploy}/click-documentation.war"
            webxml="webapps/click-documentation/WEB-INF/web.xml">
          <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
@@ -94,10 +92,10 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
-	  <!--  "click-examples" WAR  -->
+	   <!--  "click-examples" WAR  -->
       <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
-	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
+	   <javac srcdir="webapps/click-examples/WEB-INF/src" 
              destdir="webapps/click-examples/WEB-INF/classes" 
              debug="true">
          <classpath> 

@@ -1,0 +1,9 @@
+<!DOCTYPE hibernate-configuration PUBLIC 
+	"-//Hibernate/Hibernate Configuration DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-configuration-2.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="show_sql">true</property>
+		<mapping resource="trackman/domain/package.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>

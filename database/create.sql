@@ -1,10 +1,10 @@
+
 CREATE SCHEMA Trackman;
 
 SET SCHEMA Trackman;
 
 CREATE USER tracker SET PASSWORD 'compass';
 
-DROP TABLE IF EXISTS Users;
 CREATE TABLE Users (
 	username	VARCHAR(12)		NOT NULL UNIQUE,
 	password	VARCHAR(12)		NOT NULL,
@@ -17,81 +17,167 @@ CREATE TABLE Users (
 	created_by	VARCHAR(30)		NOT NULL,
 	created_at	TIMESTAMP		NOT NULL,
 	updated_by	VARCHAR(30)		NOT NULL,
-	updated_at	TIMESTAMP		NOT NULL
+	updated_at	TIMESTAMP		NOT NULL,
+	CONSTRAINT users_pk PRIMARY KEY (username)
 );
 GRANT SELECT, INSERT, UPDATE ON Users TO tracker;
 
-DROP TABLE IF EXISTS Types;
-CREATE TABLE Types (
-	type_id		INTEGER			NOT NULL UNIQUE,
+CREATE TABLE User_Roles (
+	username	VARCHAR(12)		NOT NULL,
+	rolename	VARCHAR(12)		NOT NULL,
+	CONSTRAINT user_roles_pk PRIMARY KEY (username, rolename),
+	CONSTRAINT user_roles_fk1 FOREIGN KEY (username) REFERENCES Users (username)
+);
+GRANT SELECT, INSERT, UPDATE ON User_Roles TO tracker;
+
+CREATE TABLE Category (
+	category_id	INTEGER			NOT NULL UNIQUE,
+	sort_order	INTEGER			NOT NULL UNIQUE,
+	description	VARCHAR(30)		NOT NULL,
+	active		BOOLEAN			DEFAULT true NOT NULL,	
+	CONSTRAINT category_pk PRIMARY KEY (category_id)
+);
+GRANT SELECT, INSERT, UPDATE ON Category TO tracker;
+CREATE SEQUENCE category_seq;
+GRANT SELECT ON category_seq TO tracker;
+
+DROP TABLE IF EXISTS Priority;
+CREATE TABLE Priority (
+	priority_id	INTEGER			NOT NULL UNIQUE,
 	sort_order	INTEGER			NOT NULL UNIQUE,
 	description	VARCHAR(30)		NOT NULL,
 	active		BOOLEAN			DEFAULT true NOT NULL,
-	
-	CONSTRAINT types_pk PRIMARY KEY (type_id)
+	CONSTRAINT priority_pk PRIMARY KEY (priority_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Types TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Priority TO tracker;
+CREATE SEQUENCE priority_seq;
+GRANT SELECT ON priority_seq TO tracker;
 
-DROP TABLE IF EXISTS Sub_Types;
-CREATE TABLE Sub_Types (
-	type_id		INTEGER			NOT NULL,
-	sub_type_id	INTEGER			NOT NULL,
-	sort_order	INTEGER			NOT NULL,
+CREATE TABLE Severity (
+	severity_id	INTEGER			NOT NULL UNIQUE,
+	sort_order	INTEGER			NOT NULL UNIQUE,
 	description	VARCHAR(30)		NOT NULL,
 	active		BOOLEAN			DEFAULT true NOT NULL,
-	
-	CONSTRAINT sub_types_pk PRIMARY KEY (type_id, sub_type_id),
-	CONSTRAINT sub_types_fk FOREIGN KEY (type_id) REFERENCES Types (type_id)
+	CONSTRAINT severity_pk PRIMARY KEY (severity_id)
 );
-GRANT SELECT, INSERT, UPDATE ON Sub_Types TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Severity TO tracker;
+CREATE SEQUENCE severity_seq;
+GRANT SELECT ON severity_seq TO tracker;
 
-DROP TABLE IF EXISTS Issues;
+CREATE TABLE Status (
+	status_id	INTEGER			NOT NULL UNIQUE,
+	sort_order	INTEGER			NOT NULL UNIQUE,
+	description	VARCHAR(30)		NOT NULL,
+	active		BOOLEAN			DEFAULT true NOT NULL,
+	CONSTRAINT status_pk PRIMARY KEY (status_id)
+);
+GRANT SELECT, INSERT, UPDATE ON Status TO tracker;
+CREATE SEQUENCE status_seq;
+GRANT SELECT ON status_seq TO tracker;
+
+CREATE TABLE Version (
+	version_id	INTEGER			NOT NULL UNIQUE,
+	sort_order	INTEGER			NOT NULL UNIQUE,
+	description	VARCHAR(30)		NOT NULL UNIQUE,
+	active		BOOLEAN			DEFAULT true NOT NULL,
+	CONSTRAINT version_pk PRIMARY KEY (version_id)
+);
+GRANT SELECT, INSERT, UPDATE ON Version TO tracker;
+CREATE SEQUENCE version_seq;
+GRANT SELECT ON version_seq TO tracker;
+
 CREATE TABLE Issues (
 	issue_id 	INTEGER 		NOT NULL UNIQUE,
-	status 		INTEGER 		DEFAULT 0 NOT NULL,
-	type_id		INTEGER			DEFAULT 0 NOT NULL,
-	sub_type	INTEGER			DEFAULT 0 NOT NULL,
+	status_id	INTEGER 		DEFAULT 0 NOT NULL,
+	severity_id	INTEGER			DEFAULT 0 NOT NULL,
+	priority_id	INTEGER			DEFAULT 0 NOT NULL,
+	category_id	INTEGER			DEFAULT 0 NOT NULL,
+	version_id	INTEGER			DEFAULT 0 NOT NULL,
 	summary		VARCHAR(80)		NOT NULL,
 	description	VARCHAR(1000)	NULL,
-	created_by	VARCHAR(30)		NOT NULL,
+	created_by	VARCHAR(12)		NOT NULL,
 	created_at	TIMESTAMP		NOT NULL,
-	updated_by	VARCHAR(30)		NOT NULL,
+	updated_by	VARCHAR(12)		NOT NULL,
 	updated_at	TIMESTAMP		NOT NULL,	
-	
 	CONSTRAINT issues_pk PRIMARY KEY (issue_id),
-	CONSTRAINT issues_fk1 FOREIGN KEY (type_id) REFERENCES Types (type_id),
-	CONSTRAINT issues_fk2 FOREIGN KEY (created_by) REFERENCES Users (username),
-	CONSTRAINT issues_fk3 FOREIGN KEY (updated_by) REFERENCES Users (username)
+	CONSTRAINT issues_fk1 FOREIGN KEY (status_id) REFERENCES Status (status_id),
+	CONSTRAINT issues_fk2 FOREIGN KEY (severity_id) REFERENCES Severity (severity_id),
+	CONSTRAINT issues_fk3 FOREIGN KEY (priority_id) REFERENCES Priority (priority_id),
+	CONSTRAINT issues_fk4 FOREIGN KEY (category_id) REFERENCES Category (category_id),
+	CONSTRAINT issues_fk5 FOREIGN KEY (version_id) REFERENCES Version (version_id),
+	CONSTRAINT issues_fk6 FOREIGN KEY (created_by) REFERENCES Users (username),
+	CONSTRAINT issues_fk7 FOREIGN KEY (updated_by) REFERENCES Users (username)
 );
 GRANT SELECT, INSERT, UPDATE ON Issues TO tracker;
+CREATE SEQUENCE issues_seq;
+GRANT SELECT ON issues_seq TO tracker;
 
-DROP TABLE IF EXISTS Resolutions;
-CREATE TABLE Resolutions (
-	resolution_id	INTEGER			NOT NULL UNIQUE,
-	issue_id		INTEGER			NOT NULL,
-	description		VARCHAR(1000)	NOT NULL,
-	created_by		VARCHAR(30)		NOT NULL,
-	created_at		TIMESTAMP		NOT NULL,	
-	
-	CONSTRAINT resolutions_pk PRIMARY KEY (resolution_id),
-	CONSTRAINT resolutions_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
-	CONSTRAINT resolutions_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
+CREATE TABLE Changes (
+	change_id	INTEGER			NOT NULL UNIQUE,
+	issue_id	INTEGER			NOT NULL,
+	description	VARCHAR(1000)	NOT NULL,
+	created_by	VARCHAR(12)		NOT NULL,
+	created_at	TIMESTAMP		NOT NULL,	
+	CONSTRAINT changes_pk PRIMARY KEY (change_id),
+	CONSTRAINT changes_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
+	CONSTRAINT changes_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
 );
-GRANT SELECT, INSERT, UPDATE ON Resolutions TO tracker;
+GRANT SELECT, INSERT, UPDATE ON Changes TO tracker;
+CREATE SEQUENCE changes_seq;
+GRANT SELECT ON changes_seq TO tracker;
 
-DROP TABLE IF EXISTS Notes;
 CREATE TABLE Notes (
 	note_id		INTEGER			NOT NULL UNIQUE,
 	issue_id	INTEGER			NOT NULL,
 	description	VARCHAR(1000)	NOT NULL,
-	created_by	VARCHAR(30)		NOT NULL,
+	created_by	VARCHAR(12)		NOT NULL,
 	created_at	TIMESTAMP		NOT NULL,	
-	
 	CONSTRAINT notes_pk PRIMARY KEY (note_id),
 	CONSTRAINT notes_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
 	CONSTRAINT notes_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
 );
 GRANT SELECT, INSERT, UPDATE ON Notes TO tracker;
+CREATE SEQUENCE notes_seq;
+GRANT SELECT ON notes_seq TO tracker;
+
+CREATE TABLE Resolutions (
+	resolution_id	INTEGER			NOT NULL UNIQUE,
+	issue_id		INTEGER			NOT NULL,
+	description		VARCHAR(1000)	NOT NULL,
+	created_by		VARCHAR(12)		NOT NULL,
+	created_at		TIMESTAMP		NOT NULL,	
+	CONSTRAINT resolutions_pk PRIMARY KEY (resolution_id),
+	CONSTRAINT resolutions_fk1 FOREIGN KEY (issue_id) REFERENCES Issues (issue_id),
+	CONSTRAINT resolutions_fk2 FOREIGN KEY (created_by) REFERENCES Users (username)
+);
+GRANT SELECT, INSERT, UPDATE ON Resolutions TO tracker;
+CREATE SEQUENCE resolutions_seq;
+GRANT SELECT ON resolutions_seq TO tracker;
+
+
+INSERT INTO Status (status_id, sort_order, description, active) values (0, 0, 'Open', true);
+INSERT INTO Status (status_id, sort_order, description, active) values (1, 1, 'Assigned', true);
+INSERT INTO Status (status_id, sort_order, description, active) values (2, 2, 'Resolved', true);
+INSERT INTO Status (status_id, sort_order, description, active) values (3, 3, 'Closed', true);
+INSERT INTO Status (status_id, sort_order, description, active) values (4, 4, 'Duplicate', true);
+
+INSERT INTO Severity (severity_id, sort_order, description, active) values (0, 0, '', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (1, 1, 'Major', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (2, 2, 'Moderate', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (3, 3, 'Minor', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (4, 4, 'Blocking', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (5, 5, 'Tweak', true);
+INSERT INTO Severity (severity_id, sort_order, description, active) values (6, 6, 'Note', true);
+
+INSERT INTO Priority (priority_id, sort_order, description, active) values (0, 0, '', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) values (1, 1, 'High', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) values (2, 2, 'Medium', true);
+INSERT INTO Priority (priority_id, sort_order, description, active) values (3, 3, 'Low', true);
+
+INSERT INTO Category (category_id, sort_order, description, active) values (0, 0, '', true);
+
+INSERT INTO Version (version_id, sort_order, description, active) values (0, 0, '', true);
+
 
 
 
