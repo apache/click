@@ -35,6 +35,7 @@ public class BigForm extends Page {
         textField.setMinLength(6);
         textField.setMaxLength(12);
         textField.setTitle("Your username must be between 6 and 12 characters");
+        textField.setFocus(true);
         form.add(textField);
         
         PasswordField passwordField = new PasswordField("Password");

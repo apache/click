@@ -10,7 +10,7 @@
 <a href="$context/examples/source-viewer.htm?filename=WEB-INF/web.xml">Web</a>,
 <a href="$context/examples/examples.html">Examples</a>
 
-<hr/>
-<br/>
+<hr>
+<br>
 
 #end

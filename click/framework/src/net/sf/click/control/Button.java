@@ -136,7 +136,7 @@ public class Button extends Field {
         if (disabled) {
             buffer.append(getDisabled());
         }
-        buffer.append("/>");
+        buffer.append(">");
 
         return buffer.toString();
     }

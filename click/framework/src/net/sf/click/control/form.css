@@ -13,10 +13,7 @@ select.error {
 span.error {
 	color: red;
 }
-label.required {
-	font-weight: bold;
-}
 table.form {
 	border: 0;
-	vertical-align: baseline; 
+	vertical-align: baseline;
 }

@@ -66,9 +66,6 @@ public class TextArea extends Field {
     /** The number of text area rows. The default number of rows is three. */
     protected int rows = 3;
 
-    /** The text area wrap [off|virtual|physical|soft|hard]. */
-    protected String wrap = "virtual";
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -164,25 +161,7 @@ public class TextArea extends Field {
     public void setRows(int rows) {
         this.rows = rows;
     }
-    
-    /**
-     * Return the text area wrap style [off|virtual|physical|soft|hard].
-     *
-     * @return the text area wrap style
-     */
-    public String getWrap() {
-        return wrap;
-    }
 
-    /**
-     * Set the text area wrap style [off|virtual|physical|soft|hard]
-     *
-     * @param wrap the text area wrap
-     */
-    public void setWrap(String wrap) {
-        this.wrap = wrap;
-    }
-    
     /**
      * Process the TextArea submission. If the text value passes the validation
      * constraints and a Control listener is defined then the listener
@@ -249,21 +228,19 @@ public class TextArea extends Field {
         buffer.append(getRows());
         buffer.append("' cols='");
         buffer.append(getCols());
-        buffer.append("' wrap='");
-        buffer.append(getWrap());
-        buffer.append("' ");
+        buffer.append("'");
         if (getTitle() != null) {
-            buffer.append("title='");
+            buffer.append(" title='");
             buffer.append(getTitle());
-            buffer.append("' ");
+            buffer.append("'");
         }
 
         ClickUtils.renderAttributes(attributes, buffer);
 
         if (!isValid()) {
-            buffer.append("class='error' ");
+            buffer.append(" class='error'");
         } else if (isDisabled()) {
-            buffer.append("class='disabled' ");
+            buffer.append(" class='disabled'");
         }
         buffer.append(getDisabled());
         buffer.append(">");

@@ -221,7 +221,7 @@ public class HiddenField extends Field {
         } else {
             buffer.append(getValue());
         }
-        buffer.append("'/>");
+        buffer.append("'>");
 
         return buffer.toString();
     }

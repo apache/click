@@ -24,6 +24,7 @@ import java.util.TreeMap;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.sf.click.ApplicationException;
 import net.sf.click.Page;
@@ -264,6 +265,17 @@ public class ErrorPage extends Page {
             requestHeaders.put(name, request.getHeader(name));
         }
         addModel("requestHeaders", requestHeaders);
+        
+        TreeMap sessionAttributes = new TreeMap();
+        if (getPage().getContext().hasSession()) {
+            HttpSession session = getPage().getContext().getSession();
+            attributeNames = session.getAttributeNames();
+            while (attributeNames.hasMoreElements()) {
+                String name = attributeNames.nextElement().toString();
+                sessionAttributes.put(name, session.getAttribute(name));
+            }   
+        }
+        addModel("sessionAttributes", sessionAttributes);
     }
     
     // ------------------------------------------------------ Protected Methods

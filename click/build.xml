@@ -158,7 +158,7 @@
    </target>   
 
    <target name="deploy-webapps" description="deploy web apps to app server"> 
-      <copy file="${dir.deploy}/click.war" todir="${dir.appserver}"/>
+      <copy file="${dir.deploy}/click.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 	
    <!-- i-mode development -->

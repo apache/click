@@ -50,7 +50,7 @@ function integerFilter(event) {
     }
 }
 
- /************************************************************
+/************************************************************
  * Write JavaScript "setFocus" script to set the focus to the 
  * first field in any defined page form.
  * 

@@ -62,18 +62,6 @@ public class Context {
     }
 
     /**
-     * Return the user's HttpSession, creating one if neccessary.
-     *
-     * @return the user's HttpSession, creating one if neccessary.
-     */
-    public HttpSession getSession() {
-        if (session == null) {
-            session = request.getSession();
-        }
-        return session;
-    }
-
-    /**
      * Returns the servlet request.
      *
      * @return HttpServletRequest
@@ -107,6 +95,18 @@ public class Context {
      */
     public ServletContext getServletContext() {
         return context;
+    }
+    
+    /**
+     * Return the user's HttpSession, creating one if neccessary.
+     *
+     * @return the user's HttpSession, creating one if neccessary.
+     */
+    public HttpSession getSession() {
+        if (session == null) {
+            session = request.getSession();
+        }
+        return session;
     }
     
     /**
@@ -174,21 +174,15 @@ public class Context {
      * @return the named session attribute, or null if not defined
      */
     public Object getSessionAttribute(String name) {
-        if (session == null) {
-            session = request.getSession(false);
-            
-            if (session != null) {
-                return session.getAttribute(name);
-            } else {
-                return null;
-            }
+        if (hasSession()) {
+            return getSession().getAttribute(name);
         } else {
-            return session.getAttribute(name);
+            return null;
         }
     }
     
     /**
-     * This method will set the named object in the HTTP session.
+     * This method will set the named object in the HttpSession.
      * <p/>
      * This method will create a session if one does not alerady exist.
      * 
@@ -197,5 +191,14 @@ public class Context {
      */
     public void setSessionAttribute(String name, Object value) {
         getSession().setAttribute(name, value);
+    }
+    
+    /**
+     * Return true if a HttpSession exists, or false otherwise.
+     * 
+     * @return true if a HttpSession exists, or false otherwise
+     */
+    public boolean hasSession() {
+        return (request.getSession(false) != null);
     }
 }
