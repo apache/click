@@ -557,6 +557,15 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
         
+        pop = context.put("response", page.getContext().getResponse());
+        if (pop != null) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"response\". The page model object "
+                         + pop + " has been replaced with the response object";
+            logger.warn(msg);
+        }
+        
         SessionMap sessionMap = new SessionMap(request.getSession(false));
         pop = context.put("session", sessionMap);
         if (pop != null) {
