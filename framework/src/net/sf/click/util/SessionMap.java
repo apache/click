@@ -32,14 +32,14 @@ import javax.servlet.http.HttpSession;
  * For example suppose we have a User object in the session with the
  * attribute name "user" when a user is logged on.  We can display the users
  * name in the page when the are logged onto the system.
- * 
+ *
  * <pre class="codeHtml">
  * <span class="red">#if</span> (<span class="blue">$session</span>.user)
  *   <span class="blue">$session</span>.user.fullname you are logged on.
  * <span class="red">#else</span>
  *   You are not logged on.
  * <span class="red">#end</span> </pre>
- * 
+ *
  * The ClickServlet adds a SessionMap instance to the Velocity Context before
  * it merged with the page template.
  *

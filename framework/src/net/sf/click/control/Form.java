@@ -33,7 +33,7 @@ import net.sf.click.util.ClickUtils;
  * <table class='htmlHeader' cellspacing='12'>
  * <tr>
  * <td>
- * 
+ *
  * <table class='fields'>
  * <tr>
  * <td align='left'><label>Username</label><span class="red">*</span></td>
@@ -49,7 +49,7 @@ import net.sf.click.util.ClickUtils;
  * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/>
  * </td></tr>
  * </table>
- * 
+ *
  * </td>
  * </tr>
  * </table>
@@ -105,7 +105,7 @@ import net.sf.click.util.ClickUtils;
  *                 setRedirect("home.htm");
  *             }
  *             else {
- *                  form.setError(getMessage("authentication-error")); 
+ *                  form.setError(getMessage("authentication-error"));
  *             }
  *         }
  *         return true;
@@ -126,12 +126,12 @@ import net.sf.click.util.ClickUtils;
  * If a Form has been posted and processed, if it has an {@link #error} defined or
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
- * 
+ *
  * <a name="auto-layout"><h4>Auto Layout</h4></a>
- * 
+ *
  * If you include a form variable in your template the form will be
  * automatically layed out and rendered.
- * 
+ *
  * <ul style="margin-top: 0.5em;">
  *  <li>form.css</li>
  *  <li>fieldAlign</li>
@@ -140,9 +140,9 @@ import net.sf.click.util.ClickUtils;
  *  <li>errorPosition</li>
  * </ul>
  *
- * 
+ *
  * <a name="manual-layout"><h4>Manual Layout</h4></a>
- * 
+ *
  * You can also manually layout the Form in the page template specifying
  * the fields using the named field notation:
  *
@@ -152,27 +152,27 @@ import net.sf.click.util.ClickUtils;
  * Whenever including your own Form markup in a page template or Velocity macro
  * always specify:
  * <ul style="margin-top: 0.5em;">
- *  <li><span class="maroon">method</span> 
+ *  <li><span class="maroon">method</span>
  *      - the form submission method <tt>["POST" | "GET"]</tt></li>
- *  <li><span class="maroon">name</span> 
+ *  <li><span class="maroon">name</span>
  *      - the name of your form, important when using JavaScript</li>
- *  <li><span class="maroon">action</span> 
+ *  <li><span class="maroon">action</span>
  *      - directs the Page where the form should be submitted to</li>
- *  <li><span class="maroon">form_name</span> 
+ *  <li><span class="maroon">form_name</span>
  *      - include a hidden field which specifies the {@link #name} of the Form </li>
  * </ul>
  * The hidden field is used by Click to determine which form was posted on
- * a page which may contain multiple forms. 
+ * a page which may contain multiple forms.
  * <p/>
  * An example of a manually layed out Login form is provided below:
  *
  * <pre class="codeHtml">
  * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>&gt;
  *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
- *   
+ *
  *   &lt;table style="margin: 1em;"&gt;
- * 
- *     <span class="red">#if</span> (<span class="blue">$form.error</span>) 
+ *
+ *     <span class="red">#if</span> (<span class="blue">$form.error</span>)
  *     &lt;tr&gt;
  *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
  *     &lt;/tr&gt;
@@ -185,7 +185,7 @@ import net.sf.click.util.ClickUtils;
  *       &lt;/tr&gt;
  *       <span class="red">#end</span>
  *     <span class="red">#end</span>
- * 
+ *
  *     &lt;tr&gt;
  *       &lt;td&gt; Username: &lt;/td&gt;
  *       &lt;td&gt; <span class="blue">$form.fields.usernameField</span> &lt;/td&gt;
@@ -193,37 +193,37 @@ import net.sf.click.util.ClickUtils;
  *     &lt;tr&gt;
  *       &lt;td&gt; Password: &lt;/td&gt;
  *       &lt;td&gt; <span class="blue">$form.fields.passwordField</span> &lt;/td&gt;
- *     &lt;/tr&gt; 
- * 
+ *     &lt;/tr&gt;
+ *
  *     &lt;tr&gt;
- *       &lt;td&gt; 
- *         <span class="blue">$form.fields.okSubmit</span> 
+ *       &lt;td&gt;
+ *         <span class="blue">$form.fields.okSubmit</span>
  *         <span class="blue">$form.fields.cancelSubmit</span>
  *       &lt;/td&gt;
  *     &lt;/tr&gt;
- * 
+ *
  *   &lt;/table&gt;
- * 
+ *
  * &lt;form&gt; </pre>
- * 
- * As you can see in this example most of the code and markup is generic and 
+ *
+ * As you can see in this example most of the code and markup is generic and
  * could be reused. This is where Velocity Macros come in.
- * 
+ *
  * <h4>Velocity Macros</h4>
- * 
- * Velocity Macros 
+ *
+ * Velocity Macros
  * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
- * are a great way to encapsulate customized forms. 
+ * are a great way to encapsulate customized forms.
  * <p/>
- * To create a generic form layout you can use the Form {@link #fieldList} and 
+ * To create a generic form layout you can use the Form {@link #fieldList} and
  * {@link #buttonList} properties within a Velocity macro.
  * <p/>
- * The example below provides a generic <span class="green">writeForm()</span> 
- * macro which you could use through out an application. This Velocity macro code 
+ * The example below provides a generic <span class="green">writeForm()</span>
+ * macro which you could use through out an application. This Velocity macro code
  * would be contained in a macro file, e.g. <tt>macro.vm</tt>.
  *
  * <pre class="codeHtml"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
- * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] ) 
+ * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
  *
  * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$request.requestURI</span>&gt;
  *
@@ -233,7 +233,7 @@ import net.sf.click.util.ClickUtils;
  *
  * &lt;table width="100%"&gt;
  *
- * <span class="red">#if</span> (<span class="blue">$form.error</span>) 
+ * <span class="red">#if</span> (<span class="blue">$form.error</span>)
  *   &lt;tr&gt;
  *     &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
  *   &lt;/tr&gt;
@@ -246,13 +246,13 @@ import net.sf.click.util.ClickUtils;
  *       &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
  *     &lt;/tr&gt;
  *     <span class="red">#end</span>
- * 
+ *
  *   &lt;tr&gt;
  *     &lt;td&gt; <span class="blue">$field.label</span>: &lt;/td&gt;&lt;td&gt; <span class="blue">$field</span> &lt;/td&gt;
  *   &lt;/tr&gt;
  *   <span class="red">#end</span>
  * <span class="red">#end</span>
- * 
+ *
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
  *    <span class="red">#foreach</span> (<span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span>)
@@ -260,38 +260,38 @@ import net.sf.click.util.ClickUtils;
  *    <span class="red">#end</span>
  *    &lt;/td&gt;
  *  &lt;/tr&gt;
- * 
+ *
  * &lt;/table&gt;
  * &lt;/form&gt;
- * 
+ *
  * <span class="red">#end</span> </pre>
- * 
+ *
  * You would then call this macro in your Page template passing it your
  * <span class="blue">form</span> object:
- * 
+ *
  * <pre class="codeHtml"> <span class="red">#</span><span class="green">writeForm</span>(<span class="blue">$form</span>) </pre>
- * 
+ *
  * At render time Velocity will execute the macro using the given form and render
  * the results to the response output stream.
- * 
+ *
  * <h4>Configuring Macros</h4>
- * 
+ *
  * To configure your application pick up your velocimacro file
  * (e.g. <tt>macro.vm</tt>) you will need to include a <tt>velocity.properties</tt> file
  * in your applications <tt>WEB-INF</tt> directory. See configuration topic
  * <a target="topic" href="../../../../../configuration.html#velocity-properties">
  * Velocity Properties</a> for more info.
- * 
+ *
  * <pre class="codeConfig">
  * WEB-INF/velocity.properties </pre>
- * 
+ *
  * In your <tt>velocity.properties</tt> file add a reference to your custom
- * macro file <tt>macro.vm</tt>, also making sure you included the default 
+ * macro file <tt>macro.vm</tt>, also making sure you included the default
  * Click macro file <tt>click/VM_global_library.vm</tt>.  For example:
- * 
+ *
  * <pre class="codeConfig">
  * velocimacro.library=<span class="blue">macro.vm</span>,click/VM_global_library.vm </pre>
- * 
+ *
  * <p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
@@ -417,7 +417,7 @@ public class Form implements Control {
     public Form(String name, Context context) {
         setName(name);
         setContext(context);
-        
+
         HiddenField nameField = new HiddenField(FORM_NAME, String.class);
         nameField.setValue(name);
         add(nameField);

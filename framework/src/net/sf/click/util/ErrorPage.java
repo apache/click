@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 import net.sf.click.Page;
 
 import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.log4j.Logger;
 import org.apache.velocity.exception.ParseErrorException;
 
 /**
@@ -37,12 +36,12 @@ import org.apache.velocity.exception.ParseErrorException;
  * unexpected Exceptions. When the application is not in "production" mode the
  * ErrorPage will provide diagnostic information.
  * <p/>
- * The ErrorPage template "<span class="blue">click/error.htm</span>" can be 
+ * The ErrorPage template "<span class="blue">click/error.htm</span>" can be
  * customized to your needs.
  * <p/>
  * Applications which require additional error handling logic must subclass
  * the ErrorPage. For example to rollback a Connection if an SQLException occured:
- * 
+ *
  * <pre class="codeJava">
  * package com.mycorp.util;
  *
@@ -192,7 +191,7 @@ public class ErrorPage extends Page {
      * <p/>
      * The following values are added to ErrorPage model for rendering by the
      * error page template:
-     * 
+     *
      * <ul style="margin-top: 0.5em;">
      * <li><tt>errorClass</tt> &nbsp; - &nbsp; the classname of the exception</li>
      * <li><tt>errorMessage</tt> &nbsp; - &nbsp; the exception error message</li>
@@ -437,7 +436,7 @@ public class ErrorPage extends Page {
                     lineNumber = Integer.parseInt(token.trim());
                     break;
                 } catch (NumberFormatException nfe) {
-                    Logger.getLogger(getClass()).warn
+                    getContext().getServletContext().log
                         ("Could not parse line number", nfe);
                     break;
                 }

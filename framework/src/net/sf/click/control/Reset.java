@@ -30,7 +30,7 @@ package net.sf.click.control;
  * <p/>
  * The example below illustrates adding a Reset button to a Form, and shows
  * how it will be rendered as HTML.
- * 
+ *
  * <pre class="codeJava">
  * Reset reset = new Reset("Reset");
  * reset.setTitle("Undo changes");

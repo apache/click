@@ -239,7 +239,7 @@ public class Page {
      * Pages can define text properties files to store localized messages. These
      * properties files must be stored on the Page class path with a name
      * matching the class name. For example:
-     * 
+     *
      * <pre class="codeConfig">
      *  // The page classname
      *  com.mycorp.pages.Login

@@ -36,7 +36,7 @@ public class VelocityMacro extends Page {
     public void onInit() {
         form = new Form("form", getContext());
         addControl(form);
-        
+
         nameField = new TextField("Name");
         nameField.setMinLength(5);
         nameField.setRequired(true);
@@ -68,7 +68,7 @@ public class VelocityMacro extends Page {
         cancelButton = new Submit(" Cancel ");
         cancelButton.setListener(this, "onCancelClick");
         form.add(cancelButton);
-        
+
         form.add(new Reset("Reset"));
     }
 

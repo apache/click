@@ -32,12 +32,12 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.util.ClickUtils;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.LogSystem;
+import org.apache.velocity.tools.view.servlet.ServletLogger;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -125,7 +125,7 @@ class ClickApp implements EntityResolver {
     private Class formatClass;
 
     /** The application logger. */
-    private final Logger logger = Logger.getLogger(ClickApp.class);
+    private final Logger logger;
 
     /** The application mode: [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG ] */
     private int mode;
@@ -135,7 +135,10 @@ class ClickApp implements EntityResolver {
 
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
-    
+
+    /** The ServletContext instance. */
+    private final ServletContext servletContext;
+
     /** The VelocityEngine instance. */
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
@@ -147,7 +150,13 @@ class ClickApp implements EntityResolver {
      */
     ClickApp(ServletContext context) throws Exception {
 
-        InputStream inputStream = context.getResourceAsStream(DEFAULT_APP_CONFIG);
+        servletContext = context;
+
+        logger = new Logger(servletContext);
+
+        InputStream inputStream =
+            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+
         if (inputStream == null) {
             throw new RuntimeException
                 ("could not find click app configuration file: "
@@ -164,16 +173,6 @@ class ClickApp implements EntityResolver {
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
-            
-            // Set ServletContext instance for WebappLoader
-            velocityEngine.setApplicationAttribute
-                (ServletContext.class.getName(), context);
-            
-            // Load velocity properties
-            Properties properties = getVelocityProperties(context);
-        
-            // Initialize VelocityEngine
-            velocityEngine.init(properties);
 
             // Load the format class
             loadFormatClass(rootElm);
@@ -185,7 +184,25 @@ class ClickApp implements EntityResolver {
             loadDefaultPages();
 
             // Deploy the application files if not present
-            deployFiles(context);
+            deployFiles();
+
+            // Set ServletContext instance for WebappLoader
+            velocityEngine.setApplicationAttribute
+                (ServletContext.class.getName(), servletContext);
+
+            // Load velocity properties
+            Properties properties = getVelocityProperties(servletContext);
+
+            // Initialize VelocityEngine
+            velocityEngine.init(properties);
+
+            // Turn down the Velocity logging level
+            if (mode == DEBUG) {
+                String loggerKey = ServletLogger.class.getName();
+                ServletLogger servletLogger = (ServletLogger)
+                    velocityEngine.getApplicationAttribute(loggerKey);
+                servletLogger.setLogLevel(LogSystem.WARN_ID);
+            }
 
             // Cache page templates.
             loadTemplates();
@@ -218,13 +235,21 @@ class ClickApp implements EntityResolver {
     // -------------------------------------------------------- Package Methods
 
     /**
-     * Return the application mode <tt>[ PRODUCTION | PROFILE | DEVELOPMENT |
-     * DEBUG ]</tt>.
+     * Return the application logger.
      *
-     * @return the application mode
+     * @return the application logger.
      */
-    int getMode() {
-        return mode;
+    Logger getLog() {
+        return logger;
+    }
+
+    /**
+     * Return true if the application is in PRODUCTION mode.
+     *
+     * @return true if the application is in PRODUCTION mode
+     */
+    boolean isProductionMode() {
+        return (mode == PRODUCTION);
     }
 
     /**
@@ -335,20 +360,15 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Private Methods
 
-    private void deployFiles(ServletContext context) {
-        final String path = context.getRealPath("/");
+    private void deployFiles() {
+        final String path = servletContext.getRealPath("/");
 
         if (path != null) {
-            final String webInfPath =
-                path + File.separator + "WEB-INF" + File.separator;
 
-            // Deploy DTD file
-            deployFile(DTD_FILE_PATH, webInfPath, DTD_FILE_NAME);
-
-            final String clickPath = path + File.separator + CLICK_PATH;
+            final String clickTarget = path + File.separator + CLICK_PATH;
 
             // Create files deployment directory
-            File clickDir = new File(clickPath);
+            File clickDir = new File(clickTarget);
             if (!clickDir.exists()) {
                 if (!clickDir.mkdir()) {
                     logger.error
@@ -356,34 +376,42 @@ class ClickApp implements EntityResolver {
                 }
             }
 
-            // Deploy page not found file
-            deployFile("/net/sf/click/not-found.htm", clickPath, "not-found.htm");
+            // Deploy calendar image file
+            deployFile("/net/sf/click/control/calendar.gif", clickTarget,
+                       CLICK_PATH, "calendar.gif");
 
             // Deploy error page file
-            deployFile("/net/sf/click/util/error.htm", clickPath, "error.htm");
+            deployFile("/net/sf/click/util/error.htm", clickTarget,
+                       CLICK_PATH, "error.htm");
 
             // Deploy CSS styles file
-            deployFile("/net/sf/click/control/form.css", clickPath, "form.css");
+            deployFile("/net/sf/click/control/form.css", clickTarget,
+                       CLICK_PATH, "form.css");
 
             // Deploy JavaScript file
-            deployFile("/net/sf/click/control/form.js", clickPath, "form.js");
+            deployFile("/net/sf/click/control/form.js", clickTarget,
+                       CLICK_PATH, "form.js");
 
-            // Deploy calendar image file
-            deployFile("/net/sf/click/control/calendar.gif", clickPath, "calendar.gif");
+            // Deploy page not found file
+            deployFile("/net/sf/click/not-found.htm", clickTarget,
+                       CLICK_PATH, "not-found.htm");
 
             // Deploy global VM file
-            deployFile("/net/sf/click/control/VM_global_library.vm", clickPath, "VM_global_library.vm");
+            deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
+                       CLICK_PATH, "VM_global_library.vm");
+
+            final String webInfTarget =
+                path + File.separator + "WEB-INF" + File.separator;
+
+            // Deploy DTD file
+            deployFile(DTD_FILE_PATH, webInfTarget, "WEB-INF", DTD_FILE_NAME);
 
         } else {
-            String message =
-                "Servlet real path is null. Could not deploy files to "
-                + CLICK_PATH;
-
-            logger.error(message);
+            logger.error("Servlet real path is null. Could not deploy files");
         }
     }
 
-    private void deployFile(String resource, String path, String filename) {
+    private void deployFile(String resource, String path, String dir, String filename) {
 
         String destination = path;
 
@@ -414,7 +442,11 @@ class ClickApp implements EntityResolver {
                         }
                         fos.write(buffer, 0, length);
                     }
-                    logger.debug("deployed " + filename);
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug
+                            ("deployed " + dir + File.separator + filename);
+                    }
 
                 } catch (IOException ioe) {
                     logger.warn("could not deploy " + destination, ioe);
@@ -462,32 +494,24 @@ class ClickApp implements EntityResolver {
             mode = DEVELOPMENT;
         }
 
-        // Set the Log4j logger levels
-        Map loggerLevels = new HashMap();
+        // Set Click and Velocity log levels
+        int clickLogLevel = Logger.INFO_ID;
+        Integer velocityLogLevel = new Integer(LogSystem.ERROR_ID);
 
         if (mode == PRODUCTION) {
-            loggerLevels.put(CLICK_LOGGER, "WARN");
-            loggerLevels.put(VELOCITY_LOGGER, "ERROR");
-        } else if (mode == PROFILE) {
-            loggerLevels.put(CLICK_LOGGER, "INFO");
-            loggerLevels.put(VELOCITY_LOGGER, "ERROR");
+            clickLogLevel = Logger.WARN_ID;
+
         } else if (mode == DEVELOPMENT) {
-            loggerLevels.put(CLICK_LOGGER, "INFO");
-            loggerLevels.put(VELOCITY_LOGGER, "ERROR");
+            velocityLogLevel = new Integer(LogSystem.WARN_ID);
+
         } else if (mode == DEBUG) {
-            loggerLevels.put(CLICK_LOGGER, "DEBUG");
-            loggerLevels.put(VELOCITY_LOGGER, "WARN");
+            clickLogLevel = Logger.DEBUG_ID;
+            velocityLogLevel = new Integer(LogSystem.INFO_ID);
         }
 
-        for (Iterator i = loggerLevels.keySet().iterator(); i.hasNext();) {
-            String name = i.next().toString();
-
-            String levelValue = loggerLevels.get(name).toString();
-
-            Level level = Level.toLevel(levelValue, Level.WARN);
-            Logger logger = Logger.getLogger(name);
-            logger.setLevel(level);
-        }
+        logger.setLevel(clickLogLevel);
+        velocityEngine.setApplicationAttribute
+            (ServletLogger.LOG_LEVEL, velocityLogLevel);
     }
 
     private void loadDefaultPages() throws ClassNotFoundException, JDOMException {
@@ -528,7 +552,7 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadTemplates() throws Exception {
-        if (getMode() == ClickApp.PRODUCTION || getMode() == ClickApp.PROFILE) {
+        if (mode == ClickApp.PRODUCTION || mode == ClickApp.PROFILE) {
 
             // Load page templates, which will be cached in ResourceManager
             for (Iterator i = pageByPathMap.keySet().iterator(); i.hasNext();) {
@@ -589,7 +613,7 @@ class ClickApp implements EntityResolver {
         // Set default velocity runtime properties.
 
         velProps.setProperty(RuntimeConstants.RESOURCE_LOADER, "webapp");
-        velProps.setProperty("webapp.resource.loader.class", 
+        velProps.setProperty("webapp.resource.loader.class",
                              WebappLoader.class.getName());
 
         if (mode == PRODUCTION || mode == PROFILE) {
@@ -603,8 +627,7 @@ class ClickApp implements EntityResolver {
         }
 
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                "org.apache.velocity.runtime.log.SimpleLog4JLogSystem");
-        velProps.put("runtime.log.logsystem.log4j.category", VELOCITY_LOGGER);
+                     ServletLogger.class.getName());
 
         velProps.put("velocimacro.library", CLICK_PATH + File.separator
                      + VM_FILE_NAME);
@@ -641,9 +664,10 @@ class ClickApp implements EntityResolver {
 
             Object pop = velProps.put(entry.getKey(), entry.getValue());
             if (pop != null && logger.isDebugEnabled()) {
-                String message = "user velocity property '" + entry.getKey()
-                        + "=" + entry.getValue() + "' replaced default value '"
-                        + pop + "'";
+                String message = "user defined property '" + entry.getKey()
+                        + "=" + entry.getValue()
+                        + "' replaced default propery '" +  entry.getKey()
+                        + "=" + pop + "'";
                 logger.debug(message);
             }
         }
@@ -698,6 +722,111 @@ class ClickApp implements EntityResolver {
     }
 
     // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * ServletContext log adaptor derived from:
+     * org.apache.velocity.tools.view.servlet.ServletLogger
+     *
+     * @author Malcolm Edgar
+     */
+    static class Logger {
+
+        final static int DEBUG_ID = 0;
+
+        final static int INFO_ID = 1;
+
+        final static int WARN_ID = 2;
+
+        final static int ERROR_ID = 3;
+
+        static final String PREFIX = "Click";
+
+        ServletContext servletContext = null;
+
+        int logLevel = DEBUG_ID;
+
+        private Logger(ServletContext context) {
+            servletContext = context;
+        }
+
+        void debug(Object message) {
+            log(DEBUG_ID, String.valueOf(message));
+        }
+
+        void debug(Object message, Throwable error) {
+            log(DEBUG_ID, String.valueOf(message), error);
+        }
+
+        void error(Object message) {
+            log(ERROR_ID, String.valueOf(message));
+        }
+
+        void error(Object message, Throwable error) {
+            log(ERROR_ID, String.valueOf(message), error);
+        }
+
+        void info(Object message) {
+            log(INFO_ID, String.valueOf(message));
+        }
+
+        void warn(Object message) {
+            log(WARN_ID, String.valueOf(message));
+        }
+
+        void warn(Object message, Throwable error) {
+            log(WARN_ID, String.valueOf(message), error);
+        }
+
+        boolean isDebugEnabled() {
+            return logLevel <= DEBUG_ID;
+        }
+
+        boolean isInfoEnabled() {
+            return logLevel <= INFO_ID;
+        }
+
+        private void setLevel(int level) {
+            logLevel = level;
+        }
+
+        private void log(int level, String message) {
+            if (level < logLevel) {
+                return;
+            }
+
+            if (level == LogSystem.WARN_ID) {
+                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message);
+            }
+            else if (level == LogSystem.INFO_ID){
+                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message);
+            }
+            else if (level == LogSystem.DEBUG_ID) {
+                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message);
+            }
+            else if (level == LogSystem.ERROR_ID) {
+                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message);
+            }
+        }
+
+        private void log(int level, String message, Throwable error) {
+            if (level < logLevel) {
+                return;
+            }
+
+            if (level == LogSystem.WARN_ID) {
+                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message, error);
+            }
+            else if (level == LogSystem.INFO_ID){
+                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message, error);
+            }
+            else if (level == LogSystem.DEBUG_ID) {
+                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message, error);
+            }
+            else if (level == LogSystem.ERROR_ID) {
+                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message, error);
+            }
+        }
+    }
 
     /**
      * @author Malcolm

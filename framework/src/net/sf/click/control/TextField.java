@@ -27,7 +27,7 @@ package net.sf.click.control;
  *
  * The example below shows how to a TextField to a Form, and how it will be
  * rendered as HTML.
- * 
+ *
  * <pre class="code">
  * TextField usernameField = new TextField("Username");
  * usernameField.setRequired(true);

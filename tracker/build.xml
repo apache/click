@@ -35,7 +35,7 @@
       <mkdir dir="${dir.deploy}"/>  
       <war destfile="${dir.deploy}/tracker.war"
            webxml="webapp/WEB-INF/web.xml">
-         <lib file="../${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="../${dir.deploy}/click-${version}.jar"/>
          <lib file="${jar.mkjdbc}"/>  
          <fileset dir="webapp">
             <exclude name="**/web.xml"/>

@@ -28,7 +28,7 @@ package net.sf.click.control;
  *
  * The example below shows how to a TextArea to a Form, and how it will be
  * rendered as HTML.
- * 
+ *
  * <pre class="codeJava">
  * TextArea commentsField = new TextArea("Comments");
  * commentsField.setCols(40);

@@ -35,7 +35,12 @@ public class ServletLogger implements LogSystem
 {
     protected ServletContext servletContext = null;
 
-    public static final String PREFIX = " Velocity ";
+    protected int logLevel = DEBUG_ID;
+
+    public static final String PREFIX = "Velocity";
+
+    public static final String LOG_LEVEL =
+        ServletLogger.class.getName() + ".LOG_LEVEL";
 
     /**
      * Construct a simple logger for a servlet environment.
@@ -50,11 +55,11 @@ public class ServletLogger implements LogSystem
 
     /**
      * init()
-     * 
+     *
      * @throws IllegalStateException if the ServletContext is not available
      *         in the application attributes under the appropriate key.
      */
-    public void init( RuntimeServices rs ) 
+    public void init( RuntimeServices rs )
         throws Exception
     {
         Object obj = rs.getApplicationAttribute(ServletContext.class.getName());
@@ -63,6 +68,26 @@ public class ServletLogger implements LogSystem
             throw new IllegalStateException("Could not retrieve ServletContext from application attributes!");
         }
         servletContext = (ServletContext)obj;
+
+        obj = rs.getApplicationAttribute(LOG_LEVEL);
+        if (obj instanceof Integer)
+        {
+            logLevel = ((Integer) obj).intValue();
+        }
+        else
+        {
+            throw new IllegalStateException("Could not retrieve LOG_LEVEL from application attributes!");
+        }
+
+        rs.setApplicationAttribute(getClass().getName(), this);
+    }
+
+    /**
+     * Set the logging level.
+     */
+    public void setLogLevel(int level)
+    {
+        logLevel = level;
     }
 
     /**
@@ -70,7 +95,12 @@ public class ServletLogger implements LogSystem
      */
     public void logVelocityMessage(int level, String message)
     {
-        switch (level) 
+        if (level < logLevel)
+        {
+            return;
+        }
+
+        switch (level)
         {
             case LogSystem.WARN_ID:
                 servletContext.log( PREFIX + RuntimeConstants.WARN_PREFIX + message );

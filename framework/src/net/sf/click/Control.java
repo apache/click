@@ -52,7 +52,7 @@ public interface Control {
      * </ul>
      * <p/>
      * An example event listener method would be:
-     * 
+     *
      * <pre class="codeJava">
      * public boolean onClick() {
      *     System.out.println("onClick called");
@@ -91,8 +91,8 @@ public interface Control {
      * {@link net.sf.click.control.Field} controls.
      * <p/>
      * When a control is processed it should return true if the Page should
-     * continue event processing, or false if no other controls should be 
-     * processed and the {@link Page#onGet()} or {@link Page#onPost()} methods 
+     * continue event processing, or false if no other controls should be
+     * processed and the {@link Page#onGet()} or {@link Page#onPost()} methods
      * should not be invoked.
      *
      * @return true to continue Page event processing or false otherwise
