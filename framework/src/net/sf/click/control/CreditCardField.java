@@ -144,7 +144,7 @@ public class CreditCardField extends TextField {
         super(label);
         setMaxLength(19);
         setSize(19);
-        setAttribute("onKeyPress", "javascript:return numberFilter(event);");
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 

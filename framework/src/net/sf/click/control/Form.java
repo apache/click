@@ -75,15 +75,15 @@ import net.sf.click.util.ClickUtils;
  *         form.add(passwordField);
  * 
  *         Submit okButton = new Submit("  OK  ");
- *         okButton.setListener(this, "onOkClicked");
+ *         okButton.setListener(this, "onOkClick");
  *         form.add(okButton);
  * 
  *         Submit cancelButton = new Submit(" Cancel ");
- *         cancelButton.setListener(this, "onCancelClicked");
+ *         cancelButton.setListener(this, "onCancelClick");
  *         form.add(cancelButton);
  *     }
  * 
- *     public boolean onOkClicked() {
+ *     public boolean onOkClick() {
  *         if (form.isValid()) {
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
@@ -103,7 +103,7 @@ import net.sf.click.util.ClickUtils;
  *         return true;
  *     }
  * 
- *     public boolean onCancelClicked() {
+ *     public boolean onCancelClick() {
  *         setRedirect("index.htm");
  *         return false;
  *     }
@@ -469,7 +469,7 @@ public class Form implements Control {
 
             return "<link rel='stylesheet' type='text/css' href='"
                    + contextPath + "/click/form.css' title='style'/>\n"
-                   + "<script language='JavaScript' type='text/javascript' "
+                   + "<script type='text/javascript' "
                    + "src='" + contextPath + "/click/form.js'/>";
 
         } else {

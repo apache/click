@@ -39,11 +39,11 @@ import net.sf.click.util.ClickUtils;
  *
  *     public void onInit() {
  *         ActionLink link = new ActionLink("<font color="blue">logoutLink</font>");
- *         link.setListener(this, "<b>logoutClick</b>");
+ *         link.setListener(this, "<b>onLogoutClick</b>");
  *         addControl(link);
  *     }
  *
- *     public boolean <b>logoutClick</b>() {
+ *     public boolean <b>onLogoutClick</b>() {
  *         if (getContext().getSessionAttribute("user") != null) {
  *            getContext().getSession().invalidate();
  *         }
@@ -383,6 +383,15 @@ public class ActionLink implements Control {
             return null;
         }
     }
+    
+    /**
+     * Set the ActionLink value.
+     *
+     * @param value the ActionLink value
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
     /**
      * @see net.sf.click.Control#setListener(Object, String)
@@ -451,7 +460,7 @@ public class ActionLink implements Control {
      * @return the ActionLink anchor &lt;a&gt; tag HTML href attribute value
      */
     public String getHref() {
-        return getHref(null);
+        return getHref(getValue());
     }
     
     /**

@@ -125,10 +125,10 @@ Another view on the execution flow of Pages is illustrated in the Activity diagr
 
 <a name="page-navigation"><h2>Navigation</h2></a>
 
-Navigation between pages is achieved using forwards, redirects and setting the template 
-path.
+Navigation between pages is achieved by using forwards, redirects and by setting the 
+page template path.
 
-<h3>Forward</h3>
+<a name="page-foward"><h3>Forward</h3></a>
 
 To forward to another page using the servlet 
 <a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
@@ -190,7 +190,7 @@ Forwarded to page template <tt>"<font color="blue">view-customer.htm</font>"</tt
 Request attributes are automatically added to the Velocity Context object so are  
 available in the page template.
 
-<h3>Template Path</h3>
+<a name="page-template-path"><h3>Template Path</h3></a>
 
 An alternative to forwarding to a new page is to simply set the path to the new
 page template to render. With this approach the page template  being rendered must have 
@@ -214,18 +214,17 @@ approach of using the Page model is not available when you forward to another Pa
 the first Page object is "finalized" before the second Page object is created and any
 model values would be lost.
 
-<h3>Redirect</h3>
+<a name="page-redirect"><h3>Redirect</h3></a>
 
 Redirects are another very useful way to navigate between pages. See 
 HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
 for details.
 <p/>
-The great thing about
-redirects are that they provide a clean URL in the users browser which matches the page
-that they are viewing. This is important for when users want to bookmark a page.
-The downside of redirects are that they involve a communications round trip with the 
-users browser which requests the new page. Not only does this take time, it also means
-that all the page and request information is lost. 
+The great thing about redirects are that they provide a clean URL in the users browser 
+which matches the page that they are viewing. This is important for when users want to
+bookmark a page. The downside of redirects are that they involve a communications round 
+trip with the users browser which requests the new page. Not only does this take time, 
+it also means that all the page and request information is lost. 
 <p/>
 An example of a redirect to a <tt>"<font color="blue">logout.htm</font>"</tt>
 page is provided below:
@@ -238,13 +237,15 @@ public boolean onLogoutClick() {
 </pre>
 </blockquote>
 
-A method of passing information between redirected pages is to use URL
-request parameters. The ClickServlet will encode the URL for you using
+<h4>Parameter Passing</h4>
+
+You can pass information between redirected pages using URL request parameters. 
+The ClickServlet will encode the URL for you using
 HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url)
 method. 
 <p/>
-In the example below a user click on an OK button to confirm a payment. The 
-OK button handler processes the payment, gets the payment transaction id, and then 
+In the example below a user will click on an OK button to confirm a payment. The 
+<tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
 redirects to the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page with the
 transaction id encoded in the URL.
 <blockquote>
@@ -293,6 +294,11 @@ public class TransComplete extends Page {
 }
 </pre>
 </blockquote>
+
+<h4>Post Redirect</h4>
+The parameter passing example above is also an example of a Post Redirect. The Post
+Redirect technique is a very useful method of preventing users from submitting a form 
+twice by hitting the back button or the refresh button. As when the user hits 
 
 
 <a name="page-security"><h2>Security</h2></a>

@@ -218,10 +218,8 @@ public class ClickServlet extends HttpServlet {
             boolean continueProcessing = page.onSecurityCheck();
 
             if (continueProcessing && page.hasControls()) {
-                // Make sure dont processed forwarded request, where URL and
-                // URI ends are different
-                String url = request.getRequestURL().toString();
-                if (url.endsWith(request.getRequestURI())) {
+                // Make sure dont processed forwarded request
+                if (!page.getContext().isForward()) {
                     
                     List controls = page.getControls();
                     

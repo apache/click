@@ -232,7 +232,7 @@ public class TextField extends Field {
         buffer.append(getSize());
         buffer.append("'");
         if (getTitle() != null) {
-            buffer.append("title='");
+            buffer.append(" title='");
             buffer.append(getTitle());
             buffer.append("'");
         }

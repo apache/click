@@ -1,18 +1,38 @@
 <html>
 <head>	
 <link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
+<style>
+span {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+}
+</style>
 <title>Click Examples - Page Nagiation</title>
 </head>	
 <body>
  	
-<h2>Page Nagiation - <font color="blue">Page A</font></h2> 
+<h2>Page Nagiation</h2> 
 
 #writeSourceToolbar( "examples/page/NavA.java" "examples/navigation-a.htm" )
-  
-Click <a href="$forwardLink.href">here</a> to forward to <b>NavB</b>
+
+You are currently on page <span>NavA</span>.
 <p/>
 
-Click <a href="$redirectLink.href">here</a> to redirect to <b>NavB</b>
+<h4>Forward</h4>
+
+To forward to <b>NavB</b> click <a href="$forwardLink.href">here</a>.
+<p/>
+To forward to <b>NavB</b> passing the parameter $forwardParamLink.value click
+<a href="$forwardParamLink.getHref()">here</a>.
+<p/>
+
+<h4>Redirect</h4>
+
+To redirect to <b>NavB</b> click <a href="$redirectLink.href">here</a>.
+<p/>
+To redirect to <b>NavB</b> passing the parameter $redirectParamLink.value click
+<a href="$redirectParamLink.href">here</a>.
 <p/>
 
 </body>

@@ -124,6 +124,18 @@ public class Context {
     }
     
     /**
+     * Return true if the request has been forwarded. With a forwarded request
+     * the URL and URI ends are different.
+     * 
+     * @return true if the request has been forwarded
+     */
+    public boolean isForward() {
+        String url = request.getRequestURL().toString();
+        
+        return !url.endsWith(request.getRequestURI());
+    }
+    
+    /**
      * Return true if the HTTP request method is "POST".
      * 
      * @return true if the HTTP request method is "POST"

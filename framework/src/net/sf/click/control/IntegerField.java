@@ -65,6 +65,7 @@ public class IntegerField extends TextField {
      */
     public IntegerField(String label) {
         super(label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -144,15 +145,6 @@ public class IntegerField extends TextField {
     }
 
     /**
-     * Returns the numberFilter(event) JavaScript onKeyPress() event hander.
-     * 
-     * @see Field#getOnKeyPress()
-     */
-    public String getOnKeyPress() {
-        return "return numberFilter(event);";
-    }
-
-    /**
      * Process the IntegerField submission. If the Integer value can be parsed
      * the controls listener will be invoked.
      * <p/>
@@ -207,5 +199,4 @@ public class IntegerField extends TextField {
         
         return true;
     }
-
 }

@@ -65,6 +65,7 @@ public class DoubleField extends TextField {
      */
     public DoubleField(String label) {
         super(label);
+        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -141,15 +142,6 @@ public class DoubleField extends TextField {
      */
     public double getMinValue() {
         return minvalue;
-    }
-
-    /**
-     * Returns the numberFilter(event) JavaScript onKeyPress() event hander.
-     * 
-     * @see Field#getOnKeyPress()
-     */
-    public String getOnKeyPress() {
-        return "return numberFilter(event);";
     }
 
     /**
