@@ -130,9 +130,6 @@ class ClickApp implements EntityResolver {
     /** The application mode: [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG ] */
     private int mode;
 
-    /** The page not found Page configuration element. */
-    private PageElm notFoundPage;
-
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
 
@@ -466,7 +463,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadMode(Element rootElm) throws JDOMException {
+    private void loadMode(Element rootElm) {
         Element modeElm = rootElm.getChild("mode");
 
         if (modeElm != null) {
@@ -508,7 +505,7 @@ class ClickApp implements EntityResolver {
             (ServletLogger.LOG_LEVEL, velocityLogLevel);
     }
 
-    private void loadDefaultPages() throws ClassNotFoundException, JDOMException {
+    private void loadDefaultPages() throws ClassNotFoundException {
 
         if (!pageByPathMap.containsKey(ERROR_PATH)) {
             ClickApp.PageElm page = new ClickApp.PageElm
@@ -525,8 +522,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadFormatClass(Element rootElm)
-        throws ClassNotFoundException, JDOMException {
+    private void loadFormatClass(Element rootElm) throws ClassNotFoundException {
 
         Element formatElm = rootElm.getChild("format");
 
@@ -836,7 +832,7 @@ class ClickApp implements EntityResolver {
         private final String path;
 
         private PageElm(Element element, Map commonHeaders, Class formatClass)
-            throws ClassNotFoundException, JDOMException {
+            throws ClassNotFoundException {
 
             // Set formatClass
             this.formatClass = formatClass;
