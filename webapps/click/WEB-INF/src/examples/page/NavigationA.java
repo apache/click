@@ -56,7 +56,6 @@ public class NavigationA extends Page {
         // Else request may have been redirected
         } else {
             String param = getContext().getRequest().getParameter("param");
-            System.err.println("param="+param);
             if (param != null) {
                 number = new Integer(Integer.parseInt(param) + 1);
             }

@@ -445,7 +445,7 @@ public class ActionLink implements Control {
         buffer.append("=");
         buffer.append(getName());
         if (value != null) {
-            buffer.append("&");
+            buffer.append("&amp;");
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(value);
