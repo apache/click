@@ -150,7 +150,7 @@ class ClickApp implements EntityResolver {
 
         InputStream inputStream = context.getResourceAsStream(DEFAULT_APP_CONFIG);
         if (inputStream == null) {
-            throw createConfigAppException
+            throw new RuntimeException
                 ("could not find click app configuration file: " 
                  + DEFAULT_APP_CONFIG);
         }
@@ -260,9 +260,9 @@ class ClickApp implements EntityResolver {
             try {
                 return page.getFormatClass().newInstance();
             } catch (IllegalAccessException iae) {
-                throw new ApplicationException(iae);
+                throw new RuntimeException(iae);
             } catch (InstantiationException ie) {
-                throw new ApplicationException(ie);
+                throw new RuntimeException(ie);
             }
         } else {
             return null;
@@ -329,10 +329,6 @@ class ClickApp implements EntityResolver {
     }
 
     // -------------------------------------------------------- Private Methods
-
-    private ApplicationException createConfigAppException(String msg) {
-        throw new ApplicationException("Configuration error - " + msg);
-    }
 
     private void deployFiles(ServletContext context) {
         final String path = context.getRealPath("/");
@@ -515,7 +511,7 @@ class ClickApp implements EntityResolver {
             String classname = formatElm.getAttributeValue("classname");
             
             if (classname == null) {
-                throw createConfigAppException
+                throw new RuntimeException
                     ("'format' element missing 'classname' attribute.");                
             }
             
@@ -551,7 +547,7 @@ class ClickApp implements EntityResolver {
         Element pagesElm = rootElm.getChild("pages");
 
         if (pagesElm == null) {
-            throw createConfigAppException
+            throw new RuntimeException
                 ("required configuration 'pages' element missing.");
         }
 
@@ -634,7 +630,7 @@ class ClickApp implements EntityResolver {
                     }
                 }
             } else if (!filename.equals(DEFAULT_VEL_PROPS)) {
-                throw createConfigAppException
+                throw new RuntimeException
                     ("could not find velocity properties file: " + filename);
             }
         }

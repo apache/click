@@ -26,7 +26,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.ApplicationException;
 import net.sf.click.Page;
 
 import org.apache.log4j.Logger;
@@ -46,7 +45,6 @@ import org.apache.velocity.exception.ParseErrorException;
  *
  * import java.sql.Connection;
  * import java.sql.SQLException;
- * import net.sf.click.ApplicationException;
  * import net.sf.click.util.ErrorPage;
  * 
  * public class MyCorpErrorPage extends ErrorPage {
@@ -56,10 +54,10 @@ import org.apache.velocity.exception.ParseErrorException;
  * 
  *         if (error instanceof SQLException) {
  *             rollbackAndClose();
- *         }
- *         else if (error instanceof ApplicationException) {
- *             Throwable cause = ((ApplicationException)error).getCause();
- * 
+ *         } 
+ *         else {
+ *             Throwable cause = error.getCause();
+ *
  *             if (cause instanceof SQLException) {
  *                 rollbackAndClose();
  *             }
@@ -91,6 +89,7 @@ import org.apache.velocity.exception.ParseErrorException;
  * the normal Page properties:<ul>
  * <li>{@link #error} - the error causing exception</li>
  * <li>{@link #mode} - the Click application mode</li>
+ * <li>{@link #page} - the Page object in error</tt>
  * <li>{@link #pagePath} - the path of the page with the error</li>
  * </ul>
  *
@@ -220,10 +219,10 @@ public class ErrorPage extends Page {
 
         } else {
             Throwable cause = null;
-            if (error instanceof ApplicationException) {
-                cause = ((ApplicationException) error).getCause();
-            } else if (error instanceof ServletException) {
+            if (error instanceof ServletException) {
                 cause = ((ServletException) error).getRootCause();
+            } else {
+                cause = error.getCause();
             }
             
             if (cause != null) {

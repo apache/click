@@ -413,7 +413,7 @@ public class CustomerList extends Page {
             
         } catch (DAOException daoe) {
             LOGGER.error(daoe);
-            throw new ApplicationException(daoe);
+            throw new RuntimeException(daoe);
         }
     }
 }

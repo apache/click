@@ -23,60 +23,61 @@ To build and deploy the web applications:
   property to point to your J2EE web container deployment directory. Note on
   Windows ensure you replace any \ directory path characters with / otherwise Ant 
   may not find the directory. For example:
-  <blockquote><pre>
+  <div class="code">
   # appserver deployment directory
   dir.appserver=C:/java/jakarta-tomcat-5.0.25/webapps/
-  </pre></blockquote>
+  </div>
   </li>
   <li>Run the Ant build script targets:
-  <blockquote><pre>
+  <div class="code">
   ant build-framework build-webapps deploy-webapps
-  </pre></blockquote>
+  </div>
   </li>
 </ol>
 
 <h3>Dependencies</h3>
 
-<blockquote>
-<dl>
-  <dt><b>servlet-2.3.1.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://java.sun.com/products/servlet/">Sun Servlet</a>
-  </dd>
-  <p/>
-  <dt><b>velocity-dep-1.4.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a>
-  </dd>
-  <p/>
-  <dt><b>jdom-1.0.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://www.jdom.org">JDOM.org</a>
-  </dd>
-  <p/>
-  <dt><b>log4j-1.2.8.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://logging.apache.org/log4j/">Apache Logging Log4j</a>
-  </dd>
-  <p/>
-  <dt><b>commons-lang-2.0.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons lang</a>
-  </dd>
-  <p/>
-  <dt><b>commons-codec-1.1.jar</b></dt>
-  <dd>to do.
-    <p/>
-    <a href="http://jakarta.apache.org/commons/codec/">Jakarta Commons codec</a>
-  </dd>
-  <p/>
-</dl>
-</blockquote>
+<table style="border: solid 1px black">
+<tr>
+  <th>JAR</th><th>Version</th><th>Author</th><th>Description</th>
+</tr>
+<tr>
+  <td>servlet-2.3.1.jar</td>  
+  <td>2.3.1</td>
+  <td><a href="http://java.sun.com/products/servlet/">Sun Microsystems</a></td>
+  <td>J2EE Servlet Framework</td>
+</tr>
+<tr>
+  <td>velocity-dep-1.4.jar</td>  
+  <td>1.4</td>
+  <td><a href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a></td>
+  <td>Velocity Template Framework</td>
+</tr>
+<tr>
+  <td>jdom-1.0.jar</td>  
+  <td>1.0</td>
+  <td><a href="http://www.jdom.org">JDOM.org</a></td>
+  <td>XML DOM Framework</td>
+</tr>
+<tr>
+  <td>log4j-1.2.8.jar</td>  
+  <td>1.2.8</td>
+  <td><a href="http://logging.apache.org/log4j/">Apache Logging Log4j</a></td>
+  <td>Logging Framework</td>
+</tr>
+<tr>
+  <td>commons-lang-2.0.jar</td>  
+  <td>2.0</td>
+  <td><a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons lang</a></td>
+  <td>General Language Utilities Library</td>
+</tr>
+<tr>
+  <td>commons-codec-1.1.jar</td>  
+  <td>1.1</td>
+  <td><a href="http://jakarta.apache.org/commons/codec/">Jakarta Commons codec</a></td>
+  <td>Encoding Decoding Library</td>
+</tr>
+</table>
 
 </body>
 </html>

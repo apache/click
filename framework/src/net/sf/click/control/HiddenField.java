@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
-import net.sf.click.ApplicationException;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -176,11 +175,11 @@ public class HiddenField extends Field {
                 } catch (ClassNotFoundException cnfe) {
                     String msg =
                         "could not decode value for hidden field: " + aValue;
-                    throw new ApplicationException(msg, cnfe);
+                    throw new RuntimeException(msg, cnfe);
                 } catch (IOException ioe) {
                     String msg =
                         "could not decode value for hidden field: " + aValue;
-                    throw new ApplicationException(msg, ioe);
+                    throw new RuntimeException(msg, ioe);
                 }
             } else {
                 setValue(aValue);
@@ -222,7 +221,7 @@ public class HiddenField extends Field {
             } catch (IOException ioe) {
                 String msg =
                     "could not encode value for hidden field: " + getValueObject();
-                throw new ApplicationException(msg, ioe);
+                throw new RuntimeException(msg, ioe);
             }
         } else {
             buffer.append(getValue());

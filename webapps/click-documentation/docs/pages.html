@@ -34,7 +34,7 @@ components being defined in page elements of the
 <a target="topic" href="configuration.html#application-configuration">click.xml</a> file.
 
 <div class="code">
-&lt;page path="<font color="red">search.htm</font>" classname="<font color="blue">com.mycorp.page.Search</font>"/&gt;
+&lt;page path="<span class="blue">search.htm</span>" classname="<span class="red">com.mycorp.page.Search</span>"/&gt;
 </div>
 
 The path attribute specifies the location of the page Velocity template, and the classname
@@ -131,7 +131,7 @@ page template path.
 To forward to another page using the servlet 
 <a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
 set the Page's forward property. For example to forward to a page with a path 
-<tt>"<font color="blue">index.htm</font>"</tt>:
+<span class="html">index.htm</span>:
 <div class="code">
 public void onPost() {
    // Process form post
@@ -142,7 +142,7 @@ public void onPost() {
 </div>
 
 This will invoke a new Page class instance mapped to the path 
-<tt>"<font color="blue">index.htm</font>"</tt>. Note when a request is forwarded to another Page, 
+<span class="html">index.htm</span>. Note when a request is forwarded to another Page, 
 the controls on the second page will not be processed. This prevents confusion and bugs,
 like a form on the second page trying to process a POST request from the first page.
 
@@ -164,7 +164,7 @@ public boolean onViewClick() {
 }
 </div>
 
-Forwarded to page template <tt>"<font color="blue">view-customer.htm</font>"</tt>:
+Forwarded to page template <span class="html">view-customer.htm</span>:
 
 <blockquote>
 <pre>
@@ -221,7 +221,7 @@ bookmark a page. The downside of redirects are that they involve a communication
 trip with the users browser which requests the new page. Not only does this take time, 
 it also means that all the page and request information is lost. 
 <p/>
-An example of a redirect to a <tt>"<font color="blue">logout.htm</font>"</tt>
+An example of a redirect to a <span class="html">logout.htm</span>
 page is provided below:
 <div class="code">
 public boolean onLogoutClick() {
@@ -239,7 +239,7 @@ method.
 <p/>
 In the example below a user will click on an OK button to confirm a payment. The 
 <tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
-redirects to the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page with the
+redirects to the <span class="html">trans-complete.htm</span> page with the
 transaction id encoded in the URL.
 <div class="code">
 public class Payment extends Page {
@@ -265,9 +265,9 @@ public class Payment extends Page {
 }
 </div>
 
-The Page class for the <tt>"<font color="blue">trans-complete.htm</font>"</tt> page can 
+The Page class for the <span clas="html">trans-complete.htm</span> page can 
 then get the transaction id through the request parameter 
-<tt>"<font color="red">trans-id</font>"</tt>:
+<tt>"<span color="red">trans-id</span>"</tt>:
 <div class="code">
 public class TransComplete extends Page {
    ..
@@ -384,29 +384,39 @@ is delegated to the registered handler. The default Click error handler is the
 <a target="topic" href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>,
 which is automatically configured as:
 <div class="code">
-&lt;page path="<font color="red">click/error.htm</font>" classname="<font color="blue">net.sf.click.util.ErrorPage</font>"/&gt;
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">net.sf.click.util.ErrorPage</span>"/&gt;
 </div>
 
 To register an alternative error handler you must subclass ErrorPage and define
-your page using the path "<tt>click/error.htm</tt>". For example:
+your page using the path "<span class="html">click/error.htm</span>". For example:
 <div class="code">
-&lt;page path="<font color="red">click/error.htm</font>" classname="<font color="blue">com.mycorp.pages.ErrorPage</font>"/&gt;
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.pages.ErrorPage</span>"/&gt;
 </div>
+
+When the ClickSevlet starts up it checks to see whether the <span class="html">error.htm</span> template exists in the 
+<span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
+You can tailor the <span class="html">click/error.htm</span> template to suite you own tastes, and the ClickServlet
+will not overwrite it. 
+<p/>
+The default error template will display extensive debug information when the application is in <tt>development</tt>
+or <tt>debug</tt> mode. When the application is in <tt>production</tt> or <tt>profile</tt> mode only a simple 
+error message is displayed. See <a target="topic" href="configuration.html#application-mode">Configuration</a>
+for details on how to set the application mode.
 
 <a name="page-not-found"><h2>Page Not Found</h2></a>
 
 If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
 it will use the registered "not-found.htm" page. The Click not found page is automatically configured as:
 <div class="code">
-&lt;page path="<font color="red">click/not-found.htm</font>" classname="<font color="blue">net.sf.click.Page</font>"/&gt;
+&lt;page path="<span class="blue">click/not-found.htm</span>" classname="<span class="red">net.sf.click.Page</span>"/&gt;
 </div>
 
 You can override the default configuration and specify your own class, but you cannot change the path.
 <p/>
-When the ClickSevlet starts up it checks to see whether the <tt>not-found.htm</tt> template exists in the 
-<tt>click</tt> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
+When the ClickSevlet starts up it checks to see whether the <span class="html">not-found.htm</span> template exists in the 
+<span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
 <p/>
-You can tailor the "<tt>click/not-found.htm</tt>" template to suite you own needs. This page template
+You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
 has access to the usual Click parameters:
 <ul>
   <li>$context</li>
