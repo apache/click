@@ -7,7 +7,7 @@ body
 {
   background-color: #FFFFFF; 
   font-family: Helvetica, Arial, sans-serif; 
-  font-size: 14px;
+  font-size: 12px;
 }
 
 a:visited { color: blue; }
@@ -26,6 +26,10 @@ a:visited { color: blue; }
 .green { color: green }
 
 .blue { color: blue }
+
+.navy { color: navy }
+
+.maroon { color: maroon }
 
 .htmlHeader
 {
@@ -57,8 +61,45 @@ a:visited { color: blue; }
 	white-space: pre;
 }
 
+/*  form.css */
+
+a.error {
+	color: red;
+}
+a:visited.error {
+	color: red;
+}
+input.disabled {
+	background: lightgrey;
+}
+input.error {
+	background: yellow;
+}
+select.error {
+	background: yellow;
+}
+span.error {
+	color: red;
+}
+table.fields {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.errors {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.buttons {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+	margin-top: 1em;
+}
+
 /* Headings */
-h1 { font-size: 145% }
+h1 { font-size: 18px }
 
 /* Table colors */
 .TableHeadingColor     { background: #CCCCFF } /* Dark mauve */
@@ -66,9 +107,9 @@ h1 { font-size: 145% }
 .TableRowColor         { background: #FFFFFF } /* White */
 
 /* Font used in left-hand frame lists */
-.FrameTitleFont   { font-size: 100%; font-family: Helvetica, Arial, sans-serif }
-.FrameHeadingFont { font-size:  90%; font-family: Helvetica, Arial, sans-serif }
-.FrameItemFont    { font-size:  90%; font-family: Helvetica, Arial, sans-serif }
+.FrameTitleFont   { font-size: 12px; font-family: Helvetica, Arial, sans-serif }
+.FrameHeadingFont { font-size:  10px; font-family: Helvetica, Arial, sans-serif }
+.FrameItemFont    { font-size:  10px; font-family: Helvetica, Arial, sans-serif }
 
 /* Navigation bar fonts and colors */
 .NavBarCell1    { background-color:#EEEEFF;} /* Light mauve */

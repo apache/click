@@ -67,25 +67,25 @@ h4  {
 	margin-bottom: 1em;
 }
 
-.red {
-	color: red;
-}
+.red { color: red; }
 
-.green {
-	color: green;
-}
+.green { color: green; }
 
-.blue {
-	color: blue;
-}
+.blue { color: blue; }
+
+.maroon { color: maroon; }
 
 .html {
 	color: blue;
 	font-family: CourierNew, courier;
 }
 
-/* TODO check values from form.css */
+/* form.css */
+
 a.error {
+	color: red;
+}
+a:visited.error {
 	color: red;
 }
 input.disabled {
@@ -100,9 +100,21 @@ select.error {
 span.error {
 	color: red;
 }
-
-table.form {
-	border: 0;
-	vertical-align: baseline; 
+table.fields {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
 }
+table.errors {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.buttons {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+	margin-top: 1em;
+}
+
 

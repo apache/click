@@ -38,12 +38,12 @@ and its Velocity page template:
 <div class="code">
 &lt;click-app&gt;  
   &lt;pages&gt; 
-    &lt;page path="<font color="blue">hello-world.htm</font>" classname="<font color="green">examples.page.HelloWorld</font>"/&gt; 
+    &lt;page path="<span class="blue">hello-world.htm</span>" classname="<span class="green">examples.page.HelloWorld</span>"/&gt; 
   &lt;/pages&gt;
 &lt;/click-app&gt; 
 </div>
 
-Next we have our page class <font color="green"><tt>examples.page.HelloWorld</tt></font>:
+Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt></span>:
 <div class="code">
 package examples.page;
 
@@ -53,36 +53,36 @@ import net.sf.click.Page;
 public HelloWorld extends Page {
 
     public void onGet() {
-        addModel("<font color="red">time</font>", new Date());
+        addModel("<span class="red">time</span>", new Date());
     }
 }
 </div>
-And then we have the page template <font color="blue">hello-world.htm</font>:
+And then we have the page template <span class="blue">hello-world.htm</span>:
 <div class="code">
 &lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Hello World&lt;/h2&gt;
     
-    Hello world from Click at $<font color="red">time</font>
+    Hello world from Click at $<span class="red">time</span>
     
   &lt;/body&gt;
 &lt;/html&gt;
 </div>
 
-At runtime the ClickSerlvet maps a GET <font color="blue">hello-world.htm</font> 
-request to our page class <font color="green"><tt>example.page.HelloWorld</tt></font> and creates a new instance. 
+At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
+request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
 The ClickServlet then invokes the page's <tt>onGet()</tt> method. This method creates a 
 new <tt>Date</tt> object and adds it to the page's model as a value called 
-<font color="red">time</font>.
+<span class="red">time</span>.
 <p/>
 The page model is then merged with the template which subsitutes the 
-$<font color="red">time</font> parameter with the <tt>Date</tt> object. 
+$<span class="red">time</span> parameter with the <tt>Date</tt> object. 
 Velocity then renders the merged template which looks something like this:
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
- <h2><font color="navy">Hello World</font></h2>
+ <h2 style="color: navy; margin-top: 0em;">Hello World</h2>
  Hello world from Click at Wed May 28 15:52:29 EST 2005
  </td>
 </tr>
@@ -104,7 +104,7 @@ public class Login extends Page {
     PasswordField passwordField;
 
     public void onInit() {
-        form = new Form("<font color="red">form</font>", getContext());
+        form = new Form("<span class="red">form</span>", getContext());
         addControl(form);
 
         usernameField = new TextField("Username");
@@ -116,15 +116,15 @@ public class Login extends Page {
         form.add(passwordField);
 
         Submit okButton = new Submit("   OK   ");
-        okButton.setListener(this, "onOkClicked");
+        okButton.setListener(this, "<span class="maroon">onOkClicked</span>");
         form.add(okButton);
 
         Submit cancelButton = new Submit("Cancel");
-        cancelButton.setListener(this, "onCancelClicked");
+        cancelButton.setListener(this, "<span class="maroon">onCancelClicked</span>");
         form.add(cancelButton);
     }
 
-    public boolean onOkClicked() {
+    public boolean <span class="maroon">onOkClicked</span>() {
         if (form.isValid()) {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
@@ -133,7 +133,7 @@ public class Login extends Page {
 
             if (user != null && user.getPassword().equals(password)) {
                 getContext().setSessionAttribute("user", user);
-                setRedirect("<font color="blue">secure.htm</font>");
+                setRedirect("<span class="blue">secure.htm</span>");
 
             } else {     
                 form.setError(getMessage("authentication-error"));           
@@ -142,45 +142,48 @@ public class Login extends Page {
         return true;
     }
 
-    public boolean onCancelClicked() {
-        setRedirect("<font color="blue">index.htm</font>");
+    public boolean <span class="maroon">onCancelClicked()</span> {
+        setRedirect("<span class="blue">index.htm</span>");
         return false;
     }
 }
 </div>
 
-Next we have the Login page template <font color="blue">login.htm</font>:
+Next we have the Login page template <span class="blue">login.htm</span>:
 <div class="code">
 &lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Login&lt;/h2&gt;
     
-    $<font color="red">form</font>
+    $<span class="red">form</span>
     
   &lt;/body&gt;
 &lt;/html&gt;
 </div>
 
-When the Login page is first requested the $<font color="red">form</font> object will 
+When the Login page is first requested the $<span class="red">form</span> object will 
 automatically render itself as:
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
   
- <h2><font color="navy">Login</font></h2>
+ <h2 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h2>
 
 <table class='form'>
 <tr>
-<td align='left'><label >Username</label><font color="red">*</font></td>
+<td align='left'><label >Username</label><span class="red">*</span></td>
 <td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
 </tr>
 <tr>
-<td align='left'><label >Password</label><font color="red">*</font></td>
+<td align='left'><label >Password</label><span class="red">*</span></td>
 <td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
 </tr>
-<tr><td colspan='2'>&nbsp;</td></tr>
-<tr align='left'><td colspan='2'><input type='submit' name='ok' value='   OK   '/><input type='submit' name='cancel' value='Cancel'/></td></tr>
+</table>
+<table class="buttons">
+<tr align='left'>
+  <td colspan='2'><input type='submit' name='ok' value='   OK   '/><input type='submit' name='cancel' value='Cancel'/></td>
+</tr>
 </table>
 
  </td>
@@ -198,20 +201,21 @@ With all the event processing completed the form now renders the field validatio
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
-  
- <h2><font color="navy">Login</font></h2>
+   
+ <h2 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h2>
  
-<table class='form'>
+<table class='fields'>
 <tr>
-<td align='left'><label >Username</label><font color="red">*</font></td>
+<td align='left'><label >Username</label><span class="red">*</span></td>
 <td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
 </tr>
 <tr>
-<td align='left'><label >Password</label><font color="red">*</font></td>
+<td align='left'><label >Password</label><span class="red">*</span></td>
 <td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
 </tr>
 <tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
-<tr><td colspan='2'>&nbsp;</td></tr>
+</table>
+<table class="buttons">
 <tr align='left'><td colspan='2'><input type='submit' name='ok' value='   OK   '/><input type='submit' name='cancel' value='Cancel'/></td></tr>
 </table>
 
@@ -221,10 +225,10 @@ With all the event processing completed the form now renders the field validatio
 
 If the user enters a correct username and password the <tt>onOkClicked()</tt> 
 event handler will add a User object to the HttpSession and redirect the request 
-to the <font color="blue">secure.htm</font> page.
+to the <span class="blue">secure.htm</span> page.
 <p/>
 If the user clicks on the Cancel button the <tt>onOkClicked()</tt> event handler is
-invoked and the request is redirected to the <font color="blue">index.htm</font> page.
+invoked and the request is redirected to the <span class="blue">index.htm</span> page.
 
 <h4>Form Layout</h4>
 
