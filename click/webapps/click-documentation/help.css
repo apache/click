@@ -1,0 +1,68 @@
+a:visited {
+  color: blue;
+}
+
+body, table, td, p	{
+  font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
+  font-size: 12px;
+}
+
+h1  { 
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h2  { 
+  font-size: 18px; 
+  font-weight: bold;
+}
+
+h3  { 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h4  { 
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.appnameText {
+  font-weight: bold;
+  letter-spacing: 0.2em; 
+  margin: 2px 2px;
+  padding-bottm: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  text-decoration: none;
+}
+
+.appTitleBar {
+  background-color: black;
+  color: white;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+a.error {
+	color: red;
+}
+input.disabled {
+	background: lightgrey;
+}
+input.error {
+	background: yellow;
+}
+select.error {
+	background: yellow;
+}
+span.error {
+	color: red;
+}
+table.form {
+	border: 0;
+	vertical-align: baseline; 
+}

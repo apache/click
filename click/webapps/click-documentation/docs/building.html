@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Building</h1>
+
+<h3>Building and Deploying</h3>
+To build and deploy the web applications:
+<ol>
+  <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
+  a JDK installation.<p/>
+  </li>
+  <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
+  an Ant installation.<p/>
+  </li>
+  <li>Edit <tt>build.properties</tt> file and set the <tt>app.server.dir</tt>
+  property to point to your J2EE web container deployment directory. Note on
+  Windows ensure you replace any \ directory path characters with / otherwise Ant 
+  may not find the directory. For example:
+  <blockquote><pre>
+  # appserver deployment directory
+  dir.appserver=C:/java/jakarta-tomcat-5.0.25/webapps/
+  </pre></blockquote>
+  </li>
+  <li>Run the Ant build script targets:
+  <blockquote><pre>
+  ant build-framework build-webapps deploy-webapps
+  </pre></blockquote>
+  </li>
+</ol>
+
+<h3>Dependencies</h3>
+
+<blockquote>
+<dl>
+  <dt><b>servlet-2.3.1.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://java.sun.com/products/servlet/">Sun Servlet</a>
+  </dd>
+  <p/>
+  <dt><b>velocity-dep-1.4.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a>
+  </dd>
+  <p/>
+  <dt><b>jdom-1.0.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://www.jdom.org">JDOM.org</a>
+  </dd>
+  <p/>
+  <dt><b>log4j-1.2.8.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://logging.apache.org/log4j/">Apache Logging Log4j</a>
+  </dd>
+  <p/>
+  <dt><b>commons-lang-2.0.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://jakarta.apache.org/commons/lang/">Jakarta Commons lang</a>
+  </dd>
+  <p/>
+  <dt><b>commons-codec-1.1.jar</b></dt>
+  <dd>to do.
+    <p/>
+    <a href="http://jakarta.apache.org/commons/codec/">Jakarta Commons codec</a>
+  </dd>
+  <p/>
+</dl>
+</blockquote>
+
+</body>
+</html>
+
