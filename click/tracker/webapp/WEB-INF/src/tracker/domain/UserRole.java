@@ -26,7 +26,7 @@ public class UserRole implements Serializable {
     
     protected User user;
     
-    protected String rolename;
+    protected String role;
     
     /**
      * @see Object#hashCode()
@@ -52,16 +52,16 @@ public class UserRole implements Serializable {
     public String toString() {
         return getClass().getName() + "[" +
             "user=" + ((user != null) ? user.getUsername() : "null") +
-            "rolename=" + rolename +
+            "role=" + role +
             "]";
     }
 
-    public String getRolename() {
-        return rolename;
+    public String getRole() {
+        return role;
     }
     
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
+    public void setRole(String role) {
+        this.role = role;
     }
     
     public User getUser() {

@@ -86,6 +86,11 @@ import org.apache.velocity.util.SimplePool;
  * @author Malcolm Edgar
  */
 public class ClickServlet extends HttpServlet {
+    
+    // --------------------------------------------------------------- Contants
+    
+    /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
+    protected final static String CLICK_FORWARD = "click-forward";
 
     // ------------------------------------------------------ Instance Varables
 
@@ -218,7 +223,8 @@ public class ClickServlet extends HttpServlet {
             boolean continueProcessing = page.onSecurityCheck();
 
             if (continueProcessing && page.hasControls()) {
-                // Make sure dont processed forwarded request
+                
+                // Make sure dont processed forwarded request               
                 if (!page.getContext().isForward()) {
 
                     List controls = page.getControls();
@@ -253,6 +259,8 @@ public class ClickServlet extends HttpServlet {
                 response.sendRedirect(url);
 
             } else if (page.getForward() != null) {
+                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
+                
                 if (logger.isDebugEnabled()) {
                     logger.debug("forward=" + page.getForward());
                 }

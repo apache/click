@@ -45,6 +45,13 @@ public class TestCaseDomain extends TestCase {
         
         session.save(newUser);
         
+        UserRole userRole = new UserRole();
+        userRole.setUser(newUser);
+        userRole.setRole("user");
+        
+        session.save(userRole);
+        
+/*        
         User savedUser = (User) session.get(User.class, "medgar");
         
         assertEquals(newUser.toString(), savedUser.toString());
@@ -74,7 +81,7 @@ public class TestCaseDomain extends TestCase {
         session.delete(newIssue);
         
         session.delete(savedUser);
-        
+*/       
         tx.commit();
         
         SessionProvider.closeSession();

@@ -29,7 +29,7 @@ public class Exception extends Page {
     }
 
     public boolean onBrokenPageClick() {
-        setPath("examples/broken-page.htm");
+        setPath("broken-page.htm");
 
         return true;
     }

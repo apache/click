@@ -123,15 +123,13 @@ public class Context {
     }
 
     /**
-     * Return true if the request has been forwarded. With a forwarded request
-     * the URL and URI ends are different.
+     * Return true if the request has been forwarded. A forwarded request
+     * will contain a {@link ClickServlet#CLICK_FORWARD} request attribute.
      *
      * @return true if the request has been forwarded
      */
     public boolean isForward() {
-        String url = request.getRequestURL().toString();
-
-        return !url.endsWith(request.getRequestURI());
+        return (request.getAttribute(ClickServlet.CLICK_FORWARD) != null);
     }
 
     /**
