@@ -2,10 +2,9 @@
 <head>
 <title>Tracker</title>
 <link rel='stylesheet' type='text/css' href='style.css' title='style'/>
-#if( $form ) $form.getHtmlImports() #end
 </head>
 
-<body topmargin="0" leftmargin="0">
+<body>
 
 <table valign="top" border="0" cellSpacing="1" cellPadding="0" width="100%" height="100%">
 
@@ -14,9 +13,9 @@
   <TD valign="bottom">
    <table cellspacing="0" cellpadding="0" border="0" valign="bottom">
     <tr>
-     <td valign="center" noWrap align="right" bgcolor="#002866">&nbsp;        
+     <td valign="center" align="right" bgcolor="#002866">&nbsp;        
       <span class="menu-selected">&nbsp;&nbsp;Log Off&nbsp;&nbsp;</span>&nbsp;|&nbsp; 
-      <a class="menu" href="login.html">&nbsp;Log In&nbsp;</a>&nbsp;&nbsp;
+      <a class="menu" href="login.htm">&nbsp;Log In&nbsp;</a>&nbsp;&nbsp;
      </td>
      <td valign="top" align="right"><img height="25" src="images/curve.gif"></td>
     </tr>
@@ -27,11 +26,11 @@
  </TR>
  
  <!-- Title -->
- <TR>
+ <tr>
   <td class="title" align="left" valign="center" colspan="3" width="100%">
    &nbsp;&nbsp;Tracker
   </td>
- </TR>
+ </tr>
  
  <!-- Main Start -->
  <tr valign="top">
@@ -44,9 +43,8 @@
       <br>
       <h3>Log Off</h3>      
       <p>$user you are now logged out.</p>
-      <p>To login again click <a href="login.html"><b>here</b></a>.</p>
+      <p>To login again click <a href="login.html">here</a>.</p>
      </td>  
-
     </tr>
    </table>
   </td>    
