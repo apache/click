@@ -400,12 +400,6 @@ class ClickApp implements EntityResolver {
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
 
-            final String webInfTarget =
-                path + File.separator + "WEB-INF" + File.separator;
-
-            // Deploy DTD file
-            deployFile(DTD_FILE_PATH, webInfTarget, "WEB-INF", DTD_FILE_NAME);
-
         } else {
             logger.error("Servlet real path is null. Could not deploy files");
         }
