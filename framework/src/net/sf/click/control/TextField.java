@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,18 +15,19 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a Text Field control: &nbsp; &lt;input type='text'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Text Field</td>
  * <td><input type='text' value='string' title='TextField Control'/></td>
- * </tr></table>
- * <p/>
- * The example below shows how to a TextField to a Form, and how it will be 
+ * </tr>
+ * </table>
+ *
+ * The example below shows how to a TextField to a Form, and how it will be
  * rendered as HTML.
- * <blockquote><pre>
+ * <div class="code">
  * // Java code
  * TextField usernameField = new TextField("Username");
  * usernameField.setRequired(true);
@@ -36,33 +37,33 @@ package net.sf.click.control;
  * form.add(usernameField);
  *
  * &lt;-- HTML output --&gt;
- * &lt;input type='text' name='username' value='' size='12' maxlength='12'/&gt;
- * </pre></blockquote>
+ * &lt;input type='text' name='username' value='' size='12' maxlength='12'&gt;
+ * </div>
  *
- * For another example using TextField see the {@link net.sf.click.control.Form} 
+ * For another example using TextField see the {@link net.sf.click.control.Form}
  * Javadoc example.
  * <p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class TextField extends Field {
-    
+
     // ----------------------------------------------------- Instance Variables
 
-    /** 
-     * The maximum field length validation contraint. If the value is zero this 
+    /**
+     * The maximum field length validation contraint. If the value is zero this
      * validation constraint is not applied. The default value is zero.
      * <p/>
-     * If maxLenth is greater than zero, then maxLength is rendered as the 
+     * If maxLenth is greater than zero, then maxLength is rendered as the
      * HTML attribute 'maxlength'.
      */
     protected int maxLength = 0;
 
-    /** 
-     * The minimum field length validation constraint. If the valid is zero this 
+    /**
+     * The minimum field length validation constraint. If the valid is zero this
      * validation constraint is not applied. The default value is zero.
      */
     protected int minLength = 0;
@@ -84,13 +85,13 @@ public class TextField extends Field {
     }
 
     // ------------------------------------------------------ Public Attributes
-    
+
     /**
-     * Returns the maximum field length validation constraint. If the 
-     * {@link #maxLength} property is greater than zero, the Field values length 
+     * Returns the maximum field length validation constraint. If the
+     * {@link #maxLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      * <p/>
-     * If maxLenth is greater than zero, it is rendered as the field 
+     * If maxLenth is greater than zero, it is rendered as the field
      * attribute 'maxlength'
      *
      * @return the maximum field length validation contraint
@@ -100,13 +101,13 @@ public class TextField extends Field {
     }
 
     /**
-     * Sets the maximum field length. If the {@link #maxLength} property is 
-     * greater than zero, the Field values length will be validated against 
+     * Sets the maximum field length. If the {@link #maxLength} property is
+     * greater than zero, the Field values length will be validated against
      * this constraint when processed.
      * <p/>
-     * If maxLenth is greater than zero, it is rendered as the field 
+     * If maxLenth is greater than zero, it is rendered as the field
      * attribute 'maxlength'
-     * 
+     *
      * @param maxLength the maximum field length validation constraint
      */
     public void setMaxLength(int maxLength) {
@@ -114,8 +115,8 @@ public class TextField extends Field {
     }
 
     /**
-     * Returns the minimum field length validation constraint. If the 
-     * {@link #minLength} property is greater than zero, the Field values length 
+     * Returns the minimum field length validation constraint. If the
+     * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
      * @return the minimum field length validation contraint
@@ -125,8 +126,8 @@ public class TextField extends Field {
     }
 
     /**
-     * Sets the minimum field length validation constraint. If the 
-     * {@link #minLength} property is greater than zero, the Field values length 
+     * Sets the minimum field length validation constraint. If the
+     * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
      * @param minLength the minimum field length validation constraint
@@ -134,7 +135,7 @@ public class TextField extends Field {
     public void setMinLength(int minLength) {
         this.minLength = minLength;
     }
-    
+
     /**
      * Return the field size.
      *
@@ -142,7 +143,7 @@ public class TextField extends Field {
      */
     public int getSize() {
         return size;
-    }    
+    }
 
     /**
      * Set the field size.
@@ -154,9 +155,9 @@ public class TextField extends Field {
     }
 
     /**
-     * Returns the 'text' input field type.
+     * Return the input type: '<tt>text</tt>'.
      *
-     * @return 'text'
+     * @return the input type: '<tt>text</tt>'
      */
     public String getType() {
         return "text";
@@ -169,7 +170,7 @@ public class TextField extends Field {
      * constraints and a Control listener is defined then the listener
      * method will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
      * <p/>
@@ -178,7 +179,7 @@ public class TextField extends Field {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -205,10 +206,10 @@ public class TextField extends Field {
                 setError(getMessage("field-required-error", getLabel()));
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Return a HTML rendered TextField string.
      *

@@ -12,14 +12,14 @@ import java.util.TreeMap;
 
 /**
  * Provides a mockup Customer database for the examples.
- * 
+ *
  * @see Customer
- * 
+ *
  * @author Malcolm Edgar
  */
 public class CustomerDatabase {
-    
-    private static final SimpleDateFormat FORMAT 
+
+    private static final SimpleDateFormat FORMAT
         = new SimpleDateFormat("yyyy-MM-dd");
 
     public static List getCustomersSortedByName() {
@@ -52,7 +52,7 @@ public class CustomerDatabase {
             }
         }
     }
-    
+
     public static Customer findCustomerByID(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
@@ -60,19 +60,19 @@ public class CustomerDatabase {
 
         try {
             // Search for customer id
-            Long id = Long.valueOf(value);        
+            Long id = Long.valueOf(value);
             return (Customer) CUSTOMER_BY_ID.get(id);
 
         } catch (NumberFormatException nfe) {
             return null;
-        }  
+        }
     }
-    
+
     public static Customer findCustomerByName(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
-        }        
-        
+        }
+
         // Search for customer name
         String nameValue = value.toLowerCase();
 
@@ -107,7 +107,7 @@ public class CustomerDatabase {
             }
             // No customer was found
             return null;
-            
+
         } catch (NumberFormatException nfe) {
             return null;
         }
@@ -195,7 +195,7 @@ public class CustomerDatabase {
         CUSTOMER_BY_NAME.put(customer.name, customer);
         CUSTOMER_BY_ID.put(customer.id, customer);
     }
-    
+
     private static Date createDate(String pattern) {
         try {
             return FORMAT.parse(pattern);

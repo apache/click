@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,8 +22,9 @@ import java.util.List;
 
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Select</td>
  * <td>
  * <select title='Select Control'>
@@ -32,30 +33,31 @@ import java.util.List;
  * <option value='Option 3'>Option 3</option>
  * </select>
  * </td>
- * </tr></table>
- * <p/>
- * The Control listener will be invoked if the Select is valid and an item(s) is 
+ * </tr>
+ * </table>
+ *
+ * The Control listener will be invoked if the Select is valid and an item(s) is
  * selected by the user.
  *
  * <h4>Single Item Select</h4>
  * A single item Select, will only allow users to select one item from the list.
  * By default the Select {@link #multiple} item property is false.
  * <p/>
- * If a Select is required, an item after the first in the list must be selected 
+ * If a Select is required, an item after the first in the list must be selected
  * for the Field to be valid. This forces the user to make an active selection.
  * <p/>
- * An example of a single item Select is provided below along with the 
+ * An example of a single item Select is provided below along with the
  * rendered HTML.
- * <blockquote><pre>
- * public class GenderPage {
- * 
+ *
+ * <div class="code">public class GenderPage {
+ *
  *     Form form;
  *     Select genderSelect;
- * 
+ *
  *     public void onInit() {
  *         form = new Form("form", getContext());
  *         addControl(form);
- * 
+ *
  *         genderSelect = new Select("Gender");
  *         genderSelect.setRequired(true);
  *         genderSelect.add(new Option("U", "");
@@ -63,17 +65,18 @@ import java.util.List;
  *         genderSelect.add(new Option("F", "Female"));
  *         form.add(genderSelect);
  *     }
- * 
+ *
  *     public void onPost() {
  *         if (form.isValid()) {
  *             String gender = genderSelect.getValue();
  *             ..
  *         }
  *     }
- * }</pre></blockquote>
- * 
+ * }
+ * </div>
+ *
  * Rendered HTML:
- * <blockquote>
+ * <table class="htmlExample"><tr><td>
  * <table class='form'><tr>
  * <td align='left'><label >Gender</label><font color="red">*</font></td>
  * <td align='left'><select name='gender'size='1'><option value='U'></option><option value='M'>Male</option><option value='F'>Female</option></select></td>
@@ -83,33 +86,34 @@ import java.util.List;
  * <input type='submit' value='Submit'/>
  * </td></tr>
  * </table>
- * </blockquote>
- * 
- * Note how {@link Option} items are added to the Select. In this 
+ * </td></tr>
+ * </table>
+ *
+ * Note how {@link Option} items are added to the Select. In this
  * example the "U" option will not be a valid selection, as it is the first
  * item in the option list.
- * 
+ *
  * <h4>Multiple Item Select</h4>
  * A multiple item Select, will allow users to select multiple items from the list.
- * By default the Select {@link #multiple} item property is false, and must be 
+ * By default the Select {@link #multiple} item property is false, and must be
  * enabled for multiple item selects.
  * <p/>
  * If multiple item Select is required, the user must select an item(s) in
- * the list for the Field to be valid. A valid selection can include any item 
+ * the list for the Field to be valid. A valid selection can include any item
  * including the first item.
  * <p/>
- * An example of a single item Select is provided below along with the 
+ * An example of a single item Select is provided below along with the
  * rendered HTML.
- * <blockquote><pre>
- * public class LocationPage {
- * 
+ *
+ * <div class="code">public class LocationPage {
+ *
  *     Form form;
  *     Select locationSelect;
- * 
+ *
  *     public void onInit() {
  *         form = new Form("form", getContext());
  *         addControl(form);
- * 
+ *
  *         locationSelect = new Select("Location");
  *         locationSelect.<b>setMutliple(true)</b>;
  *         locationSelect.setRequired(true);
@@ -123,17 +127,18 @@ import java.util.List;
  *         locationSelect.add("WA");
  *         form.add(locationSelect);
  *     }
- * 
+ *
  *     public void onPost() {
  *         if (form.isValid()) {
  *             String location = locationSelect.getValue();
  *             ..
  *         }
  *     }
- * }</pre></blockquote>
- * 
- * Rendered HTML: 
- * <blockquote>
+ * }
+ * </div>
+ *
+ * Rendered HTML:
+ * <table class="htmlExample"><tr><td>
  * <table class='form'>
  * <tr>
  * <td align='left'><label >Location</label><font color="red">*</font></td>
@@ -142,19 +147,20 @@ import java.util.List;
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'><input type='submit' value='Submit'/></td></tr>
  * </table>
- * </blockquote>
- * 
- * Note is this example the {@link #add(String)} method is used to an an Option 
+ * </td></tr>
+ * </table>
+ *
+ * Note is this example the {@link #add(String)} method is used to an an Option
  * item to the Select.
- * 
+ *
  * <p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.6">SELECT</a>
- * 
+ *
  * @see Select.Option
  * @see Select.OptionGroup
- * 
+ *
  * @author Malcolm Edgar
  */
 public class Select extends Field {
@@ -166,11 +172,11 @@ public class Select extends Field {
 
     /** The Select Option/OptionGroup list. */
     protected List optionList;
-    
+
     /** The Select display size in rows. The default size is one. */
     protected int size = 1;
-    
-    /** 
+
+    /**
      * The multiple selected values. This list will only be populated if
      * {@link #multiple} is true.
      */
@@ -216,12 +222,12 @@ public class Select extends Field {
         }
         getOptionList().add(optionGroup);
     }
-    
+
     /**
      * Add the given option value to the Select. This covenience method will
-     * create a new {@link Option} with the given value and add it to the 
+     * create a new {@link Option} with the given value and add it to the
      * Select. The new Option display label will be the same as its value.
-     * 
+     *
      * @param value the option value to add
      * @throws IllegalArgumentException if the value is null
      */
@@ -231,7 +237,7 @@ public class Select extends Field {
         }
         getOptionList().add(new Option(value));
     }
-    
+
     /**
      * Add the given Option/OptionGroup collection to the Select.
      *
@@ -269,8 +275,8 @@ public class Select extends Field {
     /**
      * Add the given array of string options to the Select option list.
      * <p/>
-     * The options array string value will be used for the {@link Option#value} 
-     * and {@link Option#label}. 
+     * The options array string value will be used for the {@link Option#value}
+     * and {@link Option#label}.
      *
      * @param options the array of option values to add
      * @throws IllegalArgumentException if options is null
@@ -296,7 +302,7 @@ public class Select extends Field {
     public int getSize() {
         return size;
     }
-    
+
     /**
      * Set the number of the Select display rows.
      *
@@ -305,7 +311,7 @@ public class Select extends Field {
     public void setSize(int rows) {
         size = rows;
     }
-    
+
     /**
      * Return true if multiple options can be selected.
      *
@@ -323,24 +329,24 @@ public class Select extends Field {
     public void setMultiple(boolean value) {
         multiple = value;
     }
-    
+
     /**
      * Return the list of selected values.
-     * 
+     *
      * @return the list of selected values
      */
     public List getMultipleValues() {
         if (multipleValues != null) {
             return multipleValues;
-            
+
         } else {
             return Collections.EMPTY_LIST;
         }
     }
-    
+
     /**
      * Return the Option list.
-     * 
+     *
      * @return the Option list
      */
     public List getOptionList() {
@@ -349,37 +355,37 @@ public class Select extends Field {
         }
         return optionList;
     }
-    
+
     /**
      * Set the Option list.
-     * 
+     *
      * @param options the Option list
      */
     public void setOptionList(List options) {
         optionList = options;
-    }    
+    }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the Select submission. 
+     * Process the Select submission.
      * <p/>
      * If a Select is {@link #required} then the user must select a value
      * other than the first value is the list, otherwise the Select will
      * have a validation error. If the Select is not required then no
      * validation errors will occur.
      * <p/>
-     * If the Select is valid, an item(s) is selected, and a Control listener is 
+     * If the Select is valid, an item(s) is selected, and a Control listener is
      * defined then the listener method will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
      * <li>select-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -387,30 +393,30 @@ public class Select extends Field {
         if (optionList == null || optionList.isEmpty()) {
             return true;
         }
-        
-        // Process single item select case, do the easy one first. 
+
+        // Process single item select case, do the easy one first.
         if (!isMultiple()) {
             // Load the selected item.
             value = getContext().getRequest().getParameter(getName());
-            
+
             if (value != null) {
                 Option firstOption = (Option) optionList.get(0);
-                
+
                 if (isRequired() && firstOption.getValue().equals(value)) {
                     setError(getMessage("select-error", getLabel()));
                     return true;
-                    
+
                 } else {
                     return invokeListener();
                 }
-                
+
             } else {
                 return true;
-            } 
-            
+            }
+
         // Process the multiple item select case.
         } else {
-            
+
             // Load the selected items.
             multipleValues = new ArrayList();
             String[] values = getContext().getRequest().getParameterValues(getName());
@@ -418,21 +424,21 @@ public class Select extends Field {
                 for (int i = 0; i < values.length; i++) {
                     multipleValues.add(values[i]);
                 }
-            }           
-            
+            }
+
             if (isRequired()) {
                 if (multipleValues.isEmpty()) {
                     setError(getMessage("select-error", getLabel()));
-                    return true; 
-                    
+                    return true;
+
                 } else {
                     return invokeListener();
                 }
-                
+
             } else {
                 if (multipleValues.isEmpty()) {
                     return true;
-                    
+
                 } else {
                     return invokeListener();
                 }
@@ -465,7 +471,7 @@ public class Select extends Field {
             buffer.append(getTitle());
             buffer.append("' ");
         }
-        
+
         renderAttributes(buffer);
 
         if (isMultiple()) {
@@ -484,11 +490,11 @@ public class Select extends Field {
                 if (object instanceof Option) {
                     Option option = (Option) object;
                     buffer.append(option.renderHTML(this));
-                    
+
                 } else if (object instanceof OptionGroup) {
                     OptionGroup optionGroup = (OptionGroup) object;
                     buffer.append(optionGroup.renderHTML(this));
-                    
+
                 } else {
                     String msg = "Select option class not instance of Option"
                         + " or OptionGroup: " + object.getClass().getName();
@@ -506,23 +512,23 @@ public class Select extends Field {
     /**
      * Provides a select Option element: &nbsp; &lt;option&gt;&lt;/option&gt;.
      * <p/>
-     * The Option class uses an immutable design so Option instances can be 
-     * shared by multiple Pages in the multi-threaded Servlet environment. 
+     * The Option class uses an immutable design so Option instances can be
+     * shared by multiple Pages in the multi-threaded Servlet environment.
      * This enables Option instances to be cached as static variables.
      * <p/>
-     * The example below caches Select Option and OptionGroup instances in a 
+     * The example below caches Select Option and OptionGroup instances in a
      * static List.
-     * <blockquote><pre>
-     * public class InvestmentSelect extends Select {
-     *   
+     *
+     * <div class="code">public class <span class="blue">InvestmentSelect</span> extends Select {
+     *
      *     static final List INVESTMENT_OPTIONS = new ArrayList();
-     *  
+     *
      *     static {
      *         Select.OptionGroup property = new Select.OptionGroup("Property");
      *         property.add(new Select.Option("Commerical Property", "Commercial"));
-     *         property.add(new Select.Option("Residential Property", "Residential"));    
+     *         property.add(new Select.Option("Residential Property", "Residential"));
      *         INVESTMENT_OPTIONS.add(property);
-     *   
+     *
      *         Select.OptionGroup securities = new Select.OptionGroup("Securities");
      *         securities.add(new Select.Option("Bonds"));
      *         securities.add(new Select.Option("Options"));
@@ -530,32 +536,33 @@ public class Select extends Field {
      *         INVESTMENT_OPTIONS.add(securities);
      *     }
      *
-     *     public InvestmentSelect(String label) {
+     *     public <span class="blue">InvestmentSelect</span>(String label) {
      *         super(label);
      *         setOptionList(INVESTMENT_OPTIONS);
      *     }
      * }
-     * 
+     *
      * public class InvestmentsPage {
-     * 
+     *
      *     Form form;
      *     Select investmentsSelect;
-     * 
+     *
      *     public void onInit() {
      *         form = new Form("form", getContext());
      *         addControl(form);
-     * 
-     *         investmentsSelect = new InvestmentsSelect("Investments");
+     *
+     *         investmentsSelect = new <span class="blue">InvestmentsSelect</span>("Investments");
      *         investmentsSelect.setMutliple(true);
      *         investmentsSelect(7);
      *         form.add(investmentsSelect);
      *     }
-     * 
+     *
      *     ..
-     * }</pre></blockquote>
-     * 
+     * }
+     * </div>
+     *
      * Rendered HTML:
-     * <blockquote>
+     * <table class="htmlExample"><tr><td>
      * <table class='form'><tr>
      * <td align='left'><label >Investments</label></td>
      * <td align='left'><select name='investments' size='7' multiple><optgroup label='Property'><option value='Commerical Property'>Commercial</option><option value='Residential Property'>Residential</option></optgroup><optgroup label='Securities'><option value='Bonds'>Bonds</option><option selected value='Options'>Options</option><option value='Stocks'>Stocks</option></optgroup></select></td>
@@ -565,33 +572,32 @@ public class Select extends Field {
      * <input type='submit' value='Submit'/>
      * </td></tr>
      * </table>
-     * </blockquote>
-     * 
-     * <p/>
+     * </td></tr></table>
+     *
      * See also the W3C HTML reference:
-     * <a title="W3C HTML 4.01 Specification" 
+     * <a title="W3C HTML 4.01 Specification"
      *    href="../../../../../html/interact/forms.html#h-17.6">OPTION</a>
-     * 
+     *
      * @see Select
      * @see Select.OptionGroup
-     * 
+     *
      * @author Malcolm Edgar
      */
     public static class Option {
-        
+
         // ------------------------------------------------- Instance Variables
-        
+
         /** The Options display label */
         protected final String label;
-        
+
         /** The Option value. */
         protected final String value;
-        
+
         // ------------------------------------------------------- Constructors
-               
+
         /**
          * Create an Option with the given value and display label.
-         * 
+         *
          * @param value the Option value
          * @param label the Option display label
          */
@@ -603,35 +609,35 @@ public class Select extends Field {
         /**
          * Create an Option with the given value. The value will also be used
          * for the display label.
-         * 
+         *
          * @param value the Option value and display label
          */
         public Option(String value) {
             this(value, value);
         }
-        
+
         // -------------------------------------------------- Public Attributes
-        
+
         /**
          * Return the Option display label.
-         * 
+         *
          * @return the Option display label
          */
         public String getLabel() {
             return label;
         }
-        
+
         /**
          * Return the Option value.
-         * 
+         *
          * @return the Option value
          */
         public String getValue() {
             return value;
         }
-        
+
         // ----------------------------------------------------- Public Methods
-        
+
         /**
          * Return a HTML rendered Option string.
          *
@@ -640,11 +646,11 @@ public class Select extends Field {
          */
         public String renderHTML(Select select) {
             StringBuffer buffer = new StringBuffer(48);
-            
+
             if (select.isMultiple()) {
-                
+
                 if (!select.getMultipleValues().isEmpty()) {
-                    
+
                     // Search through selection list for matching value
                     List values = select.getMultipleValues();
                     boolean found = false;
@@ -663,7 +669,7 @@ public class Select extends Field {
                 } else {
                     buffer.append("<option value='");
                 }
-                
+
             } else {
                 if (getValue().equals(select.getValue())) {
                     buffer.append("<option selected value='");
@@ -676,115 +682,115 @@ public class Select extends Field {
             buffer.append("'>");
             buffer.append(getLabel());
             buffer.append("</option>");
-            
+
             return buffer.toString();
         }
     }
-    
+
     /**
      * Provides a select Option Group element: &nbsp; &lt;optgroup&gt;&lt;/optgroup&gt;.
      * <p/>
-     * The OptionGroup class uses an immutable design so Option instances can be 
-     * shared by multiple Pages in the multi-threaded Servlet environment. 
-     * This enables OptionGroup instances to be cached as static variables. 
+     * The OptionGroup class uses an immutable design so Option instances can be
+     * shared by multiple Pages in the multi-threaded Servlet environment.
+     * This enables OptionGroup instances to be cached as static variables.
      * <p/>
      * For an OptionGroup code example see the {@link Select.Option} Javadoc example.
      * <p/>
      * See also the W3C HTML reference:
-     * <a title="W3C HTML 4.01 Specification" 
+     * <a title="W3C HTML 4.01 Specification"
      *    href="../../../../../html/interact/forms.html#h-17.6">OPTGROUP</a>
-     * 
+     *
      * @see Select
      * @see Select.Option
-     * 
+     *
      * @author Malcolm Edgar
      */
     public static class OptionGroup {
-        
+
         // ------------------------------------------------- Instance Variables
-        
+
         /** The groups child Option/OptGroup objects. */
         protected List children = new ArrayList();
-        
+
         /** The label for the OptionGroup. */
         protected final String label;
-        
+
         // ------------------------------------------------------- Constructors
-        
+
         /**
          * Create an OptionGroup with the given display label.
-         * 
+         *
          * @param label the display label for the OptionGroup
          */
         public OptionGroup(String label) {
             this.label = label;
         }
-        
+
         // -------------------------------------------------- Public Attributes
-        
+
         /**
          * Add the given Option or OptionGroup object to this group.
-         * 
+         *
          * @param object the Option or OptionGroup to add
          */
         public void add(Object object) {
             getChildren().add(object);
         }
-        
+
         /**
          * Return the OptionGroup children.
-         * 
+         *
          * @return the OptionGroup children
          */
         public List getChildren() {
             return children;
         }
-        
+
         /**
          * Return the display label.
-         * 
+         *
          * @return the display label
          */
         public String getLabel() {
             return label;
         }
-        
+
         // ----------------------------------------------------- Public Methods
-        
+
         /**
          * Return a HTML rendered OptionGroup string.
          *
          * @param select the parent Select
          * @return a rendered HTML OptionGroup string
-         */       
+         */
         public String renderHTML(Select select) {
             StringBuffer buffer = new StringBuffer(64);
-            
+
             buffer.append("<optgroup label='");
             buffer.append(getLabel());
             buffer.append("'>");
-            
+
             List list = getChildren();
             for (int i = 0, size = list.size(); i < size; i++) {
                 Object object = list.get(i);
-                
+
                 if (object instanceof Option) {
                     Option option = (Option) object;
                     buffer.append(option.renderHTML(select));
-                    
+
                 } else if (object instanceof OptionGroup) {
                     OptionGroup optionGroup = (OptionGroup) object;
                     buffer.append(optionGroup.renderHTML(select));
-                    
+
                 } else {
                     String msg = "Select option class not instance of Option"
                         + " or OptionGroup: " + object.getClass().getName();
                     throw new IllegalArgumentException(msg);
                 }
             }
-            
+
             buffer.append("</optgroup>");
-            
+
             return buffer.toString();
         }
     }

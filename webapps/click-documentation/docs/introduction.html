@@ -79,8 +79,7 @@ new <tt>Date</tt> object and adds it to the page's model as a value called
 The page model is then merged with the template which subsitutes the 
 $<font color="red">time</font> parameter with the <tt>Date</tt> object. 
 Velocity then renders the merged template which looks something like this:
-<blockquote>
-<table border="1" cellpadding="12" cellspacing="0">
+<table class="htmlExample">
 <tr>
  <td>
  <h2><font color="navy">Hello World</font></h2>
@@ -88,7 +87,6 @@ Velocity then renders the merged template which looks something like this:
  </td>
 </tr>
 </table>
-</blockquote>
 
 <h2>Form Example</h2>
 
@@ -166,8 +164,7 @@ Next we have the Login page template <font color="blue">login.htm</font>:
 
 When the Login page is first requested the $<font color="red">form</font> object will 
 automatically render itself as:
-<blockquote>
-<table border="1" cellpadding="12" cellspacing="0">
+<table class="htmlExample">
 <tr>
  <td>
   
@@ -192,7 +189,6 @@ automatically render itself as:
  </td>
 </tr>
 </table>
-</blockquote>
 
 Now the user enters their username, but forgets their password and then presses the OK
 button. The ClickServlet creates a new Login page and processes the form control.
@@ -202,8 +198,7 @@ Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the f
 invalid this method it does nothing.
 <p/>
 With all the event processing completed the form now renders the field validation errors.
-<blockquote>
-<table border="1" cellpadding="12" cellspacing="0">
+<table class="htmlExample">
 <tr>
  <td>
   
@@ -230,14 +225,18 @@ With all the event processing completed the form now renders the field validatio
  </td>
 </tr>
 </table>
-</blockquote>
+
 If the user enters a correct username and password the <tt>onOkClicked()</tt> 
 event handler will add a User object to the HttpSession and redirect the request 
 to the <font color="blue">secure.htm</font> page.
 <p/>
 If the user clicks on the Cancel button the <tt>onOkClicked()</tt> event handler is
 invoked and the request is redirected to the <font color="blue">index.htm</font> page.
-
+<p/>
+Note while in this example we use the
+<a target="topic" href="click-api/net/sf/click/control/Form.html">Form</a>
+control to render the form, you can also layout the form 
+and the fields in your page template.
 
 </body>
 </html>

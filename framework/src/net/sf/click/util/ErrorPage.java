@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,8 +32,8 @@ import org.apache.log4j.Logger;
 import org.apache.velocity.exception.ParseErrorException;
 
 /**
- * Provides the base error handling Page. The ErrorPage handles any 
- * unexpected Exceptions. When the application is not in "production" mode the 
+ * Provides the base error handling Page. The ErrorPage handles any
+ * unexpected Exceptions. When the application is not in "production" mode the
  * ErrorPage will provide diagnostic information.
  * <p/>
  * The ErrorPage template "click/error.htm" can be customized to your needs.
@@ -46,15 +46,15 @@ import org.apache.velocity.exception.ParseErrorException;
  * import java.sql.Connection;
  * import java.sql.SQLException;
  * import net.sf.click.util.ErrorPage;
- * 
+ *
  * public class MyCorpErrorPage extends ErrorPage {
  *
  *     public void onFinally() {
  *         Exception errror = getError();
- * 
+ *
  *         if (error instanceof SQLException) {
  *             rollbackAndClose();
- *         } 
+ *         }
  *         else {
  *             Throwable cause = error.getCause();
  *
@@ -63,15 +63,15 @@ import org.apache.velocity.exception.ParseErrorException;
  *             }
  *         }
  *     }
- * 
+ *
  *     protected void rollbackAndClose() {
- *         Connection connection = 
+ *         Connection connection =
  *             ConnectionProviderThreadLocal.getConnection();
- * 
+ *
  *         if (connection != null) {
  *             try {
  *                 connection.rollback();
- *             } 
+ *             }
  *             catch (SQLException sqle) {
  *             }
  *             finally {
@@ -84,7 +84,7 @@ import org.apache.velocity.exception.ParseErrorException;
  *         }
  *     }
  * } </pre></blockquote>
- * 
+ *
  * The ClickServlet sets the following ErrorPage properties in addition to
  * the normal Page properties:<ul>
  * <li>{@link #error} - the error causing exception</li>
@@ -99,57 +99,57 @@ public class ErrorPage extends Page {
 
     /** The number of lines to display. */
     protected static final int NUMB_LINES = 8;
-    
+
     /** The error causing exception. */
     protected Throwable error;
-    
-    /** 
+
+    /**
      * The application mode: &nbsp;
      * ["production", "profile", "development", "debug"]
      */
     protected String mode;
-    
+
     /** The page in error. */
     protected Page page;
-    
+
     /** The target page path of the error. */
     protected String pagePath;
-    
+
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * Return the causing error.
-     * 
+     *
      * @return the causing error
      */
     public Throwable getError() {
         return error;
     }
-    
+
     /**
      * Set the causing error.
-     * 
+     *
      * @param cause the causing error
      */
     public void setError(Throwable cause) {
         this.error = cause;
     }
-    
+
     /**
      * Return the application mode.
-     * 
+     *
      * @return the application mode.
      */
     public String getMode() {
         return mode;
     }
-    
+
     /**
-     * Set the application mode: ["production", "profile", "development", 
+     * Set the application mode: ["production", "profile", "development",
      * debug"]
      * <p/>
      * The application mode is added to the model by the {@link #onInit()} method.
-     * This property is used to determines whether the error page template 
+     * This property is used to determines whether the error page template
      * should display error diagnostic information. The default "error.htm" will
      * display error diagnostic information so long as the application mode is
      * not "production".
@@ -159,19 +159,19 @@ public class ErrorPage extends Page {
     public void setMode(String value) {
         mode = value;
     }
-    
+
     /**
      * Return the page in error
-     * 
+     *
      * @return the page in error
      */
     public Page getPage() {
         return page;
     }
-    
+
     /**
      * Set the page in error.
-     * 
+     *
      * @param page the page in error
      */
     public void setPage(Page page) {
@@ -197,7 +197,7 @@ public class ErrorPage extends Page {
      * <li>requestParams - a sorted Map of the HTTP request parameters</li>
      * <li>template - the HTML section of the page template causing a parse error</li>
      * </ul>
-     * 
+     *
      * @see Page#onInit()
      */
     public void onInit() {
@@ -224,13 +224,13 @@ public class ErrorPage extends Page {
             } else {
                 cause = error.getCause();
             }
-            
+
             if (cause != null) {
                 addModel("errorMessage",
                          ClickUtils.toHtmlEncode(cause.getMessage()));
                 addModel("errorClass", cause.getClass().getName());
                 addModel("errorStackTrace", ClickUtils.toStackTrace(cause));
-                
+
             } else {
                 addModel("errorMessage",
                         ClickUtils.toHtmlEncode(error.getMessage()));
@@ -264,7 +264,7 @@ public class ErrorPage extends Page {
             requestHeaders.put(name, request.getHeader(name));
         }
         addModel("requestHeaders", requestHeaders);
-        
+
         TreeMap sessionAttributes = new TreeMap();
         if (getPage().getContext().hasSession()) {
             HttpSession session = getPage().getContext().getSession();
@@ -272,13 +272,13 @@ public class ErrorPage extends Page {
             while (attributeNames.hasMoreElements()) {
                 String name = attributeNames.nextElement().toString();
                 sessionAttributes.put(name, session.getAttribute(name));
-            }   
+            }
         }
         addModel("sessionAttributes", sessionAttributes);
     }
-    
+
     // ------------------------------------------------------ Protected Methods
-    
+
     /**
      * Return true if the error is a ParseErrorException.
      *
@@ -291,7 +291,7 @@ public class ErrorPage extends Page {
     /**
      * Return a HTML rendered section of the specified page template, with
      * the error line highlighted.
-     * 
+     *
      * @param pagePath the path of the template to render
      * @param errorLine the parse error causing line number to highlight
      * @return a HTML rendered section of the parsing error page template
@@ -378,7 +378,7 @@ public class ErrorPage extends Page {
 
     /**
      * Return the HTML formatted parse error error message from the given error.
-     * 
+     *
      * @param error the Velocity ParseErrorException error
      * @return the HTML formatted error message
      */
@@ -407,7 +407,7 @@ public class ErrorPage extends Page {
     /**
      * Return the error line number from the ParseException error message, or
      * -1 if it could not be determined.
-     * 
+     *
      * @param parseErrorMessage the Velocity ParseException error message
      * @return the error line number of the parse error
      */
@@ -447,7 +447,7 @@ public class ErrorPage extends Page {
 
     /**
      * Return a HTML formatted line number string.
-     * 
+     *
      * @param lineNumber the line number to format
      * @param errorLine the error line number
      * @return a HTML formatted line number string

@@ -11,25 +11,25 @@ import net.sf.click.control.TextField;
  * @author Malcolm Edgar
  */
 public class SimpleForm extends Page {
-    
+
     Form form;
-    
+
     /**
      * @see Page#onInit()
      */
     public void onInit() {
         form = new Form("form", getContext());
         addControl(form);
-        
+
         TextField textField = new TextField("My Name");
         textField.setMaxLength(20);
         textField.setMinLength(5);
         textField.setRequired(true);
         form.add(textField);
-        
+
         form.add(new Submit("Sumbit"));
     }
-    
+
     /**
      * @see Page#onPost()
      */

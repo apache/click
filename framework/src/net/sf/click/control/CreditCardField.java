@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,70 +20,89 @@ import java.util.List;
 
 /**
  * Provides a Credit Card control: &nbsp; &lt;input type='text'&gt;&lt;select&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Credit Card</td>
  * <td><input type='text' title='CreditCard Control'/><select title='Card type'><option>VISA</option><option>MASTER</option>
  * <option>AMEX</option><option>DINNER</option><option>DISCOVER</option></select>
  * </td>
- * </tr></table>
- * <p/>
- * CreditCardField will validate the card number against the selected card type 
- * when the control is processed. 
+ * </tr>
+ * </table>
+ *
+ * CreditCardField will validate the card number against the selected card type
+ * when the control is processed.
  * <p/>
  * Supported card include VISA, MASTER, AMEX, DINERS and DISCOVER.
  * <p/>
- * An example page using CreditCardField is provided below:<blockquote><pre>
+ * The CreditCardField uses a JavaScript onKeyPress() integerFilter() method to
+ * prevent users from entering invalid characters. To enable number key filtering
+ * reference the method {@link Form#getHtmlImports()} in the page template
+ * (imports click/form.js file). For example.
+ *
+ * <div class="code"> &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$form.htmlImports</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="blue">$form</span>
+ *  &lt;/body&gt;
+ * &lt;/html&gt;
+ * </div>
+ *
+ * An example page using CreditCardField is provided below:
+ *
+ * <div class="code">
  * public class PaymentPage extends Page {
- * 
+ *
  *     Form form;
  *     CreditCardField creditCardField;
  *     IntegerField expiryField;
- * 
+ *
  *     public void onInit() {
  *         form = new Form("form", getContext());
  *         addControl(form);
- * 
+ *
  *         creditCardField = new CreditCardField("Credit Card");
  *         creditCardField.setRequired(true);
  *         form.add(creditCardField);
- * 
+ *
  *         expiryField = new IntegerField("Expiry Date");
  *         expiryField.setRequired(true);
  *         expiryField.setMinLength(4);
  *         expiryField.setMaxLength(4);
  *         expiryField.setSize(4);
  *         form.add(expiryField);
- * 
+ *
  *         form.add(new Submit("  OK  "));
- * 
+ *
  *         Submit cancelButton = new Submit(" Cancel ");
  *         cancelButton.setListener(this, "onCancelClick");
  *         form.add(cancelButton);
  *     }
- * 
+ *
  *     public boolean onCancelClick() {
  *         setRedirect("index.htm");
  *         return false;
  *     }
- *  
+ *
  *     public void onPost() {
  *         if (form.isValid()) {
  *             String cardType = creditCardField.getCardType();
  *             Long cardNumber = creditCardField.getCardNumber();
  *             String expiryDate = expiryField.getInteger();
- * 
+ *
  *             // Make payment
  *             ..
  *         }
  *     }
  * }
- * </pre></blockquote>
+ * </div>
  *
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class CreditCardField extends TextField {
@@ -102,13 +121,13 @@ public class CreditCardField extends TextField {
 
     /** The Discovery type credit card: "DISCOVER" */
     public static final String DISCOVER = "DISCOVER";
-    
+
     /** The statically initialized card type options list. */
     protected static final List CARD_OPTIONS = new ArrayList();
-    
+
     /** The card type Select name. */
     protected static final String SELECT_NAME = "cardtype";
-    
+
     static {
         // TODO: localize labels
         CARD_OPTIONS.add(new Select.Option(VISA, "Visa"));
@@ -125,9 +144,9 @@ public class CreditCardField extends TextField {
      * "DISCOVER"]</tt>. The default value is "VISA"
      */
     protected String cardType = VISA;
-    
+
     /** The card type Select. */
-    protected Select cardTypeSelect = new Select(SELECT_NAME); 
+    protected Select cardTypeSelect = new Select(SELECT_NAME);
 
     // ----------------------------------------------------------- Constructors
 
@@ -149,7 +168,7 @@ public class CreditCardField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the selected Credit Card type: &nbsp; 
+     * Return the selected Credit Card type: &nbsp;
      * <tt>[ "VISA" | "MASTER" | "AMEX" | "DINERS" | "DISCOVER" ]</tt>
      *
      * @return the selected Credit Card type
@@ -160,7 +179,7 @@ public class CreditCardField extends TextField {
 
     /**
      * Return the Credit Card number.
-     * 
+     *
      * @return the Credit Card number
      */
     public Long getCardNumber() {
@@ -173,12 +192,12 @@ public class CreditCardField extends TextField {
     }
 
     // -------------------------------------------------------- Public Methods
-    
+
     /**
      * Process the Credit Card submission, using the card type to validate
      * the card number.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -188,14 +207,14 @@ public class CreditCardField extends TextField {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
         value = getRequestValue();
-        
+
         cardType = getContext().getRequest().getParameter(SELECT_NAME);
-        
+
         // Strip spaces and '-' chars
         StringBuffer buffer = new StringBuffer(value.length());
         for (int i = 0, size = value.length(); i < size; i++) {
@@ -205,7 +224,7 @@ public class CreditCardField extends TextField {
             }
         }
         value = buffer.toString();
-        
+
         final int length = value.length();
         if (length > 0) {
             if (length < getMinLength()) {
@@ -267,7 +286,7 @@ public class CreditCardField extends TextField {
             if (isRequired()) {
                 setError(getMessage("field-required-error",  getLabel()));
             }
-            
+
             return true;
         }
     }
@@ -279,7 +298,7 @@ public class CreditCardField extends TextField {
      */
     public String toString() {
         StringBuffer buffer = new StringBuffer(400);
-        
+
         // Render card number field
         String textField = super.toString();
         buffer.append(textField);

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,47 +22,48 @@ import java.util.Date;
 
 /**
  * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
- * <p/>
- * <table class='form'>
+ *
+ * <table class='htmlHeader'>
  * <tr>
  * <td>Date Field</td>
  * <td><input type='text' size='20' title='DateField Control' value='15 Mar 2006'/><input type='hidden'/><img align='middle' hspace='2' style='cursor:hand' src='calendar.gif' title='Calendar'/></td>
  * </tr>
  * </table>
- * <p>
- * The DateField control provides a Date entry field and a popup Calendar Date 
+ *
+ * The DateField control provides a Date entry field and a popup Calendar Date
  * picker. Users can either key in a Date value or select a Date using the Calendar.
  * <p/>
  * The Calendar popup is created as a &lt;div&gt; element using JavaScript.
- * To enable the Calenar popup, reference the method {@link Form#getHtmlImports()} 
- * in the page template (imports form.js file). For example.<blockquote><pre>
- * &lt;html&gt;
- *  &lt;head&gt; 
- *   <font color="blue">$form.getHtmlImports()</font>
+ * To enable the Calenar popup, reference the method {@link Form#getHtmlImports()}
+ * in the page template (imports click/form.js file). For example.
+ *
+ * <div class="code"> &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$form.htmlImports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   ..
+ *   <span class="blue">$form</span>
  *  &lt;/body&gt;
- * &lt;/html&gt;</pre>
- * </blockquote>
+ * &lt;/html&gt;
+ * </div>
  *
  * <b>Important Notes</b>
  * <ul>
  * <li>
- * Take care laying out DateFields above Select controls, as there is a rendering 
- * bug in Internet Explorer which draws Selects on top of the popup Calendar 
+ * Take care laying out DateFields above Select controls, as there is a rendering
+ * bug in Internet Explorer which draws Selects on top of the popup Calendar
  * &lt;div&gt;. This bug is not present in Mozilla Firefox.
  * <p/>
  * </li>
  * <li>
- * Including the HTML &lt;DOCTYPE&gt; in the page causes a positioning bug in 
- * the display of the popup Calendar &lt;div&gt;. 
+ * Including the HTML &lt;DOCTYPE&gt; in the page causes a positioning bug in
+ * the display of the popup Calendar &lt;div&gt;.
  * </li>
  * </ul>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class DateField extends TextField {
@@ -72,7 +73,7 @@ public class DateField extends TextField {
      * "<tt>dd MMM yyyy</tt>"
      */
     protected String formatPattern = "dd MMM yyyy";
-    
+
     /** The date format. */
     protected SimpleDateFormat dateFormat;
 
@@ -93,7 +94,7 @@ public class DateField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the field Date value, or null if value was empty or a parsing 
+     * Return the field Date value, or null if value was empty or a parsing
      * error occured.
      *
      * @return the field Date value
@@ -102,7 +103,7 @@ public class DateField extends TextField {
         if (value != null || value.length() > 0) {
             try {
                 Date date = getDateFormat().parse(value);
-                
+
                 return new Date(date.getTime());
 
             } catch (ParseException pe) {
@@ -113,10 +114,10 @@ public class DateField extends TextField {
             return null;
         }
     }
-    
+
     /**
      * Set the field Date value.
-     * 
+     *
      * @param date the Date value to set
      */
     public void setDate(Date date) {
@@ -124,11 +125,11 @@ public class DateField extends TextField {
             value = getDateFormat().format(date);
         }
     }
-    
+
     /**
-     * Return the SimpleDateFormat for the {@link #formatPattern} 
+     * Return the SimpleDateFormat for the {@link #formatPattern}
      * property.
-     * 
+     *
      * @return the SimpleDateFormat for the formatPattern
      */
     public SimpleDateFormat getDateFormat() {
@@ -154,8 +155,8 @@ public class DateField extends TextField {
      */
     public void setFormatPattern(String pattern) {
         formatPattern = pattern;
-    } 
-    
+    }
+
     /**
      * Return the Timestamp value, or null if value was empty
      * or a parsing error occured.
@@ -164,7 +165,7 @@ public class DateField extends TextField {
      */
     public Timestamp getTimestamp() {
         Date date = getDate();
-        
+
         if (date != null) {
             return new Timestamp(date.getTime());
         } else {
@@ -172,12 +173,12 @@ public class DateField extends TextField {
         }
     }
 
-    // -------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Methods
     /**
      * Process the DateField submission. If the Date value can be parsed
      * the controls listener will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -187,7 +188,7 @@ public class DateField extends TextField {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -221,7 +222,7 @@ public class DateField extends TextField {
                 // Dont want to invoke listener if unable to parse dateFormat.
                 if (parsedOk) {
                     return invokeListener();
-                    
+
                 } else {
                     return true;
                 }
@@ -234,7 +235,7 @@ public class DateField extends TextField {
             return true;
         }
     }
-    
+
     /**
      * Return the HTML rendered Date Field string.
      *
@@ -242,7 +243,7 @@ public class DateField extends TextField {
      */
     public String toString() {
         StringBuffer buffer = new StringBuffer(50);
-        
+
         String textField = super.toString();
         buffer.append(textField);
 

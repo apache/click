@@ -15,7 +15,7 @@ a:visited { color: blue; }
 .code 
 {
 	font-family: courier;
-	margin-top: 1em;
+	margin-top: 0em;
 	margin-left: 3em;
 	margin-bottom: 1.5em;
 	white-space: pre;
@@ -23,15 +23,38 @@ a:visited { color: blue; }
 
 .red { color: red; }
 
+.green { color: green }
+
 .blue { color: blue }
 
-/* Form examples */
-table.form 
-{ 
-  background: #EEEEFF;
-  border: 0;
-  vertical-align: baseline; 
-  padding: 4px;
+.htmlHeader
+{
+  	border: 1px solid grey;
+  	margin-top: 0em;
+  	margin-left: 0em;
+	margin-bottom: 1em;
+  	padding: 4px;
+    vertical-align: baseline; 
+}
+
+.htmlExample
+{
+  	border: 1px solid grey;
+  	margin-top: 1em;
+  	margin-left: 3em;
+	margin-bottom: 1em;
+  	padding: 4px;
+    vertical-align: baseline; 
+}
+
+/* Code examples */
+.code {
+	font-family: courier;
+	font-size: 10pt;
+	margin-top: 0em;
+	margin-left: 3em;
+	margin-bottom: 0em;
+	white-space: pre;
 }
 
 /* Headings */

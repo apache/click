@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,9 +43,9 @@ import org.apache.commons.codec.binary.Base64;
  * @author Malcolm Edgar
  */
 public class ClickUtils {
-    
+
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * Close the given output stream and ignore any exceptions thrown.
      *
@@ -75,7 +75,7 @@ public class ClickUtils {
             }
         }
     }
-    
+
     /**
      * Return an encoded version of the <tt>Serializble</tt> object. The object
      * will be serialized, compressed and Base 64 encoded.
@@ -163,12 +163,12 @@ public class ClickUtils {
             close(bis);
         }
     }
-    
+
     /**
      * Invoke the named method on the given object and return the boolean result.
-     * 
+     *
      * @see net.sf.click.Control#setListener(Object, String)
-     * 
+     *
      * @param listener the object with the method to invoke
      * @param method the name of the method to invoke
      * @return true if the listener method returned true
@@ -180,59 +180,59 @@ public class ClickUtils {
         if (method == null) {
             throw new IllegalArgumentException("Null method parameter");
         }
-        
+
         Method targetMethod = null;
         try {
             targetMethod = listener.getClass().getMethod(method, null);
-                
+
             Object result = targetMethod.invoke(listener, null);
-            
+
             if (result instanceof Boolean) {
                 return ((Boolean)result).booleanValue();
-                
+
             } else {
-                String msg = 
+                String msg =
                     "Invalid listener method, missing boolean return type: " +
                     targetMethod;
                 throw new RuntimeException(msg);
             }
-    
+
         } catch (InvocationTargetException ite) {
-    
+
             Throwable e = ite.getTargetException();
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
-    
+
             } else if (e instanceof Exception) {
                 String msg =
                     "Exception occured invoking public method: " + targetMethod;
-    
+
                 throw new RuntimeException(msg, e);
-    
+
             } else if (e instanceof Error) {
                 String msg =
                     "Error occured invoking public method: " + targetMethod;
-    
+
                 throw new RuntimeException(msg, e);
-    
+
             } else {
                 String msg =
                     "Error occured invoking public method: " + targetMethod;
-    
+
                 throw new RuntimeException(msg, e);
             }
-    
+
         } catch (Exception e) {
             String msg =
                 "Exception occured invoking public method: " + targetMethod;
-    
+
             throw new RuntimeException(msg, e);
         }
     }
-   
+
     /**
      * Render the given Map of HTML attributes to the StringBuffer.
-     * 
+     *
      * @param attributes the Map of HTML attributes
      * @param buffer the StringBuffer to render to
      */
@@ -249,7 +249,7 @@ public class ClickUtils {
             }
         }
     }
-    
+
     /**
      * Return the getter method name for the given property name.
      *
@@ -265,7 +265,7 @@ public class ClickUtils {
 
         return buffer.toString();
     }
-    
+
     /**
      * Returns a HTML encoded String from the given value.
      * <p/>
@@ -359,7 +359,7 @@ public class ClickUtils {
             return "&nbsp;";
         }
     }
-    
+
     /**
      * Return a field name string from the given field label.
      * <p/>
@@ -407,7 +407,7 @@ public class ClickUtils {
 
         return buffer.toString();
     }
-    
+
     /**
      * Return a HTML encode stack trace string from the given error.
      *

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,42 +17,47 @@ package net.sf.click.control;
 
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'><tr>
  * <td>Integer Field</td>
  * <td><input type='text' value='101' title='IntegerField Control'/></td>
  * </tr></table>
- * <p/>
+ *
  * IntegerField will validate the number when the control is processed and invoke
- * the control listener if there is no parsing error. 
+ * the control listener if there is no parsing error.
  * <p/>
- * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent 
+ * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
- * reference the method {@link Form#getHtmlImports()} in the page template 
- * (imports form.js file). For example.<blockquote><pre>
- * &lt;html&gt;
- *  &lt;head&gt; 
- *   <font color="blue">$form.getHtmlImports()</font>
+ * reference the method {@link Form#getHtmlImports()} in the page template
+ * (imports click/form.js file). For example.
+ *
+ * <div class="code"> &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$form.htmlImports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   ..
+ *   <span class="blue">$form</span>
  *  &lt;/body&gt;
- * &lt;/html&gt;</pre>
- * </blockquote>
- * <p/>
+ * &lt;/html&gt;
+ * </div>
+ *
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
  */
 public class IntegerField extends TextField {
 
+    // ----------------------------------------------------- Instance Variables
+
     /** The maximum field value. */
-    private int maxvalue = Integer.MAX_VALUE;
+    protected int maxvalue = Integer.MAX_VALUE;
 
     /** The minimum field value. */
-    private int minvalue = Integer.MIN_VALUE;
+    protected int minvalue = Integer.MIN_VALUE;
+
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Construct a Integer Field field with the given label.
@@ -69,7 +74,7 @@ public class IntegerField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the field Integer value, or null if value was empty or a parsing 
+     * Return the field Integer value, or null if value was empty or a parsing
      * error occured.
      *
      * @return the field Integer value
@@ -78,7 +83,7 @@ public class IntegerField extends TextField {
         if (value != null && value.length() > 0) {
             try {
                 return Integer.valueOf(value);
-                
+
             } catch (NumberFormatException nfe) {
                 return null;
             }
@@ -86,9 +91,9 @@ public class IntegerField extends TextField {
             return null;
         }
     }
-    
+
     /**
-     * Return the field Long value, or null if value was empty or a parsing 
+     * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
      * @return the field Long value
@@ -97,7 +102,7 @@ public class IntegerField extends TextField {
         if (value != null && value.length() > 0) {
             try {
                 return Long.valueOf(value);
-                
+
             } catch (NumberFormatException nfe) {
                 return null;
             }
@@ -105,7 +110,7 @@ public class IntegerField extends TextField {
             return null;
         }
     }
-    
+
     /**
      * Return the maximum valid integer field value.
      *
@@ -132,7 +137,7 @@ public class IntegerField extends TextField {
     public int getMinValue() {
         return minvalue;
     }
-    
+
     /**
      * Set the miminum valid integer field value.
      *
@@ -148,7 +153,7 @@ public class IntegerField extends TextField {
      * Process the IntegerField submission. If the Integer value can be parsed
      * the controls listener will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -158,7 +163,7 @@ public class IntegerField extends TextField {
      * <li>number-maxvalue-error</li>
      * <li>number-minvalue-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -189,7 +194,7 @@ public class IntegerField extends TextField {
                 setError(getMessage("field-required-error", getLabel()));
             }
         }
-        
+
         return true;
     }
 }

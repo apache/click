@@ -8,14 +8,14 @@ import net.sf.click.Page;
  * @author Malcolm Edgar
  */
 public class Logout extends Page {
-    
+
     /**
      * @see Page#onInit()
      */
     public void onInit() {
         if (getContext().hasSession()) {
             addModel("user", getContext().getSessionAttribute("user"));
-            getContext().getSession().invalidate(); 
-        }          
+            getContext().getSession().invalidate();
+        }
     }
 }

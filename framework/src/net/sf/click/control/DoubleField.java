@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,36 +15,38 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Double Field</td>
  * <td><input type='text' value='3.541' title='DoubleField Control'/></td>
- * </tr></table>
- * <p/>
+ * </tr>
+ * </table>
+ *
  * DoubleField will validate the number when the control is processed and invoke
- * the control listener if there is no parsing error. 
+ * the control listener if there is no parsing error.
  * <p/>
- * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent 
+ * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
- * reference the method {@link Form#getHtmlImports()} in the page template 
- * (imports form.js file). For example.<blockquote><pre>
- * &lt;html&gt;
- *  &lt;head&gt; 
- *   <font color="blue">$form.getHtmlImports()</font>
+ * reference the method {@link Form#getHtmlImports()} in the page template
+ * (imports click/form.js file). For example.
+ *
+ * <div class="code"> &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$form.htmlImports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   ..
+ *   <span class="blue">$form</span>
  *  &lt;/body&gt;
- * &lt;/html&gt;</pre>
- * </blockquote>
- * <p/>
+ * &lt;/html&gt;
+ * </div>
+ *
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class DoubleField extends TextField {
@@ -59,7 +61,7 @@ public class DoubleField extends TextField {
      * Construct the Double field with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
-     * 
+     *
      * @param label the label of the field
      */
     public DoubleField(String label) {
@@ -68,9 +70,9 @@ public class DoubleField extends TextField {
     }
 
     // ------------------------------------------------------ Public Attributes
-    
+
     /**
-     * Return the field Double value, or null if value was empty or a parsing 
+     * Return the field Double value, or null if value was empty or a parsing
      * error occured.
      *
      * @return the field Double value
@@ -79,7 +81,7 @@ public class DoubleField extends TextField {
         if (value != null && value.length() > 0) {
             try {
                 return Double.valueOf(value);
-                
+
             } catch (NumberFormatException nfe) {
                 return null;
             }
@@ -87,9 +89,9 @@ public class DoubleField extends TextField {
             return null;
         }
     }
-    
+
     /**
-     * Return the field Float value, or null if value was empty or a parsing 
+     * Return the field Float value, or null if value was empty or a parsing
      * error occured.
      *
      * @return the field Float value
@@ -98,7 +100,7 @@ public class DoubleField extends TextField {
         if (value != null && value.length() > 0) {
             try {
                 return Float.valueOf(value);
-                
+
             } catch (NumberFormatException nfe) {
                 return null;
             }
@@ -143,13 +145,13 @@ public class DoubleField extends TextField {
         return minvalue;
     }
 
-    // -------------------------------------------------------- Public Methods
-    
+    // --------------------------------------------------------- Public Methods
+
     /**
      * Process the DoubleField submission. If the Double value can be parsed
      * the controls listener will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -159,7 +161,7 @@ public class DoubleField extends TextField {
      * <li>number-maxvalue-error</li>
      * <li>number-minvalue-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -175,7 +177,7 @@ public class DoubleField extends TextField {
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
-               
+
                 if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
                     Object[] args = new Object[] { getLabel(), new Double(minvalue) };
                     setError(getMessage("number-minvalue-error", args));
@@ -192,7 +194,7 @@ public class DoubleField extends TextField {
                 setError(getMessage("field-required-error", getLabel()));
             }
         }
-        
+
         return true;
     }
 }

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,19 +18,23 @@ package net.sf.click.control;
 
 /**
  * Provides a Radio control: &nbsp; &lt;input type='radio'&gt;.
- * <p/>
- * <table class='form'><tr>
- * <td>Radio</td>
- * <td><input type='radio' value='Radio Control'/></td>
- * </tr></table>
- * <p/>
- * TODO: radio javadoc
- * 
+ *
+ * <table class='htmlHeader'>
+ * <tr>
+ * <td><input type='radio' name='header' value='Radio Control'/>Radio</input></td>
+ * </tr>
+ * </table>
+ *
+ * For an Radio code example see the {@link net.sf.click.control.RadioGroup}
+ * Javadoc example.
+ *
  * <p/>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
+ * @see RadioGroup
+ *
  * @author Malcolm
  */
 public class Radio extends Field {
@@ -39,15 +43,15 @@ public class Radio extends Field {
 
     /** The field checked value. */
     protected boolean checked;
-    
+
     // ----------------------------------------------------------- Constructors
-    
+
     /**
      * Create a radio field.
      */
     public Radio() {
     }
-    
+
     /**
      * Create a radio field with the given value.
      *
@@ -56,7 +60,7 @@ public class Radio extends Field {
     public Radio(String value) {
         setValue(value);
     }
-    
+
     /**
      * Create a radio field with the given value and label.
      *
@@ -67,7 +71,7 @@ public class Radio extends Field {
         setValue(value);
         setLabel(label);
     }
-    
+
     /**
      * Create a radio field with the given value, label and name.
      *
@@ -82,7 +86,7 @@ public class Radio extends Field {
     }
 
     // ------------------------------------------------------ Public Attributes
-    
+
     /**
      * Return true if the radio is checked, or false otherwise.
      *
@@ -102,25 +106,25 @@ public class Radio extends Field {
     }
 
     /**
-     * Return the input field type of: &nbsp; <tt>radio</tt>
+     * Return the input type: 'radio'.
      *
-     * @return the input field type &nbsp; <tt>radio</tt>
+     * @return the input type: 'radio'
      */
     public String getType() {
         return "radio";
     }
 
     // --------------------------------------------------------- Public Methods
-    
+
     /**
-     * Process the request Context setting the checked value if selected 
+     * Process the request Context setting the checked value if selected
      * and invoking the controls listener if defined.
      *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
         String value = getRequestValue();
-       
+
         checked = getValue().equals(value);
 
         if (checked) {
@@ -148,29 +152,29 @@ public class Radio extends Field {
         if (isChecked()) {
             buffer.append(" checked");
         }
-        
+
         if (getTitle() != null) {
             buffer.append("title='");
             buffer.append(getTitle());
             buffer.append("'");
         }
-        
+
         renderAttributes(buffer);
 
         buffer.append(getDisabled());
-         
+
         if (isValid()) {
             buffer.append(">");
         } else {
             buffer.append(" class='error'>");
         }
-        
+
         if (getLabel() != null) {
             buffer.append(getLabel());
         } else {
             buffer.append(getValue());
         }
-        
+
         buffer.append("</input>");
 
         return buffer.toString();

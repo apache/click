@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,137 +28,149 @@ import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
 /**
- * Provides a Form control: &nbsp; &lt;form&gt;.
- * <p/>
- * <form method='POST' name='form' action='Form.html'>
- * <input name='form_name' type='hidden' value='form'/>
- * <table class='form'>
+ * Provides a Form control: &nbsp; &lt;form method='POST'&gt;.
+ *
+ * <table class='htmlHeader'>
  * <tr>
- * <td align='left'><label>Username</label><font color="red">*</font></td>
+ * <td align='left'><label>Username</label><span class="red">*</span></td>
  * <td align='left'><input type='text' name='username' value='' size='20'   maxlength='20' /></td>
  * </tr>
  * <tr>
- * <td align='left'><label  >Password</label><font color="red">*</font></td>
+ * <td align='left'><label>Password</label><span class="red">*</span></td>
  * <td align='left'><input type='password' name='password' value='' size='20'   maxlength='20' /></td>
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'>
  * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/></td>
- * </tr></table></form>
- * <p/>
- * When a Form is processed it will process its {@link Field} controls 
- * in the order they were added to the form, and then it will process the 
- * {@link Button} controls in the added order. Once all the Fields have been 
+ * </tr>
+ * </table>
+ *
+ * When a Form is processed it will process its {@link Field} controls
+ * in the order they were added to the form, and then it will process the
+ * {@link Button} controls in the added order. Once all the Fields have been
  * processed the form will invoke its action listener if defined.
  * <p/>
- * The example below illustrates a Form being used in a login Page.<blockquote><pre>
- * public class Login extends Page {
- * 
+ * The example below illustrates a Form being used in a login Page.
+ *
+ * <div class="code">public class Login extends Page {
+ *
  *     Form form;
  *     TextField usernameField;
  *     PasswordField passwordField;
- * 
+ *
  *     public void onInit() {
- *         form = new Form("<font color='blue'>form</font>", getContext());
+ *         form = new Form("<span class='blue'>form</span>", getContext());
  *         addControl(form);
- * 
+ *
  *         usernameField = new TextField("Username");
  *         usernameField.setMaxLength(20);
  *         usernameField.setMinLength(5);
  *         usernameField.setRequired(true);
  *         form.add(usernameField);
- * 
+ *
  *         passwordField = new PasswordField("Password");
  *         passwordField.setMaxLength(20);
  *         passwordField.setMinLength(5);
  *         passwordField.setRequired(true);
  *         form.add(passwordField);
- * 
+ *
  *         Submit okButton = new Submit("  OK  ");
  *         okButton.setListener(this, "onOkClick");
  *         form.add(okButton);
- * 
+ *
  *         Submit cancelButton = new Submit(" Cancel ");
  *         cancelButton.setListener(this, "onCancelClick");
  *         form.add(cancelButton);
  *     }
- * 
+ *
  *     public boolean onOkClick() {
  *         if (form.isValid()) {
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
- * 
+ *
  *             User user = UserDatabase.getUser(username);
- * 
+ *
  *             if (user != null && user.getPassword().equals(password)) {
  *                 getContext().setSessionAttribute("user", user);
  *                 setRedirect("home.htm");
- *             } 
+ *             }
  *             else {
  *                 String msg = "The system could not log you on.&lt;br&gt; Make sure "
- *                     + "your Username and password is correct, then try again.";        
- *                 form.setError(msg);           
+ *                     + "your Username and password is correct, then try again.";
+ *                 form.setError(msg);
  *             }
  *         }
  *         return true;
  *     }
- * 
+ *
  *     public boolean onCancelClick() {
  *         setRedirect("index.htm");
  *         return false;
  *     }
- * }</pre></blockquote>
- * The corresponding template code is below. The form will render itself using
- * its {@link #toString()} method.<blockquote><pre>
- * <font color="blue">$form</font></pre></blockquote>
+ * }
+ * </div>
  *
- * If a Form has been posted and processed, if it has an {@link #error} defined or 
- * any of its Fields hava validation errors they will be automatically 
+ * The corresponding template code is below. The form will render itself using
+ * its {@link #toString()} method.
+ *
+ * <div class="code">
+ * <span class="blue">$form</span>
+ * </div>
+ *
+ * If a Form has been posted and processed, if it has an {@link #error} defined or
+ * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  * <p/>
  * Alternatively you can layout the Form in the page template specifying
- * the fields using the named field notation:<blockquote><pre>
- * $form.{@link #fields}.usernameField</pre></blockquote>
- * 
+ * the fields using the named field notation:
+ *
+ * <div class="code">$form.{@link #fields}.usernameField
+ * </div>
+ *
  * Or you can use the Form {@link #fieldList} and {@link #buttonList} properties
- * to layout a generic form.<blockquote><pre>
- * &lt;form method="POST"&gt;
+ * to layout a generic form.
+ *
+ * <div class="code">
+ * &lt;form method="POST" name="form" action="<span class="blue">$request.requestURI</span>"&gt;
  * &lt;input type="hidden" name="form_name" value="form"/&gt;
  * &lt;table width="100%"&gt;
- * <font color="red">#foreach (</font><font color="blue">$field</font> <font color="red">in </font><font color="blue">$form.fieldList</font><font color="red">)</font>
- *   <font color="red">#if( !</font><font color="blue">$field.isValid()</font> <font color="red">)</font>
+ * <span class="red">#foreach (</span><span class="blue">$field</span> <span class="red">in </span><span class="blue">$form.fieldList</span><span class="red">)</span>
+ *   <span class="red">#if( !</span><span class="blue">$field.isValid()</span> <span class="red">)</span>
  *   &lt;tr&gt;
- *     &lt;td colspan="2"&gt; <font color="blue">$field.error</font> &lt;/td&gt;
+ *     &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
  *   &lt;/tr&gt;
- *   <font color="red">#end</font>
+ *   <span class="red">#end</span>
  *   &lt;tr&gt;
- *     &lt;td&gt; <font color="blue">$field.label</font> &lt;/td&gt; &lt;td&gt; $<font color="blue">field</font> &lt;/td&gt;
+ *     &lt;td&gt; <span class="blue">$field.label</span> &lt;/td&gt; &lt;td&gt; $<span class="blue">field</span> &lt;/td&gt;
  *   &lt;/tr&gt;
- * <font color="red">#end</font>
+ * <span class="red">#end</span>
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
- *    <font color="red">#foreach (</font><font color="blue">$button</font> <font color="red">in </font><font color="blue">$form.buttonList</font><font color="red">)</font>
- *      <font color="blue">$button</font> &amp;nbsp;
- *    <font color="red">#end</font> 
+ *    <span class="red">#foreach (</span><span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span><span class="red">)</span>
+ *      <span class="blue">$button</span> &amp;nbsp;
+ *    <span class="red">#end</span>
  *    &lt;/td&gt;
  *   &lt;/tr&gt;
  * &lt;/table&gt;
- * &lt;/form&gt;</pre></blockquote>
- * 
- * Whenever including your own Form markup in a page template or Velocity macro, 
- * always specify the form {@link #method} and include a hidden field which 
- * specifies the {@link #name} of the Form, for example:<blockquote><pre>
- * &lt;form method="<font color="blue">POST</font>"&gt;
- * &lt;input type="<font color="blue">hidden</font>" name="<font color="blue">form_name</font>" value="<font color="blue">searchForm</font>"/&gt;
- * </pre></blockquote>
- * 
- * The form_name hidden field is used to ensure the correct form is processed
- * in a Page which may have multiple forms.
+ * &lt;/form&gt;
+ * </div>
+ *
+ * Whenever including your own Form markup in a page template or Velocity macro,
+ * always specify the form {@link #method} and include a hidden field which
+ * specifies the {@link #name} of the Form, for example:
+ *
+ * <div class="code">
+ * &lt;form method="<span class="green">POST</span>" name="<span class="green">searchForm</span>" action="<span class="blue">$request.requestURI</span>&gt;
+ * &lt;input type="<span class="green">hidden</span>" name="<span class="green">form_name</span>" value="<span class="green">searchForm</span>"/&gt;
+ * </div>
+ *
+ * The <span class="green">form_name</span> hidden field is used to ensure the
+ * correct form is processed in a Page which may have multiple forms.
  * <p/>
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.3">FORM</a>
- * 
+ *
  * @see Field
  * @see Submit
  *
@@ -166,55 +178,57 @@ import net.sf.click.util.ClickUtils;
  */
 public class Form implements Control {
 
+    // ------------------------------------------------------- Static Variables
+
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>
      */
     public static final String FORM_NAME = "form_name";
-    
+
     /** The errors and labels on top form layout constant. */
     public static final int TOP = 10;
-    
+
     /** The errors in middle form layout constant. */
     public static final int MIDDLE = 11;
-    
+
     /** The errors on bottom form layout constant. */
     public static final int BOTTOM = 12;
-    
+
     /** The labels of left form layout contant. */
     public static final int LEFT = 13;
-    
+
     /** The errors-header resource property */
     protected static String errorsHeader = "";
-    
+
     /** The errors-footer resource property. */
     protected static String errorsFooter = "";
-    
+
     /** The errors-prefix resource property. */
     protected static String errorsPrefix = "";
-    
+
     /** The errors-suffix resource property. */
     protected static String errorsSuffix = "";
-    
+
     /** The label-required-prefix resource property. */
     protected static String labelRequiredPrefix = "";
-    
+
     /** The label-required-suffix resource property. */
     protected static String labelRequiredSuffix = "";
-    
+
     static {
-        ResourceBundle bundle = 
+        ResourceBundle bundle =
             ResourceBundle.getBundle(Field.PACKAGE_MESSAGES);
-        
+
         errorsHeader = bundle.getString("errors-header");
         errorsFooter = bundle.getString("errors-footer");
         errorsPrefix = bundle.getString("errors-prefix");
         errorsSuffix = bundle.getString("errors-suffix");
         labelRequiredPrefix = bundle.getString("label-required-prefix");
-        labelRequiredSuffix = bundle.getString("label-required-suffix");  
+        labelRequiredSuffix = bundle.getString("label-required-suffix");
     }
 
     // ----------------------------------------------------- Instance Variables
-    
+
     /** The form attributes map. */
     protected Map attributes;
 
@@ -226,9 +240,9 @@ public class Form implements Control {
 
     /** The form level error message. */
     protected String error;
-    
-    /** 
-     * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value: 
+
+    /**
+     * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value:
      * &nbsp; <tt>MIDDLE</tt>
      */
     protected int errorsPosition = MIDDLE;
@@ -244,8 +258,8 @@ public class Form implements Control {
 
     /** The label align, default value is "<tt>left</tt>" */
     protected String labelAlign = "left";
-    
-    /** 
+
+    /**
      * The form labels position <tt>[LEFT, TOP]</tt> default value: &nbsp; <tt>LEFT</tt>
      */
     protected int labelsPosition = LEFT;
@@ -255,16 +269,16 @@ public class Form implements Control {
 
     /** The listener method name. */
     protected String listenerMethod;
-    
-    /** 
-     * The form method <tt>["POST, "GET"]</tt>, default value: &nbsp; 
-     * <tt>POST</tt> 
+
+    /**
+     * The form method <tt>["POST, "GET"]</tt>, default value: &nbsp;
+     * <tt>POST</tt>
      */
     protected String method = "POST";
 
     /** The form name. */
     protected String name;
-    
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -282,8 +296,8 @@ public class Form implements Control {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Add the field to the form, and set the fields form property. The field 
-     * will be added to the {@link #fields} Map using its name. 
+     * Add the field to the form, and set the fields form property. The field
+     * will be added to the {@link #fields} Map using its name.
      * <p/>
      * Button instances will also be added to the {@link #buttonList} while
      * all others field types will also be added to the {@link #fieldList}.
@@ -300,7 +314,7 @@ public class Form implements Control {
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
         }
-        
+
         if (field instanceof Button) {
             buttonList.add(field);
         } else {
@@ -310,10 +324,10 @@ public class Form implements Control {
         field.setForm(this);
         field.setContext(getContext());
     }
-    
+
     /**
      * Remove the given field from the form.
-     * 
+     *
      * @param field the field to remove from the form
      */
     public void remove(Field field) {
@@ -327,11 +341,11 @@ public class Form implements Control {
             }
         }
     }
-    
+
     /**
      * Return the link HTML attribute with the given name, or null if the
      * attribute does not exist.
-     * 
+     *
      * @param name the name of link HTML attribute
      * @return the link HTML attribute
      */
@@ -342,7 +356,7 @@ public class Form implements Control {
             return null;
         }
     }
-    
+
     /**
      * Set the form HTML attribute with the given attribute name and value..
      *
@@ -365,11 +379,11 @@ public class Form implements Control {
             attributes.remove(name);
         }
     }
-    
-    
+
+
     /**
      * Return the form attributes Map.
-     * 
+     *
      * @return the form attributes Map.
      */
     public Map getAttributes() {
@@ -378,10 +392,10 @@ public class Form implements Control {
         }
         return attributes;
     }
-    
+
     /**
      * Return true if the form has attributes or false otherwise.
-     * 
+     *
      * @return true if the form has attributes on false otherwise
      */
     public boolean hasAttributes() {
@@ -407,7 +421,7 @@ public class Form implements Control {
     public Context getContext() {
         return context;
     }
-    
+
     /**
      * @see Control#setContext(Context)
      */
@@ -436,19 +450,19 @@ public class Form implements Control {
     public void setError(String error) {
         this.error = error;
     }
-    
+
     /**
      * Return the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
-     * 
+     *
      * @return form errors position
      */
     public int getErrorsPosition() {
         return errorsPosition;
     }
-    
+
     /**
      * Set the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
-     * 
+     *
      * @param position the form errors position
      */
     public void setErrorsPosition(int position) {
@@ -503,8 +517,8 @@ public class Form implements Control {
     }
 
     /**
-     * Return the HTML head import statement for the CSS stylesheet 
-     * click/form.css. If JavaScript is enabled a import statement for 
+     * Return the HTML head import statement for the CSS stylesheet
+     * click/form.css. If JavaScript is enabled a import statement for
      * click/form.js will also be included.
      *
      * @see #jsEnabled
@@ -568,19 +582,19 @@ public class Form implements Control {
     public void setLabelAlign(String align) {
         labelAlign = align;
     }
-  
+
     /**
      * Return the form labels position <tt>[LEFT, TOP]</tt>.
-     * 
+     *
      * @return form labels position
      */
     public int getLabelsPosition() {
         return labelsPosition;
     }
-    
+
     /**
      * Set the form labels position <tt>[LEFT, TOP]</tt>.
-     * 
+     *
      * @param position the form labels position
      */
     public void setLabelsPosition(int position) {
@@ -604,16 +618,16 @@ public class Form implements Control {
  
     /**
      * Return the form method <tt>["POST" | "GET"]</tt>
-     * 
+     *
      * @return the form method
      */
     public String getMethod() {
         return method;
     }
-    
+
     /**
      * Set the form method <tt>["POST" | "GET"]</tt>
-     * 
+     *
      * @param value the form method
      */
     public void setMethod(String value) {
@@ -628,10 +642,10 @@ public class Form implements Control {
     public String getName() {
         return name;
     }
-    
+
     /**
      * Set the name of the form.
-     * 
+     *
      * @see net.sf.click.Control#setName(String)
      */
     public void setName(String name) {
@@ -640,7 +654,7 @@ public class Form implements Control {
         }
         this.name = name;
     }
-    
+
     /**
      * Return true if the fields are valid and there is no form level error,
      * otherwise return false.
@@ -661,7 +675,7 @@ public class Form implements Control {
     }
 
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * Process the Form when the Context request method is the same as the Forms,
      * by default "POST" method.
@@ -704,25 +718,25 @@ public class Form implements Control {
                 return ClickUtils.invokeListener(listener, listenerMethod);
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Return the HTML string representation of the form.
      * <p/>
-     * If the form contains errors after processing, these errors will be 
+     * If the form contains errors after processing, these errors will be
      * rendered.
      *
      * @see Object#toString()
      */
     public String toString() {
-        final boolean process = 
+        final boolean process =
             context.getRequest().getMethod().equalsIgnoreCase(getMethod());
 
         // Estimate the size of the string buffer
-        int bufferSize = 
-            400 + (fieldList.size() * 350) + (buttonList.size() * 50); 
+        int bufferSize =
+            400 + (fieldList.size() * 350) + (buttonList.size() * 50);
 
         StringBuffer buffer = new StringBuffer(bufferSize);
 
@@ -737,20 +751,20 @@ public class Form implements Control {
             ClickUtils.renderAttributes(getAttributes(), buffer);
         }
         buffer.append(">\n");
-        
+
         buffer.append("<input name='form_name' type='hidden' value='");
         buffer.append(getName());
         buffer.append("'>\n");
-        
+
         int hiddenCount = 0;
         Field fieldWithError = null;
-        
+
         // Render fields, errors and buttons
         switch (getErrorsPosition()) {
         case TOP:
             fieldWithError = renderErrors(buffer, process);
             hiddenCount = renderFields(buffer);
-            renderButtons(buffer);           
+            renderButtons(buffer);
             break;
         case MIDDLE:
             hiddenCount = renderFields(buffer);
@@ -759,12 +773,12 @@ public class Form implements Control {
             break;
         case BOTTOM:
             hiddenCount = renderFields(buffer);
-            renderButtons(buffer);       
+            renderButtons(buffer);
             fieldWithError = renderErrors(buffer, process);
             break;
         default:
             throw new IllegalArgumentException("Invalid errorsPositon");
-        } 
+        }
 
         // Render hidden fields
         if (hiddenCount > 0) {
@@ -782,7 +796,7 @@ public class Form implements Control {
         }
 
         buffer.append("</form>\n");
-        
+
         // Set field focus
         if (fieldWithError != null) {
             buffer.append("<script type='text/javascript'><!--\n");
@@ -792,7 +806,7 @@ public class Form implements Control {
             buffer.append(fieldWithError.getName());
             buffer.append("'].focus();\n");
             buffer.append("//--></script>\n");
-            
+
         } else {
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
@@ -810,28 +824,28 @@ public class Form implements Control {
         }
 
         return buffer.toString();
-    }  
+    }
 
     // ------------------------------------------------------ Protected Methods
-    
+
     /**
      * Render the non hidden Form Fields to the string buffer and return a
      * count of hidden fields.
-     * 
+     *
      * @param buffer the StringBuffer to render to
      * @return the number of hidden Fields
      */
     protected int renderFields(StringBuffer buffer) {
         int hiddenCount = 0;
-        
+
         buffer.append("<table class='fields'>\n");
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
-            
+
             Field field = (Field) fieldList.get(i);
 
             if (!field.isHidden()) {
-                
+
                 if (field instanceof Label) {
                     buffer.append("<tr><td colspan='2' align='");
                     buffer.append(getLabelAlign());
@@ -843,10 +857,10 @@ public class Form implements Control {
                     buffer.append(">");
                     buffer.append(field);
                     buffer.append("</td></tr>\n");
-                    
+
                 } else {
                     buffer.append("<tr>\n");
-                    
+
                     // Write out label
                     if (getLabelsPosition() == LEFT) {
                         buffer.append("<td align='");
@@ -855,7 +869,7 @@ public class Form implements Control {
                     } else {
                         buffer.append("<td valign='top'>");
                     }
-                    
+
                     if (field.isRequired()) {
                         buffer.append(labelRequiredPrefix);
                     }
@@ -866,15 +880,15 @@ public class Form implements Control {
                     buffer.append("</label>");
                     if (field.isRequired()){
                         buffer.append(labelRequiredSuffix);
-                    } 
-                    
+                    }
+
                     if (getLabelsPosition() == LEFT) {
                         buffer.append("</td>\n");
                         buffer.append("<td align='left'>");
                     } else {
                         buffer.append("<br>");
                     }
-                    
+
                     // Write out field
                     buffer.append(field);
                     buffer.append("</td>\n");
@@ -885,15 +899,15 @@ public class Form implements Control {
                 hiddenCount++;
             }
         }
-        buffer.append("</table>\n");   
-        
+        buffer.append("</table>\n");
+
         return hiddenCount;
     }
-    
+
     /**
-     * Render the form errors to the given buffer is form processed and 
+     * Render the form errors to the given buffer is form processed and
      * return the first field with an error if processed.
-     * 
+     *
      * @param buffer the string buffer to render the errors to
      * @param processed the flag indicating whether has been processed
      * @return the first field with an error if the form is being processed
@@ -902,21 +916,21 @@ public class Form implements Control {
 
         Field fieldWithError = null;
         if (processed && !isValid()) {
-            
+
             String headerTest = errorsHeader.toLowerCase() +
                                 errorsPrefix.toLowerCase();
-            boolean useErrorsHeader = 
+            boolean useErrorsHeader =
                 (((headerTest.indexOf("<ul") > -1) ||
                   (headerTest.indexOf("<ol") > -1)) &&
                   (headerTest.indexOf("<li") > -1));
-               
+
             if (useErrorsHeader) {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
                 buffer.append("<table class='errors'>\n");
             }
-            
+
             if (getError() != null) {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
@@ -927,7 +941,7 @@ public class Form implements Control {
                 buffer.append(getError());
                 buffer.append("</span>\n");
                 if (useErrorsHeader) {
-                    buffer.append(errorsSuffix);  
+                    buffer.append(errorsSuffix);
                     buffer.append("\n");
                 } else {
                     buffer.append("</td></tr>\n");
@@ -960,11 +974,11 @@ public class Form implements Control {
                         buffer.append("</span>");
                     }
                     if (useErrorsHeader) {
-                        buffer.append(errorsSuffix); 
+                        buffer.append(errorsSuffix);
                         buffer.append("\n");
                     } else {
                         buffer.append("</td></tr>\n");
-                    }   
+                    }
                 }
             }
 
@@ -975,13 +989,13 @@ public class Form implements Control {
                 buffer.append("</table>\n");
             }
         }
-        
+
         return fieldWithError;
     }
-    
+
     /**
      * Render the Form Buttons to the string buffer.
-     * 
+     *
      * @param buffer the StringBuffer to render to
      */
     protected void renderButtons(StringBuffer buffer) {
@@ -993,7 +1007,7 @@ public class Form implements Control {
                 buffer.append(button);
             }
             buffer.append("</td></tr>\n");
-            buffer.append("</table>\n");           
+            buffer.append("</table>\n");
         }
     }
 }

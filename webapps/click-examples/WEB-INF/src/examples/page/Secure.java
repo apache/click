@@ -9,14 +9,14 @@ import net.sf.click.Page;
  * @author Malcolm Edgar
  */
 public class Secure extends Page {
-    
+
     /**
      * @see Page#onSecurityCheck()
      */
     public boolean onSecurityCheck() {
         if (getContext().hasSession()) {
             return true;
-            
+
         } else {
             setRedirect("login.htm");
             return false;

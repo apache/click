@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,31 +37,33 @@ import net.sf.click.util.ClickUtils;
  * bundle: <blockquote>
  * <pre>/click-control.properties</pre></blockquote>
  * You can modify these properties by copying this file into your applications
- * root class path and editing these properties. <b>Note</b> when customizing
+ * root class path and editing these properties.
+ * <p/>
+ * <span style="font-weight: bolder">Note</span> when customizing
  * the message properties you must include all the properties, not just the
  * ones you want to override, otherwise MissingResourceExceptions may be
- * thrown. 
- * 
+ * thrown.
+ *
  * @author Malcolm Edgar
  */
 public abstract class Field implements Control {
 
     // -------------------------------------------------------------- Constants
-    
-    /** 
+
+    /**
      * The package messages bundle name: &nbsp; <tt>click-control</tt>
      */
     public static final String PACKAGE_MESSAGES = "click-control";
-    
+
     /** The map of message resource bundles keyed on locale. */
-    protected static final Map MESSAGE_BUNDLES = 
+    protected static final Map MESSAGE_BUNDLES =
         Collections.synchronizedMap(new HashMap());
 
     // ----------------------------------------------------- Instance Variables
 
     /** The Field attributes Map. */
     protected Map attributes;
-    
+
     /** The Page request Context. */
     protected Context context;
 
@@ -70,7 +72,7 @@ public abstract class Field implements Control {
 
     /** The Field error message. */
     protected String error;
-    
+
     /** The request focus flag. */
     protected boolean focus;
 
@@ -97,7 +99,7 @@ public abstract class Field implements Control {
 
     /** The Field value. */
     protected String value;
-    
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -105,7 +107,7 @@ public abstract class Field implements Control {
      */
     public Field() {
     }
-    
+
     /**
      * Construct the Field with the given label.
      * <p/>
@@ -117,13 +119,13 @@ public abstract class Field implements Control {
         setLabel(label);
         setName(ClickUtils.toName(label));
     }
-    
+
     // ------------------------------------------------------ Public Attributes
-    
+
     /**
      * Return the Field HTML attribute with the given name, or null if the
      * attribute does not exist.
-     * 
+     *
      * @param name the name of field HTML attribute
      * @return the Field HTML attribute
      */
@@ -137,16 +139,16 @@ public abstract class Field implements Control {
 
     /**
      * Set the Fields with the given HTML attribute name and value. These
-     * attributes will be rendered as HTML attributes, for example: 
-     * <blockquote><pre>
-     * // Java code
+     * attributes will be rendered as HTML attributes, for example:
+     *
+     * <div class="code">// Java code
      * TextField textField = new TextField("Username");
-     * textField.setAttribute("<font color="blue">class</font>", "<font color="red">login</font>");
+     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span");
      *
      * &lt;-- HTML output --&gt;
-     * &lt;input type='text' name='username' value='' <font color="blue">class</font>='<font color="red">login</font>'/&gt;
-     * </pre></blockquote>
-     * <p/>
+     * &lt;input type='text' name='username' value='' <span class="blue">class</span>='<span class="red">login</span>'/&gt;
+     * </div>
+     *
      * If there is an existing named attribute in the Field it will be replaced
      * with the new value. If the given attribute value is null, any existing
      * attribute will be removed.
@@ -170,10 +172,10 @@ public abstract class Field implements Control {
             attributes.remove(name);
         }
     }
-    
+
     /**
      * Return the Field attributes Map.
-     * 
+     *
      * @return the field attributes Map.
      */
     public Map getAttributes() {
@@ -182,10 +184,10 @@ public abstract class Field implements Control {
         }
         return attributes;
     }
-    
+
     /**
      * Return true if the Field has attributes or false otherwise.
-     * 
+     *
      * @return true if the Field has attributes on false otherwise
      */
     public boolean hasAttributes() {
@@ -195,14 +197,14 @@ public abstract class Field implements Control {
             return false;
         }
     }
-    
+
     /**
      * @see Control#getContext()
      */
     public Context getContext() {
         return context;
     }
-    
+
     /**
      * @see Control#setContext(Context)
      */
@@ -214,9 +216,9 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return HTML rendering string "disabled " if the Field is disabled or a 
+     * Return HTML rendering string "disabled " if the Field is disabled or a
      * blank string otherwise.
-     * 
+     *
      * @see #isDisabled()
      *
      * @return HTML rendering string for the Fields disabled status
@@ -233,7 +235,7 @@ public abstract class Field implements Control {
     public boolean isDisabled() {
         return disabled;
     }
-    
+
     /**
      * Set the Field disabled flag
      *
@@ -242,9 +244,9 @@ public abstract class Field implements Control {
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
-    
+
     /**
-     * Return the validation error message if the Field is not valid, or null 
+     * Return the validation error message if the Field is not valid, or null
      * if valid.
      *
      * @return the Field validation error message, or null if valid
@@ -262,25 +264,25 @@ public abstract class Field implements Control {
     public void setError(String error) {
         this.error = error;
     }
-    
+
     /**
      * Return true if the field has requested focus.
-     * 
+     *
      * @return true if the field has requested focus
      */
     public boolean getFocus() {
         return focus;
     }
-    
+
     /**
      * Set the Field request focus flag
-     * 
+     *
      * @param focus the request focus flag
      */
     public void setFocus(boolean focus) {
         this.focus = focus;
     }
-    
+
     /**
      * Return the parent Form containing the Field.
      *
@@ -297,7 +299,7 @@ public abstract class Field implements Control {
      */
     public void setForm(Form form) {
         this.form = form;
-    } 
+    }
 
     /**
      * Return true if the Field type is hidden (&lt;input type="hidden"/&gt;) or
@@ -326,7 +328,7 @@ public abstract class Field implements Control {
     public void setLabel(String label) {
         this.label = label;
     }
-    
+
     /**
      * The callback listener will only be called during processing if the Field
      * value is valid. If the field has validation errors the listener will not
@@ -338,11 +340,11 @@ public abstract class Field implements Control {
         listener = target;
         listenerMethod = methodName;
     }
-    
+
     /**
      * Return the package resource bundle message for the named resource key
      * and the context's request locale.
-     * 
+     *
      * @param name resource name of the message
      * @return the named localized message for the package
      */
@@ -350,24 +352,24 @@ public abstract class Field implements Control {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
-        
+
         Locale locale = getContext().getRequest().getLocale();
-      
-        ResourceBundle bundle = 
+
+        ResourceBundle bundle =
             (ResourceBundle) MESSAGE_BUNDLES.get(locale);
-            
+
         if (bundle == null) {
             bundle = ResourceBundle.getBundle(PACKAGE_MESSAGES, locale);
             MESSAGE_BUNDLES.put(locale, bundle);
         }
-        
+
         return bundle.getString(name);
     }
 
     /**
      * Return the formatted package message for the given resource name, message
      * format arguments and context request locale.
-     * 
+     *
      * @param name resource name of the message
      * @param args the message arguments to format
      * @return the named localized message for the package
@@ -377,18 +379,18 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null args parameter");
         }
         String value = getMessage(name);
-        
+
         return MessageFormat.format(value, args);
     }
 
     /**
      * Return the formatted package message for the given resource name, message
      * format argument and context request locale.
-     * 
+     *
      * @param name resource name of the message
      * @param arg the message argument to format
      * @return the named localized message for the package
-     */    
+     */
     public String getMessage(String name, Object arg) {
         Object[] args = new Object[] { arg };
         return getMessage(name, args);
@@ -419,7 +421,7 @@ public abstract class Field implements Control {
     public boolean isRequired() {
         return required;
     }
-    
+
     /**
      * Set the Field required status.
      *
@@ -430,7 +432,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return the 'title' attribute, or null if not defined. The title 
+     * Return the 'title' attribute, or null if not defined. The title
      * attribute acts like tooltip message over the Field.
      *
      * @return the 'title' attribute tooltip message
@@ -438,7 +440,7 @@ public abstract class Field implements Control {
     public String getTitle() {
         return title;
     }
-    
+
     /**
      * Set the 'title' attribute tooltip message.
      *
@@ -447,10 +449,10 @@ public abstract class Field implements Control {
     public void setTitle(String value) {
         title = value;
     }
-    
+
     /**
-     * Return true if the Field is valid after being processed, or false 
-     * otherwise. If the Field has no error message after 
+     * Return true if the Field is valid after being processed, or false
+     * otherwise. If the Field has no error message after
      * {@link Control#onProcess()} has been invoked it is considered to be
      * valid.
      *
@@ -487,22 +489,22 @@ public abstract class Field implements Control {
      * method is defined.
      *
      * @see ClickUtils#invokeListener(Object, String)
-     * 
+     *
      * @return true if the invoked listener returns true, or if not listener
      * is defined
      */
     protected boolean invokeListener() {
         if (listener != null && listenerMethod != null) {
             return ClickUtils.invokeListener(listener, listenerMethod);
-            
+
         } else {
             return true;
         }
     }
-    
+
     /**
      * Return the field's value from the request.
-     * 
+     *
      * @return the field's value from the request
      */
     protected String getRequestValue() {
@@ -513,10 +515,10 @@ public abstract class Field implements Control {
             return "";
         }
     }
-    
+
     /**
      * Render the field HTML attributes to the string buffer.
-     * 
+     *
      * @param buffer the StringBuffer to render the HTML attributes to
      */
     protected void renderAttributes(StringBuffer buffer) {

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,20 +15,21 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a Email Field control: &nbsp; &lt;input type='text'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Email Field</td>
  * <td><input type='text' size='30' value='medgar@mycorp.com' title='EmailField Control'/></td>
- * </tr></table>
- * <p/>
+ * </tr>
+ * </table>
+ *
  * EmailField will validate the email when the control is processed and invoke
- * the control listener if the email format is valid. 
+ * the control listener if the email format is valid.
  * <p/>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
@@ -36,7 +37,7 @@ package net.sf.click.control;
 public class EmailField extends TextField {
 
     // ----------------------------------------------------------- Constructors
-    
+
     /**
      * Construct an Email Field with the given label and a default size of 30.
      * <p/>
@@ -49,13 +50,13 @@ public class EmailField extends TextField {
         size = 30;
     }
 
-    // -------------------------------------------------------- Public Methods
-    
+    // --------------------------------------------------------- Public Methods
+
     /**
-     * Process the EmailField submission. If the Email value is valid the 
+     * Process the EmailField submission. If the Email value is valid the
      * controls listener will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -65,7 +66,7 @@ public class EmailField extends TextField {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     * 
+     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
@@ -78,7 +79,7 @@ public class EmailField extends TextField {
                 setError(getMessage("field-minlength-error", args));
                 return true;
             }
-            
+
             if (getMaxLength() > 0 && length > getMaxLength()) {
                 Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
                 setError(getMessage("field-maxlength-error", args));
@@ -106,7 +107,7 @@ public class EmailField extends TextField {
                 setError(getMessage("field-required-error", getLabel()));
             }
         }
-        
+
         return true;
     }
 

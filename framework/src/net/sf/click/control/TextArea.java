@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,18 +15,20 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a TextArea control: &nbsp; &lt;textarea&gt;&lt;/textarea&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Text Area</td>
  * <td><textarea title='TextArea Control'>Rather lengthy text</textarea></td>
- * </tr></table>
- * <p/>
- * The example below shows how to a TextArea to a Form, and how it will be 
- * rendered as HTML.<blockquote><pre>
+ * </tr>
+ * </table>
+ *
+ * The example below shows how to a TextArea to a Form, and how it will be
+ * rendered as HTML.
+ * <div class="code">
  * // Java code
  * TextArea commentsField = new TextArea("Comments");
  * commentsField.setCols(40);
@@ -35,31 +37,31 @@ import net.sf.click.util.ClickUtils;
  *
  * &lt;-- HTML output --&gt;
  * &lt;textarea name='comments' rows='6' cols='40'/&gt;&lt;/textarea&gt;
- * </pre></blockquote>
+ * </div>
  *
  * See also the W3C HTML reference:
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.7">TEXTAREA</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class TextArea extends Field {
-    
+
     // ----------------------------------------------------- Instance Variables
 
-    /** 
+    /**
      * The number of text area columns. The default number of columns is twenty.
      */
     protected int cols = 20;
 
-    /** 
-     * The maximum field length validation contraint. If the value is zero this 
+    /**
+     * The maximum field length validation contraint. If the value is zero this
      * validation constraint is not applied. The default value is zero.
      */
     protected int maxLength = 0;
 
-    /** 
-     * The minimum field length validation constraint. If the valid is zero this 
+    /**
+     * The minimum field length validation constraint. If the valid is zero this
      * validation constraint is not applied. The default value is zero.
      */
     protected int minLength = 0;
@@ -90,10 +92,9 @@ public class TextArea extends Field {
     public int getCols() {
         return cols;
     }
-    
+
     /**
      * Set the number of text area columns.
-     * <br>
      *
      * @param cols set the number of text area columns.
      */
@@ -102,8 +103,8 @@ public class TextArea extends Field {
     }
 
     /**
-     * Returns the maximum field length validation constraint. If the 
-     * {@link #maxLength} property is greater than zero, the Field values length 
+     * Returns the maximum field length validation constraint. If the
+     * {@link #maxLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
      * @return the maximum field length validation contraint
@@ -113,10 +114,10 @@ public class TextArea extends Field {
     }
 
     /**
-     * Sets the maximum field length. If the {@link #maxLength} property is 
-     * greater than zero, the Field values length will be validated against 
+     * Sets the maximum field length. If the {@link #maxLength} property is
+     * greater than zero, the Field values length will be validated against
      * this constraint when processed.
-     * 
+     *
      * @param maxLength the maximum field length validation constraint
      */
     public void setMaxLength(int maxLength) {
@@ -124,8 +125,8 @@ public class TextArea extends Field {
     }
 
     /**
-     * Returns the minimum field length validation constraint. If the 
-     * {@link #minLength} property is greater than zero, the Field values length 
+     * Returns the minimum field length validation constraint. If the
+     * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
      * @return the minimum field length validation contraint
@@ -135,8 +136,8 @@ public class TextArea extends Field {
     }
 
     /**
-     * Sets the minimum field length validation constraint. If the 
-     * {@link #minLength} property is greater than zero, the Field values length 
+     * Sets the minimum field length validation constraint. If the
+     * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
      * @param minLength the minimum field length validation constraint
@@ -170,7 +171,7 @@ public class TextArea extends Field {
      * constraints and a Control listener is defined then the listener
      * method will be invoked.
      * <p/>
-     * A field error message is displayed if a validation error occurs. 
+     * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
@@ -179,8 +180,8 @@ public class TextArea extends Field {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     * 
-     * @see net.sf.click.Control#onProcess()     
+     *
+     * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -206,7 +207,7 @@ public class TextArea extends Field {
                 setError(getMessage("field-required-error", getLabel()));
             }
         }
-        
+
         return true;
     }
 
@@ -232,7 +233,7 @@ public class TextArea extends Field {
             buffer.append("'");
         }
 
-        ClickUtils.renderAttributes(attributes, buffer);
+        renderAttributes(buffer);
 
         if (!isValid()) {
             buffer.append(" class='error'");

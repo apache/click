@@ -12,6 +12,16 @@
    <property name="jar.velocity" value="velocity-dep-1.4.jar"/>   
    <property name="name" value="click"/>
    <property name="version" value="0.2"/>
+	
+   <!-- ReplaceTabs: replace tabs Task Definition. -->
+   <taskdef name="linetrim" 
+   	        classname="dev.LineTrimTask" 
+   	        classpath="lib/dev.jar"/>
+							
+   <!-- ReplaceTabs: replace tabs Task Definition. -->
+   <taskdef name="replacetabs" 
+   	        classname="dev.ReplaceTabsTask" 
+   	        classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
    
@@ -65,6 +75,10 @@
 
    <target name="build-webapps" description="build web application WAR files">
    	  <!--  "click-blank" WAR  -->
+	  <copy file="framework/src/click-control.properties" 
+	  	    todir="webapps/click-blank/WEB-INF/src"/>
+	  <copy file="framework/src/click-control.properties" 
+	  	    todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
          <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
@@ -112,31 +126,38 @@
 	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
+   <target name="format-java" description="replace tabs and trim trailing spaces">
+	  <linetrim srcdir="framework/src" includes="**/*.java"/>
+	  <replacetabs srcdir="framework/src" includes="**/*.java"/>
+	  <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
+	  <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
+   </target> 
+	
    <target name="examples" description="build and deploy examples"> 
-    <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
-    <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
+      <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
 	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
            destdir="webapps/click-examples/WEB-INF/classes" 
            debug="true">
-       <classpath> 
+         <classpath> 
      	    <pathelement location="lib/${jar.servlet}"/>
-          <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
-       </classpath>
-    </javac>
-    <copy todir="webapps/click-examples/WEB-INF/classes">
-       <fileset dir="webapps/click-examples/WEB-INF/src">
-         <exclude name="**/*.java"/>
-     	   <exclude name="**/package.html"/>
-       </fileset>
-    </copy>
-    <war destfile="${dir.deploy}/click-examples.war"
-         webxml="webapps/click-examples/WEB-INF/web.xml">
-       <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
-       <fileset dir="webapps/click-examples">
-          <exclude name="**/web.xml"/>
-       </fileset>
-    </war>
-	<copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+           <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
+         </classpath>
+      </javac>
+      <copy todir="webapps/click-examples/WEB-INF/classes">
+         <fileset dir="webapps/click-examples/WEB-INF/src">
+            <exclude name="**/*.java"/>
+     	    <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <war destfile="${dir.deploy}/click-examples.war"
+           webxml="webapps/click-examples/WEB-INF/web.xml">
+         <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
+         <fileset dir="webapps/click-examples">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+	  <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 	
    <target name="javadoc" description="create Javadoc HTML">

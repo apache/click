@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,31 +17,33 @@ package net.sf.click.control;
 
 /**
  * Provides a Reset control: &nbsp; &lt;input type='reset'&gt;.
- * <p/>
- * <table class='form'><tr><td>
- * <input type='reset' value='Reset' title='Reset Control'/>
- * </td></tr></table>
- * <p/>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
+ * <td><input type='reset' value='Reset' title='Reset Control'/></td>
+ * </tr>
+ * </table>
+ *
  * The Reset control provides input type reset field. The Reset button is
  * uses to reset the any changes a user may have made to a forms values. The
  * Reset button performs no server side processing.
  * <p/>
  * The example below illustrates adding a Reset button to a Form, and shows
  * how it will be rendered as HTML.
- * <blockquote><pre>
+ * <div class="code">
  * // Java code
  * Reset reset = new Reset("Reset");
  * reset.setTitle("Undo changes");
  * form.add(reset);
  *
  * &lt;-- HTML output --&gt;
- * &lt;input type='reset' name='reset' value='Reset' title='Undo changes'/&gt;
- * </pre></blockquote>
+ * &lt;input type='reset' name='reset' value='Reset' title='Undo changes'&gt;
+ * </div>
  *
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @see Button
  * @see Submit
  *
@@ -65,9 +67,9 @@ public class Reset extends Button {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the 'reset' input field type.
+     * Return the input type: '<tt>reset</tt>'.
      *
-     * @return 'reset'
+     * @return the input type: '<tt>reset</tt>'
      */
     public String getType() {
         return "reset";

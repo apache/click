@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,22 +15,23 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a Checkbox control: &nbsp; &lt;input type='checkbox'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Checkbox</td>
  * <td><input type='checkbox' title='Checkbox Control'/></td>
- * </tr></table>
- * <p/>
+ * </tr>
+ * </table>
+ *
  * Checkbox supports the {@link Field#required} property and Control listeners.
- * 
+ *
  * <p/>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm
  */
 public class Checkbox extends Field {
@@ -72,9 +73,9 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Return the input field type of: &nbsp; <tt>checkbox</tt>
+     * Return the input type: '<tt>checkbox</tt>'
      *
-     * @return the input field type &nbsp; <tt>checkbox</tt>
+     * @return the input type '<tt>checkbox</tt>'
      */
     public String getType() {
         return "checkbox";
@@ -88,11 +89,11 @@ public class Checkbox extends Field {
     public String getValue() {
         return String.valueOf(checked);
     }
-    
+
     /**
      * Set checked value of the field. If the given value is null, the checked
      * value is set to false.
-     * 
+     *
      * @see Field#setValue(Object)
      */
     public void setValue(Object value) {
@@ -104,11 +105,11 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Process the request Context setting the checked value and invoking 
+     * Process the request Context setting the checked value and invoking
      * the controls listener if defined.
      * <p/>
-     * If a checked value is {@link Field#required} and the Checkbox is not 
-     * checked the error message defined by <tt>not-checked-error</tt> 
+     * If a checked value is {@link Field#required} and the Checkbox is not
+     * checked the error message defined by <tt>not-checked-error</tt>
      * property will be displayed.
      *
      * @see net.sf.click.Control#onProcess()
@@ -123,7 +124,7 @@ public class Checkbox extends Field {
         return invokeListener();
     }
 
-    // -------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Return the HTML rendered Checkbox string.
@@ -138,7 +139,7 @@ public class Checkbox extends Field {
         buffer.append("' name='");
         buffer.append(getName());
         buffer.append("'");
-        
+
         renderAttributes(buffer);
 
         if (checked) {

@@ -1,12 +1,12 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,21 @@ package net.sf.click.control;
 
 /**
  * Provides a Password Field control: &nbsp; &lt;input type='password'&gt;.
- * <p/>
- * <table class='form'><tr>
+ *
+ * <table class='htmlHeader'>
+ * <tr>
  * <td>Password Field</td>
  * <td><input type='password' value='password' title='PasswordField Control'/></td>
- * </tr></table>
- * <p/>
- * For an PasswordField code example see the {@link net.sf.click.control.Form} 
+ * </tr>
+ * </table>
+ *
+ * For an PasswordField code example see the {@link net.sf.click.control.Form}
  * Javadoc example.
  * <p/>
  * See also W3C HTML reference
- * <a title="W3C HTML 4.01 Specification" 
+ * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class PasswordField extends TextField {
@@ -50,9 +52,9 @@ public class PasswordField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Returns the 'password' input field type.
+     * Return the input type: '<tt>password</tt>'
      *
-     * @return 'password'
+     * @return the input type: '<tt>password</tt>'
      */
     public String getType() {
         return "password";
