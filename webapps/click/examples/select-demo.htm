@@ -1,0 +1,25 @@
+<html>
+<head>	
+<link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
+$form.getHtmlImports()
+<title>Click Examples - Select Demo</title>
+</head>	
+<body>
+ 	
+<h2>Select Page</h2> 
+
+#writeSourceToolbar( "examples/page/SelectDemo.java" "examples/select-demo.htm" )
+
+This form includes all the Click form controls.
+<p/>
+
+$form
+
+#if( $form.getContext().isPost() && $form.isValid()) 
+Gender: $gender
+<p/>
+Location: $location
+#end
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<html>
+<head>	
+<link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
+<style>
+td {
+  font-size: smaller;
+}
+</style>
+<title>Click Examples - Simple Table</title>
+</head>	
+<body>
+ 	
+<h2>Simple Table</h2> 
+
+#writeSourceToolbar( "examples/page/SimpleTable.java" "examples/simple-table.htm" )
+
+J2EE servlet container system properties. 
+<p/>
+
+<table border="0" cellpadding="2" cellspacing="0">
+  <tr valign="baseline" bgcolor="navy">
+    <th align="right"> Property Name &nbsp; &nbsp; &nbsp; </th>
+    <th align="left"> Property Value </th>
+  </tr>
+#foreach( $key in $properties.keySet() )
+ #if( $velocityCount % 2 == 0)
+  <tr bgcolor="#f7f7e7"> 
+ #else 
+  <tr valign="baseline"> 
+ #end	
+    <td align="right"> $key &nbsp; &nbsp; </td> 
+    <td align="left"> $properties.get($key) &nbsp; </td>
+  </tr>
+#end
+</table>
+
+</body>
+</html>

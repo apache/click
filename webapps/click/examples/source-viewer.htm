@@ -1,0 +1,31 @@
+<html>
+<head>
+<title>Click Examples - Page Source</title>
+<style>
+body {
+  font-family: verdana, arial, sans-serif;
+}
+</style>
+</head>
+
+<body>
+#if ($name)
+ <h3>Source: $name</h3>
+#else
+ <h3>Source</h3>
+#end
+
+<hr/>
+ 
+#if ($source)
+<pre>
+$source
+</pre>
+#elseif ($error)
+ <font color="red">$error</font>
+#else 
+ <font color="read">Source not </font>
+#end
+
+</body>
+</html>

@@ -1,0 +1,257 @@
+/*
+ * Copyright 2004 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.sf.click.control;
+
+import net.sf.click.Context;
+import net.sf.click.util.ClickUtils;
+
+/**
+ * Provides a Text Field control: &nbsp; &lt;input type='text'&gt;.
+ * <p/>
+ * <table class='form'><tr>
+ * <td>Text Field</td>
+ * <td><input type='text' value='string' title='TextField Control'/></td>
+ * </tr></table>
+ * <p/>
+ * The example below shows how to a TextField to a Form, and how it will be 
+ * rendered as HTML.
+ * <blockquote><pre>
+ * // Java code
+ * TextField usernameField = new TextField("Username");
+ * usernameField.setRequired(true);
+ * usernameField.setSize(12);
+ * usernameField.setMaxLength(12);
+ * usernameField.setMinLength(6);
+ * form.add(usernameField);
+ *
+ * &lt;-- HTML output --&gt;
+ * &lt;input type='text' name='username' value='' size='12' maxlength='12'/&gt;
+ * </pre></blockquote>
+ *
+ * For another example using TextField see the {@link net.sf.click.control.Form} 
+ * Javadoc example.
+ * <p/>
+ * See also the W3C HTML reference:
+ * <a title="W3C HTML 4.01 Specification" 
+ *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
+ * 
+ * @author Malcolm Edgar
+ */
+public class TextField extends Field {
+
+    /** 
+     * The maximum field length validation contraint. If the value is zero this 
+     * validation constraint is not applied. The default value is zero.
+     * <p/>
+     * If maxLenth is greater than zero, then maxLength is rendered as the 
+     * HTML attribute 'maxlength'.
+     */
+    protected int maxLength = 0;
+
+    /** 
+     * The minimum field length validation constraint. If the valid is zero this 
+     * validation constraint is not applied. The default value is zero.
+     */
+    protected int minLength = 0;
+
+    /** The text field size attribute. The default size is 20. */
+    protected int size = 20;
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Construct the Text Field with the given label.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     */
+    public TextField(String label) {
+        super(label);
+    }
+
+    // --------------------------------------------------------- Public Methods
+    
+    /**
+     * Returns the maximum field length validation constraint. If the 
+     * {@link #maxLength} property is greater than zero, the Field values length 
+     * will be validated against this constraint when processed.
+     * <p/>
+     * If maxLenth is greater than zero, it is rendered as the field 
+     * attribute 'maxlength'
+     *
+     * @return the maximum field length validation contraint
+     */
+    public int getMaxLength() {
+        return maxLength;
+    }
+
+    /**
+     * Sets the maximum field length. If the {@link #maxLength} property is 
+     * greater than zero, the Field values length will be validated against 
+     * this constraint when processed.
+     * <p/>
+     * If maxLenth is greater than zero, it is rendered as the field 
+     * attribute 'maxlength'
+     * 
+     * @param maxLength the maximum field length validation constraint
+     */
+    public void setMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    /**
+     * Returns the minimum field length validation constraint. If the 
+     * {@link #minLength} property is greater than zero, the Field values length 
+     * will be validated against this constraint when processed.
+     *
+     * @return the minimum field length validation contraint
+     */
+    public int getMinLength() {
+        return minLength;
+    }
+
+    /**
+     * Sets the minimum field length validation constraint. If the 
+     * {@link #minLength} property is greater than zero, the Field values length 
+     * will be validated against this constraint when processed.
+     *
+     * @param minLength the minimum field length validation constraint
+     */
+    public void setMinLength(int minLength) {
+        this.minLength = minLength;
+    }
+    
+    /**
+     * Return the field size.
+     *
+     * @return the field size
+     */
+    public int getSize() {
+        return size;
+    }    
+
+    /**
+     * Set the field size.
+     *
+     * @param  size the field size
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * Returns the 'text' input field type.
+     *
+     * @return 'text'
+     */
+    public String getType() {
+        return "text";
+    }
+    
+    /**
+     * Process the TextField submission. If the text value passes the validation
+     * constraints and a Control listener is defined then the listener
+     * method will be invoked.
+     * <p/>
+     * A field error message is displayed if a validation error occurs. 
+     * These messages are defined in the resource bundle: <blockquote>
+     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <p/>
+     * Error message bundle key names include: <blockquote><ul>
+     * <li>field-maxlength-error</li>
+     * <li>field-minlength-error</li>
+     * <li>field-required-error</li>
+     * </ul></blockquote>
+     * 
+     * @see net.sf.click.Control#onProcess()
+     */
+    public boolean onProcess() {
+        Context context = getContext();
+        
+        value = context.getRequest().getParameter(name);
+        if (value != null) {
+            value = value.trim();
+        } else {
+            value = "";
+        }
+
+        int length = value.length();
+        if (length > 0) {
+            if (getMinLength() > 0 && length < getMinLength()) {
+                Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
+                error = getMessage(context, "field-minlength-error", args);
+                return true;
+            }
+
+            if (getMaxLength() > 0 && length > getMaxLength()) {
+                Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
+                error = getMessage(context, "field-maxlength-error", args);
+                return true;
+            }
+
+            return invokeListener();
+
+        } else {
+            if (required) {
+                error = getMessage(context, "field-required-error", getLabel());
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Return a HTML rendered TextField string.
+     *
+     * @see Object#toString()
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(80);
+
+        buffer.append("<input type='");
+        buffer.append(getType());
+        buffer.append("' name='");
+        buffer.append(getName());
+        buffer.append("' value='");
+        buffer.append(getValue());
+        buffer.append("' size='");
+        buffer.append(getSize());
+        buffer.append("'");
+        if (getTitle() != null) {
+            buffer.append("title='");
+            buffer.append(getTitle());
+            buffer.append("'");
+        }
+
+        ClickUtils.renderAttributes(attributes, buffer);
+
+        if (!isValid()) {
+            buffer.append(" class='error'");
+        } else if (isDisabled()) {
+            buffer.append(" class='disabled'");
+        }
+        buffer.append(getDisabled());
+        if (getMaxLength() > 0) {
+            buffer.append(" maxlength='");
+            buffer.append(getMaxLength());
+            buffer.append("'");
+        }
+        buffer.append("/>");
+
+        return buffer.toString();
+    }
+}

@@ -1,0 +1,22 @@
+#*
+ * Add your global application macros to this file
+ * 
+ *#
+
+
+#*
+ * Write a source inspection toolbar
+ *#
+
+#macro( writeSourceToolbar $java $html )
+
+<a href="$context/examples/source-viewer.htm?filename=WEB-INF/src/$java">Page</a>,
+<a href="$context/examples/source-viewer.htm?filename=$html">HTML</a>,
+<a href="$context/examples/source-viewer.htm?filename=WEB-INF/click.xml">Click</a>,
+<a href="$context/examples/source-viewer.htm?filename=WEB-INF/web.xml">Web</a>,
+<a href="$context/examples/examples.html">Examples</a>
+
+<hr/>
+<br/>
+
+#end
