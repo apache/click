@@ -11,12 +11,12 @@
    <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
 	
    <taskdef name="linetrim" 
-   	      classname="dev.LineTrimTask" 
-   	      classpath="lib/dev.jar"/>
+   	        classname="dev.LineTrimTask" 
+   	        classpath="lib/dev.jar"/>
 							
    <taskdef name="replacetabs" 
-   	      classname="dev.ReplaceTabsTask" 
-   	      classpath="lib/dev.jar"/>
+   	        classname="dev.ReplaceTabsTask" 
+   	        classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
    
@@ -45,24 +45,25 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
+      <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
+      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>        
+      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
       <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="**/Test*">
          <classpath>
             <fileset dir="lib">
               <include name="**/*.jar"/>
             </fileset>
          </classpath>
-      </javac>
-      <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
-      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
-      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>
-      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
-	   <jar destfile="${dir.deploy}/click-${version}.jar">
+      </javac>  
+      <jar destfile="${dir.deploy}/click-${version}.jar">
          <fileset dir="${dir.classes}">
+            <exclude name="org/apache/log4j/chainsaw/**"/>
             <exclude name="org/apache/velocity/anakia/**"/>
             <exclude name="org/apache/velocity/test/**"/>
             <exclude name="org/apache/velocity/texen/**"/>
          </fileset>
-      </jar>
+      </jar>  
    </target>
 
    <target name="build-webapps" description="build web application WAR files">
@@ -132,7 +133,7 @@
            destdir="webapps/click-examples/WEB-INF/classes" 
            debug="true">
          <classpath> 
-     	     <pathelement location="lib/${jar.servlet}"/>
+     	    <pathelement location="lib/${jar.servlet}"/>
            <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>
@@ -201,4 +202,10 @@
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>   
 
+   <target name="tomcat-setup" description="Setup Tomcat logging">
+      <copy todir="${dir.appserver}/.." verbose="true">
+         <fileset dir="tomcat"/>  
+      </copy>
+   </target>  
+   
 </project>

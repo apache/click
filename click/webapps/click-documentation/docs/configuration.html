@@ -20,8 +20,6 @@ covers to following topics:
   </li>
   <li><a href="#velocity-properties">Velocity Properties</a> - how to configure the Velocity runtime properties<p/>
   </li>
-  <li><a href="#log4j-properties">Log4J Properties</a> - how to configure the Log4J properties<p/>
-  </li>
   <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files<p/>
   </li>
 </ul>
@@ -36,9 +34,6 @@ The Click configuration files include:
   </td>
   <td>
 <ul>
- <li>WEB-INF/classes/<a target='topic' href="#log4j-properties">log4j.properties</a>
- &nbsp; - &nbsp; Log4j Properties (optional) 
- <p></li>
  <li>WEB-INF/<a target='topic' href="#application-configuration">click.xml</a>
  &nbsp; - &nbsp; Application Configuration (<b>required</b>)
  <p></li>
@@ -289,57 +284,49 @@ following mode element:
 &lt;/click-app&gt; 
 </pre>
 
-Application modes include:
-<ul>
- <li><tt>production</tt> &nbsp; - &nbsp; for production deployment</li>
- <li><tt>profile</tt> &nbsp; - &nbsp; for application profiling</li>
- <li><tt>development</tt> &nbsp; - &nbsp; for application development</li>
- <li><tt>debug</tt> &nbsp; - &nbsp; for application debugging</li>
-</ul>
-
-<p>
-The table below details the Click application and Velocity runtime Log4J 
-<tt>Logger</tt> levels, the Velocity template caching and ClickServlet load page on
-startup status for each application mode.
+The Click Application modes and their settings for Velocity caching, template loading on startup and 
+logging levels are:
 <p>
 <table style="border: 1px solid black;" cellspacing="0" cellpadding="6">
 <tr style="background-color: navy; color: white;">
- <th align="center">Mode</th>
- <th align="center">Click Logger Level</th>
- <th align="center">Velocity Logger Level</th>
- <th align="center">Velocity Caching</th>
- <th align="center">Load Templates on Startup</th>
+ <th align="center">Application mode</th>
+ <th align="center">Velocity caching</th>
+ <th align="center">Load templates on startup</th>
+ <th align="center">Click logging level</th>
+ <th align="center">Velocity logging level</th>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">production</span></tt></td>
+ <td align="center">Yes</td>
+ <td align="center">Yes</td>
  <td align="center">WARN</td>
  <td align="center">ERROR</td>
- <td align="center">Yes</td>
- <td align="center">Yes</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">profile</span></tt></td>
+ <td align="center">Yes</td>
+ <td align="center">Yes</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
- <td align="center">Yes</td>
- <td align="center">Yes</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">development</span></tt></td>
+ <td align="center">No</td>
+ <td align="center">No</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
- <td align="center">No</td>
- <td align="center">No</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">debug</span></tt></td>
+ <td align="center">No</td>
+ <td align="center">No</td>
  <td align="center">DEBUG</td>
  <td align="center">WARN</td>
- <td align="center">No</td>
- <td align="center">No</td>
 </tr>
 </table>
-<p>
+
+<h4>Velocity Caching</h4>
+
 When Velocity Caching is enabled Velocity page templates and macros files are 
 loaded once and cached. With caching enabled following Velocity runtime 
 properties are set:
@@ -359,12 +346,24 @@ webapp.resource.loader.cache=false
 velocimacro.library.autoreload=true 
 </pre>
 
+Template reloading is useful for application development as you can edit page templates on 
+a running application server and see the changes immediately. Note however, this 
+should <b>not</b> be used for production as Velocity can use a lot of memory when 
+introspecting templates and template reloading is significantly slower.
+
+<h4>Click and Velocity Logging</h4>
+
+The Click and Velocity runtimes are send their logging messages to the 
+<a href="servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext</a>
+log.
+<p/>
+Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
+<p/>
 When an application is not in <tt>production</tt> mode the error page displays
 detailed debugging information. When the application mode is <tt>production</tt>
 no debug information is displayed to prevent sensitive information being displayed.
 This behaviour can be changed by modifying the 
 <span class="blue"><tt>error.htm</tt></span> page template.
-
 
 <a name="velocity-properties"><h2>Velocity Properties</h2></a>
 
@@ -407,65 +406,6 @@ Note do not place Velocity macros under the WEB-INF directory as the Velocity
 ResourceManager will not be able to load them.
 
 
-<a name="log4j-properties"><h2>Log4j Properties</h2></a>
-
-Click provides in built support for the 
-<a href="http://jakarta.apache.org/log4j">Log4j</a> 
-logging. Pages can declare their own <tt>Logger</tt> instances and use the configured
-Log4J infrastructure. For example:  
-
-<pre class="codeJava">
-public class CustomerList extends Page {
-
-    static final <span class="red">Logger</span> <span class="blue">log</span> = <span class="red">Logger</span>.getLogger(CustomerList.class);
-  
-    public void onGet() {
-        try {
-            String surname = getRequest().getParameter("surname");
-        
-            List customerList = CustomerDAO.findBySurname(surname);
-
-            if (<span class="blue">log</span>.isDebugEnabled()) {
-                <span class="blue">log</span>.debug("CustomerList for '" + surname + "'" +
-                          " returned " + customerList.size() + " records.");
-            }
-
-            getModel().put("customerList", customerList);
-            
-        } catch (DAOException e) {
-            <span class="blue">log</span>.error(daoe);
-            throw new RuntimeException(e);
-        }
-    }
-}
-</pre>
-
-The Click and the Velocity frameworks have their own Log4j logging categories, 
-which they send logging messages to at runtime. The level of these
-categories can be set using the application mode attribute. See the
-<a href="#application-mode">Application Mode</a> topic for more details. 
-<p>
-The Log4j facility is configured using a classpath property file <tt>log4j.properties</tt>.
-The Click framework includes a <tt>log4j.properties</tt> file in its JAR file. 
-This file provides the following default Log4j properties:
-
-<pre class="codeConfig">
-# Set root category level to INFO and its only appender to A1.
-log4j.rootCategory=INFO, A1
-
-# A1 is set to be a ConsoleAppender. 
-log4j.appender.A1=org.apache.log4j.ConsoleAppender
-
-# A1 uses PatternLayout.
-log4j.appender.A1.layout=org.apache.log4j.PatternLayout
-log4j.appender.A1.layout.ConversionPattern=[%p] %c{1} %m%n 
-</pre>
-
-This configuration will display all debug or higher logging messages to the console.
-
-To override this configuration add your own <tt>log4j.properties</tt> file to your
-application's classpath.
-
 <a name="auto-deployed-files"><h2>Auto Deployed Files</h2></a> 
 At startup the ClickServlet will automatically deploy support files into the
 web application, if not already present. You can modify these support files and 
@@ -478,7 +418,6 @@ Click will not overwrite them. These files include:
    <li>click/form.js &nbsp; - &nbsp; the Form JavaScript library</li>
    <li>click/not-found.htm &nbsp; - &nbsp; the <a href="pages.html#page-not-found">Page Not Found</a> template</li>
    <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
-   <li>WEB-INF/click.dtd &nbsp; - &nbsp; the Click Application (click.xml) Document Type Descriptor</li>
 </ul>
 
 

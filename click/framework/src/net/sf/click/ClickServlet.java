@@ -320,15 +320,13 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost, Throwable exception,
         Page page) {
 
-        if (logger.isDebugEnabled()) {
-            // Useful to log exceptions which may occur when causing page is
-            // being rendered, as they may not be displayed in error page.
-            logger.debug("handleException:", exception);
-
-            if (exception instanceof ServletException) {
-                Throwable cause = ((ServletException) exception).getRootCause();
-                logger.debug("ServletException.rootCause", cause);
-            }
+        // Useful to log exceptions which may occur when causing page is
+        // being rendered, as they may not be displayed in error page.
+        logger.debug("handleException:", exception);
+        
+        if (exception instanceof ServletException) {
+            Throwable cause = ((ServletException) exception).getRootCause();
+            logger.debug("ServletException.rootCause", cause);
         }
 
         Context context = new Context
