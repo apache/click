@@ -355,6 +355,22 @@ public class Page {
     public void setRedirect(String value) {
         redirect = value;
     }
+    
+    /**
+     * Return the path of the page template to render. By default this method
+     * returns {@link #getPath()}.
+     * <p/>
+     * Pages can override this method to return an alternative page template. 
+     * This is very useful when implementing an standardized look and feel for
+     * a web site. You can return the default template, which uses the
+     * Velocity <tt>#include($path)</tt> to render customized page content.
+     * 
+     * @return the path of the page template to render, by default returns
+     * {@link #getPath()}.
+     */
+    public String getTemplate() {
+        return getPath();
+    }
 
     /**
      * The on Initialization event handler. This event handler is invoked after
