@@ -42,11 +42,11 @@ import net.sf.click.util.ClickUtils;
  *
  *     public void onInit() {
  *         ActionLink link = new ActionLink("<span class="blue">logoutLink</span>");
- *         link.setListener(this, "<span class="green">onLogoutClick</span>");
+ *         link.setListener(this, "<span class="maroon">onLogoutClick</span>");
  *         addControl(link);
  *     }
  *
- *     public boolean <span class="green">onLogoutClick</span>() {
+ *     public boolean <span class="maroon">onLogoutClick</span>() {
  *         if (getContext().getSessionAttribute("user") != null) {
  *            getContext().getSession().invalidate();
  *         }
@@ -54,13 +54,12 @@ import net.sf.click.util.ClickUtils;
  *
  *         return false;
  *     }
- * }
- * </div>
+ * } </div>
  *
  * The corresponding template code is below. Note href is evaluated by Velocity
- * to {@link #getHref()}:<div class="code">
- * &lt;a href="$<span class="blue">logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt;
- * </div>
+ * to {@link #getHref()}:
+ * 
+ * <div class="code">&lt;a href="<span class="blue">$logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt; </div>
  *
  * ActionLink can also support a value parameter which is accessable
  * using {@link #getValue()}.
@@ -72,41 +71,39 @@ import net.sf.click.util.ClickUtils;
  * control is processed:
  *
  * <div class="code">&lt;table&gt;
- * <span class="red">#foreach</span>( $product in $<span class="green">productList</span> )
+ * <span class="red">#foreach</span> (<span class="blue">$product</span> <span class="red">in</span> <span class="blue">$productList</span>)
  *   &lt;tr&gt;
  *    &lt;td&gt;
  *      $product.name
  *    &lt;/td&gt;
  *    &lt;td&gt;
- *      &lt;a href="$<span class="blue">detailsLink</span>.getHref($product.id)" title="Get product information"&gt;Details&lt;/a&gt;
+ *      &lt;a href="<span class="blue">$detailsLink</span>.getHref(<span class="blue">$product</span>.id)" title="Get product information"&gt;Details&lt;/a&gt;
  *    &lt;/td&gt;
  *    &lt;td&gt;
- *      &lt;a href="$<span class="blue">addLink</span>.getHref($product.id)" title="Add to basket"&gt;Add&lt;/a&gt;
+ *      &lt;a href="<span class="blue">$addLink</span>.getHref(<span class="blue">$product</span>.id)" title="Add to basket"&gt;Add&lt;/a&gt;
  *    &lt;/td&gt;
  *   &lt;/tr&gt;
  * <span class="red">#end</span>
- * &lt;/table&gt;
- * </div>
+ * &lt;/table&gt; </div>
  *
  * The corresponding Page class for this template is:
  *
- * <div class="code">
- * public class ProductsPage extends Page {
+ * <div class="code">public class ProductsPage extends Page {
  *
  *     ActionLink addLink;
  *     ActionLink detailsLink;
  *
  *     public void onInit() {
  *         addLink = new ActionLink("<span class="blue">addLink</span>");
- *         addLink.setListener(this, "<span class="green">onAddClick</span>");
+ *         addLink.setListener(this, "<span class="maroon">onAddClick</span>");
  *         addControl(addLink);
  *
  *         detailsLink = new ActionLink("<span class="blue">detailsLink</span>");
- *         detailsLink.setListener(this, "<span class="green">onDetailsClick</span>");
+ *         detailsLink.setListener(this, "<span class="maroon">onDetailsClick</span>");
  *         addControl(detailsLink);
  *     }
  *
- *     public boolean <span class="green">onAddClick</span>() {
+ *     public boolean <span class="maroon">onAddClick</span>() {
  *         // Get the product clicked on by the user
  *         Integer productId = addLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
@@ -118,7 +115,7 @@ import net.sf.click.util.ClickUtils;
  *         return true;
  *     }
  *
- *     public boolean <span class="green">onDetailsClick</span>() {
+ *     public boolean <span class="maroon">onDetailsClick</span>() {
  *         // Get the product clicked on by the user
  *         Integer productId = detailsLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
@@ -135,8 +132,7 @@ import net.sf.click.util.ClickUtils;
  *         List productList = ProductDatabase.getProducts();
  *         addModel("<span class="blue">productList</span>", productList);
  *     }
- * }
- * </div>
+ * } </div>
  *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

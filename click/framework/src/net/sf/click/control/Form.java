@@ -114,15 +114,12 @@ import net.sf.click.util.ClickUtils;
  *         setRedirect("index.htm");
  *         return false;
  *     }
- * }
- * </div>
+ * } </div>
  *
  * The forms corresponding template code is below. Note the form automatically
  * renders itself when Velocity invokes its {@link #toString()} method.
  *
- * <div class="code">
- * <span class="blue">$form</span>
- * </div>
+ * <div class="code"><span class="blue">$form</span> </div>
  *
  * If a Form has been posted and processed, if it has an {@link #error} defined or
  * any of its Fields hava validation errors they will be automatically
@@ -147,9 +144,7 @@ import net.sf.click.util.ClickUtils;
  * You can also manually layout the Form in the page template specifying
  * the fields using the named field notation:
  *
- * <div class="code">
- * $form.{@link #fields}.usernameField
- * </div>
+ * <div class="code">$form.{@link #fields}.usernameField </div>
  *
  * Whenever including your own Form markup in a page template or Velocity macro
  * always specify:
@@ -168,19 +163,18 @@ import net.sf.click.util.ClickUtils;
  * <p/>
  * An example of a manually layed out Login form is provided below:
  *
- * <div class="code">
- * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>&gt;
+ * <div class="code">&lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>&gt;
  *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  *   
  *   &lt;table style="margin: 1em;"&gt;
  * 
- *     <span class="red">#if</span>( <span class="blue">$form.error</span> ) 
+ *     <span class="red">#if</span> (<span class="blue">$form.error</span>) 
  *     &lt;tr&gt;
  *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
  *     &lt;/tr&gt;
  *     <span class="red">#end</span>
- *     <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span> )
- *       <span class="red">#if</span>( !<span class="blue">$field.hidden</span> && !<span class="blue">$field.valid</span> )
+ *     <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
+ *       <span class="red">#if</span> (!<span class="blue">$field.hidden</span> && !<span class="blue">$field.valid</span>)
  *       &lt;tr&gt;
  *         &lt;td&gt; &amp;nbsp; &lt;/td&gt;
  *         &lt;td style="color: red;"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
@@ -206,8 +200,7 @@ import net.sf.click.util.ClickUtils;
  * 
  *   &lt;/table&gt;
  * 
- * &lt;form&gt;
- * </div>
+ * &lt;form&gt; </div>
  * 
  * As you can see in this example most of the code and markup is generic and 
  * could be reused. This is where Velocity Macros come in.
@@ -225,37 +218,40 @@ import net.sf.click.util.ClickUtils;
  * macro which you could use through out an application. This Velocity macro code 
  * would be contained in a macro file, e.g. <tt>macro.vm</tt>.
  *
- * <div class="code">
- * #** Custom Form Macro Code **#
+ * <div class="code"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
  * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] ) 
  *
  * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$request.requestURI</span>&gt;
- * &lt;input type="<span class="maroon">hidden</span>" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
+ *
+ *  <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
+ *    <span class="red">#if</span> (<span class="blue">$field.hidden</span>) <span class="blue">$field</span> <span class="red">#end</span>
+ *  <span class="red">#end</span>
+ *
  * &lt;table width="100%"&gt;
  *
- * <span class="red">#if</span>( <span class="blue">$form.error</span> ) 
+ * <span class="red">#if</span> (<span class="blue">$form.error</span>) 
  *   &lt;tr&gt;
  *     &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
  *   &lt;/tr&gt;
  * <span class="red">#end</span>
  *
- * <span class="red">#foreach (</span><span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span><span class="red">)</span>
- *   <span class="red">#if</span>( !<span class="blue">$field.hidden</span> )
- *     <span class="red">#if</span>( !<span class="blue">$field.valid</span> )
+ * <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
+ *   <span class="red">#if</span> (!<span class="blue">$field.hidden</span>)
+ *     <span class="red">#if</span> (!<span class="blue">$field.valid</span>)
  *     &lt;tr&gt;
  *       &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
  *     &lt;/tr&gt;
  *     <span class="red">#end</span>
  * 
  *   &lt;tr&gt;
- *     &lt;td&gt; <span class="blue">$field.label</span>: &lt;/td&gt; &lt;td&gt; <span class="blue">$field</span> &lt;/td&gt;
+ *     &lt;td&gt; <span class="blue">$field.label</span>: &lt;/td&gt;&lt;td&gt; <span class="blue">$field</span> &lt;/td&gt;
  *   &lt;/tr&gt;
  *   <span class="red">#end</span>
  * <span class="red">#end</span>
  * 
  *  &lt;tr&gt;
  *    &lt;td colspan="2"&gt;
- *    <span class="red">#foreach (</span><span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span><span class="red">)</span>
+ *    <span class="red">#foreach</span> (<span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span>)
  *      <span class="blue">$button</span> &amp;nbsp;
  *    <span class="red">#end</span>
  *    &lt;/td&gt;
@@ -264,20 +260,18 @@ import net.sf.click.util.ClickUtils;
  * &lt;/table&gt;
  * &lt;/form&gt;
  * 
- * <span class="red">#end</span>
- * </div>
+ * <span class="red">#end</span> </div>
  * 
  * You would then call this macro in your Page template passing it your
  * <span class="blue">form</span> object:
- * <div class="code">
- * &lt;!-- HTML Code --&gt;
- * #<span class="green">writeForm</span>(<span class="blue">$form</span>)
- * </div>
+ * 
+ * <div class="code"> &lt;!-- HTML Code --&gt;
+ * <span class="red">#</span><span class="green">writeForm</span>(<span class="blue">$form</span>) </div>
  * 
  * At render time Velocity will execute the macro using the given form and render
  * the results to the response output stream.
  * 
- * <h5>Configuring Velocity Macros</h5>
+ * <h4>Configuring Macros</h4>
  * 
  * To configure your application pick up your velocimacro file
  * (e.g. <tt>macro.vm</tt>) you will need to include a <tt>velocity.properties</tt> file
@@ -285,17 +279,13 @@ import net.sf.click.util.ClickUtils;
  * <a target="topic" href="../../../../../configuration.html#velocity-properties">
  * Velocity Properties</a> for more info.
  * 
- * <div class="code">
- * WEB-INF/velocity.properties
- * </div>
+ * <div class="code">WEB-INF/velocity.properties </div>
  * 
  * In your <tt>velocity.properties</tt> file add a reference to your custom
  * macro file <tt>macro.vm</tt>, also making sure you included the default 
  * Click macro file <tt>click/VM_global_library.vm</tt>.  For example:
  * 
- * <div class="code">
- * velocimacro.library=<span class="blue">macro.vm</span>,click/VM_global_library.vm
- * </div>
+ * <div class="code">velocimacro.library=<span class="blue">macro.vm</span>,click/VM_global_library.vm </div>
  * 
  * <p/>
  * See also the W3C HTML reference:
@@ -422,6 +412,10 @@ public class Form implements Control {
     public Form(String name, Context context) {
         setName(name);
         setContext(context);
+        
+        HiddenField nameField = new HiddenField(FORM_NAME, String.class);
+        nameField.setValue(name);
+        add(nameField);
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -882,10 +876,6 @@ public class Form implements Control {
             ClickUtils.renderAttributes(getAttributes(), buffer);
         }
         buffer.append(">\n");
-
-        buffer.append("<input name='form_name' type='hidden' value='");
-        buffer.append(getName());
-        buffer.append("'>\n");
 
         int hiddenCount = 0;
         Field fieldWithError = null;

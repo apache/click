@@ -28,16 +28,14 @@ package net.sf.click.control;
  *
  * The example below shows how to a TextArea to a Form, and how it will be
  * rendered as HTML.
- * <div class="code">
- * // Java code
+ * <div class="code">// Java code
  * TextArea commentsField = new TextArea("Comments");
  * commentsField.setCols(40);
  * commentsField.setRows(6);
  * form.add(commentsField);
  *
  * &lt;-- HTML output --&gt;
- * &lt;textarea name='comments' rows='6' cols='40'/&gt;&lt;/textarea&gt;
- * </div>
+ * &lt;textarea name='comments' rows='6' cols='40'/&gt;&lt;/textarea&gt; </div>
  *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

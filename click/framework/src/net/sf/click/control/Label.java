@@ -20,15 +20,13 @@ package net.sf.click.control;
  * processing, and is used primarily to add descriptive labels or horizontal
  * rules to auto rendered forms. For example:
  *
- * <div class="code" cellspacing='6'>
- * // Java Code
+ * <div class="code" cellspacing='6'>// Java Code
  * Form form = new Form(getContext(), "form");
  * ..
  * form.add(new Label("&lt;hr/&gt;"));
  *
  * &lt;-- HTML output --&gt;
- * &lt;tr&gt;&lt;td colspan='2' align='left'&gt;&lt;hr/&gt;&lt;/td&gt;&lt;/tr&gt;
- * </div>
+ * &lt;tr&gt;&lt;td colspan='2' align='left'&gt;&lt;hr/&gt;&lt;/td&gt;&lt;/tr&gt; </div>
  *
  * @author Malcolm Edgar
  */

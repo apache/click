@@ -33,15 +33,14 @@ package net.sf.click.control;
  * reference the method {@link Form#getHtmlImports()} in the page template
  * (imports click/form.js file). For example.
  *
- * <div class="code"> &lt;html&gt;
+ * <div class="code">&lt;html&gt;
  *  &lt;head&gt;
  *   <span class="blue">$form.htmlImports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
  *   <span class="blue">$form</span>
  *  &lt;/body&gt;
- * &lt;/html&gt;
- * </div>
+ * &lt;/html&gt; </div>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"

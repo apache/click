@@ -60,8 +60,7 @@ import net.sf.click.Context;
  *
  *         ..
  *     }
- * }
- * </div>
+ * } </div>
  *
  * This radio group field would be render as:
  *

@@ -6,40 +6,46 @@
 #macro( writeForm $form )
 
 <form method="POST" name="$form.name" action="$request.requestURI">
- <input type="hidden" name="form_name" value="$form.name"/>
+
+ ## Render hidden fields
+ #foreach ($field in $form.fieldList)
+  #if ($field.hidden) $field #end
+ #end
 
  <table style="margin: 1em;">
-  #if( $form.error ) 
+  #if ($form.error) 
   <tr>
    <td colspan="2" style="color: red;" align="left"> $form.error </td>
   </tr>
   #end
   
+ ## Render visible fields
  #foreach ($field in $form.fieldList)
 
-  #if( !$field.hidden && !$field.valid )
-  <tr>
-   <td>&nbsp;</td>
-   <td style="color: red;" align="left"> $field.error </td>
-  </tr>
-  #end
+  #if (!$field.hidden)
+   #if (!$field.valid) 
+   <tr>
+    <td>&nbsp;</td>
+    <td style="color: red;" align="left"> $field.error </td>
+   </tr>
+   #end
 
-  #if( !$field.hidden )
-  <tr>
-   <td align="right"> 
-    #if( $field.required ) 
+   <tr>
+    <td align="right"> 
+    #if ($field.required) 
      <span style="font-weight: 700;">$field.label</span>:
     #else
      $field.label:
     #end
-   </td> 
-   <td> $field </td>
-  </tr>
+    </td> 
+    <td> $field </td>
+   </tr>
   #end
  #end
 
   <tr><td>&nbsp;</td></tr>
 
+  ## Render buttons
   <tr>
    <td>&nbsp;</td>
    <td align="left">

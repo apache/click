@@ -35,17 +35,16 @@ examples.
 A Hello World example in Click would look something like this. You would have a
 <tt>click.xml</tt> configuration file which defines our Hello World page class
 and its Velocity page template:
-<div class="code">
-&lt;click-app&gt;  
+
+<div class="code">&lt;click-app&gt;  
   &lt;pages&gt; 
     &lt;page path="<span class="blue">hello-world.htm</span>" classname="<span class="green">examples.page.HelloWorld</span>"/&gt; 
   &lt;/pages&gt;
-&lt;/click-app&gt; 
-</div>
+&lt;/click-app&gt; </div>
 
 Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt></span>:
-<div class="code">
-package examples.page;
+
+<div class="code">package examples.page;
 
 import java.util.Date;
 import net.sf.click.Page;
@@ -55,11 +54,11 @@ public HelloWorld extends Page {
     public void onGet() {
         addModel("<span class="red">time</span>", new Date());
     }
-}
-</div>
+} </div>
+
 And then we have the page template <span class="blue">hello-world.htm</span>:
-<div class="code">
-&lt;html&gt;
+
+<div class="code">&lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Hello World&lt;/h2&gt;
@@ -67,8 +66,7 @@ And then we have the page template <span class="blue">hello-world.htm</span>:
     Hello world from Click at $<span class="red">time</span>
     
   &lt;/body&gt;
-&lt;/html&gt;
-</div>
+&lt;/html&gt; </div>
 
 At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
 request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
@@ -96,8 +94,8 @@ Page which demonstrate Click controls.
 <p/>
 First we have a Login page class which setups up a login form in the <tt>onInit()</tt>
 method.
-<div class="code">
-public class Login extends Page {
+
+<div class="code">public class Login extends Page {
 
     Form form;
     TextField usernameField;
@@ -146,12 +144,11 @@ public class Login extends Page {
         setRedirect("<span class="blue">index.htm</span>");
         return false;
     }
-}
-</div>
+} </div>
 
 Next we have the Login page template <span class="blue">login.htm</span>:
-<div class="code">
-&lt;html&gt;
+
+<div class="code">&lt;html&gt;
   &lt;body&gt;
   
     &lt;h2&gt;Login&lt;/h2&gt;
@@ -159,8 +156,7 @@ Next we have the Login page template <span class="blue">login.htm</span>:
     $<span class="red">form</span>
     
   &lt;/body&gt;
-&lt;/html&gt;
-</div>
+&lt;/html&gt; </div>
 
 When the Login page is first requested the $<span class="red">form</span> object will 
 automatically render itself as:

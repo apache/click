@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Click DTD</h1>
+
+Click application XML descriptor Documentation Type Definition (DTD):
+
+<div class="code">
+&lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
+&lt;!ELEMENT click-app (pages, headers?, format?, mode?)&gt;
+
+  &lt;-- Application pages. --&gt;
+  &lt;!ELEMENT pages (page*)&gt;
+
+    &lt;!-- Page definition. --&gt;
+    &lt;!ELEMENT page (header*)&gt;
+      &lt;!ATTLIST page path CDATA #IMPLIED&gt;
+      &lt;!ATTLIST page classname CDATA #FIXED "net.sf.click.Page"&gt;
+
+  &lt;!-- Application default page headers. --&gt;
+  &lt;!ELEMENT headers (header*)&gt;
+  
+    &lt;-- Header definition. --&gt;
+    &lt;!ELEMENT header (#PCDATA)&gt;
+      &lt;!ATTLIST header name CDATA #REQUIRED&gt;
+      &lt;!ATTLIST header value CDATA #REQUIRED&gt;
+      &lt;!ATTLIST header type (String|Integer|Date) "String"&gt;
+
+  &lt;!-- Page template formatter class. An new format object added to
+       the Velocity context under the key: "format". --&gt;
+  &lt;!ELEMENT format (#PCDATA)&gt;
+   &lt;!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format"&gt;
+ 
+  &lt;!-- Application mode, which configures logging and caching. --&gt;
+  &lt;!ELEMENT mode (#PCDATA)&gt;
+   &lt;!ATTLIST mode value (production|profile|development|debug) "development"&gt;
+</div>
+</body>
+</html>
+   
+
+  
+   
+  
+  
+  
