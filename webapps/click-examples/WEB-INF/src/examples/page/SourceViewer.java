@@ -35,7 +35,7 @@ public class SourceViewer extends Page {
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(", "#else",
             "#else(", "#elseif", "#elseif(", "#end", "#set", "#set(",
             "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
-            "#macro(", "#foreach", "#foreach(", "##", "#*", "*#" };
+            "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#" };
 
     private boolean isJava = false;
 

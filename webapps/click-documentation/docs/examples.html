@@ -38,7 +38,7 @@ get you up and running as quickly as possible. These web applications include:
   </dd>
 </dl>
 </blockquote>
-<p>&nbsp;</p>
+<br/>
 
 <h3>Building and Deploying</h3>
 To build and deploy the web applications:
@@ -53,15 +53,15 @@ To build and deploy the web applications:
   property to point to your J2EE web container deployment directory. Note on
   Windows ensure you replace any \ directory path characters with / characters,
   otherwise Ant may not find the directory. For example:
-  <blockquote><pre>
+  
+  <pre class="codeConfig">
   # appserver deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.0.25/webapps/
-  </pre></blockquote>
+  dir.appserver=C:/java/jakarta-tomcat-5.5.7/webapps/ </pre>
   </li>
+  
   <li>Run the Ant build script targets:
-  <blockquote><pre>
-  ant build-framework build-webapps deploy-webapps
-  </pre></blockquote>
+  <pre class="codeConfig">
+  ant build-framework build-webapps deploy-webapps </pre>
   </li>
 </ol>
 

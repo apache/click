@@ -1,0 +1,63 @@
+a {
+	color: blue;
+}
+a.menu {
+	color: white;
+	font-size: 10pt;
+	font-weight: bolder;
+	text-decoration: none;
+	
+}
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;  
+}
+h3 {
+	font-weight: bold;
+	font-size: 16pt;
+}
+input.disabled {
+	background: lightgrey;
+}
+input.error {
+	background: yellow;
+}
+label.required {
+	font-weight: bold;
+}
+select.error {
+	background: yellow;
+}
+span.error {
+	color: red;
+}
+span.menu-selected {
+	color: white;
+    background-color: #5f8ac5;
+	font-size: 10pt;
+	font-weight: bold;
+}
+table.form {
+	border-width: 1;
+}
+td.title {
+	color: white;
+	background-color: #5f8ac5;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 20pt;
+	font-style: italic;
+	font-weight: bold;
+}
+td.title-event {
+	color: white;
+	background-color: #5f8ac5;
+	font-family: Arial, Helvetica, sans-serif;
+	font-style: italic;
+	font-size: 12pt;
+	font-weight: bold;
+}
+th {
+	color: white;
+	background-color: #5f8ac5;
+	font-weight: bold;
+}
+

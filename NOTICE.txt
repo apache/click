@@ -4,3 +4,6 @@ The Apache Software Foundation (http://jakarta.apache.org/).
 This product includes the JDOM XML library,
 developed by Jason Hunter and Brett McLaughlin (http://www.jdom.org/).
 
+The TrackMan example application uses the Mckoid SQL Database,
+developed by Diehl and Associates, Inc. (http://www.mckoi.com/).
+

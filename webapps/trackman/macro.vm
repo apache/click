@@ -1,0 +1,51 @@
+#*
+ * Add your global application macros to this file
+ * 
+ *#
+
+
+#*
+ * Write a menu of commands links in a horizontal table
+ *#
+#macro( writeTopMenu )
+ #if ($command.name == 'home')
+    <a class="menu" href="$app.getHref('home')" title="Log Entries"><span class="menu-selected">&nbsp;Home&nbsp;</span></a>&nbsp;|&nbsp;
+ #else
+  <a class="menu" href="$app.getHref('home')" title="Log Entries">&nbsp;Home&nbsp;</a>&nbsp;|&nbsp;
+ #end
+ #if ($command.name == 'logAdd')
+  <span class="menu-selected">&nbsp;New&nbsp;</span>&nbsp;|&nbsp;
+ #else
+  <a class="menu" href="$app.getHref('logAdd')" title="Create New Log Entry">&nbsp;New&nbsp;</a>&nbsp;|&nbsp;
+ #end
+ #if ($command.name == 'logView')
+  <span class="menu-selected">&nbsp;Details&nbsp;</span>&nbsp;|&nbsp;
+ #else
+  <a class="menu" href="$app.getHref('logView')" title="View Log Entry Details">&nbsp;Details&nbsp;</a>&nbsp;|&nbsp;
+ #end
+ #if ($command.name == 'userProfile')
+  <span class="menu-selected">&nbsp;Profile&nbsp;</span>&nbsp;|&nbsp;
+ #else
+  <a class="menu" href="$app.getHref('userProfile')" title="View Your Profile">&nbsp;Profile&nbsp;</a>&nbsp;|&nbsp;
+ #end
+ #if ($session.get('user').isAdmin())
+  #if ($command.name == 'userAdd')
+   <span class="menu-selected">&nbsp;Users&nbsp;</span>&nbsp;|&nbsp;
+  #else
+   <a class="menu" href="$app.getHref('userAdd')" title="Users">&nbsp;Users&nbsp;</a>&nbsp;|&nbsp;
+  #end
+ #end
+ <a class="menu" href="$app.getHref('logout')" title="Log Off Dev Log">&nbsp;Log Off&nbsp;</a>&nbsp;&nbsp;
+#end
+
+
+#macro( writeEventTitle )
+ #if( $session.get('user') ) 
+  $session.get('user').fullName
+ #end
+#end
+
+
+#macro( format $value )
+  $global.format($value)
+#end
