@@ -824,7 +824,7 @@ public class Form implements Control {
         if (request.getMethod().equalsIgnoreCase(getMethod())) {
             // If a form name is defined, but does not match this form exit.
             String formName = request.getParameter(FORM_NAME);
-            if (formName != null && !formName.equals(name)) {
+            if (formName == null || !formName.equals(name)) {
                 return true;
             }
 

@@ -10,20 +10,19 @@ simplified programming model and high performance.
 Click Controls provide an event callback mechanism similar the 
 <tt>java.awt.ActionListener</tt> callback. 
 
-<div class="code">
+<pre class="codeJava">
 public class MyPage extends Page {
 
     public void onInit() {
         ActionLink actionLink = new ActionLink("link");
-        actionLink.setListener(this, "<span class="maroon">onLinkClick</span>");
+        actionLink.setListener(this, "<span class="blue">onLinkClick</span>");
         addControl(actionLink);
     }
     
-    public boolean <span class="maroon">onLinkClick</span>() {
-        System.out.println("onLinkClick invoked at " + (new Date());
+    public boolean <span class="blue">onLinkClick</span>() {
+        System.out.println("onLinkClick invoked");
         return true;
     }
-}
-</div>
+} </pre>
 
 </body>

@@ -23,15 +23,15 @@ To build and deploy the web applications:
   property to point to your J2EE web container deployment directory. Note on
   Windows ensure you replace any \ directory path characters with / otherwise Ant 
   may not find the directory. For example:
-  <div class="code">
+  
+  <pre class="codeConfig">
   # appserver deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.0.25/webapps/
-  </div>
+  dir.appserver=C:/java/jakarta-tomcat-5.0.25/webapps/ </pre>
+  
   </li>
   <li>Run the Ant build script targets:
-  <div class="code">
-  ant build-framework build-webapps deploy-webapps
-  </div>
+  <pre class="codeConfig">
+  ant build-framework build-webapps deploy-webapps </pre>
   </li>
 </ol>
 

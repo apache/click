@@ -46,7 +46,7 @@ The major <a target="topic" href="api/net/sf/click/control/package-summary.html"
 <b>Class Diagram</b>
 
 <ul>
-<li><a target="topic" href="api/net/sf/click/Control.html">Control</a>
+<li><a target="topic" href="click-api/net/sf/click/Control.html">Control</a>
 &nbsp; - &nbsp; todo
 methods   
 <p></li>
@@ -63,7 +63,7 @@ methods
 </ul> 
 <a name="event-callback"><h2>Event Callback</h2></a>
 
-<div class="code">
+<pre class="codeJava">
 public class SimpleCallback extends Page {
 
     public void onInit() {
@@ -76,12 +76,11 @@ public class SimpleCallback extends Page {
         System.out.println("onClick invoked");
         return true;
     }
-}
-</div>
+} </pre>
 
 // TODO: make this a form example
 
-<div class="code">
+<pre class="codeJava">
 public class LinkPage extends Page {
 
     public void onInit() {
@@ -107,13 +106,13 @@ public class LinkPage extends Page {
     public void onGet() {
         System.out.println("onGet invoked");
     }
-}
-</div>
+} </pre>
 
 <a name="forms"><h2>Forms</h2></a>
 
-<a name="control-properties"><h2>Control Properties</h2></a>
-<div class="code">
+<a name="control-properties"><h2>Message Properties</h2></a>
+
+<pre class="codeConfig">
 # Click messages for 'net.sf.click.control' package
 calendar-image-title=Calendar
 creditcard-number-error={0} is invalid
@@ -133,8 +132,7 @@ label-required-suffix=&lt;font color="red"&gt;*&lt;/font&gt;
 not-checked-error=You must select {0}
 number-maxvalue-error={0} must not be larger than {1}
 number-minvalue-error={0} must not be smaller than {1}
-select-error=You must select a value for {0}
-</div>
+select-error=You must select a value for {0} </pre>
 
 
 </body>
