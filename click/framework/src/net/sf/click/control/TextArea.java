@@ -30,7 +30,7 @@ package net.sf.click.control;
  * rendered as HTML.
  *
  * <pre class="codeJava">
- * TextArea commentsField = new TextArea("Comments");
+ * TextArea commentsField = <span class="kw">new</span> TextArea(<span class="st">"Comments"</span>);
  * commentsField.setCols(40);
  * commentsField.setRows(6);
  * form.add(commentsField); </pre>

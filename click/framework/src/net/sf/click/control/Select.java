@@ -50,25 +50,25 @@ import java.util.List;
  * rendered HTML.
  *
  * <pre class="codeJava">
- * public class GenderPage {
+ * <span class="kw">public class</span> GenderPage <span class="kw">extends</span> Page {
  *
  *     Form form;
  *     Select genderSelect;
  *
- *     public void onInit() {
- *         form = new Form("form", getContext());
+ *     <span class="kw">public void</span> onInit() {
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         addControl(form);
  *
- *         genderSelect = new Select("Gender");
- *         genderSelect.setRequired(true);
- *         genderSelect.add(new Option("U", "");
- *         genderSelect.add(new Option("M", "Male"));
- *         genderSelect.add(new Option("F", "Female"));
+ *         genderSelect = <span class="kw">new</span> Select(<span class="st">"Gender"</span>);
+ *         genderSelect.setRequired(<span class="kw">true</span>);
+ *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"U"</span>, <span class="st">""</span>);
+ *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"M"</span>, <span class="st">"Male"</span>));
+ *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"F"</span>, <span class="st">"Female"</span>));
  *         form.add(genderSelect);
  *     }
  *
- *     public void onPost() {
- *         if (form.isValid()) {
+ *     <span class="kw">public void</span> onPost() {
+ *         <span class="kw">if</span> (form.isValid()) {
  *             String gender = genderSelect.getValue();
  *             ..
  *         }
@@ -106,31 +106,31 @@ import java.util.List;
  * rendered HTML.
  *
  * <pre class="codeJava">
- * public class LocationPage {
+ * <span class="kw">public class</span> LocationPage <span class="kw">extends</span> Page {
  *
  *     Form form;
  *     Select locationSelect;
  *
- *     public void onInit() {
- *         form = new Form("form", getContext());
+ *     <span class="kw">public void</span> onInit() {
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         addControl(form);
  *
- *         locationSelect = new Select("Location");
- *         locationSelect.<b>setMutliple(true)</b>;
- *         locationSelect.setRequired(true);
+ *         locationSelect = <span class="st">new</span> Select(<span class="st">"Location"</span>);
+ *         locationSelect.setMutliple(<span class="kw">true</span>);
+ *         locationSelect.setRequired(<span class="kw">true</span>);
  *         locationSelect.setSize(7);
- *         locationSelect.add("QLD");
- *         locationSelect.add("NSW"));
- *         locationSelect.add("NT");
- *         locationSelect.add("SA");
- *         locationSelect.add("TAS");
- *         locationSelect.add("VIC");
- *         locationSelect.add("WA");
+ *         locationSelect.add(<span class="st">"QLD"</span>);
+ *         locationSelect.add(<span class="st">"NSW"</span>);
+ *         locationSelect.add(<span class="st">"NT"</span>);
+ *         locationSelect.add(<span class="st">"SA"</span>);
+ *         locationSelect.add(<span class="st">"TAS"</span>);
+ *         locationSelect.add(<span class="st">"VIC"</span>);
+ *         locationSelect.add(<span class="st">"WA"</span>);
  *         form.add(locationSelect);
  *     }
  *
- *     public void onPost() {
- *         if (form.isValid()) {
+ *     <span class="kw">public void</span> onPost() {
+ *         <span class="kw">if</span> (form.isValid()) {
  *             String location = locationSelect.getValue();
  *             ..
  *         }
@@ -520,40 +520,40 @@ public class Select extends Field {
      * static List.
      *
      * <pre class="codeJava">
-     * public class <span class="blue">InvestmentSelect</span> extends Select {
+     * <span class="kw">public class</span> InvestmentSelect <span class="kw">extends</span> Select {
      *
-     *     static final List INVESTMENT_OPTIONS = new ArrayList();
+     *     <span class="kw">static final</span> List INVESTMENT_OPTIONS = <span class="kw">new</span> ArrayList();
      *
-     *     static {
-     *         Select.OptionGroup property = new Select.OptionGroup("Property");
-     *         property.add(new Select.Option("Commerical Property", "Commercial"));
-     *         property.add(new Select.Option("Residential Property", "Residential"));
+     *     <span class="kw">static</span> {
+     *         Select.OptionGroup property = <span class="kw">new</span> Select.OptionGroup(<span class="st">"Property"</span>);
+     *         property.add(<span class="kw">new</span> Select.Option(<span class="st">"Commerical Property"</span>, <span class="st">"Commercial"</span>));
+     *         property.add(<span class="kw">new</span> Select.Option(<span class="st">"Residential Property"</span>, <span class="st">"Residential"</span>));
      *         INVESTMENT_OPTIONS.add(property);
      *
-     *         Select.OptionGroup securities = new Select.OptionGroup("Securities");
-     *         securities.add(new Select.Option("Bonds"));
-     *         securities.add(new Select.Option("Options"));
-     *         securities.add(new Select.Option("Stocks"));
+     *         Select.OptionGroup securities = <span class="kw">new</span> Select.OptionGroup(<span class="st">"Securities"</span>);
+     *         securities.add(<span class="kw">new</span> Select.Option(<span class="st">"Bonds"</span>));
+     *         securities.add(<span class="kw">new</span> Select.Option(<span class="st">"Options"</span>));
+     *         securities.add(<span class="kw">new</span> Select.Option(<span class="st">"Stocks"</span>));
      *         INVESTMENT_OPTIONS.add(securities);
      *     }
      *
-     *     public <span class="blue">InvestmentSelect</span>(String label) {
-     *         super(label);
+     *     <span class="kw">public</span> InvestmentSelect(String label) {
+     *         <span class="kw">super</span>(label);
      *         setOptionList(INVESTMENT_OPTIONS);
      *     }
      * }
      *
-     * public class InvestmentsPage {
+     * <span class="kw">public class</span> InvestmentsPage <span class="kw">extends</span> Page {
      *
      *     Form form;
      *     Select investmentsSelect;
      *
-     *     public void onInit() {
-     *         form = new Form("form", getContext());
+     *     <span class="kw">public void</span> onInit() {
+     *         form = new Form(<span class="st">"form"</span>, getContext());
      *         addControl(form);
      *
-     *         investmentsSelect = new <span class="blue">InvestmentsSelect</span>("Investments");
-     *         investmentsSelect.setMutliple(true);
+     *         investmentsSelect = <span class="kw">new</span> InvestmentsSelect(<span class="st">"Investments"</span>);
+     *         investmentsSelect.setMutliple(<span class="kw">true</span>);
      *         investmentsSelect(7);
      *         form.add(investmentsSelect);
      *     }

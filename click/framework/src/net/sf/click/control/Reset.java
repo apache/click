@@ -32,8 +32,8 @@ package net.sf.click.control;
  * how it will be rendered as HTML.
  *
  * <pre class="codeJava">
- * Reset reset = new Reset("Reset");
- * reset.setTitle("Undo changes");
+ * Reset reset = <span class="kw">new</span> Reset(<span class="st">"Reset"</span>);
+ * reset.setTitle(<span class="st">"Undo changes"</span>);
  * form.add(reset); </pre>
  *
  * HTML output:

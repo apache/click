@@ -214,6 +214,6 @@ public class SourceViewer extends Page {
     }
 
     private String renderJavaToken(String token) {
-        return "<font color=\"navy\"><b>" + token + "</b></font>";
+        return "<font color=\"#7f0055\"><b>" + token + "</b></font>";
     }
 }

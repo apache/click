@@ -92,6 +92,11 @@ a:visited { color: blue; }
     color: #3f7f5f;
 }
 
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+
 /*  form.css */
 
 a.error {

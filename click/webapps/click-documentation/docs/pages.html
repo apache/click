@@ -148,7 +148,7 @@ set the Page's forward property. For example to forward to a page with a path
    <span class="cm">// Process form post</span>
    ..
    
-   setForward("<font color="blue">index.htm</font>");
+   setForward(<span class="st">"index.htm"</span>);
 } 
 </pre>
 
@@ -169,8 +169,8 @@ forwarded page.
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
     
-   getContext().setRequestAttribute("<font color="red">customer</font>", customer);
-   setForward("<font color="blue">view-customer.htm</font>");
+   getContext().setRequestAttribute(<span class="st">"customer"</span>, customer);
+   setForward(<span class="st">"view-customer.htm"</span>);
    
    <span class="kw">return false</span>;
 } 
@@ -186,9 +186,9 @@ Forwarded to page template <span class="html">view-customer.htm</span>:
  &lt;body&gt;
    &lt;h1&gt;Customer Details&lt;/h1&gt;
    &lt;pre&gt;
-     Full Name: <span class="red">$customer</span>.fullName
-     Email:     <span class="red">$customer</span>.email
-     Telephone: <span class="red">$customer</span>.telephone
+     Full Name: <span class="st">$customer.fullName</span>
+     Email:     <span class="st">$customer.email</span>
+     Telephone: <span class="st">$customer.telephone</span>
     &lt;/pre&gt;
   &lt;/body&gt;
 &lt;/html&gt; 
@@ -209,8 +209,8 @@ example would be:
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDatabase.getCustomer(id); 
     
-   addModel("<font color="red">customer</font>", customer);
-   setPath("<font color="blue">view-customer.htm</font>");
+   addModel(<span class="st">"customer"</span>, customer);
+   setPath(<span class="st">"view-customer.htm"</span>);
    
    <span class="kw">return false</span>;
 } 
@@ -239,7 +239,7 @@ page is provided below:
 
 <pre class="codeJava">
 <span class="kw">public boolean</span> onLogoutClick() {
-   setRedirect("<font color="blue">logout.htm</font>");
+   setRedirect(<span class="st">"logout.htm"</span>);
    <span class="kw">return false</span>;
 } 
 </pre>
@@ -268,7 +268,7 @@ transaction id encoded in the URL.
          <span class="cm">// Get transaction id</span>
          Long id = ..
    
-         setRedirect("<font color="blue">trans-complete.htm</font>?<font color="red">trans-id</font>=" + id);
+         setRedirect(<span class="st">"trans-complete.htm?trans-id="</span> + id);
       
          <span class="kw">return false</span>; 
       } 
@@ -292,7 +292,7 @@ then get the transaction id through the request parameter
     * @see Page#onInit()
     */</span>
    <span class="kw">public void</span> onInit() {
-      String id = getContext().getRequest().getParameter("<font color="red">trans-id</font>");
+      String id = getContext().getRequest().getParameter(<span class="st">"trans-id"</span>);
    
       <span class="kw">if</span> (id != <span class="kw">null</span>) {
          <span class="cm">// Get transaction details</span>
@@ -336,7 +336,7 @@ the user has a session, otherwise the request is redirected to the login page.
             <span class="kw">return true</span>;
             
         } <span class="kw">else</span> (
-            setRedirect("login.htm");
+            setRedirect(<span class="st">"login.htm"</span>);
             <span class="kw">return false</span>;
         }
     }
@@ -360,7 +360,7 @@ you could use a Secure page of:
             <span class="kw">return true</span>;
             
         } <span class="kw">else</span> (
-            setRedirect("login.htm");
+            setRedirect(<span class="st">"login.htm"</span>);
             <span class="kw">return false</span>;
         }
     }
@@ -381,11 +381,11 @@ Application Admin pages would extend this secure page to provide their funcation
      */</span>
     <span class="kw">public boolean</span> onSecurityCheck() {
     
-        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>("admin")) {
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
             <span class="kw">return true</span>;
 
         } <span class="kw">else</span> (
-            setRedirect("login.htm?");
+            setRedirect(<span class="st">"login.htm"</span>);
             <span class="kw">return false</span>;
         }
     }
@@ -459,22 +459,22 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
 has access to the usual Click objects:
 <ul>
-  <li><span class="red">$context</span> &nbsp; - &nbsp;
+  <li><span class="st">$context</span> &nbsp; - &nbsp;
     the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  
-  <li><span class="red">$format</span> &nbsp; - &nbsp; 
+  <li><span class="st">$format</span> &nbsp; - &nbsp; 
     the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
     object for formatting the display of objects.
   </li>
-  <li><span class="red">$request</span> &nbsp; - &nbsp; 
+  <li><span class="st">$request</span> &nbsp; - &nbsp; 
     the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
     object.
   </li>
-  <li><span class="red">$response</span> &nbsp; - &nbsp; 
+  <li><span class="st">$response</span> &nbsp; - &nbsp; 
     the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
     object.
   </li>
-  <li><span class="red">$session</span> &nbsp; - &nbsp; 
+  <li><span class="st">$session</span> &nbsp; - &nbsp; 
    the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
    for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
   </li>

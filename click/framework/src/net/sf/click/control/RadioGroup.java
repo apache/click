@@ -42,21 +42,22 @@ import net.sf.click.Context;
  * The example below illustrates a RadioGroup being added to a form.
  *
  * <pre class="codeJava">
- * public class Purchase extends Page {
+ * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+ * 
  *     Form form;
  *     RadioGroup radioGroup;
  *     ..
  *
- *     public void onInit() {
- *         Form form = new Form("form", getContext());
+ *     <span class="kw">public void</span> onInit() {
+ *         Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         ..
  *
- *         radioGroup = new RadioGroup("Packaging", getContext());
- *         radioGroup.add(new Radio("STD", "Standard "));
- *         radioGroup.add(new Radio("PRO", "Protective "));
- *         radioGroup.add(new Radio("GFT", "Gift Wrap "));
- *         radioGroup.setValue("STD");
- *         radioGroup.setVerticalLayout(true);
+ *         radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"Packaging"</span>, getContext());
+ *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"STD"</span>, <span class="st">"Standard "</span>));
+ *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"PRO"</span>, <span class="st">"Protective "</span>));
+ *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"GFT"</span>, <span class="st">"Gift Wrap "</span>));
+ *         radioGroup.setValue(<span class="st">"STD"</span>);
+ *         radioGroup.setVerticalLayout(<span class="kw">true</span>);
  *         form.add(radioGroup);
  *
  *         ..

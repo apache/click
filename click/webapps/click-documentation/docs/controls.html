@@ -96,13 +96,13 @@ listener method to be invoked. For example:
      * @see Page#onInit()
      */</span>
     <span class="kw">public void</span> onInit() {
-        ActionLink clickLink = <span class="kw">new</span> ActionLink("onClick");
-        clickLink.<span class="green">setListener</span>(<span class="kw">this</span>, "<span class="blue">onClick</span>");
+        ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
+        clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
         addControl(goLink);    
     }
     
-    <span class="kw">public boolean</span> <span class="blue">onClick</span>() {
-        System.out.println("onClick invoked");
+    <span class="kw">public boolean</span> onClick() {
+        System.out.println(<span class="st">"onClick invoked"</span>);
         <span class="kw">return true</span>;
     }
 } </pre>
@@ -163,7 +163,15 @@ control to render the different credit card types.
 
 <a name="message-properties"><h2>Message Properties</h2></a>
 
-TODO:
+Control strings for field validation messages and HTML formatting strings are
+externalized in the properties file:
+
+<pre class="code">
+/click-control.properties
+</pre>
+
+To customize the control properties simply add this file to your classpath and 
+tailor the specific values.
 
 <pre class="codeConfig">
 # Click Control messages
@@ -186,6 +194,16 @@ not-checked-error=You must select {0}
 number-maxvalue-error={0} must not be larger than {1}
 number-minvalue-error={0} must not be smaller than {1}
 select-error=You must select a value for {0} </pre>
+
+The errors-header, errors-prefix, errors-suffix and errors-footer act like their 
+equivalent Struts values and will format form validation error messages in HTML list.
+For example to render error messages as red list items:
+
+<pre class="codeConfig">
+errors-header=&lt;ul&gt;
+errors-prefix=&lt;li&gt;&lt;font color="red"&gt;
+errors-suffix=&lt;/font&gt;&lt;/li&gt;
+errors-footer=&lt;/ul&gt;  </pre>
 
 
 </body>
