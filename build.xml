@@ -62,7 +62,8 @@
          <fileset dir="." casesensitive="yes"> 
             <exclude name=".**"/> 
             <exclude name="TODO.txt"/>   
-            <exclude name="bin/**"/>    
+            <exclude name="bin/**"/>
+            <exclude name="**/Thumbs.db"/>
             <exclude name="framework/classes/**"/>
             <exclude name="tracker/**"/> 
             <exclude name="webapps/click-blank/WEB-INF/classes/**"/>  
