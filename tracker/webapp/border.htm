@@ -13,7 +13,7 @@
    <table cellspacing="0" cellpadding="0" border="0" valign="bottom">
     <tr>
      <td style="text-align:left;color:white;background-color:#002866;padding-left:1em;">
-      <span style="padding-left:15em;"/>    
+      #writeMenu()       
      </td>
      <td valign="top" align="right">
       <img height="25" src="images/curve.gif"/>
@@ -38,30 +38,14 @@
   <td valign="top" colspan="3" width="100%" height="100%">  
    <table width="100%" height="100%" cellpadding="8" cellspacing="8">   
     <tr>
-
+    
      <!-- Main Panel -->   
      <td valign="top" width="100%" bgcolor="white">
-
-      <h3>Log In</h3>      
-      <form method="POST" action="j_security_check">
-      <table border="0">
-       <tr>
-        <td>Username</td>
-        <td><input type="text" name="j_username"/></td>
-       </tr>
-       <tr>
-        <td>Password</td>
-        <td><input type="password" name="j_password"/></td>
-       </tr>
-       <tr>
-        <td>&nbsp;</td>
-        <td><input type="submit" value=" &nbsp; Login &nbsp; "/></td>
-       </tr>
-      </table>
-      </form>
+      
+     #parse($path)
 
      </td>
-
+  
     </tr>
    </table>
   </td>    

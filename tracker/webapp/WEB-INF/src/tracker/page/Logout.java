@@ -7,7 +7,7 @@ import net.sf.click.Page;
  *
  * @author Malcolm Edgar
  */
-public class Logout extends Page {
+public class Logout extends BorderedPage {
 
     /**
      * @see Page#onInit()

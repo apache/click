@@ -2,6 +2,7 @@
 <click-app>
   <pages>
     <page path="home.htm" classname="tracker.page.Home"/>
+    <page path="issue.htm" classname="tracker.page.BorderedPage"/>
     <page path="logout.htm" classname="tracker.page.Logout"/>
   </pages>
   <mode value="debug"/>

@@ -18,15 +18,18 @@ package tracker.page;
 import net.sf.click.Page;
 
 /**
- * Provides TODO: header
+ * Provides a page border template.
  *
  * @author Malcolm Edgar
  */
-public class Home extends BorderedPage {
-    
+public class BorderedPage extends Page {
+
     /**
-     * @see Page#onInit()
+     * Returns the name of the border template: &nbsp; <tt>"border.htm"</tt>
+     * 
+     * @see Page#getTemplate()
      */
-    public void onInit() {
-    }
+    public String getTemplate() {
+        return "border.htm";
+    }   
 }
