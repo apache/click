@@ -36,6 +36,7 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Provides miscellaneous String and Stream utility methods.
@@ -331,13 +332,13 @@ public class ClickUtils {
         StringBuffer buffer = new StringBuffer(400);
 
         if (tokenizer.hasMoreTokens()) {
-            buffer.append(tokenizer.nextToken());
+            buffer.append(StringEscapeUtils.escapeHtml(tokenizer.nextToken()));
             buffer.append("<br/>");
         }
 
         while (tokenizer.hasMoreTokens()) {
             buffer.append("&nbsp;&nbsp;&nbsp;");
-            buffer.append(tokenizer.nextToken());
+            buffer.append(StringEscapeUtils.escapeHtml(tokenizer.nextToken()));
             buffer.append("<br/>");
         }
 
