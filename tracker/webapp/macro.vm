@@ -2,23 +2,23 @@
 #macro( writeMenu )
   
   #if ($path == 'home.htm')
-	 	<span class="menu-selected">&nbsp; Home &nbsp;</span> 
+	 	<span class="menu-selected">Home</span> 
   #else
-	  <a class="menu" href="home.htm">&nbsp; Home &nbsp;</a> 
+    <a class="menu" href="home.htm">Home</a>
 	#end
 	&nbsp;|&nbsp;
 
   #if ($path == 'issue.htm')
-	  <span class="menu-selected">&nbsp; Issue &nbsp;</span>
+	  <span class="menu-selected">Issue</span>
 	#else
-	  <a class="menu" href="issue.htm">&nbsp; Issue &nbsp;</a> 
+	  <a class="menu" href="issue.htm">Issue</a>
 	#end	
 	&nbsp;|&nbsp;	
 	  
 	#if ($path == 'logout.htm')
-    <span class="menu-selected">&nbsp; Log Out</span> 
+    <span class="menu-selected">Log Out</span> 
   #else
-    <a class="menu" href="logout.htm">&nbsp; Log Out</a> 
+    <a class="menu" href="logout.htm">Log Out</a> 
   #end
   
 #end

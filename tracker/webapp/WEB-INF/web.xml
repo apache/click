@@ -50,8 +50,8 @@
       <auth-method>FORM</auth-method>
       <realm-name>Form-Based Authentication Area</realm-name>
       <form-login-config>
-         <form-login-page>/login.html</form-login-page>
-         <form-error-page>/login-error.html</form-error-page>
+         <form-login-page>/login.htm</form-login-page>
+         <form-error-page>/login.htm?auth-error=true</form-error-page>
       </form-login-config>
    </login-config>
 

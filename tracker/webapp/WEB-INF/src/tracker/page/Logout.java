@@ -15,7 +15,9 @@ public class Logout extends BorderedPage {
     public void onInit() {
         if (getContext().hasSession()) {
             String remoteUser = getContext().getRequest().getRemoteUser();
-            addModel("user", remoteUser);
+            if (remoteUser != null) {
+                addModel("user", remoteUser);
+            }
             getContext().getSession().invalidate();
         }
     }

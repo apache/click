@@ -390,7 +390,7 @@ for details about these properties. Note in <tt>debug</tt> mode the ClickServlet
 log the Velocity properties used when in starts up.
 <p/>
 If you want to add some of your own Velocity properties, or replace Click's
-properties, add a <tt>velocity.properties</tt> file in the <tt>WEB-INF</tt> 
+properties, add a <span class="blue"><tt>velocity.properties</tt></span> file in the <tt>WEB-INF</tt> 
 directory. Click will automatically pick up this file and load these properties.
 <p/>
 As a example say we have our own Velocity macro library called 
@@ -404,6 +404,10 @@ velocimacro.library=<span class="blue">mycorp.vm</span>
 
 Note do not place Velocity macros under the WEB-INF directory as the Velocity
 ResourceManager will not be able to load them.
+<p/>
+The simplest way to set your own macro file is to add a file named <span class="blue"><tt>macro.vm</tt></span>
+under your web application's root directory. At startup Click will first check to see
+if this file exists, and if it does use it instead of <tt>click/VM_global_library.vm</tt>.
 
 
 <a name="auto-deployed-files"><h2>Auto Deployed Files</h2></a> 
