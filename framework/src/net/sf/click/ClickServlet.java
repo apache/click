@@ -292,7 +292,7 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (!clickApp.isProductionMode()) {
-                logger.info("handledRequest: " + page.getPath() + " - "
+                logger.info("handleRequest:  " + page.getPath() + " - "
                             + (System.currentTimeMillis() - startTime) + " ms");
             }
         }
@@ -429,7 +429,7 @@ public class ClickServlet extends HttpServlet {
 
         final VelocityContext context = createVelocityContext(page);
 
-        final Template template = clickApp.getTemplate(page.getPath());
+        final Template template = clickApp.getTemplate(page.getTemplate());
 
         VelocityWriter velocityWriter = null;
 
@@ -472,8 +472,17 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (!clickApp.isProductionMode()) {
-            logger.info("renderedTemplate: " + page.getPath() + " - "
-                        + (System.currentTimeMillis() - startTime) + " ms");
+            StringBuffer buffer = new StringBuffer(50);
+            buffer.append("renderTemplate: ");
+            if (!page.getTemplate().equals(page.getPath())) {
+                buffer.append(page.getPath());
+                buffer.append(",");
+            }
+            buffer.append(page.getTemplate());
+            buffer.append(" - ");
+            buffer.append(System.currentTimeMillis() - startTime);
+            buffer.append(" ms");
+            logger.info(buffer);
         }
     }
 
