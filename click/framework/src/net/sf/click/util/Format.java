@@ -25,33 +25,33 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Provides the default Velocity template format object. A format object
- * is added to the Velocity Context using the name "<span class="blue">format</span>", 
+ * is added to the Velocity Context using the name "<span class="blue">format</span>",
  * and is then available in the Page for formatting objects.
  * <p/>
  * For example the following Page code adds a date to the model:
- * 
+ *
  * <pre class="codeJava">
  * public void onGet() {
  *    Date date = order.deliveryDate();
  *    addModel("<span class="red">deliveryDate</span>", date);
  * } </pre>
- * 
+ *
  * In the page template we use the format object:
- * 
+ *
  * <pre class="codeHtml">
  * Delivery date: <span class="blue">$format</span>.date(<span class="red">$deliveryDate</span>, "dd MMM yyyy") </pre>
  *
  * Which renders the output as:
- * 
+ *
  * <table class="htmlExample" cellspacing="12">
  * <tr><td>
- * Delivery date: 21 Jan 2004 
+ * Delivery date: 21 Jan 2004
  * </td></tr>
  * </table>
  *
  * The format object class can defined in the "click.xml" configuration file
  * using the syntax:
- * 
+ *
  * <pre class="codeConfig">
  * &lt;format classname="<span class="green">com.mycorp.utils.Format</span>"/&gt; </pre>
  *
@@ -173,15 +173,15 @@ public class Format {
             return "&nbsp;";
         }
     }
-    
-    
+
+
     /**
      * Escape the given object value as a HTML string, or "&amp;nbsp;"
-     * if the object is null. 
+     * if the object is null.
      * <p>
      * Implementation is provided by Jakarta Commons Lang utility:
      * <tt>StringEscapeUtils.escapeHtml(String)</tt>
-     * 
+     *
      * @param value unescaped HTML
      * @return the HTML escaped string
      */
@@ -192,14 +192,14 @@ public class Format {
             return "&nbsp;";
         }
     }
-    
+
     /**
-     * Escape the given object value as a JavaScript string, or "" if the object 
-     * is null. 
+     * Escape the given object value as a JavaScript string, or "" if the object
+     * is null.
      * <p>
      * Implementation is provided by Jakarta Commons Lang utility:
      * <tt>StringEscapeUtils.escapeJavaScript(String)</tt>
-     * 
+     *
      * @param value unescaped JavaScript
      * @return the JavaScript escaped string
      */

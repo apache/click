@@ -41,7 +41,7 @@ import net.sf.click.util.ClickUtils;
  *
  * HTML output:
  * <pre class="codeHtml">
- * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();' 
+ * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();'
  *        title='Return to previous page'&gt; </pre>
  *
  * See also W3C HTML reference

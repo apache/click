@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.SessionMap;
 
-import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.io.VelocityWriter;
@@ -49,7 +48,7 @@ import org.apache.velocity.util.SimplePool;
  * function the <tt>ClickServlet</tt> must be configured in the web
  * application's <tt>/WEB-INF/web.xml</tt> file. A simple web application which
  * maps all <tt>*.htm</tt> requests to a ClickServlet is provided below.
- * 
+ *
  * <pre class="codeConfig">
  * &lt;web-app>
  *    &lt;servlet&gt;
@@ -62,7 +61,7 @@ import org.apache.velocity.util.SimplePool;
  *       &lt;url-pattern&gt;<font color="red">*.htm</font>&lt;/url-pattern&gt;
  *    &lt;/servlet-mapping&gt;
  * &lt;/web-app&gt; </pre>
- * 
+ *
  * By default the <tt>ClickServlet</tt> will attempt to load an application
  * configuration file using the path: &nbsp; <tt>/WEB-INF/click.xml</tt>
  *
@@ -85,19 +84,19 @@ import org.apache.velocity.util.SimplePool;
  * @author Malcolm Edgar
  */
 public class ClickServlet extends HttpServlet {
-    
+
     // --------------------------------------------------------------- Contants
-    
+
     /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
     protected final static String CLICK_FORWARD = "click-forward";
 
     // ------------------------------------------------------ Instance Varables
 
-    /** The servlet logger. */
-    protected final Logger logger = Logger.getLogger(ClickServlet.class);
-
     /** The click application. */
     protected ClickApp clickApp;
+
+    /** The servlet logger. */
+    protected ClickApp.Logger logger;
 
     /** Cache of velocity writers */
     protected final SimplePool writerPool = new SimplePool(40);
@@ -110,9 +109,6 @@ public class ClickServlet extends HttpServlet {
      * @see GenericServlet#init()
      */
     public void init() throws ServletException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("init(): start for servlet '" + getServletName() + "'");
-        }
 
         // Get the context path for identifying the webapp
         String path = getServletContext().getRealPath("/");
@@ -128,9 +124,10 @@ public class ClickServlet extends HttpServlet {
             // Initialize the click application.
             clickApp = new ClickApp(getServletContext());
 
+            logger = clickApp.getLog();
+
             if (logger.isInfoEnabled()) {
-                logger.info("initialized on context path '" + path +
-                            "' in " + clickApp.getModeValue() + " mode");
+                logger.info("initialized in " + clickApp.getModeValue() + " mode");
             }
 
         } catch (Throwable e) {
@@ -138,8 +135,6 @@ public class ClickServlet extends HttpServlet {
             String message =
                 "error initializing on context path '" + path +
                 "' throwing javax.servlet.UnavailableException";
-
-            logger.error(message, e);
 
             log(message, e);
 
@@ -200,17 +195,19 @@ public class ClickServlet extends HttpServlet {
     protected void handleRequest(HttpServletRequest request,
         HttpServletResponse response, boolean isPost) {
 
-        long startTime = 0;
-        if (clickApp.getMode() != ClickApp.PRODUCTION) {
-            startTime = System.currentTimeMillis();
-        }
+        long startTime = System.currentTimeMillis();
 
         if (logger.isDebugEnabled()) {
-            logger.debug("");
-            logger.debug("method: " + request.getMethod());
-            logger.debug("uri: " + request.getRequestURI());
-            logger.debug("url: " + request.getRequestURL());
-            logger.debug("query: " + request.getQueryString());
+            StringBuffer buffer = new StringBuffer(200);
+            buffer.append(request.getMethod());
+            buffer.append(" ");
+            buffer.append(request.getRequestURL());
+            String query = request.getQueryString();
+            if (query != null) {
+                buffer.append("?");
+                buffer.append(query);
+            }
+            logger.debug(buffer);
         }
 
         Page page = null;
@@ -222,8 +219,8 @@ public class ClickServlet extends HttpServlet {
             boolean continueProcessing = page.onSecurityCheck();
 
             if (continueProcessing && page.hasControls()) {
-                
-                // Make sure dont processed forwarded request               
+
+                // Make sure dont processed forwarded request
                 if (!page.getContext().isForward()) {
 
                     List controls = page.getControls();
@@ -259,7 +256,7 @@ public class ClickServlet extends HttpServlet {
 
             } else if (page.getForward() != null) {
                 request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-                
+
                 if (logger.isDebugEnabled()) {
                     logger.debug("forward=" + page.getForward());
                 }
@@ -291,8 +288,8 @@ public class ClickServlet extends HttpServlet {
                 page.onFinally();
             }
 
-            if (clickApp.getMode() != ClickApp.PRODUCTION) {
-                logger.info("handledRequest(): " + page.getPath() + " - "
+            if (!clickApp.isProductionMode()) {
+                logger.info("handledRequest: " + page.getPath() + " - "
                             + (System.currentTimeMillis() - startTime) + " ms");
             }
         }
@@ -306,10 +303,10 @@ public class ClickServlet extends HttpServlet {
      * Applications which wish to provide their own customised error handling
      * must subclass ErrorPage and specify their page in the "/WEB-INF/click.xml"
      * application configuration file. For example:
-     * 
+     *
      * <pre class="codeConfig">
      * &lt;page path="click/error.htm" classname="com.mycorp.util.ErrorPage"/&gt; </pre>
-     * 
+     *
      * If the ErrorPage throws an exception, it will be logged as an error and
      * then be rethrown nested inside a RuntimeException.
      *
@@ -363,13 +360,11 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Exception ex) {
             String message =
-                "handleError(): " + ex.toString() + " thrown while handling "
+                "handleError: " + ex.toString() + " thrown while handling "
                  + " error: " + exception.toString()
                  + ". Now throwing RuntimeException";
 
             logger.error(message, ex);
-
-            log(message, ex);
 
             throw new RuntimeException(ex);
 
@@ -394,10 +389,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected void renderTemplate(Page page) throws Exception {
 
-        long startTime = 0;
-        if (clickApp.getMode() != ClickApp.PRODUCTION) {
-            startTime = System.currentTimeMillis();
-        }
+        long startTime = System.currentTimeMillis();
 
         final HttpServletRequest request = page.getContext().getRequest();
 
@@ -478,8 +470,8 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        if (clickApp.getMode() != ClickApp.PRODUCTION) {
-            logger.info("renderedTemplate(): " + page.getPath() + " - "
+        if (!clickApp.isProductionMode()) {
+            logger.info("renderedTemplate: " + page.getPath() + " - "
                         + (System.currentTimeMillis() - startTime) + " ms");
         }
     }

@@ -59,7 +59,7 @@ import net.sf.click.util.ClickUtils;
  *
  * The corresponding template code is below. Note href is evaluated by Velocity
  * to {@link #getHref()}:
- * 
+ *
  * <pre class="codeHtml">
  * &lt;a href="<span class="blue">$logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt; </pre>
  *

@@ -7,17 +7,16 @@
    <property name="jar.codec" value="commons-codec-1.1.jar"/>
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.9.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
    <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
 	
    <taskdef name="linetrim" 
-   	        classname="dev.LineTrimTask" 
-   	        classpath="lib/dev.jar"/>
+   	      classname="dev.LineTrimTask" 
+   	      classpath="lib/dev.jar"/>
 							
    <taskdef name="replacetabs" 
-   	        classname="dev.ReplaceTabsTask" 
-   	        classpath="lib/dev.jar"/>
+   	      classname="dev.ReplaceTabsTask" 
+   	      classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
    
@@ -53,15 +52,12 @@
             </fileset>
          </classpath>
       </javac>
-      <jar destfile="${dir.deploy}/click-${version}.jar" basedir="${dir.classes}"/>
       <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
       <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
-      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>      
-      <unzip src="${dir.lib}/${jar.log4j}" dest="${dir.classes}"/>      
+      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>
       <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
-	   <jar destfile="${dir.deploy}/click-all-${version}.jar">
+	   <jar destfile="${dir.deploy}/click-${version}.jar">
          <fileset dir="${dir.classes}">
-            <exclude name="org/apache/log4j/chainsaw/**"/>
             <exclude name="org/apache/velocity/anakia/**"/>
             <exclude name="org/apache/velocity/test/**"/>
             <exclude name="org/apache/velocity/texen/**"/>
@@ -77,7 +73,7 @@
 	  	    todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="${dir.deploy}/click-${version}.jar"/>
          <fileset dir="webapps/click-blank">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -85,7 +81,7 @@
  	   <!--  "click-documentation" WAR  -->
       <war destfile="${dir.deploy}/click-documentation.war"
            webxml="webapps/click-documentation/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="${dir.deploy}/click-${version}.jar"/>
          <fileset dir="webapps/click-documentation">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -98,7 +94,7 @@
              debug="true">
          <classpath> 
        	    <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="${dir.deploy}/click-all-${version}.jar"/>
+            <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>
       <copy todir="webapps/click-examples/WEB-INF/classes">
@@ -109,7 +105,7 @@
       </copy>
       <war destfile="${dir.deploy}/click-examples.war"
            webxml="webapps/click-examples/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="${dir.deploy}/click-${version}.jar"/>
          <fileset dir="webapps/click-examples">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -136,8 +132,8 @@
            destdir="webapps/click-examples/WEB-INF/classes" 
            debug="true">
          <classpath> 
-     	    <pathelement location="lib/${jar.servlet}"/>
-           <pathelement location="${dir.deploy}/click-all-${version}.jar"/>
+     	     <pathelement location="lib/${jar.servlet}"/>
+           <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>
       <copy todir="webapps/click-examples/WEB-INF/classes">
@@ -148,7 +144,7 @@
       </copy>
       <war destfile="${dir.deploy}/click-examples.war"
            webxml="webapps/click-examples/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-all-${version}.jar"/>
+         <lib file="${dir.deploy}/click-${version}.jar"/>
          <fileset dir="webapps/click-examples">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -169,7 +165,7 @@
                doctitle="Click API">
          <classpath>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="${dir.deploy}/click-all-${version}.jar"/>
+            <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
          <packageset dir="framework/src">
            <include name="net/**"/>
@@ -190,7 +186,7 @@
                doctitle="Click Examples API">
          <classpath>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="${dir.deploy}/click-all-${version}.jar"/>
+            <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
          <packageset dir="webapps/click-examples/WEB-INF/src"/>
       </javadoc>
