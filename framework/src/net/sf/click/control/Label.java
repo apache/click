@@ -23,6 +23,8 @@ package net.sf.click.control;
  */
 public class Label extends Field {
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a Label display control.
      * 
@@ -31,7 +33,9 @@ public class Label extends Field {
     public Label(String label) {
         super(label);
     }
-    
+
+    // --------------------------------------------------------- Public Methods
+
     /**
      * Returns true.
      * 

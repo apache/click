@@ -66,7 +66,7 @@ public class IntegerField extends TextField {
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the field Integer value, or null if value was empty or a parsing 
@@ -141,6 +141,8 @@ public class IntegerField extends TextField {
     public void setMinValue(int value) {
         minvalue = value;
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Process the IntegerField submission. If the Integer value can be parsed

@@ -118,7 +118,7 @@ public abstract class Field implements Control {
         setName(ClickUtils.toName(label));
     }
     
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
     
     /**
      * Return the Field HTML attribute with the given name, or null if the
@@ -511,6 +511,17 @@ public abstract class Field implements Control {
             return value.trim();
         } else {
             return "";
+        }
+    }
+    
+    /**
+     * Render the field HTML attributes to the string buffer.
+     * 
+     * @param buffer the StringBuffer to render the HTML attributes to
+     */
+    protected void renderAttributes(StringBuffer buffer) {
+        if (hasAttributes()) {
+            ClickUtils.renderAttributes(getAttributes(), buffer);
         }
     }
 }

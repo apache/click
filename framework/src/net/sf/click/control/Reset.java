@@ -49,6 +49,8 @@ package net.sf.click.control;
  */
 public class Reset extends Button {
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a Reset button with the given value.
      * <p/>
@@ -59,6 +61,8 @@ public class Reset extends Button {
     public Reset(String value) {
         super(value);
     }
+
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the 'reset' input field type.

@@ -1,29 +1,27 @@
 <body>
 Provides renderable HTML controls. Controls implement the
 {@link net.sf.click.Control} interface to perform server side request
-processing.
-<p/>
-Controls are invoked by Forms or by the ClickServlet.
+processing. Controls are processed by the ClickServlet and by Forms.
 <p/>
 Using these controls is similar to traditional Swing GUI programming. While these 
-controls do not provide a full Swing style MVC implementation. They provided a
-simplified programming model and high performance, but at the cost of
-some extensiblity.
+controls do not provide a full Swing style MVC implementation, they provided a
+simplified programming model and high performance.
 <p/>
-HTML controls provide an action callback mechanism similar the 
-<tt>java.awt.ActionListener</tt> callback. <blockquote><pre>
+Click Controls provide an event callback mechanism similar the 
+<tt>java.awt.ActionListener</tt> callback. 
+<div class="code">
 public class MyPage extends Page {
 
     public void onInit() {
         ActionLink actionLink = new ActionLink("link");
-        actionLink.setListener(this, "<b>onLinkClick</b>");
+        actionLink.setListener(this, "<span class="red">onLinkClick</span>");
         addControl(actionLink);
     }
     
-    public boolean <b>onLinkClick</b>() {
+    public boolean <span class="red">onLinkClick</span>() {
         System.out.println("onLinkClick invoked at " + (new Date());
         return true;
     }
 }
-</pre></blockquote>
+</div>
 </body>

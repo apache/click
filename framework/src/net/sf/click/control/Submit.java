@@ -54,7 +54,7 @@ public class Submit extends Button {
         super(value);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Returns the true if the submit button was clicked, or false otherwise.
@@ -73,6 +73,8 @@ public class Submit extends Button {
     public String getType() {
         return "submit";
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Process the submit event and return true to continue event processing.

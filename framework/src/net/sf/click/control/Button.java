@@ -68,7 +68,7 @@ public class Button extends Field {
         this.name = ClickUtils.toName(value);
     }
 
-    // -------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Returns the button onClick attribute value, or null if not defined.
@@ -99,7 +99,9 @@ public class Button extends Field {
      */
     public String getType() {
         return "button";
-    }
+    } 
+
+    // -------------------------------------------------------- Public Methods
     
     /**
      * Returns true, as buttons perform no server side logic.
@@ -131,9 +133,9 @@ public class Button extends Field {
             buffer.append("' ");
         }
 
-        ClickUtils.renderAttributes(attributes, buffer);
+        renderAttributes(buffer);
 
-        if (disabled) {
+        if (isDisabled()) {
             buffer.append(getDisabled());
         }
         buffer.append(">");

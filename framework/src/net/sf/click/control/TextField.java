@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Text Field control: &nbsp; &lt;input type='text'&gt;.
@@ -50,6 +49,8 @@ import net.sf.click.util.ClickUtils;
  * @author Malcolm Edgar
  */
 public class TextField extends Field {
+    
+    // ----------------------------------------------------- Instance Variables
 
     /** 
      * The maximum field length validation contraint. If the value is zero this 
@@ -82,7 +83,7 @@ public class TextField extends Field {
         super(label);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
     
     /**
      * Returns the maximum field length validation constraint. If the 
@@ -160,7 +161,9 @@ public class TextField extends Field {
     public String getType() {
         return "text";
     }
-    
+
+    // --------------------------------------------------------- Public Methods
+
     /**
      * Process the TextField submission. If the text value passes the validation
      * constraints and a Control listener is defined then the listener
@@ -229,7 +232,7 @@ public class TextField extends Field {
             buffer.append("'");
         }
 
-        ClickUtils.renderAttributes(attributes, buffer);
+        renderAttributes(buffer);
 
         if (!isValid()) {
             buffer.append(" class='error'");

@@ -107,7 +107,7 @@ public class HiddenField extends Field {
         this.valueClass = valueClass;
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Returns true.
@@ -117,6 +117,46 @@ public class HiddenField extends Field {
     public boolean isHidden() {
         return true;
     }
+   
+    /**
+     * @see Field#getValue()
+     */
+    public String getValue() {
+        return (valueObject != null) ? valueObject.toString() : "";
+    }
+
+    /**
+     * @see Field#setValue(Object)
+     */
+    public void setValue(Object value) {
+        if ((value != null) && (value.getClass() != valueClass)) {
+            String msg = "The value.getClass() must be the same as the " +
+                         "HiddenField valueClass property.";
+            throw new IllegalArgumentException(msg);
+        }
+        
+        this.valueObject = value;
+    }
+
+    /**
+     * Return the registed Class for the Hidden Field value Object.
+     *
+     * @return the registered Class for the Hidden Field value Object
+     */
+    public Class getValueClass() {
+        return valueClass;
+    }
+
+    /**
+     * Return the value Object.
+     *
+     * @return the value Object
+     */
+    public Object getValueObject() {
+        return valueObject;
+    }  
+
+    // --------------------------------------------------------- Public Methods
     
     /**
      * Process the HiddenField submission. If the value can be parsed the 
@@ -230,43 +270,6 @@ public class HiddenField extends Field {
 
         return buffer.toString();
     }
-    
-    /**
-     * @see Field#getValue()
-     */
-    public String getValue() {
-        return (valueObject != null) ? valueObject.toString() : "";
-    }
-
-    /**
-     * @see Field#setValue(Object)
-     */
-    public void setValue(Object value) {
-        if ((value != null) && (value.getClass() != valueClass)) {
-            String msg = "The value.getClass() must be the same as the " +
-                         "HiddenField valueClass property.";
-            throw new IllegalArgumentException(msg);
-        }
-        
-        this.valueObject = value;
-    }
-
-    /**
-     * Return the registed Class for the Hidden Field value Object.
-     *
-     * @return the registered Class for the Hidden Field value Object
-     */
-    public Class getValueClass() {
-        return valueClass;
-    }
-
-    /**
-     * Return the value Object.
-     *
-     * @return the value Object
-     */
-    public Object getValueObject() {
-        return valueObject;
-    }
+ 
 }
 

@@ -184,8 +184,8 @@ public class ActionLink implements Control {
         setName(name);
     }
 
-    // --------------------------------------------------------- Public Methods
-    
+    // ------------------------------------------------------ Public Attributes
+  
     /**
      * Return the link HTML attribute with the given name, or null if the
      * attribute does not exist.
@@ -298,6 +298,44 @@ public class ActionLink implements Control {
     }
     
     /**
+     * Return the ActionLink anchor &lt;a&gt; tag href attribute for the
+     * given value. This method will encode the URL with the session ID
+     * if required using <tt>HttpServletResponse.encodeURL()</tt>.
+     *
+     * @param value the ActionLink value parameter
+     * @return the ActionLink HTML href attribute
+     */
+    public String getHref(Object value) {
+        String uri = getContext().getRequest().getRequestURI();
+
+        StringBuffer buffer =
+            new StringBuffer(uri.length() + getName().length() + 40);
+
+        buffer.append(uri);
+        buffer.append("?");
+        buffer.append(ACTION_LINK);
+        buffer.append("=");
+        buffer.append(getName());
+        if (value != null) {
+            buffer.append("&amp;");
+            buffer.append(VALUE);
+            buffer.append("=");
+            buffer.append(value);
+        }
+
+        return getContext().getResponse().encodeURL(buffer.toString());
+    }
+
+    /**
+     * Return the ActionLink anchor &lt;a&gt; tag href attribute value.
+     *
+     * @return the ActionLink anchor &lt;a&gt; tag HTML href attribute value
+     */
+    public String getHref() {
+        return getHref(getValue());
+    }
+    
+    /**
      * Return the label for the ActionLink.
      * 
      * @return the label for the ActionLink
@@ -401,6 +439,8 @@ public class ActionLink implements Control {
         listenerMethod = methodName;
     }
 
+    // --------------------------------------------------------- Public Methods
+    
     /**
      * This method will set the {@link #isClicked()} property to true if the
      * ActionLink was clicked, and if an action callback listener was set
@@ -424,44 +464,6 @@ public class ActionLink implements Control {
         } else {
             return true;
         }
-    }
-
-    /**
-     * Return the ActionLink anchor &lt;a&gt; tag href attribute for the
-     * given value. This method will encode the URL with the session ID
-     * if required using <tt>HttpServletResponse.encodeURL()</tt>.
-     *
-     * @param value the ActionLink value parameter
-     * @return the ActionLink HTML href attribute
-     */
-    public String getHref(Object value) {
-        String uri = getContext().getRequest().getRequestURI();
-
-        StringBuffer buffer =
-            new StringBuffer(uri.length() + getName().length() + 40);
-
-        buffer.append(uri);
-        buffer.append("?");
-        buffer.append(ACTION_LINK);
-        buffer.append("=");
-        buffer.append(getName());
-        if (value != null) {
-            buffer.append("&amp;");
-            buffer.append(VALUE);
-            buffer.append("=");
-            buffer.append(value);
-        }
-
-        return getContext().getResponse().encodeURL(buffer.toString());
-    }
-
-    /**
-     * Return the ActionLink anchor &lt;a&gt; tag href attribute value.
-     *
-     * @return the ActionLink anchor &lt;a&gt; tag HTML href attribute value
-     */
-    public String getHref() {
-        return getHref(getValue());
     }
     
     /**

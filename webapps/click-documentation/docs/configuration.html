@@ -10,15 +10,29 @@
   
 <h1>Configuration</h1>
 <p/>
-This section discusses how to setup a Click web application using its 
-configuration files.
+This section discusses how to setup configure a Click web application and
+covers to following topics: 
+<ul>
+  <li><a href="#servlet-configuration">Servlet Configuration</a> - how to setup the ClickServlet<p/>
+  </li>
+  <li><a href="#application-configuration">Application Configuration</a> - how to configure the Click application
+   descriptor<p/>
+  </li>
+  <li><a href="#velocity-properties">Velocity Properties</a> - how to configure the Velocity runtime properties<p/>
+  </li>
+  <li><a href="#log4j-properties">Log4J Properties</a> - how to configure the Log4J properties<p/>
+  </li>
+</ul>
 
-<blockquote>
-<img alt="Click application configuration files" src="../images/config-files.png"/>  
-</blockquote>
+<p>&nbsp;</p>
 
-<p/>
-These files include:
+The Click configuration files include:
+<table style="margin: 1em">
+<tr valign="top">
+  <td>
+    <img alt="Click application configuration files" src="../images/config-files.png"/>  
+  </td>
+  <td>
 <ul>
  <li>WEB-INF/classes/<a target='topic' href="#log4j-properties">log4j.properties</a>
  &nbsp; - &nbsp; Log4j Properties (optional) 
@@ -32,9 +46,11 @@ These files include:
  <li>WEB-INF/<a target='topic' href="#servlet-configuration">web.xml</a>
  &nbsp; - &nbsp; Servlet Configuration (<b>required</b>)
  <p></li>
-</ul>
+</ul>    
+  </td>
+</tr>
+</table>
 
-<p>&nbsp;</p>
 <a name="servlet-configuration"><h2>Servlet Configuration</h2></a>
 
 For a Click web application to function the 
@@ -86,7 +102,7 @@ applications mode.
 See <a target='topic' href="click.dtd">Click DTD</a> for the click-app XML definition.  
  
 <p/>
-A simple example Click app config file is provided below:
+A simple Click app config file is provided below:
 
 <div class="code">
 &lt;click-app&gt; 

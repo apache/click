@@ -44,6 +44,8 @@ import net.sf.click.util.ClickUtils;
  * @author Malcolm Edgar
  */
 public class TextArea extends Field {
+    
+    // ----------------------------------------------------- Instance Variables
 
     /** 
      * The number of text area columns. The default number of columns is twenty.
@@ -78,7 +80,7 @@ public class TextArea extends Field {
         super(label);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------- Public Attributes
 
     /**
      * Return the number of text area columns.
@@ -160,6 +162,8 @@ public class TextArea extends Field {
     public void setRows(int rows) {
         this.rows = rows;
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Process the TextArea submission. If the text value passes the validation

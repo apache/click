@@ -12,6 +12,19 @@ body
 
 a:visited { color: blue; }
 
+.code 
+{
+	font-family: courier;
+	margin-top: 1em;
+	margin-left: 3em;
+	margin-bottom: 1.5em;
+	white-space: pre;
+}
+
+.red { color: red; }
+
+.blue { color: blue }
+
 /* Form examples */
 table.form 
 { 

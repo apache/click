@@ -90,7 +90,7 @@ public class DateField extends TextField {
         setAttribute("onBlur", "javascript:checkDate(this);");
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the field Date value, or null if value was empty or a parsing 
@@ -172,6 +172,7 @@ public class DateField extends TextField {
         }
     }
 
+    // -------------------------------------------------------- Public Methods
     /**
      * Process the DateField submission. If the Date value can be parsed
      * the controls listener will be invoked.
