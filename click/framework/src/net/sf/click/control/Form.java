@@ -169,35 +169,55 @@ public class Form implements Control {
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>
      */
-    public static final String FORM_NAME = "form_name";   
+    public static final String FORM_NAME = "form_name";
     
-    /** The label on left form layout. */
-    public static final int LABEL_ON_LEFT = 10;
+    /** The errors and labels on top form layout constant. */
+    public static final int TOP = 10;
     
-    /** The label on top form layout. */
-    public static final int LABEL_ON_TOP = 11;
+    /** The errors in middle form layout constant. */
+    public static final int MIDDLE = 11;
     
-    /** The required field label prefix. */
+    /** The errors on bottom form layout constant. */
+    public static final int BOTTOM = 12;
+    
+    /** The labels of left form layout contant. */
+    public static final int LEFT = 13;
+    
+    /** The errors-header resource property */
+    protected static String errorsHeader = "";
+    
+    /** The errors-footer resource property. */
+    protected static String errorsFooter = "";
+    
+    /** The errors-prefix resource property. */
+    protected static String errorsPrefix = "";
+    
+    /** The errors-suffix resource property. */
+    protected static String errorsSuffix = "";
+    
+    /** The label-required-prefix resource property. */
     protected static String labelRequiredPrefix = "";
     
-    /** The required field label postfix. */
-    protected static String labelRequiredPostfix = "";
+    /** The label-required-suffix resource property. */
+    protected static String labelRequiredSuffix = "";
     
     static {
         ResourceBundle bundle = 
             ResourceBundle.getBundle(Field.PACKAGE_MESSAGES);
         
+        errorsHeader = bundle.getString("errors-header");
+        errorsFooter = bundle.getString("errors-footer");
+        errorsPrefix = bundle.getString("errors-prefix");
+        errorsSuffix = bundle.getString("errors-suffix");
         labelRequiredPrefix = bundle.getString("label-required-prefix");
-        labelRequiredPostfix = bundle.getString("label-required-postfix");
+        labelRequiredSuffix = bundle.getString("label-required-suffix");
+        
     }
 
     // ----------------------------------------------------- Instance Variables
     
     /** The form attributes map. */
     protected Map attributes;
-    
-    /** The button align, default value is "<tt>left</tt>" */
-    protected String buttonAlign = "left";
 
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
@@ -207,6 +227,12 @@ public class Form implements Control {
 
     /** The form level error message. */
     protected String error;
+    
+    /** 
+     * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value: 
+     * &nbsp; <tt>MIDDLE</tt>
+     */
+    protected int errorsPosition = LEFT;
 
     /** The ordered list of field values, excluding buttons */
     protected final List fieldList = new ArrayList();
@@ -221,10 +247,9 @@ public class Form implements Control {
     protected String labelAlign = "left";
     
     /** 
-     * The form layout <tt>[LABEL_ON_LEFT, LABEL_ON_TOP]</tt> default value: 
-     * &nbsp; <tt>LABEL_ON_LEFT</tt>
+     * The form labels position <tt>[LEFT, TOP]</tt> default value: &nbsp; <tt>LEFT</tt>
      */
-    protected int layout = LABEL_ON_LEFT;
+    protected int labelsPosition = LEFT;
 
     /** The listener target object. */
     protected Object listener;
@@ -352,27 +377,6 @@ public class Form implements Control {
     }
 
     /**
-     * Return the button HTML horizontal alignment: "<tt>left</tt>",
-     * "<tt>center</tt>", "<tt>right</tt>".
-     *
-     * @return the button HTML horizontal alignment
-     */
-    public String getButtonAlign() {
-        return buttonAlign;
-    }
-
-    /**
-     * Set the button HTML horizontal alignment: "<tt>left</tt>",
-     * "<tt>center</tt>", "<tt>right</tt>". Note the given align is not
-     * validated.
-     *
-     * @param align the button HTML horizontal alignment
-     */
-    public void setButtonAlign(String align) {
-        buttonAlign = align;
-    }
-
-    /**
      * @see Control#getContext()
      */
     public Context getContext() {
@@ -406,6 +410,27 @@ public class Form implements Control {
      */
     public void setError(String error) {
         this.error = error;
+    }
+    
+    /**
+     * Return the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
+     * 
+     * @return form errors position
+     */
+    public int getErrorsPosition() {
+        return errorsPosition;
+    }
+    
+    /**
+     * Set the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
+     * 
+     * @param position the form errors position
+     */
+    public void seErrorsPosition(int position) {
+        if (position != TOP && position != MIDDLE && position != BOTTOM) {
+            throw new IllegalArgumentException("Invalid position: " + position);
+        }
+        errorsPosition = position;
     }
 
     /**
@@ -520,24 +545,24 @@ public class Form implements Control {
     }
   
     /**
-     * Return the form layout <tt>[LABEL_ON_LEFT, LABEL_ON_TOP]</tt>.
+     * Return the form labels position <tt>[LEFT, TOP]</tt>.
      * 
-     * @return layout the form layout
+     * @return form labels position
      */
-    public int getLayout() {
-        return layout;
+    public int getLabelsPosition() {
+        return labelsPosition;
     }
     
     /**
-     * Set the form layout <tt>[LABEL_ON_LEFT, LABEL_ON_TOP]</tt>.
+     * Set the form labels position <tt>[LEFT, TOP]</tt>.
      * 
-     * @param layout the form layout
+     * @param position the form labels position
      */
-    public void setLayout(int layout) {
-        if (layout != LABEL_ON_LEFT && layout != LABEL_ON_TOP) {
-            throw new IllegalArgumentException("Invalid layout: " + layout);
+    public void setLabelsPosition(int position) {
+        if (position != LEFT && position != TOP) {
+            throw new IllegalArgumentException("Invalid position: " + position);
         }
-        this.layout = layout;
+        labelsPosition = position;
     }
 
     /**
@@ -598,7 +623,7 @@ public class Form implements Control {
      * @return true if the fields are valid and there is no form level error
      */
     public boolean isValid() {
-        if (error != null) {
+        if (getError() != null) {
             return false;
         }
         for (int i = 0, size = fieldList.size(); i < size; i++) {
@@ -669,34 +694,17 @@ public class Form implements Control {
             context.getRequest().getMethod().equalsIgnoreCase(getMethod());
 
         // Estimate the size of the string buffer
-        int bufferSize = 0;
-        if (process) {
-            if (jsEnabled) {
-                bufferSize = 300 + (fieldList.size() * 700)
-                    + (buttonList.size() * 100);
-            } else {
-                bufferSize = 300 + (fieldList.size() * 400)
-                    + (buttonList.size() * 100);
-            }
-        } else {
-            if (jsEnabled) {
-                bufferSize = 300 + (fieldList.size() * 500)
-                    + (buttonList.size() * 100);
-            } else {
-                bufferSize = 300 + (fieldList.size() * 400)
-                    + (buttonList.size() * 100);
-            }
-        }
-        StringBuffer buffer = new StringBuffer(bufferSize);
+        int bufferSize = 
+            400 + (fieldList.size() * 350) + (buttonList.size() * 50); 
 
-        int hiddenCount = 0;
+        StringBuffer buffer = new StringBuffer(bufferSize);
 
         buffer.append("<form method='");
         buffer.append(getMethod());
         buffer.append("' name='");
         buffer.append(getName());
         buffer.append("' action='");
-        buffer.append(context.getRequest().getRequestURI());
+        buffer.append(getContext().getRequest().getRequestURI());
         buffer.append("'");
         ClickUtils.renderAttributes(attributes, buffer);
         buffer.append(">\n");
@@ -704,9 +712,10 @@ public class Form implements Control {
         buffer.append("<input name='form_name' type='hidden' value='");
         buffer.append(getName());
         buffer.append("'>\n");
-
-        buffer.append("<table class='form'>\n");
         
+        // Render fields
+        buffer.append("<table class='fields'>\n");
+        int hiddenCount = 0;
         for (int i = 0, size = fieldList.size(); i < size; i++) {
 
             Field field = (Field) fieldList.get(i);
@@ -715,11 +724,11 @@ public class Form implements Control {
                 buffer.append("<tr>\n");
                 
                 // Write out label
-                if (layout == LABEL_ON_LEFT) {
+                if (getLabelsPosition() == LEFT) {
                     buffer.append("<td align='");
                     buffer.append(labelAlign);
                     buffer.append("'>");
-                } else if (layout == LABEL_ON_TOP) {
+                } else {
                     buffer.append("<td valign='top'>");
                 }
                 
@@ -732,13 +741,13 @@ public class Form implements Control {
                 buffer.append(field.getLabel());
                 buffer.append("</label>");
                 if (field.isRequired()){
-                    buffer.append(labelRequiredPostfix);
+                    buffer.append(labelRequiredSuffix);
                 } 
                 
-                if (layout == LABEL_ON_LEFT) {
+                if (getLabelsPosition() == LEFT) {
                     buffer.append("</td>\n");
                     buffer.append("<td align='left'>");
-                } else if (layout == LABEL_ON_TOP) {
+                } else {
                     buffer.append("<br>");
                 }
                 
@@ -751,50 +760,14 @@ public class Form implements Control {
                 hiddenCount++;
             }
         }
-
-        boolean foundError = false;
-        Field fieldWithError = null;
-        if (process) {
-
-            if (error != null) {
-                foundError = true;
-                buffer.append("<tr><td colspan='2'><span class='error'>");
-                buffer.append(error);
-                buffer.append("</span></td></tr>\n");
-            }
-
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
-                if (!field.isValid() && !field.isHidden()) {
-                    foundError = true;
-                    if (fieldWithError == null && !field.isDisabled()) {
-                        fieldWithError = field;
-                    }
-                    buffer.append("<tr><td colspan='2'>");
-                    if (jsEnabled) {
-                        buffer.append("<a class='error'");
-                        buffer.append(" href='javascript:document.");
-                        buffer.append(getName());
-                        buffer.append(".");
-                        buffer.append(field.getName());
-                        buffer.append(".focus();'>");
-                        buffer.append(field.getError());
-                        buffer.append("</a>");
-                    } else {
-                        buffer.append("<span class='error'>");
-                        buffer.append(field.getError());
-                        buffer.append("</span>");
-                    }
-                    buffer.append("</td></tr>\n");
-                }
-            }
-        }
-
-        buffer.append("<tr><td colspan='2'>&nbsp;</td></tr>\n");
-
-        buffer.append("<tr align='");
-        buffer.append(buttonAlign);
-        buffer.append("'><td colspan='2'>");
+        buffer.append("</table>\n");
+        
+        // Render field errors
+        Field fieldWithError = renderErrors(buffer, process);
+        
+        // Render buttons
+        buffer.append("<table class='buttons'>\n");
+        buffer.append("<tr><td>");
         if (buttonList.isEmpty()) {
             buffer.append("<input type='submit' value='Submit'>");
         } else {
@@ -804,9 +777,9 @@ public class Form implements Control {
             }
         }
         buffer.append("</td></tr>\n");
-        
         buffer.append("</table>\n");
 
+        // Render hidden fields
         if (hiddenCount > 0) {
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
@@ -823,6 +796,7 @@ public class Form implements Control {
 
         buffer.append("</form>\n");
         
+        // Set field focus
         if (fieldWithError != null) {
             buffer.append("<script type='text/javascript'><!--\n");
             buffer.append("document.forms['");
@@ -849,6 +823,95 @@ public class Form implements Control {
         }
 
         return buffer.toString();
-    }    
+    }  
+    
+    /**
+     * Render the form errors to the given buffer is form processed and 
+     * return the first field with an error if processed.
+     * 
+     * @param buffer the string buffer to render the errors to
+     * @param processed the flag indicating whether has been processed
+     * @return the first field with an error if the form is being processed
+     */
+    protected Field renderErrors(StringBuffer buffer, boolean processed) {
+
+        Field fieldWithError = null;
+        if (processed && !isValid()) {
+            
+            String headerTest = errorsHeader.toLowerCase() +
+                                errorsPrefix.toLowerCase();
+            boolean useErrorsHeader = 
+                (((headerTest.indexOf("<ul") > -1) ||
+                  (headerTest.indexOf("<ol") > -1)) &&
+                  (headerTest.indexOf("<li") > -1));
+               
+            if (useErrorsHeader) {
+                buffer.append(errorsHeader);
+                buffer.append("\n");
+            } else {
+                buffer.append("<table class='errors'>\n");
+            }
+            
+            if (getError() != null) {
+                if (useErrorsHeader) {
+                    buffer.append(errorsPrefix);
+                } else {
+                    buffer.append("<tr><td>");
+                }
+                buffer.append("<span class='error'>");
+                buffer.append(getError());
+                buffer.append("</span>\n");
+                if (useErrorsHeader) {
+                    buffer.append(errorsSuffix);  
+                    buffer.append("\n");
+                } else {
+                    buffer.append("</td></tr>\n");
+                }
+            }
+
+            for (int i = 0, size = fieldList.size(); i < size; i++) {
+                Field field = (Field) fieldList.get(i);
+                if (!field.isValid() && !field.isHidden()) {
+                    if (fieldWithError == null && !field.isDisabled()) {
+                        fieldWithError = field;
+                    }
+                    if (useErrorsHeader) {
+                        buffer.append(errorsPrefix);
+                    } else {
+                        buffer.append("<tr><td>");
+                    }
+                    if (jsEnabled) {
+                        buffer.append("<a class='error'");
+                        buffer.append(" href='javascript:document.");
+                        buffer.append(getName());
+                        buffer.append(".");
+                        buffer.append(field.getName());
+                        buffer.append(".focus();'>");
+                        buffer.append(field.getError());
+                        buffer.append("</a>");
+                    } else {
+                        buffer.append("<span class='error'>");
+                        buffer.append(field.getError());
+                        buffer.append("</span>");
+                    }
+                    if (useErrorsHeader) {
+                        buffer.append(errorsSuffix); 
+                        buffer.append("\n");
+                    } else {
+                        buffer.append("</td></tr>\n");
+                    }   
+                }
+            }
+
+            if (useErrorsHeader) {
+                buffer.append(errorsFooter);
+                buffer.append("\n");
+            } else {
+                buffer.append("</table>\n");
+            }
+        }
+        
+        return fieldWithError;
+    }
 }
 
