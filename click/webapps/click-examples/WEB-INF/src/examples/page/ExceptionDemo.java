@@ -17,8 +17,6 @@ public class ExceptionDemo extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        System.err.println(toString() + " onInit() invoked");
-
         ActionLink brokenContentLink = new ActionLink("brokenContentLink");
         brokenContentLink.setListener(this, "onBrokenContentClick");
         addControl(brokenContentLink);
@@ -42,6 +40,7 @@ public class ExceptionDemo extends BorderedPage {
     }
 
     public boolean onBrokenTemplateClick() {
+        setPath("broken-template.htm");
         template = "broken-template.htm";
         return true;
     }
@@ -57,13 +56,6 @@ public class ExceptionDemo extends BorderedPage {
      */
     public String getTemplate() {
         return (template != null) ? template : super.getTemplate();
-    }
-
-    /**
-     * @see Page#onDestroy()
-     */
-    public void onDestroy() {
-        System.err.println(toString() + " onDestroy() invoked");
     }
 
 }
