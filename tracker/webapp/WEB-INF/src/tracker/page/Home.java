@@ -15,10 +15,6 @@
  */
 package tracker.page;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
-
 import net.sf.click.Page;
 
 /**
@@ -32,6 +28,6 @@ public class Home extends Page {
      * @see Page#onInit()
      */
     public void onInit() {
-        System.err.println("here!!");
+        System.err.println("here 3");
     }
 }

@@ -1,7 +1,22 @@
-#*
- * Add your global application macros to this file
- * 
- *#
+
+#macro( writeMenu )
+  #if ($path == 'home.htm')
+		<span class="menu-selected">&nbsp; Home &nbsp;</span> 
+	#else
+		<a class="menu" href="home.htm">&nbsp; Home &nbsp;</a> 
+	#end
+	&nbsp;|&nbsp;
+
+  #if ($path == 'issue.htm')
+		<span class="menu-selected">&nbsp; Issue &nbsp;</span>
+	#else
+		<a class="menu" href="issue.htm">&nbsp; Issue &nbsp;</a> 
+	#end	
+	&nbsp;|&nbsp;
+	
+  <a class="menu" href="logout.htm">&nbsp; Log Out &nbsp;</a> 
+	&nbsp;
+#end
 
 
 #*
