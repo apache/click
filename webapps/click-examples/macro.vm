@@ -9,18 +9,18 @@
  <input type="hidden" name="form_name" value="$form.name"/>
 
  <table style="margin: 1em;">
+  #if( $form.error ) 
+  <tr>
+   <td colspan="2" style="color: red;" align="left"> $form.error </td>
+  </tr>
+  #end
+  
  #foreach ($field in $form.fieldList)
 
   #if( !$field.hidden && !$field.valid )
   <tr>
    <td>&nbsp;</td>
    <td style="color: red;" align="left"> $field.error </td>
-  </tr>
-  #end
-
-  #if( $form.error ) 
-  <tr>
-   <td colspan="2" style="color: red;" align="left"> $form.error </td>
   </tr>
   #end
 

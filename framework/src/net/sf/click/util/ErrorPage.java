@@ -1,5 +1,5 @@
 /**
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,12 @@ import org.apache.velocity.exception.ParseErrorException;
  * unexpected Exceptions. When the application is not in "production" mode the
  * ErrorPage will provide diagnostic information.
  * <p/>
- * The ErrorPage template "click/error.htm" can be customized to your needs.
+ * The ErrorPage template "<span class="blue">click/error.htm</span>" can be 
+ * customized to your needs.
  * <p/>
  * Applications which require additional error handling logic must subclass
  * the ErrorPage. For example to rollback a Connection if an SQLException occured:
- * <blockquote><pre>
+ * <div class="code">
  * package com.mycorp.util;
  *
  * import java.sql.Connection;
@@ -49,6 +50,9 @@ import org.apache.velocity.exception.ParseErrorException;
  *
  * public class MyCorpErrorPage extends ErrorPage {
  *
+ *     /**
+ *      * @see Page#onFinally()
+ *      * /
  *     public void onFinally() {
  *         Exception errror = getError();
  *
@@ -83,7 +87,8 @@ import org.apache.velocity.exception.ParseErrorException;
  *             }
  *         }
  *     }
- * } </pre></blockquote>
+ * }
+ * </div>
  *
  * The ClickServlet sets the following ErrorPage properties in addition to
  * the normal Page properties:<ul>

@@ -162,7 +162,7 @@
 	
    <target name="javadoc" description="create Javadoc HTML">
       <delete quiet="false" failonerror="false">
-          <fileset dir="webapps/click-documentation/docs/click-api" includes="**/*.html"/>
+          <fileset dir="webapps/click-documentation/docs/click-api" includes="**/*"/>
       </delete>
       <javadoc sourcepath="framework/src"
                destdir="webapps/click-documentation/docs/click-api"
@@ -177,10 +177,17 @@
          </classpath>
          <packageset dir="framework/src"/>
       </javadoc>
+      <!--
+ 	  <replace dir="webapps/click-documentation/docs/click-api" 
+ 		     token='onload="windowTitle();"' summary="true">
+ 	     <include name="**/*.html"/>
+ 	  	<replacetoken></replacetoken>
+ 	  </replace>
+ 	  -->
    	  <copy file="framework/src/net/sf/click/control/calendar.gif"
    	        todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <delete quiet="false" failonerror="false">
-         <fileset dir="webapps/click-examples/javadoc" includes="**/*.html"/>
+         <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
       </delete>
       <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
                destdir="webapps/click-examples/javadoc"
