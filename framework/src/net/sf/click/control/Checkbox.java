@@ -88,13 +88,13 @@ public class Checkbox extends Field {
         if (getTitle() != null) {
             buffer.append("title='");
             buffer.append(getTitle());
-            buffer.append("' ");
+            buffer.append("'");
         }
         buffer.append(getDisabled());
         if (isValid()) {
-            buffer.append("/>");
+            buffer.append(">");
         } else {
-            buffer.append(" class='error'/>");
+            buffer.append(" class='error'>");
         }
 
         return buffer.toString();

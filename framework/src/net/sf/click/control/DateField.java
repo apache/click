@@ -48,10 +48,19 @@ import net.sf.click.Context;
  * &lt;/html&gt;</pre>
  * </blockquote>
  *
+ * <b>Important Notes</b>
+ * <ul>
+ * <li>
  * Take care laying out DateFields above Select controls, as there is a rendering 
  * bug in Internet Explorer which draws Selects on top of the popup Calendar 
- * &lt;div&gt;. This bug is not present in Mozilla FireFox.
+ * &lt;div&gt;. This bug is not present in Mozilla Firefox.
  * <p/>
+ * </li>
+ * <li>
+ * Including the HTML &lt;DOCTYPE&lt; in the page causes a positioning bug in 
+ * the display of the popup Calendar &lt;div&lt;. 
+ * </li>
+ * </ul>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification" 
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -247,11 +256,11 @@ public class DateField extends TextField {
 
         buffer.append("<input type='hidden' name='dateHidden' value='");
         buffer.append(System.currentTimeMillis());
-        buffer.append("'/>");
+        buffer.append("'>");
 
         buffer.append("<input type='hidden' name='formatHidden' value='");
         buffer.append(formatPattern);
-        buffer.append("'/>");
+        buffer.append("'>");
 
         buffer.append("<img align='middle' hspace='2' style='cursor:hand' src='");
         buffer.append(getForm().getContext().getRequest().getContextPath());
@@ -259,11 +268,13 @@ public class DateField extends TextField {
 
         String calendarTitle = getMessage(getContext(), "calendar-image-title");
         if (calendarTitle != null) {
-            buffer.append(" title='");
+            buffer.append(" alt='");
             buffer.append(calendarTitle);
-            buffer.append("'/>");
+            buffer.append("' title='");
+            buffer.append(calendarTitle);
+            buffer.append("'>");
         } else {
-            buffer.append("/>");
+            buffer.append(">");
         }
 
         return buffer.toString();

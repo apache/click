@@ -1,21 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>	
-<link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
-$form.getHtmlImports()
+<head>
 <title>Click Examples - Search Form</title>
-</head>	
-<body>
+<link rel="stylesheet" type="text/css" href="style.css" title="Style">
+$form.getHtmlImports()
+</head>
+<body onload="javascript:setFocus();">
  	
 <h2>Search Form</h2> 
 
 #writeSourceToolbar( "examples/page/SearchForm.java" "examples/search-form.htm" )
 
 This example demonstrates manually laying out a form in the page template.
-<p/>
+<p>
 
-<form method="POST">
+<form action='$request.requestURI' method="POST">
  <b>Customer</b> ${form.fields.search}${form.fields.type}${form.fields.go}
- <input type="hidden" name="form_name" value="form"/>
+ <input type="hidden" name="form_name" value="form">
 </form>
 
 <p>&nbsp;</p>
@@ -43,7 +44,7 @@ This example demonstrates manually laying out a form in the page template.
   <td><b>Date Joined</b></td><td>&nbsp;</td><td>$format.date($customerDetail.dateJoined)</td>
  </tr>
 </table>
-<p/>
+<p>
 #end
 
 #if( $message ) <i> $message </i> #end

@@ -468,14 +468,14 @@ public class Form implements Control {
         if (jsEnabled) {
 
             return "<link rel='stylesheet' type='text/css' href='"
-                   + contextPath + "/click/form.css' title='style'/>\n"
+                   + contextPath + "/click/form.css' title='style'>\n"
                    + "<script type='text/javascript' "
-                   + "src='" + contextPath + "/click/form.js'/>";
+                   + "src='" + contextPath + "/click/form.js'></script>";
 
         } else {
 
             return "<link rel='stylesheet' type='text/css' href='"
-                   + contextPath + "/click/form.css' title='style'/>";
+                   + contextPath + "/click/form.css' title='style'>";
 
         }
     }
@@ -703,7 +703,7 @@ public class Form implements Control {
         
         buffer.append("<input name='form_name' type='hidden' value='");
         buffer.append(getName());
-        buffer.append("'/>\n");
+        buffer.append("'>\n");
 
         buffer.append("<table class='form'>\n");
         
@@ -726,7 +726,7 @@ public class Form implements Control {
                 if (field.isRequired()) {
                     buffer.append(labelRequiredPrefix);
                 }
-                buffer.append("<label ");
+                buffer.append("<label");
                 buffer.append(field.getDisabled());
                 buffer.append(">");
                 buffer.append(field.getLabel());
@@ -753,6 +753,7 @@ public class Form implements Control {
         }
 
         boolean foundError = false;
+        Field fieldWithError = null;
         if (process) {
 
             if (error != null) {
@@ -764,8 +765,11 @@ public class Form implements Control {
 
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
-                if (!field.isValid()) {
+                if (!field.isValid() && !field.isHidden()) {
                     foundError = true;
+                    if (fieldWithError == null && !field.isDisabled()) {
+                        fieldWithError = field;
+                    }
                     buffer.append("<tr><td colspan='2'>");
                     if (jsEnabled) {
                         buffer.append("<a class='error'");
@@ -792,7 +796,7 @@ public class Form implements Control {
         buffer.append(buttonAlign);
         buffer.append("'><td colspan='2'>");
         if (buttonList.isEmpty()) {
-            buffer.append("<input type='submit' value='Submit'/>");
+            buffer.append("<input type='submit' value='Submit'>");
         } else {
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
@@ -818,6 +822,31 @@ public class Form implements Control {
         }
 
         buffer.append("</form>\n");
+        
+        if (fieldWithError != null) {
+            buffer.append("<script type='text/javascript'><!--\n");
+            buffer.append("document.forms['");
+            buffer.append(getName());
+            buffer.append("'].elements['");
+            buffer.append(fieldWithError.getName());
+            buffer.append("'].focus();\n");
+            buffer.append("//--></script>\n");
+            
+        } else {
+            for (int i = 0, size = fieldList.size(); i < size; i++) {
+                Field field = (Field) fieldList.get(i);
+                if (field.getFocus() && !field.isHidden() && !field.isDisabled()) {
+                    buffer.append("<script type='text/javascript'><!--\n");
+                    buffer.append("document.forms['");
+                    buffer.append(getName());
+                    buffer.append("'].elements['");
+                    buffer.append(field.getName());
+                    buffer.append("'].focus();\n");
+                    buffer.append("//--></script>\n");
+                    break;
+                }
+            }
+        }
 
         return buffer.toString();
     }    

@@ -30,6 +30,7 @@ public class Login extends Page {
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
         usernameField.setRequired(true);
+        usernameField.setFocus(true);
         form.add(usernameField);
 
         passwordField = new PasswordField("Password");
@@ -60,7 +61,7 @@ public class Login extends Page {
 
             } else {
                 String msg = "The system could not log you on.<br> Make sure "
-                    + "your Username and password is correct, then try again.";        
+                    + "your username and password is correct, then try again.";        
                 form.setError(msg);           
             }
         }

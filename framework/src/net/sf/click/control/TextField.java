@@ -250,7 +250,7 @@ public class TextField extends Field {
             buffer.append(getMaxLength());
             buffer.append("'");
         }
-        buffer.append("/>");
+        buffer.append(">");
 
         return buffer.toString();
     }

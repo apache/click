@@ -17,6 +17,7 @@ td.header {
  
  The application encountered an unexpected error.
  
+ <!-- if not "production" mode then print out debug info -->
  #if( !($mode == "production") )
  
  <p/>
@@ -66,7 +67,7 @@ td.header {
    <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
   </tr>
   <tr>
-   <td width="12%"><b>Classname</b></td><td>
+   <td width="16%"><b>Classname</b></td><td>
 #if( $page ) $page.class.name #else &nbsp; #end
    </td>
   </tr>
@@ -84,35 +85,24 @@ td.header {
    <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
   </tr>
   <tr valign="top">
-   <td width="12%"><b>Method</b></td><td>
-   	$request.method
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>URL</b></td>
-   <td><a href="$request.requestURL">$request.requestURL</a></td>
-  </tr>
-  <tr valign="top">
-   <td><b>Query</b></td><td>
-#if( $request.query ) $request.query #else &nbsp; #end    
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Parameters</b></td><td>
-#foreach( $key in $requestParams.keySet() )   	
- $key='$requestParams.get($key)' &nbsp;
-#end
-   &nbsp;
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Attributes</b></td><td>
+   <td width="16%"><b>Attributes</b></td>
+   <td>
+    <small>
 #foreach( $key in $requestAttributes.keySet() )   	
- $key='$requestAttributes.get($key)' &nbsp;
+ $key='$requestAttributes.get($key)' <br/>
 #end
-   &nbsp;
+   </small>
+   #if ($requestAttributes.isEmpty()) &nbsp; #end
    </td>
   </tr>
+  <tr valign="top">
+   <td><b>Auth Type</b></td>
+   <td>$format.string($request.authType)</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Context Path</b></td>
+   <td>$format.string($request.contextPath)</td>
+  </tr> 
   <tr valign="top">
    <td><b>Headers</b></td><td>
     <small>
@@ -120,19 +110,49 @@ td.header {
  $key='$requestHeaders.get($key)' <br/>
 #end
     </small>
+    #if ($requestHeaders.isEmpty()) &nbsp; #end
+   </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Query</b></td>
+   <td>$format.string($request.query)</td>
+  </tr>  
+  <tr valign="top">
+   <td width="16%"><b>Method</b></td>
+   <td>$request.method</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Parameters</b></td>
+   <td>
+    <small>
+#foreach( $key in $requestParams.keySet() )   	
+ $key='$requestParams.get($key)' <br/>
+#end
+    </small>
+    #if ($requestParams.isEmpty()) &nbsp; #end
    </td>
   </tr>
   <tr valign="top">
    <td><b>Remote User</b></td>
-   <td>#if ($request.remoteUser) $request.remoteUser #else &nbsp; #end</td>
+   <td>$format.string($request.remoteUser)</td>
   </tr>
   <tr valign="top">
-   <td><b>Auth Type</b></td>
-   <td>#if ($request.authType) $request.authType #else &nbsp; #end</td>
+   <td><b>Session</b></td><td>
+    <small>
+#foreach( $key in $sessionAttributes.keySet() )   	
+ $key=$sessionAttributes.get($key) <br/>
+#end
+    </small>
+    #if ($sessionAttributes.isEmpty()) &nbsp; #end
+   </td>
   </tr>
   <tr valign="top">
-   <td><b>Remote User</b></td>
-   <td>#if ($request.remoteUser) $request.remoteUser #else &nbsp; #end</td>
+   <td><b>URI</b></td>
+   <td><a href="$request.requestURL">$request.requestURI</a></td>
+  </tr>   
+  <tr valign="top">
+   <td><b>URL</b></td>
+   <td><a href="$request.requestURL">$request.requestURL</a></td>
   </tr>
  </table>
  

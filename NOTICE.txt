@@ -1,0 +1,6 @@
+This product includes software developed by
+The Apache Software Foundation (http://jakarta.apache.org/).
+
+This product includes the JDOM XML library,
+developed by Jason Hunter and Brett McLaughlin (http://www.jdom.org/).
+

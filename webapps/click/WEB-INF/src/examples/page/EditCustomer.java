@@ -46,6 +46,7 @@ public class EditCustomer extends Page {
         nameField.setMinLength(5);
         nameField.setRequired(true);
         nameField.setTitle("Customer full name");
+        nameField.setFocus(true);
         form.add(nameField);
         
         emailField = new EmailField("Email");

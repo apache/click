@@ -61,6 +61,9 @@ public abstract class Field implements Control {
 
     /** The Field error message. */
     protected String error;
+    
+    /** The request focus flag. */
+    protected boolean focus;
 
     /** The parent Form. */
     protected Form form;
@@ -224,6 +227,24 @@ public abstract class Field implements Control {
      */
     public void setError(String error) {
         this.error = error;
+    }
+    
+    /**
+     * Return true if the field has requested focus.
+     * 
+     * @return true if the field has requested focus
+     */
+    public boolean getFocus() {
+        return focus;
+    }
+    
+    /**
+     * Set the Field request focus flag
+     * 
+     * @param focus the request focus flag
+     */
+    public void setFocus(boolean focus) {
+        this.focus = focus;
     }
     
     /**
