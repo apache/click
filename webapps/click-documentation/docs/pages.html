@@ -13,17 +13,17 @@ Pages are the heart of web applications. In Click, Pages encapsulate the process
 HTML requests and the rendering of HTML responses. The section discusses Click pages 
 and covers to following topics:
 <ul>
-  <li><a href="#page-class">Classes</a> - page Java classes<p/>
+  <li><a href="#page-class">Classes</a> - page Java classes
   </li>
-  <li><a href="#page-execution">Execution</a> - page execution sequence<p/>
+  <li><a href="#page-execution">Execution</a> - page execution sequence
   </li>
-  <li><a href="#page-navigation">Navigation</a> - navigation between pages<p/>
+  <li><a href="#page-navigation">Navigation</a> - navigation between pages
   </li>
-  <li><a href="#page-security">Security</a> - page security model<p/>
+  <li><a href="#page-security">Security</a> - page security model
   </li>
-  <li><a href="#page-error-handling">Error Handling</a> - page error handling model<p/>
+  <li><a href="#page-error-handling">Error Handling</a> - page error handling model
   </li>
-  <li><a href="#page-not-found">Page Not Found</a> - page not found handling<p/>
+  <li><a href="#page-not-found">Page Not Found</a> - page not found handling
   </li>
 </ul>
 
@@ -49,7 +49,10 @@ below in Figure 1.
 
 <p/>
 <img src="../images/click-class-diagram.png"/>
-<h4>Figure 1. &nbsp; Page Class Diagram</h4>
+<p class="diagram">
+<b>Figure 1. &nbsp; Page Class Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
 
 The Page class provides a model attribute which is used to hold all the objects that
 are rendered in the page's Velocity template. The model may also contain
@@ -65,11 +68,11 @@ parameters and the HttpSession object.
 The Page class provide a number of empty handler methods which subclasses can override to
 provide functionality:
 <ul>
-  <li>onInit()</li>
-  <li>onSecurityCheck()</li>
-  <li>onGet()</li>
-  <li>onPost()</li>
-  <li>onFinally()</li>
+  <li><a href="click-api/net/sf/click/Page.html#onInit()">onInit()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onGet()">onGet()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onPost()">onPost()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onFinally()">onFinally()</a></li>
 </ul>
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
@@ -82,7 +85,10 @@ The GET request execution sequence for Pages is summarised below in the Figure 2
 
 <p/>
 <img src="../images/get-sequence-diagram.png"/>
-<h4>Figure 2. &nbsp; GET Request Sequence Diagram</h4>
+<p class="diagram">
+<b>Figure 2. &nbsp; GET Request Sequence Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
 
 Stepping through this GET request sequence, a new Page instance is created and the 
 attributes for the Page are set (context, format, headers, path). Next the <tt>onInit()</tt>
@@ -117,8 +123,10 @@ method is invoked instead on <tt>onGet()</tt>. See the
 Another view on the execution flow of Pages is illustrated in the Activity diagram below.
 <p/>
 <img src="../images/activity-diagram.png"/>
-<h4>Figure 3. &nbsp; Page Execution Activity Diagram</h4>
-
+<p class="diagram">
+<b>Figure 3. &nbsp; Page Execution Activity Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
 
 <a name="page-navigation"><h2>Navigation</h2></a>
 
@@ -432,13 +440,27 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 <span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
 <p/>
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
-has access to the usual Click parameters:
+has access to the usual Click objects:
 <ul>
-  <li>$context</li>
-  <li>$format</li>
-  <li>$request</li>
-  <li>$response</li>
-  <li>$session</li>
+  <li><span class="">$context</span> &nbsp; - &nbsp;
+    the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li><span class="">$format</span> &nbsp; - &nbsp; 
+    the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects.
+  </li>
+  <li><span class="">$request</span> &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
+    object.
+  </li>
+  <li><span class="">$response</span> &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
+    object.
+  </li>
+  <li><span class="">$session</span> &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
+   for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
+  </li>
 </ul>
 
 </body>
