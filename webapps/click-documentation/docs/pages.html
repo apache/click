@@ -76,12 +76,12 @@ provide functionality:
 </ul>
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
-constructur. By convention in Click you place initialization code in an <tt>onInit()</tt>
+constructor. By convention in Click you place initialization code in an <tt>onInit()</tt>
 method and you generally don't implement a constructor.
 
 <a name="page-execution"><h2>Execution</h2></a>
 
-The GET request execution sequence for Pages is summarised below in the Figure 2.
+The GET request execution sequence for Pages is summarized below in the Figure 2.
 
 <p/>
 <img src="../images/get-sequence-diagram.png"/>
@@ -113,7 +113,7 @@ rendered using their <tt>toString()</tt> method.
 <p/>
 The final step in this sequence is invoking the Page's <tt>onDestroy()</tt> method. This 
 method can be used to clean up resource associated with the Page before it is garbage
-collected. The <tt>onDestroy()</tt> method is garanteed to be called even if an exception
+collected. The <tt>onDestroy()</tt> method is guaranteed to be called even if an exception
 occurs in the previous steps.
 <p/>
 The execution sequence for POST requests is almost identical, except the <tt>onPost()</tt>
@@ -371,7 +371,7 @@ you could use a Secure page of:
 The Servlet Container also provides facilities to enforce role based access control 
 (authorization). The example below is a base page to ensure only users
 in the "admin" role can access the page, otherwise users are redirected to the login page.
-Application Admin pages would extend this secure page to provide their funcationality.
+Application Admin pages would extend this secure page to provide their functionality.
 
 <pre class="codeJava">
 <span class="kw">public class</span> AdminPage <span class="kw">extends</span> Page {
