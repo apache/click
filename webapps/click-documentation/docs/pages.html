@@ -379,10 +379,19 @@ For more information of the J2EE Servlet security facilities see the Servlet
 
 <a name="page-error-handling"><h2>Error Handling</h2></a>
 
-If an Exception occurs processing a Page object or rendering a page template the error
-is delegated to the registered error.htm
+If an Exception occurs processing a Page object or rendering a template the error
+is delegated to the registered handler. The default Click error handler is the
+<a target="topic" href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>,
+which is automatically configured as:
+<div class="code">
+&lt;page path="<font color="red">click/error.htm</font>" classname="<font color="blue">net.sf.click.util.ErrorPage</font>"/&gt;
+</div>
 
-TODO:
+To register an alternative error handler you must subclass ErrorPage and define
+your page using the path "<tt>click/error.htm</tt>". For example:
+<div class="code">
+&lt;page path="<font color="red">click/error.htm</font>" classname="<font color="blue">com.mycorp.pages.ErrorPage</font>"/&gt;
+</div>
 
 <a name="page-not-found"><h2>Page Not Found</h2></a>
 
