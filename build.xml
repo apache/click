@@ -9,7 +9,7 @@
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
    <property name="jar.log4j" value="log4j-1.2.9.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
-   <property name="jar.velocity" value="velocity-dep-1.4.jar"/>
+   <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
 	
    <taskdef name="linetrim" 
    	        classname="dev.LineTrimTask" 

@@ -314,17 +314,16 @@ authorization capabilities.
 <h4>Application Authentication</h4>
 Applications can use this method to implement their own security model. The example 
 class below provides a base Secure page class which other pages can extend
-to ensure the user is logged in. In this example the login page adds a "user" object to
-the session when a user successfully authenticates. This Secure page then checks to make sure
-this session attribute is present, otherwise the request is redirected back to the login
-page.
+to ensure the user is logged in. In this example the login page creates a session 
+when a user successfully authenticates. This Secure page then checks to make sure
+the user has a session, otherwise the request is redirected to the login page.
 
 <pre class="codeJava">
 public class Secure extends Page {
 
     public boolean onSecurityCheck() {
     
-        if (getContext().getSessionAttribute("user") != null) {
+        if (getContext().hasSession()) {
             return true;
             
         } else {

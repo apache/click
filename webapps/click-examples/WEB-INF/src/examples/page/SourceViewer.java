@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -116,7 +117,7 @@ public class SourceViewer extends Page {
     private String getEncodedLine(String line, String name) {
 
         if (isJava) {
-            line = ClickUtils.toHtmlEncodeNoBreaks(line);
+            line = StringEscapeUtils.escapeHtml(line);
 
             for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
                 String keyword = JAVA_KEYWORDS[i];
@@ -124,7 +125,7 @@ public class SourceViewer extends Page {
             }
 
         } else if (isHtml) {
-            line = ClickUtils.toHtmlEncodeNoBreaks(line);
+            line = StringEscapeUtils.escapeHtml(line);
 
             for (int i = 0; i < HTML_KEYWORDS.length; i++) {
                 String keyword = HTML_KEYWORDS[i];
@@ -141,7 +142,7 @@ public class SourceViewer extends Page {
             line = StringUtils.replace(line, "$", renderedDollar);
 
         } else {
-            line = ClickUtils.toHtmlEncodeNoBreaks(line);
+            line = StringEscapeUtils.escapeHtml(line);
         }
 
         return line;

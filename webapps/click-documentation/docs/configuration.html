@@ -22,6 +22,8 @@ covers to following topics:
   </li>
   <li><a href="#log4j-properties">Log4J Properties</a> - how to configure the Log4J properties<p/>
   </li>
+  <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files<p/>
+  </li>
 </ul>
 
 <p>&nbsp;</p>
@@ -463,6 +465,22 @@ This configuration will display all debug or higher logging messages to the cons
 
 To override this configuration add your own <tt>log4j.properties</tt> file to your
 application's classpath.
+
+<a name="auto-deployed-files"><h2>Auto Deployed Files</h2></a> 
+At startup the ClickServlet will automatically deploy support files into the
+web application, if not already present. You can modify these support files and 
+Click will not overwrite them. These files include:
+
+<ul>
+   <li>click/calendar.gif &nbsp; - &nbsp; the DateField calendar image</li>
+   <li>click/error.htm &nbsp; - &nbsp; the Page <a href="pages.html#page-error-handling">Error Handling</a> template</li>
+   <li>click/form.css &nbsp; - &nbsp; the Form cascading stylesheet</li>
+   <li>click/form.js &nbsp; - &nbsp; the Form JavaScript library</li>
+   <li>click/not-found.htm &nbsp; - &nbsp; the <a href="pages.html#page-not-found">Page Not Found</a> template</li>
+   <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
+   <li>WEB-INF/click.dtd &nbsp; - &nbsp; the Click Application (click.xml) Document Type Descriptor</li>
+</ul>
+
 
 </body>
 </html>

@@ -28,6 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.click.Page;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.exception.ParseErrorException;
 
@@ -235,13 +236,13 @@ public class ErrorPage extends Page {
 
             if (cause != null) {
                 addModel("errorMessage",
-                         ClickUtils.toHtmlEncode(cause.getMessage()));
+                        StringEscapeUtils.escapeHtml(cause.getMessage()));
                 addModel("errorClass", cause.getClass().getName());
                 addModel("errorStackTrace", ClickUtils.toStackTrace(cause));
 
             } else {
                 addModel("errorMessage",
-                        ClickUtils.toHtmlEncode(error.getMessage()));
+                        StringEscapeUtils.escapeHtml(error.getMessage()));
                 addModel("errorClass", error.getClass().getName());
                 addModel("errorStackTrace", ClickUtils.toStackTrace(error));
             }
@@ -409,7 +410,7 @@ public class ErrorPage extends Page {
             }
         }
 
-        return ClickUtils.toHtmlEncodeNoBreaks(buffer.toString());
+        return StringEscapeUtils.escapeHtml(buffer.toString());
     }
 
     /**
