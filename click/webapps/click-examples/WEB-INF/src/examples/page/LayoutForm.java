@@ -77,7 +77,6 @@ public class LayoutForm extends EditCustomer {
     public void onPost() {
         Integer formLayout = (Integer) formLayoutHidden.getValueObject();
         
-//TODO: NPE probably formLayout        
         form.setLayout(formLayout.intValue());
         form.setLabelAlign(labelAlignHidden.getValue());
         form.setButtonAlign(buttonAlignHidden.getValue());
@@ -105,7 +104,7 @@ public class LayoutForm extends EditCustomer {
         
         labelAlignHidden.setValue(labelAlignSelect.getValue());
         buttonAlignHidden.setValue(buttonAlignSelect.getValue());
-   
+
         return true;
     }
     

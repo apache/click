@@ -132,11 +132,8 @@ public class Login extends Page {
                 getContext().setSessionAttribute("user", user);
                 setRedirect("<font color="blue">secure.htm</font>");
 
-            } else {
-                String msg = 
-                    "The system could not log you on.&lt;br&gt; Make sure " +
-                    "your Username and Password is correct, then try again.";        
-                form.setError(msg);           
+            } else {     
+                form.setError(getMessage("authentication-error"));           
             }
         }
         return true;

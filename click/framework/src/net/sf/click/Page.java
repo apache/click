@@ -18,7 +18,10 @@ package net.sf.click;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 
 /**
@@ -74,6 +77,9 @@ public class Page {
     /** The HTTP response headers. */
     protected Map headers;
     
+    /** The messages resource bundle. **/
+    protected ResourceBundle messages;
+
     /** The page model, which is used to populate the Velocity context. */
     protected Map model = new HashMap();
     
@@ -224,6 +230,41 @@ public class Page {
      */
     public void setHeaders(Map value) {
         headers = value;
+    }
+    
+    /**
+     * Return the Page resource message for the given resource property key. The 
+     * resource message returned will use the Local of the HttpServletRequest.
+     * <p/>
+     * Pages can define text properties files to store localized messages. These
+     * properties files must be stored on the Page class path with a name 
+     * matching the class name. For example:
+     * <blockquote>
+     * <pre>
+     *  // The page classname
+     *  com.mycorp.pages.Login
+     * 
+     *  // The properties filenames and location
+     *  /com/mycorp/pages/Login.properties
+     *  /com/mycorp/pages/Login_en.properties
+     *  /com/mycorp/pages/Login_fr.properties
+     * </pre>
+     * </blockquote>
+     * 
+     * @param key the message property key name
+     * @return the Page message for the given message property key
+     * @throws MissingResourceException if the properties file could not be
+     * found, or the message for the given key could not be found.
+     */
+    public String getMessage(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Null key parameter");
+        }
+        if (messages == null) {
+            Locale locale = getContext().getRequest().getLocale();
+            messages = ResourceBundle.getBundle(getClass().getName(), locale);
+        }
+        return messages.getString(key);
     }
     
     /**

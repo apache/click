@@ -63,7 +63,7 @@ import net.sf.click.util.ClickUtils;
  *     public void onGet() {
  *         Integer count = new Integer(0);
  * 
- *         counterField.setValueObject(count);
+ *         counterField.setValue(count);
  *         addModel("count", count);
  *     }
  *
@@ -72,7 +72,7 @@ import net.sf.click.util.ClickUtils;
  * 
  *         count = new Integer(count.intValue() + 1);
  *
- *         counterField.setValueObject(count);
+ *         counterField.setValue(count);
  *         addModel("count", count);
  *     }
  * }
@@ -89,10 +89,10 @@ public class HiddenField extends Field {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The field value. */
-    protected Object value;
+    /** The field value Object. */
+    protected Object valueObject;
 
-    /** The value Object Class. */
+    /** The field value Class. */
     protected final Class valueClass;
 
     // ----------------------------------------------------------- Constructors
@@ -139,34 +139,40 @@ public class HiddenField extends Field {
      *
      * @see net.sf.click.Control#onProcess()
      */
-    public boolean onProcess() {        
-        String aValue = getContext().getRequest().getParameter(name);
+    public boolean onProcess() {    
+        String aValue = getContext().getRequest().getParameter(name);       
+        Class valueClass = getValueClass();
 
         if (valueClass == String.class) {
-            value = aValue;
+            setValue(aValue);
 
         } else if (aValue != null && aValue.length() > 0) {
 
-            if (valueClass == String.class) {
-                value = aValue;
-            } else if (valueClass == Integer.class) {
-                value = Integer.valueOf(aValue);
+             if (valueClass == Integer.class) {
+                setValue(Integer.valueOf(aValue));
+                
             } else if (valueClass == Boolean.class) {
-                value = Boolean.valueOf(aValue);
+                setValue(Boolean.valueOf(aValue));
+                
             } else if (valueClass == Double.class) {
-                value = Double.valueOf(aValue);
+                setValue(Double.valueOf(aValue));
+                
             } else if (valueClass == Float.class) {
-                value = Float.valueOf(aValue);
+                setValue(Float.valueOf(aValue));
+                
             } else if (valueClass == Long.class) {
-                value = Long.valueOf(aValue);
+                setValue(Long.valueOf(aValue));
+                
             } else if (valueClass == Short.class) {
-                value = Short.valueOf(aValue);
+                setValue(Short.valueOf(aValue));
+                
             } else if (Date.class.isAssignableFrom(valueClass)) {
                 long time = Long.parseLong(aValue);
-                value = new Date(time);
+                setValue(new Date(time));
+                
             } else if (Serializable.class.isAssignableFrom(valueClass)) {
                 try {
-                    value = ClickUtils.decode(aValue);
+                    setValue(ClickUtils.decode(aValue));
                 } catch (ClassNotFoundException cnfe) {
                     String msg =
                         "could not decode value for hidden field: " + aValue;
@@ -177,10 +183,10 @@ public class HiddenField extends Field {
                     throw new ApplicationException(msg, ioe);
                 }
             } else {
-                value = aValue;
+                setValue(aValue);
             }
         } else {
-            value = null;
+            setValue(null);
         }
 
         return invokeListener();
@@ -225,6 +231,26 @@ public class HiddenField extends Field {
 
         return buffer.toString();
     }
+    
+    /**
+     * @see Field#getValue()
+     */
+    public String getValue() {
+        return (valueObject != null) ? valueObject.toString() : "";
+    }
+
+    /**
+     * @see Field#setValue(String)
+     */
+    public void setValue(Object value) {
+        if ((value != null) && (value.getClass() != valueClass)) {
+            String msg = "The value.getClass() must be the same as the " +
+                         "HiddenField valueClass property.";
+            throw new IllegalArgumentException(msg);
+        }
+        
+        this.valueObject = value;
+    }
 
     /**
      * Return the registed Class for the Hidden Field value Object.
@@ -241,26 +267,7 @@ public class HiddenField extends Field {
      * @return the value Object
      */
     public Object getValueObject() {
-        return value;
-    }
-
-    /**
-     * Sets the value Object.
-     *
-     * @param value the value Object to set
-     */
-    public void setValueObject(Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Null value parameter");
-        }
-        
-        if (value.getClass() != valueClass) {
-            String msg = "The value.getClass() must be the same as the " +
-                    "HiddenField valueClass property.";
-            throw new IllegalArgumentException(msg);
-        }
-        
-        this.value = value;
+        return valueObject;
     }
 }
 
