@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * Provides the HTTP request context information for pages. A new Context object
- * will be created for each Page.
+ * is created for each Page.
  *
  * @author Malcolm Edgar
  */
@@ -48,7 +48,7 @@ public class Context {
     protected final boolean isPost;
 
     /**
-     *
+     * Create a new request context.
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
@@ -112,9 +112,8 @@ public class Context {
     /**
      * Return the page resouce path from the request (Request URI path - Request
      * Context path). For example:
-     * <pre>
-     * http://www.mycorp.com/banking/secure/login.html  ->  secure/login.html
-     * </pre>
+     * <pre class="code">
+     * <span class="blue">http://www.mycorp.com/banking/secure/login.html</span>  ->  <span class="red">secure/login.html</span> </pre>
      *
      * @return the page resource path from the request
      */

@@ -49,7 +49,8 @@ import java.util.List;
  * An example of a single item Select is provided below along with the
  * rendered HTML.
  *
- * <div class="code">public class GenderPage {
+ * <pre class="codeJava">
+ * public class GenderPage {
  *
  *     Form form;
  *     Select genderSelect;
@@ -72,7 +73,7 @@ import java.util.List;
  *             ..
  *         }
  *     }
- * } </div>
+ * } </pre>
  *
  * Rendered HTML:
  * <table class="htmlExample"><tr><td>
@@ -104,7 +105,8 @@ import java.util.List;
  * An example of a single item Select is provided below along with the
  * rendered HTML.
  *
- * <div class="code">public class LocationPage {
+ * <pre class="codeJava">
+ * public class LocationPage {
  *
  *     Form form;
  *     Select locationSelect;
@@ -133,7 +135,7 @@ import java.util.List;
  *             ..
  *         }
  *     }
- * } </div>
+ * } </pre>
  *
  * Rendered HTML:
  * <table class="htmlExample"><tr><td>
@@ -517,7 +519,8 @@ public class Select extends Field {
      * The example below caches Select Option and OptionGroup instances in a
      * static List.
      *
-     * <div class="code">public class <span class="blue">InvestmentSelect</span> extends Select {
+     * <pre class="codeJava">
+     * public class <span class="blue">InvestmentSelect</span> extends Select {
      *
      *     static final List INVESTMENT_OPTIONS = new ArrayList();
      *
@@ -556,8 +559,7 @@ public class Select extends Field {
      *     }
      *
      *     ..
-     * }
-     * </div>
+     * } </pre>
      *
      * Rendered HTML:
      * <table class="htmlExample"><tr><td>

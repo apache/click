@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ import org.apache.velocity.util.SimplePool;
  * function the <tt>ClickServlet</tt> must be configured in the web
  * application's <tt>/WEB-INF/web.xml</tt> file. A simple web application which
  * maps all <tt>*.htm</tt> requests to a ClickServlet is provided below.
- * <blockquote><pre>
+ * 
+ * <pre class="codeConfig">
  * &lt;web-app>
  *    &lt;servlet&gt;
  *       &lt;servlet-name&gt;<font color="blue">ClickServlet</font>&lt;/servlet-name&gt;
@@ -60,9 +61,8 @@ import org.apache.velocity.util.SimplePool;
  *       &lt;servlet-name&gt;<font color="blue">ClickServlet</font>&lt;/servlet-name&gt;
  *       &lt;url-pattern&gt;<font color="red">*.htm</font>&lt;/url-pattern&gt;
  *    &lt;/servlet-mapping&gt;
- * &lt;/web-app&gt;
- * </pre></blockquote>
- * <p/>
+ * &lt;/web-app&gt; </pre>
+ * 
  * By default the <tt>ClickServlet</tt> will attempt to load an application
  * configuration file using the path: &nbsp; <tt>/WEB-INF/click.xml</tt>
  *
@@ -299,9 +299,10 @@ public class ClickServlet extends HttpServlet {
      * Applications which wish to provide their own customised error handling
      * must subclass ErrorPage and specify their page in the "/WEB-INF/click.xml"
      * application configuration file. For example:
-     * <blockquote><pre>
-     * &lt;page path="click/error.htm" classname="com.mycorp.util.ErrorPage"/&gt;
-     * </pre></blockquote>
+     * 
+     * <pre class="codeConfig">
+     * &lt;page path="click/error.htm" classname="com.mycorp.util.ErrorPage"/&gt; </pre>
+     * 
      * If the ErrorPage throws an exception, it will be logged as an error and
      * then be rethrown nested inside a RuntimeException.
      *

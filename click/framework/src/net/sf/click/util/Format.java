@@ -23,35 +23,42 @@ import java.util.Date;
 
 /**
  * Provides the default Velocity template format object. A format object
- * is added to the Velocity Context using the name "format", and is then
- * available in the Page for formatting objects.
+ * is added to the Velocity Context using the name "<span class="blue">format</span>", 
+ * and is then available in the Page for formatting objects.
  * <p/>
  * For example the following Page code adds a date to the model:
- * <div class="code">
+ * 
+ * <pre class="codeJava">
  * public void onGet() {
  *    Date date = order.deliveryDate();
  *    addModel("<span class="red">deliveryDate</span>", date);
- * }
- * </div>
+ * } </pre>
+ * 
  * In the page template we use the format object:
- * <div class="code">
- * Delivery date: <span class="blue">$format</span>.date(<span class="red">$deliveryDate</span>, "dd MMM yyyy")
- * </div>
+ * 
+ * <pre class="codeHtml">
+ * Delivery date: <span class="blue">$format</span>.date(<span class="red">$deliveryDate</span>, "dd MMM yyyy") </pre>
  *
  * Which renders the output as:
- * <blockquote>
- * Delivery date: 21 Jan 2004
- * </blockquote>
+ * 
+ * <table class="htmlExample" cellspacing="12">
+ * <tr><td>
+ * Delivery date: 21 Jan 2004 
+ * </td></tr>
+ * </table>
  *
  * The format object class can defined in the "click.xml" configuration file
  * using the syntax:
- * <div class="code">
- * &lt;format classname="com.mycorp.utils.Format"/&gt;
- * </div>
+ * 
+ * <pre class="codeConfig">
+ * &lt;format classname="<span class="green">com.mycorp.utils.Format</span>"/&gt; </pre>
  *
  * The format class must provide a no-args public constructor . After a Page is
  * created its <a href="../Page.html#format">format</a> property is set.
  * The ClickServlet will then add this property to the Velocity Context.
+ * <p/>
+ * When designing a format object ensure it is light weight, as a new
+ * format object will be created for every new Page.
  *
  * @author Malcolm Edgar
  */

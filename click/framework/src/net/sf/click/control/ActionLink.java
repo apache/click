@@ -38,7 +38,8 @@ import net.sf.click.util.ClickUtils;
  * ActionLink support invoking control listeners. An example of using ActionLink
  * to call a logout method is illustrated below:
  *
- * <div class="code">public class MyPage extends Page {
+ * <pre class="codeJava">
+ * public class MyPage extends Page {
  *
  *     public void onInit() {
  *         ActionLink link = new ActionLink("<span class="blue">logoutLink</span>");
@@ -54,12 +55,13 @@ import net.sf.click.util.ClickUtils;
  *
  *         return false;
  *     }
- * } </div>
+ * } </pre>
  *
  * The corresponding template code is below. Note href is evaluated by Velocity
  * to {@link #getHref()}:
  * 
- * <div class="code">&lt;a href="<span class="blue">$logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt; </div>
+ * <pre class="codeHtml">
+ * &lt;a href="<span class="blue">$logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt; </pre>
  *
  * ActionLink can also support a value parameter which is accessable
  * using {@link #getValue()}.
@@ -70,7 +72,8 @@ import net.sf.click.util.ClickUtils;
  * the {@link #getHref(Object)} method, which is then available when the
  * control is processed:
  *
- * <div class="code">&lt;table&gt;
+ * <pre class="codeHtml">
+ * &lt;table&gt;
  * <span class="red">#foreach</span> (<span class="blue">$product</span> <span class="red">in</span> <span class="blue">$productList</span>)
  *   &lt;tr&gt;
  *    &lt;td&gt;
@@ -84,11 +87,12 @@ import net.sf.click.util.ClickUtils;
  *    &lt;/td&gt;
  *   &lt;/tr&gt;
  * <span class="red">#end</span>
- * &lt;/table&gt; </div>
+ * &lt;/table&gt; </pre>
  *
  * The corresponding Page class for this template is:
  *
- * <div class="code">public class ProductsPage extends Page {
+ * <pre class="codeJava">
+ * public class ProductsPage extends Page {
  *
  *     ActionLink addLink;
  *     ActionLink detailsLink;
@@ -132,7 +136,7 @@ import net.sf.click.util.ClickUtils;
  *         List productList = ProductDatabase.getProducts();
  *         addModel("<span class="blue">productList</span>", productList);
  *     }
- * } </div>
+ * } </pre>
  *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

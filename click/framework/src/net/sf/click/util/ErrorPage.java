@@ -41,7 +41,8 @@ import org.apache.velocity.exception.ParseErrorException;
  * <p/>
  * Applications which require additional error handling logic must subclass
  * the ErrorPage. For example to rollback a Connection if an SQLException occured:
- * <div class="code">
+ * 
+ * <pre class="codeJava">
  * package com.mycorp.util;
  *
  * import java.sql.Connection;
@@ -87,8 +88,7 @@ import org.apache.velocity.exception.ParseErrorException;
  *             }
  *         }
  *     }
- * }
- * </div>
+ * } </pre>
  *
  * The ClickServlet sets the following ErrorPage properties in addition to
  * the normal Page properties:<ul>
@@ -141,17 +141,18 @@ public class ErrorPage extends Page {
     }
 
     /**
-     * Return the application mode.
+     * Return the application mode: <tt>["production", "profile", "development",
+     * debug"]</tt>
      *
-     * @return the application mode.
+     * @return the application mode
      */
     public String getMode() {
         return mode;
     }
 
     /**
-     * Set the application mode: ["production", "profile", "development",
-     * debug"]
+     * Set the application mode: <tt>["production", "profile", "development",
+     * debug"]</tt>
      * <p/>
      * The application mode is added to the model by the {@link #onInit()} method.
      * This property is used to determines whether the error page template
@@ -189,18 +190,20 @@ public class ErrorPage extends Page {
      * diagnostic information.
      * <p/>
      * The following values are added to ErrorPage model for rendering by the
-     * error page template:<ul>
-     * <li>errorClass - the classname of the exception</li>
-     * <li>errorMessage - the exception error message</li>
-     * <li>errorStackTrace - the HTML rendered error stack trace</li>
-     * <li>isParseError - a boolean flag denoting a Velocity parsing error</li>
-     * <li>mode - the application mode</li>
-     * <li>page - the error causing page</li>
-     * <li>pagePath - the path of the error causing page</li>
-     * <li>requestAttributes - a sorted Map of the HTTP request attributes</li>
-     * <li>requestHeaders - a sorted Map of the HTTP request headers</li>
-     * <li>requestParams - a sorted Map of the HTTP request parameters</li>
-     * <li>template - the HTML section of the page template causing a parse error</li>
+     * error page template:
+     * 
+     * <ul style="margin-top: 0.5em;">
+     * <li><tt>errorClass</tt> &nbsp; - &nbsp; the classname of the exception</li>
+     * <li><tt>errorMessage</tt> &nbsp; - &nbsp; the exception error message</li>
+     * <li><tt>errorStackTrace</tt> &nbsp; - &nbsp; the HTML rendered error stack trace</li>
+     * <li><tt>isParseError</tt> &nbsp; - &nbsp; a boolean flag denoting a Velocity parsing error</li>
+     * <li><tt>mode</tt> &nbsp; - &nbsp; the application mode</li>
+     * <li><tt>page</tt> &nbsp; - &nbsp; the error causing page</li>
+     * <li><tt>pagePath</tt> &nbsp; - &nbsp; the path of the error causing page</li>
+     * <li><tt>requestAttributes</tt> &nbsp; - &nbsp; a sorted Map of the HTTP request attributes</li>
+     * <li><tt>requestHeaders</tt> &nbsp; - &nbsp; a sorted Map of the HTTP request headers</li>
+     * <li><tt>requestParams</tt> &nbsp; - &nbsp; a sorted Map of the HTTP request parameters</li>
+     * <li><tt>template</tt> &nbsp; - &nbsp; the HTML section of the page template causing a parse error</li>
      * </ul>
      *
      * @see Page#onInit()

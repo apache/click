@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,17 +239,15 @@ public class Page {
      * Pages can define text properties files to store localized messages. These
      * properties files must be stored on the Page class path with a name
      * matching the class name. For example:
-     * <blockquote>
-     * <pre>
+     * 
+     * <pre class="codeConfig">
      *  // The page classname
      *  com.mycorp.pages.Login
      *
      *  // The properties filenames and location
      *  /com/mycorp/pages/Login.properties
      *  /com/mycorp/pages/Login_en.properties
-     *  /com/mycorp/pages/Login_fr.properties
-     * </pre>
-     * </blockquote>
+     *  /com/mycorp/pages/Login_fr.properties </pre>
      *
      * @param key the message property key name
      * @return the Page message for the given message property key

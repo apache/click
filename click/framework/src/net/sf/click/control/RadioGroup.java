@@ -41,7 +41,8 @@ import net.sf.click.Context;
  * <p/>
  * The example below illustrates a RadioGroup being added to a form.
  *
- * <div class="code">public class Purchase extends Page {
+ * <pre class="codeJava">
+ * public class Purchase extends Page {
  *     Form form;
  *     RadioGroup radioGroup;
  *     ..
@@ -60,7 +61,7 @@ import net.sf.click.Context;
  *
  *         ..
  *     }
- * } </div>
+ * } </pre>
  *
  * This radio group field would be render as:
  *

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,12 +49,6 @@ import org.xml.sax.SAXException;
 /**
  * Application the Click application object which defines the
  * application's configuration.
- * <p/>
- * The click application contains the:
- * <ul>
- *  <li>{@link PageElm}s</li>
- *  <li>Velocity configuration properties</li>
- * </ul>
  *
  * @author Malcolm Edgar
  */
@@ -212,8 +206,8 @@ class ClickApp implements EntityResolver {
     // -------------------------------------------------------- Package Methods
 
     /**
-     * Return the application mode [ PRODUCTION | PROFILE | DEVELOPMENT |
-     * DEBUG ].
+     * Return the application mode <tt>[ PRODUCTION | PROFILE | DEVELOPMENT |
+     * DEBUG ]</tt>.
      *
      * @return the application mode
      */
@@ -223,7 +217,7 @@ class ClickApp implements EntityResolver {
 
     /**
      * Return the application mode String value: &nbsp; <tt>["production",
-     * "profile", "development", "debug"].
+     * "profile", "development", "debug"]</tt>.
      *
      * @return the application mode String value
      */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004 Malcolm A. Edgar
+ * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,12 +52,12 @@ public interface Control {
      * </ul>
      * <p/>
      * An example event listener method would be:
-     * <blockquote><pre>
+     * 
+     * <pre class="codeJava">
      * public boolean onClick() {
      *     System.out.println("onClick called");
      *     return true;
-     * }
-     * </pre></blockquote>
+     * } </pre>
      *
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke

@@ -12,36 +12,36 @@
 
 Click application XML descriptor Documentation Type Definition (DTD):
 
-<div class="code">
+<pre class="codeDtd">
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
-&lt;!ELEMENT click-app (pages, headers?, format?, mode?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?)&gt;
 
   &lt;-- Application pages. --&gt;
-  &lt;!ELEMENT pages (page*)&gt;
+  &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*)&gt;
 
     &lt;!-- Page definition. --&gt;
-    &lt;!ELEMENT page (header*)&gt;
-      &lt;!ATTLIST page path CDATA #IMPLIED&gt;
-      &lt;!ATTLIST page classname CDATA #FIXED "net.sf.click.Page"&gt;
+    &lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
+      &lt;!ATTLIST page <span class="blue">path</span> CDATA #IMPLIED&gt;
+      &lt;!ATTLIST page <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.Page</span>"&gt;
 
   &lt;!-- Application default page headers. --&gt;
-  &lt;!ELEMENT headers (header*)&gt;
+  &lt;!ELEMENT <span class="red">headers</span> (<span class="blue">header</span>*)&gt;
   
     &lt;-- Header definition. --&gt;
-    &lt;!ELEMENT header (#PCDATA)&gt;
-      &lt;!ATTLIST header name CDATA #REQUIRED&gt;
-      &lt;!ATTLIST header value CDATA #REQUIRED&gt;
-      &lt;!ATTLIST header type (String|Integer|Date) "String"&gt;
+    &lt;!ELEMENT <span class="red">header</span> (#PCDATA)&gt;
+      &lt;!ATTLIST header <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST header <span class="blue">value</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST header <span class="blue">type</span> (String|Integer|Date) "<span class="green">String</span>"&gt;
 
   &lt;!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". --&gt;
-  &lt;!ELEMENT format (#PCDATA)&gt;
-   &lt;!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format"&gt;
+  &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
+   &lt;!ATTLIST format <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
  
   &lt;!-- Application mode, which configures logging and caching. --&gt;
-  &lt;!ELEMENT mode (#PCDATA)&gt;
-   &lt;!ATTLIST mode value (production|profile|development|debug) "development"&gt;
-</div>
+  &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
+   &lt;!ATTLIST mode <span class="blue">value</span> (production|profile|development|debug) "<span class="green">development</span>"&gt;
+</pre>
 </body>
 </html>
    
