@@ -19,7 +19,7 @@ package net.sf.click.control;
 /**
  * Provides a TextArea control: &nbsp; &lt;textarea&gt;&lt;/textarea&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Text Area</td>
  * <td><textarea title='TextArea Control'>Rather lengthy text</textarea></td>

@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Email Field control: &nbsp; &lt;input type='text'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Email Field</td>
  * <td><input type='text' size='30' value='medgar@mycorp.com' title='EmailField Control'/></td>

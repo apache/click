@@ -19,7 +19,7 @@ package net.sf.click.control;
 /**
  * Provides a Radio control: &nbsp; &lt;input type='radio'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td><input type='radio' name='header' value='Radio Control'/>Radio</input></td>
  * </tr>

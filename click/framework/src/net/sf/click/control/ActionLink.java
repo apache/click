@@ -25,9 +25,11 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a Action Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
  *
- * <table class='htmlHeader'><tr><td>
+ * <table class='htmlHeader' cellspacing='6'>
+ * <tr><td>
  * <a href='' title='ActionLink Control'>Action Link</a>
- * </td></tr></table>
+ * </td></tr>
+ * </table>
  *
  * This control can render the "href" URL attribute using
  * {@link #getHref()}, or the entire ActionLink anchor tag using
@@ -39,12 +41,12 @@ import net.sf.click.util.ClickUtils;
  * <div class="code">public class MyPage extends Page {
  *
  *     public void onInit() {
- *         ActionLink link = new ActionLink("<font color="blue">logoutLink</font>");
- *         link.setListener(this, "<b>onLogoutClick</b>");
+ *         ActionLink link = new ActionLink("<span class="blue">logoutLink</span>");
+ *         link.setListener(this, "<span class="green">onLogoutClick</span>");
  *         addControl(link);
  *     }
  *
- *     public boolean <b>onLogoutClick</b>() {
+ *     public boolean <span class="green">onLogoutClick</span>() {
  *         if (getContext().getSessionAttribute("user") != null) {
  *            getContext().getSession().invalidate();
  *         }
@@ -57,7 +59,7 @@ import net.sf.click.util.ClickUtils;
  *
  * The corresponding template code is below. Note href is evaluated by Velocity
  * to {@link #getHref()}:<div class="code">
- * &lt;a href="$<font color="blue">logoutLink</font>.href" title="Click to Logout"&gt;Logout&lt;/a&gt;
+ * &lt;a href="$<span class="blue">logoutLink</span>.href" title="Click to Logout"&gt;Logout&lt;/a&gt;
  * </div>
  *
  * ActionLink can also support a value parameter which is accessable
@@ -95,16 +97,16 @@ import net.sf.click.util.ClickUtils;
  *     ActionLink detailsLink;
  *
  *     public void onInit() {
- *         addLink = new ActionLink("<font color="blue">addLink</font>");
- *         addLink.setListener(this, "<b>onAddClick</b>");
+ *         addLink = new ActionLink("<span class="blue">addLink</span>");
+ *         addLink.setListener(this, "<span class="green">onAddClick</span>");
  *         addControl(addLink);
  *
- *         detailsLink = new ActionLink("<font color="blue">detailsLink</font>");
- *         detailsLink.setListener(this, "<b>onDetailsClick</b>");
+ *         detailsLink = new ActionLink("<span class="blue">detailsLink</span>");
+ *         detailsLink.setListener(this, "<span class="green">onDetailsClick</span>");
  *         addControl(detailsLink);
  *     }
  *
- *     public boolean <b>onAddClick</b>() {
+ *     public boolean <span class="green">onAddClick</span>() {
  *         // Get the product clicked on by the user
  *         Integer productId = addLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
@@ -116,7 +118,7 @@ import net.sf.click.util.ClickUtils;
  *         return true;
  *     }
  *
- *     public boolean <b>onDetailsClick</b>() {
+ *     public boolean <span class="green">onDetailsClick</span>() {
  *         // Get the product clicked on by the user
  *         Integer productId = detailsLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
@@ -131,7 +133,7 @@ import net.sf.click.util.ClickUtils;
  *     public void onGet() {
  *         // Display the list of available products
  *         List productList = ProductDatabase.getProducts();
- *         addModel("<span class="green">productList</span>", productList);
+ *         addModel("<span class="blue">productList</span>", productList);
  *     }
  * }
  * </div>

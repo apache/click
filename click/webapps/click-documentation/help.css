@@ -60,7 +60,7 @@ h4  {
 }
 
 .htmlExample {
-	border: 1px solid grey;
+	border: 1px solid black;
 	border-spacing: 1em;
 	margin-left: 3em;
 	margin-top: 1em;
@@ -100,7 +100,9 @@ select.error {
 span.error {
 	color: red;
 }
+
 table.form {
 	border: 0;
 	vertical-align: baseline; 
 }
+

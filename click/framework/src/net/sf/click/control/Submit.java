@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Submit control: &nbsp; &lt;input type='submit'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader cellspacing='6'>
  * <tr>
  * <td><input type='submit' value='Submit' title='Submit Control'/></td>
  * </tr>

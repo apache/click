@@ -18,7 +18,7 @@ package net.sf.click.control;
 /**
  * Provides a Checkbox control: &nbsp; &lt;input type='checkbox'&gt;.
  *
- * <table class='htmlHeader'>
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Checkbox</td>
  * <td><input type='checkbox' title='Checkbox Control'/></td>
