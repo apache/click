@@ -56,7 +56,7 @@
             fork="true"
             failonerror="true"> 
          <arg value='-url'/>
-         <arg value='"jdbc:mckoi://localhost:9157"'/>
+         <arg value='"jdbc:mckoi://localhost:9157/Tracker"'/>
          <arg value='-u'/>  
          <arg value='"system"'/> 
          <arg value='-p'/>    

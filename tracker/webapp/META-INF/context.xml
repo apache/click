@@ -1,0 +1,13 @@
+<Context docBase="${catalina.home}/webapps/tracker">
+   <Resource 
+      name="jdbc/tracker" 
+      auth="Container" 
+      type="javax.sql.DataSource"
+      maxActive="20" 
+      maxIdle="10" 
+      maxWait="10000"
+      username="scout" 
+      password="compass" 
+      driverClassName="com.mckoi.JDBCDriver"
+      url="jdbc:mckoi://localhost:9157/Tracker"/>
+</Context>
