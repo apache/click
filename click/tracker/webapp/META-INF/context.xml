@@ -1,4 +1,4 @@
-<Context path="/tracker" docBase="${catalina.home}/webapps/tracker">
+<Context path="/tracker" docBase="${catalina.home}/webapps/tracker" reloadable="true">
 
    <Realm
       className="org.apache.catalina.realm.JDBCRealm" 
