@@ -57,8 +57,8 @@ import net.sf.click.Context;
  * <p/>
  * </li>
  * <li>
- * Including the HTML &lt;DOCTYPE&lt; in the page causes a positioning bug in 
- * the display of the popup Calendar &lt;div&lt;. 
+ * Including the HTML &lt;DOCTYPE&gt; in the page causes a positioning bug in 
+ * the display of the popup Calendar &lt;div&gt;. 
  * </li>
  * </ul>
  * See also W3C HTML reference

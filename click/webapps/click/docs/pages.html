@@ -148,7 +148,9 @@ This will invoke a new Page class instance mapped to the path
 <tt>"<font color="blue">index.htm</font>"</tt>. Note when a request is forwarded to another Page, 
 the controls on the second page will not be processed. This prevents confusion and bugs,
 like a form on the second page trying to process a POST request from the first page.
-<p/>
+
+<h4>Forward Parameter Passing</h4>
+
 When you forward to another page the request parameters are maintained. This is a handy way
 of passing through state information through with the request. For example to you could
 add a customer object as request parameter which is displayed in the template of the 
@@ -237,7 +239,7 @@ public boolean onLogoutClick() {
 </pre>
 </blockquote>
 
-<h4>Parameter Passing</h4>
+<h4>Redirect Parameter Passing</h4>
 
 You can pass information between redirected pages using URL request parameters. 
 The ClickServlet will encode the URL for you using

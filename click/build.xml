@@ -4,8 +4,6 @@
    <property file="./build.properties"/>
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
-   <property name="dir.test" value="test"/>
-   <property name="dir.temp" value="temp"/>
    <property name="jar.codec" value="commons-codec-1.1.jar"/>
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
@@ -26,7 +24,7 @@
       <mkdir dir="framework/classes"/>
       <delete dir="webapps/click/WEB-INF/classes"/>
       <mkdir dir="webapps/click/WEB-INF/classes"/>
-	  <zip destfile="../click2.zip" basedir="."/>
+	  <zip destfile="../${name}-${version}.zip" basedir="."/>
    </target>
 
    <target name="build-framework" description="compile and build framework JARs">
@@ -64,7 +62,7 @@
       </jar>
    </target>
 
-   <target name="build-webapps">
+   <target name="build-webapps" description="build web application WAR files">
       <delete dir="webapps/click/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click/WEB-INF/classes"/>
 	  <javac srcdir="webapps/click/WEB-INF/src" 
@@ -88,33 +86,12 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
-   	
-      <delete dir="webapps/imode/WEB-INF/classes" quiet="false"/>
-      <mkdir dir="webapps/imode/WEB-INF/classes"/>
-  	  <javac srcdir="webapps/imode/WEB-INF/src" 
-               destdir="webapps/imode/WEB-INF/classes" 
-               debug="true">
-           <classpath> 
-           	<pathelement location="lib/${jar.servlet}"/>
-              <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
-           </classpath>
-        </javac>
-        <copy todir="webapps/imode/WEB-INF/classes">
-           <fileset dir="webapps/imode/WEB-INF/src">
-              <exclude name="**/*.java"/>
-           	<exclude name="**/package.html"/>
-           </fileset>
-        </copy>
-        <war destfile="${dir.deploy}/imode.war"
-             webxml="webapps/imode/WEB-INF/web.xml">
-           <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
-           <fileset dir="webapps/imode">
-              <exclude name="**/web.xml"/>
-           </fileset>
-        </war>  
    </target>
 
    <target name="javadoc" description="create Javadoc HTML">
+      <delete quiet="false" failonerror="false">
+          <fileset dir="webapps/click/docs/click-api" includes="**/*.html"/>
+      </delete>
       <javadoc sourcepath="framework/src"
                destdir="webapps/click/docs/click-api"
                author="true"
@@ -130,6 +107,9 @@
       </javadoc>
    	  <copy file="framework/src/net/sf/click/control/calendar.gif"
    	        todir="webapps/click/docs/click-api/net/sf/click/control"/>
+      <delete quiet="false" failonerror="false">
+         <fileset dir="webapps/click/docs/examples-api" includes="**/*.html"/>
+      </delete>
       <javadoc sourcepath="webapps/click/WEF-INF/src"
                destdir="webapps/click/docs/examples-api"
                author="true"
@@ -160,38 +140,5 @@
    <target name="deploy-webapps" description="deploy web apps to app server"> 
       <copy file="${dir.deploy}/click.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
-	
-   <!-- i-mode development -->
-	
-   <target name="build-imode">
-      <delete dir="webapps/imode/WEB-INF/classes" quiet="false"/>
-      <mkdir dir="webapps/imode/WEB-INF/classes"/>
-  	  <javac srcdir="webapps/imode/WEB-INF/src" 
-	         destdir="webapps/imode/WEB-INF/classes" 
-	         debug="true">
-	      <classpath> 
-	         <pathelement location="lib/${jar.servlet}"/>
-	         <pathelement location="${dir.deploy}/${name}-all-${version}.jar"/>
-	      </classpath>
-       </javac>
-       <copy todir="webapps/imode/WEB-INF/classes">
-	      <fileset dir="webapps/imode/WEB-INF/src">
-	         <exclude name="**/*.java"/>
-	      	 <exclude name="**/package.html"/>
-	      </fileset>
-       </copy>
-	   <war destfile="${dir.deploy}/imode.war"
-	        webxml="webapps/imode/WEB-INF/web.xml">
-	      <lib file="${dir.deploy}/${name}-all-${version}.jar"/>
-	      <fileset dir="webapps/imode">
-	         <exclude name="**/web.xml"/>
-	      </fileset>
-	   </war>  
-   </target>
-	
-   <target name="deploy-imode" description="deploy web apps to app server"> 
-      <copy file="${dir.deploy}/imode.war" todir="${dir.appserver}"/>
-   </target>
-	
 
 </project>
