@@ -1,6 +1,42 @@
-#**********************************
+
+#*********************
+ * Write generic form
+ *********************#
+
+#macro( writeForm $form )
+
+<form method="POST" name="$form.name" action="$request.requestURI">
+ <input type="hidden" name="form_name" value="$form.name"/>
+ <table style="margin: 1em;">
+ #foreach ($field in $form.fieldList)
+  #if( !$field.isHidden() && !$field.isValid() )
+  <tr>
+   <td colspan="2" style="color: red;"> $field.error </td>
+  </tr>
+  #end
+  #if( !$field.isHidden() )
+  <tr>
+   <td> $field.label </td> <td> $field </td>
+  </tr>
+  #end
+ #end
+  <tr><td>&nbsp;</td></tr>
+  <tr>
+   <td colspan="2">
+   #foreach ($button in $form.buttonList)
+    $button &nbsp;
+   #end
+   </td>
+  </tr>  
+ </table>  
+</form>
+
+#end
+
+
+#***********************************
  * Write source inspection toolbar
- *********************************#
+ **********************************#
 
 #macro( writeSourceToolbar $java $html )
 

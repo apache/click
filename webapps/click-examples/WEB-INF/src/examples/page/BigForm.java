@@ -86,14 +86,10 @@ public class BigForm extends Page {
         form.add(checkbox);
 
         radioGroup = new RadioGroup("Packaging", getContext());
-        radioGroup.add(new Radio("Protective "));
-        Radio radio = new Radio("Standard ");
-        radio.setListener(this, "subtest");
-        radio.setChecked(true);
-        radioGroup.add(radio);
-        radioGroup.add(new Radio("GIFT", "Gift Wrap "));
-        radioGroup.setListener(this, "test");
-     //   radioGroup.setValue("GIFT");
+        radioGroup.add(new Radio("STD", "Standard "));
+        radioGroup.add(new Radio("PRO", "Protective "));
+        radioGroup.add(new Radio("GFT", "Gift Wrap "));
+        radioGroup.setValue("STD");
         form.add(radioGroup);
 
         Select select = new Select("Delivery type");
@@ -123,23 +119,8 @@ public class BigForm extends Page {
         form.add(reset);
     }
 
-    /**
-     * On a POST Cancel button submit redirect to "examples.html"
-     *
-     * @return true
-     */
     public boolean onCancelClick() {
         setRedirect("index.html");
         return false;
-    }
-
-    public boolean subtest() {
-        System.err.println("SUB radio="+radioGroup.getName()+"="+radioGroup.getValue());
-        return true;
-    }
-
-    public boolean test() {
-        System.err.println("BIG radio="+radioGroup.getName()+"="+radioGroup.getValue());
-        return true;
     }
 }
