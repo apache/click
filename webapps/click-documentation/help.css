@@ -7,6 +7,10 @@ body, table, td, p	{
   font-size: 12px;
 }
 
+body {
+  background-color: white;
+}
+
 h1  { 
   font-size: 24px;
   font-weight: bold;
