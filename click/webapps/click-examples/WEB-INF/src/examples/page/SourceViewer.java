@@ -63,20 +63,24 @@ public class SourceViewer extends Page {
     private void loadFilename(String filename) {
         ServletContext context = getContext().getServletContext();
 
+        // Orion server requires '/' prefix to find resources
+        String resourceFilename = 
+            (filename.charAt(0) != '/') ? "/" + filename : filename;
+
         InputStream in = null;
         try {
-            in = context.getResourceAsStream(filename);
+            in = context.getResourceAsStream(resourceFilename);
 
             if (in != null) {
 
                 loadResource(in, filename);
 
             } else {
-                addModel("error", "File " + filename + " not found");
+                addModel("error", "File " + resourceFilename + " not found");
             }
 
         } catch (IOException e) {
-            addModel("error", "Could not read " + filename);
+            addModel("error", "Could not read " + resourceFilename);
 
         } finally {
             ClickUtils.close(in);
