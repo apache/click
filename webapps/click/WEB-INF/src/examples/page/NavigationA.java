@@ -9,7 +9,7 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class NavA extends Page {
+public class NavigationA extends Page {
     
     ActionLink forwardLink;
     ActionLink forwardParamLink;

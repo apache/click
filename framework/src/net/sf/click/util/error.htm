@@ -122,6 +122,18 @@ td.header {
     </small>
    </td>
   </tr>
+  <tr valign="top">
+   <td><b>Remote User</b></td>
+   <td>#if ($request.remoteUser) $request.remoteUser #else &nbsp; #end</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Auth Type</b></td>
+   <td>#if ($request.authType) $request.authType #else &nbsp; #end</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Remote User</b></td>
+   <td>#if ($request.remoteUser) $request.remoteUser #else &nbsp; #end</td>
+  </tr>
  </table>
  
  #end <!-- if not "production" mode -->

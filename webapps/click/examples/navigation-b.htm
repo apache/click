@@ -2,36 +2,40 @@
 <head>	
 <link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
 <style>
+h2 {
+  background-color: navy;
+  color: white;
+}
 span {
-  color: blue;
+  color: navy;
   font-size: 16px;
   font-weight: bold;
 }
 </style>
-<title>Click Examples - Page Nagiation</title>
+<title>Click Examples - Page Navigation</title>
 </head>	
 <body>
  	
 <h2>Page Nagiation</h2> 
 
-#writeSourceToolbar( "examples/page/NavB.java" "examples/navigation-b.htm" )
+#writeSourceToolbar( "examples/page/NavigationB.java" "examples/navigation-b.htm" )
   
-You are currently on page <span>NavB</span>.
+You are currently on page <span>NavigationB</span>.
 <p/>
 
 <h4>Forward</h4>
 
-To forward to <b>NavA</b> click <a href="$forwardLink.href">here</a>.
+To forward to <b>NavigationA</b> click <a href="$forwardLink.href">here</a>.
 <p/>
-To forward to <b>NavB</b> passing the parameter $forwardParamLink.value click
+To forward to <b>NavigationA</b> passing the parameter $forwardParamLink.value click
 <a href="$forwardParamLink.getHref()">here</a>.
 <p/>
 
 <h4>Redirect</h4>
 
-To redirect to <b>NavA</b> click <a href="$redirectLink.href">here</a>.
+To redirect to <b>NavigationA</b> click <a href="$redirectLink.href">here</a>.
 <p/>
-To redirect to <b>NavB</b> passing the parameter $redirectParamLink.value click
+To redirect to <b>NavigationA</b> passing the parameter $redirectParamLink.value click
 <a href="$redirectParamLink.href">here</a>.
 <p/>
 </body>

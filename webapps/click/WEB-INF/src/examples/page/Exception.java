@@ -22,6 +22,10 @@ public class Exception extends Page {
         ActionLink exceptionLink = new ActionLink("exceptionLink");
         exceptionLink.setListener(this, "onExceptionClick");
         addControl(exceptionLink);
+        
+        ActionLink missingMethodLink = new ActionLink("missingMethodLink");
+        missingMethodLink.setListener(this, "missingMethodClick");
+        addControl(missingMethodLink);
     }
 
     public boolean onBrokenPageClick() {
@@ -31,7 +35,7 @@ public class Exception extends Page {
     }
     
     public boolean onExceptionClick() {
-        throw new IllegalStateException("Oh No...");
+        throw new NullPointerException("Oh No...");
     }
 
 }

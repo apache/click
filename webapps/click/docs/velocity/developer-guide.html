@@ -17,6 +17,10 @@
            
                                     
             <title>Velocity - Developer's Guide</title>
+            <style>
+              a:visited { color: blue; }
+              body	{ font-family: arial, helvetica, sans-serif; }
+            </style>
         </head>
 
         <body bgcolor="#ffffff" text="#000000" link="#525D76">        
@@ -2317,7 +2321,8 @@ properties, showing how setting up the FileResourceLoader is managed
 resource.loader = file
 
 file.resource.loader.description = Velocity File Resource Loader
-file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
+file.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.FileResourceLoader
 file.resource.loader.path = .
 file.resource.loader.cache = false
 file.resource.loader.modificationCheckInterval = 2
@@ -2807,7 +2812,8 @@ is to declare the class to use as the loader :
     <tr>
       <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
       <td bgcolor="#ffffff"><pre>
-file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
+file.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.FileResourceLoader
 </pre></td>
       <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
     </tr>
@@ -2881,7 +2887,8 @@ path, and caching is off.  As a properties set, this is expressed as :
 resource.loader = file
 
 file.resource.loader.description = Velocity File Resource Loader
-file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
+file.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.FileResourceLoader
 file.resource.loader.path = .
 file.resource.loader.cache = false
 file.resource.loader.modificationCheckInterval = 0
@@ -2914,7 +2921,8 @@ checked for changes in 10 second intervals.  As a properties set, this is expres
 resource.loader = file
 
 file.resource.loader.description = Velocity File Resource Loader
-file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
+file.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.FileResourceLoader
 file.resource.loader.path = /opt/directory1, /opt/directory2
 file.resource.loader.cache = true
 file.resource.loader.modificationCheckInterval = 10
@@ -2960,7 +2968,8 @@ resource.loader = file, class, jar
 # class to use, turn off caching, and use 3 directories for templates
 #
 file.resource.loader.description = Velocity File Resource Loader
-file.resource.loader.class = org.apache.velocity.runtime.resource.loader.FileResourceLoader
+file.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.FileResourceLoader
 file.resource.loader.path = templatedirectory1, anotherdirectory, foo/bar
 file.resource.loader.cache = false
 file.resource.loader.modificationCheckInterval = 0
@@ -2969,15 +2978,18 @@ file.resource.loader.modificationCheckInterval = 0
 #  for the loader we call 'class', use the ClasspathResourceLoader
 #
 class.resource.loader.description = Velocity Classpath Resource Loader
-class.resource.loader.class = org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+class.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
 
 #
 # and finally, for the loader we call 'jar', use the JarResourceLoader
 # and specify two jars to load from
 #
 jar.resource.loader.description = Velocity Jar  Resource Loader
-jar.resource.loader.class = org.apache.velocity.runtime.resource.loader.JarResourceLoader
-jar.resource.loader.path = jar:file:/myjarplace/myjar.jar, jar:file:/myjarplace/myjar2.jar
+jar.resource.loader.class = 
+   org.apache.velocity.runtime.resource.loader.JarResourceLoader
+jar.resource.loader.path = 
+   jar:file:/myjarplace/myjar.jar, jar:file:/myjarplace/myjar2.jar
 </pre></td>
       <td bgcolor="#023264" width="1"><img src="/images/void.gif" width="1" height="1" vspace="0" hspace="0" border="0"/></td>
     </tr>
