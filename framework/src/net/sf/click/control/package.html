@@ -11,17 +11,20 @@ Click Controls provide an event callback mechanism similar the
 <tt>java.awt.ActionListener</tt> callback. 
 
 <pre class="codeJava">
-public class MyPage extends Page {
+<span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
 
-    public void onInit() {
-        ActionLink actionLink = new ActionLink("link");
-        actionLink.setListener(this, "<span class="blue">onLinkClick</span>");
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public void</span> onInit() {
+        ActionLink actionLink = <span class="kw">new</span> ActionLink("link");
+        actionLink.setListener(<span class="kw">this</span>, "<span class="blue">onLinkClick</span>");
         addControl(actionLink);
     }
     
-    public boolean <span class="blue">onLinkClick</span>() {
+    <span class="kw">public boolean</span> <span class="blue">onLinkClick</span>() {
         System.out.println("onLinkClick invoked");
-        return true;
+        <span class="kw">return true</span>;
     }
 } </pre>
 

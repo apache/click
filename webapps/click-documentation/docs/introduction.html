@@ -120,19 +120,19 @@ method.
         addControl(form);
 
         usernameField = <span class="kw">new</span> TextField("Username");
-        usernameField.setRequired(true);
+        usernameField.setRequired(<span class="kw">true</span>);
         form.add(usernameField);
 
         passwordField = <span class="kw">new</span> PasswordField("Password");
-        passwordField.setRequired(true);
+        passwordField.setRequired(<span class="kw">true</span>);
         form.add(passwordField);
 
         Submit okButton = <span class="kw">new</span> Submit("   OK   ");
-        okButton.setListener(this, "<span class="blue">onOkClicked</span>");
+        okButton.setListener(<span class="kw">this</span>, "<span class="blue">onOkClicked</span>");
         form.add(okButton);
 
         Submit cancelButton = <span class="kw">new</span> Submit("Cancel");
-        cancelButton.setListener(this, "<span class="blue">onCancelClicked</span>");
+        cancelButton.setListener(<span class="kw">this</span>, "<span class="blue">onCancelClicked</span>");
         form.add(cancelButton);
     }
 

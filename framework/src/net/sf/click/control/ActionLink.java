@@ -39,21 +39,21 @@ import net.sf.click.util.ClickUtils;
  * to call a logout method is illustrated below:
  *
  * <pre class="codeJava">
- * public class MyPage extends Page {
+ * <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
  *
- *     public void onInit() {
- *         ActionLink link = new ActionLink("<span class="blue">logoutLink</span>");
- *         link.setListener(this, "<span class="maroon">onLogoutClick</span>");
+ *     <span class="kw">public void</span> onInit() {
+ *         ActionLink link = <span class="kw">new</span> ActionLink("<span class="blue">logoutLink</span>");
+ *         link.setListener(<span class="kw">this</span>, "onLogoutClick");
  *         addControl(link);
  *     }
  *
- *     public boolean <span class="maroon">onLogoutClick</span>() {
- *         if (getContext().getSessionAttribute("user") != null) {
+ *     <span class="kw">public boolean</span> onLogoutClick() {
+ *         <span class="kw">if</span> (getContext().getSessionAttribute("user") != <span class="kw">null</span>) {
  *            getContext().getSession().invalidate();
  *         }
  *         setForward("logout");
  *
- *         return false;
+ *         <span class="kw">return false</span>;
  *     }
  * } </pre>
  *
@@ -92,47 +92,47 @@ import net.sf.click.util.ClickUtils;
  * The corresponding Page class for this template is:
  *
  * <pre class="codeJava">
- * public class ProductsPage extends Page {
+ * <span class="kw">public class</span> ProductsPage <span class="kw">extends</span> Page {
  *
  *     ActionLink addLink;
  *     ActionLink detailsLink;
  *
- *     public void onInit() {
- *         addLink = new ActionLink("<span class="blue">addLink</span>");
- *         addLink.setListener(this, "<span class="maroon">onAddClick</span>");
+ *     <span class="kw">public void</span> onInit() {
+ *         addLink = <span class="kw">new</span> ActionLink("<span class="blue">addLink</span>");
+ *         addLink.setListener(<span class="kw">this</span>, "onAddClick");
  *         addControl(addLink);
  *
- *         detailsLink = new ActionLink("<span class="blue">detailsLink</span>");
- *         detailsLink.setListener(this, "<span class="maroon">onDetailsClick</span>");
+ *         detailsLink = <span class="kw">new</span> ActionLink("<span class="blue">detailsLink</span>");
+ *         detailsLink.setListener(<span class="kw">this</span>, "onDetailsClick");
  *         addControl(detailsLink);
  *     }
  *
- *     public boolean <span class="maroon">onAddClick</span>() {
- *         // Get the product clicked on by the user
+ *     <span class="kw">public boolean</span> onAddClick() {
+ *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = addLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
  *
- *         // Add product to basket
+ *         <span class="cm">// Add product to basket</span>
  *         List basket = (List) getContext().getSessionAttribute("basket");
  *         basket.add(product);
  *
- *         return true;
+ *         <span class="kw">return true</span>;
  *     }
  *
- *     public boolean <span class="maroon">onDetailsClick</span>() {
- *         // Get the product clicked on by the user
+ *     <span class="kw">public boolean</span> onDetailsClick() {
+ *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = detailsLink.getValueInteger();
  *         Product product = ProductDatabase.getProduct(productId);
  *
- *         // Store the product in the request and display in the details page
+ *         <span class="cm">// Store the product in the request and display in the details page</span>
  *         getContext().setRequestAttribute("product", product);
  *         setForward("productDetails.html");
  *
- *         return false;
+ *         <span class="kw">return false</span>;
  *     }
  *
- *     public void onGet() {
- *         // Display the list of available products
+ *     <span class="kw">public void</span> onGet() {
+ *         <span class="cm">// Display the list of available products</span>
  *         List productList = ProductDatabase.getProducts();
  *         addModel("<span class="blue">productList</span>", productList);
  *     }
@@ -221,8 +221,8 @@ public class ActionLink implements Control {
      * <p/>
      * For example:
      *
-     * <div class="code">// Java code
-     * ActionLink addLink = new ActionLink("<span class="blue">addLink</span>");
+     * <div class="codeJava"> <span class="cm">// Java code</span>
+     * ActionLink addLink = <span class="kw">new</span> ActionLink("<span class="blue">addLink</span>");
      * addLink.setLabel("Add");
      * addLink.setAttribute("title", "Add Product to Cart");
      * addLink.setAttribute("class", "table");
