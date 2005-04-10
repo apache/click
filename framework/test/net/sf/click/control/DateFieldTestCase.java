@@ -26,11 +26,28 @@ public class DateFieldTestCase extends TestCase {
 
     public void testFormatPattern() throws Exception {
         DateField dateField = new DateField("Delivery date");
-        dateField.setFormatPattern(" dd MMM yyyy");
+        assertEquals(dateField.getFormatPattern(), "dd MMM yyyy");
+        assertEquals(dateField.getCalendarPattern(), "%e %b %Y");
         
-        System.err.println("calendarPatter='" + dateField.calendarPattern + "'");
-        assertEquals(dateField.getFormatPattern(), " dd MMM yyyy");
-        assertEquals(dateField.getCalendarPattern(), " %e %b %Y");
+        dateField = new DateField("Delivery date");
+        dateField.setFormatPattern(" dd MMM yyyy ");
+        assertEquals(dateField.getFormatPattern(), " dd MMM yyyy ");
+        assertEquals(dateField.getCalendarPattern(), " %e %b %Y ");        
+
+        dateField = new DateField("Delivery date");
+        dateField.setFormatPattern("dd/MMM/yyyy");
+        assertEquals(dateField.getFormatPattern(), "dd/MMM/yyyy");
+        assertEquals(dateField.getCalendarPattern(), "%e/%b/%Y"); 
+        
+        dateField = new DateField("Delivery date");
+        dateField.setFormatPattern("dd.MMM.yyyy");
+        assertEquals(dateField.getFormatPattern(), "dd.MMM.yyyy");
+        assertEquals(dateField.getCalendarPattern(), "%e.%b.%Y");
+        
+        dateField = new DateField("Delivery date");
+        dateField.setFormatPattern("dd.MM.yy");
+        assertEquals(dateField.getFormatPattern(), "dd.MM.yy");
+        assertEquals(dateField.getCalendarPattern(), "%e.%m.%y");
     }
 
 }

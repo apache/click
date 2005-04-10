@@ -381,7 +381,12 @@ public class Form implements Control {
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
     
-    // TODO: columns doc.
+    /** 
+     * The number of form layout table columns, default value: <tt>1</tt>. 
+     * <p/>
+     * This property is used to layout the number of table columns the form is 
+     * rendered in using a flow layout style.
+     */
     protected int columns = 1;
 
     /** The form context. */
@@ -568,11 +573,23 @@ public class Form implements Control {
         return buttonList;
     }
     
-    // TODO: doco
+    /**
+     * Return the number of form layout table columns. This property is used
+     * to layout the number of table columns the form is rendered in.
+     * 
+     * @return the number of form layout table columns
+     */
     public int getColumns() {
         return columns;
     }
     
+    
+    /**
+     * Set the number of form layout table columns. This property is used
+     * to layout the number of table columns the form is rendered in.
+     * 
+     * @param columns the number of form layout table columns
+     */
     public void setColumns(int columns) {
        this.columns = columns;
     }
