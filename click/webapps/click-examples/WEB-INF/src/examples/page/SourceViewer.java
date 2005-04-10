@@ -25,16 +25,18 @@ public class SourceViewer extends BorderedPage {
 
     private static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",
-            "return", "if", "while", "for", "do", "else", "try",
-            "catch", "throws", "throw", "static", "final", "break", "continue" };
+            "return", "if", "while", "for", "do", "else", "try", "new", "void",
+            "catch", "throws", "throw", "static", "final", "break", "continue",
+            "super", "finally", "true", "false", "null", "boolean", "int", 
+            "char", "long", "float", "double", "short" };
 
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
             "i", "u", "ul", "ol", "li", "form" };
 
-    private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(", "#else",
-            "#else(", "#elseif", "#elseif(", "#end", "#set", "#set(",
+    private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(", 
+            "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
             "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
             "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#" };
 

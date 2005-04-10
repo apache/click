@@ -108,8 +108,34 @@ subsequent controls and the Page's <tt>onGet()</tt> method is aborted.
 If everything is executing normally the Page's <tt>onGet()</tt> method is now called.
 <p/>
 The next step is rendering the page template to generate the displayed HTML. The
-ClickServlet gets the model from the Page as well as the path to its template. It then
-merges the template with the page model and writes out results to the HttpServletResponse.
+ClickServlet gets the model (<tt>Map</tt>) from the Page then adds the following 
+objects to the model:
+<ul>
+  <li>context &nbsp; - &nbsp; 
+   the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li>format &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects
+  </li>
+  <li>path &nbsp; - &nbsp; the <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page template to render
+  </li>
+  <li>request &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
+    object
+  </li>
+  <li>response &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
+    object
+  </li>
+  <li>session &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
+   for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+  </li>
+</ul>
+
+It then merges the template with the page model and writes out results to the HttpServletResponse.
 When the model is being merged with the template, any Controls in the model may be
 rendered using their <tt>toString()</tt> method.
 <p/>
@@ -333,7 +359,7 @@ method, returning the path of the border template to render. For example:
     }
 } </pre>
 
-Note the default Page getTemplate() method simply returns the 
+Note the default Page getTemplate() method simply returns the Page's
 <a href="click-api/net/sf/click/Page.html#path">path</a> property.
 <p/>
 The BorderedPage template <span class="blue">border.htm</span>: 
@@ -544,14 +570,21 @@ You can tailor the <span class="html">click/error.htm</span> template to suite y
 will not overwrite it. 
 <p/>
 The default error template will display extensive debug information when the application is in <tt>development</tt>
-or <tt>debug</tt> mode. When the application is in <tt>production</tt> or <tt>profile</tt> mode only a simple 
+or <tt>debug</tt> mode. Example error page displays include:
+<ul>
+   <li><a href="error-npe.html">NullPointerException</a> - in a page method</li>
+   <li><a href="error-parsing.html">ParseErrorException</a> - in a page template </li>
+</ul>
+When the application is in <tt>production</tt> or <tt>profile</tt> mode only a simple 
 error message is displayed. See <a target="topic" href="configuration.html#application-mode">Configuration</a>
 for details on how to set the application mode.
 
 <a name="page-not-found"><h2>Page Not Found</h2></a>
 
 If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
-it will use the registered "not-found.htm" page. The Click not found page is automatically configured as:
+it will use the registered <a href="not-found.html">not-found.htm</a> page. 
+<p/>
+The Click not found page is automatically configured as:
 
 <pre class="codeConfig">
 &lt;page path="<span class="blue">click/not-found.htm</span>" classname="<span class="red">net.sf.click.Page</span>"/&gt; 
@@ -563,32 +596,7 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 <span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
 <p/>
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
-has access to the usual Click objects:
-<ul>
-  <li><span class="st">$context</span> &nbsp; - &nbsp;
-    the Servlet context path, e.g. <span class="">/mycorp</span>
-  </li>  
-  <li><span class="st">$format</span> &nbsp; - &nbsp; 
-    the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
-    object for formatting the display of objects.
-  </li>
-  <li><span class="st">$path</span> &nbsp; - &nbsp; 
-    the <a href="click-api/net/sf/click/Page.html#path">path</a> 
-    of the page template to render.
-  </li>
-  <li><span class="st">$request</span> &nbsp; - &nbsp; 
-    the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
-    object.
-  </li>
-  <li><span class="st">$response</span> &nbsp; - &nbsp; 
-    the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
-    object.
-  </li>
-  <li><span class="st">$session</span> &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> Map adaptor
-   for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
-  </li>
-</ul>
+has access to the usual Click objects.
 
 </body>
 </html>

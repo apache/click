@@ -27,16 +27,25 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import net.sf.click.Page;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.velocity.exception.ParseErrorException;
 
 /**
  * Provides miscellaneous String and Stream utility methods.
@@ -164,6 +173,161 @@ public class ClickUtils {
             close(bis);
         }
     }
+    
+    /**
+     * Return a error HTML display.
+     * 
+     * @param error the page error
+     * @param page the page which caused the error
+     * @return a error HTML display
+     */
+    public static String getErrorReport(Exception error, Page page) {
+        StringBuffer buffer = new StringBuffer(10 * 1024);
+         
+        Throwable cause = null;
+        if (error instanceof ServletException) {
+            ServletException se = (ServletException) error;
+            if (se.getRootCause() != null) {
+                cause = se.getRootCause();
+            } else if (se.getCause() != null) {
+                cause = se.getCause();
+            } else {
+                cause = error;
+            }
+        } else {
+            if (error.getCause() != null) {
+                cause = error.getCause();
+            } else {
+                cause = error;
+            }
+        }
+        
+        HttpServletRequest request = page.getContext().getRequest();
+   
+        buffer.append("<div class='errorReport'>");
+        
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        if (cause instanceof ParseErrorException) {
+            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
+        } else {
+            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");            
+            buffer.append("<tr><td width='12%'><b>Message</b></td><td>");
+            String message = (cause.getMessage() != null) ? cause.getMessage() : "null";
+            buffer.append(StringEscapeUtils.escapeHtml(message));
+            buffer.append("</td></tr>");
+            buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
+            buffer.append(cause.getClass().getName());
+            buffer.append("</td></tr>");
+        }
+
+        buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br><tt>");
+        buffer.append(toStackTrace(cause));
+        buffer.append("</tt></td></tr>");
+        buffer.append("</table>");
+        buffer.append("<br/>");
+        
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
+        buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
+        buffer.append(page.getClass().getName());
+        buffer.append("</td></tr>");
+        buffer.append("<tr><td width='12%'><b>Path</b></td><td>");
+        buffer.append(page.getPath());
+        buffer.append("</td></tr>");
+        buffer.append("<tr><td><b width='12%'>Template</b></td><td>");
+        buffer.append(page.getTemplate());
+        buffer.append("</td></tr>");
+        buffer.append("</table>");
+        buffer.append("<br/>");
+
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Request</td></tr>");
+
+        TreeMap requestAttributes = new TreeMap();
+        Enumeration attributeNames = request.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String name = attributeNames.nextElement().toString();
+            requestAttributes.put(name, request.getAttribute(name));
+        }
+        buffer.append("<tr><td width='12%' valign='top'><b>Attributes</b></td><td>");
+        writeMap(buffer, requestAttributes);
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td width='12%'><b>Auth Type</b></td><td>");
+        buffer.append(request.getAuthType());
+        buffer.append("</td></tr>");
+
+        buffer.append("<tr><td width='12%'><b>Context Path</b></td><td>");
+        buffer.append(request.getContextPath());
+        buffer.append("</td></tr>");
+        
+        TreeMap requestHeaders = new TreeMap();
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String name = headerNames.nextElement().toString();
+            requestHeaders.put(name, request.getHeader(name));
+        }
+        buffer.append("<tr><td width='12%' valign='top'><b>Headers</b></td><td>");
+        writeMap(buffer, requestHeaders);
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td width='12%'><b>Query</b></td><td>");
+        buffer.append(request.getQueryString());
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td width='12%'><b>Method</b></td><td>");
+        buffer.append(request.getMethod());
+        buffer.append("</td></tr>");
+        
+        TreeMap requestParams = new TreeMap();
+        Enumeration paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String name = paramNames.nextElement().toString();
+            requestParams.put(name, request.getParameter(name));
+        }
+        buffer.append("<tr><td width='12%' valign='top'><b>Parameters</b></td><td>");
+        writeMap(buffer, requestParams);
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td width='12%'><b>Remote User</b></td><td>");
+        buffer.append(request.getRemoteUser());
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td width='12%' valign='top'><b>URI</b></td><td>");
+        buffer.append("<a href='");
+        buffer.append(request.getRequestURI());
+        buffer.append("'>");
+        buffer.append(request.getRequestURI());
+        buffer.append("</a>");
+        buffer.append("</td></tr>");
+        
+        buffer.append("<tr><td><b width='12%'>URL</b></td><td>");
+        buffer.append("<a href='");
+        buffer.append(request.getRequestURL());
+        buffer.append("'>");
+        buffer.append(request.getRequestURL());
+        buffer.append("</a>");
+        buffer.append("</td></tr>");
+        
+        TreeMap sessionAttributes = new TreeMap();
+        if (page.getContext().hasSession()) {
+            HttpSession session = request.getSession();
+            attributeNames = session.getAttributeNames();
+            while (attributeNames.hasMoreElements()) {
+                String name = attributeNames.nextElement().toString();
+                sessionAttributes.put(name, session.getAttribute(name));
+            }
+        }
+        buffer.append("<tr><td width='12%' valign='top'><b>Session</b></td><td>");
+        writeMap(buffer, sessionAttributes);
+        buffer.append("</td></tr>");
+        buffer.append("</table>");
+        
+        buffer.append("</div>");
+
+        return buffer.toString();
+    }
+
 
     /**
      * Invoke the named method on the given object and return the boolean result.
@@ -359,5 +523,18 @@ public class ClickUtils {
         buffer.append(property.substring(1));
 
         return buffer.toString();
+    }
+    
+    private static void writeMap(StringBuffer buffer, Map map) {
+        for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+            String name = i.next().toString();
+            buffer.append(name);
+            buffer.append("=");
+            buffer.append(map.get(name));
+            buffer.append("</br>");
+        }
+        if (map.isEmpty()) {
+            buffer.append("&nbsp;");
+        }
     }
 }

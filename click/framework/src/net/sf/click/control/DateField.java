@@ -30,12 +30,15 @@ import java.util.Date;
  * </tr>
  * </table>
  *
- * The DateField control provides a Date entry field and a popup Calendar Date
- * picker. Users can either key in a Date value or select a Date using the Calendar.
+ * The DateField control provides a Date entry field and a popup DHTML Calendar
+ * &lt;div&gt;. Users can either key in a Date value or select a Date using the 
+ * Calendar.
  * <p/>
- * The Calendar popup is created as a &lt;div&gt; element using JavaScript.
- * To enable the Calenar popup, reference the method {@link Form#getHtmlImports()}
- * in the page template (imports click/form.js file). For example.
+ * The Calendar popup is provided by the DHTML Calendar by
+ * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is 
+ * created as a &lt;div&gt; element using JavaScript. To enable the Calenar 
+ * popup, reference the method {@link Form#getHtmlImports()} in the page 
+ * template (imports click/form.js file). For example.
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -47,19 +50,6 @@ import java.util.Date;
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
- * <b>Important Notes</b>
- * <ul>
- * <li>
- * Take care laying out DateFields above Select controls, as there is a rendering
- * bug in Internet Explorer which draws Selects on top of the popup Calendar
- * &lt;div&gt;. This bug is not present in Mozilla Firefox.
- * <p/>
- * </li>
- * <li>
- * Including the HTML &lt;DOCTYPE&gt; in the page causes a positioning bug in
- * the display of the popup Calendar &lt;div&gt;.
- * </li>
- * </ul>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -71,11 +61,14 @@ public class DateField extends TextField {
     /** The JavaScript DHTML Calendar pattern. */
     protected String calendarPattern;
 
+    /** The date format. */
+    protected SimpleDateFormat dateFormat;
+    
     /** The date format pattern value. */
     protected String formatPattern;
 
-    /** The date format. */
-    protected SimpleDateFormat dateFormat;
+    /** The Calendar popup show time display bar flag. */
+    protected boolean showTime;
 
     // ----------------------------------------------------------- Constructors
 
@@ -97,7 +90,8 @@ public class DateField extends TextField {
     // ------------------------------------------------------ Public Attributes
     
     /**
-     * Return the JavaScript DHTML Calendar pattern.
+     * Return the JavaScript DHTML Calendar pattern. The DHTML Calendar pattern
+     * is defined when you set the format pattern.
      * 
      * @return the JavaScript DHTML Calendar pattern
      */
@@ -187,6 +181,24 @@ public class DateField extends TextField {
         } else {
             return null;
         }
+    }
+    
+    /**
+     * Return true if the DHTML Calendar popup will show the time display bar.
+     * 
+     * @return true if the DHTML Calendar popup will show the time display bar
+     */
+    public boolean getShowTime() {
+        return showTime;
+    }
+
+    /**
+     * Set the DHTML Calendar popup show the time display bar flag.
+     * 
+     * @param showTime the flag to show the Calendar time display bar
+     */
+    public void setShowTime(boolean showTime) {
+        this.showTime = showTime;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -293,6 +305,9 @@ public class DateField extends TextField {
         buffer.append(" ifFormat :    '");
         buffer.append(getCalendarPattern());
         buffer.append("', \n");
+        if (getShowTime()) {
+            buffer.append(" showsTime : true, \n");
+        }
         buffer.append(" button : '");
         buffer.append(getName());
         buffer.append("-button', \n");
@@ -315,18 +330,26 @@ public class DateField extends TextField {
         StringBuffer jsPattern = new StringBuffer(20);
         int tokenStart = -1;
         int tokenEnd = -1;
+        boolean debug = false;
         
         for (int i = 0; i < pattern.length(); i++) {
-            char aChar = pattern.charAt(i);    
-System.err.print("["+i+","+tokenStart+","+tokenEnd+"]="+aChar);
+            char aChar = pattern.charAt(i); 
+            if (debug) {
+                System.err.print("["+i+","+tokenStart+","+tokenEnd+"]="+aChar);
+            }
+            
             // If character is in SimpleDateFormat pattern character set
-            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {      
-System.err.println(" N");               
+            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
+                if (debug) {
+                    System.err.println(" N");      
+                }
                 if (tokenStart > -1) {
                     tokenEnd = i;
                 }
             } else {
-System.err.println(" Y"); 
+                if (debug) {
+                    System.err.println(" Y"); 
+                }
                 if (tokenStart == -1) {
                     tokenStart = i;                
                 }
@@ -367,9 +390,39 @@ System.err.println(" Y");
                         jsPattern.append("%p");
                     } else if ("a".equals(token)) {
                         jsPattern.append("%p");
+                    } else if ("HH".equals(token)) {
+                        jsPattern.append("%H");
+                        setShowTime(true);
+                    } else if ("H".equals(token)) {
+                        jsPattern.append("%H");
+                        setShowTime(true);
+                    } else if ("hh".equals(token)) {
+                        jsPattern.append("%l");
+                        setShowTime(true);
+                    } else if ("h".equals(token)) {
+                        jsPattern.append("%l");
+                        setShowTime(true);
+                    } else if ("mm".equals(token)) {
+                        jsPattern.append("%M");
+                        setShowTime(true);
+                    } else if ("m".equals(token)) {
+                        jsPattern.append("%M");
+                        setShowTime(true);
+                    } else if ("ss".equals(token)) {
+                        jsPattern.append("%S");
+                        setShowTime(true);
+                    } else if ("s".equals(token)) {
+                        jsPattern.append("%S");
+                        setShowTime(true);
+                    } else {
+                        if (debug) {
+                            System.err.println("Not mapped:" + token);
+                        }
                     }
                     
-                    System.err.println("token["+tokenStart+","+tokenEnd+"]='" + token + "'");
+                    if (debug) {
+                        System.err.println("token["+tokenStart+","+tokenEnd+"]='" + token + "'");
+                    }
                     tokenStart = -1;
                     tokenEnd = -1;
                 }
