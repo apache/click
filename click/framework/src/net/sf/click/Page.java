@@ -243,8 +243,8 @@ public class Page {
      * The page class:
      * <pre class="codeJava">
      *  <span class="kw">package</span> com.mycorp.pages;
-     * 
-     *  <span class="kw">public class</span> Login <span class="kw">extends</span> Page { 
+     *
+     *  <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
      *     .. </pre>
      *
      * The page class property filenames and their path:
@@ -355,25 +355,25 @@ public class Page {
     public void setRedirect(String value) {
         redirect = value;
     }
-    
+
     /**
      * Return the path of the page template to render, by default this method
      * returns {@link #getPath()}.
      * <p/>
-     * Pages can override this method to return an alternative page template. 
+     * Pages can override this method to return an alternative page template.
      * This is very useful when implementing an standardized look and feel for
-     * a web site. The example below provides a BorderedPage base Page which 
-     * other site templated Pages should extend. 
+     * a web site. The example below provides a BorderedPage base Page which
+     * other site templated Pages should extend.
      *
      * <pre class="codeJava">
      * <span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
      *     <span class="kw">public</span> String getTemplate() {
-     *         <span class="kw">return</span> <span class="st">"border.htm"</span>;  
+     *         <span class="kw">return</span> <span class="st">"border.htm"</span>;
      *     }
      * } </pre>
-     * 
-     * The BorderedPage returns the page border template <span class="st">"border.htm"</span>: 
-     * 
+     *
+     * The BorderedPage returns the page border template <span class="st">"border.htm"</span>:
+     *
      * <pre class="codeHtml">
      * &lt;html&gt;
      *   &lt;head&gt;
@@ -381,21 +381,21 @@ public class Page {
      *     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
      *   &lt;/head&gt;
      *   &lt;body&gt;
-     * 
+     *
      *     &lt;h1&gt; <span class="blue">$title</span> &lt;/h1&gt;
      *     &lt;hr/&gt;
-     * 
+     *
      *     <span class="red">#parse</span>( <span class="blue">$path</span> )
-     * 
+     *
      *   &lt;/body&gt;
      * &lt;/html&gt; </pre>
-     * 
-     * Other pages insert their content into this template, via their 
-     * {@link #path} property using the Velocity 
+     *
+     * Other pages insert their content into this template, via their
+     * {@link #path} property using the Velocity
      * <a href="../../../../velocity/vtl-reference-guide.html#parse">#parse</a>
-     * directive. Note the <span class="blue">$path</span> value is automatically 
+     * directive. Note the <span class="blue">$path</span> value is automatically
      * added to the VelocityContext by the ClickServlet.
-     * 
+     *
      * @return the path of the page template to render, by default returns
      * {@link #getPath()}.
      */

@@ -43,7 +43,7 @@ import net.sf.click.Context;
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
- * 
+ *
  *     Form form;
  *     RadioGroup radioGroup;
  *     ..

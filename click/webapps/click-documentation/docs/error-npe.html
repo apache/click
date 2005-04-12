@@ -1,0 +1,161 @@
+<html><head>
+
+<title>Error Page</title><style>
+body {
+  font-family: verdana, arial, sans-serif;
+}
+td.header {
+  color: white;
+  background: navy;
+}
+</style></head>
+<body>
+ <h1>Error Page</h1>
+ 
+ The application encountered an unexpected error.
+ 
+ <!-- if not "production" mode then print out debug info -->
+  
+ <p>
+
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"><b>Exception</b></td>
+  </tr>
+  <tr>
+   <td width="12%"><b>Message</b></td>
+   <td>Oh No... &nbsp;</td>
+  </tr>
+  <tr>
+   <td width="12%"><b>Class</b></td>
+   <td>java.lang.NullPointerException</td>
+  </tr>
+  <tr>
+   <td colspan="2">
+    <b>Stack trace</b><br>
+    <small>java.lang.NullPointerException: Oh No...
+<br>&nbsp;&nbsp;&nbsp;	at examples.page.ExceptionDemo.onExceptionClick(ExceptionDemo.java:49)
+<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+<br>&nbsp;&nbsp;&nbsp;	at java.lang.reflect.Method.invoke(Method.java:324)
+<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.util.ClickUtils.invokeListener(ClickUtils.java:189)
+<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.control.ActionLink.onProcess(ActionLink.java:471)
+<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.ClickServlet.handleRequest(ClickServlet.java:236)
+<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.ClickServlet.doGet(ClickServlet.java:166)
+<br>&nbsp;&nbsp;&nbsp;	at javax.servlet.http.HttpServlet.service(HttpServlet.java:689)
+<br>&nbsp;&nbsp;&nbsp;	at javax.servlet.http.HttpServlet.service(HttpServlet.java:802)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:252)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:173)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:214)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:178)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:126)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:105)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:107)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:148)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:825)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:738)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.net.PoolTcpEndpoint.processSocket(PoolTcpEndpoint.java:526)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.net.LeaderFollowerWorkerThread.runIt(LeaderFollowerWorkerThread.java:80)
+<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:684)
+<br>&nbsp;&nbsp;&nbsp;	at java.lang.Thread.run(Thread.java:534)
+<br></small>
+   </td>
+  </tr>
+ </tbody></table>
+
+ <br> 
+ 
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
+  </tr>
+  <tr>
+   <td width="16%"><b>Classname</b></td><td>
+ examples.page.ExceptionDemo    </td>
+  </tr>
+  <tr>
+   <td><b>Path</b></td><td>
+ exception.htm    </td>
+  </tr>
+    <tr>
+   <td><b>Template</b></td><td>
+ border.htm    </td>
+  </tr>
+ </tbody></table>
+  
+ <br> 
+ 
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
+  </tr>
+  <tr valign="top">
+   <td width="16%"><b>Attributes</b></td>
+   <td>
+    <small>
+   </small>
+    &nbsp;    </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Auth Type</b></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Context Path</b></td>
+   <td>/click-examples</td>
+  </tr> 
+  <tr valign="top">
+   <td><b>Headers</b></td><td>
+    <small>
+ accept='text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5' <br>
+ accept-charset='ISO-8859-1,utf-8;q=0.7,*;q=0.7' <br>
+ accept-encoding='gzip,deflate' <br>
+ accept-language='en-us,en;q=0.5' <br>
+ connection='keep-alive' <br>
+ host='localhost:8080' <br>
+ keep-alive='300' <br>
+ referer='http://localhost:8080/click-examples/exception.htm' <br>
+ user-agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2' <br>
+    </small>
+       </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Query</b></td>
+   <td>&nbsp;</td>
+  </tr>  
+  <tr valign="top">
+   <td width="16%"><b>Method</b></td>
+   <td>GET</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Parameters</b></td>
+   <td>
+    <small>
+ actionLink='exceptionLink' <br>
+    </small>
+       </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Remote User</b></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Session</b></td><td>
+    <small>
+    </small>
+     &nbsp;    </td>
+  </tr>
+  <tr valign="top">
+   <td><b>URI</b></td>
+   <td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td>
+  </tr>   
+  <tr valign="top">
+   <td><b>URL</b></td>
+   <td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td>
+  </tr>
+ </tbody></table>
+ 
+  <!-- if not "production" mode -->
+
+</p></body></html>

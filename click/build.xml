@@ -36,7 +36,9 @@
       <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
       <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
       <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>        
-      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>     
+      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/> 
+   	<delete file="${dir.classes}/org/apache/velocity/app/VelocityEngine.class"/>
+      <delete file="${dir.classes}/org/apache/velocity/runtime/RuntimeServices.class"/>  
       <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="**/Test*">
          <classpath>
             <fileset dir="lib">

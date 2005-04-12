@@ -28,7 +28,7 @@ public class LayoutForm extends EditCustomer {
         POSITION_OPTIONS.add(new Select.Option("middle", "Middle"));
         POSITION_OPTIONS.add(new Select.Option("bottom", "Buttom"));
     }
-    
+
     static final String[] COLUMNS = { "1", "2", "3", "4" };
 
     HiddenField errorsPositionHidden = new HiddenField("errorsPosition", Integer.class);
@@ -80,7 +80,7 @@ public class LayoutForm extends EditCustomer {
         errorsPositionSelect.setTitle("Form errors position");
         errorsPositionSelect.setValue("middle");
         styleForm.add(errorsPositionSelect);
-        
+
         columnsSelect = new Select("Columns");
         columnsSelect.addAll(COLUMNS);
         columnsSelect.setTitle("Form columns");
@@ -147,9 +147,9 @@ public class LayoutForm extends EditCustomer {
             labelsPositionHidden.setValue(new Integer(Form.TOP));
         }
 
-        labelAlignHidden.setValue(labelAlignSelect.getValue());        
+        labelAlignHidden.setValue(labelAlignSelect.getValue());
         columnsHidden.setValue(Integer.valueOf(columnsSelect.getValue()));
-        
+
         return true;
     }
 

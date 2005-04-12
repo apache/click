@@ -35,6 +35,7 @@ import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -53,6 +54,9 @@ import org.apache.velocity.exception.ParseErrorException;
  * @author Malcolm Edgar
  */
 public class ClickUtils {
+
+    /** The number of template lines to display in error report. */
+    protected static final int NUMBER_TEMPLATE_LINES = 8;
 
     // --------------------------------------------------------- Public Methods
 
@@ -173,17 +177,21 @@ public class ClickUtils {
             close(bis);
         }
     }
-    
+
     /**
-     * Return a error HTML display.
-     * 
+     * Return a error report HTML &lt;div&gt; element for the given error and
+     * page. The HTML &lt;div&gt; element 'id' and 'class' attribute values are
+     * 'errorReport'.
+     *
      * @param error the page error
      * @param page the page which caused the error
+     * @param renderTemplate flag to render the template with the error if a
+     *  ParseErrorException occured, otherwise render the error stack trace
      * @return a error HTML display
      */
-    public static String getErrorReport(Exception error, Page page) {
+    public static String getErrorReport(Throwable error, Page page, boolean renderTemplate) {
         StringBuffer buffer = new StringBuffer(10 * 1024);
-         
+
         Throwable cause = null;
         if (error instanceof ServletException) {
             ServletException se = (ServletException) error;
@@ -201,16 +209,39 @@ public class ClickUtils {
                 cause = error;
             }
         }
-        
+
         HttpServletRequest request = page.getContext().getRequest();
-   
-        buffer.append("<div class='errorReport'>");
-        
+
+        buffer.append("<div id='errorReport' class='errorReport'>\n");
+
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         if (cause instanceof ParseErrorException) {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
+            if (renderTemplate) {
+                ParseErrorException parseError = (ParseErrorException) cause;
+                ServletContext servletContext = page.getContext().getServletContext();
+
+                String templateErrorSection =
+                    getTemplateErrorSection(parseError, servletContext);
+
+                buffer.append("<tr><td valign='top' colspan='2' bgcolor='#EOEOEO'><b>Template:</b>&nbsp;");
+                buffer.append(parseError.getTemplateName());
+                buffer.append("<br><span style='font-family: Courier New, courier;'>");
+                buffer.append(templateErrorSection);
+                buffer.append("</span></td></tr>");
+                buffer.append("</table>");
+                buffer.append("<br/>");
+
+            } else {
+                buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br>");
+                buffer.append("<span style='font-family: Courier New, courier;'>");
+                buffer.append(toStackTrace(cause));
+                buffer.append("</span></td></tr>");
+                buffer.append("</table>");
+                buffer.append("<br/>");
+            }
         } else {
-            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");            
+            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");
             buffer.append("<tr><td width='12%'><b>Message</b></td><td>");
             String message = (cause.getMessage() != null) ? cause.getMessage() : "null";
             buffer.append(StringEscapeUtils.escapeHtml(message));
@@ -218,14 +249,14 @@ public class ClickUtils {
             buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
             buffer.append(cause.getClass().getName());
             buffer.append("</td></tr>");
+            buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br>");
+            buffer.append("<span style='font-family: Courier New, courier;'>");
+            buffer.append(toStackTrace(cause));
+            buffer.append("</span></td></tr>");
+            buffer.append("</table>");
+            buffer.append("<br/>");
         }
 
-        buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br><tt>");
-        buffer.append(toStackTrace(cause));
-        buffer.append("</tt></td></tr>");
-        buffer.append("</table>");
-        buffer.append("<br/>");
-        
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
         buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
@@ -250,17 +281,21 @@ public class ClickUtils {
             requestAttributes.put(name, request.getAttribute(name));
         }
         buffer.append("<tr><td width='12%' valign='top'><b>Attributes</b></td><td>");
-        writeMap(buffer, requestAttributes);
+        writeMap(requestAttributes, buffer);
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td width='12%'><b>Auth Type</b></td><td>");
         buffer.append(request.getAuthType());
         buffer.append("</td></tr>");
 
         buffer.append("<tr><td width='12%'><b>Context Path</b></td><td>");
+        buffer.append("<a href='");
         buffer.append(request.getContextPath());
+        buffer.append("'>");
+        buffer.append(request.getContextPath());
+        buffer.append("</a>");
         buffer.append("</td></tr>");
-        
+
         TreeMap requestHeaders = new TreeMap();
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
@@ -268,17 +303,17 @@ public class ClickUtils {
             requestHeaders.put(name, request.getHeader(name));
         }
         buffer.append("<tr><td width='12%' valign='top'><b>Headers</b></td><td>");
-        writeMap(buffer, requestHeaders);
+        writeMap(requestHeaders, buffer);
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td width='12%'><b>Query</b></td><td>");
         buffer.append(request.getQueryString());
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td width='12%'><b>Method</b></td><td>");
         buffer.append(request.getMethod());
         buffer.append("</td></tr>");
-        
+
         TreeMap requestParams = new TreeMap();
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
@@ -286,13 +321,13 @@ public class ClickUtils {
             requestParams.put(name, request.getParameter(name));
         }
         buffer.append("<tr><td width='12%' valign='top'><b>Parameters</b></td><td>");
-        writeMap(buffer, requestParams);
+        writeMap(requestParams, buffer);
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td width='12%'><b>Remote User</b></td><td>");
         buffer.append(request.getRemoteUser());
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td width='12%' valign='top'><b>URI</b></td><td>");
         buffer.append("<a href='");
         buffer.append(request.getRequestURI());
@@ -300,7 +335,7 @@ public class ClickUtils {
         buffer.append(request.getRequestURI());
         buffer.append("</a>");
         buffer.append("</td></tr>");
-        
+
         buffer.append("<tr><td><b width='12%'>URL</b></td><td>");
         buffer.append("<a href='");
         buffer.append(request.getRequestURL());
@@ -308,7 +343,7 @@ public class ClickUtils {
         buffer.append(request.getRequestURL());
         buffer.append("</a>");
         buffer.append("</td></tr>");
-        
+
         TreeMap sessionAttributes = new TreeMap();
         if (page.getContext().hasSession()) {
             HttpSession session = request.getSession();
@@ -319,11 +354,11 @@ public class ClickUtils {
             }
         }
         buffer.append("<tr><td width='12%' valign='top'><b>Session</b></td><td>");
-        writeMap(buffer, sessionAttributes);
+        writeMap(sessionAttributes, buffer);
         buffer.append("</td></tr>");
-        buffer.append("</table>");
-        
-        buffer.append("</div>");
+        buffer.append("</table>\n");
+
+        buffer.append("</div>\n");
 
         return buffer.toString();
     }
@@ -524,13 +559,185 @@ public class ClickUtils {
 
         return buffer.toString();
     }
-    
-    private static void writeMap(StringBuffer buffer, Map map) {
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return a HTML rendered section of the  page template with the error
+     * line highlighted.
+     *
+     * @param error the parse error
+     * @return a HTML rendered section of the parsing error page template
+     */
+    protected static String getTemplateErrorSection(ParseErrorException error, ServletContext context) {
+
+        final int errorLine = error.getLineNumber();
+
+        StringBuffer buffer = new StringBuffer();
+
+        InputStream is = context.getResourceAsStream(error.getTemplateName());
+
+        if (is != null) {
+            try {
+                int line = 1;
+                if (displayLine(line, errorLine)) {
+                    buffer.append(formatLineNumber(line, errorLine));
+                }
+
+                int value = is.read();
+                while (value > -1) {
+
+
+                    char aChar = (char) value;
+                    if (aChar == '\n') {
+
+                        line++;
+
+                        // If previous line was error line close bold tag.
+                        if (line == errorLine + 1) {
+                            buffer.append("</b>");
+                        }
+
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("</font><br/>");
+                            buffer.append(formatLineNumber(line, errorLine));
+                        }
+
+                    } else if (aChar == '<') {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("&lt;");
+                        }
+                    } else if (aChar == '>') {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("&gt;");
+                        }
+                    } else if (aChar == '&') {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("&amp;");
+                        }
+                    } else if (aChar == '"') {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("&quot;");
+                        }
+                    } else if (aChar == ' ') {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append("&nbsp;");
+                        }
+                    } else {
+                        if (displayLine(line, errorLine)) {
+                            buffer.append(aChar);
+                        }
+                    }
+                    value = is.read();
+                }
+
+            } catch (IOException ioe) {
+                buffer = new StringBuffer();
+                buffer.append("Could not load page template: " + ioe);
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException ioe) {
+                    // do nothing
+                }
+            }
+
+        } else {
+            buffer.append("Page template not available.");
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return the HTML formatted parse error error message from the given error.
+     *
+     * @param error the Velocity ParseErrorException error
+     * @return the HTML formatted error message
+     */
+    protected static String getParseMessage(Throwable error) {
+
+        StringTokenizer tokenizer =
+            new StringTokenizer(error.getMessage(), "\n\r");
+
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(tokenizer.nextToken());
+        buffer.append(" ");
+
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = token.replace('"', ' ');
+            if (token.endsWith("...")) {
+                buffer.append(token.substring(0, token.length() - 3));
+            } else {
+                buffer.append(token);
+            }
+        }
+
+        return StringEscapeUtils.escapeHtml(buffer.toString());
+    }
+
+    /**
+     * Return a HTML formatted line number string.
+     *
+     * @param lineNumber the line number to format
+     * @param errorLine the error line number
+     * @return a HTML formatted line number string
+     */
+    protected static String formatLineNumber(int lineNumber, int errorLine) {
+        StringBuffer buffer = new StringBuffer();
+
+        if (lineNumber == errorLine) {
+            buffer.append("<font color='red'><b>");
+        } else {
+            buffer.append("<font color='navy'>");
+        }
+
+        String lineStr = "" + lineNumber;
+
+        int numberSpace = 3 - lineStr.length();
+
+        for (int i = 0; i < numberSpace; i++) {
+            buffer.append("&nbsp;");
+        }
+
+        buffer.append(lineNumber);
+        if (lineNumber == errorLine) {
+            buffer.append(":&nbsp;&nbsp;");
+        } else {
+            buffer.append(":&nbsp;&nbsp;");
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return true if the given line should be displayed for the given error
+     * line.
+     *
+     * @param line the line number to test
+     * @param errorLine the line number where the error occured
+     * @return true if line should be displayed for the given error
+     */
+    protected static boolean displayLine(int line, int errorLine) {
+        return (line >= errorLine - NUMBER_TEMPLATE_LINES
+                && line <= errorLine + NUMBER_TEMPLATE_LINES);
+    }
+
+    /**
+     * Write out the map name value pairs as name=value lines to the string
+     * buffer.
+     *
+     * @param map the Map of name value pairs
+     * @param buffer the string buffer to write out the values to
+     */
+    protected static void writeMap(Map map, StringBuffer buffer) {
         for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
             String name = i.next().toString();
+            String value = map.get(name).toString();
             buffer.append(name);
             buffer.append("=");
-            buffer.append(map.get(name));
+            buffer.append(StringEscapeUtils.escapeHtml(value));
             buffer.append("</br>");
         }
         if (map.isEmpty()) {
