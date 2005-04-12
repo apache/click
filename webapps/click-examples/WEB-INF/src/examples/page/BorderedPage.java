@@ -18,14 +18,14 @@ package examples.page;
 import net.sf.click.Page;
 
 /**
- * Provides a page border template. This Page returns the template 
+ * Provides a page border template. This Page returns the template
  * <tt>"border.htm"</tt>, and sets the Page model values <tt>$title</tt> and
  * <tt>$srcPath</tt>.
  *
  * @author Malcolm Edgar
  */
 public class BorderedPage extends Page {
-    
+
     /**
      * Create a BorderedPage and set the model attributes <tt>$title</tt> and
      * <tt>$srcPath</tt>.
@@ -36,7 +36,7 @@ public class BorderedPage extends Page {
      */
     public BorderedPage() {
         String className = getClass().getName();
-        
+
         String shortName = className.substring(className.lastIndexOf('.') + 1);
         StringBuffer title = new StringBuffer(shortName.length() + 1);
         title.append(shortName.charAt(0));
@@ -47,7 +47,7 @@ public class BorderedPage extends Page {
             }
             title.append(aChar);
         }
-        addModel("title", title);       
+        addModel("title", title);
 
         String srcPath = className.replace('.', '/') + ".java";
         addModel("srcPath", srcPath);
@@ -55,10 +55,10 @@ public class BorderedPage extends Page {
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"border.htm"</tt>
-     * 
+     *
      * @see Page#getTemplate()
      */
     public String getTemplate() {
         return "border.htm";
-    }   
+    }
 }

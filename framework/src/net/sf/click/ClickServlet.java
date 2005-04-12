@@ -87,12 +87,12 @@ import org.apache.velocity.util.SimplePool;
  */
 public class ClickServlet extends HttpServlet {
 
-	// --------------------------------------------------------------- Contants
-	
-	private static final long serialVersionUID = 3835158375989262128L;
+    // --------------------------------------------------------------- Contants
+    
+    private static final long serialVersionUID = 3835158375989262128L;
 
 
-	/** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
+    /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
     protected final static String CLICK_FORWARD = "click-forward";
 
     // ------------------------------------------------------ Instance Varables
@@ -451,13 +451,22 @@ public class ClickServlet extends HttpServlet {
         } catch (ParseErrorException error) {
             // Parse error probably occured in content, as output has already
             // been written to write out an error message before it is closed.
-            // TODO: dont display if in production mode
             if (!page.getTemplate().equals(page.getPath())) {
-                velocityWriter.write(ClickUtils.getErrorReport(error, page));
+                if (!clickApp.isProductionMode()) {
+                    String errorReport =
+                        ClickUtils.getErrorReport(error, page, true);
+                    velocityWriter.write(errorReport);
+                } else {
+                    StringBuffer buffer = new StringBuffer(80);
+                    buffer.append("<div id='errorReport' class='errorReport'>\n");
+                    buffer.append("The application encountered an unexpected error.\n");
+                    buffer.append("</div>\n");
+                    velocityWriter.write(buffer.toString());
+                }
             }
-            
+
             throw error;
-            
+
         } finally {
             try {
                 if (velocityWriter != null) {
@@ -634,7 +643,7 @@ public class ClickServlet extends HttpServlet {
                 logger.warn(msg);
             }
         }
-        
+
         return context;
     }
 

@@ -2,166 +2,38 @@
 <head>
 <title>Error Page</title>
 <style>
-body {
+body, table, td {
   font-family: verdana, arial, sans-serif;
+  font-size: small;
 }
 td.header {
   color: white;
   background: navy;
 }
+.errorReport {
+  display: none;
+}
 </style>
+<script type='text/javascript'>
+function displayError() {
+  errorReport = document.getElementById('errorReport');
+  errorReport.style.display = 'block';
+  return true;
+}
+</script>
 </head>
 
 <body>
  <h1>Error Page</h1>
  
  The application encountered an unexpected error.
- 
- <!-- if not "production" mode then print out debug info -->
- #if( !($mode == "production") )
- 
  <p/>
-
- <table border="1" cellspacing="1" cellpadding="4" width="100%">
-#if( $isParseError )
-  <tr>
-   <td colspan="2" class="header"> &nbsp; <b>Page Parsing Error</b></td>
-  </tr>  
-  <tr>
-   <td width="12%" valign="top"><b>Message</b></td>
-   	<td><small>$errorMessage</small></td>
-  </tr>
-  <tr>
-   <td colspan="2" bgcolor="#EOEOEO">
-    <b>Page template:</b> $templatePath <br/><br/>
-    <tt>
-    $templateErrorSection
-    </tt>
-   </td>
-  </tr>
-#else 
-  <tr>
-   <td colspan="2" class="header"><b>Exception</b></td>
-  </tr>
-  <tr>
-   <td width="12%"><b>Message</b></td>
-   <td>$errorMessage &nbsp;</td>
-  </tr>
-  <tr>
-   <td width="12%"><b>Class</b></td>
-   <td>$errorClass</td>
-  </tr>
-  <tr>
-   <td colspan="2">
-    <b>Stack trace</b><br/>
-    <small>$errorStackTrace</small>
-   </td>
-  </tr>
-#end
- </table>
-
- <br/> 
  
- <table border="1"  cellspacing="1" cellpadding="4" width="100%">
-  <tr>
-   <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
-  </tr>
-  <tr>
-   <td width="16%"><b>Classname</b></td><td>
-#if( $page ) $page.class.name #else &nbsp; #end
-   </td>
-  </tr>
-  <tr>
-   <td><b>Path</b></td><td>
-#if( $page ) $page.path #else &nbsp; #end
-   </td>
-  </tr>
-    <tr>
-   <td><b>Template</b></td><td>
-#if( $page ) $page.template #else &nbsp; #end
-   </td>
-  </tr>
- </table>
-  
- <br/> 
- 
- <table border="1" cellspacing="1" cellpadding="4" width="100%">
-  <tr>
-   <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
-  </tr>
-  <tr valign="top">
-   <td width="16%"><b>Attributes</b></td>
-   <td>
-    <small>
-#foreach( $key in $requestAttributes.keySet() )   	
- $key='$requestAttributes.get($key)' <br/>
-#end
-   </small>
-   #if ($requestAttributes.isEmpty()) &nbsp; #end
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Auth Type</b></td>
-   <td>$format.string($request.authType)</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Context Path</b></td>
-   <td>$format.string($request.contextPath)</td>
-  </tr> 
-  <tr valign="top">
-   <td><b>Headers</b></td><td>
-    <small>
-#foreach( $key in $requestHeaders.keySet() )   	
- $key='$requestHeaders.get($key)' <br/>
-#end
-    </small>
-    #if ($requestHeaders.isEmpty()) &nbsp; #end
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Query</b></td>
-   <td>$format.string($request.query)</td>
-  </tr>  
-  <tr valign="top">
-   <td width="16%"><b>Method</b></td>
-   <td>$request.method</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Parameters</b></td>
-   <td>
-    <small>
-#foreach( $key in $requestParams.keySet() )   	
- $key='$requestParams.get($key)' <br/>
-#end
-    </small>
-    #if ($requestParams.isEmpty()) &nbsp; #end
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Remote User</b></td>
-   <td>$format.string($request.remoteUser)</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Session</b></td><td>
-    <small>
-#foreach( $key in $sessionAttributes.keySet() )   	
- $key=$sessionAttributes.get($key) <br/>
-#end
-    </small>
-    #if ($sessionAttributes.isEmpty()) &nbsp; #end
-   </td>
-  </tr>
-  <tr valign="top">
-   <td><b>URI</b></td>
-   <td><a href="$request.requestURL">$request.requestURI</a></td>
-  </tr>   
-  <tr valign="top">
-   <td><b>URL</b></td>
-   <td><a href="$request.requestURL">$request.requestURL</a></td>
-  </tr>
- </table>
- 
- #end <!-- if not "production" mode -->
+ #if ($mode != "production")
+   To view error details click <a href="#" onclick="displayError();">here</a>.
+   <p/>
+   $errorReport
+ #end
 
 </body>
 </html>

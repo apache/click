@@ -10,7 +10,7 @@ import net.sf.click.control.ActionLink;
  * @author Malcolm Edgar
  */
 public class ExceptionDemo extends BorderedPage {
-    
+
     String template;
 
     /**
@@ -20,7 +20,7 @@ public class ExceptionDemo extends BorderedPage {
         ActionLink brokenContentLink = new ActionLink("brokenContentLink");
         brokenContentLink.setListener(this, "onBrokenContentClick");
         addControl(brokenContentLink);
-        
+
         ActionLink brokenTemplateLink = new ActionLink("brokenTemplateLink");
         brokenTemplateLink.setListener(this, "onBrokenTemplateClick");
         addControl(brokenTemplateLink);
@@ -33,7 +33,7 @@ public class ExceptionDemo extends BorderedPage {
         missingMethodLink.setListener(this, "missingMethodClick");
         addControl(missingMethodLink);
     }
-    
+
     public boolean onBrokenContentClick() {
         setPath("broken-content.htm");
         return true;
@@ -48,7 +48,7 @@ public class ExceptionDemo extends BorderedPage {
     public boolean onExceptionClick() {
         throw new NullPointerException("Oh No...");
     }
-    
+
     /**
      * Override getTemplate so we can stuff things up.
      *

@@ -27,7 +27,7 @@ public class SourceViewer extends BorderedPage {
             "class", "public", "protected", "private", "extends", "implements",
             "return", "if", "while", "for", "do", "else", "try", "new", "void",
             "catch", "throws", "throw", "static", "final", "break", "continue",
-            "super", "finally", "true", "false", "null", "boolean", "int", 
+            "super", "finally", "true", "false", "null", "boolean", "int",
             "char", "long", "float", "double", "short" };
 
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
@@ -35,7 +35,7 @@ public class SourceViewer extends BorderedPage {
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
             "i", "u", "ul", "ol", "li", "form" };
 
-    private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(", 
+    private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
             "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
             "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#" };
@@ -66,7 +66,7 @@ public class SourceViewer extends BorderedPage {
         ServletContext context = getContext().getServletContext();
 
         // Orion server requires '/' prefix to find resources
-        String resourceFilename = 
+        String resourceFilename =
             (filename.charAt(0) != '/') ? "/" + filename : filename;
 
         InputStream in = null;

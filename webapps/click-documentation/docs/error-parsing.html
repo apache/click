@@ -1,0 +1,150 @@
+<html><head>
+
+<title>Error Page</title><style>
+body {
+  font-family: verdana, arial, sans-serif;
+}
+td.header {
+  color: white;
+  background: navy;
+}
+</style></head>
+<body>
+ <h1>Error Page</h1>
+ 
+ The application encountered an unexpected error.
+ 
+ <!-- if not "production" mode then print out debug info -->
+  
+ <p>
+
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"> &nbsp; <b>Page Parsing Error</b></td>
+  </tr>  
+  <tr>
+   <td valign="top" width="12%"><b>Message</b></td>
+   	<td><small>Encountered
+"," at line 11, column 22. Was expecting one of: &lt;RPAREN&gt;
+&lt;IDENTIFIER&gt; { &lt;WORD&gt; &lt;STRING_LITERAL&gt;
+&lt;INTEGER_LITERAL&gt; [ &lt;FLOATING_POINT_LITERAL&gt; { true false </small></td>
+  </tr>
+  <tr>
+   <td colspan="2" bgcolor="#e0e0e0">
+    <b>Page template:</b> broken-template.htm <br><br>
+    <tt>
+    <br><font color="navy">&nbsp;&nbsp;3:&nbsp;&nbsp;&lt;title&gt;Click&nbsp;Examples&nbsp;-&nbsp;$title&lt;/title&gt;
+</font><br><font color="navy">&nbsp;&nbsp;4:&nbsp;&nbsp;&lt;link&nbsp;rel="stylesheet"&nbsp;type="text/css"&nbsp;href="style.css"&nbsp;title="Style"&gt;
+</font><br><font color="navy">&nbsp;&nbsp;5:&nbsp;&nbsp;#if&nbsp;($form)&nbsp;$form.htmlImports&nbsp;#end
+</font><br><font color="navy">&nbsp;&nbsp;6:&nbsp;&nbsp;&lt;/head&gt;	</font><br><font color="navy">&nbsp;&nbsp;7:&nbsp;&nbsp;&lt;body&gt;
+</font><br><font color="navy">&nbsp;&nbsp;8:&nbsp;&nbsp;&nbsp;	</font><br><font color="navy">&nbsp;&nbsp;9:&nbsp;&nbsp;&lt;h1&gt;$title&lt;/h1&gt;&nbsp;
+</font><br><font color="navy">&nbsp;10:&nbsp;&nbsp;
+</font><br><font color="red"><b>&nbsp;11:&nbsp;&nbsp;#writeForm(&nbsp;$srcPath&nbsp;,&nbsp;$path&nbsp;)
+</b></font><br><font color="navy">&nbsp;12:&nbsp;&nbsp;
+</font><br><font color="navy">&nbsp;13:&nbsp;&nbsp;Hello&nbsp;world&nbsp;from&nbsp;&lt;b&gt;Click&lt;/b&gt;&nbsp;at&nbsp;$time
+</font><br><font color="navy">&nbsp;14:&nbsp;&nbsp;&lt;p&gt;
+</font><br><font color="navy">&nbsp;15:&nbsp;&nbsp;To&nbsp;refresh&nbsp;click&nbsp;&lt;a&nbsp;href="hello-world.htm"&gt;here&lt;/a&gt;.
+</font><br><font color="navy">&nbsp;16:&nbsp;&nbsp;
+</font><br><font color="navy">&nbsp;17:&nbsp;&nbsp;&lt;/body&gt;
+</font><br><font color="navy">&nbsp;18:&nbsp;&nbsp;&lt;/html&gt;
+</font><br><font color="navy">&nbsp;19:&nbsp;&nbsp;
+    </font></tt>
+<font color="navy">   </font></td>
+  </tr>
+ </tbody></table>
+
+ <br> 
+ 
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
+  </tr>
+  <tr>
+   <td width="16%"><b>Classname</b></td><td>
+ examples.page.ExceptionDemo    </td>
+  </tr>
+  <tr>
+   <td><b>Path</b></td><td>
+ broken-template.htm    </td>
+  </tr>
+    <tr>
+   <td><b>Template</b></td><td>
+ broken-template.htm    </td>
+  </tr>
+ </tbody></table>
+  
+ <br> 
+ 
+ <table border="1" cellpadding="4" cellspacing="1" width="100%">
+  <tbody><tr>
+   <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
+  </tr>
+  <tr valign="top">
+   <td width="16%"><b>Attributes</b></td>
+   <td>
+    <small>
+   </small>
+    &nbsp;    </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Auth Type</b></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Context Path</b></td>
+   <td>/click-examples</td>
+  </tr> 
+  <tr valign="top">
+   <td><b>Headers</b></td><td>
+    <small>
+ accept='text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5' <br>
+ accept-charset='ISO-8859-1,utf-8;q=0.7,*;q=0.7' <br>
+ accept-encoding='gzip,deflate' <br>
+ accept-language='en-us,en;q=0.5' <br>
+ connection='keep-alive' <br>
+ host='localhost:8080' <br>
+ keep-alive='300' <br>
+ referer='http://localhost:8080/click-examples/exception.htm' <br>
+ user-agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2' <br>
+    </small>
+       </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Query</b></td>
+   <td>&nbsp;</td>
+  </tr>  
+  <tr valign="top">
+   <td width="16%"><b>Method</b></td>
+   <td>GET</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Parameters</b></td>
+   <td>
+    <small>
+ actionLink='brokenTemplateLink' <br>
+    </small>
+       </td>
+  </tr>
+  <tr valign="top">
+   <td><b>Remote User</b></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr valign="top">
+   <td><b>Session</b></td><td>
+    <small>
+    </small>
+     &nbsp;    </td>
+  </tr>
+  <tr valign="top">
+   <td><b>URI</b></td>
+   <td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td>
+  </tr>   
+  <tr valign="top">
+   <td><b>URL</b></td>
+   <td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td>
+  </tr>
+ </tbody></table>
+ 
+  <!-- if not "production" mode -->
+
+</p></body></html>

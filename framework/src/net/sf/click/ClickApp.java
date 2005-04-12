@@ -103,7 +103,7 @@ class ClickApp implements EntityResolver {
      * "<tt>VM_global_library.vm</tt>"
      */
     static final String VM_FILE_NAME = "VM_global_library.vm";
-    
+
     /**
      * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>"
      */
@@ -381,11 +381,11 @@ class ClickApp implements EntityResolver {
             // Deploy calendar image file
             deployFile("/net/sf/click/control/calendar.gif", clickTarget,
                        CLICK_PATH, "calendar.gif");
-       
+
             // Deploy JavaScript file
             deployFile("/net/sf/click/control/calendar-en.js", clickTarget,
                        CLICK_PATH, "calendar-en.js");
-            
+
             // Deploy CSS styles file
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");

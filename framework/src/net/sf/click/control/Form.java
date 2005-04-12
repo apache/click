@@ -291,7 +291,7 @@ import org.apache.commons.lang.StringUtils;
  *   in your applications root directory.
  *  </li>
  *  <li>
- *   Put your macros in the auto deployed 
+ *   Put your macros in the auto deployed
  *   <span class="st"><tt>click/VM_global_macro.vm</tt></span> file.
  *  </li>
  *  <li>
@@ -299,7 +299,7 @@ import org.apache.commons.lang.StringUtils;
  *   <span class="st"><tt>WEB-INF/velocity.properties</tt></span>
  *   file under the property named
  *   <tt>velocimacro.library</tt>. See configuration topic
- *   <a target="topic" href="../../../../../configuration.html#velocity-properties">Velocity Properties</a> 
+ *   <a target="topic" href="../../../../../configuration.html#velocity-properties">Velocity Properties</a>
  *   for more info.
  *  </li>
  * </ul>
@@ -352,13 +352,13 @@ public class Form implements Control {
 
     /** The label-required-suffix resource property. */
     protected static String labelRequiredSuffix = "";
-    
-    protected static final String JAVASCRIPT_IMPORTS = 
+
+    protected static final String JAVASCRIPT_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
         "<script type='text/javascript' src='$/click/control.js'></script>" +
         "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
-    
-    protected static final String STYLESHEET_IMPORT = 
+
+    protected static final String STYLESHEET_IMPORT =
         "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>";
 
     static {
@@ -380,11 +380,11 @@ public class Form implements Control {
 
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
-    
-    /** 
-     * The number of form layout table columns, default value: <tt>1</tt>. 
+
+    /**
+     * The number of form layout table columns, default value: <tt>1</tt>.
      * <p/>
-     * This property is used to layout the number of table columns the form is 
+     * This property is used to layout the number of table columns the form is
      * rendered in using a flow layout style.
      */
     protected int columns = 1;
@@ -572,22 +572,22 @@ public class Form implements Control {
     public List getButtonList() {
         return buttonList;
     }
-    
+
     /**
      * Return the number of form layout table columns. This property is used
      * to layout the number of table columns the form is rendered in.
-     * 
+     *
      * @return the number of form layout table columns
      */
     public int getColumns() {
         return columns;
     }
-    
-    
+
+
     /**
      * Set the number of form layout table columns. This property is used
      * to layout the number of table columns the form is rendered in.
-     * 
+     *
      * @param columns the number of form layout table columns
      */
     public void setColumns(int columns) {
@@ -706,13 +706,13 @@ public class Form implements Control {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath(); 
-        
-        if (jsEnabled) {        
+        String path = context.getRequest().getContextPath();
+
+        if (jsEnabled) {
             return StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path);
         } else {
             return StringUtils.replace(STYLESHEET_IMPORT, "$", path);
-        } 
+        }
     }
 
     /**
@@ -1001,16 +1001,16 @@ public class Form implements Control {
      *
      * @param buffer the StringBuffer to render to
      * @return the number of hidden Fields
-     */  
+     */
     protected int renderFields(StringBuffer buffer) {
         int hiddenCount = 0;
 
         buffer.append("<table class='fields'>\n");
-        
+
         int column = 1;
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
-            
+
             Field field = (Field) fieldList.get(i);
 
             if (!field.isHidden()) {
@@ -1018,7 +1018,7 @@ public class Form implements Control {
                 if (column == 1) {
                     buffer.append("<tr>\n");
                 }
-                
+
                 if (field instanceof Label) {
                     buffer.append("<td colspan='2' align='");
                     buffer.append(getLabelAlign());
@@ -1064,18 +1064,18 @@ public class Form implements Control {
                     buffer.append(field);
                     buffer.append("</td>\n");
                 }
-                
+
                 if (column == columns) {
                     buffer.append("</tr>\n");
                     column = 1;
                 } else {
                     column++;
                 }
-                
+
             } else {
                 hiddenCount++;
             }
-            
+
         }
         buffer.append("</table>\n");
 

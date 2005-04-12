@@ -31,13 +31,13 @@ import java.util.Date;
  * </table>
  *
  * The DateField control provides a Date entry field and a popup DHTML Calendar
- * &lt;div&gt;. Users can either key in a Date value or select a Date using the 
+ * &lt;div&gt;. Users can either key in a Date value or select a Date using the
  * Calendar.
  * <p/>
  * The Calendar popup is provided by the DHTML Calendar by
- * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is 
- * created as a &lt;div&gt; element using JavaScript. To enable the Calenar 
- * popup, reference the method {@link Form#getHtmlImports()} in the page 
+ * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
+ * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
+ * popup, reference the method {@link Form#getHtmlImports()} in the page
  * template (imports click/form.js file). For example.
  *
  * <pre class="codeHtml">
@@ -57,13 +57,13 @@ import java.util.Date;
  * @author Malcolm Edgar
  */
 public class DateField extends TextField {
-    
+
     /** The JavaScript DHTML Calendar pattern. */
     protected String calendarPattern;
 
     /** The date format. */
     protected SimpleDateFormat dateFormat;
-    
+
     /** The date format pattern value. */
     protected String formatPattern;
 
@@ -88,11 +88,11 @@ public class DateField extends TextField {
     }
 
     // ------------------------------------------------------ Public Attributes
-    
+
     /**
      * Return the JavaScript DHTML Calendar pattern. The DHTML Calendar pattern
      * is defined when you set the format pattern.
-     * 
+     *
      * @return the JavaScript DHTML Calendar pattern
      */
     public String getCalendarPattern() {
@@ -182,10 +182,10 @@ public class DateField extends TextField {
             return null;
         }
     }
-    
+
     /**
      * Return true if the DHTML Calendar popup will show the time display bar.
-     * 
+     *
      * @return true if the DHTML Calendar popup will show the time display bar
      */
     public boolean getShowTime() {
@@ -194,7 +194,7 @@ public class DateField extends TextField {
 
     /**
      * Set the DHTML Calendar popup show the time display bar flag.
-     * 
+     *
      * @param showTime the flag to show the Calendar time display bar
      */
     public void setShowTime(boolean showTime) {
@@ -223,7 +223,7 @@ public class DateField extends TextField {
         if (formatPattern == null) {
             throw new IllegalStateException("dateFormat attribute is null");
         }
-        
+
         value = getRequestValue();
 
         int length = value.length();
@@ -296,7 +296,7 @@ public class DateField extends TextField {
         } else {
             buffer.append(">\n");
         }
-        
+
         buffer.append("<script type='text/javascript'>\n");
         buffer.append("Calendar.setup({ \n");
         buffer.append(" inputField : '");
@@ -318,11 +318,11 @@ public class DateField extends TextField {
 
         return buffer.toString();
     }
-    
+
     /**
      * Return the JavaScript Calendar pattern for the given Java DateFormat
      * pattern.
-     * 
+     *
      * @param pattern the Java DateFormat pattern
      * @return JavaScript Calendar pattern
      */
@@ -331,39 +331,39 @@ public class DateField extends TextField {
         int tokenStart = -1;
         int tokenEnd = -1;
         boolean debug = false;
-        
+
         for (int i = 0; i < pattern.length(); i++) {
-            char aChar = pattern.charAt(i); 
+            char aChar = pattern.charAt(i);
             if (debug) {
                 System.err.print("["+i+","+tokenStart+","+tokenEnd+"]="+aChar);
             }
-            
+
             // If character is in SimpleDateFormat pattern character set
             if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
                 if (debug) {
-                    System.err.println(" N");      
+                    System.err.println(" N");
                 }
                 if (tokenStart > -1) {
                     tokenEnd = i;
                 }
             } else {
                 if (debug) {
-                    System.err.println(" Y"); 
+                    System.err.println(" Y");
                 }
                 if (tokenStart == -1) {
-                    tokenStart = i;                
+                    tokenStart = i;
                 }
             }
 
             if (tokenStart > -1) {
-                
+
                 if (tokenEnd == -1 && i == pattern.length() -1) {
                     tokenEnd = pattern.length();
                 }
 
                 if (tokenEnd > -1) {
                     String token = pattern.substring(tokenStart, tokenEnd);
-                    
+
                     if ("yyyy".equals(token)) {
                         jsPattern.append("%Y");
                     } else if ("yy".equals(token)) {
@@ -419,7 +419,7 @@ public class DateField extends TextField {
                             System.err.println("Not mapped:" + token);
                         }
                     }
-                    
+
                     if (debug) {
                         System.err.println("token["+tokenStart+","+tokenEnd+"]='" + token + "'");
                     }
@@ -427,14 +427,14 @@ public class DateField extends TextField {
                     tokenEnd = -1;
                 }
             }
-            
+
             if (tokenStart == -1 && tokenEnd == -1) {
                 if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
                     jsPattern.append(aChar);
                 }
             }
         }
-        
+
         return jsPattern.toString();
     }
 }

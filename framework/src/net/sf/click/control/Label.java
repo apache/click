@@ -23,7 +23,7 @@ package net.sf.click.control;
  * <pre class="codeJava">
  * Form form = <span class="kw">new</span> Form(getContext(), <span class="st">"form"</span>);
  * ..
- * 
+ *
  * form.add(<span class="kw">new</span> Label(<span class="st">"&lt;hr/&gt;"</span>)); </pre>
  *
  * HTML output:
