@@ -224,9 +224,9 @@ public class ClickUtils {
                 String templateErrorSection =
                     getTemplateErrorSection(parseError, servletContext);
 
-                buffer.append("<tr><td valign='top' colspan='2' bgcolor='#EOEOEO'><b>Template:</b>&nbsp;");
+                buffer.append("<tr><td valign='top' colspan='2'><b>Template:</b>&nbsp;");
                 buffer.append(parseError.getTemplateName());
-                buffer.append("<br><span style='font-family: Courier New, courier;'>");
+                buffer.append("<br><span style='font-family: Courier New, courier;'><br/>");
                 buffer.append(templateErrorSection);
                 buffer.append("</span></td></tr>");
                 buffer.append("</table>");
@@ -586,8 +586,7 @@ public class ClickUtils {
 
                 int value = is.read();
                 while (value > -1) {
-
-
+ 
                     char aChar = (char) value;
                     if (aChar == '\n') {
 
@@ -599,7 +598,9 @@ public class ClickUtils {
                         }
 
                         if (displayLine(line, errorLine)) {
-                            buffer.append("</font><br/>");
+                            if (line > 2) {
+                                buffer.append("</span> <br/>");
+                            }
                             buffer.append(formatLineNumber(line, errorLine));
                         }
 
@@ -688,9 +689,9 @@ public class ClickUtils {
         StringBuffer buffer = new StringBuffer();
 
         if (lineNumber == errorLine) {
-            buffer.append("<font color='red'><b>");
+            buffer.append("<span style='color:red;'><b>");
         } else {
-            buffer.append("<font color='navy'>");
+            buffer.append("<span style='color:navy;'>");
         }
 
         String lineStr = "" + lineNumber;
