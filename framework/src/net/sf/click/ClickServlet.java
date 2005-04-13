@@ -94,6 +94,14 @@ public class ClickServlet extends HttpServlet {
 
     /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
     protected final static String CLICK_FORWARD = "click-forward";
+    
+    /** 
+     * The template merge parsing error report displayed when in production mode. 
+     */
+    protected final static String ERROR_REPORT = 
+        "<div id='errorReport' class='errorReport'>\n" +
+        "The application encountered an unexpected error.\n" +
+        "</div>\n";
 
     // ------------------------------------------------------ Instance Varables
 
@@ -393,6 +401,11 @@ public class ClickServlet extends HttpServlet {
     protected void renderTemplate(Page page) throws Exception {
 
         long startTime = System.currentTimeMillis();
+        
+        final VelocityContext context = createVelocityContext(page);
+
+        // May throw parsing error if template could not be obtained
+        final Template template = clickApp.getTemplate(page.getTemplate());
 
         final HttpServletRequest request = page.getContext().getRequest();
 
@@ -402,16 +415,10 @@ public class ClickServlet extends HttpServlet {
 
         OutputStream output = response.getOutputStream();
 
-        // If an ErrorPage clear any response "Content-Encoding" "gzip" header
-        // and dont compress the output stream
-        if (page instanceof ErrorPage) {
-            if (response.containsHeader("Content-Encoding")) {
-                response.setHeader("Content-Encoding", null);
-            }
 
-        // Else if Page has a "Content-Encoding" "gzip" header then we can
-        // look to compressing the output stream
-        } else if (hasContentEncodingGzipHeader(page)) {
+        // If Page has a "Content-Encoding" "gzip" header then we can look to 
+        // compressing the output stream
+        if (hasContentEncodingGzipHeader(page)) {
 
             // If client accepts gzip encoding compress output stream
             String acceptEncoding = request.getHeader("Accept-Encoding");
@@ -429,10 +436,6 @@ public class ClickServlet extends HttpServlet {
 
         final String encoding = response.getCharacterEncoding();
 
-        final VelocityContext context = createVelocityContext(page);
-
-        final Template template = clickApp.getTemplate(page.getTemplate());
-
         VelocityWriter velocityWriter = null;
 
         try {
@@ -449,20 +452,15 @@ public class ClickServlet extends HttpServlet {
             template.merge(context, velocityWriter);
 
         } catch (ParseErrorException error) {
-            // Parse error probably occured in content, as output has already
-            // been written to write out an error message before it is closed.
-            if (!page.getTemplate().equals(page.getPath())) {
-                if (!clickApp.isProductionMode()) {
-                    String errorReport =
-                        ClickUtils.getErrorReport(error, page, true);
-                    velocityWriter.write(errorReport);
-                } else {
-                    StringBuffer buffer = new StringBuffer(80);
-                    buffer.append("<div id='errorReport' class='errorReport'>\n");
-                    buffer.append("The application encountered an unexpected error.\n");
-                    buffer.append("</div>\n");
-                    velocityWriter.write(buffer.toString());
-                }
+            // Parse error occured merging template and model. It is possible 
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            if (!clickApp.isProductionMode()) {
+                String errorReport =
+                    ClickUtils.getErrorReport(error, page, true);
+                velocityWriter.write(errorReport);
+            } else {
+                velocityWriter.write(ERROR_REPORT);
             }
 
             throw error;
