@@ -5,6 +5,7 @@
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
    <property name="jar.codec" value="commons-codec-1.1.jar"/>
+   <property name="jar.collections" value="commons-collections.jar"/>  
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
@@ -34,6 +35,7 @@
          </fileset>
       </copy>
       <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.collections}" dest="${dir.classes}"/>  
       <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
       <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>        
       <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/> 

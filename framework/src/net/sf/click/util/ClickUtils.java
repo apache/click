@@ -19,6 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -185,11 +187,9 @@ public class ClickUtils {
      *
      * @param error the page error
      * @param page the page which caused the error
-     * @param renderTemplate flag to render the template with the error if a
-     *  ParseErrorException occured, otherwise render the error stack trace
      * @return a error HTML display
      */
-    public static String getErrorReport(Throwable error, Page page, boolean renderTemplate) {
+    public static String getErrorReport(Throwable error, Page page) {
         StringBuffer buffer = new StringBuffer(10 * 1024);
 
         Throwable cause = null;
@@ -211,47 +211,40 @@ public class ClickUtils {
         }
 
         HttpServletRequest request = page.getContext().getRequest();
+        
+        ErrorInfo errorInfo = 
+            new ErrorInfo(cause, page.getContext().getServletContext());
+
+        String errorSource = getErrorSource(errorInfo);
 
         buffer.append("<div id='errorReport' class='errorReport'>\n");
 
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
-        if (cause instanceof ParseErrorException) {
-            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
-            if (renderTemplate) {
-                ParseErrorException parseError = (ParseErrorException) cause;
-                ServletContext servletContext = page.getContext().getServletContext();
+        if (errorInfo.isParseError) {
 
-                String templateErrorSection =
-                    getTemplateErrorSection(parseError, servletContext);
+            buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
+            buffer.append(errorInfo.message);
+            buffer.append("</td></tr>");
+            
+            buffer.append("<tr><td valign='top' colspan='2'><b>Template:</b>&nbsp;");
+            buffer.append(errorInfo.sourceName);
+            buffer.append("<br><span style='font-family: Courier New, courier;'><br/>");
+            buffer.append(errorSource);
+            buffer.append("</span></td></tr>");
+            buffer.append("</table>");
+            buffer.append("<br/>");
 
-                buffer.append("<tr><td valign='top' colspan='2'><b>Template:</b>&nbsp;");
-                buffer.append(parseError.getTemplateName());
-                buffer.append("<br><span style='font-family: Courier New, courier;'><br/>");
-                buffer.append(templateErrorSection);
-                buffer.append("</span></td></tr>");
-                buffer.append("</table>");
-                buffer.append("<br/>");
-
-            } else {
-                buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br>");
-                buffer.append("<span style='font-family: Courier New, courier;'>");
-                buffer.append(toStackTrace(cause));
-                buffer.append("</span></td></tr>");
-                buffer.append("</table>");
-                buffer.append("<br/>");
-            }
         } else {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");
             buffer.append("<tr><td width='12%'><b>Message</b></td><td>");
-            String message = (cause.getMessage() != null) ? cause.getMessage() : "null";
-            buffer.append(StringEscapeUtils.escapeHtml(message));
+            buffer.append(errorInfo.message);
             buffer.append("</td></tr>");
             buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
             buffer.append(cause.getClass().getName());
             buffer.append("</td></tr>");
             buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br>");
             buffer.append("<span style='font-family: Courier New, courier;'>");
-            buffer.append(toStackTrace(cause));
+            buffer.append(errorInfo.getStackTrace());
             buffer.append("</span></td></tr>");
             buffer.append("</table>");
             buffer.append("<br/>");
@@ -362,7 +355,6 @@ public class ClickUtils {
 
         return buffer.toString();
     }
-
 
     /**
      * Invoke the named method on the given object and return the boolean result.
@@ -563,94 +555,6 @@ public class ClickUtils {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Return a HTML rendered section of the  page template with the error
-     * line highlighted.
-     *
-     * @param error the parse error
-     * @return a HTML rendered section of the parsing error page template
-     */
-    protected static String getTemplateErrorSection(ParseErrorException error, ServletContext context) {
-
-        final int errorLine = error.getLineNumber();
-
-        StringBuffer buffer = new StringBuffer();
-
-        InputStream is = context.getResourceAsStream(error.getTemplateName());
-
-        if (is != null) {
-            try {
-                int line = 1;
-                if (displayLine(line, errorLine)) {
-                    buffer.append(formatLineNumber(line, errorLine));
-                }
-
-                int value = is.read();
-                while (value > -1) {
- 
-                    char aChar = (char) value;
-                    if (aChar == '\n') {
-
-                        line++;
-
-                        // If previous line was error line close bold tag.
-                        if (line == errorLine + 1) {
-                            buffer.append("</b>");
-                        }
-
-                        if (displayLine(line, errorLine)) {
-                            if (line > 2) {
-                                buffer.append("</span> <br/>");
-                            }
-                            buffer.append(formatLineNumber(line, errorLine));
-                        }
-
-                    } else if (aChar == '<') {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append("&lt;");
-                        }
-                    } else if (aChar == '>') {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append("&gt;");
-                        }
-                    } else if (aChar == '&') {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append("&amp;");
-                        }
-                    } else if (aChar == '"') {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append("&quot;");
-                        }
-                    } else if (aChar == ' ') {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append("&nbsp;");
-                        }
-                    } else {
-                        if (displayLine(line, errorLine)) {
-                            buffer.append(aChar);
-                        }
-                    }
-                    value = is.read();
-                }
-
-            } catch (IOException ioe) {
-                buffer = new StringBuffer();
-                buffer.append("Could not load page template: " + ioe);
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException ioe) {
-                    // do nothing
-                }
-            }
-
-        } else {
-            buffer.append("Page template not available.");
-        }
-
-        return buffer.toString();
-    }
-
-    /**
      * Return the HTML formatted parse error error message from the given error.
      *
      * @param error the Velocity ParseErrorException error
@@ -677,52 +581,91 @@ public class ClickUtils {
 
         return StringEscapeUtils.escapeHtml(buffer.toString());
     }
-
+    
     /**
-     * Return a HTML formatted line number string.
+     * Return a HTML rendered section of the source error with the error
+     * line highlighted.
      *
-     * @param lineNumber the line number to format
-     * @param errorLine the error line number
-     * @return a HTML formatted line number string
+     * @param errorInfo the parse error
+     * @return a HTML rendered section of the parsing error page template
      */
-    protected static String formatLineNumber(int lineNumber, int errorLine) {
-        StringBuffer buffer = new StringBuffer();
+    protected static String getErrorSource(ErrorInfo errorInfo) {
 
-        if (lineNumber == errorLine) {
-            buffer.append("<span style='color:red;'><b>");
-        } else {
-            buffer.append("<span style='color:navy;'>");
+        StringBuffer buffer = new StringBuffer(5*1024);
+
+        if (errorInfo.sourceReader == null) {
+            buffer.append("Page template not available.");
+            return buffer.toString();
         }
+        
+        final String errorLineStyle = "style='background-color:yellow;'";
+        final String errorCharSpan = 
+            "<span style='color:red;text-decoration:underline;font-weight:bold;'>";
 
-        String lineStr = "" + lineNumber;
-
-        int numberSpace = 3 - lineStr.length();
-
-        for (int i = 0; i < numberSpace; i++) {
-            buffer.append("&nbsp;");
-        }
-
-        buffer.append(lineNumber);
-        if (lineNumber == errorLine) {
-            buffer.append(":&nbsp;&nbsp;");
-        } else {
-            buffer.append(":&nbsp;&nbsp;");
+        try {
+            String line = errorInfo.sourceReader.readLine();
+            
+            while (line != null) {
+                boolean isErrorLine = 
+                    errorInfo.sourceReader.getLineNumber() == errorInfo.lineNumber;
+                
+                // Start div tag
+                buffer.append("<div ");
+                if (isErrorLine) {
+                    buffer.append(errorLineStyle);
+                }
+                buffer.append(">");
+                
+                // Write out line number
+                String lineStr = "" + errorInfo.sourceReader.getLineNumber();
+                int numberSpace = 3 - lineStr.length();
+                for (int i = 0; i < numberSpace; i++) {
+                    buffer.append("&nbsp;");
+                }
+                if (isErrorLine) {
+                    buffer.append("<b>");
+                }
+                buffer.append(errorInfo.sourceReader.getLineNumber());
+                if (isErrorLine) {
+                    buffer.append("</b>");
+                }
+                buffer.append(":&nbsp;&nbsp;");
+                
+                // Write out line content
+                if (isErrorLine) {
+                    StringBuffer htmlLine = new StringBuffer(line.length() * 2);
+                    for (int i = 0; i < line.length(); i++) {
+                        if (i == errorInfo.columnNumber - 1) {
+                            htmlLine.append(errorCharSpan);
+                            htmlLine.append(line.charAt(i));
+                            htmlLine.append("</span>");
+                        } else {
+                            htmlLine.append(line.charAt(i));
+                        }
+                    }
+                    buffer.append(htmlLine.toString());
+                    
+                } else {
+                    buffer.append(StringEscapeUtils.escapeHtml(line));
+                }
+                
+                // Close div tag
+                buffer.append("</div>\n");
+                
+                line = errorInfo.sourceReader.readLine();
+            }
+            
+        } catch (IOException ioe) {
+            buffer.append("Could not load page template: " + ioe);
+        } finally {
+            try {
+                errorInfo.sourceReader.close();
+            } catch (IOException ioe) {
+                // do nothing
+            }
         }
 
         return buffer.toString();
-    }
-
-    /**
-     * Return true if the given line should be displayed for the given error
-     * line.
-     *
-     * @param line the line number to test
-     * @param errorLine the line number where the error occured
-     * @return true if line should be displayed for the given error
-     */
-    protected static boolean displayLine(int line, int errorLine) {
-        return (line >= errorLine - NUMBER_TEMPLATE_LINES
-                && line <= errorLine + NUMBER_TEMPLATE_LINES);
     }
 
     /**
@@ -743,6 +686,75 @@ public class ClickUtils {
         }
         if (map.isEmpty()) {
             buffer.append("&nbsp;");
+        }
+    }
+    
+    /**
+     * Provides Error details for the display of error messages.
+     *
+     * @author Malcolm Edgar
+     */
+    protected static class ErrorInfo {
+        
+        /** The cause of error. */
+        protected final Throwable cause;
+        
+        /** The error is Velocity parsing exception. */
+        protected final boolean isParseError;
+        
+        /** The name of the error source. */
+        protected final String sourceName;
+        
+        /** The error souce LineNumberReader */
+        protected LineNumberReader sourceReader;
+        
+        /** The line number of the error, or -1 if not defined. */
+        protected final int lineNumber;
+        
+        /** The column number of the error, or -1 if not defined. */
+        protected final int columnNumber;
+        
+        /** The error message. */
+        protected final String message;
+        
+        /**
+         * Create a ErrorInfo instance from the given error and ServletContext.
+         * 
+         * @param error the source of the error
+         * @param context the ServletContext
+         */
+        protected ErrorInfo(Throwable error, ServletContext context) {
+            cause = error;
+            
+            isParseError = error instanceof ParseErrorException;
+            
+            if (isParseError) {
+                ParseErrorException pee = (ParseErrorException) error;
+                sourceName = pee.getTemplateName();
+                lineNumber = pee.getLineNumber();
+                columnNumber = pee.getColumnNumber();
+                
+                message = getParseMessage(error);
+                
+                InputStream is = 
+                    context.getResourceAsStream(pee.getTemplateName());
+                
+                LineNumberReader lineReader = 
+                    new LineNumberReader(new InputStreamReader(is));
+                
+            } else {
+                sourceName = null;
+                lineNumber = -1;
+                columnNumber = -1;
+                
+                String value = 
+                    (error.getMessage() != null) ? error.getMessage() : "null";
+                message = StringEscapeUtils.escapeHtml(value);
+            }
+        }
+        
+        protected String getStackTrace() {
+            return toStackTrace(cause);
         }
     }
 }

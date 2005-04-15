@@ -21,7 +21,9 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.GenericServlet;
@@ -456,11 +458,13 @@ public class ClickServlet extends HttpServlet {
             // that some output has already been written, so we will append the
             // error report to the previous output.
             if (!clickApp.isProductionMode()) {
-                String errorReport =
-                    ClickUtils.getErrorReport(error, page, true);
+                String errorReport = ClickUtils.getErrorReport(error, page);
                 velocityWriter.write(errorReport);
             } else {
-                velocityWriter.write(ERROR_REPORT);
+                Locale locale = page.getContext().getRequest().getLocale();
+                ResourceBundle bundle = 
+                    ResourceBundle.getBundle("click-control", locale);
+                velocityWriter.write(bundle.getString("parsing-error-message"));
             }
 
             throw error;
