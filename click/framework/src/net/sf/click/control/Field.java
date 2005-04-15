@@ -16,7 +16,6 @@
 package net.sf.click.control;
 
 import java.text.MessageFormat;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -57,10 +56,6 @@ public abstract class Field implements Control {
      * The package messages bundle name: &nbsp; <tt>click-control</tt>
      */
     public static final String PACKAGE_MESSAGES = "click-control";
-
-    /** The map of message resource bundles keyed on locale. */
-    protected static final Map MESSAGE_BUNDLES =
-        Collections.synchronizedMap(new HashMap());
 
     // ----------------------------------------------------- Instance Variables
 
@@ -358,13 +353,8 @@ public abstract class Field implements Control {
 
         Locale locale = getContext().getRequest().getLocale();
 
-        ResourceBundle bundle =
-            (ResourceBundle) MESSAGE_BUNDLES.get(locale);
-
-        if (bundle == null) {
-            bundle = ResourceBundle.getBundle(PACKAGE_MESSAGES, locale);
-            MESSAGE_BUNDLES.put(locale, bundle);
-        }
+        ResourceBundle bundle = 
+            ResourceBundle.getBundle("click-control", locale);
 
         return bundle.getString(name);
     }
