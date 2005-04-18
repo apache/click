@@ -1,6 +1,6 @@
 package examples.page;
 import examples.domain.Customer;
-import examples.domain.CustomerDatabase;
+import examples.domain.CustomerDAO;
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 
@@ -34,7 +34,7 @@ public class ActionTable extends BorderedPage {
 
     public boolean onViewClick() {
         Long id = viewLink.getValueLong();
-        Customer customer = CustomerDatabase.getCustomer(id);
+        Customer customer = CustomerDAO.getCustomer(id);
         addModel("customerDetail", customer);
 
         return true;
@@ -47,7 +47,7 @@ public class ActionTable extends BorderedPage {
      */
     public boolean onEditClick() {
         Long id = editLink.getValueLong();
-        Customer customer = CustomerDatabase.getCustomer(id);
+        Customer customer = CustomerDAO.getCustomer(id);
 
         if (customer != null) {
             getContext().setRequestAttribute("customer", customer);
@@ -61,7 +61,7 @@ public class ActionTable extends BorderedPage {
 
     public boolean onDeleteClick() {
         Long id = deleteLink.getValueLong();
-        CustomerDatabase.deleteCustomer(id);
+        CustomerDAO.deleteCustomer(id);
 
         return true;
     }
@@ -73,7 +73,7 @@ public class ActionTable extends BorderedPage {
      * @see Page#onGet()
      */
     public void onGet() {
-        addModel("customers", CustomerDatabase.getCustomersSortedByName());
+        addModel("customers", CustomerDAO.getCustomersSortedByName());
     }
 
 }

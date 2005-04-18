@@ -34,8 +34,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
+import net.sf.click.util.ErrorReport;
 import net.sf.click.util.SessionMap;
 
 import org.apache.velocity.Template;
@@ -458,8 +458,8 @@ public class ClickServlet extends HttpServlet {
             // that some output has already been written, so we will append the
             // error report to the previous output.
             if (!clickApp.isProductionMode()) {
-                String errorReport = ClickUtils.getErrorReport(error, page);
-                velocityWriter.write(errorReport);
+                ErrorReport errorReport = new ErrorReport(error, page);
+                velocityWriter.write(errorReport.getErrorReport());
             } else {
                 Locale locale = page.getContext().getRequest().getLocale();
                 ResourceBundle bundle = 

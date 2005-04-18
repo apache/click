@@ -11,7 +11,7 @@ import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import examples.control.InvestmentSelect;
 import examples.domain.Customer;
-import examples.domain.CustomerDatabase;
+import examples.domain.CustomerDAO;
 
 /**
  * Provides an edit Customer Form example. The Customer business object
@@ -117,7 +117,7 @@ public class EditCustomer extends BorderedPage {
             customer.setInvestments(investmentsField.getValue());
             customer.setDateJoined(dateJoinedField.getDate());
 
-            CustomerDatabase.setCustomer(customer);
+            CustomerDAO.setCustomer(customer);
 
             setRedirect("action-table.htm");
             return true;
