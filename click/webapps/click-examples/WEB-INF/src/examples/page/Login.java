@@ -1,7 +1,7 @@
 package examples.page;
 
 import examples.domain.User;
-import examples.domain.UserDatabase;
+import examples.domain.UserDAO;
 import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.PasswordField;
@@ -66,7 +66,7 @@ public class Login extends BorderedPage {
             String username = usernameField.getValue();
             String password = passwordField.getValue();
 
-            User user = UserDatabase.getUser(username);
+            User user = UserDAO.getUser(username);
 
             if (user != null && user.getPassword().equals(password)) {
                 getContext().setSessionAttribute("user", user);

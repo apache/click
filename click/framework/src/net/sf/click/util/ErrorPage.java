@@ -175,8 +175,8 @@ public class ErrorPage extends Page {
     public void onInit() {
         addModel("mode", getMode());
 
-        String errorReport = ClickUtils.getErrorReport(getError(), getPage());
+        ErrorReport errorReport = new ErrorReport(error, page);
 
-        addModel("errorReport", errorReport);
+        addModel("errorReport", errorReport.getErrorReport());
     }
 }

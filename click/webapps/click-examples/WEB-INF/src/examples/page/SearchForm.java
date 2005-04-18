@@ -5,7 +5,7 @@ import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import examples.domain.Customer;
-import examples.domain.CustomerDatabase;
+import examples.domain.CustomerDAO;
 
 /**
  * Provides a search form example demonstrating how to layout a form manually
@@ -44,13 +44,13 @@ public class SearchForm extends BorderedPage {
         String type = typeSelect.getValue().toLowerCase();
 
         if (type.equals("id")) {
-            customer = CustomerDatabase.findCustomerByID(value);
+            customer = CustomerDAO.findCustomerByID(value);
         }
         else if (type.equals("name")) {
-            customer = CustomerDatabase.findCustomerByName(value);
+            customer = CustomerDAO.findCustomerByName(value);
         }
         else if (type.equals("age")) {
-            customer = CustomerDatabase.findCustomerByAge(value);
+            customer = CustomerDAO.findCustomerByAge(value);
         }
 
         if (customer != null) {

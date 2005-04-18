@@ -17,7 +17,7 @@ import java.util.TreeMap;
  *
  * @author Malcolm Edgar
  */
-public class CustomerDatabase {
+public class CustomerDAO {
 
     private static final SimpleDateFormat FORMAT
         = new SimpleDateFormat("yyyy-MM-dd");

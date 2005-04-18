@@ -100,7 +100,7 @@ import org.apache.commons.lang.StringUtils;
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
  *
- *             User user = UserDatabase.getUser(username);
+ *             User user = UserDAO.getUser(username);
  *
  *             <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
  *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);

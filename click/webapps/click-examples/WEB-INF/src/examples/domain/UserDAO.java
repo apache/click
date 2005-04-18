@@ -10,7 +10,7 @@ import java.util.TreeMap;
  *
  * @author Malcolm Edgar
  */
-public class UserDatabase {
+public class UserDAO {
 
     public static User getUser(String username) {
         return (User) USERS_MAP.get(username.toLowerCase());
