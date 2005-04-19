@@ -12,12 +12,12 @@
    <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
 	
    <taskdef name="linetrim" 
-   	        classname="dev.LineTrimTask" 
-   	        classpath="lib/dev.jar"/>
+   	      classname="dev.LineTrimTask" 
+   	      classpath="lib/dev.jar"/>
 							
    <taskdef name="replacetabs" 
-   	        classname="dev.ReplaceTabsTask" 
-   	        classpath="lib/dev.jar"/>
+   	      classname="dev.ReplaceTabsTask" 
+   	      classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
 
@@ -79,9 +79,9 @@
    <target name="build-webapps" description="build web application WAR files">
       <!--  "click-blank" WAR  -->
 	   <copy file="framework/src/click-control.properties" 
-	  	    todir="webapps/click-blank/WEB-INF/src"/>
+	  	      todir="webapps/click-blank/WEB-INF/src"/>
 	   <copy file="framework/src/click-control.properties" 
-	  	    todir="webapps/click-blank/WEB-INF/classes"/>
+	  	      todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
          <lib file="${dir.deploy}/click-${version}.jar"/>
@@ -104,13 +104,13 @@
              destdir="webapps/click-examples/WEB-INF/classes" 
              debug="true">
          <classpath> 
-       	    <pathelement location="lib/${jar.servlet}"/>
+       	   <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>
       <copy todir="webapps/click-examples/WEB-INF/classes">
          <fileset dir="webapps/click-examples/WEB-INF/src">
-           <exclude name="**/*.java"/>
+            <exclude name="**/*.javaxxx"/>
        	   <exclude name="**/package.html"/>
          </fileset>
       </copy>
@@ -194,13 +194,13 @@
          <packageset dir="webapps/click-examples/WEB-INF/src"/>
       </javadoc>
       <copy file="framework/stylesheet.css"  
-      	    overwrite="true"
+      	   overwrite="true"
             todir="webapps/click-documentation/docs/click-api"/>
       <copy file="framework/stylesheet.css"  
-      	    overwrite="true"
+      	   overwrite="true"
             todir="webapps/click-examples/javadoc"/>
       <copy file="framework/stylesheet.css"
-      	    overwrite="true"
+      	   overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>   
 
