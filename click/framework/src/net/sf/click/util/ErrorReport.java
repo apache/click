@@ -40,7 +40,8 @@ import org.apache.velocity.exception.ParseErrorException;
 
 /**
  * Provides an HTML &lt;div&gt; error report for the display of page error
- * information.
+ * information. This class is used by ErrorPage and ClickServlet for the
+ * display of error information.
  *
  * @author Malcolm Edgar
  */
@@ -57,9 +58,6 @@ public class ErrorReport {
     
     /** The column number of the error, or -1 if not defined. */
     protected int columnNumber;
-    
-    /** The error message. */
-    protected String message;
     
     /** The page which caused the error. */
     protected final Page page;
@@ -88,8 +86,6 @@ public class ErrorReport {
             lineNumber = pee.getLineNumber();
             columnNumber = pee.getColumnNumber();
             
-            message = getParseErrorMessage();
-            
             ServletContext context = page.getContext().getServletContext();
             
             InputStream is = 
@@ -101,13 +97,9 @@ public class ErrorReport {
             sourceName = null;
             columnNumber = -1;
             
-            String value = 
-                (error.getMessage() != null) ? error.getMessage() : "null";
-            message = StringEscapeUtils.escapeHtml(value);
-            
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
-            error.printStackTrace(pw);
+            getCause().printStackTrace(pw);
             
             StringTokenizer tokenizer = new StringTokenizer(sw.toString(), "\n");
             
@@ -124,8 +116,15 @@ public class ErrorReport {
                 String linenumber = line.substring(lineStart + 1, lineEnd);
                 this.lineNumber = Integer.parseInt(linenumber);
                 
-                String filename = classname.replace('.', '/') + ".java";
+                String filename = "/" + classname.replace('.', '/') + ".java";
                 System.err.println("filename="+filename);
+                
+                InputStream is = page.getClass().getResourceAsStream(filename);
+                System.err.println("is="+is);
+                
+                if (is != null) {
+                    sourceReader = new LineNumberReader(new InputStreamReader(is));
+                }
                                 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -143,56 +142,32 @@ public class ErrorReport {
     public String getErrorReport() {
         StringBuffer buffer = new StringBuffer(10 * 1024);
 
-        Throwable cause = null;
-        if (error instanceof ServletException) {
-            ServletException se = (ServletException) error;
-            if (se.getRootCause() != null) {
-                cause = se.getRootCause();
-            } else if (se.getCause() != null) {
-                cause = se.getCause();
-            } else {
-                cause = error;
-            }
-        } else {
-            if (error.getCause() != null) {
-                cause = error.getCause();
-            } else {
-                cause = error;
-            }
-        }
+        Throwable cause = getCause();
 
-        HttpServletRequest request = page.getContext().getRequest();
-        
+        HttpServletRequest request = page.getContext().getRequest();     
 
         buffer.append("<div id='errorReport' class='errorReport'>\n");
 
+        // Exception table
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         if (isParseError()) {
-
-            buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
-            buffer.append(getMessage());
-            buffer.append("</td></tr>");
-            
-            buffer.append("<tr><td valign='top' colspan='2'><b>Template:</b>&nbsp;");
-            buffer.append(getSourceName());
-            buffer.append("<br><span style='font-family: Courier New, courier;'><br/>");
-
+            buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
         } else {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");
-            buffer.append("<tr><td width='12%'><b>Message</b></td><td>");
-            buffer.append(getMessage());
-            buffer.append("</td></tr>");
             buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
             buffer.append(cause.getClass().getName());
             buffer.append("</td></tr>");
-            buffer.append("<tr><td valign='top' colspan='2'><b>Stack trace</b><br>");
-            buffer.append("<span style='font-family: Courier New, courier;'>");
-        }
+        }     
+        buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
+        buffer.append(getMessage());
+        buffer.append("</td></tr>");
+        buffer.append("<tr><td valign='top' colspan='2'>");
         buffer.append(getErrorSource());
-        buffer.append("</span></td></tr>");
+        buffer.append("</td></tr>");
         buffer.append("</table>");
         buffer.append("<br/>");
 
+        // Page table
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
         buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
@@ -207,6 +182,7 @@ public class ErrorReport {
         buffer.append("</table>");
         buffer.append("<br/>");
 
+        // Request table
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Request</td></tr>");
 
@@ -304,8 +280,20 @@ public class ErrorReport {
      * 
      * @return the cause of the error
      */
-    public Throwable getError() {
-        return error;
+    public Throwable getCause() {
+        Throwable cause = null;
+        if (error instanceof ServletException) {
+            cause = ((ServletException) error).getRootCause();
+            if (cause == null) {
+                cause = error.getCause();
+            }
+        } else {
+            cause = error.getCause();
+        }
+        if (cause == null) {
+            cause = error;
+        }
+        return cause;
     }
     
     /**
@@ -341,7 +329,28 @@ public class ErrorReport {
      * @return the error message
      */
     public String getMessage() {
-        return message;
+        if (isParseError()) {
+            String message = error.getMessage();
+            
+            int startIndex = message.indexOf('\n');
+            int endIndex = message.lastIndexOf("...");
+            
+            String parseMsg = message.substring(startIndex + 1, endIndex);
+            
+            parseMsg = StringEscapeUtils.escapeHtml(parseMsg);
+            
+            parseMsg = StringUtils.replace(parseMsg, "...", ", &nbsp;");
+
+            return parseMsg;
+            
+        } else {
+            Throwable cause = getCause();
+            
+            String value = 
+                (cause.getMessage() != null) ? cause.getMessage() : "null";
+                
+            return StringEscapeUtils.escapeHtml(value);
+        }
     }
     
     /**
@@ -373,13 +382,8 @@ public class ErrorReport {
      * @return a HTML rendered section of the parsing error page template
      */
     protected String getErrorSource() {
-        
-        if (isParseError) { 
-            if (sourceReader != null) {
-                return getRenderedSource();
-            } else {
-                return getStackTrace();
-            }
+        if (sourceReader != null) {
+            return getRenderedSource();
         } else {
             return getStackTrace();
         }
@@ -394,15 +398,21 @@ public class ErrorReport {
     protected String getRenderedSource() {
 
         StringBuffer buffer = new StringBuffer(5*1024);
+        
+        buffer.append("<span style='font-family: Courier New, courier;'>");
 
         if (sourceReader == null) {
-            buffer.append("Page template not available.");
+            buffer.append("Source is not available.</span>");
             return buffer.toString();
         }
         
-        final String errorLineStyle = "style='background-color:yellow;'";
+        final String normalLineStyle = "style='white-space:pre;'";
+        
+        final String errorLineStyle = 
+            "style='white-space:pre;background-color:yellow;'"; 
+        
         final String errorCharSpan = 
-            "<span style='color:red;text-decoration:underline;font-weight:bold;'>";
+            "<span style='white-space:pre;color:red;text-decoration:underline;font-weight:bold;'>";
 
         try {
             String line = sourceReader.readLine();
@@ -415,6 +425,8 @@ public class ErrorReport {
                 buffer.append("<div ");
                 if (isErrorLine) {
                     buffer.append(errorLineStyle);
+                } else {
+                    buffer.append(normalLineStyle);
                 }
                 buffer.append(">");
                 
@@ -422,7 +434,7 @@ public class ErrorReport {
                 String lineStr = "" + sourceReader.getLineNumber();
                 int numberSpace = 3 - lineStr.length();
                 for (int i = 0; i < numberSpace; i++) {
-                    buffer.append("&nbsp;");
+                    buffer.append(" ");
                 }
                 if (isErrorLine) {
                     buffer.append("<b>");
@@ -431,13 +443,13 @@ public class ErrorReport {
                 if (isErrorLine) {
                     buffer.append("</b>");
                 }
-                buffer.append(":&nbsp;&nbsp;");
+                buffer.append(":  ");
                 
                 // Write out line content
                 if (isErrorLine) {
                     StringBuffer htmlLine = new StringBuffer(line.length() * 2);
                     for (int i = 0; i < line.length(); i++) {
-                        if (i == columnNumber - 1) {
+                        if (i == getColumnNumber() - 1) {
                             htmlLine.append(errorCharSpan);
                             htmlLine.append(line.charAt(i));
                             htmlLine.append("</span>");
@@ -458,7 +470,8 @@ public class ErrorReport {
             }
             
         } catch (IOException ioe) {
-            buffer.append("Could not load page template: " + ioe);
+            buffer.append("Could not load page source: ");
+            buffer.append(StringEscapeUtils.escapeHtml(ioe.toString()));
         } finally {
             try {
                 sourceReader.close();
@@ -466,6 +479,8 @@ public class ErrorReport {
                 // do nothing
             }
         }
+        
+        buffer.append("</span>");
 
         return buffer.toString();
     }
@@ -479,7 +494,7 @@ public class ErrorReport {
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        error.printStackTrace(pw);
+        getCause().printStackTrace(pw);
 
         StringTokenizer tokenizer = new StringTokenizer(sw.toString(), "\n");
 
@@ -497,26 +512,6 @@ public class ErrorReport {
         }
 
         return buffer.toString();
-    }
-    
-    /**
-     * Return the HTML formatted parse error error message from the given error.
-     *
-     * @return the HTML formatted error message
-     */
-    protected String getParseErrorMessage() {
-        String message = error.getMessage();
-        
-        int startIndex = message.indexOf('\n');
-        int endIndex = message.lastIndexOf("...");
-        
-        String parseMsg = message.substring(startIndex + 1, endIndex + 4);
-        
-        parseMsg = StringEscapeUtils.escapeHtml(parseMsg);
-        
-        parseMsg = StringUtils.replace(parseMsg, "\n", ", ");
-
-        return parseMsg;
     }
     
     /**
