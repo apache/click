@@ -21,9 +21,7 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.GenericServlet;
@@ -335,9 +333,9 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost, Throwable exception,
         Page page) {
 
-        // Useful to log exceptions which may occur when causing page is
-        // being rendered, as they may not be displayed in error page.
-        logger.debug("handleException:", exception);
+        if (exception instanceof ParseErrorException == false) {
+            logger.error("handleException:", exception);
+        }
 
         if (exception instanceof ServletException) {
             Throwable cause = ((ServletException) exception).getRootCause();
@@ -457,15 +455,10 @@ public class ClickServlet extends HttpServlet {
             // Parse error occured merging template and model. It is possible 
             // that some output has already been written, so we will append the
             // error report to the previous output.
-            if (!clickApp.isProductionMode()) {
-                ErrorReport errorReport = new ErrorReport(error, page);
-                velocityWriter.write(errorReport.getErrorReport());
-            } else {
-                Locale locale = page.getContext().getRequest().getLocale();
-                ResourceBundle bundle = 
-                    ResourceBundle.getBundle("click-control", locale);
-                velocityWriter.write(bundle.getString("parsing-error-message"));
-            }
+            ErrorReport errorReport = 
+                new ErrorReport(error, page, clickApp.isProductionMode());
+            
+            velocityWriter.write(errorReport.getErrorReport());
 
             throw error;
 

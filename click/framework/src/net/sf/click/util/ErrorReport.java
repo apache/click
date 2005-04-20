@@ -15,6 +15,8 @@
  */
 package net.sf.click.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +25,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -46,6 +50,13 @@ import org.apache.velocity.exception.ParseErrorException;
  * @author Malcolm Edgar
  */
 public class ErrorReport {
+    
+    protected static final String[] JAVA_KEYWORDS = { "package", "import",
+            "class", "public", "protected", "private", "extends", "implements",
+            "return", "if", "while", "for", "do", "else", "try", "new", "void",
+            "catch", "throws", "throw", "static", "final", "break", "continue",
+            "super", "finally", "true", "false", "null", "boolean", "int",
+            "char", "long", "float", "double", "short" };
        
     /** The cause of the error. */
     protected final Throwable error;
@@ -62,6 +73,9 @@ public class ErrorReport {
     /** The page which caused the error. */
     protected final Page page;
     
+    /** The applicaiton is in "production" mode flag. */
+    protected final boolean isProductionMode;
+    
     /** The name of the error source. */
     protected final String sourceName;
     
@@ -73,10 +87,12 @@ public class ErrorReport {
      * 
      * @param error the cause of the error
      * @param page the Page causing the error
+     * @param isProductionMode the application is in "production" mode
      */
-    public ErrorReport(Throwable error, Page page) {
+    public ErrorReport(Throwable error, Page page, boolean isProductionMode) {
         this.page = page;
         this.error = error;
+        this.isProductionMode = isProductionMode;
         
         isParseError = error instanceof ParseErrorException;
         
@@ -117,13 +133,44 @@ public class ErrorReport {
                 this.lineNumber = Integer.parseInt(linenumber);
                 
                 String filename = "/" + classname.replace('.', '/') + ".java";
-                System.err.println("filename="+filename);
                 
+                // Look for source file on classpath
                 InputStream is = page.getClass().getResourceAsStream(filename);
-                System.err.println("is="+is);
                 
                 if (is != null) {
                     sourceReader = new LineNumberReader(new InputStreamReader(is));
+                }
+                // Search for source file under WEB-INF
+                else {  
+                    String rootPath = 
+                        page.getContext().getServletContext().getRealPath("/");
+                    
+                    String webInfPath = rootPath + File.separator + "WEB-INF";
+
+                    File sourceFile = null;
+                    
+                    File webInfDir = new File(webInfPath);
+                    if (webInfDir.isDirectory() && webInfDir.canRead()) {
+                        File[] dirList = webInfDir.listFiles();
+                        for (int i = 0; i < dirList.length; i++) {
+                            File file = dirList[i];
+                            if (file.isDirectory() && file.canRead()) {
+                                String sourcePath = file.toString() + filename;
+                                sourceFile = new File(sourcePath);
+                                if (sourceFile.isFile() && sourceFile.canRead()) {
+                                    break;
+                                } else {
+                                    sourceFile = null;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (sourceFile != null) {
+                        FileInputStream fis = new FileInputStream(sourceFile);
+                        sourceReader = 
+                            new LineNumberReader(new InputStreamReader(fis));
+                    }
                 }
                                 
             } catch (Exception e) {
@@ -140,6 +187,14 @@ public class ErrorReport {
      * @return a error HTML display
      */
     public String getErrorReport() {
+        
+        if (isProductionMode()) {
+            Locale locale = page.getContext().getRequest().getLocale();
+            ResourceBundle bundle = 
+                ResourceBundle.getBundle("click-control", locale);
+            return bundle.getString("production-error-message");
+        }
+        
         StringBuffer buffer = new StringBuffer(10 * 1024);
 
         Throwable cause = getCause();
@@ -152,6 +207,9 @@ public class ErrorReport {
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         if (isParseError()) {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
+            buffer.append("<tr><td width='12%'><b>Source</b></td><td>");
+            buffer.append(getSourceName());
+            buffer.append("</td></tr>");
         } else {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Exception</td></tr>");
             buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
@@ -161,7 +219,7 @@ public class ErrorReport {
         buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
         buffer.append(getMessage());
         buffer.append("</td></tr>");
-        buffer.append("<tr><td valign='top' colspan='2'>");
+        buffer.append("<tr><td valign='top' colspan='2'>\n");
         buffer.append(getErrorSource());
         buffer.append("</td></tr>");
         buffer.append("</table>");
@@ -315,6 +373,15 @@ public class ErrorReport {
     }
     
     /**
+     * Return true if the application is in "production" mode.
+     * 
+     * @return true if the application is in "production" mode
+     */
+    public boolean isProductionMode() {
+        return isProductionMode;
+    }
+    
+    /**
      * Return the error source line number, or -1 if not determined.
      * 
      * @return the error source line number, or -1 if not determined
@@ -447,20 +514,29 @@ public class ErrorReport {
                 
                 // Write out line content
                 if (isErrorLine) {
-                    StringBuffer htmlLine = new StringBuffer(line.length() * 2);
-                    for (int i = 0; i < line.length(); i++) {
-                        if (i == getColumnNumber() - 1) {
-                            htmlLine.append(errorCharSpan);
-                            htmlLine.append(line.charAt(i));
-                            htmlLine.append("</span>");
-                        } else {
-                            htmlLine.append(line.charAt(i));
+                    if (isParseError()) {
+                        StringBuffer htmlLine = new StringBuffer(line.length() * 2);
+                        for (int i = 0; i < line.length(); i++) {
+                            if (i == getColumnNumber() - 1) {
+                                htmlLine.append(errorCharSpan);
+                                htmlLine.append(line.charAt(i));
+                                htmlLine.append("</span>");
+                            } else {
+                                htmlLine.append(line.charAt(i));
+                            }
                         }
+                        buffer.append(htmlLine.toString());
+                        
+                    } else {
+                        buffer.append(getRenderJavaLine(line));
                     }
-                    buffer.append(htmlLine.toString());
                     
                 } else {
-                    buffer.append(StringEscapeUtils.escapeHtml(line));
+                    if (isParseError()) {
+                        buffer.append(StringEscapeUtils.escapeHtml(line));
+                    } else {
+                        buffer.append(getRenderJavaLine(line));
+                    }
                 }
                 
                 // Close div tag
@@ -496,21 +572,11 @@ public class ErrorReport {
         PrintWriter pw = new PrintWriter(sw);
         getCause().printStackTrace(pw);
 
-        StringTokenizer tokenizer = new StringTokenizer(sw.toString(), "\n");
-
-        StringBuffer buffer = new StringBuffer(400);
-
-        if (tokenizer.hasMoreTokens()) {
-            buffer.append(StringEscapeUtils.escapeHtml(tokenizer.nextToken()));
-            buffer.append("<br/>");
-        }
-
-        while (tokenizer.hasMoreTokens()) {
-            buffer.append("&nbsp;&nbsp;&nbsp;");
-            buffer.append(StringEscapeUtils.escapeHtml(tokenizer.nextToken()));
-            buffer.append("<br/>");
-        }
-
+        StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);       
+        buffer.append("<span style='white-space:pre;font-family: Courier New, courier;'>");
+        buffer.append(StringEscapeUtils.escapeHtml(sw.toString()));
+        buffer.append("</span>");
+        
         return buffer.toString();
     }
     
@@ -533,5 +599,35 @@ public class ErrorReport {
         if (map.isEmpty()) {
             buffer.append("&nbsp;");
         }
+    }
+    
+    protected String getRenderJavaLine(String line) {
+        line = StringEscapeUtils.escapeHtml(line);
+        
+        for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
+            String keyword = JAVA_KEYWORDS[i];
+            line = renderJavaKeywords(line, keyword);
+        }
+
+        return line;
+    }
+
+    protected String renderJavaKeywords(String line, String token) {
+        String markupToken = 
+            "<span style='color:#7f0055;font-weight:bold;'>" + token + "</span>";
+
+        line = StringUtils.replace
+            (line, " " + token + " ", " " + markupToken + " ");
+
+        if (line.startsWith(token)) {
+            line = markupToken + line.substring(token.length());
+        }
+
+        if (line.endsWith(token)) {
+            line = line.substring(0, line.length() - token.length())
+                    + markupToken;
+        }
+
+        return line;
     }
 }

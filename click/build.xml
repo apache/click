@@ -110,7 +110,7 @@
       </javac>
       <copy todir="webapps/click-examples/WEB-INF/classes">
          <fileset dir="webapps/click-examples/WEB-INF/src">
-            <exclude name="**/*.javaxxx"/>
+            <exclude name="**/*.java"/>
        	   <exclude name="**/package.html"/>
          </fileset>
       </copy>

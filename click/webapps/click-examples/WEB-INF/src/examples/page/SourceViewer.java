@@ -21,8 +21,6 @@ import org.apache.commons.lang.StringUtils;
  */
 public class SourceViewer extends BorderedPage {
 
-    private static final String COLOR = "navy";
-
     private static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",
             "return", "if", "while", "for", "do", "else", "try", "new", "void",
@@ -110,7 +108,7 @@ public class SourceViewer extends BorderedPage {
         String line = reader.readLine();
 
         while (line != null) {
-            buffer.append(getEncodedLine(line, name));
+            buffer.append(getEncodedLine(line));
             buffer.append("\n");
             line = reader.readLine();
         }
@@ -120,7 +118,7 @@ public class SourceViewer extends BorderedPage {
         addModel("name", name);
     }
 
-    private String getEncodedLine(String line, String name) {
+    private String getEncodedLine(String line) {
 
         if (isJava) {
             line = StringEscapeUtils.escapeHtml(line);
