@@ -175,7 +175,7 @@ public class ErrorPage extends Page {
     public void onInit() {
         addModel("mode", getMode());
 
-        ErrorReport errorReport = new ErrorReport(error, page);
+        ErrorReport errorReport = new ErrorReport(error, page, false);
 
         addModel("errorReport", errorReport.getErrorReport());
     }
