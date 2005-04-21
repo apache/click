@@ -387,6 +387,10 @@ the VelocityContext by the ClickServlet.
 <p/>
 An example bordered Home page is provided below:
 
+<pre class="codeConfig">
+&lt;page path="<span class="blue">home.htm</span>" classname="Home"/&gt; 
+</pre>
+
 <pre class="codeJava"><span class="kw">public class</span> Home <span class="kw">extends</span> BorderedPage {
    
      <span class="jd">/**
@@ -575,7 +579,7 @@ or <tt>debug</tt> mode. Example error page displays include:
    <li><a href="error-npe.html">NullPointerException</a> - in a page method</li>
    <li><a href="error-parsing.html">ParseErrorException</a> - in a page template </li>
 </ul>
-When the application is in <tt>production</tt> or <tt>profile</tt> mode only a simple 
+When the application is in <tt>production</tt> mode only a simple 
 error message is displayed. See <a target="topic" href="configuration.html#application-mode">Configuration</a>
 for details on how to set the application mode.
 

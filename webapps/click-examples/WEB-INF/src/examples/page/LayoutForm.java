@@ -29,7 +29,7 @@ public class LayoutForm extends EditCustomer {
         POSITION_OPTIONS.add(new Select.Option("bottom", "Buttom"));
     }
 
-    static final String[] COLUMNS = { "1", "2", "3", "4" };
+    static final String[] COLUMNS = { "1", "2", "3", "4", "5", "6" };
 
     HiddenField errorsPositionHidden = new HiddenField("errorsPosition", Integer.class);
     HiddenField labelsPositionHidden = new HiddenField("labelsPosition", Integer.class);
