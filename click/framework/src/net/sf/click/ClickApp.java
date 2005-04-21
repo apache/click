@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 import net.sf.click.util.ClickUtils;
 
@@ -769,8 +770,8 @@ class ClickApp implements EntityResolver {
             log(DEBUG_ID, String.valueOf(message), error);
         }
 
-        void error(Object message) {
-            log(ERROR_ID, String.valueOf(message));
+        void error(String message) {
+            log(ERROR_ID, message);
         }
 
         void error(Object message, Throwable error) {
@@ -824,18 +825,30 @@ class ClickApp implements EntityResolver {
             if (level < logLevel) {
                 return;
             }
+            
+            Throwable cause = null;
+            if (error != null) {
+                if (error instanceof ServletException) {
+                    cause = ((ServletException) error).getRootCause();
+                }
+                if (cause == null && error.getCause() != null) {
+                    cause = error.getCause();
+                } else {
+                    cause = error;
+                }
+            }
 
             if (level == LogSystem.WARN_ID) {
-                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message, error);
+                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message, cause);
             }
             else if (level == LogSystem.INFO_ID){
-                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message, error);
+                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message, cause);
             }
             else if (level == LogSystem.DEBUG_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message, error);
+                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message, cause);
             }
             else if (level == LogSystem.ERROR_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message, error);
+                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message, cause);
             }
         }
     }

@@ -89,19 +89,11 @@ public class ClickServlet extends HttpServlet {
 
     // --------------------------------------------------------------- Contants
     
+    /** The Java serialiization version unique id. */
     private static final long serialVersionUID = 3835158375989262128L;
-
 
     /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
     protected final static String CLICK_FORWARD = "click-forward";
-    
-    /** 
-     * The template merge parsing error report displayed when in production mode. 
-     */
-    protected final static String ERROR_REPORT = 
-        "<div id='errorReport' class='errorReport'>\n" +
-        "The application encountered an unexpected error.\n" +
-        "</div>\n";
 
     // ------------------------------------------------------ Instance Varables
 
@@ -123,16 +115,6 @@ public class ClickServlet extends HttpServlet {
      */
     public void init() throws ServletException {
 
-        // Get the context path for identifying the webapp
-        String path = getServletContext().getRealPath("/");
-        if (path != null) {
-            path = path.replace('\\', '/');
-            int index = path.lastIndexOf('/', path.length() - 2);
-            if (index != -1) {
-                path = path.substring(index, path.length() - 1);
-            }
-        }
-
         try {
             // Initialize the click application.
             clickApp = new ClickApp(getServletContext());
@@ -144,10 +126,8 @@ public class ClickServlet extends HttpServlet {
             }
 
         } catch (Throwable e) {
-
             String message =
-                "error initializing on context path '" + path +
-                "' throwing javax.servlet.UnavailableException";
+                "error initializing throwing javax.servlet.UnavailableException";
 
             log(message, e);
 
@@ -226,66 +206,8 @@ public class ClickServlet extends HttpServlet {
         Page page = null;
         try {
             page = createPage(request, response, isPost);
-
-            page.onInit();
-
-            boolean continueProcessing = page.onSecurityCheck();
-
-            if (continueProcessing && page.hasControls()) {
-
-                // Make sure dont processed forwarded request
-                if (!page.getContext().isForward()) {
-
-                    List controls = page.getControls();
-
-                    for (int i = 0, size = controls.size(); i < size; i++) {
-                        Control control = (Control) controls.get(i);
-
-                        continueProcessing = control.onProcess();
-
-                        if (!continueProcessing) {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (continueProcessing) {
-                if (isPost) {
-                    page.onPost();
-                } else {
-                    page.onGet();
-                }
-            }
-
-            if (page.getRedirect() != null) {
-                String url = response.encodeRedirectURL(page.getRedirect());
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("redirect=" + url);
-                }
-
-                response.sendRedirect(url);
-
-            } else if (page.getForward() != null) {
-                request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("forward=" + page.getForward());
-                }
-                RequestDispatcher dispatcher =
-                    request.getRequestDispatcher(page.getForward());
-
-                dispatcher.forward(request, response);
-
-            } else if (page.getPath() != null) {
-                renderTemplate(page);
-
-            } else {
-                String msg =
-                    "Path not defined for Page " + page.getClass().getName();
-                throw new RuntimeException(msg);
-            }
+            
+            processPage(page);
 
         } catch (Exception e) {
             handleException(request, response, isPost, e, page);
@@ -334,12 +256,7 @@ public class ClickServlet extends HttpServlet {
         Page page) {
 
         if (exception instanceof ParseErrorException == false) {
-            logger.error("handleException:", exception);
-        }
-
-        if (exception instanceof ServletException) {
-            Throwable cause = ((ServletException) exception).getRootCause();
-            logger.debug("ServletException.rootCause", cause);
+            logger.error("handleException: ", exception);
         }
 
         Context context = new Context
@@ -357,23 +274,13 @@ public class ClickServlet extends HttpServlet {
             errorPage.setPage(page);
             errorPage.setPath(ClickApp.ERROR_PATH);
 
-            errorPage.onInit();
-
-            errorPage.onSecurityCheck();
-
-            if (isPost) {
-                errorPage.onPost();
-            } else {
-                errorPage.onGet();
-            }
-
-            renderTemplate(errorPage);
+            processPage(errorPage);
 
         } catch (Exception ex) {
             String message =
-                "handleError: " + ex.toString() + " thrown while handling "
-                 + " error: " + exception.toString()
-                 + ". Now throwing RuntimeException";
+                "handleError: " + ex.getClass().getName() 
+                 + " thrown while handling " + exception.getClass().getName()
+                 + ". Now throwing RuntimeException.";
 
             logger.error(message, ex);
 
@@ -383,6 +290,81 @@ public class ClickServlet extends HttpServlet {
             if (errorPage != null) {
                 errorPage.onDestroy();
             }
+        }
+    }
+    
+    /**
+     * Process the given page invoking its "on" event callback methods
+     * and directing the response. This method does not invoke the "onDestroy()"
+     * callback method.
+     * 
+     * @param page the Page to process
+     * @throws Exception if an error occurs
+     */
+    protected void processPage(Page page) throws Exception {
+        
+        final HttpServletRequest request = page.getContext().getRequest();
+        final HttpServletResponse response = page.getContext().getResponse();
+        final boolean isPost = page.getContext().isPost();
+        
+        page.onInit();
+        
+        boolean continueProcessing = page.onSecurityCheck();
+        
+        if (continueProcessing && page.hasControls()) {
+            
+            // Make sure dont processed forwarded request
+            if (!page.getContext().isForward()) {
+                
+                List controls = page.getControls();
+                
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    Control control = (Control) controls.get(i);
+                    
+                    continueProcessing = control.onProcess();
+                    
+                    if (!continueProcessing) {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        if (continueProcessing) {
+            if (isPost) {
+                page.onPost();
+            } else {
+                page.onGet();
+            }
+        }
+        
+        if (page.getRedirect() != null) {
+            String url = response.encodeRedirectURL(page.getRedirect());
+            
+            if (logger.isDebugEnabled()) {
+                logger.debug("redirect=" + url);
+            }
+            
+            response.sendRedirect(url);
+            
+        } else if (page.getForward() != null) {
+            request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
+            
+            if (logger.isDebugEnabled()) {
+                logger.debug("forward=" + page.getForward());
+            }
+            RequestDispatcher dispatcher =
+                request.getRequestDispatcher(page.getForward());
+            
+            dispatcher.forward(request, response);
+            
+        } else if (page.getPath() != null) {
+            renderTemplate(page);
+            
+        } else {
+            String msg =
+                "Path not defined for Page " + page.getClass().getName();
+            throw new RuntimeException(msg);
         }
     }
 
@@ -414,7 +396,6 @@ public class ClickServlet extends HttpServlet {
         response.setContentType(page.getContentType());
 
         OutputStream output = response.getOutputStream();
-
 
         // If Page has a "Content-Encoding" "gzip" header then we can look to 
         // compressing the output stream

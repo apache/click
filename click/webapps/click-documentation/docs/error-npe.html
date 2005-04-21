@@ -1,161 +1,96 @@
 <html><head>
 
 <title>Error Page</title><style>
-body {
-  font-family: verdana, arial, sans-serif;
+body, table, td {
+  font-family: arial, sans-serif;
+  font-size: small;
 }
 td.header {
   color: white;
   background: navy;
 }
-</style></head>
+.errorReport {
+  display: none;
+}
+</style>
+<script type="text/javascript">
+function displayError() {
+  errorReport.style.display = 'block';
+}
+</script></head>
 <body>
  <h1>Error Page</h1>
  
  The application encountered an unexpected error.
- 
- <!-- if not "production" mode then print out debug info -->
-  
  <p>
-
- <table border="1" cellpadding="4" cellspacing="1" width="100%">
-  <tbody><tr>
-   <td colspan="2" class="header"><b>Exception</b></td>
-  </tr>
-  <tr>
-   <td width="12%"><b>Message</b></td>
-   <td>Oh No... &nbsp;</td>
-  </tr>
-  <tr>
-   <td width="12%"><b>Class</b></td>
-   <td>java.lang.NullPointerException</td>
-  </tr>
-  <tr>
-   <td colspan="2">
-    <b>Stack trace</b><br>
-    <small>java.lang.NullPointerException: Oh No...
-<br>&nbsp;&nbsp;&nbsp;	at examples.page.ExceptionDemo.onExceptionClick(ExceptionDemo.java:49)
-<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
-<br>&nbsp;&nbsp;&nbsp;	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
-<br>&nbsp;&nbsp;&nbsp;	at java.lang.reflect.Method.invoke(Method.java:324)
-<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.util.ClickUtils.invokeListener(ClickUtils.java:189)
-<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.control.ActionLink.onProcess(ActionLink.java:471)
-<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.ClickServlet.handleRequest(ClickServlet.java:236)
-<br>&nbsp;&nbsp;&nbsp;	at net.sf.click.ClickServlet.doGet(ClickServlet.java:166)
-<br>&nbsp;&nbsp;&nbsp;	at javax.servlet.http.HttpServlet.service(HttpServlet.java:689)
-<br>&nbsp;&nbsp;&nbsp;	at javax.servlet.http.HttpServlet.service(HttpServlet.java:802)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:252)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:173)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:214)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:178)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:126)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:105)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:107)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:148)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.coyote.http11.Http11Processor.process(Http11Processor.java:825)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.coyote.http11.Http11Protocol$Http11ConnectionHandler.processConnection(Http11Protocol.java:738)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.net.PoolTcpEndpoint.processSocket(PoolTcpEndpoint.java:526)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.net.LeaderFollowerWorkerThread.runIt(LeaderFollowerWorkerThread.java:80)
-<br>&nbsp;&nbsp;&nbsp;	at org.apache.tomcat.util.threads.ThreadPool$ControlRunnable.run(ThreadPool.java:684)
-<br>&nbsp;&nbsp;&nbsp;	at java.lang.Thread.run(Thread.java:534)
-<br></small>
-   </td>
-  </tr>
- </tbody></table>
-
- <br> 
  
- <table border="1" cellpadding="4" cellspacing="1" width="100%">
-  <tbody><tr>
-   <td colspan="2" class="header"> &nbsp; <b>Page</b></td>
-  </tr>
-  <tr>
-   <td width="16%"><b>Classname</b></td><td>
- examples.page.ExceptionDemo    </td>
-  </tr>
-  <tr>
-   <td><b>Path</b></td><td>
- exception.htm    </td>
-  </tr>
-    <tr>
-   <td><b>Template</b></td><td>
- border.htm    </td>
-  </tr>
- </tbody></table>
-  
- <br> 
- 
- <table border="1" cellpadding="4" cellspacing="1" width="100%">
-  <tbody><tr>
-   <td colspan="2" class="header"> &nbsp; <b>Request</b></td>
-  </tr>
-  <tr valign="top">
-   <td width="16%"><b>Attributes</b></td>
-   <td>
-    <small>
-   </small>
-    &nbsp;    </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Auth Type</b></td>
-   <td>&nbsp;</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Context Path</b></td>
-   <td>/click-examples</td>
-  </tr> 
-  <tr valign="top">
-   <td><b>Headers</b></td><td>
-    <small>
- accept='text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5' <br>
- accept-charset='ISO-8859-1,utf-8;q=0.7,*;q=0.7' <br>
- accept-encoding='gzip,deflate' <br>
- accept-language='en-us,en;q=0.5' <br>
- connection='keep-alive' <br>
- host='localhost:8080' <br>
- keep-alive='300' <br>
- referer='http://localhost:8080/click-examples/exception.htm' <br>
- user-agent='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2' <br>
-    </small>
-       </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Query</b></td>
-   <td>&nbsp;</td>
-  </tr>  
-  <tr valign="top">
-   <td width="16%"><b>Method</b></td>
-   <td>GET</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Parameters</b></td>
-   <td>
-    <small>
- actionLink='exceptionLink' <br>
-    </small>
-       </td>
-  </tr>
-  <tr valign="top">
-   <td><b>Remote User</b></td>
-   <td>&nbsp;</td>
-  </tr>
-  <tr valign="top">
-   <td><b>Session</b></td><td>
-    <small>
-    </small>
-     &nbsp;    </td>
-  </tr>
-  <tr valign="top">
-   <td><b>URI</b></td>
-   <td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td>
-  </tr>   
-  <tr valign="top">
-   <td><b>URL</b></td>
-   <td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td>
-  </tr>
- </tbody></table>
- 
-  <!-- if not "production" mode -->
+    To view error details click <a href="#" onclick="displayError();">here</a>.
+   </p><p>
+   </p><div style="display: block;" id="errorReport" class="errorReport">
+<table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Exception</td></tr><tr><td width="12%"><b>Class</b></td><td>java.lang.NullPointerException</td></tr><tr><td valign="top" width="12%"><b>Message</b></td><td>Oh No...</td></tr><tr><td colspan="2" valign="top">
+<span style="font-family: Courier New,courier;"><div style="white-space: pre;">  1:  <span style="color: rgb(127, 0, 85); font-weight: bold;">package</span> examples.page;</div>
+<div style="white-space: pre;">  2:  </div>
+<div style="white-space: pre;">  3:  <span style="color: rgb(127, 0, 85); font-weight: bold;">import</span> net.sf.click.Page;</div>
+<div style="white-space: pre;">  4:  <span style="color: rgb(127, 0, 85); font-weight: bold;">import</span> net.sf.click.control.ActionLink;</div>
+<div style="white-space: pre;">  5:  </div>
+<div style="white-space: pre;">  6:  /**</div>
+<div style="white-space: pre;">  7:   * Provides examples of the Click Exception handling which includes a broken</div>
+<div style="white-space: pre;">  8:   * Velocity template and a broken event listener.</div>
+<div style="white-space: pre;">  9:   *</div>
+<div style="white-space: pre;"> 10:   * @author Malcolm Edgar</div>
+<div style="white-space: pre;"> 11:   */</div>
+<div style="white-space: pre;"> 12:  <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">class</span> ExceptionDemo <span style="color: rgb(127, 0, 85); font-weight: bold;">extends</span> BorderedPage {</div>
+<div style="white-space: pre;"> 13:  </div>
+<div style="white-space: pre;"> 14:      String template;</div>
+<div style="white-space: pre;"> 15:  </div>
+<div style="white-space: pre;"> 16:      /**</div>
+<div style="white-space: pre;"> 17:       * @see Page#onInit()</div>
+<div style="white-space: pre;"> 18:       */</div>
+<div style="white-space: pre;"> 19:      <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">void</span> onInit() {</div>
+<div style="white-space: pre;"> 20:          ActionLink brokenContentLink = <span style="color: rgb(127, 0, 85); font-weight: bold;">new</span> ActionLink("brokenContentLink");</div>
+<div style="white-space: pre;"> 21:          brokenContentLink.setListener(this, "onBrokenContentClick");</div>
+<div style="white-space: pre;"> 22:          addControl(brokenContentLink);</div>
+<div style="white-space: pre;"> 23:  </div>
+<div style="white-space: pre;"> 24:          ActionLink brokenTemplateLink = <span style="color: rgb(127, 0, 85); font-weight: bold;">new</span> ActionLink("brokenTemplateLink");</div>
+<div style="white-space: pre;"> 25:          brokenTemplateLink.setListener(this, "onBrokenTemplateClick");</div>
+<div style="white-space: pre;"> 26:          addControl(brokenTemplateLink);</div>
+<div style="white-space: pre;"> 27:  </div>
+<div style="white-space: pre;"> 28:          ActionLink exceptionLink = <span style="color: rgb(127, 0, 85); font-weight: bold;">new</span> ActionLink("exceptionLink");</div>
+<div style="white-space: pre;"> 29:          exceptionLink.setListener(this, "onExceptionClick");</div>
+<div style="white-space: pre;"> 30:          addControl(exceptionLink);</div>
+<div style="white-space: pre;"> 31:  </div>
+<div style="white-space: pre;"> 32:          ActionLink missingMethodLink = <span style="color: rgb(127, 0, 85); font-weight: bold;">new</span> ActionLink("missingMethodLink");</div>
+<div style="white-space: pre;"> 33:          missingMethodLink.setListener(this, "missingMethodClick");</div>
+<div style="white-space: pre;"> 34:          addControl(missingMethodLink);</div>
+<div style="white-space: pre;"> 35:      }</div>
+<div style="white-space: pre;"> 36:  </div>
+<div style="white-space: pre;"> 37:      <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">boolean</span> onBrokenContentClick() {</div>
+<div style="white-space: pre;"> 38:          setPath("broken-content.htm");</div>
+<div style="white-space: pre;"> 39:          <span style="color: rgb(127, 0, 85); font-weight: bold;">return</span> true;</div>
+<div style="white-space: pre;"> 40:      }</div>
+<div style="white-space: pre;"> 41:  </div>
+<div style="white-space: pre;"> 42:      <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">boolean</span> onBrokenTemplateClick() {</div>
+<div style="white-space: pre;"> 43:          setPath("broken-template.htm");</div>
+<div style="white-space: pre;"> 44:          template = "broken-template.htm";</div>
+<div style="white-space: pre;"> 45:          <span style="color: rgb(127, 0, 85); font-weight: bold;">return</span> true;</div>
+<div style="white-space: pre;"> 46:      }</div>
+<div style="white-space: pre;"> 47:  </div>
+<div style="white-space: pre;"> 48:      <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">boolean</span> onExceptionClick() {</div>
+<div style="white-space: pre; background-color: yellow;"> <b>49</b>:          <span style="color: rgb(127, 0, 85); font-weight: bold;">throw</span> <span style="color: rgb(127, 0, 85); font-weight: bold;">new</span> NullPointerException("Oh No...");</div>
+<div style="white-space: pre;"> 50:      }</div>
+<div style="white-space: pre;"> 51:  </div>
+<div style="white-space: pre;"> 52:      /**</div>
+<div style="white-space: pre;"> 53:       * Override getTemplate so we can stuff things up.</div>
+<div style="white-space: pre;"> 54:       *</div>
+<div style="white-space: pre;"> 55:       * @see Page#getTemplate()</div>
+<div style="white-space: pre;"> 56:       */</div>
+<div style="white-space: pre;"> 57:      <span style="color: rgb(127, 0, 85); font-weight: bold;">public</span> String getTemplate() {</div>
+<div style="white-space: pre;"> 58:          <span style="color: rgb(127, 0, 85); font-weight: bold;">return</span> (template != null) ? template : super.getTemplate();</div>
+<div style="white-space: pre;"> 59:      }</div>
+<div style="white-space: pre;"> 60:  </div>
+<div style="white-space: pre;"> 61:  }</div>
+</span></td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Page</td></tr><tr><td width="12%"><b>Classname</b></td><td>examples.page.ExceptionDemo</td></tr><tr><td width="12%"><b>Path</b></td><td>exception.htm</td></tr><tr><td><b width="12%">Template</b></td><td>border.htm</td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Request</td></tr><tr><td valign="top" width="12%"><b>Attributes</b></td><td>&nbsp;</td></tr><tr><td width="12%"><b>Auth Type</b></td><td>null</td></tr><tr><td width="12%"><b>Context Path</b></td><td><a href="http://localhost:8080/click-examples">/click-examples</a></td></tr><tr><td valign="top" width="12%"><b>Headers</b></td><td>accept=text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5<br>accept-charset=ISO-8859-1,utf-8;q=0.7,*;q=0.7<br>accept-encoding=gzip,deflate<br>accept-language=en-us,en;q=0.5<br>connection=keep-alive<br>host=localhost:8080<br>keep-alive=300<br>referer=http://localhost:8080/click-examples/exception.htm<br>user-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2<br></td></tr><tr><td width="12%"><b>Query</b></td><td>actionLink=exceptionLink</td></tr><tr><td width="12%"><b>Method</b></td><td>GET</td></tr><tr><td valign="top" width="12%"><b>Parameters</b></td><td>actionLink=exceptionLink<br></td></tr><tr><td width="12%"><b>Remote User</b></td><td>null</td></tr><tr><td valign="top" width="12%"><b>URI</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td></tr><tr><td><b width="12%">URL</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td></tr><tr><td valign="top" width="12%"><b>Session</b></td><td>&nbsp;</td></tr></tbody></table>
+</div>
 
-</p></body></html>
+ 
+</body></html>

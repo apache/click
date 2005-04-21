@@ -17,6 +17,7 @@ package net.sf.click.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -51,30 +52,32 @@ import org.apache.velocity.exception.ParseErrorException;
  */
 public class ErrorReport {
     
+    /** The Java language keywords. Used to render Java source code. */
     protected static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",
             "return", "if", "while", "for", "do", "else", "try", "new", "void",
             "catch", "throws", "throw", "static", "final", "break", "continue",
             "super", "finally", "true", "false", "null", "boolean", "int",
             "char", "long", "float", "double", "short" };
+    
+    /** The column number of the error, or -1 if not defined. */
+    protected int columnNumber;
        
     /** The cause of the error. */
     protected final Throwable error;
     
-    /** The error is Velocity parsing exception. */
-    protected final boolean isParseError;
 
     /** The line number of the error, or -1 if not defined. */
     protected int lineNumber;
     
-    /** The column number of the error, or -1 if not defined. */
-    protected int columnNumber;
+    /** The error is Velocity parsing exception. */
+    protected final boolean isParseError;
+       
+    /** The applicaiton is in "production" mode flag. */
+    protected final boolean isProductionMode;
     
     /** The page which caused the error. */
     protected final Page page;
-    
-    /** The applicaiton is in "production" mode flag. */
-    protected final boolean isProductionMode;
     
     /** The name of the error source. */
     protected final String sourceName;
@@ -128,49 +131,15 @@ public class ErrorReport {
                 String classname = line.substring(nameStart + 3, nameEnd);
                     
                 int lineStart = line.indexOf(":");
-                int lineEnd = line.indexOf(")");
-                String linenumber = line.substring(lineStart + 1, lineEnd);
-                this.lineNumber = Integer.parseInt(linenumber);
-                
-                String filename = "/" + classname.replace('.', '/') + ".java";
-                
-                // Look for source file on classpath
-                InputStream is = page.getClass().getResourceAsStream(filename);
-                
-                if (is != null) {
-                    sourceReader = new LineNumberReader(new InputStreamReader(is));
-                }
-                // Search for source file under WEB-INF
-                else {  
-                    String rootPath = 
-                        page.getContext().getServletContext().getRealPath("/");
+                if (lineStart != -1) {
+                    int lineEnd = line.indexOf(")");
+                    String linenumber = line.substring(lineStart + 1, lineEnd);
+                    System.err.println("linenumber="+linenumber);
+                    this.lineNumber = Integer.parseInt(linenumber);
                     
-                    String webInfPath = rootPath + File.separator + "WEB-INF";
-
-                    File sourceFile = null;
+                    String filename = "/" + classname.replace('.', '/') + ".java";
                     
-                    File webInfDir = new File(webInfPath);
-                    if (webInfDir.isDirectory() && webInfDir.canRead()) {
-                        File[] dirList = webInfDir.listFiles();
-                        for (int i = 0; i < dirList.length; i++) {
-                            File file = dirList[i];
-                            if (file.isDirectory() && file.canRead()) {
-                                String sourcePath = file.toString() + filename;
-                                sourceFile = new File(sourcePath);
-                                if (sourceFile.isFile() && sourceFile.canRead()) {
-                                    break;
-                                } else {
-                                    sourceFile = null;
-                                }
-                            }
-                        }
-                    }
-                    
-                    if (sourceFile != null) {
-                        FileInputStream fis = new FileInputStream(sourceFile);
-                        sourceReader = 
-                            new LineNumberReader(new InputStreamReader(fis));
-                    }
+                    sourceReader = getJavaSourceReader(filename);
                 }
                                 
             } catch (Exception e) {
@@ -443,6 +412,52 @@ public class ErrorReport {
     // ------------------------------------------------------ Protected Methods
     
     /**
+     * Return Java Source LineNumberReader for the given filename, or null if
+     * not found.
+     * 
+     * @param filename the name of the Java source file, e.g. /examples/Page.java
+     * @return LineNumberReader for the given source filename, or null if
+     *      not found
+     * @throws FileNotFoundException if file could not be found
+     */
+    protected LineNumberReader getJavaSourceReader(String filename) 
+        throws FileNotFoundException {
+        
+        // Look for source file on classpath
+        InputStream is = page.getClass().getResourceAsStream(filename);        
+        if (is != null) {
+            return new LineNumberReader(new InputStreamReader(is));
+        }
+        
+        // Else search for source file under WEB-INF 
+        String rootPath = 
+            page.getContext().getServletContext().getRealPath("/");
+        
+        String webInfPath = rootPath + File.separator + "WEB-INF";
+        
+        File sourceFile = null;
+        
+        File webInfDir = new File(webInfPath);
+        if (webInfDir.isDirectory() && webInfDir.canRead()) {
+            File[] dirList = webInfDir.listFiles();
+            for (int i = 0; i < dirList.length; i++) {
+                File file = dirList[i];
+                if (file.isDirectory() && file.canRead()) {
+                    String sourcePath = file.toString() + filename;
+                    sourceFile = new File(sourcePath);
+                    if (sourceFile.isFile() && sourceFile.canRead()) {
+                        
+                        FileInputStream fis = new FileInputStream(sourceFile);
+                        return new LineNumberReader(new InputStreamReader(fis));
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
      * Return a HTML rendered section of the source error with the error
      * line highlighted.
      *
@@ -601,6 +616,13 @@ public class ErrorReport {
         }
     }
     
+    /**
+     * Return a HTML rendered Java source line with keywords highlighted
+     * using the given line.
+     * 
+     * @param line the Java source line to render
+     * @return HTML rendred Java source line
+     */
     protected String getRenderJavaLine(String line) {
         line = StringEscapeUtils.escapeHtml(line);
         
@@ -612,19 +634,28 @@ public class ErrorReport {
         return line;
     }
 
-    protected String renderJavaKeywords(String line, String token) {
+    /**
+     * Render the HTML rendered Java source line with the given keyword 
+     * highlighted.
+     * 
+     * @param line the given Java source line to render
+     * @param keyword the Java keyword to highlight
+     * @return the HTML rendered Java source line with the given keyword 
+     *      highlighted
+     */
+    protected String renderJavaKeywords(String line, String keyword) {
         String markupToken = 
-            "<span style='color:#7f0055;font-weight:bold;'>" + token + "</span>";
+            "<span style='color:#7f0055;font-weight:bold;'>" + keyword + "</span>";
 
         line = StringUtils.replace
-            (line, " " + token + " ", " " + markupToken + " ");
+            (line, " " + keyword + " ", " " + markupToken + " ");
 
-        if (line.startsWith(token)) {
-            line = markupToken + line.substring(token.length());
+        if (line.startsWith(keyword)) {
+            line = markupToken + line.substring(keyword.length());
         }
 
-        if (line.endsWith(token)) {
-            line = line.substring(0, line.length() - token.length())
+        if (line.endsWith(keyword)) {
+            line = line.substring(0, line.length() - keyword.length())
                     + markupToken;
         }
 
