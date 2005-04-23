@@ -253,6 +253,31 @@ public class ActionLink implements Control {
             attributes.remove(name);
         }
     }
+    
+    /**
+     * Return the ActionLink attributes Map.
+     *
+     * @return the ActionLink attributes Map
+     */
+    public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap(5);
+        }
+        return attributes;
+    }
+
+    /**
+     * Return true if the ActionLink has attributes or false otherwise.
+     *
+     * @return true if the ActionLink has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        if (attributes != null && !attributes.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Returns true if the ActionLink was clicked, otherwise returns false.
@@ -346,6 +371,20 @@ public class ActionLink implements Control {
      */
     public String getHref() {
         return getHref(getValue());
+    }
+    
+    /**
+     * Return the "id" attribute value if defined, or the ActionLink name 
+     * otherwise.
+     *
+     * @see net.sf.click.Control#getId()
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            return getName();
+        }
     }
 
     /**
@@ -492,6 +531,8 @@ public class ActionLink implements Control {
 
         buffer.append("<a href='");
         buffer.append(getHref());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("'");
         ClickUtils.renderAttributes(attributes, buffer);
         buffer.append(getDisabled());

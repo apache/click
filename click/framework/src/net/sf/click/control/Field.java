@@ -308,6 +308,21 @@ public abstract class Field implements Control {
     public boolean isHidden() {
         return false;
     }
+ 
+    /**
+     * Return the Form and Field id appended: &nbsp; "<tt>form-field</tt>"
+     * <p/>
+     * Use the field the "id" attribute value if defined, or the name otherwise.
+     * 
+     * @see net.sf.click.Control#getId()
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getForm().getId() + "-" + getAttribute("id");
+        } else {
+            return getForm().getId() + "-" + getName();
+        }
+    }
 
     /**
      * Return the display caption label.
@@ -510,7 +525,8 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Render the field HTML attributes to the string buffer.
+     * Render the field HTML attributes to the string buffer, except for
+     * the attribute "id".
      *
      * @param buffer the StringBuffer to render the HTML attributes to
      */

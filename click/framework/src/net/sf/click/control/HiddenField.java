@@ -243,6 +243,8 @@ public class HiddenField extends Field {
         buffer.append(getType());
         buffer.append("' name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("' value='");
         if (valueClass == String.class
             || valueClass == Integer.class

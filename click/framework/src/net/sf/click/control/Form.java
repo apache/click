@@ -538,7 +538,6 @@ public class Form implements Control {
         }
     }
 
-
     /**
      * Return the form attributes Map.
      *
@@ -712,6 +711,19 @@ public class Form implements Control {
             return StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path);
         } else {
             return StringUtils.replace(STYLESHEET_IMPORT, "$", path);
+        }
+    }
+    
+    /**
+     * Return the "id" attribute value if defined, or the Form name otherwise.
+     *
+     * @see net.sf.click.Control#getId()
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            return getName();
         }
     }
 
@@ -915,6 +927,8 @@ public class Form implements Control {
         buffer.append(getMethod());
         buffer.append("' name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("' action='");
         buffer.append(getContext().getRequest().getRequestURI());
         buffer.append("'");

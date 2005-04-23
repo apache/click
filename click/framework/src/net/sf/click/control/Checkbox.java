@@ -138,6 +138,8 @@ public class Checkbox extends Field {
         buffer.append(getType());
         buffer.append("' name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("'");
 
         renderAttributes(buffer);

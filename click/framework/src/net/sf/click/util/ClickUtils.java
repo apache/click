@@ -231,7 +231,8 @@ public class ClickUtils {
     }
 
     /**
-     * Render the given Map of HTML attributes to the StringBuffer.
+     * Render the given Map of HTML attributes to the StringBuffer, except for
+     * the attribute "id".
      *
      * @param attributes the Map of HTML attributes
      * @param buffer the StringBuffer to render to
@@ -240,12 +241,14 @@ public class ClickUtils {
         if (attributes != null) {
             for (Iterator i = attributes.keySet().iterator(); i.hasNext();) {
                 String name = i.next().toString();
-                String value = attributes.get(name).toString();
-                buffer.append(" ");
-                buffer.append(name);
-                buffer.append("='");
-                buffer.append(value);
-                buffer.append("'");
+                if (!name.equals("id")) {
+                    String value = attributes.get(name).toString();
+                    buffer.append(" ");
+                    buffer.append(name);
+                    buffer.append("='");
+                    buffer.append(value);
+                    buffer.append("'");
+                }
             }
         }
     }

@@ -461,6 +461,8 @@ public class Select extends Field {
 
         buffer.append("<select name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("'");
         buffer.append(getDisabled());
         buffer.append(" size='");

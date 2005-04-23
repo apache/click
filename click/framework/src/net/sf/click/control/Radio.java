@@ -146,6 +146,8 @@ public class Radio extends Field {
         buffer.append(getType());
         buffer.append("' name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("' value='");
         buffer.append(getValue());
         buffer.append("'");

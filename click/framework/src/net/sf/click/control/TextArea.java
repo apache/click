@@ -222,6 +222,8 @@ public class TextArea extends Field {
         buffer.append("<textarea");
         buffer.append(" name='");
         buffer.append(getName());
+        buffer.append("' id='");
+        buffer.append(getId());
         buffer.append("' rows='");
         buffer.append(getRows());
         buffer.append("' cols='");
