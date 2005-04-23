@@ -481,20 +481,18 @@ public class ErrorReport {
 
         StringBuffer buffer = new StringBuffer(5*1024);
         
-        buffer.append("<span style='font-family: Courier New, courier;'>");
+        buffer.append("<pre style='font-family: Courier New, courier;'>");
 
         if (sourceReader == null) {
             buffer.append("Source is not available.</span>");
             return buffer.toString();
         }
         
-        final String normalLineStyle = "style='white-space:pre;'";
-        
         final String errorLineStyle = 
-            "style='white-space:pre;background-color:yellow;'"; 
+            "style='background-color:yellow;'"; 
         
         final String errorCharSpan = 
-            "<span style='white-space:pre;color:red;text-decoration:underline;font-weight:bold;'>";
+            "<span style='color:red;text-decoration:underline;font-weight:bold;'>";
 
         try {
             String line = sourceReader.readLine();
@@ -502,13 +500,11 @@ public class ErrorReport {
             while (line != null) {
                 boolean isErrorLine = 
                     sourceReader.getLineNumber() == lineNumber;
-                
+               
                 // Start div tag
                 buffer.append("<div ");
                 if (isErrorLine) {
                     buffer.append(errorLineStyle);
-                } else {
-                    buffer.append(normalLineStyle);
                 }
                 buffer.append(">");
                 
@@ -555,7 +551,7 @@ public class ErrorReport {
                 }
                 
                 // Close div tag
-                buffer.append("</div>\n");
+                buffer.append("</div>");
                 
                 line = sourceReader.readLine();
             }
@@ -571,7 +567,7 @@ public class ErrorReport {
             }
         }
         
-        buffer.append("</span>");
+        buffer.append("</pre>");
 
         return buffer.toString();
     }
@@ -588,9 +584,9 @@ public class ErrorReport {
         getCause().printStackTrace(pw);
 
         StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);       
-        buffer.append("<span style='white-space:pre;font-family: Courier New, courier;'>");
+        buffer.append("<span style='font-family: Courier New, courier;'><pre>");
         buffer.append(StringEscapeUtils.escapeHtml(sw.toString()));
-        buffer.append("</span>");
+        buffer.append("</pre></span>");
         
         return buffer.toString();
     }

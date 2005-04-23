@@ -305,6 +305,7 @@ public class CreditCardField extends TextField {
         // Render card type select
         cardTypeSelect.setContext(getContext());
         cardTypeSelect.setValue(cardType);
+        cardTypeSelect.setForm(getForm());
         buffer.append(cardTypeSelect);
 
         return buffer.toString();

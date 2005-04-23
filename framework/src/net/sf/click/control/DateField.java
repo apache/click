@@ -283,7 +283,7 @@ public class DateField extends TextField {
         buffer.append("<img align='middle' hspace='2' style='cursor:hand' src='");
         buffer.append(getForm().getContext().getRequest().getContextPath());
         buffer.append("/click/calendar.gif' id='");
-        buffer.append(getName());
+        buffer.append(getId());
         buffer.append("-button' ");
 
         String calendarTitle = getMessage("calendar-image-title");
@@ -300,8 +300,8 @@ public class DateField extends TextField {
         buffer.append("<script type='text/javascript'>\n");
         buffer.append("Calendar.setup({ \n");
         buffer.append(" inputField : '");
-        buffer.append(getName());
-        buffer.append("-field', \n");
+        buffer.append(getId());
+        buffer.append("', \n");
         buffer.append(" ifFormat :    '");
         buffer.append(getCalendarPattern());
         buffer.append("', \n");
@@ -309,7 +309,7 @@ public class DateField extends TextField {
             buffer.append(" showsTime : true, \n");
         }
         buffer.append(" button : '");
-        buffer.append(getName());
+        buffer.append(getId());
         buffer.append("-button', \n");
         buffer.append(" align :    'cr', \n");
         buffer.append(" singleClick : true \n");

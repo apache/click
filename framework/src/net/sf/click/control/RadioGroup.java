@@ -205,6 +205,7 @@ public class RadioGroup extends Field {
 
         for (int i = 0; i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
+            radio.setForm(getForm());
 
             if (value != null && value.length() > 0) {
                 if (radio.getValue().equals(value)) {
