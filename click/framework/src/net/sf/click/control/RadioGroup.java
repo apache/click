@@ -132,6 +132,19 @@ public class RadioGroup extends Field {
         radio.setContext(getContext());
         getRadioList().add(radio);
     }
+       
+    /**
+     * @see Field#setForm(Form)
+     */
+    public void setForm(Form form) {
+        super.setForm(form);
+        if (hasRadios()) {
+            for (int i = 0, size = getRadioList().size(); i < size; i++) {
+                Radio radio = (Radio) getRadioList().get(i);
+                radio.setForm(getForm());
+            }
+        }
+    }
 
     /**
      * Return true if the radio control layout is vertical.
@@ -161,6 +174,15 @@ public class RadioGroup extends Field {
             radioList = new ArrayList();
         }
         return radioList;
+    }
+    
+    /**
+     * Return true if RadioGroup has Radio controls, or false otherwise.
+     * 
+     * @return true if RadioGroup has Radio controls, or false otherwise
+     */
+    public boolean hasRadios() {
+        return radioList != null && !radioList.isEmpty();
     }
 
     // --------------------------------------------------------- Public Methods
@@ -205,7 +227,6 @@ public class RadioGroup extends Field {
 
         for (int i = 0; i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
-            radio.setForm(getForm());
 
             if (value != null && value.length() > 0) {
                 if (radio.getValue().equals(value)) {
