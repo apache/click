@@ -1019,7 +1019,9 @@ public class Form implements Control {
     protected int renderFields(StringBuffer buffer) {
         int hiddenCount = 0;
 
-        buffer.append("<table class='fields'>\n");
+        buffer.append("<table class='fields' id='");
+        buffer.append(getId());
+        buffer.append("-fields'>\n");
 
         int column = 1;
 
@@ -1120,7 +1122,9 @@ public class Form implements Control {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
-                buffer.append("<table class='errors'>\n");
+                buffer.append("<table class='errors' id='");
+                buffer.append(getId());
+                buffer.append("-errors'>\n");
             }
 
             if (getError() != null) {
@@ -1192,7 +1196,9 @@ public class Form implements Control {
      */
     protected void renderButtons(StringBuffer buffer) {
         if (!buttonList.isEmpty()) {
-            buffer.append("<table class='buttons'>\n");
+            buffer.append("<table class='buttons' id='");
+            buffer.append(getId());
+            buffer.append("-buttons'>\n");
             buffer.append("<tr><td>");
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
