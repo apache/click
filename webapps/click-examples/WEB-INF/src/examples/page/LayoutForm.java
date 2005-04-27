@@ -3,6 +3,7 @@ package examples.page;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.click.control.Checkbox;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.Select;
@@ -10,6 +11,9 @@ import net.sf.click.control.Submit;
 
 /**
  * Provides a example Page to demonstrate Form layout options.
+ * <p>
+ * This page is a little complicated as Hidden fields are used to maintain
+ * state between the different forms contained in the page.
  *
  * @author Malcolm Edgar
  */
@@ -35,12 +39,14 @@ public class LayoutForm extends EditCustomer {
     HiddenField labelsPositionHidden = new HiddenField("labelsPosition", Integer.class);
     HiddenField labelAlignHidden= new HiddenField("labelAlign", String.class);
     HiddenField columnsHidden = new HiddenField("columns", Integer.class);
+    HiddenField showBordersHidden = new HiddenField("showBorders", Boolean.class);
 
     Form styleForm;
     Select labelsPositionSelect;
     Select errorsPositionSelect;
     Select labelAlignSelect;
     Select columnsSelect;
+    Checkbox showBordersCheckbox;
 
     public void onInit() {
         super.onInit();
@@ -54,6 +60,8 @@ public class LayoutForm extends EditCustomer {
         form.add(labelAlignHidden);
         columnsHidden.setValue(new Integer(1));
         form.add(columnsHidden);
+        showBordersHidden.setValue(Boolean.FALSE);
+        form.add(showBordersHidden);
 
         // Unset EditCustomer.onOkClick() listener
         okButton.setListener(null, null);
@@ -86,11 +94,19 @@ public class LayoutForm extends EditCustomer {
         columnsSelect.setTitle("Form columns");
         columnsSelect.setValue("1");
         styleForm.add(columnsSelect);
+        
+        showBordersCheckbox = new Checkbox("Show Borders");
+        showBordersCheckbox.setAttribute("onclick", "toggleBorders(this);");
+        styleForm.add(showBordersCheckbox);
 
         Submit applyButton = new Submit("   Apply Layout   ");
         applyButton.setTitle("Apply the layout to the form");
         applyButton.setListener(this, "onApplyClick");
         styleForm.add(applyButton);
+        
+        // Setup checkbox Javascript
+        addModel("javascript-include", "layout-form.js");
+        addModel("body-onload", "toggleBorders(document.styleForm.showBorders);");
     }
 
     /**
@@ -101,6 +117,7 @@ public class LayoutForm extends EditCustomer {
         Integer errorsPosition = (Integer) errorsPositionHidden.getValueObject();
         Integer labelsPosition = (Integer) labelsPositionHidden.getValueObject();
         Integer columns = (Integer) columnsHidden.getValueObject();
+        Boolean showBorders = (Boolean) showBordersHidden.getValueObject();
 
         form.setErrorsPosition(errorsPosition.intValue());
         form.setLabelsPosition(labelsPosition.intValue());
@@ -122,6 +139,8 @@ public class LayoutForm extends EditCustomer {
         }
         labelAlignSelect.setValue(labelAlignHidden.getValue());
         columnsSelect.setValue(String.valueOf(columns.intValue()));
+        
+        showBordersCheckbox.setChecked(showBorders.booleanValue());
     }
 
     /**
@@ -149,6 +168,8 @@ public class LayoutForm extends EditCustomer {
 
         labelAlignHidden.setValue(labelAlignSelect.getValue());
         columnsHidden.setValue(Integer.valueOf(columnsSelect.getValue()));
+        
+        showBordersHidden.setValue(Boolean.valueOf(showBordersCheckbox.isChecked()));
 
         return true;
     }
