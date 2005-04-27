@@ -10,31 +10,5 @@ Modify the forms layout options.
 
 $styleForm
 
-<p/>
-
-<script type='text/javascript'>
-function toggleBorders(checkbox) {
-  var fieldsTable = document.getElementById("form-fields");
-  var buttonsTable = document.getElementById("form-buttons");
-  var errorsTable = document.getElementById("form-errors");
-  
-  if (checkbox.checked) {
-    fieldsTable.style.border = "1px dashed blue";
-    buttonsTable.style.border = "1px dashed green";
-    errorsTable.style.border = "1px dashed red";
-  } else {
-    fieldsTable.style.border = "0px dashed blue";
-    buttonsTable.style.border = "0px dashed green";
-    errorsTable.style.border = "0px dashed red";
-  }
-}
-</script>
-<table>
-  <tr>
-    <td><input type="checkbox" onclick="toggleBorders(this);"/></td>
-    <td>Show Borders</td>
-  </tr> 
-</table>
-
 
 

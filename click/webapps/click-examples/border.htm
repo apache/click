@@ -3,8 +3,11 @@
 <title>Click Examples - $title</title>
 <link rel="stylesheet" type="text/css" href="style.css" title="Style">
 #if ($form) $form.htmlImports #end
-</head>	
-<body>
+<script type="text/javascript">
+#if ($javascript-include) #include($javascript-include) #end
+</script>
+</head>
+<body #if($body-onload) onload="$body-onload" #end>
  	
 <h1>$title</h1> 
 
