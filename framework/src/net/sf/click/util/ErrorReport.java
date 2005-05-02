@@ -128,6 +128,9 @@ public class ErrorReport {
                 int nameStart = line.indexOf("at ");
                 int nameEnd = line.indexOf("(");
                 nameEnd = line.lastIndexOf(".", nameEnd);
+                if (line.indexOf("$") != -1) {
+                    nameEnd = line.indexOf("$");
+                }
                 String classname = line.substring(nameStart + 3, nameEnd);
                     
                 int lineStart = line.indexOf(":");
@@ -188,9 +191,16 @@ public class ErrorReport {
         buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
         buffer.append(getMessage());
         buffer.append("</td></tr>");
-        buffer.append("<tr><td valign='top' colspan='2'>\n");
-        buffer.append(getErrorSource());
-        buffer.append("</td></tr>");
+        if (getSourceReader() != null) {
+            buffer.append("<tr><td valign='top' colspan='2'>\n");
+            buffer.append(getRenderedSource());
+            buffer.append("</td></tr>");
+        }
+        if (!isParseError()) {
+            buffer.append("<tr><td valign='top' colspan='2'>\n");
+            buffer.append(getStackTrace());
+            buffer.append("</td></tr>");
+        }
         buffer.append("</table>");
         buffer.append("<br/>");
 
@@ -456,21 +466,7 @@ public class ErrorReport {
         
         return null;
     }
-    
-    /**
-     * Return a HTML rendered section of the source error with the error
-     * line highlighted.
-     *
-     * @return a HTML rendered section of the parsing error page template
-     */
-    protected String getErrorSource() {
-        if (sourceReader != null) {
-            return getRenderedSource();
-        } else {
-            return getStackTrace();
-        }
-    }
-    
+
     /**
      * Return a HTML rendered section of the source error with the error
      * line highlighted.
@@ -478,6 +474,8 @@ public class ErrorReport {
      * @return a HTML rendered section of the parsing error page template
      */
     protected String getRenderedSource() {
+        
+        final int windowSize = 20;
 
         StringBuffer buffer = new StringBuffer(5*1024);
         
@@ -498,6 +496,11 @@ public class ErrorReport {
             String line = sourceReader.readLine();
             
             while (line != null) {
+                if (skipLine()) {
+                    line = sourceReader.readLine();
+                    continue;
+                }
+                
                 boolean isErrorLine = 
                     sourceReader.getLineNumber() == lineNumber;
                
@@ -584,9 +587,9 @@ public class ErrorReport {
         getCause().printStackTrace(pw);
 
         StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);       
-        buffer.append("<span style='font-family: Courier New, courier;'><pre>");
-        buffer.append(StringEscapeUtils.escapeHtml(sw.toString()));
-        buffer.append("</pre></span>");
+        buffer.append("<pre><tt style='font-size:10pt;'>");
+        buffer.append(StringEscapeUtils.escapeHtml(sw.toString().trim()));
+        buffer.append("</tt></pre>");
         
         return buffer.toString();
     }
@@ -656,5 +659,22 @@ public class ErrorReport {
         }
 
         return line;
+    }
+    
+    /**
+     * Return true if the current line read from the source line reader, should
+     * be skipped, or false if the current line should be rendered.
+     * 
+     * @return true if the current line from the source reader should be skipped
+     */
+    protected boolean skipLine() {
+        final int currentLine = getSourceReader().getLineNumber();
+        final int errorLine = getLineNumber();
+        
+        if (Math.abs(currentLine - errorLine) <= 10) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

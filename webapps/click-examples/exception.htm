@@ -1,33 +1,68 @@
-Click <a href="$exceptionLink.href">here</a> to cause an NullPointerException in 
-this Page.
-<p>
+This page demonstrates Clicks error handling.
 
-Click <a href="$missingMethodLink.href">here</a> to cause a NoSuchMethodException 
-in this Page. 
-<blockquote>
-This type of exception will occur if you miss spell a method name when setting a 
-Control listener.
-</blockquote>
+<dl>
+   
+<dt><a href="$exceptionLink.href">NullPointerException</a></dt>
+<dd>
+This error is caused by the Pages <tt>onExceptionClick()</tt> method throwing a 
+<tt>NullPointerException</tt>. Note how the error report shows you the exact line
+where the error occurred. Click will do this if it can find the Java source code 
+on the classpath or under the WEB-INF directory.
+</dd>
 
-Click <a href="$brokenTemplateLink.href">here</a> to view a broken page template.
-<blockquote>
-This exception originates from a Velocity ParseErrorException while parsing
-a broken page template. This type of exception is pretty rare. Most of the time 
-Velocity will ignore template errors and simply render the invalid template code.
-</blockquote>
+<dt><a href="$missingMethodLink.href">NoSuchMethodException</a></dt>
+<dd>
+This error is caused by a Control action listener being set to a method which 
+doesn't exist. Typically a typo error when setting Control listeners. 
+When the control attempts to call the listeners callback method it will throw a 
+<tt>NoSuchMethodException</tt>. In this example the Java source code
+is not available, so the error source is not highlighted.
+</dd>
 
-Click <a href="$brokenContentLink.href">here</a> to view a broken content page.
-<blockquote>
-This exception originates from a Velocity ParseErrorException while parsing
-a broken content page which included in the border template. This type of exception 
-is pretty rare. Most of the time Velocity will ignore template errors and simply 
-render the invalid template code.
-</blockquote>
+<dt><a href="$brokenRendererLink.href">Broken Renderer</a></dt>
+<dd>
+This error is caused by a Page model object throwing a NPE when being rendered by 
+Velocity. When Velocity tries to merge the page model with the template, it will
+call the objects <t>toString()</tt> method which throws a <tt>NullPointerException</tt>.
+As this error usually occurs after some contents has been written to the 
+<tt>HttpServletResponse</tt> Click will append the error report
+to the end of the response.
+<ul style="margin-top: 0.5em;">
+   <li>Line 1</li>
+   <li><a href="$brokenRendererLink.href">$brokenRenderer</a> &nbsp; &lt;- clicking on link 
+       will add <tt>BrokenRenderer</tt> to page model</li>
+   <li>Line 3</li>
+</ul>
+</dd>
 
-Click <a href="missing.htm">missing.htm</a> to view page not found handling.
-<blockquote>
+<dt><a href="$brokenTemplateLink.href">Broken Page Border Template</a></dt>
+<dd>
+This error is caused by an invalid Velocity expression in a page border template.
+When Velocity tries to parse this expression it will throw a 
+<tt>ParseErrorException</tt>. At this point no output will have been written to
+the <tt>HttpServletResponse</tt> and the ErrorPage will render the error report
+in the error.htm page template.
+Note these types of exceptions are pretty rare. Most of the time Velocity will ignore 
+template errors and simply render the invalid template code.
+</dd>
+
+<dt><a href="$brokenContentLink.href">Broken Page Content Template</a></dt>
+<dd>
+This is another example of an invalid Velocity expression, but this time it is
+contained in the page content template. When a exception occurs in a content template, 
+Velocity will be performing a merge of the Page model and the border template, 
+and including the content template. At this point Velocity will most probably have 
+written border template output to the <tt>HttpServletResponse</tt> so the
+<tt>ClickServlet</tt> appends the error report to the response output stream before 
+it is closed.
+</dd>
+
+<dt><a href="missing.htm">Page Not Found</a></dt>
+<dd>
 When the ClickServlet cannot find a requested page it will render the 
 <a href="click/not-found.htm">click/not-found.htm</a> page.<br/>
 You can custome is this page templates to suite your own needs.
-</blockquote>
+</dd>
+
+</dl>
 
