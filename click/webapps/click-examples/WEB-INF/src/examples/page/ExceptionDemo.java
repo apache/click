@@ -20,7 +20,11 @@ public class ExceptionDemo extends BorderedPage {
         ActionLink brokenContentLink = new ActionLink("brokenContentLink");
         brokenContentLink.setListener(this, "onBrokenContentClick");
         addControl(brokenContentLink);
-
+     
+        ActionLink brokenRendererLink = new ActionLink("brokenRendererLink");
+        brokenRendererLink.setListener(this, "onBrokenRendererClick");
+        addControl(brokenRendererLink);
+        
         ActionLink brokenTemplateLink = new ActionLink("brokenTemplateLink");
         brokenTemplateLink.setListener(this, "onBrokenTemplateClick");
         addControl(brokenTemplateLink);
@@ -39,6 +43,11 @@ public class ExceptionDemo extends BorderedPage {
         return true;
     }
 
+    public boolean onBrokenRendererClick() {
+        addModel("brokenRenderer", new BrokenRenderer());
+        return true;
+    }
+    
     public boolean onBrokenTemplateClick() {
         setPath("broken-template.htm");
         template = "broken-template.htm";
@@ -46,7 +55,9 @@ public class ExceptionDemo extends BorderedPage {
     }
 
     public boolean onExceptionClick() {
-        throw new NullPointerException("Oh No...");
+        Object object = null;
+        object.hashCode();
+        return true;
     }
 
     /**
@@ -56,6 +67,25 @@ public class ExceptionDemo extends BorderedPage {
      */
     public String getTemplate() {
         return (template != null) ? template : super.getTemplate();
+    }
+    
+    /*
+     * Provides a rendering ojbect which will throw a NPE when merged by
+     * velocity in the template.
+     *
+     * @author Malcolm Edgar
+     */
+    public static class BrokenRenderer { 
+        
+        /**
+         * Guaranteed to fail, or you money back.
+         * 
+         * @see Object#toString()
+         */
+        public String toString() {
+            Object object = null;
+            return object.toString();
+        }
     }
 
 }
