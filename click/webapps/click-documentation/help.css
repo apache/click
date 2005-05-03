@@ -1,3 +1,7 @@
+a {
+  text-decoration: underline;
+}
+
 a:visited {
   color: blue;
 }

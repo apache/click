@@ -27,20 +27,22 @@
 
 <ul>
   <li>
-    Provide 2 review releases over the next few months, with the aim of making
+    Provide a Release Candiate over the next few months, with the aim of making
     a 1.0 release in June 2005.
   </li>
   <li>Create <b>Tracker</b> example application.
-    <p/>
     Tracker will provide a Bug Tracking and Issue Management application.
     <p/>
     The application will use <a href="http://www.hibernate.org">Hibernate</a> 2.1.8 
     for persistence layer, with <a href="http://www.mckoi.com">Mckoi</a> 1.0.3 as 
     the backing SQL database.
-    <p/>
     The example will be tailored for deployment to 
     <a href="http:jakarta.apache.org/tomcat">Tomcat</a> 5.5.7.
    </li>
+   <li>
+    Create a Table control which supports pagination, sorting and custom
+    renderers.
+  </li>
 </ul>
 
 <p>&nbsp;</p>
@@ -48,7 +50,7 @@
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 0.4 - April 2005</dt>
+  <dt>Version 0.4 - May 2005</dt>
   <dd>
     <ul style="padding: 0em;">
       <li class="change">Implemented <a href="pages.html#page-templating">Page Templating</a> 
@@ -61,6 +63,10 @@
       </li>
       <li class="change">Integrated the DHTML Calendar widget by <a href="http://www.dynarch.com/">Dyna.com</a>
          into <a href="click-api/net/sf/click/control/DateField.html">DateField</a> control.
+      </li>
+      <li class="change">Added Form and Field <a href="click-api/net/sf/click/control/Field.html#readonly">readonly</a> 
+         property. Modified Field subclasses to render their HTML readonly attribute. If the Form is set to
+         readonly all its fields will also be readonly.
       </li>
       <li class="change">Added Control <a href="click-api/net/sf/click/Control.html#getId()">getId()</a> 
          method. Modified control classes to render their HTML id attribute.

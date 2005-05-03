@@ -138,9 +138,8 @@ public class Button extends Field {
 
         renderAttributes(buffer);
 
-        if (isDisabled()) {
-            buffer.append(getDisabled());
-        }
+        buffer.append(getDisabled());
+        
         buffer.append(">");
 
         return buffer.toString();

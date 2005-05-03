@@ -17,46 +17,46 @@ public class ExceptionDemo extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        ActionLink brokenContentLink = new ActionLink("brokenContentLink");
-        brokenContentLink.setListener(this, "onBrokenContentClick");
-        addControl(brokenContentLink);
-     
+        ActionLink nullPointerLink = new ActionLink("nullPointerLink");
+        nullPointerLink.setListener(this, "onNullPointerClick");
+        addControl(nullPointerLink);
+
+        ActionLink missingMethodLink = new ActionLink("missingMethodLink");
+        missingMethodLink.setListener(this, "onMissingMethodClick");
+        addControl(missingMethodLink);
+        
         ActionLink brokenRendererLink = new ActionLink("brokenRendererLink");
         brokenRendererLink.setListener(this, "onBrokenRendererClick");
         addControl(brokenRendererLink);
         
-        ActionLink brokenTemplateLink = new ActionLink("brokenTemplateLink");
-        brokenTemplateLink.setListener(this, "onBrokenTemplateClick");
-        addControl(brokenTemplateLink);
-
-        ActionLink exceptionLink = new ActionLink("exceptionLink");
-        exceptionLink.setListener(this, "onExceptionClick");
-        addControl(exceptionLink);
-
-        ActionLink missingMethodLink = new ActionLink("missingMethodLink");
-        missingMethodLink.setListener(this, "missingMethodClick");
-        addControl(missingMethodLink);
+        ActionLink brokenBorderLink = new ActionLink("brokenBorderLink");
+        brokenBorderLink.setListener(this, "onBrokenBorderClick");
+        addControl(brokenBorderLink);
+        
+        ActionLink brokenContentLink = new ActionLink("brokenContentLink");
+        brokenContentLink.setListener(this, "onBrokenContentClick");
+        addControl(brokenContentLink);
     }
-
-    public boolean onBrokenContentClick() {
-        setPath("broken-content.htm");
+    
+    public boolean onNullPointerClick() {
+        Object object = null;
+        object.hashCode();
         return true;
     }
-
+    
     public boolean onBrokenRendererClick() {
         addModel("brokenRenderer", new BrokenRenderer());
         return true;
     }
-    
-    public boolean onBrokenTemplateClick() {
-        setPath("broken-template.htm");
-        template = "broken-template.htm";
+        
+    public boolean onBrokenBorderClick() {
+        setPath("broken-border.htm");
+        template = "broken-border.htm";
         return true;
     }
 
-    public boolean onExceptionClick() {
-        Object object = null;
-        object.hashCode();
+    public boolean onBrokenContentClick() {
+        setPath("broken-content.htm");
         return true;
     }
 

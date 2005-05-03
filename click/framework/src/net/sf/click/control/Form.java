@@ -392,6 +392,9 @@ public class Form implements Control {
     /** The form context. */
     protected Context context;
 
+    /** The form disabled value. */
+    protected boolean disabled;
+
     /** The form level error message. */
     protected String error;
 
@@ -432,6 +435,9 @@ public class Form implements Control {
 
     /** The form name. */
     protected String name;
+    
+    /** The form is readonly flag. */
+    protected boolean readonly;
 
     // ----------------------------------------------------------- Constructors
 
@@ -571,7 +577,25 @@ public class Form implements Control {
     public List getButtonList() {
         return buttonList;
     }
-
+    
+    /**
+     * Return true if the form is a disabled.
+     *
+     * @return true if the form is a disabled
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+    
+    /**
+     * Set the form disabled flag
+     *
+     * @param disabled the form disabled flag
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+    
     /**
      * Return the number of form layout table columns. This property is used
      * to layout the number of table columns the form is rendered in.
@@ -836,6 +860,24 @@ public class Form implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+    }
+    
+    /**
+     * Return true if the form is a readonly.
+     *
+     * @return true if the form is a readonly
+     */
+    public boolean isReadonly() {
+        return readonly;
+    }
+    
+    /**
+     * Set the form readonly flag
+     *
+     * @param readonly the form readonly flag
+     */
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
     }
 
     /**

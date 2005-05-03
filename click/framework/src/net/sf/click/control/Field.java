@@ -88,6 +88,9 @@ public abstract class Field implements Control {
 
     /** The Field name. */
     protected String name;
+    
+    /** The Field is readonly flag. */
+    protected boolean readonly;
 
     /** The Field is required flag. */
     protected boolean required;
@@ -214,7 +217,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return HTML rendering string "disabled " if the Field is disabled or a
+     * Return HTML rendering string " disabled" if the Field is disabled or a
      * blank string otherwise.
      *
      * @see #isDisabled()
@@ -222,16 +225,21 @@ public abstract class Field implements Control {
      * @return HTML rendering string for the Fields disabled status
      */
     public String getDisabled() {
-        return (disabled) ? " disabled" : "";
+        return (isDisabled()) ? " disabled" : "";
     }
 
     /**
-     * Return true if the Field is a disabled.
+     * Return true if the Field is a disabled. The Field will also be disabled 
+     * if the parent Form is disabled.
      *
      * @return true if the Field is a disabled
      */
     public boolean isDisabled() {
-        return disabled;
+        if (getForm() != null && getForm().isDisabled()) {
+            return true;
+        } else {
+            return disabled;
+        }
     }
 
     /**
@@ -421,6 +429,41 @@ public abstract class Field implements Control {
         this.name = name;
     }
 
+    /**
+     * Return HTML rendering string " readonly" if the Field is readonly or a
+     * blank string otherwise.
+     *
+     * @see #isDisabled()
+     *
+     * @return HTML rendering string for the Fields readonly status
+     */
+    public String getReadonly() {
+        return (isReadonly()) ? " readonly" : "";
+    }
+
+    /**
+     * Return true if the Field is a readonly. The Field will also be readonly 
+     * if the parent Form is readonly.
+     *
+     * @return true if the Field is a readonly
+     */
+    public boolean isReadonly() {
+        if (getForm() != null && getForm().isReadonly()) {
+            return true;
+        } else {
+            return readonly;
+        }
+    }
+ 
+    /**
+     * Set the Field readonly flag
+     *
+     * @param readonly the Field readonly flag
+     */
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
+    }
+    
     /**
      * Return true if the Field's value is required.
      *
