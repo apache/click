@@ -1,6 +1,6 @@
-<html><head>
+<html><head><title>Error Page</title>
 
-<title>Error Page</title><style>
+<style>
 body, table, td {
   font-family: arial, sans-serif;
   font-size: small;
@@ -19,7 +19,7 @@ function displayError() {
 }
 </script></head>
 <body>
- <h1>Error Page</h1>
+ <h2>Error Page</h2>
  
  The application encountered an unexpected error.
  <p>
@@ -27,7 +27,7 @@ function displayError() {
     To view error details click <a href="#" onclick="displayError();">here</a>.
    </p><p>
    </p><div style="display: block;" id="errorReport" class="errorReport">
-<table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Page Parsing Error</td></tr><tr><td width="12%"><b>Source</b></td><td>broken-template.htm</td></tr><tr><td valign="top" width="12%"><b>Message</b></td><td>Was expecting one of:
+<table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Page Parsing Error</td></tr><tr><td width="12%"><b>Source</b></td><td>broken-border.htm</td></tr><tr><td valign="top" width="12%"><b>Message</b></td><td>Was expecting one of:
     &lt;RPAREN&gt; , &nbsp;
     &lt;IDENTIFIER&gt; , &nbsp;
     "{" , &nbsp;
@@ -39,25 +39,7 @@ function displayError() {
     "{" , &nbsp;
     "true" , &nbsp;
     "false" </td></tr><tr><td colspan="2" valign="top">
-<span style="font-family: Courier New,courier;"><div style="white-space: pre;">  1:  &lt;html&gt;</div>
-<div style="white-space: pre;">  2:  &lt;head&gt;	</div>
-<div style="white-space: pre;">  3:  &lt;title&gt;Click Examples - $title&lt;/title&gt;</div>
-<div style="white-space: pre;">  4:  &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"&gt;</div>
-<div style="white-space: pre;">  5:  $form.htmlImports</div>
-<div style="white-space: pre;">  6:  &lt;/head&gt;	</div>
-<div style="white-space: pre;">  7:  &lt;body&gt;</div>
-<div style="white-space: pre;">  8:   	</div>
-<div style="white-space: pre;">  9:  &lt;h1&gt;$title&lt;/h1&gt; </div>
-<div style="white-space: pre;"> 10:  </div>
-<div style="white-space: pre; background-color: yellow;"> <b>11</b>:  #writeForm( $srcPath <span style="white-space: pre; color: red; text-decoration: underline; font-weight: bold;">,</span> $path )</div>
-<div style="white-space: pre;"> 12:  </div>
-<div style="white-space: pre;"> 13:  Updated at $time</div>
-<div style="white-space: pre;"> 14:  &lt;p&gt;</div>
-<div style="white-space: pre;"> 15:  To refresh click &lt;a href="test-form.htm"&gt;here&lt;/a&gt;.</div>
-<div style="white-space: pre;"> 16:  </div>
-<div style="white-space: pre;"> 17:  &lt;/body&gt;</div>
-<div style="white-space: pre;"> 18:  &lt;/html&gt;</div>
-</span></td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Page</td></tr><tr><td width="12%"><b>Classname</b></td><td>examples.page.ExceptionDemo</td></tr><tr><td width="12%"><b>Path</b></td><td>broken-template.htm</td></tr><tr><td><b width="12%">Template</b></td><td>broken-template.htm</td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Request</td></tr><tr><td valign="top" width="12%"><b>Attributes</b></td><td>&nbsp;</td></tr><tr><td width="12%"><b>Auth Type</b></td><td>null</td></tr><tr><td width="12%"><b>Context Path</b></td><td><a href="http://localhost:8080/click-examples">/click-examples</a></td></tr><tr><td valign="top" width="12%"><b>Headers</b></td><td>accept=text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5<br>accept-charset=ISO-8859-1,utf-8;q=0.7,*;q=0.7<br>accept-encoding=gzip,deflate<br>accept-language=en-us,en;q=0.5<br>connection=keep-alive<br>host=localhost:8080<br>keep-alive=300<br>referer=http://localhost:8080/click-examples/exception.htm<br>user-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Firefox/1.0.2<br></td></tr><tr><td width="12%"><b>Query</b></td><td>actionLink=brokenTemplateLink</td></tr><tr><td width="12%"><b>Method</b></td><td>GET</td></tr><tr><td valign="top" width="12%"><b>Parameters</b></td><td>actionLink=brokenTemplateLink<br></td></tr><tr><td width="12%"><b>Remote User</b></td><td>null</td></tr><tr><td valign="top" width="12%"><b>URI</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td></tr><tr><td><b width="12%">URL</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td></tr><tr><td valign="top" width="12%"><b>Session</b></td><td>&nbsp;</td></tr></tbody></table>
+<pre style="font-family: Courier New,courier;"><div>  1:  &lt;html&gt;</div><div>  2:  &lt;head&gt;	</div><div>  3:  &lt;title&gt;Click Examples - $title&lt;/title&gt;</div><div>  4:  &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"&gt;</div><div>  5:  $form.htmlImports</div><div>  6:  &lt;/head&gt;	</div><div>  7:  &lt;body&gt;</div><div>  8:   	</div><div>  9:  &lt;h1&gt;$title&lt;/h1&gt; </div><div> 10:  </div><div style="background-color: yellow;"> <b>11</b>:  #writeForm( $srcPath <span style="color: red; text-decoration: underline; font-weight: bold;">,</span> $path )</div><div> 12:  </div><div> 13:  Updated at $time</div><div> 14:  &lt;p&gt;</div><div> 15:  To refresh click &lt;a href="test-form.htm"&gt;here&lt;/a&gt;.</div><div> 16:  </div><div> 17:  &lt;/body&gt;</div><div> 18:  &lt;/html&gt;</div></pre></td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Page</td></tr><tr><td width="12%"><b>Classname</b></td><td>examples.page.ExceptionDemo</td></tr><tr><td width="12%"><b>Path</b></td><td>broken-border.htm</td></tr><tr><td><b width="12%">Template</b></td><td>broken-border.htm</td></tr></tbody></table><br><table border="1" cellpadding="4" cellspacing="1" width="100%"><tbody><tr><td colspan="2" style="color: white; background-color: navy; font-weight: bold;">Request</td></tr><tr><td valign="top" width="12%"><b>Attributes</b></td><td>&nbsp;</td></tr><tr><td width="12%"><b>Auth Type</b></td><td>null</td></tr><tr><td width="12%"><b>Context Path</b></td><td><a href="http://localhost:8080/click-examples">/click-examples</a></td></tr><tr><td valign="top" width="12%"><b>Headers</b></td><td>accept=text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5<br>accept-charset=ISO-8859-1,utf-8;q=0.7,*;q=0.7<br>accept-encoding=gzip,deflate<br>accept-language=en-us,en;q=0.5<br>connection=keep-alive<br>host=localhost:8080<br>keep-alive=300<br>referer=http://localhost:8080/click-examples/exception.htm<br>user-agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.7) Gecko/20050414 Firefox/1.0.3<br></td></tr><tr><td width="12%"><b>Query</b></td><td>actionLink=brokenBorderLink</td></tr><tr><td width="12%"><b>Method</b></td><td>GET</td></tr><tr><td valign="top" width="12%"><b>Parameters</b></td><td>actionLink=brokenBorderLink<br></td></tr><tr><td width="12%"><b>Remote User</b></td><td>null</td></tr><tr><td valign="top" width="12%"><b>URI</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">/click-examples/exception.htm</a></td></tr><tr><td><b width="12%">URL</b></td><td><a href="http://localhost:8080/click-examples/exception.htm">http://localhost:8080/click-examples/exception.htm</a></td></tr><tr><td valign="top" width="12%"><b>Session</b></td><td>&nbsp;</td></tr></tbody></table>
 </div>
 
  

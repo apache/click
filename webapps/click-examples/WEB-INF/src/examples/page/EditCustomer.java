@@ -75,6 +75,7 @@ public class EditCustomer extends BorderedPage {
 
         cancelButton = new Submit(" Cancel ");
         cancelButton.setListener(this, "onCancelClick");
+
         form.add(cancelButton);
     }
 

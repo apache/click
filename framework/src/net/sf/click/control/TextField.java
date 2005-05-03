@@ -243,6 +243,7 @@ public class TextField extends Field {
             buffer.append(" class='disabled'");
         }
         buffer.append(getDisabled());
+        buffer.append(getReadonly());
         if (getMaxLength() > 0) {
             buffer.append(" maxlength='");
             buffer.append(getMaxLength());

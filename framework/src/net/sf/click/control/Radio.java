@@ -164,6 +164,7 @@ public class Radio extends Field {
         renderAttributes(buffer);
 
         buffer.append(getDisabled());
+        buffer.append(getReadonly());
 
         if (isValid()) {
             buffer.append(">");

@@ -243,6 +243,7 @@ public class TextArea extends Field {
             buffer.append(" class='disabled'");
         }
         buffer.append(getDisabled());
+        buffer.append(getReadonly());
         buffer.append(">");
         buffer.append(getValue());
         buffer.append("</textarea>");

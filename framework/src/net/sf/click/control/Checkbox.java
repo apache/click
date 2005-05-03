@@ -155,6 +155,7 @@ public class Checkbox extends Field {
             buffer.append("'");
         }
         buffer.append(getDisabled());
+        buffer.append(getReadonly());
         if (isValid()) {
             buffer.append(">");
         } else {

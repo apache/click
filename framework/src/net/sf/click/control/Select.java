@@ -465,6 +465,7 @@ public class Select extends Field {
         buffer.append(getId());
         buffer.append("'");
         buffer.append(getDisabled());
+
         buffer.append(" size='");
         buffer.append(getSize());
         buffer.append("'");
