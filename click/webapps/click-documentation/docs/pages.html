@@ -42,7 +42,7 @@ components being defined in page elements of the
 The path attribute specifies the location of the page Velocity template, and the classname
 attribute specifies the page Java class name.
 
-<a name="page-class"><h2>Classes</h2></a>
+<a name="page-class" class="heading"><h2>Classes</h2></a>
 
 All custom Click pages must subclass the
 <a target="topic" href="click-api/net/sf/click/Page.html">Page</a> base class.
@@ -81,7 +81,7 @@ so when you create Page subclasses you must ensure you don't add an incompatible
 constructor. By convention in Click you place initialization code in an <tt>onInit()</tt>
 method and you generally don't implement a constructor.
 
-<a name="page-execution"><h2>Execution</h2></a>
+<a name="page-execution" class="heading"><h2>Execution</h2></a>
 
 The GET request execution sequence for Pages is summarized below in the Figure 2.
 
@@ -150,18 +150,18 @@ method is invoked instead on <tt>onGet()</tt>. See the
 <p/>
 Another view on the execution flow of Pages is illustrated in the Activity diagram below.
 <p/>
-<a name="activity-diagram"><img src="../images/activity-diagram.png"/></a>
+<a name="activity-diagram" class="heading"><img src="../images/activity-diagram.png"/></a>
 <p class="diagram">
 <b>Figure 3. &nbsp; Page Execution Activity Diagram</b>
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
 </p>
 
-<a name="page-navigation"><h2>Navigation</h2></a>
+<a name="page-navigation" class="heading"><h2>Navigation</h2></a>
 
 Navigation between pages is achieved by using forwards, redirects and by setting the 
 page template path.
 
-<a name="page-foward"><h3>Forward</h3></a>
+<a name="page-foward" class="heading"><h3>Forward</h3></a>
 
 To forward to another page using the servlet 
 <a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
@@ -225,7 +225,7 @@ Forwarded to page template <span class="html">view-customer.htm</span>:
 Request attributes are automatically added to the Velocity Context object so are  
 available in the page template.
 
-<a name="page-template-path"><h3>Template Path</h3></a>
+<a name="page-template-path" class="heading"><h3>Template Path</h3></a>
 
 An alternative to forwarding to a new page is to simply set the path to the new
 page template to render. With this approach the page template  being rendered must have 
@@ -250,7 +250,7 @@ the first Page object is
 "<a target="topic" href="click-api/net/sf/click/Page.html#onDestroy()">destroyed</a>"
 before the second Page object is created and any model values would be lost.
 
-<a name="page-redirect"><h3>Redirect</h3></a>
+<a name="page-redirect" class="heading"><h3>Redirect</h3></a>
 
 Redirects are another very useful way to navigate between pages. See 
 HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
@@ -338,7 +338,7 @@ Redirect technique is a very useful method of preventing users from submitting a
 twice by hitting the refresh button.
 
 
-<a name="page-templating"><h2>Page Templating</h2></a>
+<a name="page-templating" class="heading"><h2>Page Templating</h2></a>
 
 Click supports page templating (a.k.a. <i>Tiles</i> in Struts) enabling you to
 create a standardized look and feel for your web application and greatly reducing
@@ -446,7 +446,7 @@ which is referenced in the <span class="blue">border.htm</span> template as <spa
 Each bordered page can define their own title which is rendered in this template.
 
 
-<a name="page-security"><h2>Security</h2></a>
+<a name="page-security" class="heading"><h2>Security</h2></a>
 
 Pages provide an 
 <a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
@@ -550,7 +550,7 @@ and Louis E. Mauget's
 <a target="topic" href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form-Based Web Authentication</a>
 paper.
 
-<a name="page-error-handling"><h2>Error Handling</h2></a>
+<a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
 
 If an Exception occurs processing a Page object or rendering a template the error
 is delegated to the registered handler. The default Click error handler is the
@@ -586,7 +586,7 @@ for details on how to set the application mode.
 Please also see the <a href="examples.html">Examples</a> web app Exception Demo for demonstrations of Clicks error 
 handling.
 
-<a name="page-not-found"><h2>Page Not Found</h2></a>
+<a name="page-not-found" class="heading"><h2>Page Not Found</h2></a>
 
 If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
 it will use the registered <a href="not-found.html">not-found.htm</a> page. 

@@ -253,7 +253,7 @@ public class ActionLink implements Control {
             attributes.remove(name);
         }
     }
-    
+
     /**
      * Return the ActionLink attributes Map.
      *
@@ -372,9 +372,9 @@ public class ActionLink implements Control {
     public String getHref() {
         return getHref(getValue());
     }
-    
+
     /**
-     * Return the "id" attribute value if defined, or the ActionLink name 
+     * Return the "id" attribute value if defined, or the ActionLink name
      * otherwise.
      *
      * @see net.sf.click.Control#getId()

@@ -13,13 +13,13 @@
 Click provides a rich set of Controls which support client side rendering and
 server side processing. This section covers the following topics:
 <ul>
-  <li><a href="#control-interface">Control Interface</a> - describes the Control interface<p/>
+  <li><a href="#control-interface">Control Interface</a> - describes the Control interface
   </li> 
-  <li><a href="#control-callback">Control Callback</a> - control event callback pattern<p/>
+  <li><a href="#control-callback">Control Callback</a> - control event callback pattern
   </li> 
-  <li><a href="#control-class">Control Classes</a> - control Java classes<p/>
+  <li><a href="#control-class">Control Classes</a> - control Java classes
   </li>
-  <li><a href="#message-properties">Message Properties</a> - control message properties<p/>
+  <li><a href="#message-properties">Message Properties</a> - control message properties
   </li> 
 </ul>
 <p>&nbsp;</p>
@@ -30,7 +30,7 @@ While this section provides an overview how Controls work please see the
 which provides extensive information and examples.
 Javadoc 
 
-<a name="control-interface"><h2>Control Interface</h2></a>
+<a name="control-interface" class="heading"><h2>Control Interface</h2></a>
 In Click Controls provide the server side components that process user input, and render their
 display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
 <p/>
@@ -82,7 +82,7 @@ Methods on the Control interface include:
   </li>
 </ul>
 
-<a name="control-callback"><h2>Control Callback</h2></a>
+<a name="control-callback" class="heading"><h2>Control Callback</h2></a>
 
 Click Controls provide an event callback mechanism similar the java.awt.ActionListener callback.
 <p/>
@@ -119,7 +119,7 @@ Being able to stop further processing and do something else can be very handy. F
 Pages onGet() or onPost() method may perform an expensive database operation. By using 
 returning false in a event handler you can skip this step and forward to the next page.
 
-<a name="control-class"><h2>Control Classes</h2></a>
+<a name="control-class" class="heading"><h2>Control Classes</h2></a>
 
 Control classes are defined in the package 
 <a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>,
@@ -161,7 +161,7 @@ You can also aggregate controls to build more complex controls. For example the
 uses a <a href="click-api/net/sf/click/control/Select.html">Select</a>
 control to render the different credit card types. 
 
-<a name="message-properties"><h2>Message Properties</h2></a>
+<a name="message-properties" class="heading"><h2>Message Properties</h2></a>
 
 Control strings for field validation messages and HTML formatting strings are
 externalized in the properties file:

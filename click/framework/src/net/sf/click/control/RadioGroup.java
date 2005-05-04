@@ -132,7 +132,7 @@ public class RadioGroup extends Field {
         radio.setContext(getContext());
         getRadioList().add(radio);
     }
-       
+
     /**
      * @see Field#setForm(Form)
      */
@@ -175,10 +175,10 @@ public class RadioGroup extends Field {
         }
         return radioList;
     }
-    
+
     /**
      * Return true if RadioGroup has Radio controls, or false otherwise.
-     * 
+     *
      * @return true if RadioGroup has Radio controls, or false otherwise
      */
     public boolean hasRadios() {

@@ -2,6 +2,10 @@ a {
   text-decoration: underline;
 }
 
+.heading {
+	text-decoration: none;
+}
+
 a:visited {
   color: blue;
 }

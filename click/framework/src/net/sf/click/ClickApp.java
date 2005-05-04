@@ -825,7 +825,7 @@ class ClickApp implements EntityResolver {
             if (level < logLevel) {
                 return;
             }
-            
+
             Throwable cause = null;
             if (error != null) {
                 if (error instanceof ServletException) {

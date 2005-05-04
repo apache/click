@@ -88,7 +88,7 @@ import org.apache.velocity.util.SimplePool;
 public class ClickServlet extends HttpServlet {
 
     // --------------------------------------------------------------- Contants
-    
+
     /** The Java serialiization version unique id. */
     private static final long serialVersionUID = 3835158375989262128L;
 
@@ -206,7 +206,7 @@ public class ClickServlet extends HttpServlet {
         Page page = null;
         try {
             page = createPage(request, response, isPost);
-            
+
             processPage(page);
 
         } catch (Exception e) {
@@ -278,7 +278,7 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Exception ex) {
             String message =
-                "handleError: " + ex.getClass().getName() 
+                "handleError: " + ex.getClass().getName()
                  + " thrown while handling " + exception.getClass().getName()
                  + ". Now throwing RuntimeException.";
 
@@ -292,44 +292,44 @@ public class ClickServlet extends HttpServlet {
             }
         }
     }
-    
+
     /**
      * Process the given page invoking its "on" event callback methods
      * and directing the response. This method does not invoke the "onDestroy()"
      * callback method.
-     * 
+     *
      * @param page the Page to process
      * @throws Exception if an error occurs
      */
     protected void processPage(Page page) throws Exception {
-        
+
         final HttpServletRequest request = page.getContext().getRequest();
         final HttpServletResponse response = page.getContext().getResponse();
         final boolean isPost = page.getContext().isPost();
-        
+
         page.onInit();
-        
+
         boolean continueProcessing = page.onSecurityCheck();
-        
+
         if (continueProcessing && page.hasControls()) {
-            
+
             // Make sure dont processed forwarded request
             if (!page.getContext().isForward()) {
-                
+
                 List controls = page.getControls();
-                
+
                 for (int i = 0, size = controls.size(); i < size; i++) {
                     Control control = (Control) controls.get(i);
-                    
+
                     continueProcessing = control.onProcess();
-                    
+
                     if (!continueProcessing) {
                         break;
                     }
                 }
             }
         }
-        
+
         if (continueProcessing) {
             if (isPost) {
                 page.onPost();
@@ -337,30 +337,30 @@ public class ClickServlet extends HttpServlet {
                 page.onGet();
             }
         }
-        
+
         if (page.getRedirect() != null) {
             String url = response.encodeRedirectURL(page.getRedirect());
-            
+
             if (logger.isDebugEnabled()) {
                 logger.debug("redirect=" + url);
             }
-            
+
             response.sendRedirect(url);
-            
+
         } else if (page.getForward() != null) {
             request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
-            
+
             if (logger.isDebugEnabled()) {
                 logger.debug("forward=" + page.getForward());
             }
             RequestDispatcher dispatcher =
                 request.getRequestDispatcher(page.getForward());
-            
+
             dispatcher.forward(request, response);
-            
+
         } else if (page.getPath() != null) {
             renderTemplate(page);
-            
+
         } else {
             String msg =
                 "Path not defined for Page " + page.getClass().getName();
@@ -383,7 +383,7 @@ public class ClickServlet extends HttpServlet {
     protected void renderTemplate(Page page) throws Exception {
 
         long startTime = System.currentTimeMillis();
-        
+
         final VelocityContext context = createVelocityContext(page);
 
         // May throw parsing error if template could not be obtained
@@ -397,7 +397,7 @@ public class ClickServlet extends HttpServlet {
 
         OutputStream output = response.getOutputStream();
 
-        // If Page has a "Content-Encoding" "gzip" header then we can look to 
+        // If Page has a "Content-Encoding" "gzip" header then we can look to
         // compressing the output stream
         if (hasContentEncodingGzipHeader(page)) {
 
@@ -433,12 +433,12 @@ public class ClickServlet extends HttpServlet {
             template.merge(context, velocityWriter);
 
         } catch (Exception error) {
-            // Exception occured merging template and model. It is possible 
+            // Exception occured merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
-            ErrorReport errorReport = 
+            ErrorReport errorReport =
                 new ErrorReport(error, page, clickApp.isProductionMode());
-            
+
             velocityWriter.write(errorReport.getErrorReport());
 
             throw error;

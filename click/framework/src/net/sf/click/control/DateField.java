@@ -286,7 +286,7 @@ public class DateField extends TextField {
             buffer.append("/click/calendar.gif' id='");
             buffer.append(getId());
             buffer.append("-button' ");
-            
+
             String calendarTitle = getMessage("calendar-image-title");
             if (calendarTitle != null) {
                 buffer.append(" alt='");
@@ -297,7 +297,7 @@ public class DateField extends TextField {
             } else {
                 buffer.append(">\n");
             }
-            
+
             buffer.append("<script type='text/javascript'>\n");
             buffer.append("Calendar.setup({ \n");
             buffer.append(" inputField : '");
