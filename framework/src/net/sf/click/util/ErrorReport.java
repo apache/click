@@ -51,43 +51,43 @@ import org.apache.velocity.exception.ParseErrorException;
  * @author Malcolm Edgar
  */
 public class ErrorReport {
-    
+
     /** The Java language keywords. Used to render Java source code. */
-    protected static final String[] JAVA_KEYWORDS = { "package", "import",
+    private static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",
             "return", "if", "while", "for", "do", "else", "try", "new", "void",
             "catch", "throws", "throw", "static", "final", "break", "continue",
-            "super", "finally", "true", "false", "null", "boolean", "int",
-            "char", "long", "float", "double", "short" };
-    
+            "super", "finally", "true", "false", "true;", "false;", "null", 
+            "boolean", "int", "char", "long", "float", "double", "short" };
+
     /** The column number of the error, or -1 if not defined. */
     protected int columnNumber;
-       
+
     /** The cause of the error. */
     protected final Throwable error;
-    
+
 
     /** The line number of the error, or -1 if not defined. */
     protected int lineNumber;
-    
+
     /** The error is Velocity parsing exception. */
     protected final boolean isParseError;
-       
+
     /** The applicaiton is in "production" mode flag. */
     protected final boolean isProductionMode;
-    
+
     /** The page which caused the error. */
     protected final Page page;
-    
+
     /** The name of the error source. */
     protected final String sourceName;
-    
+
     /** The error souce LineNumberReader */
     protected LineNumberReader sourceReader;
-    
+
     /**
      * Create a ErrorReport instance from the given error and ServletContext.
-     * 
+     *
      * @param error the cause of the error
      * @param page the Page causing the error
      * @param isProductionMode the application is in "production" mode
@@ -96,32 +96,32 @@ public class ErrorReport {
         this.page = page;
         this.error = error;
         this.isProductionMode = isProductionMode;
-        
+
         isParseError = error instanceof ParseErrorException;
-        
+
         if (isParseError) {
             ParseErrorException pee = (ParseErrorException) error;
             sourceName = pee.getTemplateName();
             lineNumber = pee.getLineNumber();
             columnNumber = pee.getColumnNumber();
-            
+
             ServletContext context = page.getContext().getServletContext();
-            
-            InputStream is = 
+
+            InputStream is =
                 context.getResourceAsStream(pee.getTemplateName());
-            
+
             sourceReader = new LineNumberReader(new InputStreamReader(is));
-            
+
         } else {
             sourceName = null;
             columnNumber = -1;
-            
+
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             getCause().printStackTrace(pw);
-            
+
             StringTokenizer tokenizer = new StringTokenizer(sw.toString(), "\n");
-            
+
             try {
                 tokenizer.nextToken();
                 String line = tokenizer.nextToken();
@@ -132,25 +132,25 @@ public class ErrorReport {
                     nameEnd = line.indexOf("$");
                 }
                 String classname = line.substring(nameStart + 3, nameEnd);
-                    
+
                 int lineStart = line.indexOf(":");
                 if (lineStart != -1) {
                     int lineEnd = line.indexOf(")");
                     String linenumber = line.substring(lineStart + 1, lineEnd);
-                    System.err.println("linenumber="+linenumber);
+
                     this.lineNumber = Integer.parseInt(linenumber);
-                    
+
                     String filename = "/" + classname.replace('.', '/') + ".java";
-                    
+
                     sourceReader = getJavaSourceReader(filename);
                 }
-                                
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     /**
      * Return a error report HTML &lt;div&gt; element for the given error and
      * page. The HTML &lt;div&gt; element 'id' and 'class' attribute values are
@@ -159,19 +159,19 @@ public class ErrorReport {
      * @return a error HTML display
      */
     public String getErrorReport() {
-        
+
         if (isProductionMode()) {
             Locale locale = page.getContext().getRequest().getLocale();
-            ResourceBundle bundle = 
+            ResourceBundle bundle =
                 ResourceBundle.getBundle("click-control", locale);
             return bundle.getString("production-error-message");
         }
-        
+
         StringBuffer buffer = new StringBuffer(10 * 1024);
 
         Throwable cause = getCause();
 
-        HttpServletRequest request = page.getContext().getRequest();     
+        HttpServletRequest request = page.getContext().getRequest();
 
         buffer.append("<div id='errorReport' class='errorReport'>\n");
 
@@ -187,7 +187,7 @@ public class ErrorReport {
             buffer.append("<tr><td width='12%'><b>Class</b></td><td>");
             buffer.append(cause.getClass().getName());
             buffer.append("</td></tr>");
-        }     
+        }
         buffer.append("<tr><td valign='top' width='12%'><b>Message</b></td><td>");
         buffer.append(getMessage());
         buffer.append("</td></tr>");
@@ -311,10 +311,10 @@ public class ErrorReport {
 
         return buffer.toString();
     }
-    
+
     /**
      * Return the cause of the error.
-     * 
+     *
      * @return the cause of the error
      */
     public Throwable getCause() {
@@ -332,121 +332,121 @@ public class ErrorReport {
         }
         return cause;
     }
-    
+
     /**
      * Return the error source column number, or -1 if not determined.
-     * 
+     *
      * @return the error source column number, or -1 if not determined
      */
     public int getColumnNumber() {
         return columnNumber;
     }
-    
+
     /**
      * Return true if the error was a Velocity parsing exception.
-     * 
+     *
      * @return true if the error was a Velocity parsing exception
      */
     public boolean isParseError() {
         return isParseError;
     }
-    
+
     /**
      * Return true if the application is in "production" mode.
-     * 
+     *
      * @return true if the application is in "production" mode
      */
     public boolean isProductionMode() {
         return isProductionMode;
     }
-    
+
     /**
      * Return the error source line number, or -1 if not determined.
-     * 
+     *
      * @return the error source line number, or -1 if not determined
      */
     public int getLineNumber() {
         return lineNumber;
     }
-    
+
     /**
      * Return the error message.
-     * 
+     *
      * @return the error message
      */
     public String getMessage() {
         if (isParseError()) {
             String message = error.getMessage();
-            
+
             int startIndex = message.indexOf('\n');
             int endIndex = message.lastIndexOf("...");
-            
+
             String parseMsg = message.substring(startIndex + 1, endIndex);
-            
+
             parseMsg = StringEscapeUtils.escapeHtml(parseMsg);
-            
+
             parseMsg = StringUtils.replace(parseMsg, "...", ", &nbsp;");
 
             return parseMsg;
-            
+
         } else {
             Throwable cause = getCause();
-            
-            String value = 
+
+            String value =
                 (cause.getMessage() != null) ? cause.getMessage() : "null";
-                
+
             return StringEscapeUtils.escapeHtml(value);
         }
     }
-    
+
     /**
      * Return the error source name
-     * 
+     *
      * @return the error source name
      */
     public String getSourceName() {
         return sourceName;
     }
-    
+
     /**
      * Return a LineNumberReader for the error source file, or null if not
      * defined
-     * 
+     *
      * @returna LineNumberReader for the error source file, or null if not
      *      defined
      */
     public LineNumberReader getSourceReader() {
         return sourceReader;
     }
-    
+
     // ------------------------------------------------------ Protected Methods
-    
+
     /**
      * Return Java Source LineNumberReader for the given filename, or null if
      * not found.
-     * 
+     *
      * @param filename the name of the Java source file, e.g. /examples/Page.java
      * @return LineNumberReader for the given source filename, or null if
      *      not found
      * @throws FileNotFoundException if file could not be found
      */
-    protected LineNumberReader getJavaSourceReader(String filename) 
+    protected LineNumberReader getJavaSourceReader(String filename)
         throws FileNotFoundException {
-        
+
         // Look for source file on classpath
-        InputStream is = page.getClass().getResourceAsStream(filename);        
+        InputStream is = page.getClass().getResourceAsStream(filename);
         if (is != null) {
             return new LineNumberReader(new InputStreamReader(is));
         }
-        
-        // Else search for source file under WEB-INF 
-        String rootPath = 
+
+        // Else search for source file under WEB-INF
+        String rootPath =
             page.getContext().getServletContext().getRealPath("/");
-        
+
         String webInfPath = rootPath + File.separator + "WEB-INF";
-        
+
         File sourceFile = null;
-        
+
         File webInfDir = new File(webInfPath);
         if (webInfDir.isDirectory() && webInfDir.canRead()) {
             File[] dirList = webInfDir.listFiles();
@@ -456,14 +456,14 @@ public class ErrorReport {
                     String sourcePath = file.toString() + filename;
                     sourceFile = new File(sourcePath);
                     if (sourceFile.isFile() && sourceFile.canRead()) {
-                        
+
                         FileInputStream fis = new FileInputStream(sourceFile);
                         return new LineNumberReader(new InputStreamReader(fis));
                     }
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -474,43 +474,43 @@ public class ErrorReport {
      * @return a HTML rendered section of the parsing error page template
      */
     protected String getRenderedSource() {
-        
+
         final int windowSize = 20;
 
         StringBuffer buffer = new StringBuffer(5*1024);
-        
+
         buffer.append("<pre style='font-family: Courier New, courier;'>");
 
         if (sourceReader == null) {
             buffer.append("Source is not available.</span>");
             return buffer.toString();
         }
-        
-        final String errorLineStyle = 
-            "style='background-color:yellow;'"; 
-        
-        final String errorCharSpan = 
+
+        final String errorLineStyle =
+            "style='background-color:yellow;'";
+
+        final String errorCharSpan =
             "<span style='color:red;text-decoration:underline;font-weight:bold;'>";
 
         try {
             String line = sourceReader.readLine();
-            
+
             while (line != null) {
                 if (skipLine()) {
                     line = sourceReader.readLine();
                     continue;
                 }
-                
-                boolean isErrorLine = 
+
+                boolean isErrorLine =
                     sourceReader.getLineNumber() == lineNumber;
-               
+
                 // Start div tag
                 buffer.append("<div ");
                 if (isErrorLine) {
                     buffer.append(errorLineStyle);
                 }
                 buffer.append(">");
-                
+
                 // Write out line number
                 String lineStr = "" + sourceReader.getLineNumber();
                 int numberSpace = 3 - lineStr.length();
@@ -525,7 +525,7 @@ public class ErrorReport {
                     buffer.append("</b>");
                 }
                 buffer.append(":  ");
-                
+
                 // Write out line content
                 if (isErrorLine) {
                     if (isParseError()) {
@@ -540,11 +540,11 @@ public class ErrorReport {
                             }
                         }
                         buffer.append(htmlLine.toString());
-                        
+
                     } else {
                         buffer.append(getRenderJavaLine(line));
                     }
-                    
+
                 } else {
                     if (isParseError()) {
                         buffer.append(StringEscapeUtils.escapeHtml(line));
@@ -552,13 +552,13 @@ public class ErrorReport {
                         buffer.append(getRenderJavaLine(line));
                     }
                 }
-                
+
                 // Close div tag
                 buffer.append("</div>");
-                
+
                 line = sourceReader.readLine();
             }
-            
+
         } catch (IOException ioe) {
             buffer.append("Could not load page source: ");
             buffer.append(StringEscapeUtils.escapeHtml(ioe.toString()));
@@ -569,12 +569,12 @@ public class ErrorReport {
                 // do nothing
             }
         }
-        
+
         buffer.append("</pre>");
 
         return buffer.toString();
     }
-    
+
     /**
      * Return a HTML encode stack trace string from the given error.
      *
@@ -586,14 +586,14 @@ public class ErrorReport {
         PrintWriter pw = new PrintWriter(sw);
         getCause().printStackTrace(pw);
 
-        StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);       
+        StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);
         buffer.append("<pre><tt style='font-size:10pt;'>");
         buffer.append(StringEscapeUtils.escapeHtml(sw.toString().trim()));
         buffer.append("</tt></pre>");
-        
+
         return buffer.toString();
     }
-    
+
     /**
      * Write out the map name value pairs as name=value lines to the string
      * buffer.
@@ -614,17 +614,17 @@ public class ErrorReport {
             buffer.append("&nbsp;");
         }
     }
-    
+
     /**
      * Return a HTML rendered Java source line with keywords highlighted
      * using the given line.
-     * 
+     *
      * @param line the Java source line to render
      * @return HTML rendred Java source line
      */
     protected String getRenderJavaLine(String line) {
         line = StringEscapeUtils.escapeHtml(line);
-        
+
         for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
             String keyword = JAVA_KEYWORDS[i];
             line = renderJavaKeywords(line, keyword);
@@ -634,16 +634,16 @@ public class ErrorReport {
     }
 
     /**
-     * Render the HTML rendered Java source line with the given keyword 
+     * Render the HTML rendered Java source line with the given keyword
      * highlighted.
-     * 
+     *
      * @param line the given Java source line to render
      * @param keyword the Java keyword to highlight
-     * @return the HTML rendered Java source line with the given keyword 
+     * @return the HTML rendered Java source line with the given keyword
      *      highlighted
      */
     protected String renderJavaKeywords(String line, String keyword) {
-        String markupToken = 
+        String markupToken =
             "<span style='color:#7f0055;font-weight:bold;'>" + keyword + "</span>";
 
         line = StringUtils.replace
@@ -660,17 +660,17 @@ public class ErrorReport {
 
         return line;
     }
-    
+
     /**
      * Return true if the current line read from the source line reader, should
      * be skipped, or false if the current line should be rendered.
-     * 
+     *
      * @return true if the current line from the source reader should be skipped
      */
     protected boolean skipLine() {
         final int currentLine = getSourceReader().getLineNumber();
         final int errorLine = getLineNumber();
-        
+
         if (Math.abs(currentLine - errorLine) <= 10) {
             return false;
         } else {

@@ -63,10 +63,10 @@ public interface Control {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method);
-    
+
     /**
      * Return HTML element identifier attribute "id" value.
-     * 
+     *
      * @return HTML element identifier attribute "id" value
      */
     public String getId();

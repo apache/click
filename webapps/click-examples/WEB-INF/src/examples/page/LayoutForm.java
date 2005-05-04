@@ -94,7 +94,7 @@ public class LayoutForm extends EditCustomer {
         columnsSelect.setTitle("Form columns");
         columnsSelect.setValue("1");
         styleForm.add(columnsSelect);
-        
+
         showBordersCheckbox = new Checkbox("Show Borders");
         showBordersCheckbox.setAttribute("onclick", "toggleBorders(this);");
         styleForm.add(showBordersCheckbox);
@@ -103,7 +103,7 @@ public class LayoutForm extends EditCustomer {
         applyButton.setTitle("Apply the layout to the form");
         applyButton.setListener(this, "onApplyClick");
         styleForm.add(applyButton);
-        
+
         // Setup checkbox Javascript
         addModel("javascript-include", "layout-form.js");
         addModel("body-onload", "toggleBorders(document.styleForm.showBorders);");
@@ -139,7 +139,7 @@ public class LayoutForm extends EditCustomer {
         }
         labelAlignSelect.setValue(labelAlignHidden.getValue());
         columnsSelect.setValue(String.valueOf(columns.intValue()));
-        
+
         showBordersCheckbox.setChecked(showBorders.booleanValue());
     }
 
@@ -168,7 +168,7 @@ public class LayoutForm extends EditCustomer {
 
         labelAlignHidden.setValue(labelAlignSelect.getValue());
         columnsHidden.setValue(Integer.valueOf(columnsSelect.getValue()));
-        
+
         showBordersHidden.setValue(Boolean.valueOf(showBordersCheckbox.isChecked()));
 
         return true;

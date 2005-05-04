@@ -88,7 +88,7 @@ public abstract class Field implements Control {
 
     /** The Field name. */
     protected String name;
-    
+
     /** The Field is readonly flag. */
     protected boolean readonly;
 
@@ -229,7 +229,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return true if the Field is a disabled. The Field will also be disabled 
+     * Return true if the Field is a disabled. The Field will also be disabled
      * if the parent Form is disabled.
      *
      * @return true if the Field is a disabled
@@ -321,7 +321,7 @@ public abstract class Field implements Control {
      * Return the Form and Field id appended: &nbsp; "<tt>form-field</tt>"
      * <p/>
      * Use the field the "id" attribute value if defined, or the name otherwise.
-     * 
+     *
      * @see net.sf.click.Control#getId()
      */
     public String getId() {
@@ -376,7 +376,7 @@ public abstract class Field implements Control {
 
         Locale locale = getContext().getRequest().getLocale();
 
-        ResourceBundle bundle = 
+        ResourceBundle bundle =
             ResourceBundle.getBundle("click-control", locale);
 
         return bundle.getString(name);
@@ -442,7 +442,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return true if the Field is a readonly. The Field will also be readonly 
+     * Return true if the Field is a readonly. The Field will also be readonly
      * if the parent Form is readonly.
      *
      * @return true if the Field is a readonly
@@ -463,7 +463,7 @@ public abstract class Field implements Control {
     public void setReadonly(boolean readonly) {
         this.readonly = readonly;
     }
-    
+
     /**
      * Return true if the Field's value is required.
      *

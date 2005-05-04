@@ -1,7 +1,3 @@
-/************************************************
- * Number filter to only allow number key values
- * to be entered.
- ***********************************************/
 function doubleFilter(event) {
     var keyCode;
     if (document.all) {
@@ -48,26 +44,6 @@ function integerFilter(event) {
     } else {  
         return true;     
     }
-}
-
-/************************************************************
- * Write JavaScript "setFocus" script to set the focus to the 
- * first field in any defined page form.
- * 
- * Activate this script by calling it from the body onload:
- *   <body onload="javascript:setFocus();">
- ************************************************************/
-function setFocus() {
-    if (document.forms[0]) {
-        for (i = 0; i < document.forms[0].elements.length; i++) {
-            if (document.forms[0].elements[i].type != "hidden" &&
-                document.forms[0].elements[i].disabled != true) {
-
-                document.forms[0].elements[i].focus();
-                return;
-            }
-        }
-    }	
 }
 
 

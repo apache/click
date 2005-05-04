@@ -13,14 +13,14 @@
 This section discusses how to setup configure a Click web application and
 covers to following topics: 
 <ul>
-  <li><a href="#servlet-configuration">Servlet Configuration</a> - how to setup the ClickServlet<p/>
+  <li><a href="#servlet-configuration">Servlet Configuration</a> - how to setup the ClickServlet
   </li>
   <li><a href="#application-configuration">Application Configuration</a> - how to configure the Click application
-   descriptor<p/>
+   descriptor
   </li>
-  <li><a href="#velocity-properties">Velocity Properties</a> - how to configure the Velocity runtime properties<p/>
+  <li><a href="#velocity-properties">Velocity Properties</a> - how to configure the Velocity runtime properties
   </li>
-  <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files<p/>
+  <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files
   </li>
 </ul>
 
@@ -36,19 +36,19 @@ The Click configuration files include:
 <ul>
  <li>WEB-INF/<a target='topic' href="#application-configuration">click.xml</a>
  &nbsp; - &nbsp; Application Configuration (<b>required</b>)
- <p></li>
+ </li>
  <li>WEB-INF/<a target='topic' href="#velocity-properties">velocity.properties</a>
  &nbsp; - &nbsp; Velocity Properties (optional)
- <p></li>
+ </li>
  <li>WEB-INF/<a target='topic' href="#servlet-configuration">web.xml</a>
  &nbsp; - &nbsp; Servlet Configuration (<b>required</b>)
- <p></li>
+ </li>
 </ul>    
   </td>
 </tr>
 </table>
 
-<a name="servlet-configuration"><h2>Servlet Configuration</h2></a>
+<a name="servlet-configuration" class="heading"><h2>Servlet Configuration</h2></a>
 
 For a Click web application to function the 
 <a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>
@@ -90,7 +90,7 @@ configured with the Click application mode element in the "<tt>click.xml</tt>"
 config file.
 
 
-<a name="application-configuration"><h2>Application Configuration</h2></a>
+<a name="application-configuration" class="heading"><h2>Application Configuration</h2></a>
 
 The heart of a Click application is the <tt>click.xml</tt> configuration file.
 This file specifies the application pages, headers, the format object and the 
@@ -134,8 +134,7 @@ An example of a fully optioned up config file is:
 </pre>
 
 
-<a name="application-pages"></a>
-<h3>Pages</h3>
+<a name="application-pages" class="heading"><h3>Pages</h3></a>
 
 The first major element of the click-app is the mandatory <tt>pages</tt> element 
 which defines the list of Click pages.
@@ -168,7 +167,7 @@ is a critical configuration error the ClickSerlvet will log an <tt>ERROR</tt> me
 If this occurs the click application will be permanently unavailable until the error is fixed 
 and the web app is restarted.
 
-<a name="application-headers"><h3>Headers</h3></a>
+<a name="application-headers" class="heading"><h3>Headers</h3></a>
 
 The optional <tt>headers</tt> element defines a list of <tt>header</tt> elements
 which is applied to all pages.
@@ -235,7 +234,7 @@ Note there are alternative ways to apply HTTP compression such as using the Apac
 <tt>mod_gzip</tt>, or using a ServletFilter.
 
 
-<a name="application-format"><h3>Format</h3></a>
+<a name="application-format" class="heading"><h3>Format</h3></a>
 
 The optional <tt>format</tt> element defines the Format object classname which
 is applied to all pages.
@@ -261,7 +260,7 @@ descriptor. For example:
 </pre>
 
 
-<a name="application-mode"><h3>Mode</h3></a>
+<a name="application-mode" class="heading"><h3>Mode</h3></a>
 
 The optional <tt>mode</tt> element defines the application logging and caching mode.
 
@@ -365,7 +364,7 @@ no debug information is displayed to prevent sensitive information being display
 This behaviour can be changed by modifying the 
 <span class="blue"><tt>error.htm</tt></span> page template.
 
-<a name="velocity-properties"><h2>Velocity Properties</h2></a>
+<a name="velocity-properties" class="heading"><h2>Velocity Properties</h2></a>
 
 The Velocity runtime engine is configured through a series of properties when the 
 <tt>ClickServlet</tt> starts up.  The default Velocity properties set are:
@@ -410,7 +409,7 @@ under your web application's root directory. At startup Click will first check t
 if this file exists, and if it does use it instead of <tt>click/VM_global_library.vm</tt>.
 
 
-<a name="auto-deployed-files"><h2>Auto Deployed Files</h2></a> 
+<a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
 At startup the ClickServlet will automatically deploy support files into the
 web application, if not already present. You can modify these support files and 
 Click will not overwrite them. These files include:

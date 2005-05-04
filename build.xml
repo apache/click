@@ -59,7 +59,7 @@
    </target>
  
    <target name="build-release" 
-           depends="build-framework, build-webapps, javadoc" 
+           depends="build-framework, javadoc, build-webapps" 
            description="build release ZIP file">
       <delete file="../click-${version}.zip"/>  
       <zip destfile="../click-${version}.zip">

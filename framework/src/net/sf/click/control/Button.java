@@ -139,7 +139,7 @@ public class Button extends Field {
         renderAttributes(buffer);
 
         buffer.append(getDisabled());
-        
+
         buffer.append(">");
 
         return buffer.toString();

@@ -435,7 +435,7 @@ public class Form implements Control {
 
     /** The form name. */
     protected String name;
-    
+
     /** The form is readonly flag. */
     protected boolean readonly;
 
@@ -577,7 +577,7 @@ public class Form implements Control {
     public List getButtonList() {
         return buttonList;
     }
-    
+
     /**
      * Return true if the form is a disabled.
      *
@@ -586,7 +586,7 @@ public class Form implements Control {
     public boolean isDisabled() {
         return disabled;
     }
-    
+
     /**
      * Set the form disabled flag
      *
@@ -595,7 +595,7 @@ public class Form implements Control {
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
     }
-    
+
     /**
      * Return the number of form layout table columns. This property is used
      * to layout the number of table columns the form is rendered in.
@@ -737,7 +737,7 @@ public class Form implements Control {
             return StringUtils.replace(STYLESHEET_IMPORT, "$", path);
         }
     }
-    
+
     /**
      * Return the "id" attribute value if defined, or the Form name otherwise.
      *
@@ -861,7 +861,7 @@ public class Form implements Control {
         }
         this.name = name;
     }
-    
+
     /**
      * Return true if the form is a readonly.
      *
@@ -870,7 +870,7 @@ public class Form implements Control {
     public boolean isReadonly() {
         return readonly;
     }
-    
+
     /**
      * Set the form readonly flag
      *
