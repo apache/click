@@ -1,20 +1,25 @@
-J2EE servlet container system properties. 
+Servlet Container System Properties:
 <p/>
 
 <table border="0" cellpadding="2" cellspacing="0">
+   
   <tr valign="baseline" bgcolor="navy">
-    <th align="right"> Property Name &nbsp; &nbsp; &nbsp; </th>
-    <th align="left"> Property Value </th>
+   
+    <th class="left-column"> Name </th>
+    
+    <th class="right-column"> Value </th>
+    
   </tr>
+
 #foreach( $key in $properties.keySet() )
- #if( $velocityCount % 2 == 0)
-  <tr bgcolor="#f7f7e7"> 
- #else 
-  <tr valign="baseline"> 
- #end	
-    <td align="right"> $key &nbsp; &nbsp; </td> 
-    <td align="left"> $properties.get($key) &nbsp; </td>
+  <tr#if($velocityCount % 2 == 0)bgcolor="#f7f7e7"#end> 
+
+    <td class="left-column"> $key </td> 
+    
+    <td class="right-column"> $properties.get($key) </td>
+    
   </tr>
 #end
+
 </table>
 
