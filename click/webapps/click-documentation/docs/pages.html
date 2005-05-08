@@ -195,7 +195,7 @@ forwarded page.
 <pre class="codeJava">
 <span class="kw">public boolean</span> onViewClick() {
    Long id = viewLink.getValueLong();
-   Customer customer = CustomerDatabase.getCustomer(id); 
+   Customer customer = CustomerDAO.findByPK(id); 
     
    getContext().setRequestAttribute(<span class="st">"customer"</span>, customer);
    setForward(<span class="st">"view-customer.htm"</span>);
@@ -235,7 +235,7 @@ example would be:
 <pre class="codeJava">
 <span class="kw">public boolean</span> onViewClick() {
    Long id = viewLink.getValueLong();
-   Customer customer = CustomerDatabase.getCustomer(id); 
+   Customer customer = CustomerDAO.findByPK(id); 
     
    addModel(<span class="st">"customer"</span>, customer);
    setPath(<span class="st">"view-customer.htm"</span>);

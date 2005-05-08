@@ -7,7 +7,7 @@
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
     <page path="exception.htm" classname="examples.page.ExceptionDemo"/>
     <page path="hello-world.htm" classname="examples.page.HelloWorld"/>
-    <page path="layout-form.htm" classname="examples.page.LayoutForm"/>
+    <page path="form-properties.htm" classname="examples.page.FormProperties"/>
     <page path="login.htm" classname="examples.page.Login"/>
     <page path="logout.htm" classname="examples.page.Logout"/>
     <page path="navigation-a.htm" classname="examples.page.NavigationA"/>

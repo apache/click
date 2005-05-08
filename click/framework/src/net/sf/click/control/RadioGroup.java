@@ -201,9 +201,13 @@ public class RadioGroup extends Field {
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
             continueProcessing = radio.onProcess();
-            if (!continueProcessing) {
+            if (!continueProcessing && validate()) {
                 return false;
             }
+        }
+   
+        if (!validate()) {
+            return true;
         }
 
         if (value.length() > 0) {

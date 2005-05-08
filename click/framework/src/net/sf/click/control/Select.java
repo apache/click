@@ -399,7 +399,7 @@ public class Select extends Field {
             // Load the selected item.
             value = getContext().getRequest().getParameter(getName());
 
-            if (value != null) {
+            if (validate() && value != null) {
                 Option firstOption = (Option) optionList.get(0);
 
                 if (isRequired() && firstOption.getValue().equals(value)) {
@@ -424,6 +424,10 @@ public class Select extends Field {
                 for (int i = 0; i < values.length; i++) {
                     multipleValues.add(values[i]);
                 }
+            }
+            
+            if (!validate()) {
+                return true;
             }
 
             if (isRequired()) {
