@@ -16,6 +16,11 @@ select.error {
 span.error {
 	color: red;
 }
+table.form {
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px;
+}
 table.fields {
 	border-width: 1px;
 	padding: 0;

@@ -100,7 +100,7 @@ import org.apache.commons.lang.StringUtils;
  *             String username = usernameField.getValue();
  *             String password = passwordField.getValue();
  *
- *             User user = UserDAO.getUser(username);
+ *             User user = UserDAO.findByPK(username);
  *
  *             <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
  *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
@@ -324,16 +324,16 @@ public class Form implements Control {
     public static final String FORM_NAME = "form_name";
 
     /** The errors and labels on top form layout constant. */
-    public static final int TOP = 10;
+    public static final String TOP = "top";
 
     /** The errors in middle form layout constant. */
-    public static final int MIDDLE = 11;
+    public static final String MIDDLE = "middle";
 
     /** The errors on bottom form layout constant. */
-    public static final int BOTTOM = 12;
+    public static final String BOTTOM = "bottom";
 
     /** The labels of left form layout contant. */
-    public static final int LEFT = 13;
+    public static final String LEFT = "left";
 
     /** The errors-header resource property */
     protected static String errorsHeader = "";
@@ -353,14 +353,11 @@ public class Form implements Control {
     /** The label-required-suffix resource property. */
     protected static String labelRequiredSuffix = "";
 
-    protected static final String JAVASCRIPT_IMPORTS =
+    protected static final String HTML_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
         "<script type='text/javascript' src='$/click/control.js'></script>" +
         "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
-
-    protected static final String STYLESHEET_IMPORT =
-        "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>";
-
+    
     static {
         ResourceBundle bundle =
             ResourceBundle.getBundle(Field.PACKAGE_MESSAGES);
@@ -377,6 +374,9 @@ public class Form implements Control {
 
     /** The form attributes map. */
     protected Map attributes;
+    
+    /** The button align, default value is "<tt>left</tt>" */
+    protected String buttonAlign = LEFT;
 
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
@@ -402,7 +402,7 @@ public class Form implements Control {
      * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value:
      * &nbsp; <tt>MIDDLE</tt>
      */
-    protected int errorsPosition = MIDDLE;
+    protected String errorsPosition = MIDDLE;
 
     /** The ordered list of field values, excluding buttons */
     protected final List fieldList = new ArrayList();
@@ -410,16 +410,13 @@ public class Form implements Control {
     /** The map of fields keyed by field name. */
     protected final Map fields = new HashMap();
 
-    /** The JavaScript enabled flag, defaults value is true. */
-    protected boolean jsEnabled = true;
-
     /** The label align, default value is "<tt>left</tt>" */
-    protected String labelAlign = "left";
+    protected String labelAlign = LEFT;
 
     /**
      * The form labels position <tt>[LEFT, TOP]</tt> default value: &nbsp; <tt>LEFT</tt>
      */
-    protected int labelsPosition = LEFT;
+    protected String labelsPosition = LEFT;
 
     /** The listener target object. */
     protected Object listener;
@@ -438,6 +435,9 @@ public class Form implements Control {
 
     /** The form is readonly flag. */
     protected boolean readonly;
+    
+    /** The form validate fields when processing flag. */
+    protected boolean validate = true;
 
     // ----------------------------------------------------------- Constructors
 
@@ -570,6 +570,27 @@ public class Form implements Control {
     }
 
     /**
+     * Return the buttons &lt;td&gt; HTML horizontal alignment: "<tt>left</tt>",
+     * "<tt>center</tt>", "<tt>right</tt>".
+     *
+     * @return the field label HTML horizontal alignment
+     */
+    public String getButtonAlign() {
+        return buttonAlign;
+    }
+
+    /**
+     * Set the button &lt;td&gt; HTML horizontal alignment: "<tt>left</tt>",
+     * "<tt>center</tt>", "<tt>right</tt>". Note the given align is not
+     * validated.
+     *
+     * @param align the field label HTML horizontal alignment
+     */
+    public void setButtonAlign(String align) {
+        buttonAlign = align;
+    }
+    
+    /**
      * Return the ordered list of {@link Button}s.
      *
      * @return the ordered list of {@link Button}s.
@@ -658,7 +679,7 @@ public class Form implements Control {
      *
      * @return form errors position
      */
-    public int getErrorsPosition() {
+    public String getErrorsPosition() {
         return errorsPosition;
     }
 
@@ -667,11 +688,16 @@ public class Form implements Control {
      *
      * @param position the form errors position
      */
-    public void setErrorsPosition(int position) {
-        if (position != TOP && position != MIDDLE && position != BOTTOM) {
+    public void setErrorsPosition(String position) {
+        if (TOP.equals(position) || 
+            MIDDLE.equals(position) || 
+            BOTTOM.equals(position)) {
+            
+            errorsPosition = position;
+            
+        } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
-        errorsPosition = position;
     }
 
     /**
@@ -719,23 +745,17 @@ public class Form implements Control {
     }
 
     /**
-     * Return the HTML head import statement for the CSS stylesheet
-     * click/control.css. If JavaScript is enabled a import statement for
-     * click/control.js will also be included.
+     * Return the HTML head import statements for the CSS stylesheet
+     * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>) 
+     * files.
      *
-     * @see #jsEnabled
-     *
-     * @return the HTML head import statements for the form stylesheet and
+     * @return the HTML head import statements for the control stylesheet and
      * JavaScript files
      */
     public String getHtmlImports() {
         String path = context.getRequest().getContextPath();
 
-        if (jsEnabled) {
-            return StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path);
-        } else {
-            return StringUtils.replace(STYLESHEET_IMPORT, "$", path);
-        }
+        return StringUtils.replace(HTML_IMPORTS, "$", path);
     }
 
     /**
@@ -749,24 +769,6 @@ public class Form implements Control {
         } else {
             return getName();
         }
-    }
-
-    /**
-     * Return true if JavaScript is enabled.
-     *
-     * @return true if JavaScript is enabled
-     */
-    public boolean getJSEnabled() {
-        return jsEnabled;
-    }
-
-    /**
-     * Set whether JavaScript is enabled.
-     *
-     * @param enabled sets whether JavaScript is enabled
-     */
-    public void setJSEnabled(boolean enabled) {
-        jsEnabled = enabled;
     }
 
     /**
@@ -795,7 +797,7 @@ public class Form implements Control {
      *
      * @return form labels position
      */
-    public int getLabelsPosition() {
+    public String getLabelsPosition() {
         return labelsPosition;
     }
 
@@ -804,11 +806,12 @@ public class Form implements Control {
      *
      * @param position the form labels position
      */
-    public void setLabelsPosition(int position) {
-        if (position != LEFT && position != TOP) {
+    public void setLabelsPosition(String position) {       
+        if (LEFT.equals(position) || TOP.equals(position)) {       
+            labelsPosition = position;          
+        } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
-        labelsPosition = position;
     }
 
     /**
@@ -898,6 +901,27 @@ public class Form implements Control {
         }
         return true;
     }
+    
+    /**
+     * Return true if the Form's fields should validate themselves when being
+     * processed.
+     * 
+     * @return true if the form fields should perform validation when being
+     * processed
+     */
+    public boolean getValidate() {
+        return validate;
+    }
+    
+    /**
+     * Set the Form's field validation flag, telling the Fields to validate
+     * themselves when their <tt>onProcess()</tt> method is invoked.
+     * 
+     * @param validate the Form's field validation flag
+     */
+    public void setValidate(boolean validate) {
+        this.validate = validate;
+    }
 
     // --------------------------------------------------------- Public Methods
 
@@ -981,27 +1005,32 @@ public class Form implements Control {
 
         int hiddenCount = 0;
         Field fieldWithError = null;
+        
+        buffer.append("<table class='form' id='");
+        buffer.append(getId());
+        buffer.append("-form'>\n");
 
         // Render fields, errors and buttons
-        switch (getErrorsPosition()) {
-        case TOP:
+        if (TOP.equals(getErrorsPosition())) {
             fieldWithError = renderErrors(buffer, process);
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
-            break;
-        case MIDDLE:
+            
+        } else if (MIDDLE.equals(getErrorsPosition())) {
             hiddenCount = renderFields(buffer);
             fieldWithError = renderErrors(buffer, process);
             renderButtons(buffer);
-            break;
-        case BOTTOM:
+
+        } else if (BOTTOM.equals(getErrorsPosition())) {
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
             fieldWithError = renderErrors(buffer, process);
-            break;
-        default:
-            throw new IllegalArgumentException("Invalid errorsPositon");
+            
+        } else {
+            String msg = "Invalid errorsPositon:" + getErrorsPosition();
+            throw new IllegalArgumentException(msg);
         }
+        buffer.append("</table>\n");
 
         // Render hidden fields
         if (hiddenCount > 0) {
@@ -1061,6 +1090,7 @@ public class Form implements Control {
     protected int renderFields(StringBuffer buffer) {
         int hiddenCount = 0;
 
+        buffer.append("<tr><td>\n");
         buffer.append("<table class='fields' id='");
         buffer.append(getId());
         buffer.append("-fields'>\n");
@@ -1091,7 +1121,7 @@ public class Form implements Control {
 
                 } else {
                     // Write out label
-                    if (getLabelsPosition() == LEFT) {
+                    if (LEFT.equals(getLabelsPosition())) {
                         buffer.append("<td align='");
                         buffer.append(getLabelAlign());
                         buffer.append("'>");
@@ -1111,7 +1141,7 @@ public class Form implements Control {
                         buffer.append(labelRequiredSuffix);
                     }
 
-                    if (getLabelsPosition() == LEFT) {
+                    if (LEFT.equals(getLabelsPosition())) {
                         buffer.append("</td>\n");
                         buffer.append("<td align='left'>");
                     } else {
@@ -1136,6 +1166,7 @@ public class Form implements Control {
 
         }
         buffer.append("</table>\n");
+        buffer.append("</td></tr>");
 
         return hiddenCount;
     }
@@ -1164,6 +1195,7 @@ public class Form implements Control {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
+                buffer.append("<tr><td>\n");
                 buffer.append("<table class='errors' id='");
                 buffer.append(getId());
                 buffer.append("-errors'>\n");
@@ -1197,20 +1229,16 @@ public class Form implements Control {
                     } else {
                         buffer.append("<tr><td>");
                     }
-                    if (jsEnabled) {
-                        buffer.append("<a class='error'");
-                        buffer.append(" href='javascript:document.");
-                        buffer.append(getName());
-                        buffer.append(".");
-                        buffer.append(field.getName());
-                        buffer.append(".focus();'>");
-                        buffer.append(field.getError());
-                        buffer.append("</a>");
-                    } else {
-                        buffer.append("<span class='error'>");
-                        buffer.append(field.getError());
-                        buffer.append("</span>");
-                    }
+
+                    buffer.append("<a class='error'");
+                    buffer.append(" href='javascript:document.");
+                    buffer.append(getName());
+                    buffer.append(".");
+                    buffer.append(field.getName());
+                    buffer.append(".focus();'>");
+                    buffer.append(field.getError());
+                    buffer.append("</a>");
+
                     if (useErrorsHeader) {
                         buffer.append(errorsSuffix);
                         buffer.append("\n");
@@ -1225,6 +1253,7 @@ public class Form implements Control {
                 buffer.append("\n");
             } else {
                 buffer.append("</table>\n");
+                buffer.append("</td></tr>\n");
             }
         }
 
@@ -1238,6 +1267,9 @@ public class Form implements Control {
      */
     protected void renderButtons(StringBuffer buffer) {
         if (!buttonList.isEmpty()) {
+            buffer.append("<tr><td align='");
+            buffer.append(getButtonAlign());
+            buffer.append("'>\n");
             buffer.append("<table class='buttons' id='");
             buffer.append(getId());
             buffer.append("-buttons'>\n");
@@ -1248,6 +1280,7 @@ public class Form implements Control {
             }
             buffer.append("</td></tr>\n");
             buffer.append("</table>\n");
+            buffer.append("</td></tr>\n");
         }
     }
 }

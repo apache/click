@@ -213,6 +213,10 @@ public class CreditCardField extends TextField {
         value = getRequestValue();
 
         cardType = getContext().getRequest().getParameter(SELECT_NAME);
+       
+        if (!validate()) {
+            return true;
+        }
 
         // Strip spaces and '-' chars
         StringBuffer buffer = new StringBuffer(value.length());

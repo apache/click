@@ -185,6 +185,10 @@ public class TextArea extends Field {
      */
     public boolean onProcess() {
         value = getRequestValue();
+              
+        if (!validate()) {
+            return true;
+        }
 
         int length = value.length();
         if (length > 0) {

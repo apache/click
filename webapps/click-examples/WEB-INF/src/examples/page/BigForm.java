@@ -28,12 +28,10 @@ public class BigForm extends BorderedPage {
             "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"
     };
 
-    RadioGroup radioGroup;
-
     public void onInit() {
         Form form = new Form("form", getContext());
         addControl(form);
-
+        
         form.add(new Label("<b>My Details</b>"));
 
         TextField textField = new TextField("Username");
@@ -84,7 +82,7 @@ public class BigForm extends BorderedPage {
         checkbox.setTitle("Please contact me before delivery");
         form.add(checkbox);
 
-        radioGroup = new RadioGroup("Packaging", getContext());
+        RadioGroup radioGroup = new RadioGroup("Packaging", getContext());
         radioGroup.add(new Radio("STD", "Standard "));
         radioGroup.add(new Radio("PRO", "Protective "));
         radioGroup.add(new Radio("GFT", "Gift Wrap "));
@@ -119,6 +117,7 @@ public class BigForm extends BorderedPage {
     }
 
     public boolean onCancelClick() {
+        
         setRedirect("index.html");
         return false;
     }
