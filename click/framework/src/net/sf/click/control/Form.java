@@ -398,6 +398,9 @@ public class Form implements Control {
     /** The form level error message. */
     protected String error;
 
+    /** The errors block align, default value is "<tt>left</tt>" */
+    protected String errorsAlign = LEFT;
+    
     /**
      * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value:
      * &nbsp; <tt>MIDDLE</tt>
@@ -674,6 +677,27 @@ public class Form implements Control {
         this.error = error;
     }
 
+    /**
+     * Return the errors block HTML horizontal alignment: "<tt>left</tt>",
+     * "<tt>center</tt>", "<tt>right</tt>".
+     *
+     * @return the errors block HTML horizontal alignment
+     */
+    public String getErrorsAlign() {
+        return errorsAlign;
+    }
+
+    /**
+     * Set the errors block HTML horizontal alignment: "<tt>left</tt>",
+     * "<tt>center</tt>", "<tt>right</tt>". Note the given align is not
+     * validated.
+     *
+     * @param align the errors block HTML horizontal alignment
+     */
+    public void setErrorsAlign(String align) {
+        errorsAlign = align;
+    }  
+    
     /**
      * Return the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
      *
@@ -1195,7 +1219,9 @@ public class Form implements Control {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
-                buffer.append("<tr><td>\n");
+                buffer.append("<tr><td style='text-align:");
+                buffer.append(getErrorsAlign());
+                buffer.append("'>\n");
                 buffer.append("<table class='errors' id='");
                 buffer.append(getId());
                 buffer.append("-errors'>\n");
@@ -1205,7 +1231,9 @@ public class Form implements Control {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
                 } else {
-                    buffer.append("<tr><td>");
+                    buffer.append("<tr><td style='text-align:");
+                    buffer.append(getErrorsAlign());
+                    buffer.append("'>\n");
                 }
                 buffer.append("<span class='error'>");
                 buffer.append(getError());
