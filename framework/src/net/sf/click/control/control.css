@@ -22,20 +22,26 @@ table.form {
 	padding: 0px;
 }
 table.fields {
-	border-width: 1px;
-	padding: 0;
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px;
 	vertical-align: baseline;
+	white-space: nowrap;
 }
 table.errors {
-	border-width: 1px;
-	padding: 0;
+	border-width: 0px;
+	margin: 0px;
+	padding: 0px;
 	vertical-align: baseline;
 }
 table.buttons {
-	border-width: 1px;
-	padding: 0;
+	border-width: 0px;
+	padding: 0px;
+	margin-top: 0.5em;
 	vertical-align: baseline;
-	margin-top: 1em;
+}
+label {
+  white-space: nowrap;
 }
 
 /* The main calendar widget.  DIV containing a table. */

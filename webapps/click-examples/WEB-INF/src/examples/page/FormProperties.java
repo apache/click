@@ -9,6 +9,7 @@ import net.sf.click.control.DateField;
 import net.sf.click.control.DoubleField;
 import net.sf.click.control.EmailField;
 import net.sf.click.control.Form;
+import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
@@ -40,6 +41,7 @@ public class FormProperties extends BorderedPage {
         String buttonAlign = Form.LEFT;
         int columns = 1;
         boolean disabled = false;
+        String errorsAlign = Form.LEFT;
         String errorsPosition = Form.MIDDLE;
         String labelAlign = Form.LEFT;
         String labelsPosition = Form.LEFT;
@@ -48,13 +50,23 @@ public class FormProperties extends BorderedPage {
         boolean validate = true;
     }
     
+    /** Form values holder.*/
+    static class Values implements Serializable {
+        String name;
+        String email;
+        String holdings;
+        String investments;
+        String dateJoined;
+    }
+    
     Form form;
     Form optionsForm;
     
     Select buttonAlignSelect;
-    Select labelsPositionSelect;
+    Select errorsAlignSelect;
     Select errorsPositionSelect;
     Select labelAlignSelect;
+    Select labelsPositionSelect;
     Select columnsSelect;
     Checkbox showBordersCheckbox;
     Checkbox disabledCheckbox;
@@ -100,6 +112,7 @@ public class FormProperties extends BorderedPage {
         form.setButtonAlign(options.buttonAlign);
         form.setColumns(options.columns);
         form.setDisabled(options.disabled);
+        form.setErrorsAlign(options.errorsAlign);
         form.setErrorsPosition(options.errorsPosition);
         form.setLabelAlign(options.labelAlign);
         form.setLabelsPosition(options.labelsPosition);
@@ -127,26 +140,33 @@ public class FormProperties extends BorderedPage {
         
         readonlyCheckbox = new Checkbox("Readonly");
         optionsForm.add(readonlyCheckbox);
-       
+        
+        errorsAlignSelect = new Select("Errors Align");
+        errorsAlignSelect.addAll(ALIGN_OPTIONS);
+        errorsAlignSelect.setTitle("Errors block horizontal alignment");
+        optionsForm.add(errorsAlignSelect);
+
+        showBordersCheckbox = new Checkbox("Show Borders");
+        optionsForm.add(showBordersCheckbox);
+        
         errorsPositionSelect = new Select("Errors Position");
         errorsPositionSelect.addAll(POSITION_OPTIONS);
         errorsPositionSelect.setTitle("Form errors position");
         optionsForm.add(errorsPositionSelect);
 
-        showBordersCheckbox = new Checkbox("Show Borders");
-        optionsForm.add(showBordersCheckbox);
+        validateCheckbox = new Checkbox("Validate");
+        optionsForm.add(validateCheckbox);
         
         labelAlignSelect = new Select("Label Align");
         labelAlignSelect.addAll(ALIGN_OPTIONS);
         labelAlignSelect.setTitle("Field label alignment");
         optionsForm.add(labelAlignSelect);
         
-        validateCheckbox = new Checkbox("Validate");
-        optionsForm.add(validateCheckbox);
+        optionsForm.add(new Label(""));
         
         labelsPositionSelect = new Select("Labels Position");
-        labelsPositionSelect.add(new Select.Option("left", "Label on Left"));
-        labelsPositionSelect.add(new Select.Option("top", "Label on Top"));
+        labelsPositionSelect.add(new Select.Option("left", "Left"));
+        labelsPositionSelect.add(new Select.Option("top", "Top"));
         labelsPositionSelect.setTitle("Form labels position");
         optionsForm.add(labelsPositionSelect);
 
@@ -167,6 +187,7 @@ public class FormProperties extends BorderedPage {
         // Apply any saved options to optionsForm
         buttonAlignSelect.setValue(options.buttonAlign);
         columnsSelect.setValue(String.valueOf(options.columns));
+        errorsAlignSelect.setValue(options.errorsAlign);
         errorsPositionSelect.setValue(options.errorsPosition);
         labelAlignSelect.setValue(options.labelAlign);
         labelsPositionSelect.setValue(options.labelsPosition);
@@ -174,6 +195,11 @@ public class FormProperties extends BorderedPage {
         readonlyCheckbox.setChecked(options.readonly);
         disabledCheckbox.setChecked(options.disabled);
         validateCheckbox.setChecked(options.validate);
+    }
+    
+    public boolean onOkClick() {
+        // TODO: save submitted values
+        return true;
     }
 
     public boolean onCancelClick() {
@@ -189,6 +215,9 @@ public class FormProperties extends BorderedPage {
         
         options.columns = Integer.parseInt(columnsSelect.getValue());
         form.setColumns(options.columns);
+        
+        options.errorsAlign = errorsAlignSelect.getValue();
+        form.setErrorsAlign(options.errorsAlign);
         
         options.errorsPosition = errorsPositionSelect.getValue();
         form.setErrorsPosition(options.errorsPosition);
@@ -221,6 +250,7 @@ public class FormProperties extends BorderedPage {
         form.setButtonAlign(options.buttonAlign);
         form.setColumns(options.columns);
         form.setDisabled(options.disabled);
+        form.setErrorsAlign(options.errorsAlign);
         form.setErrorsPosition(options.errorsPosition);
         form.setLabelAlign(options.labelAlign);
         form.setLabelsPosition(options.labelsPosition);
@@ -229,6 +259,7 @@ public class FormProperties extends BorderedPage {
         
         buttonAlignSelect.setValue(options.buttonAlign);
         columnsSelect.setValue(String.valueOf(options.columns));
+        errorsAlignSelect.setValue(options.errorsAlign);
         errorsPositionSelect.setValue(options.errorsPosition);
         labelAlignSelect.setValue(options.labelAlign);
         labelsPositionSelect.setValue(options.labelsPosition);

@@ -19,5 +19,5 @@ function toggleBorders(checkbox) {
       errorsTable.style.border = "0px dashed red";
     }
   }
-  document.form.showBorders.value = checkbox.checked;
+  document.optionsForm.showBorders.value = checkbox.checked;
 }

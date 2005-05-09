@@ -149,12 +149,10 @@ public class Checkbox extends Field {
         renderAttributes(buffer);
 
         if (checked) {
-            buffer.append("' checked ");
-        } else {
-            buffer.append("' ");
+            buffer.append("' checked");
         }
         if (getTitle() != null) {
-            buffer.append("title='");
+            buffer.append(" 'title='");
             buffer.append(getTitle());
             buffer.append("'");
         }
