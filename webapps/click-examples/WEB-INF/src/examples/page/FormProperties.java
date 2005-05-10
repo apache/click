@@ -37,7 +37,7 @@ public class FormProperties extends BorderedPage {
     }
     
     /** Form options holder. */
-    static class Options implements Serializable {
+    public static class Options implements Serializable {
         String buttonAlign = Form.LEFT;
         int columns = 1;
         boolean disabled = false;
@@ -51,17 +51,22 @@ public class FormProperties extends BorderedPage {
     }
     
     /** Form values holder.*/
-    static class Values implements Serializable {
-        String name;
-        String email;
-        String holdings;
-        String investments;
-        String dateJoined;
+    public static class Values implements Serializable {
+        String name = "";
+        String email = "";
+        String holdings = "";
+        String investments = "";
+        String dateJoined = "";
     }
     
     Form form;
-    Form optionsForm;
+    TextField nameField;
+    EmailField emailField;
+    DoubleField holdingsField;
+    InvestmentSelect investmentsField;
+    DateField dateJoinedField;
     
+    Form optionsForm;
     Select buttonAlignSelect;
     Select errorsAlignSelect;
     Select errorsPositionSelect;
@@ -78,7 +83,7 @@ public class FormProperties extends BorderedPage {
         form = new Form("form", getContext());
         addControl(form);
 
-        TextField nameField = new TextField("Name");
+        nameField = new TextField("Name");
         nameField.setMinLength(5);
         nameField.setTitle("Customer full name");
         nameField.setFocus(true);
@@ -108,7 +113,7 @@ public class FormProperties extends BorderedPage {
         form.add(cancelButton);
         
         // Apply saved options to the form
-        Options options = getOptions();
+        Options options = (Options) getContext().getSessionObject(Options.class);
         form.setButtonAlign(options.buttonAlign);
         form.setColumns(options.columns);
         form.setDisabled(options.disabled);
@@ -198,7 +203,16 @@ public class FormProperties extends BorderedPage {
     }
     
     public boolean onOkClick() {
-        // TODO: save submitted values
+        Values values = (Values) getContext().getSessionObject(Values.class);
+        
+        values.name = nameField.getValue();
+        values.email = emailField.getValue();
+        values.holdings = holdingsField.getValue();
+        values.investments = investmentsField.getValue();
+        values.dateJoined = dateJoinedField.getValue();
+        
+        getContext().setSessionObject(values);
+
         return true;
     }
 
@@ -208,7 +222,7 @@ public class FormProperties extends BorderedPage {
     }
 
     public boolean onApplyClick() {
-        Options options = getOptions();
+        Options options = (Options) getContext().getSessionObject(Options.class);
         
         options.buttonAlign = buttonAlignSelect.getValue();
         form.setButtonAlign(options.buttonAlign);
@@ -239,7 +253,16 @@ public class FormProperties extends BorderedPage {
         
         options.showBorders = showBordersCheckbox.isChecked();
         
-        getContext().setSessionAttribute("options", options);
+        getContext().setSessionObject(options);
+        
+        // Apply any saved form values to demo form.
+        Values values = (Values) getContext().getSessionObject(Values.class);
+System.err.println(values);        
+        nameField.setValue(values.name);
+        emailField.setValue(values.email);
+        holdingsField.setValue(values.holdings);
+        investmentsField.setValue(values.investments);
+        dateJoinedField.setValue(values.dateJoined);
 
         return true;
     }
@@ -268,17 +291,10 @@ public class FormProperties extends BorderedPage {
         disabledCheckbox.setChecked(options.disabled);
         validateCheckbox.setChecked(options.validate);
         
-        getContext().setSessionAttribute("options", options);
+        getContext().setSessionObject(options);
         
         return true;
     }
     
-    private Options getOptions() {
-        Options options = (Options) getContext().getSessionAttribute("options");
-        if (options == null) {
-            options = new Options();
-        }
-        return options;
-    }
 
 }
