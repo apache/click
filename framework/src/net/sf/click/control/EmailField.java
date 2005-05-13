@@ -70,8 +70,8 @@ public class EmailField extends TextField {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        value = getRequestValue();       
-        
+        value = getRequestValue();
+
         if (!validate()) {
             return true;
         }

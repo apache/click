@@ -14,7 +14,7 @@ public class Secure extends BorderedPage {
      * @see Page#onSecurityCheck()
      */
     public boolean onSecurityCheck() {
-        if (getContext().hasSession()) {
+        if (getContext().hasSessionAttribute("user")) {
             return true;
 
         } else {

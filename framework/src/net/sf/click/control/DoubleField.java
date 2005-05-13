@@ -166,7 +166,7 @@ public class DoubleField extends TextField {
      */
     public boolean onProcess() {
         value = getRequestValue();
-        
+
         if (!validate()) {
             return true;
         }

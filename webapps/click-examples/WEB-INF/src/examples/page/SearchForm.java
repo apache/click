@@ -15,8 +15,6 @@ import examples.domain.CustomerDAO;
  */
 public class SearchForm extends BorderedPage {
 
-    static final String[] SEARCH_TYPES = { "ID", "Name", "Age" };
-
     TextField textField;
     Select typeSelect;
 
@@ -29,7 +27,8 @@ public class SearchForm extends BorderedPage {
         form.add(textField);
 
         typeSelect = new Select("type");
-        typeSelect.addAll(SEARCH_TYPES);
+        typeSelect.addAll(new String[] {"ID", "Name", "Age"});
+        typeSelect.setValue("Name");
         typeSelect.setTitle("Type of search");
         form.add(typeSelect);
 

@@ -126,7 +126,7 @@ public class Radio extends Field {
         String value = getRequestValue();
 
         checked = getValue().equals(value);
-   
+
         if (!validate()) {
             return true;
         }

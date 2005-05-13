@@ -31,7 +31,7 @@ public class BigForm extends BorderedPage {
     public void onInit() {
         Form form = new Form("form", getContext());
         addControl(form);
-        
+
         form.add(new Label("<b>My Details</b>"));
 
         TextField textField = new TextField("Username");
@@ -49,7 +49,6 @@ public class BigForm extends BorderedPage {
         form.add(passwordField);
 
         EmailField emailField = new EmailField("Email");
-        emailField.setRequired(true);
         form.add(emailField);
 
         IntegerField integerField = new IntegerField("Customer Number");
@@ -117,7 +116,7 @@ public class BigForm extends BorderedPage {
     }
 
     public boolean onCancelClick() {
-        
+
         setRedirect("index.html");
         return false;
     }

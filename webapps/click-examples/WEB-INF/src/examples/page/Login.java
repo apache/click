@@ -52,7 +52,7 @@ public class Login extends BorderedPage {
      * @see Page#onSecurityCheck()
      */
     public boolean onSecurityCheck() {
-        if (getContext().hasSession()) {
+        if (getContext().hasSessionAttribute("user")) {
             setRedirect("secure.htm");
             return false;
 

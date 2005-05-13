@@ -225,7 +225,7 @@ public class DateField extends TextField {
         }
 
         value = getRequestValue();
-        
+
         if (!validate()) {
             return true;
         }

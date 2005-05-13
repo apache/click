@@ -31,27 +31,27 @@ public class SelectDemo extends BorderedPage {
         genderSelect.add(new Option("M", "Male"));
         genderSelect.add(new Option("F", "Female"));
         form.add(genderSelect);
-        
+
         // Investment Select
         List investmentOptions = new ArrayList();
         Select.Option none = new Select.Option("None");
         investmentOptions.add(none);
-        
+
         Select.OptionGroup property = new Select.OptionGroup("Property");
         property.add(new Select.Option("Commerical Property", "Commercial"));
         property.add(new Select.Option("Residential Property", "Residential"));
         investmentOptions.add(property);
-        
+
         Select.OptionGroup securities = new Select.OptionGroup("Securities");
         securities.add(new Select.Option("Bonds"));
         securities.add(new Select.Option("Options"));
         securities.add(new Select.Option("Stocks"));
         investmentOptions.add(securities);
-        
+
         investmentSelect = new Select("Investment");
         investmentSelect.setOptionList(investmentOptions);
         form.add(investmentSelect);
-        
+
         // Location Select
         locationSelect = new Select("Location");
         locationSelect.setRequired(true);

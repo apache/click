@@ -500,12 +500,12 @@ public abstract class Field implements Control {
     public void setTitle(String value) {
         title = value;
     }
-    
+
     /**
      * Return true if the Field should validate itself when being processed.
      * The Field inherits its validate status from its parent Form, see
      * {@link Form#getValidate()}.
-     * 
+     *
      * @return true if the Field should validate itself when being processed.
      */
     public boolean validate() {

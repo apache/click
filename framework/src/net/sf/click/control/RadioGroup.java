@@ -205,7 +205,7 @@ public class RadioGroup extends Field {
                 return false;
             }
         }
-   
+
         if (!validate()) {
             return true;
         }

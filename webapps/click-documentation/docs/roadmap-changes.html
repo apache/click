@@ -28,20 +28,14 @@
 <ul>
   <li>
     Provide a Release Candiate over the next few months, with the aim of making
-    a 1.0 release in June 2005.
+    a 1.0 release in June/July 2005.
   </li>
-  <li>Create <b>Tracker</b> example application.
-    Tracker will provide a Bug Tracking and Issue Management application.
-    <p/>
-    The application will use <a href="http://www.hibernate.org">Hibernate</a> 2.1.8 
-    for persistence layer, with <a href="http://www.mckoi.com">Mckoi</a> 1.0.3 as 
-    the backing SQL database.
-    The example will be tailored for deployment to 
-    <a href="http:jakarta.apache.org/tomcat">Tomcat</a> 5.5.9.
-   </li>
-   <li>
-    Create a Table control which supports pagination, sorting and custom
-    renderers.
+  <li>
+    Create a Table control which supports pagination and custom renderers.
+  </li>
+  <li>
+    A Commercial CRM web application being built using Click will feed features
+    back into the Click source code mainline.
   </li>
 </ul>
 
@@ -50,6 +44,31 @@
 <h2>Changes</h2>
 
 <dl>
+  <dt>Version 0.5 - May 2004</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">Form control encodes the form <tt>"action"</tt> URL attribute using
+         <a href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeURL(java.lang.String)">encodeURL(String)</a>
+         to ensure session ID is set.
+      </li> 
+      <li class="change">Added optional Form validation. A 
+         <a href="click-api/net/sf/click/control/Form.html#validate">validate</a>
+         property has beed added to Form and a <a href="click-api/net/sf/click/control/Field.html#validate()">validate()</a>
+         method to Field. Field subclasses have been modified to support optional
+         validation.  See the Click <a href="index.html">Examples</a> Form
+         Properties page for a demonstration.
+      </li> 
+      <li class="change">Added Session Object utility methods to Context, see 
+         <a href="click-api/net/sf/click/Context.html#getSessionObject(java.lang.Class)">getSessionObject</a>.
+      </li> 
+      <li class="change">Added error message block horizontal alignment proeprty
+         <a href="click-api/net/sf/click/control/Form.html#errorsAlign">errorsAlign</a>
+         to Form.
+      </li>  
+      <li class="change">Updated documentation and examples.</li>   
+    </ul>
+  </dd>
+  <p/>
   <dt>Version 0.4 - May 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">

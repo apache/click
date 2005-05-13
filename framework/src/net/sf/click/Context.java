@@ -212,11 +212,11 @@ public class Context {
     public void setSessionAttribute(String name, Object value) {
         getSession().setAttribute(name, value);
     }
-    
+
     /**
-     * Remove the named attribute from the session. If the session does not 
+     * Remove the named attribute from the session. If the session does not
      * exist or the name is null, this method does nothing.
-     * 
+     *
      * @param name of the attribute to remove from the session
      */
     public void removeSessionAttribute(String name) {
@@ -224,18 +224,26 @@ public class Context {
             getSession().removeAttribute(name);
         }
     }
-    
+
+    /**
+     * Return true if there is a session and it contains the named attribute.
+     *
+     * @param name the name of the attribute
+     * @return true if the session contains the named attribute
+     */
+    public boolean hasSessionAttribute(String name) {
+        return (getSessionAttribute(name) != null);
+    }
+
     /**
      * Return a object stored in the session using the objects class name.
-     * If the object does not exist in the session an new instance will be
-     * created.
-     * <p/>
-     * The specified class must have <tt>public</tt> visibility and provide
-     * an no-args public constructor.
-     * 
+     * If the object does not exist in the session, an new instance will be
+     * created. The specified class must be <tt>public</tt> visibility and
+     * provide an no-args public constructor.
+     *
      * @param aClass the class of the object to get from the session
      * @return a object stored in the session using the objects class name, or
-     * a new object instance if it does not exist. 
+     * a new object instance if it does not exist.
      */
     public Object getSessionObject(Class aClass) {
         if (aClass == null) {
@@ -251,11 +259,11 @@ public class Context {
         }
         return object;
     }
-    
+
     /**
-     * Store the given object in the session using the objects class name as
+     * Store the given object in the session using the object's class name as
      * the key.
-     * 
+     *
      * @param object the object to store in the session
      */
     public void setSessionObject(Object object) {
@@ -267,7 +275,7 @@ public class Context {
     /**
      * Remove the class object from the session. If the session does not exist
      * or the class is null, this method does nothing.
-     * 
+     *
      * @param aClass the class object to remove from the session
      */
     public void removeSessionObject(Class aClass) {
@@ -275,7 +283,7 @@ public class Context {
             getSession().removeAttribute(aClass.getName());
         }
     }
-    
+
     /**
      * Return true if a HttpSession exists, or false otherwise.
      *

@@ -425,7 +425,7 @@ public class Select extends Field {
                     multipleValues.add(values[i]);
                 }
             }
-            
+
             if (!validate()) {
                 return true;
             }
