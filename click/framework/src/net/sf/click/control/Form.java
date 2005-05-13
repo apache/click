@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -357,7 +358,7 @@ public class Form implements Control {
         "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
         "<script type='text/javascript' src='$/click/control.js'></script>" +
         "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
-    
+
     static {
         ResourceBundle bundle =
             ResourceBundle.getBundle(Field.PACKAGE_MESSAGES);
@@ -374,7 +375,7 @@ public class Form implements Control {
 
     /** The form attributes map. */
     protected Map attributes;
-    
+
     /** The button align, default value is "<tt>left</tt>" */
     protected String buttonAlign = LEFT;
 
@@ -400,7 +401,7 @@ public class Form implements Control {
 
     /** The errors block align, default value is "<tt>left</tt>" */
     protected String errorsAlign = LEFT;
-    
+
     /**
      * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value:
      * &nbsp; <tt>MIDDLE</tt>
@@ -438,7 +439,7 @@ public class Form implements Control {
 
     /** The form is readonly flag. */
     protected boolean readonly;
-    
+
     /** The form validate fields when processing flag. */
     protected boolean validate = true;
 
@@ -592,7 +593,7 @@ public class Form implements Control {
     public void setButtonAlign(String align) {
         buttonAlign = align;
     }
-    
+
     /**
      * Return the ordered list of {@link Button}s.
      *
@@ -696,8 +697,8 @@ public class Form implements Control {
      */
     public void setErrorsAlign(String align) {
         errorsAlign = align;
-    }  
-    
+    }
+
     /**
      * Return the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
      *
@@ -713,12 +714,12 @@ public class Form implements Control {
      * @param position the form errors position
      */
     public void setErrorsPosition(String position) {
-        if (TOP.equals(position) || 
-            MIDDLE.equals(position) || 
+        if (TOP.equals(position) ||
+            MIDDLE.equals(position) ||
             BOTTOM.equals(position)) {
-            
+
             errorsPosition = position;
-            
+
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
@@ -770,7 +771,7 @@ public class Form implements Control {
 
     /**
      * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>) 
+     * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>)
      * files.
      *
      * @return the HTML head import statements for the control stylesheet and
@@ -830,9 +831,9 @@ public class Form implements Control {
      *
      * @param position the form labels position
      */
-    public void setLabelsPosition(String position) {       
-        if (LEFT.equals(position) || TOP.equals(position)) {       
-            labelsPosition = position;          
+    public void setLabelsPosition(String position) {
+        if (LEFT.equals(position) || TOP.equals(position)) {
+            labelsPosition = position;
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
@@ -925,22 +926,22 @@ public class Form implements Control {
         }
         return true;
     }
-    
+
     /**
      * Return true if the Form's fields should validate themselves when being
      * processed.
-     * 
+     *
      * @return true if the form fields should perform validation when being
      * processed
      */
     public boolean getValidate() {
         return validate;
     }
-    
+
     /**
      * Set the Form's field validation flag, telling the Fields to validate
      * themselves when their <tt>onProcess()</tt> method is invoked.
-     * 
+     *
      * @param validate the Form's field validation flag
      */
     public void setValidate(boolean validate) {
@@ -1012,6 +1013,10 @@ public class Form implements Control {
             400 + (fieldList.size() * 350) + (buttonList.size() * 50);
 
         StringBuffer buffer = new StringBuffer(bufferSize);
+        
+        HttpServletRequest request = getContext().getRequest();
+        HttpServletResponse response = getContext().getResponse();
+        String actionURL = response.encodeURL(request.getRequestURI());
 
         buffer.append("<form method='");
         buffer.append(getMethod());
@@ -1020,7 +1025,7 @@ public class Form implements Control {
         buffer.append("' id='");
         buffer.append(getId());
         buffer.append("' action='");
-        buffer.append(getContext().getRequest().getRequestURI());
+        buffer.append(actionURL);
         buffer.append("'");
         if (hasAttributes()) {
             ClickUtils.renderAttributes(getAttributes(), buffer);
@@ -1029,7 +1034,7 @@ public class Form implements Control {
 
         int hiddenCount = 0;
         Field fieldWithError = null;
-        
+
         buffer.append("<table class='form' id='");
         buffer.append(getId());
         buffer.append("-form'>\n");
@@ -1039,7 +1044,7 @@ public class Form implements Control {
             fieldWithError = renderErrors(buffer, process);
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
-            
+
         } else if (MIDDLE.equals(getErrorsPosition())) {
             hiddenCount = renderFields(buffer);
             fieldWithError = renderErrors(buffer, process);
@@ -1049,7 +1054,7 @@ public class Form implements Control {
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
             fieldWithError = renderErrors(buffer, process);
-            
+
         } else {
             String msg = "Invalid errorsPositon:" + getErrorsPosition();
             throw new IllegalArgumentException(msg);
@@ -1190,7 +1195,7 @@ public class Form implements Control {
 
         }
         buffer.append("</table>\n");
-        buffer.append("</td></tr>");
+        buffer.append("</td></tr>\n");
 
         return hiddenCount;
     }
@@ -1219,7 +1224,7 @@ public class Form implements Control {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
-                buffer.append("<tr><td style='text-align:");
+                buffer.append("<tr><td align='");
                 buffer.append(getErrorsAlign());
                 buffer.append("'>\n");
                 buffer.append("<table class='errors' id='");
@@ -1231,7 +1236,7 @@ public class Form implements Control {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
                 } else {
-                    buffer.append("<tr><td style='text-align:");
+                    buffer.append("<tr><td align='");
                     buffer.append(getErrorsAlign());
                     buffer.append("'>\n");
                 }
@@ -1255,7 +1260,9 @@ public class Form implements Control {
                     if (useErrorsHeader) {
                         buffer.append(errorsPrefix);
                     } else {
-                        buffer.append("<tr><td>");
+                        buffer.append("<tr><td align='");
+                        buffer.append(getErrorsAlign());
+                        buffer.append("'>");
                     }
 
                     buffer.append("<a class='error'");

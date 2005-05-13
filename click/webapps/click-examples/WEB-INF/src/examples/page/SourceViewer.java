@@ -25,7 +25,7 @@ public class SourceViewer extends BorderedPage {
             "class", "public", "protected", "private", "extends", "implements",
             "return", "if", "while", "for", "do", "else", "try", "new", "void",
             "catch", "throws", "throw", "static", "final", "break", "continue",
-            "super", "finally", "true", "false", "true;", "false;", "null", 
+            "super", "finally", "true", "false", "true;", "false;", "null",
             "boolean", "int", "char", "long", "float", "double", "short" };
 
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",

@@ -116,7 +116,7 @@ public class Checkbox extends Field {
      */
     public boolean onProcess() {
         setChecked(getContext().getRequest().getParameter(name) != null);
-        
+
         if (!validate()) {
             return true;
         }

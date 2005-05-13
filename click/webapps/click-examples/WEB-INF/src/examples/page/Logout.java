@@ -1,6 +1,7 @@
 package examples.page;
 
 import net.sf.click.Page;
+import examples.domain.User;
 
 /**
  * Provides an user session logout Page.
@@ -13,9 +14,10 @@ public class Logout extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        if (getContext().hasSession()) {
-            addModel("user", getContext().getSessionAttribute("user"));
-            getContext().getSession().invalidate();
+        User user = (User) getContext().getSessionAttribute("user");
+        if (user != null) {
+            addModel("user", user);
+            getContext().removeSessionAttribute("user");
         }
     }
 }

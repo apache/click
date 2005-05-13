@@ -61,3 +61,19 @@ dt {
 	text-align: left; 
 	padding-left: 0.5em;
 }
+
+.codeJava {
+	font-family: Courier New, courier;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
