@@ -112,7 +112,7 @@ public class Context {
     /**
      * Return the page resouce path from the request. For example:
      * <pre class="codeHtml">
-     * <span class="blue">http://www.mycorp.com/banking/secure/login.html</span>  ->  <span class="red">secure/login.html</span> </pre>
+     * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">secure/login.htm</span> </pre>
      *
      * @return the page resource path from the request
      */

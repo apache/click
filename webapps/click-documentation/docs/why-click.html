@@ -1,0 +1,90 @@
+<!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Why Click</h1>
+<p/>
+This topic discusses design philosophy and background behind Click, and hopefully explains why someone would build
+another Java web application framework.
+<p/>
+
+Click is modern J2EE web application framework, which incorporates lessons learn from previous frameworks including Struts and Tapestry.
+<p/>
+Key features of Click include:
+<p/>
+Simple to Learn<br/>
+Click is designed to be simple learn so that new developers can get up and running in a day.  This is very important with commercial development teams where you have a wide range of skill levels and motivation.
+<p/>
+My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for average developer. The two development teams I introduced Tapestry to eventually dropped it, reverting to Struts.
+<p/>
+Click is also significantly easier to learn than Struts. Struts, while essentially a simple command pattern framework, has a convoluted and confusing design.
+<p/>
+To support ease of adoption Click has some of the best documentation for available for a open source framework and includes many working examples.
+<p/>
+Component and Page Oriented Design<br/>
+If you have done traditional GUI programming with Swing, VB or Delphi you will know that there is something very wrong with J2EE web development. J2EE web development is painfully slow, complex and error prone.
+<p/>
+One of the first generation J2EE web frameworks was Struts, which provides a command pattern design and a set of JSP tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions working with primitive ActionForms.  Its not giving you much leverage at all.
+<p/>
+Tapestry was one of first the component base J2EE web frameworks, introducing the component hierarchies, pages and an event based programming model.  This is a much more productive way of working, and is what we have come to expect in when developing desktop GUI applications.  
+<p/>
+Click provides an Page oriented design, featuring Control components and an event based programming model. Click includes 22 Controls out of the box, which correspond to the major HTML elements. It’s a great way of programming simply 
+<p/>
+Click Forms and Controls provide automatic validation and rendering, making form development very fast and robust.
+<p/>
+JSP Free<br/>
+Click is JSP Free. This is a good thing! 
+<p/>
+JSP’s combined with the miss application of the MVC pattern have been holding back J2EE web development for many years. It’s a big statement I know.  Please let me explain.
+<p/>
+MVC is a desktop GUI design pattern, which supports a separation of  roles in UI design. Model is the data, the View does the rendering and the Control is for modifying the data.  Now MVC is a fairly sophisticated UI pattern which solves the problem of multiple views and controls sharing the same data.  
+<p/>
+For most UI development however MVC is overkill. The control and the view are usually the same thing.  For example, a Select box is the view and the control and also holds the model. In Swing fortunately, most of the MVC design is hidden away below the surface.  In VB and Delphi there is no MVC at all.
+<p/>
+In the early days of J2EE web development design patterns were converted, and MVC was grabbed and early Servlet/JSP designs were branded as MVC. In their analysis the model was usually a DAO, the view was the JSP and control was a Servlet.  
+<p/>
+The effect of this was to lock in the design concept where the UI MVC roles were strictly separated. This fits well with the generalized architectural principle separating layers, and with the fact that JSPs are only really suitable for rendering output.
+<p/>
+Unfortunately the cost of this strict separation was the encapsulation. Most UI components encapsulate the view and the control. Click components (Controls) are responsible for both rendering themselves (view) and then understanding what they mean (control).
+<p/>
+To see this concept in action take simple Click page where we have an ActionLink Control.
+<pre><code>
+public class ActionPage extends Page {
+
+    public void onInit() {
+        ActionLink clickLink = new ActionLink("clickLink");
+        clickLink.setListener(this, "onClick");
+        addControl(clickLink);    
+    }
+    
+    public boolean onClick() {
+        System.out.println("onClick invoked");
+        return true;
+    }
+} 
+</code></pre>
+<br/>
+<code>
+&lt;a href="$clickLink.href"&gt;Click Me&lt;/a&gt;
+</code>
+<p/>
+It this example the ActionLink control renders href attribute in the HTML page, and then invokes Page method if its clicked.  
+<p/>
+Conversely with the JSP's "MVC" architecture a JSP's can tell you something, but it can't understand what it has just said.
+<p/>
+
+Instead of using JSPs Click uses the Velocity templating engine coupled with Click Controls for
+<p/>
+
+
+
+</table>
+</body>
+</html>
+
