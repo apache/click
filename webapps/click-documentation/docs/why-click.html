@@ -12,7 +12,8 @@
 <p/>
 This topic discusses the design philosophy and background behind Click, and hopefully explains why someone would build
 another Java web application framework.
-<p>&nbsp;</p>
+<p/>
+<br/>
 
 
 Click is modern J2EE web application framework, which incorporates lessons learned from previous frameworks including 
@@ -105,48 +106,38 @@ Conversely with the JSP MVC architecture a JSP can tell you something, but it ca
 said. 
 <p/>
 With Click a control renders itself and processes the users input.  In OO terms this is called 
-<i>encapsulation</i>.
+<i>encapsulation</i>. This makes Click controls robust and easy to reuse.
 <p/>
 
 <h2>Velocity</h2>
 
-TODO:
-For rendering HTML Click uses the Velocity templating engine.
-Instead of using JSPs Click uses the Velocity templating engine. If you have every had the pleasure of using 
-Velocity you will find going back to JSP quite painful. Velocity provides a simple language which is intuative:
+For rendering HTML Click uses the Velocity templating engine. Velocity has a simple 
+instruction set which is very easy to learn and use. 
+For example take a look at the template below.
 
 <pre class="codeHtml">
-<span class="">#if</span>( <span class="">$customerList.size</span> > 0 )
-  &lt;table&gt;
-  <span class="">#foreach</span>( <span class="">$customer</span> <span class="">in</span> <span class="">$customerList</span> )
-    &lt;tr&gt;
-      &lt;td&gt;Name: &lt;/td&gt; &lt;td&gt;<span class="">$customer.name</span>&lt;/td&gt; 
-      &lt;td&gt;Email:&lt;/td&gt; &lt;td&gt;<span class="">$customer.email</span>&lt;/td&gt;   
-    &lt;/tr&gt;
-  <span class="">#end</span>
-  &lt;/table&gt;
-<span class="">#else</span>
-  No customers found.
-<span class="">#end</span> 
+<span class="kw">#if</span> (<span class="st">$session.order.lineItems.size()</span> > 0)
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Quantity&lt;/th&gt; &lt;th&gt;Total Price&lt;/th&gt;
+  &lt;/tr&gt;
+  <span class="kw">#foreach</span> (<span class="st">$lineItem</span> <span class="kw">in</span> <span class="st">$session.order.lineItems</span>)
+  &lt;tr&gt;
+    &lt;td&gt;<span class="st">$lineItem.name</span>&lt;/td&gt; 
+    &lt;td&gt;<span class="st">$lineItem.quantity</span>&lt;/td&gt;   
+    &lt;td&gt;<span class="st">$lineItem.totalPrice</span>&lt;/td&gt;   
+  &lt;/tr&gt;
+  <span class="kw">#end</span>
+&lt;/table&gt;
+<span class="kw">#else</span>
+  No items have been ordered.
+<span class="kw">#end</span> 
 </pre>
 
-Compare this to the equivalent JSP Struts taglib code, and you should find Velocity eaiser to read.
-
-<pre class="codeHtml">
-&lt;logic:notEmpty name="<span class="">customerList</span>"&gt;
-  &lt;table&gt;  
-  &lt;logic:iterate id="<span class="">customer</span>" name="<span class="">customerList</span>"&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Name: &lt;/td&gt; &lt;td&gt;&lt;bean:write name="<span class="">customer</span>" property="<span class="">name</span>"/&gt;&lt;/td&gt; 
-      &lt;td&gt;Email:&lt;/td&gt; &lt;td&gt;&lt;bean:write name="<span class="">customer</span>" property="<span class="">email</span>"/&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/logic:iterate&gt; 
-  &lt;/table&gt;
-&lt;/logic:notEmpty&gt;
-&lt;logic:empty name="<span class="">customerList</span>"&gt; 
-  No customers found.
-&lt;/logic:empty&gt;
-</pre>
+You should be able to understand what this codes doing without having to consult any taglib 
+reference. Velocity's ease of use made it the ideal choice for Click. 
+<p/>
+The one tricky part of Velocity <i>configuration</i> is handled automatically by Click.
 
 </table>
 </body>

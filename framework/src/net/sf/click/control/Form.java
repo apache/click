@@ -130,6 +130,8 @@ import org.apache.commons.lang.StringUtils;
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
+ * <a name="form-layout"><h3>Form Layout</h3></a>
+ * 
  * <a name="auto-layout"><h4>Auto Layout</h4></a>
  *
  * If you include a form variable in your template the form will be
@@ -138,11 +140,17 @@ import org.apache.commons.lang.StringUtils;
  *
  * <table style="margin-left: 1em;" cellpadding="3">
  * <tr>
- * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; ["left", "center", "right"]</td>
+ * <td>{@link #buttonAlign}</td> <td>button alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
- * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>[LEFT, TOP]</tt></td>
+ * <td>{@link #columns}</td> <td>number of form table columns, the default value number is 1</td>
  * </tr><tr>
- * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>[TOP, MIDDLE, BOTTOM]</tt></td>
+ * <td>{@link #errorsAlign}</td> <td>validation error messages alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>["top", "middle", "bottom"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
  * </tr><tr>
  * <td>click/form.css</td> <td>form CSS styles, located under web root directory</td>
  * </tr><tr>
@@ -324,16 +332,16 @@ public class Form implements Control {
      */
     public static final String FORM_NAME = "form_name";
 
-    /** The errors and labels on top form layout constant. */
+    /** The errors and labels on top form layout constant: &nbsp; <tt>"top"</tt> */
     public static final String TOP = "top";
 
-    /** The errors in middle form layout constant. */
+    /** The errors in middle form layout constant: &nbsp; <tt>"middle"</tt> */
     public static final String MIDDLE = "middle";
 
-    /** The errors on bottom form layout constant. */
+    /** The errors on bottom form layout constant: &nbsp; <tt>"top"</tt> */
     public static final String BOTTOM = "bottom";
 
-    /** The labels of left form layout contant. */
+    /** The labels of left form layout contant: &nbsp; <tt>"left"</tt> */
     public static final String LEFT = "left";
 
     /** The errors-header resource property */
@@ -399,12 +407,12 @@ public class Form implements Control {
     /** The form level error message. */
     protected String error;
 
-    /** The errors block align, default value is "<tt>left</tt>" */
+    /** The errors block align, default value is <tt>"left"</tt> */
     protected String errorsAlign = LEFT;
 
     /**
-     * The form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt> default value:
-     * &nbsp; <tt>MIDDLE</tt>
+     * The form errors position <tt>["top", "middle", "bottom"]</tt> default value:
+     * &nbsp; <tt>"middle"</tt>
      */
     protected String errorsPosition = MIDDLE;
 
@@ -414,11 +422,11 @@ public class Form implements Control {
     /** The map of fields keyed by field name. */
     protected final Map fields = new HashMap();
 
-    /** The label align, default value is "<tt>left</tt>" */
+    /** The label align, default value is <tt>"left"</tt> */
     protected String labelAlign = LEFT;
 
     /**
-     * The form labels position <tt>[LEFT, TOP]</tt> default value: &nbsp; <tt>LEFT</tt>
+     * The form labels position <tt>["left", "top"]</tt> default value: &nbsp; <tt>"left"</tt>
      */
     protected String labelsPosition = LEFT;
 
@@ -700,7 +708,7 @@ public class Form implements Control {
     }
 
     /**
-     * Return the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
+     * Return the form errors position <tt>["top", "middle", "bottom"]</tt>.
      *
      * @return form errors position
      */
@@ -709,7 +717,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form errors position <tt>[TOP, MIDDLE, BOTTOM]</tt>.
+     * Set the form errors position <tt>["top", "middle", "bottom"]</tt>.
      *
      * @param position the form errors position
      */
@@ -818,7 +826,7 @@ public class Form implements Control {
     }
 
     /**
-     * Return the form labels position <tt>[LEFT, TOP]</tt>.
+     * Return the form labels position <tt>["left", "top"]</tt>.
      *
      * @return form labels position
      */
@@ -827,7 +835,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form labels position <tt>[LEFT, TOP]</tt>.
+     * Set the form labels position <tt>["left", "top"]</tt>.
      *
      * @param position the form labels position
      */
@@ -1013,7 +1021,7 @@ public class Form implements Control {
             400 + (fieldList.size() * 350) + (buttonList.size() * 50);
 
         StringBuffer buffer = new StringBuffer(bufferSize);
-        
+
         HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
         String actionURL = response.encodeURL(request.getRequestURI());
@@ -1319,4 +1327,3 @@ public class Form implements Control {
         }
     }
 }
-
