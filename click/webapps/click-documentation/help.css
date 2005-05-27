@@ -74,6 +74,7 @@ span.sparx {
 
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
 	font-family: Courier New, courier;
+	font-size: 10pt;
 	border: 1px solid #AAAAAA;
 	background-color: #FAFAFA;
 	padding: 1em;
