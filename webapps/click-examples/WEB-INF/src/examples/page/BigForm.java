@@ -66,12 +66,14 @@ public class BigForm extends BorderedPage {
         form.add(creditCardField);
 
         IntegerField monthField = new IntegerField("Expiry Month");
+        monthField.setSize(2);
         monthField.setMaxLength(2);
         monthField.setMinValue(1);
         monthField.setMaxValue(12);
         form.add(monthField);
 
         IntegerField yearField = new IntegerField("Expiry Year");
+        yearField.setSize(4);
         yearField.setMaxLength(4);
         yearField.setMinValue(2000);
         yearField.setMaxValue(2010);
@@ -98,6 +100,7 @@ public class BigForm extends BorderedPage {
         form.add(dateField);
 
         TextArea textArea = new TextArea("Delivery Notes");
+        textArea.setCols(30);
         textArea.setTitle("Please tell us about any special delivery instructions");
         form.add(textArea);
 
