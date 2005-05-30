@@ -27,7 +27,7 @@ Struts and Tapestry. &nbsp; Key features of Click include:
 Click is designed to be simple learn so that new developers can get up and running in a day.  This is very important 
 with commercial development teams where you have a wide range of skill levels and motivation.
 <p/>
-My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for 
+My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for the
 average developer. The two development teams I introduced to Tapestry eventually dropped it and revert to Struts.
 <p/>
 Click is also significantly easier to learn than Struts. The Struts framework, while essentially a simple command 
@@ -49,8 +49,8 @@ Tapestry was one of first the component base J2EE web frameworks, introducing th
 event based programming model.  This is a much more productive way of working, and is what we have come to expect in 
 when developing desktop GUI applications.  
 <p/>
-The idea with Click was to take this page and component design approach, and make it much easiser to use and more 
-accessable.
+The idea with Click was to take this page and component design approach, and make it much easier to use and more 
+accessible.
 <p/>
 Click provides an Page oriented design, featuring Control components and an event based programming model. Click 
 includes 22 Controls out of the box, which correspond to the major HTML elements. It's a great way of programming 
@@ -72,7 +72,7 @@ For most UI development however MVC is overkill. The control and the view are us
 a Select box is the view and the control and also holds the model. In Swing fortunately, most of the MVC design is 
 hidden away below the surface.  In VB and Delphi there is no MVC at all.
 <p/>
-In the early days of J2EE web development design patterns were converted, and MVC was grabbed and early Servlet/JSP 
+In the early days of J2EE web development design patterns were highly converted, and MVC was grabbed and early Servlet/JSP 
 designs were branded as MVC. In their analysis the model was usually a DAO, the view was the JSP and control was a 
 Servlet.  
 <p/>
@@ -107,41 +107,33 @@ The ActionLink control renders the links <tt>href</tt> attribute in the HTML pag
 If the user clicks the link the ActionLink control then invokes the invokes the Page's <code>onClick()</code> method. 
 <p/>
 Conversely with the JSP MVC architecture a JSP can tell you something, but it can't understand what it has just 
-said. Think about this for a second. There is no UI component is taking responsibility for its own actions. 
-Guess where the responsibility falls to. 
+said. Think about this for a second. There is no single UI component is taking responsibility for its own actions. 
+Guess where the responsibility then falls to... 
 <p/>
-You become responsible for wiring up the numerous pieces to make it work. In Struts this can include
+You become responsible for wiring up the numerous pieces to make it work. In Struts this can include:
 <ul>
    <li>writing a custom <tt>Action</tt> class</li>
    <li>writing a custom <tt>ActinForm</tt> class</li>
    <li>specifying the <tt>action</tt> elements in the <tt>struts-config.xml</tt> file</li>
    <li>specifying the <tt>form-bean</tt> element in the <tt>struts-config.xml</tt> file</li>
-   <li>specifying the <tt>field</tt> elements in the <tt>validation.xml</tt> file.</li>
-   <li>specifying the &lt;htm:form&gt; and &lt;html:field&gt; tag correctly in the JSP file.</li>
+   <li>specifying the <tt>form</tt> element in the <tt>validation.xml</tt> file</li>
+   <li>specifying the form <tt>field</tt> validation elements in the <tt>validation.xml</tt> file</li>
+   <li>ensure all bindings are correct between the XML elements: <tt>action</tt>, <tt>form-bean</tt>, <tt>form</tt>, <tt>field</tt></li>
+   <li>specifying the tag lib includes in the JSP file</li>
+   <li>specifying the &lt;htm:form&gt; and &lt;html&gt; field tag XML elements and attributes correctly in the JSP file</li>
 </ul>
 
-In Struts this can include writing an
-Action and ActionForm class, defining an ActionMapping in the struts config file, mappingan Action class
-ActionForm
-
-You become responsible for wiring up everything correctly.
+In development of large applications this becomes a volumous, tedious and error prone task. 
 <p/>
-This can be a tedious and error prone task, 
-
-With the JSP MVC approach you are responsible for wiring up everything correctly.
+Another aspect of these designs is the transfer of logic from Java code into XML configuration files. Tapestry also 
+makes extensive use of XML. The problem with this is compile time errors now only become apparent at runtime.
+Also writing and maintaining large volumes of XML is more difficult that Java code. The Java IDE refactoring
+tools are much more sophisticated that the XML tools available.
 <p/>
+Click enables you to apply Object Oriented design principles such as subclassing to extend other Controls, 
+or aggregation to build more sophisticated UI components. For example the Click control <tt>CreditCardField</tt> 
+"<i>is a</i>" subclass of <tt>TextField</tt> and "<i>has a</i>" <tt>Select</tt> control for specifying the card type.
 
-This makes it hard to build UI sophisticated components which you can reuse through out your application. 
-With the JSP approach you are are responsible, making sure you wire up everything correctly including paths, actions,
-XML mappings, request 
-You have to take
-great care ensuring you have correctly mapped paths to actions, initialise request and or session parameters
-
-There is no OO <i>encapsulation</i>
-<p/>
-With Click a control renders itself and processes the users input.  In OO terms this is called 
-<i>encapsulation</i>. TODO and makes development with Click a whole load easier.
-<p/>
 
 <h2>Velocity</h2>
 
@@ -168,10 +160,10 @@ For example take a look at the template below.
 <span class="kw">#end</span> 
 </pre>
 
-You should be able to understand what this codes doing without having to consult any taglib 
-reference. Velocity's ease of use made it the ideal choice for Click. 
+You should have a pretty good idea of what this code does without having to consult any taglib 
+documentation. Velocity's ease of use made it the ideal choice for Click. 
 <p/>
-The one tricky part of Velocity <i>configuration</i> is handled automatically by Click.
+The one tricky part of Velocity, <i>configuration</i> is handled automatically by Click.
 
 </table>
 </body>
