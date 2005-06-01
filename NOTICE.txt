@@ -1,3 +1,4 @@
+
 This product includes software developed by 
 The Apache Software Foundation (http://jakarta.apache.org/).
 
@@ -11,10 +12,3 @@ This product includes the Java API for Servlets, version 2.3,
 developed by Sun Microsystems Inc (http://www.sun.com). 
 Please note the Java Servlet API is NOT included in the 
 Click runtime library.
-
-This product includes an example Tracker application, which uses 
-the Mckoid SQL Database, developed by Diehl and Associates, Inc. 
-(http://www.mckoi.com/). The Mckoid SQL Database is licensed 
-using the the GNU GENERAL PUBLIC LICENSE. Please note the
-Tracker application and Mckoid SQL Database is NOT included in 
-the Click runtime library. 

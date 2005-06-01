@@ -1,8 +1,9 @@
+
 Welcome to the Click
 ====================
 
-Click is a simple J2EE web application framework for 
-commercial Java developers. Click is an open source project, 
+Click is a J2EE web application framework featuring a Component
+and Page oriented design. Click is an open source project 
 licensed using the Apache license. 
 
 Comprehensive HTML documentation is provided under:
@@ -12,6 +13,16 @@ Comprehensive HTML documentation is provided under:
 Or online at:
 
 	http://click.sourceforge.net/
+	
+	
+To get started with the Click Examples see:
+
+  webapps/click-documentation/docs/examples.html
+  
+To get started with building Click see:
+
+  webapps/click-documentation/docs/building.html
+
 
 Click is built using the J2SE 1.4.2 and Ant 1.6.1.
 The main Ant targets include:
