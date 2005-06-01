@@ -48,7 +48,7 @@ import net.sf.click.util.ClickUtils;
  *     }
  *
  *     <span class="kw">public boolean</span> onLogoutClick() {
- *         <span class="kw">if</span> (getContext().getSessionAttribute(<span class="st">"user"</span>) != <span class="kw">null</span>) {
+ *         <span class="kw">if</span> (getContext().hasSession()) {
  *            getContext().getSession().invalidate();
  *         }
  *         setForward(<span class="st">"logout"</span>);

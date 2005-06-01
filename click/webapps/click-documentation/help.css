@@ -54,10 +54,10 @@ span.sparx {
 
 .appnameText {
   font-weight: bold;
+  font-size: 20pt;
   letter-spacing: 0.2em; 
-  margin: 2px 2px;
   padding-bottm: 0px;
-  padding-left: 0px;
+  padding-left: 2px;
   padding-right: 0px;
   padding-top: 0px;
   text-decoration: none;
