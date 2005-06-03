@@ -49,7 +49,7 @@ import org.apache.commons.lang.StringUtils;
  * </table>
  * <table class="buttons">
  * <tr><td>
- * <input type='submit' name='ok' value='  OK  '/><input type='submit' name='cancel' value=' Cancel '/>
+ * <input type='submit' name='ok' value='  OK  '/>&nbsp;<input type='submit' name='cancel' value=' Cancel '/>
  * </td></tr>
  * </table>
  *
@@ -131,7 +131,7 @@ import org.apache.commons.lang.StringUtils;
  * rendered, and the {@link #isValid()} method will return false.
  *
  * <a name="form-layout"><h3>Form Layout</h3></a>
- * 
+ *
  * <a name="auto-layout"><h4>Auto Layout</h4></a>
  *
  * If you include a form variable in your template the form will be
@@ -1320,6 +1320,9 @@ public class Form implements Control {
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);
+                if (i <= size - 1) {
+                    buffer.append("&nbsp;");
+                }
             }
             buffer.append("</td></tr>\n");
             buffer.append("</table>\n");
