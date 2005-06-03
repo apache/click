@@ -272,7 +272,8 @@ public class ClickUtils {
     /**
      * Return a field name string from the given field label.
      * <p/>
-     * A label of " OK do it!" is returned as "okDoIt".
+     * A label of " OK do it!" is returned as "okDoIt". Any &amp;nbsp;
+     * characters will also be removed.
      *
      * @param label the field label or caption
      * @return a field name string from the given field label

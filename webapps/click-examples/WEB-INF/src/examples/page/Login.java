@@ -39,7 +39,7 @@ public class Login extends BorderedPage {
         passwordField.setRequired(true);
         form.add(passwordField);
 
-        Submit okButton = new Submit("  OK  ");
+        Submit okButton = new Submit("    OK    ");
         okButton.setListener(this, "onOkClicked");
         form.add(okButton);
 

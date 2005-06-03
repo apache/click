@@ -144,7 +144,7 @@ public abstract class Field implements Control {
      *
      * <pre class="codeJava">
      * TextField textField = new TextField("Username");
-     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span"); </pre>
+     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span>"); </pre>
      *
      * HTML output:
      * <pre class="codeHtml">
