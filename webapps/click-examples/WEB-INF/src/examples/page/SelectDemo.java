@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.click.control.Form;
+import net.sf.click.control.Option;
+import net.sf.click.control.OptionGroup;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
-import net.sf.click.control.Select.Option;
 
 /**
  * Provides an Select example secure Page.
@@ -34,29 +35,27 @@ public class SelectDemo extends BorderedPage {
 
         // Investment Select
         List investmentOptions = new ArrayList();
-        Select.Option none = new Select.Option("None");
-        investmentOptions.add(none);
 
-        Select.OptionGroup property = new Select.OptionGroup("Property");
-        property.add(new Select.Option("Commerical Property", "Commercial"));
-        property.add(new Select.Option("Residential Property", "Residential"));
+        OptionGroup property = new OptionGroup("Property");
+        property.add(new Option("Commerical Property", "Commercial"));
+        property.add(new Option("Residential Property", "Residential"));
         investmentOptions.add(property);
 
-        Select.OptionGroup securities = new Select.OptionGroup("Securities");
-        securities.add(new Select.Option("Bonds"));
-        securities.add(new Select.Option("Options"));
-        securities.add(new Select.Option("Stocks"));
+        OptionGroup securities = new OptionGroup("Securities");
+        securities.add(new Option("Bonds"));
+        securities.add(new Option("Options"));
+        securities.add(new Option("Stocks"));
         investmentOptions.add(securities);
 
         investmentSelect = new Select("Investment");
         investmentSelect.setOptionList(investmentOptions);
+        investmentSelect.setMultiple(true);
+        investmentSelect.setSize(7);
         form.add(investmentSelect);
 
         // Location Select
         locationSelect = new Select("Location");
         locationSelect.setRequired(true);
-        locationSelect.setMultiple(true);
-        locationSelect.setSize(7);
         locationSelect.add("QLD");
         locationSelect.add("NSW");
         locationSelect.add("NT");

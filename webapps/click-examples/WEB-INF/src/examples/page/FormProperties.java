@@ -147,8 +147,9 @@ public class FormProperties extends BorderedPage {
         resetButton.setListener(this, "onResetClick");
         optionsForm.add(resetButton);
 
-        // Setup showBorders checkbox Javascript
-        addModel("javascript-include", "form-properties.js");
+        // Setup showBorders checkbox Javascript using HTML head include and
+        // setting the body onload function.
+        addModel("head-include", "form-head.htm");
         addModel("body-onload", "toggleBorders(document.optionsForm.showBorders);");
 
         // Apply saved options to the demo form and the optionsForm
