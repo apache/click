@@ -274,6 +274,8 @@ public class ClickUtils {
      * <p/>
      * A label of " OK do it!" is returned as "okDoIt". Any &amp;nbsp;
      * characters will also be removed.
+     * <p/>
+     * A label of "customerSelect" is returned as "customerSelect".
      *
      * @param label the field label or caption
      * @return a field name string from the given field label
@@ -285,6 +287,7 @@ public class ClickUtils {
 
         boolean doneFirstLetter = false;
         boolean lastCharBlank = false;
+        boolean hasWhiteSpace = (label.indexOf(' ') != -1);
 
         StringBuffer buffer = new StringBuffer(label.length());
         for (int i = 0, size = label.length(); i < size; i++) {
@@ -303,7 +306,11 @@ public class ClickUtils {
                         }
                     } else {
                         if (doneFirstLetter) {
-                            buffer.append(Character.toLowerCase(aChar));
+                            if (hasWhiteSpace) {
+                                buffer.append(Character.toLowerCase(aChar));
+                            } else {
+                                buffer.append(aChar);
+                            }
                         } else {
                             buffer.append(Character.toLowerCase(aChar));
                             doneFirstLetter = true;
