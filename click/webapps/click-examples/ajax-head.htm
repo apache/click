@@ -1,0 +1,12 @@
+<script type='text/javascript' src='prototype.js'></script>
+<script type='text/javascript' src='rico.js'></script>
+<script type='text/javascript'>
+function registerAjaxStuff() {
+    ajaxEngine.registerRequest( 'getCustomerInfo', 'ajax-customer.htm' );
+   	ajaxEngine.registerAjaxElement( 'customerDetails' );
+}
+
+function onClickCustomers(select) {
+	ajaxEngine.sendRequest( 'getCustomerInfo', 'customerId=' + select.value );
+}
+</script>

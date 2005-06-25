@@ -3,6 +3,8 @@
   <pages>
     <page path="action-demo.htm" classname="examples.page.ActionDemo"/>
     <page path="action-table.htm" classname="examples.page.ActionTable"/>
+    <page path="ajax.htm" classname="examples.page.Ajax"/>
+    <page path="ajax-customer.htm" classname="examples.page.AjaxCustomer"/>
     <page path="big-form.htm" classname="examples.page.BigForm"/>
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
     <page path="exception.htm" classname="examples.page.ExceptionDemo"/>

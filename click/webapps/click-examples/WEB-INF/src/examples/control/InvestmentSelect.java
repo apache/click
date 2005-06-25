@@ -3,6 +3,8 @@ package examples.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.click.control.Option;
+import net.sf.click.control.OptionGroup;
 import net.sf.click.control.Select;
 
 /**
@@ -23,18 +25,17 @@ public class InvestmentSelect extends Select {
     static final List INVESTMENT_OPTIONS = new ArrayList();
 
     static {
-        Select.Option none = new Select.Option("None");
-        INVESTMENT_OPTIONS.add(none);
+        INVESTMENT_OPTIONS.add(new Option("None"));
 
-        Select.OptionGroup property = new Select.OptionGroup("Property");
-        property.add(new Select.Option("Commerical Property", "Commercial"));
-        property.add(new Select.Option("Residential Property", "Residential"));
+        OptionGroup property = new OptionGroup("Property");
+        property.add(new Option("Commerical Property", "Commercial"));
+        property.add(new Option("Residential Property", "Residential"));
         INVESTMENT_OPTIONS.add(property);
 
-        Select.OptionGroup securities = new Select.OptionGroup("Securities");
-        securities.add(new Select.Option("Bonds"));
-        securities.add(new Select.Option("Options"));
-        securities.add(new Select.Option("Stocks"));
+        OptionGroup securities = new OptionGroup("Securities");
+        securities.add(new Option("Bonds"));
+        securities.add(new Option("Options"));
+        securities.add(new Option("Stocks"));
         INVESTMENT_OPTIONS.add(securities);
     }
 

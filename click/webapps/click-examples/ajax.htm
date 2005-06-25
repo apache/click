@@ -1,0 +1,66 @@
+<a href="http://en.wikipedia.org/wiki/AJAX">AJAX</a> dynamic HTML/XML demonstration.
+Please select one of the customers:
+<p/>
+
+<table cellspacing="4" cellpadding="4">
+   <tr>
+      <td> $customerSelect </td>
+      <td> <div id="customerDetails"/> </td>
+   </tr>
+</table>
+
+<p><hr/></p>
+
+The <a href="http://openrico.org/home.page">Rico</a> JavaScript
+library is used in this example.
+<p/>
+This HTML page contains a Select control &#36;<span class="st">customerSelect</span> 
+and a &lt;div id='<span class="st">customerDetails</span>'/&gt; element:
+
+<pre class="codeHtml">
+&lt;table cellspacing="4" cellpadding="4">
+   &lt;tr>
+      &lt;td> &#36;<span class="st">customerSelect</span> &lt;/td>
+      &lt;td> &lt;div id="<span class="st">customerDetails</span>"/> &lt;/td>
+   &lt;/tr>
+&lt;/table>
+</pre>
+
+<p/>
+When you click on the Select control a HTTP request (<tt>GET ajax-customer.htm?customerId=4424</tt>)
+is made to the 
+<a href="$context/source-viewer.htm?filename=WEB-INF/src/examples/page/AjaxCustomer.java">AjaxCustomer</a>
+page to get the customers details. These details are returned as XML/HTML with a response
+content-type of 'text/xml':
+<pre class="codeHtml">
+&lt;ajax-response&gt;
+  &lt;response type="element" id="customerDetails"&gt;
+    <i>HTML content</i>
+  &lt;/response&gt;
+&lt;/ajax-response&gt;
+</pre>
+
+The Rico ajaxEngine then sets the inner text of the registered
+&lt;div id='<span class="st">customerDetails</span>'/&gt; element with the XML/HTML 
+response.
+<p/>
+The Rico ajaxEngine is initialised through the JavaScript page body onload function.
+
+<pre class="codeHtml">
+..
+&lt;script type='text/javascript' src='prototype.js'>&lt;/script&gt;
+&lt;script type='text/javascript' src='rico.js'&gt;&lt;/script&gt;
+&lt;script type='text/javascript'&gt;
+function <span class="maroon">registerAjaxStuff</span>() {
+   ajaxEngine.registerRequest( '<span class="green">getCustomerInfo</span>', 'ajax-customer.htm' );
+   ajaxEngine.registerAjaxElement( '<span class="st">customerDetails</span>' );
+}
+
+function onClickCustomers(select) {
+	ajaxEngine.sendRequest( '<span class="green">getCustomerInfo</span>', 'customerId=' + select.value );
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="<span class="maroon">registerAjaxStuff</span>();"&gt;
+..
+</pre>

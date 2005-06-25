@@ -364,7 +364,7 @@ public class Form implements Control {
 
     protected static final String HTML_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
-        "<script type='text/javascript' src='$/click/control.js'></script>" +
+        "<script type='text/javascript' src='$/click/control.js'></script>\n" +
         "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
 
     static {

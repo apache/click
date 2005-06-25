@@ -2,10 +2,12 @@
 <head>	
 <title>Click Examples - $title</title>
 <link rel="stylesheet" type="text/css" href="style.css" title="Style">
-#if ($form) $form.htmlImports #end
-<script type="text/javascript">
-#if ($javascript-include) #include($javascript-include) #end
-</script>
+#if ($head-include) 
+  #include($head-include) 
+#end
+#if ($form) 
+  $form.htmlImports 
+#end
 </head>
 <body #if($body-onload) onload="$body-onload" #end>
  	

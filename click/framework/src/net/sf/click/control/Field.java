@@ -325,10 +325,12 @@ public abstract class Field implements Control {
      * @see net.sf.click.Control#getId()
      */
     public String getId() {
+        String formId = (getForm() != null) ? getForm().getId() + "-" : "";
+        
         if (hasAttributes() && getAttributes().containsKey("id")) {
-            return getForm().getId() + "-" + getAttribute("id");
+            return formId + getAttribute("id");
         } else {
-            return getForm().getId() + "-" + getName();
+            return formId + "-" + getName();
         }
     }
 
@@ -509,7 +511,11 @@ public abstract class Field implements Control {
      * @return true if the Field should validate itself when being processed.
      */
     public boolean validate() {
-        return getForm().getValidate();
+        if (getForm() != null) {
+            return getForm().getValidate();
+        } else {
+            return true;
+        }
     }
 
     /**

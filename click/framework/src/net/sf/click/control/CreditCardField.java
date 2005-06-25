@@ -129,11 +129,11 @@ public class CreditCardField extends TextField {
 
     static {
         // TODO: localize labels
-        CARD_OPTIONS.add(new Select.Option(VISA, "Visa"));
-        CARD_OPTIONS.add(new Select.Option(MASTER, "Master"));
-        CARD_OPTIONS.add(new Select.Option(AMEX, "AmEx"));
-        CARD_OPTIONS.add(new Select.Option(DINERS, "Diners"));
-        CARD_OPTIONS.add(new Select.Option(DISCOVER, "Discover"));
+        CARD_OPTIONS.add(new Option(VISA, "Visa"));
+        CARD_OPTIONS.add(new Option(MASTER, "Master"));
+        CARD_OPTIONS.add(new Option(AMEX, "AmEx"));
+        CARD_OPTIONS.add(new Option(DINERS, "Diners"));
+        CARD_OPTIONS.add(new Option(DISCOVER, "Discover"));
     }
 
     // ----------------------------------------------------- Instance Variables
