@@ -359,8 +359,6 @@ method, returning the path of the border template to render. For example:
     }
 } </pre>
 
-Note the default Page getTemplate() method simply returns the Page's
-<a href="click-api/net/sf/click/Page.html#path">path</a> property.
 <p/>
 The BorderedPage template <span class="blue">border.htm</span>: 
 
@@ -381,7 +379,7 @@ The BorderedPage template <span class="blue">border.htm</span>:
  
 Other pages insert their content into this template using the Velocity 
 <a href="velocity/vtl-reference-guide.html#parse">#parse</a> directive,
-passing it their contents <a href="click-api/net/sf/click/Page.html#path">path</a>.
+passing it their contents pages <a href="click-api/net/sf/click/Page.html#path">path</a>.
 The <span class="blue">$path</span> value is automatically added to 
 the VelocityContext by the ClickServlet.
 <p/>

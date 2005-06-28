@@ -313,7 +313,7 @@ class ClickApp implements EntityResolver {
         PageElm page = (PageElm) pageByPathMap.get(path);
 
         if (page != null) {
-            return new HashMap(page.getHeaders());
+            return page.getHeaders();
         } else {
             return null;
         }

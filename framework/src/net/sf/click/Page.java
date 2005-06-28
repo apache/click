@@ -76,6 +76,9 @@ public class Page {
 
     /** The HTTP response headers. */
     protected Map headers;
+    
+    /** The headers have been edited flag, to support copy on write. */
+    protected boolean headersEdited;
 
     /** The messages resource bundle. **/
     protected ResourceBundle messages;
@@ -216,11 +219,32 @@ public class Page {
 
     /**
      * Return the map of HTTP header to be set in the HttpServletResponse.
+     * Note to edit header values use {@link #setHeader(String, Object)} as
+     * headers Map is initially unmodifiable.
      *
      * @return the map of HTTP header to be set in the HttpServletResponse
      */
     public Map getHeaders() {
         return headers;
+    }
+    
+    /**
+     * Set the named header with the given value. This method uses copy on
+     * write to the headers Map, as the initial loaded headers Map is
+     * unmodifiable.
+     * 
+     * @param name the name of the header
+     * @param value the value of the header
+     */
+    public void setHeader(String name, Object value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null header name parameter");
+        }
+        if (!headersEdited) {
+            headersEdited = true;
+            headers = new HashMap(headers);
+        }
+        headers.put(name, value);
     }
 
     /**

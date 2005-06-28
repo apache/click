@@ -22,7 +22,7 @@ public class Ajax extends BorderedPage {
            
         Select customerSelect = new Select("customerSelect");
         customerSelect.setSize(7);
-        customerSelect.setAttribute("onchange", "onClickCustomers(this);");
+        customerSelect.setAttribute("onchange", "onCustomerChange(this);");
         addControl(customerSelect);
 
         List customerList = CustomerDAO.getCustomersSortedByName();
