@@ -28,7 +28,7 @@ public class AjaxCustomer extends Page {
         
         addModel("customer", customer);
         
-        getHeaders().put("Content-Type", "text/xml");
+        setHeader("Content-Type", "text/xml");
     }
 
 }

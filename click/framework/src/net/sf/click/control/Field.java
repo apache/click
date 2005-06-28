@@ -330,7 +330,7 @@ public abstract class Field implements Control {
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return formId + getAttribute("id");
         } else {
-            return formId + "-" + getName();
+            return formId + getName();
         }
     }
 

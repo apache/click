@@ -3,10 +3,10 @@
 <script type='text/javascript'>
 function registerAjaxStuff() {
     ajaxEngine.registerRequest( 'getCustomerInfo', 'ajax-customer.htm' );
-   	ajaxEngine.registerAjaxElement( 'customerDetails' );
+    ajaxEngine.registerAjaxElement( 'customerDetails' );
 }
 
-function onClickCustomers(select) {
-	ajaxEngine.sendRequest( 'getCustomerInfo', 'customerId=' + select.value );
+function onCustomerChange(select) {
+	 ajaxEngine.sendRequest( 'getCustomerInfo', 'customerId=' + select.value );
 }
 </script>

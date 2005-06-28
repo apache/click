@@ -189,7 +189,9 @@ pairs which are applied to the
 
 Page headers are set after the Page has been constructed and before <tt>onInit()</tt> is called.
 Pages can then modify their 
-<a target="topic" href="click-api/net/sf/click/Page.html#headers">headers</a> property.
+<a target="topic" href="click-api/net/sf/click/Page.html#headers">headers</a> property using
+the <a href="click-api/net/sf/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
+method.
 
 <h4>Browser Caching</h4>
 
@@ -375,9 +377,6 @@ resource.loader=webapp
 webapp.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
 webapp.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
 webapp.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
-
-runtime.log.logsystem.class=org.apache.velocity.runtime.log.Log4JLogSystem
-runtime.log.logsystem.log4j.category=org.apache.velocity
 
 velocimacro.library.autoreload=[true|false] <span class="green">depending on application mode</span>
 velocimacro.library=click/VM_global_library.vm 
