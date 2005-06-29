@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+   dt { margin-top:2em; }
+   dd { margin:1em; margin-left:2em; }
+ </style>
+</head>
+<body>
+  
+<h1>Frequently Asked Questions</h1>
+
+<p>&nbsp;</p>
+
+<dl>
+  
+  <a name="why-click" class="heading"></a>
+  <dt><b>Why develop a new Web Application Framework?</b></dt>
+  <dd>
+  Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
+  while Tapestry is too complicated. 
+  <p/>
+  For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
+  </dd>
+  
+  <a name="html-control" class="heading"></a>
+  <dt><b>How can you control HTML layout if Click auto generates everything?</b></dt>
+  <dd>
+   ..
+  </dd>
+
+  <a name="localization" class="heading"></a>
+  <dt><b>Does Click support Localization?</b></dt>
+  <dd>
+   ..
+  </dd>
+  
+  <a name="why-velocity" class="heading"></a>
+  <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
+  <dd>
+   The Click framework uses a custom Velocity 1.5 build to provided
+   enhanced error reporting.
+   <p/>
+   Its actually better than the line-precise error reporting you get in
+   Tapesty, as Click will render the source code with the error. For
+   example:
+   <p/>
+   http://click.sourceforge.net/docs/error-npe.html
+   <p/>
+   http://click.sourceforge.net/docs/error-parsing.html
+  </dd>
+  
+  <a name="spring-integration" class="heading"></a>
+  <dt><b>How can you integrate Click into Spring?</b></dt>
+  <dd>
+   The Spring non-web components can be readily used in Click as they can with any framework.
+   <p/>
+   The Spring Web Framework however is not complimentary to Click. Spring uses its own
+   Servlet for dispatching requests to its own request handlers ??. ?? handlers are the 
+   Spring plugin point for integration.
+   <p/>
+   Click also provides its own Servlet for dispatching requests to Pages and their
+   Controls. In Click the Pages and Controls provide the plugin points for integration.
+  </dd>
+  
+</dl>
+
+
+</body>
+</html>
+
