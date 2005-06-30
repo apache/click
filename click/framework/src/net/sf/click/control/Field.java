@@ -385,8 +385,21 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return the formatted package message for the given resource name, message
-     * format arguments and context request locale.
+     * Return the formatted package message for the given resource name
+     * and message format argument and for the context request locale.
+     *
+     * @param name resource name of the message
+     * @param arg the message argument to format
+     * @return the named localized message for the package
+     */
+    public String getMessage(String name, Object arg) {
+        Object[] args = new Object[] { arg };
+        return getMessage(name, args);
+    }
+
+    /**
+     * Return the formatted package message for the given resource name and
+     * message format arguments and for the context request locale.
      *
      * @param name resource name of the message
      * @param args the message arguments to format
@@ -399,19 +412,6 @@ public abstract class Field implements Control {
         String value = getMessage(name);
 
         return MessageFormat.format(value, args);
-    }
-
-    /**
-     * Return the formatted package message for the given resource name, message
-     * format argument and context request locale.
-     *
-     * @param name resource name of the message
-     * @param arg the message argument to format
-     * @return the named localized message for the package
-     */
-    public String getMessage(String name, Object arg) {
-        Object[] args = new Object[] { arg };
-        return getMessage(name, args);
     }
 
     /**

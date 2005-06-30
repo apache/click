@@ -34,24 +34,49 @@
   </dd>
 
   <a name="localization" class="heading"></a>
-  <dt><b>Does Click support Localization?</b></dt>
+  <dt><b>How do you internationalize Pages and Control labels?</b></dt>
   <dd>
-   ..
+   Click provides good string localization support for internationalization requirements.
+   <p/>
+   The Page class supports page specific string localisation bundles using the 
+   method 
+   <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
+   For example a Login class with three locale string property files on the classpath:
+<pre class="codeConfig">
+/com/mycorp/pages/Login.properties
+/com/mycorp/pages/Login_en.properties
+/com/mycorp/pages/Login_fr.properties </pre>
+  
+   The Field control classes share a common string properties file:
+<pre class="codeConfig">
+/click-control.properties </pre>  
+
+   The field class provides a number of 
+   <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+   methods which support localized strings and message formatting.
+   Please also see the topic Control <a href="controls.html#message-properties">Message Properties</a>.
   </dd>
   
   <a name="why-velocity" class="heading"></a>
   <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
   <dd>
-   The Click framework uses a custom Velocity 1.5 build to provided
-   enhanced error reporting.
+   FreeMarker was evaluated against Velocity for template rendering,
+   and has some features Velocity doesn't. However Velocity was
+   chosen over FreeMaker because it doesn't use an XML based 
+   syntax, so its easier to read, and because Velocity is easier
+   to learn.
+   <p/>
+   One of FreeMarker's strong points error reporting is address
+   in Click. The Click framework uses a custom Velocity 1.5 build 
+   to provided enhanced error reporting.
    <p/>
    Its actually better than the line-precise error reporting you get in
    Tapesty, as Click will render the source code with the error. For
    example:
-   <p/>
-   http://click.sourceforge.net/docs/error-npe.html
-   <p/>
-   http://click.sourceforge.net/docs/error-parsing.html
+   <ul>
+      <li><a href="error-parsing.html">Page Parsing Error</a></li>
+      <li><a href="error-npe.html">Null Pointer Error</a></li>
+   </ul>
   </dd>
   
   <a name="spring-integration" class="heading"></a>

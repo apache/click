@@ -196,8 +196,8 @@ number-minvalue-error={0} must not be smaller than {1}
 select-error=You must select a value for {0} 
 
 # Message displayed when a error occurs when the application is in "production" mode
-production-error-message=
-  &lt;div id='errorReport' class='errorReport'&gt;The application encountered an unexpected error.&lt;/div&gt; </pre>
+production-error-message=&lt;div id='errorReport' class='errorReport'&gt;
+   The application encountered an unexpected error.&lt;/div&gt; </pre>
 
 The errors-header, errors-prefix, errors-suffix and errors-footer act like their 
 equivalent Struts values and will format form validation error messages in HTML list.
@@ -208,6 +208,12 @@ errors-header=&lt;ul&gt;
 errors-prefix=&lt;li&gt;&lt;font color="red"&gt;
 errors-suffix=&lt;/font&gt;&lt;/li&gt;
 errors-footer=&lt;/ul&gt;  </pre>
+
+The Field class provides a number of 
+<a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+methods which support localized strings and message formatting.
+<p/>
+
 
 </body>
 </html>
