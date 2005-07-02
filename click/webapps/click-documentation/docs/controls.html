@@ -209,11 +209,24 @@ errors-prefix=&lt;li&gt;&lt;font color="red"&gt;
 errors-suffix=&lt;/font&gt;&lt;/li&gt;
 errors-footer=&lt;/ul&gt;  </pre>
 
-The Field class provides a number of 
-<a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
-methods which support localized strings and message formatting.
-<p/>
-
+The Field class provides a number of methods for gettting localized strings and 
+formatting messages:
+<ul>
+<li>
+<a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a> 
+- return the localized string 
+</li>
+<li>
+<a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a>
+- return the string formatted with the given object 
+</li>
+<li>
+<a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a>
+- return the localized string formatted with the given array of objects  
+</li>
+</ul>
+These methods use the <tt>Locale</tt> of the request to lookup the string resource bundle, 
+and use <tt>MessageFormat</tt> for any string formatting.
 
 </body>
 </html>
