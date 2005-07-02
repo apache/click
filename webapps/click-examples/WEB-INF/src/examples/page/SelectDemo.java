@@ -50,12 +50,12 @@ public class SelectDemo extends BorderedPage {
         investmentSelect = new Select("Investment");
         investmentSelect.setOptionList(investmentOptions);
         investmentSelect.setMultiple(true);
+        investmentSelect.setRequired(true);
         investmentSelect.setSize(7);
         form.add(investmentSelect);
 
         // Location Select
         locationSelect = new Select("Location");
-        locationSelect.setRequired(true);
         locationSelect.add("QLD");
         locationSelect.add("NSW");
         locationSelect.add("NT");
@@ -71,8 +71,8 @@ public class SelectDemo extends BorderedPage {
     public void onPost() {
         if (form.isValid()) {
             addModel("gender", genderSelect.getValue());
-            addModel("investment", investmentSelect.getValue());
-            addModel("location", locationSelect.getMultipleValues());
+            addModel("investment", investmentSelect.getMultipleValues());
+            addModel("location", locationSelect.getValue());
         }
     }
 }
