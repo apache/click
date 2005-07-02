@@ -12,3 +12,13 @@ This product includes the Java API for Servlets, version 2.3,
 developed by Sun Microsystems Inc (http://www.sun.com). 
 Please note the Java Servlet API is NOT included in the 
 Click runtime library.
+
+This product includes the prototype JavaScript library,
+developed by Sam Stephenson (http://prototype.conio.net).
+Please note this library is NOT included in the
+Click runtime library.
+
+This product includes the rico JavaScript library,
+developed by Sabre Airline Solutions (http://openrico.org).
+Please note this library is NOT included in the
+Click runtime library.

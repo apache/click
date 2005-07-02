@@ -28,9 +28,51 @@
   </dd>
   
   <a name="html-control" class="heading"></a>
-  <dt><b>How can you control HTML layout if Click auto generates everything?</b></dt>
+  <dt><b>How can the GUI designer define the HTML if Click Controls generates everything?</b></dt>
   <dd>
-   ..
+  In Click there is nothing preventing you from laying out HTML forms by hand. 
+  It just provides the option of doing it automatically for you.
+  <p/>
+  There are a number of approaches you can use for generating for HTML,
+  each with pros &amp; cons:
+  <p/>
+  <ol>
+  <li>
+  <u>Use Click forms and controls to do all the HTML rendering for you.</u> 
+  <p/>
+  This a 80/20 approach where you can quickly get stuff developed, but it may
+  not meet all your UI style requirements. 
+  <p/>
+  Please note the Forms control provides many 
+  <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layout</a> 
+  options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
+  for a demonstration.
+  <p/>
+  </li><li>
+  <u>Subclass Click Form/Controls to customise HTML rendering.</u> 
+  <p/>
+  This is a good approach for ensuring a common LAF across your web application, 
+  but you will have to get your hands dirty and write some code.
+  </li><li>
+  <u>Use Velocity macros for a generic HTML layout.</u>
+  <p/>
+  This is easy to do and gives you good reuse across your web application.
+  <p/>
+  Please see the Form 
+  <a href="click-api/net/sf/click/control/Form.html#velocity-macros">velocity macros</a> 
+  example, and also see the <a href="examples.html">click-examples</a> 'Velocity Macro' 
+  demonstration. 
+  </li><li>
+  <u>Layout your HTML forms by hand.</u> 
+  <p/>
+  This gives you the ultimate control in presentation, but provides no reuse 
+  across your web application. 
+  <p/>
+  Please see the Form
+  <a href="click-api/net/sf/click/control/Form.html#manual-layout">manual layout</a>
+  example.
+  </li>
+  </ol>
   </dd>
 
   <a name="localization" class="heading"></a>
@@ -54,7 +96,7 @@
    The field class provides a number of 
    <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
-   Please also see the topic Control <a href="controls.html#message-properties">Message Properties</a>.
+   Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.
   </dd>
   
   <a name="why-velocity" class="heading"></a>
@@ -66,8 +108,8 @@
    syntax, so its easier to read, and because Velocity is easier
    to learn.
    <p/>
-   One of FreeMarker's strong points error reporting is address
-   in Click. The Click framework uses a custom Velocity 1.5 build 
+   One of FreeMarker's strong points compared to Velocity is error reporting.
+   This issue is addressed in Click by using a custom Velocity 1.5 build 
    to provided enhanced error reporting.
    <p/>
    Its actually better than the line-precise error reporting you get in
@@ -84,12 +126,23 @@
   <dd>
    The Spring non-web components can be readily used in Click as they can with any framework.
    <p/>
-   The Spring Web Framework however is not complimentary to Click. Spring uses its own
-   Servlet for dispatching requests to its own request handlers ??. ?? handlers are the 
-   Spring plugin point for integration.
+   The Spring Web MVC Framework however is not compatible with Click. The Spring framework
+   uses a low level command pattern design like Struts and WebWork.
    <p/>
-   Click also provides its own Servlet for dispatching requests to Pages and their
-   Controls. In Click the Pages and Controls provide the plugin points for integration.
+   Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
+   objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
+
+<pre class="codeJava">
+public interface Controller {
+   public ModelAndView handleRequest(HttpServletRequest request, 
+                                     HttpServletResponse response) throws Exception;
+} </pre>
+
+  In Spring the integration plugin points are the Controllers.
+  <p/>
+  Click uses higher level design constructs focusing on Pages and Controls. Click uses its
+  own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
+  which are Clicks plugin points.
   </dd>
   
 </dl>

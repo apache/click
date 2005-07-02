@@ -76,7 +76,7 @@ public class Page {
 
     /** The HTTP response headers. */
     protected Map headers;
-    
+
     /** The headers have been edited flag, to support copy on write. */
     protected boolean headersEdited;
 
@@ -227,12 +227,12 @@ public class Page {
     public Map getHeaders() {
         return headers;
     }
-    
+
     /**
      * Set the named header with the given value. This method uses copy on
      * write to the headers Map, as the initial loaded headers Map is
      * unmodifiable.
-     * 
+     *
      * @param name the name of the header
      * @param value the value of the header
      */

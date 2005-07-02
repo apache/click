@@ -53,9 +53,9 @@ public abstract class Field implements Control {
     // -------------------------------------------------------------- Constants
 
     /**
-     * The package messages bundle name: &nbsp; <tt>click-control</tt>
+     * The control package messages bundle name: &nbsp; <tt>click-control</tt>
      */
-    public static final String PACKAGE_MESSAGES = "click-control";
+    public static final String CONTROL_MESSAGES = "click-control";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -326,7 +326,7 @@ public abstract class Field implements Control {
      */
     public String getId() {
         String formId = (getForm() != null) ? getForm().getId() + "-" : "";
-        
+
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return formId + getAttribute("id");
         } else {

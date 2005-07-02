@@ -16,10 +16,10 @@ import examples.domain.CustomerDAO;
 public class Ajax extends BorderedPage {
 
     public void onInit() {
-        
+
         addModel("head-include", "ajax-head.htm");
         addModel("body-onload", "registerAjaxStuff();");
-           
+
         Select customerSelect = new Select("customerSelect");
         customerSelect.setSize(7);
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
@@ -28,7 +28,7 @@ public class Ajax extends BorderedPage {
         List customerList = CustomerDAO.getCustomersSortedByName();
         for (Iterator i = customerList.iterator(); i.hasNext();) {
             Customer customer = (Customer) i.next();
-            customerSelect.add(new Option(customer.getId(), customer.getName()));  
+            customerSelect.add(new Option(customer.getId(), customer.getName()));
         }
     }
 
