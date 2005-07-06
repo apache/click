@@ -1,0 +1,28 @@
+#if ($courseBooking)
+
+ Course Booking Completed:
+ 
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>Booking ID</b></td>
+  <td>$courseBooking.id</td>
+ </tr>
+ <tr>
+  <td><b>Course Type</b></td>
+  <td>$courseBooking.courseType</td>
+ </tr>
+ <tr>
+  <td><b>Booking Date</b></td>
+  <td>$format.date($courseBooking.bookingDate, "dd MMM yyyy")</td>
+ </tr>
+ <tr>
+  <td><b>Customer Name</b></td>
+  <td>$customer.name</td>
+ </tr>
+</table>
+ 
+#else
+
+ No course booking has been made.
+ 
+#end

@@ -21,7 +21,6 @@ public class Ajax extends BorderedPage {
         addModel("body-onload", "registerAjaxStuff();");
 
         Select customerSelect = new Select("customerSelect");
-        customerSelect.setSize(7);
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
         addControl(customerSelect);
 
@@ -30,6 +29,7 @@ public class Ajax extends BorderedPage {
             Customer customer = (Customer) i.next();
             customerSelect.add(new Option(customer.getId(), customer.getName()));
         }
+        customerSelect.setSize(customerList.size());
     }
 
 }

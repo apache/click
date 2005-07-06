@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Provides a mockup User database for the examples.
+ * Provides a mockup User DAO for the examples.
  *
  * @see User
  *

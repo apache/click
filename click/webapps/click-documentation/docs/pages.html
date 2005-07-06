@@ -294,9 +294,9 @@ transaction id encoded in the URL.
          ..
          
          <span class="cm">// Get transaction id</span>
-         Long id = ..
+         Long transId = OrderDAO.purchase(order);
    
-         setRedirect(<span class="st">"trans-complete.htm?trans-id="</span> + id);
+         setRedirect(<span class="st">"trans-complete.htm?trans-id="</span> + transId);
       
          <span class="kw">return false</span>; 
       } 
@@ -320,9 +320,9 @@ then get the transaction id through the request parameter
     * @see Page#onInit()
     */</span>
    <span class="kw">public void</span> onInit() {
-      String id = getContext().getRequest().getParameter(<span class="st">"trans-id"</span>);
+      String transId = getContext().getRequest().getParameter(<span class="st">"trans-id"</span>);
    
-      <span class="kw">if</span> (id != <span class="kw">null</span>) {
+      <span class="kw">if</span> (transId != <span class="kw">null</span>) {
          <span class="cm">// Get transaction details</span>
          ..
       }

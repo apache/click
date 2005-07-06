@@ -6,6 +6,7 @@
     <page path="ajax.htm" classname="examples.page.Ajax"/>
     <page path="ajax-customer.htm" classname="examples.page.AjaxCustomer"/>
     <page path="big-form.htm" classname="examples.page.BigForm"/>
+    <page path="confirm-page.htm" classname="examples.page.ConfirmPage"/>
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
     <page path="exception.htm" classname="examples.page.ExceptionDemo"/>
     <page path="hello-world.htm" classname="examples.page.HelloWorld"/>
@@ -14,11 +15,13 @@
     <page path="logout.htm" classname="examples.page.Logout"/>
     <page path="navigation-a.htm" classname="examples.page.NavigationA"/>
     <page path="navigation-b.htm" classname="examples.page.NavigationB"/>
+    <page path="next-page.htm" classname="examples.page.NextPage"/>
     <page path="search-form.htm" classname="examples.page.SearchForm"/>
     <page path="secure.htm" classname="examples.page.Secure"/>
     <page path="select-demo.htm" classname="examples.page.SelectDemo"/>
     <page path="simple-table.htm" classname="examples.page.SimpleTable"/>
     <page path="source-viewer.htm" classname="examples.page.SourceViewer"/>
+    <page path="start-page.htm" classname="examples.page.StartPage"/>
     <page path="velocity-macro.htm" classname="examples.page.VelocityMacro"/>
   </pages>
 
