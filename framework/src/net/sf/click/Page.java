@@ -218,6 +218,23 @@ public class Page {
     }
 
     /**
+     * The Page instance to forward the request to. The given Page object
+     * must have a valid path defined.
+     *
+     * @param page the Page object to forward the request to.
+     */
+    public void setForward(Page page) {
+        if (page == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
+        if (page.getPath() == null) {
+            throw new IllegalArgumentException("Page has no path defined");
+        }
+        setForward(page.getPath());
+        getContext().setRequestAttribute(ClickServlet.FORWARD_PAGE, page);
+    }
+
+    /**
      * Return the map of HTTP header to be set in the HttpServletResponse.
      * Note to edit header values use {@link #setHeader(String, Object)} as
      * headers Map is initially unmodifiable.
@@ -303,14 +320,19 @@ public class Page {
      */
     public void addModel(String name, Object value) {
         if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
+            String msg = "Cannot add null parameter name to " +
+                          getClass().getName() + " model";
+            throw new IllegalArgumentException(msg);
         }
         if (value == null) {
-            throw new IllegalArgumentException("Null value parameter");
+            String msg = "Cannot add null " + name + " parameter " +
+                         "to " + getClass().getName() + " model";
+            throw new IllegalArgumentException(msg);
         }
         if (getModel().containsKey(name)) {
-            throw new IllegalArgumentException
-                ("Page model already contains element named: " + name);
+            String msg = getClass().getName() + " model already contains " +
+                         "value named " + name;
+            throw new IllegalArgumentException(msg);
         } else {
             getModel().put(name, value);
         }

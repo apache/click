@@ -1,5 +1,6 @@
 package examples.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  * @author Malcolm Edgar
  */
-public class Customer {
+public class Customer implements Serializable {
 
     Long id;
     String name;

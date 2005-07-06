@@ -1,0 +1,28 @@
+Please confirm course booking details.
+
+<p/>
+
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>Customer Name</b></td>
+  <td>$customer.name</td>
+ </tr>
+ <tr>
+  <td><b>Course Type</b></td>
+  <td>$courseBooking.courseType</td>
+ </tr>
+ <tr>
+  <td><b>Booking Date</b></td>
+  <td>$format.date($courseBooking.bookingDate, "dd MMM yyyy")</td>
+ </tr>
+ #if ($courseBooking.bookingNotes)
+ <tr>
+  <td><b>Booking Notes</b></td>
+  <td>$courseBooking.bookingNotes</td>
+ </tr>
+ #end
+</table>
+
+Create booking:
+
+$form

@@ -26,7 +26,9 @@ public class AjaxCustomer extends Page {
 
         Customer customer = CustomerDAO.findCustomerByID(customerId);
 
-        addModel("customer", customer);
+        if (customer != null) {
+            addModel("customer", customer);
+        }
 
         setHeader("Content-Type", "text/xml");
     }

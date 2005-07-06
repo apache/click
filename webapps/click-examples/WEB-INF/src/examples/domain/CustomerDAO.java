@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Provides a mockup Customer database for the examples.
+ * Provides a mockup Customer DAO for the examples.
  *
  * @see Customer
  *
@@ -53,6 +53,10 @@ public class CustomerDAO {
         }
     }
 
+    public static Customer findCustomerByID(Long id) {
+        return (Customer) CUSTOMER_BY_ID.get(id);
+    }
+
     public static Customer findCustomerByID(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
@@ -60,8 +64,7 @@ public class CustomerDAO {
 
         try {
             // Search for customer id
-            Long id = Long.valueOf(value);
-            return (Customer) CUSTOMER_BY_ID.get(id);
+            return findCustomerByID(Long.valueOf(value));
 
         } catch (NumberFormatException nfe) {
             return null;

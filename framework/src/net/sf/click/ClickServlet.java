@@ -92,8 +92,15 @@ public class ClickServlet extends HttpServlet {
     /** The Java serialiization version unique id. */
     private static final long serialVersionUID = 3835158375989262128L;
 
-    /** The Click Forward request: &nbsp; "<tt>click-forward</tt>" */
+    /**
+     * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>"
+     */
     protected final static String CLICK_FORWARD = "click-forward";
+
+    /**
+     * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
+     */
+    protected final static String FORWARD_PAGE = "forward-page";
 
     // ------------------------------------------------------ Instance Varables
 
@@ -102,6 +109,9 @@ public class ClickServlet extends HttpServlet {
 
     /** The servlet logger. */
     protected ClickApp.Logger logger;
+
+    /** The page creator factory. */
+    protected final PageMaker pageMaker = new PageMaker();
 
     /** Cache of velocity writers */
     protected final SimplePool writerPool = new SimplePool(40);
@@ -259,8 +269,12 @@ public class ClickServlet extends HttpServlet {
             logger.error("handleException: ", exception);
         }
 
-        Context context = new Context
-            (getServletContext(), getServletConfig(), request, response, isPost);
+        Context context = new Context(getServletContext(),
+                                      getServletConfig(),
+                                      request,
+                                      response,
+                                      isPost,
+                                      pageMaker);
 
         ErrorPage errorPage = null;
         try {
@@ -494,10 +508,22 @@ public class ClickServlet extends HttpServlet {
     protected Page createPage(HttpServletRequest request,
         HttpServletResponse response, boolean isPost) {
 
-        Context context = new Context
-            (getServletContext(), getServletConfig(), request, response, isPost);
+        Context context = new Context(getServletContext(),
+                                      getServletConfig(),
+                                      request,
+                                      response,
+                                      isPost,
+                                      pageMaker);
 
         String path = context.getResourcePath();
+
+        if (request.getAttribute(FORWARD_PAGE) != null) {
+            Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
+            forwardPage.setContext(context);
+            request.removeAttribute(FORWARD_PAGE);
+
+            return forwardPage;
+        }
 
         Class pageClass = clickApp.getPageClass(path);
 
@@ -651,6 +677,46 @@ public class ClickServlet extends HttpServlet {
             } else {
                 int intValue = ((Integer) value).intValue();
                 response.setIntHeader(name, intValue);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * Provides a package visibility interface for creating Page objects using
+     * a given path.
+     *
+     * @author Malcolm Edgar
+     */
+    class PageMaker {
+
+        /**
+         * Return a new Page instance for the given path.
+         *
+         * @param path the Page path configured in the click.xml file
+         * @return a new Page object
+         * @throws IllegalArgumentException if the Page is not found
+         */
+        Page createPage(String path) {
+            Class pageClass = clickApp.getPageClass(path);
+
+            if (pageClass == null) {
+                String msg = "No Page class configured for path: " + path;
+                throw new IllegalArgumentException(msg);
+            }
+
+            try {
+                Page newPage = (Page) pageClass.newInstance();
+
+                newPage.setFormat(clickApp.getPageFormat(path));
+                newPage.setHeaders(clickApp.getPageHeaders(path));
+                newPage.setPath(path);
+
+                return newPage;
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }

@@ -35,6 +35,9 @@ public class Context {
     /** The servlet config. */
     protected final ServletConfig config;
 
+    /** The page maker factory. */
+    protected final ClickServlet.PageMaker pageMaker;
+
     /** The servlet request. */
     protected final HttpServletRequest request;
 
@@ -52,13 +55,14 @@ public class Context {
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
-        boolean isPost) {
+        boolean isPost, ClickServlet.PageMaker pageMaker) {
 
         this.context = context;
         this.config = config;
         this.request = request;
         this.response = response;
         this.isPost = isPost;
+        this.pageMaker = pageMaker;
     }
 
     /**
@@ -291,5 +295,16 @@ public class Context {
      */
     public boolean hasSession() {
         return (request.getSession(false) != null);
+    }
+
+    /**
+     * Return a new Page instance for the given path.
+     *
+     * @param path the Page path as configured in the click.xml file
+     * @return a new Page object
+     * @throws IllegalArgumentException if the Page is not found
+     */
+    public Page createPage(String path) {
+        return pageMaker.createPage(path);
     }
 }
