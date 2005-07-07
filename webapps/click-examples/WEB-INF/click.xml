@@ -31,5 +31,5 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="development"/>
+  <mode value="debug"/>
 </click-app>

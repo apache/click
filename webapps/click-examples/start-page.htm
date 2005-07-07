@@ -1,17 +1,22 @@
 <style type="text/css">
-table.fields { border-spacing: 1em; }
-table.buttons { margin-left: 1em; }
-table.errors { margin-left: 1em; }
+td.fields { padding-top: 0.75em; }
 </style>
 
-This example demonstrates how to make calls between pages.
-
-<p/>
-Please enter the course booking.
+Demonstration of page flow design patterns. &nbsp; Please make a course booking:
 
 <table>
   <tr valign="top">
     <td> $form </td> 
-    <td style="padding:2em;"> <div id="customerDetails"/> </td>
+    <td style="padding-top:1em;"> <div id="customerDetails"/> </td>
   </tr>
 </table>
+
+<p>&nbsp;</p>
+
+This page setting up the next page in the flow:
+<pre class="codeJava">
+NextPage nextPage = (NextPage) getContext().createPage("<span class="st">next-page.htm</span>");
+nextPage.setCourseBooking(courseBooking);
+   
+setForward(nextPage);
+</pre>

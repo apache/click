@@ -123,6 +123,10 @@
       </war>
    </target>
 
+   <target name="deploy-examples"> 
+     <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+               
    <target name="deploy-webapps" description="copy WAR files to application server"> 
 	  <copy file="${dir.deploy}/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
 	  <copy file="${dir.deploy}/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>

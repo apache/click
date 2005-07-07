@@ -48,7 +48,7 @@ public class NextPage extends BorderedPage {
         courseField = new HiddenField("courseField", CourseBooking.class);
         form.add(courseField);
 
-        Submit confirm = new Submit(" Confirm ");
+        Submit confirm = new Submit("  Next &gt; ");
         confirm.setListener(this, "onConfirmClick");
         form.add(confirm);
 
