@@ -1143,11 +1143,11 @@ public class Form implements Control {
             if (!field.isHidden()) {
 
                 if (column == 1) {
-                    buffer.append("<tr>\n");
+                    buffer.append("<tr class='fields'>\n");
                 }
 
                 if (field instanceof Label) {
-                    buffer.append("<td colspan='2' align='");
+                    buffer.append("<td class='fields' colspan='2' align='");
                     buffer.append(getLabelAlign());
                     buffer.append("'");
                     if (field.hasAttributes()) {
@@ -1161,11 +1161,11 @@ public class Form implements Control {
                 } else {
                     // Write out label
                     if (LEFT.equals(getLabelsPosition())) {
-                        buffer.append("<td align='");
+                        buffer.append("<td class='fields' align='");
                         buffer.append(getLabelAlign());
                         buffer.append("'>");
                     } else {
-                        buffer.append("<td valign='top'>");
+                        buffer.append("<td class='fields' valign='top'>");
                     }
 
                     if (field.isRequired()) {
@@ -1246,7 +1246,8 @@ public class Form implements Control {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
                 } else {
-                    buffer.append("<tr><td align='");
+                    buffer.append("<tr class='errors'>");
+                    buffer.append("<td class='errors' align='");
                     buffer.append(getErrorsAlign());
                     buffer.append("'>\n");
                 }
@@ -1270,7 +1271,8 @@ public class Form implements Control {
                     if (useErrorsHeader) {
                         buffer.append(errorsPrefix);
                     } else {
-                        buffer.append("<tr><td align='");
+                        buffer.append("<tr class='errors'>");
+                        buffer.append("<td class='errors' align='");
                         buffer.append(getErrorsAlign());
                         buffer.append("'>");
                     }
@@ -1318,7 +1320,7 @@ public class Form implements Control {
             buffer.append("<table class='buttons' id='");
             buffer.append(getId());
             buffer.append("-buttons'>\n");
-            buffer.append("<tr><td>");
+            buffer.append("<tr class='buttons'><td class='buttons'>");
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);

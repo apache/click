@@ -1,4 +1,4 @@
-Please confirm course booking details.
+Demonstration of page flow design patterns. &nbsp; Please confirm course details:
 
 <p/>
 
@@ -8,6 +8,10 @@ Please confirm course booking details.
   <td>$customer.name</td>
  </tr>
  <tr>
+  <td><b>Customer ID</b></td>
+  <td>$customer.id</td>
+ </tr>
+ <tr>
   <td><b>Course Type</b></td>
   <td>$courseBooking.courseType</td>
  </tr>
@@ -15,7 +19,7 @@ Please confirm course booking details.
   <td><b>Booking Date</b></td>
   <td>$format.date($courseBooking.bookingDate, "dd MMM yyyy")</td>
  </tr>
- #if ($courseBooking.bookingNotes)
+ #if ($courseBooking.bookingNotes != "")
  <tr>
   <td><b>Booking Notes</b></td>
   <td>$courseBooking.bookingNotes</td>
@@ -23,6 +27,13 @@ Please confirm course booking details.
  #end
 </table>
 
-Create booking:
-
 $form
+
+<p>&nbsp;</p>
+
+When the booking is confirmed the page will redirect to the confirmation page:
+<pre class="codeJava">
+Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
+
+setRedirect("<span class="st">confirm-page.htm?bookingId=</span>" + bookingId);
+</pre>
