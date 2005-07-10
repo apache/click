@@ -72,7 +72,7 @@ public class TextArea extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the TextArea with the given label. The area will have a 
+     * Construct the TextArea with the given label. The area will have a
      * default size of 20 cols and 3 rows.
      * <p/>
      * The field name will be Java property representation of the given label.

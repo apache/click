@@ -271,7 +271,7 @@ The optional <tt>mode</tt> element defines the application logging and caching m
 
 <pre class="codeDtd">
 &lt;!ELEMENT mode (#PCDATA)&gt;
-    &lt;ATTLIST mode value (<span class="blue">production</span>|<span class="blue">profile</span>|<span class="blue">development</span>|<span class="blue">debug</span>) "development"&gt;
+    &lt;ATTLIST mode value (<span class="blue">production</span>|<span class="blue">profile</span>|<span class="blue">development</span>|<span class="blue">debug</span>|<span class="blue">trace</span>) "development"&gt;
 </pre>
 
 By default Click applications run in <tt>development</tt> mode which switches off page
@@ -325,6 +325,13 @@ logging levels are:
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">DEBUG</td>
+ <td align="center">WARN</td>
+</tr>
+<tr>
+ <td align="center"><tt><span class="blue">trace</span></tt></td>
+ <td align="center">No</td>
+ <td align="center">No</td>
+ <td align="center">TRACE</td>
  <td align="center">WARN</td>
 </tr>
 </table>
