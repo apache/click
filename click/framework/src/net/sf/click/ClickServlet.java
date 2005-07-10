@@ -19,9 +19,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.GenericServlet;
@@ -205,12 +207,21 @@ public class ClickServlet extends HttpServlet {
             buffer.append(request.getMethod());
             buffer.append(" ");
             buffer.append(request.getRequestURL());
-            String query = request.getQueryString();
-            if (query != null) {
-                buffer.append("?");
-                buffer.append(query);
-            }
             logger.debug(buffer);
+        }
+        if (logger.isTraceEnabled()) {
+            TreeMap requestParams = new TreeMap();
+            Enumeration paramNames = request.getParameterNames();
+            while (paramNames.hasMoreElements()) {
+                String name = paramNames.nextElement().toString();
+                requestParams.put(name, request.getParameter(name));
+            }
+            Iterator i = requestParams.keySet().iterator();
+            while (i.hasNext()) {
+                String name = i.next().toString();
+                String value = requestParams.get(name).toString();
+                logger.trace(name + "=" + value);
+            }
         }
 
         Page page = null;

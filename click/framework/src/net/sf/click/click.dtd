@@ -25,7 +25,7 @@
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
-   <!ATTLIST mode value (production|profile|development|debug) "development">
+   <!ATTLIST mode value (production|profile|development|debug|trace) "development">
    
 
   

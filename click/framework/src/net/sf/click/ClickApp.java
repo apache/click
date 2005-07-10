@@ -122,8 +122,11 @@ class ClickApp implements EntityResolver {
     /** The debug application mode. */
     static final int DEBUG = 3;
 
+    /** The trace application mode. */
+    static final int TRACE = 4;
+
     static final String[] MODE_VALUES =
-        { "production", "profile", "development", "debug" };
+        { "production", "profile", "development", "debug", "trace" };
 
     // -------------------------------------------------------- Package Members
 
@@ -133,7 +136,10 @@ class ClickApp implements EntityResolver {
     /** The application logger. */
     private final Logger logger;
 
-    /** The application mode: [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG ] */
+    /**
+     * The application mode:
+     * [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG | TRACE ]
+     */
     private int mode;
 
     /** The map of ClickApp.PageElm keyed on path. */
@@ -200,7 +206,7 @@ class ClickApp implements EntityResolver {
             velocityEngine.init(properties);
 
             // Turn down the Velocity logging level
-            if (mode == DEBUG) {
+            if (mode == DEBUG || mode == TRACE) {
                 String loggerKey = ServletLogger.class.getName();
                 ServletLogger servletLogger = (ServletLogger)
                     velocityEngine.getApplicationAttribute(loggerKey);
@@ -487,6 +493,8 @@ class ClickApp implements EntityResolver {
                 mode = DEVELOPMENT;
             } else if (modeValue.equalsIgnoreCase("debug")) {
                 mode = DEBUG;
+            } else if (modeValue.equalsIgnoreCase("trace")) {
+                mode = TRACE;
             } else {
                 logger.error("invalid application mode: " + mode);
                 mode = DEBUG;
@@ -507,6 +515,10 @@ class ClickApp implements EntityResolver {
 
         } else if (mode == DEBUG) {
             clickLogLevel = Logger.DEBUG_ID;
+            velocityLogLevel = new Integer(LogSystem.INFO_ID);
+
+        } else if (mode == TRACE) {
+            clickLogLevel = Logger.TRACE_ID;
             velocityLogLevel = new Integer(LogSystem.INFO_ID);
         }
 
@@ -744,15 +756,19 @@ class ClickApp implements EntityResolver {
      */
     static class Logger {
 
-        final static int DEBUG_ID = 0;
+        final static int TRACE_ID = LogSystem.DEBUG_ID - 1;
 
-        final static int INFO_ID = 1;
+        final static int DEBUG_ID = LogSystem.DEBUG_ID;
 
-        final static int WARN_ID = 2;
+        final static int INFO_ID = LogSystem.INFO_ID;
 
-        final static int ERROR_ID = 3;
+        final static int WARN_ID = LogSystem.WARN_ID;
+
+        final static int ERROR_ID = LogSystem.ERROR_ID;
 
         static final String PREFIX = " Click";
+
+        static final String TRACE_PREFIX = " [trace] ";
 
         ServletContext servletContext = null;
 
@@ -782,12 +798,24 @@ class ClickApp implements EntityResolver {
             log(INFO_ID, String.valueOf(message));
         }
 
+        void trace(Object message) {
+            log(TRACE_ID, String.valueOf(message));
+        }
+
+        void trace(Object message, Throwable error) {
+            log(TRACE_ID, String.valueOf(message), error);
+        }
+
         void warn(Object message) {
             log(WARN_ID, String.valueOf(message));
         }
 
         void warn(Object message, Throwable error) {
             log(WARN_ID, String.valueOf(message), error);
+        }
+
+        boolean isTraceEnabled() {
+            return logLevel <= TRACE_ID;
         }
 
         boolean isDebugEnabled() {
@@ -818,6 +846,9 @@ class ClickApp implements EntityResolver {
             }
             else if (level == LogSystem.ERROR_ID) {
                 servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message);
+            }
+            else if (level == TRACE_ID) {
+                servletContext.log( PREFIX + TRACE_PREFIX + message);
             }
         }
 
@@ -850,12 +881,11 @@ class ClickApp implements EntityResolver {
             else if (level == LogSystem.ERROR_ID) {
                 servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message, cause);
             }
+            else if (level == TRACE_ID) {
+                servletContext.log( PREFIX + TRACE_PREFIX + message, cause);
+            }
         }
     }
-
-    /**
-     * @author Malcolm
-     */
     private static class PageElm {
 
         private final Class formatClass;
