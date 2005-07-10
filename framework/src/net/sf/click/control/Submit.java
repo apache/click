@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.ClickUtils;
+
 /**
  * Provides a Submit control: &nbsp; &lt;input type='submit'&gt;.
  *
@@ -92,12 +94,16 @@ public class Submit extends Button {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        clicked = value.equals(getContext().getRequest().getParameter(getName()));
+        String value = getContext().getRequest().getParameter(getName());
 
-        if (clicked) {
-            return invokeListener();
-        } else {
-            return true;
+        if (value != null) {
+            clicked = getName().equals(ClickUtils.toName(value));
+
+            if (clicked) {
+                return invokeListener();
+            }
         }
+
+        return true;
     }
 }
