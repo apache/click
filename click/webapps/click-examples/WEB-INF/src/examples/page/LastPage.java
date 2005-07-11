@@ -6,11 +6,11 @@ import examples.domain.Customer;
 import examples.domain.CustomerDAO;
 
 /**
- * Provides TODO: header
+ * Provides the last page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
-public class ConfirmPage extends BorderedPage {
+public class LastPage extends BorderedPage {
 
     public void onInit() {
         String bookingId = getContext().getRequest().getParameter("bookingId");

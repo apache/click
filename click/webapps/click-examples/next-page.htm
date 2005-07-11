@@ -2,14 +2,10 @@ Demonstration of page flow design patterns. &nbsp; Please confirm course details
 
 <p/>
 
-<table border="0" cellspacing="2" cellpadding="2">
+<table border="0" cellspacing="4" cellpadding="4">
  <tr>
   <td><b>Customer Name</b></td>
-  <td>$customer.name</td>
- </tr>
- <tr>
-  <td><b>Customer ID</b></td>
-  <td>$customer.id</td>
+  <td>$customer.name &nbsp; (Cust # $customer.id)</td>
  </tr>
  <tr>
   <td><b>Course Type</b></td>
@@ -31,9 +27,11 @@ $form
 
 <p>&nbsp;</p>
 
-When the booking is confirmed the page will redirect to the confirmation page:
+When the booking is confirmed the page will redirect to the last page:
 <pre class="codeJava">
 Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
 
-setRedirect("<span class="st">confirm-page.htm?bookingId=</span>" + bookingId);
+setRedirect("<span class="st">last-page.htm?bookingId=</span>" + bookingId);
 </pre>
+
+This page flow design pattern is known as Post-Redirect.

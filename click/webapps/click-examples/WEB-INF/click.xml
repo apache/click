@@ -6,11 +6,11 @@
     <page path="ajax.htm" classname="examples.page.Ajax"/>
     <page path="ajax-customer.htm" classname="examples.page.AjaxCustomer"/>
     <page path="big-form.htm" classname="examples.page.BigForm"/>
-    <page path="confirm-page.htm" classname="examples.page.ConfirmPage"/>
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
     <page path="exception.htm" classname="examples.page.ExceptionDemo"/>
     <page path="hello-world.htm" classname="examples.page.HelloWorld"/>
     <page path="form-properties.htm" classname="examples.page.FormProperties"/>
+    <page path="last-page.htm" classname="examples.page.LastPage"/>
     <page path="login.htm" classname="examples.page.Login"/>
     <page path="logout.htm" classname="examples.page.Logout"/>
     <page path="navigation-a.htm" classname="examples.page.NavigationA"/>

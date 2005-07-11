@@ -21,11 +21,17 @@ import examples.domain.CustomerDAO;
  */
 public class StartPage extends BorderedPage {
 
-    Form form;
-    Select customerSelect;
-    DateField dateField;
-    Select courseSelect;
-    TextArea notesField;
+    private Form form;
+    private Select customerSelect;
+    private DateField dateField;
+    private Select courseSelect;
+    private TextArea notesField;
+    
+    private CourseBooking courseBooking;
+
+    public void setCourseBooking(CourseBooking courseBooking) {
+        this.courseBooking = courseBooking;
+    }
 
     public void onInit() {
         addModel("head-include", "ajax-head.htm");
@@ -58,19 +64,28 @@ public class StartPage extends BorderedPage {
         notesField.setCols(25);
         form.add(notesField);
 
-        form.add(new Submit("  Next &gt; "));
+        Submit backButton = new Submit(" < Back ");
+        backButton.setListener(this, "onBackClick");
+        form.add(backButton);
 
-        Submit cancel = new Submit(" Cancel ");
-        cancel.setListener(this, "onCancelClick");
-        form.add(cancel);
+        Submit nextButton = new Submit(" Next > ");
+        nextButton.setListener(this, "onNextClick");
+        form.add(nextButton);
+        
+        if (getContext().isForward() && courseBooking != null) {
+            customerSelect.setValue(courseBooking.getCustomerId());
+            dateField.setDate(courseBooking.getBookingDate());
+            courseSelect.setValue(courseBooking.getCourseType());
+            notesField.setValue(courseBooking.getBookingNotes());
+        }
     }
 
-    public boolean onCancelClick() {
+    public boolean onBackClick() {
         setRedirect("index.html");
         return false;
     }
 
-    public void onPost() {
+    public boolean onNextClick() {
         if (form.isValid()) {
             Long customerId = new Long(customerSelect.getValue());
 
@@ -84,7 +99,9 @@ public class StartPage extends BorderedPage {
             nextPage.setCourseBooking(courseBooking);
 
             setForward(nextPage);
+            return false;
         }
+        return true;
     }
 
 }
