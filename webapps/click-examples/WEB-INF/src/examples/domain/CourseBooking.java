@@ -15,6 +15,7 @@ public class CourseBooking implements Serializable  {
     String bookingNotes;
     Long customerId;
     String courseType;
+    Date createdAt = new Date();
 
     /**
      * @return Returns the id.
@@ -84,5 +85,12 @@ public class CourseBooking implements Serializable  {
      */
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+    
+    /**
+     * @return Returns the createdAt.
+     */
+    public Date getCreatedAt() {
+        return createdAt;
     }
 }
