@@ -43,5 +43,5 @@ public class CourseBookingDAO {
 
     private static final Map COURSE_BOOKING_BY_ID = new HashMap();
 
-    private static long seqNumber = 4015;
+    private static long seqNumber = 92731;
 }
