@@ -26,7 +26,7 @@ public class StartPage extends BorderedPage {
     private DateField dateField;
     private Select courseSelect;
     private TextArea notesField;
-    
+
     private CourseBooking courseBooking;
 
     public void setCourseBooking(CourseBooking courseBooking) {
@@ -71,7 +71,7 @@ public class StartPage extends BorderedPage {
         Submit nextButton = new Submit(" Next > ");
         nextButton.setListener(this, "onNextClick");
         form.add(nextButton);
-        
+
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValue(courseBooking.getCustomerId());
             dateField.setDate(courseBooking.getBookingDate());

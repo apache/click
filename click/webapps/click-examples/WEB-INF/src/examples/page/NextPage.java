@@ -47,7 +47,7 @@ public class NextPage extends BorderedPage {
         Submit backButton = new Submit(" < Back ");
         backButton.setListener(this, "onBackClick");
         form.add(backButton);
-        
+
         Submit nextButton = new Submit("  Next > ");
         nextButton.setListener(this, "onNextClick");
         form.add(nextButton);
@@ -67,7 +67,7 @@ public class NextPage extends BorderedPage {
         StartPage startPage = (StartPage) getContext().createPage("start-page.htm");
         courseBooking = (CourseBooking) courseField.getValueObject();
         startPage.setCourseBooking(courseBooking);
-        
+
         setForward(startPage);
         return false;
     }
@@ -75,7 +75,7 @@ public class NextPage extends BorderedPage {
     public boolean onNextClick() {
         CourseBooking booking = (CourseBooking) courseField.getValueObject();
         Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
-        
+
         setRedirect("last-page.htm?bookingId=" + bookingId);
         return true;
     }

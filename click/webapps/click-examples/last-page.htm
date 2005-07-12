@@ -6,32 +6,38 @@ Demonstration of page flow design patterns.
 <b>Course Booking Completed</b>
  
 <style type="text/css">
-td { border: 1px dotted gray; padding: 1em; }
+td.value { 
+  border: 1px dotted gray; 
+}
+td.title { 
+  font-weight: bold;
+  background-color: #e0e0e0; 
+}
 </style>
-<table style="border: 1px solid gray; margin: 1em; padding: 1em;">
+<table style="border: 1px solid gray; margin: 1em;" cellpadding="8" cellspacing="8">
  <tr>
-  <td><b>Booking No.</b></td>
-  <td>$courseBooking.id</td>
+  <td class="title">Booking No.</td>
+  <td class="value">$courseBooking.id</td>
  </tr>
  <tr>
-  <td><b>Booking Date</b></td>
-  <td>$format.date($courseBooking.createdAt, "dd MMM yyyy - h:mm:ss a")</td>
+  <td class="title">Booking Created</td>
+  <td class="value">$format.date($courseBooking.createdAt, "dd MMM yyyy - h:mm:ss a")</td>
  </tr>
  <tr>
-  <td><b>Customer Name</b></td>
-  <td>$customer.name</td>
+  <td class="title">Customer Name</td>
+  <td class="value">$customer.name</td>
  </tr>
  <tr>
-  <td><b>Customer No.</b></td>
-  <td>$customer.id</td>
+  <td class="title">Customer No.</td>
+  <td class="value">$customer.id</td>
  </tr>
  <tr>
-  <td><b>Course Date</b></td>
-  <td>$format.date($courseBooking.bookingDate, "dd MMM yyyy")</td>
+  <td class="title">Course Date</td>
+  <td class="value">$format.date($courseBooking.bookingDate, "dd MMM yyyy")</td>
  </tr>
  <tr>
-  <td><b>Course Type</b></td>
-  <td>$courseBooking.courseType</td>
+  <td class="title">Course Type</td>
+  <td class="value">$courseBooking.courseType</td>
  </tr>
 </table>
  
@@ -46,13 +52,13 @@ No course booking has been made.
 
 <p>&nbsp;</p>
 
-The Last Page gets the booking details from a "bookingId" URL request parameter. 
+The LastPage gets the booking details from a "bookingId" URL request parameter. 
 <pre class="codeJava">
 String bookingId = getContext().getRequest().getParameter("<span class="st">bookingId=</span>");
 
 CourseBooking courseBooking = CourseBookingDAO.findCourseBookingByID(<span class="kw">new</span> Long(bookingId));
 </pre>
 
-The advantage of the Post-Redirect pattern is it will not make the POST
-request again even if you refresh the page.
+The advantage of the Post-Redirect pattern is that it will not make the POST
+request again of the previous page even if the users does a refresh.
 

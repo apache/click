@@ -86,7 +86,7 @@ public class CourseBooking implements Serializable  {
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
-    
+
     /**
      * @return Returns the createdAt.
      */

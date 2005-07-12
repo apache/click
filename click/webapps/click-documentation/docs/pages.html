@@ -225,6 +225,27 @@ Forwarded to page template <span class="html">view-customer.htm</span>:
 Request attributes are automatically added to the Velocity Context object so are  
 available in the page template.
 
+<a name="page-forwarding" class="heading"><h4>Page Forwarding</h4></a>
+
+Page forwarding is another way of passing information between pages. In this case
+you create the page to be forwarded to using the Context
+<a href="click-api/net/sf/click/Context.html#createPage(java.lang.String)">createPage()</a> 
+method and then set properties directly on the Page.
+Finally set this page as the page to forward the request to. For example:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onEditClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+   
+   EditPage editPage = (EditPage) getContext().createPage(<span class="st">"edit-customer.htm"</span>);
+   editPage.setCustomer(customer);
+   setForward(editPage);
+   
+   <span class="kw">return false</span>;
+} 
+</pre>
+
 <a name="page-template-path" class="heading"><h3>Template Path</h3></a>
 
 An alternative to forwarding to a new page is to simply set the path to the new
@@ -296,39 +317,38 @@ transaction id encoded in the URL.
          <span class="cm">// Get transaction id</span>
          Long transId = OrderDAO.purchase(order);
    
-         setRedirect(<span class="st">"trans-complete.htm?trans-id="</span> + transId);
+         setRedirect(<span class="st">"trans-complete.htm?transId="</span> + transId);
       
          <span class="kw">return false</span>; 
       } 
   
       <span class="kw">return true</span>;
    }
-   
-   ..
 } 
 </pre>
 
 The Page class for the <span clas="html">trans-complete.htm</span> page can 
 then get the transaction id through the request parameter 
-<tt>"<span color="red">trans-id</span>"</tt>:
+<tt>"<span color="red">transId</span>"</tt>:
 
 <pre class="codeJava">
 <span class="kw">public class</span> TransComplete <span class="kw">extends</span> Page {
-   ..
    
    <span class="jd">/**
     * @see Page#onInit()
     */</span>
    <span class="kw">public void</span> onInit() {
-      String transId = getContext().getRequest().getParameter(<span class="st">"trans-id"</span>);
+      String transId = getContext().getRequest().getParameter(<span class="st">"transId"</span>);
    
       <span class="kw">if</span> (transId != <span class="kw">null</span>) {
-         <span class="cm">// Get transaction details</span>
-         ..
+      
+         <span class="cm">// Get order details</span>
+         Order order = OrderDAO.findOrderByPK(<span class="kw">new</span> Long(transId));
+         <span class="kw">if</span> (order != <span class="kw">null</span>) {
+            addModel(<span class="st">"order"</span>, order);
+         }
       }
    }
-   
-   ..
 } 
 </pre>
 

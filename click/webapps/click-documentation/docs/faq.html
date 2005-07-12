@@ -46,7 +46,21 @@
   Please note the Forms control provides many 
   <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layout</a> 
   options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
-  for a demonstration.
+  for a demonstration. 
+  <p/>
+  The Form control also renders the class attributes 'form', 'fields', 'errors' and 'buttons'
+  in the form's HTML elements enabling fine grained CSS control. 
+  <p/>
+  As an example you could configure a form to display the labels on top, and want to
+  increase the vertical spacing between fields. To do this simply define the CSS
+  style in front of your form:
+  <pre class="codeHtml">
+ &lt;style type="<span class="st">text/css</span>"&gt;
+    td.<span class="kw">fields</span> { padding-top: 0.75em; }
+ &lt;/style&gt; 
+ 
+ <span class="red">$</span><span class="blue">form</span> </pre>
+  Fields are also rendered with an 'id' attribute enabling manipulation of individual fields.
   <p/>
   </li><li>
   <u>Subclass Click Form/Controls to customise HTML rendering.</u> 

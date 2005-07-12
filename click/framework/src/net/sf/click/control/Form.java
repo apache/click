@@ -406,6 +406,9 @@ public class Form implements Control {
     /** The form disabled value. */
     protected boolean disabled;
 
+    /** The form "enctype" attribute. */
+    protected String enctype;
+
     /** The form level error message. */
     protected String error;
 
@@ -667,6 +670,35 @@ public class Form implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
+    }
+
+    /**
+     * Return the form "enctype" attribute value, or null if not defined.
+     *
+     * @return the form "enctype" attribute value, or null if not defined
+     */
+    public String getEnctype() {
+        if (enctype == null) {
+            for (int i = 0, size = fieldList.size(); i < size; i++) {
+                Field field = (Field) fieldList.get(i);
+                if (!field.isHidden() && !field.isDisabled()) {
+                    if (field instanceof FileField) {
+                        enctype = "multipart/form-data";
+                        break;
+                    }
+                }
+            }
+        }
+        return enctype;
+    }
+
+    /**
+     * Set the form "enctype" attribute value.
+     *
+     * @param enctype the form "enctype" attribute value, or null if not defined
+     */
+    public void setEnctype(String enctype) {
+        this.enctype = enctype;
     }
 
     /**
@@ -1036,6 +1068,10 @@ public class Form implements Control {
         buffer.append(getId());
         buffer.append("' action='");
         buffer.append(actionURL);
+        if (getEnctype() != null) {
+            buffer.append("' enctype='");
+            buffer.append(getEnctype());
+        }
         buffer.append("'");
         if (hasAttributes()) {
             ClickUtils.renderAttributes(getAttributes(), buffer);

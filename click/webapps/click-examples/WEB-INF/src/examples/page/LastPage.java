@@ -18,11 +18,14 @@ public class LastPage extends BorderedPage {
         if (bookingId != null) {
             CourseBooking courseBooking =
                 CourseBookingDAO.findCourseBookingByID(new Long(bookingId));
-            addModel("courseBooking", courseBooking);
 
-            Customer customer =
-                CustomerDAO.findCustomerByID(courseBooking.getCustomerId());
-            addModel("customer", customer);
+            if (courseBooking != null) {
+                addModel("courseBooking", courseBooking);
+
+                Customer customer =
+                    CustomerDAO.findCustomerByID(courseBooking.getCustomerId());
+                addModel("customer", customer);
+            }
         }
     }
 
