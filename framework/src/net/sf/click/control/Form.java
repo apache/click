@@ -345,6 +345,9 @@ public class Form implements Control {
 
     /** The labels of left form layout contant: &nbsp; <tt>"left"</tt> */
     public static final String LEFT = "left";
+    
+    /** The HTTP content type header for multipart forms. */
+    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     /** The errors-header resource property */
     protected static String errorsHeader = "";
@@ -683,7 +686,7 @@ public class Form implements Control {
                 Field field = (Field) fieldList.get(i);
                 if (!field.isHidden() && !field.isDisabled()) {
                     if (field instanceof FileField) {
-                        enctype = "multipart/form-data";
+                        enctype = MULTIPART_FORM_DATA;
                         break;
                     }
                 }

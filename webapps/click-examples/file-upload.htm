@@ -1,0 +1,25 @@
+<style type="text/css">
+td.fields { padding-top: 0.75em; }
+</style>
+
+Demonstration of file upload <tt>FileField</tt> control. &nbsp; Please select a
+file to upload:
+<p/>
+   
+$form 
+
+<p>&nbsp;</p>
+
+#if ($fileItem) 
+ $fileItem
+#end
+
+<p>&nbsp;</p>
+
+This page setting up the next page in the flow:
+<pre class="codeJava">
+NextPage nextPage = (NextPage) getContext().createPage("<span class="st">next-page.htm</span>");
+nextPage.setCourseBooking(courseBooking);
+   
+setForward(nextPage);
+</pre>

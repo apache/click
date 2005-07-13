@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,12 +82,16 @@ public class FileField extends Field {
 
     /**
      * Return the list of <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
-     * after processing the request.
+     * after processing the request, or an empty list otherwise.
      *
      * @return the list of <tt>FileItem</tt> after processing a request
      */
     public List getFileItems() {
-        return fileItems;
+        if (fileItems != null) {
+            return fileItems;
+        } else {
+            return Collections.EMPTY_LIST;
+        }
     }
 
     /**
