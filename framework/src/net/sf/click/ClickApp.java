@@ -886,6 +886,7 @@ class ClickApp implements EntityResolver {
             }
         }
     }
+
     private static class PageElm {
 
         private final Class formatClass;

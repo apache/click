@@ -15,11 +15,17 @@
  */
 package net.sf.click;
 
+import java.util.Collections;
+import java.util.Map;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 
 /**
  * Provides the HTTP request context information for pages. A new Context object
@@ -46,6 +52,9 @@ public class Context {
 
     /** The http session. */
     protected HttpSession session;
+
+    /** The Map of form data for Content-Type "multipart/form-data" request. */
+    protected Map multiPartFormData;
 
     /** The HTTP method is POST flag. */
     protected final boolean isPost;
@@ -189,6 +198,28 @@ public class Context {
     }
 
     /**
+     * Return the named request parameter. If the request Content-type is
+     * "multipart/form-data" and the {@link #multiPartFormData} is defined
+     * the request parameter will be derived from the multiPartFormData map.
+     *
+     * @param name the name of the request parameter
+     * @return the value of the request parameter.
+     */
+    public String getRequestParameter(String name) {
+        if (isPost() && multiPartFormData != null) {
+            FileItem fileItem = (FileItem) multiPartFormData.get(name);
+            if (fileItem != null) {
+                return fileItem.getString();
+            } else {
+                return null;
+            }
+
+        } else {
+            return request.getParameter(name);
+        }
+    }
+
+    /**
      * Return the named session attribute, or null if not defined.
      * <p/>
      * If the session is not defined this method will return null, and a
@@ -306,5 +337,34 @@ public class Context {
      */
     public Page createPage(String path) {
         return pageMaker.createPage(path);
+    }
+
+    /**
+     * Returns a map of <tt>FileItem</tt> keyed on name for Content-type
+     * "multipart/form-data" requests, or an empty map otherwise.
+     *
+     * @return map of <tt>FileItem</tt> keyed on name for
+     * "multipart/form-data" requests
+     */
+    public Map getMultiPartFormData() {
+        if (multiPartFormData != null) {
+            return multiPartFormData;
+        } else {
+            return Collections.EMPTY_MAP;
+        }
+    }
+
+    /**
+     * Set the map of FileItem keyed on name for a Content-type
+     * "multipart/form-data" request.
+     *
+     * @param multiPartFormData the map of form FileItem data keyed on name
+     */
+    public void setMultiPartFormData(Map multiPartFormData) {
+        if (!isPost() || !FileUploadBase.isMultipartContent(request)) {
+            String msg = "Not a POST Content-type 'multipart' request";
+            throw new IllegalStateException(msg);
+        }
+        this.multiPartFormData = multiPartFormData;
     }
 }

@@ -15,14 +15,10 @@
  */
 package net.sf.click.control;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.fileupload.DefaultFileItemFactory;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * Provides a File Field control: &nbsp; &lt;input type='file'&gt;.
@@ -52,11 +48,11 @@ public class FileField extends Field {
     /** The text field size attribute. The default size is 20. */
     protected int size = 20;
 
-    /** The list of
+    /** The
      * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
      * after processing a file upload request.
      */
-    protected List fileItems;
+    protected FileItem fileItem;
 
     /**
      * The
@@ -81,17 +77,13 @@ public class FileField extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the list of <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
-     * after processing the request, or an empty list otherwise.
+     * Return the <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
+     * after processing the request, or null otherwise.
      *
-     * @return the list of <tt>FileItem</tt> after processing a request
+     * @return the <tt>FileItem</tt> after processing a request
      */
-    public List getFileItems() {
-        if (fileItems != null) {
-            return fileItems;
-        } else {
-            return Collections.EMPTY_LIST;
-        }
+    public FileItem getFileItem() {
+        return fileItem;
     }
 
     /**
@@ -106,6 +98,7 @@ public class FileField extends Field {
     public FileUploadBase getFileUpload() {
         if (fileUpload == null) {
             fileUpload = new FileUpload();
+            fileUpload.setFileItemFactory(new DefaultFileItemFactory());
         }
         return fileUpload;
     }
@@ -156,19 +149,10 @@ public class FileField extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        HttpServletRequest request = getContext().getRequest();
+        fileItem = (FileItem) getContext().getMultiPartFormData().get(getName());
 
-        if (FileUploadBase.isMultipartContent(request)) {
-            FileUploadBase fileUpload = getFileUpload();
-
-            try {
-                fileItems = fileUpload.parseRequest(request);
-
-                return invokeListener();
-
-            } catch (FileUploadException fue) {
-                throw new RuntimeException(fue);
-            }
+        if (fileItem != null) {
+            return invokeListener();
         }
 
         return true;

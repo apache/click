@@ -28,6 +28,11 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.fileupload.DefaultFileItemFactory;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -345,7 +350,7 @@ public class Form implements Control {
 
     /** The labels of left form layout contant: &nbsp; <tt>"left"</tt> */
     public static final String LEFT = "left";
-    
+
     /** The HTTP content type header for multipart forms. */
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
@@ -684,11 +689,9 @@ public class Form implements Control {
         if (enctype == null) {
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
-                if (!field.isHidden() && !field.isDisabled()) {
-                    if (field instanceof FileField) {
-                        enctype = MULTIPART_FORM_DATA;
-                        break;
-                    }
+                if (!field.isHidden() && (field instanceof FileField)) {
+                    enctype = MULTIPART_FORM_DATA;
+                    break;
                 }
             }
         }
@@ -1011,9 +1014,51 @@ public class Form implements Control {
         HttpServletRequest request = getContext().getRequest();
 
         if (request.getMethod().equalsIgnoreCase(getMethod())) {
+
+            // If "multipart/form-data" request load form data FileItem into
+            // context
+            if (FileUploadBase.isMultipartContent(request)) {
+                FileField fileField = null;
+                for (int i = 0, size = fieldList.size(); i < size; i++) {
+                    Field field = (Field) fieldList.get(i);
+                    if (!field.isHidden() && (field instanceof FileField)) {
+                        fileField = (FileField) field;
+                        break;
+                    }
+                }
+
+                FileUploadBase fileUpload = null;
+                if (fileField != null) {
+                    fileUpload = fileField.getFileUpload();
+                    if (fileUpload.getFileItemFactory() == null) {
+                        FileItemFactory fif = new DefaultFileItemFactory();
+                        fileUpload.setFileItemFactory(fif);
+                    }
+                } else {
+                    String msg = "No FileField defined for POST " +
+                                 "Content-type 'multipart' request";
+                    throw new RuntimeException(msg);
+                }
+
+                try {
+                    List itemsList = fileUpload.parseRequest(request);
+
+                    Map itemsMap = new HashMap(itemsList.size());
+                    for (int i = 0; i < itemsList.size(); i++) {
+                        FileItem fileItem = (FileItem) itemsList.get(i);
+                        itemsMap.put(fileItem.getFieldName(), fileItem);
+                    }
+
+                    getContext().setMultiPartFormData(itemsMap);
+
+                } catch (FileUploadException fue) {
+                    throw new RuntimeException(fue);
+                }
+            }
+
             // If a form name is defined, but does not match this form exit.
-            String formName = request.getParameter(FORM_NAME);
-            if (formName == null || !formName.equals(name)) {
+            String formName = getContext().getRequestParameter(FORM_NAME);
+            if (formName == null || !formName.equals(getName())) {
                 return true;
             }
 

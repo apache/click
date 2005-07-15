@@ -194,7 +194,6 @@ public class RadioGroup extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-
         value = getRequestValue();
 
         boolean continueProcessing = true;

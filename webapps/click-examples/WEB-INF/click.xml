@@ -9,7 +9,7 @@
     <page path="edit-customer.htm" classname="examples.page.EditCustomer"/>
     <page path="exception.htm" classname="examples.page.ExceptionDemo"/>
     <page path="hello-world.htm" classname="examples.page.HelloWorld"/>
-    <page path="file-upload.htm" classname="examples.page.UploadPage"/>
+    <page path="file-upload.htm" classname="examples.page.FileUpload"/>
     <page path="form-properties.htm" classname="examples.page.FormProperties"/>
     <page path="last-page.htm" classname="examples.page.LastPage"/>
     <page path="login.htm" classname="examples.page.Login"/>

@@ -397,7 +397,7 @@ public class Select extends Field {
         // Process single item select case, do the easy one first.
         if (!isMultiple()) {
             // Load the selected item.
-            value = getContext().getRequest().getParameter(getName());
+            value = getContext().getRequestParameter(getName());
 
             if (validate() && value != null) {
                 Option firstOption = (Option) optionList.get(0);
@@ -419,6 +419,7 @@ public class Select extends Field {
 
             // Load the selected items.
             multipleValues = new ArrayList();
+            // TODO: resolve multiple values when multipart/form-data
             String[] values = getContext().getRequest().getParameterValues(getName());
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {

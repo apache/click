@@ -179,7 +179,7 @@ public class HiddenField extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        String aValue = getContext().getRequest().getParameter(name);
+        String aValue = getRequestValue();
         Class valueClass = getValueClass();
 
         if (valueClass == String.class) {

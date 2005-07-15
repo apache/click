@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a TextArea control: &nbsp; &lt;textarea&gt;&lt;/textarea&gt;.
  *
