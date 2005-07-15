@@ -576,7 +576,7 @@ public abstract class Field implements Control {
      * @return the field's value from the request
      */
     protected String getRequestValue() {
-        String value = getContext().getRequest().getParameter(getName());
+        String value = getContext().getRequestParameter(getName());
         if (value != null) {
             return value.trim();
         } else {

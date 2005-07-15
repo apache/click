@@ -115,7 +115,7 @@ public class Checkbox extends Field {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        setChecked(getContext().getRequest().getParameter(name) != null);
+        setChecked(getContext().getRequestParameter(getName()) != null);
 
         if (!validate()) {
             return true;

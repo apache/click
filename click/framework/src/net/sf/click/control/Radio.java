@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-
 /**
  * Provides a Radio control: &nbsp; &lt;input type='radio'&gt;.
  *

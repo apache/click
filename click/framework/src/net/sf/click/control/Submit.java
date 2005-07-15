@@ -48,7 +48,9 @@ public class Submit extends Button {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Submit button with the given value
+     * Create a Submit button with the given value. The value cannot contain
+     * the HTML characters <tt>&nbsp;</tt> as the submitted value cannot be
+     * processed correctly.
      * <p/>
      * The field name will be Java property representation of the given value.
      *
@@ -56,6 +58,11 @@ public class Submit extends Button {
      */
     public Submit(String value) {
         super(value);
+
+        if (value.toLowerCase().indexOf("&nbsp;") != -1) {
+            String msg = "Cannot correctly process value containing: &nbsp;";
+            throw new IllegalArgumentException(msg);
+        }
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -94,7 +101,7 @@ public class Submit extends Button {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        String value = getContext().getRequest().getParameter(getName());
+        String value = getContext().getRequestParameter(getName());
 
         if (value != null) {
             clicked = getName().equals(ClickUtils.toName(value));

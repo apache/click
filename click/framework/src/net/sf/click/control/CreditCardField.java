@@ -212,7 +212,7 @@ public class CreditCardField extends TextField {
     public boolean onProcess() {
         value = getRequestValue();
 
-        cardType = getContext().getRequest().getParameter(SELECT_NAME);
+        cardType = getContext().getRequestParameter(SELECT_NAME);
 
         if (!validate()) {
             return true;

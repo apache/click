@@ -501,10 +501,10 @@ public class ActionLink implements Control {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        clicked = getName().equals(getContext().getRequest().getParameter(ACTION_LINK));
+        clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
 
         if (clicked) {
-            value = getContext().getRequest().getParameter(VALUE);
+            value = getContext().getRequestParameter(VALUE);
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
