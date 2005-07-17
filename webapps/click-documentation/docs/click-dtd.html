@@ -18,11 +18,13 @@ Click application XML descriptor Documentation Type Definition (DTD):
 
   &lt;-- Application pages. --&gt;
   &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*)&gt;
-
+    &lt;!ATTLIST <span class="red">pages</span> <span class="blue">package</span> CDATA #IMPLIED&gt;
+    &lt;!ATTLIST <span class="red">pages</span> <span class="blue">automapping</span> (true|false) "<span class="green">false</span>"&gt;
+    
     &lt;!-- Page definition. --&gt;
     &lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
-      &lt;!ATTLIST page <span class="blue">path</span> CDATA #IMPLIED&gt;
-      &lt;!ATTLIST page <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.Page</span>"&gt;
+      &lt;!ATTLIST page <span class="blue">path</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST page <span class="blue">classname</span> CDATA #REQUIRED&gt;
 
   &lt;!-- Application default page headers. --&gt;
   &lt;!ELEMENT <span class="red">headers</span> (<span class="blue">header</span>*)&gt;

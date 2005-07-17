@@ -3,11 +3,13 @@
 
   <-- Application pages. -->
   <!ELEMENT pages (page*)>
+    <!ATTLIST pages package CDATA #IMPLIED>
+    <!ATTLIST pages automapping (true|false) "false">
 
     <!-- Page definition. -->
     <!ELEMENT page (header*)>
-      <!ATTLIST page path CDATA #IMPLIED>
-      <!ATTLIST page classname CDATA #FIXED "net.sf.click.Page">
+      <!ATTLIST page path CDATA #REQUIRED>
+      <!ATTLIST page classname CDATA #REQUIRED>
 
   <!-- Application default page headers. -->
   <!ELEMENT headers (header*)>
