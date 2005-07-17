@@ -1,4 +1,4 @@
-package examples.page;
+package examples.page.ajax;
 
 import net.sf.click.Page;
 import examples.domain.Customer;

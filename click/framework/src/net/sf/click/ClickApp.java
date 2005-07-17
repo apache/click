@@ -17,8 +17,10 @@ package net.sf.click;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +28,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
@@ -592,6 +596,28 @@ class ClickApp implements EntityResolver {
                 ("required configuration 'pages' element missing.");
         }
 
+        String pagesPackage = pagesElm.getAttributeValue("package", "");
+        pagesPackage = pagesPackage.trim();
+        if (pagesPackage.endsWith(".")) {
+            pagesPackage =
+                pagesPackage.substring(0, pagesPackage.length() - 2);
+        }
+
+        boolean automap = false;
+        String automapStr = pagesElm.getAttributeValue("automapping", "false");
+        if ("true".equalsIgnoreCase(automapStr)) {
+            automap = true;
+        } else if ("false".equalsIgnoreCase(automapStr)) {
+            automap = false;
+        } else {
+            String msg = "Invalid pages automap attribute: " + automapStr;
+            throw new RuntimeException(msg);
+        }
+
+        if (automap && logger.isInfoEnabled()) {
+            logger.info("pages automapping enabled");
+        }
+
         Map headersMap = new HashMap();
 
         Element headersElm = rootElm.getChild("headers");
@@ -599,20 +625,40 @@ class ClickApp implements EntityResolver {
             headersMap = loadHeadersMap(headersElm);
         }
 
-        List pageList = pagesElm.getChildren();
-        for (int i = 0; i < pageList.size(); i++) {
-            Element pageElm = (Element) pageList.get(i);
+        if (automap) {
+            List templates = getTemplateFiles();
 
-            if (pageElm.getName().equals("page")) {
-                ClickApp.PageElm page =
-                        new ClickApp.PageElm(pageElm, headersMap, formatClass);
+            for (int i = 0; i < templates.size(); i++) {
+                String pagePath = (String) templates.get(i);
+
+                Class pageClass = getPageClass(pagePath, pagesPackage);
+
+                ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
+                        pageClass,
+                        headersMap,
+                        formatClass);
 
                 pageByPathMap.put(page.getPath(), page);
+            }
 
-            } else {
-                String msg = "click.xml <pages> contains a non <page>"
-                    + " element: <" + pageElm.getName() + "/>";
-                logger.warn(msg);
+        } else {
+            List pageList = pagesElm.getChildren();
+            for (int i = 0; i < pageList.size(); i++) {
+                Element pageElm = (Element) pageList.get(i);
+
+                if (pageElm.getName().equals("page")) {
+                    ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
+                            pagesPackage,
+                            headersMap,
+                            formatClass);
+
+                    pageByPathMap.put(page.getPath(), page);
+
+                } else {
+                    String msg = "click.xml <pages> contains a non <page>"
+                        + " element: <" + pageElm.getName() + "/>";
+                    logger.warn(msg);
+                }
             }
         }
     }
@@ -746,7 +792,115 @@ class ClickApp implements EntityResolver {
         return headersMap;
     }
 
+    private List getTemplateFiles() {
+        List fileList = new ArrayList();
+
+        Set resources = servletContext.getResourcePaths("/");
+
+        for (Iterator i = resources.iterator(); i.hasNext();) {
+            String resource = (String) i.next();
+
+            if (resource.endsWith(".htm")) {
+                fileList.add(resource);
+            } else if (resource.endsWith("/")) {
+                if (!resource.equals("/click/") &&
+                    !resource.equalsIgnoreCase("/WEB-INF/")) {
+                    processDirectory(resource, fileList);
+                }
+            }
+        }
+
+        return fileList;
+    }
+
+    private void processDirectory(String dirPath, List fileList) {
+        Set resources = servletContext.getResourcePaths(dirPath);
+
+        for (Iterator i = resources.iterator(); i.hasNext();) {
+            String resource = (String) i.next();
+
+            if (resource.endsWith(".htm")) {
+                fileList.add(resource);
+            } else if (resource.endsWith("/")) {
+                processDirectory(resource, fileList);
+            }
+        }
+    }
+
+    private Class getPageClass(final String pagePath, final String pagesPackage) {
+        String packageName = pagesPackage + ".";
+        String className = "";
+
+        // Strip off .htm extension
+        String path = pagePath.substring(0, pagePath.lastIndexOf("."));
+
+        if (path.indexOf("/") != -1) {
+            StringTokenizer tokenizer = new StringTokenizer(path, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String token = tokenizer.nextToken();
+                if (tokenizer.hasMoreTokens()) {
+                    packageName = packageName + token + ".";
+                } else {
+                    className = token;
+                }
+            }
+        } else {
+            className = path;
+        }
+
+        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
+        className = "";
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+            className += token;
+        }
+
+        className = packageName + className;
+
+        Class pageClass = null;
+        try {
+            pageClass = Class.forName(className);
+
+            if (!Page.class.isAssignableFrom(pageClass)) {
+                String msg = "Automapped page class " + className +
+                             " is not a subclass of net.sf.clic.Page";
+                throw new RuntimeException(msg);
+            }
+
+        } catch (ClassNotFoundException cnfe) {
+            if (logger.isTraceEnabled()) {
+                String msg = "pages automapping could not find page class " +
+                    className + " for path " + pagePath;
+                logger.trace(msg);
+            }
+        }
+
+        System.err.println(pagePath + ", "  + pageClass.getName());
+
+        return pageClass;
+    }
+
     // ---------------------------------------------------------- Inner Classes
+
+    private static class TemplateFilter implements FilenameFilter {
+
+        public boolean accept(File dir, String name) {
+            File file = new File(dir.getPath() + File.separator + name);
+
+            if (file.isFile()) {
+                return name.endsWith(".htm");
+            } else {
+                if (name.equals("click")) {
+                    return false;
+                } else if (name.equalsIgnoreCase("WEB-INF")) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
 
     /**
      * ServletContext log adaptor derived from:
@@ -897,8 +1051,8 @@ class ClickApp implements EntityResolver {
 
         private final String path;
 
-        private PageElm(Element element, Map commonHeaders, Class formatClass)
-            throws ClassNotFoundException {
+        private PageElm(Element element, String pagesPackage, Map commonHeaders,
+                Class formatClass) throws ClassNotFoundException {
 
             // Set formatClass
             this.formatClass = formatClass;
@@ -909,14 +1063,34 @@ class ClickApp implements EntityResolver {
             aggregationMap.putAll(pageHeaders);
             headers = Collections.unmodifiableMap(aggregationMap);
 
+            // Set path
+            path = element.getAttributeValue("path");
+
             // Set pageClass
             String value = element.getAttributeValue("classname");
-            value = (value != null) ? value : "net.sf.click.Page";
+            if (value != null) {
+                value = pagesPackage + "." + value;
+            } else {
+                String msg = "No classname defined for page path " + path;
+                throw new RuntimeException(msg);
+            }
 
             pageClass = Class.forName(value);
 
-            // Set path
-            path = element.getAttributeValue("path");
+            if (!Page.class.isAssignableFrom(pageClass)) {
+                String msg = "Page class " + value +
+                             " is not a subclass of net.sf.clic.Page";
+                throw new RuntimeException(msg);
+            }
+        }
+
+        private PageElm(String path, Class pageClass, Map commonHeaders,
+                Class formatClass) {
+
+            this.formatClass = formatClass;
+            headers = Collections.unmodifiableMap(commonHeaders);
+            this.pageClass = pageClass;
+            this.path = path;
         }
 
         private PageElm(String classname, String path, Class formatClass)

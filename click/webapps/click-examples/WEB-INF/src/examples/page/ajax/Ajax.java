@@ -1,4 +1,4 @@
-package examples.page;
+package examples.page.ajax;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +7,7 @@ import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
+import examples.page.BorderedPage;
 
 /**
  * Provides an ActionDemo example Page.
@@ -17,7 +18,7 @@ public class Ajax extends BorderedPage {
 
     public void onInit() {
 
-        addModel("head-include", "ajax-head.htm");
+        addModel("head-include", "ajax/ajax-head.htm");
         addModel("body-onload", "registerAjaxStuff();");
 
         Select customerSelect = new Select("customerSelect");
