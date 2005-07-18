@@ -174,7 +174,6 @@ public class Format {
         }
     }
 
-
     /**
      * Escape the given object value as a HTML string, or "&amp;nbsp;"
      * if the object is null.
@@ -210,7 +209,40 @@ public class Format {
             return "";
         }
     }
+    
+    /**
+     * Return the value string limited to maxlength characters. If the string 
+     * gets curtailed, "..." is appended to it.
+     * <p/>
+     * Adapted from Velocity Tools Formatter.
+     *
+     * @param value the string value to limit the length of
+     * @param maxlength An int with the maximum length
+     * @return a length limited string
+     */
+    public String limitLength(String value, int maxlength) {
+        return limitLength(value, maxlength, "...");
+    }
 
+    /**
+     * Return the value string limited to maxlength characters. If the string 
+     * gets curtailed and the suffix parameter is appended to it.
+     * <p/>
+     * Adapted from Velocity Tools Formatter.
+     *
+     * @param value the string value to limit the length of
+     * @param maxlength An int with the maximum length
+     * @param suffix the suffix to append to the length limited string
+     * @return a length limited string
+     */
+    public String limitLength(String value, int maxlength, String suffix) {
+        String ret = value;
+        if (value.length() > maxlength) {
+            ret = value.substring(0, maxlength - suffix.length()) + suffix;
+        }
+        return ret;
+    }
+    
     /**
      * Return a percentage formatted number string using number. If the number
      * is null this method will return "&amp;nbsp;"

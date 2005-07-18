@@ -1,29 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <click-app>
   <pages package="examples.page" automapping="true">
-    <page path="action-demo.htm" classname="ActionDemo"/>
-    <page path="action-table.htm" classname="ActionTable"/>
-    <page path="ajax/ajax.htm" classname="ajax.Ajax"/>
-    <page path="ajax/ajax-customer.htm" classname="ajax.AjaxCustomer"/>
-    <page path="big-form.htm" classname="BigForm"/>
-    <page path="edit-customer.htm" classname="EditCustomer"/>
     <page path="exception.htm" classname="ExceptionDemo"/>
-    <page path="hello-world.htm" classname="HelloWorld"/>
-    <page path="file-upload.htm" classname="FileUpload"/>
-    <page path="form-properties.htm" classname="FormProperties"/>
-    <page path="last-page.htm" classname="LastPage"/>
-    <page path="login.htm" classname="Login"/>
-    <page path="logout.htm" classname="Logout"/>
-    <page path="navigation-a.htm" classname="NavigationA"/>
-    <page path="navigation-b.htm" classname="NavigationB"/>
-    <page path="next-page.htm" classname="NextPage"/>
-    <page path="search-form.htm" classname="SearchForm"/>
-    <page path="secure.htm" classname="Secure"/>
-    <page path="select-demo.htm" classname="SelectDemo"/>
-    <page path="simple-table.htm" classname="SimpleTable"/>
-    <page path="source-viewer.htm" classname="SourceViewer"/>
-    <page path="start-page.htm" classname="StartPage"/>
-    <page path="velocity-macro.htm" classname="VelocityMacro"/>
   </pages>
 
   <headers>
@@ -32,5 +10,5 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="trace"/>
+  <mode value="debug"/>
 </click-app>

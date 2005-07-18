@@ -454,13 +454,13 @@ class ClickApp implements EntityResolver {
                         fos.write(buffer, 0, length);
                     }
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug
+                    if (logger.isTraceEnabled()) {
+                        logger.trace
                             ("deployed " + dir + File.separator + filename);
                     }
 
                 } catch (IOException ioe) {
-                    logger.warn("could not deploy " + destination, ioe);
+                    logger.error("could not deploy " + destination, ioe);
                 } finally {
                     if (fos != null) {
                         try {
@@ -519,7 +519,7 @@ class ClickApp implements EntityResolver {
 
         } else if (mode == DEBUG) {
             clickLogLevel = Logger.DEBUG_ID;
-            velocityLogLevel = new Integer(LogSystem.INFO_ID);
+            velocityLogLevel = new Integer(LogSystem.WARN_ID);
 
         } else if (mode == TRACE) {
             clickLogLevel = Logger.TRACE_ID;
@@ -614,52 +614,73 @@ class ClickApp implements EntityResolver {
             throw new RuntimeException(msg);
         }
 
-        if (automap && logger.isInfoEnabled()) {
-            logger.info("pages automapping enabled");
-        }
-
         Map headersMap = new HashMap();
 
         Element headersElm = rootElm.getChild("headers");
         if (headersElm != null) {
             headersMap = loadHeadersMap(headersElm);
         }
+        
+        List pageList = pagesElm.getChildren();
+        
+        if (!pageList.isEmpty() && logger.isDebugEnabled()) {
+            logger.debug("click.xml pages:");
+        }
+        
+        for (int i = 0; i < pageList.size(); i++) {
+            Element pageElm = (Element) pageList.get(i);
+            
+            if (pageElm.getName().equals("page")) {
+                ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
+                        pagesPackage,
+                        headersMap,
+                        formatClass);
+                
+                pageByPathMap.put(page.getPath(), page);
+                
+                if (logger.isDebugEnabled()) {
+                    String msg = 
+                        page.getPath() + " -> " + page.getPageClass().getName();
+                    logger.debug(msg);
+                }
+                
+            } else {
+                String msg = "click.xml <pages> contains a non <page>"
+                    + " element: <" + pageElm.getName() + "/>";
+                logger.warn(msg);
+            }
+        }
 
         if (automap) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("automapped pages:");
+            }
+            
             List templates = getTemplateFiles();
 
             for (int i = 0; i < templates.size(); i++) {
                 String pagePath = (String) templates.get(i);
+                
+                if (!pageByPathMap.containsKey(pagePath)) {
 
-                Class pageClass = getPageClass(pagePath, pagesPackage);
+                    Class pageClass = getPageClass(pagePath, pagesPackage);
+                    
+                    if (pageClass != null) {
+                        ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
+                                pageClass,
+                                headersMap,
+                                formatClass);
 
-                ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
-                        pageClass,
-                        headersMap,
-                        formatClass);
-
-                pageByPathMap.put(page.getPath(), page);
-            }
-
-        } else {
-            List pageList = pagesElm.getChildren();
-            for (int i = 0; i < pageList.size(); i++) {
-                Element pageElm = (Element) pageList.get(i);
-
-                if (pageElm.getName().equals("page")) {
-                    ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
-                            pagesPackage,
-                            headersMap,
-                            formatClass);
-
-                    pageByPathMap.put(page.getPath(), page);
-
-                } else {
-                    String msg = "click.xml <pages> contains a non <page>"
-                        + " element: <" + pageElm.getName() + "/>";
-                    logger.warn(msg);
+                        pageByPathMap.put(page.getPath(), page);  
+                        
+                        if (logger.isDebugEnabled()) {
+                            String msg = pagePath + " -> " + pageClass.getName();
+                            logger.debug(msg);
+                        }
+                    }
                 }
             }
+
         }
     }
 
@@ -743,7 +764,7 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             TreeMap sortedPropMap = new TreeMap();
 
             Iterator i = velProps.entrySet().iterator();
@@ -752,7 +773,7 @@ class ClickApp implements EntityResolver {
                 sortedPropMap.put(entry.getKey(), entry.getValue());
             }
 
-            logger.debug("velocity properties: " + sortedPropMap);
+            logger.trace("velocity properties: " + sortedPropMap);
         }
 
         return velProps;
@@ -801,7 +822,8 @@ class ClickApp implements EntityResolver {
             String resource = (String) i.next();
 
             if (resource.endsWith(".htm")) {
-                fileList.add(resource);
+                fileList.add(resource.substring(1));
+                
             } else if (resource.endsWith("/")) {
                 if (!resource.equals("/click/") &&
                     !resource.equalsIgnoreCase("/WEB-INF/")) {
@@ -820,7 +842,7 @@ class ClickApp implements EntityResolver {
             String resource = (String) i.next();
 
             if (resource.endsWith(".htm")) {
-                fileList.add(resource);
+                fileList.add(resource.substring(1));
             } else if (resource.endsWith("/")) {
                 processDirectory(resource, fileList);
             }
@@ -869,14 +891,13 @@ class ClickApp implements EntityResolver {
             }
 
         } catch (ClassNotFoundException cnfe) {
+            if (logger.isDebugEnabled()) {
+                logger.debug(pagePath + " -> CLASS NOT FOUND");
+            }
             if (logger.isTraceEnabled()) {
-                String msg = "pages automapping could not find page class " +
-                    className + " for path " + pagePath;
-                logger.trace(msg);
+                logger.trace("class not found: " + className);
             }
         }
-
-        System.err.println(pagePath + ", "  + pageClass.getName());
 
         return pageClass;
     }

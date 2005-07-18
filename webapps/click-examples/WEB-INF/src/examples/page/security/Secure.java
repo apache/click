@@ -1,5 +1,6 @@
-package examples.page;
+package examples.page.security;
 
+import examples.page.BorderedPage;
 import net.sf.click.Page;
 
 /**

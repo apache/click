@@ -1,7 +1,8 @@
-package examples.page;
+package examples.page.security;
 
 import examples.domain.User;
 import examples.domain.UserDAO;
+import examples.page.BorderedPage;
 import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.PasswordField;

@@ -29,7 +29,7 @@ and a &lt;div id='<span class="st">customerDetails</span>'/&gt; element:
 <p/>
 When you click on the select a HTTP request (e.g. <tt>GET ajax-customer.htm?customerId=4424</tt>)
 is made to the 
-<a href="$context/source-viewer.htm?filename=WEB-INF/src/examples/page/AjaxCustomer.java">AjaxCustomer</a>
+<a href="$context/source-viewer.htm?filename=WEB-INF/src/examples/page/ajax/AjaxCustomer.java">AjaxCustomer</a>
 page to get the customers details. These details are returned as XML/HTML with a content-type of 'text/xml':
 <pre class="codeHtml">
 &lt;ajax-response&gt;
@@ -67,6 +67,6 @@ function <span class="red">onCustomerChange</span>(select) {
 </pre>
 
 The initialization code above is contained in the 
-<a href="$context/source-viewer.htm?filename=ajax-head.htm">ajax-head.htm</a> file.
+<a href="$context/source-viewer.htm?filename=ajax/ajax-head.htm">ajax-head.htm</a> file.
 Note when including the JavaScript prototype.js and rico.js files, ensure prototype.js is before rico.js
 as rico is dependent upon prototype. 
