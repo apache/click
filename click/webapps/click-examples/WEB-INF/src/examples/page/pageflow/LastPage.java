@@ -1,9 +1,10 @@
-package examples.page;
+package examples.page.pageflow;
 
 import examples.domain.CourseBooking;
 import examples.domain.CourseBookingDAO;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
+import examples.page.BorderedPage;
 
 /**
  * Provides the last page of a multi page work flow.

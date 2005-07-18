@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples.page;
+package examples.page.pageflow;
 
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
@@ -22,6 +22,7 @@ import examples.domain.CourseBooking;
 import examples.domain.CourseBookingDAO;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
+import examples.page.BorderedPage;
 
 /**
  * Provides the next page of a multi page work flow.
@@ -64,7 +65,9 @@ public class NextPage extends BorderedPage {
     }
 
     public boolean onBackClick() {
-        StartPage startPage = (StartPage) getContext().createPage("start-page.htm");
+        StartPage startPage = 
+            (StartPage) getContext().createPage("pageflow/start-page.htm");
+        
         courseBooking = (CourseBooking) courseField.getValueObject();
         startPage.setCourseBooking(courseBooking);
 

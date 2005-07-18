@@ -1,4 +1,4 @@
-package examples.page;
+package examples.page.pageflow;
 
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +13,7 @@ import examples.control.InvestmentSelect;
 import examples.domain.CourseBooking;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
+import examples.page.BorderedPage;
 
 /**
  * Provides the start page of a multi page work flow.
@@ -34,7 +35,7 @@ public class StartPage extends BorderedPage {
     }
 
     public void onInit() {
-        addModel("head-include", "ajax-head.htm");
+        addModel("head-include", "ajax/ajax-head.htm");
         addModel("body-onload", "registerAjaxStuff();");
 
         form = new Form("form", getContext());
@@ -81,7 +82,7 @@ public class StartPage extends BorderedPage {
     }
 
     public boolean onBackClick() {
-        setRedirect("index.html");
+        setRedirect("../index.html");
         return false;
     }
 
@@ -95,7 +96,8 @@ public class StartPage extends BorderedPage {
             courseBooking.setCourseType(courseSelect.getValue());
             courseBooking.setBookingNotes(notesField.getValue());
 
-            NextPage nextPage = (NextPage) getContext().createPage("next-page.htm");
+            NextPage nextPage = 
+                (NextPage) getContext().createPage("pageflow/next-page.htm");
             nextPage.setCourseBooking(courseBooking);
 
             setForward(nextPage);
