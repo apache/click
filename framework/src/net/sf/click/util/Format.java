@@ -209,9 +209,9 @@ public class Format {
             return "";
         }
     }
-    
+
     /**
-     * Return the value string limited to maxlength characters. If the string 
+     * Return the value string limited to maxlength characters. If the string
      * gets curtailed, "..." is appended to it.
      * <p/>
      * Adapted from Velocity Tools Formatter.
@@ -225,7 +225,7 @@ public class Format {
     }
 
     /**
-     * Return the value string limited to maxlength characters. If the string 
+     * Return the value string limited to maxlength characters. If the string
      * gets curtailed and the suffix parameter is appended to it.
      * <p/>
      * Adapted from Velocity Tools Formatter.
@@ -242,7 +242,7 @@ public class Format {
         }
         return ret;
     }
-    
+
     /**
      * Return a percentage formatted number string using number. If the number
      * is null this method will return "&amp;nbsp;"

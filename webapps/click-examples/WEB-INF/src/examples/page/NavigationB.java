@@ -9,6 +9,6 @@ package examples.page;
 public class NavigationB extends NavigationA {
 
     public String getTarget() {
-        return "navigation-a.htm";
+        return "/navigation-a.htm";
     }
 }

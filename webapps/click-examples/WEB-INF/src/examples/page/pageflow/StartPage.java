@@ -82,7 +82,7 @@ public class StartPage extends BorderedPage {
     }
 
     public boolean onBackClick() {
-        setRedirect("../index.html");
+        setRedirect("/index.html");
         return false;
     }
 
@@ -96,8 +96,8 @@ public class StartPage extends BorderedPage {
             courseBooking.setCourseType(courseSelect.getValue());
             courseBooking.setBookingNotes(notesField.getValue());
 
-            NextPage nextPage = 
-                (NextPage) getContext().createPage("pageflow/next-page.htm");
+            NextPage nextPage =
+                (NextPage) getContext().createPage("/pageflow/next-page.htm");
             nextPage.setCourseBooking(courseBooking);
 
             setForward(nextPage);

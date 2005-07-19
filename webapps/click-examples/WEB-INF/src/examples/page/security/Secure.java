@@ -19,7 +19,7 @@ public class Secure extends BorderedPage {
             return true;
 
         } else {
-            setRedirect("login.htm");
+            setRedirect("/security/login.htm");
             return false;
         }
     }

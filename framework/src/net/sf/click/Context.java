@@ -125,7 +125,7 @@ public class Context {
     /**
      * Return the page resouce path from the request. For example:
      * <pre class="codeHtml">
-     * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">secure/login.htm</span> </pre>
+     * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
      *
      * @return the page resource path from the request
      */
@@ -149,10 +149,6 @@ public class Context {
 
         if (info != null) {
             path += info;
-        }
-
-        if ((path != null) && (path.charAt(0) == '/')) {
-            path = path.substring(1);
         }
 
         return path;

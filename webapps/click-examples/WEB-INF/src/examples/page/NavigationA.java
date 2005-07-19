@@ -16,6 +16,10 @@ public class NavigationA extends BorderedPage {
     ActionLink redirectLink;
     ActionLink redirectParamLink;
 
+    public String getTarget() {
+        return "/navigation-b.htm";
+    }
+
     /**
      * @see Page#onInit()
      */
@@ -81,9 +85,5 @@ public class NavigationA extends BorderedPage {
     public boolean onRedirectParamClick() {
         setRedirect(getTarget() + "?param=" + redirectParamLink.getValue());
         return false;
-    }
-
-    public String getTarget() {
-        return "navigation-b.htm";
     }
 }
