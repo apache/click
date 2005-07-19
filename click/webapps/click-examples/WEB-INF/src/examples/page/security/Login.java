@@ -54,7 +54,7 @@ public class Login extends BorderedPage {
      */
     public boolean onSecurityCheck() {
         if (getContext().hasSessionAttribute("user")) {
-            setRedirect("secure.htm");
+            setRedirect("/security/secure.htm");
             return false;
 
         } else {
@@ -71,7 +71,7 @@ public class Login extends BorderedPage {
 
             if (user != null && user.getPassword().equals(password)) {
                 getContext().setSessionAttribute("user", user);
-                setRedirect("secure.htm");
+                setRedirect("/security/secure.htm");
 
             } else {
                 form.setError(getMessage("authentication-error"));
@@ -82,7 +82,7 @@ public class Login extends BorderedPage {
     }
 
     public boolean onCancelClicked() {
-        setRedirect("index.html");
+        setRedirect("/index.html");
 
         return false;
     }

@@ -31,7 +31,7 @@ When the booking is confirmed the page will redirect to the last page:
 <pre class="codeJava">
 Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
 
-setRedirect("<span class="st">pageflow/last-page.htm?bookingId=</span>" + bookingId);
+setRedirect("<span class="st">/pageflow/last-page.htm?bookingId=</span>" + bookingId);
 </pre>
 
 This page flow design pattern is known as Post-Redirect.

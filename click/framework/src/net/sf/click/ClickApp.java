@@ -620,30 +620,30 @@ class ClickApp implements EntityResolver {
         if (headersElm != null) {
             headersMap = loadHeadersMap(headersElm);
         }
-        
+
         List pageList = pagesElm.getChildren();
-        
+
         if (!pageList.isEmpty() && logger.isDebugEnabled()) {
             logger.debug("click.xml pages:");
         }
-        
+
         for (int i = 0; i < pageList.size(); i++) {
             Element pageElm = (Element) pageList.get(i);
-            
+
             if (pageElm.getName().equals("page")) {
                 ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
                         pagesPackage,
                         headersMap,
                         formatClass);
-                
+
                 pageByPathMap.put(page.getPath(), page);
-                
+
                 if (logger.isDebugEnabled()) {
-                    String msg = 
+                    String msg =
                         page.getPath() + " -> " + page.getPageClass().getName();
                     logger.debug(msg);
                 }
-                
+
             } else {
                 String msg = "click.xml <pages> contains a non <page>"
                     + " element: <" + pageElm.getName() + "/>";
@@ -655,24 +655,24 @@ class ClickApp implements EntityResolver {
             if (logger.isDebugEnabled()) {
                 logger.debug("automapped pages:");
             }
-            
+
             List templates = getTemplateFiles();
 
             for (int i = 0; i < templates.size(); i++) {
                 String pagePath = (String) templates.get(i);
-                
+
                 if (!pageByPathMap.containsKey(pagePath)) {
 
                     Class pageClass = getPageClass(pagePath, pagesPackage);
-                    
+
                     if (pageClass != null) {
                         ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
                                 pageClass,
                                 headersMap,
                                 formatClass);
 
-                        pageByPathMap.put(page.getPath(), page);  
-                        
+                        pageByPathMap.put(page.getPath(), page);
+
                         if (logger.isDebugEnabled()) {
                             String msg = pagePath + " -> " + pageClass.getName();
                             logger.debug(msg);
@@ -822,8 +822,8 @@ class ClickApp implements EntityResolver {
             String resource = (String) i.next();
 
             if (resource.endsWith(".htm")) {
-                fileList.add(resource.substring(1));
-                
+                fileList.add(resource);
+
             } else if (resource.endsWith("/")) {
                 if (!resource.equals("/click/") &&
                     !resource.equalsIgnoreCase("/WEB-INF/")) {
@@ -842,7 +842,7 @@ class ClickApp implements EntityResolver {
             String resource = (String) i.next();
 
             if (resource.endsWith(".htm")) {
-                fileList.add(resource.substring(1));
+                fileList.add(resource);
             } else if (resource.endsWith("/")) {
                 processDirectory(resource, fileList);
             }
@@ -1085,7 +1085,12 @@ class ClickApp implements EntityResolver {
             headers = Collections.unmodifiableMap(aggregationMap);
 
             // Set path
-            path = element.getAttributeValue("path");
+            String pathValue = element.getAttributeValue("path");
+            if (pathValue.charAt(0) != '/') {
+                path = "/" + pathValue;
+            } else {
+                path = pathValue;
+            }
 
             // Set pageClass
             String value = element.getAttributeValue("classname");

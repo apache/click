@@ -59,6 +59,6 @@ public class BorderedPage extends Page {
      * @see Page#getTemplate()
      */
     public String getTemplate() {
-        return "border.htm";
+        return "/border.htm";
     }
 }
