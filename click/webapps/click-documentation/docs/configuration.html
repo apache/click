@@ -105,10 +105,11 @@ A simple Click app config file is provided below:
 <pre class="codeConfig">
 &lt;click-app&gt; 
   &lt;pages&gt;
-    &lt;page path="<span class="blue">index.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
-    &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
-    &lt;page path="<span class="blue">logout.htm</span>" classname="<span class="blue">com.mycorp.page.Logout</span>"/&gt;    
-    &lt;page path="<span class="blue">search.htm</span>" classname="<span class="blue">com.mycorp.page.Search</span>"/&gt;
+    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
+    &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
+    &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
+    &lt;page path="<span class="navy">search.htm</span>" classname="<span class="maroon">com.mycorp.page.Search</span>"/&gt;
+    &lt;page path="<span class="navy">results.htm</span>" classname="<span class="maroon">com.mycorp.page.Results</span>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt; 
 </pre>
@@ -119,23 +120,30 @@ An example of a fully optioned up config file is:
 <pre class="codeConfig">
 &lt;click-app&gt; 
   &lt;pages&gt;
-    &lt;page path="<span class="blue">index.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
-    &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
-    &lt;page path="<span class="blue">logout.htm</span>" classname="<span class="blue">com.mycorp.page.Logout</span>"/&gt;    
-    &lt;page path="<span class="blue">search.htm</span>" classname="<span class="blue">com.mycorp.page.Search</span>"/&gt;
-    &lt;page path="<span class="blue">results.htm</span>" classname="<span class="blue">com.mycorp.page.SearchResults</span>"&gt;
-      &lt;header name="<span class="blue">Content-Type</span>" value="<span class="blue">text/xml</span>"/&gt;
-    &lt;/page&gt;
+    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
+    &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
+    &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
+    &lt;page path="<span class="navy">search.htm</span>" classname="<span class="maroon">com.mycorp.page.Search</span>"/&gt;
+    &lt;page path="<span class="navy">results.htm</span>" classname="<span class="maroon">com.mycorp.page.Results</span>"/&gt;
   &lt;/pages&gt;
   &lt;headers&gt;
     &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
     &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
   &lt;/headers&gt;
-  &lt;format classname="<span class="blue">com.mycorp.util.Format</span>"/&gt;
+  &lt;format classname="<span class="maroon">com.mycorp.util.Format</span>"/&gt;
   &lt;mode value="<span class="blue">debug</span>"/&gt;
 &lt;/click-app&gt; 
 </pre>
 
+Alternatively pages can be automatically configured using page auto mapping:
+
+<pre class="codeConfig">
+&lt;click-app&gt; 
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
+    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
 
 <a name="application-pages" class="heading"><h3>Pages</h3></a>
 
@@ -144,7 +152,18 @@ which defines the list of Click pages.
 
 <pre class="codeDtd">
 &lt;!ELEMENT <span class="blue">pages</span> (<span class="red">page</span>*)&gt; 
+   &lt;!ATTLIST pages <span class="blue">package</span> CDATA #IMPLIED&gt;
+   &lt;!ATTLIST pages <span class="blue">automapping</span> (true|false) "false"&gt; 
 </pre>
+
+The pages element can specify a default <span class="blue">package</span>
+name which is prepended to the classname of any pages defined.
+<p/>
+The pages element also defines the <span class="blue">automapping</span> attribute
+which is discussed in the 
+<a href="#application-automapping">Page Automapping</a> topic.
+
+<a name="application-page" class="heading"><h3>Page</h3></a>
 
 The <span class="red">page</span> element defines the Click application pages.
 
@@ -169,6 +188,60 @@ is a critical configuration error the ClickSerlvet will log an <tt>ERROR</tt> me
 <a target="topic" href="servlet-api/javax/servlet/UnavailableException.html">UnavailableException</a>. 
 If this occurs the click application will be permanently unavailable until the error is fixed 
 and the web app is restarted.
+
+<a name="application-automapping" class="heading"><h4>Page Automapping</h4></a>
+
+The pages automapping option will automatically configure application pages using a
+simple set of rules. This enables you to greatly streamline your configuration file
+as you only need to define pages which don't fit the automapping rules.
+<p/>
+Automapping will attempt to associate each page template (*.htm) file in the web
+application (excluding those under the WEB-INF and click directories) to a Page class.
+Automapped pages are loaded after the manually defined pages are loaded, and 
+manually defined pages taking preference. When automapping is enabled the Click 
+application will log the page mappings when in debug or trace mode.
+<p/>
+For example given a page path to class mapping:
+<pre class="codeConfig" style="background-color: white;">
+<span class="navy">index.htm</span>                     =>  <span class="maroon">com.mycorp.page.Home</span>
+<span class="navy">search.htm</span>                    =>  <span class="maroon">com.mycorp.page.Search</span>
+<span class="navy">contacts/contacts.htm</span>         =>  <span class="maroon">com.mycorp.page.contacts.Contacts</span>
+<span class="navy">security/login.htm</span>            =>  <span class="maroon">com.mycorp.page.security.Login</span>
+<span class="navy">security/logout.htm</span>           =>  <span class="maroon">com.mycorp.page.security.Logout</span>
+<span class="navy">security/change-password.htm</span>  =>  <span class="maroon">com.mycorp.page.security.ChangePassword</span>
+</pre>
+
+This would be defined configured mannually using the package prefix as:
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>"&gt;
+    &lt;page path="<span class="navy">index.htm</span>"                    classname="<span class="maroon">Home</span>"/&gt;
+    &lt;page path="<span class="navy">search.htm</span>"                   classname="<span class="maroon">Search</span>"/&gt;
+    &lt;page path="<span class="navy">contacts/contacts.htm</span>"        classname="<span class="maroon">contacts.Contacts</span>"/&gt;
+    &lt;page path="<span class="navy">security/login.htm</span>"           classname="<span class="maroon">security.Login</span>"/&gt;
+    &lt;page path="<span class="navy">security/logout.htm</span>"          classname="<span class="maroon">security.Logout</span>"/&gt;    
+    &lt;page path="<span class="navy">security/change-password.htm</span>" classname="<span class="maroon">security.ChangePassword</span>"/&gt;    
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
+
+Using automapping you only need to define the Home page which doesn't automatically
+map to index.html.
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
+    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
+
+The page template name to classname convention is:
+<pre class="codeConfig" style="background-color: white;">
+change-password.htm  =>  ChangePassword
+change_password.htm  =>  ChangePassword
+changePassword.htm   =>  ChangePassword
+ChangePassword.htm   =>  ChangePassword
+</pre>
 
 <a name="application-headers" class="heading"><h3>Headers</h3></a>
 

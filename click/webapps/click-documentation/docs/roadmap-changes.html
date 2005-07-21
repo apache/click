@@ -24,21 +24,17 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
+Click is currently being developed with a monthly release cycle. At this stage of
+Click's development new features will be largely driven by user requests.
+<p/> 
+The next version 0.8 is due to be released on the 1st of September 2005. 
+<p/>
+A Release Candiate (RC1) should available in Q4 2005.
+<p/>
+A Commercial CRM application is being built using Click. Some features
+of this application will be incorporated into the Click mainline, the first
+example being a Menu control.
 
-<ul>
-  <li>
-    Version 0.8 will be released on the 1st September 2005. This release will include a new 
-    Menu control.
-  </li>
-  <li>
-    Release Candidate (RC1) is scheduled for release in October 2005.
-  </li>
-  <li>
-    A Commercial CRM application is being built using Click. Some features
-    of this application will be incorporated into the Click mainline, the first
-    example being the Menu control.
-  </li>
-</ul>
 
 <p>&nbsp;</p>
 
@@ -48,13 +44,28 @@
   <dt>Version 0.7 - 1st August 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">Added 
+         <a href="click-api/net/sf/click/control/FileField.html">FileField</a>
+         control for uploading files and modified Form control to support 
+         "multipart/form-data" requests. See the Click Examples 
+         File Upload page for a demonstration [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237942&group_id=82095&atid=565027">1237942</a>].
+      </li>
+      <li class="changes">
+        Added pages <a href="configuration.html#application-automapping">Auto Mapping</a> 
+        configuration option [<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1237397&group_id=82095&atid=565027">1237397</a>]. 
+        This feature can automatically map HTML page
+        templates to Page classes so you dont have to declare them manually in
+        the click.xml configuration file. 
+        <p/>
+        This concept was defined by <a href="http://sourceforge.net/users/amohombe/">Ahmed Mohombe</a>.
+      </li>
       <li class="changes">
         Added 
         <a href="pages.html#page-forwarding">Page Fowarding</a> 
         enabling you to configure the Page to forward the request to.
         This provides similar functionality as Tapestry's <tt>cycle.getPage()</tt>
-        interpage calling technique. See the <a href="index.html">Examples</a> Start page
-        for a demonstration.
+        interpage calling technique. See the Examples Page
+        Flow for a demonstration.
       </li>
       <li class="changes">
         Form rendering improved to include CSS classes "fields", "errors" and "buttons" 
@@ -81,8 +92,7 @@
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">Added AJAX Dynamic HTML and XML request example using
-         the using Rico Ajax library. See the Click 
-         <a href="index.html">Examples</a> AJAX page for a demonstration.
+         the using Rico Ajax library. See the Click Examples AJAX page for a demonstration.
       </li> 
       <li class="change">
          <a href="click-api/net/sf/click/control/Option.html">Option</a> and 
@@ -112,8 +122,7 @@
          <a href="click-api/net/sf/click/control/Form.html#validate">validate</a>
          property has beed added to Form and a <a href="click-api/net/sf/click/control/Field.html#validate()">validate()</a>
          method to Field. Field subclasses have been modified to support optional
-         validation.  See the Click <a href="index.html">Examples</a> Form
-         Properties page for a demonstration.
+         validation.  See the Click Examples Form Properties page for a demonstration.
       </li> 
       <li class="change">Added Session Object utility methods to Context, see 
          <a href="click-api/net/sf/click/Context.html#getSessionObject(java.lang.Class)">getSessionObject</a>.

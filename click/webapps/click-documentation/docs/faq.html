@@ -13,7 +13,20 @@
 <body>
   
 <h1>Frequently Asked Questions</h1>
-
+<ul>
+  <li><a href="#why-click">Why develop a new Web Application Framework?</a>
+  </li> 
+  <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
+  </li> 
+  <li><a href="#localization">How do you internationalize Pages and Control labels?</a>
+  </li>
+  <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
+  </li>
+  <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
+  </li> 
+  <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
+  </li> 
+</ul>
 <p>&nbsp;</p>
 
 <dl>
@@ -111,6 +124,24 @@
    <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
    Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.
+  </dd>
+  
+  
+  <a name="shared-template" class="heading"></a>
+  <dt><b>How can I have many Pages using the same HTML template?</b></dt>
+  <dd>
+   To do this use the Page templating technique detailed in the 
+   <a href="pages.html#page-templating">Page Templating</a> topic. 
+   <p/>
+   Page templating is highly recommended for your web applications, as it provides
+   numerous benefits including:
+   <ul>
+      <li>greatly reduces the amount of HTML you need to maintain</li>
+      <li>ensures you have a common look and feel across you application</li>
+      <li>makes your application more robust, as there is less code to test</li>
+   </ul>
+   For a live demonstation of page templating deploy and run the
+   <a href="examples.html">click-examples</a> application.
   </dd>
   
   <a name="why-velocity" class="heading"></a>
