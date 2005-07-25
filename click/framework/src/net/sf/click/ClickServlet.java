@@ -548,7 +548,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         try {
-            Page newPage = (Page) pageClass.newInstance();
+            Page newPage = newPageInstance(pageClass, request);
 
             newPage.setContext(context);
             newPage.setFormat(clickApp.getPageFormat(path));
@@ -560,6 +560,25 @@ public class ClickServlet extends HttpServlet {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    /**
+     * Return a new Page instance for the given page Class and request. This
+     * method is invoked by 
+     * {@link #createPage(HttpServletRequest, HttpServletResponse, boolean)}
+     * to create new Page objects, and is designed to be overridden by 
+     * applications using Inversion of Control (IoC) frameworks such as
+     * Spring or HiveMind.
+     * 
+     * @param pageClass the page Class mapped to the request path
+     * @param request the servlet request
+     * @return a new Page instance
+     * @throws Exception if an error occured creating the Page
+     */
+    protected Page newPageInstance(Class pageClass, HttpServletRequest request) 
+            throws Exception {
+        
+        return (Page) pageClass.newInstance();
     }
 
     /**
