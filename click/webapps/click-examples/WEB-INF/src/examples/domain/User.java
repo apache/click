@@ -69,4 +69,7 @@ public class User implements Serializable {
     public void setFullname(String fullname) {
         this.fullname = fullname;
     }
+
+    private static final long serialVersionUID = 1L;
+    
 }
