@@ -475,8 +475,6 @@ public class ErrorReport {
      */
     protected String getRenderedSource() {
 
-        final int windowSize = 20;
-
         StringBuffer buffer = new StringBuffer(5*1024);
 
         buffer.append("<pre style='font-family: Courier New, courier;'>");
