@@ -17,7 +17,6 @@ package net.sf.click;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -904,25 +903,6 @@ class ClickApp implements EntityResolver {
 
     // ---------------------------------------------------------- Inner Classes
 
-    private static class TemplateFilter implements FilenameFilter {
-
-        public boolean accept(File dir, String name) {
-            File file = new File(dir.getPath() + File.separator + name);
-
-            if (file.isFile()) {
-                return name.endsWith(".htm");
-            } else {
-                if (name.equals("click")) {
-                    return false;
-                } else if (name.equalsIgnoreCase("WEB-INF")) {
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }
-    }
-
     /**
      * ServletContext log adaptor derived from:
      * org.apache.velocity.tools.view.servlet.ServletLogger
@@ -1095,7 +1075,9 @@ class ClickApp implements EntityResolver {
             // Set pageClass
             String value = element.getAttributeValue("classname");
             if (value != null) {
-                value = pagesPackage + "." + value;
+                if (pagesPackage.trim().length() > 0) {
+                    value = pagesPackage + "." + value;
+                }
             } else {
                 String msg = "No classname defined for page path " + path;
                 throw new RuntimeException(msg);

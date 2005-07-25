@@ -93,4 +93,7 @@ public class CourseBooking implements Serializable  {
     public Date getCreatedAt() {
         return createdAt;
     }
+
+    private static final long serialVersionUID = 1L;
+    
 }

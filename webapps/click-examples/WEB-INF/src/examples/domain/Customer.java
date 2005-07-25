@@ -115,4 +115,6 @@ public class Customer implements Serializable {
         dateJoined = value;
     }
 
+    private static final long serialVersionUID = 1L;
+
 }
