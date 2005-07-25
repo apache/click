@@ -21,6 +21,7 @@ public class FormProperties extends BorderedPage {
 
     /** Form options holder. */
     public static class Options implements Serializable {
+    	static final long serialVersionUID = 1L;
         String buttonAlign = Form.LEFT;
         int columns = 1;
         boolean disabled = false;
@@ -35,6 +36,7 @@ public class FormProperties extends BorderedPage {
 
     /** Form values holder.*/
     public static class Values implements Serializable {
+    	static final long serialVersionUID = 1L;
         String name = "";
         String email = "";
         String investments = "";
