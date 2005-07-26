@@ -169,7 +169,36 @@
   <a name="spring-integration" class="heading"></a>
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
-   The Spring non-web components can be readily used in Click as they can with any framework.
+   The ClickServlet can customized to support applications using Inversion
+   of Control (IoC) frameworks such as Spring and HiveMind.
+   <p/>
+   To use Spring to create Page objects and set services before handing them off 
+   to Click you could override the ClickServlet:
+<pre class="codeJava">
+<span class="kw">public class</span> SpringClickServlet <span class="kw">extends</span> ClickServlet {
+    
+    <span class="cm">/** Spring bean factory. */</span>
+    <span class="kw">protected</span> BeanFactory beanFactory;
+
+    <span class="cm">/**
+     * @see ClickServlet#init()
+     */</span>
+    <span class="kw">public void</span> init() <span class="kw">throws</span>ServletException {
+        <span class="kw">super</span>.init();
+        beanFactory = <span class="kw">new</span> XmlBeanFactory(<span class="kw">new</span> ClassPathResource(<span class="st">"spring-beans.xml"</span>));
+    }
+
+    <span class="cm">/**
+     * @see ClickServlet#newPageInstance(Class, HttpServletRequest)
+     */</span>
+    <span class="kw">protected</span> Page newPageInstance(Class pageClass, HttpServletRequest request) 
+            <span class="kw">throws</span> Exception {
+        <span class="kw">return</span> (Page) beanFactory.getBean(pageClass.getName());
+    }
+} </pre>
+
+   The <a href="click-api/net/sf/click/Page.html#onDestroy()">Page.onDestroy()</a>
+   method can then be used to free any allocated resources to a Page object. 
    <p/>
    The Spring Web MVC Framework however is not compatible with Click. The Spring framework
    uses a low level command pattern design like Struts and WebWork.

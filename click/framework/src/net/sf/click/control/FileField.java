@@ -49,7 +49,7 @@ public class FileField extends Field {
     protected int size = 20;
 
     /** The
-     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
+     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/DefaultFileItem.html">DefaultFileItem</a>
      * after processing a file upload request.
      */
     protected FileItem fileItem;
@@ -150,9 +150,18 @@ public class FileField extends Field {
      */
     public boolean onProcess() {
         fileItem = (FileItem) getContext().getMultiPartFormData().get(getName());
+        
+        if (!validate()) {
+            return true;
+        }
 
         if (fileItem != null) {
-            return invokeListener();
+            if (isRequired() && fileItem.getSize() == 0) {
+                setError(getMessage("file-required-error", getLabel()));
+
+            } else {
+                return invokeListener();
+            }
         }
 
         return true;
