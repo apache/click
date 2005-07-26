@@ -5,6 +5,7 @@ import net.sf.click.control.CreditCardField;
 import net.sf.click.control.DateField;
 import net.sf.click.control.DoubleField;
 import net.sf.click.control.EmailField;
+import net.sf.click.control.FileField;
 import net.sf.click.control.Form;
 import net.sf.click.control.IntegerField;
 import net.sf.click.control.Label;
@@ -103,6 +104,10 @@ public class BigForm extends BorderedPage {
         textArea.setCols(30);
         textArea.setTitle("Please tell us about any special delivery instructions");
         form.add(textArea);
+        
+        FileField fileField = new FileField("Delivery Documents");
+        fileField.setSize(26);
+        form.add(fileField);
 
         Submit okButton = new Submit("    OK    ");
         okButton.setTitle("Submit the form");

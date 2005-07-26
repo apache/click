@@ -261,7 +261,7 @@ public class ClickServlet extends HttpServlet {
      * application configuration file. For example:
      *
      * <pre class="codeConfig">
-     * &lt;page path="click/error.htm" classname="com.mycorp.util.ErrorPage"/&gt; </pre>
+     * &lt;page path="<span class="navy">click/error.htm</span>" classname="<span class="maroon">com.mycorp.util.ErrorPage</span>"/&gt; </pre>
      *
      * If the ErrorPage throws an exception, it will be logged as an error and
      * then be rethrown nested inside a RuntimeException.
@@ -513,7 +513,9 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return a new Page instance for the given request.
+     * Return a new Page instance for the given request. This method will
+     * invoke {@link #newPageInstance(Class, HttpServletRequest)} to create
+     * the Page instance and then set the properties on the page.
      *
      * @param request the servlet request
      * @param response the servlet response
@@ -561,23 +563,30 @@ public class ClickServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
-     * Return a new Page instance for the given page Class and request. This
-     * method is invoked by 
-     * {@link #createPage(HttpServletRequest, HttpServletResponse, boolean)}
-     * to create new Page objects, and is designed to be overridden by 
-     * applications using Inversion of Control (IoC) frameworks such as
-     * Spring or HiveMind.
-     * 
-     * @param pageClass the page Class mapped to the request path
+     * Return a new Page instance for the given page Class and request.
+     * <p/>
+     * This method is designed to be overridden by applications using
+     * Inversion of Control (IocC) frameworks such as Spring or HiveHind.
+     * <p/>
+     * For example a Spring application could override this method and use a
+     * BeanFactory to instantiate new Page objects:
+     * <pre class="codeJava">
+     * <span class="kw">protected</span> Page newPageInstance(Class pageClass, HttpServletRequest request)
+     *       <span class="kw">throws</span> Exception {
+     *
+     *   <span class="kw">return</span> (Page) beanFactory.getBean(pageClass.getName());
+     * } </pre>
+     *
+     * @param pageClass the page Class the request is mapped to
      * @param request the servlet request
-     * @return a new Page instance
-     * @throws Exception if an error occured creating the Page
+     * @return a new Page object
+     * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(Class pageClass, HttpServletRequest request) 
+    protected Page newPageInstance(Class pageClass, HttpServletRequest request)
             throws Exception {
-        
+
         return (Page) pageClass.newInstance();
     }
 

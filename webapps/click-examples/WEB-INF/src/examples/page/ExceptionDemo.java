@@ -69,7 +69,7 @@ public class ExceptionDemo extends BorderedPage {
         return (template != null) ? template : super.getTemplate();
     }
 
-    /*
+    /**
      * Provides a rendering ojbect which will throw a NPE when merged by
      * velocity in the template.
      *

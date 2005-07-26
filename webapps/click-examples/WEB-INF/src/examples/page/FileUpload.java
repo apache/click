@@ -28,24 +28,19 @@ public class FileUpload extends BorderedPage {
         fileField.setSize(40);
         form.add(fileField);
 
-        descField = new TextField("File Description");
-        descField.setRequired(true);
+        descField = new TextField("Description");
         form.add(descField);
 
-        form.add(new Submit("    OK    "));
+        Submit okButton = new Submit("    OK    ");
+        okButton.setListener(this, "onOkClick");
+        form.add(okButton);
 
         Submit cancelButton = new Submit(" Cancel ");
         cancelButton.setListener(this, "onCancelClick");
         form.add(cancelButton);
     }
 
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
-    }
-
-    public void onPost() {
-        System.err.println("here");
+    public boolean onOkClick() {
         if (form.isValid()) {
             FileItem fileItem = fileField.getFileItem();
 
@@ -55,7 +50,12 @@ public class FileUpload extends BorderedPage {
 
             addModel("fileDesc", descField.getValue());
         }
+        return true;
     }
 
+    public boolean onCancelClick() {
+        setRedirect("index.html");
+        return false;
+    }
 }
  
