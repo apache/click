@@ -21,6 +21,11 @@ import examples.domain.CustomerDAO;
  */
 public class AjaxCustomer extends Page {
 
+    /**
+     * Process the AJAX request and return XML customer table.
+     *
+     * @see Page#onGet()
+     */
     public void onGet() {
         String customerId = getContext().getRequest().getParameter("customerId");
 
@@ -29,8 +34,14 @@ public class AjaxCustomer extends Page {
         if (customer != null) {
             addModel("customer", customer);
         }
-
-        setHeader("Content-Type", "text/xml");
     }
 
+    /**
+     * Ensure the Http response Content-type is "text/xml".
+     *
+     * @see Page#getContentType()
+     */
+    public String getContentType() {
+        return "text/xml";
+    }
 }
