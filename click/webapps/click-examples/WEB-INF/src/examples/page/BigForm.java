@@ -104,7 +104,7 @@ public class BigForm extends BorderedPage {
         textArea.setCols(30);
         textArea.setTitle("Please tell us about any special delivery instructions");
         form.add(textArea);
-        
+
         FileField fileField = new FileField("Delivery Documents");
         fileField.setSize(26);
         form.add(fileField);

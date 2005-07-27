@@ -150,7 +150,7 @@ public class FileField extends Field {
      */
     public boolean onProcess() {
         fileItem = (FileItem) getContext().getMultiPartFormData().get(getName());
-        
+
         if (!validate()) {
             return true;
         }

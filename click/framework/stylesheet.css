@@ -98,6 +98,12 @@ a:visited { color: blue; }
     color: #2a00ff;
 }
 
+/* Web resource */
+.wr {
+    font-family: Courier New, courier;
+	color: navy;
+}
+
 /*  form.css */
 
 a.error {

@@ -209,6 +209,30 @@ public class Page {
      * {@link #path} property. The request is forwarded using the
      * RequestDispatcher.
      * <p/>
+     * If forward paths start with a <span class="wr">"/"</span> 
+     * character the forward path is
+     * relative to web applications root context, otherwise the path is
+     * relative to the request's current location.
+     * <p/>
+     * For example given a web application deployed to context <tt>mycorp</tt>
+     * with the pages:
+     * <pre class="codeConfig" style="color:navy">
+     *  /index.htm
+     *  /customer/search.htm
+     *  /customer/details.htm
+     *  /customer/management/add-customer.htm </pre>
+     *
+     * To forward to the customer <tt class="wr">search.htm</tt> page from
+     * the web app root you could set forward as
+     * <tt>setFoward(<span class="navy">"/customer/search.htm"</span>)</tt>
+     * or <tt>setFoward(<span class="navy">"customer/search.htm"</span>)</tt>.
+     * <p/>
+     * If a user was currently viewing the <tt class="wr">add-customer.htm</tt>
+     * to forward to customer <span class="wr">details.htm</span> you could
+     * set forward as
+     * <tt>setFoward(<span class="navy">"/customer/details.htm"</span>)</tt>
+     * or <tt>setFoward(<span class="navy">"../details.htm"</span>)</tt>.
+     * <p/>
      * See also {@link #setPath(String)}, {@link #setRedirect(String)}
      *
      * @param value the path to forward the request to
@@ -375,8 +399,8 @@ public class Page {
      * <p/>
      * If the {@link #redirect} property is not null it will be used to redirect
      * the request in preference to {@link #forward} or {@link #path} properties.
-     * The request is redirected to using the HttpServletResponse
-     * setRedirect() method.
+     * The request is redirected to using the HttpServletResponse.setRedirect() 
+     * method.
      * <p/>
      * See also {@link #getForward()}, {@link #getPath()}
      *
@@ -387,19 +411,29 @@ public class Page {
     }
 
     /**
-     * Set the path to redirect the request to.
+     * Set the location to redirect the request to.
      * <p/>
      * If the {@link #redirect} property is not null it will be used to redirect
      * the request in preference to {@link #forward} or {@link #path} properties.
-     * The request is redirected to using the HttpServletResponse
-     * setRedirect() method.
+     * The request is redirected to using the HttpServletResponse.setRedirect() 
+     * method.
+     * <p/>
+     * If the redirect location is begins with a <tt class="wr">"/"</tt> 
+     * character the redirect location will be prefixed with the web applications 
+     * context path. 
+     * <p/>
+     * For example if an application is deployed to the context 
+     * <tt class="wr">"mycorp"</tt> calling 
+     * <tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
+     * will redirect the request to:
+     * <tt class="wr">"/mycorp/customer/details.htm"</tt>
      * <p/>
      * See also {@link #setForward(String)}, {@link #setPath(String)}
      *
-     * @param value the path to redirect the request to
+     * @param location the path to redirect the request to
      */
-    public void setRedirect(String value) {
-        redirect = value;
+    public void setRedirect(String location) {
+        redirect = location;
     }
 
     /**

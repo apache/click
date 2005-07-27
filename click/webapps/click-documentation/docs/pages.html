@@ -238,13 +238,16 @@ Finally set this page as the page to forward the request to. For example:
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDAO.findByPK(id); 
    
-   EditPage editPage = (EditPage) getContext().createPage(<span class="st">"edit-customer.htm"</span>);
+   EditPage editPage = (EditPage) getContext().createPage(<span class="st">"/edit-customer.htm"</span>);
    editPage.setCustomer(customer);
    setForward(editPage);
    
    <span class="kw">return false</span>;
 } 
 </pre>
+
+When creating a page with the <tt>createPage()</tt> method ensure you prefix
+the page path with the <tt class="st">"/"</tt> character.
 
 <a name="page-template-path" class="heading"><h3>Template Path</h3></a>
 
@@ -288,10 +291,20 @@ page is provided below:
 
 <pre class="codeJava">
 <span class="kw">public boolean</span> onLogoutClick() {
-   setRedirect(<span class="st">"logout.htm"</span>);
+   setRedirect(<span class="st">"/logout.htm"</span>);
    <span class="kw">return false</span>;
 } 
 </pre>
+
+If the redirect location is begins with a <span class="wr">"/"</span> 
+character the redirect location will be prefixed with the web applications 
+context path. 
+<p/>
+For example if an application is deployed to the context 
+<span class="wr">"mycorp"</span> calling 
+<tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
+will redirect the request to:
+<span class="wr">"/mycorp/customer/details.htm"</span>
 
 <h4>Redirect Parameter Passing</h4>
 
