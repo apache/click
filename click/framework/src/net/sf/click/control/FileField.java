@@ -32,12 +32,24 @@ import org.apache.commons.fileupload.FileUploadBase;
  *
  * The FileField control uses the Jakarta Commons
  * <a href="http://jakarta.apache.org/commons/fileupload/">FileUpload</a>
- * library to provide file processing functionality.  Please see the
- * <a href="http://jakarta.apache.org/commons/fileupload/using.html">Using FileUpload</a>
- * topic for examples.
+ * library to provide file processing functionality. Please also see:
+ * <ul>
+ * <li><a href="http://jakarta.apache.org/commons/fileupload/using.html">Jakarta Commons - Using FileUpload</a></li>
+ * <li><a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867 - Form-based File Upload in HTML</a></li>
+ * <li><a href="http://www.cs.tut.fi/~jkorpela/forms/file.html">Jukka Korpela - File input (or "upload") in HTML forms</a></li>
+ * <li><a href="https://www.sdn.sap.com/sdn/weblogs.sdn?blog=/pub/wlg/684">SDN - INPUT TYPE="FILE" and your options...</a></li>
+ * </ul>
  * <p/>
- * Also see Internet <a href="http://www.ietf.org/rfc/rfc1867.txt">rfc1867</a>
- * on Form-based File Upload in HTML.
+ * Also note Browsers enforce the JavaScript <tt>value</tt> property as readonly
+ * to prevent script based stealing of users files. However you can make the
+ * field invisible by setting the CSS display attribute.
+ *
+ * <pre class="codeHtml">
+ * &lt;form method="POST" enctype="multipart/form-data"&gt;
+ *    &lt;input type="file" name="myfile" <span class='st'>style</span>=<span class='maroon'>"display:none"</span> onchange="fileName=this.value"&gt;
+ *    &lt;input type="button" value="open file" onclick="myfile.click()"&gt;
+ *    &lt;input type="button" value="show value" onclick="alert(fileName)"&gt;
+ * &lt;/form&gt; </pre>
  *
  * @author Malcolm Edgar
  */
