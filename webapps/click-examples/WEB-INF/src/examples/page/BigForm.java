@@ -124,7 +124,6 @@ public class BigForm extends BorderedPage {
     }
 
     public boolean onCancelClick() {
-
         setRedirect("index.html");
         return false;
     }

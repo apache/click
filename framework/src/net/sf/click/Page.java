@@ -209,7 +209,7 @@ public class Page {
      * {@link #path} property. The request is forwarded using the
      * RequestDispatcher.
      * <p/>
-     * If forward paths start with a <span class="wr">"/"</span> 
+     * If forward paths start with a <span class="wr">"/"</span>
      * character the forward path is
      * relative to web applications root context, otherwise the path is
      * relative to the request's current location.
@@ -399,7 +399,7 @@ public class Page {
      * <p/>
      * If the {@link #redirect} property is not null it will be used to redirect
      * the request in preference to {@link #forward} or {@link #path} properties.
-     * The request is redirected to using the HttpServletResponse.setRedirect() 
+     * The request is redirected to using the HttpServletResponse.setRedirect()
      * method.
      * <p/>
      * See also {@link #getForward()}, {@link #getPath()}
@@ -415,15 +415,15 @@ public class Page {
      * <p/>
      * If the {@link #redirect} property is not null it will be used to redirect
      * the request in preference to {@link #forward} or {@link #path} properties.
-     * The request is redirected to using the HttpServletResponse.setRedirect() 
+     * The request is redirected to using the HttpServletResponse.setRedirect()
      * method.
      * <p/>
-     * If the redirect location is begins with a <tt class="wr">"/"</tt> 
-     * character the redirect location will be prefixed with the web applications 
-     * context path. 
+     * If the redirect location is begins with a <tt class="wr">"/"</tt>
+     * character the redirect location will be prefixed with the web applications
+     * context path.
      * <p/>
-     * For example if an application is deployed to the context 
-     * <tt class="wr">"mycorp"</tt> calling 
+     * For example if an application is deployed to the context
+     * <tt class="wr">"mycorp"</tt> calling
      * <tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
      * will redirect the request to:
      * <tt class="wr">"/mycorp/customer/details.htm"</tt>

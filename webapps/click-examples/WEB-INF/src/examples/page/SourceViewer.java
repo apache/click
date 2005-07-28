@@ -33,6 +33,12 @@ public class SourceViewer extends BorderedPage {
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
             "i", "u", "ul", "ol", "li", "form" };
 
+    private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
+        "headers", "header", "format", "mode", "type", "?xml", "!DOCTYPE",
+        "web-app", "display-name", "description", "servlet-mapping",
+        "servlet-name", "servlet-class", "servlet", "load-on-startup",
+        "url-pattern", "welcome-file-list", "welcome-file" };
+
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
             "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
@@ -144,6 +150,14 @@ public class SourceViewer extends BorderedPage {
             String renderedDollar = "<font color=\"red\">$</font>";
 
             line = StringUtils.replace(line, "$", renderedDollar);
+
+        } else if (isXml) {
+            line = StringEscapeUtils.escapeHtml(line);
+
+            for (int i = 0; i < XML_KEYWORDS.length; i++) {
+                String keyword = XML_KEYWORDS[i];
+                line = renderHtmlKeywords(line, keyword);
+            }
 
         } else {
             line = StringEscapeUtils.escapeHtml(line);
