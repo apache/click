@@ -528,6 +528,29 @@ public class Form implements Control {
             } else {
                 fieldList.remove(field);
             }
+            System.err.println(field);
+        }
+    }
+
+    /**
+     * Remove the named field from the form.
+     *
+     * @param name the name of the field to remove from the form
+     */
+    public void removeField(String name) {
+        remove(getField(name));
+    }
+
+    /**
+     * Remove the list of named fields from the form.
+     *
+     * @param fieldNames the list of field names to remove from the form
+     */
+    public void removeFields(List fieldNames) {
+        if (fieldNames != null) {
+            for (int i = 0; i < fieldNames.size(); i++) {
+                removeField(fieldNames.get(i).toString());
+            }
         }
     }
 

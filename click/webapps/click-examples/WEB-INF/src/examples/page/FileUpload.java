@@ -5,8 +5,6 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 
-import org.apache.commons.fileupload.FileItem;
-
 /**
  * Provides File Upload example using the FileField control.
  *
@@ -42,12 +40,7 @@ public class FileUpload extends BorderedPage {
 
     public boolean onOkClick() {
         if (form.isValid()) {
-            FileItem fileItem = fileField.getFileItem();
-
-            if (fileItem != null) {
-                addModel("fileItem", fileItem);
-            }
-
+            addModel("fileItem", fileField.getFileItem());
             addModel("fileDesc", descField.getValue());
         }
         return true;
