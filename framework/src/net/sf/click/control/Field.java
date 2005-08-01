@@ -47,6 +47,7 @@ import net.sf.click.util.ClickUtils;
  * thrown.
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public abstract class Field implements Control {
 

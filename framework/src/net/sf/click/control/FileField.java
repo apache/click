@@ -52,6 +52,7 @@ import org.apache.commons.fileupload.FileUploadBase;
  * &lt;/form&gt; </pre>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class FileField extends Field {
 

@@ -48,6 +48,7 @@ package net.sf.click.control;
  * @see Submit
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Reset extends Button {
 

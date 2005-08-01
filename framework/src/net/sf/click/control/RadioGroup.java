@@ -83,7 +83,8 @@ import net.sf.click.Context;
  *
  * @see Radio
  *
- * @author Malcolm
+ * @author Malcolm Edgar
+ * @version $Id$
  */
 public class RadioGroup extends Field {
 
