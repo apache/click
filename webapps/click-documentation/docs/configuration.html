@@ -345,10 +345,12 @@ The optional <tt>mode</tt> element defines the application logging and caching m
 <pre class="codeDtd">
 &lt;!ELEMENT mode (#PCDATA)&gt;
     &lt;ATTLIST mode value (<span class="blue">production</span>|<span class="blue">profile</span>|<span class="blue">development</span>|<span class="blue">debug</span>|<span class="blue">trace</span>) "development"&gt;
+    &lt;ATTLIST mode logto (<span class="blue">console</span>|<span class="blue">servlet</span>) "console"&gt;
 </pre>
 
-By default Click applications run in <tt>development</tt> mode which switches off page
-template caching and provides <tt>INFO</tt> level logging. 
+By default Click applications run in <tt>development</tt> mode, which switches off page
+template caching, and the logging level is set to <tt>INFO</tt>. Also by default 
+log messages are sent to the console [System.out]. 
 <p/>
 To change the default application mode configure a mode element in the click-app 
 descriptor. For example to specify <tt>production</tt> mode you would add the 
@@ -435,12 +437,21 @@ a running application server and see the changes immediately. Note however, this
 should <b>not</b> be used for production as Velocity can use a lot of memory when 
 introspecting templates and template reloading is significantly slower.
 
-<h4>Click and Velocity Logging</h4>
+<a name="click-logging" class="heading"><h4>Click and Velocity Logging</h4></a>
 
-The Click and Velocity runtimes are send their logging messages to the 
-<a href="servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext</a>
-log.
+The Click and Velocity runtimes use 
+<a target="topic" href="click-api/net/sf/click/util/ClickLogger.html">ClickLogger</a>  
+for logging messages. 
 <p/>
+By default the runtime loggers will send messages to the console [System.out]. 
+To configure the loggers to send their logging messages to the 
+<a href="servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext.log</a>
+set the mode <span class="blue">logto</span> attribute. For example:
+
+<pre class="codeConfig">
+&lt;mode value="production" <span class="blue">logto</span>="<span class="red">servlet</span>"&gt;
+</pre>
+
 Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays
