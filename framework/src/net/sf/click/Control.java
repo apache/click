@@ -24,6 +24,7 @@ package net.sf.click;
  * <tt>toString()</tt> method.
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public interface Control {
  

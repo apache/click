@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,6 +75,7 @@ import net.sf.click.Page;
  * </ul>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class ErrorPage extends Page {
 
