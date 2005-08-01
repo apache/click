@@ -34,7 +34,7 @@ public class SourceViewer extends BorderedPage {
             "i", "u", "ul", "ol", "li", "form" };
 
     private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
-        "headers", "header", "format", "mode", "type", "?xml", "!DOCTYPE",
+        "headers", "header", "format", "mode", "type",
         "web-app", "display-name", "description", "servlet-mapping",
         "servlet-name", "servlet-class", "servlet", "load-on-startup",
         "url-pattern", "welcome-file-list", "welcome-file" };
@@ -156,7 +156,7 @@ public class SourceViewer extends BorderedPage {
 
             for (int i = 0; i < XML_KEYWORDS.length; i++) {
                 String keyword = XML_KEYWORDS[i];
-                line = renderHtmlKeywords(line, keyword);
+                line = renderXmlKeywords(line, keyword);
             }
 
         } else {
@@ -223,8 +223,33 @@ public class SourceViewer extends BorderedPage {
         return line;
     }
 
+    private String renderXmlKeywords(String line, String token) {
+
+        String markupToken = "&lt;" + token + "&gt;";
+        String renderedToken = "&lt;" + renderXmlToken(token) + "&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;" + token + "/&gt;";
+        renderedToken = "&lt;" + renderXmlToken(token) + "/&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;/" + token + "&gt;";
+        renderedToken = "&lt;/" + renderXmlToken(token) + "&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;" + token + " ";
+        renderedToken = "&lt;" + renderXmlToken(token) + " ";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        return line;
+    }
+
     private String renderHtmlToken(String token) {
         return "<font color=\"navy\">" + token + "</font>";
+    }
+
+    private String renderXmlToken(String token) {
+        return "<font color=\"blue\">" + token + "</font>";
     }
 
     private String renderVelocityToken(String token) {
