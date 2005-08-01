@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,6 +63,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * format object will be created for every new Page.
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Format {
 

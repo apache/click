@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
 /**
  * Provides the Page request event handler class.
  * <p/>
@@ -59,6 +58,7 @@ import java.util.ResourceBundle;
  * </ul>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Page {
 
