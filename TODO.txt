@@ -1,0 +1,18 @@
+CODE
+* Menu control
+* Table control
+* Select can have multiple values and this need to be resolved with multpart request
+* improve exception handling for method not found, walk up stack and find class
+
+BUGS
+
+DOCUMENTATION
+* update Control in diagrams, update Control classes diagram
+* add excludes to FAQ
+
+VELOCITY
+* get VelocityEngine and RuntimeService changes checked in
+* get Parser, ParsingException, ParsingErrorException, Template checked in
+* get Parse checked in
+
+
