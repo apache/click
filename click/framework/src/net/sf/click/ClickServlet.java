@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
 import net.sf.click.util.SessionMap;
@@ -86,6 +87,7 @@ import org.apache.velocity.util.SimplePool;
  * See the User Guide for information on how to configure the application mode.
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class ClickServlet extends HttpServlet {
 
@@ -110,7 +112,7 @@ public class ClickServlet extends HttpServlet {
     protected ClickApp clickApp;
 
     /** The servlet logger. */
-    protected ClickApp.Logger logger;
+    protected ClickLogger logger;
 
     /** The page creator factory. */
     protected final PageMaker pageMaker = new PageMaker();
@@ -131,7 +133,7 @@ public class ClickServlet extends HttpServlet {
             // Initialize the click application.
             clickApp = new ClickApp(getServletContext());
 
-            logger = clickApp.getLog();
+            logger = clickApp.getLogger();
 
             if (logger.isInfoEnabled()) {
                 logger.info("initialized in " + clickApp.getModeValue() + " mode");
@@ -220,7 +222,7 @@ public class ClickServlet extends HttpServlet {
             while (i.hasNext()) {
                 String name = i.next().toString();
                 String value = requestParams.get(name).toString();
-                logger.trace(name + "=" + value);
+                logger.trace("   " + name + "=" + value);
             }
         }
 

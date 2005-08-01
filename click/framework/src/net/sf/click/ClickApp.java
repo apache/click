@@ -32,8 +32,8 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.velocity.Template;
@@ -41,7 +41,6 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.log.LogSystem;
-import org.apache.velocity.tools.view.servlet.ServletLogger;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -57,6 +56,7 @@ import org.xml.sax.SAXException;
  * page templates.
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 class ClickApp implements EntityResolver {
 
@@ -137,7 +137,7 @@ class ClickApp implements EntityResolver {
     private Class formatClass;
 
     /** The application logger. */
-    private final Logger logger;
+    private final ClickLogger logger;
 
     /**
      * The application mode:
@@ -164,7 +164,7 @@ class ClickApp implements EntityResolver {
 
         servletContext = context;
 
-        logger = new Logger(servletContext);
+        logger = new ClickLogger();
 
         InputStream inputStream =
             servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
@@ -210,10 +210,10 @@ class ClickApp implements EntityResolver {
 
             // Turn down the Velocity logging level
             if (mode == DEBUG || mode == TRACE) {
-                String loggerKey = ServletLogger.class.getName();
-                ServletLogger servletLogger = (ServletLogger)
-                    velocityEngine.getApplicationAttribute(loggerKey);
-                servletLogger.setLogLevel(LogSystem.WARN_ID);
+              String loggerKey = ClickLogger.class.getName();
+              ClickLogger clickLog = (ClickLogger)
+                  velocityEngine.getApplicationAttribute(loggerKey);
+              clickLog.setLevel(ClickLogger.WARN_ID);
             }
 
             // Cache page templates.
@@ -251,7 +251,7 @@ class ClickApp implements EntityResolver {
      *
      * @return the application logger.
      */
-    Logger getLog() {
+    ClickLogger getLogger() {
         return logger;
     }
 
@@ -507,27 +507,42 @@ class ClickApp implements EntityResolver {
         }
 
         // Set Click and Velocity log levels
-        int clickLogLevel = Logger.INFO_ID;
+        int clickLogLevel = ClickLogger.INFO_ID;
         Integer velocityLogLevel = new Integer(LogSystem.ERROR_ID);
 
         if (mode == PRODUCTION) {
-            clickLogLevel = Logger.WARN_ID;
+            clickLogLevel = ClickLogger.WARN_ID;
 
         } else if (mode == DEVELOPMENT) {
             velocityLogLevel = new Integer(LogSystem.WARN_ID);
 
         } else if (mode == DEBUG) {
-            clickLogLevel = Logger.DEBUG_ID;
+            clickLogLevel = ClickLogger.DEBUG_ID;
             velocityLogLevel = new Integer(LogSystem.WARN_ID);
 
         } else if (mode == TRACE) {
-            clickLogLevel = Logger.TRACE_ID;
+            clickLogLevel = ClickLogger.TRACE_ID;
             velocityLogLevel = new Integer(LogSystem.INFO_ID);
         }
 
         logger.setLevel(clickLogLevel);
         velocityEngine.setApplicationAttribute
-            (ServletLogger.LOG_LEVEL, velocityLogLevel);
+            (ClickLogger.LOG_LEVEL, velocityLogLevel);
+
+        // Configure loggig to console or servlet context.
+        String logto = modeElm.getAttributeValue("logto", "console");
+
+        if (logto.equalsIgnoreCase("servlet")) {
+            logger.setServletContext(servletContext);
+            velocityEngine.setApplicationAttribute
+                (ClickLogger.LOG_LEVEL, "servlet");
+
+        } else if (logto.equalsIgnoreCase("console")) {
+            // Do nothing
+
+        } else {
+            logger.warn("Invalid mode logto attribute:" + logto);
+        }
     }
 
     private void loadDefaultPages() throws ClassNotFoundException {
@@ -705,7 +720,7 @@ class ClickApp implements EntityResolver {
         }
 
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                     ServletLogger.class.getName());
+                     ClickLogger.class.getName());
 
         // If 'macro.vm' exists set it as default VM library, otherwise use
         // 'click/VM_global_library.vm'
@@ -902,145 +917,6 @@ class ClickApp implements EntityResolver {
     }
 
     // ---------------------------------------------------------- Inner Classes
-
-    /**
-     * ServletContext log adaptor derived from:
-     * org.apache.velocity.tools.view.servlet.ServletLogger
-     *
-     * @author Malcolm Edgar
-     */
-    static class Logger {
-
-        final static int TRACE_ID = LogSystem.DEBUG_ID - 1;
-
-        final static int DEBUG_ID = LogSystem.DEBUG_ID;
-
-        final static int INFO_ID = LogSystem.INFO_ID;
-
-        final static int WARN_ID = LogSystem.WARN_ID;
-
-        final static int ERROR_ID = LogSystem.ERROR_ID;
-
-        static final String PREFIX = " Click";
-
-        static final String TRACE_PREFIX = " [trace] ";
-
-        ServletContext servletContext = null;
-
-        int logLevel = DEBUG_ID;
-
-        private Logger(ServletContext context) {
-            servletContext = context;
-        }
-
-        void debug(Object message) {
-            log(DEBUG_ID, String.valueOf(message));
-        }
-
-        void debug(Object message, Throwable error) {
-            log(DEBUG_ID, String.valueOf(message), error);
-        }
-
-        void error(String message) {
-            log(ERROR_ID, message);
-        }
-
-        void error(Object message, Throwable error) {
-            log(ERROR_ID, String.valueOf(message), error);
-        }
-
-        void info(Object message) {
-            log(INFO_ID, String.valueOf(message));
-        }
-
-        void trace(Object message) {
-            log(TRACE_ID, String.valueOf(message));
-        }
-
-        void trace(Object message, Throwable error) {
-            log(TRACE_ID, String.valueOf(message), error);
-        }
-
-        void warn(Object message) {
-            log(WARN_ID, String.valueOf(message));
-        }
-
-        void warn(Object message, Throwable error) {
-            log(WARN_ID, String.valueOf(message), error);
-        }
-
-        boolean isTraceEnabled() {
-            return logLevel <= TRACE_ID;
-        }
-
-        boolean isDebugEnabled() {
-            return logLevel <= DEBUG_ID;
-        }
-
-        boolean isInfoEnabled() {
-            return logLevel <= INFO_ID;
-        }
-
-        private void setLevel(int level) {
-            logLevel = level;
-        }
-
-        private void log(int level, String message) {
-            if (level < logLevel) {
-                return;
-            }
-
-            if (level == LogSystem.WARN_ID) {
-                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message);
-            }
-            else if (level == LogSystem.INFO_ID){
-                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message);
-            }
-            else if (level == LogSystem.DEBUG_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message);
-            }
-            else if (level == LogSystem.ERROR_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message);
-            }
-            else if (level == TRACE_ID) {
-                servletContext.log( PREFIX + TRACE_PREFIX + message);
-            }
-        }
-
-        private void log(int level, String message, Throwable error) {
-            if (level < logLevel) {
-                return;
-            }
-
-            Throwable cause = null;
-            if (error != null) {
-                if (error instanceof ServletException) {
-                    cause = ((ServletException) error).getRootCause();
-                }
-                if (cause == null && error.getCause() != null) {
-                    cause = error.getCause();
-                } else {
-                    cause = error;
-                }
-            }
-
-            if (level == LogSystem.WARN_ID) {
-                servletContext.log(PREFIX + RuntimeConstants.WARN_PREFIX + message, cause);
-            }
-            else if (level == LogSystem.INFO_ID){
-                servletContext.log( PREFIX + RuntimeConstants.INFO_PREFIX + message, cause);
-            }
-            else if (level == LogSystem.DEBUG_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.DEBUG_PREFIX + message, cause);
-            }
-            else if (level == LogSystem.ERROR_ID) {
-                servletContext.log( PREFIX + RuntimeConstants.ERROR_PREFIX + message, cause);
-            }
-            else if (level == TRACE_ID) {
-                servletContext.log( PREFIX + TRACE_PREFIX + message, cause);
-            }
-        }
-    }
 
     private static class PageElm {
 
