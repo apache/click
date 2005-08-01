@@ -35,6 +35,7 @@ import java.util.List;
  * @see Option
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class OptionGroup {
 

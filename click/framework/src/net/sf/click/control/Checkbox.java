@@ -32,7 +32,8 @@ package net.sf.click.control;
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
- * @author Malcolm
+ * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Checkbox extends Field {
 

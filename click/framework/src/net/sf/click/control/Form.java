@@ -329,6 +329,7 @@ import org.apache.commons.lang.StringUtils;
  * @see Submit
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Form implements Control {
 

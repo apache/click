@@ -84,6 +84,7 @@ import net.sf.click.util.ClickUtils;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class HiddenField extends Field {
 

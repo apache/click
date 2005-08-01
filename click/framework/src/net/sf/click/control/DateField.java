@@ -55,6 +55,7 @@ import java.util.Date;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class DateField extends TextField {
 

@@ -31,6 +31,7 @@ package net.sf.click.control;
  * &lt;tr&gt;&lt;td colspan='2' align='left'&gt;&lt;hr/&gt;&lt;/td&gt;&lt;/tr&gt; </pre>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Label extends Field {
 

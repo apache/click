@@ -34,7 +34,8 @@ package net.sf.click.control;
  *
  * @see RadioGroup
  *
- * @author Malcolm
+ * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Radio extends Field {
 

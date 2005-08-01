@@ -43,6 +43,7 @@ package net.sf.click.control;
  *    href="../../../../../html/interact/forms.html#h-17.7">TEXTAREA</a>
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class TextArea extends Field {
 

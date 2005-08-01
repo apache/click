@@ -52,6 +52,7 @@ import net.sf.click.util.ClickUtils;
  * @see Submit
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Button extends Field {
 

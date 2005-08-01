@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2004-2005 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -145,6 +145,7 @@ import net.sf.click.util.ClickUtils;
  * @see Submit
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class ActionLink implements Control {
 
@@ -191,7 +192,7 @@ public class ActionLink implements Control {
      * Create an action link for the given name.
      *
      * @param name the action link name
-     * @throws IllegalArgumentException if the name.
+     * @throws IllegalArgumentException if the name is null
      */
     public ActionLink(String name) {
         setName(name);

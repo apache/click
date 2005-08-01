@@ -92,6 +92,7 @@ import java.util.List;
  * @see OptionGroup
  *
  * @author Malcolm Edgar
+ * @version $Id$
  */
 public class Option {
 
