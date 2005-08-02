@@ -25,7 +25,9 @@
   <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
   </li> 
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
-  </li> 
+  </li>
+  <li><a href="#exclude-fields">How do you exclude some fields from a Form?</a>
+  </li>  
 </ul>
 <p>&nbsp;</p>
 
@@ -217,6 +219,22 @@ public interface Controller {
   Click uses higher level design constructs focusing on Pages and Controls. Click uses its
   own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
   which are Clicks plugin points.
+  </dd>
+  
+  <a name="exclude-fields" class="heading"></a>
+  <dt><b>How do you exclude some fields from a Form?</b></dt>
+  <dd>
+   To exclude some fields from being displayed in a shared Form class use the
+   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   method. 
+   <p/>
+   You can even do this in your page template. Just make sure you call you call 
+   it before $form renders itself. For example:
+<pre class="codeHtml">
+  <span class="red">$</span><span class="blue">form</span>.<span class="blue">removeFields</span>(["field11", "field15", "field22"])
+
+  <span class="red">$</span><span class="blue">form</span>
+</pre>
   </dd>
   
 </dl>
