@@ -22,7 +22,10 @@ import net.sf.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * TODO: column header
+ * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
+ * renderer.
+ * <p/>
+ * PLEASE NOTE: the table Column is undergoing preliminary development
  *
  * @see Table
  *
@@ -38,6 +41,9 @@ public class Column {
 
     /** The column table data &lt;td&gt; CSS style attribute. */
     protected String dataStyle;
+
+    /** The column row decorator. */
+    protected Decorator decorator;
 
     /** The CSS class attribute of the column header. */
     protected String headerClass;
@@ -103,6 +109,24 @@ public class Column {
      */
     public void setDataStyle(String style) {
         dataStyle = style;
+    }
+
+    /**
+     * Return the row column &lt;td&gt; decorator.
+     *
+     * @return the row column &lt;td&gt; decorator
+     */
+    public Decorator getDecorator() {
+        return decorator;
+    }
+
+    /**
+     * Set the row column &lt;td&gt; decorator.
+     *
+     * @param decorator the row column &lt;td&gt; decorator
+     */
+    public void setDecorator(Decorator decorator) {
+        this.decorator = decorator;
     }
 
     /**
@@ -244,5 +268,28 @@ public class Column {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // ------------------------------------------------------- Inner Interfaces
+
+    /**
+     * Provides a Column table data &lt;td&gt; row object decorator.
+     * <p/>
+     * PLEASE NOTE: the table column Decorator is undergoing preliminary
+     * development
+     *
+     * @author Malcolm Edgar
+     */
+    public interface Decorator {
+
+        /**
+         * Return a column table data &lt;td&gt; element for the given row
+         * object. Please note the passed in row object is the entire row object,
+         * not the row column property.
+         *
+         * @param row the row object to render
+         * @return a column table data &lt;td&gt; element string
+         */
+        public String toTableData(Object row);
     }
 }

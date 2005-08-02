@@ -25,7 +25,11 @@ import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
 /**
- * Provides a HTML Table control: &lt;table&gt;
+ * Provides a HTML Table control: &lt;table&gt;.
+ * <p/>
+ * PLEASE NOTE: the Table control is undergoing preliminary development
+ *
+ * @see Column
  *
  * @author Malcolm Edgar
  * @version $Id$
