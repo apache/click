@@ -152,7 +152,6 @@
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="help                  display the Help message"/>  
       <echo message="javadoc               create Javadoc HTML files"/> 
-      <echo message="setup-tomcat-logging  setup Tomcat logging configuration"/>
       <echo/>
       <echo/>  
       <echo message="Please ensure you have configured build.properties"/> 
@@ -206,12 +205,6 @@
       <copy file="framework/stylesheet.css"
       	   overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
-   </target>   
-
-   <target name="setup-tomcat-logging" description="setup Tomcat logging configuration">
-      <copy todir="${dir.tomcat}" verbose="true">
-         <fileset dir="server/tomcat"/>  
-      </copy>
-   </target>  
+   </target>
    
 </project>
