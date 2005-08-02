@@ -485,6 +485,8 @@ class ClickApp implements EntityResolver {
     private void loadMode(Element rootElm) {
         Element modeElm = rootElm.getChild("mode");
 
+        String logto = "console";
+
         if (modeElm != null) {
             String modeValue = modeElm.getAttributeValue("value");
 
@@ -502,6 +504,10 @@ class ClickApp implements EntityResolver {
                 logger.error("invalid application mode: " + mode);
                 mode = DEBUG;
             }
+
+            // Configure loggig to console or servlet context.
+            logto = modeElm.getAttributeValue("logto", "console");
+
         } else {
             mode = DEVELOPMENT;
         }
@@ -529,19 +535,18 @@ class ClickApp implements EntityResolver {
         velocityEngine.setApplicationAttribute
             (ClickLogger.LOG_LEVEL, velocityLogLevel);
 
-        // Configure loggig to console or servlet context.
-        String logto = modeElm.getAttributeValue("logto", "console");
-
         if (logto.equalsIgnoreCase("servlet")) {
             logger.setServletContext(servletContext);
             velocityEngine.setApplicationAttribute
-                (ClickLogger.LOG_LEVEL, "servlet");
+                (ClickLogger.LOG_TO, "servlet");
 
         } else if (logto.equalsIgnoreCase("console")) {
             // Do nothing
 
         } else {
-            logger.warn("Invalid mode logto attribute:" + logto);
+            String msg = "Invalid mode logto attribute '" + logto +
+                         "' logging to console instead.";
+            logger.warn(msg);
         }
     }
 
