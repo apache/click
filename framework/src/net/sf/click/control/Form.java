@@ -492,25 +492,25 @@ public class Form implements Control {
      * Button instances will also be added to the {@link #buttonList} while
      * all others field types will also be added to the {@link #fieldList}.
      *
-     * @param field the field to add to the form.
+     * @param field the field to add to the form
      * @throws IllegalArgumentException if the form already contains a field
-     * or button with the same name as the added field
+     * or button with the same name
      */
     public void add(Field field) {
         if (field == null) {
             throw new IllegalArgumentException("field parameter cannot be null");
         }
-        if (fields.containsKey(field.getName()) && !(field instanceof Label)) {
+        if (getFields().containsKey(field.getName()) && !(field instanceof Label)) {
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
         }
 
         if (field instanceof Button) {
-            buttonList.add(field);
+            getButtonList().add(field);
         } else {
-            fieldList.add(field);
+            getFieldList().add(field);
         }
-        fields.put(field.getName(), field);
+        getFields().put(field.getName(), field);
         field.setForm(this);
         field.setContext(getContext());
     }
@@ -521,15 +521,14 @@ public class Form implements Control {
      * @param field the field to remove from the form
      */
     public void remove(Field field) {
-        if (field != null && fields.containsKey(field.getName())) {
+        if (field != null && getFields().containsKey(field.getName())) {
             field.setForm(null);
-            fields.remove(field.getName());
+            getFields().remove(field.getName());
             if (field instanceof Button) {
-                buttonList.remove(field);
+                getButtonList().remove(field);
             } else {
-                fieldList.remove(field);
+                getFieldList().remove(field);
             }
-            System.err.println(field);
         }
     }
 
