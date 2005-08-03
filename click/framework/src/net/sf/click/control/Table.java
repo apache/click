@@ -18,7 +18,11 @@ package net.sf.click.control;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+
+import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -27,22 +31,37 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a HTML Table control: &lt;table&gt;.
  * <p/>
- * PLEASE NOTE: the Table control is undergoing preliminary development
+ * <b>PLEASE NOTE</b>: the Table control is undergoing preliminary development 
+ * and is subject to significant change
  *
  * @see Column
+ * @see Decorator
  *
  * @author Malcolm Edgar
  * @version $Id$
  */
 public class Table implements Control {
 
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The click table properties bundle name: &nbsp; <tt>click-table</tt>
+     */
+    protected static final String TABLE_PROPERTIES = "click-table";
+    
+    protected static final String TABLE_IMPORTS =
+        "<link rel='stylesheet' type='text/css' href='$/click/table.css' title='style'>\n";
+
     // ----------------------------------------------------- Instance Variables
 
     /** The Table attributes Map. */
-    protected Map attributes;
+    protected Map attributes = new HashMap();
+
+    /** The map of Table Columns keyed by column name. */
+    protected Map columns = new HashMap();
 
     /** The list of Table Columns. */
-    protected List columns;
+    protected List columnList = new ArrayList();
 
     /** The request context. */
     protected Context context;
@@ -50,8 +69,8 @@ public class Table implements Control {
     /** The control name. */
     protected String name;
 
-    /** The Table rows. */
-    protected List rows;
+    /** The list Table rows. */
+    protected List rowList;
 
     // ----------------------------------------------------------- Constructors
 
@@ -63,6 +82,7 @@ public class Table implements Control {
      */
     public Table(String name) {
         setName(name);
+        setAttribute("class", "click");
     }
     // ------------------------------------------------------ Public Attributes
 
@@ -74,11 +94,7 @@ public class Table implements Control {
      * @return the Table HTML attribute
      */
     public String getAttribute(String name) {
-        if (attributes != null) {
-            return (String) attributes.get(name);
-        } else {
-            return null;
-        }
+        return (String) getAttributes().get(name);
     }
 
     /**
@@ -106,14 +122,10 @@ public class Table implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-
         if (value != null) {
-            attributes.put(name, value);
+            getAttributes().put(name, value);
         } else {
-            attributes.remove(name);
+            getAttributes().remove(name);
         }
     }
 
@@ -123,9 +135,6 @@ public class Table implements Control {
      * @return the table attributes Map.
      */
     public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
         return attributes;
     }
 
@@ -135,24 +144,75 @@ public class Table implements Control {
      * @return true if the Table has attributes on false otherwise
      */
     public boolean hasAttributes() {
-        if (attributes != null && !attributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return !getAttributes().isEmpty();
     }
 
+    /**
+     * Add the column to the table. The column will be added to the
+     * {@link #columns} Map using its name.
+     *
+     * @param column the column to add to the table
+     * @throws IllegalArgumentException if the table already contains a column
+     * with the same name
+     */
     public void addColumn(Column column) {
         if (column == null) {
-            throw new IllegalArgumentException("Null column parameter");
+            throw new IllegalArgumentException("column parameter cannot be null");
         }
-        getColumns().add(column);
+        if (getColumns().containsKey(column.getName())) {
+            throw new IllegalArgumentException
+                ("Table already contains column named: " + column.getName());
+        }
+
+        getColumns().put(column.getName(), column);
+        getColumnList().add(column);
     }
 
-    public List getColumns() {
-        if (columns == null) {
-            columns = new ArrayList();
+    /**
+     * Remove the given Column from the table.
+     *
+     * @param column the column to remove from the table
+     */
+    public void removeColumn(Column column) {
+        if (column != null && getColumns().containsKey(column.getName())) {
+            getColumns().remove(column.getName());
+            getColumnList().remove(column);
         }
+    }
+
+    /**
+     * Remove the named colum from the Table.
+     *
+     * @param name the name of the column to remove from the table
+     */
+    public void removeColumn(String name) {
+        Column column = (Column) getColumns().get(name);
+        removeColumn(column);
+    }
+
+    /**
+     * Remove the list of named columns from the table.
+     *
+     * @param columnNames the list of column names to remove from the table
+     */
+    public void removeColumns(List columnNames) {
+        if (columnNames != null) {
+            for (int i = 0; i < columnNames.size(); i++) {
+                removeColumn(columnNames.get(i).toString());
+            }
+        }
+    }
+
+    public List getColumnList() {
+        return columnList;
+    }
+
+    /**
+     * Return the Map of table Columns, keyed on column name.
+     *
+     * @return the Map of table Columns, keyed on column name
+     */
+    public Map getColumns() {
         return columns;
     }
 
@@ -168,6 +228,20 @@ public class Table implements Control {
      */
     public void setContext(Context context) {
         this.context = context;
+    }
+    
+    /**
+     * Return the HTML head import statements for the CSS stylesheet
+     * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>)
+     * files.
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(TABLE_IMPORTS, "$", path);
     }
 
     /**
@@ -200,17 +274,25 @@ public class Table implements Control {
         }
         this.name = name;
     }
-
+    
     /**
-     * Return the list of table rows.
+     * Return the table property for the named resource key and the context's 
+     * request locale.
      *
-     * @return the list of table rows
+     * @param name resource name of the property
+     * @return the named localized property for the table
      */
-    public List getRows() {
-        if (rows == null) {
-            rows = new ArrayList();
+    public String getProperty(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
         }
-        return rows;
+
+        Locale locale = getContext().getRequest().getLocale();
+
+        ResourceBundle bundle =
+            ResourceBundle.getBundle(TABLE_PROPERTIES, locale);
+
+        return bundle.getString(name);
     }
 
     /**
@@ -218,8 +300,20 @@ public class Table implements Control {
      *
      * @return the list of table rows
      */
-    public void setRows(List rows) {
-        this.rows = rows;
+    public List getRowList() {
+        if (rowList == null) {
+            rowList = new ArrayList();
+        }
+        return rowList;
+    }
+
+    /**
+     * Return the list of table rows.
+     *
+     * @return the list of table rows
+     */
+    public void setRowList(List rowList) {
+        this.rowList = rowList;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -249,23 +343,23 @@ public class Table implements Control {
         // Render table header row.
         buffer.append(" <tr>\n  ");
 
-        final List tableColumns = getColumns();
+        final List tableColumns = getColumnList();
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
-            column.renderTableHeader(buffer);
+            column.renderTableHeader(buffer, context);
         }
 
         buffer.append("\n </tr>\n");
 
         // Render table rows.
-        final List tableRows = getRows();
+        final List tableRows = getRowList();
         for (int i = 0; i < tableRows.size(); i++) {
             Object row = tableRows.get(i);
             buffer.append(" <tr>\n  ");
 
             for (int j = 0; j < tableColumns.size(); j++) {
                 Column column = (Column) tableColumns.get(j);
-                column.renderTableData(row, buffer);
+                column.renderTableData(row, buffer, context);
             }
 
             buffer.append("\n </tr>\n");
