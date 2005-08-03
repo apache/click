@@ -399,6 +399,10 @@ class ClickApp implements EntityResolver {
             // Deploy CSS styles file
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
+            
+            // Deploy CSS styles file
+            deployFile("/net/sf/click/control/table.css", clickTarget,
+                       CLICK_PATH, "table.css");
 
             // Deploy JavaScript file
             deployFile("/net/sf/click/control/control.js", clickTarget,
