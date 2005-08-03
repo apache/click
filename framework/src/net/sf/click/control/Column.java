@@ -17,6 +17,7 @@ package net.sf.click.control;
 
 import java.lang.reflect.Method;
 
+import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,8 +26,10 @@ import org.apache.commons.lang.StringUtils;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  * <p/>
- * PLEASE NOTE: the table Column is undergoing preliminary development
+ * <b>PLEASE NOTE</b>: the Column class is undergoing preliminary development 
+ * and is subject to significant change
  *
+ * @see Decorator
  * @see Table
  *
  * @author Malcolm Edgar
@@ -209,8 +212,11 @@ public class Column {
      *
      * @param row the row object to render
      * @param buffer the string buffer to render to
+     * @param context the request context
      */
-    public void renderTableData(Object row, StringBuffer buffer) {
+    public void renderTableData(Object row, StringBuffer buffer,
+            Context context) {
+
         buffer.append("<td");
         if (getDataClass() != null) {
             buffer.append(" class='");
@@ -223,7 +229,15 @@ public class Column {
             buffer.append("'");
         }
         buffer.append(">");
-        buffer.append(getProperty(row));
+
+        Object columnValue = getProperty(row);
+
+        if (getDecorator() != null) {
+            buffer.append(getDecorator().render(columnValue, context));
+        } else {
+            buffer.append(columnValue);
+        }
+
         buffer.append("</td>");
     }
 
@@ -231,8 +245,9 @@ public class Column {
      * Render the column table header &lt;tr&gt; element to the given buffer.
      *
      * @param buffer the string buffer to render to
+     * @param context the request context
      */
-    public void renderTableHeader(StringBuffer buffer) {
+    public void renderTableHeader(StringBuffer buffer, Context context) {
         buffer.append("<th");
         if (getHeaderClass() != null) {
             buffer.append(" class='");
@@ -268,28 +283,5 @@ public class Column {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    // ------------------------------------------------------- Inner Interfaces
-
-    /**
-     * Provides a Column table data &lt;td&gt; row object decorator.
-     * <p/>
-     * PLEASE NOTE: the table column Decorator is undergoing preliminary
-     * development
-     *
-     * @author Malcolm Edgar
-     */
-    public interface Decorator {
-
-        /**
-         * Return a column table data &lt;td&gt; element for the given row
-         * object. Please note the passed in row object is the entire row object,
-         * not the row column property.
-         *
-         * @param row the row object to render
-         * @return a column table data &lt;td&gt; element string
-         */
-        public String toTableData(Object row);
     }
 }
