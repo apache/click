@@ -56,7 +56,7 @@ public abstract class Field implements Control {
     /**
      * The control package messages bundle name: &nbsp; <tt>click-control</tt>
      */
-    public static final String CONTROL_MESSAGES = "click-control";
+    protected static final String CONTROL_MESSAGES = "click-control";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -380,7 +380,7 @@ public abstract class Field implements Control {
         Locale locale = getContext().getRequest().getLocale();
 
         ResourceBundle bundle =
-            ResourceBundle.getBundle("click-control", locale);
+            ResourceBundle.getBundle(CONTROL_MESSAGES, locale);
 
         return bundle.getString(name);
     }
