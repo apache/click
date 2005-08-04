@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.util.ClickLogger;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
 import net.sf.click.util.SessionMap;
@@ -93,13 +94,23 @@ public class ClickServlet extends HttpServlet {
 
     // --------------------------------------------------------------- Contants
 
-    /** The Java serialiization version unique id. */
     private static final long serialVersionUID = 3835158375989262128L;
+
+    private static final String APPLICAION_RELOADED_MSG  =
+        "<html><head>" +
+        "<style type='text/css'>body{font-family:Arial;}</style></head>" +
+        "<body><h2>Application Reloaded</h2></body></html>";
 
     /**
      * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>"
      */
     protected final static String CLICK_FORWARD = "click-forward";
+
+    /**
+     * The click application is reloadable flag servlet init parameter name:
+     * &nbsp; "<tt>click-reloadable</tt>"
+     */
+    protected final static String CLICK_RELOADABLE = "click-reloadable";
 
     /**
      * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
@@ -117,8 +128,11 @@ public class ClickServlet extends HttpServlet {
     /** The page creator factory. */
     protected final PageMaker pageMaker = new PageMaker();
 
+    /** The click application is reloadable flag. */
+    protected boolean reloadable = false;
+
     /** Cache of velocity writers */
-    protected final SimplePool writerPool = new SimplePool(40);
+    protected SimplePool writerPool;
 
     // --------------------------------------------------------- Public Methods
 
@@ -130,10 +144,27 @@ public class ClickServlet extends HttpServlet {
     public void init() throws ServletException {
 
         try {
-            // Initialize the click application.
-            clickApp = new ClickApp(getServletContext());
+            // Dereference any allocated objects
+            clickApp = null;
+            writerPool = null;
 
-            logger = clickApp.getLogger();
+            // Determine whether the click application is reloadable
+            reloadable =
+                "true".equalsIgnoreCase(getInitParameter(CLICK_RELOADABLE));
+
+            // Initialize the click application.
+            ClickApp newClickApp = new ClickApp();
+
+            newClickApp.init(getServletContext());
+
+            logger = newClickApp.getLogger();
+
+            // Initialise the Cache of velocity writers.
+            SimplePool newWriterPool = new SimplePool(40);
+
+            // Set the new ClickApp and writer pool
+            clickApp = newClickApp;
+            writerPool = newWriterPool;
 
             if (logger.isInfoEnabled()) {
                 logger.info("initialized in " + clickApp.getModeValue() + " mode");
@@ -159,13 +190,14 @@ public class ClickServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-        // Ensure click app has been initialized
-        if (clickApp == null) {
-            throw new UnavailableException
-                ("permanantly unavailable - click app has not been initialized");
-        }
+        ensureAppInitialized();
 
-        handleRequest(request, response, false);
+        if (ifAuthorizedReloadRequest(request)) {
+            reloadClickApp(request, response);
+
+        } else {
+            handleRequest(request, response, false);
+        }
     }
 
     /**
@@ -178,11 +210,7 @@ public class ClickServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
-        // Ensure click app has been initialized
-        if (clickApp == null) {
-            throw new UnavailableException
-                ("permanantly unavailable - click app has not been initialized");
-        }
+        ensureAppInitialized();
 
         handleRequest(request, response, true);
     }
@@ -724,6 +752,73 @@ public class ClickServlet extends HttpServlet {
                 response.setIntHeader(name, intValue);
             }
         }
+    }
+
+    /**
+     * Ensure the ClickApp and the Velocity WriterPool have been initialized
+     * otherwise throw a UnavailableException.
+     * <p/>
+     * If the <tt>click-reloadable</tt> a temporarily UnavailableException is
+     * thrown, otherwise if not reloadable then a permantantly
+     * UnavailableException is thrown.
+     *
+     * @throws UnavailableException if the application has not been initialized
+     */
+    protected void ensureAppInitialized() throws UnavailableException {
+        if (clickApp == null || writerPool == null) {
+            if (reloadable) {
+                String msg = "The application is temporarily unavailable" +
+                " - please try again in 1 minute";
+                throw new UnavailableException(msg, 60);
+            } else {
+                String msg = "The application is unavailable.";
+                throw new UnavailableException(msg);
+            }
+        }
+    }
+
+    /**
+     * Return true if the request is click application reload request, and the
+     * user is authorised to make the request. To reload the click application
+     * the <tt>click-reloadable</tt> servlet init parameter must be defined
+     * and the user making the request must be in the role "click-admin"
+     *
+     * @param request the servlet request
+     * @return if a reload request and servlet configured to enable reloading
+     *  and the user is in "click-admin" role
+     */
+    protected boolean ifAuthorizedReloadRequest(HttpServletRequest request) {
+        if (reloadable && request.isUserInRole("click-admin")) {
+            String path = ClickUtils.getResourcePath(request);
+
+            return "/click/click-reload.htm".equals(path);
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Reload the ClickApp and send status message to the given response.
+     *
+     * @param request the servlet request
+     * @param response the response to write the status message to
+     * @throws ServletException if an error occurs reloading the application
+     * @throws IOException if an I/O error occurs
+     */
+    protected void reloadClickApp(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
+
+        init();
+
+        final String msg =
+            "ClickApp reloaded by " + request.getRemoteUser() + " on " +
+            (new Date()).toString();
+        logger.info(msg);
+
+        response.setContentType("text/html");
+        response.getWriter().print(APPLICAION_RELOADED_MSG);
+        response.getWriter().close();
     }
 
     // ---------------------------------------------------------- Inner Classes

@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.util.ClickUtils;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 
@@ -131,28 +133,7 @@ public class Context {
      * @return the page resource path from the request
      */
     public String getResourcePath() {
-        // Adapted from VelocityViewServlet.handleRequest() method:
-
-        // If we get here from RequestDispatcher.include(), getServletPath()
-        // will return the original (wrong) URI requested.  The following special
-        // attribute holds the correct path.  See section 8.3 of the Servlet
-        // 2.3 specification.
-
-        String path = (String) request.getAttribute("javax.servlet.include.servlet_path");
-
-        // Also take into account the PathInfo stated on SRV.4.4 Request Path Elements.
-        String info = (String) request.getAttribute("javax.servlet.include.path_info");
-
-        if (path == null) {
-            path = request.getServletPath();
-            info = request.getPathInfo();
-        }
-
-        if (info != null) {
-            path += info;
-        }
-
-        return path;
+        return ClickUtils.getResourcePath(request);
     }
 
     /**
