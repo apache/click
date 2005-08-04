@@ -31,7 +31,7 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a HTML Table control: &lt;table&gt;.
  * <p/>
- * <b>PLEASE NOTE</b>: the Table control is undergoing preliminary development 
+ * <b>PLEASE NOTE</b>: the Table control is undergoing preliminary development
  * and is subject to significant change
  *
  * @see Column
@@ -48,7 +48,7 @@ public class Table implements Control {
      * The click table properties bundle name: &nbsp; <tt>click-table</tt>
      */
     protected static final String TABLE_PROPERTIES = "click-table";
-    
+
     protected static final String TABLE_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/table.css' title='style'>\n";
 
@@ -229,7 +229,7 @@ public class Table implements Control {
     public void setContext(Context context) {
         this.context = context;
     }
-    
+
     /**
      * Return the HTML head import statements for the CSS stylesheet
      * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>)
@@ -274,9 +274,9 @@ public class Table implements Control {
         }
         this.name = name;
     }
-    
+
     /**
-     * Return the table property for the named resource key and the context's 
+     * Return the table property for the named resource key and the context's
      * request locale.
      *
      * @param name resource name of the property

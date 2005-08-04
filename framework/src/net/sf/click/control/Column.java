@@ -26,7 +26,7 @@ import org.apache.commons.lang.StringUtils;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  * <p/>
- * <b>PLEASE NOTE</b>: the Column class is undergoing preliminary development 
+ * <b>PLEASE NOTE</b>: the Column class is undergoing preliminary development
  * and is subject to significant change
  *
  * @see Decorator
