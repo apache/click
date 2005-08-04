@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
@@ -253,6 +255,39 @@ public class ClickUtils {
             }
         }
     }
+
+    /**
+     * Return the page resouce path from the request. For example:
+     * <pre class="codeHtml">
+     * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
+     *
+     * @return the page resource path from the request
+     */
+    public static String getResourcePath(HttpServletRequest request) {
+        // Adapted from VelocityViewServlet.handleRequest() method:
+
+        // If we get here from RequestDispatcher.include(), getServletPath()
+        // will return the original (wrong) URI requested.  The following special
+        // attribute holds the correct path.  See section 8.3 of the Servlet
+        // 2.3 specification.
+
+        String path = (String) request.getAttribute("javax.servlet.include.servlet_path");
+
+        // Also take into account the PathInfo stated on SRV.4.4 Request Path Elements.
+        String info = (String) request.getAttribute("javax.servlet.include.path_info");
+
+        if (path == null) {
+            path = request.getServletPath();
+            info = request.getPathInfo();
+        }
+
+        if (info != null) {
+            path += info;
+        }
+
+        return path;
+    }
+
 
     /**
      * Return the getter method name for the given property name.

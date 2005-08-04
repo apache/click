@@ -137,7 +137,7 @@ class ClickApp implements EntityResolver {
     private Class formatClass;
 
     /** The application logger. */
-    private final ClickLogger logger;
+    private ClickLogger logger;
 
     /**
      * The application mode:
@@ -149,10 +149,12 @@ class ClickApp implements EntityResolver {
     private final Map pageByPathMap = new HashMap();
 
     /** The ServletContext instance. */
-    private final ServletContext servletContext;
+    private ServletContext servletContext;
 
     /** The VelocityEngine instance. */
     private final VelocityEngine velocityEngine = new VelocityEngine();
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Initialize the click application using the given servlet context.
@@ -160,7 +162,7 @@ class ClickApp implements EntityResolver {
      * @param context the servlet context
      * @throws Exception if an error occurs initializing the application
      */
-    ClickApp(ServletContext context) throws Exception {
+    void init(ServletContext context) throws Exception {
 
         servletContext = context;
 
@@ -399,7 +401,7 @@ class ClickApp implements EntityResolver {
             // Deploy CSS styles file
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
-            
+
             // Deploy CSS styles file
             deployFile("/net/sf/click/control/table.css", clickTarget,
                        CLICK_PATH, "table.css");
