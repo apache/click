@@ -20,12 +20,12 @@ import net.sf.click.Context;
 /**
  * Provides a decorator interface to render given objects.
  * <p/>
- * <b>PLEASE NOTE</b>: the Decorator interface is undergoing preliminary 
+ * <b>PLEASE NOTE</b>: the Decorator interface is undergoing preliminary
  * development and is subject to significant change
- * 
+ *
  * @see Column
  * @see Table
- * 
+ *
  * @author Malcolm Edgar
  * @version $Id$
  */
