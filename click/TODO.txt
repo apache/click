@@ -1,12 +1,15 @@
 CODE
-* Menu control
+* click-reload
 * Table control
+* Menu control
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
 
 BUGS
 
 DOCUMENTATION
+* update ClickServlet Javadoc to include click-reloadable,
+  update configuration.html, roadmap-changes, FAQ
 * update Control in diagrams, update Control classes diagram
 * add excludes to FAQ
 
