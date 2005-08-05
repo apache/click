@@ -56,14 +56,14 @@ import org.apache.velocity.util.SimplePool;
  * maps all <tt>*.htm</tt> requests to a ClickServlet is provided below.
  *
  * <pre class="codeConfig">
- * &lt;web-app>
+ * &lt;web-app&gt;
  *    &lt;servlet&gt;
- *       &lt;servlet-name&gt;<font color="blue">ClickServlet</font>&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;<font color="blue">click-servlet</font>&lt;/servlet-name&gt;
  *       &lt;servlet-class&gt;<font color="red">net.sf.click.ClickServlet</font>&lt;/servlet-class&gt;
  *       &lt;load-on-startup&gt;<font color="red">0</font>&lt;/load-on-startup&gt;
  *    &lt;/servlet&gt;
  *    &lt;servlet-mapping&gt;
- *       &lt;servlet-name&gt;<font color="blue">ClickServlet</font>&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;<font color="blue">click-servlet</font>&lt;/servlet-name&gt;
  *       &lt;url-pattern&gt;<font color="red">*.htm</font>&lt;/url-pattern&gt;
  *    &lt;/servlet-mapping&gt;
  * &lt;/web-app&gt; </pre>
@@ -87,6 +87,57 @@ import org.apache.velocity.util.SimplePool;
  * configured with the Click application mode in the "<tt>click.xml</tt>" file.
  * See the User Guide for information on how to configure the application mode.
  *
+ * <h4>Application Reloading</h4>
+ * The <tt>ClickServlet</tt> supports the ability to reload the click
+ * application "<tt>click.xml</tt>" without having to restart the entire web
+ * application.
+ * <p/>
+ * To reload the application simply make the GET request
+ * <font color="blue">/click/reload-app.htm</font> while in the role
+ * <font color="red">click-admin</font>.
+ * <p/>
+ * To enable application reloading you need to configure the servlet
+ * init parameter <tt>app-reloadable</tt> as true, and secure
+ * the path <tt>/click/reload-app.htm</tt> with the role <tt>click-admin</tt>.
+ * If the user making a GET request to this path is not in this role the
+ * ClickServlet will return the page not found template.
+ *
+ * <pre class="codeConfig">
+ * &lt;web-app&gt;
+ *    &lt;servlet&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
+ *       &lt;init-param&gt;
+ *         &lt;param-name&gt;<font color="blue">app-reloadable</font>&lt;/param-name&gt;
+ *         &lt;param-value&gt;<font color="red">true</font>&lt;/param-value&gt;
+ *       &lt;/init-param&gt;
+ *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+ *    &lt;/servlet&gt;
+ *
+ *    &lt;servlet-mapping&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+ *    &lt;/servlet-mapping&gt;
+ *
+ *    &lt;security-constraint&gt;
+ *      &lt;web-resource-collection&gt;
+ *        &lt;url-pattern&gt;<font color="blue">/click/reload-app.htm</font>&lt;/url-pattern&gt;
+ *      &lt;/web-resource-collection&gt;
+ *      &lt;auth-constraint&gt;
+ *        &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
+ *      &lt;/auth-constraint&gt;
+ *    &lt;/security-constraint&gt;
+ *
+ *    &lt;login-config&gt;
+ *      &lt;auth-method&gt;DIGEST&lt;/auth-method&gt;
+ *      &lt;realm-name&gt;MyCorp&lt;/realm-name&gt;
+ *    &lt;/login-config&gt;
+ *
+ *    &lt;security-role&gt;
+ *      &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
+ *    &lt;/security-role&gt;
+ * &lt;/web-app&gt; </pre>
+ *
  * @author Malcolm Edgar
  * @version $Id$
  */
@@ -108,9 +159,9 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * The click application is reloadable flag servlet init parameter name:
-     * &nbsp; "<tt>click-reloadable</tt>"
+     * &nbsp; "<tt>app-reloadable</tt>"
      */
-    protected final static String CLICK_RELOADABLE = "click-reloadable";
+    protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
      * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
@@ -150,7 +201,7 @@ public class ClickServlet extends HttpServlet {
 
             // Determine whether the click application is reloadable
             reloadable =
-                "true".equalsIgnoreCase(getInitParameter(CLICK_RELOADABLE));
+                "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
             // Initialize the click application.
             ClickApp newClickApp = new ClickApp();
@@ -171,6 +222,8 @@ public class ClickServlet extends HttpServlet {
             }
 
         } catch (Throwable e) {
+            e.printStackTrace();
+
             String message =
                 "error initializing throwing javax.servlet.UnavailableException";
 
@@ -544,7 +597,7 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Return a new Page instance for the given request. This method will
-     * invoke {@link #newPageInstance(Class, HttpServletRequest)} to create
+     * invoke {@link #newPageInstance(String, Class)} to create
      * the Page instance and then set the properties on the page.
      *
      * @param request the servlet request
@@ -580,7 +633,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         try {
-            Page newPage = newPageInstance(pageClass, request);
+            Page newPage = newPageInstance(path, pageClass);
 
             newPage.setContext(context);
             newPage.setFormat(clickApp.getPageFormat(path));
@@ -603,19 +656,26 @@ public class ClickServlet extends HttpServlet {
      * For example a Spring application could override this method and use a
      * BeanFactory to instantiate new Page objects:
      * <pre class="codeJava">
-     * <span class="kw">protected</span> Page newPageInstance(Class pageClass, HttpServletRequest request)
-     *       <span class="kw">throws</span> Exception {
+     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
+     *       String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
      *
-     *   <span class="kw">return</span> (Page) beanFactory.getBean(pageClass.getName());
+     *       Page page = (Page) beanFactory.getBean(beanName);
+     *
+     *       <span class="kw">if</span> (page == <span class="kw">null</span>) {
+     *           page = (Page) pageClass.newInstance();
+     *       }
+     *
+     *       <span class="kw">return</span> page;
+     *    }
      * } </pre>
      *
+     * @param path the request page path
      * @param pageClass the page Class the request is mapped to
-     * @param request the servlet request
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(Class pageClass, HttpServletRequest request)
-            throws Exception {
+    protected Page newPageInstance(String path, Class pageClass)
+        throws Exception {
 
         return (Page) pageClass.newInstance();
     }
@@ -778,10 +838,10 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return true if the request is click application reload request, and the
-     * user is authorised to make the request. To reload the click application
-     * the <tt>click-reloadable</tt> servlet init parameter must be defined
-     * and the user making the request must be in the role "click-admin"
+     * Return true if the request is click application reload request GET
+     * <tt>"/click/reload-app.htm"</tt> and the user is in the role
+     * <tt>"click-admin"</tt>. To reload the click application the
+     * servlet init parameter <tt>app-reloadable</tt> must also be defined.
      *
      * @param request the servlet request
      * @return if a reload request and servlet configured to enable reloading
@@ -791,7 +851,7 @@ public class ClickServlet extends HttpServlet {
         if (reloadable && request.isUserInRole("click-admin")) {
             String path = ClickUtils.getResourcePath(request);
 
-            return "/click/click-reload.htm".equals(path);
+            return "/click/reload-app.htm".equals(path);
 
         } else {
             return false;
