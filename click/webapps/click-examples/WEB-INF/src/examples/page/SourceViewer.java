@@ -36,7 +36,10 @@ public class SourceViewer extends BorderedPage {
     private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
         "headers", "header", "format", "mode", "type",
         "web-app", "display-name", "description", "servlet-mapping",
-        "servlet-name", "servlet-class", "servlet", "load-on-startup",
+        "servlet-name", "servlet-class", "init-param", "param-name",
+        "param-value", "servlet", "load-on-startup", "security-constraint",
+        "web-resource-collection", "auth-constraint", "role-name",
+        "login-config", "auth-method", "realm-name", "security-role",
         "url-pattern", "welcome-file-list", "welcome-file" };
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
@@ -245,7 +248,7 @@ public class SourceViewer extends BorderedPage {
     }
 
     private String renderHtmlToken(String token) {
-        return "<font color=\"navy\">" + token + "</font>";
+        return "<font color=\"blue\">" + token + "</font>";
     }
 
     private String renderXmlToken(String token) {
