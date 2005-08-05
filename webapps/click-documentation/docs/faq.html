@@ -18,15 +18,15 @@
   </li> 
   <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
   </li> 
-  <li><a href="#localization">How do you internationalize Pages and Control labels?</a>
-  </li>
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
   </li>
-  <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
+  <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
+  <li><a href="#localization">How do you internationalize Pages and Control labels?</a>
+  </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
-  <li><a href="#exclude-fields">How do you exclude some fields from a Form?</a>
+  <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
   </li>  
 </ul>
 <p>&nbsp;</p>
@@ -103,7 +103,40 @@
   </li>
   </ol>
   </dd>
+  
+  <a name="shared-template" class="heading"></a>
+  <dt><b>How can I have many Pages using the same HTML template?</b></dt>
+  <dd>
+   To do this use the Page templating technique detailed in the 
+   <a href="pages.html#page-templating">Page Templating</a> topic. 
+   <p/>
+   Page templating is highly recommended for your web applications, as it provides
+   numerous benefits including:
+   <ul>
+      <li>greatly reduces the amount of HTML you need to maintain</li>
+      <li>ensures you have a common look and feel across you application</li>
+      <li>makes your application more robust, as there is less code to test</li>
+   </ul>
+   For a live demonstation of page templating deploy and run the
+   <a href="examples.html">click-examples</a> application.
+  </dd>
+    
+  <a name="exclude-fields" class="heading"></a>
+  <dt><b>Can you exclude some fields from a Form?</b></dt>
+  <dd>
+   To exclude some fields from being displayed in a shared Form class use the
+   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   method. 
+   <p/>
+   You can even do this in your page template. Just make sure you call you call 
+   it before $form renders itself. For example:
+<pre class="codeHtml">
+  <span class="red">$</span><span class="blue">form</span>.<span class="blue">removeFields</span>(["field11", "field15", "field22"])
 
+  <span class="red">$</span><span class="blue">form</span>
+</pre>
+  </dd>
+  
   <a name="localization" class="heading"></a>
   <dt><b>How do you internationalize Pages and Control labels?</b></dt>
   <dd>
@@ -128,54 +161,17 @@
    Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.
   </dd>
   
-  
-  <a name="shared-template" class="heading"></a>
-  <dt><b>How can I have many Pages using the same HTML template?</b></dt>
-  <dd>
-   To do this use the Page templating technique detailed in the 
-   <a href="pages.html#page-templating">Page Templating</a> topic. 
-   <p/>
-   Page templating is highly recommended for your web applications, as it provides
-   numerous benefits including:
-   <ul>
-      <li>greatly reduces the amount of HTML you need to maintain</li>
-      <li>ensures you have a common look and feel across you application</li>
-      <li>makes your application more robust, as there is less code to test</li>
-   </ul>
-   For a live demonstation of page templating deploy and run the
-   <a href="examples.html">click-examples</a> application.
-  </dd>
-  
-  <a name="why-velocity" class="heading"></a>
-  <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
-  <dd>
-   FreeMarker was evaluated against Velocity for template rendering,
-   and has some features Velocity doesn't. However Velocity was
-   chosen over FreeMaker because it doesn't use an XML based 
-   syntax, so its easier to read, and because Velocity is easier
-   to learn.
-   <p/>
-   One of FreeMarker's strong points compared to Velocity is error reporting.
-   This issue is addressed in Click by using a custom Velocity 1.5 build 
-   to provided enhanced error reporting.
-   <p/>
-   Its actually better than the line-precise error reporting you get in
-   Tapesty, as Click will render the source code with the error. For
-   example:
-   <ul>
-      <li><a href="error-parsing.html">Page Parsing Error</a></li>
-      <li><a href="error-npe.html">Null Pointer Error</a></li>
-   </ul>
-  </dd>
-  
   <a name="spring-integration" class="heading"></a>
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
-   The ClickServlet can customized to support applications using Inversion
+   The ClickServlet can be subclassed to support applications using Inversion
    of Control (IoC) frameworks such as Spring and HiveMind.
    <p/>
-   To use Spring to create Page objects and set services before handing them off 
-   to Click you could override the ClickServlet:
+   To integrate Spring with Click you can subclass the ClickServlet and override the
+   <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class)">newPageInstance()</a>
+   method to use Spring to create Page objects and set their dependencies. 
+   For example:
+   
 <pre class="codeJava">
 <span class="kw">public class</span> SpringClickServlet <span class="kw">extends</span> ClickServlet {
     
@@ -191,20 +187,31 @@
     }
 
     <span class="cm">/**
-     * @see ClickServlet#newPageInstance(Class, HttpServletRequest)
+     * @see ClickServlet#newPageInstance(String, Class)
      */</span>
-    <span class="kw">protected</span> Page newPageInstance(Class pageClass, HttpServletRequest request) 
-            <span class="kw">throws</span> Exception {
-        <span class="kw">return</span> (Page) beanFactory.getBean(pageClass.getName());
+    <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
+        String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
+        
+        Page page = (Page) beanFactory.getBean(beanName);
+        
+        <span class="kw">if</span> (page == <span class="kw">null</span>) {
+            page = (Page) pageClass.newInstance();
+        }
+        
+        <span class="kw">return</span> page;
     }
 } </pre>
 
+   In this example the Spring bean name is derived from the Page path, 
+   so the request of <span class="st">"/security/login.htm"</span> would map to a bean name of
+   <span class="st">"/security/login"</span>. If a corresponding Spring Page bean could not be found a 
+   new Page instance is created from the pageClass.
+   <p/>
    The <a href="click-api/net/sf/click/Page.html#onDestroy()">Page.onDestroy()</a>
    method can then be used to free any allocated resources to a Page object. 
    <p/>
-   The Spring Web MVC Framework however is not compatible with Click. The Spring framework
+   The Spring Web MVC Framework however, is not compatible with Click. The Spring framework
    uses a low level command pattern design like Struts and WebWork.
-   <p/>
    Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
    objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
 
@@ -214,27 +221,31 @@ public interface Controller {
                                      HttpServletResponse response) throws Exception;
 } </pre>
 
-  In Spring the integration plugin points are the Controllers.
+  In Spring MVC the integration plugin points are the Controllers.
   <p/>
   Click uses higher level design constructs focusing on Pages and Controls. Click uses its
   own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
-  which are Clicks plugin points.
-  </dd>
-  
-  <a name="exclude-fields" class="heading"></a>
-  <dt><b>How do you exclude some fields from a Form?</b></dt>
+  which are Click's plugin points.
+  </dd> 
+    
+  <a name="why-velocity" class="heading"></a>
+  <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
   <dd>
-   To exclude some fields from being displayed in a shared Form class use the
-   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
-   method. 
+   FreeMarker was evaluated against Velocity for template rendering,
+   and has some features Velocity doesn't. However Velocity was
+   chosen over FreeMaker because it doesn't use an XML based 
+   syntax, so its easier to read, and because Velocity is easier
+   to learn.
    <p/>
-   You can even do this in your page template. Just make sure you call you call 
-   it before $form renders itself. For example:
-<pre class="codeHtml">
-  <span class="red">$</span><span class="blue">form</span>.<span class="blue">removeFields</span>(["field11", "field15", "field22"])
-
-  <span class="red">$</span><span class="blue">form</span>
-</pre>
+   One of FreeMarker's strong points compared to Velocity is error reporting.
+   This issue is addressed in Click by using a custom Velocity 1.5 build 
+   to provided enhanced error reporting.
+   <p/>
+   Click will render the source code with the error. For example:
+   <ul>
+      <li><a href="error-parsing.html">Page Parsing Error</a></li>
+      <li><a href="error-npe.html">Null Pointer Error</a></li>
+   </ul>
   </dd>
   
 </dl>
