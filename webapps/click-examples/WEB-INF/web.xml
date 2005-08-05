@@ -8,6 +8,10 @@
  <servlet>
   <servlet-name>click-servlet</servlet-name>
   <servlet-class>net.sf.click.ClickServlet</servlet-class>
+  <init-param>
+   <param-name>app-reloadable</param-name>
+   <param-value>true</param-value>
+  </init-param>
   <load-on-startup>0</load-on-startup>
  </servlet>
 
@@ -19,4 +23,22 @@
  <welcome-file-list>
   <welcome-file>index.html</welcome-file>
  </welcome-file-list>
+ 
+ <security-constraint>
+  <web-resource-collection>
+   <url-pattern>/click/reload-app.htm</url-pattern>
+  </web-resource-collection>
+  <auth-constraint>
+   <role-name>click-admin</role-name>
+  </auth-constraint>
+ </security-constraint>
+ 
+ <login-config>
+  <auth-method>BASIC</auth-method>
+  <realm-name>Click Examples</realm-name>
+ </login-config>
+  
+ <security-role>
+  <role-name>click-admin</role-name>
+ </security-role> 
 </web-app>
