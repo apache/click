@@ -14,8 +14,8 @@ public class TableDemo extends BorderedPage {
 
         Table table = new Table("table");
         table.setAttribute("border", "1");
-        table.setAttribute("cellpadding", "4");
-        table.setAttribute("cellspacing", "4");
+        table.setAttribute("cellpadding", "6");
+        table.setAttribute("cellspacing", "0");
 
         Column column = new Column("name");
         column.setHeaderStyle("{background-color:navy;}");
