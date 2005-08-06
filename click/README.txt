@@ -33,6 +33,5 @@ The main Ant targets include:
 	deploy-webapps        copy WAR files to application server
 	help                  display the Help message
 	javadoc               create Javadoc HTML files
-	setup-tomcat-logging  setup Tomcat logging configuration
 
 	Please ensure you have configured build.properties
