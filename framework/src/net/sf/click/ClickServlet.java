@@ -87,7 +87,7 @@ import org.apache.velocity.util.SimplePool;
  * configured with the Click application mode in the "<tt>click.xml</tt>" file.
  * See the User Guide for information on how to configure the application mode.
  *
- * <h4>Application Reloading</h4>
+ * <a name="app-reloading"><h4>Application Reloading</h4></a>
  * The <tt>ClickServlet</tt> supports the ability to reload the click
  * application "<tt>click.xml</tt>" without having to restart the entire web
  * application.
