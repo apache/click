@@ -1,11 +1,10 @@
-<Context 
-	path="/click-examples" 
-    docBase="${catalina.home}/webapps/click-examples" 
-    reloadable="true">
-         
-	<ResourceLink 
-		name="users" 
-        global="UserDatabase"
-        type="org.apache.catalina.UserDatabase"/>
+<Context
+   path="/click-examples" 
+   docBase="${catalina.home}/webapps/click-examples" 
+   reloadable="true">
 
+   <ResourceLink 
+      name="users" 
+      global="UserDatabase"
+      type="org.apache.catalina.UserDatabase"/>
 </Context>
