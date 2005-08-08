@@ -16,6 +16,8 @@
 package net.sf.click.control;
 
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
@@ -48,6 +50,9 @@ public class Column {
     /** The column row decorator. */
     protected Decorator decorator;
 
+    /** The column message format pattern. */
+    protected String format;
+
     /** The CSS class attribute of the column header. */
     protected String headerClass;
 
@@ -56,6 +61,8 @@ public class Column {
 
     /** The title of the column header. */
     protected String headerTitle;
+
+    protected MessageFormat messageFormat;
 
     /** The property name of the row object to render. */
     protected String name;
@@ -130,6 +137,43 @@ public class Column {
      */
     public void setDecorator(Decorator decorator) {
         this.decorator = decorator;
+    }
+
+    /**
+     * Return the row column message format pattern.
+     *
+     * @return the message row column message format pattern
+     */
+    public String getFormat() {
+        return format;
+    }
+
+    /**
+     * Set the row column message format pattern.
+     *
+     * @param pattern the message format pattern
+     */
+    public void setFormat(String pattern) {
+        this.format = pattern;
+    }
+
+    /**
+     * Return the MessageFormat instance used to format the row object value.
+     *
+     * @return the MessageFormat instance used to format the row object value
+     */
+    public MessageFormat getMessageFormat() {
+        return messageFormat;
+    }
+
+    /**
+     * Set the MessageFormat instance used to format the row object value.
+     *
+     * @param messageFormat the MessageFormat used to format the row object
+     * value
+     */
+    public void setMessageFormat(MessageFormat messageFormat) {
+        this.messageFormat = messageFormat;
     }
 
     /**
@@ -217,6 +261,11 @@ public class Column {
     public void renderTableData(Object row, StringBuffer buffer,
             Context context) {
 
+        if (getMessageFormat() == null && getFormat() != null) {
+            Locale locale = context.getRequest().getLocale();
+            setMessageFormat(new MessageFormat(getFormat(), locale));
+        }
+
         buffer.append("<td");
         if (getDataClass() != null) {
             buffer.append(" class='");
@@ -234,6 +283,11 @@ public class Column {
 
         if (getDecorator() != null) {
             buffer.append(getDecorator().render(columnValue, context));
+
+        } else if (getMessageFormat() != null) {
+            Object[] args = new Object[] { columnValue };
+            buffer.append(getMessageFormat().format(args));
+
         } else {
             buffer.append(columnValue);
         }

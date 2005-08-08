@@ -82,7 +82,6 @@ public class Table implements Control {
      */
     public Table(String name) {
         setName(name);
-        setAttribute("class", "click");
     }
     // ------------------------------------------------------ Public Attributes
 
@@ -341,32 +340,48 @@ public class Table implements Control {
         buffer.append(">\n");
 
         // Render table header row.
-        buffer.append(" <tr>\n  ");
+        buffer.append("<thead>\n<tr>\n");
 
         final List tableColumns = getColumnList();
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
             column.renderTableHeader(buffer, context);
+            if (j < tableColumns.size() -1) {
+                buffer.append("\n");
+            }
         }
 
-        buffer.append("\n </tr>\n");
+        buffer.append("</tr></thead>\n");
 
         // Render table rows.
+        buffer.append("<tbody>\n");
+
         final List tableRows = getRowList();
         for (int i = 0; i < tableRows.size(); i++) {
             Object row = tableRows.get(i);
-            buffer.append(" <tr>\n  ");
+
+            if ((i+1) % 2 == 0) {
+                buffer.append("<tr class='even'>\n");
+            } else {
+                buffer.append("<tr class='odd'>\n");
+            }
 
             for (int j = 0; j < tableColumns.size(); j++) {
                 Column column = (Column) tableColumns.get(j);
                 column.renderTableData(row, buffer, context);
+                if (j < tableColumns.size() -1) {
+                    buffer.append("\n");
+                }
             }
 
-            buffer.append("\n </tr>\n");
+            buffer.append("</tr>");
+            if (i < tableRows.size() -1) {
+                buffer.append("\n");
+            }
         }
 
         // Render table end.
-        buffer.append("</table>\n");
+        buffer.append("</tbody></table>\n");
 
         return buffer.toString();
     }

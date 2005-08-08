@@ -1,3 +1,7 @@
+/* 
+ * The Form and Field CSS styles. 
+ */
+ 
 a.error {
 	color: red;
 }
@@ -44,7 +48,10 @@ label {
   white-space: nowrap;
 }
 
-/* The main calendar widget.  DIV containing a table. */
+/*
+ * Calendar EN language CSS styles.
+ * Author: Mihai Bazon, <mihai_bazon@yahoo.com>
+ */
 
 .calendar {
   position: relative;
