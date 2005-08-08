@@ -13,16 +13,12 @@ public class TableDemo extends BorderedPage {
     public void onInit() {
 
         Table table = new Table("table");
-        table.setAttribute("border", "1");
-        table.setAttribute("cellpadding", "6");
-        table.setAttribute("cellspacing", "0");
+        table.setAttribute("class", "simple");
 
         Column column = new Column("name");
-        column.setHeaderStyle("{background-color:navy;}");
         table.addColumn(column);
 
         column = new Column("email");
-        column.setHeaderStyle("{background-color:navy;}");
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 String email = row.toString();
@@ -32,7 +28,10 @@ public class TableDemo extends BorderedPage {
         table.addColumn(column);
 
         column = new Column("age");
-        column.setHeaderStyle("{background-color:navy;}");
+        table.addColumn(column);
+
+        column = new Column("holdings");
+        column.setFormat("${0,number,#,##0.00}");
         table.addColumn(column);
 
         List customers = CustomerDAO.getCustomersSortedByName();
