@@ -1,0 +1,18 @@
+<table>
+    <tr><td colspan="6"><h2>Customer List 2</h2></td></tr>
+    <tr>
+        #foreach( $customer in $customers )
+        <td style="border:1px solid black;">
+            $customer.name
+            <br/>$customer.email
+            <br/>$customer.age
+            <br/>$customer.holdings
+            <br/>$customer.investments
+            <br/>$customer.dateJoined
+        </td>
+            #if( $velocityCount % 4 == 0 )
+            </tr><tr>
+            #end
+        #end
+    </tr>
+</table>
