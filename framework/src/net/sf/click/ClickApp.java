@@ -44,7 +44,6 @@ import org.apache.velocity.runtime.log.LogSystem;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
@@ -422,13 +421,13 @@ class ClickApp implements EntityResolver {
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
 
-			// Deploy list panel file
-			deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
-					   CLICK_PATH, "ListPanel.htm");
+            // Deploy list panel file
+            deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
+                       CLICK_PATH, "ListPanel.htm");
 
-			// Deploy tabbed panel file
-			deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
-					   CLICK_PATH, "TabbedPanel.htm");
+            // Deploy tabbed panel file
+            deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
+                       CLICK_PATH, "TabbedPanel.htm");
 
         } else {
             logger.error("Servlet real path is null. Could not deploy files");
