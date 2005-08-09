@@ -5,3 +5,5 @@ deploy
 .project
 TODO.txt
 .checkstyle
+Click.iml
+classes

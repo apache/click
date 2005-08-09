@@ -366,7 +366,7 @@ class ClickApp implements EntityResolver {
      * Return the Velocity Template for the give page path.
      *
      * @return the Velocity Template for the give page path
-     * @throw Exception if Velocity error occurs
+     * @throws Exception if Velocity error occurs
      */
     Template getTemplate(String path) throws Exception {
         return velocityEngine.getTemplate(path);
@@ -421,6 +421,14 @@ class ClickApp implements EntityResolver {
             // Deploy global VM file
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
+
+			// Deploy list panel file
+			deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
+					   CLICK_PATH, "ListPanel.htm");
+
+			// Deploy tabbed panel file
+			deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
+					   CLICK_PATH, "TabbedPanel.htm");
 
         } else {
             logger.error("Servlet real path is null. Could not deploy files");
@@ -611,8 +619,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadPages(Element rootElm)
-        throws ClassNotFoundException, JDOMException {
+    private void loadPages(Element rootElm) throws ClassNotFoundException {
 
         Element pagesElm = rootElm.getChild("pages");
 
