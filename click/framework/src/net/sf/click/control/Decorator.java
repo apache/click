@@ -23,6 +23,17 @@ import net.sf.click.Context;
  * <b>PLEASE NOTE</b>: the Decorator interface is undergoing preliminary
  * development and is subject to significant change
  *
+ * <pre class="codeJava">
+ * Column column = new Column("email");
+ * column.setDecorator(new Decorator() {
+ *     public String render(Object row, Context context) {
+ *         String email = row.toString();
+ *         return "<a href='mailto:" + email + "'>" + email + "</a>";
+ *     }
+ * });
+ * table.addColumn(column); </pre>
+ *
+ *
  * @see Column
  * @see Table
  *
