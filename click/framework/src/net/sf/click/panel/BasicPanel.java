@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * A simple implementation of a Panel, that will render a basic panel.  If
  * the template is provided, it will return that value via the toString()
@@ -36,7 +35,7 @@ import java.util.Map;
  * making this Panel a passthrough to the Page.
  *
  * @author Phil Barnes
- * @since July 9th, 2005
+ * @version $Id$
  */
 public class BasicPanel implements Panel {
     /**

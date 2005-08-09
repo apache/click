@@ -20,7 +20,7 @@ package net.sf.click;
  * </ul>
  *
  * @author Phil Barnes
- * @since Jul 10, 2005 @ 9:05:52 PM
+ * @version $Id$
  */
 public interface Panel {
 
@@ -31,7 +31,7 @@ public interface Panel {
      * has all available information necessary to render.
      * @param page the page associated with this panel
      */
-    void setPage(Page page);
+    public void setPage(Page page);
 
     /**
      * The path and name of the template to render.  This is the method that
@@ -39,7 +39,7 @@ public interface Panel {
      * indirectly through toString())
      * @return the path/name of the template to use when rendering this panel
      */
-    String getTemplate();
+    public String getTemplate();
 
     /**
      * The "context name" that this Panel is associated with.  This name will be
@@ -52,7 +52,7 @@ public interface Panel {
      * @return the name of this panel, to be used to uniquely identify it in the
      * model context
      */
-    String getName();
+    public String getName();
 
     /**
      * The "id" associated with this panel.  This id is typically used to
@@ -60,10 +60,9 @@ public interface Panel {
      *
      * For example:
      * <pre class="codeHtml">
-     *  <div id="$panel.id">
+     *  &lt;div id="$panel.id"&gt;
      *      ## content here
-     *  </div>
-     * </pre>
+     *  &lt;/div&gt; </pre>
      *
      * The setter is not part of the interface, as this id can be specified by
      * multiple means: a constructor, a setter, or inferred from any number of
@@ -72,7 +71,7 @@ public interface Panel {
      * @return the id of this panel, to be used to uniquely identify it in the
      * HTML page
      */
-    String getId();
+    public String getId();
 
     /**
      * Returns text label assocaited with this panel.  This should be an already
@@ -81,20 +80,19 @@ public interface Panel {
      *
      * For example:
      * <pre class="codeHtml">
-     *  <div id="$panel.id">
-     *      <h1>$panel.label</h1>
+     *  &lt;div id="$panel.id"&gt;
+     *      &lt;h1&gt;$panel.label&lt;/h1&gt;
      *      ## content here
-     *  </div>
-     * </pre>
+     *  &lt;/div&gt; </pre>
      *
      * @return the internationalized label associated with this control.
      */
-    String getLabel();
+    public String getLabel();
 
     /**
      * Set the internationalized label associated with this panel.  This method
      * is necessary to ensure proper internationalization of text for a panel.
      * @param label the internationalized label for this panel
      */
-    void setLabel(String label);
+    public void setLabel(String label);
 }
