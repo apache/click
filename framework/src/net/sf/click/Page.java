@@ -68,8 +68,8 @@ public class Page {
     /** The list of page controls. */
     protected List controls;
 
-	/** Panels associated with this page */
-	protected List panels;
+    /** Panels associated with this page */
+    protected List panels;
 
     /** The Velocity template formatter object. */
     protected Object format;
@@ -116,25 +116,25 @@ public class Page {
         addModel(control.getName(), control);
     }
 
-	/**
-	 * Adds a panel to the page.  The panel will be added to the page model
-	 * during render after being evaluated and rendered with the associated
-	 * context.
-	 *
-	 * @param panel the panel to add
-	 */
-	public void addPanel(Panel panel) {
-		if (panel == null) {
-			throw new IllegalArgumentException(
-					"Null panel parameter during addPanel()");
-		}
-		if (panels == null) {
-			panels = new ArrayList();
-		}
-		panels.add(panel);
-		panel.setPage(this);
-		addModel(panel.getName(), panel);
-	}
+    /**
+     * Adds a panel to the page.  The panel will be added to the page model
+     * during render after being evaluated and rendered with the associated
+     * context.
+     *
+     * @param panel the panel to add
+     */
+    public void addPanel(Panel panel) {
+        if (panel == null) {
+            throw new IllegalArgumentException(
+                    "Null panel parameter during addPanel()");
+        }
+        if (panels == null) {
+            panels = new ArrayList();
+        }
+        panels.add(panel);
+        panel.setPage(this);
+        addModel(panel.getName(), panel);
+    }
 
     /**
      * Return the list of page Controls.
