@@ -17,7 +17,9 @@ package net.sf.click.control;
 
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
@@ -40,6 +42,15 @@ import org.apache.commons.lang.StringUtils;
 public class Column {
 
     // ----------------------------------------------------- Instance Variables
+
+    /** The Column attributes Map. */
+    protected Map attributes = new HashMap();
+
+    /**
+     * The automatically hyperlink column URL and email address values flag,
+     * default value is <tt>false</tt>.
+     */
+    protected boolean autolink;
 
     /** The column table data &lt;td&gt; CSS class attribute. */
     protected String dataClass;
@@ -84,6 +95,80 @@ public class Column {
     }
 
     // ------------------------------------------------------ Public Properties
+
+    /**
+     * Return the Column HTML attribute with the given name, or null if the
+     * attribute does not exist.
+     *
+     * @param name the name of column HTML attribute
+     * @return the Column HTML attribute
+     */
+    public String getAttribute(String name) {
+        return (String) getAttributes().get(name);
+    }
+
+    /**
+     * Set the Column with the given HTML attribute name and value. These
+     * attributes will be rendered as HTML attributes, for example:
+     * <p/>
+     * If there is an existing named attribute in the Column it will be replaced
+     * with the new value. If the given attribute value is null, any existing
+     * attribute will be removed.
+     *
+     * @param name the name of the column HTML attribute
+     * @param value the value of the column HTML attribute
+     * @throws IllegalArgumentException if attribute name is null
+     */
+    public void setAttribute(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getAttributes().put(name, value);
+        } else {
+            getAttributes().remove(name);
+        }
+    }
+
+    /**
+     * Return the Column attributes Map.
+     *
+     * @return the column attributes Map.
+     */
+    public Map getAttributes() {
+        return attributes;
+    }
+
+    /**
+     * Return true if the Column has attributes or false otherwise.
+     *
+     * @return true if the column has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        return !getAttributes().isEmpty();
+    }
+
+    /**
+     * Return the flag to automatically render HTML hyperlinks for column URL
+     * and email addresses values.
+     *
+     * @return automatically hyperlink column URL and email addresses flag
+     */
+    public boolean getAutolink() {
+        return autolink;
+    }
+
+    /**
+     * Set the flag to automatically render HTML hyperlinks for column URL
+     * and email addresses values.
+     *
+     * @param autolink the flag to automatically hyperlink column URL and
+     * email addresses flag
+     */
+    public void setAutolink(boolean autolink) {
+        this.autolink = autolink;
+    }
 
     /**
      * Return the table data &lt;td&gt; CSS class.
@@ -251,6 +336,18 @@ public class Column {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Render the table HTML attributes to the string buffer, except for
+     * the attribute "id".
+     *
+     * @param buffer the StringBuffer to render the HTML attributes to
+     */
+    protected void renderAttributes(StringBuffer buffer) {
+        if (hasAttributes()) {
+            ClickUtils.renderAttributes(getAttributes(), buffer);
+        }
+    }
+
+    /**
      * Render the column table data &lt;td&gt; element to the given buffer using
      * the passed row object.
      *
@@ -277,12 +374,16 @@ public class Column {
             buffer.append(getDataStyle());
             buffer.append("'");
         }
+        renderAttributes(buffer);
         buffer.append(">");
 
         Object columnValue = getProperty(row);
 
         if (getDecorator() != null) {
             buffer.append(getDecorator().render(columnValue, context));
+
+        } else if (getAutolink() && renderLink(columnValue, buffer)) {
+            // Has been rendered
 
         } else if (getMessageFormat() != null) {
             Object[] args = new Object[] { columnValue };
@@ -313,10 +414,13 @@ public class Column {
             buffer.append(getHeaderStyle());
             buffer.append("'");
         }
+        renderAttributes(buffer);
         buffer.append(">");
         buffer.append(getHeaderTitle());
         buffer.append("</th>");
     }
+
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return the named column property value from the given row object.
@@ -337,5 +441,46 @@ public class Column {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected boolean renderLink(Object value, StringBuffer buffer) {
+        if (value != null) {
+            String valueStr = value.toString();
+
+            // If email
+            if (valueStr.indexOf('@') != -1 && !valueStr.startsWith("@") &&
+                !valueStr.endsWith("@")) {
+
+                buffer.append("<a href='mailto:");
+                buffer.append(valueStr);
+                buffer.append("'>");
+                buffer.append(valueStr);
+                buffer.append("</a>");
+                return true;
+
+            } else if (valueStr.startsWith("http")) {
+                int index = valueStr.indexOf("//");
+                if (index != -1) {
+                    index += 2;
+                } else {
+                    index = 0;
+                }
+                buffer.append("<a href='");
+                buffer.append(valueStr);
+                buffer.append("'>");
+                buffer.append(valueStr.substring(index));
+                buffer.append("</a>");
+                return true;
+
+            } else if (valueStr.startsWith("www")) {
+                buffer.append("<a href='http://");
+                buffer.append(valueStr);
+                buffer.append("'>");
+                buffer.append(valueStr);
+                buffer.append("</a>");
+                return true;
+            }
+        }
+        return false;
     }
 }
