@@ -1,9 +1,9 @@
 package examples.page;
 
 import examples.domain.CustomerDAO;
-import net.sf.click.Panel;
-import net.sf.click.panel.BasicPanel;
-import net.sf.click.panel.ListPanel;
+import net.sf.click.extras.panel.BasicPanel;
+import net.sf.click.extras.panel.ListPanel;
+import net.sf.click.extras.panel.Panel;
 
 import java.util.List;
 
@@ -20,8 +20,9 @@ public class ListPanelDemo extends BorderedPage {
         listPanel.addPanel(panel2);
         Panel panel3 = new BasicPanel("panel3", "customersPanel3.htm");
         listPanel.addPanel(panel3);
-        addPanel(listPanel);
-    }
 
+        listPanel.setPage(this);
+        addModel(listPanel.getName(), listPanel);
+    }
 
 }

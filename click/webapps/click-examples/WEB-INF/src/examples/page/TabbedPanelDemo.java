@@ -1,12 +1,11 @@
 package examples.page;
 
-import examples.domain.CustomerDAO;
-import net.sf.click.Panel;
-import net.sf.click.panel.BasicPanel;
-import net.sf.click.panel.ListPanel;
-import net.sf.click.panel.TabbedPanel;
-
 import java.util.List;
+
+import net.sf.click.extras.panel.BasicPanel;
+import net.sf.click.extras.panel.Panel;
+import net.sf.click.extras.panel.TabbedPanel;
+import examples.domain.CustomerDAO;
 
 public class TabbedPanelDemo extends BorderedPage {
 
@@ -24,8 +23,9 @@ public class TabbedPanelDemo extends BorderedPage {
         Panel panel3 = new BasicPanel("panel3", "customersPanel3.htm");
         panel3.setLabel("The Third Panel");
         tabbedPanel.addPanel(panel3,false);
-        addPanel(tabbedPanel);
-    }
 
+        tabbedPanel.setPage(this);
+        addModel(tabbedPanel.getName(), tabbedPanel);
+    }
 
 }

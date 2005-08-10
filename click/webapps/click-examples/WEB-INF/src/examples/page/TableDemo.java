@@ -2,10 +2,10 @@ package examples.page;
 
 import java.util.List;
 
-import net.sf.click.control.Column;
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
-import net.sf.click.control.Table;
+import net.sf.click.extras.table.Column;
+import net.sf.click.extras.table.Table;
 import examples.domain.CustomerDAO;
 
 public class TableDemo extends BorderedPage {
