@@ -20,6 +20,10 @@
    	        classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
+   
+   <target name="build-all" 
+           depends="build-framework, build-extras, build-webapps" 
+           description="build Click framework, extras and webapps"/>
 
    <target name="build-framework" description="build framework JAR file">
       <delete dir="${dir.deploy}" quiet="false"/>
@@ -49,6 +53,10 @@
          </classpath>
       </javac>  
       <jar destfile="${dir.deploy}/click-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
          <fileset dir="${dir.classes}">
             <exclude name="org/apache/log4j/chainsaw/**"/>
             <exclude name="org/apache/velocity/anakia/**"/>
@@ -74,6 +82,10 @@
          </classpath>
       </javac>  
       <jar destfile="${dir.deploy}/click-extras-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
          <fileset dir="extras/classes"/>
       </jar>  
    </target>
@@ -104,6 +116,10 @@
             todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
          <lib file="${dir.deploy}/click-${version}.jar"/>
          <fileset dir="webapps/click-blank">
             <exclude name="**/web.xml"/>
@@ -112,7 +128,10 @@
  	   <!--  "click-documentation" WAR  -->
       <war destfile="${dir.deploy}/click-documentation.war"
            webxml="webapps/click-documentation/WEB-INF/web.xml">
-         <lib file="${dir.deploy}/click-${version}.jar"/>
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
          <fileset dir="webapps/click-documentation">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -137,6 +156,10 @@
       </copy>
       <war destfile="${dir.deploy}/click-examples.war"
            webxml="webapps/click-examples/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
          <lib file="${dir.deploy}/click-${version}.jar"/>
          <lib file="${dir.deploy}/click-extras-${version}.jar"/>
          <fileset dir="webapps/click-examples">
@@ -170,9 +193,10 @@
       <echo/>  
       <echo message="Main targets:"/> 
       <echo/>    
-      <echo message="build-release         build release ZIP file"/> 
-      <echo message="build-framework       build click framework JAR file"/> 
+      <echo message="build-all             build framework, extras, webapps"/>
       <echo message="build-extras          build click-extras JAR file"/> 
+      <echo message="build-framework       build click framework JAR file"/> 
+      <echo message="build-release         build release ZIP file"/>
       <echo message="build-webapps         build web application WAR files"/> 
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="help                  display the Help message"/>  
