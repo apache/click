@@ -4,14 +4,15 @@ CODE
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
+* specify version in Manifest file
+* add ImageSubmit to BigForm example
 
 BUGS
 
 DOCUMENTATION
-* update ClickServlet Javadoc to include click-reloadable,
-  update configuration.html, roadmap-changes, FAQ
+* document Chinese localisation by Xi Ping Wang 
+* update configuration.html, roadmap-changes, FAQ
 * update Control in diagrams, update Control classes diagram
-* add excludes to FAQ
 
 VELOCITY
 * get VelocityEngine and RuntimeService changes checked in
