@@ -153,7 +153,8 @@ public class Page {
     }
 
     /**
-     * Return the HTTP response content type, by default <tt>"text/html"</tt>.
+     * Return the HTTP response content type, by default 
+     * <tt>"text/html;charset=UTF-8"</tt>.
      * <p/>
      * The ClickServlet uses the pages content type for setting the
      * HttpServletResponse content type.
@@ -161,7 +162,7 @@ public class Page {
      * @return the HTTP response content type
      */
     public String getContentType() {
-        return "text/html";
+        return "text/html;charset=UTF-8";
     }
 
     /**
