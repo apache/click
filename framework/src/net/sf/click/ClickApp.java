@@ -26,7 +26,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -401,9 +403,9 @@ class ClickApp implements EntityResolver {
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
 
-            // Deploy CSS styles file
-            deployFile("/net/sf/click/control/table.css", clickTarget,
-                       CLICK_PATH, "table.css");
+//            // Deploy CSS styles file
+//            deployFile("/net/sf/click/control/table.css", clickTarget,
+//                       CLICK_PATH, "table.css");
 
             // Deploy JavaScript file
             deployFile("/net/sf/click/control/control.js", clickTarget,
@@ -421,13 +423,49 @@ class ClickApp implements EntityResolver {
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
 
-            // Deploy list panel file
-            deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
-                       CLICK_PATH, "ListPanel.htm");
+//            // Deploy list panel file
+//            deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
+//                       CLICK_PATH, "ListPanel.htm");
+//
+//            // Deploy tabbed panel file
+//            deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
+//                       CLICK_PATH, "TabbedPanel.htm");
 
-            // Deploy tabbed panel file
-            deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
-                       CLICK_PATH, "TabbedPanel.htm");
+            // Find extra files to deploy
+            try {
+                ResourceBundle bundle =
+                    ResourceBundle.getBundle("click-deploy");
+
+                String filenames = bundle.getString("click.deploy.files");
+                if (filenames != null) {
+                    StringTokenizer tokens =
+                            new StringTokenizer(filenames, ",");
+
+                    while (tokens.hasMoreTokens()) {
+                        String key = "click.deploy.path." + tokens.nextToken();
+
+                        String filepath = bundle.getString(key);
+
+                        if (filepath != null) {
+                            String filename =
+                                filepath.substring(filepath.lastIndexOf('/') + 1);
+
+                            deployFile(filepath,
+                                      clickTarget,
+                                      CLICK_PATH,
+                                      filename);
+                        } else {
+                            logger.warn("Could not find property: " + key);
+                        }
+                    }
+
+                } else {
+                    logger.warn("click.deploy.files property not found");
+                }
+
+            } catch (MissingResourceException mre) {
+                logger.info("/click-deploy.properties file not found");
+            }
 
         } else {
             logger.error("Servlet real path is null. Could not deploy files");
@@ -473,6 +511,7 @@ class ClickApp implements EntityResolver {
 
                 } catch (IOException ioe) {
                     logger.error("could not deploy " + destination, ioe);
+
                 } finally {
                     if (fos != null) {
                         try {
