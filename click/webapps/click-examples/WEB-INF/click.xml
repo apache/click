@@ -10,5 +10,5 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="debug"/>
+  <mode value="trace"/>
 </click-app>
