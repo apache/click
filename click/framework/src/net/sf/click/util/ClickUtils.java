@@ -381,16 +381,16 @@ public class ClickUtils {
     }
 
     /**
-     * Return the name of the passed class, without the package information.
-     * This is used as a default 'lookup' for a template with the same name plus
-     * the defualt template extension (.htm).
+     * Return the name of the passed object class, without the package
+     * information. This is used as a default 'lookup' for a template with the
+     * same name plus the defualt template extension (.htm).
      *
-     * @param clazz
-     * @return the simple name of the class + the default template extension
+     * @param object the object to get the template for
+     * @return the short class name + the default template extension
      */
-    public static String generateDefaultTemplateName(Class clazz) {
-        String fqn = clazz.getName();
-        return fqn.substring(
-                fqn.lastIndexOf('.') + 1) + DEFAULT_TEMPLATE_EXTENSION;
+    public static String generateDefaultTemplateName(Object object) {
+        String classname = object.getClass().getName();
+        int index = classname.lastIndexOf('.');
+        return classname.substring(index + 1) + DEFAULT_TEMPLATE_EXTENSION;
     }
 }
