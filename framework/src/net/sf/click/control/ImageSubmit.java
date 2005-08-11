@@ -3,11 +3,11 @@ package net.sf.click.control;
 import net.sf.click.util.ClickUtils;
 
 /**
- * Provides an ImageSubmit control: &nbsp; &lt;input type='image'&gt;.
+ * Provides an ImageSubmit control: &nbsp; &lt;input type='image' src='edit.gif'&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
- * <input type='image' value='img' title='ImageSubmit Control' src='images/myButtonImage.jpg'/>
+ * <input type='image' value='img' title='ImageSubmit Control' src='image-submit.gif'/>
  * </td></tr>
  * </table>
  *
@@ -18,45 +18,86 @@ import net.sf.click.util.ClickUtils;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Phil Barnes
+ * @author Malcolm Edgar
  * $Id$
  */
 public class ImageSubmit extends Submit {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The pixel x coordinate clicked on by the user. */
-    protected int x;
+    /**
+     * The image pixel x coordinate clicked on by the user. The default x
+     * value is -1 which means the value has not been set.
+     */
+    protected int x = -1;
 
-    /** The pixel y coordinate clicked on by the user. */
-    protected int y;
+    /** The image pixel y coordinate clicked on by the user.  The default x
+     * value is -1 which means the value has not been set. */
+    protected int y = -1;
 
     // ----------------------------------------------------------- Constructors
 
+    /**
+     * Create a ImageSubmit button with the given value. The value cannot
+     * contain the HTML characters <tt>&nbsp;</tt> as the submitted value
+     * cannot be processed correctly.
+     * <p/>
+     * The field name will be Java property representation of the given value.
+     *
+     * @param value the button value
+     */
     public ImageSubmit(String value) {
         super(value);
     }
 
-    public ImageSubmit(String value, String imageSource) {
+    /**
+     * Create a ImageSubmit button with the given value and image src path.
+     * The value cannot contain the HTML characters <tt>&nbsp;</tt> as the
+     * submitted value cannot be processed correctly.
+     * <p/>
+     * The field name will be Java property representation of the given value.
+     *
+     * @param value the button value
+     * @param src the image src path attribute
+     */
+    public ImageSubmit(String value, String src) {
         super(value);
-        setSrc(imageSource);
+        setSrc(src);
     }
 
     // ------------------------------------------------------ Public Attributes
 
+    /**
+     * Return the input type: '<tt>image</tt>'.
+     *
+     * @return the input type: '<tt>image</tt>'
+     */
     public String getType() {
         return "image";
     }
 
+    /**
+     * Return the image src path attribute.
+     *
+     * @return the image src attribute
+     */
     public String getSrc() {
         return getAttribute("src");
     }
 
+    /**
+     * Set the image src path attribute.
+     *
+     * @param src the image src attribute
+     */
     public void setSrc(String src) {
         setAttribute("src", src);
     }
 
     /**
-     * Return the image x pixel coordinate clicked on by the user.
+     * Return the image x pixel coordinate clicked on by the user. The x
+     * pixel value will be set after control has been processed. The default x
+     * value is -1 which means the value has not been set.
      *
      * @return the image x pixel coordinate clicked on by the user
      */
@@ -65,7 +106,9 @@ public class ImageSubmit extends Submit {
     }
  
     /**
-     * Return the image y pixel coordinate clicked on by the user.
+     * Return the image y pixel coordinate clicked on by the user. The y
+     * pixel value will be set after control has been processed. The default y
+     * value is -1 which means the value has not been set.
      *
      * @return the image y pixel coordinate clicked on by the user
      */
@@ -78,13 +121,13 @@ public class ImageSubmit extends Submit {
     /**
      * Process the submit event and return true to continue event processing.
      * <p/>
-     * If the submit button is clicked and a Control listener is defined, the
+     * If the image is clicked and a Control listener is defined, the
      * listener method will be invoked and its boolean return value will be
      * returned by this method.
      * <p/>
-     * Submit buttons will be processed after all the non Button Form Controls
-     * have been processed. Submit buttons will be processed in the order
-     * they were added to the Form.
+     * Submit button controls will be processed after all the non Button
+     * Controls have been processed. Submit buttons will be processed in the
+     * order they were added to the Form.
      *
      * TODO: update doco
      *

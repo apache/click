@@ -232,6 +232,8 @@
       </javadoc>
       <copy file="framework/src/net/sf/click/control/calendar.gif"
             todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
+      <copy file="framework/src/net/sf/click/control/image-submit.gif"
+            todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <!-- Extras -->
       <delete quiet="false" failonerror="false">
           <fileset dir="webapps/click-documentation/docs/extras-api" includes="**/*"/>
