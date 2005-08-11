@@ -55,6 +55,7 @@
       <jar destfile="${dir.deploy}/click-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="${dir.classes}">
@@ -84,6 +85,7 @@
       <jar destfile="${dir.deploy}/click-extras-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="extras/classes"/>

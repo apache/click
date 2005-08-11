@@ -3,7 +3,17 @@
  <title>Click Examples</title>
  <link rel="stylesheet" type="text/css" href="style.css">
  <style type="text/css">
-   p { margin: 0.75em; }
+  p { 
+    margin: 0.75em; 
+  }
+  .title { 
+    background-color: #d0d0d0; 
+    color: black; 
+    font-weight: bold;
+    margin-top: 1em;
+    padding: 0.5em; 
+    padding-left: 1.5em; 
+  }
  </style>
 </head>
 <body>
@@ -16,6 +26,10 @@ Try the Click examples below by clicking on a link.
 </div>
 
 <table border="0" cellpadding="0" cellspacing="0" style="margin-top: 1em;">
+
+ <tr>
+  <td colspan='2'><div class='title' style='margin-top:0.25em;'>ActionLink</div></td>
+ </tr>
  <tr>
   <td width="50%"><p><a href="action-demo.htm">Action Demo</a></p>
     <p>Demonstration of the ActionLink control.</p>
@@ -23,7 +37,37 @@ Try the Click examples below by clicking on a link.
   <td width="50%"><p><a href="action-table.htm">Action Table</a></p>
     <p>Example of ActionLink controls being used in a table.</p>
   </td>
+ </tr>
+
+
+ <tr>
+  <td colspan='2'><div class='title'>Forms</div></td>
+ </tr>
+ <tr>
+  <td><p><a href="big-form.htm">Big Form</a></p>
+    <p>Super size form example with all the Form Controls.</p>
+  </td>
+  <td><p><a href="file-upload.htm">File Upload</a></p>
+    <p>Demonstration of file uploading using the FileField control.</p>
+  </td>
  </tr><tr>
+  <td><p><a href="form-properties.htm">Form Properties</a></p>
+    <p>Demonstration of form properties and layout options.</p>
+  </td>
+  <td><p><a href="search-form.htm">Search Form</a></p>
+    <p>Search form example demonstrating manually laying out a form.</p>
+  </td>
+ </tr><tr>
+  <td><p><a href="select-demo.htm">Select Demo</a></p>
+    <p>Demonstration of form layout options.</p>
+  </td>
+  <td>&nbsp;</td>
+ </tr>
+
+ <tr>
+  <td colspan='2'><div class='title'>Miscellaneous</div></td>
+ </tr>
+ <tr>
   <td><p><a href="ajax/ajax.htm">AJAX</a></p>
     <p>AJAX Dynamic HTML and XML request example.</p>
   </td>
@@ -31,54 +75,57 @@ Try the Click examples below by clicking on a link.
     <p>Demonstration of Click application reloading.</p>
   </td>
  </tr><tr>
-  <td><p><a href="big-form.htm">Big Form</a></p>
-    <p>Super size form example with all the Form Controls.</p>
-  </td>
   <td><p><a href="exception.htm">Exception Demo</a></p>
     <p>Demonstration of Click error handling.</p>
-  </td>
- </tr><tr>
-  <td><p><a href="file-upload.htm">File Upload</a></p>
-    <p>Demonstration of file uploading using the FileField control.</p>
-  </td>
-  <td><p><a href="form-properties.htm">Form Properties</a></p>
-    <p>Demonstration of form properties and layout options.</p>
-  </td>
- </tr><tr>
-  <td><p><a href="hello-world.htm">Hello World</a></p>
-    <p>The classic introduction example.</p>
-  </td>
-  <td><p><a href="pageflow/start-page.htm">Page Flow</a></p>
-    <p>Demonstration of page flow design patterns.</p>
-  </td>  
- </tr><tr>
-  <td><p><a href="navigation-a.htm">Page Navigation</a></p>
-    <p>Navigation between Pages using forward and redirect.</p>
   </td>
   <td><p><a href="security/login.htm">Page Security</a></p>
     <p>Securiy example with Login, Secure and Logout pages.</p>
   </td>
- </tr><tr>
-  <td><p><a href="search-form.htm">Search Form</a></p>
-    <p>Search form example demonstrating manually laying out a form.</p>
+ </tr>
+
+ <tr>
+  <td colspan='2'><div class='title'>Navigation</div></td>
+ </tr>
+ <tr>
+  <td><p><a href="navigation-a.htm">Page Navigation</a></p>
+    <p>Navigation between Pages using forward and redirect.</p>
   </td>
-  <td><p><a href="select-demo.htm">Select Demo</a></p>
-    <p>Demonstration of form layout options.</p>
+  <td><p><a href="pageflow/start-page.htm">Page Flow</a></p>
+    <p>Demonstration of page flow design patterns.</p>
   </td>
- </tr><tr>
-  <td><p><a href="simple-table.htm">Simple Table</a></p>
-    <p>Simple Velocity table displaying Java System properties.</p>
-  </td>
-   <td><p><a href="table-demo.htm">Table Demo</a></p>
-    <p>Demonstration of the Table control.</p>
-  </td>  
- </tr><tr> 
- </tr><tr>
+ </tr>
+
+ <tr>
+  <td colspan='2'><div class='title'>Panel</div></td>
+ </tr>
+ <tr>
   <td><p><a href="list-panel-demo.htm">List Panel Demo</a></p>
     <p>Vertically repeating panels.</p>
   </td>
    <td><p><a href="tabbed-panel-demo.htm">Tabbed Panel Demo</a></p>
     <p>Panels separated by tabs with navigation.</p>
+  </td>
+ </tr>
+
+ <tr>
+  <td colspan='2'><div class='title'>Table control</div></td>
+ </tr>
+ <tr>
+   <td><p><a href="table-demo.htm">Table Demo</a></p>
+    <p>Demonstration of the Table control.</p>
+  </td>  
+  <td>&nbsp;</td>
+ </tr>
+
+ <tr>
+  <td colspan='2'><div class='title'>Velocity</div></td>
+ </tr>
+ <tr>
+  <td><p><a href="hello-world.htm">Hello World</a></p>
+    <p>The classic introduction example.</p>
+  </td>
+  <td><p><a href="simple-table.htm">Simple Table</a></p>
+    <p>Simple Velocity table displaying Java System properties.</p>
   </td>
  </tr><tr>
   <td><p><a href="velocity-macro.htm">Velocity Macro</a></p>
@@ -86,6 +133,7 @@ Try the Click examples below by clicking on a link.
   </td>
   <td>&nbsp;</td>
  </tr>	
+
 </table>
 
 

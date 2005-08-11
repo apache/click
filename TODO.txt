@@ -8,7 +8,6 @@ CODE
 BUGS
 
 DOCUMENTATION
-* document Chinese localisation by Xi Ping Wang 
 * update configuration.html, roadmap-changes, FAQ
 * update Control in diagrams, update Control classes diagram
 

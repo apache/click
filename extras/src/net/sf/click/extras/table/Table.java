@@ -69,6 +69,12 @@ public class Table implements Control {
     /** The control name. */
     protected String name;
 
+    /** The current page number. */
+    protected int pageNumber;
+
+    /** The page size in rows. */
+    protected int pageSize;
+
     /** The list Table rows. */
     protected List rowList;
 
@@ -272,6 +278,36 @@ public class Table implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+    }
+
+    public int getNumberPages() {
+        if (pageSize == 0) {
+            return 1;
+        }
+        if (rowList == null || rowList.isEmpty())
+        {
+            return 1;
+        }
+        else
+        {
+            // TODO
+        }
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     /**
