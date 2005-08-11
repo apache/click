@@ -291,6 +291,7 @@ public class Table implements Control {
         else
         {
             // TODO
+            return 1;
         }
     }
 
