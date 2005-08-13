@@ -8,6 +8,11 @@ import net.sf.click.extras.table.Column;
 import net.sf.click.extras.table.Table;
 import examples.domain.CustomerDAO;
 
+/**
+ * Provides an Table control demonstration.
+ *
+ * @author Malcolm Edgar
+ */
 public class TableDemo extends BorderedPage {
 
     private static final String[] STYLES = {

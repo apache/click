@@ -3,7 +3,6 @@ CODE
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
-* make ImageSubmit example
 
 BUGS
 

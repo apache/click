@@ -69,10 +69,13 @@ public class Table implements Control {
     /** The control name. */
     protected String name;
 
-    /** The current page number. */
+    /** The currently displayed page number. */
     protected int pageNumber;
 
-    /** The page size in rows. */
+    /**
+     * The maximum page size in rows. A value of 0 means there is no maximum
+     * page size.
+     */
     protected int pageSize;
 
     /** The list Table rows. */
@@ -280,33 +283,58 @@ public class Table implements Control {
         this.name = name;
     }
 
+    /**
+     * Return the number of pages to display.
+     *
+     * @return the number of pages to display
+     */
     public int getNumberPages() {
-        if (pageSize == 0) {
+        if (getPageSize() == 0) {
             return 1;
         }
-        if (rowList == null || rowList.isEmpty())
-        {
+
+        if (rowList == null || rowList.isEmpty()) {
             return 1;
         }
-        else
-        {
-            // TODO
-            return 1;
-        }
+
+
+        return (int) Math.ceil((double)rowList.size() / (double) getPageSize());
     }
 
+    /**
+     * Return the currently displayed page number.
+     *
+     * @return the currently displayed page number
+     */
     public int getPageNumber() {
         return pageNumber;
     }
 
+    /**
+     * Set the currently displayed page number.
+     *
+     * @param pageNumber set the currently displayed page number
+     */
     public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
 
+    /**
+     * Return the maximum page size in rows. A page size of 0
+     * means there is no maximum page size.
+     *
+     * @return the maximum page size in rows
+     */
     public int getPageSize() {
         return pageSize;
     }
 
+   /**
+     * Set the maximum page size in rows. A page size of 0
+     * means there is no maximum page size.
+     *
+     * @param pageSize the maximum page size in rows
+     */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }

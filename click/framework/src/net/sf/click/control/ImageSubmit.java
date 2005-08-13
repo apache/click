@@ -1,6 +1,5 @@
 package net.sf.click.control;
 
-import net.sf.click.util.ClickUtils;
 
 /**
  * Provides an ImageSubmit control: &nbsp; &lt;input type='image' src='edit.gif'&gt;.
@@ -11,35 +10,44 @@ import net.sf.click.util.ClickUtils;
  * </td></tr>
  * </table>
  *
- * TODO
+ * The ImageSubmit control is useful for creating custom form buttons. This
+ * control can also be used for creating image areas where the user clicks on
+ * a point on the image and the clicked x and y coordinates are submitted
+ * with the name of the control.
+ * <p/>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
+ * @see Submit
+ * @see Button
+ *
  * @author Phil Barnes
  * @author Malcolm Edgar
- * $Id$
+ * @version $Id$
  */
 public class ImageSubmit extends Submit {
 
     // ----------------------------------------------------- Instance Variables
 
     /**
-     * The image pixel x coordinate clicked on by the user. The default x
-     * value is -1 which means the value has not been set.
+     * The image pixel x coordinate clicked on by the user, the default value
+     * is -1. A value of -1 which means the value has not been set.
      */
     protected int x = -1;
 
-    /** The image pixel y coordinate clicked on by the user.  The default x
-     * value is -1 which means the value has not been set. */
+    /**
+     * The image pixel y coordinate clicked on by the user, the default value
+     * is -1.  A value of -1 means the value has not been set.
+     */
     protected int y = -1;
 
     // ----------------------------------------------------------- Constructors
 
     /**
      * Create a ImageSubmit button with the given value. The value cannot
-     * contain the HTML characters <tt>&nbsp;</tt> as the submitted value
+     * contain the HTML characters <tt>&amp;nbsp;</tt> as the submitted value
      * cannot be processed correctly.
      * <p/>
      * The field name will be Java property representation of the given value.
@@ -52,7 +60,7 @@ public class ImageSubmit extends Submit {
 
     /**
      * Create a ImageSubmit button with the given value and image src path.
-     * The value cannot contain the HTML characters <tt>&nbsp;</tt> as the
+     * The value cannot contain the HTML characters <tt>&amp;nbsp;</tt> as the
      * submitted value cannot be processed correctly.
      * <p/>
      * The field name will be Java property representation of the given value.
@@ -129,17 +137,15 @@ public class ImageSubmit extends Submit {
      * Controls have been processed. Submit buttons will be processed in the
      * order they were added to the Form.
      *
-     * TODO: update doco
-     *
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        String value = getContext().getRequestParameter(getName());
+        //  Note IE does not submit name
+        String xValue = getContext().getRequestParameter(getName() + ".x");
 
-        if (value != null) {
-            clicked = getName().equals(ClickUtils.toName(value));
+        if (xValue != null) {
+            clicked = true;
 
-            String xValue = getContext().getRequestParameter(getName() + ".x");
             try {
                 x = Integer.parseInt(xValue);
             } catch (NumberFormatException nfe) {
