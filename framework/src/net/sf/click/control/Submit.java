@@ -50,7 +50,7 @@ public class Submit extends Button {
 
     /**
      * Create a Submit button with the given value. The value cannot contain
-     * the HTML characters <tt>&nbsp;</tt> as the submitted value cannot be
+     * the HTML characters <tt>&amp;nbsp;</tt> as the submitted value cannot be
      * processed correctly.
      * <p/>
      * The field name will be Java property representation of the given value.

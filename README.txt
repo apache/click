@@ -27,6 +27,8 @@ To get started with building Click see:
 Click is built using the J2SE 1.4.2 and Ant 1.6.1.
 The main Ant targets include:
 
+        build-all             build framework, extras, webapps
+        build-extras          build extras JAR file
 	build-framework       build framework JAR file
 	build-release         build release ZIP file
 	build-webapps         build web application WAR files

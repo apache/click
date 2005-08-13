@@ -13,41 +13,42 @@ import net.sf.click.util.ClickUtils;
  * model related information for which ever panel is selected by the user.
  *
  * <pre class="codeHtml">
- * &lt;div id='$_tp_id'&gt;
- * &lt;table class="tp_tab"&gt;
- * &lt;tr class="tp_tab"&gt;
- * #foreach ($panel in $_tp_panels)
- * #if( $panel.id == $_tp_activePanel.id )
- * &lt;td class="tp_tab_on"&gt;
- * $panel.label
- * &lt;/td&gt;
- * &lt;td class="tp_tab_space"&gt;&lt;/td&gt;
- * #else
- * &lt;td class="tp_tab_off"&gt;
- * &lt;a href="$_tp_tabLink.getHref($panel.name)" id="$panel.id" class="tp_tab_link"&gt;$panel.label&lt;/a&gt;
- * &lt;/td&gt;
- * &lt;td class="tp_tab_space"&gt;&lt;/td&gt;
- * #end
- * #end
- * &lt;/tr&gt;
- * &lt;/table&gt;
- * &lt;table class="tp_content"&gt;
- * &lt;tr class="tp_content"&gt;
- * &lt;td class="tp_content"&gt;
- * #parse($_tp_activePanel)
- * &lt;/td&gt;
- * &lt;/tr&gt;
- * &lt;/table&gt;
- * &lt;/div&gt;
- * </pre>
+ * &lt;div id='<span class="blue">$_tp_id</span>'&gt;
+ *  &lt;table class="<span class="green">tp_tab</span>"&gt;
+ *   &lt;tr class="<span class="green">tp_tab</span>"&gt;
+ *    <span class="red">#foreach</span> (<span class="blue">$panel</span> <span class="red">in</span> <span class="blue">$_tp_panels</span>)
+ *     <span class="red">#if</span> (<span class="blue">$panel.id</span> == <span class="blue">$_tp_activePanel.id</span>)
+ *      &lt;td class="<span class="green">tp_tab_on</span>"&gt;
+ *       <span class="blue">$panel.label</span>
+ *      &lt;/td&gt;
+ *      &lt;td class="<span class="green">tp_tab_space</span>"&gt;&lt;/td&gt;
+ *     <span class="red">#else</span>
+ *      &lt;td class="<span class="green">tp_tab_off</span>"&gt;
+ *       &lt;a href="<span class="blue">$_tp_tabLink.getHref($panel.name)</span>"
+ *          id="<span class="blue">$panel.id</span>"
+ *          class="<span class="green">tp_tab_link</span>"&gt;<span class="blue">$panel.label</span>&lt;/a&gt;
+ *      &lt;/td&gt;
+ *      &lt;td class="<span class="green">tp_tab_space</span>"&gt;&lt;/td&gt;
+ *     <span class="red">#end</span>
+ *    <span class="red">#end</span>
+ *   &lt;/tr&gt;
+ *  &lt;/table&gt;
+ *  &lt;table class="<span class="green">tp_content</span>"&gt;
+ *   &lt;tr class="<span class="green">tp_content</span>"&gt;
+ *    &lt;td class="<span class="green">tp_content</span>"&gt;
+ *     <span class="red">#parse</span>(<span class="blue">$_tp_activePanel</span>)
+ *    &lt;/td&gt;
+ *   &lt;/tr&gt;
+ *  &lt;/table&gt;
+ * &lt;/div&gt; </pre>
  *
  * As shown above, the the model context variables associated with a tabbed
  * panel are as follows:
  * <ul>
- * <li>_tp_id - the id associated with this tabbed panel</li>
- * <li>_tp_panels - the sub-panels added to this panel</li>
- * <li>_tp_activePanel - the currently active panel (aka tab)</li>
- * <li>_tp_tabLink - an {@link ActionLink} control that handles the switching
+ * <li><tt>_tp_id</tt> &nbsp; - the id associated with this tabbed panel</li>
+ * <li><tt>_tp_panels</tt> &nbsp; - the sub-panels added to this panel</li>
+ * <li><tt>_tp_activePanel</tt> &nbsp; - the currently active panel (aka tab)</li>
+ * <li><tt>_tp_tabLink</tt> &nbsp; - an {@link ActionLink} control that handles the switching
  * between the various panels.</li>
  * </ul>
  * <p/>
@@ -55,14 +56,36 @@ import net.sf.click.util.ClickUtils;
  * customization of the output.  These are as follows (these are the exact
  * colors show in the example for tabbed panels):
  *
- * <pre class="codeCss">
- * table.tp_tab { border-collapse: collapse; }
- * tr.tp_tab { }
- * td.tp_tab_on {  background: #336699; color: #ffffff; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699; padding: 5px; }
- * td.tp_tab_off { background: #cccccc; color: #000000; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699; padding: 5px; }
- * table.tp_content { border: 1px solid #336699; }
- * tr.tp_content { }
- * td.tp_content { background: #efefef; } </pre>
+ * <pre class="codeHtml">
+ * <span class="green">table.tp_tab</span> {
+ *   border-collapse: collapse;
+ * }
+ * <span class="green">tr.tp_tab</span> {
+ * }
+ * <span class="green">td.tp_tab_on</span> {
+ *   background: #336699;
+ *   color: #ffffff;
+ *   border-left: 1px solid #336699;
+ *   border-top: 1px solid #336699;
+ *   border-right: 1px solid #336699;
+ *   padding: 5px;
+ * }
+ * <span class="green">td.tp_tab_off</span> {
+ *   background: #cccccc;
+ *   color: #000000;
+ *   border-left: 1px solid #336699;
+ *   border-top: 1px solid #336699;
+ *   border-right: 1px solid #336699;
+ *   padding: 5px;
+ * }
+ * <span class="green">table.tp_content</span> {
+ *   border: 1px solid #336699;
+ * }
+ * <span class="green">tr.tp_content</span> {
+ * }
+ * <span class="green">td.tp_content</span> {
+ *   background: #efefef;
+ * } </pre>
  *
  * @author Phil Barnes
  * @version $Id$

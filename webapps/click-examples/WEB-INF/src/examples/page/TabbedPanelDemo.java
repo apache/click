@@ -7,6 +7,11 @@ import net.sf.click.extras.panel.Panel;
 import net.sf.click.extras.panel.TabbedPanel;
 import examples.domain.CustomerDAO;
 
+/**
+ * Provides an TabbedPanel demonstration.
+ *
+ * @author Phil Barnes
+ */
 public class TabbedPanelDemo extends BorderedPage {
 
     public void onInit() {

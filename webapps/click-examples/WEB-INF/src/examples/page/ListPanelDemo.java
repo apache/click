@@ -7,6 +7,12 @@ import net.sf.click.extras.panel.Panel;
 
 import java.util.List;
 
+
+/**
+ * Provides an ListPanel demonstration.
+ *
+ * @author Phil Barnes
+ */
 public class ListPanelDemo extends BorderedPage {
 
     public void onInit() {

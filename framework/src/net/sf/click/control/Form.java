@@ -1234,6 +1234,10 @@ public class Form implements Control {
      * @return the number of hidden Fields
      */
     protected int renderFields(StringBuffer buffer) {
+        if (fieldList.size() == 1 && fields.containsKey("form_name")) {
+            return 1;
+        }
+
         int hiddenCount = 0;
 
         buffer.append("<tr><td>\n");
