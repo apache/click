@@ -1,5 +1,6 @@
 package net.sf.click.extras.panel;
 
+
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 import net.sf.click.util.ClickLogger;
@@ -93,16 +94,22 @@ import net.sf.click.util.ClickUtils;
 public class TabbedPanel extends BasicPanel {
 
     /** The logger associated with this tabbed panel. */
-    protected static ClickLogger log = new ClickLogger();
+    protected static ClickLogger log = new ClickLogger("TabbedPanel");
 
-    private Object listener;
-    private String method;
-    private ActionLink tabActionLink;
+    protected Object listener;
+
+    protected String method;
+
+    protected ActionLink tabActionLink;
+
+    // ----------------------------------------------------------- Constructors
 
     public TabbedPanel(String id) {
         super(id);
         addModel("_tp_id", id);
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * <b>NOTE:</b> This method should <b>not</b> be called, in favor of

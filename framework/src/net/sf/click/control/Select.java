@@ -209,6 +209,9 @@ public class Select extends Field {
             throw new IllegalArgumentException("option parameter cannot be null");
         }
         getOptionList().add(option);
+        if (getOptionList().size() == 1) {
+            setInitialValue();
+        }
     }
 
     /**
@@ -237,6 +240,9 @@ public class Select extends Field {
             throw new IllegalArgumentException("value parameter cannot be null");
         }
         getOptionList().add(new Option(value));
+        if (getOptionList().size() == 1) {
+            setInitialValue();
+        }
     }
 
     /**
@@ -249,10 +255,8 @@ public class Select extends Field {
         if (options == null) {
             throw new IllegalArgumentException("options parameter cannot be null");
         }
-        if (optionList == null) {
-            optionList = new ArrayList(options.size());
-        }
-        optionList.addAll(options);
+        getOptionList().addAll(options);
+        setInitialValue();
     }
 
     /**
@@ -265,12 +269,10 @@ public class Select extends Field {
         if (options == null) {
             throw new IllegalArgumentException("options parameter cannot be null");
         }
-        if (optionList == null) {
-            optionList = new ArrayList(options.size());
-        }
         for (int i = 0, size = options.size(); i < size; i++) {
-            optionList.add(options.get(i));
+            getOptionList().add(options.get(i));
         }
+        setInitialValue();
     }
 
     /**
@@ -286,13 +288,11 @@ public class Select extends Field {
         if (options == null) {
             throw new IllegalArgumentException("options parameter cannot be null");
         }
-        if (optionList == null) {
-            optionList = new ArrayList(options.length);
-        }
         for (int i = 0; i < options.length; i++) {
             String value = options[i];
-            optionList.add(new Option(value, value));
+            getOptionList().add(new Option(value, value));
         }
+        setInitialValue();
     }
 
     /**
@@ -514,5 +514,21 @@ public class Select extends Field {
         buffer.append("</select>");
 
         return buffer.toString();
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    protected void setInitialValue() {
+        if (!getOptionList().isEmpty()) {
+            Object object = getOptionList().get(0);
+
+            if (object instanceof String) {
+                setValue(object.toString());
+
+            } else if (object instanceof Option) {
+                Option option = (Option) object;
+                setValue(option.getValue());
+            }
+        }
     }
 }
