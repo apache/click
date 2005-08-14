@@ -35,6 +35,10 @@ import org.apache.velocity.runtime.log.LogSystem;
  * This class was adapted from
  * <tt>org.apache.velocity.tools.view.servlet.ServletLogger</tt>
  *
+ * <p/>
+ * The ClickLogger is designed to avoid the logging configuration, classpath
+ * and appender issues that plague existing logging frameworks.
+ *
  * @author Malcolm Edgar
  * @version $Id$
  */
@@ -59,11 +63,11 @@ public class ClickLogger implements LogSystem {
 
     // ----------------------------------------------------- Instance Variables
 
-    /**
-     * The is velocity log flag. This flag is true when instance is the
-     * velocity logger and false when instance is the click logger.
-     */
-    protected boolean velocityLog = false;
+    /** The logging level. */
+    protected int logLevel = DEBUG_ID;
+
+    /** The logger name. */
+    protected final String name;
 
     /**
      * The servlet context to log messages to. If the servlet context is null
@@ -71,8 +75,25 @@ public class ClickLogger implements LogSystem {
      */
     protected ServletContext servletContext = null;
 
-    /** The logging level. */
-    protected int logLevel = DEBUG_ID;
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new Click logger with the given name. The logger name will be
+     * written out in the logging messages.
+     *
+     * @param name the logger name
+     */
+    public ClickLogger(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Create a new Click logger with the "Velocity" name. This logger instance
+     * will be created by the Velocity runtime.
+     */
+    public ClickLogger() {
+        this.name = "Velocity";
+    }
 
     // --------------------------------------------------------- Public Methods
 
@@ -83,7 +104,6 @@ public class ClickLogger implements LogSystem {
      * @see LogSystem#init(RuntimeServices)
      */
     public void init(RuntimeServices rs) throws Exception {
-        velocityLog = true;
 
         String logto = (String) rs.getApplicationAttribute(LOG_TO);
         if ("servlet".equals(logto)) {
@@ -263,11 +283,9 @@ public class ClickLogger implements LogSystem {
 
         StringBuffer buffer = new StringBuffer(80);
 
-        if (velocityLog) {
-            buffer.append("[Velocity]");
-        } else {
-            buffer.append("[Click]");
-        }
+        buffer.append("[");
+        buffer.append(name);
+        buffer.append("]");
 
         buffer.append(LEVELS[level+1]);
         buffer.append(message);

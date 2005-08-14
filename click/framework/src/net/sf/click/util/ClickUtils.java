@@ -47,9 +47,6 @@ public class ClickUtils {
     /** The number of template lines to display in error report. */
     protected static final int NUMBER_TEMPLATE_LINES = 8;
 
-    /** The default extension for Click templates */
-    public static final String DEFAULT_TEMPLATE_EXTENSION = ".htm";
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -380,17 +377,4 @@ public class ClickUtils {
         return buffer.toString();
     }
 
-    /**
-     * Return the name of the passed object class, without the package
-     * information. This is used as a default 'lookup' for a template with the
-     * same name plus the defualt template extension (.htm).
-     *
-     * @param object the object to get the template for
-     * @return the short class name + the default template extension
-     */
-    public static String generateDefaultTemplateName(Object object) {
-        String classname = object.getClass().getName();
-        int index = classname.lastIndexOf('.');
-        return classname.substring(index + 1) + DEFAULT_TEMPLATE_EXTENSION;
-    }
 }

@@ -24,9 +24,18 @@ public class TableDemo extends BorderedPage {
 
     public void onInit() {
 
+        // Setup table style select.
+        Form form = new Form("form", getContext());
+        addControl(form);
+
+        styleSelect = new Select("Style");
+        styleSelect.addAll(STYLES);
+        styleSelect.setAttribute("onchange", "this.form.submit();");
+        form.add(styleSelect);
+
         // Setup customers table
         table = new Table("table");
-        table.setAttribute("class", "simple");
+        table.setAttribute("class", styleSelect.getValue());
 
         table.addColumn(new Column("name"));
 
@@ -34,7 +43,9 @@ public class TableDemo extends BorderedPage {
         column.setAutolink(true);
         table.addColumn(column);
 
-        table.addColumn(new Column("age"));
+        column = new Column("age");
+        column.setAttribute("style", "{text-align:center;}");
+        table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
@@ -45,15 +56,6 @@ public class TableDemo extends BorderedPage {
         table.setRowList(customers);
 
         addControl(table);
-
-        // Setup table style select.
-        Form form = new Form("form", getContext());
-        addControl(form);
-
-        styleSelect = new Select("Style");
-        styleSelect.addAll(STYLES);
-        styleSelect.setAttribute("onchange", "this.form.submit();");
-        form.add(styleSelect);
     }
 
     public void onPost() {

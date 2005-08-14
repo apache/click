@@ -2,6 +2,7 @@ package examples.page;
 
 import net.sf.click.control.Form;
 import net.sf.click.control.ImageSubmit;
+import net.sf.click.control.Label;
 
 /**
  * Provides an ImageSubmit control example.
@@ -30,6 +31,8 @@ public class ImageDemo extends BorderedPage {
         // Colors Form
         Form form = new Form("form", getContext());
         addControl(form);
+
+        form.add(new Label("<b>Color Chooser</b>"));
 
         colorSubmit = new ImageSubmit("submit", "images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");

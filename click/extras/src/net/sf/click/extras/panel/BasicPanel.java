@@ -37,45 +37,34 @@ import java.util.Map;
  * @version $Id$
  */
 public class BasicPanel implements Panel {
-    /**
-     * The list of sub panels.
-     */
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The list of sub panels. */
     protected List panels;
 
-    /**
-     * The page this panel is associated with
-     */
-    private Page page;
+    /** The page this panel is associated with. */
+    protected Page page;
 
-    /**
-     * A temporary storage for control objects until the Page is set
-     */
-    private List controls = new ArrayList();
+    /** A temporary storage for control objects until the Page is set. */
+    protected List controls = new ArrayList();
 
-    /**
-     * A temporary storage for model objects until the Page is set
-     */
-    private Map model = new HashMap();
+    /** A temporary storage for model objects until the Page is set. */
+    protected Map model = new HashMap();
 
-    /**
-     * The template this panel is tied to for rendering
-     */
-    private String template;
+    /** The template this panel is tied to for rendering. */
+    protected String template;
 
-    /**
-     * The "name" of this panel (context key)
-     */
-    private String name;
+    /** The "name" of this panel (context key) */
+    protected String name;
 
-    /**
-     * The (localized) label of this panel
-     */
-    private String label;
+    /** The (localized) label of this panel. */
+    protected String label;
 
-    /**
-     * The "identifier" for this panel (id for rendering)
-     */
-    private String id;
+    /** The "identifier" for this panel (CSS id for rendering). */
+    protected String id;
+
+    // ----------------------------------------------------------- Constructors
 
     public BasicPanel(String id) {
         // null template will be replaced with a default template name - see
@@ -101,9 +90,11 @@ public class BasicPanel implements Panel {
         if (template != null) {
             setTemplate(template);
         } else {
-            setTemplate(ClickUtils.generateDefaultTemplateName(this));
+            setTemplate(getDefaultTemplateName());
         }
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Adds a 'sub-panel' to this panel.  This is useful for 'panels of panels',
@@ -323,5 +314,19 @@ public class BasicPanel implements Panel {
      */
     public String toString() {
         return getTemplate();
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the default template name which is the short classname and the
+     * template extension (htm).
+     *
+     * @return the short class name + the default template extension (.htm)
+     */
+    public String getDefaultTemplateName() {
+        String classname = getClass().getName();
+        int index = classname.lastIndexOf('.');
+        return classname.substring(index + 1) + ".htm";
     }
 }

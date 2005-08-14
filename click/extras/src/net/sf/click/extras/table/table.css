@@ -1,13 +1,10 @@
 /*
- * DisplayTag 1.0 - screen.css
- *
+ * Table CSS style
+ * 
+ * This CSS style sheet was adapted from DisplayTag 1.0 - screen.css
  * http://displaytag.sourceforge.net
  */
- 
-table, td, th, td { 
-	font-family:Verdana, Geneva, Arial, Helvetica, sans-serif; 
-	font-size: 11px;
-}
+
 h1, h2, h3, h4, h5, h6, p, strong, div, form, acronym, label, table, td, th, span, a, hr, code, pre, hr {
 	margin:0;
 	padding:0;
@@ -134,12 +131,7 @@ ul#stylelist li {
 	padding:2px;
 	margin-right: 2px;
 }
-table {
-	border: 1px solid #666;
 
-	width: 80%;
-	margin: 20px 0 20px 0;
-}
 th, td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
@@ -152,11 +144,11 @@ th.sorted {
     background-color: orange;
 }
 th a, th a:visited {
-  color: black;
+    color: black;
 }
 th a:hover {
-  text-decoration: underline;
-  color: black;
+    text-decoration: underline;
+    color: black;
 }
 th.sorted a, th.sortable a {
 	background-position: right;
@@ -173,10 +165,10 @@ th.order2 a {
 	background-image: url(../img/arrow_up.png);
 }
 tr.odd {
-  background-color: #fff
+    background-color: #fff
 }
 tr.tableRowEven, tr.even {
-  background-color: #fea
+    background-color: #fea
 }
 
 ul#showsource {
@@ -189,52 +181,68 @@ ul#showsource {
 	list-style-type: none;
 }
 
+/* isi style */
+table.isi, table.isi td, table.isi th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
 
-/* test styles */
+/* its style */
 table.its thead tr {
-  background-color: #69c;
+    background-color: #69c;
 }
 table.its tr.even {
-  background-color: #def;
+    background-color: #def;
+}
+table.its, table.its td, table.its th {
+    border: 1px solid #666;
+    border-collapse: collapse;
 }
 
+/* mars style */
 table.mars thead tr {
-  background-color: #9c9;
+    background-color: #9c9;
 }
 table.mars tr.even {
-  background-color: #ccb;
+    background-color: #ccb;
 }
 table.mars tr.odd {
-  background-color: #eec;
+    background-color: #eec;
+}
+table.mars, table.mars td, table.mars th {
+    border: 1px solid #666;
+    border-collapse: collapse;
 }
 
-
+/* simple style */
 table.simple thead tr {
-  background-color: #eee;
+    background-color: #eee;
 }
 table.simple tr.even {
-  background-color: #fff;
+    background-color: #fff;
 }
-table.simple {
+table.simple td.textRed {
+    color: #b11;
+}
+table.simple, table.simple td, table.simple th {
 	border: 1px solid #ccc;
 	border-collapse: collapse;
 }
-table.simple td,table.simple th{
-	border: 1px solid #ccc;
-}
 
-table.nocol tbody td,table.nocol tbody th{
+/* nocol style */
+table.nocol tbody td,table.nocol tbody th {
 	border-left: none;
 	border-right: none;
 }
 
-
-
-
-table.report td, table.report th{
-	font:         menu;
+/* report style */
+table.report {
+    border: 1px solid #666;
 }
-table.report th{
+table.report td, table.report th {
+	font: menu;
+}
+table.report th {
 	background:   buttonface;
 	border-width: 1px;
 	border-style: solid;
@@ -244,7 +252,6 @@ table.report th{
 table.report idcol {
 	background: buttonface;
 }
-
 table.report tr.even{
 	background-color: #399;
 }
@@ -252,24 +259,14 @@ table.report tbody {
 	height: 100px;
 	overflow: auto;
 }
-
 table.report {
 	height: 120px;
 	overflow: auto;
 }
-
 table.report tbody tr{
 	height: 10px;
 }
 
-
-
-
-
-table.mark td.tableCellError {
-	background-color: #d00;
-	color: #fff;
-}
 
 table.sublist {
 	margin: 0 0 0 0;
@@ -325,5 +322,3 @@ span.pagelinks {
 	border-top: none;
 	margin-bottom: -5px;
 }
-
-table.simple td.textRed {color: #b11;}

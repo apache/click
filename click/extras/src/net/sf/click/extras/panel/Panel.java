@@ -19,7 +19,6 @@ import net.sf.click.Page;
  * When a Panel is instantiated, it should automatically add all the information
  * required to render the Panel to the Model (via addModel) and pass controls
  * directly to the Page (via addControl).
- * </ul>
  *
  * @author Phil Barnes
  * @version $Id$
@@ -31,6 +30,7 @@ public interface Panel {
      * ensure any associated model or control elements that are added to the
      * panel are ultimately added to the page, so that the rendering of the page
      * has all available information necessary to render.
+     *
      * @param page the page associated with this panel
      */
     public void setPage(Page page);
@@ -39,6 +39,7 @@ public interface Panel {
      * The path and name of the template to render.  This is the method that
      * should be called via Velocity's #parse() directive (either directly or
      * indirectly through toString())
+     *
      * @return the path/name of the template to use when rendering this panel
      */
     public String getTemplate();
@@ -51,6 +52,7 @@ public interface Panel {
      * by multiple means: a constructor, a setter, or inferred from any number
      * of other methods (getTemplate(), getId(), getLabel(), etc.).  Thus the
      * implementation is left up to the Panel creator.
+     *
      * @return the name of this panel, to be used to uniquely identify it in the
      * model context
      */
@@ -70,6 +72,7 @@ public interface Panel {
      * multiple means: a constructor, a setter, or inferred from any number of
      * other methods (getTemplate(), getName(), getLabel(), etc.).  Thus the
      * implementation is left up to the Panel creator.
+     *
      * @return the id of this panel, to be used to uniquely identify it in the
      * HTML page
      */
@@ -87,13 +90,14 @@ public interface Panel {
      *      ## content here
      *  &lt;/div&gt; </pre>
      *
-     * @return the internationalized label associated with this control.
+     * @return the internationalized label associated with this control
      */
     public String getLabel();
 
     /**
      * Set the internationalized label associated with this panel.  This method
      * is necessary to ensure proper internationalization of text for a panel.
+     *
      * @param label the internationalized label for this panel
      */
     public void setLabel(String label);

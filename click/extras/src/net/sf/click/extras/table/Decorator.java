@@ -28,7 +28,7 @@ import net.sf.click.Context;
  * column.setDecorator(new Decorator() {
  *     public String render(Object row, Context context) {
  *         String email = row.toString();
- *         return "<a href='mailto:" + email + "'>" + email + "</a>";
+ *         return "&lt;a href='mailto:" + email + "'&gt;" + email + "</a>";
  *     }
  * });
  * table.addColumn(column); </pre>

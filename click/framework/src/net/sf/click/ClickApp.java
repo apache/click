@@ -167,7 +167,7 @@ class ClickApp implements EntityResolver {
 
         servletContext = context;
 
-        logger = new ClickLogger();
+        logger = new ClickLogger("Click");
 
         InputStream inputStream =
             servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
