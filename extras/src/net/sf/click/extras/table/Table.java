@@ -146,16 +146,16 @@ public class Table implements Control {
     }
 
     /**
-     * Set the Tables with the given HTML attribute name and value. These
+     * Set the Table with the given HTML attribute name and value. These
      * attributes will be rendered as HTML attributes, for example:
      *
      * <pre class="codeJava">
      * Table table = new Table("customer");
-     * table.setAttribute("<span class="blue">style</span>", "<span class="red">text-align:middle;</span>"); </pre>
+     * table.setAttribute("<span class="blue">class</span>", "<span class="red">simple</span>"); </pre>
      *
      * HTML output:
      * <pre class="codeHtml">
-     * &lt;table id='customer-table' class='simple' <span class="blue">style</span>='<span class="red">text-align:middle;</span>'&gt;
+     * &lt;table id='customer-table' <span class="blue">class</span>='<span class="red">simple</span>'&gt;
      *   ..
      * &lt;/table&gt; </pre>
      *

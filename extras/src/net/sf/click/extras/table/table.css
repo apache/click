@@ -5,19 +5,7 @@
  * http://displaytag.sourceforge.net
  */
 
-h1, h2, h3, h4, h5, h6, p, strong, div, form, acronym, label, table, td, th, span, a, hr, code, pre, hr {
-	margin:0;
-	padding:0;
-	font-size: 1em;
-	background-repeat:no-repeat;
-	list-style-type:none;
-}
-a, a:visited, a:hover { 
-	color:#666; text-decoration:none; 
-}
-a:hover {
-	text-decoration: underline;
-}
+/*
 img{ 
 	border:none;
 }
@@ -68,25 +56,6 @@ div#header ul li a:hover{
 	border-left: 1px solid #000;
 }
 
-h2 {
-	font-size: 1.2em;
-	margin: 10px 0 10px 0;
-}
-
-h2 {
-	font-size: 1.1em;
-	margin: 10px 0 5px 0;
-}
-
-p {
-	margin: 0 0 10px 0;
-}
-
-acronym {
-	border-bottom: 1px dashed #000;
-	cursor: help;
-}
-
 div#body {
 	margin: 0 5% 20px 5%;
 	padding: 20px 20px 20px 20px;
@@ -112,12 +81,6 @@ div#footer span {
 	float: left;
 }
 
-/*.changed {
-	background-color: #ee0;
-	border: 1px solid #ccc;
-	padding: 10px;
-	margin: 10px;
-}*/
 ul#stylelist {
 	margin:0 0 30px 0;
 }
@@ -131,14 +94,19 @@ ul#stylelist li {
 	padding:2px;
 	margin-right: 2px;
 }
+*/
 
-th, td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-	vertical-align: top;
+/** Global styles **/
+
+td a, td a:visited, td a:hover { 
+	color: #666; 
+    text-decoration: none; 
+}
+td a:hover {
+	text-decoration: underline;
 }
 thead tr {
-  background-color: #fc0;
+    background-color: #fc0;
 }
 th.sorted {
     background-color: orange;
@@ -181,10 +149,17 @@ ul#showsource {
 	list-style-type: none;
 }
 
+/** Individual Styles **/
+
 /* isi style */
 table.isi, table.isi td, table.isi th {
     border: 1px solid #666;
     border-collapse: collapse;
+}
+table.isi th, table.isi td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
 }
 
 /* its style */
@@ -197,6 +172,11 @@ table.its tr.even {
 table.its, table.its td, table.its th {
     border: 1px solid #666;
     border-collapse: collapse;
+}
+table.its th, table.its td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
 }
 
 /* mars style */
@@ -213,6 +193,11 @@ table.mars, table.mars td, table.mars th {
     border: 1px solid #666;
     border-collapse: collapse;
 }
+table.mars th, table.mars td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
 
 /* simple style */
 table.simple thead tr {
@@ -228,11 +213,21 @@ table.simple, table.simple td, table.simple th {
 	border: 1px solid #ccc;
 	border-collapse: collapse;
 }
+table.simple th, table.simple td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
 
 /* nocol style */
 table.nocol tbody td,table.nocol tbody th {
 	border-left: none;
 	border-right: none;
+}
+table.nocol th, table.nocol td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
 }
 
 /* report style */
@@ -265,6 +260,11 @@ table.report {
 }
 table.report tbody tr{
 	height: 10px;
+}
+table.report th, table.report td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
 }
 
 

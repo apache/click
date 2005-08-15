@@ -26,6 +26,7 @@ public class TableDemo extends BorderedPage {
 
         // Setup table style select.
         Form form = new Form("form", getContext());
+        form.setMethod("GET");
         addControl(form);
 
         styleSelect = new Select("Style");
@@ -58,7 +59,8 @@ public class TableDemo extends BorderedPage {
         addControl(table);
     }
 
-    public void onPost() {
+    public void onGet() {
+        // Note the style form uses GET method.
         table.setAttribute("class", styleSelect.getValue());
     }
 
