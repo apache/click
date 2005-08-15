@@ -20,8 +20,10 @@ import net.sf.click.Context;
 /**
  * Provides a decorator interface to render given objects.
  * <p/>
- * <b>PLEASE NOTE</b>: the Decorator interface is undergoing preliminary
- * development and is subject to significant change
+ * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
+ * Please note the Decorator interface is undergoing development and is
+ * subject to change.
+ * </div>
  *
  * <pre class="codeJava">
  * Column column = new Column("email");

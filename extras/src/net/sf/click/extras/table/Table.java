@@ -31,8 +31,48 @@ import net.sf.click.util.ClickUtils;
 /**
  * Provides a HTML Table control: &lt;table&gt;.
  * <p/>
- * <b>PLEASE NOTE</b>: the Table control is undergoing preliminary development
- * and is subject to significant change
+ * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
+ * Please note the Table control is undergoing development and is
+ * subject to change.
+ * </div>
+ * <p/>
+ * The Table control provides a HTML &lt;table&gt; control with
+ * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
+ * like functionality. The design on the Table control has been informed by
+ * the DisplayTag library, with the aim of making this control easy to
+ * learn for DisplayTag users.
+ * <p/>
+ * The Table control automatically deploys the table CSS style sheet to the
+ * click application directory <tt>/click/table.css</tt>. To import the style
+ * sheet simpley reference the method {@link Table#getHtmlImports()}. For
+ * example:
+ *
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$table.htmlImports</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="blue">$table</span>
+ *  &lt;/body&gt;
+ * &lt;/html&gt; </pre>
+ *
+ * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
+ * style sheet and includes the styles:
+ * <ul>
+ *  <li>mars</li>
+ *  <li>isi</li>
+ *  <li>its</li>
+ *  <li>report</li>
+ *  <li>simple</li>
+ * </ul>
+ *
+ * See also W3C HTML reference
+ * <a title="W3C HTML 4.01 Specification"
+ *    href="../../../../../../html/struct/tables.html">Tables</a>
+ * and the W3C CSS reference
+ * <a title="W3C CSS 2.1 Specification"
+ *    href="../../../../../../css2/tables.html">Tables</a>.
  *
  * @see Column
  * @see Decorator
@@ -110,12 +150,14 @@ public class Table implements Control {
      * attributes will be rendered as HTML attributes, for example:
      *
      * <pre class="codeJava">
-     * Table table = new Table("Username");
-     * table.setAttribute("<span class="blue">class</span>", "<span class="red">login</span>"); </pre>
+     * Table table = new Table("customer");
+     * table.setAttribute("<span class="blue">style</span>", "<span class="red">text-align:middle;</span>"); </pre>
      *
      * HTML output:
      * <pre class="codeHtml">
-     * &lt;input type='text' name='username' value='' <span class="blue">class</span>='<span class="red">login</span>'/&gt; </pre>
+     * &lt;table id='customer-table' class='simple' <span class="blue">style</span>='<span class="red">text-align:middle;</span>'&gt;
+     *   ..
+     * &lt;/table&gt; </pre>
      *
      * If there is an existing named attribute in the Table it will be replaced
      * with the new value. If the given attribute value is null, any existing
@@ -239,9 +281,8 @@ public class Table implements Control {
     }
 
     /**
-     * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/control.css</tt>) and JavaScript (<tt>click/control.js</tt>)
-     * files.
+     * Return the HTML head import statements for the CSS stylesheet file:
+     * <tt>click/table.css</tt>.
      *
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files

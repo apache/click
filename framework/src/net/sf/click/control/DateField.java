@@ -38,7 +38,7 @@ import java.util.Date;
  * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
  * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
  * popup, reference the method {@link Form#getHtmlImports()} in the page
- * template (imports click/form.js file). For example.
+ * template (imports click/form.js file). For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
