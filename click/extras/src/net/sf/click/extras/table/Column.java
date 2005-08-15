@@ -30,8 +30,10 @@ import org.apache.commons.lang.StringUtils;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  * <p/>
- * <b>PLEASE NOTE</b>: the Column class is undergoing preliminary development
- * and is subject to significant change
+ * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
+ * Please note the Column class is undergoing development and is
+ * subject to change.
+ * </div>
  *
  * @see Decorator
  * @see Table
