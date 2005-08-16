@@ -21,8 +21,8 @@ import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogSystem;
 
 /**
- * Provides the loggers for the Click and Velocity runtime. By default the
- * runtime loggers will send messages to the console [System.out].
+ * Provides the internal loggers for the Click and Velocity runtime. By default
+ * the runtime loggers will send messages to the console [System.out].
  * <p/>
  * To configure the runtime loggers to send their messages to
  * <a href="../../../../../servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext.log</a>

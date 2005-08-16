@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * A simple implementation of a Panel, that will render a basic panel.  If
  * the template is provided, it will return that value via the toString()
@@ -40,29 +43,32 @@ public class BasicPanel implements Panel {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The list of sub panels. */
-    protected List panels;
-
-    /** The page this panel is associated with. */
-    protected Page page;
-
     /** A temporary storage for control objects until the Page is set. */
     protected List controls = new ArrayList();
 
-    /** A temporary storage for model objects until the Page is set. */
-    protected Map model = new HashMap();
-
-    /** The template this panel is tied to for rendering. */
-    protected String template;
-
-    /** The "name" of this panel (context key) */
-    protected String name;
+    /** The "identifier" for this panel (CSS id for rendering). */
+    protected String id;
 
     /** The (localized) label of this panel. */
     protected String label;
 
-    /** The "identifier" for this panel (CSS id for rendering). */
-    protected String id;
+    /** The class logger. */
+    protected final Log log;
+
+    /** A temporary storage for model objects until the Page is set. */
+    protected Map model = new HashMap();
+
+    /** The "name" of this panel (context key) */
+    protected String name;
+
+    /** The page this panel is associated with. */
+    protected Page page;
+
+    /** The list of sub panels. */
+    protected List panels;
+
+    /** The template this panel is tied to for rendering. */
+    protected String template;
 
     // ----------------------------------------------------------- Constructors
 
@@ -85,6 +91,7 @@ public class BasicPanel implements Panel {
      * @param template
      */
     public BasicPanel(String id, String name, String template) {
+        log = LogFactory.getLog(getClass());
         setId(id);
         setName(name);
         if (template != null) {
@@ -182,7 +189,7 @@ public class BasicPanel implements Panel {
      * Set the page this panel is associated to.  This method will set the
      * sub-panels pages as well
      *
-     * @param page
+     * @see Panel#setPage(Page)
      */
     public void setPage(Page page) {
         this.page = page;
@@ -209,7 +216,7 @@ public class BasicPanel implements Panel {
      * The template associated with this Panel.  If null, the simple class name
      * plus the default extension (".htm") will be used.
      *
-     * @return the template assocaited with this panel
+     * @see Panel#getTemplate()
      */
     public String getTemplate() {
         return template;
@@ -225,10 +232,7 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * The name for this panel.  This is used to uniquely identify the panel
-     * in the model context.
-     *
-     * @return the name for this panel
+     * @see Panel#getName()
      */
     public String getName() {
         return name;
@@ -245,10 +249,7 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * The id for this panel.  This is the identifier that will be assigned to
-     * the 'id' tag for this panel's model.
-     *
-     * @return the id for this panel
+     * @see Panel#getId()
      */
     public String getId() {
         return id;
@@ -258,7 +259,7 @@ public class BasicPanel implements Panel {
      * Set the id for this panel.  This is the identifier that will be assigned
      * to the 'id' tag for this panel's model.
      *
-     * @param id
+     * @see id the id attribute for this panel
      */
     public void setId(String id) {
         this.id = id;
@@ -283,23 +284,26 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * The label associated with this panel.  This can be used to i18n the title
-     * associated to this panel.
-     *
-     * @return the label for this panel
+     * @see Panel#getLabel()
      */
     public String getLabel() {
         return label == null ? name : label;
     }
 
     /**
-     * Set the label associated with this panel.  This can be used to i18n the
-     * title associated to this panel.
-     *
-     * @param label
+     * @see Panel#setLabel(String)
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * Return the logger for this class.
+     *
+     * @return the logger for this class
+     */
+    public Log getLog() {
+        return log;
     }
 
     /**

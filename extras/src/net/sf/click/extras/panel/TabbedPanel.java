@@ -3,7 +3,6 @@ package net.sf.click.extras.panel;
 
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -93,9 +92,6 @@ import net.sf.click.util.ClickUtils;
  */
 public class TabbedPanel extends BasicPanel {
 
-    /** The logger associated with this tabbed panel. */
-    protected static ClickLogger log = new ClickLogger("TabbedPanel");
-
     protected Object listener;
 
     protected String method;
@@ -120,10 +116,10 @@ public class TabbedPanel extends BasicPanel {
      * @param panel
      */
     public void addPanel(Panel panel) {
-        log.warn("WARNING: TabbedPanel should have panels added ONLY via" +
-                " addPanel(panel, boolean) to ensure the active panel" +
-                " is correctly set.  Setting active panel to *this* panel ('" +
-                panel.getName() + "') as a result.");
+        getLog().warn("WARNING: TabbedPanel should have panels added ONLY via" +
+                      " addPanel(panel, boolean) to ensure the active panel" +
+                      " is correctly set.  Setting active panel to *this* |" +
+                      " panel ('" + panel.getName() + "') as a result.");
         this.addPanel(panel, true);
     }
 
@@ -140,17 +136,17 @@ public class TabbedPanel extends BasicPanel {
     public void addPanel(Panel panel, boolean isActivePanel) {
         super.addPanel(panel);
         if (isActivePanel) {
-            if (log.isDebugEnabled()) {
-                log.debug("Adding panel with id " + panel.getId() +
-                          " as the active panel.");
+            if (getLog().isDebugEnabled()) {
+                getLog().debug("Adding panel with id " + panel.getId() +
+                               " as the active panel.");
             }
             setActivePanel(panel);
         }
         if (getPanels().size() > 1 && tabActionLink == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("Two or more panels detected, enabling " +
-                          "tabActionLink. Current listener status = " +
-                          this.listener + "." + this.method + "()");
+            if (getLog().isDebugEnabled()) {
+                getLog().debug("Two or more panels detected, enabling " +
+                               "tabActionLink. Current listener status = " +
+                               this.listener + "." + this.method + "()");
             }
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");
@@ -186,6 +182,9 @@ public class TabbedPanel extends BasicPanel {
         this.method = method;
     }
 
+    /**
+     * @see Panel#setPage(Page)
+     */
     public void setPage(Page page) {
         super.setPage(page);
         // add the context to the tabActionLink control - TODO: is there a better way to do set the context?
@@ -212,13 +211,16 @@ public class TabbedPanel extends BasicPanel {
         // if a listener has been explicitely set to handle a tab switch,
         // then invoke it
         if (this.listener != null && this.method != null) {
-            log.debug("Invoking listener " + this.listener + "." + this.method + "()");
+            getLog().debug("Invoking listener " + this.listener + "." +
+                           this.method + "()");
             return ClickUtils.invokeListener(listener, method);
         }
         // this implies that everything needed to render the next tab has been
         // added to the "model" context already
         else {
-            log.debug("No listener.method() found, continuing processing...");
+            String msg =
+                "No listener.method() found, continuing processing...";
+            getLog().debug(msg);
             return true;
         }
     }

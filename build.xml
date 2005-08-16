@@ -8,6 +8,7 @@
    <property name="jar.collections" value="commons-collections.jar"/>  
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
+   <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
    <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
 	
@@ -76,6 +77,7 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
+      <unzip src="${dir.lib}/${jar.logging}" dest="extras/classes"/> 
       <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
          <classpath>
         	<pathelement location="lib/${jar.servlet}"/>
