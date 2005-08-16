@@ -5,6 +5,12 @@
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+  li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+ </style>
 </head>
 <body>
   
@@ -17,17 +23,37 @@ you can deploy with your application.
 Click Extras provides a place for people to contribute their own code to the
 Click project and have it package with the standard distribution. Contributed
 code will be subject to review and may require modifications before it is
-included in the distribution.
+included in the Click distribution.
 <p/>
 
-<p>&nbsp;</p>
+<h3>Design</h3>
+One of the overriding design principles with Click is to keep it simple, this
+makes to code easier to understand and more reliable. 
+<p/>
+Another guiding principle is YAGNI (You Ain't Going to Need It), or don't build 
+it until you really really need it. Click is trying to provide an 80/20 rule framework 
+where 80% of peoples needs are meet by a framework which is only 20% in size.
+<p/>
+When developing Click Extras contributions please follow these principles.
 
-<div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
-Please note these controls and components are undergoing preliminary
-development and are subject to change. If you have find any bugs or have any 
-suggestions please log them at 
-<a target="blank" href="http://sourceforge.net/projects/click">http://sourceforge.net/projects/click</a>.
-</div>
+<h3>Dependencies</h3>
+
+Components and controls should have minimal dependencies. This is to support easy 
+deployment of the click-examples and keeps the click build process simple. 
+Current available dependencies include: 
+<ul style="margin-top:0.75em;margin-bottom:0.75em;">
+ <li>Click framework<span class="red">*</span></li>
+ <li>Commons Codec<span class="red">*</span></li>
+ <li>Commons Collections<span class="red">*</span></li>
+ <li>Commons Lang<span class="red">*</span></li>
+ <li>Commons Logging<span class="blue">*</span></li>
+ <li>JDOM<span class="red">*</span></li>
+<li>Velocity<span class="red">*</span></li>
+</ul>
+
+<span style="margin-left:1em;" class="red">*</span> : marked libraries are included in <tt>click.jar</tt><br/>
+<span style="margin-left:1em;" class="blue">*</span> : marked libraries are included in <tt>click-extras.jar</tt>
+
 
 </body>
 </html>
