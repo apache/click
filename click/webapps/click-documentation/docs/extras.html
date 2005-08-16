@@ -26,7 +26,7 @@ code will be subject to review and may require modifications before it is
 included in the Click distribution.
 <p/>
 
-<h3>Design</h3>
+<h2>Design</h2>
 One of the overriding design principles with Click is to keep it simple, this
 makes to code easier to understand and more reliable. 
 <p/>
@@ -53,6 +53,31 @@ Current available dependencies include:
 
 <span style="margin-left:1em;" class="red">*</span> : marked libraries are included in <tt>click.jar</tt><br/>
 <span style="margin-left:1em;" class="blue">*</span> : marked libraries are included in <tt>click-extras.jar</tt>
+
+<h3>Auto File Deployment</h3>
+
+The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates. 
+This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
+<tt>FileResourceLoader</tt> on J2EE application servers.
+<p/>
+To make preconfigured resources (templates, stylesheets, etc.) available to web applications
+Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
+directory at startup (existing files will not be overwritten).
+<p/>
+To register classpath resources to be automatically deployed add an entry to the Click Extras
+<tt>/click-deploy.properties</tt> file.
+
+<pre class="codeConfig">
+# Define list files to be deployed
+click.deploy.files=ListPanel,TabbedPanel,table
+
+# Define file resource paths
+click.deploy.path.ListPanel=/net/sf/click/extras/panel/ListPanel.htm
+
+click.deploy.path.TabbedPanel=/net/sf/click/extras/panel/TabbedPanel.htm
+
+click.deploy.path.table=/net/sf/click/extras/table/table.css </pre>
+
 
 
 </body>
