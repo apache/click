@@ -1,42 +1,28 @@
-package examples.page;
+package examples.page.table;
 
 import java.util.List;
 
-import net.sf.click.control.Form;
-import net.sf.click.control.Select;
 import net.sf.click.extras.table.Column;
 import net.sf.click.extras.table.Table;
 import examples.domain.CustomerDAO;
+import examples.page.BorderedPage;
 
 /**
- * Provides an demonstration of Table control styles.
+ * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
-public class TableStyles extends BorderedPage {
-
-    private static final String[] STYLES = {
-        "isi", "its", "mars", "simple", "report",
-    };
+public class TablePaging extends BorderedPage {
 
     Table table;
-    Select styleSelect;
 
     public void onInit() {
 
-        // Setup table style select.
-        Form form = new Form("form", getContext());
-        form.setMethod("GET");
-        addControl(form);
-
-        styleSelect = new Select("Table Style:");
-        styleSelect.addAll(STYLES);
-        styleSelect.setAttribute("onchange", "this.form.submit();");
-        form.add(styleSelect);
-
         // Setup customers table
         table = new Table("table");
-        table.setAttribute("class", styleSelect.getValue());
+        table.setAttribute("class", "its");
+        table.setPageSize(3);
+        table.setShowBanner(true);
 
         table.addColumn(new Column("name"));
 
@@ -57,11 +43,6 @@ public class TableStyles extends BorderedPage {
         table.setRowList(customers);
 
         addControl(table);
-    }
-
-    public void onGet() {
-        // Note the style form uses GET method.
-        table.setAttribute("class", styleSelect.getValue());
     }
 
 }
