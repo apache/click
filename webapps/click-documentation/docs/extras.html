@@ -63,6 +63,10 @@ Current available dependencies include:
 
 <span style="margin-left:1em;" class="red">*</span> : marked libraries are included in <tt>click.jar</tt><br/>
 <span style="margin-left:1em;" class="blue">*</span> : marked libraries are included in <tt>click-extras.jar</tt>
+<p/>
+Extras controls and components should use Commons Logging API for logging. Please
+do not use the <tt>ClickLogger</tt> which is for internal use by the Click and 
+Velocity runtimes.
 
 <h3>Auto File Deployment</h3>
 
@@ -79,16 +83,28 @@ To register classpath resources to be automatically deployed add an entry to the
 
 <pre class="codeConfig">
 # Define list files to be deployed
-click.deploy.files=ListPanel,TabbedPanel,table
+click.deploy.files=<span class="red">ListPanel</span>,<span class="red">TabbedPanel</span>,<span class="red">table</span>
 
 # Define file resource paths
-click.deploy.path.ListPanel=/net/sf/click/extras/panel/ListPanel.htm
+click.deploy.path.<span class="red">ListPanel</span>=<span class="blue">/net/sf/click/extras/panel/ListPanel.htm</span>
 
-click.deploy.path.TabbedPanel=/net/sf/click/extras/panel/TabbedPanel.htm
+click.deploy.path.<span class="red">TabbedPanel</span>=<span class="blue">/net/sf/click/extras/panel/TabbedPanel.htm</span>
 
-click.deploy.path.table=/net/sf/click/extras/table/table.css </pre>
+click.deploy.path.<span class="red">table</span>=<span class="blue">/net/sf/click/extras/table/table.css</span> </pre>
 
+<h3>Coding Style and Practices</h3>
 
+Click follows the Sun conversions for Java code style. Other style convertions
+and practices include:
+<ul style="margin-top:0.75em;margin-bottom:0.75em;">
+<li>indents are 4 spaces wide and no tabs are used</li>
+<li>public and protected visibility members require Javadoc</li>
+<li>private and package visiblity members do not require Javadoc</li>
+<li>favour the use of unchecked <tt>RuntimeException</tt> and avoid creating new Exception classes</li>
+<li>check method parametes and throw <tt>IllegalArguementException</tt> if parameters are null or invalid</li>
+<li>avoid creating any more classes than you need to get the job done</li>
+<li>before checking in code run the Ant task: <tt>ant format-java</tt>
+</ul>
 
 </body>
 </html>
