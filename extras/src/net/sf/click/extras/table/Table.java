@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.table;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,20 +27,16 @@ import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.control.ActionLink;
 import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a HTML Table control: &lt;table&gt;.
  * <p/>
- * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
- * Please note the Table control is undergoing development and is
- * subject to change.
- * </div>
- * <p/>
  * The Table control provides a HTML &lt;table&gt; control with
  * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
  * like functionality. The design on the Table control has been informed by
- * the DisplayTag library, with the aim of making this control easy to
+ * the excellent DisplayTag library, with the aim of making this control easy to
  * learn for DisplayTag users.
  * <p/>
  * The Table control automatically deploys the table CSS style sheet to the
@@ -59,7 +56,7 @@ import net.sf.click.util.ClickUtils;
  *
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
- * <ul>
+ * <ul style="margin-top:0.5em;">
  *  <li>mars</li>
  *  <li>isi</li>
  *  <li>its</li>
@@ -82,13 +79,22 @@ import net.sf.click.util.ClickUtils;
  */
 public class Table implements Control {
 
+
     // -------------------------------------------------------------- Constants
+
+    /**
+     * The Click Extras messages bundle name: &nbsp; <tt>click-extras</tt>
+     */
+    protected static final String CONTROL_MESSAGES = "click-extras";
 
     /**
      * The click table properties bundle name: &nbsp; <tt>click-table</tt>
      */
     protected static final String TABLE_PROPERTIES = "click-table";
 
+    /**
+     * The table.css style sheet import link.
+     */
     protected static final String TABLE_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/table.css' title='style'>\n";
 
@@ -109,6 +115,9 @@ public class Table implements Control {
     /** The control name. */
     protected String name;
 
+    /** The next table page action link. */
+    protected ActionLink nextLink;
+
     /** The currently displayed page number. */
     protected int pageNumber;
 
@@ -118,8 +127,16 @@ public class Table implements Control {
      */
     protected int pageSize;
 
+    /** The Table previous page action link. */
+    protected ActionLink previousLink;
+
     /** The list Table rows. */
     protected List rowList;
+
+    /**
+     * The show Table banner flag detailing number of rows and rows displayed.
+     */
+    protected boolean showBanner;
 
     // ----------------------------------------------------------- Constructors
 
@@ -270,7 +287,7 @@ public class Table implements Control {
      * @see Control#getContext()
      */
     public Context getContext() {
-        return null;
+        return context;
     }
 
     /**
@@ -278,6 +295,12 @@ public class Table implements Control {
      */
     public void setContext(Context context) {
         this.context = context;
+        if (previousLink != null) {
+            previousLink.setContext(context);
+        }
+        if (nextLink != null) {
+            nextLink.setContext(context);
+        }
     }
 
     /**
@@ -305,6 +328,43 @@ public class Table implements Control {
      */
     public String getId() {
         return getName() + "-table";
+    }
+
+    /**
+     * Return the package resource bundle message for the named resource key
+     * and the context's request locale.
+     *
+     * @param name resource name of the message
+     * @return the named localized message for the package
+     */
+    public String getMessage(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        Locale locale = getContext().getRequest().getLocale();
+
+        ResourceBundle bundle =
+            ResourceBundle.getBundle(CONTROL_MESSAGES, locale);
+
+        return bundle.getString(name);
+    }
+
+    /**
+     * Return the formatted package message for the given resource name and
+     * message format arguments and for the context request locale.
+     *
+     * @param name resource name of the message
+     * @param args the message arguments to format
+     * @return the named localized message for the package
+     */
+     public String getMessage(String name, Object[] args) {
+        if (args == null) {
+            throw new IllegalArgumentException("Null args parameter");
+        }
+        String value = getMessage(name);
+
+        return MessageFormat.format(value, args);
     }
 
     /**
@@ -337,7 +397,6 @@ public class Table implements Control {
         if (rowList == null || rowList.isEmpty()) {
             return 1;
         }
-
 
         return (int) Math.ceil((double)rowList.size() / (double) getPageSize());
     }
@@ -378,6 +437,13 @@ public class Table implements Control {
      */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+
+        if (pageSize > 0) {
+            nextLink = new ActionLink("next");
+            nextLink.setListener(this, "onNextClick");
+            previousLink = new ActionLink("previous");
+            previousLink.setListener(this, "onPreviousClick");
+        }
     }
 
     /**
@@ -421,12 +487,60 @@ public class Table implements Control {
         this.rowList = rowList;
     }
 
+    /**
+     * Return the show Table banner flag detailing number of rows and rows
+     * displayed.
+     *
+     * @return the show Table banner flag
+     */
+    public boolean getShowBanner() {
+        return showBanner;
+    }
+
+    /**
+     * Set the show Table banner flag detailing number of rows and rows
+     * displayed.
+     *
+     * @param showBanner the show Table banner flag
+     */
+    public void setShowBanner(boolean showBanner) {
+        this.showBanner = showBanner;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Handle the next table page control click.
+     *
+     * @return true
+     */
+    public boolean onNextClick() {
+        System.err.println("onNextClick:" + nextLink.getValueInteger());
+        return true;
+    }
+
+    /**
+     * Handle the previous table page control click.
+     *
+     * @return true
+     */
+    public boolean onPreviousClick() {
+        System.err.println("onPreviousClick:" + previousLink.getValueInteger());
+        return true;
+    }
+
+    /**
+     * Process any Table paging control requests.
+     *
      * @see Control#onProcess()
      */
     public boolean onProcess() {
+        if (nextLink != null) {
+            nextLink.onProcess();
+        }
+        if (previousLink != null) {
+            previousLink.onProcess();
+        }
         return true;
     }
 
@@ -489,6 +603,9 @@ public class Table implements Control {
         // Render table end.
         buffer.append("</tbody></table>\n");
 
+        renderTableBanner(buffer);
+        renderPagingControls(buffer);
+
         return buffer.toString();
     }
 
@@ -506,4 +623,53 @@ public class Table implements Control {
         }
     }
 
+    /**
+     * Render the table banner detailing number of rows and number displayed.
+     * <p/>
+     * See the <tt>/click-extras.properies</tt> for the HTML templates:
+     * <tt>table-page-banner</tt> and <tt>table-page-banner-nolinks</tt>
+     *
+     * @param buffer the StringBuffer to render the paging controls to
+     */
+    protected void renderTableBanner(StringBuffer buffer) {
+        if (getShowBanner()) {
+            String tableSize = String.valueOf(getRowList().size());
+            String pageNumber = String.valueOf(getPageNumber());
+
+            String[] args = { tableSize, pageNumber, pageNumber};
+
+            if (getPageSize() > 0) {
+                buffer.append(getMessage("table-page-banner", args));
+            } else {
+                buffer.append(getMessage("table-page-banner-nolinks", args));
+            }
+        }
+    }
+
+    /**
+     * Render the table paging action link controls.
+     * <p/>
+     * See the <tt>/click-extras.properies</tt> for the HTML templates:
+     * <tt>table-page-links</tt> and <tt>table-page-links-nobanner</tt>
+     *
+     * @param buffer the StringBuffer to render the paging controls to
+     */
+    protected void renderPagingControls(StringBuffer buffer) {
+        if (getPageSize() > 0) {
+            nextLink.setLabel(getMessage("table-next"));
+            previousLink.setLabel(getMessage("table-previous"));
+
+            String pageNumber = String.valueOf(getPageNumber());
+            nextLink.setValue(pageNumber);
+            previousLink.setValue(pageNumber);
+
+            String[] args = { previousLink.toString(), nextLink.toString() };
+
+            if (getShowBanner()) {
+                buffer.append(getMessage("table-page-links", args));
+            } else {
+                buffer.append(getMessage("table-page-links-nobanner", args));
+            }
+        }
+    }
 }

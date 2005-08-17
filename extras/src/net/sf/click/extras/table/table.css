@@ -216,19 +216,38 @@ span.pagebanner {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 79%;
+	width: 300px;
 	margin-top: 10px;
-	display:block;
+	display: block;
 	border-bottom: none;
+}
+
+span.pagebanner-nolinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 300px;
+	margin-top: 10px;
+	display: block;
 }
 
 span.pagelinks {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 79%;
-	display:block;
+	width: 300px;
+	display: block;
+	margin-bottom: -5px;
 	border-top: none;
+}
+
+span.pagelinks-nobanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 150px;
+	display: block;
+	margin-top: 10px;
 	margin-bottom: -5px;
 }
 

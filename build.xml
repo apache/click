@@ -248,6 +248,7 @@
                windowtitle="Click Extras API"
                doctitle="Click Extras API">
          <classpath>
+            <pathelement location="lib/${jar.logging}"/>
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>

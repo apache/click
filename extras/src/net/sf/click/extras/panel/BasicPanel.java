@@ -259,7 +259,7 @@ public class BasicPanel implements Panel {
      * Set the id for this panel.  This is the identifier that will be assigned
      * to the 'id' tag for this panel's model.
      *
-     * @see id the id attribute for this panel
+     * @param id the id attribute for this panel
      */
     public void setId(String id) {
         this.id = id;
