@@ -9,11 +9,11 @@ import net.sf.click.extras.table.Table;
 import examples.domain.CustomerDAO;
 
 /**
- * Provides an Table control demonstration.
+ * Provides an demonstration of Table control styles.
  *
  * @author Malcolm Edgar
  */
-public class TableDemo extends BorderedPage {
+public class TableStyles extends BorderedPage {
 
     private static final String[] STYLES = {
         "isi", "its", "mars", "simple", "report",
@@ -29,7 +29,7 @@ public class TableDemo extends BorderedPage {
         form.setMethod("GET");
         addControl(form);
 
-        styleSelect = new Select("Style");
+        styleSelect = new Select("Table Style:");
         styleSelect.addAll(STYLES);
         styleSelect.setAttribute("onchange", "this.form.submit();");
         form.add(styleSelect);
