@@ -5,97 +5,6 @@
  * http://displaytag.sourceforge.net
  */
 
-/*
-img{ 
-	border:none;
-}
-hr {
-	height: 1px;
-	color: #000;
-	clear:both;
-}
-textarea {
-	width:80%;
-	height:200px;
-}
-dt {
-	font-weight: bold;
-}
-.clear {
-	clear: both;
-}
-h1 {
-	font-size: 2em;
-}
-h1 a{
-	color: #000;
-}
-div#header {
-	background-color: #fea;
-	border-top: 1px solid #000;
-	border-bottom: 1px solid #000;
-	padding: 20px 10px 30px 15px;
-	margin: 10px 5% 20px 5%;
-}
-div#header ul{
-	margin: 10px 0 0 0;
-}
-div#header ul li{
-	list-style-type: none;
-	float: left;
-	padding: 0 10px 0 0;
-	font-weight: bold;
-}
-div#header ul li a{
-	display: block;
-	color: #f00;
-	border-left: 1px solid red;
-	padding-left: 5px;
-}
-div#header ul li a:hover{
-	border-left: 1px solid #000;
-}
-
-div#body {
-	margin: 0 5% 20px 5%;
-	padding: 20px 20px 20px 20px;
-	border: 1px dashed #666;
-}
-
-div#validxhtml {
-	float: right;
-	background-color: #eee;
-	border: 1px dotted #999;
-	padding: 2px;
-	margin: 5px;
-	width:100px;
-	text-align: center;
-}
-div#footer {
-	border-top: 1px solid #666;
-	padding: 5px 5px 5px 5px;
-	text-align:right;
-}
-
-div#footer span {
-	float: left;
-}
-
-ul#stylelist {
-	margin:0 0 30px 0;
-}
-
-ul#stylelist li {
-	list-style-type: none;
-	float:left;
-	width:100px;
-	border: 1px solid #ccc;
-	background-color: #eee;
-	padding:2px;
-	margin-right: 2px;
-}
-*/
-
 /** Global styles **/
 
 td a, td a:visited, td a:hover { 
@@ -322,3 +231,97 @@ span.pagelinks {
 	border-top: none;
 	margin-bottom: -5px;
 }
+
+/* 
+ TODO: review styles
+
+img{ 
+	border:none;
+}
+hr {
+	height: 1px;
+	color: #000;
+	clear:both;
+}
+textarea {
+	width:80%;
+	height:200px;
+}
+dt {
+	font-weight: bold;
+}
+.clear {
+	clear: both;
+}
+h1 {
+	font-size: 2em;
+}
+h1 a{
+	color: #000;
+}
+div#header {
+	background-color: #fea;
+	border-top: 1px solid #000;
+	border-bottom: 1px solid #000;
+	padding: 20px 10px 30px 15px;
+	margin: 10px 5% 20px 5%;
+}
+div#header ul{
+	margin: 10px 0 0 0;
+}
+div#header ul li{
+	list-style-type: none;
+	float: left;
+	padding: 0 10px 0 0;
+	font-weight: bold;
+}
+div#header ul li a{
+	display: block;
+	color: #f00;
+	border-left: 1px solid red;
+	padding-left: 5px;
+}
+div#header ul li a:hover{
+	border-left: 1px solid #000;
+}
+
+div#body {
+	margin: 0 5% 20px 5%;
+	padding: 20px 20px 20px 20px;
+	border: 1px dashed #666;
+}
+
+div#validxhtml {
+	float: right;
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px;
+	margin: 5px;
+	width:100px;
+	text-align: center;
+}
+div#footer {
+	border-top: 1px solid #666;
+	padding: 5px 5px 5px 5px;
+	text-align:right;
+}
+
+div#footer span {
+	float: left;
+}
+
+ul#stylelist {
+	margin:0 0 30px 0;
+}
+
+ul#stylelist li {
+	list-style-type: none;
+	float:left;
+	width:100px;
+	border: 1px solid #ccc;
+	background-color: #eee;
+	padding:2px;
+	margin-right: 2px;
+}
+*/
+
