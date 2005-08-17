@@ -1,5 +1,4 @@
 CODE
-* link examples.htm to http://click.sunvolt.com/
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
@@ -8,7 +7,6 @@ CODE
 BUGS
 
 DOCUMENTATION
-* update configuration.html, roadmap-changes, FAQ
 * update Control in diagrams, update Control classes diagram
 
 VELOCITY
