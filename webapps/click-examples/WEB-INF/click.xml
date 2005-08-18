@@ -8,6 +8,7 @@
     <header name="Pragma" value="no-cache"/>
     <header name="Cache-Control" value="no-cache"/>
     <header name="Expires" value="1" type="Date"/>
+	<header name="Content-Encoding" value="gzip"/>
   </headers>
 
   <mode value="profile"/>
