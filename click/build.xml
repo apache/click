@@ -5,25 +5,25 @@
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
    <property name="jar.codec" value="commons-codec-1.1.jar"/>
-   <property name="jar.collections" value="commons-collections.jar"/>  
+   <property name="jar.collections" value="commons-collections.jar"/>
    <property name="jar.jdom" value="jdom-1.0.jar"/>
    <property name="jar.lang" value="commons-lang-2.0.jar"/>
    <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
    <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
-	
-   <taskdef name="linetrim" 
-   	        classname="dev.LineTrimTask" 
+
+   <taskdef name="linetrim"
+   	        classname="dev.LineTrimTask"
    	        classpath="lib/dev.jar"/>
-							
-   <taskdef name="replacetabs" 
-   	        classname="dev.ReplaceTabsTask" 
+
+   <taskdef name="replacetabs"
+   	        classname="dev.ReplaceTabsTask"
    	        classpath="lib/dev.jar"/>
 
    <!-- Tasks -->
-   
-   <target name="build-all" 
-           depends="build-framework, build-extras, build-webapps" 
+
+   <target name="build-all"
+           depends="build-framework, build-extras, build-webapps"
            description="build Click framework, extras and webapps"/>
 
    <target name="build-framework" description="build framework JAR file">
@@ -40,19 +40,19 @@
          </fileset>
       </copy>
       <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
-      <unzip src="${dir.lib}/${jar.collections}" dest="${dir.classes}"/>  
-      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
-      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/> 
-      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/> 
+      <unzip src="${dir.lib}/${jar.collections}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/>
       <delete file="${dir.classes}/org/apache/velocity/app/VelocityEngine.class"/>
-      <delete file="${dir.classes}/org/apache/velocity/runtime/RuntimeServices.class"/>  
+      <delete file="${dir.classes}/org/apache/velocity/runtime/RuntimeServices.class"/>
       <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="**/Test*">
          <classpath>
             <fileset dir="lib">
               <include name="**/*.jar"/>
             </fileset>
          </classpath>
-      </javac>  
+      </javac>
       <jar destfile="${dir.deploy}/click-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -65,7 +65,7 @@
             <exclude name="org/apache/velocity/test/**"/>
             <exclude name="org/apache/velocity/texen/**"/>
          </fileset>
-      </jar>  
+      </jar>
    </target>
 
    <target name="build-extras" description="build extras JAR file">
@@ -83,7 +83,7 @@
         	<pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
-      </javac>  
+      </javac>
       <jar destfile="${dir.deploy}/click-extras-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -91,32 +91,45 @@
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="extras/classes"/>
-      </jar>  
+      </jar>
    </target>
-	
-   <target name="build-release" 
-           depends="build-framework, build-extras, build-webapps, javadoc" 
+
+   <target name="build-release"
+           depends="build-framework, build-extras, build-webapps, javadoc"
            description="build release ZIP file">
-      <delete file="../click-${version}.zip"/>  
+      <delete file="../click-${version}.zip"/>
       <zip destfile="../click-${version}.zip">
-         <fileset dir="." casesensitive="yes"> 
-            <exclude name=".**"/> 
-            <exclude name="TODO.txt"/>   
+         <fileset dir="." casesensitive="yes">
+            <exclude name=".**"/>
+            <exclude name="TODO.txt"/>
             <exclude name="bin/**"/>
             <exclude name="**/Thumbs.db"/>
             <exclude name="framework/classes/**"/>
-            <exclude name="extras/classes/**"/> 
-            <exclude name="webapps/click-blank/WEB-INF/classes/**"/>  
-            <exclude name="webapps/click-examples/WEB-INF/classes/**"/>  
+            <exclude name="extras/classes/**"/>
+            <exclude name="webapps/click-blank/WEB-INF/classes/**"/>
+            <exclude name="webapps/click-examples/WEB-INF/classes/**"/>
          </fileset>
       </zip>
-   </target>  
+   </target>
 
    <target name="build-webapps" description="build web application WAR files">
-      <!--  "click-blank" WAR  -->
-      <copy file="framework/src/click-control.properties" 
+	   <!-- Check for existence of the framework jar, fail gracefully if not
+	    found.  The reason we do this instead of creating a dependency is to not
+	    require the framework to be built every time we build these webapps. -->
+	  <available file="${dir.deploy}/click-${version}.jar" property="isClickFileAvail"/>
+	  <available file="${dir.deploy}/click-extras-${version}.jar" property="isExtraFileAvail"/>
+  	  <fail message="!!! NOTE !!! Please build the framework and extras using 'ant build-framework' and 'ant build-extras' (respectively) before running this target">
+	  	<condition>
+			  <or>
+				  <isfalse value="${isClickFileAvail}"/>
+				  <isfalse value="${isExtraFileAvail}"/>
+			  </or>
+		  </condition>
+	  </fail>
+	  <!--  "click-blank" WAR  -->
+      <copy file="framework/src/click-control.properties"
             todir="webapps/click-blank/WEB-INF/src"/>
-      <copy file="framework/src/click-control.properties" 
+      <copy file="framework/src/click-control.properties"
             todir="webapps/click-blank/WEB-INF/classes"/>
       <war destfile="${dir.deploy}/click-blank.war"
            webxml="webapps/click-blank/WEB-INF/web.xml">
@@ -143,10 +156,10 @@
 	   <!--  "click-examples" WAR  -->
       <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
-	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
-             destdir="webapps/click-examples/WEB-INF/classes" 
+	  <javac srcdir="webapps/click-examples/WEB-INF/src"
+             destdir="webapps/click-examples/WEB-INF/classes"
              debug="true">
-         <classpath> 
+         <classpath>
        	   <pathelement location="lib/${jar.servlet}"/>
            <pathelement location="${dir.deploy}/click-${version}.jar"/>
            <pathelement location="${dir.deploy}/click-extras-${version}.jar"/>
@@ -172,11 +185,11 @@
       </war>
    </target>
 
-   <target name="deploy-examples"> 
+   <target name="deploy-examples">
      <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
-               
-   <target name="deploy-webapps" description="copy WAR files to application server"> 
+
+   <target name="deploy-webapps" description="copy WAR files to application server">
       <copy file="${dir.deploy}/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
       <copy file="${dir.deploy}/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
       <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
@@ -190,27 +203,27 @@
       <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
       <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
    </target>
- 
+
    <target name="help" description="display the Help message">
       <echo message="Click ${version} web application framework"/>
-      <echo message="==================================="/> 
-      <echo/>  
-      <echo message="Main targets:"/> 
-      <echo/>    
-      <echo message="build-all             build framework, extras, webapps"/>
-      <echo message="build-extras          build click-extras JAR file"/> 
-      <echo message="build-framework       build click framework JAR file"/> 
-      <echo message="build-release         build release ZIP file"/>
-      <echo message="build-webapps         build web application WAR files"/> 
-      <echo message="deploy-webapps        copy WAR files to application server"/>
-      <echo message="help                  display the Help message"/>  
-      <echo message="javadoc               create Javadoc HTML files"/> 
+      <echo message="==================================="/>
       <echo/>
-      <echo/>  
-      <echo message="Please ensure you have configured build.properties"/> 
-      <echo/>  
-   </target>  
-	
+      <echo message="Main targets:"/>
+      <echo/>
+      <echo message="build-all             build framework, extras, webapps"/>
+      <echo message="build-extras          build click-extras JAR file"/>
+      <echo message="build-framework       build click framework JAR file"/>
+      <echo message="build-release         build release ZIP file"/>
+      <echo message="build-webapps         build web application WAR files"/>
+      <echo message="deploy-webapps        copy WAR files to application server"/>
+      <echo message="help                  display the Help message"/>
+      <echo message="javadoc               create Javadoc HTML files"/>
+      <echo/>
+      <echo/>
+      <echo message="Please ensure you have configured build.properties"/>
+      <echo/>
+   </target>
+
    <target name="javadoc" description="create Javadoc HTML files">
       <!-- Framework -->
       <delete quiet="false" failonerror="false">
@@ -274,18 +287,18 @@
          </classpath>
          <packageset dir="webapps/click-examples/WEB-INF/src"/>
       </javadoc>
-      <copy file="framework/stylesheet.css"  
+      <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/click-api"/>
-      <copy file="framework/stylesheet.css"  
+      <copy file="framework/stylesheet.css"
             overwrite="true"
             todir="webapps/click-documentation/docs/extras-api"/>
-      <copy file="framework/stylesheet.css"  
+      <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-examples/javadoc"/>
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>
-   
+
 </project>
