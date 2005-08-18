@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ajax-response>
+  <response type="object" id='data_grid_updater'>
+    <rows update_ui='true' >
+      #foreach( $customer in $customers )
+		#set( $count = $velocityCount + $offset )
+		<tr>
+			<td>$count</td>
+			<td>$customer.name</td>
+			<td>$customer.email</td>
+			<td>$customer.age</td>
+			<td>$customer.holdings</td>
+			<td>$customer.investments</td>
+			<td>$format.date($customer.dateJoined,'dd-MMM-yyyy')</td>
+        </tr>
+      #end
+    </rows>
+  </response>
+</ajax-response>
