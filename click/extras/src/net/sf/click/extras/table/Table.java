@@ -23,12 +23,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.util.ClickUtils;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a HTML Table control: &lt;table&gt;.
@@ -129,6 +129,17 @@ public class Table implements Control {
 
     /** The Table previous page action link. */
     protected ActionLink previousLink;
+
+    /**
+     * The total number of rows in the query, if 0 rowCount is undefined. Row
+     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
+     * query and is used to determine the number of pages which can be
+     * displayed.
+     */
+    // TODO: need to consider than passed lists will not be indexed from the
+    // start of the query, ie Page 50, wont have 50 pages worth of empty data
+    // in the provided list
+    protected int rowCount;
 
     /** The list Table rows. */
     protected List rowList;
@@ -467,6 +478,30 @@ public class Table implements Control {
     }
 
     /**
+     * Return total number of rows in the query, if 0 rowCount is undefined. Row
+     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
+     * query and is used to determine the number of pages which can be
+     * displayed.
+     *
+     * @return the total number of rows in the quer]y, or 0 if undefined
+     */
+    public int getRowCount() {
+        return rowCount;
+    }
+
+    /**
+     * Set the total number of rows in the query, if 0 rowCount is undefined. Row
+     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
+     * query and is used to determine the number of pages which can be
+     * displayed.
+     *
+     * @param rowCount the total number of rows in the quer]y, or 0 if undefined
+     */
+    public void setRowCount(int rowCount) {
+        this.rowCount = rowCount;
+    }
+
+    /**
      * Return the list of table rows.
      *
      * @return the list of table rows
@@ -515,7 +550,10 @@ public class Table implements Control {
      * @return true
      */
     public boolean onNextClick() {
-        System.err.println("onNextClick:" + nextLink.getValueInteger());
+        int currentPage = nextLink.getValueInteger().intValue();
+        currentPage = Math.min(currentPage + 1, getNumberPages() - 1);
+        setPageNumber(currentPage);
+        System.err.println(getNumberPages());
         return true;
     }
 
@@ -525,7 +563,9 @@ public class Table implements Control {
      * @return true
      */
     public boolean onPreviousClick() {
-        System.err.println("onPreviousClick:" + previousLink.getValueInteger());
+        int currentPage = previousLink.getValueInteger().intValue();
+        currentPage = Math.max(currentPage - 1, 0);
+        setPageNumber(currentPage);
         return true;
     }
 
@@ -577,7 +617,11 @@ public class Table implements Control {
         buffer.append("<tbody>\n");
 
         final List tableRows = getRowList();
-        for (int i = 0; i < tableRows.size(); i++) {
+        
+        int firstRow = getFirstRow();
+        int lastRow = getLastRow();
+                
+        for (int i = firstRow; i < lastRow; i++) {
             Object row = tableRows.get(i);
 
             if ((i+1) % 2 == 0) {
@@ -610,6 +654,39 @@ public class Table implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
+    
+    /**
+     * Return the index of the first row to display. Index starts from 0.
+     * 
+     * @return the index of the first row to display
+     */
+    protected int getFirstRow() {
+        int firstRow = 0;
+        
+        if (getPageSize() > 0) {
+            if (getPageNumber() > 0) {
+                firstRow = getPageSize() * getPageNumber();
+            }
+        }
+        
+        return firstRow;
+    }
+    
+    /**
+     * Return the index of the last row to diplay. Index starts from 0.
+     * 
+     * @return the index of the last row to display
+     */
+    protected int getLastRow() {
+        int numbRows = getRowList().size();
+        int lastRow = numbRows;
+        
+        if (getPageSize() > 0) {
+            lastRow = getFirstRow() + getPageSize();
+            lastRow = Math.min(lastRow, numbRows);
+        }
+        return lastRow;
+    }
 
     /**
      * Render the table HTML attributes to the string buffer, except for
@@ -633,10 +710,28 @@ public class Table implements Control {
      */
     protected void renderTableBanner(StringBuffer buffer) {
         if (getShowBanner()) {
-            String tableSize = String.valueOf(getRowList().size());
-            String pageNumber = String.valueOf(getPageNumber());
+            String totalRows = null;
+            if (getRowCount() > 0) {
+                totalRows = String.valueOf(getRowCount());
+            } else {
+                totalRows = String.valueOf(getRowList().size());
+            }
+            
+            String firstRow = null;
+            if (getRowList().isEmpty()) {
+                firstRow = String.valueOf(0);
+            } else {
+                firstRow = String.valueOf(getFirstRow() + 1);
+            }
 
-            String[] args = { tableSize, pageNumber, pageNumber};
+            String lastRow = null;
+            if (getRowList().isEmpty()) {
+                lastRow = String.valueOf(0);
+            } else {
+                lastRow = String.valueOf(getLastRow());
+            }
+
+            String[] args = { totalRows, firstRow, lastRow};
 
             if (getPageSize() > 0) {
                 buffer.append(getMessage("table-page-banner", args));
