@@ -1,7 +1,6 @@
 package examples.page.ajax;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import examples.domain.CustomerDAO;
 import examples.page.BorderedPage;
