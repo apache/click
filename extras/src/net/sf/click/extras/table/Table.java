@@ -111,14 +111,14 @@ public class Table implements Control {
 
     /** The request context. */
     protected Context context;
-
+    
     /** The control name. */
     protected String name;
 
-    /** The next table page action link. */
-    protected ActionLink nextLink;
-
-    /** The currently displayed page number. */
+    /** 
+     * The currently displayed page number. The page number is zero indexed, 
+     * i.e. the page number of the first page is 0.
+     */
     protected int pageNumber;
 
     /**
@@ -127,8 +127,8 @@ public class Table implements Control {
      */
     protected int pageSize;
 
-    /** The Table previous page action link. */
-    protected ActionLink previousLink;
+    /** The Table paging action link. */
+    protected ActionLink pagingLink;
 
     /**
      * The total number of rows in the query, if 0 rowCount is undefined. Row
@@ -306,11 +306,8 @@ public class Table implements Control {
      */
     public void setContext(Context context) {
         this.context = context;
-        if (previousLink != null) {
-            previousLink.setContext(context);
-        }
-        if (nextLink != null) {
-            nextLink.setContext(context);
+        if (pagingLink != null) {
+            pagingLink.setContext(context);
         }
     }
 
@@ -413,7 +410,8 @@ public class Table implements Control {
     }
 
     /**
-     * Return the currently displayed page number.
+     * Return the currently displayed page number. The page number is zero
+     * indexed, i.e. the page number of the first page is 0.
      *
      * @return the currently displayed page number
      */
@@ -422,7 +420,8 @@ public class Table implements Control {
     }
 
     /**
-     * Set the currently displayed page number.
+     * Set the currently displayed page number. The page number is zero
+     * indexed, i.e. the page number of the first page is 0.
      *
      * @param pageNumber set the currently displayed page number
      */
@@ -450,10 +449,8 @@ public class Table implements Control {
         this.pageSize = pageSize;
 
         if (pageSize > 0) {
-            nextLink = new ActionLink("next");
-            nextLink.setListener(this, "onNextClick");
-            previousLink = new ActionLink("previous");
-            previousLink.setListener(this, "onPreviousClick");
+            pagingLink = new ActionLink("paging");
+            pagingLink.setListener(this, "onPagingClick");
         }
     }
 
@@ -545,27 +542,19 @@ public class Table implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Handle the next table page control click.
-     *
-     * @return true
-     */
-    public boolean onNextClick() {
-        int currentPage = nextLink.getValueInteger().intValue();
-        currentPage = Math.min(currentPage + 1, getNumberPages() - 1);
-        setPageNumber(currentPage);
-        System.err.println(getNumberPages());
-        return true;
-    }
-
-    /**
      * Handle the previous table page control click.
      *
      * @return true
      */
-    public boolean onPreviousClick() {
-        int currentPage = previousLink.getValueInteger().intValue();
-        currentPage = Math.max(currentPage - 1, 0);
-        setPageNumber(currentPage);
+    public boolean onPagingClick() {
+        int page = pagingLink.getValueInteger().intValue();
+        
+        // Range sanity check
+        page = Math.min(page, getRowList().size() -1);
+        page = Math.max(page, 0);
+        
+        setPageNumber(page);
+        
         return true;
     }
 
@@ -575,11 +564,8 @@ public class Table implements Control {
      * @see Control#onProcess()
      */
     public boolean onProcess() {
-        if (nextLink != null) {
-            nextLink.onProcess();
-        }
-        if (previousLink != null) {
-            previousLink.onProcess();
+        if (pagingLink != null) {
+            pagingLink.onProcess();
         }
         return true;
     }
@@ -751,14 +737,60 @@ public class Table implements Control {
      */
     protected void renderPagingControls(StringBuffer buffer) {
         if (getPageSize() > 0) {
-            nextLink.setLabel(getMessage("table-next"));
-            previousLink.setLabel(getMessage("table-previous"));
+            String firstLabel = getMessage("table-first-label");
+            String firstTitle = getMessage("table-first-title");
+            String previousLabel = getMessage("table-previous-label");
+            String previousTitle = getMessage("table-previous-title");
+            String nextLabel = getMessage("table-next-label");
+            String nextTitle = getMessage("table-next-title");
+            String lastLabel = getMessage("table-last-label");
+            String lastTitle = getMessage("table-last-title");
+            String gotoTitle = getMessage("table-goto-title");
+            
+            if (getPageNumber() > 0) {
+                pagingLink.setLabel(firstLabel);
+                pagingLink.setValue(String.valueOf(0));
+                pagingLink.setAttribute("title", firstTitle);
+                firstLabel = pagingLink.toString();
+                
+                pagingLink.setLabel(previousLabel);
+                pagingLink.setValue(String.valueOf(getPageNumber() - 1));
+                pagingLink.setAttribute("title", previousTitle);
+                previousLabel = pagingLink.toString();   
+            }
+            
+            StringBuffer pagesBuffer = new StringBuffer(getNumberPages() * 70);
+            for (int i = 0; i < getNumberPages(); i++) {
+                String pageNumber = String.valueOf(i + 1);
+                if (i == getPageNumber()) {
+                    pagesBuffer.append("<strong>" + pageNumber + "</strong>");
+                } else {
+                    pagingLink.setLabel(pageNumber);
+                    pagingLink.setValue(String.valueOf(i));
+                    pagingLink.setAttribute("title", gotoTitle + " " + pageNumber);
+                    pagesBuffer.append(pagingLink.toString());
+                }
 
-            String pageNumber = String.valueOf(getPageNumber());
-            nextLink.setValue(pageNumber);
-            previousLink.setValue(pageNumber);
+                if (i < getNumberPages() - 1) {
+                    pagesBuffer.append(", ");
+                }
+            }
+            String pageLinks = pagesBuffer.toString();
+            
+            if (getPageNumber() < getNumberPages() - 1) {
+                pagingLink.setLabel(nextLabel);
+                pagingLink.setValue(String.valueOf(getPageNumber() + 1));
+                pagingLink.setAttribute("title", nextTitle);
+                nextLabel = pagingLink.toString();
+                
+                pagingLink.setLabel(lastLabel);
+                pagingLink.setValue(String.valueOf(getNumberPages() - 1));
+                pagingLink.setAttribute("title", lastTitle);
+                lastLabel = pagingLink.toString();   
+            }
 
-            String[] args = { previousLink.toString(), nextLink.toString() };
+            String[] args = 
+                { firstLabel, previousLabel, pageLinks, nextLabel, lastLabel };
 
             if (getShowBanner()) {
                 buffer.append(getMessage("table-page-links", args));
