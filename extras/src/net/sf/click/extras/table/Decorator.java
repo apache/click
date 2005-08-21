@@ -18,19 +18,19 @@ package net.sf.click.extras.table;
 import net.sf.click.Context;
 
 /**
- * Provides a decorator interface to render given objects.
+ * Provides a decorator interface to render given Table row objects.
  * <p/>
- * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
- * Please note the Decorator interface is undergoing development and is
- * subject to change.
- * </div>
+ * The following example illustrates how to render a email link in a customer
+ * table:
  *
  * <pre class="codeJava">
- * Column column = new Column("email");
- * column.setDecorator(new Decorator() {
- *     public String render(Object row, Context context) {
- *         String email = row.toString();
- *         return "&lt;a href='mailto:" + email + "'&gt;" + email + "</a>";
+ * Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
+ * column.setDecorator(<span class="kw">new</span> Decorator() {
+ *     <span class="kw">public</span> String render(Object row, Context context) {
+ *         Customer customer = (Customer) row;
+ *         String email = customer.getEmail();
+ *         String fullName = customer.getFullName();
+ *         <span class="kw">return</span> <span class="st">"&lt;a href='mailto:"</span> + email + <span class="st">"'&gt;"</span> + fullName + <span class="st">"&lt;/a&gt;"</span>;
  *     }
  * });
  * table.addColumn(column); </pre>
@@ -48,9 +48,9 @@ public interface Decorator {
      * Returns a rendered and decorated string representation of the given
      * object.
      *
-     * @param object the object to render
+     * @param row the Table row object to render
      * @param context the request context
      * @return a decorated string representation of the given object
      */
-    public String render(Object object, Context context);
+    public String render(Object row, Context context);
 }

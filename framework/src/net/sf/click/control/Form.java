@@ -430,7 +430,7 @@ public class Form implements Control {
      */
     protected String errorsPosition = MIDDLE;
 
-    /** The ordered list of field values, excluding buttons */
+    /** The ordered list of field values, excluding buttons. */
     protected final List fieldList = new ArrayList();
 
     /** The map of fields keyed by field name. */

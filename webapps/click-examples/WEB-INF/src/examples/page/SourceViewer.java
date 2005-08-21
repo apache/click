@@ -31,7 +31,7 @@ public class SourceViewer extends BorderedPage {
     private static final String[] HTML_KEYWORDS = { "html", "head", "style",
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
-            "i", "u", "ul", "ol", "li", "form" };
+            "i", "u", "ul", "ol", "li", "form", "div" };
 
     private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
         "headers", "header", "format", "mode", "type",

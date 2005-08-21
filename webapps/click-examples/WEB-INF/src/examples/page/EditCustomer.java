@@ -134,7 +134,7 @@ public class EditCustomer extends BorderedPage {
      * @return false to stop processing
      */
     public boolean onCancelClick() {
-        setRedirect("action-table.htm");
+        setRedirect("index.html");
         return false;
     }
 }
