@@ -111,12 +111,15 @@ public class Table implements Control {
 
     /** The request context. */
     protected Context context;
-    
+
+    /** The list of Table controls. */
+    protected final List controlList = new ArrayList();
+
     /** The control name. */
     protected String name;
 
-    /** 
-     * The currently displayed page number. The page number is zero indexed, 
+    /**
+     * The currently displayed page number. The page number is zero indexed,
      * i.e. the page number of the first page is 0.
      */
     protected int pageNumber;
@@ -309,6 +312,29 @@ public class Table implements Control {
         if (pagingLink != null) {
             pagingLink.setContext(context);
         }
+    }
+
+    /**
+     * Add the given Control to the table. The control will be processed when
+     * the Table is processed.
+     *
+     * @param control the Control to add to the table
+     */
+    public void addControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        controlList.add(control);
+    }
+
+    /**
+     * Return the list of Controls added to the table. Note table paging control
+     * will not be returned in this list.
+     *
+     * @return the list of table controls
+     */
+    public List getControls() {
+        return controlList;
     }
 
     /**
@@ -548,18 +574,19 @@ public class Table implements Control {
      */
     public boolean onPagingClick() {
         int page = pagingLink.getValueInteger().intValue();
-        
+
         // Range sanity check
         page = Math.min(page, getRowList().size() -1);
         page = Math.max(page, 0);
-        
+
         setPageNumber(page);
-        
+
         return true;
     }
 
     /**
-     * Process any Table paging control requests.
+     * Process any Table paging control requests, and process any added Table
+     * Controls.
      *
      * @see Control#onProcess()
      */
@@ -567,6 +594,17 @@ public class Table implements Control {
         if (pagingLink != null) {
             pagingLink.onProcess();
         }
+
+        boolean continueProcessing = true;
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            control.setContext(getContext());
+            continueProcessing = control.onProcess();
+            if (!continueProcessing) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -603,10 +641,10 @@ public class Table implements Control {
         buffer.append("<tbody>\n");
 
         final List tableRows = getRowList();
-        
+
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
-                
+
         for (int i = firstRow; i < lastRow; i++) {
             Object row = tableRows.get(i);
 
@@ -640,33 +678,33 @@ public class Table implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
-    
+
     /**
      * Return the index of the first row to display. Index starts from 0.
-     * 
+     *
      * @return the index of the first row to display
      */
     protected int getFirstRow() {
         int firstRow = 0;
-        
+
         if (getPageSize() > 0) {
             if (getPageNumber() > 0) {
                 firstRow = getPageSize() * getPageNumber();
             }
         }
-        
+
         return firstRow;
     }
-    
+
     /**
      * Return the index of the last row to diplay. Index starts from 0.
-     * 
+     *
      * @return the index of the last row to display
      */
     protected int getLastRow() {
         int numbRows = getRowList().size();
         int lastRow = numbRows;
-        
+
         if (getPageSize() > 0) {
             lastRow = getFirstRow() + getPageSize();
             lastRow = Math.min(lastRow, numbRows);
@@ -702,7 +740,7 @@ public class Table implements Control {
             } else {
                 totalRows = String.valueOf(getRowList().size());
             }
-            
+
             String firstRow = null;
             if (getRowList().isEmpty()) {
                 firstRow = String.valueOf(0);
@@ -746,19 +784,19 @@ public class Table implements Control {
             String lastLabel = getMessage("table-last-label");
             String lastTitle = getMessage("table-last-title");
             String gotoTitle = getMessage("table-goto-title");
-            
+
             if (getPageNumber() > 0) {
                 pagingLink.setLabel(firstLabel);
                 pagingLink.setValue(String.valueOf(0));
                 pagingLink.setAttribute("title", firstTitle);
                 firstLabel = pagingLink.toString();
-                
+
                 pagingLink.setLabel(previousLabel);
                 pagingLink.setValue(String.valueOf(getPageNumber() - 1));
                 pagingLink.setAttribute("title", previousTitle);
-                previousLabel = pagingLink.toString();   
+                previousLabel = pagingLink.toString();
             }
-            
+
             StringBuffer pagesBuffer = new StringBuffer(getNumberPages() * 70);
             for (int i = 0; i < getNumberPages(); i++) {
                 String pageNumber = String.valueOf(i + 1);
@@ -776,20 +814,20 @@ public class Table implements Control {
                 }
             }
             String pageLinks = pagesBuffer.toString();
-            
+
             if (getPageNumber() < getNumberPages() - 1) {
                 pagingLink.setLabel(nextLabel);
                 pagingLink.setValue(String.valueOf(getPageNumber() + 1));
                 pagingLink.setAttribute("title", nextTitle);
                 nextLabel = pagingLink.toString();
-                
+
                 pagingLink.setLabel(lastLabel);
                 pagingLink.setValue(String.valueOf(getNumberPages() - 1));
                 pagingLink.setAttribute("title", lastTitle);
-                lastLabel = pagingLink.toString();   
+                lastLabel = pagingLink.toString();
             }
 
-            String[] args = 
+            String[] args =
                 { firstLabel, previousLabel, pageLinks, nextLabel, lastLabel };
 
             if (getShowBanner()) {

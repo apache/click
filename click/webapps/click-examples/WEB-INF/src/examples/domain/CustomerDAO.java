@@ -1,5 +1,9 @@
 package examples.domain;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,215 +12,195 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 /**
  * Provides a mockup Customer DAO for the examples.
  *
- * @author Malcolm Edgar
  * @see Customer
+ * @author Malcolm Edgar
  */
 public class CustomerDAO {
 
-	private static final SimpleDateFormat FORMAT
-			= new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat FORMAT
+        = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static List getCustomersSortedByName() {
-		List customers = new ArrayList(CUSTOMER_BY_NAME.values());
+    private static final Map CUSTOMER_BY_NAME = new TreeMap();
 
-		return customers;
-	}
+    private static final Map CUSTOMER_BY_ID = new HashMap();
 
-	public static void setCustomer(Customer customer) {
-		if (customer != null) {
-			deleteCustomer(customer.id);
-			CUSTOMER_BY_ID.put(customer.id, customer);
-			CUSTOMER_BY_NAME.put(customer.name, customer);
-		}
-	}
+    static {
+        loadCustomers();
+    }
 
-	public static Customer getCustomer(Long id) {
-		return (Customer) CUSTOMER_BY_ID.get(id);
-	}
+    // --------------------------------------------------------- Public Methods
 
-	public static void deleteCustomer(Long id) {
-		CUSTOMER_BY_ID.remove(id);
+    public static synchronized List getCustomersSortedByName() {
+        ensureDataAvailable();
+        List customers = new ArrayList(CUSTOMER_BY_NAME.values());
+        return customers;
+    }
 
-		Iterator i = CUSTOMER_BY_NAME.values().iterator();
-		while (i.hasNext()) {
-			Customer customer = (Customer) i.next();
-			if (customer.getId().equals(id)) {
-				i.remove();
-				break;
-			}
-		}
-	}
+    public static synchronized void setCustomer(Customer customer) {
+        ensureDataAvailable();
+        if (customer != null) {
+            deleteCustomer(customer.id);
+            CUSTOMER_BY_ID.put(customer.id, customer);
+            CUSTOMER_BY_NAME.put(customer.name, customer);
+        }
+    }
 
-	public static Customer findCustomerByID(Long id) {
-		return (Customer) CUSTOMER_BY_ID.get(id);
-	}
+    public static synchronized Customer getCustomer(Long id) {
+        ensureDataAvailable();
+        return (Customer) CUSTOMER_BY_ID.get(id);
+    }
 
-	public static Customer findCustomerByID(String value) {
-		if (value == null || value.trim().length() == 0) {
-			return null;
-		}
+    public static synchronized void deleteCustomer(Long id) {
+        ensureDataAvailable();
+        CUSTOMER_BY_ID.remove(id);
 
-		try {
-			// Search for customer id
-			return findCustomerByID(Long.valueOf(value));
+        Iterator i = CUSTOMER_BY_NAME.values().iterator();
+        while (i.hasNext()) {
+            Customer customer = (Customer) i.next();
+            if (customer.getId().equals(id)) {
+                i.remove();
+                break;
+            }
+        }
+    }
 
-		} catch (NumberFormatException nfe) {
-			return null;
-		}
-	}
+    public static synchronized Customer findCustomerByID(Long id) {
+        ensureDataAvailable();
+        return (Customer) CUSTOMER_BY_ID.get(id);
+    }
 
-	public static Customer findCustomerByName(String value) {
-		if (value == null || value.trim().length() == 0) {
-			return null;
-		}
+    public static synchronized Customer findCustomerByID(String value) {
+        if (value == null || value.trim().length() == 0) {
+            return null;
+        }
 
-		// Search for customer name
-		String nameValue = value.toLowerCase();
+        ensureDataAvailable();
 
-		Iterator customers = CUSTOMER_BY_NAME.values().iterator();
-		while (customers.hasNext()) {
-			Customer customer = (Customer) customers.next();
-			String name = customer.getName();
-			if (name.toLowerCase().indexOf(nameValue) != -1) {
-				return customer;
-			}
-		}
-		// No customer was found
-		return null;
-	}
+        try {
+            // Search for customer id
+            return findCustomerByID(Long.valueOf(value));
 
-	public static Customer findCustomerByAge(String value) {
-		if (value == null || value.trim().length() == 0) {
-			return null;
-		}
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
 
-		try {
-			// Search for customer by age
-			Integer age = Integer.valueOf(value);
+    public static synchronized Customer findCustomerByName(String value) {
+        if (value == null || value.trim().length() == 0) {
+            return null;
+        }
 
-			Iterator customers = CUSTOMER_BY_ID.values().iterator();
-			while (customers.hasNext()) {
-				Customer customer = (Customer) customers.next();
+        ensureDataAvailable();
 
-				if (customer.getAge().equals(age)) {
-					return customer;
-				}
-			}
-			// No customer was found
-			return null;
+        // Search for customer name
+        String nameValue = value.toLowerCase();
 
-		} catch (NumberFormatException nfe) {
-			return null;
-		}
-	}
+        Iterator customers = CUSTOMER_BY_NAME.values().iterator();
+        while (customers.hasNext()) {
+            Customer customer = (Customer) customers.next();
+            String name = customer.getName();
+            if (name.toLowerCase().indexOf(nameValue) != -1) {
+                return customer;
+            }
+        }
+        // No customer was found
+        return null;
+    }
 
-	private static final Map CUSTOMER_BY_NAME = new TreeMap();
+    public static synchronized Customer findCustomerByAge(String value) {
+        if (value == null || value.trim().length() == 0) {
+            return null;
+        }
 
-	private static final Map CUSTOMER_BY_ID = new HashMap();
+        ensureDataAvailable();
 
-	static {
-		Customer customer = new Customer();
-		customer.id = new Long(2023);
-		customer.name = "Ann Melan";
-		customer.email = "ann_melan@inet.com";
-		customer.age = new Integer(41);
-		customer.investments = "Residential Property";
-		customer.holdings = new Double(34560);
-		customer.dateJoined = createDate("1986-12-05");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+        try {
+            // Search for customer by age
+            Integer age = Integer.valueOf(value);
 
-		customer = new Customer();
-		customer.id = new Long(4501);
-		customer.name = "Bob Harrold";
-		customer.email = "bobh@citibank.com";
-		customer.age = new Integer(50);
-		customer.holdings = new Double(45030);
-		customer.investments = "Options";
-		customer.dateJoined = createDate("1989-05-03");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+            Iterator customers = CUSTOMER_BY_ID.values().iterator();
+            while (customers.hasNext()) {
+                Customer customer = (Customer) customers.next();
 
-		customer = new Customer();
-		customer.id = new Long(7620);
-		customer.name = "John Tessel";
-		customer.email = "john_tessel@hotmail.com";
-		customer.age = new Integer(58);
-		customer.holdings = new Double(90400);
-		customer.investments = "Bonds";
-		customer.dateJoined = createDate("1992-01-19");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+                if (customer.getAge().equals(age)) {
+                    return customer;
+                }
+            }
+            // No customer was found
+            return null;
 
-		customer = new Customer();
-		customer.id = new Long(7634);
-		customer.name = "Rodger Alan";
-		customer.email = "ralan@westpower.com";
-		customer.age = new Integer(27);
-		customer.holdings = new Double(0);
-		customer.investments = "None";
-		customer.dateJoined = createDate("1997-06-26");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
 
-		customer = new Customer();
-		customer.id = new Long(4424);
-		customer.name = "David Henderson";
-		customer.email = "dhendi@yahoo.com";
-		customer.age = new Integer(45);
-		customer.holdings = new Double(430500.0);
-		customer.investments = "Commercial Property";
-		customer.dateJoined = createDate("2003-08-14");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+    public static synchronized List findCustomersByPage(int offset, int pageSize) {
+        ensureDataAvailable();
+        List customers = getAllCustomers();
+        int toIndex = Math.min(offset + pageSize, customers.size());
+        return customers.subList(offset, toIndex);
+    }
 
-		customer = new Customer();
-		customer.id = new Long(4478);
-		customer.name = "Katherine Malar";
-		customer.email = "kmalar@mycorp.com";
-		customer.age = new Integer(52);
-		customer.holdings = new Double(870000.0);
-		customer.investments = "Residential Property";
-		customer.dateJoined = createDate("1983-04-19");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
+    public static synchronized List getAllCustomers() {
+        ensureDataAvailable();
+        List customerList = new ArrayList();
+        for (int i = 0; i < 1000; i++) {
+            customerList.addAll(getCustomersSortedByName());
+        }
+        return customerList;
+    }
 
-		customer = new Customer();
-		customer.id = new Long(1056);
-		customer.name = "John Merton";
-		customer.email = "John.Merton@meriton.com";
-		customer.age = new Integer(48);
-		customer.holdings = new Double(109000.0);
-		customer.investments = "Options";
-		customer.dateJoined = createDate("2003-06-29");
-		CUSTOMER_BY_NAME.put(customer.name, customer);
-		CUSTOMER_BY_ID.put(customer.id, customer);
-	}
+    // -------------------------------------------------------- Private Methods
 
-	private static Date createDate(String pattern) {
-		try {
-			return FORMAT.parse(pattern);
-		} catch (ParseException pe) {
-			return null;
-		}
-	}
+    private static synchronized void ensureDataAvailable() {
+        if (CUSTOMER_BY_NAME.size() < 6) {
+            loadCustomers();
+        }
+    }
 
-	public static List findCustomersByPage(int offset, int pageSize) {
-		List customers = getAllCustomers();
-		return customers
-				.subList(offset, Math.min(offset + pageSize, customers.size()));
-	}
+    private static synchronized void loadCustomers() {
+        try {
+            InputStream is =
+                CustomerDAO.class.getResourceAsStream("customers.txt");
 
-	public static List getAllCustomers() {
-		List customerList = new ArrayList();
-		for (int i = 0; i < 100000; i++) {
-			customerList.addAll(getCustomersSortedByName());
-		}
-		return customerList;
-	}
+            BufferedReader reader =
+                new BufferedReader(new InputStreamReader(is));
+
+            String line = reader.readLine();
+            while (line != null) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                Customer customer = new Customer();
+                customer.id = Long.valueOf(tokenizer.nextToken().trim());
+                customer.name = tokenizer.nextToken().trim();
+                customer.email = tokenizer.nextToken().trim();
+                customer.age = Integer.valueOf(tokenizer.nextToken().trim());
+                customer.investments = tokenizer.nextToken().trim();
+                customer.holdings = Double.valueOf(tokenizer.nextToken().trim());
+                customer.dateJoined = createDate(tokenizer.nextToken().trim());
+
+                CUSTOMER_BY_NAME.put(customer.name, customer);
+                CUSTOMER_BY_ID.put(customer.id, customer);
+
+                line = reader.readLine();
+            }
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    private static Date createDate(String pattern) {
+        try {
+            return FORMAT.parse(pattern);
+        } catch (ParseException pe) {
+            return null;
+        }
+    }
 }

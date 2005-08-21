@@ -379,20 +379,22 @@ public class Column {
         renderAttributes(buffer);
         buffer.append(">");
 
-        Object columnValue = getProperty(row);
-
         if (getDecorator() != null) {
-            buffer.append(getDecorator().render(columnValue, context));
-
-        } else if (getAutolink() && renderLink(columnValue, buffer)) {
-            // Has been rendered
-
-        } else if (getMessageFormat() != null) {
-            Object[] args = new Object[] { columnValue };
-            buffer.append(getMessageFormat().format(args));
+            buffer.append(getDecorator().render(row, context));
 
         } else {
-            buffer.append(columnValue);
+            Object columnValue = getProperty(row);
+
+            if (getAutolink() && renderLink(columnValue, buffer)) {
+                // Has been rendered
+
+            } else if (getMessageFormat() != null) {
+                Object[] args = new Object[] { columnValue };
+                buffer.append(getMessageFormat().format(args));
+
+            } else {
+                buffer.append(columnValue);
+            }
         }
 
         buffer.append("</td>");

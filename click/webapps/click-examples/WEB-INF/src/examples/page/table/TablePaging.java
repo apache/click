@@ -21,8 +21,7 @@ public class TablePaging extends BorderedPage {
         // Setup customers table
         table = new Table("table");
         table.setAttribute("class", "its");
-        table.setPageSize(1);
-        //table.setRowCount(5);
+        table.setPageSize(3);
         table.setShowBanner(true);
 
         table.addColumn(new Column("name"));
