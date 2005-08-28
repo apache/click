@@ -328,7 +328,7 @@ public class Page {
             throw new IllegalArgumentException("Null key parameter");
         }
         if (messages == null) {
-            Locale locale = getContext().getRequest().getLocale();
+            Locale locale = getContext().getLocale();
             messages = ResourceBundle.getBundle(getClass().getName(), locale);
         }
         return messages.getString(key);

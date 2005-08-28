@@ -403,10 +403,6 @@ class ClickApp implements EntityResolver {
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
 
-//            // Deploy CSS styles file
-//            deployFile("/net/sf/click/control/table.css", clickTarget,
-//                       CLICK_PATH, "table.css");
-
             // Deploy JavaScript file
             deployFile("/net/sf/click/control/control.js", clickTarget,
                        CLICK_PATH, "control.js");
@@ -422,14 +418,6 @@ class ClickApp implements EntityResolver {
             // Deploy global VM file
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
-
-//            // Deploy list panel file
-//            deployFile("/net/sf/click/panel/ListPanel.htm", clickTarget,
-//                       CLICK_PATH, "ListPanel.htm");
-//
-//            // Deploy tabbed panel file
-//            deployFile("/net/sf/click/panel/TabbedPanel.htm", clickTarget,
-//                       CLICK_PATH, "TabbedPanel.htm");
 
             // Find extra files to deploy
             try {
@@ -460,7 +448,7 @@ class ClickApp implements EntityResolver {
                     }
 
                 } else {
-                    logger.warn("click.deploy.files property not found");
+                    logger.warn("could not load /click-deploy.properties");
                 }
 
             } catch (MissingResourceException mre) {
@@ -473,7 +461,6 @@ class ClickApp implements EntityResolver {
     }
 
     private void deployFile(String resource, String path, String dir, String filename) {
-
         String destination = path;
 
         if (path.endsWith(File.separator)
@@ -620,7 +607,6 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadFormatClass(Element rootElm) throws ClassNotFoundException {
-
         Element formatElm = rootElm.getChild("format");
 
         if (formatElm != null) {
@@ -658,7 +644,6 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadPages(Element rootElm) throws ClassNotFoundException {
-
         Element pagesElm = rootElm.getChild("pages");
 
         if (pagesElm == null) {

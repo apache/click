@@ -162,7 +162,7 @@ public class ErrorReport {
     public String getErrorReport() {
 
         if (isProductionMode()) {
-            Locale locale = page.getContext().getRequest().getLocale();
+            Locale locale = page.getContext().getLocale();
             ResourceBundle bundle =
                 ResourceBundle.getBundle("click-control", locale);
             return bundle.getString("production-error-message");
