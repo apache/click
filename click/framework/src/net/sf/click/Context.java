@@ -16,6 +16,7 @@
 package net.sf.click;
 
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -37,6 +38,9 @@ import org.apache.commons.fileupload.FileUploadBase;
  * @version $Id$
  */
 public class Context {
+
+    /** The user's session Locale key: &nbsp; <tt>locale</tt> */
+    public static final String LOCALE = "locale";
 
     /** The servlet context. */
     protected final ServletContext context;
@@ -76,6 +80,8 @@ public class Context {
         this.isPost = isPost;
         this.pageMaker = pageMaker;
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Returns the servlet request.
@@ -315,6 +321,41 @@ public class Context {
      */
     public Page createPage(String path) {
         return pageMaker.createPage(path);
+    }
+
+    /**
+     * Return the users Locale stored in their session, or the request Locale
+     * if not available. To override the default request Locale set the users
+     * Locale using the {@see #setLocale(Locale)} method.
+     * <p/>
+     * Pages and Controls obtain the users Locale using this method.
+     *
+     * @return the users Locale in the session, or if null the request Locale
+     */
+    public Locale getLocale() {
+        Locale locale = (Locale) getSessionAttribute(LOCALE);
+        if (locale == null) {
+            locale = getRequest().getLocale();
+        }
+        return locale;
+    }
+
+    /**
+     * This method stores the given Locale in the users session. If the given
+     * Locale is null, the "locale" attribute will be removed from the session.
+     * <p/>
+     * The Locale object is stored in the session using the {@see #LOCALE} 
+     * key.
+     *
+     * @param locale the Locale to store in the users session using the key
+     * "locale"
+     */
+    public void setLocale(Locale locale) {
+        if (locale == null && hasSession()) {
+            getSession().removeAttribute(LOCALE);
+        } else {
+            setSessionAttribute(LOCALE, locale);
+        }
     }
 
     /**

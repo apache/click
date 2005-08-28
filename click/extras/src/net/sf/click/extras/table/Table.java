@@ -376,7 +376,7 @@ public class Table implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        Locale locale = getContext().getRequest().getLocale();
+        Locale locale = getContext().getLocale();
 
         ResourceBundle bundle =
             ResourceBundle.getBundle(CONTROL_MESSAGES, locale);
@@ -492,7 +492,7 @@ public class Table implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        Locale locale = getContext().getRequest().getLocale();
+        Locale locale = getContext().getLocale();
 
         ResourceBundle bundle =
             ResourceBundle.getBundle(TABLE_PROPERTIES, locale);
@@ -614,7 +614,10 @@ public class Table implements Control {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer();
+        int bufferSize =
+            (getColumnList().size() * 60) * (getRowList().size() + 1);
+
+        StringBuffer buffer = new StringBuffer(bufferSize);
 
         // Render table start.
         buffer.append("<table id='");

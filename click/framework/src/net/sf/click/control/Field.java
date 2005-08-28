@@ -377,7 +377,7 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        Locale locale = getContext().getRequest().getLocale();
+        Locale locale = getContext().getLocale();
 
         ResourceBundle bundle =
             ResourceBundle.getBundle(CONTROL_MESSAGES, locale);

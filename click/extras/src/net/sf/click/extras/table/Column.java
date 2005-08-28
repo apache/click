@@ -361,7 +361,7 @@ public class Column {
             Context context) {
 
         if (getMessageFormat() == null && getFormat() != null) {
-            Locale locale = context.getRequest().getLocale();
+            Locale locale = context.getLocale();
             setMessageFormat(new MessageFormat(getFormat(), locale));
         }
 
