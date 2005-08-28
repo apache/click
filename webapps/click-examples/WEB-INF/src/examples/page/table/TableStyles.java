@@ -39,6 +39,8 @@ public class TableStyles extends BorderedPage {
         table = new Table("table");
         table.setAttribute("class", styleSelect.getValue());
 
+        table.addColumn(new Column("id"));
+
         table.addColumn(new Column("name"));
 
         Column column = new Column("email");

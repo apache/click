@@ -1,14 +1,15 @@
 CODE
-* review UTF-8 page content and Velocity changes
-* estimate table size when allocating StringBuffer
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
 
 BUGS
+* ensure blank page issue fixed
 
 DOCUMENTATION
+* add entry on http://java-source.net/open-source/web-frameworks
+* add UTF-8 localization comments
 * update Control in diagrams, update Control classes diagram
 
 VELOCITY
