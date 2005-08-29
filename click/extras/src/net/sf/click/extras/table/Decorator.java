@@ -18,13 +18,14 @@ package net.sf.click.extras.table;
 import net.sf.click.Context;
 
 /**
- * Provides a decorator interface to render given Table row objects.
+ * Provides a decorator interface for rendering Table column values.
  * <p/>
- * The following example illustrates how to render a email link in a customer
- * table:
+ * The following example illustrates how to render a email hyperlink in a
+ * email table column.
  *
  * <pre class="codeJava">
  * Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
+ *
  * column.setDecorator(<span class="kw">new</span> Decorator() {
  *     <span class="kw">public</span> String render(Object row, Context context) {
  *         Customer customer = (Customer) row;
@@ -33,8 +34,8 @@ import net.sf.click.Context;
  *         <span class="kw">return</span> <span class="st">"&lt;a href='mailto:"</span> + email + <span class="st">"'&gt;"</span> + fullName + <span class="st">"&lt;/a&gt;"</span>;
  *     }
  * });
- * table.addColumn(column); </pre>
  *
+ * table.addColumn(column); </pre>
  *
  * @see Column
  * @see Table

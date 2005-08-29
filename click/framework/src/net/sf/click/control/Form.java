@@ -335,6 +335,8 @@ public class Form implements Control {
 
     // ------------------------------------------------------- Static Variables
 
+    private static final long serialVersionUID = -8288409197675214969L;
+
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>
      */
@@ -483,6 +485,20 @@ public class Form implements Control {
         add(nameField);
     }
 
+    /**
+     * Create an form with no name or context defined, <b>please note</b> the
+     * form's name and context must be defined before it is valid. Also note you
+     * must define the Forms context before you add Fields to it.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public Form() {
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -494,15 +510,22 @@ public class Form implements Control {
      *
      * @param field the field to add to the form
      * @throws IllegalArgumentException if the form already contains a field
-     * or button with the same name
+     * or button with the same name, or if the field name is not defined
+     * @throws IllegalStateException if the form context is not defined
      */
     public void add(Field field) {
         if (field == null) {
             throw new IllegalArgumentException("field parameter cannot be null");
         }
+        if (StringUtils.isBlank(field.getName())) {
+            throw new IllegalArgumentException("Field name not defined");
+        }
         if (getFields().containsKey(field.getName()) && !(field instanceof Label)) {
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
+        }
+        if (getContext() == null) {
+            throw new IllegalStateException("Form context is not defined");
         }
 
         if (field instanceof Button) {

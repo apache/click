@@ -151,6 +151,8 @@ public class ActionLink implements Control {
 
     // -------------------------------------------------------------- Constants
 
+    private static final long serialVersionUID = 8469056846426557956L;
+
     /** The action link parameter name: &nbsp; <tt>actionLink</tt> */
     public static final String ACTION_LINK = "actionLink";
 
@@ -189,13 +191,26 @@ public class ActionLink implements Control {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create an action link for the given name.
+     * Create an ActionLink for the given name.
      *
      * @param name the action link name
      * @throws IllegalArgumentException if the name is null
      */
     public ActionLink(String name) {
         setName(name);
+    }
+
+    /**
+     * Create an ActionLink with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public ActionLink() {
     }
 
     // ------------------------------------------------------ Public Attributes

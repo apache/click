@@ -88,6 +88,8 @@ import net.sf.click.Context;
  */
 public class RadioGroup extends Field {
 
+    private static final long serialVersionUID = 2978451472698468194L;
+
     // ----------------------------------------------------- Instance Variables
 
     /** The list of Radio controls. */
@@ -103,7 +105,7 @@ public class RadioGroup extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a radio group with the given label and context.
+     * Create a RadioGroup with the given label and context.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -115,6 +117,21 @@ public class RadioGroup extends Field {
         setContext(context);
     }
 
+    /**
+     * Create a RadioGroup field with no label/name or context defined,
+     * <b>please note</b> the control's name and context must be defined before
+     * it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public RadioGroup() {
+        super();
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -123,10 +140,15 @@ public class RadioGroup extends Field {
      * set.
      *
      * @param radio the radio control to add to the radio group
+     * @throws IllegalArgumentException if the radio parameter is null
+     * @throws IllegalStateException if the radio group context is not defined
      */
     public void add(Radio radio) {
         if (radio == null) {
             throw new IllegalArgumentException("Null radio parameter");
+        }
+        if (getContext() == null) {
+            throw new IllegalStateException("RadioGroup context not defined");
         }
 
         radio.setName(getName());

@@ -52,6 +52,10 @@ package net.sf.click.control;
  */
 public class TextField extends Field {
 
+    // ----------------------------------------------------------- Constructors
+
+    private static final long serialVersionUID = 6187190854708434969L;
+
     // ----------------------------------------------------- Instance Variables
 
     /**
@@ -83,6 +87,19 @@ public class TextField extends Field {
      */
     public TextField(String label) {
         super(label);
+    }
+
+    /**
+     * Create a Text Field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public TextField() {
     }
 
     // ------------------------------------------------------ Public Attributes

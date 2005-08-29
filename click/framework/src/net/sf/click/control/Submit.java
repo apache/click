@@ -41,6 +41,8 @@ import net.sf.click.util.ClickUtils;
  */
 public class Submit extends Button {
 
+    private static final long serialVersionUID = 866770311383007541L;
+
     // ----------------------------------------------------- Instance Variables
 
     /** The button is clicked. */
@@ -64,6 +66,20 @@ public class Submit extends Button {
             String msg = "Cannot correctly process value containing: &nbsp;";
             throw new IllegalArgumentException(msg);
         }
+    }
+
+    /**
+     * Create an Submit button with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public Submit() {
+        super();
     }
 
     // ------------------------------------------------------ Public Attributes

@@ -59,6 +59,10 @@ import java.util.Date;
  */
 public class DateField extends TextField {
 
+    private static final long serialVersionUID = 3379108282465075759L;
+
+    // ----------------------------------------------------- Instance Variables
+
     /** The JavaScript DHTML Calendar pattern. */
     protected String calendarPattern;
 
@@ -85,6 +89,21 @@ public class DateField extends TextField {
     public DateField(String label) {
         super(label);
         setAttribute("id", getName() + "-field");
+        setFormatPattern("dd MMM yyyy");
+    }
+
+    /**
+     * Create a date field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public DateField() {
+        super();
         setFormatPattern("dd MMM yyyy");
     }
 
@@ -166,6 +185,14 @@ public class DateField extends TextField {
         }
         formatPattern = pattern;
         calendarPattern = parseDateFormatPattern(pattern);
+    }
+
+    /**
+     * @see Field#setName(String)
+     */
+    public void setName(String name) {
+        super.setName(name);
+        setAttribute("id", getName() + "-field");
     }
 
     /**

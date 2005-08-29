@@ -88,13 +88,15 @@ import net.sf.click.util.ClickUtils;
  */
 public class HiddenField extends Field {
 
+    private static final long serialVersionUID = 4705251470274077158L;
+
     // ----------------------------------------------------- Instance Variables
 
     /** The field value Object. */
     protected Object valueObject;
 
     /** The field value Class. */
-    protected final Class valueClass;
+    protected Class valueClass;
 
     // ----------------------------------------------------------- Constructors
 
@@ -107,6 +109,21 @@ public class HiddenField extends Field {
     public HiddenField(String name, Class valueClass) {
         this.name = name;
         this.valueClass = valueClass;
+    }
+
+    /**
+     * Create an HiddenField with no name or Class defined, <b>please note</b>
+     * the HiddenField's name and value Class must be defined before it is
+     * valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public HiddenField() {
+        super();
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -158,6 +175,15 @@ public class HiddenField extends Field {
      */
     public Class getValueClass() {
         return valueClass;
+    }
+
+    /**
+     * Set the registed Class for the Hidden Field value Object.
+     *
+     * @param valueClass the registered Class for the Hidden Field value Object
+     */
+    public void setValueClass(Class valueClass) {
+        this.valueClass = valueClass;
     }
 
     /**

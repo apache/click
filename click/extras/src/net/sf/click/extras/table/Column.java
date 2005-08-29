@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.table;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -29,11 +30,6 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
- * <p/>
- * <div style="border: 1px solid red; padding: 0.5em; margin-top: 0.5em">
- * Please note the Column class is undergoing development and is
- * subject to change.
- * </div>
  *
  * @see Decorator
  * @see Table
@@ -41,7 +37,9 @@ import org.apache.commons.lang.StringUtils;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public class Column {
+public class Column implements Serializable {
+
+    private static final long serialVersionUID = -4573607961095404555L;
 
     // ----------------------------------------------------- Instance Variables
 
@@ -75,6 +73,9 @@ public class Column {
     /** The title of the column header. */
     protected String headerTitle;
 
+    /**
+     * The optional MessageFormat used to render the column table cell value.
+     */
     protected MessageFormat messageFormat;
 
     /** The property name of the row object to render. */
@@ -94,6 +95,19 @@ public class Column {
     public Column(String name) {
         this.name = name;
         this.headerTitle = StringUtils.capitalize(name);
+    }
+
+    /**
+     * Create a Column with no name defined, <b>please note</b> the
+     * columns's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a column instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public Column() {
     }
 
     // ------------------------------------------------------ Public Properties
@@ -245,19 +259,19 @@ public class Column {
     }
 
     /**
-     * Return the MessageFormat instance used to format the row object value.
+     * Return the MessageFormat instance used to format the table cell value.
      *
-     * @return the MessageFormat instance used to format the row object value
+     * @return the MessageFormat instance used to format the table cell value
      */
     public MessageFormat getMessageFormat() {
         return messageFormat;
     }
 
     /**
-     * Set the MessageFormat instance used to format the row object value.
+     * Set the MessageFormat instance used to format the table cell value.
      *
-     * @param messageFormat the MessageFormat used to format the row object
-     * value
+     * @param messageFormat the MessageFormat used to format the table cell
+     *  value
      */
     public void setMessageFormat(MessageFormat messageFormat) {
         this.messageFormat = messageFormat;
@@ -447,6 +461,15 @@ public class Column {
         }
     }
 
+    /**
+     * Render the given table cell value to the buffer as a <tt>mailto:</tt>
+     * or <tt>http:</tt> hyperlink, or as an ordinary string if the value is
+     * determined not be linkable.
+     *
+     * @param value the table cell value to render
+     * @param buffer the StringBuffer to render to
+     * @return a rendered email or web hyperlink if applicable
+     */
     protected boolean renderLink(Object value, StringBuffer buffer) {
         if (value != null) {
             String valueStr = value.toString();

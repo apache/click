@@ -57,12 +57,22 @@ import org.apache.commons.lang.StringUtils;
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
  * <ul style="margin-top:0.5em;">
- *  <li>mars</li>
  *  <li>isi</li>
  *  <li>its</li>
+ *  <li>mars</li>
  *  <li>report</li>
  *  <li>simple</li>
  * </ul>
+ *
+ * To use one of these CSS styles set the table <span class="st">"class"</span>
+ * attribute. For examle:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public void</span> onInit() {
+ *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
+ *     table.setAttribute(<span class="st">"class"</span>, <span class="st">"simple"</span>);
+ *     ..
+ * } </pre>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -79,6 +89,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Table implements Control {
 
+    private static final long serialVersionUID = 8465121273938579765L;
 
     // -------------------------------------------------------------- Constants
 
@@ -155,7 +166,7 @@ public class Table implements Control {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create an action link for the given name.
+     * Create an Table for the given name.
      *
      * @param name the table name
      * @throws IllegalArgumentException if the name is null
@@ -163,6 +174,21 @@ public class Table implements Control {
     public Table(String name) {
         setName(name);
     }
+
+    /**
+     * Create a Table with no name defined, <b>please note</b> the control's
+     * name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public Table() {
+        super();
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**

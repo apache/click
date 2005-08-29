@@ -326,7 +326,7 @@ public class Context {
     /**
      * Return the users Locale stored in their session, or the request Locale
      * if not available. To override the default request Locale set the users
-     * Locale using the {@see #setLocale(Locale)} method.
+     * Locale using the {@link #setLocale(Locale)} method.
      * <p/>
      * Pages and Controls obtain the users Locale using this method.
      *
@@ -344,7 +344,7 @@ public class Context {
      * This method stores the given Locale in the users session. If the given
      * Locale is null, the "locale" attribute will be removed from the session.
      * <p/>
-     * The Locale object is stored in the session using the {@see #LOCALE} 
+     * The Locale object is stored in the session using the {@link #LOCALE}
      * key.
      *
      * @param locale the Locale to store in the users session using the key

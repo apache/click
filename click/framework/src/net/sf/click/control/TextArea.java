@@ -47,6 +47,8 @@ package net.sf.click.control;
  */
 public class TextArea extends Field {
 
+    private static final long serialVersionUID = 850919582013675611L;
+
     // ----------------------------------------------------- Instance Variables
 
     /**
@@ -81,6 +83,20 @@ public class TextArea extends Field {
      */
     public TextArea(String label) {
         super(label);
+    }
+
+    /**
+     * Create a TextArea with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public TextArea() {
+        super();
     }
 
     // ------------------------------------------------------- Public Attributes
