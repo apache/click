@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Provides the Page request event handler class.
  * <p/>
@@ -98,11 +100,15 @@ public class Page {
      * also be set.
      *
      * @param control the control to add
-     * @throws IllegalArgumentException if the control is null
+     * @throws IllegalArgumentException if the control is null, or if the name
+     * of the control is not defined
      */
     public void addControl(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
+        }
+        if (StringUtils.isBlank(control.getName())) {
+            throw new IllegalArgumentException("Control name not defined");
         }
         if (controls == null) {
             controls = new ArrayList();
@@ -298,8 +304,9 @@ public class Page {
     }
 
     /**
-     * Return the Page resource message for the given resource property key. The
-     * resource message returned will use the Local of the HttpServletRequest.
+     * Return the localized Page resource message for the given resource
+     * property key. The resource message returned will use the Locale obtained
+     * from the Context.
      * <p/>
      * Pages can define text properties files to store localized messages. These
      * properties files must be stored on the Page class path with a name
@@ -317,6 +324,14 @@ public class Page {
      *  /com/mycorp/pages/Login.properties
      *  /com/mycorp/pages/Login_en.properties
      *  /com/mycorp/pages/Login_fr.properties </pre>
+     *
+     * Note page messages can be accessed directly in the page template using
+     * the <span class="st">$messages</span> reference. For examples:
+     *
+     * <pre class="codeHtml">
+     * <span class="blue">$messages.title</span> </pre>
+     *
+     * Please see the {@link net.sf.click.util.MessagesMap} adaptor for more details.
      *
      * @param key the message property key name
      * @return the Page message for the given message property key

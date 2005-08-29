@@ -38,6 +38,7 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
+import net.sf.click.util.MessagesMap;
 import net.sf.click.util.SessionMap;
 
 import org.apache.velocity.Template;
@@ -777,6 +778,17 @@ public class ClickServlet extends HttpServlet {
                         + " has been replaced with the page path";
                 logger.warn(msg);
             }
+        }
+
+        MessagesMap messagesMap = new MessagesMap(page);
+        pop = context.put("messages", messagesMap);
+        if (pop != null) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"messages\". The page model object "
+                         + pop + " has been replaced with the request "
+                         + " messages";
+            logger.warn(msg);
         }
 
         return context;

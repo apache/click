@@ -107,6 +107,8 @@ import java.util.List;
  */
 public class CreditCardField extends TextField {
 
+    private static final long serialVersionUID = -4591403023871778803L;
+
     /** The Visa type credit card: "VISA" */
     public static final String VISA = "VISA";
 
@@ -159,6 +161,24 @@ public class CreditCardField extends TextField {
      */
     public CreditCardField(String label) {
         super(label);
+        setMaxLength(19);
+        setSize(19);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        cardTypeSelect.addAll(CARD_OPTIONS);
+    }
+
+    /**
+     * Create a credit card field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public CreditCardField() {
+        super();
         setMaxLength(19);
         setSize(19);
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");

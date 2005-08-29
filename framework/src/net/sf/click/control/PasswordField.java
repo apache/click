@@ -37,10 +37,12 @@ package net.sf.click.control;
  */
 public class PasswordField extends TextField {
 
+    private static final long serialVersionUID = -1220129260834465418L;
+
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the Password Field with the given label.
+     * Construct a PasswordField with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -48,6 +50,20 @@ public class PasswordField extends TextField {
      */
     public PasswordField(String label) {
         super(label);
+    }
+
+    /**
+     * Create a PasswordField with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public PasswordField() {
+        super();
     }
 
     // ------------------------------------------------------ Public Attributes

@@ -41,7 +41,7 @@ import javax.servlet.http.HttpSession;
  * <span class="red">#end</span> </pre>
  *
  * The ClickServlet adds a SessionMap instance to the Velocity Context before
- * it merged with the page template.
+ * it is merged with the page template.
  *
  * @author Malcolm.Edgar
  * @version $Id$

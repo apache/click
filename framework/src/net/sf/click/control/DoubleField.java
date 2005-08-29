@@ -52,6 +52,8 @@ package net.sf.click.control;
  */
 public class DoubleField extends TextField {
 
+    private static final long serialVersionUID = -6326214893690121356L;
+
     /** The maximum field value. */
     protected double maxvalue = Double.MAX_VALUE;
 
@@ -59,7 +61,7 @@ public class DoubleField extends TextField {
     protected double minvalue = Double.MIN_VALUE;
 
     /**
-     * Construct the Double field with the given label.
+     * Construct a DoubleField with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -67,6 +69,21 @@ public class DoubleField extends TextField {
      */
     public DoubleField(String label) {
         super(label);
+        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+    }
+
+    /**
+     * Create a DoubleField with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public DoubleField() {
+        super();
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
     }
 

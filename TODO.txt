@@ -1,4 +1,5 @@
 CODE
+* expose page object in Velocity context
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
@@ -8,6 +9,8 @@ BUGS
 * ensure blank page issue fixed
 
 DOCUMENTATION
+* provide more Column Javadoc
+* discuss redirecting to HTTPS
 * add entry on http://java-source.net/open-source/web-frameworks
 * add UTF-8 localization comments
 * update Control in diagrams, update Control classes diagram

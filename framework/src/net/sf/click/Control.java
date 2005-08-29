@@ -15,6 +15,8 @@
  */
 package net.sf.click;
 
+import java.io.Serializable;
+
 /**
  * Provides the interface for Page controls. When a Page request
  * event is processed Controls may perform server side event processing
@@ -26,7 +28,7 @@ package net.sf.click;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public interface Control {
+public interface Control extends Serializable {
  
     /**
      * Return the Page request Context of the Control.

@@ -52,6 +52,8 @@ package net.sf.click.control;
  */
 public class IntegerField extends TextField {
 
+    private static final long serialVersionUID = -2239992411551673682L;
+
     // ----------------------------------------------------- Instance Variables
 
     /** The maximum field value. */
@@ -63,7 +65,7 @@ public class IntegerField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a Integer Field field with the given label.
+     * Construct a IntegerField field with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -71,6 +73,20 @@ public class IntegerField extends TextField {
      */
     public IntegerField(String label) {
         super(label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+    }
+
+    /**
+     * Create a IntegerField with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public IntegerField() {
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 

@@ -37,6 +37,8 @@ package net.sf.click.control;
  */
 public class EmailField extends TextField {
 
+    private static final long serialVersionUID = 7526447883893011813L;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -49,6 +51,20 @@ public class EmailField extends TextField {
     public EmailField(String label) {
         super(label);
         size = 30;
+    }
+
+    /**
+     * Create an Email Field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public EmailField() {
+        super();
     }
 
     // --------------------------------------------------------- Public Methods

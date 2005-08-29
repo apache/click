@@ -56,7 +56,11 @@ import net.sf.click.util.ClickUtils;
  */
 public class Button extends Field {
 
-    // -------------------------------------------------------- Constructors
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = -4565346013990356183L;
+
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Create a button with the given value.
@@ -68,6 +72,19 @@ public class Button extends Field {
     public Button(String value) {
         this.value = value;
         this.name = ClickUtils.toName(value);
+    }
+
+    /**
+     * Create a button with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+    public Button() {
     }
 
     // ------------------------------------------------------ Public Attributes

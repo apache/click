@@ -39,6 +39,8 @@ package net.sf.click.control;
  */
 public class Radio extends Field {
 
+    private static final long serialVersionUID = 6352053148711861658L;
+
     // ----------------------------------------------------- Instance Variables
 
     /** The field checked value. */
