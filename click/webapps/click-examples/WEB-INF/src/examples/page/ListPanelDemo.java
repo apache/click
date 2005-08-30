@@ -7,7 +7,6 @@ import net.sf.click.extras.panel.Panel;
 
 import java.util.List;
 
-
 /**
  * Provides an ListPanel demonstration.
  *
@@ -16,7 +15,7 @@ import java.util.List;
 public class ListPanelDemo extends BorderedPage {
 
     public void onInit() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = CustomerDAO.getCustomersSortedByName(8);
         addModel("customers", customers);
 
         ListPanel listPanel = new ListPanel("listPanel");

@@ -22,6 +22,7 @@ import examples.domain.CustomerDAO;
 public class EditCustomer extends BorderedPage {
 
     Form form;
+    HiddenField referrerField;
     HiddenField idField;
     TextField nameField;
     EmailField emailField;
@@ -32,12 +33,18 @@ public class EditCustomer extends BorderedPage {
     Submit okButton;
     Submit cancelButton;
 
+    /** The path to referrer a successful edit to. */
+    String referrer;
+
     /**
      * @see Page#onInit()
      */
     public void onInit() {
         form = new Form("form", getContext());
         addControl(form);
+
+        referrerField = new HiddenField("referrer", String.class);
+        form.add(referrerField);
 
         idField = new HiddenField("id", Long.class);
         form.add(idField);
@@ -89,7 +96,10 @@ public class EditCustomer extends BorderedPage {
         Customer customer = (Customer)
             getContext().getRequestAttribute("customer");
 
+        String referrer = getContext().getRequestParameter("referrer");
+
         if (customer != null) {
+            referrerField.setValue(referrer);
             idField.setValue(customer.getId());
             nameField.setValue(customer.getName());
             emailField.setValue(customer.getEmail());
@@ -120,7 +130,13 @@ public class EditCustomer extends BorderedPage {
 
             CustomerDAO.setCustomer(customer);
 
-            setRedirect("action-table.htm");
+            String referrer = referrerField.getValue();
+            if (referrer != null) {
+                setRedirect(referrer);
+            } else {
+                setRedirect("/index.htm");
+            }
+
             return true;
 
         } else {

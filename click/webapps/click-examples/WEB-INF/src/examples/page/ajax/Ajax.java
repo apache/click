@@ -24,7 +24,7 @@ public class Ajax extends BorderedPage {
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
         addControl(customerSelect);
 
-        List customerList = CustomerDAO.getCustomersSortedByName();
+        List customerList = CustomerDAO.getCustomersSortedByName(8);
         for (Iterator i = customerList.iterator(); i.hasNext();) {
             Customer customer = (Customer) i.next();
             customerSelect.add(new Option(customer.getId(), customer.getName()));

@@ -1,4 +1,5 @@
 package examples.page;
+
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
 import net.sf.click.Page;
@@ -73,7 +74,7 @@ public class ActionTable extends BorderedPage {
      * @see Page#onGet()
      */
     public void onGet() {
-        addModel("customers", CustomerDAO.getCustomersSortedByName());
+        addModel("customers", CustomerDAO.getCustomersSortedByName(7));
     }
 
 }

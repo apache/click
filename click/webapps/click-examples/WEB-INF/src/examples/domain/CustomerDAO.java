@@ -30,6 +30,8 @@ public class CustomerDAO {
 
     private static final Map CUSTOMER_BY_ID = new HashMap();
 
+    private static final List ALL_CUSTOMER_LIST = new ArrayList(20000);
+
     static {
         loadCustomers();
     }
@@ -39,6 +41,21 @@ public class CustomerDAO {
     public static synchronized List getCustomersSortedByName() {
         ensureDataAvailable();
         List customers = new ArrayList(CUSTOMER_BY_NAME.values());
+        return customers;
+    }
+
+    public static synchronized List getCustomersSortedByName(int rows) {
+        ensureDataAvailable();
+        List customers = new ArrayList(rows);
+
+        for (Iterator i = CUSTOMER_BY_NAME.values().iterator(); i.hasNext();) {
+            Customer customer = (Customer) i.next();
+            customers.add(customer);
+            if (customers.size() >= rows) {
+                break;
+            }
+        }
+
         return customers;
     }
 
@@ -148,12 +165,7 @@ public class CustomerDAO {
     }
 
     public static synchronized List getAllCustomers() {
-        ensureDataAvailable();
-        List customerList = new ArrayList();
-        for (int i = 0; i < 1000; i++) {
-            customerList.addAll(getCustomersSortedByName());
-        }
-        return customerList;
+        return ALL_CUSTOMER_LIST;
     }
 
     // -------------------------------------------------------- Private Methods
@@ -189,6 +201,11 @@ public class CustomerDAO {
                 CUSTOMER_BY_ID.put(customer.id, customer);
 
                 line = reader.readLine();
+            }
+
+            ALL_CUSTOMER_LIST.clear();
+            for (int i = 0; i < 1000; i++) {
+                ALL_CUSTOMER_LIST.addAll(getCustomersSortedByName());
             }
 
         } catch (IOException ioe) {

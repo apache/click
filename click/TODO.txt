@@ -1,5 +1,5 @@
 CODE
-* expose page object in Velocity context
+* Table decorator edit link
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
