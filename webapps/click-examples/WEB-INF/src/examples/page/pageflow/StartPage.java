@@ -61,17 +61,11 @@ public class StartPage extends BorderedPage {
         courseSelect.setRequired(true);
         form.add(courseSelect);
 
-        notesField = new TextArea("Booking Notes");
-        notesField.setCols(25);
-        form.add(notesField);
+        form.add(new TextArea("Booking Notes", 25, 3));
 
-        Submit backButton = new Submit(" < Back ");
-        backButton.setListener(this, "onBackClick");
-        form.add(backButton);
+        form.add(new Submit(" < Back ", this, "onBackClick"));
 
-        Submit nextButton = new Submit(" Next > ");
-        nextButton.setListener(this, "onNextClick");
-        form.add(nextButton);
+        form.add(new Submit(" Next > ", this, "onNextClick"));
 
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValue(courseBooking.getCustomerId());

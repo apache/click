@@ -18,6 +18,8 @@ package net.sf.click.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
@@ -198,6 +200,27 @@ public class ActionLink implements Control {
      */
     public ActionLink(String name) {
         setName(name);
+    }
+
+    /**
+     * Create an ActionLink for the given name, listener object and listener
+     * method.
+     *
+     * @param name the action link name
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if the name, listener or method is null
+     * or if the method is blank
+     */
+    public ActionLink(String name, Object listener, String method) {
+        setName(name);
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener parameter");
+        }
+        if (StringUtils.isBlank(method)) {
+            throw new IllegalArgumentException("Blank listener method");
+        }
+        setListener(listener, method);
     }
 
     /**

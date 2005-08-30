@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -66,6 +68,28 @@ public class Submit extends Button {
             String msg = "Cannot correctly process value containing: &nbsp;";
             throw new IllegalArgumentException(msg);
         }
+    }
+
+    /**
+     * Create a Submit button with the given value, listener object and
+     * listener method.
+     *
+     * @param value the button value
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method
+     * is blank
+     */
+    public Submit(String value, Object listener, String method) {
+        super(value);
+
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener parameter");
+        }
+        if (StringUtils.isBlank(method)) {
+            throw new IllegalArgumentException("Blank listener method");
+        }
+        setListener(listener, method);
     }
 
     /**

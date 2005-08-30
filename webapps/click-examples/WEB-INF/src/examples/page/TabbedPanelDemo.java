@@ -15,7 +15,7 @@ import examples.domain.CustomerDAO;
 public class TabbedPanelDemo extends BorderedPage {
 
     public void onInit() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = CustomerDAO.getCustomersSortedByName(12);
         addModel("customers", customers);
 
         TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");

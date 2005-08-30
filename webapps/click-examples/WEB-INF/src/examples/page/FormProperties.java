@@ -144,7 +144,7 @@ public class FormProperties extends BorderedPage {
         labelAlignSelect.setAttribute("onChange", "optionsForm.submit();");
         optionsForm.add(labelAlignSelect);
 
-        optionsForm.add(new Label(""));
+        optionsForm.add(new Label("&nbsp;"));
 
         labelsPositionSelect = new Select("Labels Position");
         labelsPositionSelect.addAll(new String[] {"left", "top"});

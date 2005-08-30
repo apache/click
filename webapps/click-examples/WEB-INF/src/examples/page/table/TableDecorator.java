@@ -102,7 +102,7 @@ public class TableDecorator extends BorderedPage {
 
         if (customer != null) {
             getContext().setRequestAttribute("customer", customer);
-            setForward("/edit-customer.htm");
+            setForward("/edit-customer.htm?referrer=/table/table-decorator.htm");
             return false;
 
         } else {
@@ -118,7 +118,7 @@ public class TableDecorator extends BorderedPage {
     }
 
     public void onGet() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = CustomerDAO.getCustomersSortedByName(12);
         table.setRowList(customers);
     }
 

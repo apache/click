@@ -6,9 +6,9 @@
             $customer.name
             <br/>$customer.email
             <br/>$customer.age
-            <br/>$customer.holdings
+            <br/>$format.currency($customer.holdings)
             <br/>$customer.investments
-            <br/>$customer.dateJoined
+            <br/>$format.date($customer.dateJoined)
         </td>
             #if( $velocityCount % 4 == 0 )
             </tr><tr>

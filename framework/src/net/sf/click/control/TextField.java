@@ -79,7 +79,8 @@ public class TextField extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the Text Field with the given label.
+     * Construct the TextField with the given label. The default size is
+     * text field size is 20 characters.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -90,7 +91,37 @@ public class TextField extends Field {
     }
 
     /**
-     * Create a Text Field with no name defined, <b>please note</b> the
+     * Construct the TextField with the given label and size.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param size the size of the text field
+     */
+    public TextField(String label, int size) {
+        super(label);
+
+        setSize(size);
+    }
+
+    /**
+     * Construct the TextField with the given label, size and maxlength.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param size the size attribute of the text field
+     * @param maxlength the maxlength attribute of the text field
+     */
+    public TextField(String label, int size, int maxlength) {
+        super(label);
+
+        setSize(size);
+        setMaxLength(maxlength);
+    }
+
+    /**
+     * Create a TextField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
      * <div style="border: 1px solid red;padding:0.5em;">
