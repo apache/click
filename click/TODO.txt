@@ -1,5 +1,4 @@
 CODE
-* Table decorator edit link
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
@@ -7,6 +6,9 @@ CODE
 
 BUGS
 * ensure blank page issue fixed
+* control.css, missing menuarrow.gif --- .calendar .nav {
+  background: ButtonFace url(menuarrow.gif) no-repeat 100% 100%;
+}
 
 DOCUMENTATION
 * provide more Column Javadoc
