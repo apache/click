@@ -175,7 +175,7 @@ a:visited.error {
 	color: red;
 }
 input.disabled {
-	background: lightgrey;
+	background: lightgray;
 }
 input.error {
 	background: yellow;

@@ -46,8 +46,7 @@ import net.sf.click.Context;
 public interface Decorator {
 
     /**
-     * Returns a rendered and decorated string representation of the given
-     * object.
+     * Returns a decorated string representation of the given object.
      *
      * @param row the Table row object to render
      * @param context the request context

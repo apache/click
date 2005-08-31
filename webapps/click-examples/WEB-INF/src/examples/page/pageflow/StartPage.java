@@ -61,7 +61,9 @@ public class StartPage extends BorderedPage {
         courseSelect.setRequired(true);
         form.add(courseSelect);
 
-        form.add(new TextArea("Booking Notes", 25, 3));
+        notesField = new TextArea("Booking Notes");
+        notesField.setCols(25);
+        form.add(notesField);
 
         form.add(new Submit(" < Back ", this, "onBackClick"));
 
