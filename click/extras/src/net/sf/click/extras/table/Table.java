@@ -35,7 +35,7 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * The Table control provides a HTML &lt;table&gt; control with
  * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
- * like functionality. The design on the Table control has been informed by
+ * like functionality. The design of the Table control has been informed by
  * the excellent DisplayTag library, with the aim of making this control easy to
  * learn for DisplayTag users.
  * <p/>

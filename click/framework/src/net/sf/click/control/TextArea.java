@@ -86,34 +86,6 @@ public class TextArea extends Field {
     }
 
     /**
-     * Construct the TextArea with the given label and cols.
-     * <p/>
-     * The field name will be Java property representation of the given label.
-     *
-     * @param label the label of the field
-     * @param cols the number of columns
-     */
-    public TextArea(String label, int cols) {
-        super(label);
-        setCols(cols);
-    }
-
-    /**
-     * Construct the TextArea with the given label, cols and rows.
-     * <p/>
-     * The field name will be Java property representation of the given label.
-     *
-     * @param label the label of the field
-     * @param cols the number of columns
-     * @param rows the number of rows
-     */
-    public TextArea(String label, int cols, int rows) {
-        super(label);
-        setCols(cols);
-        setRows(rows);
-    }
-
-    /**
      * Create a TextArea with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

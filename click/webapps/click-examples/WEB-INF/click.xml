@@ -10,5 +10,5 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="profile"/>
+  <mode value="production"/>
 </click-app>

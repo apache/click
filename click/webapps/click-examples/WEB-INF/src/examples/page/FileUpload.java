@@ -29,13 +29,9 @@ public class FileUpload extends BorderedPage {
         descField = new TextField("Description");
         form.add(descField);
 
-        Submit okButton = new Submit("    OK    ");
-        okButton.setListener(this, "onOkClick");
-        form.add(okButton);
+        form.add(new Submit("    OK    ", this, "onOkClick"));
 
-        Submit cancelButton = new Submit(" Cancel ");
-        cancelButton.setListener(this, "onCancelClick");
-        form.add(cancelButton);
+        form.add(new Submit(" Cancel ", this, "onCancelClick"));
     }
 
     public boolean onOkClick() {

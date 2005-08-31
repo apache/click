@@ -7,9 +7,9 @@
     $customer.name
     <br/>$customer.email
     <br/>$customer.age
-    <br/>$customer.holdings
+    <br/>$format.currency($customer.holdings)
     <br/>$customer.investments
-    <br/>$customer.dateJoined
+    <br/>$format.date($customer.dateJoined)
 </div>
 #end
 </div>

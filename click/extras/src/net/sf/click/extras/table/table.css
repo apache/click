@@ -7,12 +7,11 @@
 
 /** Global styles **/
 
-td a, td a:visited, td a:hover { 
-	color: #666; 
+td a, td a:visited, td a:hover {
     text-decoration: none; 
 }
 td a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 thead tr {
     background-color: #fc0;

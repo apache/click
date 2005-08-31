@@ -30,13 +30,9 @@ public class NextPage extends BorderedPage {
         courseField = new HiddenField("courseField", CourseBooking.class);
         form.add(courseField);
 
-        Submit backButton = new Submit(" < Back ");
-        backButton.setListener(this, "onBackClick");
-        form.add(backButton);
+        form.add(new Submit(" < Back ", this, "onBackClick"));
 
-        Submit nextButton = new Submit("  Next > ");
-        nextButton.setListener(this, "onNextClick");
-        form.add(nextButton);
+        form.add(new Submit("  Next > ", this, "onNextClick"));
 
         if (getContext().isForward() && courseBooking != null) {
             courseField.setValue(courseBooking);
