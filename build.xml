@@ -193,7 +193,7 @@
  
    <target name="help" description="display the Help message">
       <echo message="Click ${version} web application framework"/>
-      <echo message="==================================="/> 
+      <echo message="===================================="/> 
       <echo/>  
       <echo message="Main targets:"/> 
       <echo/>    
