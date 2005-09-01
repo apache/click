@@ -8,32 +8,32 @@ licensed using the Apache license.
 
 Comprehensive HTML documentation is provided under:
 
-	webapps/click-documentation/index.html
+    webapps/click-documentation/index.html
 	
 Or online at:
 
-	http://click.sourceforge.net/
+    http://click.sourceforge.net/
 	
 	
 To get started with the Click Examples see:
 
-  webapps/click-documentation/docs/examples.html
+    webapps/click-documentation/docs/examples.html
   
 To get started with building Click see:
 
-  webapps/click-documentation/docs/building.html
+    webapps/click-documentation/docs/building.html
 
 
-Click is built using the J2SE 1.4.2 and Ant 1.6.1.
+Click is built using the J2SE 1.4.2 and Ant 1.6.5.
 The main Ant targets include:
 
-        build-all             build framework, extras, webapps
-        build-extras          build extras JAR file
-	build-framework       build framework JAR file
-	build-release         build release ZIP file
-	build-webapps         build web application WAR files
-	deploy-webapps        copy WAR files to application server
-	help                  display the Help message
-	javadoc               create Javadoc HTML files
+    build-all             build framework, extras, webapps
+    build-extras          build extras JAR file
+    build-framework       build framework JAR file
+    build-release         build release ZIP file
+    build-webapps         build web application WAR files
+    deploy-webapps        copy WAR files to application server
+    help                  display the Help message
+    javadoc               create Javadoc HTML files
 
-	Please ensure you have configured build.properties
+    Please ensure you have configured build.properties

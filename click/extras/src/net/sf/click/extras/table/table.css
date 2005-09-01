@@ -156,14 +156,14 @@ table.report idcol {
 	background: buttonface;
 }
 table.report tr.even{
-	background-color: #399;
+	background-color: #C2EFEF;
 }
 table.report tbody {
-	height: 100px;
+	height: 180px;
 	overflow: auto;
 }
 table.report {
-	height: 120px;
+	height: 200px;
 	overflow: auto;
 }
 table.report tbody tr{
