@@ -80,7 +80,7 @@ public class EditCustomer extends BorderedPage {
             getContext().getRequestAttribute("customer");
 
         if (customer != null) {
-            form.copyFrom(customer, true);
+            form.copyFrom(customer);
         }
 
         String referrer = getContext().getRequestParameter("referrer");
@@ -97,7 +97,7 @@ public class EditCustomer extends BorderedPage {
         if (form.isValid()) {
 
             Customer customer = new Customer();
-            form.copyTo(customer, true);
+            form.copyTo(customer);
             CustomerDAO.setCustomer(customer);
 
             String referrer = referrerField.getValue();
