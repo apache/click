@@ -3,6 +3,8 @@ CODE
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
+* upgrade webapp DTD
+* XHTML vs HTML
 
 BUGS
 * ensure blank page issue fixed

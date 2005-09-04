@@ -1,6 +1,7 @@
 package examples.page;
 
 import net.sf.click.Page;
+import net.sf.click.control.Checkbox;
 import net.sf.click.control.DateField;
 import net.sf.click.control.DoubleField;
 import net.sf.click.control.EmailField;
@@ -23,18 +24,6 @@ public class EditCustomer extends BorderedPage {
 
     Form form;
     HiddenField referrerField;
-    HiddenField idField;
-    TextField nameField;
-    EmailField emailField;
-    IntegerField ageField;
-    DoubleField holdingsField;
-    InvestmentSelect investmentsField;
-    DateField dateJoinedField;
-    Submit okButton;
-    Submit cancelButton;
-
-    /** The path to referrer a successful edit to. */
-    String referrer;
 
     /**
      * @see Page#onInit()
@@ -46,44 +35,38 @@ public class EditCustomer extends BorderedPage {
         referrerField = new HiddenField("referrer", String.class);
         form.add(referrerField);
 
-        idField = new HiddenField("id", Long.class);
-        form.add(idField);
+        form.add(new HiddenField("id", Long.class));
 
-        nameField = new TextField("Name");
+        TextField nameField = new TextField("Name");
         nameField.setMinLength(5);
         nameField.setRequired(true);
         nameField.setTitle("Customer full name");
         nameField.setFocus(true);
         form.add(nameField);
 
-        emailField = new EmailField("Email");
+        EmailField emailField = new EmailField("Email");
         emailField.setTitle("Customers email address");
         form.add(emailField);
 
-        ageField = new IntegerField("Age");
+        IntegerField ageField = new IntegerField("Age");
         ageField.setMinValue(1);
         ageField.setMaxValue(120);
         form.add(ageField);
 
-        holdingsField = new DoubleField("Holdings");
+        DoubleField holdingsField = new DoubleField("Holdings");
         holdingsField.setTitle("Total investment holdings");
         form.add(holdingsField);
 
-        investmentsField = new InvestmentSelect("Investments");
-        form.add(investmentsField);
+        form.add(new InvestmentSelect("Investments"));
 
-        dateJoinedField = new DateField("Date Joined");
+        DateField dateJoinedField = new DateField("Date Joined");
         dateJoinedField.setTitle("Date customer joined fund");
         form.add(dateJoinedField);
 
-        okButton = new Submit("    OK    ");
-        okButton.setListener(this, "onOkClick");
-        form.add(okButton);
+        form.add(new Checkbox("Active"));
 
-        cancelButton = new Submit(" Cancel ");
-        cancelButton.setListener(this, "onCancelClick");
-
-        form.add(cancelButton);
+        form.add(new Submit("    OK    ", this, "onOkClick"));
+        form.add(new Submit(" Cancel ", this, "onCancelClick"));
     }
 
     /**
@@ -96,18 +79,12 @@ public class EditCustomer extends BorderedPage {
         Customer customer = (Customer)
             getContext().getRequestAttribute("customer");
 
-        String referrer = getContext().getRequestParameter("referrer");
-
         if (customer != null) {
-            referrerField.setValue(referrer);
-            idField.setValue(customer.getId());
-            nameField.setValue(customer.getName());
-            emailField.setValue(customer.getEmail());
-            ageField.setValue(customer.getAge());
-            holdingsField.setValue(customer.getHoldings());
-            investmentsField.setValue(customer.getInvestments());
-            dateJoinedField.setDate(customer.getDateJoined());
+            form.copyFrom(customer, true);
         }
+
+        String referrer = getContext().getRequestParameter("referrer");
+        referrerField.setValue(referrer);
     }
 
     /**
@@ -118,16 +95,9 @@ public class EditCustomer extends BorderedPage {
      */
     public boolean onOkClick() {
         if (form.isValid()) {
+
             Customer customer = new Customer();
-
-            customer.setId((Long) idField.getValueObject());
-            customer.setName(nameField.getValue());
-            customer.setEmail(emailField.getValue());
-            customer.setAge(ageField.getInteger());
-            customer.setHoldings(holdingsField.getDouble());
-            customer.setInvestments(investmentsField.getValue());
-            customer.setDateJoined(dateJoinedField.getDate());
-
+            form.copyTo(customer, true);
             CustomerDAO.setCustomer(customer);
 
             String referrer = referrerField.getValue();

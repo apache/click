@@ -116,7 +116,7 @@ public class Checkbox extends Field {
      */
     public void setValue(Object value) {
         if (value != null) {
-            checked = Boolean.getBoolean(value.toString());
+            checked = Boolean.valueOf(value.toString()).booleanValue();
         } else {
             checked = false;
         }

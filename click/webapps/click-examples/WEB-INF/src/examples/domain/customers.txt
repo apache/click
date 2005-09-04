@@ -1,16 +1,16 @@
-2023, Ann Melan, ann_melan@iinet.com, 41, Residential Property, 434560, 1986-12-05
-2134, Joh Holgate, jholgate@gate.com, 55, Residential Property, 145000, 1998-01-29
-8076, Peter Harold, peterh@easymail.com, 43, Stocks, 10200, 2002-11-02
-7623, Angus Robins, arobins@robins.com, 39, Bonds, 40000, 2000-09-10
-7894, David Huew, david.huew@city.com, 47, Options, 87600, 2001-02-12
-8328, Paula Matthews, paulam@robinson.com, 31, Commerical Property, 348700, 2001-12-23
-9035, Robin Master, robin.master@gmail.com, 32, Bonds, 45000, 2001-08-03
-9034, James Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03
-9086, Sandra Nomi, snomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17
-9110, David Anderson, david_anderson@faststream.net, 53, Options, 762000, 2001-10-03
-9128, Alison Smart, asmart@biztalk.com, 48, Residential Property, 558000, 2001-12-25
-9139, Rodney Alan, ralan@gmail.com, 31, Stocks, 125000, 2002-01-29
-9172, Ben Romanolf, benr@albert.net, 45, Bonds, 284230, 2002-02-07
-9181, Charles Fisher, charles.filser@fisher.com, 58, Stocks, 872050, 2002-02-17
-9278, Kylie Simons, ksimons@hotmail.com, 37, Options, 255000, 2002-07-12
-9589, Leah Smith, lsmith@halbert.com, 25, Stocks, 55000, 2002-10-13
+2023, Ann Melan, ann_melan@iinet.com, 41, Residential Property, 434560, 1986-12-05, true
+2134, Joh Holgate, jholgate@gate.com, 55, Residential Property, 145000, 1998-01-29, true
+8076, Peter Harold, peterh@easymail.com, 43, Stocks, 10200, 2002-11-02, true
+7623, Angus Robins, arobins@robins.com, 39, Bonds, 40000, 2000-09-10, false
+7894, David Huew, david.huew@city.com, 47, Options, 87600, 2001-02-12, true
+8328, Paula Matthews, paulam@robinson.com, 31, Commerical Property, 348700, 2001-12-23, true
+9035, Robin Master, robin.master@gmail.com, 32, Bonds, 45000, 2001-08-03, false
+9034, James Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03, true
+9086, Sandra Nomi, snomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17, true
+9110, David Anderson, david_anderson@faststream.net, 53, Options, 762000, 2001-10-03, false
+9128, Alison Smart, asmart@biztalk.com, 48, Residential Property, 558000, 2001-12-25, true
+9139, Rodney Alan, ralan@gmail.com, 31, Stocks, 125000, 2002-01-29, true
+9172, Ben Romanolf, benr@albert.net, 45, Bonds, 284230, 2002-02-07, true
+9181, Charles Fisher, charles.filser@fisher.com, 58, Stocks, 872050, 2002-02-17, true
+9278, Kylie Simons, ksimons@hotmail.com, 37, Options, 255000, 2002-07-12, false
+9589, Leah Smith, lsmith@halbert.com, 25, Stocks, 55000, 2002-10-13, true

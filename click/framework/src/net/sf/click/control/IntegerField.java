@@ -99,6 +99,7 @@ public class IntegerField extends TextField {
      * @return the field Integer value
      */
     public Integer getInteger() {
+        String value = getValue();
         if (value != null && value.length() > 0) {
             try {
                 return Integer.valueOf(value);
@@ -118,6 +119,7 @@ public class IntegerField extends TextField {
      * @return the field Long value
      */
     public Long getLong() {
+        String value = getValue();
         if (value != null && value.length() > 0) {
             try {
                 return Long.valueOf(value);

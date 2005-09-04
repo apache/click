@@ -23,7 +23,7 @@ th { color: white; }
   <td align="left">
    <a href="$viewLink.getHref($customer.id)">$customer.name</a>
   </td> 
-  <td align="left">
+  <td align="right">
    $format.currency($customer.holdings)
   </td>
   <td align="center">
@@ -55,7 +55,7 @@ th { color: white; }
   <td><a style="{text-decoration:none;}" href="mailto:$customerDetail.email">$customerDetail.email</a></td>
  </tr>
  <tr>
-  <td><b>Age</b></td><td>&nbsp;</td><td>$customerDetail.age</td>
+  <td><b>Age</b></td><td>&nbsp;</td><td>$format.string($customerDetail.age)</td>
  </tr>
  <tr>
   <td><b>Investments</b></td><td>&nbsp;</td><td>$customerDetail.investments</td>
@@ -65,6 +65,9 @@ th { color: white; }
  </tr>
  <tr>
   <td><b>Date Joined</b></td><td>&nbsp;</td><td>$format.date($customerDetail.dateJoined, "dd MMM yyyy")</td>
+ </tr>
+ <tr>
+  <td><b>Active</b></td><td>&nbsp;</td><td>$customerDetail.active</td>
  </tr>
 </table>
 #end
