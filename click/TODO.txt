@@ -13,6 +13,7 @@ BUGS
 }
 
 DOCUMENTATION
+* Javadoc copyFrom/copyTo example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
 * add entry on http://java-source.net/open-source/web-frameworks
