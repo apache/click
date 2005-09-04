@@ -17,6 +17,7 @@ public class Customer implements Serializable {
     Double holdings;
     String investments;
     Date dateJoined;
+    Boolean active;
 
     /**
      * @return Returns the age.
@@ -66,6 +67,7 @@ public class Customer implements Serializable {
     public Long getId() {
         return id;
     }
+
     /**
      * @param id The id to set.
      */
@@ -113,6 +115,20 @@ public class Customer implements Serializable {
      */
     public void setDateJoined(Date value) {
         dateJoined = value;
+    }
+
+    /**
+     * @return Returns the active.
+     */
+    public Boolean getActive() {
+        return active;
+    }
+
+    /**
+     * @param active The active to set.
+     */
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     private static final long serialVersionUID = 1L;

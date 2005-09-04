@@ -1045,6 +1045,58 @@ public class Form implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Copy the given object's attributes into the Form's field values. In
+     * other words automatically populate Forms field values with the given
+     * objects attributes.
+     *
+     * @param object the object to obtain attribute values from
+     * @throws IllegalArgumentException if the object parameter is null
+     */
+    public void copyFrom(Object object) {
+        ClickUtils.copyObjectToForm(object, this, false);
+    }
+
+    /**
+     * Copy the given object's attributes into the Form's field values. In
+     * other words automatically populate Forms field values with the given
+     * objects attributes. If the debug parameter is true, debugging messages
+     * will be logged.
+     *
+     * @param object the object to obtain attribute values from
+     * @param debug log debug statements when populating the form
+     * @throws IllegalArgumentException if the object parameter is null
+     */
+    public void copyFrom(Object object, boolean debug) {
+        ClickUtils.copyObjectToForm(object, this, debug);
+    }
+
+    /**
+     * Copy the Form's field values into the given object's attributes. In
+     * other words automatically populate Object attributes with the Forms
+     * field values.
+     *
+     * @param object the object to populate with field values
+     * @throws IllegalArgumentException if the object parameter is null
+     */
+    public void copyTo(Object object) {
+        ClickUtils.copyFormToObject(this, object, false);
+    }
+
+    /**
+     * Copy the Form's field values into the given object's attributes. In
+     * other words automatically populate Object attributes with the Forms
+     * field values. If the debug parameter is true, debugging messages
+     * will be logged.
+     *
+     * @param object the object to populate with field values
+     * @param debug log debug statements when populating the object
+     * @throws IllegalArgumentException if the object parameter is null
+     */
+    public void copyTo(Object object, boolean debug) {
+        ClickUtils.copyFormToObject(this, object, debug);
+    }
+
+    /**
      * Process the Form when the Context request method is the same as the Forms,
      * by default "POST" method.
      * <p/>

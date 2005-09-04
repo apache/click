@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
@@ -32,12 +33,18 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.click.control.DateField;
+import net.sf.click.control.Field;
+import net.sf.click.control.Form;
+import net.sf.click.control.HiddenField;
+
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides miscellaneous String and Stream utility methods.
+ * Provides miscellaneous Form, String and Stream utility methods.
  *
  * @author Malcolm Edgar
  * @version $Id$
@@ -75,6 +82,237 @@ public class ClickUtils {
                 stream.close();
             } catch (IOException ex) {
                 // Ignore.
+            }
+        }
+    }
+
+    /**
+     * Popuplate the given object's attributes with the Form's field values.
+     *
+     * @param form the Form to obtain field values from
+     * @param object the object to populate with field values
+     * @param debug log debug statements when populating the object
+     */
+    public static void copyFormToObject(Form form, Object object, boolean debug) {
+        if (form == null) {
+            throw new IllegalArgumentException("Null form parameter");
+        }
+        if (object == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+
+        String objectClassname = object.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        Method[] methods = object.getClass().getMethods();
+
+        for (int i = 0, size = form.getFieldList().size(); i < size; i++) {
+            Field field = (Field) form.getFieldList().get(i);
+
+            if (field.getName().equals(Form.FORM_NAME)) {
+                continue;
+            }
+
+            String setterName = toSetterName(field.getName());
+
+            Method method = null;
+            for (int j = 0; j < methods.length; j++) {
+                if (setterName.equals(methods[j].getName())) {
+                    method = methods[j];
+                    break;
+                }
+            }
+
+            if (method != null) {
+                Class[] parameterTypes = method.getParameterTypes();
+                if (parameterTypes.length == 1) {
+                    Class paramClass = parameterTypes[0];
+                    Object paramObject = null;
+
+                    if (paramClass == String.class) {
+                        paramObject = field.getValue();
+
+                    } else if (paramClass == Integer.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Integer.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == Boolean.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Boolean.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == Double.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Double.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == Float.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Float.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == Long.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Long.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == Short.class) {
+                        if (!StringUtils.isBlank(field.getValue())) {
+                            paramObject = Short.valueOf(field.getValue());
+                        }
+                    } else if (paramClass == java.util.Date.class) {
+                        if (field instanceof DateField) {
+                            paramObject = ((DateField) field).getDate();
+                        }
+                    } else if (paramClass == java.sql.Date.class) {
+                        if (field instanceof DateField) {
+                            Date date = ((DateField) field).getDate();
+                            if (date != null) {
+                                paramObject =
+                                    new java.sql.Date(date.getTime());
+                            }
+                        }
+                    } else if (paramClass == java.sql.Time.class) {
+                        if (field instanceof DateField) {
+                            Date date = ((DateField) field).getDate();
+                            if (date != null) {
+                                paramObject =
+                                    new java.sql.Time(date.getTime());
+                            }
+                        }
+                    } else if (paramClass == java.sql.Timestamp.class) {
+                        if (field instanceof DateField) {
+                            Date date = ((DateField) field).getDate();
+                            if (date != null) {
+                                paramObject =
+                                    new java.sql.Timestamp(date.getTime());
+                            }
+                        }
+                    }
+
+                    Object[] params = { paramObject };
+
+                    try {
+                        method.invoke(object, params);
+
+                        if (debug) {
+                            String msg =
+                                "[Click] [debug] Form -> " + objectClassname +
+                                "." + method.getName() + " : " +
+                                paramObject;
+                            System.out.println(msg);
+                        }
+
+                    } catch (Exception e) {
+                        if (debug) {
+                            String msg =
+                                "[Click] [debug] Error incurred invoking " +
+                                objectClassname + "." + method.getName() +
+                                "() with " + paramObject + " error: " +
+                                e.toString();
+                            System.out.println(msg);
+                        }
+                    }
+
+                } else {
+                    if (debug) {
+                        String msg =
+                            "[Click] [debug] " +
+                            objectClassname + "." + method.getName() +
+                            "() method has invalid number of parameters";
+                        System.out.println(msg);
+                    }
+                }
+            } else {
+                if (debug) {
+                    String msg =
+                        "[Click] [debug] " + objectClassname + "." +
+                        setterName + "() method not found";
+                    System.out.println(msg);
+                }
+            }
+        }
+    }
+
+    /**
+     * Popuplate the given Form field values with the object's attributes.
+     *
+     * @param object the object to obtain attribute values from
+     * @param form the Form to populate
+     * @param debug log debug statements when populating the form
+     */
+    public static void copyObjectToForm(Object object, Form form, boolean debug) {
+        if (object == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+        if (form == null) {
+            throw new IllegalArgumentException("Null form parameter");
+        }
+
+        String objectClassname = object.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        Method[] methods = object.getClass().getMethods();
+
+        for (int i = 0, size = form.getFieldList().size(); i < size; i++) {
+            Field field = (Field) form.getFieldList().get(i);
+
+            if (field.getName().equals(Form.FORM_NAME)) {
+                continue;
+            }
+
+            String getterName = toGetterName(field.getName());
+
+            Method method = null;
+            for (int j = 0; j < methods.length; j++) {
+                if (getterName.equals(methods[j].getName())) {
+                    method = methods[j];
+                    break;
+                }
+            }
+
+            if (method != null) {
+                // call method
+                try {
+                    Object result = method.invoke(object, null);
+
+                    if (debug) {
+                        String msg =
+                            "[Click] [debug] Form <- " + objectClassname +
+                            "." + method.getName() + " : " + result;
+                        System.out.println(msg);
+                    }
+
+                    if (result != null) {
+                        if (field instanceof DateField &&
+                            result instanceof Date) {
+
+                            DateField dateField = (DateField) field;
+                            dateField.setDate((Date) result);
+
+                        } else if (field instanceof HiddenField) {
+                            field.setValue(result);
+
+                        } else {
+                            field.setValue(result.toString());
+                        }
+                    }
+
+                } catch (Exception e) {
+                    if (debug) {
+                        String msg =
+                            "[Click] [debug] Error incurred invoking " +
+                            objectClassname + "." + method.getName() +
+                            "() error: " + e.toString();
+                        System.out.println(msg);
+                    }
+                }
+
+            } else {
+                if (debug) {
+                    String msg =
+                        "[Click] [debug] " + objectClassname + "." +
+                        getterName + "() method not found";
+                    System.out.println(msg);
+                }
             }
         }
     }

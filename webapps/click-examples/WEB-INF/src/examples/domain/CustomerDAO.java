@@ -196,6 +196,7 @@ public class CustomerDAO {
                 customer.investments = tokenizer.nextToken().trim();
                 customer.holdings = Double.valueOf(tokenizer.nextToken().trim());
                 customer.dateJoined = createDate(tokenizer.nextToken().trim());
+                customer.active = Boolean.valueOf(tokenizer.nextToken().trim());
 
                 CUSTOMER_BY_NAME.put(customer.name, customer);
                 CUSTOMER_BY_ID.put(customer.id, customer);

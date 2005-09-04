@@ -96,6 +96,7 @@ public class DoubleField extends TextField {
      * @return the field Double value
      */
     public Double getDouble() {
+        String value = getValue();
         if (value != null && value.length() > 0) {
             try {
                 return Double.valueOf(value);
@@ -115,6 +116,7 @@ public class DoubleField extends TextField {
      * @return the field Float value
      */
     public Float getFloat() {
+        String value = getValue();
         if (value != null && value.length() > 0) {
             try {
                 return Float.valueOf(value);
