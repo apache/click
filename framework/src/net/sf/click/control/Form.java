@@ -1048,6 +1048,16 @@ public class Form implements Control {
      * Copy the given object's attributes into the Form's field values. In
      * other words automatically populate Forms field values with the given
      * objects attributes.
+     * <p/>
+     * The following example populates the Form field with Customer objects
+     * attributes:
+     *
+     * <pre class="codeJava">
+     * <span class="kw">public void</span> onGet() {
+     *    Long customerId = ..
+     *    Customer customer = CustomerDAO.findByPK(customerId);
+     *    form.copyFrom(customer);
+     * } </pre>
      *
      * @param object the object to obtain attribute values from
      * @throws IllegalArgumentException if the object parameter is null
@@ -1074,6 +1084,19 @@ public class Form implements Control {
      * Copy the Form's field values into the given object's attributes. In
      * other words automatically populate Object attributes with the Forms
      * field values.
+     * <p/>
+     * The following example populates the Customer object atributes with
+     * the Form's field values:
+     *
+     * <pre class="codeJava">
+     * <span class="kw">public void</span> onPost() {
+     *     <span class="kw">if</span> (form.isValid()) {
+     *        Customer customer = <span class="kw">new</span> Customer();
+     *        form.copyTo(customer);
+     *        ..
+     *     }
+     *     <span class="kw">return true</span>;
+     * } </pre>
      *
      * @param object the object to populate with field values
      * @throws IllegalArgumentException if the object parameter is null
