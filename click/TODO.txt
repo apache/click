@@ -1,4 +1,6 @@
 CODE
+* constructs for name, label
+* Context -> ClickContext
 * review table.css
 * Menu control
 * Select can have multiple values and this need to be resolved with multpart request
@@ -13,7 +15,6 @@ BUGS
 }
 
 DOCUMENTATION
-* Javadoc copyFrom/copyTo example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
 * add entry on http://java-source.net/open-source/web-frameworks
