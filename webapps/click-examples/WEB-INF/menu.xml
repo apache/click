@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
+<menu>
+   <menu label="Menu A" path="menu/page-a1.htm">
+      <menu label="A 1" path="menu/page-a1.htm"/>
+      <menu label="A 2" path="menu/page-a2.htm"/>
+   </menu>
+   <menu label="Menu B" path="menu/page-b1.htm">
+      <menu label="B 1" path="menu/page-b1.htm"/>
+      <menu label="B 2" path="menu/page-b2.htm"/>
+   </menu>
+</menu>
