@@ -18,6 +18,7 @@ package net.sf.click.extras.menu;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -31,7 +32,6 @@ import org.jdom.input.SAXBuilder;
 /**
  * Provides hierarchical Menu component. Application menus can be defined
  * using a <tt>/WEB-INF/menu.xml</tt> configuration file.
-
  *
  * @author Malcolm Edgar
  * @version $Id$
@@ -120,6 +120,7 @@ public class Menu implements Serializable {
         setPath(menu.getPath());
         setTitle(menu.getTitle());
         setRoles(menu.getRoles());
+        setSelected(menu.isSelected());
 
         for (int i = 0; i < menu.getChildren().size(); i++) {
             Menu menuChild = (Menu) menu.getChildren().get(i);
@@ -172,8 +173,39 @@ public class Menu implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+    
+    /**
+     * @see Object#toString()
+     */
+    public String toString() {
+        return getClass().getName() + 
+            "[label=" + getLabel() +
+            ",path=" + getPath() + 
+            ",title=" + getTitle() +
+            ",selected=" + isSelected() +
+            "]";
+    }
 
     // --------------------------------------------------------- Public Methods
+    
+    /**
+     * Return the selected child menu, or null if no child menu is selected.
+     * 
+     * @return the selected child menu
+     */
+    public Menu getSelectedChild() {
+System.out.println("getSelectedChild - " + this);
+        if (isSelected()) {
+            for (Iterator i = getChildren().iterator(); i.hasNext();) {
+                Menu menu = (Menu) i.next();
+System.out.println("menu - " + menu);
+                if (menu.isSelected()) {
+                    return menu;
+                }
+            }
+        }
+        return null;
+    }
 
     /**
      * Return a copy of the Appliations root Menu as defined in the
@@ -190,6 +222,7 @@ public class Menu implements Serializable {
         synchronized(loadLock) {
             if (rootMenu == null) {
                 Menu menu = new Menu();
+                menu.setSelected(true);
 
                 InputStream inputStream =
                     context.getServletContext().getResourceAsStream(CONFIG_FILE);
@@ -237,8 +270,10 @@ public class Menu implements Serializable {
      * @param context the request context
      */
     public void select(Context context) {
-        if (getPath() != null) {
-            selected = getPath().equals(context.getResourcePath());
+        String path = getPath();
+        if (path != null) {
+            path = path.startsWith("/") ? path : "/" + path;
+            selected = path.equals(context.getResourcePath());
         } else {
             selected = false;
         }

@@ -126,3 +126,26 @@ td.tp_tab_off { background: #cccccc; color: #000000; border-left: 1px solid #336
 table.tp_content { border: 1px solid #336699; }
 tr.tp_content { }
 td.tp_content { background: #efefef; }
+
+/* Menu Demo */
+
+.menu-demo {
+	color: white;
+	background-color: #002866;
+/* padding: 0px 6px 0px 6px; */
+}
+.menu-demo-selected {
+	color: white;
+	background-color: #5f8ac5;
+ 	padding: 0px 6px;
+}
+
+a.menu-demo {
+	color: white;
+	font-family: Arial;
+	font-size: 10pt;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+}
+
+

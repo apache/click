@@ -61,31 +61,51 @@
 #end
 
 
-
 #*********************************
  * Write two tier horizontal menu
  ********************************#
 
 #macro( writeMenu $rootMenu )
 
-<table width="100%" border="1">
+<table width="100%" border="1" bgcolor="#002866">
+ <!-- Top Menu -->
  <tr>  
   <td> 
-   
    <table border="1"> 
     <tr>
     #foreach ($menu in $rootMenu.children)
-     <td>
-     #if ($menu.path)
-      <a href="$context/$menu.path" title="$menu.title">$menu.label</a>
+     #if ($menu.selected)
+      <td class="menu-demo-selected">$menu.label</td>
      #else
-      <span>$menu.label</span>
-     #end 
-     </td>
+      <td>
+       <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a>
+      </td>
+     #end
     #end
     </tr>
    </table>
-
+  </td>
+ </tr>
+ <!-- Sub Menu -->
+ <tr>  
+  <td> 
+   <table border="1"> 
+    <tr>
+    #if ($rootMenu.selectedChild)
+     #foreach ($menu in $$rootMenu.selectedChild.children)
+      #if ($menu.selected)
+       <td class="menu-demo-selected">$menu.label</td>
+      #else
+       <td class="menu-demo">
+        <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a>
+       </td>
+      #end
+     #end
+    #else
+       <td>&nbsp;</td>
+    #end
+    </tr>
+   </table>
   </td>
  </tr>
 </table>
