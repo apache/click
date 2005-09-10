@@ -100,7 +100,7 @@ public class Menu implements Serializable {
             }
         }
 
-        List childElements = menuElement.getChildren("menu-item");
+        List childElements = menuElement.getChildren("menu");
         for (int i = 0, size = childElements.size(); i < size; i++) {
             Element childElement = (Element) childElements.get(i);
             getChildren().add(new Menu(childElement));
@@ -173,32 +173,32 @@ public class Menu implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
-    
+
     /**
      * @see Object#toString()
      */
     public String toString() {
-        return getClass().getName() + 
+        return getClass().getName() +
             "[label=" + getLabel() +
-            ",path=" + getPath() + 
+            ",path=" + getPath() +
             ",title=" + getTitle() +
             ",selected=" + isSelected() +
+            ",roles=" + roles +
+            ",children=" + children +
             "]";
     }
 
     // --------------------------------------------------------- Public Methods
-    
+
     /**
      * Return the selected child menu, or null if no child menu is selected.
-     * 
+     *
      * @return the selected child menu
      */
     public Menu getSelectedChild() {
-System.out.println("getSelectedChild - " + this);
         if (isSelected()) {
             for (Iterator i = getChildren().iterator(); i.hasNext();) {
                 Menu menu = (Menu) i.next();
-System.out.println("menu - " + menu);
                 if (menu.isSelected()) {
                     return menu;
                 }
@@ -210,6 +210,8 @@ System.out.println("menu - " + menu);
     /**
      * Return a copy of the Appliations root Menu as defined in the
      * configuration file "<tt>/WEB-INF/menu.xml</tt>".
+     * <p/>
+     * The returned root menu is always selected.
      *
      * @param context the request context
      * @return a copy of the application's root Menu
@@ -222,7 +224,6 @@ System.out.println("menu - " + menu);
         synchronized(loadLock) {
             if (rootMenu == null) {
                 Menu menu = new Menu();
-                menu.setSelected(true);
 
                 InputStream inputStream =
                     context.getServletContext().getResourceAsStream(CONFIG_FILE);
@@ -258,6 +259,7 @@ System.out.println("menu - " + menu);
         Menu menu = new Menu(rootMenu);
 
         menu.select(context);
+        menu.setSelected(true);
 
         return menu;
     }
@@ -281,6 +283,9 @@ System.out.println("menu - " + menu);
         for (int i = 0; i < getChildren().size(); i++) {
             Menu menu = (Menu) getChildren().get(i);
             menu.select(context);
+            if (menu.isSelected()) {
+                selected = true;
+            }
         }
     }
 
