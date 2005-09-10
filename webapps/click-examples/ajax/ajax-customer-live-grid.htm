@@ -7,7 +7,7 @@
 		<tr>
 			<td>$count</td>
 			<td>$customer.name</td>
-			<td>$customer.email</td>
+			<td>$format.email($customer.email)</td>
 			<td>$customer.age</td>
 			<td>$format.currency($customer.holdings)</td>
 			<td>$customer.investments</td>

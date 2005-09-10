@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides the default Velocity template format object. A format object
@@ -176,6 +177,65 @@ public class Format {
     }
 
     /**
+     * Return an email hyperlink using the given email address. If the
+     * given value is not a valid email string it will be rendered as is
+     * and not as a hyperlink. If the given value is blank then "&amp;nbsp;"
+     * will rendered instead.
+     * <p/>
+     * The format of the returned email string will be:
+     * <pre class="codeHtml">
+     * &lt;a href='mailto:email'&gt;email&lt;/a&gt; </pre>
+     *
+     * @param email the email address to hyperlink
+     * @return a hyperlinked email
+     */
+    public String email(String email) {
+        return email(email, null);
+    }
+
+    /**
+     * Return an email hyperlink using the given email address. If the
+     * given value is not a valid email string it will be rendered as is
+     * and not as a hyperlink. If the given value is blank then "&amp;nbsp;"
+     * will rendered instead.
+     * <p/>
+     * The format of the returned email string will be:
+     * <pre class="codeHtml">
+     * &lt;a href='mailto:email' attribute&gt;email&lt;/a&gt; </pre>
+     *
+     * @param email the email address to hyperlink
+     * @param attribute the anchor tag attribute to render
+     * @return a hyperlinked email
+     */
+    public String email(String email, String attribute) {
+        if (StringUtils.isNotBlank(email)) {
+            if (email.indexOf('@') != -1 &&
+                !email.startsWith("@") &&
+                !email.endsWith("@")) {
+
+                StringBuffer buffer = new StringBuffer(50);
+                buffer.append("<a href='mailto:");
+                buffer.append(email);
+                buffer.append("'");
+                if (StringUtils.isNotBlank(attribute)) {
+                    buffer.append(" ");
+                    buffer.append(attribute);
+                }
+                buffer.append(">");
+                buffer.append(email);
+                buffer.append("</a>");
+                return buffer.toString();
+
+            } else {
+                return email;
+            }
+
+        } else {
+            return "&nbsp;";
+        }
+    }
+
+    /**
      * Escape the given object value as a HTML string, or "&amp;nbsp;"
      * if the object is null.
      * <p>
@@ -242,6 +302,83 @@ public class Format {
             ret = value.substring(0, maxlength - suffix.length()) + suffix;
         }
         return ret;
+    }
+
+    /**
+     * TODO: link javadoc
+     *
+     * @param value
+     * @return
+     */
+    public String link(String value) {
+        return link(value, null);
+    }
+
+    /**
+     * TODO: link javadoc
+     *
+     * @param value
+     * @param attribute
+     * @return
+     */
+    public String link(String value, String attribute) {
+        if (StringUtils.isNotBlank(value)) {
+            StringBuffer buffer = new StringBuffer(50);
+
+            // If email
+            if (value.indexOf('@') != -1 &&
+                !value.startsWith("@") &&
+                !value.endsWith("@")) {
+
+                buffer.append("<a href='mailto:");
+                buffer.append(value);
+                buffer.append("'");
+                if (StringUtils.isNotBlank(attribute)) {
+                    buffer.append(" ");
+                    buffer.append(attribute);
+                }
+                buffer.append(">");
+                buffer.append(value);
+                buffer.append("</a>");
+
+            } else if (value.startsWith("http")) {
+                int index = value.indexOf("//");
+                if (index != -1) {
+                    index += 2;
+                } else {
+                    index = 0;
+                }
+                buffer.append("<a href='");
+                buffer.append(value);
+                buffer.append("'");
+                if (StringUtils.isNotBlank(attribute)) {
+                    buffer.append(" ");
+                    buffer.append(attribute);
+                }
+                buffer.append(">");
+                buffer.append(value.substring(index));
+                buffer.append("</a>");
+
+            } else if (value.startsWith("www")) {
+                buffer.append("<a href='http://");
+                buffer.append(value);
+                buffer.append("'");
+                if (StringUtils.isNotBlank(attribute)) {
+                    buffer.append(" ");
+                    buffer.append(attribute);
+                }
+                buffer.append(">");
+                buffer.append(value);
+                buffer.append("</a>");
+
+            } else {
+                buffer.append(value);
+            }
+
+            return buffer.toString();
+        }
+
+        return "&nbsp;";
     }
 
     /**

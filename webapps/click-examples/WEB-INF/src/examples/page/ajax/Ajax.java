@@ -18,7 +18,7 @@ public class Ajax extends BorderedPage {
 
     public void onInit() {
         addModel("head-include", "ajax/ajax-head.htm");
-        addModel("body-onload", "registerAjaxStuff();");
+        addModel("body-onload", "registerAjax();");
 
         Select customerSelect = new Select("customerSelect");
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");

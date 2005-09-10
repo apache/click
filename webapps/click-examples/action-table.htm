@@ -52,7 +52,7 @@ th { color: white; }
  </tr>
  <tr>
   <td><b>Email</b></td><td>&nbsp;</td>
-  <td><a style="{text-decoration:none;}" href="mailto:$customerDetail.email">$customerDetail.email</a></td>
+  <td>$format.email($customerDetail.email, "style='{text-decoration:none;}'")</td>
  </tr>
  <tr>
   <td><b>Age</b></td><td>&nbsp;</td><td>$format.string($customerDetail.age)</td>

@@ -6,7 +6,7 @@ function bodyOnLoad() {
     new Effect.Round(null, 'roundNormal');
     new Effect.Round(null, 'roundCompact', {compact:true});
     for (var i = 0; i < onloads.length; i++) {
-	    onloads[i]();
+        onloads[i]();
     }
 }
 </script>
@@ -54,6 +54,7 @@ var opts = { prefetchBuffer : true,
              sortDir: '$request.getParameter("data_grid_sort_dir")',
         #end
              onscroll: updateHeader };
+
 onloads.push(function() {
     tu = new Rico.LiveGrid('data_grid',
                            $pageSize,
@@ -106,7 +107,7 @@ dynamic retrieval of paged grid content using the
                     <tr>
                         <td class="cell" style="width:45px;text-align:center">$count</td>
                         <td class="cell" style="width:140px">$customer.name</td>
-                        <td class="cell" style="width:200px">$customer.email</td>
+                        <td class="cell" style="width:200px">$format.email($customer.email)</td>
                         <td class="cell" style="width:40px;text-align:center;">$customer.age</td>
                         <td class="cell" style="width:90px;text-align:right;">$format.currency($customer.holdings)</td>
                         <td class="cell" style="width:140px">$customer.investments</td>
