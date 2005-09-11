@@ -71,19 +71,22 @@
  <!-- Top Menu -->
  <tr>  
   <td> 
-   <table bgcolor="#002866" cellpadding="4"> 
+   <table bgcolor="#002866" cellpadding="0" cellspacing="0"> 
     <tr>
     #foreach ($menu in $rootMenu.children)
      #if ($menu.selected)
       <td class="menu-demo-selected">
-       $menu.label
+       &nbsp; $menu.label &nbsp;
       </td>
      #else
       <td>
-       <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a>
+       &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
       </td>
      #end
     #end
+     <td>
+      <img src="$context\images\curve-right.gif"\>
+     </td>
     </tr>
    </table>
   </td>
@@ -91,17 +94,17 @@
  <!-- Sub Menu -->
  <tr bgcolor="#002866">  
   <td> 
-   <table cellpadding="4"> 
+   <table cellpadding="0" cellspacing="0" height="23px;"> 
     <tr>
     #if ($rootMenu.selectedChild)
      #foreach ($menu in $rootMenu.selectedChild.children)
       #if ($menu.selected)
        <td class="menu-demo-selected">
-        $menu.label
+        &nbsp; $menu.label &nbsp;
        </td>
       #else
        <td class="menu-demo">
-        <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a>
+        &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
        </td>
       #end
      #end
