@@ -38,7 +38,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Dmitri Valdin
  * @version Revision: 1.3, Date: 2004/03/18 16:40:28
  */
-public class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
+class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
 
     // ----------------------------------------------------- Constructor
 
