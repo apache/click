@@ -132,20 +132,31 @@ td.tp_content { background: #efefef; }
 .menu-demo {
 	color: white;
 	background-color: #002866;
-/* padding: 0px 6px 0px 6px; */
+	font-family: arial; 
+	font-size: 10pt;
+	font-weight: bold;
 }
 .menu-demo-selected {
 	color: white;
 	background-color: #5f8ac5;
- 	padding: 0px 6px;
+	font-family: arial;
+	font-size: 10pt; 
+	font-weight: bold;
+ 	padding: 0px 7px;
 }
 
 a.menu-demo {
 	color: white;
-	font-family: Arial;
+	font-family: arial;
 	font-size: 10pt;
+	font-weight: bold;
 	padding-left: 0.5em;
 	padding-right: 0.5em;
+	text-decoration: none;
+}
+
+a.menu-demo:visited {
+	color: white;
 }
 
 
