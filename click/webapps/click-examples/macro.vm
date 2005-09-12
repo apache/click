@@ -71,7 +71,7 @@
  <!-- Top Menu -->
  <tr>  
   <td> 
-   <table bgcolor="#002866" cellpadding="0" cellspacing="0"> 
+   <table class="menu-demo" cellpadding="0" cellspacing="0"> 
     <tr>
     #foreach ($menu in $rootMenu.children)
      #if ($menu.selected)
@@ -92,7 +92,7 @@
   </td>
  </tr>
  <!-- Sub Menu -->
- <tr bgcolor="#002866">  
+ <tr class="menu-demo">  
   <td> 
    <table cellpadding="0" cellspacing="0" height="23px;"> 
     <tr>
