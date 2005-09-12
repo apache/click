@@ -9,12 +9,12 @@ CODE
 * XHTML vs HTML
 
 BUGS
-* ensure blank page issue fixed
 * control.css, missing menuarrow.gif --- .calendar .nav {
   background: ButtonFace url(menuarrow.gif) no-repeat 100% 100%;
 }
 
 DOCUMENTATION
+* provide more Menu Javadoc
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
 * add entry on http://java-source.net/open-source/web-frameworks

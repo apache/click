@@ -298,24 +298,6 @@ To apply header values globally define header values in the headers element. For
 &lt;/click-app&gt; 
 </pre>
 
-<h4>GZIP Encoding</h4>
-
-By setting a "<tt>Content-Encoding</tt>" header value to "<tt>gzip</tt>" the ClickServlet will apply 
-GZIP compression to the HTML output. The ClickServlet will only compression if there is a "<tt>Accept-Encoding</tt>" HTTP request header 
-which includes <tt>gzip</tt>.
-
-<pre class="codeConfig">
-&lt;header name="<span class="blue">Content-Encoding</span>" value="<span class="blue">gzip</span>"/&gt; 
-</pre>
-
-Note there are alternative ways to apply HTTP compression such as using the Apache web server module
-<tt>mod_gzip</tt>, or using a ServletFilter.
-<p/>
-<b>Please Note</b> issues have been observed using gzip encoding 
-resulting in blank pages being displayed. Please this test feature before 
-deploying into production, if issues occur use an alternative gzip compression 
-technique.
-
 
 <a name="application-format" class="heading"><h3>Format</h3></a>
 
