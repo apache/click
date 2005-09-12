@@ -131,14 +131,15 @@ td.tp_content { background: #efefef; }
 
 .menu-demo {
 	color: white;
-	background-color: #002866;
-	font-family: arial; 
+	background-color: #893E13;
+	font-family: arial;
 	font-size: 10pt;
 	font-weight: bold;
 }
+
 .menu-demo-selected {
-	color: white;
-	background-color: #5f8ac5;
+	color: yellow;
+	background-color: #B25318;
 	font-family: arial;
 	font-size: 10pt; 
 	font-weight: bold;
@@ -159,4 +160,7 @@ a.menu-demo:visited {
 	color: white;
 }
 
+a.menu-demo:hover {
+	color: #FFFF80;
+}
 

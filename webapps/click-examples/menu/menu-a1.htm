@@ -1,12 +1,35 @@
-Demonstration of the <tt>Menu</tt> component.
-<p/>
-This example demonstrates uses a Velocity Macro 
-<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>
-to render the menu.
+This page provides a demonstration of the <tt>Menu</tt> component.
 
 <p>&nbsp;</p>
 
 #writeMenu($rootMenu)
 
+<p style="margin:2em;">
+This is page $title.
+</p>
+
+<p>&nbsp;</p>
+
+Application menus can be defined in configuration file 
+<a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>
+<p/>
+To access the root menu item of the applications configured menus use the static 
+Menu method <tt>getRootMenu()</tt>:
+
+<pre class="codeJava">
+<span class="kw">public void</span> onInit() {
+    Menu rootMenu = Menu.getRootMenu(getContext()); 
+    addModel(<span class="st">"rootMenu"</span>, rootMenu);
+} </pre>
+
+This method will return copy of the menu tree which can be referened from the 
+root menu item. In the returned tree the Menu item for the current page will 
+be selected, and its parents will also be selected.
+
+<p/>
+
+In this example the applications menu is rendered as a 2 level menu using a 
+Velocity Macro 
+<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>
 
 
