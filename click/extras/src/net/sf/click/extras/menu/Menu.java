@@ -33,6 +33,12 @@ import org.jdom.input.SAXBuilder;
  * Provides hierarchical Menu component. Application menus can be defined
  * using a <tt>/WEB-INF/menu.xml</tt> configuration file.
  *
+ * <pre class="codeJava">
+ * <span class="kw">public void</span> onInit() {
+ *     Menu rootMenu = Menu.getRootMenu(getContext());
+ *     addModel(<span class="st">"rootMenu"</span>, rootMenu);
+ * } </pre>
+ *
  * @author Malcolm Edgar
  * @version $Id$
  */
@@ -130,46 +136,101 @@ public class Menu implements Serializable {
 
     // ------------------------------------------------------ Public Attributes
 
+    /**
+     * Return list of of submenu items.
+     *
+     * @return the list of submenu items
+     */
     public List getChildren() {
         return children;
     }
 
+    /**
+     * Return the label of the Menu item.
+     *
+     * @return the label of the Menu item
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * Set the label of the Menu item.
+     *
+     * @param label the label of the Menu item
+     */
     public void setLabel(String label) {
         this.label = label;
     }
 
+    /**
+     * Return the path of the Menu item.
+     *
+     * @return the path of the Menu item
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Set the path of the Menu item.
+     *
+     * @param path the path of the Menu item
+     */
     public void setPath(String path) {
         this.path = path;
     }
 
+    /**
+     * Return the list of valid roles for the Menu item.
+     *
+     * @return the list of valid roles for the Menu item
+     */
     public List getRoles() {
         return roles;
     }
 
+    /**
+     * Set the list of valid roles for the Menu item.
+     *
+     * @param roles the list of valid roles for the Menu item
+     */
     public void setRoles(List roles) {
         this.roles = roles;
     }
 
+    /**
+     * Return true if the Menu item is selected.
+     *
+     * @return true if the Menu item is selected
+     */
     public boolean isSelected() {
         return selected;
     }
 
+    /**
+     * Set the selected status of the Menu item.
+     *
+     * @param selected the selected status of the Menu item.
+     */
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
 
+    /**
+     * Return the title attribute of the Menu item.
+     *
+     * @return the title attribute of the Menu item
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Set the title attribute of the Menu item.
+     *
+     * @param title the title attribute of the Menu item
+     */
     public void setTitle(String title) {
         this.title = title;
     }

@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.GenericServlet;
 import javax.servlet.RequestDispatcher;
@@ -502,27 +501,11 @@ public class ClickServlet extends HttpServlet {
         // May throw parsing error if template could not be obtained
         final Template template = clickApp.getTemplate(page.getTemplate());
 
-        final HttpServletRequest request = page.getContext().getRequest();
-
         final HttpServletResponse response = page.getContext().getResponse();
 
         response.setContentType(page.getContentType());
 
         OutputStream output = response.getOutputStream();
-
-        // If Page has a "Content-Encoding" "gzip" header then we can look to
-        // compressing the output stream
-        if (hasContentEncodingGzipHeader(page)) {
-
-            // If client accepts gzip encoding compress output stream
-            String acceptEncoding = request.getHeader("Accept-Encoding");
-            if (acceptEncoding != null) {
-                if (acceptEncoding.toLowerCase().indexOf("gzip") > -1) {
-                    output = new GZIPOutputStream(output, 4 * 1024);
-                    response.setHeader("Content-Encoding", "gzip");
-                }
-            }
-        }
 
         if (page.getHeaders() != null) {
             setPageResponseHeaders(response, page.getHeaders());
@@ -679,28 +662,6 @@ public class ClickServlet extends HttpServlet {
         throws Exception {
 
         return (Page) pageClass.newInstance();
-    }
-
-    /**
-     * Return true if the page headers contain a "Content-Encoding" header
-     * with a value of "gzip".
-     *
-     * @param page the page to test
-     * @return true if the page has a gzip content-encoding header
-     */
-    protected boolean hasContentEncodingGzipHeader(Page page) {
-        Map headers = page.getHeaders();
-
-        if (headers != null && !headers.isEmpty()) {
-            String value = (String) headers.get("Content-Encoding");
-
-            if (value == null) {
-                value = (String) headers.get("content-encoding");
-            }
-
-            return "gzip".equalsIgnoreCase(value);
-        }
-        return false;
     }
 
     /**

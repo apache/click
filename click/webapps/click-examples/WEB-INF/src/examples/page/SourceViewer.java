@@ -35,6 +35,7 @@ public class SourceViewer extends BorderedPage {
 
     private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
         "headers", "header", "format", "mode", "type",
+        "filter-name", "filter-class", "filter-mapping", "filter",
         "web-app", "display-name", "description", "servlet-mapping",
         "servlet-name", "servlet-class", "init-param", "param-name",
         "param-value", "servlet", "load-on-startup", "security-constraint",
