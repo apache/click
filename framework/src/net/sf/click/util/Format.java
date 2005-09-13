@@ -305,21 +305,27 @@ public class Format {
     }
 
     /**
-     * TODO: link javadoc
+     * Return an hyperlink using the given URL or email address value. If the
+     * given value is not a valid email string or URL it will note be
+     * hyperlinked and will be rendered as is. If the given value is blank then
+     * "&amp;nbsp;" will rendered instead.
      *
-     * @param value
-     * @return
+     * @param value the URL or email address to hyperlink
+     * @return a hyperlinked URL or email address
      */
     public String link(String value) {
         return link(value, null);
     }
 
     /**
-     * TODO: link javadoc
+     * Return an hyperlink using the given URL or email address value. If the
+     * given value is not a valid email string or URL it will note be
+     * hyperlinked and will be rendered as is. If the given value is blank then
+     * "&amp;nbsp;" will rendered instead.
      *
-     * @param value
-     * @param attribute
-     * @return
+     * @param value the URL or email address to hyperlink
+     * @param attribute the anchor tag attribute to render
+     * @return a hyperlinked URL or email address
      */
     public String link(String value, String attribute) {
         if (StringUtils.isNotBlank(value)) {
