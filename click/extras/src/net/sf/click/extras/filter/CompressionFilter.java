@@ -31,29 +31,31 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- * Provides a GZIP compression <tt>Filter</tt> to compress
- * HTML ServletResponse content if it is bigger than a threshold.
- * <p/>
- * This package is derived from the Jakarta Tomcat examples compression filter
- * and is packaged in Click Extras for convenience.
+ * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
+ * content. The content will only be compressed if it is bigger than a
+ * configurable threshold.
  * <p/>
  * To configure your application to GZIP compress HTML content include the
- * click-extras.jar in you application and add the following filter elements to 
+ * click-extras.jar in you application and add the following filter elements to
  * your <tt>/WEB-INF/web.xml</tt> file:
  * <pre class="codeConfig"/>
  * &lt;filter&gt;
- *  &lt;filter-name&gt;compression-filter&lt;/filter-name&gt;
- *  &lt;filter-class&gt;net.sf.click.extras.filter.CompressionFilter&lt;/filter-class&gt;
+ *  &lt;filter-name&gt;<span class="blue">compression-filter</span>&lt;/filter-name&gt;
+ *  &lt;filter-class&gt;<span class="red">net.sf.click.extras.filter.CompressionFilter</span>&lt;/filter-class&gt;
  * &lt;/filter&gt;
  *
  * &lt;filter-mapping&gt;
- *  &lt;filter-name&gt;compression-filter&lt;/filter-name&gt;
- *  &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
- * &lt;/filter-mapping&gt; 
- * 
+ *  &lt;filter-name&gt;<span class="blue">compression-filter</span>&lt;/filter-name&gt;
+ *  &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ * &lt;/filter-mapping&gt;
+ *
  * &lt;servlet&gt;
- *  &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *  &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
  * .. </pre>
+ *
+ * This package is derived from the Jakarta
+ * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>
+ * examples compression filter and is distributed in Click Extras for convenience.
  *
  * @author Amy Roh
  * @author Dmitri Valdin

@@ -72,43 +72,24 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     TextField usernameField;
- *     PasswordField passwordField;
+ *     <span class="kw">private</span> Form form;
  *
  *     <span class="kw">public void</span> onInit() {
  *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
  *         addControl(form);
  *
- *         usernameField = <span class="kw">new</span> TextField(<span class="st">"Username"</span>);
- *         usernameField.setMaxLength(20);
- *         usernameField.setMinLength(5);
- *         usernameField.setRequired(<span class="kw">true</span>);
- *         form.add(usernameField);
- *
- *         passwordField = <span class="kw">new</span> PasswordField(<span class="st">"Password"</span>);
- *         passwordField.setMaxLength(20);
- *         passwordField.setMinLength(5);
- *         passwordField.setRequired(<span class="kw">true</span>);
- *         form.add(passwordField);
- *
- *         Submit okButton = <span class="kw">new</span> Submit(<span class="st">"  OK  "</span>);
- *         okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClick"</span>);
- *         form.add(okButton);
- *
- *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">" Cancel "</span>);
- *         cancelButton.setListener(<span class="kw">this</span>, <span class="st">"onCancelClick"</span>);
- *         form.add(cancelButton);
+ *         form.add(<span class="kw">new</span> TextField(<span class="st">"Username"</span>, <span class="kw">true</span>));
+ *         form.add(<span class="kw">new</span> PasswordField(<span class="st">"Password"</span>, <span class="kw">true</span>));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"  OK  "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">" Cancel "</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
  *     }
  *
  *     <span class="kw">public boolean</span> onOkClick() {
  *         <span class="kw">if</span> (form.isValid()) {
- *             String username = usernameField.getValue();
- *             String password = passwordField.getValue();
+ *             User user = new User();
+ *             form.copyTo(user);
  *
- *             User user = UserDAO.findByPK(username);
- *
- *             <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
+ *             <span class="kw">if</span> (UserDOA.isAuthenticatedUser(user)) {
  *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
  *                 setRedirect(<span class="st">"home.htm"</span>);
  *             }
@@ -1382,6 +1363,9 @@ public class Form implements Control {
                     }
                     buffer.append("<label");
                     buffer.append(field.getDisabled());
+                    if (field.getError() != null) {
+                        buffer.append(" class='error'");
+                    }
                     buffer.append(">");
                     buffer.append(field.getLabel());
                     buffer.append("</label>");

@@ -86,6 +86,20 @@ public class TextArea extends Field {
     }
 
     /**
+     * Construct the TextArea with the given label and required status. The
+     * area will have a default size of 20 cols and 3 rows.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public TextArea(String label, boolean required) {
+        super(label);
+        setRequired(required);
+    }
+
+    /**
      * Create a TextArea with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

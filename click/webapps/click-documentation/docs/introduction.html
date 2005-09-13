@@ -108,9 +108,7 @@ method.
 <pre class="codeJava">
 <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
 
-    Form form;
-    TextField usernameField;
-    PasswordField passwordField;
+    <span class="kw">private</span> Form form;
 
     <span class="jd">/**
      * @see Page#onInit()
@@ -118,32 +116,19 @@ method.
     <span class="kw">public void</span> onInit() {
         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
         addControl(form);
-
-        usernameField = <span class="kw">new</span> TextField(<span class="st">"Username"</span>);
-        usernameField.setRequired(<span class="kw">true</span>);
-        form.add(usernameField);
-
-        passwordField = <span class="kw">new</span> PasswordField(<span class="st">"Password"</span>);
-        passwordField.setRequired(<span class="kw">true</span>);
-        form.add(passwordField);
-
-        Submit okButton = <span class="kw">new</span> Submit(<span class="st">"   OK   "</span>);
-        okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
-        form.add(okButton);
-
-        Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">"Cancel"</span>);
-        cancelButton.setListener(<span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
-        form.add(cancelButton);
+ 
+        form.add(<span class="kw">new</span> TextField(<span class="st">"Username"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> PasswordField(<span class="st">"Password"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
     }
 
     <span class="kw">public boolean</span> onOkClicked() {
         <span class="kw">if</span> (form.isValid()) {
-            String username = usernameField.getValue();
-            String password = passwordField.getValue();
+            User user = new User();
+            form.copyTo(user);
 
-            User user = UserDAO.findByPK(username);
-
-            <span class="kw">if</span> (user != <span class="kw">null</span> && user.getPassword().equals(password)) {
+            <span class="kw">if</span> (UserDAO.isAuthenticatedUser(user)) {
                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
                 setRedirect(<span class="st">"secure.htm"</span>);
 
@@ -241,7 +226,7 @@ If the user enters a correct username and password the <tt>onOkClicked()</tt>
 event handler will add a User object to the HttpSession and redirect the request 
 to the <span class="blue">secure.htm</span> page.
 <p/>
-If the user clicks on the Cancel button the <tt>onOkClicked()</tt> event handler is
+If the user clicks on the Cancel button the <tt>onCancelClicked()</tt> event handler is
 invoked and the request is redirected to the <span class="blue">index.htm</span> page.
 
 <h4>Form Layout</h4>

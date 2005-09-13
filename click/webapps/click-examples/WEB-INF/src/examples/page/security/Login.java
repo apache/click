@@ -17,8 +17,6 @@ import net.sf.click.control.TextField;
 public class Login extends BorderedPage {
 
     Form form;
-    TextField usernameField;
-    PasswordField passwordField;
 
     /**
      * @see Page#onInit()
@@ -27,26 +25,20 @@ public class Login extends BorderedPage {
         form = new Form("form", getContext());
         addControl(form);
 
-        usernameField = new TextField("Username");
+        TextField usernameField = new TextField("Username", true);
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
-        usernameField.setRequired(true);
         usernameField.setFocus(true);
         form.add(usernameField);
 
-        passwordField = new PasswordField("Password");
+        PasswordField passwordField = new PasswordField("Password", true);
         passwordField.setMaxLength(20);
         passwordField.setMinLength(5);
-        passwordField.setRequired(true);
         form.add(passwordField);
 
-        Submit okButton = new Submit("    OK    ");
-        okButton.setListener(this, "onOkClicked");
-        form.add(okButton);
+        form.add(new Submit("    OK    ", this, "onOkClicked"));
 
-        Submit cancelButton = new Submit(" Cancel ");
-        cancelButton.setListener(this, "onCancelClicked");
-        form.add(cancelButton);
+        form.add(new Submit(" Cancel ", this, "onCancelClicked"));
     }
 
     /**
@@ -64,12 +56,11 @@ public class Login extends BorderedPage {
 
     public boolean onOkClicked() {
         if (form.isValid()) {
-            String username = usernameField.getValue();
-            String password = passwordField.getValue();
+            User user = new User();
+            form.copyTo(user);
 
-            User user = UserDAO.getUser(username);
-
-            if (user != null && user.getPassword().equals(password)) {
+            if (UserDAO.isAuthenticatedUser(user)) {
+                user = UserDAO.getUser(user.getUsername());
                 getContext().setSessionAttribute("user", user);
                 setRedirect("/security/secure.htm");
 

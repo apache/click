@@ -199,6 +199,17 @@ public class Select extends Field {
     }
 
     /**
+     * Create a Select field with the given label and required status.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public Select(String label, boolean required) {
+        super(label);
+    }
+    /**
      * Create a Select field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

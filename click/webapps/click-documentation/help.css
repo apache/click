@@ -178,10 +178,13 @@ input.disabled {
 	background: lightgray;
 }
 input.error {
-	background: yellow;
+	background: #FFFF80;
+}
+label.error {
+    /* color: red; */
 }
 select.error {
-	background: yellow;
+	background: #FFFF80;
 }
 span.error {
 	color: red;
