@@ -54,10 +54,17 @@ Additional features to be included in the 1.0 release are:
         Javadoc for details [<a target="blank" href="http://www.sunvolt.com/jira/browse/CLK-2">CLK-2</a>].
       </li>
       <li class="change">
-        Fixed blank page gzip compression bug [<a href="http://www.sunvolt.com/jira/browse/CLK-15">CLK-15</a>]. 
-        The Click embedded gzip compression functionality has been replaced with a
+        Fixed blank page gzip compression bug. The Click embedded gzip compression 
+        functionality has been replaced with a
         <a href="extras-api/net/sf/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
-        derived from Jarkata Tomcat.
+        derived from Jarkata Tomcat
+        [<a href="http://www.sunvolt.com/jira/browse/CLK-15">CLK-15</a>].
+      </li> 
+      <li class="change">
+        Modified <a href="click-api/net/sf/click/control/Form.html">Form</a>
+        control to render a class error attribute &lt;label class="error"&gt; 
+        in the labels of invalid fields. You can now override the <tt>control.css</tt>
+        style <tt>label.error</tt> to modify the display of field error labels.
       </li> 
     </ul>
   </dd>

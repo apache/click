@@ -93,6 +93,21 @@ public class DateField extends TextField {
     }
 
     /**
+     * Construct the Date Field with the given label and required status.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     * <p/>
+     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public DateField(String label, boolean required) {
+        this(label);
+        setRequired(required);
+    }
+
+    /**
      * Create a date field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

@@ -12,6 +12,16 @@ import java.util.TreeMap;
  */
 public class UserDAO {
 
+    public static boolean isAuthenticatedUser(User user) {
+        if (user != null) {
+            User foundUser = getUser(user.getUsername());
+            if (foundUser != null) {
+                return foundUser.getPassword().equals(user.getPassword());
+            }
+        }
+        return false;
+    }
+
     public static User getUser(String username) {
         return (User) USERS_MAP.get(username.toLowerCase());
     }

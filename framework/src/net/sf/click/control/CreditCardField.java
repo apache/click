@@ -168,6 +168,19 @@ public class CreditCardField extends TextField {
     }
 
     /**
+     * Construct the credit card field with the given label and required status.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public CreditCardField(String label, boolean required) {
+        this(label);
+        setRequired(required);
+    }
+
+    /**
      * Create a credit card field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

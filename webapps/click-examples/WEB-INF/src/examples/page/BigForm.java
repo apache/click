@@ -31,6 +31,7 @@ public class BigForm extends BorderedPage {
 
     public void onInit() {
         Form form = new Form("form", getContext());
+        form.setErrorsPosition(Form.TOP);
         addControl(form);
 
         form.add(new Label("<b>My Details</b>"));
@@ -44,7 +45,6 @@ public class BigForm extends BorderedPage {
         form.add(textField);
 
         PasswordField passwordField = new PasswordField("Password");
-        passwordField.setRequired(true);
         passwordField.setMinLength(6);
         passwordField.setMaxLength(20);
         form.add(passwordField);
@@ -93,11 +93,11 @@ public class BigForm extends BorderedPage {
 
         Select select = new Select("Delivery type");
         select.addAll(DELIVERY_OPTIONS);
-        select.setRequired(true);
         select.setTitle("Type of delivery required");
         form.add(select);
 
         DateField dateField = new DateField("Delivery date");
+        dateField.setRequired(true);
         form.add(dateField);
 
         TextArea textArea = new TextArea("Delivery Notes");

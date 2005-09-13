@@ -90,6 +90,19 @@ public class FileField extends Field {
     }
 
     /**
+     * Construct the File Field with the given label and required status.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the Field
+     * @param required the field required status
+     */
+    public FileField(String label, boolean required) {
+        super(label);
+        setRequired(required);
+    }
+
+    /**
      * Create an File Field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

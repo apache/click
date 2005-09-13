@@ -260,10 +260,15 @@ public class ClickUtils {
             }
 
             String getterName = toGetterName(field.getName());
+            String isGetterName = toIsGetterName(field.getName());
 
             Method method = null;
             for (int j = 0; j < methods.length; j++) {
                 if (getterName.equals(methods[j].getName())) {
+                    method = methods[j];
+                    break;
+                }
+                if (isGetterName.equals(methods[j].getName())) {
                     method = methods[j];
                     break;
                 }
@@ -531,12 +536,28 @@ public class ClickUtils {
      * Return the getter method name for the given property name.
      *
      * @param property the property name
-     * @return the setter method name for the given property name.
+     * @return the getter method name for the given property name.
      */
     public static String toGetterName(String property) {
         StringBuffer buffer = new StringBuffer(property.length() + 3);
 
         buffer.append("get");
+        buffer.append(Character.toUpperCase(property.charAt(0)));
+        buffer.append(property.substring(1));
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return the is getter method name for the given property name.
+     *
+     * @param property the property name
+     * @return the is getter method name for the given property name.
+     */
+    public static String toIsGetterName(String property) {
+        StringBuffer buffer = new StringBuffer(property.length() + 3);
+
+        buffer.append("is");
         buffer.append(Character.toUpperCase(property.charAt(0)));
         buffer.append(property.substring(1));
 

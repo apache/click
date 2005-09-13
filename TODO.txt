@@ -14,7 +14,7 @@ BUGS
 }
 
 DOCUMENTATION
-* provide more Menu Javadoc
+* provide more Menu Javadoc, need prettier example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
 * add entry on http://java-source.net/open-source/web-frameworks

@@ -79,8 +79,8 @@ public class TextField extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the TextField with the given label. The default size is
-     * text field size is 20 characters.
+     * Construct the TextField with the given label. The default text field size
+     * is 20 characters.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
@@ -88,6 +88,20 @@ public class TextField extends Field {
      */
     public TextField(String label) {
         super(label);
+    }
+
+    /**
+     * Construct the TextField with the given label and required status. The
+     * default text field size is 20 characters.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public TextField(String label, boolean required) {
+        super(label);
+        setRequired(required);
     }
 
     /**

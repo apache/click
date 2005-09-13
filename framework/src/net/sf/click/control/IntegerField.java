@@ -77,6 +77,19 @@ public class IntegerField extends TextField {
     }
 
     /**
+     * Construct a IntegerField field with the given label and required status.
+     * <p/>
+     * The field name will be Java property representation of the given label.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public IntegerField(String label, boolean required) {
+        this(label);
+        setRequired(required);
+    }
+
+    /**
      * Create a IntegerField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

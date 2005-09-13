@@ -51,10 +51,21 @@ public class Checkbox extends Field {
     /**
      * Create a Checkbox field with the given label.
      *
-     * @param label the label of the field.
+     * @param label the label of the field
      */
     public Checkbox(String label) {
         super(label);
+    }
+
+    /**
+     * Create a Checkbox field with the given label and required flag.
+     *
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public Checkbox(String label, boolean required) {
+        super(label);
+        setRequired(required);
     }
 
     /**
@@ -170,7 +181,7 @@ public class Checkbox extends Field {
             buffer.append("' checked");
         }
         if (getTitle() != null) {
-            buffer.append(" 'title='");
+            buffer.append(" title='");
             buffer.append(getTitle());
             buffer.append("'");
         }
