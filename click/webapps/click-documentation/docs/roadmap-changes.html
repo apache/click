@@ -29,8 +29,10 @@ up to a 1.0 release in the Q4 2005.
 <p/>
 Additional features to be included in the 1.0 release are:
 <ul>
- <li>Getting Started Guide to building fully fledged Click applications.</li>
- <li>Additonal Table control functionality.</li>
+ <li>Getting Started Guide to building fully fledged Click applications</li>
+ <li>HTML FieldSet control</li>
+ <li>Client-side JavaScript Form validation</li>
+ <li>Additonal Table control functionality</li>
 </ul>
 <p/>
 
@@ -40,7 +42,7 @@ Additional features to be included in the 1.0 release are:
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 0.11 - 30th September 2004</dt>
+  <dt>Version 0.11 - 15th September 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -49,7 +51,7 @@ Additional features to be included in the 1.0 release are:
       	[<a href="http://www.sunvolt.com/jira/browse/CLK-12">CLK-12</a>].
       </li> 
       <li class="change">
-      	Added Form / DAO autoloading feature.
+      	Added Form &lt;-&gt; DAO auto-loading feature.
         See <a href="click-api/net/sf/click/control/Form.html#copyFrom(java.lang.Object)">Form</a>
         Javadoc for details [<a target="blank" href="http://www.sunvolt.com/jira/browse/CLK-2">CLK-2</a>].
       </li>
@@ -58,6 +60,11 @@ Additional features to be included in the 1.0 release are:
         functionality has been replaced with a
         <a href="extras-api/net/sf/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
         derived from Jarkata Tomcat
+        [<a href="http://www.sunvolt.com/jira/browse/CLK-5">CLK-5</a>].
+      </li> 
+      <li class="change">
+        Added <tt>email()</tt> and <tt>link()</tt> formatter methods to
+        <a href="click-api/net/sf/click/util/Format.html#email(java.lang.String)">Format</a> class
         [<a href="http://www.sunvolt.com/jira/browse/CLK-15">CLK-15</a>].
       </li> 
       <li class="change">
@@ -66,6 +73,7 @@ Additional features to be included in the 1.0 release are:
         in the labels of invalid fields. You can now override the <tt>control.css</tt>
         style <tt>label.error</tt> to modify the display of field error labels.
       </li> 
+      <li class="change">Updated documentation and examples.</li> 
     </ul>
   </dd>
   <p/>
