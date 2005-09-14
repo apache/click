@@ -17,7 +17,7 @@ public class FileUpload extends BorderedPage {
     TextField descField;
 
     public void onInit() {
-        form = new Form("form", getContext());
+        form = new Form("form");
         form.setLabelsPosition("top");
         addControl(form);
 

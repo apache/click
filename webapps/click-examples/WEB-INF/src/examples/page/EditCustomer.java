@@ -29,7 +29,7 @@ public class EditCustomer extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        form = new Form("form", getContext());
+        form = new Form("form");
         addControl(form);
 
         referrerField = new HiddenField("referrer", String.class);

@@ -34,7 +34,7 @@ public class VelocityMacro extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        form = new Form("form", getContext());
+        form = new Form("form");
         addControl(form);
 
         nameField = new TextField("Name");

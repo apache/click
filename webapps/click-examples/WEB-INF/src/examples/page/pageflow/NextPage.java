@@ -24,7 +24,7 @@ public class NextPage extends BorderedPage {
     }
 
     public void onInit() {
-        Form form = new Form("form", getContext());
+        Form form = new Form("form");
         addControl(form);
 
         courseField = new HiddenField("courseField", CourseBooking.class);
