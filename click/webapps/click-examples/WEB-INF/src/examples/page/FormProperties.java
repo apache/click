@@ -64,7 +64,7 @@ public class FormProperties extends BorderedPage {
     public void onInit() {
         //--------------------------
         // Setup demonstration form.
-        form = new Form("form", getContext());
+        form = new Form("form");
         addControl(form);
 
         nameField = new TextField("Name");
@@ -92,7 +92,7 @@ public class FormProperties extends BorderedPage {
 
         //-------------------
         // Setup control form
-        optionsForm = new Form("optionsForm", getContext());
+        optionsForm = new Form("optionsForm");
         optionsForm.setColumns(2);
         optionsForm.setLabelAlign("right");
         optionsForm.setListener(this, "onApplyChanges");

@@ -17,6 +17,7 @@ package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -75,7 +76,7 @@ import org.apache.commons.lang.StringUtils;
  *     <span class="kw">private</span> Form form;
  *
  *     <span class="kw">public void</span> onInit() {
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  *         addControl(form);
  *
  *         form.add(<span class="kw">new</span> TextField(<span class="st">"Username"</span>, <span class="kw">true</span>));
@@ -451,25 +452,18 @@ public class Form implements Control {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a form with the given name and context.
+     * Create a form with the given name.
      *
      * @param name the name of the form
-     * @param context the form command context
-     * @throws IllegalArgumentException if the form name or command is null.
+     * @throws IllegalArgumentException if the form name is null
      */
-    public Form(String name, Context context) {
+    public Form(String name) {
         setName(name);
-        setContext(context);
-
-        HiddenField nameField = new HiddenField(FORM_NAME, String.class);
-        nameField.setValue(name);
-        add(nameField);
     }
 
     /**
      * Create an form with no name or context defined, <b>please note</b> the
-     * form's name and context must be defined before it is valid. Also note you
-     * must define the Forms context before you add Fields to it.
+     * form's name and context must be defined before it is valid.
      * <p/>
      * <div style="border: 1px solid red;padding:0.5em;">
      * No-args constructors are provided for Java Bean tools support and are not
@@ -492,7 +486,6 @@ public class Form implements Control {
      * @param field the field to add to the form
      * @throws IllegalArgumentException if the form already contains a field
      * or button with the same name, or if the field name is not defined
-     * @throws IllegalStateException if the form context is not defined
      */
     public void add(Field field) {
         if (field == null) {
@@ -505,9 +498,6 @@ public class Form implements Control {
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
         }
-        if (getContext() == null) {
-            throw new IllegalStateException("Form context is not defined");
-        }
 
         if (field instanceof Button) {
             getButtonList().add(field);
@@ -516,7 +506,10 @@ public class Form implements Control {
         }
         getFields().put(field.getName(), field);
         field.setForm(this);
-        field.setContext(getContext());
+
+        if (getContext() != null) {
+            field.setContext(getContext());
+        }
     }
 
     /**
@@ -705,6 +698,15 @@ public class Form implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
+
+        if (!getFields().isEmpty()) {
+            for (Iterator i = getFields().values().iterator(); i.hasNext();) {
+                Object object = i.next();
+                if (object instanceof Control) {
+                    ((Control)object).setContext(context);
+                }
+            }
+        }
     }
 
     /**
@@ -963,6 +965,10 @@ public class Form implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+
+        HiddenField nameField = new HiddenField(FORM_NAME, String.class);
+        nameField.setValue(name);
+        add(nameField);
     }
 
     /**

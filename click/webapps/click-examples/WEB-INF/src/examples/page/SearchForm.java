@@ -19,7 +19,7 @@ public class SearchForm extends BorderedPage {
     Select typeSelect;
 
     public void onInit() {
-        Form form = new Form("form", getContext());
+        Form form = new Form("form");
         addControl(form);
 
         textField = new TextField("Search");

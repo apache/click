@@ -417,7 +417,7 @@ public class Select extends Field {
      */
     public boolean onProcess() {
         // Page developer has not initialized options
-        if (optionList == null || optionList.isEmpty()) {
+        if (getOptionList().isEmpty()) {
             return true;
         }
 
@@ -427,7 +427,7 @@ public class Select extends Field {
             value = getContext().getRequestParameter(getName());
 
             if (validate() && value != null) {
-                Option firstOption = (Option) optionList.get(0);
+                Option firstOption = (Option) getOptionList().get(0);
 
                 if (isRequired() && firstOption.getValue().equals(value)) {
                     setError(getMessage("select-error", getLabel()));
@@ -486,7 +486,7 @@ public class Select extends Field {
     public String toString() {
 
         int bufferSize = 50;
-        if (optionList != null) {
+        if (!getOptionList().isEmpty()) {
             bufferSize = bufferSize + (optionList.size() * 48);
         }
         StringBuffer buffer = new StringBuffer(bufferSize);
@@ -518,9 +518,9 @@ public class Select extends Field {
             buffer.append(" class='error'>");
         }
 
-        if (optionList != null) {
-            for (int i = 0, size = optionList.size(); i < size; i++) {
-                Object object = optionList.get(i);
+        if (!getOptionList().isEmpty()) {
+            for (int i = 0, size = getOptionList().size(); i < size; i++) {
+                Object object = getOptionList().get(i);
 
                 if (object instanceof Option) {
                     Option option = (Option) object;

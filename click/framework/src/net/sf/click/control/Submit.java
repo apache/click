@@ -71,6 +71,21 @@ public class Submit extends Button {
     }
 
     /**
+     * Create a Submit button with the given value and title attribute. The
+     * value cannot contain the HTML characters <tt>&amp;nbsp;</tt> as the
+     * submitted value cannot be processed correctly.
+     * <p/>
+     * The field name will be Java property representation of the given value.
+     *
+     * @param value the button value
+     * @param title the button title attribute
+     */
+    public Submit(String value, String title) {
+        this(value);
+        setTitle(title);
+    }
+
+    /**
      * Create a Submit button with the given value, listener object and
      * listener method.
      *

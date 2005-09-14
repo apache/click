@@ -16,9 +16,11 @@
 package net.sf.click.control;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.sf.click.Context;
+import net.sf.click.Control;
 
 /**
  * Provides a RadioGroup control.
@@ -105,16 +107,14 @@ public class RadioGroup extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a RadioGroup with the given label and context.
+     * Create a RadioGroup with the given label.
      * <p/>
      * The field name will be Java property representation of the given label.
      *
      * @param label the label of the field
-     * @param context the request context
      */
-    public RadioGroup(String label, Context context) {
+    public RadioGroup(String label) {
         super(label);
-        setContext(context);
     }
 
     /**
@@ -141,19 +141,36 @@ public class RadioGroup extends Field {
      *
      * @param radio the radio control to add to the radio group
      * @throws IllegalArgumentException if the radio parameter is null
-     * @throws IllegalStateException if the radio group context is not defined
      */
     public void add(Radio radio) {
         if (radio == null) {
             throw new IllegalArgumentException("Null radio parameter");
         }
-        if (getContext() == null) {
-            throw new IllegalStateException("RadioGroup context not defined");
-        }
 
         radio.setName(getName());
-        radio.setContext(getContext());
         getRadioList().add(radio);
+        if (getContext() != null) {
+            radio.setContext(getContext());
+        }
+    }
+
+    /**
+     * @see Control#setContext(Context)
+     */
+    public void setContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+        this.context = context;
+
+        if (hasRadios()) {
+            for (Iterator i = getRadioList().iterator(); i.hasNext();) {
+                Object object = i.next();
+                if (object instanceof Control) {
+                    ((Control)object).setContext(context);
+                }
+            }
+        }
     }
 
     /**

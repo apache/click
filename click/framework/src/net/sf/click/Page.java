@@ -17,6 +17,7 @@ package net.sf.click;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -114,7 +115,10 @@ public class Page {
             controls = new ArrayList();
         }
         controls.add(control);
-        control.setContext(getContext());
+
+        if (getContext() != null) {
+            control.setContext(getContext());
+        }
 
         addModel(control.getName(), control);
     }
@@ -150,12 +154,26 @@ public class Page {
     }
 
     /**
-     * Set the request context of the page.
+     * Set the request context of the page. If the page model contains any
+     * Controls the context will also be set in the Controls.
      *
-     * @param value the request context to set
+     * @param context the request context to set
+     * @throws IllegalArgumentException if the Context is null
      */
-    public void setContext(Context value) {
-        context = value;
+    public void setContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+        this.context = context;
+
+        if (!getModel().isEmpty()) {
+            for (Iterator i = getModel().values().iterator(); i.hasNext();) {
+                Object object = i.next();
+                if (object instanceof Control) {
+                    ((Control)object).setContext(context);
+                }
+            }
+        }
     }
 
     /**

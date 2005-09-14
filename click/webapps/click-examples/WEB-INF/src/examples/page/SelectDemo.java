@@ -22,7 +22,7 @@ public class SelectDemo extends BorderedPage {
     Select locationSelect;
 
     public void onInit() {
-        form = new Form("form", getContext());
+        form = new Form("form");
         addControl(form);
 
         // Gender Select

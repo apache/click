@@ -26,7 +26,7 @@ public class TableStyles extends BorderedPage {
     public void onInit() {
 
         // Setup table style select.
-        Form form = new Form("form", getContext());
+        Form form = new Form("form");
         form.setMethod("GET");
         addControl(form);
 

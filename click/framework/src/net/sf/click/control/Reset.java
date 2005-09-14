@@ -68,6 +68,19 @@ public class Reset extends Button {
     }
 
     /**
+     * Create a Reset button with the given value and title.
+     * <p/>
+     * The field name will be Java property representation of the given value.
+     *
+     * @param value the button value
+     * @param title the button title attribute
+     */
+    public Reset(String value, String title) {
+        super(value);
+        setTitle(title);
+    }
+
+    /**
      * Create a Reset field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>

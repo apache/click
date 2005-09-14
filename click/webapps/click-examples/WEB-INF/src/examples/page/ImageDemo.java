@@ -15,7 +15,7 @@ public class ImageDemo extends BorderedPage {
 
     public void onInit() {
         // Buttons Form
-        Form buttonsForm = new Form("buttonsForm", getContext());
+        Form buttonsForm = new Form("buttonsForm");
         addControl(buttonsForm);
 
         ImageSubmit editSubmit = new ImageSubmit("edit", "images/edit.gif");
@@ -29,7 +29,7 @@ public class ImageDemo extends BorderedPage {
         buttonsForm.add(deleteSubmit);
 
         // Colors Form
-        Form form = new Form("form", getContext());
+        Form form = new Form("form");
         addControl(form);
 
         form.add(new Label("<b>Color Chooser</b>"));
