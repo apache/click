@@ -880,7 +880,7 @@ public class ClickServlet extends HttpServlet {
             }
 
             try {
-                Page newPage = (Page) pageClass.newInstance();
+                Page newPage = newPageInstance(path, pageClass);
 
                 newPage.setFormat(clickApp.getPageFormat(path));
                 newPage.setHeaders(clickApp.getPageHeaders(path));

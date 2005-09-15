@@ -132,10 +132,15 @@ class ClickApp implements EntityResolver {
     static final String[] MODE_VALUES =
         { "production", "profile", "development", "debug", "trace" };
 
+    private static final Object PAGE_LOAD_LOCK = new Object();
+
     // -------------------------------------------------------- Package Members
 
     /** The format class. */
     private Class formatClass;
+
+    /** The Map of global page headers. */
+    private Map commonHeaders;
 
     /** The application logger. */
     private ClickLogger logger;
@@ -148,6 +153,9 @@ class ClickApp implements EntityResolver {
 
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
+
+    /** The pages package prefix. */
+    private String pagesPackage;
 
     /** The ServletContext instance. */
     private ServletContext servletContext;
@@ -284,12 +292,43 @@ class ClickApp implements EntityResolver {
      * @return the page class
      */
     Class getPageClass(String path) {
-        PageElm page = (PageElm) pageByPathMap.get(path);
 
-        if (page != null) {
-            return page.getPageClass();
+        // If in Pproduction or profile mode.
+        if (mode <= PROFILE) {
+            PageElm page = (PageElm) pageByPathMap.get(path);
+            if (page != null) {
+                return page.getPageClass();
+            } else {
+                return null;
+            }
+
+        // Else in development, debug or trace mode
         } else {
-            return null;
+
+            synchronized(PAGE_LOAD_LOCK) {
+                PageElm page = (PageElm) pageByPathMap.get(path);
+                if (page != null) {
+                    return page.getPageClass();
+                }
+
+                Class pageClass = null;
+                if (servletContext.getResourcePaths(path) != null) {
+                    pageClass = getPageClass(path, pagesPackage);
+
+                    if (pageClass != null) {
+                        page = new
+                            PageElm(path, pageClass, commonHeaders, formatClass);
+
+                        pageByPathMap.put(page.getPath(), page);
+
+                        if (logger.isDebugEnabled()) {
+                            String msg = path + " -> " + pageClass.getName();
+                            logger.debug(msg);
+                        }
+                    }
+                }
+                return pageClass;
+            }
         }
     }
 
@@ -651,7 +690,7 @@ class ClickApp implements EntityResolver {
                 ("required configuration 'pages' element missing.");
         }
 
-        String pagesPackage = pagesElm.getAttributeValue("package", "");
+        pagesPackage = pagesElm.getAttributeValue("package", "");
         pagesPackage = pagesPackage.trim();
         if (pagesPackage.endsWith(".")) {
             pagesPackage =
@@ -669,11 +708,12 @@ class ClickApp implements EntityResolver {
             throw new RuntimeException(msg);
         }
 
-        Map headersMap = new HashMap();
-
         Element headersElm = rootElm.getChild("headers");
         if (headersElm != null) {
-            headersMap = loadHeadersMap(headersElm);
+            commonHeaders =
+                Collections.unmodifiableMap(loadHeadersMap(headersElm));
+        } else {
+            commonHeaders = Collections.EMPTY_MAP;
         }
 
         List pageList = pagesElm.getChildren();
@@ -688,7 +728,7 @@ class ClickApp implements EntityResolver {
             if (pageElm.getName().equals("page")) {
                 ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
                         pagesPackage,
-                        headersMap,
+                        commonHeaders,
                         formatClass);
 
                 pageByPathMap.put(page.getPath(), page);
@@ -723,7 +763,7 @@ class ClickApp implements EntityResolver {
                     if (pageClass != null) {
                         ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
                                 pageClass,
-                                headersMap,
+                                commonHeaders,
                                 formatClass);
 
                         pageByPathMap.put(page.getPath(), page);
