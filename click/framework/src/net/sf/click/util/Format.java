@@ -67,11 +67,29 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class Format {
+    
+    /**
+     * Returns the format empty string value: &nbsp; <tt>&amp;nbsp;</tt>. 
+     * <p/>
+     * The preference for <tt>&amp;nbsp;</tt> as a empty string is to ensure
+     * table cells are always rendered non-empty. Note the IE browser does 
+     * not fully support CSS attribute: &nbsp; <tt>table { empty-cells: show }</tt>
+     * <p/>
+     * This method is designed to be overridden. If you need a different
+     * empty string value simply override this method.
+     * 
+     * @return the formatter methods empty string value
+     */
+    public String getEmptyString() {
+        return "&nbsp";
+    }
 
     /**
      * Return a currency formatted String value for the given number, using
-     * the default Locale. If the number is null this method will return
-     * "&amp;nbsp;"
+     * the default Locale. 
+     * <p/>
+     * If the number is null this method will return the
+     * {@link #getEmptyString()} value.
      *
      * @param number the number to format
      * @return a currency formatted number string
@@ -83,7 +101,7 @@ public class Format {
             return format.format(number.doubleValue());
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
@@ -92,7 +110,8 @@ public class Format {
      * pattern. See SimpleDateFormat for information on the format
      * pattern string.
      * <p/>
-     * If the date is null this method will return "&amp;nbsp;"
+     * If the date is null this method will return the {@link #getEmptyString()} 
+     * value.
      *
      * @param date the date value to format
      * @param pattern the SimpleDateFormat formatting pattern
@@ -110,13 +129,16 @@ public class Format {
             return format.format(date);
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
      * Return a formatted date string using the given date and the default
-     * DateFormat. If the date is null this method will return "&amp;nbsp;"
+     * DateFormat.
+     * <p/>
+     * If the date is null this method will return the 
+     * {@link #getEmptyString()} value.
      *
      * @param date the date value to format
      * @return a formatted date string
@@ -128,7 +150,7 @@ public class Format {
             return format.format(date);
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
@@ -136,7 +158,8 @@ public class Format {
      * Return a decimal formatted string using the given number and pattern.
      * See DecimalFormat for information on the format pattern string.
      * <p/>
-     * If the number is null this method will return "&amp;nbsp;"
+     * If the number is null this method will return the 
+     * {@link #getEmptyString()} value.
      *
      * @param number the number to format
      * @param pattern the decimal format pattern
@@ -154,13 +177,15 @@ public class Format {
             return format.format(number.doubleValue());
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
      * Return a decimal formatted string using the given number and pattern.
-     * If the number is null this method will return "&amp;nbsp;"
+     * <p/>
+     * If the number is null this method will return the 
+     * {@link #getEmptyString()} value.
      *
      * @param number the number to format
      * @return the fornmatted decimal number
@@ -172,14 +197,16 @@ public class Format {
             return format.format(number.doubleValue());
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
      * Return an email hyperlink using the given email address. If the
      * given value is not a valid email string it will be rendered as is
-     * and not as a hyperlink. If the given value is blank then "&amp;nbsp;"
+     * and not as a hyperlink. 
+     * <p/>
+     * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
      * <p/>
      * The format of the returned email string will be:
@@ -196,7 +223,9 @@ public class Format {
     /**
      * Return an email hyperlink using the given email address. If the
      * given value is not a valid email string it will be rendered as is
-     * and not as a hyperlink. If the given value is blank then "&amp;nbsp;"
+     * and not as a hyperlink. 
+     * <p/>
+     * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
      * <p/>
      * The format of the returned email string will be:
@@ -231,13 +260,15 @@ public class Format {
             }
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
-     * Escape the given object value as a HTML string, or "&amp;nbsp;"
-     * if the object is null.
+     * Escape the given object value as a HTML string.
+     * <p/>
+     * If the value is null this method will return the 
+     * {@link #getEmptyString()} value.
      * <p>
      * Implementation is provided by Jakarta Commons Lang utility:
      * <tt>StringEscapeUtils.escapeHtml(String)</tt>
@@ -249,7 +280,7 @@ public class Format {
         if (value != null) {
             return StringEscapeUtils.escapeHtml(value.toString());
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
@@ -307,8 +338,10 @@ public class Format {
     /**
      * Return an hyperlink using the given URL or email address value. If the
      * given value is not a valid email string or URL it will note be
-     * hyperlinked and will be rendered as is. If the given value is blank then
-     * "&amp;nbsp;" will rendered instead.
+     * hyperlinked and will be rendered as is. 
+     * <p/>
+     * If the given value is blank then the {@link #getEmptyString()} value
+     * will rendered instead.
      *
      * @param value the URL or email address to hyperlink
      * @return a hyperlinked URL or email address
@@ -320,8 +353,10 @@ public class Format {
     /**
      * Return an hyperlink using the given URL or email address value. If the
      * given value is not a valid email string or URL it will note be
-     * hyperlinked and will be rendered as is. If the given value is blank then
-     * "&amp;nbsp;" will rendered instead.
+     * hyperlinked and will be rendered as is. 
+     * <p/>
+     * If the given value is blank then the {@link #getEmptyString()} value
+     * will rendered instead.
      *
      * @param value the URL or email address to hyperlink
      * @param attribute the anchor tag attribute to render
@@ -384,12 +419,14 @@ public class Format {
             return buffer.toString();
         }
 
-        return "&nbsp;";
+        return getEmptyString();
     }
 
     /**
-     * Return a percentage formatted number string using number. If the number
-     * is null this method will return "&amp;nbsp;"
+     * Return a percentage formatted number string using number. 
+     * <p/>
+     * If the number is null this method will return the
+     * {@link #getEmptyString()} value.
      *
      * @param number the number value to format
      * @return a percentage formatted number string
@@ -401,13 +438,16 @@ public class Format {
             return format.format(number.doubleValue());
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
      * Return a formatted time string using the given date and the default
-     * DateFormat. If the date is null this method will return "&amp;nbsp;"
+     * DateFormat. 
+     * <p/>
+     * If the date is null this method will return the
+     * {@link #getEmptyString()} value.
      *
      * @param date the date value to format
      * @return a formatted time string
@@ -419,13 +459,15 @@ public class Format {
             return format.format(date);
 
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 
     /**
-     * Return the string representation of the given object, or "&amp;nbsp;"
-     * if the object is null.
+     * Return the string representation of the given object.
+     * <p/>
+     * If the object is null this method will return the 
+     * {@link #getEmptyString()} value.
      *
      * @param object the object to format
      * @return the string representation of the object
@@ -434,7 +476,7 @@ public class Format {
         if (object != null) {
             return object.toString();
         } else {
-            return "&nbsp;";
+            return getEmptyString();
         }
     }
 }
