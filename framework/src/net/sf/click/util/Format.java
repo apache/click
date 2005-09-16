@@ -67,17 +67,17 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class Format {
-    
+
     /**
-     * Returns the format empty string value: &nbsp; <tt>&amp;nbsp;</tt>. 
+     * Returns the format empty string value: &nbsp; <tt>&amp;nbsp;</tt>.
      * <p/>
      * The preference for <tt>&amp;nbsp;</tt> as a empty string is to ensure
-     * table cells are always rendered non-empty. Note the IE browser does 
+     * table cells are always rendered non-empty. Note the IE browser does
      * not fully support CSS attribute: &nbsp; <tt>table { empty-cells: show }</tt>
      * <p/>
      * This method is designed to be overridden. If you need a different
      * empty string value simply override this method.
-     * 
+     *
      * @return the formatter methods empty string value
      */
     public String getEmptyString() {
@@ -86,7 +86,7 @@ public class Format {
 
     /**
      * Return a currency formatted String value for the given number, using
-     * the default Locale. 
+     * the default Locale.
      * <p/>
      * If the number is null this method will return the
      * {@link #getEmptyString()} value.
@@ -110,7 +110,7 @@ public class Format {
      * pattern. See SimpleDateFormat for information on the format
      * pattern string.
      * <p/>
-     * If the date is null this method will return the {@link #getEmptyString()} 
+     * If the date is null this method will return the {@link #getEmptyString()}
      * value.
      *
      * @param date the date value to format
@@ -137,7 +137,7 @@ public class Format {
      * Return a formatted date string using the given date and the default
      * DateFormat.
      * <p/>
-     * If the date is null this method will return the 
+     * If the date is null this method will return the
      * {@link #getEmptyString()} value.
      *
      * @param date the date value to format
@@ -158,7 +158,7 @@ public class Format {
      * Return a decimal formatted string using the given number and pattern.
      * See DecimalFormat for information on the format pattern string.
      * <p/>
-     * If the number is null this method will return the 
+     * If the number is null this method will return the
      * {@link #getEmptyString()} value.
      *
      * @param number the number to format
@@ -184,7 +184,7 @@ public class Format {
     /**
      * Return a decimal formatted string using the given number and pattern.
      * <p/>
-     * If the number is null this method will return the 
+     * If the number is null this method will return the
      * {@link #getEmptyString()} value.
      *
      * @param number the number to format
@@ -204,7 +204,7 @@ public class Format {
     /**
      * Return an email hyperlink using the given email address. If the
      * given value is not a valid email string it will be rendered as is
-     * and not as a hyperlink. 
+     * and not as a hyperlink.
      * <p/>
      * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
@@ -223,7 +223,7 @@ public class Format {
     /**
      * Return an email hyperlink using the given email address. If the
      * given value is not a valid email string it will be rendered as is
-     * and not as a hyperlink. 
+     * and not as a hyperlink.
      * <p/>
      * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
@@ -267,7 +267,7 @@ public class Format {
     /**
      * Escape the given object value as a HTML string.
      * <p/>
-     * If the value is null this method will return the 
+     * If the value is null this method will return the
      * {@link #getEmptyString()} value.
      * <p>
      * Implementation is provided by Jakarta Commons Lang utility:
@@ -338,7 +338,7 @@ public class Format {
     /**
      * Return an hyperlink using the given URL or email address value. If the
      * given value is not a valid email string or URL it will note be
-     * hyperlinked and will be rendered as is. 
+     * hyperlinked and will be rendered as is.
      * <p/>
      * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
@@ -353,7 +353,7 @@ public class Format {
     /**
      * Return an hyperlink using the given URL or email address value. If the
      * given value is not a valid email string or URL it will note be
-     * hyperlinked and will be rendered as is. 
+     * hyperlinked and will be rendered as is.
      * <p/>
      * If the given value is blank then the {@link #getEmptyString()} value
      * will rendered instead.
@@ -423,7 +423,7 @@ public class Format {
     }
 
     /**
-     * Return a percentage formatted number string using number. 
+     * Return a percentage formatted number string using number.
      * <p/>
      * If the number is null this method will return the
      * {@link #getEmptyString()} value.
@@ -444,7 +444,7 @@ public class Format {
 
     /**
      * Return a formatted time string using the given date and the default
-     * DateFormat. 
+     * DateFormat.
      * <p/>
      * If the date is null this method will return the
      * {@link #getEmptyString()} value.
@@ -466,7 +466,7 @@ public class Format {
     /**
      * Return the string representation of the given object.
      * <p/>
-     * If the object is null this method will return the 
+     * If the object is null this method will return the
      * {@link #getEmptyString()} value.
      *
      * @param object the object to format

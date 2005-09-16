@@ -5,7 +5,7 @@ import net.sf.click.extras.menu.Menu;
 
 /**
  * Provides a Menu Page.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class MenuC3 extends BorderedPage {
