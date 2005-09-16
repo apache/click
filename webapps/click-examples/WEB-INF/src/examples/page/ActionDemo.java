@@ -6,7 +6,7 @@ import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 
 /**
- * Provides an ActionDemo example Page.
+ * Provides an ActionLink  demonstration Page.
  *
  * @author Malcolm Edgar
  */
@@ -18,7 +18,7 @@ public class ActionDemo extends BorderedPage {
      * @see Page#onInit()
      */
     public void onInit() {
-        actionLink = new net.sf.click.control.ActionLink("link");
+        actionLink = new ActionLink("link");
         actionLink.setListener(this, "onLinkClick");
         addControl(actionLink);
     }

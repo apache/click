@@ -2,6 +2,11 @@ package examples.page.menu;
 
 import net.sf.click.extras.menu.Menu;
 
+/**
+ * Provides a Menu Page.
+ * 
+ * @author Malcolm Edgar
+ */
 public class MenuB2 extends MenuA1 {
 
     public void onInit() {
