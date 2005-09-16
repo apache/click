@@ -4,7 +4,7 @@ import net.sf.click.extras.menu.Menu;
 
 /**
  * Provides a Menu Page.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class MenuA5 extends MenuA1 {
