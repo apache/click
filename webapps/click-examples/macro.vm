@@ -85,7 +85,7 @@
      #end
     #end
      <td>
-      <img src="$context\images\curve-right.gif"\>
+      <img src="$context/images/curve-right.gif"\>
      </td>
     </tr>
    </table>
