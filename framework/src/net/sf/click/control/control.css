@@ -23,6 +23,9 @@ select.error {
 span.error {
 	color: red;
 }
+textarea.error {
+	background: #FFFF80;
+}
 table.form {
 	border-width: 0px;
 	margin: 0px;
@@ -46,6 +49,7 @@ table.buttons {
 	padding: 0px;
 	margin-top: 0.5em;
 	vertical-align: baseline;
+	white-space: pre;
 }
 label {
   white-space: nowrap;

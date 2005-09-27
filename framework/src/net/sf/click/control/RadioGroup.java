@@ -117,6 +117,17 @@ public class RadioGroup extends Field {
         super(label);
     }
 
+
+    /**
+     * Create a RadioGroup with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public RadioGroup(String name, String label) {
+        super(name, label);
+    }
+
     /**
      * Create a RadioGroup field with no label/name or context defined,
      * <b>please note</b> the control's name and context must be defined before
@@ -281,8 +292,8 @@ public class RadioGroup extends Field {
 
             buffer.append(radio.toString());
 
-            if (!isVerticalLayout() && (i < size - 1)) {
-                buffer.append("<br>");
+            if (isVerticalLayout() && (i < size - 1)) {
+                buffer.append("<br/>");
             }
         }
 

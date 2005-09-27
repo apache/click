@@ -122,6 +122,17 @@ public abstract class Field implements Control {
         setName(ClickUtils.toName(label));
     }
 
+    /**
+     * Construct the Field with the given name and label.
+     *
+     * @param name the name of the Field
+     * @param label the label of the Field
+     */
+    public Field(String name, String label) {
+        setName(name);
+        setLabel(label);
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -226,7 +237,7 @@ public abstract class Field implements Control {
      * @return HTML rendering string for the Fields disabled status
      */
     public String getDisabled() {
-        return (isDisabled()) ? " disabled" : "";
+        return (isDisabled()) ? " disabled='disabled'" : "";
     }
 
     /**
@@ -302,7 +313,7 @@ public abstract class Field implements Control {
     /**
      * Set the Field's the parent <tt>Form</tt>.
      *
-     * @param form Field's the parent <tt>Form</tt>.
+     * @param form Field's parent <tt>Form</tt>.
      */
     public void setForm(Form form) {
         this.form = form;
@@ -441,7 +452,7 @@ public abstract class Field implements Control {
      * @return HTML rendering string for the Fields readonly status
      */
     public String getReadonly() {
-        return (isReadonly()) ? " readonly" : "";
+        return (isReadonly()) ? " readonly='readonly'" : "";
     }
 
     /**

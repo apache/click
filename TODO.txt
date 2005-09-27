@@ -1,6 +1,4 @@
 CODE
-* constructs for name, label
-* Context -> ClickContext
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
@@ -12,10 +10,11 @@ BUGS
 }
 
 DOCUMENTATION
+* discuss page autoloading
+* reference WIKI
 * provide more Menu Javadoc, need prettier example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
-* add entry on http://java-source.net/open-source/web-frameworks
 * add UTF-8 localization comments
 * update Control in diagrams, update Control classes diagram
 

@@ -83,10 +83,20 @@ public class FileField extends Field {
      * <p/>
      * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the Field
+     * @param label the label of the field
      */
     public FileField(String label) {
         super(label);
+    }
+
+    /**
+     * Construct the File Field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public FileField(String name, String label) {
+        super(name, label);
     }
 
     /**
@@ -94,7 +104,7 @@ public class FileField extends Field {
      * <p/>
      * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the Field
+     * @param label the label of the field
      * @param required the field required status
      */
     public FileField(String label, boolean required) {
@@ -243,7 +253,7 @@ public class FileField extends Field {
         }
         buffer.append(getDisabled());
         buffer.append(getReadonly());
-        buffer.append(">");
+        buffer.append("/>");
 
         return buffer.toString();
     }

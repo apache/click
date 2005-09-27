@@ -5,6 +5,7 @@ import java.io.Serializable;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.DateField;
 import net.sf.click.control.EmailField;
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 import net.sf.click.control.Select;
@@ -30,7 +31,7 @@ public class FormProperties extends BorderedPage {
         String labelAlign = Form.LEFT;
         String labelsPosition = Form.LEFT;
         boolean readonly = false;
-        boolean showBorders = true;
+        boolean showBorders = false;
         boolean validate = true;
     }
 
@@ -67,28 +68,26 @@ public class FormProperties extends BorderedPage {
         form = new Form("form");
         addControl(form);
 
+        FieldSet fieldSet = new FieldSet("<b>Demonstration Form</b>");
+        form.add(fieldSet);
+
         nameField = new TextField("Name");
         nameField.setRequired(true);
         nameField.setFocus(true);
-        form.add(nameField);
+        fieldSet.add(nameField);
 
         emailField = new EmailField("Email");
         emailField.setRequired(true);
-        form.add(emailField);
+        fieldSet.add(emailField);
 
         investmentsField = new InvestmentSelect("Investments");
-        form.add(investmentsField);
+        fieldSet.add(investmentsField);
 
         dateJoinedField = new DateField("Date Joined");
-        form.add(dateJoinedField);
+        fieldSet.add(dateJoinedField);
 
-        Submit okButton = new Submit("    OK    ");
-        okButton.setListener(this, "onOkClick");
-        form.add(okButton);
-
-        Submit cancelButton = new Submit(" Cancel ");
-        cancelButton.setListener(this, "onCancelClick");
-        form.add(cancelButton);
+        form.add(new Submit("    OK    ", this, "onOkClick"));
+        form.add(new Submit(" Cancel ", this, "onCancelClick"));
 
         //-------------------
         // Setup control form
@@ -98,64 +97,64 @@ public class FormProperties extends BorderedPage {
         optionsForm.setListener(this, "onApplyChanges");
         addControl(optionsForm);
 
+        fieldSet = new FieldSet("<b>Form Properites</b>");
+        optionsForm.add(fieldSet);
+
         buttonAlignSelect = new Select("Button Align");
         buttonAlignSelect.addAll(new String[] { "left", "center", "right" });
         buttonAlignSelect.setTitle("Buttons horizontal alignment");
         buttonAlignSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(buttonAlignSelect);
+        fieldSet.add(buttonAlignSelect);
 
         showBordersCheckbox = new Checkbox("Show Borders");
-        showBordersCheckbox.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(showBordersCheckbox);
+        showBordersCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        fieldSet.add(showBordersCheckbox);
 
         columnsSelect = new Select("Columns");
         columnsSelect.addAll(new String[] { "1", "2", "3", "4" });
         columnsSelect.setTitle("Number of Form table columns");
         columnsSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(columnsSelect);
+        fieldSet.add(columnsSelect);
 
         disabledCheckbox = new Checkbox("Disabled");
-        disabledCheckbox.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(disabledCheckbox);
+        disabledCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        fieldSet.add(disabledCheckbox);
 
         errorsAlignSelect = new Select("Errors Align");
         errorsAlignSelect.addAll(new String[] { "left", "center", "right" });
         errorsAlignSelect.setTitle("Errors block horizontal alignment");
         errorsAlignSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(errorsAlignSelect);
+        fieldSet.add(errorsAlignSelect);
 
         readonlyCheckbox = new Checkbox("Readonly");
-        readonlyCheckbox.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(readonlyCheckbox);
+        readonlyCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        fieldSet.add(readonlyCheckbox);
 
         errorsPositionSelect = new Select("Errors Position");
         errorsPositionSelect.addAll(new String[] { "top", "middle", "bottom" });
         errorsPositionSelect.setTitle("Form errors position");
         errorsPositionSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(errorsPositionSelect);
+        fieldSet.add(errorsPositionSelect);
 
         validateCheckbox = new Checkbox("Validate");
-        validateCheckbox.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(validateCheckbox);
+        validateCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        fieldSet.add(validateCheckbox);
 
         labelAlignSelect = new Select("Label Align");
         labelAlignSelect.addAll(new String[] { "left", "center", "right" });
         labelAlignSelect.setTitle("Field label alignment");
         labelAlignSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(labelAlignSelect);
+        fieldSet.add(labelAlignSelect);
 
-        optionsForm.add(new Label("&nbsp;"));
+        fieldSet.add(new Label("&nbsp;"));
 
         labelsPositionSelect = new Select("Labels Position");
         labelsPositionSelect.addAll(new String[] {"left", "top"});
         labelsPositionSelect.setTitle("Form labels position");
         labelsPositionSelect.setAttribute("onChange", "optionsForm.submit();");
-        optionsForm.add(labelsPositionSelect);
+        fieldSet.add(labelsPositionSelect);
 
-        Submit resetButton = new Submit("Restore Defaults");
-        resetButton.setTitle("Restore default form properties");
-        resetButton.setListener(this, "onRestoreDefaults");
-        optionsForm.add(resetButton);
+        optionsForm.add(new Submit("Restore Defaults", this, "onRestoreDefaults"));
 
         // Setup showBorders checkbox Javascript using HTML head include and
         // setting the body onload function.
