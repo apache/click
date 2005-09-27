@@ -82,12 +82,23 @@ public class TextField extends Field {
      * Construct the TextField with the given label. The default text field size
      * is 20 characters.
      * <p/>
-     * The field name will be Java property representation of the given label.
+     * The field name will be Java property representation of the given label
      *
      * @param label the label of the field
      */
     public TextField(String label) {
         super(label);
+    }
+
+    /**
+     * Construct the TextField with the given name and label. The default text
+     * field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public TextField(String name, String label) {
+        super(name, label);
     }
 
     /**
@@ -286,7 +297,7 @@ public class TextField extends Field {
             buffer.append(getMaxLength());
             buffer.append("'");
         }
-        buffer.append(">");
+        buffer.append("/>");
 
         return buffer.toString();
     }

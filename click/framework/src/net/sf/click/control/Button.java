@@ -18,7 +18,7 @@ package net.sf.click.control;
 import net.sf.click.util.ClickUtils;
 
 /**
- * Provides a Button control: &nbsp; &lt;input type='button'&gt;.
+ * Provides a Button control: &nbsp; &lt;input type='button'/&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
@@ -42,7 +42,7 @@ import net.sf.click.util.ClickUtils;
  * HTML output:
  * <pre class="codeHtml">
  * &lt;input type='button' name='back' value=' &lt Back ' onclick='history.back();'
- *        title='Return to previous page'&gt; </pre>
+ *        title='Return to previous page'/&gt; </pre>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -70,8 +70,8 @@ public class Button extends Field {
      * @param value the button value
      */
     public Button(String value) {
-        this.value = value;
-        this.name = ClickUtils.toName(value);
+        setValue(value);
+        setName(ClickUtils.toName(value));
     }
 
     /**
@@ -158,7 +158,7 @@ public class Button extends Field {
 
         buffer.append(getDisabled());
 
-        buffer.append(">");
+        buffer.append("/>");
 
         return buffer.toString();
     }

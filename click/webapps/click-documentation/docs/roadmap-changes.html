@@ -27,12 +27,12 @@
 Click is currently being developed using a short feature release cycle leading
 up to a 1.0 release in the Q4 2005.
 <p/>
-Additional features to be included in the 1.0 release are:
+Features to be included in future releases are:
 <ul>
  <li>Getting Started Guide to building fully fledged Click applications</li>
- <li>HTML FieldSet control</li>
- <li>Client-side JavaScript Form validation</li>
+ <li>Data aware <a href="http://objectstyle.org/cayenne/">Cayenne</a> ORM controls</li>
  <li>Additonal Table control functionality</li>
+ <li>Client-side JavaScript Form validation</li>
 </ul>
 <p/>
 
@@ -42,18 +42,42 @@ Additional features to be included in the 1.0 release are:
 <h2>Changes</h2>
 
 <dl>
+  <dt>Version 0.12 - 1st October 2005</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Added <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a> 
+        control. See Javadoc for details and Click Examples for a demonstration 
+      	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-4">CLK-4</a>].
+      </li> 
+      <li class="change">
+        Add <tt>"name"</tt> and <tt>"label"</tt> Field constructors added to 
+        make Form &lt;-&gt; DAO auto-loading eaiser to use.
+      </li>
+      <li class="change">
+        Changed controls to render valid XHTML, instead of HTML 4.01, enabling
+        Firefox and Mac OS X  browsers to render AJAX responses containing Control
+        HTML
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-3">CLK-3</a>].
+        <div style="margin-top:0.5em;">
+        For example the TextField HTML &nbsp; <tt>&lt;input type='text' disabled&gt;</tt> 
+        &nbsp; now renders as <br/> <tt>&lt;input type='text' disabled='disabled'/&gt;</tt> </div>
+      </li>
+    </ul>
+  </dd>
+  <p/>
   <dt>Version 0.11 - 16th September 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
       	Added <a href="extras-api/net/sf/click/extras/menu/Menu.html">Menu</a> component.
       	See Javadoc for details and Click Examples for a demonstration 
-      	[<a href="http://www.sunvolt.com/jira/browse/CLK-12">CLK-12</a>].
+      	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-12">CLK-12</a>].
       </li> 
       <li class="change">
       	Added automatic Page loading at runtime when application in
         <tt>"development"</tt>, <tt>"debug"</tt> or <tt>"trace"</tt> mode
-        [<a href="http://www.sunvolt.com/jira/browse/CLK-18">CLK-18</a>].
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-18">CLK-18</a>].
       </li> 
       <li class="change">
       	Added Form &lt;-&gt; DAO auto-loading feature.
@@ -65,13 +89,13 @@ Additional features to be included in the 1.0 release are:
         functionality has been replaced with a
         <a href="extras-api/net/sf/click/extras/filter/CompressionFilter.html">CompressionFilter</a>
         derived from Jarkata Tomcat
-        [<a href="http://www.sunvolt.com/jira/browse/CLK-5">CLK-5</a>].
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-5">CLK-5</a>].
       </li> 
       <li class="change">
         Added <tt>email()</tt> and <tt>link()</tt> formatter methods and
         <tt>getEmptyString()</tt> method to
         <a href="click-api/net/sf/click/util/Format.html#email(java.lang.String)">Format</a> class
-        [<a href="http://www.sunvolt.com/jira/browse/CLK-15">CLK-15</a>].
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-15">CLK-15</a>].
       </li> 
       <li class="change">
         Modified <a href="click-api/net/sf/click/control/Form.html">Form</a>
@@ -101,7 +125,7 @@ Additional features to be included in the 1.0 release are:
       <li class="change">
       	Added <a href="extras-api/net/sf/click/extras/table/Table.html">Table</a> control.
       	See Javadoc for details and Click Examples for a demonstration 
-      	[<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1243243&group_id=82095&atid=565027">1243243</a>].
+      	[<a target='blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1243243&group_id=82095&atid=565027">1243243</a>].
       </li> 
       <li class="change">
       	Added <a href="click-api/net/sf/click/control/ImageSubmit.html">ImageSubmit</a> 
@@ -144,7 +168,7 @@ Additional features to be included in the 1.0 release are:
       	See 
       	<a href="click-api/net/sf/click/ClickServlet.html#app-reloading">ClickServlet</a>
       	Javadoc for details and the Click Examples for a demonstration 
-      	[<a href="http://sourceforge.net/tracker/index.php?func=detail&aid=1250978&group_id=82095&atid=565027">1237942</a>].
+      	[<a target='blank' href="http://sourceforge.net/tracker/index.php?func=detail&aid=1250978&group_id=82095&atid=565027">1237942</a>].
         <div style="margin-top:0.5em;">
         This concept was defined by <a target="blank" href="http://sourceforge.net/users/hansbaeckerm/">Hans Baecker-Mayer</a>. </div>
       </li>    

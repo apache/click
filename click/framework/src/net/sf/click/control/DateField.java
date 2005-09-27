@@ -93,6 +93,20 @@ public class DateField extends TextField {
     }
 
     /**
+     * Construct the Date Field with the given name and label.
+     * <p/>
+     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public DateField(String name, String label) {
+        super(name, label);
+        setAttribute("id", getName() + "-field");
+        setFormatPattern("dd MMM yyyy");
+    }
+
+    /**
      * Construct the Date Field with the given label and required status.
      * <p/>
      * The field name will be Java property representation of the given label.
@@ -340,9 +354,9 @@ public class DateField extends TextField {
                 buffer.append(calendarTitle);
                 buffer.append("' title='");
                 buffer.append(calendarTitle);
-                buffer.append("'>\n");
+                buffer.append("'/>\n");
             } else {
-                buffer.append(">\n");
+                buffer.append("/>\n");
             }
 
             buffer.append("<script type='text/javascript'>\n");

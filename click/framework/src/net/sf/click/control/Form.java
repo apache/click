@@ -552,11 +552,11 @@ public class Form implements Control {
     }
 
     /**
-     * Return the link HTML attribute with the given name, or null if the
+     * Return the form HTML attribute with the given name, or null if the
      * attribute does not exist.
      *
-     * @param name the name of link HTML attribute
-     * @return the link HTML attribute
+     * @param name the name of form HTML attribute
+     * @return the form HTML attribute
      */
     public String getAttribute(String name) {
         if (attributes != null) {
@@ -567,7 +567,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form HTML attribute with the given attribute name and value..
+     * Set the form HTML attribute with the given attribute name and value.
      *
      * @param name the name of the form HTML attribute
      * @param value the value of the form HTML attribute
@@ -592,7 +592,7 @@ public class Form implements Control {
     /**
      * Return the form attributes Map.
      *
-     * @return the form attributes Map.
+     * @return the form attributes Map
      */
     public Map getAttributes() {
         if (attributes == null) {
@@ -774,6 +774,45 @@ public class Form implements Control {
      */
     public void setErrorsAlign(String align) {
         errorsAlign = align;
+    }
+
+    /**
+     * Return a list of form fields which are not valid, not hidden and not
+     * disabled.
+     *
+     * @return list of form fields which are not valid, not hidden and not
+     *      disabled
+     */
+    public List getErrorFields() {
+        List list = new ArrayList();
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            Field field = (Field) fieldList.get(i);
+
+            if (field instanceof FieldSet) {
+                FieldSet fieldSet = (FieldSet) field;
+
+                for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
+                    Field fieldSetField = (Field)
+                        fieldSet.getFieldList().get(j);
+
+                    if (!fieldSetField.isValid() &&
+                        !fieldSetField.isHidden() &&
+                        !fieldSetField.isDisabled()) {
+
+                        list.add(fieldSetField);
+                    }
+                }
+
+            } else if (!field.isValid() &&
+                       !field.isHidden() &&
+                       !field.isDisabled()) {
+
+                list.add(field);
+            }
+        }
+
+        return list;
     }
 
     /**
@@ -1293,7 +1332,32 @@ public class Form implements Control {
         } else {
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
-                if (field.getFocus() && !field.isHidden() && !field.isDisabled()) {
+
+                if (field instanceof FieldSet) {
+                    FieldSet fieldSet = (FieldSet) field;
+                    for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
+                        Field fieldSetField = (Field)
+                            fieldSet.getFieldList().get(j);
+
+                        if (fieldSetField.getFocus() &&
+                            !fieldSetField.isHidden() &&
+                            !fieldSetField.isDisabled()) {
+
+                            buffer.append("<script type='text/javascript'><!--\n");
+                            buffer.append("document.forms['");
+                            buffer.append(getName());
+                            buffer.append("'].elements['");
+                            buffer.append(fieldSetField.getName());
+                            buffer.append("'].focus();\n");
+                            buffer.append("//--></script>\n");
+                            break;
+                        }
+                    }
+
+                } else if (field.getFocus() &&
+                           !field.isHidden() &&
+                           !field.isDisabled()) {
+
                     buffer.append("<script type='text/javascript'><!--\n");
                     buffer.append("document.forms['");
                     buffer.append(getName());
@@ -1342,7 +1406,14 @@ public class Form implements Control {
                     buffer.append("<tr class='fields'>\n");
                 }
 
-                if (field instanceof Label) {
+                if (field instanceof FieldSet) {
+                    buffer.append("<td class='fields' colspan='2' align='");
+                    buffer.append(getLabelAlign());
+                    buffer.append("'>\n");
+                    buffer.append(field);
+                    buffer.append("</td>\n");
+
+                } else if (field instanceof Label) {
                     buffer.append("<td class='fields' colspan='2' align='");
                     buffer.append(getLabelAlign());
                     buffer.append("'");
@@ -1391,7 +1462,7 @@ public class Form implements Control {
                     buffer.append("</td>\n");
                 }
 
-                if (column == columns) {
+                if (column == getColumns()) {
                     buffer.append("</tr>\n");
                     column = 1;
                 } else {
@@ -1461,37 +1532,13 @@ public class Form implements Control {
                 }
             }
 
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
-                if (!field.isValid() && !field.isHidden()) {
-                    if (fieldWithError == null && !field.isDisabled()) {
-                        fieldWithError = field;
-                    }
-                    if (useErrorsHeader) {
-                        buffer.append(errorsPrefix);
-                    } else {
-                        buffer.append("<tr class='errors'>");
-                        buffer.append("<td class='errors' align='");
-                        buffer.append(getErrorsAlign());
-                        buffer.append("'>");
-                    }
+            List errorFieldList = getErrorFields();
 
-                    buffer.append("<a class='error'");
-                    buffer.append(" href='javascript:document.");
-                    buffer.append(getName());
-                    buffer.append(".");
-                    buffer.append(field.getName());
-                    buffer.append(".focus();'>");
-                    buffer.append(field.getError());
-                    buffer.append("</a>");
+            for (int i = 0, size = errorFieldList.size(); i < size; i++) {
+                Field field = (Field) errorFieldList.get(i);
 
-                    if (useErrorsHeader) {
-                        buffer.append(errorsSuffix);
-                        buffer.append("\n");
-                    } else {
-                        buffer.append("</td></tr>\n");
-                    }
-                }
+                renderFieldError
+                    (field, buffer, useErrorsHeader, fieldWithError);
             }
 
             if (useErrorsHeader) {
@@ -1524,11 +1571,43 @@ public class Form implements Control {
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);
                 if (i <= size - 1) {
-                    buffer.append("&nbsp;");
+                    buffer.append(" ");
                 }
             }
             buffer.append("</td></tr>\n");
             buffer.append("</table>\n");
+            buffer.append("</td></tr>\n");
+        }
+    }
+
+    protected void renderFieldError(Field field, StringBuffer buffer,
+            boolean useErrorsHeader, Field fieldWithError) {
+
+        if (fieldWithError == null && !field.isDisabled()) {
+            fieldWithError = field;
+        }
+        if (useErrorsHeader) {
+            buffer.append(errorsPrefix);
+        } else {
+            buffer.append("<tr class='errors'>");
+            buffer.append("<td class='errors' align='");
+            buffer.append(getErrorsAlign());
+            buffer.append("'>");
+        }
+
+        buffer.append("<a class='error'");
+        buffer.append(" href='javascript:document.");
+        buffer.append(getName());
+        buffer.append(".");
+        buffer.append(field.getName());
+        buffer.append(".focus();'>");
+        buffer.append(field.getError());
+        buffer.append("</a>");
+
+        if (useErrorsHeader) {
+            buffer.append(errorsSuffix);
+            buffer.append("\n");
+        } else {
             buffer.append("</td></tr>\n");
         }
     }

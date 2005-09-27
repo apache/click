@@ -60,6 +60,8 @@ public class DoubleField extends TextField {
     /** The minimum field value. */
     protected double minvalue = Double.MIN_VALUE;
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Construct a DoubleField with the given label.
      * <p/>
@@ -69,6 +71,17 @@ public class DoubleField extends TextField {
      */
     public DoubleField(String label) {
         super(label);
+        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+    }
+
+    /**
+     * Construct a DoubleField with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public DoubleField(String name, String label) {
+        super(name, label);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
     }
 

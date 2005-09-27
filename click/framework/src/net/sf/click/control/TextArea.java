@@ -85,6 +85,18 @@ public class TextArea extends Field {
         super(label);
     }
 
+
+    /**
+     * Construct the TextArea with the given name and label. The area will have
+     * a default size of 20 cols and 3 rows.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public TextArea(String name, String label) {
+        super(name, label);
+    }
+
     /**
      * Construct the TextArea with the given label and required status. The
      * area will have a default size of 20 cols and 3 rows.

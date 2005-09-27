@@ -84,6 +84,7 @@ public class BigForm extends BorderedPage {
         radioGroup.add(new Radio("PRO", "Protective "));
         radioGroup.add(new Radio("GFT", "Gift Wrap "));
         radioGroup.setValue("STD");
+        radioGroup.setVerticalLayout(false);
         form.add(radioGroup);
 
         Select select = new Select("Delivery type");

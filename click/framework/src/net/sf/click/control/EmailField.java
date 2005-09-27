@@ -47,10 +47,22 @@ public class EmailField extends TextField {
      * <p/>
      * The field name will be Java property representation of the given label
      *
-     * @param label the label of the field.
+     * @param label the label of the field
      */
     public EmailField(String label) {
         super(label);
+        setSize(30);
+    }
+
+    /**
+     * Construct an Email Field with the given name and label.
+     * The default email field size is 30 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public EmailField(String name, String label) {
+        super(name, label);
         setSize(30);
     }
 

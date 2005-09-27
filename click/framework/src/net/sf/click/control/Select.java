@@ -199,6 +199,16 @@ public class Select extends Field {
     }
 
     /**
+     * Create a Select field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public Select(String name, String label) {
+        super(name, label);
+    }
+
+    /**
      * Create a Select field with the given label and required status.
      * <p/>
      * The field name will be Java property representation of the given label.
@@ -497,6 +507,7 @@ public class Select extends Field {
         buffer.append(getId());
         buffer.append("'");
         buffer.append(getDisabled());
+        buffer.append(getReadonly());
 
         buffer.append(" size='");
         buffer.append(getSize());
@@ -510,7 +521,7 @@ public class Select extends Field {
         renderAttributes(buffer);
 
         if (isMultiple()) {
-            buffer.append(" multiple");
+            buffer.append(" multiple='multiple'");
         }
         if (isValid()) {
             buffer.append(">");

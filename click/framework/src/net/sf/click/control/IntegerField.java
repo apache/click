@@ -77,6 +77,17 @@ public class IntegerField extends TextField {
     }
 
     /**
+     * Construct a IntegerField field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public IntegerField(String name, String label) {
+        super(name, label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+    }
+
+    /**
      * Construct a IntegerField field with the given label and required status.
      * <p/>
      * The field name will be Java property representation of the given label.

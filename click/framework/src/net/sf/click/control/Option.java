@@ -168,7 +168,7 @@ public class Option {
                 for (int i = 0, size = values.size(); i < size; i++) {
                     String value = values.get(i).toString();
                     if (getValue().equals(value)) {
-                        buffer.append("<option selected value='");
+                        buffer.append("<option selected='selected' value='");
                         found = true;
                         break;
                     }
@@ -183,7 +183,7 @@ public class Option {
 
         } else {
             if (getValue().equals(select.getValue())) {
-                buffer.append("<option selected value='");
+                buffer.append("<option selected='selected' value='");
             } else {
                 buffer.append("<option value='");
             }

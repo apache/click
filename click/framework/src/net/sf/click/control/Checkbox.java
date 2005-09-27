@@ -37,11 +37,7 @@ package net.sf.click.control;
  */
 public class Checkbox extends Field {
 
-    // -------------------------------------------------------------- Constants
-
     private static final long serialVersionUID = -6767031397352259579L;
-
-    // ----------------------------------------------------- Instance Variables
 
     /** The field checked value. */
     protected boolean checked;
@@ -50,11 +46,23 @@ public class Checkbox extends Field {
 
     /**
      * Create a Checkbox field with the given label.
+     * <p/>
+     * The field name will be Java property representation of the given label.
      *
      * @param label the label of the field
      */
     public Checkbox(String label) {
         super(label);
+    }
+
+    /**
+     * Create a Checkbox field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public Checkbox(String name, String label) {
+        super(name, label);
     }
 
     /**
@@ -178,7 +186,7 @@ public class Checkbox extends Field {
         renderAttributes(buffer);
 
         if (checked) {
-            buffer.append("' checked");
+            buffer.append("' checked='checked'");
         }
         if (getTitle() != null) {
             buffer.append(" title='");
@@ -188,9 +196,9 @@ public class Checkbox extends Field {
         buffer.append(getDisabled());
         buffer.append(getReadonly());
         if (isValid()) {
-            buffer.append(">");
+            buffer.append("/>");
         } else {
-            buffer.append(" class='error'>");
+            buffer.append(" class='error'/>");
         }
 
         return buffer.toString();
