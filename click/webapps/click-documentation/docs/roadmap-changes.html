@@ -30,9 +30,9 @@ up to a 1.0 release in the Q4 2005.
 Features to be included in future releases are:
 <ul>
  <li>Getting Started Guide to building fully fledged Click applications</li>
- <li>Data aware <a href="http://objectstyle.org/cayenne/">Cayenne</a> ORM controls</li>
- <li>Additonal Table control functionality</li>
  <li>Client-side JavaScript Form validation</li>
+ <li>Data aware <a href="http://objectstyle.org/cayenne/">Cayenne</a> controls</li>
+ <li>Additonal Table control functionality</li>
 </ul>
 <p/>
 
@@ -51,7 +51,7 @@ Features to be included in future releases are:
       	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-4">CLK-4</a>].
       </li> 
       <li class="change">
-        Add <tt>"name"</tt> and <tt>"label"</tt> Field constructors added to 
+        Add Field <tt>"name"</tt> and <tt>"label"</tt> constructors added to 
         make Form &lt;-&gt; DAO auto-loading eaiser to use.
       </li>
       <li class="change">
@@ -63,6 +63,12 @@ Features to be included in future releases are:
         For example the TextField HTML &nbsp; <tt>&lt;input type='text' disabled&gt;</tt> 
         &nbsp; now renders as <br/> <tt>&lt;input type='text' disabled='disabled'/&gt;</tt> </div>
       </li>
+      <li class="change">
+        Fixed bug where multipart form parameters not available during 
+        <tt>Page.onInit()</tt> 
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-1">CLK-1</a>].
+      </li>
+      <li class="change">Updated documentation and examples.</li> 
     </ul>
   </dd>
   <p/>
@@ -75,7 +81,8 @@ Features to be included in future releases are:
       	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-12">CLK-12</a>].
       </li> 
       <li class="change">
-      	Added automatic Page loading at runtime when application in
+      	Added runtime <a href="configuration.html#page-auto-loading">Page Auto Loading</a> 
+        when the application is in
         <tt>"development"</tt>, <tt>"debug"</tt> or <tt>"trace"</tt> mode
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-18">CLK-18</a>].
       </li> 

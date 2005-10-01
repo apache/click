@@ -30,7 +30,6 @@ public class FileUpload extends BorderedPage {
         form.add(descField);
 
         form.add(new Submit("    OK    ", this, "onOkClick"));
-
         form.add(new Submit(" Cancel ", this, "onCancelClick"));
     }
 

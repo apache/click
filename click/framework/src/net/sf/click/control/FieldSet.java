@@ -27,8 +27,67 @@ import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
 /**
- * Provides a FieldSet control: &nbsp; &lt;fieldset/&gt;.
+ * Provides a FieldSet container control: &nbsp; &lt;fieldset&gt;.
  *
+ * <table style='margin-bottom: 1.25em'>
+ * <tr>
+ * <td>
+ * <fieldset id='form-paymentDetails'>
+ * <legend id='form-paymentDetails-legend'>FieldSet</legend>
+ * <table class='fields' id='form-paymentDetails-fields'>
+ * <tr class='fields'>
+ * <td class='fields' align='left'><label>Card Name</label><font color="red">*</font></td>
+ * <td align='left'><input type='text' name='cardName' id='form-cardName' value='' size='20'/></td>
+ * </tr>
+ * <tr class='fields'>
+ * <td class='fields' align='left'><label>Card Number</label><font color="red">*</font></td>
+ * <td align='left'><input type='text' name='cardNumber' id='form-cardNumber' value='' size='19' onKeyPress='javascript:return integerFilter(event);' maxlength='19'/><select name='cardtype' id='form-cardtype' size='1'><option selected='selected' value='VISA'>Visa</option><option value='MASTER'>Master</option><option value='AMEX'>AmEx</option><option value='DINERS'>Diners</option><option value='DISCOVER'>Discover</option></select></td>
+ * </tr>
+ * <tr class='fields'>
+ * <td class='fields' align='left'><label>Expiry</label><font color="red">*</font></td>
+ * <td align='left'><input type='text' name='expiry' id='form-expiry' value='' size='4' onKeyPress='javascript:return integerFilter(event);' maxlength='4'/></td>
+ * </tr>
+ * </table>
+ * </fieldset>
+ * </td>
+ * </tr>
+ * </table>
+ *
+ * FieldSet provides a container for laying out form <tt>Field</tt> controls.
+ * The FieldSet will use the properties of its parent Form for laying out and
+ * rendering of its Fields. To further customise the rendering of a FieldSet
+ * override the {@link #renderFields(StringBuffer)} method.
+ * <p/>
+ * A FieldSet can contain any Field controls except for <tt>Button</tt> and
+ * <tt>FieldSet</tt> controls.
+ * <p/>
+ * An FieldSet example containing credit card payment details is provided below:
+ *
+ * <pre class='codeJava'>
+ * <span class='kw'>public void</span> onInit() {
+ *     Form form = <span class='kw'>new</span> Form(<span class='st'>"form"</span>);
+ *     addControl(form);
+ *
+ *     FieldSet paymentFieldSet = <span class='kw'>new</span> FieldSet(<span class='st'>"Payment Details"</span>);
+ *     form.add(paymentFieldSet);
+ *
+ *     paymentFieldSet.add(<span class='kw'>new</span> TextField(<span class='st'>"Card Name"</span>, <span class='kw'>true</span>));
+ *     paymentFieldSet.add(<span class='kw'>new</span> CreditCardField(<span class='st'>"Card Number"</span>, <span class='kw'>true</span>));
+ *     IntegerField expiryField = <span class='kw'>new</span> IntegerField(<span class='st'>"Expiry"</span>, <span class='kw'>true</span>);
+ *     expiryField.setSize(4);
+ *     expiryField.setMaxLength(4);
+ *     paymentFieldSet.add(expiryField);
+ *
+ *     form.add(<span class='kw'>new</span> Submit(<span class='st'>"    OK    "</span>, <span class='kw'>this</span>, <span class='st'>"onOkClick"</span>);
+ *     form.add(<span class='kw'>new</span> Submit(<span class='st'>"  Cancel  "</span>, <span class='kw'>this</span>, <span class='st'>"onCancelClick"</span>));
+ * } </pre>
+ *
+ * When the FieldSet is processed it invokes the <tt>onProcess()</tt> method
+ * of its contained Fields. Beyond this the FieldSet performs no server side
+ * processing, and should be considered simply as a container for laying out
+ * form fields.
+ *
+ * <p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.10">FIELDSET</a>
@@ -394,10 +453,10 @@ public class FieldSet extends Field {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Render the non hidden Form Fields to the string buffer.
+     * Render the fieldsets form fields to the string buffer. This method will
+     * apply the parent Forms properties to the layout and rendering of fields.
      *
      * @param buffer the StringBuffer to render to
-     * @return the number of hidden Fields
      */
     protected void renderFields(StringBuffer buffer) {
         if (getFieldList().isEmpty()) {

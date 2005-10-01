@@ -10,8 +10,6 @@ BUGS
 }
 
 DOCUMENTATION
-* discuss page autoloading
-* reference WIKI
 * provide more Menu Javadoc, need prettier example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
