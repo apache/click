@@ -16,6 +16,7 @@
 package net.sf.click.control;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -1154,6 +1155,16 @@ public class Form implements Control {
      * <li>All {@link Button} controls in the order they were added</li>
      * <li>Invoke the Forms listener if defined</li>
      * </ol>
+     * <p/>
+     * If the request is a Content-type <tt>"multipart"</tt> POST (i.e. a file
+     * upload request), then the form will determine whether the multi part data
+     * has been loaded into the request <tt>Context</tt>. &nbsp; If not loaded,
+     * the Form will search for a contained <tt>FileUpload</tt> control and use
+     * this control to process the <tt>"multipart"</tt> data. This data will then
+     * be loaded into the context using {@link Context#setMultiPartFormData(Map)}.
+     *
+     * @see Context#getRequestParameter(String)
+     * @see Context#getMultiPartFormData()
      *
      * @see net.sf.click.Control#onProcess()
      */
@@ -1162,9 +1173,11 @@ public class Form implements Control {
 
         if (request.getMethod().equalsIgnoreCase(getMethod())) {
 
-            // If "multipart/form-data" request load form data FileItem into
-            // context
-            if (FileUploadBase.isMultipartContent(request)) {
+            // If "multipart/form-data" request and not already loaded then
+            // load form data FileItem into context
+            if (getContext().isMultipartRequest() &&
+                getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
+
                 FileField fileField = null;
                 for (int i = 0, size = fieldList.size(); i < size; i++) {
                     Field field = (Field) fieldList.get(i);
@@ -1205,6 +1218,7 @@ public class Form implements Control {
 
             // If a form name is defined, but does not match this form exit.
             String formName = getContext().getRequestParameter(FORM_NAME);
+
             if (formName == null || !formName.equals(getName())) {
                 return true;
             }
@@ -1537,8 +1551,33 @@ public class Form implements Control {
             for (int i = 0, size = errorFieldList.size(); i < size; i++) {
                 Field field = (Field) errorFieldList.get(i);
 
-                renderFieldError
-                    (field, buffer, useErrorsHeader, fieldWithError);
+                if (fieldWithError == null && !field.isDisabled()) {
+                    fieldWithError = field;
+                }
+                if (useErrorsHeader) {
+                    buffer.append(errorsPrefix);
+                } else {
+                    buffer.append("<tr class='errors'>");
+                    buffer.append("<td class='errors' align='");
+                    buffer.append(getErrorsAlign());
+                    buffer.append("'>");
+                }
+
+                buffer.append("<a class='error'");
+                buffer.append(" href='javascript:document.");
+                buffer.append(getName());
+                buffer.append(".");
+                buffer.append(field.getName());
+                buffer.append(".focus();'>");
+                buffer.append(field.getError());
+                buffer.append("</a>");
+
+                if (useErrorsHeader) {
+                    buffer.append(errorsSuffix);
+                    buffer.append("\n");
+                } else {
+                    buffer.append("</td></tr>\n");
+                }
             }
 
             if (useErrorsHeader) {
@@ -1580,35 +1619,4 @@ public class Form implements Control {
         }
     }
 
-    protected void renderFieldError(Field field, StringBuffer buffer,
-            boolean useErrorsHeader, Field fieldWithError) {
-
-        if (fieldWithError == null && !field.isDisabled()) {
-            fieldWithError = field;
-        }
-        if (useErrorsHeader) {
-            buffer.append(errorsPrefix);
-        } else {
-            buffer.append("<tr class='errors'>");
-            buffer.append("<td class='errors' align='");
-            buffer.append(getErrorsAlign());
-            buffer.append("'>");
-        }
-
-        buffer.append("<a class='error'");
-        buffer.append(" href='javascript:document.");
-        buffer.append(getName());
-        buffer.append(".");
-        buffer.append(field.getName());
-        buffer.append(".focus();'>");
-        buffer.append(field.getError());
-        buffer.append("</a>");
-
-        if (useErrorsHeader) {
-            buffer.append(errorsSuffix);
-            buffer.append("\n");
-        } else {
-            buffer.append("</td></tr>\n");
-        }
-    }
 }

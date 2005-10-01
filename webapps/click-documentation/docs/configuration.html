@@ -350,12 +350,13 @@ following mode element:
 &lt;/click-app&gt; 
 </pre>
 
-The Click Application modes and their settings for Velocity caching, template loading on startup and 
-logging levels are:
+The Click Application modes and their settings for Page auto loading, 
+Velocity caching, template loading on startup and logging levels are:
 <p>
 <table style="border: 1px solid black;" cellspacing="0" cellpadding="6">
 <tr style="background-color: navy; color: white;">
  <th align="center">Application mode</th>
+ <th align="center">Page auto loading</th>
  <th align="center">Velocity caching</th>
  <th align="center">Load templates on startup</th>
  <th align="center">Click logging level</th>
@@ -363,6 +364,7 @@ logging levels are:
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">production</span></tt></td>
+ <td align="center">No</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">WARN</td>
@@ -370,6 +372,7 @@ logging levels are:
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">profile</span></tt></td>
+ <td align="center">No</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">INFO</td>
@@ -377,6 +380,7 @@ logging levels are:
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">development</span></tt></td>
+ <td align="center">Yes</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">INFO</td>
@@ -384,6 +388,7 @@ logging levels are:
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">debug</span></tt></td>
+ <td align="center">Yes</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">DEBUG</td>
@@ -391,12 +396,23 @@ logging levels are:
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">trace</span></tt></td>
+ <td align="center">Yes</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">TRACE</td>
  <td align="center">WARN</td>
 </tr>
 </table>
+
+
+<a name="page-auto-loading" class="heading"><h4>Page Auto Loading</h4></a>
+
+When Page Auto Loading is enabled any new page templates and classes will
+be automatically loaded at runtime. These pages are loaded using the 
+<a href="#application-automapping">Page Automapping</a> rules.
+<p/>
+Page auto loading is a very handy feature for rapid development 
+as you do not have to restart you application server to pick up new pages.
 
 <h4>Velocity Caching</h4>
 

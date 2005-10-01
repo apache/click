@@ -16,6 +16,8 @@
 package net.sf.click;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,8 +29,11 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.fileupload.DefaultFileItemFactory;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * Provides the HTTP request context information for pages. A new Context object
@@ -60,7 +65,10 @@ public class Context {
     /** The http session. */
     protected HttpSession session;
 
-    /** The Map of form data for Content-Type "multipart/form-data" request. */
+    /**
+     * The Map of form data for Content-Type <tt>"multipart/form-data"</tt>
+     * request.
+     */
     protected Map multiPartFormData;
 
     /** The HTTP method is POST flag. */
@@ -182,15 +190,53 @@ public class Context {
     }
 
     /**
-     * Return the named request parameter. If the request Content-type is
-     * "multipart/form-data" and the {@link #multiPartFormData} is defined
-     * the request parameter will be derived from the multiPartFormData map.
+     * Return the named request parameter. If the request is a Content-type
+     * <tt>"multipart/form-data"</tt> POST request, then request parameter will
+     * be derived from the {@link #multiPartFormData} map.
+     * <p/>
+     * Generally the <tt>Form</tt> control is responsible for populating the
+     * multipart form data map. However if a call is made to this method
+     * before the {@link net.sf.click.control.Form#onProcess()} has had a chance
+     * to populate the multipart form data map, then this method will load the
+     * data itself using the <tt>DefaultFileItemFactory</tt>.
+     * <p/>
+     * If the Context loads the multi part data map then the Form will not
+     * attempt to reload the data map and any <tt>FileField</tt> configurations
+     * will not be applied. The reason for this is because
+     * <tt>HttpServletRequest</tt> <tt>InputStream</tt> cannot be processed
+     * twice.
+     *
+     * @see net.sf.click.control.Form#onProcess()
+     * @see #isMultipartRequest()
+     * @see #getMultiPartFormData()
      *
      * @param name the name of the request parameter
      * @return the value of the request parameter.
      */
     public String getRequestParameter(String name) {
-        if (isPost() && multiPartFormData != null) {
+        if (isMultipartRequest()) {
+            // If form has not alreay initialized multipart form data, load it
+            // now. Form will overwrite it later during the request processing
+            if (multiPartFormData == null) {
+                FileUpload fileUpload = new FileUpload();
+                fileUpload.setFileItemFactory(new DefaultFileItemFactory());
+
+                try {
+                    List itemsList = fileUpload.parseRequest(request);
+
+                    Map itemsMap = new HashMap(itemsList.size());
+                    for (int i = 0; i < itemsList.size(); i++) {
+                        FileItem fileItem = (FileItem) itemsList.get(i);
+                        itemsMap.put(fileItem.getFieldName(), fileItem);
+                    }
+
+                    multiPartFormData = itemsMap;
+
+                } catch (FileUploadException fue) {
+                    throw new RuntimeException(fue);
+                }
+            }
+
             FileItem fileItem = (FileItem) multiPartFormData.get(name);
             if (fileItem != null) {
                 return fileItem.getString();
@@ -360,7 +406,8 @@ public class Context {
 
     /**
      * Returns a map of <tt>FileItem</tt> keyed on name for Content-type
-     * "multipart/form-data" requests, or an empty map otherwise.
+     * "multipart/form-data" requests, or an <tt>Collections.EMPTY_MAP</tt>
+     * otherwise.
      *
      * @return map of <tt>FileItem</tt> keyed on name for
      * "multipart/form-data" requests
@@ -380,10 +427,19 @@ public class Context {
      * @param multiPartFormData the map of form FileItem data keyed on name
      */
     public void setMultiPartFormData(Map multiPartFormData) {
-        if (!isPost() || !FileUploadBase.isMultipartContent(request)) {
+        if (!isMultipartRequest()) {
             String msg = "Not a POST Content-type 'multipart' request";
             throw new IllegalStateException(msg);
         }
         this.multiPartFormData = multiPartFormData;
+    }
+
+    /**
+     * Return true if the request is a multi-part content type POST request.
+     *
+     * @return true if the request is a multi-part content type POST request
+     */
+    public boolean isMultipartRequest() {
+        return (isPost() && FileUploadBase.isMultipartContent(request));
     }
 }
