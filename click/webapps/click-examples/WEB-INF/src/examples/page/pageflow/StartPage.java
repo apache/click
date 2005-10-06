@@ -36,7 +36,7 @@ public class StartPage extends BorderedPage {
 
     public void onInit() {
         addModel("head-include", "ajax/ajax-head.htm");
-        addModel("body-onload", "registerAjaxStuff();");
+        addModel("body-onload", "registerAjax();");
 
         form = new Form("form");
         form.setLabelsPosition("top");
