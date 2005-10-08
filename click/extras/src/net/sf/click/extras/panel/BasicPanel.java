@@ -15,17 +15,16 @@
  */
 package net.sf.click.extras.panel;
 
-import net.sf.click.Control;
-import net.sf.click.Page;
-import net.sf.click.util.ClickUtils;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import net.sf.click.Control;
+import net.sf.click.Page;
+import net.sf.click.util.ClickUtils;
+
+import org.apache.log4j.Logger;
 
 /**
  * A simple implementation of a Panel, that will render a basic panel.  If
@@ -53,7 +52,7 @@ public class BasicPanel implements Panel {
     protected String label;
 
     /** The class logger. */
-    protected final Log log;
+    protected final Logger log;
 
     /** A temporary storage for model objects until the Page is set. */
     protected Map model = new HashMap();
@@ -91,7 +90,7 @@ public class BasicPanel implements Panel {
      * @param template
      */
     public BasicPanel(String id, String name, String template) {
-        log = LogFactory.getLog(getClass());
+        log = Logger.getLogger(getClass());
         setId(id);
         setName(name);
         if (template != null) {
@@ -302,7 +301,7 @@ public class BasicPanel implements Panel {
      *
      * @return the logger for this class
      */
-    public Log getLog() {
+    public Logger getLog() {
         return log;
     }
 

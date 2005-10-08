@@ -24,8 +24,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Implementation of <tt>HttpServletResponseWrapper</tt> that works with
@@ -60,7 +59,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     /**
      * The class logger.
      */
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger log = Logger.getLogger(getClass());
 
     /**
      * Original response
