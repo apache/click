@@ -96,7 +96,10 @@ public class Menu implements Serializable {
 
         setLabel(menuElement.getAttributeValue("label"));
         setPath(menuElement.getAttributeValue("path"));
-        setTitle(menuElement.getAttributeValue("title", ""));
+        String titleAtr = menuElement.getAttributeValue("title");
+        if (StringUtils.isNotBlank(titleAtr)) {
+            setTitle(titleAtr);
+        }
 
         String rolesValue = menuElement.getAttributeValue("roles");
         if (!StringUtils.isBlank(rolesValue)) {

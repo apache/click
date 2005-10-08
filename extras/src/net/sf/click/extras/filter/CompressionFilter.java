@@ -17,6 +17,7 @@ package net.sf.click.extras.filter;
 
 import java.io.IOException;
 import java.util.Enumeration;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -26,8 +27,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -64,7 +64,7 @@ import org.apache.commons.logging.LogFactory;
 public class CompressionFilter implements Filter {
 
     /** The class logger. */
-    private final Log log = LogFactory.getLog(getClass());
+    private final Logger log = Logger.getLogger(getClass());
 
     /**
      * The filter configuration object we are associated with.  If this value
