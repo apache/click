@@ -4,13 +4,14 @@
    <property file="./build.properties"/>
    <property name="dir.deploy" value="deploy"/>
    <property name="dir.lib" value="lib"/>
-   <property name="jar.codec" value="commons-codec-1.1.jar"/>
-   <property name="jar.collections" value="commons-collections.jar"/>  
+   <property name="jar.codec" value="commons-codec-1.3.jar"/>
+   <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.jdom" value="jdom-1.0.jar"/>
-   <property name="jar.lang" value="commons-lang-2.0.jar"/>
-   <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
+   <property name="jar.jdom.07" value="jdom-0.7.jar"/>
+   <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.servlet" value="servlet-2.3.1.jar"/>
-   <property name="jar.velocity" value="velocity-dep-1.5-dev.jar"/>
+   <property name="jar.upload" value="commons-fileupload-1.0.jar"/>
+   <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
 	
    <taskdef name="linetrim" 
    	        classname="dev.LineTrimTask" 
@@ -39,20 +40,33 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
-      <unzip src="${dir.lib}/${jar.collections}" dest="${dir.classes}"/>  
-      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>      
-      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/> 
-      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/> 
-      <delete file="${dir.classes}/org/apache/velocity/app/VelocityEngine.class"/>
-      <delete file="${dir.classes}/org/apache/velocity/runtime/RuntimeServices.class"/>  
-      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="**/Test*">
+      <!-- No Dependencies -->
+      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="commons/**">
          <classpath>
-            <fileset dir="lib">
-              <include name="**/*.jar"/>
-            </fileset>
+            <pathelement location="lib/${jar.codec}"/>
+            <pathelement location="lib/${jar.collections}"/>
+            <pathelement location="lib/${jar.jdom.07}"/>
+            <pathelement location="lib/${jar.lang}"/>
+            <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="lib/${jar.upload}"/>
+            <pathelement location="lib/${jar.velocity}"/>
          </classpath>
       </javac>  
+      <jar destfile="${dir.deploy}/click-${version}-nodeps.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="${dir.classes}"/>
+      </jar>
+      <!-- With Dependencies -->
+      <unzip src="${dir.lib}/${jar.codec}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.collections}" dest="${dir.classes}"/>
+      <unzip src="${dir.lib}/${jar.jdom}" dest="${dir.classes}"/>  
+      <unzip src="${dir.lib}/${jar.lang}" dest="${dir.classes}"/> 
+      <unzip src="${dir.lib}/${jar.upload}" dest="${dir.classes}"/> 
+      <unzip src="${dir.lib}/${jar.velocity}" dest="${dir.classes}"/> 
       <jar destfile="${dir.deploy}/click-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -60,12 +74,11 @@
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="${dir.classes}">
-            <exclude name="org/apache/log4j/chainsaw/**"/>
             <exclude name="org/apache/velocity/anakia/**"/>
             <exclude name="org/apache/velocity/test/**"/>
             <exclude name="org/apache/velocity/texen/**"/>
          </fileset>
-      </jar>  
+      </jar>
    </target>
 
    <target name="build-extras" description="build extras JAR file">
@@ -77,10 +90,9 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <unzip src="${dir.lib}/${jar.logging}" dest="extras/classes"/> 
       <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
          <classpath>
-        	<pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>  
@@ -90,23 +102,26 @@
            <attribute name="Package" value="net.sf.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
-         <fileset dir="extras/classes"/>
+         <fileset dir="extras/classes">
+            <exclude name="org/apache/log4j/chainsaw/**"/>
+         </fileset>
       </jar>  
    </target>
-	
+
    <target name="build-release" 
            depends="build-framework, build-extras, build-webapps, javadoc" 
            description="build release ZIP file">
       <delete file="../click-${version}.zip"/>  
       <zip destfile="../click-${version}.zip">
-         <fileset dir="." casesensitive="yes"> 
+         <fileset dir="." casesensitive="yes">
             <exclude name=".**"/> 
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
             <exclude name="**/Thumbs.db"/>
             <exclude name="framework/classes/**"/>
             <exclude name="extras/classes/**"/> 
-            <exclude name="webapps/click-blank/WEB-INF/classes/**"/>  
+            <exclude name="webapps/click-blank/WEB-INF/classes/**"/> 
+            <exclude name="webapps/click-documentation/**"/> 
             <exclude name="webapps/click-examples/WEB-INF/classes/**"/>  
          </fileset>
       </zip>
@@ -248,7 +263,6 @@
                windowtitle="Click Extras API"
                doctitle="Click Extras API">
          <classpath>
-            <pathelement location="lib/${jar.logging}"/>
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
