@@ -1,5 +1,19 @@
+/*
+ * Copyright 2004-2005 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.panel;
-
 
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
@@ -92,6 +106,8 @@ import net.sf.click.util.ClickUtils;
  */
 public class TabbedPanel extends BasicPanel {
 
+    protected boolean debug;
+
     protected Object listener;
 
     protected String method;
@@ -113,13 +129,13 @@ public class TabbedPanel extends BasicPanel {
      * method will by default set the active panel to the current panel being
      * passed, to ensure that at least one active panel has been set.
      *
-     * @param panel
+     * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
-        getLog().warn("WARNING: TabbedPanel should have panels added ONLY via" +
-                      " addPanel(panel, boolean) to ensure the active panel" +
-                      " is correctly set.  Setting active panel to *this* |" +
-                      " panel ('" + panel.getName() + "') as a result.");
+        debug("WARNING: TabbedPanel should have panels added ONLY via" +
+              " addPanel(panel, boolean) to ensure the active panel" +
+              " is correctly set.  Setting active panel to *this* |" +
+              " panel ('" + panel.getName() + "') as a result");
         this.addPanel(panel, true);
     }
 
@@ -136,17 +152,17 @@ public class TabbedPanel extends BasicPanel {
     public void addPanel(Panel panel, boolean isActivePanel) {
         super.addPanel(panel);
         if (isActivePanel) {
-            if (getLog().isDebugEnabled()) {
-                getLog().debug("Adding panel with id " + panel.getId() +
-                               " as the active panel.");
+            if (isDebugEnabled()) {
+                debug("Adding panel with id " + panel.getId() +
+                      " as the active panel");
             }
             setActivePanel(panel);
         }
         if (getPanels().size() > 1 && tabActionLink == null) {
-            if (getLog().isDebugEnabled()) {
-                getLog().debug("Two or more panels detected, enabling " +
-                               "tabActionLink. Current listener status = " +
-                               this.listener + "." + this.method + "()");
+            if (isDebugEnabled()) {
+                debug("Two or more panels detected, enabling " +
+                       "tabActionLink. Current listener status = " +
+                       listener + "." + method + "()");
             }
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");
@@ -187,7 +203,8 @@ public class TabbedPanel extends BasicPanel {
      */
     public void setPage(Page page) {
         super.setPage(page);
-        // add the context to the tabActionLink control - TODO: is there a better way to do set the context?
+        // add the context to the tabActionLink control
+        // TODO: is there a better way to do set the context?
         tabActionLink.setContext(page.getContext());
     }
 
@@ -210,17 +227,16 @@ public class TabbedPanel extends BasicPanel {
 
         // if a listener has been explicitely set to handle a tab switch,
         // then invoke it
-        if (this.listener != null && this.method != null) {
-            getLog().debug("Invoking listener " + this.listener + "." +
-                           this.method + "()");
+        if (listener != null && method != null) {
+            if (isDebugEnabled()) {
+                debug("Invoking listener " + listener + "." + method + "()");
+            }
             return ClickUtils.invokeListener(listener, method);
         }
         // this implies that everything needed to render the next tab has been
         // added to the "model" context already
         else {
-            String msg =
-                "No listener.method() found, continuing processing...";
-            getLog().debug(msg);
+            debug("No listener method found, continuing processing");
             return true;
         }
     }
@@ -247,5 +263,34 @@ public class TabbedPanel extends BasicPanel {
      */
     public String toString() {
         return "/click/" + super.toString();
+    }
+
+    /**
+     * Return true if debug logging is enabled.
+     *
+     * @return true if debug loggin is enabled
+     */
+    public boolean isDebugEnabled() {
+        return debug;
+    }
+
+    /**
+     * Set the debug logging status.
+     *
+     * @param debug the debug logging status
+     */
+    public void setDebug(boolean debug) {
+        this.debug = debug;
+    }
+
+    /**
+     * Log the given message to <tt>System.out</tt> if debug logging is enabled.
+     *
+     * @param msg the debug message to log write to <tt>System.out</tt>
+     */
+    public void debug(String msg) {
+        if (isDebugEnabled()) {
+            System.out.println("[Click] [debug] TabledPannel " + msg);
+        }
     }
 }

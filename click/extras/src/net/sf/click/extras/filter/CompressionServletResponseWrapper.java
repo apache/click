@@ -24,8 +24,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.log4j.Logger;
-
 /**
  * Implementation of <tt>HttpServletResponseWrapper</tt> that works with
  * the CompressionServletResponseStream implementation.
@@ -49,17 +47,9 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     public CompressionServletResponseWrapper(HttpServletResponse response) {
         super(response);
         origResponse = response;
-        if (log.isDebugEnabled()) {
-            log.debug("constructor get called");
-        }
     }
 
     // ----------------------------------------------------- Instance Variables
-
-    /**
-     * The class logger.
-     */
-    private final Logger log = Logger.getLogger(getClass());
 
     /**
      * Original response
@@ -108,9 +98,6 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * Set content type
      */
     public void setContentType(String contentType) {
-        if (log.isDebugEnabled()) {
-            log.debug("setContentType to "+contentType);
-        }
         this.contentType = contentType;
         origResponse.setContentType(contentType);
     }
@@ -120,9 +107,6 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * Set threshold number
      */
     public void setCompressionThreshold(int threshold) {
-        if (log.isDebugEnabled()) {
-            log.debug("setCompressionThreshold to " + threshold);
-        }
         this.threshold = threshold;
     }
 
@@ -134,9 +118,6 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * @exception IOException if an input/output error occurs
      */
     public ServletOutputStream createOutputStream() throws IOException {
-        if (log.isDebugEnabled()) {
-            log.debug("createOutputStream gets called");
-        }
 
         CompressionResponseStream stream = new CompressionResponseStream(origResponse);
         stream.setBuffer(threshold);
@@ -171,9 +152,6 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * @exception IOException if an input/output error occurs
      */
     public void flushBuffer() throws IOException {
-        if (log.isDebugEnabled()) {
-            log.debug("flush buffer @ CompressionServletResponseWrapper");
-        }
         ((CompressionResponseStream)stream).flush();
 
     }
@@ -192,9 +170,6 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
 
         if (stream == null)
             stream = createOutputStream();
-        if (log.isDebugEnabled()) {
-            log.debug("stream is set to "+stream+" in getOutputStream");
-        }
 
         return (stream);
 
@@ -221,9 +196,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         }
         //String charset = getCharsetFromContentType(contentType);
         String charEnc = origResponse.getCharacterEncoding();
-        if (log.isDebugEnabled()) {
-            log.debug("character encoding is " + charEnc);
-        }
+
         // HttpServletResponse.getCharacterEncoding() shouldn't return null
         // according the spec, so feel free to remove that "if"
         if (charEnc != null) {
