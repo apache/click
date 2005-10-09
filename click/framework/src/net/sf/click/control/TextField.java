@@ -116,6 +116,30 @@ public class TextField extends Field {
     }
 
     /**
+     * Construct the TextField with the given label and size.
+     * <p/>
+     * The field name will be Java property representation of the given label
+     *
+     * @param label the label of the field
+     * @param size the size of the field
+     */
+    public TextField(String label, int size) {
+        super(label);
+        setSize(size);
+    }
+
+    /**
+     * Construct the TextField with the given name, label and size.
+     *
+     * @param label the label of the field
+     * @param size the size of the field
+     */
+    public TextField(String name, String label, int size) {
+        super(name, label);
+        setSize(size);
+    }
+
+    /**
      * Create a TextField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
