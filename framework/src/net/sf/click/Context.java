@@ -53,6 +53,12 @@ public class Context {
     /** The servlet config. */
     protected final ServletConfig config;
 
+    /**
+     * The Map of form data for Content-Type <tt>"multipart/form-data"</tt>
+     * request.
+     */
+    protected Map multiPartFormData;
+
     /** The page maker factory. */
     protected final ClickServlet.PageMaker pageMaker;
 
@@ -64,12 +70,6 @@ public class Context {
 
     /** The http session. */
     protected HttpSession session;
-
-    /**
-     * The Map of form data for Content-Type <tt>"multipart/form-data"</tt>
-     * request.
-     */
-    protected Map multiPartFormData;
 
     /** The HTTP method is POST flag. */
     protected final boolean isPost;
