@@ -18,7 +18,7 @@ package net.sf.click.util;
 import javax.servlet.ServletContext;
 
 import org.apache.velocity.runtime.RuntimeServices;
-import org.apache.velocity.runtime.log.LogSystem;
+import org.apache.velocity.runtime.log.LogChute;
 
 /**
  * Provides the internal loggers for the Click and Velocity runtime. By default
@@ -42,12 +42,9 @@ import org.apache.velocity.runtime.log.LogSystem;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public class ClickLogger implements LogSystem {
+public class ClickLogger implements LogChute {
 
     // -------------------------------------------------------------- Constants
-
-    /** The [trace] logging level. */
-    public static final int TRACE_ID = DEBUG_ID - 1;
 
     /** The logging level Velocity application attribute key. */
     public static final String LOG_LEVEL =
@@ -75,6 +72,9 @@ public class ClickLogger implements LogSystem {
      */
     protected ServletContext servletContext = null;
 
+    /** The Velocity ClickLogger instance. */
+    private static ClickLogger velocityInstance;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -101,10 +101,9 @@ public class ClickLogger implements LogSystem {
      * Initialize the logger instance for the Velocity runtime. This method
      * is invoked by the Velocity runtime.
      *
-     * @see LogSystem#init(RuntimeServices)
+     * @see LogChute#init(RuntimeServices)
      */
     public void init(RuntimeServices rs) throws Exception {
-
         String logto = (String) rs.getApplicationAttribute(LOG_TO);
         if ("servlet".equals(logto)) {
             servletContext = (ServletContext)
@@ -120,16 +119,67 @@ public class ClickLogger implements LogSystem {
             throw new IllegalStateException(msg);
         }
 
-        rs.setApplicationAttribute(getClass().getName(), this);
+        velocityInstance = this;
     }
 
     /**
-     * The Velocity runtime logs messages to this method.
+     * Log the given message and optional error at the specified logging level.
      *
-     * @see LogSystem#logVelocityMessage(int, java.lang.String)
+     * @see LogChute#log(int, java.lang.String)
      */
-    public void logVelocityMessage(int level, String message) {
+    public void log(int level, String message) {
         log(level, message, null);
+    }
+
+    /**
+     * Log the given message and optional error at the specified logging level.
+     * <p/>
+     * If you need to customise the Click and Velocity runtime logging for your
+     * application modify this method.
+     *
+     * @see LogChute#log(int, java.lang.String, java.lang.Throwable)
+     *
+     * @param level the logging level
+     * @param message the message to log
+     * @param error the optional error to log
+     */
+    public void log(int level, String message, Throwable error) {
+        if (level < logLevel) {
+            return;
+        }
+
+        StringBuffer buffer = new StringBuffer(80);
+
+        buffer.append("[");
+        buffer.append(name);
+        buffer.append("]");
+
+        buffer.append(LEVELS[level+1]);
+        buffer.append(message);
+
+        if (servletContext != null) {
+            if (error != null) {
+                servletContext.log(buffer.toString(), error);
+            } else {
+                servletContext.log(buffer.toString());
+            }
+        } else {
+            if (error != null) {
+                System.out.print(buffer.toString());
+                error.printStackTrace(System.out);
+            } else {
+                System.out.println(buffer.toString());
+            }
+        }
+    }
+
+    /**
+     * Tell whether or not a log level is enabled.
+     *
+     * @see LogChute#isLevelEnabled(int)
+     */
+    public boolean isLevelEnabled(int level) {
+        return logLevel >= level;
     }
 
     /**
@@ -264,46 +314,14 @@ public class ClickLogger implements LogSystem {
         return logLevel <= TRACE_ID;
     }
 
-    // ------------------------------------------------------ Protected Methods
 
     /**
-     * Log the given message and optional error at the specified logging level.
-     * <p/>
-     * If you need to customise the Click and Velocity runtime logging for your
-     * application modify this method.
+     * Return the ClickLogger instance initialized by the Velocity runtime
+     * engine.
      *
-     * @param level the logging level
-     * @param message the message to log
-     * @param error the optional error to log
+     * @return the logger instance initialized by the Velocity runtime
      */
-    protected void log(int level, String message, Throwable error) {
-        if (level < logLevel) {
-            return;
-        }
-
-        StringBuffer buffer = new StringBuffer(80);
-
-        buffer.append("[");
-        buffer.append(name);
-        buffer.append("]");
-
-        buffer.append(LEVELS[level+1]);
-        buffer.append(message);
-
-        if (servletContext != null) {
-            if (error != null) {
-                servletContext.log(buffer.toString(), error);
-            } else {
-                servletContext.log(buffer.toString());
-            }
-        } else {
-            if (error != null) {
-                System.out.print(buffer.toString());
-                error.printStackTrace(System.out);
-            } else {
-                System.out.println(buffer.toString());
-            }
-        }
+    public static ClickLogger getVelocityInstance() {
+        return velocityInstance;
     }
-
 }
