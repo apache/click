@@ -38,11 +38,11 @@ import javax.servlet.ServletContext;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.log.LogSystem;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -221,10 +221,7 @@ class ClickApp implements EntityResolver {
 
             // Turn down the Velocity logging level
             if (mode == DEBUG || mode == TRACE) {
-              String loggerKey = ClickLogger.class.getName();
-              ClickLogger clickLog = (ClickLogger)
-                  velocityEngine.getApplicationAttribute(loggerKey);
-              clickLog.setLevel(ClickLogger.WARN_ID);
+                ClickLogger.getVelocityInstance().setLevel(ClickLogger.WARN_ID);
             }
 
             // Cache page templates.
@@ -584,7 +581,10 @@ class ClickApp implements EntityResolver {
             }
 
             // Configure loggig to console or servlet context.
-            logto = modeElm.getAttributeValue("logto", "console");
+            logto = modeElm.getAttributeValue("logto");
+            if (StringUtils.isBlank(logto)) {
+                logto = "console";
+            }
 
         } else {
             mode = DEVELOPMENT;
@@ -592,21 +592,21 @@ class ClickApp implements EntityResolver {
 
         // Set Click and Velocity log levels
         int clickLogLevel = ClickLogger.INFO_ID;
-        Integer velocityLogLevel = new Integer(LogSystem.ERROR_ID);
+        Integer velocityLogLevel = new Integer(ClickLogger.ERROR_ID);
 
         if (mode == PRODUCTION) {
             clickLogLevel = ClickLogger.WARN_ID;
 
         } else if (mode == DEVELOPMENT) {
-            velocityLogLevel = new Integer(LogSystem.WARN_ID);
+            velocityLogLevel = new Integer(ClickLogger.WARN_ID);
 
         } else if (mode == DEBUG) {
             clickLogLevel = ClickLogger.DEBUG_ID;
-            velocityLogLevel = new Integer(LogSystem.WARN_ID);
+            velocityLogLevel = new Integer(ClickLogger.WARN_ID);
 
         } else if (mode == TRACE) {
             clickLogLevel = ClickLogger.TRACE_ID;
-            velocityLogLevel = new Integer(LogSystem.INFO_ID);
+            velocityLogLevel = new Integer(ClickLogger.INFO_ID);
         }
 
         logger.setLevel(clickLogLevel);
@@ -690,7 +690,11 @@ class ClickApp implements EntityResolver {
                 ("required configuration 'pages' element missing.");
         }
 
-        pagesPackage = pagesElm.getAttributeValue("package", "");
+        pagesPackage = pagesElm.getAttributeValue("package");
+        if (StringUtils.isBlank(pagesPackage)) {
+            pagesPackage = "";
+        }
+
         pagesPackage = pagesPackage.trim();
         if (pagesPackage.endsWith(".")) {
             pagesPackage =
@@ -698,7 +702,11 @@ class ClickApp implements EntityResolver {
         }
 
         boolean automap = false;
-        String automapStr = pagesElm.getAttributeValue("automapping", "false");
+        String automapStr = pagesElm.getAttributeValue("automapping");
+        if (StringUtils.isBlank(automapStr)) {
+            automapStr = "false";
+        }
+
         if ("true".equalsIgnoreCase(automapStr)) {
             automap = true;
         } else if ("false".equalsIgnoreCase(automapStr)) {
