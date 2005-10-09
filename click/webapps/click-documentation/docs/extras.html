@@ -60,17 +60,16 @@ Current available dependencies include:
  <li>Commons Codec<span class="red">*</span></li>
  <li>Commons Collections<span class="red">*</span></li>
  <li>Commons Lang<span class="red">*</span></li>
- <li>Commons Logging<span class="blue">*</span></li>
+ <li>Commons FileUpload<span class="red">*</span></li>
  <li>JDOM<span class="red">*</span></li>
-<li>Velocity<span class="red">*</span></li>
+ <li>Velocity<span class="red">*</span></li>
 </ul>
 
 <span style="margin-left:1em;" class="red">*</span> : marked libraries are included in <tt>click.jar</tt><br/>
-<span style="margin-left:1em;" class="blue">*</span> : marked libraries are included in <tt>click-extras.jar</tt>
 <p/>
-Extras controls and components should use Commons Logging API for logging. Please
-do not use the <tt>ClickLogger</tt> which is for internal use by the Click and 
-Velocity runtimes.
+Please note when targeting the IBM WepSphere application server, it is strongly
+recommended that you do not use the Commons Logging API or any post JDOM 0.7 API 
+features as this may cause class loading issues.
 
 <h3>Auto File Deployment</h3>
 
