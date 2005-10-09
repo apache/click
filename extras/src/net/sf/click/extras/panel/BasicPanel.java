@@ -24,8 +24,6 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 
-import org.apache.log4j.Logger;
-
 /**
  * A simple implementation of a Panel, that will render a basic panel.  If
  * the template is provided, it will return that value via the toString()
@@ -50,9 +48,6 @@ public class BasicPanel implements Panel {
 
     /** The (localized) label of this panel. */
     protected String label;
-
-    /** The class logger. */
-    protected final Logger log;
 
     /** A temporary storage for model objects until the Page is set. */
     protected Map model = new HashMap();
@@ -90,7 +85,6 @@ public class BasicPanel implements Panel {
      * @param template
      */
     public BasicPanel(String id, String name, String template) {
-        log = Logger.getLogger(getClass());
         setId(id);
         setName(name);
         if (template != null) {
@@ -294,15 +288,6 @@ public class BasicPanel implements Panel {
      */
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    /**
-     * Return the logger for this class.
-     *
-     * @return the logger for this class
-     */
-    public Logger getLog() {
-        return log;
     }
 
     /**

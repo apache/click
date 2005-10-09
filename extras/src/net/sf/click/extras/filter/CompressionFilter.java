@@ -27,8 +27,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
-
 
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
@@ -63,9 +61,6 @@ import org.apache.log4j.Logger;
  */
 public class CompressionFilter implements Filter {
 
-    /** The class logger. */
-    private final Logger log = Logger.getLogger(getClass());
-
     /**
      * The filter configuration object we are associated with.  If this value
      * is null, this filter instance is not currently configured.
@@ -97,10 +92,6 @@ public class CompressionFilter implements Filter {
             if (str!=null) {
                 compressionThreshold = Integer.parseInt(str);
                 if (compressionThreshold != 0 && compressionThreshold < minThreshold) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("compressionThreshold should be either 0 - no compression or >= " + minThreshold);
-                        log.debug("compressionThreshold set to " + minThreshold);
-                    }
                     compressionThreshold = minThreshold;
                 }
             } else {
@@ -142,30 +133,18 @@ public class CompressionFilter implements Filter {
     public void doFilter ( ServletRequest request, ServletResponse response,
                         FilterChain chain ) throws IOException, ServletException {
 
-        if (log.isDebugEnabled()) {
-            log.debug("@doFilter");
-        }
 
         if (compressionThreshold == 0) {
-            if (log.isDebugEnabled()) {
-                log.debug("doFilter gets called, but compressionTreshold is set to 0 - no compression");
-            }
             chain.doFilter(request, response);
             return;
         }
 
         boolean supportCompression = false;
         if (request instanceof HttpServletRequest) {
-            if (log.isDebugEnabled()) {
-                log.debug("requestURI = " + ((HttpServletRequest)request).getRequestURI());
-            }
 
             // Are we allowed to compress ?
             String s = (String) ((HttpServletRequest)request).getParameter("gzip");
             if ("false".equals(s)) {
-                if (log.isDebugEnabled()) {
-                    log.debug("got parameter gzip=false --> don't compress, just chain filter");
-                }
                 chain.doFilter(request, response);
                 return;
             }
@@ -175,22 +154,12 @@ public class CompressionFilter implements Filter {
             while (e.hasMoreElements()) {
                 String name = (String)e.nextElement();
                 if (name.indexOf("gzip") != -1) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("supports compression");
-                    }
                     supportCompression = true;
-                } else {
-                    if (log.isDebugEnabled()) {
-                        log.debug("no support for compresion");
-                    }
                 }
             }
         }
 
         if (!supportCompression) {
-            if (log.isDebugEnabled()) {
-                log.debug("doFilter gets called wo compression");
-            }
             chain.doFilter(request, response);
             return;
         } else {
@@ -199,9 +168,7 @@ public class CompressionFilter implements Filter {
                     new CompressionServletResponseWrapper((HttpServletResponse)response);
 
                 wrappedResponse.setCompressionThreshold(compressionThreshold);
-                if (log.isDebugEnabled()) {
-                    log.debug("doFilter gets called with compression");
-                }
+
                 try {
                     chain.doFilter(request, wrappedResponse);
                 } finally {
