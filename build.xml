@@ -41,7 +41,7 @@
          </fileset>
       </copy>
       <!-- No Dependencies -->
-      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true" excludes="commons/**">
+      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true">
          <classpath>
             <pathelement location="lib/${jar.codec}"/>
             <pathelement location="lib/${jar.collections}"/>
@@ -92,7 +92,9 @@
       </copy>
       <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
          <classpath>
+            <pathelement location="${jar.cayenne}"/>
             <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="${jar.spring}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
       </javac>  
