@@ -28,6 +28,10 @@
   </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
+  <li><a href="#jsp-support">Does Click support JSP?</a>
+  </li>
+  <li><a href="#logging">Why doesn't Click use Commons Logging or Log4J for logging?</a>
+  </li>
   <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
   </li>  
 </ul>
@@ -198,15 +202,26 @@
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
    The ClickServlet can be subclassed to support applications using Inversion
-   of Control (IoC) frameworks such as Spring and HiveMind.
+   of Control (IoC) frameworks such as <a href="http://www.springframework.org/">Spring</a> 
+   and <a href="http://jakarta.apache.org/hivemind/">HiveMind</a>.
    <p/>
-   To integrate Spring with Click you can subclass the ClickServlet and override the
+   To integrate Spring with Click use the Click Extras
+   <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+   instead of the normal <tt>ClickServlet</tt>. Alternatively you can write your own 
+   Spring integration servlet based on this pattern.
+   <p/>
+   The <tt>SpringClickServlet</tt> servlet subclasses the <tt>ClickServlet</tt> and override the
    <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class)">newPageInstance()</a>
-   method to use Spring to create Page objects and set their dependencies. 
-   For example:
+   method to use Spring to create Page objects and set their dependencies. For example:
    
 <pre class="codeJava">
+<span class="kw">import</span> org.springframework.beans.factory.BeanFactory;
+<span class="kw">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;
+
 <span class="kw">public class</span> SpringClickServlet <span class="kw">extends</span> ClickServlet {
+
+    <span class="cm">/** The path to the Spring XML appliation context definition file. */</span>
+    <span class="kw">public static final</span> String SPRING_PATH = <span class="st">"spring-path"</span>;
     
     <span class="cm">/** Spring bean factory. */</span>
     <span class="kw">protected</span> BeanFactory beanFactory;
@@ -216,7 +231,13 @@
      */</span>
     <span class="kw">public void</span> init() <span class="kw">throws</span>ServletException {
         <span class="kw">super</span>.init();
-        beanFactory = <span class="kw">new</span> XmlBeanFactory(<span class="kw">new</span> ClassPathResource(<span class="st">"spring-beans.xml"</span>));
+
+        String springPath = getInitParameter(SPRING_PATH);
+        <span class="kw">if</span> (springPath == <span class="kw">null</span>) {
+            String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
+            <span class="kw">throw new</span> UnavailableException(msg);
+        }
+        beanFactory = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
     }
 
     <span class="cm">/**
@@ -225,13 +246,12 @@
     <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
         String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
         
-        Page page = (Page) beanFactory.getBean(beanName);
-        
-        <span class="kw">if</span> (page == <span class="kw">null</span>) {
-            page = (Page) pageClass.newInstance();
+        <span class="kw">if</span> (beanFactory.containsBean(beanName)) {
+            <span class="kw">return</span> (Page) beanFactory.getBean(beanName);
+            
+        } <span class="kw">else</span> {
+            <span class="kw">return</span> pageClass.newIntance();
         }
-        
-        <span class="kw">return</span> page;
     }
 } </pre>
 
@@ -242,7 +262,9 @@
    <p/>
    The <a href="click-api/net/sf/click/Page.html#onDestroy()">Page.onDestroy()</a>
    method can then be used to free any allocated resources to a Page object. 
-   <p/>
+
+   <h4>Spring Web MVC Framework</h4>
+
    The Spring Web MVC Framework however, is not compatible with Click. The Spring framework
    uses a low level command pattern design like Struts and WebWork.
    Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
@@ -260,6 +282,55 @@ public interface Controller {
   own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
   which are Click's plugin points.
   </dd> 
+
+  <a name="jsp-support" class="heading"></a>
+  <dt><b>Does Click support JSP?</b></dt>
+  <dd>
+   Click does provide basic support for JSP pages. 
+   However JSP pages are not fully integated into Click like Velocity templates. This 
+   will change in the near future and JSP pages will become first class citizens.
+   <p/>
+   To forward to a JSP page for rendering simply set the Page forward to the target JSP. 
+   For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomersTable <span class="kw">extends</span> Page {
+    <span class="kw">public void</span> onGet() {
+        List customers = CustomerDAO.getCustomers();
+        getContext().setRequestAttribute(<span class="st">"customers"</span>, customers);
+        
+        setForward(<span class="st">"customers-table.jsp"</span>);
+    }
+} </pre>
+
+   Note you have to set request attributes to pass data to the JSP. In future releases the
+   Page model data will be added automatically to the request as named request attribute
+   values.
+   <p/>
+   To have this <tt>CustomersTable</tt> page automatically handle <tt>GET customer-table.htm</tt> 
+   requests you will need to create an empty <tt>customer-table.htm</tt> file and
+   use either configure page automapping or add a page definition in <tt>click.xml</tt>. 
+   For example:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">customers-table.htm</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
+
+  </dd>
+    
+  
+  <a name="logging" class="heading"></a>
+  <dt><b>Why doesn't Click use Commons Logging or Log4J for logging?</b></dt>
+  <dd>
+   Click does not use Log4J with Velocity because of an appender closing
+   memory leak  associated with garbage collecting VelocityEngines. This issue is being
+   addressed with latest Velocity 1.5 development stream. 
+   <p/>
+   There are also Log4J jar locking issues on Tomcat 5.5.9 which can prevent the 
+   automatic reloading of web applications.
+   <p/>
+   Commons Logging is not used because of class loader issues which occur
+   on the IBM WebSphere application server.
+  </dd>
     
   <a name="why-velocity" class="heading"></a>
   <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>

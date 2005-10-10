@@ -14,8 +14,7 @@
   
 <h1>Building</h1>
 
-<h3>Building and Deploying</h3>
-To build and deploy the web applications:
+<h3>Building Click Framework</h3>
 <ol>
   <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
   a JDK installation (1.4 or later).<p/>
@@ -24,29 +23,52 @@ To build and deploy the web applications:
   <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
   an Ant installation (1.6.5 or later).<p/>
   </li>
-  
-  <li>Edit <tt>build.properties</tt> file and set the <tt>dir.appserver</tt>
-  property to point to your J2EE web container deployment directory. For example:
-  
+
+  <li>Run the Ant target <tt>build-framework</tt> to build the framework:
   <pre class="codeConfig">
-  # App Server deployment directory
-  dir.appserver=C:/java/jakarta-tomcat-5.5.9/webapps </pre>
-  
-  Note on Windows ensure you replace any \ directory path characters with / otherwise 
-  Ant may not find the directory. <p>
+  ant build-framework </pre>
+  </li>
+
+</ol>
+
+<h3>Building Click Extras</h3>
+<ol>
+  <li>Ensure the above configurations have been made.<p/>
   </li>
   
-  <li>Run the Ant targets:
+  <li>Download the 
+  <a href="http://sourceforge.net/project/showfiles.php?group_id=48132">Cayenne</a> and 
+  <a href="http://sourceforge.net/project/showfiles.php?group_id=73357">Spring</a> JARS 
+  and set the jar properties in the <tt>build.properties</tt> file. For example:
+
   <pre class="codeConfig">
-  ant build-all deploy-webapps </pre>
-  
-  These targets will build the Click framework, extras and example 
-  applications, and then copy the WAR files to your Application Servers 
-  deployment directory.
+  # Cayenne framework JAR used for building Click Extras
+  jar.cayenne=C:/java/cayenne-1.2M6/lib/cayenne.jar
+
+  # Spring framework JAR used for building Click Extras
+  jar.spring=C:/java/spring-framework-1.2.5/dist/spring.jar </pre>
+  </li>
+
+  <li>Run the Ant targets <tt>framework</tt> and <tt>build-extras</tt>:
+  <pre class="codeConfig">
+  ant build-framework build-extras </pre>
   </li>
 </ol>
 
-<h3>Runtime Dependencies</h3>
+<h3>Building Webapps</h3>
+To build the Click web applications:
+<ol>
+  <li>Ensure the above configurations have been made.<p/>
+  </li>
+  
+  <li>Run the Ant target <tt>build-all</tt>:
+  <pre class="codeConfig">
+  ant build-all </pre>
+  </li>
+</ol>
+
+
+<h3>Click Framework Dependencies</h3>
 The Click framework has the following runtime dependencies.
 
 <table style="border: 1px solid black; margin: 1em 0em;" cellspacing="0" cellpadding="6">
