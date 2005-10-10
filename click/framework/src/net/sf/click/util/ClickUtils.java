@@ -25,8 +25,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -35,11 +37,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.control.DateField;
 import net.sf.click.control.Field;
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
+import net.sf.click.control.Label;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 
@@ -50,11 +52,6 @@ import org.apache.commons.lang.StringUtils;
  * @version $Id$
  */
 public class ClickUtils {
-
-    /** The number of template lines to display in error report. */
-    protected static final int NUMBER_TEMPLATE_LINES = 8;
-
-    // --------------------------------------------------------- Public Methods
 
     /**
      * Close the given output stream and ignore any exceptions thrown.
@@ -107,8 +104,10 @@ public class ClickUtils {
 
         Method[] methods = object.getClass().getMethods();
 
-        for (int i = 0, size = form.getFieldList().size(); i < size; i++) {
-            Field field = (Field) form.getFieldList().get(i);
+        final List fieldList = getFormFields(form);
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            Field field = (Field) fieldList.get(i);
 
             if (field.getName().equals(Form.FORM_NAME)) {
                 continue;
@@ -252,8 +251,10 @@ public class ClickUtils {
 
         Method[] methods = object.getClass().getMethods();
 
-        for (int i = 0, size = form.getFieldList().size(); i < size; i++) {
-            Field field = (Field) form.getFieldList().get(i);
+        final List fieldList = getFormFields(form);
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            Field field = (Field) fieldList.get(i);
 
             if (field.getName().equals(Form.FORM_NAME)) {
                 continue;
@@ -365,8 +366,9 @@ public class ClickUtils {
 
             return new String(byteData);
 
-        } catch (EncoderException ee) {
-            String message = "error occured Base64 encoding: " + object;
+        } catch (Throwable t) {
+            String message =
+                "error occured Base64 encoding: " + object + " : " + t;
             throw new IOException(message);
         }
     }
@@ -388,8 +390,9 @@ public class ClickUtils {
         try {
             byteData = base64.decode(string.getBytes());
 
-        } catch (DecoderException de) {
-            String message = "error occured Base64 decoding: " + string;
+        } catch (Throwable t) {
+            String message =
+                "error occured Base64 decoding: " + string + " : " + t;
             throw new IOException(message);
         }
 
@@ -497,6 +500,41 @@ public class ClickUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Return the list of Field for the given Form, including the any Fields
+     * contained in FieldSets. The list of returned fields will exclude any
+     * <tt>FieldSet</tt> or <tt>Label</tt> fields.
+     *
+     * @param form the form to obtain the fields from
+     * @return the list of contained form fields
+     */
+    public static List getFormFields(Form form) {
+        if (form == null) {
+            throw new IllegalArgumentException("Null form parameter");
+        }
+
+        List fieldList = new ArrayList();
+
+        for (int i = 0; i < form.getFieldList().size(); i++) {
+            Field field = (Field) form.getFieldList().get(i);
+
+            if (field instanceof FieldSet) {
+                FieldSet fieldSet = (FieldSet) field;
+                for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
+                    Field fieldSetField = (Field) fieldSet.getFieldList().get(j);
+                    if (!(fieldSetField instanceof Label)) {
+                        fieldList.add(fieldSetField);
+                    }
+                }
+
+            } else if (!(field instanceof Label)) {
+                fieldList.add(field);
+            }
+        }
+
+        return fieldList;
     }
 
     /**
