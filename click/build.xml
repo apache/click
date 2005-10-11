@@ -265,7 +265,9 @@
                windowtitle="Click Extras API"
                doctitle="Click Extras API">
          <classpath>
+            <pathelement location="${jar.cayenne}"/>
             <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="${jar.spring}"/>
             <pathelement location="${dir.deploy}/click-${version}.jar"/>
          </classpath>
          <packageset dir="extras/src">
