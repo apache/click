@@ -112,6 +112,9 @@ public class SourceViewer extends BorderedPage {
         if (!isHtml) {
             isHtml = name.endsWith(".vm");
         }
+        if (!isHtml) {
+            isHtml = name.endsWith(".jsp");
+        }
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 inputStream));
