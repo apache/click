@@ -468,6 +468,10 @@ public class ClickServlet extends HttpServlet {
             RequestDispatcher dispatcher =
                 request.getRequestDispatcher(page.getForward());
 
+            if (page.getForward().endsWith(".jsp")) {
+                setRequestAttributes(page);
+            }
+
             dispatcher.forward(request, response);
 
         } else if (page.getPath() != null) {
@@ -852,6 +856,37 @@ public class ClickServlet extends HttpServlet {
         response.setContentType("text/html");
         response.getWriter().print(APPLICAION_RELOADED_MSG);
         response.getWriter().close();
+    }
+
+    /**
+     * Set the page model, context, format, messages and path as request
+     * attributes to support JSP rendering.
+     *
+     * @param page the page to set the request attributes on
+     */
+    protected void setRequestAttributes(Page page) {
+        HttpServletRequest request = page.getContext().getRequest();
+
+        Map model = page.getModel();
+        for (Iterator i = model.keySet().iterator(); i.hasNext();)  {
+            String name = i.next().toString();
+            request.setAttribute(name, model.get(name));
+        }
+
+        request.setAttribute("context", request.getContextPath());
+
+        Object format = page.getFormat();
+        if (format != null) {
+           request.setAttribute("format", format);
+        }
+
+        Object path = page.getPath();
+        if (path != null) {
+           request.setAttribute("path", path);
+        }
+
+        MessagesMap messagesMap = new MessagesMap(page);
+        request.setAttribute("messages", messagesMap);
     }
 
     // ---------------------------------------------------------- Inner Classes
