@@ -156,6 +156,22 @@
 /com/mycorp/pages/Login.properties
 /com/mycorp/pages/Login_en.properties
 /com/mycorp/pages/Login_fr.properties </pre>
+
+   In your Login Page class you can use the <tt>getMessage()</tt> method
+   to lookup request localized message strings.
+   
+<pre class="codeJava">
+<span class="kw">public void</span> onInit() {
+    form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+    addControl(form);
+    
+    form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, getMessage(<span class="st">"label.username"</span>)));
+    form.add(<span class="kw">new</span> PasswordField(<span class="st">"username"</span>, getMessage(<span class="st">"label.password"</span>)));
+    
+    form.add(<span class="kw">new</span> Submit(getMessage(<span class="st">"label.ok"</span>), <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
+    form.add(<span class="kw">new</span> Submit(getMessage(<span class="st">"label.cancel"</span>), <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
+}
+</pre>
   
    The Field control classes share a common string properties file:
 <pre class="codeConfig">
@@ -201,67 +217,11 @@
   <a name="spring-integration" class="heading"></a>
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
-   The ClickServlet can be subclassed to support applications using Inversion
-   of Control (IoC) frameworks such as <a href="http://www.springframework.org/">Spring</a> 
-   and <a href="http://jakarta.apache.org/hivemind/">HiveMind</a>.
-   <p/>
-   To integrate Spring with Click use the Click Extras
+   To integrate Spring with Click configure the
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
-   instead of the normal <tt>ClickServlet</tt>. Alternatively you can write your own 
-   Spring integration servlet based on this pattern.
+   instead of the normal <tt>ClickServlet</tt>. 
    <p/>
-   The <tt>SpringClickServlet</tt> servlet subclasses the <tt>ClickServlet</tt> and override the
-   <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class)">newPageInstance()</a>
-   method to use Spring to create Page objects and set their dependencies. For example:
-   
-<pre class="codeJava">
-<span class="kw">import</span> org.springframework.beans.factory.BeanFactory;
-<span class="kw">import</span> org.springframework.context.support.ClassPathXmlApplicationContext;
-
-<span class="kw">public class</span> SpringClickServlet <span class="kw">extends</span> ClickServlet {
-
-    <span class="cm">/** The path to the Spring XML appliation context definition file. */</span>
-    <span class="kw">public static final</span> String SPRING_PATH = <span class="st">"spring-path"</span>;
-    
-    <span class="cm">/** Spring bean factory. */</span>
-    <span class="kw">protected</span> BeanFactory beanFactory;
-
-    <span class="cm">/**
-     * @see ClickServlet#init()
-     */</span>
-    <span class="kw">public void</span> init() <span class="kw">throws</span>ServletException {
-        <span class="kw">super</span>.init();
-
-        String springPath = getInitParameter(SPRING_PATH);
-        <span class="kw">if</span> (springPath == <span class="kw">null</span>) {
-            String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
-            <span class="kw">throw new</span> UnavailableException(msg);
-        }
-        beanFactory = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
-    }
-
-    <span class="cm">/**
-     * @see ClickServlet#newPageInstance(String, Class)
-     */</span>
-    <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
-        String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
-        
-        <span class="kw">if</span> (beanFactory.containsBean(beanName)) {
-            <span class="kw">return</span> (Page) beanFactory.getBean(beanName);
-            
-        } <span class="kw">else</span> {
-            <span class="kw">return</span> pageClass.newIntance();
-        }
-    }
-} </pre>
-
-   In this example the Spring bean name is derived from the Page path, 
-   so the request of <span class="st">"/security/login.htm"</span> would map to a bean name of
-   <span class="st">"/security/login"</span>. If a corresponding Spring Page bean could not be found a 
-   new Page instance is created from the pageClass.
-   <p/>
-   The <a href="click-api/net/sf/click/Page.html#onDestroy()">Page.onDestroy()</a>
-   method can then be used to free any allocated resources to a Page object. 
+   The SpringClickServlet is contained in the Click <a href="extras.html">Extras</a> package.
 
    <h4>Spring Web MVC Framework</h4>
 
@@ -286,7 +246,7 @@ public interface Controller {
   <a name="jsp-support" class="heading"></a>
   <dt><b>Does Click support JSP?</b></dt>
   <dd>
-   Click does provide basic support for JSP pages. 
+   Click does provide support for JSP pages. 
    However JSP pages are not fully integated into Click like Velocity templates. This 
    will change in the near future and JSP pages will become first class citizens.
    <p/>
@@ -295,17 +255,35 @@ public interface Controller {
 
 <pre class="codeJava">
 <span class="kw">public class</span> CustomersTable <span class="kw">extends</span> Page {
+
     <span class="kw">public void</span> onGet() {
         List customers = CustomerDAO.getCustomers();
-        getContext().setRequestAttribute(<span class="st">"customers"</span>, customers);
-        
+        addModel(<span class="st">"customers"</span>, customers);        
         setForward(<span class="st">"customers-table.jsp"</span>);
     }
 } </pre>
 
-   Note you have to set request attributes to pass data to the JSP. In future releases the
-   Page model data will be added automatically to the request as named request attribute
-   values.
+   The page's model data values are automatically added to the request as
+   attributes so they are available in the JSP page. Other Click values added 
+   as request attributes include:
+   <p/>
+   <ul>
+  <li>context &nbsp; - &nbsp; 
+   the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li>format &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects
+  </li>
+  <li>messages &nbsp; - &nbsp; 
+   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   method
+  </li>
+  <li>path &nbsp; - &nbsp; the <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page template to render
+  </li>
+   </ul>
    <p/>
    To have this <tt>CustomersTable</tt> page automatically handle <tt>GET customer-table.htm</tt> 
    requests you will need to create an empty <tt>customer-table.htm</tt> file and
