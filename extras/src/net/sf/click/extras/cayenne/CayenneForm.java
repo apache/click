@@ -36,14 +36,54 @@ import org.objectstyle.cayenne.validation.ValidationResult;
 
 /**
  * Provides Cayenne data aware Form control.
+ * 
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> DepartmentEdit <span class="kw">extends</span> Page {
+ *
+ *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.class);
+ *
+ *    <span class="kw">public void</span> onInit() {
+ *        addControl(form);
+ *        
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>);
+ *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>);
+ *
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"OK"</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *    }
+ *
+ *    <span class="kw">public void</span> onGet() {
+ *        Department department = (Department)
+ *           getContext().getRequestAttribute(<span class="st">"department"</span>);
+ *
+ *        <span class="kw">if</span> (department != <span class="kw">null</span>) {
+ *            department = <span class="kw">new</span> Department();
+ *        }
+ *        form.setDataObject(department);
+ *    }
+ *
+ *    <span class="kw">public boolean</span> onOkClicked() {
+ *        <span class="kw">if</span> (form.isValid()) {
+ *           <span class="kw">if</span> (form.saveChanges()) {
+ *               setRedirect(<span class="st">"departments-view.htm"</span>);           
+ *           }
+ *        }
+ *        <span class="kw">return true</span>;
+ *    }
+ *
+ *    <span class="kw">public boolean</span> onCancelClicked() {
+ *        setRedirect(<span class="st">"departments-view.htm"</span>);
+ *        <span class="kw">return false</span>;
+ *    }
+ * } </pre>
  *
  * @author Andrus Adamchik
  * @author Malcolm Edgar
  */
 public class CayenneForm extends Form {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     protected HiddenField pkField = new HiddenField("DOPK", Integer.class);
     protected HiddenField classField = new HiddenField("DOCLASS", String.class);
     protected boolean metaDataApplied = false;
@@ -52,51 +92,51 @@ public class CayenneForm extends Form {
         super(name);
         add(pkField);
         add(classField);
-        
+
         if (!DataObject.class.isAssignableFrom(dataClass)) {
             String msg = "Not a DataObject class: " + dataClass;
             throw new IllegalArgumentException(msg);
         }
-        
+
         classField.setValue(dataClass.getName());
     }
-    
+
     public DataObject getDataObject() {
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
                 Class dataClass = Class.forName(classField.getValue());
                 DataObject dataObject = null;
-                
+
                 Integer id = (Integer) pkField.getValueObject();
                 if (id != null) {
                     dataObject = DataObjectUtils.objectForPK
                         (getDataContext(), dataClass,  id);
                 } else {
-                    dataObject = 
+                    dataObject =
                         getDataContext().createAndRegisterNewObject(dataClass);
                 }
-                
+
                 copyTo(dataObject, true);
-                
+
                 return dataObject;
-                
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
         return null;
     }
-    
+
     public void setDataObject(DataObject dataObject) {
         if (dataObject != null) {
             if (dataObject.getPersistenceState() != PersistenceState.TRANSIENT) {
                 int pk = DataObjectUtils.intPKForObject(dataObject);
-                pkField.setValue(new Integer(pk));                
+                pkField.setValue(new Integer(pk));
             }
             copyFrom(dataObject, true);
         }
     }
-    
+
     public boolean saveChanges() {
         // Load data object into data context
         getDataObject();
@@ -116,33 +156,33 @@ public class CayenneForm extends Form {
             return false;
         }
     }
-    
+
     public boolean onProcess() {
         applyMetaData();
         return super.onProcess();
     }
-    
+
     public String toString() {
         applyMetaData();
         return super.toString();
     }
-    
+
     protected void applyMetaData() {
         if (metaDataApplied) {
             return;
         }
-        
+
         try {
             Class dataClass = Class.forName(classField.getValue());
-            
-            ObjEntity objEntity = 
+
+            ObjEntity objEntity =
                 getDataContext().getEntityResolver().lookupObjEntity(dataClass);
 
             Iterator attributes = objEntity.getAttributes().iterator();
             while (attributes.hasNext()) {
                 ObjAttribute objAttribute = (ObjAttribute) attributes.next();
                 DbAttribute dbAttribute = objAttribute.getDbAttribute();
-                
+
                 Field field = getField(dbAttribute.getName());
                 if (field != null) {
                     field.setRequired(dbAttribute.isMandatory());
@@ -160,10 +200,10 @@ public class CayenneForm extends Form {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        
+
         metaDataApplied = true;
     }
-    
+
     protected DataContext getDataContext() {
         return DataContext.getThreadDataContext();
     }
