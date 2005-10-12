@@ -219,6 +219,12 @@ public abstract class Field implements Control {
     }
 
     /**
+     * Set the Field context and localize any <tt>"msg:"</tt> prefixed
+     * label or title values.
+     *
+     * @see #setLabel(String)
+     * @see #setTitle(String)
+     *
      * @see Control#setContext(Context)
      */
     public void setContext(Context context) {
@@ -227,9 +233,13 @@ public abstract class Field implements Control {
         }
         this.context = context;
 
-        if (label != null && label.startsWith("msg:")) {
-            String key = label.substring(4);
-            this.label = getMessage(key);
+        if (getLabel() != null && getLabel().startsWith("msg:")) {
+            String key = getLabel().substring(4);
+            setLabel(getMessage(key));
+        }
+        if (getTitle() != null && getTitle().startsWith("msg:")) {
+            String key = getTitle().substring(4);
+            setTitle(getMessage(key));
         }
     }
 
@@ -535,6 +545,11 @@ public abstract class Field implements Control {
 
     /**
      * Set the 'title' attribute tooltip message.
+     * <p/>
+     * If the given title value is prefixed with <tt>"msg:"</tt> then the title will be
+     * considered to be a localized message key. This value will be replaced
+     * with the localized message string for the given key when the Field's context
+     * is set.
      *
      * @param value the 'title' attribute tooltip message
      */
