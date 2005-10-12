@@ -36,7 +36,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * <pre class="codeJava">
  * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
- *     String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
+ *     String beanName = pageClass.getName();
  *
  *     <span class="kw">if</span> (beanFactory.containsBean(beanName)) {
  *         <span class="kw">return</span> (Page) beanFactory.getBean(beanName);
@@ -47,12 +47,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * } </pre>
  *
  * Spring Page beans are defined in a Sring application context XML file.
- * In this file Page bean id maps to the page request path excluding <tt>.htm</tt> extension:
+ * In this file the Page bean id maps to the page class name:
  *
  * <pre class="codeConfig">
  * &lt;beans&gt;
- *   &lt;bean singleton="false" id="/customer-edit" class="com.mycorp.pages.CustomerEdit"
- *         autowire="byName"/&gt;
+ *   &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit" 
+ *         singleton="false" autowire="byName"/&gt;
  *   ..
  * &lt;/beans&gt; </pre>
  *
@@ -113,6 +113,11 @@ public class SpringClickServlet extends ClickServlet {
     protected BeanFactory beanFactory;
 
     /**
+     * Initialize the SpringClickServlet and the Spring application context
+     * bean factory. An Spring <tt>ClassPathXmlApplicationContext</tt> bean
+     * factory is used and initialize with the servlet <tt>init-param</tt>
+     * named <tt>"spring-path"</tt>.
+     * 
      * @see ClickServlet#init()
      */
     public void init() throws ServletException {
@@ -127,10 +132,14 @@ public class SpringClickServlet extends ClickServlet {
     }
 
     /**
+     * Create a new Spring Page bean if defined in the application context, or
+     * a new Page instance otherwise. The bean name used is the full class name 
+     * of the given pageClass.
+     * 
      * @see ClickServlet#newPageInstance(String, Class)
      */
     protected Page newPageInstance(String path, Class pageClass) throws Exception {
-        String beanName = path.substring(0, path.indexOf("."));
+        String beanName = pageClass.getName();
 
         if (beanFactory.containsBean(beanName)) {
             return (Page) beanFactory.getBean(beanName);
