@@ -2,26 +2,30 @@
 Welcome to the Click
 ====================
 
-Click is a J2EE web application framework featuring a Component
-and Page oriented design. Click is an open source project 
+Click is a J2EE web application framework featuring a Page
+and Component oriented design. Click is an open source project 
 licensed using the Apache license. 
 
-Comprehensive HTML documentation is provided under:
-
-    webapps/click-documentation/index.html
-	
-Or online at:
+Comprehensive HTML documentation is available online at:
 
     http://click.sourceforge.net/
-	
-	
-To get started with the Click Examples see:
 
-    webapps/click-documentation/docs/examples.html
-  
-To get started with building Click see:
+This documentation is also available in the click-documentation.war file.
+	
+Distributed Click JAR files include:
 
-    webapps/click-documentation/docs/building.html
+   deploy/click-xx.jar        - Click runtime JAR including dependencies
+
+   deploy/click-xx-nodeps.jar - Click runtime JAR with no dependencies
+
+   deploy/click-extras-xx.jar - Click Extras JAR with no dependencies
+	
+
+Example pre-built web appliations include:
+
+   deploy/click-blank.war
+
+   deploy/click-examples.war
 
 
 Click is built using the J2SE 1.4.2 and Ant 1.6.5.
@@ -36,4 +40,16 @@ The main Ant targets include:
     help                  display the Help message
     javadoc               create Javadoc HTML files
 
-    Please ensure you have configured build.properties
+
+Please note to build-extras you will need to download the following jars:
+
+    cayenne-xx.jar  from  http://sourceforge.net/projects/cayenne
+
+    spring-xxx.jar  from  http://sourceforge.net/projects/springframework
+
+Then you will need to configure the build.properties entries:
+
+    jar.cayenne= location of cayenne-xx.jar
+
+    jar.spring= location of spring-xx.jar
+
