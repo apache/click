@@ -1,9 +1,7 @@
 CODE
-* try and remove Commons Upload and replace with JAR
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
-* XHTML vs HTML
 
 BUGS
 * control.css, missing menuarrow.gif --- .calendar .nav {
@@ -12,8 +10,6 @@ BUGS
 
 DOCUMENTATION
 * update Velocity documentation
-* add JSP integration notes
-* add I18N notes
 * provide more Menu Javadoc, need prettier example
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
@@ -21,7 +17,6 @@ DOCUMENTATION
 * update Control in diagrams, update Control classes diagram
 
 VELOCITY
-* get VelocityEngine and RuntimeService changes checked in
 * get Parser, ParsingException, ParsingErrorException, Template checked in
 * get Parse checked in
 
