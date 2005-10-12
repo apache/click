@@ -226,6 +226,11 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
+
+        if (label != null && label.startsWith("msg:")) {
+            String key = label.substring(4);
+            this.label = getMessage(key);
+        }
     }
 
     /**
@@ -357,6 +362,28 @@ public abstract class Field implements Control {
 
     /**
      * Set the Field display caption.
+     * <p/>
+     * If the given label value is prefixed with <tt>"msg:"</tt> then the label will be
+     * considered to be a localized message key. This value will be replaced
+     * with the localized message string for the given key when the Field's context
+     * is set.
+     * <p/>
+     * For examle:
+     *
+     * <pre class="codeJava">
+     * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
+     * nameField.setLabel(<span class="st">"msg:name.label"</span>);
+     *
+     * <span class="cm">// Or alternatively</span>
+     * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"msg:name.label"</span>); </pre>
+     *
+     * Will replace the Field label with the localized message
+     * <span class="red">Customer Name</span> for the key
+     * <span class="st">name.label</span>  when the context is set.
+     * This message would be defined in the <tt>/click-control.properties</tt> file:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">name.label</span>=<span class="red">Customer Name</span> </pre>
      *
      * @param label the display label of the Field.
      */
