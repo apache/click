@@ -35,20 +35,53 @@ import org.objectstyle.cayenne.validation.ValidationException;
 import org.objectstyle.cayenne.validation.ValidationResult;
 
 /**
- * Provides Cayenne data aware Form control.
- * 
+ * Provides Cayenne data aware Form control: &nbsp; &lt;form method='POST'&gt;.
+ *
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr>
+ * <td>
+ *
+ * <table class='fields'>
+ * <tr>
+ * <td align='left'><label>Department Name</label><span class="red">*</span></td>
+ * <td align='left'><input type='text' name='name' value='' size='35' /></td>
+ * </tr>
+ * <tr>
+ * <td align='left'><label>Description</label></td>
+ * <td align='left'><textarea name='description' cols='35' rows='3'></textarea></td>
+ * </tr>
+ * </table>
+ * <table class="buttons" align='right'>
+ * <tr><td>
+ * <input type='submit' name='ok' value='  OK  '/>&nbsp;<input type='submit' name='cancel' value=' Cancel '/>
+ * </td></tr>
+ * </table>
+ *
+ * </td>
+ * </tr>
+ * </table>
+ *
+ * <a href="http://objectstyle.org/cayenne/">Cayenne</a> is an Object Relational
+ * Mapping (ORM) framework. The CayenneForm supports creating (inserting) and
+ * saving (updating) Cayenne <tt>DataObject</tt> instances.
+ * <p/>
+ * The CayenneForm uses the thread local <tt>DataContext</tt> obtained via
+ * <tt>DataContext.getThreadDataContext()</tt> for all object for persistence
+ * operations.
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> DepartmentEdit <span class="kw">extends</span> Page {
  *
  *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.class);
  *
  *    <span class="kw">public void</span> onInit() {
+ *        form.setButtonAlign(<span class="st">"right"</span>);
  *        addControl(form);
- *        
- *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>);
- *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>);
  *
- *        form.add(<span class="kw">new</span> Submit(<span class="st">"OK"</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>, 35);
+ *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>, 35, 2);
+ *
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
  *    }
  *
@@ -57,15 +90,14 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *           getContext().getRequestAttribute(<span class="st">"department"</span>);
  *
  *        <span class="kw">if</span> (department != <span class="kw">null</span>) {
- *            department = <span class="kw">new</span> Department();
+ *            form.setDataObject(department);
  *        }
- *        form.setDataObject(department);
  *    }
  *
  *    <span class="kw">public boolean</span> onOkClicked() {
  *        <span class="kw">if</span> (form.isValid()) {
  *           <span class="kw">if</span> (form.saveChanges()) {
- *               setRedirect(<span class="st">"departments-view.htm"</span>);           
+ *               setRedirect(<span class="st">"departments-view.htm"</span>);
  *           }
  *        }
  *        <span class="kw">return true</span>;
@@ -84,10 +116,27 @@ public class CayenneForm extends Form {
 
     private static final long serialVersionUID = 1L;
 
+    /** The data object primary key hidden field. */
     protected HiddenField pkField = new HiddenField("DOPK", Integer.class);
+
+    /** The data object class name hidden field. */
     protected HiddenField classField = new HiddenField("DOCLASS", String.class);
+
+    /**
+     * The flag specifying that object validation meta data has been applied to
+     * the form fields.
+     */
     protected boolean metaDataApplied = false;
 
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new CayenneForm with the given form name and <tt>DataObject</tt>
+     * class.
+     *
+     * @param name the form name
+     * @param dataClass the <tt>DataObject</tt> class
+     */
     public CayenneForm(String name, Class dataClass) {
         super(name);
         add(pkField);
@@ -101,6 +150,25 @@ public class CayenneForm extends Form {
         classField.setValue(dataClass.getName());
     }
 
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the thread local <tt>DataContext</tt> obtained via
+     * <tt>DataContext.getThreadDataContext()</tt>.
+     *
+     * @return the thread local <tt>DataContext</tt>
+     */
+    public DataContext getDataContext() {
+        return DataContext.getThreadDataContext();
+    }
+
+    /**
+     * Return a <tt>DataObject</tt> from the form with the form field values
+     * copied into the data object's properties.
+     *
+     * @return the data object from the form with the form field values applied
+     *  to the data object properties.
+     */
     public DataObject getDataObject() {
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
@@ -127,6 +195,13 @@ public class CayenneForm extends Form {
         return null;
     }
 
+
+    /**
+     * Set the given <tt>DataObject</tt> in the form and copy the object's
+     * properties into the form field values.
+     *
+     * @param dataObject the <tt>DataObject</tt> to set
+     */
     public void setDataObject(DataObject dataObject) {
         if (dataObject != null) {
             if (dataObject.getPersistenceState() != PersistenceState.TRANSIENT) {
@@ -137,6 +212,31 @@ public class CayenneForm extends Form {
         }
     }
 
+    /**
+     * Save the object to the database committing all changes in the
+     * <tt>DataContext</tt> and return true.
+     * If a <tt>ValidationException</tt>
+     * occured then all <tt>DataContext</tt> changes will be rolled back,
+     * the valiation error will be set as the Form's error and the method will
+     * return false.
+     * <p/>
+     * If no <tt>DataObject</tt> is added to the form using <tt>setDataObject()</tt>
+     * then this method will: <ul>
+     * <li>create and register a new object instance with the
+     *    <tt>DataContext</tt></li>
+     * <li>copy the form's field values to the objects properties</li>
+     * <li>insert a new object record in the database</li>
+     * </ul>
+     * <p/>
+     * If an existing persistent <tt>DataObject</tt> is added to the form using
+     * <tt>setDataObject()</tt> then this method will: <ul>
+     * <li>load the persistent object record from the database</li>
+     * <li>copy the form's field values to the objects properties</li>
+     * <li>update the object record in the database</li>
+     * </ul>
+     *
+     * @return true if the <tt>DataObject</tt> was saved or false otherwise
+     */
     public boolean saveChanges() {
         // Load data object into data context
         getDataObject();
@@ -157,16 +257,40 @@ public class CayenneForm extends Form {
         }
     }
 
+    /**
+     * This method applies the object meta data to the form fields and then
+     * invokes the <tt>super.onProcess()</tt> method.
+     *
+     * @see Form#onProcess()
+     */
     public boolean onProcess() {
         applyMetaData();
         return super.onProcess();
     }
 
+    /**
+     * This method applies the object meta data to the form fields and then
+     * invokes the <tt>super.toString()</tt> method.
+     *
+     * @see Form#toString()
+     */
     public String toString() {
         applyMetaData();
         return super.toString();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Applies the <tt>DataObject</tt> validation database meta data to the
+     * form fields.
+     * <p/>
+     * The field validation attributes include:
+     * <ul>
+     * <li>required - is a mandatory field and cannot be null</tt>
+     * <li>maxLength - the maximum length of the field</tt>
+     * </ul>
+     */
     protected void applyMetaData() {
         if (metaDataApplied) {
             return;
@@ -204,7 +328,4 @@ public class CayenneForm extends Form {
         metaDataApplied = true;
     }
 
-    protected DataContext getDataContext() {
-        return DataContext.getThreadDataContext();
-    }
 }
