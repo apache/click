@@ -63,16 +63,23 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *
  * <a href="http://objectstyle.org/cayenne/">Cayenne</a> is an Object Relational
  * Mapping (ORM) framework. The CayenneForm supports creating (inserting) and
- * saving (updating) Cayenne <tt>DataObject</tt> instances.
+ * saving (updating) Cayenne <tt>DataObject</tt> instances. This form will
+ * automatically apply the given data objects validation constraints to the
+ * form fields.
  * <p/>
  * The CayenneForm uses the thread local <tt>DataContext</tt> obtained via
  * <tt>DataContext.getThreadDataContext()</tt> for all object for persistence
  * operations.
- *
+ * <p/>
+ * The example below provides a <tt>Department</tt> data object creation
+ * and editing page. To edit an existing department object, the object is passed
+ * to the page as a request parameter. Otherwise a new department object will
+ * be created when {@link #saveChanges()} is called. 
+ * 
  * <pre class="codeJava">
  * <span class="kw">public class</span> DepartmentEdit <span class="kw">extends</span> Page {
  *
- *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.class);
+ *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.<span class="kw">class</span>);
  *
  *    <span class="kw">public void</span> onInit() {
  *        form.setButtonAlign(<span class="st">"right"</span>);
