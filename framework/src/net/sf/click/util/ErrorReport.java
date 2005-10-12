@@ -602,11 +602,15 @@ public class ErrorReport {
      */
     protected void writeMap(Map map, StringBuffer buffer) {
         for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
-            String name = i.next().toString();
-            String value = map.get(name).toString();
-            buffer.append(name);
+            Object key = i.next();
+            buffer.append(key);
             buffer.append("=");
-            buffer.append(StringEscapeUtils.escapeHtml(value));
+            Object value = map.get(key);
+            if (value != null) {
+                buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
+            } else {
+                buffer.append("null");
+            }
             buffer.append("</br>");
         }
         if (map.isEmpty()) {
