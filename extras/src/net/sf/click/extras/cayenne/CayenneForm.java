@@ -74,8 +74,8 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  * The example below provides a <tt>Department</tt> data object creation
  * and editing page. To edit an existing department object, the object is passed
  * to the page as a request parameter. Otherwise a new department object will
- * be created when {@link #saveChanges()} is called. 
- * 
+ * be created when {@link #saveChanges()} is called.
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> DepartmentEdit <span class="kw">extends</span> Page {
  *

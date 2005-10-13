@@ -9,6 +9,9 @@ BUGS
 }
 
 DOCUMENTATION
+* FAQ topic performance
+* FAQ topic back button - possibly add example
+* FAQ topic post redirect pattern
 * update Velocity documentation
 * provide more Menu Javadoc, need prettier example
 * provide more Column Javadoc
