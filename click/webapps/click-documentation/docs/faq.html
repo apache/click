@@ -26,11 +26,15 @@
   </li>
   <li><a href="#actionlink-parameters">How do you create an ActionLink with several parameters?</a>
   </li>
+  <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
+  </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
   <li><a href="#jsp-support">Does Click support JSP?</a>
   </li>
-  <li><a href="#logging">Why doesn't Click use Commons Logging or Log4J for logging?</a>
+  <li><a href="#performance">What is the performance of Click?</a>
+  </li>
+  <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
   </li>
   <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
   </li>  
@@ -123,7 +127,7 @@
       <li>ensures you have a common look and feel across you application</li>
       <li>makes your application more robust, as there is less code to test</li>
    </ul>
-   For a live demonstation of page templating deploy and run the
+   For a live demonstration of page templating deploy and run the
    <a href="examples.html">click-examples</a> application.
   </dd>
     
@@ -192,7 +196,7 @@
    with the localized message string for the given key when the Field's context 
    is set.  
    <p/>
-   For examle:
+   For example:
    
 <pre class="codeJava">
 TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
@@ -240,6 +244,23 @@ TextField nameField = <span class="kw">new</span> TextField(<span class="st">"na
     
     <span class="kw">return true</span>;
 } </pre>
+  </dd>
+  
+      
+  <a name="multiple-posts" class="heading"></a>
+  <dt><b>How can you prevent multiple form posts?</b></dt>
+  <dd>
+  You can prevent multiple form posts by using the Post Redirect pattern. With 
+  this pattern once the user has posted form you redirect another page. If the
+  user then presses the refresh button, they will making a GET request on the
+  current page.
+  <p/>
+  Please see the Click Examples 'Page Flow' for a demostration of this pattern.
+  <p/>
+  When you want to be doubly careful, store a token in the users session to 
+  make sure they don't do the same thing twice. The Page 
+  <tt>onSecurityCheck()</tt> method is a good location for this type of
+  functionality.
   </dd>
 
   <a name="spring-integration" class="heading"></a>
@@ -320,12 +341,56 @@ public interface Controller {
 
 <pre class="codeConfig">
 &lt;page path="<span class="blue">customers-table.htm</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
-
   </dd>
     
-  
+  <a name="performance" class="heading"></a>
+  <dt><b>What is the performance of Click?</b></dt>
+  <dd>
+  Click is fast. Reported performance comparisons between Tapestry and Click 
+  indicate that Click is much faster.
+  <p/>
+  When the Click framework processes a request it creates a relatively small 
+  number of objects. These include a Page, a Context, a Format and a number of
+  Contols which in turn contain some Lists, Maps and Strings.
+  <p/>
+  The allocation of small/moderate numbers of short lived objects by 
+  modern JVMs is very, very fast. Please see the IBM article 
+  <a target="blank" href="http://www-128.ibm.com/developerworks/java/library/j-jtp09275.html">Urban performance legends, revisited</a>.
+  <p/>
+  When Click is in production or profile mode it performs no synchronization which 
+  could lead to blocking.
+  <p/>
+  The amount of actual work Click does it pretty small. 
+  <p/>
+  The <tt>onProcess()</tt> methods traverse a list of Controls and do simple 
+  operations.  
+  <p/>
+  The control <tt>toString()</tt> methods can allocate large StringBuffers when 
+  rendering tables, but forms rarely get larger than 4,000 characters.  
+  When Click creates a new StringBuffer it attempts to determine the
+  maximum likely size, to avoid additional memory allocation and arraycopy
+  operations.
+  <p/>
+  There is not much reflection in Click at all. With really only the use of
+  control call back listeners:
+  <blockquote> 
+  <tt style="white-space:nowrap">okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);</tt>
+  </blockquote>
+  The next step in processing the request is rendering the response.
+  Velocity is largely responsible for this step. 
+  <p/>
+  Velocity is fast.
+  <p/>
+  While hard performance numbers are difficult to come by in this area, 
+  until recently Velocity was considered to be faster than JSP. 
+  However, recent discussions on Velocity mail lists indicate that JSP 
+  compilers have improved to the point where JSP has a small performance lead over
+  Velocity. What ever the case, JSP is very fast and so is Velocity.
+  </dd>
+
+
   <a name="logging" class="heading"></a>
-  <dt><b>Why doesn't Click use Commons Logging or Log4J for logging?</b></dt>
+  <dt><b>Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
    Click does not use Log4J with Velocity because of an appender closing
    memory leak  associated with garbage collecting VelocityEngines. This issue is being

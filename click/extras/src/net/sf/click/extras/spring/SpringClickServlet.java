@@ -51,7 +51,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * <pre class="codeConfig">
  * &lt;beans&gt;
- *   &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit" 
+ *   &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
  *         singleton="false" autowire="byName"/&gt;
  *   ..
  * &lt;/beans&gt; </pre>
@@ -117,7 +117,7 @@ public class SpringClickServlet extends ClickServlet {
      * bean factory. An Spring <tt>ClassPathXmlApplicationContext</tt> bean
      * factory is used and initialize with the servlet <tt>init-param</tt>
      * named <tt>"spring-path"</tt>.
-     * 
+     *
      * @see ClickServlet#init()
      */
     public void init() throws ServletException {
@@ -133,9 +133,9 @@ public class SpringClickServlet extends ClickServlet {
 
     /**
      * Create a new Spring Page bean if defined in the application context, or
-     * a new Page instance otherwise. The bean name used is the full class name 
+     * a new Page instance otherwise. The bean name used is the full class name
      * of the given pageClass.
-     * 
+     *
      * @see ClickServlet#newPageInstance(String, Class)
      */
     protected Page newPageInstance(String path, Class pageClass) throws Exception {

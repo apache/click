@@ -45,7 +45,7 @@ Please note to build-extras you will need to download the following jars:
 
     cayenne-xx.jar  from  http://sourceforge.net/projects/cayenne
 
-    spring-xxx.jar  from  http://sourceforge.net/projects/springframework
+    spring-xx.jar   from  http://sourceforge.net/projects/springframework
 
 Then you will need to configure the build.properties entries:
 
