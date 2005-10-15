@@ -44,9 +44,10 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -186,13 +187,10 @@ class ClickApp implements EntityResolver {
                  + DEFAULT_APP_CONFIG);
         }
 
-        SAXBuilder saxBuilder = new SAXBuilder();
-        saxBuilder.setEntityResolver(this);
-
         try {
-            Document document = saxBuilder.build(inputStream);
+            Document document = ClickUtils.buildDocument(inputStream, this);
 
-            Element rootElm = document.getRootElement();
+            Element rootElm = document.getDocumentElement();
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
@@ -558,12 +556,12 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadMode(Element rootElm) {
-        Element modeElm = rootElm.getChild("mode");
+        Element modeElm = getChild(rootElm, "mode");
 
         String logto = "console";
 
         if (modeElm != null) {
-            String modeValue = modeElm.getAttributeValue("value");
+            String modeValue = modeElm.getAttribute("value");
 
             if (modeValue.equalsIgnoreCase("production")) {
                 mode = PRODUCTION;
@@ -581,7 +579,7 @@ class ClickApp implements EntityResolver {
             }
 
             // Configure loggig to console or servlet context.
-            logto = modeElm.getAttributeValue("logto");
+            logto = modeElm.getAttribute("logto");
             if (StringUtils.isBlank(logto)) {
                 logto = "console";
             }
@@ -646,10 +644,10 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadFormatClass(Element rootElm) throws ClassNotFoundException {
-        Element formatElm = rootElm.getChild("format");
+        Element formatElm = getChild(rootElm, "format");
 
         if (formatElm != null) {
-            String classname = formatElm.getAttributeValue("classname");
+            String classname = formatElm.getAttribute("classname");
 
             if (classname == null) {
                 throw new RuntimeException
@@ -683,14 +681,14 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadPages(Element rootElm) throws ClassNotFoundException {
-        Element pagesElm = rootElm.getChild("pages");
+        Element pagesElm = getChild(rootElm, "pages");
 
         if (pagesElm == null) {
             throw new RuntimeException
                 ("required configuration 'pages' element missing.");
         }
 
-        pagesPackage = pagesElm.getAttributeValue("package");
+        pagesPackage = pagesElm.getAttribute("package");
         if (StringUtils.isBlank(pagesPackage)) {
             pagesPackage = "";
         }
@@ -702,7 +700,7 @@ class ClickApp implements EntityResolver {
         }
 
         boolean automap = false;
-        String automapStr = pagesElm.getAttributeValue("automapping");
+        String automapStr = pagesElm.getAttribute("automapping");
         if (StringUtils.isBlank(automapStr)) {
             automapStr = "false";
         }
@@ -716,7 +714,7 @@ class ClickApp implements EntityResolver {
             throw new RuntimeException(msg);
         }
 
-        Element headersElm = rootElm.getChild("headers");
+        Element headersElm = getChild(rootElm, "headers");
         if (headersElm != null) {
             commonHeaders =
                 Collections.unmodifiableMap(loadHeadersMap(headersElm));
@@ -724,7 +722,7 @@ class ClickApp implements EntityResolver {
             commonHeaders = Collections.EMPTY_MAP;
         }
 
-        List pageList = pagesElm.getChildren();
+        List pageList = getChildren(pagesElm, "page");
 
         if (!pageList.isEmpty() && logger.isDebugEnabled()) {
             logger.debug("click.xml pages:");
@@ -733,24 +731,17 @@ class ClickApp implements EntityResolver {
         for (int i = 0; i < pageList.size(); i++) {
             Element pageElm = (Element) pageList.get(i);
 
-            if (pageElm.getName().equals("page")) {
-                ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
-                        pagesPackage,
-                        commonHeaders,
-                        formatClass);
+            ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
+                    pagesPackage,
+                    commonHeaders,
+                    formatClass);
 
-                pageByPathMap.put(page.getPath(), page);
+            pageByPathMap.put(page.getPath(), page);
 
-                if (logger.isDebugEnabled()) {
-                    String msg =
-                        page.getPath() + " -> " + page.getPageClass().getName();
-                    logger.debug(msg);
-                }
-
-            } else {
-                String msg = "click.xml <pages> contains a non <page>"
-                    + " element: <" + pageElm.getName() + "/>";
-                logger.warn(msg);
+            if (logger.isDebugEnabled()) {
+                String msg =
+                    page.getPath() + " -> " + page.getPageClass().getName();
+                logger.debug(msg);
             }
         }
 
@@ -885,18 +876,18 @@ class ClickApp implements EntityResolver {
     private static Map loadHeadersMap(Element parentElm) {
         Map headersMap = new HashMap();
 
-        List headerList = parentElm.getChildren("header");
+        List headerList = getChildren(parentElm, "header");
 
         for (int i = 0, size = headerList.size(); i < size; i++) {
             Element header = (Element) headerList.get(i);
 
-            String name = header.getAttributeValue("name");
-            String type = header.getAttributeValue("type");
-            String propertyValue = header.getAttributeValue("value");
+            String name = header.getAttribute("name");
+            String type = header.getAttribute("type");
+            String propertyValue = header.getAttribute("value");
 
             Object value = null;
 
-            if (type == null || "String".equalsIgnoreCase(type)) {
+            if ("".equals(type) || "String".equalsIgnoreCase(type)) {
                 value = propertyValue;
             } else if ("Integer".equalsIgnoreCase(type)) {
                 value = Integer.valueOf(propertyValue);
@@ -1005,6 +996,33 @@ class ClickApp implements EntityResolver {
         return pageClass;
     }
 
+    private Element getChild(Element element, String name) {
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    return (Element) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static List getChildren(Element element, String name) {
+        List list = new ArrayList();
+        NodeList nodeList = element.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    list.add(node);
+                }
+            }
+        }
+        return list;
+    }
+
     // ---------------------------------------------------------- Inner Classes
 
     private static class PageElm {
@@ -1030,7 +1048,7 @@ class ClickApp implements EntityResolver {
             headers = Collections.unmodifiableMap(aggregationMap);
 
             // Set path
-            String pathValue = element.getAttributeValue("path");
+            String pathValue = element.getAttribute("path");
             if (pathValue.charAt(0) != '/') {
                 path = "/" + pathValue;
             } else {
@@ -1038,7 +1056,7 @@ class ClickApp implements EntityResolver {
             }
 
             // Set pageClass
-            String value = element.getAttributeValue("classname");
+            String value = element.getAttribute("classname");
             if (value != null) {
                 if (pagesPackage.trim().length() > 0) {
                     value = pagesPackage + "." + value;
