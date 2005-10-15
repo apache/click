@@ -34,6 +34,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.click.control.DateField;
 import net.sf.click.control.Field;
@@ -44,6 +46,8 @@ import net.sf.click.control.Label;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
 
 /**
  * Provides miscellaneous Form, String and Stream utility methods.
@@ -674,4 +678,42 @@ public class ClickUtils {
         return buffer.toString();
     }
 
+    /**
+     * Return a new XML Document for the given input stream.
+     *
+     * @param inputStream the file input stream
+     * @return new XML Document
+     * @throws RuntimeException if a parsing error occurs
+     */
+    public static Document buildDocument(InputStream inputStream) {
+        return buildDocument(inputStream, null);
+    }
+
+    /**
+     * Return a new XML Document for the given input stream and XML entity
+     * resolver.
+     *
+     * @param inputStream the file input stream
+     * @param entityResolver the XML entity resolver
+     * @return new XML Document
+     * @throws RuntimeException if a parsing error occurs
+     */
+    public static Document buildDocument(InputStream inputStream,
+                                         EntityResolver entityResolver) {
+         try {
+             DocumentBuilderFactory factory =
+                 DocumentBuilderFactory.newInstance();
+
+             DocumentBuilder builder = factory.newDocumentBuilder();
+
+             if (entityResolver != null) {
+                 builder.setEntityResolver(entityResolver);
+             }
+
+             return builder.parse(inputStream);
+
+         } catch (Exception ex) {
+             throw new RuntimeException("Error parsing XML", ex);
+         }
+    }
 }

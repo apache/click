@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import net.sf.click.Context;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Provides hierarchical Menu component. Application menus can be defined
@@ -94,14 +96,14 @@ public class Menu implements Serializable {
             throw new IllegalArgumentException("Null menuElement parameter");
         }
 
-        setLabel(menuElement.getAttributeValue("label"));
-        setPath(menuElement.getAttributeValue("path"));
-        String titleAtr = menuElement.getAttributeValue("title");
+        setLabel(menuElement.getAttribute("label"));
+        setPath(menuElement.getAttribute("path"));
+        String titleAtr = menuElement.getAttribute("title");
         if (StringUtils.isNotBlank(titleAtr)) {
             setTitle(titleAtr);
         }
 
-        String rolesValue = menuElement.getAttributeValue("roles");
+        String rolesValue = menuElement.getAttribute("roles");
         if (!StringUtils.isBlank(rolesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(rolesValue, ",");
             while (tokenizer.hasMoreTokens()) {
@@ -109,10 +111,12 @@ public class Menu implements Serializable {
             }
         }
 
-        List childElements = menuElement.getChildren("menu");
-        for (int i = 0, size = childElements.size(); i < size; i++) {
-            Element childElement = (Element) childElements.get(i);
-            getChildren().add(new Menu(childElement));
+        NodeList childElements = menuElement.getChildNodes();
+        for (int i = 0, size = childElements.getLength(); i < size; i++) {
+            Node node = childElements.item(i);
+            if (node instanceof Element) {
+                getChildren().add(new Menu((Element) node));
+            }
         }
     }
 
@@ -297,23 +301,17 @@ public class Menu implements Serializable {
                     throw new RuntimeException(msg);
                 }
 
-                SAXBuilder saxBuilder = new SAXBuilder();
+                Document document = ClickUtils.buildDocument(inputStream);
 
-                try {
-                    Document document = saxBuilder.build(inputStream);
+                Element rootElm = document.getDocumentElement();
 
-                    Element rootElm = document.getRootElement();
+                NodeList list = rootElm.getChildNodes();
 
-                    List list = rootElm.getChildren("menu");
-
-                    for (int i = 0; i < list.size(); i++) {
-                        Element menuElm = (Element) list.get(i);
-                        menu.getChildren().add(new Menu(menuElm));
+                for (int i = 0; i < list.getLength(); i++) {
+                    Node node = list.item(i);
+                    if (node instanceof Element) {
+                        menu.getChildren().add(new Menu((Element) node));
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
                 }
 
                 rootMenu = menu;
