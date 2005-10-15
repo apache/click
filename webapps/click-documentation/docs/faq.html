@@ -268,7 +268,8 @@ TextField nameField = <span class="kw">new</span> TextField(<span class="st">"na
   <dd>
    To integrate Spring with Click configure the
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
-   instead of the normal <tt>ClickServlet</tt>. 
+   instead of the normal 
+   <a href="extras-api/net/sf/click/ClickServlet.html">ClickServlet</a>. 
    <p/>
    The SpringClickServlet is contained in the Click <a href="extras.html">Extras</a> package.
 
@@ -346,8 +347,10 @@ public interface Controller {
   <a name="performance" class="heading"></a>
   <dt><b>What is the performance of Click?</b></dt>
   <dd>
-  Click is fast. Reported performance comparisons between Tapestry and Click 
-  indicate that Click is much faster.
+  Click is fast. 
+  <p/>
+  Reported performance comparisons between Tapestry 3.0.3 and Click 0.12
+  indicate that Click is almost 3x faster.
   <p/>
   When the Click framework processes a request it creates a relatively small 
   number of objects. These include a Page, a Context, a Format and a number of
@@ -360,26 +363,26 @@ public interface Controller {
   When Click is in production or profile mode it performs no synchronization which 
   could lead to blocking.
   <p/>
-  The amount of actual work Click does it pretty small. 
+  The amount of actual work Click does is pretty small. 
   <p/>
   The <tt>onProcess()</tt> methods traverse a list of Controls and do simple 
   operations.  
   <p/>
-  The control <tt>toString()</tt> methods can allocate large StringBuffers when 
+  The Control <tt>toString()</tt> methods can allocate large StringBuffers when 
   rendering tables, but forms rarely get larger than 4,000 characters.  
   When Click creates a new StringBuffer it attempts to determine the
-  maximum likely size, to avoid additional memory allocation and arraycopy
+  maximum likely size to avoid additional memory allocation and arraycopy
   operations.
   <p/>
-  There is not much reflection in Click at all. With really only the use of
-  control call back listeners:
+  There is not much reflection in Click at all. With reflection only really used by
+  the Control call back listeners:
   <blockquote> 
   <tt style="white-space:nowrap">okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);</tt>
   </blockquote>
   The next step in processing the request is rendering the response.
   Velocity is largely responsible for this step. 
   <p/>
-  Velocity is fast.
+  Velocity is also fast.
   <p/>
   While hard performance numbers are difficult to come by in this area, 
   until recently Velocity was considered to be faster than JSP. 
@@ -413,8 +416,8 @@ public interface Controller {
    to learn.
    <p/>
    One of FreeMarker's strong points compared to Velocity is error reporting.
-   This issue is addressed in Click by using a custom Velocity 1.5 build 
-   to provided enhanced error reporting.
+   This issue is addressed in Click by using the new enhanced error reporting
+   feature of Velocity 1.5.
    <p/>
    Click will render the source code with the error. For example:
    <ul>

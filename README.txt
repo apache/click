@@ -8,7 +8,7 @@ licensed using the Apache license.
 
 Comprehensive HTML documentation is available online at:
 
-    http://click.sourceforge.net/
+    http://click.sourceforge.net
 
 This documentation is also available in the click-documentation.war file.
 	
@@ -16,7 +16,7 @@ Distributed Click JAR files include:
 
    deploy/click-xx.jar        - Click runtime JAR including dependencies
 
-   deploy/click-xx-nodeps.jar - Click runtime JAR with no dependencies
+   deploy/click-nodeps-xx.jar - Click runtime JAR with no dependencies
 
    deploy/click-extras-xx.jar - Click Extras JAR with no dependencies
 	
