@@ -71,7 +71,7 @@ public class FieldSetDemo extends BorderedPage {
         form.add(new Submit("    OK    ", this, "onOkClick"));
         form.add(new Submit("  Cancel  ", this, "onCancelClick"));
     }
-    
+
     public boolean onOkClick() {
         if (form.isValid()) {
             List fieldList = ClickUtils.getFormFields(form);
