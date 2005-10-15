@@ -237,6 +237,7 @@ public class FieldSet extends Field {
         this.context = context;
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
+            field.setContext(context);
             field.setForm(form);
         }
     }
