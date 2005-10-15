@@ -1,8 +1,12 @@
 package examples.page;
 
+import java.util.Iterator;
+import java.util.List;
+
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.CreditCardField;
 import net.sf.click.control.DateField;
+import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.IntegerField;
@@ -11,6 +15,7 @@ import net.sf.click.control.RadioGroup;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a form FieldSet example.
@@ -19,8 +24,9 @@ import net.sf.click.control.TextField;
  */
 public class FieldSetDemo extends BorderedPage {
 
+    Form form = new Form("form");
+
     public void onInit() {
-        Form form = new Form("form");
         addControl(form);
 
         // Delivery fieldset
@@ -62,8 +68,19 @@ public class FieldSetDemo extends BorderedPage {
         expiryField.setMaxLength(4);
         paymentFieldSet.add(expiryField);
 
-        form.add(new Submit("    OK    "));
+        form.add(new Submit("    OK    ", this, "onOkClick"));
         form.add(new Submit("  Cancel  ", this, "onCancelClick"));
+    }
+    
+    public boolean onOkClick() {
+        if (form.isValid()) {
+            List fieldList = ClickUtils.getFormFields(form);
+            for (Iterator i = fieldList.iterator(); i.hasNext(); ) {
+                Field field = (Field) i.next();
+                System.out.println(field.getName() + "=" + field.getValue());
+            }
+        }
+        return true;
     }
 
     public boolean onCancelClick() {

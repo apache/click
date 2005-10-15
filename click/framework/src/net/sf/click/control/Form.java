@@ -882,6 +882,15 @@ public class Form implements Control {
         if (field != null) {
             return field.getValue();
         } else {
+            for (int i = 0; i < getFieldList().size(); i++) {
+                field = (Field) getFieldList().get(i);
+                if (field instanceof FieldSet) {
+                    FieldSet fieldSet = (FieldSet) field;
+                    if (fieldSet.getField(name) != null) {
+                        return fieldSet.getField(name).getValue();
+                    }
+                }
+            }
             return null;
         }
     }
