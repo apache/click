@@ -140,14 +140,17 @@
             <exclude name=".**"/> 
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
+            <exclude name="lib/${jar.codec}"/>
+            <exclude name="lib/${jar.collections}"/>
+            <exclude name="lib/${jar.lang}"/>
+            <exclude name="lib/${jar.junit}"/>
+            <exclude name="lib/${jar.servlet}"/>
+            <exclude name="lib/${jar.spring}"/>
+            <exclude name="lib/${jar.upload}"/>
             <exclude name="**/Thumbs.db"/>
-            <exclude name="framework/classes/**"/>
-            <exclude name="extras/classes/**"/> 
-            <exclude name="lib/junit-*.*"/> 
-            <exclude name="webapps/click-blank/WEB-INF/classes/**"/>
+            <exclude name="**/classes/**"/>
             <exclude name="webapps/click-cayenne/**"/>  
             <exclude name="webapps/click-documentation/**"/> 
-            <exclude name="webapps/click-examples/WEB-INF/classes/**"/>  
          </fileset>
       </zip>
    </target>  
@@ -291,7 +294,7 @@
          <classpath>
             <pathelement location="${jar.cayenne}"/>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="${jar.spring}"/>
+            <pathelement location="lib/${jar.spring}"/>
             <pathelement location="deploy/click-${version}.jar"/>
          </classpath>
          <packageset dir="extras/src">
