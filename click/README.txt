@@ -36,6 +36,7 @@ The main Ant targets include:
     build-framework       build framework JAR file
     build-release         build release ZIP file
     build-webapps         build web application WAR files
+    get-deps              download JAR dependencies
     deploy-webapps        copy WAR files to application server
     help                  display the Help message
     javadoc               create Javadoc HTML files
@@ -45,11 +46,7 @@ Please note to build-extras you will need to download the following jars:
 
     cayenne-xx.jar  from  http://sourceforge.net/projects/cayenne
 
-    spring-xx.jar   from  http://sourceforge.net/projects/springframework
-
 Then you will need to configure the build.properties entries:
 
     jar.cayenne= location of cayenne-xx.jar
-
-    jar.spring= location of spring-xx.jar
 
