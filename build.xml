@@ -5,7 +5,9 @@
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
-   <property name="jar.servlet" value="servlet-2.3.1.jar"/>
+   <property name="jar.junit" value="junit-3.8.1.jar"/>
+   <property name="jar.servlet" value="servlet-api-2.4.jar"/>
+   <property name="jar.spring" value="spring-1.2.5.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.0.jar"/>
    <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
 	
@@ -19,6 +21,31 @@
 
    <!-- Tasks -->
    
+   <target name="get-deps" description="download JAR dependencies">
+      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <get src="${repository}/commons-codec/jars/${jar.codec}"
+           dest="lib/${jar.codec}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-collections/jars/${jar.collections}"
+           dest="lib/${jar.collections}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-lang/jars/${jar.lang}"
+           dest="lib/${jar.lang}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-fileupload/jars/${jar.upload}"
+           dest="lib/${jar.upload}"
+           usetimestamp="true"/>
+      <get src="${repository}/junit/jars/${jar.junit}"
+           dest="lib/${jar.junit}"
+           usetimestamp="true"/>
+      <get src="${repository}/javax.servlet/jars/${jar.servlet}"
+           dest="lib/${jar.servlet}"
+           usetimestamp="true"/>
+      <get src="${repository}/springframework/jars/${jar.spring}"
+           dest="lib/${jar.spring}"
+           usetimestamp="true"/>
+   </target>
+
    <target name="build-all" 
            depends="build-framework, build-extras, build-webapps" 
            description="build Click framework, extras and webapps"/>
@@ -88,7 +115,7 @@
          <classpath>
             <pathelement location="${jar.cayenne}"/>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="${jar.spring}"/>
+            <pathelement location="lib/${jar.spring}"/>
             <pathelement location="deploy/click-${version}.jar"/>
          </classpath>
       </javac>  
@@ -216,6 +243,7 @@
       <echo message="build-release         build release ZIP file"/>
       <echo message="build-webapps         build web application WAR files"/> 
       <echo message="deploy-webapps        copy WAR files to application server"/>
+      <echo message="get-deps              download JAR dependencies"/>  
       <echo message="help                  display the Help message"/>  
       <echo message="javadoc               create Javadoc HTML files"/> 
       <echo/>
