@@ -18,7 +18,7 @@ Distributed Click JAR files include:
 
    deploy/click-nodeps-xx.jar - Click runtime JAR with no dependencies
 
-   deploy/click-extras-xx.jar - Click Extras JAR with no dependencies
+   deploy/click-extras-xx.jar - Click Extras JAR
 	
 
 Example pre-built web appliations include:
@@ -36,17 +36,17 @@ The main Ant targets include:
     build-framework       build framework JAR file
     build-release         build release ZIP file
     build-webapps         build web application WAR files
-    get-deps              download JAR dependencies
     deploy-webapps        copy WAR files to application server
+    get-deps              download JAR dependencies
     help                  display the Help message
     javadoc               create Javadoc HTML files
 
 
 Please note to build-extras you will need to download the following jars:
 
-    cayenne-xx.jar  from  http://sourceforge.net/projects/cayenne
+    cayenne.jar  from  http://sourceforge.net/projects/cayenne
 
 Then you will need to configure the build.properties entries:
 
-    jar.cayenne= location of cayenne-xx.jar
+    jar.cayenne= location of cayenne.jar
 

@@ -24,17 +24,24 @@
   an Ant installation (1.6.5 or later).<p/>
   </li>
 
-  <li>Run the Ant target <tt>get-deps</tt>, <tt>build-framework</tt> to build 
-  the framework:
+
+  <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
+  from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
   <pre class="codeConfig">
-  ant get-deps build-framework </pre>
+  ant get-deps </pre>
+  </li>
+
+  <li>Run the Ant target <tt>build-framework</tt> to build the framework:
+  <pre class="codeConfig">
+  ant build-framework </pre>
   </li>
 
 </ol>
 
 <h3>Building Click Extras</h3>
 <ol>
-  <li>Ensure the above configurations have been made.<p/>
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
   </li>
   
   <li>Download the 
@@ -48,14 +55,15 @@
 
   <li>Run the Ant targets <tt>framework</tt> and <tt>build-extras</tt>:
   <pre class="codeConfig">
-  ant get-deps build-framework build-extras </pre>
+  ant build-framework build-extras </pre>
   </li>
 </ol>
 
 <h3>Building Webapps</h3>
 To build the Click web applications:
 <ol>
-  <li>Ensure the above configurations have been made.<p/>
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
   </li>
   
   <li>Run the Ant target <tt>build-all</tt>:
