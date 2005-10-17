@@ -254,7 +254,6 @@
    </target>
  
    <target name="get-deps" description="download JAR dependencies">
-      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
       <get src="${repository}/commons-codec/jars/${jar.codec}"
            dest="lib/${jar.codec}"
@@ -278,6 +277,11 @@
            dest="lib/${jar.spring}"
            usetimestamp="true"/>
    </target>
+   
+   <target name="get-deps-proxy" description="download JAR dependencies">
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+      <antcall target="get-deps"/>
+   </target>
 
    <target name="help" description="display the Help message">
       <echo message="Click ${version} web application framework"/>
@@ -292,6 +296,7 @@
       <echo message="build-webapps         build web application WAR files"/> 
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="get-deps              download JAR dependencies"/>  
+      <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
       <echo message="help                  display the Help message"/>  
       <echo message="javadoc               create Javadoc HTML files"/> 
       <echo/>

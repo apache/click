@@ -1,7 +1,5 @@
 CODE
-
-* modify build ZIP
-* upload build jar
+* upload maven module
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request

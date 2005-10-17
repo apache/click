@@ -38,6 +38,7 @@ The main Ant targets include:
     build-webapps         build web application WAR files
     deploy-webapps        copy WAR files to application server
     get-deps              download JAR dependencies
+    get-deps-proxy        download JAR dependencies via proxy
     help                  display the Help message
     javadoc               create Javadoc HTML files
 
