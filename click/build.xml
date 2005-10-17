@@ -21,38 +21,21 @@
 
    <!-- Tasks -->
    
-   <target name="get-deps" description="download JAR dependencies">
-      <property name="repository" value="http://www.ibiblio.org/maven"/>
-      <get src="${repository}/commons-codec/jars/${jar.codec}"
-           dest="lib/${jar.codec}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-collections/jars/${jar.collections}"
-           dest="lib/${jar.collections}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-lang/jars/${jar.lang}"
-           dest="lib/${jar.lang}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-fileupload/jars/${jar.upload}"
-           dest="lib/${jar.upload}"
-           usetimestamp="true"/>
-      <get src="${repository}/junit/jars/${jar.junit}"
-           dest="lib/${jar.junit}"
-           usetimestamp="true"/>
-      <get src="${repository}/javax.servlet/jars/${jar.servlet}"
-           dest="lib/${jar.servlet}"
-           usetimestamp="true"/>
-      <get src="${repository}/springframework/jars/${jar.spring}"
-           dest="lib/${jar.spring}"
-           usetimestamp="true"/>
-   </target>
-
    <target name="build-all" 
            depends="build-framework, build-extras, build-webapps" 
            description="build Click framework, extras and webapps"/>
 
    <target name="build-framework" description="build framework JAR file">
-      <delete dir="deploy" quiet="false"/>
-      <mkdir dir="deploy"/>
+      <available file="lib/${jar.codec}" property="isJarAvail"/>
+      <fail message="Download JAR dependencies first with 'get-deps'">
+         <condition>
+  	    <or>
+  	       <isfalse value="${isJarAvail}"/>
+  	    </or>
+  	 </condition>
+      </fail>
+      <delete file="deploy/click-${version}.jar" quiet="false"/>
+      <delete file="deploy/click-nodeps-${version}.jar" quiet="false"/>
       <property name="dir.source" value="framework/src"/>
       <property name="dir.classes" value="framework/classes"/>
       <delete dir="${dir.classes}" quiet="false"/>
@@ -103,6 +86,15 @@
    </target>
 
    <target name="build-extras" description="build extras JAR file">
+      <available file="deploy/click-${version}.jar" property="isClickAvail"/>
+      <fail message="Build framework first with 'build-framework'">
+         <condition>
+  	    <or>
+  	       <isfalse value="${isClickAvail}"/>
+  	    </or>
+  	 </condition>
+      </fail>
+      <delete file="deploy/click-extras-${version}.jar" quiet="false"/>
       <delete dir="extras/classes" quiet="false"/>
       <mkdir dir="extras/classes"/>
       <copy todir="extras/classes">
@@ -134,10 +126,23 @@
    <target name="build-release" 
            depends="build-framework, build-extras, build-webapps, javadoc" 
            description="build release ZIP file">
-      <delete file="../click-${version}.zip"/>  
-      <zip destfile="../click-${version}.zip">
+      <delete dir="click-${version}" quiet="false"/>
+      <mkdir dir="click-${version}"/>
+      <!--  "click-documentation" WAR  -->
+      <war destfile="deploy/click-documentation.war"
+           webxml="webapps/click-documentation/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="webapps/click-documentation">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+      <copy todir="click-${version}">
          <fileset dir="." casesensitive="yes">
             <exclude name=".**"/> 
+            <exclude name="click-${version}"/> 
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
             <exclude name="lib/${jar.codec}"/>
@@ -152,11 +157,25 @@
             <exclude name="webapps/click-cayenne/**"/>  
             <exclude name="webapps/click-documentation/**"/> 
          </fileset>
-      </zip>
+      </copy>
+      <delete file="../click-${version}.zip"/>  
+      <zip basedir="."
+           destfile="../click-${version}.zip"
+           includes="click-${version}/**"/>
+      <delete dir="click-${version}" quiet="false"/>
    </target>  
 
    <target name="build-webapps" description="build web application WAR files">
+      <available file="deploy/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <fail message="Build extras first with 'build-extras'">
+         <condition>
+  	    <or>
+  	       <isfalse value="${isExtrasAvail}"/>
+  	    </or>
+  	 </condition>
+      </fail>
       <!--  "click-blank" WAR  -->
+      <delete file="deploy/deploy/click-blank.war" quiet="false"/>
       <copy file="framework/src/click-control.properties" 
             todir="webapps/click-blank/WEB-INF/src"/>
       <copy file="framework/src/click-control.properties" 
@@ -172,18 +191,8 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
- 	   <!--  "click-documentation" WAR  -->
-      <war destfile="deploy/click-documentation.war"
-           webxml="webapps/click-documentation/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <fileset dir="webapps/click-documentation">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
-	   <!--  "click-examples" WAR  -->
+      <!--  "click-examples" WAR  -->
+      <delete file="deploy/deploy/click-examples.war" quiet="false"/>
       <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
 	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
@@ -215,6 +224,16 @@
       </war>
    </target>
 
+   <target name="create-upload-bundle">
+      <delete dir="upload-bundle" quiet="false"/>
+      <mkdir dir="upload-bundle"/>
+      <copy file="LICENSE.txt" todir="upload-bundle"/> 
+      <copy file="project.xml" todir="upload-bundle"/> 
+      <copy file="deploy/click-${version}.jar" todir="upload-bundle"/> 
+      <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
+      <delete dir="upload-bundle" quiet="false"/>
+   </target>
+
    <target name="deploy-examples"> 
      <copy file="deploy/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
@@ -234,6 +253,32 @@
       <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
    </target>
  
+   <target name="get-deps" description="download JAR dependencies">
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <get src="${repository}/commons-codec/jars/${jar.codec}"
+           dest="lib/${jar.codec}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-collections/jars/${jar.collections}"
+           dest="lib/${jar.collections}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-lang/jars/${jar.lang}"
+           dest="lib/${jar.lang}"
+           usetimestamp="true"/>
+      <get src="${repository}/commons-fileupload/jars/${jar.upload}"
+           dest="lib/${jar.upload}"
+           usetimestamp="true"/>
+      <get src="${repository}/junit/jars/${jar.junit}"
+           dest="lib/${jar.junit}"
+           usetimestamp="true"/>
+      <get src="${repository}/javax.servlet/jars/${jar.servlet}"
+           dest="lib/${jar.servlet}"
+           usetimestamp="true"/>
+      <get src="${repository}/springframework/jars/${jar.spring}"
+           dest="lib/${jar.spring}"
+           usetimestamp="true"/>
+   </target>
+
    <target name="help" description="display the Help message">
       <echo message="Click ${version} web application framework"/>
       <echo message="===================================="/> 
@@ -332,5 +377,5 @@
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>
-   
+
 </project>
