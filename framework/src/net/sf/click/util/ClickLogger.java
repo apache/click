@@ -17,6 +17,7 @@ package net.sf.click.util;
 
 import javax.servlet.ServletContext;
 
+import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogChute;
 
@@ -54,6 +55,10 @@ public class ClickLogger implements LogChute {
     public static final String LOG_TO =
         ClickLogger.class.getName() + ".LOG_TO";
 
+    /** The logger instance Velocity application attribute key. */
+    private static final String LOG_INSTANCE =
+        ClickLogger.class.getName() + ".LOG_INSTANCE";
+    
     /** The level names. */
     private static final String[] LEVELS =
         { " [trace] ", " [debug] ", " [info ] ", " [warn ] ", " [error] " };
@@ -71,9 +76,6 @@ public class ClickLogger implements LogChute {
      * message will be logged to the console [System.out].
      */
     protected ServletContext servletContext = null;
-
-    /** The Velocity ClickLogger instance. */
-    private static ClickLogger velocityInstance;
 
     // ----------------------------------------------------------- Constructors
 
@@ -118,8 +120,18 @@ public class ClickLogger implements LogChute {
             String msg = "Could not retrieve LOG_LEVEL from Runtime attributes";
             throw new IllegalStateException(msg);
         }
+       
+        rs.setApplicationAttribute(LOG_INSTANCE, this);
+    }
 
-        velocityInstance = this;
+    /**
+     * Return the ClickLogger instance initialized by the given VelocityEngine.
+     *
+     * @param ve the VelocityEngine which initialized the logger
+     * @return the logger instance initialized by the Velocity runtime
+     */
+    public static ClickLogger getInstance(VelocityEngine ve) {
+        return (ClickLogger) ve.getApplicationAttribute(LOG_INSTANCE);
     }
 
     /**
@@ -314,14 +326,4 @@ public class ClickLogger implements LogChute {
         return logLevel <= TRACE_ID;
     }
 
-
-    /**
-     * Return the ClickLogger instance initialized by the Velocity runtime
-     * engine.
-     *
-     * @return the logger instance initialized by the Velocity runtime
-     */
-    public static ClickLogger getVelocityInstance() {
-        return velocityInstance;
-    }
 }

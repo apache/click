@@ -219,7 +219,8 @@ class ClickApp implements EntityResolver {
 
             // Turn down the Velocity logging level
             if (mode == DEBUG || mode == TRACE) {
-                ClickLogger.getVelocityInstance().setLevel(ClickLogger.WARN_ID);
+                ClickLogger logger = ClickLogger.getInstance(velocityEngine);
+                logger.setLevel(ClickLogger.WARN_ID);
             }
 
             // Cache page templates.
