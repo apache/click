@@ -1,0 +1,33 @@
+<p><i><a href="$newLink.href">
+	<img src="images/icon-plus.gif" alt="New" title="New" border="0" align="middle"/> create new department...</a></i></p>
+
+#if(!$departments.Empty)
+<table border="0" cellpadding="2" cellspacing="5">
+	<tr>
+		<td valign="top">
+	<table cellpadding="2" cellspacing="0" width="250">
+	<tr bgcolor="navy">
+		<th class="right-column">Departments</th>
+		<th>&nbsp;</th>
+	</tr>
+#foreach ( $department in $departments)
+#if( $velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
+		<td width="85%">$department.name</td>
+		<td align="right"><a href="#" onclick="return onDepartmentChange($format.id($department, 'Department'));">
+			<img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a></td>
+#end
+		</table>
+		</td>
+		<!-- Department details rendered with AJAX-->
+		<td width="2" valign="top">
+			&nbsp;
+		</td>
+		<td width="300" valign="top">
+			<div id="departmentDetails"/>
+		</td>
+	</tr>
+</table>
+
+#else
+	<p><i>No departments configured.</i></p>
+#end

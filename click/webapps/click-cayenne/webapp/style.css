@@ -1,0 +1,108 @@
+body, table, p {
+  font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
+  font-size: 12px;
+}
+
+a:visited {
+  color: blue;
+}
+
+.menu {
+  color: white;
+  text-decoration: none;
+}
+
+.menu:visited {
+  color: white;
+}
+
+.menu:hover {
+  color: yellow;
+}
+
+h1  { 
+  font-size: 24px;
+  font-weight: bold;
+}
+
+th {
+  color: white;
+}
+
+tr.titleBar {
+  background-color: black;
+  color: white;
+}
+
+td.titleText {
+  font-weight: bold;
+  letter-spacing: 0.2em; 
+  margin: 2px 2px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  text-decoration: none;
+}
+
+dt {
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.left-column {
+	text-align: right; 
+	padding-right: 0.5em;
+}
+
+.right-column {
+	text-align: left; 
+	padding-left: 0.5em;
+}
+
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
+	font-family: Courier New, courier;
+	font-size: 10pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeJava {
+	font-family: Courier New, courier;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+
+.red { color: red; }
+
+.green { color: green; }
+
+.blue { color: blue; }
+
+.maroon { color: maroon; }
+
+.navy { color: navy; }

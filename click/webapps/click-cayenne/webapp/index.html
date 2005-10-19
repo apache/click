@@ -1,0 +1,34 @@
+<html>
+<head>
+ <title>Cayenne/Click Example</title>
+ <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div style="background-color: navy; color: white; padding: 0.5em;">
+		&nbsp;
+	</div>
+	<h1>Cayenne/Click::Home</h1>
+	
+	
+	<table border="0" cellpadding="12" cellspacing="0" style="margin-top: 1em;">
+		<tr>
+			<td width="50%"  valign="top"><p>View/Edit human resources database:
+				<span class="red">*</span></p>
+				<p><a href="departments-viewer.htm">Start Demo...</a></p>
+				
+			</td>
+			<td width="50%" valign="top"><p>Browse Cayenne mapping files:</p>
+				<p><a href="source-viewer.htm?filename=WEB-INF/cayenne.xml">
+					cayenne.xml: Main Cayenne project file</a></p>
+				<p><a href="source-viewer.htm?filename=WEB-INF/HRMap.map.xml">
+					HRMap.map.xml: DataMap file - object relational mapping info</a>
+					</p>
+				<p><a href="source-viewer.htm?filename=WEB-INF/HRDB.driver.xml">HRDB.driver.xml: DataNode file - database connection info</a></p>
+			</td>
+		</tr>
+	</table>
+	<p class="red"><i>Note: Unless you changed Cayenne configuration, this demo uses
+		in-memory database. ALL CHANGES WILL BE LOST ON WEB APPLICATION RESTART</i> </p>
+</body>
+</html>
+

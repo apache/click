@@ -1,0 +1,5 @@
+<Context
+   path="/click-cayenne" 
+   docBase="${catalina.home}/webapps/click-cayenne" 
+   reloadable="true">
+</Context>
