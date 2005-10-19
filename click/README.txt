@@ -42,12 +42,3 @@ The main Ant targets include:
     help                  display the Help message
     javadoc               create Javadoc HTML files
 
-
-Please note to build-extras you will need to download the following jars:
-
-    cayenne.jar  from  http://sourceforge.net/projects/cayenne
-
-Then you will need to configure the build.properties entries:
-
-    jar.cayenne= location of cayenne.jar
-

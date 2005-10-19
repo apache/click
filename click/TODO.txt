@@ -1,5 +1,7 @@
 CODE
+* fix NPE in ClickApp init
 * upload maven module
+* configure hsqldb-1.7.3.3.jar in get-deps for click-cayenne
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request

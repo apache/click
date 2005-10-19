@@ -1,7 +1,29 @@
 <project>
-  <groupId>click</groupId>
+
+  <groupId>net.sf.click</groupId>
+
   <artifactId>click</artifactId>
-  <version>0.14</version>
+
+  <name>click</name>
+
+  <currentVersion>0.15</currentVersion>
+
+  <organization>
+    <name>Click Framework Project</name>
+    <url>http://click.sourceforge.net</url>
+  </organization>
+
+  <inceptionYear>2003</inceptionYear>
+
+  <package>net.sf.click</package>
+
+  <shortDescription>
+    J2EE web application framework designed for commercial developers.
+  </shortDescription>
+
+  <url>http://sourceforge.net/projects/click</url>
+  <distributionDirectory>http://sourceforge.net/project/showfiles.php?group_id=82095</distributionDirectory>
+
   <dependencies>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -39,4 +61,5 @@
       <version>1.2.5</version>
     </dependency>
   </dependencies>
+
 </project>
