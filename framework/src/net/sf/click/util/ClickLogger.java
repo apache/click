@@ -58,7 +58,7 @@ public class ClickLogger implements LogChute {
     /** The logger instance Velocity application attribute key. */
     private static final String LOG_INSTANCE =
         ClickLogger.class.getName() + ".LOG_INSTANCE";
-    
+
     /** The level names. */
     private static final String[] LEVELS =
         { " [trace] ", " [debug] ", " [info ] ", " [warn ] ", " [error] " };
@@ -120,7 +120,7 @@ public class ClickLogger implements LogChute {
             String msg = "Could not retrieve LOG_LEVEL from Runtime attributes";
             throw new IllegalStateException(msg);
         }
-       
+
         rs.setApplicationAttribute(LOG_INSTANCE, this);
     }
 

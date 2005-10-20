@@ -242,17 +242,17 @@ public class Format {
                 !email.startsWith("@") &&
                 !email.endsWith("@")) {
 
-                StringBuffer buffer = new StringBuffer(50);
-                buffer.append("<a href='mailto:");
-                buffer.append(email);
-                buffer.append("'");
+                HtmlStringBuffer buffer = new HtmlStringBuffer(128);
+                buffer.elementStart("a");
+                buffer.appendAttribute("href", "mailto:" + email);
                 if (StringUtils.isNotBlank(attribute)) {
                     buffer.append(" ");
                     buffer.append(attribute);
                 }
-                buffer.append(">");
+                buffer.closeTag();
                 buffer.append(email);
-                buffer.append("</a>");
+                buffer.elementEnd("a");
+
                 return buffer.toString();
 
             } else {
@@ -364,23 +364,22 @@ public class Format {
      */
     public String link(String value, String attribute) {
         if (StringUtils.isNotBlank(value)) {
-            StringBuffer buffer = new StringBuffer(50);
+            HtmlStringBuffer buffer = new HtmlStringBuffer(128);
 
             // If email
             if (value.indexOf('@') != -1 &&
                 !value.startsWith("@") &&
                 !value.endsWith("@")) {
 
-                buffer.append("<a href='mailto:");
-                buffer.append(value);
-                buffer.append("'");
+                buffer.elementStart("a");
+                buffer.appendAttribute("href", "mailto:" + value);
                 if (StringUtils.isNotBlank(attribute)) {
                     buffer.append(" ");
                     buffer.append(attribute);
                 }
-                buffer.append(">");
+                buffer.closeTag();
                 buffer.append(value);
-                buffer.append("</a>");
+                buffer.elementEnd("a");
 
             } else if (value.startsWith("http")) {
                 int index = value.indexOf("//");
@@ -389,28 +388,26 @@ public class Format {
                 } else {
                     index = 0;
                 }
-                buffer.append("<a href='");
-                buffer.append(value);
-                buffer.append("'");
+                buffer.elementStart("a");
+                buffer.appendAttribute("href", value);
                 if (StringUtils.isNotBlank(attribute)) {
                     buffer.append(" ");
                     buffer.append(attribute);
                 }
-                buffer.append(">");
+                buffer.closeTag();
                 buffer.append(value.substring(index));
-                buffer.append("</a>");
+                buffer.elementEnd("a");
 
             } else if (value.startsWith("www")) {
-                buffer.append("<a href='http://");
-                buffer.append(value);
-                buffer.append("'");
+                buffer.elementStart("a");
+                buffer.appendAttribute("href", "http://" + value);
                 if (StringUtils.isNotBlank(attribute)) {
                     buffer.append(" ");
                     buffer.append(attribute);
                 }
-                buffer.append(">");
+                buffer.closeTag();
                 buffer.append(value);
-                buffer.append("</a>");
+                buffer.elementEnd("a");
 
             } else {
                 buffer.append(value);

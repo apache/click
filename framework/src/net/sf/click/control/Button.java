@@ -16,6 +16,7 @@
 package net.sf.click.control;
 
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Button control: &nbsp; &lt;input type='button'/&gt;.
@@ -137,28 +138,23 @@ public class Button extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(40);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' value='");
-        buffer.append(getValue());
-        buffer.append("'");
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("' ");
+        buffer.elementStart("input");
+
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("title", getTitle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
         }
 
-        renderAttributes(buffer);
-
-        buffer.append(getDisabled());
-
-        buffer.append("/>");
+        buffer.elementEnd();
 
         return buffer.toString();
     }

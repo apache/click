@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Hidden Field control: &nbsp; &lt;input type='hidden'&gt;.
@@ -264,15 +265,14 @@ public class HiddenField extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(20);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' value='");
+        buffer.elementStart("input");
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+
+        String valueStr = null;
         if (valueClass == String.class
             || valueClass == Integer.class
             || valueClass == Boolean.class
@@ -281,23 +281,27 @@ public class HiddenField extends Field {
             || valueClass == Long.class
             || valueClass == Short.class) {
 
-            buffer.append(getValue());
+            valueStr = String.valueOf(getValue());
 
         } else if (getValueObject() instanceof Date) {
-            buffer.append(((Date)getValueObject()).getTime());
+            valueStr = String.valueOf(((Date)getValueObject()).getTime());
 
         } else if (getValueObject() instanceof Serializable) {
             try {
-                buffer.append(ClickUtils.encode(getValueObject()));
+                valueStr = ClickUtils.encode(getValueObject());
             } catch (IOException ioe) {
                 String msg =
                     "could not encode value for hidden field: " + getValueObject();
                 throw new RuntimeException(msg, ioe);
             }
         } else {
-            buffer.append(getValue());
+            valueStr = getValue();
         }
-        buffer.append("'/>");
+
+        buffer.appendAttribute("value", valueStr);
+
+
+        buffer.elementEnd();
 
         return buffer.toString();
     }

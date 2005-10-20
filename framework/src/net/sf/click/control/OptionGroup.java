@@ -18,6 +18,8 @@ package net.sf.click.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a select Option Group element: &nbsp; &lt;optgroup&gt;&lt;/optgroup&gt;.
  * <p/>
@@ -96,11 +98,12 @@ public class OptionGroup {
      * @return a rendered HTML OptionGroup string
      */
     public String renderHTML(Select select) {
-        StringBuffer buffer = new StringBuffer(64);
 
-        buffer.append("<optgroup label='");
-        buffer.append(getLabel());
-        buffer.append("'>");
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        buffer.elementStart("optgroup");
+        buffer.appendAttribute("label", getLabel());
+        buffer.closeTag();
 
         List list = getChildren();
         for (int i = 0, size = list.size(); i < size; i++) {
@@ -108,11 +111,11 @@ public class OptionGroup {
 
             if (object instanceof Option) {
                 Option option = (Option) object;
-                buffer.append(option.renderHTML(select));
+                buffer.appendRaw(option.renderHTML(select));
 
             } else if (object instanceof OptionGroup) {
                 OptionGroup optionGroup = (OptionGroup) object;
-                buffer.append(optionGroup.renderHTML(select));
+                buffer.appendRaw(optionGroup.renderHTML(select));
 
             } else {
                 String msg = "Select option class not instance of Option"
@@ -121,7 +124,7 @@ public class OptionGroup {
             }
         }
 
-        buffer.append("</optgroup>");
+        buffer.elementEnd("optgroup");
 
         return buffer.toString();
     }

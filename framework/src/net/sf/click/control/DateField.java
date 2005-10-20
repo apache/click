@@ -20,6 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Date Field control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
  *
@@ -336,47 +338,41 @@ public class DateField extends TextField {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(50);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         String textField = super.toString();
-        buffer.append(textField);
+        buffer.appendRaw(textField);
 
         if (!isReadonly() && !isDisabled()) {
-            buffer.append("<img align='middle' hspace='2' style='cursor:hand' src='");
-            buffer.append(getForm().getContext().getRequest().getContextPath());
-            buffer.append("/click/calendar.gif' id='");
-            buffer.append(getId());
-            buffer.append("-button' ");
+            buffer.appendRaw("<img align='middle' hspace='2' style='cursor:hand' src='");
+            buffer.appendRaw(getForm().getContext().getRequest().getContextPath());
+            buffer.appendRaw("/click/calendar.gif' id='");
+            buffer.appendRaw(getId());
+            buffer.appendRaw("-button' ");
 
             String calendarTitle = getMessage("calendar-image-title");
-            if (calendarTitle != null) {
-                buffer.append(" alt='");
-                buffer.append(calendarTitle);
-                buffer.append("' title='");
-                buffer.append(calendarTitle);
-                buffer.append("'/>\n");
-            } else {
-                buffer.append("/>\n");
-            }
+            buffer.appendAttribute("alt", calendarTitle);
+            buffer.appendAttribute("title", calendarTitle);
+            buffer.elementEnd();
 
-            buffer.append("<script type='text/javascript'>\n");
-            buffer.append("Calendar.setup({ \n");
-            buffer.append(" inputField : '");
-            buffer.append(getId());
-            buffer.append("', \n");
-            buffer.append(" ifFormat :    '");
-            buffer.append(getCalendarPattern());
-            buffer.append("', \n");
+            buffer.appendRaw("<script type='text/javascript'>\n");
+            buffer.appendRaw("Calendar.setup({ \n");
+            buffer.appendRaw(" inputField : '");
+            buffer.appendRaw(getId());
+            buffer.appendRaw("', \n");
+            buffer.appendRaw(" ifFormat :    '");
+            buffer.appendRaw(getCalendarPattern());
+            buffer.appendRaw("', \n");
             if (getShowTime()) {
-                buffer.append(" showsTime : true, \n");
+                buffer.appendRaw(" showsTime : true, \n");
             }
-            buffer.append(" button : '");
-            buffer.append(getId());
-            buffer.append("-button', \n");
-            buffer.append(" align :    'cr', \n");
-            buffer.append(" singleClick : true \n");
-            buffer.append("});\n");
-            buffer.append("</script> \n");
+            buffer.appendRaw(" button : '");
+            buffer.appendRaw(getId());
+            buffer.appendRaw("-button', \n");
+            buffer.appendRaw(" align :    'cr', \n");
+            buffer.appendRaw(" singleClick : true \n");
+            buffer.appendRaw("});\n");
+            buffer.appendRaw("</script> \n");
         }
 
         return buffer.toString();

@@ -17,6 +17,8 @@ package net.sf.click.control;
 
 import java.util.List;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 //---------------------------------------------------------- Inner Classes
 
 /**
@@ -156,7 +158,10 @@ public class Option {
      * @return rendered HTML Option string
      */
     public String renderHTML(Select select) {
-        StringBuffer buffer = new StringBuffer(48);
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(48);
+
+        buffer.elementStart("option");
 
         if (select.isMultiple()) {
 
@@ -164,35 +169,28 @@ public class Option {
 
                 // Search through selection list for matching value
                 List values = select.getMultipleValues();
-                boolean found = false;
                 for (int i = 0, size = values.size(); i < size; i++) {
                     String value = values.get(i).toString();
                     if (getValue().equals(value)) {
-                        buffer.append("<option selected='selected' value='");
-                        found = true;
+                        buffer.appendAttribute("selected", "selected");
                         break;
                     }
                 }
-                if (!found) {
-                    buffer.append("<option value='");
-                }
 
-            } else {
-                buffer.append("<option value='");
             }
 
         } else {
             if (getValue().equals(select.getValue())) {
-                buffer.append("<option selected='selected' value='");
-            } else {
-                buffer.append("<option value='");
+                buffer.appendAttribute("selected", "selected");
             }
         }
 
-        buffer.append(getValue());
-        buffer.append("'>");
+        buffer.appendAttribute("value", getValue());
+        buffer.closeTag();
+
         buffer.append(getLabel());
-        buffer.append("</option>");
+
+        buffer.elementEnd("option");
 
         return buffer.toString();
     }

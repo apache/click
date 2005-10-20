@@ -1462,7 +1462,9 @@ public class Form implements Control {
                         buffer.append(labelRequiredPrefix);
                     }
                     buffer.append("<label");
-                    buffer.append(field.getDisabled());
+                    if (field.isDisabled()) {
+                        buffer.append(" disabled=\"disabled\"");
+                    }
                     if (field.getError() != null) {
                         buffer.append(" class='error'");
                     }

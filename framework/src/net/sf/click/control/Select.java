@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
  *
@@ -499,35 +501,30 @@ public class Select extends Field {
         if (!getOptionList().isEmpty()) {
             bufferSize = bufferSize + (optionList.size() * 48);
         }
-        StringBuffer buffer = new StringBuffer(bufferSize);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        buffer.append("<select name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("'");
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
+        buffer.elementStart("select");
 
-        buffer.append(" size='");
-        buffer.append(getSize());
-        buffer.append("'");
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("' ");
-        }
-
-        renderAttributes(buffer);
-
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("size", getSize());
+        buffer.appendAttribute("title", getTitle());
         if (isMultiple()) {
-            buffer.append(" multiple='multiple'");
+            buffer.appendAttribute("multiple", "multiple");
         }
-        if (isValid()) {
-            buffer.append(">");
-        } else {
-            buffer.append(" class='error'>");
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
+        if (!isValid()) {
+            buffer.appendAttribute("class", "error");
+        }
+        buffer.closeTag();
 
         if (!getOptionList().isEmpty()) {
             for (int i = 0, size = getOptionList().size(); i < size; i++) {
@@ -535,11 +532,11 @@ public class Select extends Field {
 
                 if (object instanceof Option) {
                     Option option = (Option) object;
-                    buffer.append(option.renderHTML(this));
+                    buffer.appendRaw(option.renderHTML(this));
 
                 } else if (object instanceof OptionGroup) {
                     OptionGroup optionGroup = (OptionGroup) object;
-                    buffer.append(optionGroup.renderHTML(this));
+                    buffer.appendRaw(optionGroup.renderHTML(this));
 
                 } else {
                     String msg = "Select option class not instance of Option"
@@ -548,7 +545,8 @@ public class Select extends Field {
                 }
             }
         }
-        buffer.append("</select>");
+
+        buffer.elementEnd("select");
 
         return buffer.toString();
     }
