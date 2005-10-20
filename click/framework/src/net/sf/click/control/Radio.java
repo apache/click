@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Radio control: &nbsp; &lt;input type='radio'&gt;.
  *
@@ -146,35 +148,30 @@ public class Radio extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(50);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' value='");
-        buffer.append(getValue());
-        buffer.append("'");
+        buffer.elementStart("input");
+
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("title", getTitle());
         if (isChecked()) {
-            buffer.append(" checked='checked'");
+            buffer.appendAttribute("checked", "checked");
         }
-
-        if (getTitle() != null) {
-            buffer.append("title='");
-            buffer.append(getTitle());
-            buffer.append("'");
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
-
-        renderAttributes(buffer);
-
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
-
-        if (isValid()) {
-            buffer.append(">");
-        } else {
-            buffer.append(" class='error'>");
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
         }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
+        if (!isValid()) {
+            buffer.appendAttribute("class", "error");
+        }
+        buffer.closeTag();
 
         if (getLabel() != null) {
             buffer.append(getLabel());
@@ -182,7 +179,7 @@ public class Radio extends Field {
             buffer.append(getValue());
         }
 
-        buffer.append("</input>");
+        buffer.elementEnd("input");
 
         return buffer.toString();
     }

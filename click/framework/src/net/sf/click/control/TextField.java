@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Text Field control: &nbsp; &lt;input type='text'&gt;.
  *
@@ -288,40 +290,35 @@ public class TextField extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(80);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' value='");
-        buffer.append(getValue());
-        buffer.append("' size='");
-        buffer.append(getSize());
-        buffer.append("'");
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("'");
-        }
+        buffer.elementStart("input");
 
-        renderAttributes(buffer);
-
-        if (!isValid()) {
-            buffer.append(" class='error'");
-        } else if (isDisabled()) {
-            buffer.append(" class='disabled'");
-        }
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("size", getSize());
+        buffer.appendAttribute("title", getTitle());
         if (getMaxLength() > 0) {
-            buffer.append(" maxlength='");
-            buffer.append(getMaxLength());
-            buffer.append("'");
+            buffer.appendAttribute("maxlength", getMaxLength());
         }
-        buffer.append("/>");
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
+        if (!isValid()) {
+            buffer.appendAttribute("class", "error");
+        } else if (isDisabled()) {
+            buffer.appendAttribute("class", "disabled");
+        }
+
+        buffer.elementEnd();
 
         return buffer.toString();
     }

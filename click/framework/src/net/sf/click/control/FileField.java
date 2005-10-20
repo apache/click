@@ -20,6 +20,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.fileupload.FileUploadBase;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a File Field control: &nbsp; &lt;input type='file'&gt;.
  *
@@ -225,35 +227,30 @@ public class FileField extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(80);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' value='");
-        buffer.append(getValue());
-        buffer.append("' size='");
-        buffer.append(getSize());
-        buffer.append("'");
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("'");
+        buffer.elementStart("input");
+
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("size", getSize());
+        buffer.appendAttribute("title", getTitle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
-
-        renderAttributes(buffer);
-
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
         if (!isValid()) {
-            buffer.append(" class='error'");
-        } else if (isDisabled()) {
-            buffer.append(" class='disabled'");
+            buffer.appendAttribute("class", "error");
         }
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
-        buffer.append("/>");
+
+        buffer.elementEnd();
 
         return buffer.toString();
     }

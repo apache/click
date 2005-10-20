@@ -45,8 +45,21 @@ Features to be included in future releases are:
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Fixed escaping quote characters in controls. This issue was idendified by
+        Mike Organek
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-31">31</a>].<br/>
+        Added new 
+	<a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
+        class for control rendering.
+      </li>
+      <li class="change">
         Fixed ClickApp NPE when initializing
-        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-??">??</a>].
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-30">30</a>],
+        related Velocity Engine patches applied 
+        [<a target='blank' href="http://issues.apache.org/jira/browse/VELOCITY-412">412</a>].
+      </li> 
+      <li class="change">
+        Added example click-cayenne web application.
       </li> 
     </ul>
   </dd>
@@ -64,9 +77,13 @@ Features to be included in future releases are:
         Removed JDOM depencency.
       </li> 
       <li class="change">
+        Velocity Engine error reporting patches applied 
+        [<a target='blank' href="http://issues.apache.org/jira/browse/VELOCITY-373">373</a>].
+      </li> 
+      <li class="change">
         Modified Ant build script to download JAR dependencies from 
         <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository.
-      </li>     
+      </li>    
     </ul>
   </dd>
   <dt>Version 0.13 - 13th October 2005</dt>

@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a TextArea control: &nbsp; &lt;textarea&gt;&lt;/textarea&gt;.
  *
@@ -295,36 +297,34 @@ public class TextArea extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(50);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.append("<textarea");
-        buffer.append(" name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' rows='");
-        buffer.append(getRows());
-        buffer.append("' cols='");
-        buffer.append(getCols());
-        buffer.append("'");
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("'");
+        buffer.elementStart("textarea");
+
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("rows", getRows());
+        buffer.appendAttribute("cols", getCols());
+        buffer.appendAttribute("title", getTitle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
-
-        renderAttributes(buffer);
-
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
         if (!isValid()) {
-            buffer.append(" class='error'");
+            buffer.appendAttribute("class", "error");
         } else if (isDisabled()) {
-            buffer.append(" class='disabled'");
+            buffer.appendAttribute("class", "disabled");
         }
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
-        buffer.append(">");
+        buffer.closeTag();
+
         buffer.append(getValue());
-        buffer.append("</textarea>");
+
+        buffer.elementEnd("textarea");
 
         return buffer.toString();
     }

@@ -244,18 +244,6 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return HTML rendering string " disabled" if the Field is disabled or a
-     * blank string otherwise.
-     *
-     * @see #isDisabled()
-     *
-     * @return HTML rendering string for the Fields disabled status
-     */
-    public String getDisabled() {
-        return (isDisabled()) ? " disabled='disabled'" : "";
-    }
-
-    /**
      * Return true if the Field is a disabled. The Field will also be disabled
      * if the parent Form is disabled.
      *
@@ -478,18 +466,6 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-    }
-
-    /**
-     * Return HTML rendering string " readonly" if the Field is readonly or a
-     * blank string otherwise.
-     *
-     * @see #isDisabled()
-     *
-     * @return HTML rendering string for the Fields readonly status
-     */
-    public String getReadonly() {
-        return (isReadonly()) ? " readonly='readonly'" : "";
     }
 
     /**

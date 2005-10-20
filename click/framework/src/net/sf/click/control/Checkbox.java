@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Checkbox control: &nbsp; &lt;input type='checkbox'&gt;.
  *
@@ -173,33 +175,31 @@ public class Checkbox extends Field {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(50);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append("<input type='");
-        buffer.append(getType());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("'");
+        buffer.elementStart("input");
 
-        renderAttributes(buffer);
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("title", getTitle());
+        if (isChecked()) {
+            buffer.appendAttribute("checked", "checked");
+        }
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (isReadonly()) {
+            buffer.appendAttributeReadonly();
+        }
+        if (!isValid()) {
+            buffer.appendAttribute("class", "error");
+        }
 
-        if (checked) {
-            buffer.append("' checked='checked'");
-        }
-        if (getTitle() != null) {
-            buffer.append(" title='");
-            buffer.append(getTitle());
-            buffer.append("'");
-        }
-        buffer.append(getDisabled());
-        buffer.append(getReadonly());
-        if (isValid()) {
-            buffer.append("/>");
-        } else {
-            buffer.append(" class='error'/>");
-        }
+        buffer.elementEnd();
 
         return buffer.toString();
     }

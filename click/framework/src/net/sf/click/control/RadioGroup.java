@@ -21,6 +21,7 @@ import java.util.List;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a RadioGroup control.
@@ -275,7 +276,7 @@ public class RadioGroup extends Field {
     public String toString() {
         final int size = getRadioList().size();
 
-        StringBuffer buffer = new StringBuffer(size * 30);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(size * 30);
 
         String value = getValue();
 
@@ -290,10 +291,10 @@ public class RadioGroup extends Field {
                 }
             }
 
-            buffer.append(radio.toString());
+            buffer.appendRaw(radio.toString());
 
             if (isVerticalLayout() && (i < size - 1)) {
-                buffer.append("<br/>");
+                buffer.appendRaw("<br/>");
             }
         }
 

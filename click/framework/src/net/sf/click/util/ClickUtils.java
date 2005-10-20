@@ -58,6 +58,45 @@ import org.xml.sax.EntityResolver;
 public class ClickUtils {
 
     /**
+     * Return a new XML Document for the given input stream.
+     *
+     * @param inputStream the file input stream
+     * @return new XML Document
+     * @throws RuntimeException if a parsing error occurs
+     */
+    public static Document buildDocument(InputStream inputStream) {
+        return buildDocument(inputStream, null);
+    }
+
+    /**
+     * Return a new XML Document for the given input stream and XML entity
+     * resolver.
+     *
+     * @param inputStream the file input stream
+     * @param entityResolver the XML entity resolver
+     * @return new XML Document
+     * @throws RuntimeException if a parsing error occurs
+     */
+    public static Document buildDocument(InputStream inputStream,
+                                         EntityResolver entityResolver) {
+         try {
+             DocumentBuilderFactory factory =
+                 DocumentBuilderFactory.newInstance();
+
+             DocumentBuilder builder = factory.newDocumentBuilder();
+
+             if (entityResolver != null) {
+                 builder.setEntityResolver(entityResolver);
+             }
+
+             return builder.parse(inputStream);
+
+         } catch (Exception ex) {
+             throw new RuntimeException("Error parsing XML", ex);
+         }
+    }
+
+    /**
      * Close the given output stream and ignore any exceptions thrown.
      *
      * @param stream the output stream to close.
@@ -573,7 +612,6 @@ public class ClickUtils {
         return path;
     }
 
-
     /**
      * Return the getter method name for the given property name.
      *
@@ -678,42 +716,4 @@ public class ClickUtils {
         return buffer.toString();
     }
 
-    /**
-     * Return a new XML Document for the given input stream.
-     *
-     * @param inputStream the file input stream
-     * @return new XML Document
-     * @throws RuntimeException if a parsing error occurs
-     */
-    public static Document buildDocument(InputStream inputStream) {
-        return buildDocument(inputStream, null);
-    }
-
-    /**
-     * Return a new XML Document for the given input stream and XML entity
-     * resolver.
-     *
-     * @param inputStream the file input stream
-     * @param entityResolver the XML entity resolver
-     * @return new XML Document
-     * @throws RuntimeException if a parsing error occurs
-     */
-    public static Document buildDocument(InputStream inputStream,
-                                         EntityResolver entityResolver) {
-         try {
-             DocumentBuilderFactory factory =
-                 DocumentBuilderFactory.newInstance();
-
-             DocumentBuilder builder = factory.newDocumentBuilder();
-
-             if (entityResolver != null) {
-                 builder.setEntityResolver(entityResolver);
-             }
-
-             return builder.parse(inputStream);
-
-         } catch (Exception ex) {
-             throw new RuntimeException("Error parsing XML", ex);
-         }
-    }
 }

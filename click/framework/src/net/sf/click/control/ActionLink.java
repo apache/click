@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Action Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
@@ -345,18 +346,6 @@ public class ActionLink implements Control {
     }
 
     /**
-     * Return HTML rendering string "disabled " if the ActionLink is disabled
-     * or a blank string otherwise.
-     *
-     * @see #isDisabled()
-     *
-     * @return HTML rendering string for the ActionLink disabled status
-     */
-    public String getDisabled() {
-        return (disabled) ? " disabled" : "";
-    }
-
-    /**
      * Return true if the ActionLink is a disabled.
      *
      * @return true if the ActionLink is a disabled
@@ -566,18 +555,23 @@ public class ActionLink implements Control {
      * @see Object#toString()
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(100);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append("<a href='");
-        buffer.append(getHref());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("'");
-        ClickUtils.renderAttributes(attributes, buffer);
-        buffer.append(getDisabled());
-        buffer.append(">");
+        buffer.elementStart("a");
+
+        buffer.appendAttribute("href", getHref());
+        buffer.appendAttribute("id", getId());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        buffer.closeTag();
+
         buffer.append(getLabel());
-        buffer.append("</a>");
+
+        buffer.elementEnd("a");
 
         return buffer.toString();
     }
