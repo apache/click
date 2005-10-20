@@ -71,7 +71,7 @@ public class WebappLoader extends ResourceLoader
      */
     public void init(ExtendedProperties configuration)
     {
-        rsvc.info("WebappLoader : initialization starting.");
+        log.info("WebappLoader : initialization starting.");
 
         /* get configured paths */
         paths = configuration.getStringArray("path");
@@ -89,7 +89,7 @@ public class WebappLoader extends ResourceLoader
                 {
                     paths[i] += '/';
                 }
-                rsvc.info("WebappLoader : added template path - '" + paths[i] + "'");
+                log.info("WebappLoader : added template path - '" + paths[i] + "'");
             }
         }
 
@@ -101,13 +101,13 @@ public class WebappLoader extends ResourceLoader
         }
         else
         {
-            rsvc.error("WebappLoader : unable to retrieve ServletContext");
+            log.error("WebappLoader : unable to retrieve ServletContext");
         }
 
         /* init the template paths map */
         templatePaths = new HashMap();
 
-        rsvc.info("WebappLoader : initialization complete.");
+        log.info("WebappLoader : initialization complete.");
     }
 
     /**
