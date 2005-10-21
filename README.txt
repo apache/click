@@ -27,6 +27,8 @@ Example pre-built web appliations include:
 
    deploy/click-examples.war
 
+   deploy/click-cayenne.war
+
 
 Click is built using the J2SE 1.4.2 and Ant 1.6.5.
 The main Ant targets include:
