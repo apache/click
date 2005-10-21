@@ -27,6 +27,7 @@
            description="build Click framework, extras and webapps"/>
 
    <target name="build-framework" description="build framework JAR file">
+      <mkdir dir="deploy"/>
       <available file="lib/${jar.codec}" property="isJarAvail"/>
       <fail message="Download JAR dependencies first with 'get-deps'">
          <condition>

@@ -1,7 +1,5 @@
 CODE
-* fix NPE in ClickApp init
 * upload maven module
-* configure hsqldb-1.7.3.3.jar in get-deps for click-cayenne
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
@@ -23,7 +21,5 @@ DOCUMENTATION
 * update Control in diagrams, update Control classes diagram
 
 VELOCITY
-* get Parser, ParsingException, ParsingErrorException, Template checked in
-* get Parse checked in
 
 
