@@ -31,7 +31,7 @@ public class BigForm extends BorderedPage {
 
     public void onInit() {
         Form form = new Form("form");
-        form.setErrorsPosition(Form.TOP);
+        form.setErrorsPosition(Form.POSITION_TOP);
         addControl(form);
 
         form.add(new Label("<b>My Details</b>"));
