@@ -21,27 +21,39 @@ import org.apache.commons.lang.StringUtils;
  */
 public class SourceViewer extends BorderedPage {
 
-    private static final String[] JAVA_KEYWORDS = {
-            "package", "import", "class", "public", "protected", "private", "extends",
-            "implements", "return", "if", "while", "for", "do", "else", "try", "new",
-            "void", "catch", "throws", "throw", "static", "final", "break", "continue",
-            "super", "finally", "true", "false", "true;", "false;", "null", "boolean",
-            "int", "char", "long", "float", "double", "short"
-    };
+    private static final String[] JAVA_KEYWORDS = { "package", "import",
+            "class", "public", "protected", "private", "extends", "implements",
+            "return", "if", "while", "for", "do", "else", "try", "new", "void",
+            "catch", "throws", "throw", "static", "final", "break", "continue",
+            "super", "finally", "true", "false", "true;", "false;", "null",
+            "boolean", "int", "char", "long", "float", "double", "short",
+            "this," };
 
-    private static final String[] HTML_KEYWORDS = {
-            "html", "head", "style", "script", "title", "link", "body", "h1", "h2", "h3",
-            "h4", "h5", "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a",
-            "b", "i", "u", "ul", "ol", "li", "form"
-    };
+    private static final String[] HTML_KEYWORDS = { "html", "head", "style",
+            "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
+            "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
+            "i", "u", "ul", "ol", "li", "form", "div", "input", "fieldset",
+            "pre", "tt", "%@", "ajax-response", "response" };
 
-    private static final String[] VELOCITY_KEYWORDS = {
-            "#if", "#if(", "#elseif", "#elseif(", "#else", "#else(", "#end", "#set",
-            "#set(", "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
-            "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#"
-    };
+    private static final String[] XML_KEYWORDS = { "click-app", "pages",
+            "page", "headers", "header", "format", "mode", "type",
+            "filter-name", "filter-class", "filter-mapping", "filter",
+            "web-app", "display-name", "description", "servlet-mapping",
+            "servlet-name", "servlet-class", "init-param", "param-name",
+            "param-value", "servlet", "load-on-startup", "security-constraint",
+            "web-resource-collection", "auth-constraint", "role-name",
+            "login-config", "auth-method", "realm-name", "security-role",
+            "url-pattern", "welcome-file-list", "welcome-file", "Context",
+            "ResourceLink", "menu", "?xml" };
+
+    private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
+            "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
+            "#include", "#include(", "#parse", "#parse(", "#stop", "#macro",
+            "#macro(", "#foreach", "#foreach(", "##", "#*", "*#", "#" };
 
     private boolean isJava = false;
+
+    private boolean isXml = false;
 
     private boolean isHtml = false;
 
@@ -56,8 +68,7 @@ public class SourceViewer extends BorderedPage {
         if (filename != null) {
             loadFilename(filename);
 
-        }
-        else {
+        } else {
             addModel("error", "filename not defined");
         }
     }
@@ -66,7 +77,8 @@ public class SourceViewer extends BorderedPage {
         ServletContext context = getContext().getServletContext();
 
         // Orion server requires '/' prefix to find resources
-        String resourceFilename = (filename.charAt(0) != '/') ? "/" + filename : filename;
+        String resourceFilename = (filename.charAt(0) != '/') ? "/" + filename
+                : filename;
 
         InputStream in = null;
         try {
@@ -76,24 +88,23 @@ public class SourceViewer extends BorderedPage {
 
                 loadResource(in, filename);
 
-            }
-            else {
+            } else {
                 addModel("error", "File " + resourceFilename + " not found");
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             addModel("error", "Could not read " + resourceFilename);
 
-        }
-        finally {
+        } finally {
             ClickUtils.close(in);
         }
     }
 
-    private void loadResource(InputStream inputStream, String name) throws IOException {
+    private void loadResource(InputStream inputStream, String name)
+            throws IOException {
 
         isJava = name.endsWith(".java");
+        isXml = name.endsWith(".xml");
         isHtml = name.endsWith(".htm");
         if (!isHtml) {
             isHtml = name.endsWith(".html");
@@ -101,11 +112,15 @@ public class SourceViewer extends BorderedPage {
         if (!isHtml) {
             isHtml = name.endsWith(".vm");
         }
+        if (!isHtml) {
+            isHtml = name.endsWith(".jsp");
+        }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                inputStream));
 
         StringBuffer buffer = new StringBuffer();
-        
+
         String line = reader.readLine();
 
         while (line != null) {
@@ -129,8 +144,7 @@ public class SourceViewer extends BorderedPage {
                 line = renderJavaKeywords(line, keyword);
             }
 
-        }
-        else if (isHtml) {
+        } else if (isHtml) {
             line = StringEscapeUtils.escapeHtml(line);
 
             for (int i = 0; i < HTML_KEYWORDS.length; i++) {
@@ -147,8 +161,15 @@ public class SourceViewer extends BorderedPage {
 
             line = StringUtils.replace(line, "$", renderedDollar);
 
-        }
-        else {
+        } else if (isXml) {
+            line = StringEscapeUtils.escapeHtml(line);
+
+            for (int i = 0; i < XML_KEYWORDS.length; i++) {
+                String keyword = XML_KEYWORDS[i];
+                line = renderXmlKeywords(line, keyword);
+            }
+
+        } else {
             line = StringEscapeUtils.escapeHtml(line);
         }
 
@@ -158,14 +179,16 @@ public class SourceViewer extends BorderedPage {
     private String renderJavaKeywords(String line, String token) {
         String markupToken = renderJavaToken(token);
 
-        line = StringUtils.replace(line, " " + token + " ", " " + markupToken + " ");
+        line = StringUtils.replace(line, " " + token + " ", " " + markupToken
+                + " ");
 
         if (line.startsWith(token)) {
             line = markupToken + line.substring(token.length());
         }
 
         if (line.endsWith(token)) {
-            line = line.substring(0, line.length() - token.length()) + markupToken;
+            line = line.substring(0, line.length() - token.length())
+                    + markupToken;
         }
 
         return line;
@@ -174,14 +197,16 @@ public class SourceViewer extends BorderedPage {
     private String renderVelocityKeywords(String line, String token) {
         String markupToken = renderVelocityToken(token);
 
-        line = StringUtils.replace(line, " " + token + " ", " " + markupToken + " ");
+        line = StringUtils.replace(line, " " + token + " ", " " + markupToken
+                + " ");
 
         if (line.startsWith(token)) {
             line = markupToken + line.substring(token.length());
         }
 
         if (line.endsWith(token)) {
-            line = line.substring(0, line.length() - token.length()) + markupToken;
+            line = line.substring(0, line.length() - token.length())
+                    + markupToken;
         }
 
         return line;
@@ -208,8 +233,33 @@ public class SourceViewer extends BorderedPage {
         return line;
     }
 
+    private String renderXmlKeywords(String line, String token) {
+
+        String markupToken = "&lt;" + token + "&gt;";
+        String renderedToken = "&lt;" + renderXmlToken(token) + "&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;" + token + "/&gt;";
+        renderedToken = "&lt;" + renderXmlToken(token) + "/&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;/" + token + "&gt;";
+        renderedToken = "&lt;/" + renderXmlToken(token) + "&gt;";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        markupToken = "&lt;" + token + " ";
+        renderedToken = "&lt;" + renderXmlToken(token) + " ";
+        line = StringUtils.replace(line, markupToken, renderedToken);
+
+        return line;
+    }
+
     private String renderHtmlToken(String token) {
-        return "<font color=\"navy\">" + token + "</font>";
+        return "<font color=\"#00029F\">" + token + "</font>";
+    }
+
+    private String renderXmlToken(String token) {
+        return "<font color=\"#00029F\">" + token + "</font>";
     }
 
     private String renderVelocityToken(String token) {

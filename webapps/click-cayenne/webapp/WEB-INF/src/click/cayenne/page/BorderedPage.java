@@ -1,27 +1,12 @@
-/*
- * Copyright 2005 Malcolm A. Edgar
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package click.cayenne.page;
 
 import net.sf.click.Page;
 
 /**
- * Provides a page border template. This Page returns the template 
- * <tt>"border.htm"</tt>, and sets the Page model values <tt>$title</tt> and 
+ * Provides a page border template. This Page returns the template
+ * <tt>"border.htm"</tt>, and sets the Page model values <tt>$title</tt> and
  * <tt>$srcPath</tt>.
- * 
+ *
  * @author Malcolm Edgar
  */
 public class BorderedPage extends CayennePage {
@@ -55,10 +40,10 @@ public class BorderedPage extends CayennePage {
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"border.htm"</tt>
-     * 
+     *
      * @see Page#getTemplate()
      */
     public String getTemplate() {
-        return "border.htm";
+        return "/border.htm";
     }
 }

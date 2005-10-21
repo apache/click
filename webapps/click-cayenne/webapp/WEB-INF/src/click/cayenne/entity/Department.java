@@ -9,7 +9,11 @@ import org.objectstyle.cayenne.validation.ValidationResult;
 
 import click.cayenne.entity.auto._Department;
 
-
+/**
+ * Provides a Department data object.
+ *
+ * @author Malcolm Edgar
+ */
 public class Department extends _Department {
 
     protected void validateForSave(ValidationResult validationResult) {

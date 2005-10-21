@@ -14,7 +14,7 @@ import org.objectstyle.cayenne.map.ObjEntity;
 import org.objectstyle.cayenne.util.Util;
 
 /**
- * Provides a Cayenne adapted Click <tt>Format</tt> object.
+ * Provides a Cayenne customised Click <tt>Format</tt> object.
  * 
  * @author Andrus Adamchik
  * @author Malcolm Edgar
@@ -28,28 +28,46 @@ public class CayenneFormat extends Format {
      * @return the string value of the ObjectId for the given DataObject
      */
     public String id(DataObject object) {
-        return (object != null) ? "" + 
-                DataObjectUtils.intPKForObject(object) : null;
+        if (object != null) {
+            return "" + DataObjectUtils.intPKForObject(object);
+        } else {
+            return null;
+        }
     }
 
+    /**
+     * Return the object id string for the given data row and entity name.
+     * 
+     * @param dataRow the current data row map
+     * @param entityName the name of the entity
+     * @return the object id string
+     */
     public String id(Map dataRow, String entityName) {
-        ObjEntity entity = DataContext
-                .getThreadDataContext()
-                .getEntityResolver()
-                .lookupObjEntity(entityName);
+        DataContext dataContext = DataContext.getThreadDataContext(); 
+        ObjEntity entity =
+            dataContext.getEntityResolver().lookupObjEntity(entityName);
 
         List pk = entity.getDbEntity().getPrimaryKey();
         if (pk.size() == 1) {
             DbAttribute attribute = (DbAttribute) pk.get(0);
             return String.valueOf(dataRow.get(attribute.getName()));
+            
+        } else {
+            String msg = "Multi-column keys are not yet supported as ids"; 
+            throw new CayenneRuntimeException(msg);
         }
-
-        throw new CayenneRuntimeException(
-                "Multi-column keys are not yet supported as ids");
     }
 
-    public String prettyTrim(String string, int maxlength) {
-        return Util.prettyTrim(string, maxlength);
+    /**
+     * Trims long strings substituting middle part with "...".
+     * 
+     * @param value the string value to limit the length of, must be at least
+     *  5 characters long, or an IllegalArgumentException is thrown.
+     * @param maxlength the maximum string length
+     * @return a length limited string
+     */
+    public String prettyTrim(String value, int maxlength) {
+        return Util.prettyTrim(value, maxlength);
     }
     
     /**
