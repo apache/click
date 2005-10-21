@@ -23,13 +23,13 @@ public class FormProperties extends BorderedPage {
     /** Form options holder. */
     public static class Options implements Serializable {
         static final long serialVersionUID = 1L;
-        String buttonAlign = Form.LEFT;
+        String buttonAlign = Form.ALIGN_LEFT;
         int columns = 1;
         boolean disabled = false;
-        String errorsAlign = Form.LEFT;
-        String errorsPosition = Form.MIDDLE;
-        String labelAlign = Form.LEFT;
-        String labelsPosition = Form.LEFT;
+        String errorsAlign = Form.ALIGN_LEFT;
+        String errorsPosition = Form.POSITION_MIDDLE;
+        String labelAlign = Form.ALIGN_LEFT;
+        String labelsPosition = Form.POSITION_LEFT;
         boolean readonly = false;
         boolean showBorders = false;
         boolean validate = true;
