@@ -27,9 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -519,29 +517,6 @@ public class ClickUtils {
                 "Exception occured invoking public method: " + targetMethod;
 
             throw new RuntimeException(msg, e);
-        }
-    }
-
-    /**
-     * Render the given Map of HTML attributes to the StringBuffer, except for
-     * the attribute "id".
-     *
-     * @param attributes the Map of HTML attributes
-     * @param buffer the StringBuffer to render to
-     */
-    public static void renderAttributes(Map attributes, StringBuffer buffer) {
-        if (attributes != null) {
-            for (Iterator i = attributes.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
-                if (!name.equals("id")) {
-                    String value = attributes.get(name).toString();
-                    buffer.append(" ");
-                    buffer.append(name);
-                    buffer.append("='");
-                    buffer.append(value);
-                    buffer.append("'");
-                }
-            }
         }
     }
 

@@ -36,13 +36,13 @@ public class HtmlStringBufferTest extends TestCase {
         buffer.appendAttribute("cols", 12);
         buffer.appendAttribute("class", "field-input");
         buffer.closeTag();
-        buffer.append("This is the car's way home today");
+        buffer.appendEscaped("This is the car's way home today");
         buffer.elementEnd("textarea");
         value = "<textarea id=\"textarea-id\" rows=\"2\" cols=\"12\" class=\"field-input\">This is the car's way home today</textarea>";
         assertEquals(value, buffer.toString());
         
         buffer = new HtmlStringBuffer();
-        buffer.appendRaw("<");
+        buffer.append("<");
         assertEquals("<", buffer.toString());
         
         buffer = new HtmlStringBuffer();

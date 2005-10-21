@@ -83,29 +83,29 @@ public class HtmlStringBuffer {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Append the given value to the buffer and escape its HMTL value.
+     * Append the raw string value of the given object to the buffer.
      *
      * @param value the object value to append
-     * @throw IllegalArgumentException if the value is null
+     * @throws IllegalArgumentException if the value is null
      */
     public void append(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
-        buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
+        buffer.append(value);
     }
 
     /**
-     * Append the raw string value of the given object to the buffer.
+     * Append the given value to the buffer and escape its HMTL value.
      *
      * @param value the object value to append
-     * @throw IllegalArgumentException if the value is null
+     * @throws IllegalArgumentException if the value is null
      */
-    public void appendRaw(Object value) {
+    public void appendEscaped(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
-        buffer.append(value);
+        buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
     }
 
     /**
@@ -168,9 +168,6 @@ public class HtmlStringBuffer {
      * For example:
      * <pre class="javaCode">
      *    appendAttributeDisabled()  <span class="green">-></span>  <span class="st">disabled="disabled"</span> </pre>
-     *
-     * @param name the HTML attribute name
-     * @param value the HTML attribute value
      */
     public void appendAttributeDisabled() {
         buffer.append(" disabled=\"disabled\"");
@@ -182,9 +179,6 @@ public class HtmlStringBuffer {
      * For example:
      * <pre class="javaCode">
      *    appendAttributeReadonly()  <span class="green">-></span>  <span class="st">readonly="readonly"</span> </pre>
-     *
-     * @param name the HTML attribute name
-     * @param value the HTML attribute value
      */
     public void appendAttributeReadonly() {
         buffer.append(" readonly=\"readonly\"");

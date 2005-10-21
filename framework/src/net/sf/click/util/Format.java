@@ -250,7 +250,7 @@ public class Format {
                     buffer.append(attribute);
                 }
                 buffer.closeTag();
-                buffer.append(email);
+                buffer.appendEscaped(email);
                 buffer.elementEnd("a");
 
                 return buffer.toString();
@@ -309,7 +309,7 @@ public class Format {
      * Adapted from Velocity Tools Formatter.
      *
      * @param value the string value to limit the length of
-     * @param maxlength An int with the maximum length
+     * @param maxlength the maximum string length
      * @return a length limited string
      */
     public String limitLength(String value, int maxlength) {
@@ -323,7 +323,7 @@ public class Format {
      * Adapted from Velocity Tools Formatter.
      *
      * @param value the string value to limit the length of
-     * @param maxlength An int with the maximum length
+     * @param maxlength the maximum string length
      * @param suffix the suffix to append to the length limited string
      * @return a length limited string
      */
@@ -378,7 +378,7 @@ public class Format {
                     buffer.append(attribute);
                 }
                 buffer.closeTag();
-                buffer.append(value);
+                buffer.appendEscaped(value);
                 buffer.elementEnd("a");
 
             } else if (value.startsWith("http")) {
@@ -395,7 +395,7 @@ public class Format {
                     buffer.append(attribute);
                 }
                 buffer.closeTag();
-                buffer.append(value.substring(index));
+                buffer.appendEscaped(value.substring(index));
                 buffer.elementEnd("a");
 
             } else if (value.startsWith("www")) {
@@ -406,7 +406,7 @@ public class Format {
                     buffer.append(attribute);
                 }
                 buffer.closeTag();
-                buffer.append(value);
+                buffer.appendEscaped(value);
                 buffer.elementEnd("a");
 
             } else {

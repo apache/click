@@ -174,9 +174,9 @@ public class Radio extends Field {
         buffer.closeTag();
 
         if (getLabel() != null) {
-            buffer.append(getLabel());
+            buffer.appendEscaped(getLabel());
         } else {
-            buffer.append(getValue());
+            buffer.appendEscaped(getValue());
         }
 
         buffer.elementEnd("input");

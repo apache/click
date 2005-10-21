@@ -57,7 +57,7 @@ import org.apache.commons.lang.StringUtils;
  * FieldSet provides a container for laying out form <tt>Field</tt> controls.
  * The FieldSet will use the properties of its parent Form for laying out and
  * rendering of its Fields. To further customise the rendering of a FieldSet
- * override the {@link #renderFields(StringBuffer)} method.
+ * override the {@link #renderFields(HtmlStringBuffer)} method.
  * <p/>
  * A FieldSet can contain any Field controls except for <tt>Button</tt> and
  * <tt>FieldSet</tt> controls.
@@ -433,7 +433,7 @@ public class FieldSet extends Field {
             buffer.appendAttributeDisabled();
         }
         buffer.closeTag();
-        buffer.appendRaw("\n");
+        buffer.append("\n");
 
         if (getLegend() != null) {
             buffer.elementStart("legend");
@@ -442,15 +442,15 @@ public class FieldSet extends Field {
                 buffer.appendAttributes(getLegendAttributes());
             }
             buffer.closeTag();
-            buffer.appendRaw(getLegend());
+            buffer.append(getLegend());
             buffer.elementEnd("legend");
-            buffer.appendRaw("\n");
+            buffer.append("\n");
         }
 
         renderFields(buffer);
 
         buffer.elementEnd("fieldset");
-        buffer.appendRaw("\n");
+        buffer.append("\n");
 
         return buffer.toString();
     }
@@ -472,7 +472,7 @@ public class FieldSet extends Field {
         buffer.appendAttribute("class", "fields");
         buffer.appendAttribute("id", getId() + "-fields");
         buffer.closeTag();
-        buffer.appendRaw("\n");
+        buffer.append("\n");
 
         int column = 1;
 
@@ -481,38 +481,38 @@ public class FieldSet extends Field {
             Field field = (Field) fieldList.get(i);
 
             if (field.isHidden()) {
-                buffer.appendRaw(field.toString());
-                buffer.appendRaw("\n");
+                buffer.append(field.toString());
+                buffer.append("\n");
 
             } else {
 
                 if (column == 1) {
-                    buffer.appendRaw("<tr class='fields'>\n");
+                    buffer.append("<tr class=\"fields\">\n");
                 }
 
                 if (field instanceof Label) {
-                    buffer.appendRaw("<td class='fields' colspan='2' align='");
-                    buffer.appendRaw(getForm().getLabelAlign());
-                    buffer.appendRaw("'");
+                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
+                    buffer.append(getForm().getLabelAlign());
+                    buffer.append("\"");
                     if (field.hasAttributes()) {
                         buffer.appendAttributes(field.getAttributes());
                     }
-                    buffer.appendRaw(">");
-                    buffer.appendRaw(field);
-                    buffer.appendRaw("</td>\n");
+                    buffer.append(">");
+                    buffer.append(field);
+                    buffer.append("</td>\n");
 
                 } else {
                     // Write out label
-                    if (Form.LEFT.equals(getForm().getLabelsPosition())) {
-                        buffer.appendRaw("<td class='fields' align='");
-                        buffer.appendRaw(getForm().getLabelAlign());
-                        buffer.appendRaw("'>");
+                    if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
+                        buffer.append("<td class=\"fields\" align=\"");
+                        buffer.append(getForm().getLabelAlign());
+                        buffer.append("\">");
                     } else {
-                        buffer.appendRaw("<td class='fields' valign='top'>");
+                        buffer.append("<td class=\"fields\" valign=\"top\">");
                     }
 
                     if (field.isRequired()) {
-                        buffer.appendRaw(Form.labelRequiredPrefix);
+                        buffer.append(Form.labelRequiredPrefix);
                     }
                     buffer.elementStart("label");
                     if (field.isDisabled()) {
@@ -522,26 +522,26 @@ public class FieldSet extends Field {
                         buffer.appendAttribute("class", "error");
                     }
                     buffer.closeTag();
-                    buffer.appendRaw(field.getLabel());
+                    buffer.append(field.getLabel());
                     buffer.elementEnd("label");
                     if (field.isRequired()){
-                        buffer.appendRaw(Form.labelRequiredSuffix);
+                        buffer.append(Form.labelRequiredSuffix);
                     }
 
-                    if (Form.LEFT.equals(getForm().getLabelsPosition())) {
-                        buffer.appendRaw("</td>\n");
-                        buffer.appendRaw("<td align='left'>");
+                    if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
+                        buffer.append("</td>\n");
+                        buffer.append("<td align=\"left\">");
                     } else {
-                        buffer.appendRaw("<br>");
+                        buffer.append("<br/>");
                     }
 
                     // Write out field
-                    buffer.appendRaw(field);
-                    buffer.appendRaw("</td>\n");
+                    buffer.append(field);
+                    buffer.append("</td>\n");
                 }
 
                 if (column == getForm().getColumns()) {
-                    buffer.appendRaw("</tr>\n");
+                    buffer.append("</tr>\n");
                     column = 1;
                 } else {
                     column++;
@@ -551,7 +551,7 @@ public class FieldSet extends Field {
         }
 
         buffer.elementEnd("table");
-        buffer.appendRaw("\n");
+        buffer.append("\n");
     }
 
 }

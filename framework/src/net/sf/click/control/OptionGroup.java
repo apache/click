@@ -111,11 +111,11 @@ public class OptionGroup {
 
             if (object instanceof Option) {
                 Option option = (Option) object;
-                buffer.appendRaw(option.renderHTML(select));
+                buffer.append(option.renderHTML(select));
 
             } else if (object instanceof OptionGroup) {
                 OptionGroup optionGroup = (OptionGroup) object;
-                buffer.appendRaw(optionGroup.renderHTML(select));
+                buffer.append(optionGroup.renderHTML(select));
 
             } else {
                 String msg = "Select option class not instance of Option"
