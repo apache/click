@@ -614,15 +614,4 @@ public abstract class Field implements Control {
         }
     }
 
-    /**
-     * Render the field HTML attributes to the string buffer, except for
-     * the attribute "id".
-     *
-     * @param buffer the StringBuffer to render the HTML attributes to
-     */
-    protected void renderAttributes(StringBuffer buffer) {
-        if (hasAttributes()) {
-            ClickUtils.renderAttributes(getAttributes(), buffer);
-        }
-    }
 }

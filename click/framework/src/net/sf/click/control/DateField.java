@@ -341,38 +341,38 @@ public class DateField extends TextField {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         String textField = super.toString();
-        buffer.appendRaw(textField);
+        buffer.append(textField);
 
         if (!isReadonly() && !isDisabled()) {
-            buffer.appendRaw("<img align='middle' hspace='2' style='cursor:hand' src='");
-            buffer.appendRaw(getForm().getContext().getRequest().getContextPath());
-            buffer.appendRaw("/click/calendar.gif' id='");
-            buffer.appendRaw(getId());
-            buffer.appendRaw("-button' ");
+            buffer.append("<img align=\"middle\" hspace=\"2\" style=\"cursor:hand\" src=\"");
+            buffer.append(getForm().getContext().getRequest().getContextPath());
+            buffer.append("/click/calendar.gif\" id=\"");
+            buffer.append(getId());
+            buffer.append("-button\" ");
 
             String calendarTitle = getMessage("calendar-image-title");
             buffer.appendAttribute("alt", calendarTitle);
             buffer.appendAttribute("title", calendarTitle);
             buffer.elementEnd();
 
-            buffer.appendRaw("<script type='text/javascript'>\n");
-            buffer.appendRaw("Calendar.setup({ \n");
-            buffer.appendRaw(" inputField : '");
-            buffer.appendRaw(getId());
-            buffer.appendRaw("', \n");
-            buffer.appendRaw(" ifFormat :    '");
-            buffer.appendRaw(getCalendarPattern());
-            buffer.appendRaw("', \n");
+            buffer.append("<script type=\"text/javascript\">\n");
+            buffer.append("Calendar.setup({ \n");
+            buffer.append(" inputField :  '");
+            buffer.append(getId());
+            buffer.append("', \n");
+            buffer.append(" ifFormat :    '");
+            buffer.append(getCalendarPattern());
+            buffer.append("', \n");
             if (getShowTime()) {
-                buffer.appendRaw(" showsTime : true, \n");
+                buffer.append(" showsTime : true, \n");
             }
-            buffer.appendRaw(" button : '");
-            buffer.appendRaw(getId());
-            buffer.appendRaw("-button', \n");
-            buffer.appendRaw(" align :    'cr', \n");
-            buffer.appendRaw(" singleClick : true \n");
-            buffer.appendRaw("});\n");
-            buffer.appendRaw("</script> \n");
+            buffer.append(" button :      '");
+            buffer.append(getId());
+            buffer.append("-button', \n");
+            buffer.append(" align :       'cr', \n");
+            buffer.append(" singleClick : true \n");
+            buffer.append("});\n");
+            buffer.append("</script> \n");
         }
 
         return buffer.toString();

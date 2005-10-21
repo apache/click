@@ -188,7 +188,7 @@ public class Option {
         buffer.appendAttribute("value", getValue());
         buffer.closeTag();
 
-        buffer.append(getLabel());
+        buffer.appendEscaped(getLabel());
 
         buffer.elementEnd("option");
 

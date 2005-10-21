@@ -559,7 +559,9 @@ public class ActionLink implements Control {
 
         buffer.elementStart("a");
 
-        buffer.appendAttribute("href", getHref());
+        buffer.append(" href=\"");
+        buffer.append(getHref());
+        buffer.append("\"");
         buffer.appendAttribute("id", getId());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
@@ -569,7 +571,7 @@ public class ActionLink implements Control {
         }
         buffer.closeTag();
 
-        buffer.append(getLabel());
+        buffer.appendEscaped(getLabel());
 
         buffer.elementEnd("a");
 

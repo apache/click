@@ -291,10 +291,10 @@ public class RadioGroup extends Field {
                 }
             }
 
-            buffer.appendRaw(radio.toString());
+            buffer.append(radio.toString());
 
             if (isVerticalLayout() && (i < size - 1)) {
-                buffer.appendRaw("<br/>");
+                buffer.append("<br/>");
             }
         }
 

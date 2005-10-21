@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
-import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -643,14 +643,16 @@ public class Table implements Control {
         int bufferSize =
             (getColumnList().size() * 60) * (getRowList().size() + 1);
 
-        StringBuffer buffer = new StringBuffer(bufferSize);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
         // Render table start.
-        buffer.append("<table id='");
-        buffer.append(getId());
-        buffer.append("'");
-        renderAttributes(buffer);
-        buffer.append(">\n");
+        buffer.elementStart("table");
+        buffer.appendAttribute("id", getId());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        buffer.closeTag();
+        buffer.append("\n");
 
         // Render table header row.
         buffer.append("<thead>\n<tr>\n");
@@ -678,9 +680,9 @@ public class Table implements Control {
             Object row = tableRows.get(i);
 
             if ((i+1) % 2 == 0) {
-                buffer.append("<tr class='even'>\n");
+                buffer.append("<tr class=\"even\">\n");
             } else {
-                buffer.append("<tr class='odd'>\n");
+                buffer.append("<tr class=\"odd\">\n");
             }
 
             for (int j = 0; j < tableColumns.size(); j++) {
@@ -742,18 +744,6 @@ public class Table implements Control {
     }
 
     /**
-     * Render the table HTML attributes to the string buffer, except for
-     * the attribute "id".
-     *
-     * @param buffer the StringBuffer to render the HTML attributes to
-     */
-    protected void renderAttributes(StringBuffer buffer) {
-        if (hasAttributes()) {
-            ClickUtils.renderAttributes(getAttributes(), buffer);
-        }
-    }
-
-    /**
      * Render the table banner detailing number of rows and number displayed.
      * <p/>
      * See the <tt>/click-extras.properies</tt> for the HTML templates:
@@ -761,7 +751,7 @@ public class Table implements Control {
      *
      * @param buffer the StringBuffer to render the paging controls to
      */
-    protected void renderTableBanner(StringBuffer buffer) {
+    protected void renderTableBanner(HtmlStringBuffer buffer) {
         if (getShowBanner()) {
             String totalRows = null;
             if (getRowCount() > 0) {
@@ -802,7 +792,7 @@ public class Table implements Control {
      *
      * @param buffer the StringBuffer to render the paging controls to
      */
-    protected void renderPagingControls(StringBuffer buffer) {
+    protected void renderPagingControls(HtmlStringBuffer buffer) {
         if (getPageSize() > 0) {
             String firstLabel = getMessage("table-first-label");
             String firstTitle = getMessage("table-first-title");

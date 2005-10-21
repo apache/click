@@ -24,6 +24,7 @@ import java.util.Map;
 
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -352,18 +353,6 @@ public class Column implements Serializable {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Render the table HTML attributes to the string buffer, except for
-     * the attribute "id".
-     *
-     * @param buffer the StringBuffer to render the HTML attributes to
-     */
-    protected void renderAttributes(StringBuffer buffer) {
-        if (hasAttributes()) {
-            ClickUtils.renderAttributes(getAttributes(), buffer);
-        }
-    }
-
-    /**
      * Render the column table data &lt;td&gt; element to the given buffer using
      * the passed row object.
      *
@@ -371,7 +360,7 @@ public class Column implements Serializable {
      * @param buffer the string buffer to render to
      * @param context the request context
      */
-    public void renderTableData(Object row, StringBuffer buffer,
+    public void renderTableData(Object row, HtmlStringBuffer buffer,
             Context context) {
 
         if (getMessageFormat() == null && getFormat() != null) {
@@ -379,19 +368,13 @@ public class Column implements Serializable {
             setMessageFormat(new MessageFormat(getFormat(), locale));
         }
 
-        buffer.append("<td");
-        if (getDataClass() != null) {
-            buffer.append(" class='");
-            buffer.append(getDataClass());
-            buffer.append("'");
+        buffer.elementStart("td");
+        buffer.appendAttribute("class", getDataClass());
+        buffer.appendAttribute("style", getDataStyle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
-        if (getDataStyle() != null) {
-            buffer.append(" style='");
-            buffer.append(getDataStyle());
-            buffer.append("'");
-        }
-        renderAttributes(buffer);
-        buffer.append(">");
+        buffer.closeTag();
 
         if (getDecorator() != null) {
             buffer.append(getDecorator().render(row, context));
@@ -411,7 +394,7 @@ public class Column implements Serializable {
             }
         }
 
-        buffer.append("</td>");
+        buffer.elementEnd("td");
     }
 
     /**
@@ -420,22 +403,16 @@ public class Column implements Serializable {
      * @param buffer the string buffer to render to
      * @param context the request context
      */
-    public void renderTableHeader(StringBuffer buffer, Context context) {
-        buffer.append("<th");
-        if (getHeaderClass() != null) {
-            buffer.append(" class='");
-            buffer.append(getHeaderClass());
-            buffer.append("'");
+    public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
+        buffer.elementStart("th");
+        buffer.appendAttribute("class", getHeaderClass());
+        buffer.appendAttribute("style", getHeaderStyle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
         }
-        if (getHeaderStyle() != null) {
-            buffer.append(" style='");
-            buffer.append(getHeaderStyle());
-            buffer.append("'");
-        }
-        renderAttributes(buffer);
-        buffer.append(">");
+        buffer.closeTag();
         buffer.append(getHeaderTitle());
-        buffer.append("</th>");
+        buffer.elementEnd("th");
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -470,7 +447,7 @@ public class Column implements Serializable {
      * @param buffer the StringBuffer to render to
      * @return a rendered email or web hyperlink if applicable
      */
-    protected boolean renderLink(Object value, StringBuffer buffer) {
+    protected boolean renderLink(Object value, HtmlStringBuffer buffer) {
         if (value != null) {
             String valueStr = value.toString();
 
@@ -478,9 +455,9 @@ public class Column implements Serializable {
             if (valueStr.indexOf('@') != -1 && !valueStr.startsWith("@") &&
                 !valueStr.endsWith("@")) {
 
-                buffer.append("<a href='mailto:");
+                buffer.append("<a href=\"mailto:");
                 buffer.append(valueStr);
-                buffer.append("'>");
+                buffer.append("\">");
                 buffer.append(valueStr);
                 buffer.append("</a>");
                 return true;
@@ -492,17 +469,17 @@ public class Column implements Serializable {
                 } else {
                     index = 0;
                 }
-                buffer.append("<a href='");
+                buffer.append("<a href=\"");
                 buffer.append(valueStr);
-                buffer.append("'>");
+                buffer.append("\">");
                 buffer.append(valueStr.substring(index));
                 buffer.append("</a>");
                 return true;
 
             } else if (valueStr.startsWith("www")) {
-                buffer.append("<a href='http://");
+                buffer.append("<a href=\"http://");
                 buffer.append(valueStr);
-                buffer.append("'>");
+                buffer.append("\">");
                 buffer.append(valueStr);
                 buffer.append("</a>");
                 return true;

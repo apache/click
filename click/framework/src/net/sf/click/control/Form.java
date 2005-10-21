@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.fileupload.DefaultFileItemFactory;
 import org.apache.commons.fileupload.FileItem;
@@ -320,25 +321,34 @@ public class Form implements Control {
 
     private static final long serialVersionUID = -8288409197675214969L;
 
+    /** The align left, form layout contant: &nbsp; <tt>"left"</tt> */
+    public static final String ALIGN_LEFT = "left";
+
+    /** The align center, form layout contant: &nbsp; <tt>"center"</tt> */
+    public static final String ALIGN_CENTER = "center";
+
+    /** The align right, form layout contant: &nbsp; <tt>"right"</tt> */
+    public static final String ALIGN_RIGHT = "right";
+
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>
      */
     public static final String FORM_NAME = "form_name";
 
-    /** The errors and labels on top form layout constant: &nbsp; <tt>"top"</tt> */
-    public static final String TOP = "top";
-
-    /** The errors in middle form layout constant: &nbsp; <tt>"middle"</tt> */
-    public static final String MIDDLE = "middle";
-
-    /** The errors on bottom form layout constant: &nbsp; <tt>"top"</tt> */
-    public static final String BOTTOM = "bottom";
-
-    /** The labels of left form layout contant: &nbsp; <tt>"left"</tt> */
-    public static final String LEFT = "left";
-
     /** The HTTP content type header for multipart forms. */
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
+
+    /** The position top, errors and labels form layout constant: &nbsp; <tt>"top"</tt> */
+    public static final String POSITION_TOP = "top";
+
+    /** The position middle, errors in middle form layout constant: &nbsp; <tt>"middle"</tt> */
+    public static final String POSITION_MIDDLE = "middle";
+
+    /** The position bottom, errors on bottom form layout constant: &nbsp; <tt>"top"</tt> */
+    public static final String POSITION_BOTTOM = "bottom";
+
+    /** The position left, labels of left form layout contant: &nbsp; <tt>"left"</tt> */
+    public static final String POSITION_LEFT = "left";
 
     /** The errors-header resource property */
     protected static String errorsHeader = "";
@@ -359,9 +369,9 @@ public class Form implements Control {
     protected static String labelRequiredSuffix = "";
 
     protected static final String HTML_IMPORTS =
-        "<link rel='stylesheet' type='text/css' href='$/click/control.css' title='style'>\n" +
-        "<script type='text/javascript' src='$/click/control.js'></script>\n" +
-        "<script type='text/javascript' src='$/click/calendar-en.js'></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"$/click/control.css\" title=\"style\">\n" +
+        "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n" +
+        "<script type=\"text/javascript\" src=\"$/click/calendar-en.js\"></script>\n";
 
     static {
         ResourceBundle bundle =
@@ -381,7 +391,7 @@ public class Form implements Control {
     protected Map attributes;
 
     /** The button align, default value is "<tt>left</tt>" */
-    protected String buttonAlign = LEFT;
+    protected String buttonAlign = ALIGN_LEFT;
 
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
@@ -407,13 +417,13 @@ public class Form implements Control {
     protected String error;
 
     /** The errors block align, default value is <tt>"left"</tt> */
-    protected String errorsAlign = LEFT;
+    protected String errorsAlign = ALIGN_LEFT;
 
     /**
      * The form errors position <tt>["top", "middle", "bottom"]</tt> default value:
      * &nbsp; <tt>"middle"</tt>
      */
-    protected String errorsPosition = MIDDLE;
+    protected String errorsPosition = POSITION_MIDDLE;
 
     /** The ordered list of field values, excluding buttons. */
     protected final List fieldList = new ArrayList();
@@ -422,12 +432,12 @@ public class Form implements Control {
     protected final Map fields = new HashMap();
 
     /** The label align, default value is <tt>"left"</tt> */
-    protected String labelAlign = LEFT;
+    protected String labelAlign = ALIGN_LEFT;
 
     /**
      * The form labels position <tt>["left", "top"]</tt> default value: &nbsp; <tt>"left"</tt>
      */
-    protected String labelsPosition = LEFT;
+    protected String labelsPosition = POSITION_LEFT;
 
     /** The listener target object. */
     protected Object listener;
@@ -831,9 +841,9 @@ public class Form implements Control {
      * @param position the form errors position
      */
     public void setErrorsPosition(String position) {
-        if (TOP.equals(position) ||
-            MIDDLE.equals(position) ||
-            BOTTOM.equals(position)) {
+        if (POSITION_TOP.equals(position) ||
+            POSITION_MIDDLE.equals(position) ||
+            POSITION_BOTTOM.equals(position)) {
 
             errorsPosition = position;
 
@@ -958,7 +968,7 @@ public class Form implements Control {
      * @param position the form labels position
      */
     public void setLabelsPosition(String position) {
-        if (LEFT.equals(position) || TOP.equals(position)) {
+        if (POSITION_LEFT.equals(position) || POSITION_TOP.equals(position)) {
             labelsPosition = position;
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
@@ -1272,49 +1282,44 @@ public class Form implements Control {
         int bufferSize =
             400 + (fieldList.size() * 350) + (buttonList.size() * 50);
 
-        StringBuffer buffer = new StringBuffer(bufferSize);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
         HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
         String actionURL = response.encodeURL(request.getRequestURI());
 
-        buffer.append("<form method='");
-        buffer.append(getMethod());
-        buffer.append("' name='");
-        buffer.append(getName());
-        buffer.append("' id='");
-        buffer.append(getId());
-        buffer.append("' action='");
-        buffer.append(actionURL);
-        if (getEnctype() != null) {
-            buffer.append("' enctype='");
-            buffer.append(getEnctype());
-        }
-        buffer.append("'");
+        buffer.elementStart("form");
+
+        buffer.appendAttribute("method", getMethod());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("action", actionURL);
+        buffer.appendAttribute("enctype", getEnctype());
         if (hasAttributes()) {
-            ClickUtils.renderAttributes(getAttributes(), buffer);
+            buffer.appendAttributes(getAttributes());
         }
-        buffer.append(">\n");
+        buffer.closeTag();
+        buffer.append("\n");
 
         int hiddenCount = 0;
         Field fieldWithError = null;
 
-        buffer.append("<table class='form' id='");
+        buffer.append("<table class=\"form\" id=\"");
         buffer.append(getId());
-        buffer.append("-form'>\n");
+        buffer.append("-form\">\n");
 
         // Render fields, errors and buttons
-        if (TOP.equals(getErrorsPosition())) {
+        if (POSITION_TOP.equals(getErrorsPosition())) {
             fieldWithError = renderErrors(buffer, process);
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
 
-        } else if (MIDDLE.equals(getErrorsPosition())) {
+        } else if (POSITION_MIDDLE.equals(getErrorsPosition())) {
             hiddenCount = renderFields(buffer);
             fieldWithError = renderErrors(buffer, process);
             renderButtons(buffer);
 
-        } else if (BOTTOM.equals(getErrorsPosition())) {
+        } else if (POSITION_BOTTOM.equals(getErrorsPosition())) {
             hiddenCount = renderFields(buffer);
             renderButtons(buffer);
             fieldWithError = renderErrors(buffer, process);
@@ -1340,11 +1345,12 @@ public class Form implements Control {
             }
         }
 
-        buffer.append("</form>\n");
+        buffer.elementEnd("form");
+        buffer.append("\n");
 
         // Set field focus
         if (fieldWithError != null) {
-            buffer.append("<script type='text/javascript'><!--\n");
+            buffer.append("<script type=\"text/javascript\"><!--\n");
             buffer.append("document.forms['");
             buffer.append(getName());
             buffer.append("'].elements['");
@@ -1366,7 +1372,7 @@ public class Form implements Control {
                             !fieldSetField.isHidden() &&
                             !fieldSetField.isDisabled()) {
 
-                            buffer.append("<script type='text/javascript'><!--\n");
+                            buffer.append("<script type=\"text/javascript\"><!--\n");
                             buffer.append("document.forms['");
                             buffer.append(getName());
                             buffer.append("'].elements['");
@@ -1381,7 +1387,7 @@ public class Form implements Control {
                            !field.isHidden() &&
                            !field.isDisabled()) {
 
-                    buffer.append("<script type='text/javascript'><!--\n");
+                    buffer.append("<script type=\"text/javascript\"><!--\n");
                     buffer.append("document.forms['");
                     buffer.append(getName());
                     buffer.append("'].elements['");
@@ -1405,7 +1411,7 @@ public class Form implements Control {
      * @param buffer the StringBuffer to render to
      * @return the number of hidden Fields
      */
-    protected int renderFields(StringBuffer buffer) {
+    protected int renderFields(HtmlStringBuffer buffer) {
         if (fieldList.size() == 1 && fields.containsKey("form_name")) {
             return 1;
         }
@@ -1413,9 +1419,9 @@ public class Form implements Control {
         int hiddenCount = 0;
 
         buffer.append("<tr><td>\n");
-        buffer.append("<table class='fields' id='");
+        buffer.append("<table class=\"fields\" id=\"");
         buffer.append(getId());
-        buffer.append("-fields'>\n");
+        buffer.append("-fields\">\n");
 
         int column = 1;
 
@@ -1426,23 +1432,22 @@ public class Form implements Control {
             if (!field.isHidden()) {
 
                 if (column == 1) {
-                    buffer.append("<tr class='fields'>\n");
+                    buffer.append("<tr class=\"fields\">\n");
                 }
 
                 if (field instanceof FieldSet) {
-                    buffer.append("<td class='fields' colspan='2' align='");
+                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getLabelAlign());
-                    buffer.append("'>\n");
+                    buffer.append("\">\n");
                     buffer.append(field);
                     buffer.append("</td>\n");
 
                 } else if (field instanceof Label) {
-                    buffer.append("<td class='fields' colspan='2' align='");
+                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getLabelAlign());
-                    buffer.append("'");
+                    buffer.append("\"");
                     if (field.hasAttributes()) {
-                        ClickUtils.renderAttributes
-                            (field.getAttributes(), buffer);
+                        buffer.appendAttributes(field.getAttributes());
                     }
                     buffer.append(">");
                     buffer.append(field);
@@ -1450,12 +1455,12 @@ public class Form implements Control {
 
                 } else {
                     // Write out label
-                    if (LEFT.equals(getLabelsPosition())) {
-                        buffer.append("<td class='fields' align='");
+                    if (POSITION_LEFT.equals(getLabelsPosition())) {
+                        buffer.append("<td class=\"fields\" align=\"");
                         buffer.append(getLabelAlign());
-                        buffer.append("'>");
+                        buffer.append("\">");
                     } else {
-                        buffer.append("<td class='fields' valign='top'>");
+                        buffer.append("<td class=\"fields\" valign=\"top\">");
                     }
 
                     if (field.isRequired()) {
@@ -1466,7 +1471,7 @@ public class Form implements Control {
                         buffer.append(" disabled=\"disabled\"");
                     }
                     if (field.getError() != null) {
-                        buffer.append(" class='error'");
+                        buffer.append(" class=\"error\"");
                     }
                     buffer.append(">");
                     buffer.append(field.getLabel());
@@ -1475,9 +1480,9 @@ public class Form implements Control {
                         buffer.append(labelRequiredSuffix);
                     }
 
-                    if (LEFT.equals(getLabelsPosition())) {
+                    if (POSITION_LEFT.equals(getLabelsPosition())) {
                         buffer.append("</td>\n");
-                        buffer.append("<td align='left'>");
+                        buffer.append("<td align=\"left\">");
                     } else {
                         buffer.append("<br>");
                     }
@@ -1513,7 +1518,7 @@ public class Form implements Control {
      * @param processed the flag indicating whether has been processed
      * @return the first field with an error if the form is being processed
      */
-    protected Field renderErrors(StringBuffer buffer, boolean processed) {
+    protected Field renderErrors(HtmlStringBuffer buffer, boolean processed) {
 
         Field fieldWithError = null;
         if (processed && !isValid()) {
@@ -1529,24 +1534,24 @@ public class Form implements Control {
                 buffer.append(errorsHeader);
                 buffer.append("\n");
             } else {
-                buffer.append("<tr><td align='");
+                buffer.append("<tr><td align=\"");
                 buffer.append(getErrorsAlign());
-                buffer.append("'>\n");
-                buffer.append("<table class='errors' id='");
+                buffer.append("\">\n");
+                buffer.append("<table class=\"errors\" id=\"");
                 buffer.append(getId());
-                buffer.append("-errors'>\n");
+                buffer.append("-errors\">\n");
             }
 
             if (getError() != null) {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
                 } else {
-                    buffer.append("<tr class='errors'>");
-                    buffer.append("<td class='errors' align='");
+                    buffer.append("<tr class=\"errors\">");
+                    buffer.append("<td class=\"errors\" align=\"");
                     buffer.append(getErrorsAlign());
-                    buffer.append("'>\n");
+                    buffer.append("\">\n");
                 }
-                buffer.append("<span class='error'>");
+                buffer.append("<span class=\"error\">");
                 buffer.append(getError());
                 buffer.append("</span>\n");
                 if (useErrorsHeader) {
@@ -1568,18 +1573,18 @@ public class Form implements Control {
                 if (useErrorsHeader) {
                     buffer.append(errorsPrefix);
                 } else {
-                    buffer.append("<tr class='errors'>");
-                    buffer.append("<td class='errors' align='");
+                    buffer.append("<tr class=\"errors\">");
+                    buffer.append("<td class=\"errors\" align=\"");
                     buffer.append(getErrorsAlign());
-                    buffer.append("'>");
+                    buffer.append("\">");
                 }
 
-                buffer.append("<a class='error'");
-                buffer.append(" href='javascript:document.");
+                buffer.append("<a class=\"error\"");
+                buffer.append(" href=\"javascript:document.");
                 buffer.append(getName());
                 buffer.append(".");
                 buffer.append(field.getName());
-                buffer.append(".focus();'>");
+                buffer.append(".focus();\">");
                 buffer.append(field.getError());
                 buffer.append("</a>");
 
@@ -1608,15 +1613,15 @@ public class Form implements Control {
      *
      * @param buffer the StringBuffer to render to
      */
-    protected void renderButtons(StringBuffer buffer) {
+    protected void renderButtons(HtmlStringBuffer buffer) {
         if (!buttonList.isEmpty()) {
-            buffer.append("<tr><td align='");
+            buffer.append("<tr><td align=\"");
             buffer.append(getButtonAlign());
-            buffer.append("'>\n");
-            buffer.append("<table class='buttons' id='");
+            buffer.append("\">\n");
+            buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
-            buffer.append("-buttons'>\n");
-            buffer.append("<tr class='buttons'><td class='buttons'>");
+            buffer.append("-buttons\">\n");
+            buffer.append("<tr class=\"buttons\"><td class=\"buttons\">");
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);

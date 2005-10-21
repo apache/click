@@ -322,7 +322,7 @@ public class TextArea extends Field {
         }
         buffer.closeTag();
 
-        buffer.append(getValue());
+        buffer.appendEscaped(getValue());
 
         buffer.elementEnd("textarea");
 
