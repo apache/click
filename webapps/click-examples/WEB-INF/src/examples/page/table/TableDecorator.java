@@ -62,7 +62,7 @@ public class TableDecorator extends BorderedPage {
         deleteLink.setLabel("Delete");
         deleteLink.setAttribute("title", "Delete customer record");
         deleteLink.setAttribute
-            ("onclick", "return window.confirm(\"Please confirm delete\");");
+            ("onclick", "return window.confirm('Please confirm delete');");
         table.addControl(deleteLink);
 
         column = new Column("Action");
