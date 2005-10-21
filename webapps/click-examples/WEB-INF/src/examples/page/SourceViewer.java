@@ -35,16 +35,16 @@ public class SourceViewer extends BorderedPage {
             "i", "u", "ul", "ol", "li", "form", "div", "input", "fieldset",
             "pre", "tt", "%@", "ajax-response", "response" };
 
-    private static final String[] XML_KEYWORDS = { "click-app", "pages", "page",
-        "headers", "header", "format", "mode", "type",
-        "filter-name", "filter-class", "filter-mapping", "filter",
-        "web-app", "display-name", "description", "servlet-mapping",
-        "servlet-name", "servlet-class", "init-param", "param-name",
-        "param-value", "servlet", "load-on-startup", "security-constraint",
-        "web-resource-collection", "auth-constraint", "role-name",
-        "login-config", "auth-method", "realm-name", "security-role",
-        "url-pattern", "welcome-file-list", "welcome-file",
-        "Context", "ResourceLink", "menu", "?xml" };
+    private static final String[] XML_KEYWORDS = { "click-app", "pages",
+            "page", "headers", "header", "format", "mode", "type",
+            "filter-name", "filter-class", "filter-mapping", "filter",
+            "web-app", "display-name", "description", "servlet-mapping",
+            "servlet-name", "servlet-class", "init-param", "param-name",
+            "param-value", "servlet", "load-on-startup", "security-constraint",
+            "web-resource-collection", "auth-constraint", "role-name",
+            "login-config", "auth-method", "realm-name", "security-role",
+            "url-pattern", "welcome-file-list", "welcome-file", "Context",
+            "ResourceLink", "menu", "?xml" };
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
