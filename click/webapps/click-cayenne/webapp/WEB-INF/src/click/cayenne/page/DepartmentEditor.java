@@ -6,11 +6,20 @@ import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.cayenne.CayenneForm;
 
+/**
+ * Provides a Department Editor page which can be used to create or edit
+ * Department data objects. This page uses the data aware CayenneForm control 
+ * for simplified editing data objects.
+ *
+ * @author Andrus Adamchik
+ * @author Malcolm Edgar
+ */
 public class DepartmentEditor extends BorderedPage {
 
     public static final String DEPARTMENT_EDIT_KEY = 
         DepartmentEditor.class.getName();
 
+    /** The Department editing CayenneForm. */
     protected CayenneForm form = new CayenneForm("form", Department.class);
 
     /**
@@ -28,6 +37,9 @@ public class DepartmentEditor extends BorderedPage {
     }
 
     /**
+     * If the Department has been passed to the page as a request attribute,
+     * then bind the Department object to the data aware CayenneForm.
+     * 
      * @see Page#onGet()
      */
     public void onGet() {
@@ -39,6 +51,11 @@ public class DepartmentEditor extends BorderedPage {
         }
     }
 
+    /**
+     * Handle the OK button click, saving the Department if valid and 
+     * redirecting to the <tt>DepartmentsViewer</tt> page. If the Department
+     * is not valid display form errors.
+     */
     public boolean onOkClick() {
         if (form.isValid()) {
             if (form.saveChanges()) {
@@ -49,6 +66,12 @@ public class DepartmentEditor extends BorderedPage {
         return true;
     }
 
+    /**
+     * Handle the Cancel button click, redirecting to the 
+     * <tt>DepartmentsViwer</tt> page.
+     * 
+     * @return false
+     */
     public boolean onCancelClick() {
         setRedirect("departments-viewer.htm");
         return false;

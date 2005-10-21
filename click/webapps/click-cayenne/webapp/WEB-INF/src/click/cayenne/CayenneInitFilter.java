@@ -11,7 +11,8 @@ import org.objectstyle.cayenne.conf.WebApplicationContextFilter;
 import org.objectstyle.cayenne.map.DataMap;
 
 /**
- * Initializes Cayenne runtime and creates a demo database schema.
+ * Provides a customized WebApplicationContextFilter to initialize 
+ * the Cayenne runtime and creates a demo database schema.
  * 
  * @see WebApplicationContextFilter
  * 

@@ -7,9 +7,8 @@ import org.objectstyle.cayenne.DataObjectUtils;
 import org.objectstyle.cayenne.access.DataContext;
 
 /**
- * A superclass of Click pages that supports storing and retrieving DataObjects 
- * in the session. It stores ObjectIds and retrieves DataObjects in a context of 
- * request processing relying on thread-bound DataContext.
+ * Provides a base Cayenne page which provides utility methods for retrieving 
+ * DataObjects contained in the thread-bound DataContext.  
  * 
  * @author Andrus Adamchik
  * @author Malcolm Edgar
@@ -23,19 +22,6 @@ public class CayennePage extends Page {
      */
     public DataContext getDataContext() {
         return DataContext.getThreadDataContext();
-    }
-    
-    /**
-     * Return the DataObject for the given class and primary key.
-     * 
-     * @param aClass the DataObject class
-     * @param primaryKey the DataObject primary key
-     * @return the DataObject for the given class and primary key
-     */
-    public DataObject getDataObject(Class aClass, int primaryKey) {
-        return DataObjectUtils.objectForPK(getDataContext(),  
-                                           aClass,
-                                           primaryKey);
     }
     
     /**
