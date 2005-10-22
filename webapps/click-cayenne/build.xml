@@ -45,7 +45,7 @@
       </javac> 
    </target>
 
-   <target name="build" description="build web application WAR file">
+   <target name="build" description="build web application WAR file" depends="compile">
       <delete dir="deploy" quiet="false"/>
       <mkdir dir="deploy"/>
       <war destfile="deploy/${name}.war"
@@ -58,6 +58,7 @@
          <lib file="${jar.click}"/>
          <lib file="${jar.click-extras}"/>
          <lib file="${jar.log4j}"/>
+         <lib file="${jar.cayenne}"/>
          <fileset dir="webapp">
             <exclude name="**/web.xml"/>
          </fileset>
