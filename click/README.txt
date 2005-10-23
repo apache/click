@@ -14,18 +14,18 @@ This documentation is also available in the click-documentation.war file.
 	
 Distributed Click JAR files include:
 
-   deploy/click-xx.jar        - Click runtime JAR including dependencies
+   dist/click-xx.jar        - Click runtime JAR including dependencies
 
-   deploy/click-nodeps-xx.jar - Click runtime JAR with no dependencies
+   dist/click-nodeps-xx.jar - Click runtime JAR with no dependencies
 
-   deploy/click-extras-xx.jar - Click Extras JAR
+   dist/click-extras-xx.jar - Click Extras JAR
 	
 
 Example pre-built web appliations include:
 
-   deploy/click-blank.war
+   dist/click-blank.war
 
-   deploy/click-examples.war
+   dist/click-examples.war
 
    deploy/click-cayenne.war
 
@@ -34,9 +34,9 @@ Click is built using the J2SE 1.4.2 and Ant 1.6.5.
 The main Ant targets include:
 
     build-all             build framework, extras, webapps
-    build-extras          build extras JAR file
-    build-framework       build framework JAR file
-    build-release         build release ZIP file
+    build-distribution    build distribution ZIP file
+    build-extras          build click extras JAR file
+    build-framework       build click framework JAR file
     build-webapps         build web application WAR files
     deploy-webapps        copy WAR files to application server
     get-deps              download JAR dependencies
