@@ -1,8 +1,8 @@
-<project name="click" default="help" basedir=".">
+<project name="click" default="help" basedir="..">
 
    <!-- Project Properties -->
-   <property file="./build.properties"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2M6.jar"/>
+   <property file="./build/build.properties"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2-dev.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
@@ -26,18 +26,81 @@
            depends="build-framework, build-extras, build-webapps" 
            description="build Click framework, extras and webapps"/>
 
+   <target name="build-distribution" 
+           depends="build-framework, build-extras, build-webapps, javadoc" 
+           description="build distribution ZIP file">
+      <delete dir="click-${version}" quiet="false"/>
+      <mkdir dir="click-${version}"/>
+      <copy todir="click-${version}">
+         <fileset dir="." casesensitive="yes">
+            <exclude name=".**"/> 
+            <exclude name="click-${version}"/> 
+            <exclude name="TODO.txt"/>   
+            <exclude name="bin/**"/>
+            <exclude name="lib/${jar.codec}"/>
+            <exclude name="lib/${jar.collections}"/>
+            <exclude name="lib/${jar.lang}"/>
+            <exclude name="lib/${jar.junit}"/>
+            <exclude name="lib/${jar.servlet}"/>
+            <exclude name="lib/${jar.spring}"/>
+            <exclude name="lib/${jar.upload}"/>
+            <exclude name="**/Thumbs.db"/>
+            <exclude name="**/classes/**"/>
+         </fileset>
+      </copy>
+      <delete file="../click-${version}.zip"/>  
+      <zip basedir="."
+           destfile="../click-${version}.zip"
+           includes="click-${version}/**"/>
+      <delete dir="click-${version}" quiet="false"/>
+   </target>  
+
+   <target name="build-extras" description="build extras JAR file">
+      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <fail message="Build framework first with 'build-framework'">
+         <condition>
+  	        <or><isfalse value="${isClickAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete file="dist/click-extras-${version}.jar" quiet="false"/>
+      <delete dir="extras/classes" quiet="false"/>
+      <mkdir dir="extras/classes"/>
+      <copy todir="extras/classes">
+         <fileset dir="extras/src">
+            <exclude name="**/*.java"/>
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
+         <classpath>
+            <pathelement location="lib/${jar.cayenne}"/>
+            <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="lib/${jar.spring}"/>
+            <pathelement location="dist/click-${version}.jar"/>
+         </classpath>
+      </javac>  
+      <jar destfile="dist/click-extras-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click.extras"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="extras/classes">
+            <exclude name="org/apache/log4j/chainsaw/**"/>
+         </fileset>
+      </jar>  
+   </target>
+
    <target name="build-framework" description="build framework JAR file">
-      <mkdir dir="deploy"/>
+      <mkdir dir="dist"/>
       <available file="lib/${jar.codec}" property="isJarAvail"/>
       <fail message="Download JAR dependencies first with 'get-deps'">
          <condition>
-  	    <or>
-  	       <isfalse value="${isJarAvail}"/>
-  	    </or>
-  	 </condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
       </fail>
-      <delete file="deploy/click-${version}.jar" quiet="false"/>
-      <delete file="deploy/click-nodeps-${version}.jar" quiet="false"/>
+      <delete file="dist/click-${version}.jar" quiet="false"/>
+      <delete file="dist/click-nodeps-${version}.jar" quiet="false"/>
       <property name="dir.source" value="framework/src"/>
       <property name="dir.classes" value="framework/classes"/>
       <delete dir="${dir.classes}" quiet="false"/>
@@ -59,7 +122,7 @@
             <pathelement location="lib/${jar.velocity}"/>
          </classpath>
       </javac>  
-      <jar destfile="deploy/click-nodeps-${version}.jar">
+      <jar destfile="dist/click-nodeps-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -73,7 +136,7 @@
       <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
       <unzip src="lib/${jar.upload}" dest="${dir.classes}"/> 
       <unzip src="lib/${jar.velocity}" dest="${dir.classes}"/> 
-      <jar destfile="deploy/click-${version}.jar">
+      <jar destfile="dist/click-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -87,51 +150,32 @@
       </jar>
    </target>
 
-   <target name="build-extras" description="build extras JAR file">
-      <available file="deploy/click-${version}.jar" property="isClickAvail"/>
-      <fail message="Build framework first with 'build-framework'">
+   <target name="build-webapps" description="build web application WAR files">
+      <available file="dist/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <fail message="Build extras first with 'build-extras'">
          <condition>
-  	    <or>
-  	       <isfalse value="${isClickAvail}"/>
-  	    </or>
-  	 </condition>
+  	        <or><isfalse value="${isExtrasAvail}"/></or>
+  	     </condition>
       </fail>
-      <delete file="deploy/click-extras-${version}.jar" quiet="false"/>
-      <delete dir="extras/classes" quiet="false"/>
-      <mkdir dir="extras/classes"/>
-      <copy todir="extras/classes">
-         <fileset dir="extras/src">
-            <exclude name="**/*.java"/>
-            <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
-      <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
-         <classpath>
-            <pathelement location="lib/${jar.cayenne}"/>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="lib/${jar.spring}"/>
-            <pathelement location="deploy/click-${version}.jar"/>
-         </classpath>
-      </javac>  
-      <jar destfile="deploy/click-extras-${version}.jar">
+      <!--  "click-blank" WAR  -->
+      <delete file="dist/click-blank.war" quiet="false"/>
+      <copy file="framework/src/click-control.properties" 
+            todir="webapps/click-blank/WEB-INF/src"/>
+      <copy file="framework/src/click-control.properties" 
+            todir="webapps/click-blank/WEB-INF/classes"/>
+      <war destfile="dist/click-blank.war"
+           webxml="webapps/click-blank/WEB-INF/web.xml">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
-         <fileset dir="extras/classes">
-            <exclude name="org/apache/log4j/chainsaw/**"/>
+         <lib file="dist/click-${version}.jar"/>
+         <fileset dir="webapps/click-blank">
+            <exclude name="**/web.xml"/>
          </fileset>
-      </jar>  
-   </target>
-
-   <target name="build-release" 
-           depends="build-framework, build-extras, build-webapps, javadoc" 
-           description="build release ZIP file">
-      <delete dir="click-${version}" quiet="false"/>
-      <mkdir dir="click-${version}"/>
+      </war>
       <!--  "click-documentation" WAR  -->
-      <war destfile="deploy/click-documentation.war"
+      <war destfile="dist/click-documentation.war"
            webxml="webapps/click-documentation/WEB-INF/web.xml">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -141,60 +185,8 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
-      <copy todir="click-${version}">
-         <fileset dir="." casesensitive="yes">
-            <exclude name=".**"/> 
-            <exclude name="click-${version}"/> 
-            <exclude name="TODO.txt"/>   
-            <exclude name="bin/**"/>
-            <exclude name="lib/${jar.codec}"/>
-            <exclude name="lib/${jar.collections}"/>
-            <exclude name="lib/${jar.lang}"/>
-            <exclude name="lib/${jar.junit}"/>
-            <exclude name="lib/${jar.servlet}"/>
-            <exclude name="lib/${jar.spring}"/>
-            <exclude name="lib/${jar.upload}"/>
-            <exclude name="**/Thumbs.db"/>
-            <exclude name="**/classes/**"/>
-            <exclude name="webapps/click-cayenne/**"/>  
-            <exclude name="webapps/click-documentation/**"/> 
-         </fileset>
-      </copy>
-      <delete file="../click-${version}.zip"/>  
-      <zip basedir="."
-           destfile="../click-${version}.zip"
-           includes="click-${version}/**"/>
-      <delete dir="click-${version}" quiet="false"/>
-   </target>  
-
-   <target name="build-webapps" description="build web application WAR files">
-      <available file="deploy/click-extras-${version}.jar" property="isExtrasAvail"/>
-      <fail message="Build extras first with 'build-extras'">
-         <condition>
-  	    <or>
-  	       <isfalse value="${isExtrasAvail}"/>
-  	    </or>
-  	 </condition>
-      </fail>
-      <!--  "click-blank" WAR  -->
-      <delete file="deploy/deploy/click-blank.war" quiet="false"/>
-      <copy file="framework/src/click-control.properties" 
-            todir="webapps/click-blank/WEB-INF/src"/>
-      <copy file="framework/src/click-control.properties" 
-            todir="webapps/click-blank/WEB-INF/classes"/>
-      <war destfile="deploy/click-blank.war"
-           webxml="webapps/click-blank/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <lib file="deploy/click-${version}.jar"/>
-         <fileset dir="webapps/click-blank">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
       <!--  "click-examples" WAR  -->
-      <delete file="deploy/deploy/click-examples.war" quiet="false"/>
+      <delete file="dist/click-examples.war" quiet="false"/>
       <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
       <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
 	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
@@ -202,8 +194,8 @@
              debug="true">
          <classpath> 
        	   <pathelement location="lib/${jar.servlet}"/>
-           <pathelement location="deploy/click-${version}.jar"/>
-           <pathelement location="deploy/click-extras-${version}.jar"/>
+           <pathelement location="dist/click-${version}.jar"/>
+           <pathelement location="dist/click-extras-${version}.jar"/>
          </classpath>
       </javac>
       <copy todir="webapps/click-examples/WEB-INF/classes">
@@ -212,14 +204,14 @@
        	   <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <war destfile="deploy/click-examples.war"
+      <war destfile="dist/click-examples.war"
            webxml="webapps/click-examples/WEB-INF/web.xml">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
-         <lib file="deploy/click-${version}.jar"/>
-         <lib file="deploy/click-extras-${version}.jar"/>
+         <lib file="dist/click-${version}.jar"/>
+         <lib file="dist/click-extras-${version}.jar"/>
          <fileset dir="webapps/click-examples">
             <exclude name="**/web.xml"/>
          </fileset>
@@ -231,19 +223,19 @@
       <mkdir dir="upload-bundle"/>
       <copy file="LICENSE.txt" todir="upload-bundle"/> 
       <copy file="project.xml" todir="upload-bundle"/> 
-      <copy file="deploy/click-${version}.jar" todir="upload-bundle"/> 
+      <copy file="dist/click-${version}.jar" todir="upload-bundle"/> 
       <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
       <delete dir="upload-bundle" quiet="false"/>
    </target>
 
    <target name="deploy-examples"> 
-     <copy file="deploy/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+     <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
                
    <target name="deploy-webapps" description="copy WAR files to application server"> 
-      <copy file="deploy/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
-      <copy file="deploy/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
-      <copy file="deploy/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="dist/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="dist/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
    <target name="format-java">
@@ -292,9 +284,9 @@
       <echo message="Main targets:"/> 
       <echo/>    
       <echo message="build-all             build framework, extras, webapps"/>
+      <echo message="build-distribution    build distribution ZIP file"/>
       <echo message="build-extras          build click-extras JAR file"/> 
       <echo message="build-framework       build click framework JAR file"/> 
-      <echo message="build-release         build release ZIP file"/>
       <echo message="build-webapps         build web application WAR files"/> 
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="get-deps              download JAR dependencies"/>  
@@ -321,7 +313,7 @@
                doctitle="Click API">
          <classpath>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="deploy/click-${version}.jar"/>
+            <pathelement location="dist/click-${version}.jar"/>
          </classpath>
          <packageset dir="framework/src">
            <include name="net/**"/>
@@ -347,7 +339,7 @@
             <pathelement location="lib/${jar.cayenne}"/>
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="lib/${jar.spring}"/>
-            <pathelement location="deploy/click-${version}.jar"/>
+            <pathelement location="dist/click-${version}.jar"/>
          </classpath>
          <packageset dir="extras/src">
             <include name="net/**"/>
@@ -366,8 +358,8 @@
                doctitle="Click Examples API">
          <classpath>
             <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="deploy/click-${version}.jar"/>
-            <pathelement location="deploy/click-extras-${version}.jar"/>
+            <pathelement location="dist/click-${version}.jar"/>
+            <pathelement location="dist/click-extras-${version}.jar"/>
          </classpath>
          <packageset dir="webapps/click-examples/WEB-INF/src"/>
       </javadoc>
