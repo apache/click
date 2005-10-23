@@ -14,6 +14,9 @@
   
 <h1>Building</h1>
 
+The Click Ant build file <tt>build.xml</tt> is located in the <tt>/build</tt> 
+directory. Build artifacts are created in the <tt>/dist</tt> directory.
+
 <h3>Building Click Framework</h3>
 <ol>
   <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
@@ -24,11 +27,13 @@
   an Ant installation (1.6.5 or later).<p/>
   </li>
 
-
   <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
   from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
   <pre class="codeConfig">
   ant get-deps </pre>
+
+  If you are behind a firewall use the Ant target <tt>get-deps-proxy</tt>
+  and configure you proxy settings in <tt>build.properties</tt>.
   </li>
 
   <li>Run the Ant target <tt>build-framework</tt> to build the framework:
