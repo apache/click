@@ -1,10 +1,7 @@
 .settings
-bin
-deploy
 .classpath
 .project
-TODO.txt
-.checkstyle
-Click.iml
+bin
 classes
-tomcat.bat
+dist
+TODO.txt
