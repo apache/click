@@ -1,6 +1,6 @@
 <project>
 
-  <groupId>net.sf.click</groupId>
+  <groupId>net.sourceforge.click</groupId>
 
   <artifactId>click-no-deps</artifactId>
 
