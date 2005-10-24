@@ -1,17 +1,81 @@
 <project name="click-cayenne" default="help" basedir=".">
 
    <!-- Project Properties -->
-   <property file="../../build.properties"/>
+   <property file="../../build/build.properties"/>
    <property name="name" value="click-cayenne"/>
-   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2M6.jar"/>
-   <property name="jar.click" value="../../deploy/click-${version}.jar"/>
-   <property name="jar.click-extras" value="../../deploy/click-extras-${version}.jar"/>
+   <property name="jar.ashwood" value="../../lib/ashwood-1.1.jar"/>
+   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2-dev.jar"/>
+   <property name="jar.click" value="../../dist/click-${version}.jar"/>
+   <property name="jar.click-extras" value="../../dist/click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
+   <property name="jar.lang" value="../../lib/commons-lang-2.1.jar"/>
    <property name="jar.log4j" value="log4j-1.2.9.jar"/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
    <property name="jar.servlet" value="../../lib/servlet-api-2.4.jar"/>
 	
    <!-- Tasks -->
+
+   <target name="build" description="build web application WAR file">
+      <delete quiet="true" failonerror="false">
+         <fileset dir="webapp/javadoc" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="webapp/WEF-INF/src"
+               destdir="webapp/javadoc"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Examples"
+               doctitle="Click Cayenne Example API">
+         <classpath>
+            <pathelement location="${jar.cayenne}"/>
+            <pathelement location="${jar.click}"/>
+            <pathelement location="${jar.click-extras}"/>
+       	    <pathelement location="${jar.servlet}"/>
+         </classpath>
+         <packageset dir="webapp/WEB-INF/src"/>
+      </javadoc>
+      <copy file="../../framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="webapp/javadoc"/>
+      <delete dir="deploy" quiet="false"/>
+      <mkdir dir="deploy"/>
+      <war destfile="deploy/${name}.war"
+           webxml="webapp/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="${name}-version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <lib file="${jar.ashwood}"/>
+         <lib file="${jar.cayenne}"/>
+         <lib file="${jar.click}"/>
+         <lib file="${jar.click-extras}"/>
+         <lib file="${jar.lang}"/>
+         <lib file="${jar.log4j}"/>
+         <fileset dir="webapp">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+   
+   <target name="compile" description="compile Java source">
+      <delete dir="webapp/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapp/WEB-INF/classes"/>
+      <javac srcdir="webapp/WEB-INF/src" 
+             destdir="webapp/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+           <pathelement location="${jar.cayenne}"/>
+           <pathelement location="${jar.click}"/>
+           <pathelement location="${jar.click-extras}"/>
+       	   <pathelement location="${jar.servlet}"/>
+         </classpath>
+      </javac> 
+   </target>
+               
+   <target name="deploy" description="copy WAR files to application server"> 
+      <copy file="deploy/click-cayenne.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+   
    <target name="get-deps" description="download JAR dependencies">
       <property name="repository" value="http://www.ibiblio.org/maven"/>
       <get src="${repository}/hsqldb/jars/${jar.hsqldb}"
@@ -28,45 +92,6 @@
    <target name="get-deps-proxy" description="download JAR dependencies via proxy">
       <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
       <antcall target="get-deps"/>
-   </target>
-
-   <target name="compile" description="compile Java source">
-      <delete dir="webapp/WEB-INF/classes" quiet="false"/>
-      <mkdir dir="webapp/WEB-INF/classes"/>
-      <javac srcdir="webapp/WEB-INF/src" 
-             destdir="webapp/WEB-INF/classes" 
-             debug="true">
-         <classpath> 
-           <pathelement location="${jar.cayenne}"/>
-           <pathelement location="${jar.click}"/>
-           <pathelement location="${jar.click-extras}"/>
-       	   <pathelement location="${jar.servlet}"/>
-         </classpath>
-      </javac> 
-   </target>
-
-   <target name="build" description="build web application WAR file" depends="compile">
-      <delete dir="deploy" quiet="false"/>
-      <mkdir dir="deploy"/>
-      <war destfile="deploy/${name}.war"
-           webxml="webapp/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="${name}-version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <!--lib file="${jar.cayenne}"/-->
-         <lib file="${jar.click}"/>
-         <lib file="${jar.click-extras}"/>
-         <lib file="${jar.log4j}"/>
-         <lib file="${jar.cayenne}"/>
-         <fileset dir="webapp">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
-   </target>
-               
-   <target name="deploy" description="copy WAR files to application server"> 
-      <copy file="deploy/click-cayenne.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
  
    <target name="help" description="display the Help message">
