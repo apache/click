@@ -23,7 +23,7 @@ public class DepartmentEditor extends BorderedPage {
     protected CayenneForm form = new CayenneForm("form", Department.class);
 
     /**
-     * @see Page#onInit()
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         form.setButtonAlign("right");
@@ -40,7 +40,7 @@ public class DepartmentEditor extends BorderedPage {
      * If the Department has been passed to the page as a request attribute,
      * then bind the Department object to the data aware CayenneForm.
      * 
-     * @see Page#onGet()
+     * @see net.sf.click.Page#onGet()
      */
     public void onGet() {
         Department department = (Department) 
