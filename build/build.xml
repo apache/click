@@ -29,11 +29,25 @@
    <target name="build-distribution" 
            depends="build-framework, build-extras, build-webapps, javadoc" 
            description="build distribution ZIP file">
+      <!--  "click-documentation" WAR  -->
+      <delete file="dist/click-documentation.war" quiet="false"/>
+      <war destfile="dist/click-documentation.war"
+           webxml="webapps/click-documentation/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="webapps/click-documentation">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+      <!-- create distribution zip file -->
       <delete dir="click-${version}" quiet="false"/>
       <mkdir dir="click-${version}"/>
       <copy todir="click-${version}">
          <fileset dir="." casesensitive="yes">
             <exclude name=".**"/> 
+            <exclude name=".**/**"/> 
             <exclude name="click-${version}"/> 
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
@@ -46,9 +60,14 @@
             <exclude name="lib/${jar.upload}"/>
             <exclude name="**/Thumbs.db"/>
             <exclude name="**/classes/**"/>
+            <exclude name="**/WEB-INF/lib/**"/>
+            <exclude name="webapps/click-cayenne/deploy/**"/>
+            <exclude name="webapps/click-documentation/docs/click-api/**"/>
+            <exclude name="webapps/click-documentation/docs/extras-api/**"/>
+            <exclude name="webapps/click-examples/javadoc/**"/>
          </fileset>
       </copy>
-      <delete file="../click-${version}.zip"/>  
+      <delete file="../click-${version}.zip"/>
       <zip basedir="."
            destfile="../click-${version}.zip"
            includes="click-${version}/**"/>
@@ -174,17 +193,6 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
-      <!--  "click-documentation" WAR  -->
-      <war destfile="dist/click-documentation.war"
-           webxml="webapps/click-documentation/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <fileset dir="webapps/click-documentation">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
       <!--  "click-examples" WAR  -->
       <delete file="dist/click-examples.war" quiet="false"/>
       <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
@@ -204,6 +212,26 @@
        	   <exclude name="**/package.html"/>
          </fileset>
       </copy>
+      <delete quiet="false" failonerror="false">
+         <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
+               destdir="webapps/click-examples/javadoc"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Examples"
+               doctitle="Click Examples API">
+         <classpath>
+            <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="dist/click-${version}.jar"/>
+            <pathelement location="dist/click-extras-${version}.jar"/>
+         </classpath>
+         <packageset dir="webapps/click-examples/WEB-INF/src"/>
+      </javadoc>
+      <copy file="framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="webapps/click-examples/javadoc"/>
       <war destfile="dist/click-examples.war"
            webxml="webapps/click-examples/WEB-INF/web.xml">
          <manifest>
@@ -345,33 +373,12 @@
             <include name="net/**"/>
          </packageset>
       </javadoc>
-      <!-- Examples -->
-      <delete quiet="false" failonerror="false">
-         <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
-      </delete>
-      <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
-               destdir="webapps/click-examples/javadoc"
-               author="true"
-               version="true"
-               verbose="false"
-               windowtitle="Click Examples"
-               doctitle="Click Examples API">
-         <classpath>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-            <pathelement location="dist/click-extras-${version}.jar"/>
-         </classpath>
-         <packageset dir="webapps/click-examples/WEB-INF/src"/>
-      </javadoc>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
             todir="webapps/click-documentation/docs/click-api"/>
       <copy file="framework/stylesheet.css"  
             overwrite="true"
             todir="webapps/click-documentation/docs/extras-api"/>
-      <copy file="framework/stylesheet.css"  
-      	    overwrite="true"
-            todir="webapps/click-examples/javadoc"/>
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
