@@ -14,7 +14,7 @@ import net.sf.click.control.ActionLink;
 public class DepartmentsViewer extends BorderedPage {
 
     /**
-     * @see Page#onInit()
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         addModel("head-include", "ajax-head.htm");
@@ -27,7 +27,7 @@ public class DepartmentsViewer extends BorderedPage {
      * Perform a configured "DepartmentSearch" and add the results to the pages
      * model for display.
      *  
-     * @see Page#onGet()
+     * @see net.sf.click.Page#onGet()
      */
     public void onGet() {
         List departmentList = 

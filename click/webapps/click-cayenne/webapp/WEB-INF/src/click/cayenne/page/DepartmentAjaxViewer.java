@@ -23,7 +23,7 @@ public class DepartmentAjaxViewer extends CayennePage {
     protected ActionLink deleteLink;
 
     /**
-     * @see Page#onInit()
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         editLink = new ActionLink("editLink", this, "onEditClick");
@@ -36,7 +36,7 @@ public class DepartmentAjaxViewer extends CayennePage {
     /**
      * Return AJAX response content type of "text/xml".
      * 
-     * @see Page#getContentType()
+     * @see net.sf.click.Page#getContentType()
      */
     public String getContentType() {
         return "text/xml";
@@ -45,7 +45,7 @@ public class DepartmentAjaxViewer extends CayennePage {
     /**
      * Display the Department AJAX table by rendering a Rico AJAX response. 
      * 
-     * @see Page#onGet()
+     * @see net.sf.click.Page#onGet()
      */
     public void onGet() {
         String id = getContext().getRequest().getParameter("id");

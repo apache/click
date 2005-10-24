@@ -44,7 +44,11 @@ public class SourceViewer extends BorderedPage {
             "web-resource-collection", "auth-constraint", "role-name",
             "login-config", "auth-method", "realm-name", "security-role",
             "url-pattern", "welcome-file-list", "welcome-file", "Context",
-            "ResourceLink", "menu", "?xml" };
+            "ResourceLink", "menu", "?xml", "driver", "url", 
+            "connectionPool", "data-map", "property", "db-entity", 
+            "db-attribute", "db-relationship", "db-attribute-pair",
+            "obj-entity", "obj-attribute", "obj-relationship", "query", 
+            "qualifier", "ordering", "domains", "domain", "map", "node" };
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",
