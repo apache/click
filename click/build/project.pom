@@ -6,7 +6,7 @@
 
   <name>Click</name>
 
-  <currentVersion>${version}</currentVersion>
+  <currentVersion>VERSION</currentVersion>
 
   <organization>
     <name>Click Framework Project</name>
@@ -26,19 +26,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.objectstyle.cayenne</groupId>
-      <artifactId>cayenne</artifactId>
-      <version>1.2-dev</version>
-    </dependency>
-    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <version>2.4</version>
-    </dependency>
-    <dependency>
-      <groupId>springframework</groupId>
-      <artifactId>spring</artifactId>
-      <version>1.2.5</version>
     </dependency>
   </dependencies>
 
