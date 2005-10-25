@@ -77,6 +77,7 @@
    </target>
    
    <target name="get-deps" description="download JAR dependencies">
+      <mkdir dir="webapp/WEB-INF/lib"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
       <get src="${repository}/hsqldb/jars/${jar.hsqldb}"
            dest="webapp/WEB-INF/lib/${jar.hsqldb}"
@@ -108,7 +109,7 @@
       <echo message="help                  display the Help message"/>  
       <echo/>
       <echo/>
-      <echo message="Please ensure you have configured ../../build.properties"/> 
+      <echo message="Please ensure you have configured ../../build/build.properties"/> 
       <echo/>  
    </target>  
 	   

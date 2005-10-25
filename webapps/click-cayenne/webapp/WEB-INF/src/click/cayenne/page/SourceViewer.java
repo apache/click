@@ -48,7 +48,8 @@ public class SourceViewer extends BorderedPage {
             "connectionPool", "data-map", "property", "db-entity", 
             "db-attribute", "db-relationship", "db-attribute-pair",
             "obj-entity", "obj-attribute", "obj-relationship", "query", 
-            "qualifier", "ordering", "domains", "domain", "map", "node" };
+            "qualifier", "ordering", "domains", "domain", "map-ref", "node", 
+            "map" };
 
     private static final String[] VELOCITY_KEYWORDS = { "#if", "#if(",
             "#elseif", "#elseif(", "#else", "#else(", "#end", "#set", "#set(",

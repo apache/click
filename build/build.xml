@@ -29,7 +29,13 @@
    <target name="build-distribution" 
            depends="build-framework, build-extras, build-webapps, javadoc" 
            description="build distribution ZIP file">
-      <!--  "click-documentation" WAR  -->
+      <!--  "click-documentation" WAR -->
+      <available file="webapps/click-documentation/index.html" property="isDocAvail"/>
+      <fail message="Click documentation 'webapps/click-documentation' is not available. Please unzip the click-documentation.war to this directory or checkout the source files from CVS.">
+         <condition>
+  	        <or><isfalse value="${isDocAvail}"/></or>
+  	     </condition>
+      </fail>
       <delete file="dist/click-documentation.war" quiet="false"/>
       <war destfile="dist/click-documentation.war"
            webxml="webapps/click-documentation/WEB-INF/web.xml">
@@ -62,8 +68,8 @@
             <exclude name="**/classes/**"/>
             <exclude name="**/WEB-INF/lib/**"/>
             <exclude name="webapps/click-cayenne/deploy/**"/>
-            <exclude name="webapps/click-documentation/docs/click-api/**"/>
-            <exclude name="webapps/click-documentation/docs/extras-api/**"/>
+            <exclude name="webapps/click-cayenne/webapp/javadoc/**"/>
+            <exclude name="webapps/click-documentation/**"/>
             <exclude name="webapps/click-examples/javadoc/**"/>
          </fileset>
       </copy>
@@ -246,13 +252,22 @@
       </war>
    </target>
 
-   <target name="create-upload-bundle">
+   <target name="create-maven-bundles">
       <delete dir="upload-bundle" quiet="false"/>
       <mkdir dir="upload-bundle"/>
       <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="project.xml" todir="upload-bundle"/> 
+      <copy file="build/project.pom" tofile="upload-bundle/project.xml"/> 
+      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
       <copy file="dist/click-${version}.jar" todir="upload-bundle"/> 
       <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
+      <delete dir="upload-bundle" quiet="false"/>
+      <!-- Make no-deps bundle -->
+      <mkdir dir="upload-bundle"/>
+      <copy file="LICENSE.txt" todir="upload-bundle"/> 
+      <copy file="build/project-nodeps.pom" tofile="upload-bundle/project.xml"/> 
+      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
+      <copy file="dist/click-nodeps-${version}.jar" todir="upload-bundle"/> 
+      <jar basedir="upload-bundle" destfile="../click-nodeps-${version}-bundle.jar"/>
       <delete dir="upload-bundle" quiet="false"/>
    </target>
 

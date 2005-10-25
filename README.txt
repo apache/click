@@ -10,7 +10,9 @@ Comprehensive HTML documentation is available online at:
 
     http://click.sourceforge.net
 
-This documentation is also available in the click-documentation.war file.
+This documentation is also available in the WAR file:
+
+   dist/click-documentation.war
 	
 Distributed Click JAR files include:
 
@@ -18,8 +20,7 @@ Distributed Click JAR files include:
 
    dist/click-nodeps-xx.jar - Click runtime JAR with no dependencies
 
-   dist/click-extras-xx.jar - Click Extras JAR
-	
+   dist/click-extras-xx.jar - Click Extras JAR	
 
 Example pre-built web appliations include:
 
@@ -27,10 +28,11 @@ Example pre-built web appliations include:
 
    dist/click-examples.war
 
-   deploy/click-cayenne.war
+Click is built using the J2SE 1.4.2 and Ant 1.6.5. 
 
+The Ant build.xml and build.properties files are located in 
+the build directory. 
 
-Click is built using the J2SE 1.4.2 and Ant 1.6.5.
 The main Ant targets include:
 
     build-all             build framework, extras, webapps
