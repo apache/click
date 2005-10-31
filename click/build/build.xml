@@ -2,7 +2,7 @@
 
    <!-- Project Properties -->
    <property file="./build/build.properties"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2-dev.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2M6.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
@@ -57,6 +57,8 @@
             <exclude name="click-${version}"/> 
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
+            <exclude name="design/**"/>
+            <exclude name="lib/${jar.cayenne}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
             <exclude name="lib/${jar.lang}"/>
@@ -292,6 +294,9 @@
  
    <target name="get-deps" description="download JAR dependencies">
       <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}"
+           dest="lib/${jar.cayenne}"
+           usetimestamp="true"/>
       <get src="${repository}/commons-codec/jars/${jar.codec}"
            dest="lib/${jar.codec}"
            usetimestamp="true"/>
