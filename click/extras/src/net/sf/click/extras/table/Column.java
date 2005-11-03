@@ -381,16 +381,17 @@ public class Column implements Serializable {
 
         } else {
             Object columnValue = getProperty(row);
-
-            if (getAutolink() && renderLink(columnValue, buffer)) {
-                // Has been rendered
-
-            } else if (getMessageFormat() != null) {
-                Object[] args = new Object[] { columnValue };
-                buffer.append(getMessageFormat().format(args));
-
-            } else {
-                buffer.append(columnValue);
+            if (columnValue != null) {
+                if (getAutolink() && renderLink(columnValue, buffer)) {
+                    // Has been rendered
+                    
+                } else if (getMessageFormat() != null) {
+                    Object[] args = new Object[] { columnValue };
+                    buffer.append(getMessageFormat().format(args));
+                    
+                } else {
+                    buffer.append(columnValue);
+                }
             }
         }
 
