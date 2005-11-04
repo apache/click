@@ -1,1 +1,7 @@
-<Context path="/click-blank" docBase="${catalina.home}/webapps/click-blank"  reloadable="true"/>
+<Context 
+   path="/click-blank" 
+   docBase="${catalina.home}/webapps/click-blank" 
+   reloadable="true" 
+   antiJARLocking="true">
+
+</Context>

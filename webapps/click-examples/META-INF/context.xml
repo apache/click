@@ -1,7 +1,8 @@
 <Context
    path="/click-examples" 
    docBase="${catalina.home}/webapps/click-examples" 
-   reloadable="true">
+   reloadable="true"
+   antiJARLocking="true">
 
    <ResourceLink 
       name="users" 
