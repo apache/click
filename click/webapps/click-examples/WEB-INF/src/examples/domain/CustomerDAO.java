@@ -191,12 +191,24 @@ public class CustomerDAO {
                 Customer customer = new Customer();
                 customer.id = Long.valueOf(tokenizer.nextToken().trim());
                 customer.name = tokenizer.nextToken().trim();
-                customer.email = tokenizer.nextToken().trim();
-                customer.age = Integer.valueOf(tokenizer.nextToken().trim());
-                customer.investments = tokenizer.nextToken().trim();
-                customer.holdings = Double.valueOf(tokenizer.nextToken().trim());
-                customer.dateJoined = createDate(tokenizer.nextToken().trim());
-                customer.active = Boolean.valueOf(tokenizer.nextToken().trim());
+                if (tokenizer.hasMoreTokens()) {
+                    customer.email = tokenizer.nextToken().trim();
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.age = Integer.valueOf(tokenizer.nextToken().trim());
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.investments = tokenizer.nextToken().trim();
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.holdings = Double.valueOf(tokenizer.nextToken().trim());
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.dateJoined = createDate(tokenizer.nextToken().trim());
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.active = Boolean.valueOf(tokenizer.nextToken().trim());
+                }
 
                 CUSTOMER_BY_NAME.put(customer.name, customer);
                 CUSTOMER_BY_ID.put(customer.id, customer);
