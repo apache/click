@@ -4,7 +4,7 @@
    <property file="../../build/build.properties"/>
    <property name="name" value="click-cayenne"/>
    <property name="jar.ashwood" value="../../lib/ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2-dev.jar"/>
+   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2M6.jar"/>
    <property name="jar.click" value="../../dist/click-${version}.jar"/>
    <property name="jar.click-extras" value="../../dist/click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
