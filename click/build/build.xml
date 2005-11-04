@@ -176,6 +176,36 @@
          </fileset>
       </jar>
    </target>
+    
+   <target name="build-maven-bundles" 
+           depends="build-framework, build-extras"
+           description="build Maven repository upload bundles">
+      <!-- Make click bundle -->
+      <delete dir="upload-bundle" quiet="false"/>
+      <mkdir dir="upload-bundle"/>
+      <copy file="LICENSE.txt" todir="upload-bundle"/> 
+      <copy file="build/click.pom" tofile="upload-bundle/project.xml"/> 
+      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
+      <copy file="dist/click-${version}.jar" todir="upload-bundle"/> 
+      <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
+      <delete dir="upload-bundle" quiet="false"/>
+      <!-- Make click-nodeps bundle -->
+      <mkdir dir="upload-bundle"/>
+      <copy file="LICENSE.txt" todir="upload-bundle"/> 
+      <copy file="build/click-nodeps.pom" tofile="upload-bundle/project.xml"/> 
+      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
+      <copy file="dist/click-nodeps-${version}.jar" todir="upload-bundle"/> 
+      <jar basedir="upload-bundle" destfile="../click-nodeps-${version}-bundle.jar"/>
+      <delete dir="upload-bundle" quiet="false"/>
+      <!-- Make click-extras bundle -->
+      <mkdir dir="upload-bundle"/>
+      <copy file="LICENSE.txt" todir="upload-bundle"/> 
+      <copy file="build/click-extras.pom" tofile="upload-bundle/project.xml"/> 
+      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
+      <copy file="dist/click-extras-${version}.jar" todir="upload-bundle"/> 
+      <jar basedir="upload-bundle" destfile="../click-extras-${version}-bundle.jar"/>
+      <delete dir="upload-bundle" quiet="false"/>
+   </target>
 
    <target name="build-webapps" description="build web application WAR files">
       <available file="dist/click-extras-${version}.jar" property="isExtrasAvail"/>
@@ -254,25 +284,6 @@
       </war>
    </target>
 
-   <target name="create-maven-bundles">
-      <delete dir="upload-bundle" quiet="false"/>
-      <mkdir dir="upload-bundle"/>
-      <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="build/project.pom" tofile="upload-bundle/project.xml"/> 
-      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
-      <copy file="dist/click-${version}.jar" todir="upload-bundle"/> 
-      <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
-      <delete dir="upload-bundle" quiet="false"/>
-      <!-- Make no-deps bundle -->
-      <mkdir dir="upload-bundle"/>
-      <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="build/project-nodeps.pom" tofile="upload-bundle/project.xml"/> 
-      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
-      <copy file="dist/click-nodeps-${version}.jar" todir="upload-bundle"/> 
-      <jar basedir="upload-bundle" destfile="../click-nodeps-${version}-bundle.jar"/>
-      <delete dir="upload-bundle" quiet="false"/>
-   </target>
-
    <target name="deploy-examples"> 
      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
@@ -335,6 +346,7 @@
       <echo message="build-distribution    build distribution ZIP file"/>
       <echo message="build-extras          build click-extras JAR file"/> 
       <echo message="build-framework       build click framework JAR file"/> 
+      <echo message="build-maven-bundles   build Maven repository upload bundles"/>
       <echo message="build-webapps         build web application WAR files"/> 
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="get-deps              download JAR dependencies"/>  

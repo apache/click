@@ -1,6 +1,6 @@
 <project>
 
-  <groupId>net.sourceforge.click</groupId>
+  <groupId>net.sf.click</groupId>
 
   <artifactId>click-nodeps</artifactId>
 
