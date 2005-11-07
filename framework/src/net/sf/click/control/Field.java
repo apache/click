@@ -32,12 +32,12 @@ import net.sf.click.util.MessagesMap;
  * is processed it will inturn process all the fields it contains. All Form
  * field controls must extend this abstract class.
  * <p/>
- * Field classes provide localizable field messages and error messages 
+ * Field classes provide localizable field messages and error messages
  * defined in the resource bundle:
  *
  * <pre class="codeConfig">
  * /click-control.properties </pre>
- * 
+ *
  * Access to these message is provided using the {@link #getMessage(String)}
  * method.
  * <p/>
@@ -351,16 +351,16 @@ public abstract class Field implements Control {
      * <blockquote>
      * <tt>getName() + ".label"</tt>
      * </blockquote>
-     * If not found then the message will be looked up in the 
+     * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
-     * If a value still cannot be found then the Field name will be converted 
+     * If a value still cannot be found then the Field name will be converted
      * into a label using the method: {@link ClickUtils#toLabel(String)}
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file 
+     * For examle given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">
-     * <span class="st">name</span>.label=<span class="red">Customer Name</span> 
+     * <span class="st">name</span>.label=<span class="red">Customer Name</span>
      * <span class="st">name</span>.title=<span class="red">Full name or Business name</span> </pre>
      *
      * The page TextField code:
@@ -376,13 +376,13 @@ public abstract class Field implements Control {
      * &lt;td&gt;&lt;input type="text" name="<span class="st">name</span>" title="<span class="red">Full name or Business name</span>"/&gt;&lt;/td&gt; </pre>
      *
      * When a label value is not set, or defined in any properties files, then
-     * its value will be created from the Fields name. 
+     * its value will be created from the Fields name.
      * <p/>
-     * For example given the TextField code: 
+     * For example given the TextField code:
      *
      * <pre class="codeJava">
      * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"faxNumber"</span>);  </pre>
-     * 
+     *
      * Will render the TextField label as:
      * <pre class="codeHtml">
      * &lt;td&gt;&lt;label&gt;<span class="red">Fax Number</span>&lt;/label&gt;&lt;/td&gt;
@@ -424,10 +424,10 @@ public abstract class Field implements Control {
     /**
      * Return the localized message for the given key, or null if not found.
      * <p/>
-     * This method will attempt to lookup the localized message in the 
+     * This method will attempt to lookup the localized message in the
      * parentMessages, which by default represents the Page's resource bundle.
      * <p/>
-     * If the message was not found, the this method will attempt to look up the 
+     * If the message was not found, the this method will attempt to look up the
      * value in the <tt>/click-control.properties</tt> message properties file.
      * <p/>
      * If still not found, this method will return null.
@@ -585,15 +585,15 @@ public abstract class Field implements Control {
      * <blockquote>
      * <tt>getName() + ".title"</tt>
      * </blockquote>
-     * If not found then the message will be looked up in the 
-     * <tt>/click-control.properties</tt> file using the same key. If still 
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key. If still
      * not found the title will be left as null and will not be rendered.
      * <p/>
-     * For examle given a <tt>CustomerPage</tt> with the properties file 
+     * For examle given a <tt>CustomerPage</tt> with the properties file
      * <tt>CustomerPage.properties</tt>:
      *
      * <pre class="codeConfig">
-     * <span class="st">name</span>.label=<span class="red">Customer Name</span> 
+     * <span class="st">name</span>.label=<span class="red">Customer Name</span>
      * <span class="st">name</span>.title=<span class="red">Full name or Business name</span> </pre>
      *
      * The page TextField code:

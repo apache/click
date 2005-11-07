@@ -497,16 +497,16 @@ public class Form implements Control {
 
     /** The parent localized messages map. */
     protected Map parentMessages;
-    
+
     /** The perform submit check flag. */
     protected boolean submitCheck;
-    
+
     /** The submit check redirect to target flag. */
     protected boolean submitCheckRedirect;
-    
-    /** The submit check failure target path. */ 
+
+    /** The submit check failure target path. */
     protected String submitCheckPath;
-    
+
     /** The listener target object. */
     protected Object submitCheckListener;
 
@@ -1342,12 +1342,12 @@ public class Form implements Control {
 
         return true;
     }
-    
+
     /**
      * TODO: onSubmitCheck doco
-     * 
+     *
      * Perform a submit check.
-     * 
+     *
      * @param page the page invoking the Form submit check
      * @return true if the submit is OK or false otherwise
      */
@@ -1355,17 +1355,17 @@ public class Form implements Control {
         if (page == null) {
             throw new IllegalArgumentException("Null page parameter");
         }
-        
+
         if (submitCheck) {
-            if (submitCheckListener != null && 
+            if (submitCheckListener != null &&
                 submitCheckListenerMethod != null) {
-                
-                return ClickUtils.invokeListener(submitCheckListener, 
+
+                return ClickUtils.invokeListener(submitCheckListener,
                                                  submitCheckListenerMethod);
             } else {
                 // Check tokens
                 boolean isValid = false;
-                
+
                 if (!isValid) {
                     if (page == null) {
                         String msg = "submitCheckPath is not defined";
@@ -1386,7 +1386,7 @@ public class Form implements Control {
 
     /**
      * TODO: setSubmitCheck doco
-     * 
+     *
      * @param path
      * @param redirect
      */
@@ -1396,12 +1396,12 @@ public class Form implements Control {
         }
         submitCheck = true;
         submitCheckPath = path;
-        submitCheckRedirect = redirect; 
+        submitCheckRedirect = redirect;
     }
 
     /**
      * TODO: setSubmitCheck doco
-     * 
+     *
      * @param listener
      * @param method
      */
@@ -1411,10 +1411,10 @@ public class Form implements Control {
         }
         if (method == null) {
             throw new IllegalArgumentException("Null method parameter");
-        }        
+        }
         submitCheck = true;
         submitCheckListener = listener;
-        submitCheckListenerMethod = method; 
+        submitCheckListenerMethod = method;
     }
 
     /**
