@@ -44,14 +44,14 @@ public class Label extends Field {
     /**
      * Create a Label display control.
      * <p/>
-     * Note the Label control will attempt to find a localized label message 
-     * in the parent messages, and if not found then in the field messages 
+     * Note the Label control will attempt to find a localized label message
+     * in the parent messages, and if not found then in the field messages
      * using the key name of <tt>getName() + ".label"</tt>.
      * <p/>
      * If a value cannot be found in the parent or control messages then the
      * Field name will be converted into a label using the
      * {@link ClickUtils#toLabel(String)} method.
-     * 
+     *
      * @param name the name display value
      */
     public Label(String name) {

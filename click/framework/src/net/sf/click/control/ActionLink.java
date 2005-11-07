@@ -213,7 +213,7 @@ public class ActionLink implements Control {
     public ActionLink(String name) {
         setName(name);
     }
-    
+
     /**
      * Create an ActionLink for the given name and label.
      *
@@ -246,9 +246,9 @@ public class ActionLink implements Control {
         }
         setListener(listener, method);
     }
-    
+
     /**
-     * Create an ActionLink for the given name, label, listener object and 
+     * Create an ActionLink for the given name, label, listener object and
      * listener method.
      *
      * @param name the action link name
@@ -468,16 +468,16 @@ public class ActionLink implements Control {
      * <blockquote>
      * <tt>getName() + ".label"</tt>
      * </blockquote>
-     * If not found then the message will be looked up in the 
+     * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
-     * If a value still cannot be found then the ActinLink name will be converted 
+     * If a value still cannot be found then the ActinLink name will be converted
      * into a label using the method: {@link ClickUtils#toLabel(String)}
      * <p/>
-     * For examle given a <tt>OrderPage</tt> with the properties file 
+     * For examle given a <tt>OrderPage</tt> with the properties file
      * <tt>OrderPage.properties</tt>:
      *
      * <pre class="codeConfig">
-     * <span class="st">checkout</span>.label=<span class="red">Checkout</span> 
+     * <span class="st">checkout</span>.label=<span class="red">Checkout</span>
      * <span class="st">checkout</span>.title=<span class="red">Proceed to Checkout</span> </pre>
      *
      * The page ActionLink code:
@@ -492,13 +492,13 @@ public class ActionLink implements Control {
      * &lt;a href="order-page.htm?actionLink=<span class="st">checkout</span>" title="<span class="red">Proceed to Checkout</span>"&gt;<span class="red">Checkout</span>&lt;/a&gt; </pre>
      *
      * When a label value is not set, or defined in any properties files, then
-     * its value will be created from the Fields name. 
+     * its value will be created from the Fields name.
      * <p/>
-     * For example given the ActionLink code: 
+     * For example given the ActionLink code:
      *
      * <pre class="codeJava">
      * ActionLink nameField = <span class="kw">new</span> ActionLink(<span class="st">"deleteItem"</span>);  </pre>
-     * 
+     *
      * Will render the ActionLink label as:
      * <pre class="codeHtml">
      * &lt;a href="order-page.htm?actionLink=<span class="st">deleteItem</span>"&gt;<span class="red">Delete Item</span>&lt;/a&gt; </pre>
@@ -506,10 +506,10 @@ public class ActionLink implements Control {
      * Note the ActionLink label can include raw HTML to render other elements.
      * <p/>
      * For example the configured label:
-     * 
+     *
      * <pre class="codeConfig">
      * <span class="st">edit</span>.label=<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span> </pre>
-     * 
+     *
      * Will render the ActionLink label as:
      * <pre class="codeHtml">
      * &lt;a href="..?actionLink=<span class="st">edit</span>"&gt;<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span>&lt;/a&gt; </pre>
@@ -530,7 +530,7 @@ public class ActionLink implements Control {
      * Set the label for the ActionLink.
      *
      * @see #getLabel()
-     * 
+     *
      * @param label the label for the ActionLink
      */
     public void setLabel(String label) {
@@ -549,10 +549,10 @@ public class ActionLink implements Control {
     /**
      * Return the localized message for the given key, or null if not found.
      * <p/>
-     * This method will attempt to lookup the localized message in the 
+     * This method will attempt to lookup the localized message in the
      * parentMessages, which by default represents the Page's resource bundle.
      * <p/>
-     * If the message was not found, the this method will attempt to look up the 
+     * If the message was not found, the this method will attempt to look up the
      * value in the <tt>/click-control.properties</tt> message properties file.
      * <p/>
      * If still not found, this method will return null.
@@ -639,14 +639,14 @@ public class ActionLink implements Control {
      * <blockquote>
      * <tt>getName() + ".title"</tt>
      * </blockquote>
-     * If not found then the message will be looked up in the 
+     * If not found then the message will be looked up in the
      * <tt>/click-control.properties</tt> file using the same key.
      * <p/>
-     * For examle given a <tt>ItemsPage</tt> with the properties file 
+     * For examle given a <tt>ItemsPage</tt> with the properties file
      * <tt>ItemPage.properties</tt>:
      *
      * <pre class="codeConfig">
-     * <span class="st">edit</span>.label=<span class="red">Edit</span> 
+     * <span class="st">edit</span>.label=<span class="red">Edit</span>
      * <span class="st">edit</span>.title=<span class="red">Edit Item</span> </pre>
      *
      * The page ActionLink code:
@@ -671,7 +671,7 @@ public class ActionLink implements Control {
 
     /**
      * Set the 'title' attribute tooltip message.
-     * 
+     *
      * @see #getTitle()
      *
      * @param value the 'title' attribute tooltip message
