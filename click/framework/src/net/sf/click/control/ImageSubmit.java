@@ -48,30 +48,22 @@ public class ImageSubmit extends Submit {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a ImageSubmit button with the given value. The value cannot
-     * contain the HTML characters <tt>&amp;nbsp;</tt> as the submitted value
-     * cannot be processed correctly.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a ImageSubmit button with the given name.
      *
-     * @param value the button value
+     * @param name the button name
      */
-    public ImageSubmit(String value) {
-        super(value);
+    public ImageSubmit(String name) {
+        super(name);
     }
 
     /**
-     * Create a ImageSubmit button with the given value and image src path.
-     * The value cannot contain the HTML characters <tt>&amp;nbsp;</tt> as the
-     * submitted value cannot be processed correctly.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a ImageSubmit button with the given name and image src path.
      *
-     * @param value the button value
+     * @param name the button name
      * @param src the image src path attribute
      */
-    public ImageSubmit(String value, String src) {
-        super(value);
+    public ImageSubmit(String name, String src) {
+        super(name);
         setSrc(src);
     }
 

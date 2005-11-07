@@ -42,15 +42,13 @@ public class EmailField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct an Email Field with the given label.
-     * The default email field size is 30 characters.
-     * <p/>
-     * The field name will be Java property representation of the given label
+     * Construct an Email Field with the given name. The default email field
+     * size is 30 characters.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public EmailField(String label) {
-        super(label);
+    public EmailField(String name) {
+        super(name);
         setSize(30);
     }
 
@@ -67,16 +65,14 @@ public class EmailField extends TextField {
     }
 
     /**
-     * Construct an Email Field with the given label and required status.
+     * Construct an Email Field with the given name and required status.
      * The default email field size is 30 characters.
-     * <p/>
-     * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public EmailField(String label, boolean required) {
-        this(label);
+    public EmailField(String name, boolean required) {
+        this(name);
         size = 30;
     }
 

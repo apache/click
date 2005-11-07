@@ -57,27 +57,22 @@ public class Reset extends Button {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Reset button with the given value.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a Reset button with the given name.
      *
-     * @param value the button value
+     * @param name the button name
      */
-    public Reset(String value) {
-        super(value);
+    public Reset(String name) {
+        super(name);
     }
 
     /**
-     * Create a Reset button with the given value and title.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a Reset button with the given name and label.
      *
-     * @param value the button value
-     * @param title the button title attribute
+     * @param name the button name
+     * @param label the button display label
      */
-    public Reset(String value, String title) {
-        super(value);
-        setTitle(title);
+    public Reset(String name, String label) {
+        super(name, label);
     }
 
     /**

@@ -18,8 +18,6 @@ package net.sf.click.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sf.click.util.ClickUtils;
-
 /**
  * Provides a Credit Card control: &nbsp; &lt;input type='text'&gt;&lt;select&gt;.
  *
@@ -155,14 +153,16 @@ public class CreditCardField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the credit card field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the credit card field with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public CreditCardField(String label) {
-        this(ClickUtils.toName(label), label);
+    public CreditCardField(String name) {
+        super(name);
+        setMaxLength(19);
+        setSize(19);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
     /**
@@ -180,15 +180,13 @@ public class CreditCardField extends TextField {
     }
 
     /**
-     * Construct the credit card field with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the credit card field with the given name and required status.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public CreditCardField(String label, boolean required) {
-        this(label);
+    public CreditCardField(String name, boolean required) {
+        this(name);
         setRequired(required);
     }
 

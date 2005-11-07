@@ -66,6 +66,12 @@ public class ClickUtilsTest extends TestCase {
       assertEquals(sampleObject.getName(), nameField.getValue());
   }
   
+  public void testToLabel() {
+      assertEquals("Customer", ClickUtils.toLabel("customer"));
+      assertEquals("Customer Number", ClickUtils.toLabel("customerNumber"));
+      assertEquals("Card PIN", ClickUtils.toLabel("cardPIN"));
+  }
+  
   public static class SampleObject {
       private Integer id;
       private String name;

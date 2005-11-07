@@ -47,14 +47,12 @@ public class Checkbox extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Checkbox field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Create a Checkbox field with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public Checkbox(String label) {
-        super(label);
+    public Checkbox(String name) {
+        super(name);
     }
 
     /**
@@ -68,13 +66,13 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Create a Checkbox field with the given label and required flag.
+     * Create a Checkbox field with the given name and required flag.
      *
-     * @param label the label of the field
-     * @param required the field required status
+     * @param name the name of the field
+     * @param required the name required status
      */
-    public Checkbox(String label, boolean required) {
-        super(label);
+    public Checkbox(String name, boolean required) {
+        super(name);
         setRequired(required);
     }
 

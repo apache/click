@@ -27,6 +27,7 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -125,6 +126,9 @@ public class Table implements Control {
 
     /** The list of Table controls. */
     protected final List controlList = new ArrayList();
+ 
+    /** The Field localized messages Map. */
+    protected Map messages;
 
     /** The control name. */
     protected String name;
@@ -143,6 +147,9 @@ public class Table implements Control {
 
     /** The Table paging action link. */
     protected ActionLink pagingLink;
+
+    /** The parent localized messages map. */
+    protected Map parentMessages;
 
     /**
      * The total number of rows in the query, if 0 rowCount is undefined. Row
@@ -402,12 +409,18 @@ public class Table implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        Locale locale = getContext().getLocale();
+        String message = null;
 
-        ResourceBundle bundle =
-            ResourceBundle.getBundle(CONTROL_MESSAGES, locale);
+        if (getParentMessages() != null && getParentMessages().containsKey(name))
+        {
+            message = (String) getParentMessages().get(name);
+        }
 
-        return bundle.getString(name);
+        if (message == null && getMessages().containsKey(name)) {
+            message = (String) getMessages().get(name);
+        }
+
+        return message;
     }
 
     /**
@@ -425,6 +438,26 @@ public class Table implements Control {
         String value = getMessage(name);
 
         return MessageFormat.format(value, args);
+    }
+
+    /**
+     * Return a Map of localized messages for the Field.
+     *
+     * @return a Map of localized messages for the Field
+     * @throws IllegalStateException if the context for the Field has not be set
+     */
+    public Map getMessages() {
+         if (messages == null) {
+             if (getContext() != null) {
+                 Locale locale = getContext().getLocale();
+                 messages = new MessagesMap(CONTROL_MESSAGES, locale);
+
+             } else {
+                 String msg = "Cannot initialize messages as context not set";
+                 throw new IllegalStateException(msg);
+             }
+         }
+         return messages;
     }
 
     /**
@@ -504,6 +537,20 @@ public class Table implements Control {
             pagingLink = new ActionLink("paging");
             pagingLink.setListener(this, "onPagingClick");
         }
+    }
+
+    /**
+     * @see Control#getParentMessages()
+     */
+    public Map getParentMessages() {
+        return parentMessages;
+    }
+
+    /**
+     * @see Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+        parentMessages = messages;
     }
 
     /**

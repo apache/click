@@ -190,14 +190,12 @@ public class Select extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Select field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Create a Select field with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public Select(String label) {
-        super(label);
+    public Select(String name) {
+        super(name);
     }
 
     /**
@@ -211,16 +209,15 @@ public class Select extends Field {
     }
 
     /**
-     * Create a Select field with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Create a Select field with the given name and required status.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public Select(String label, boolean required) {
-        super(label);
+    public Select(String name, boolean required) {
+        super(name);
     }
+
     /**
      * Create a Select field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
@@ -553,6 +550,9 @@ public class Select extends Field {
 
     // ------------------------------------------------------ Protected Methods
 
+    /**
+     * Set the initial select option value.
+     */
     protected void setInitialValue() {
         if (!getOptionList().isEmpty()) {
             Object object = getOptionList().get(0);

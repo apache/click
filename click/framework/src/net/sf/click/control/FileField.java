@@ -81,14 +81,12 @@ public class FileField extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the File Field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the File Field with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public FileField(String label) {
-        super(label);
+    public FileField(String name) {
+        super(name);
     }
 
     /**
@@ -102,15 +100,13 @@ public class FileField extends Field {
     }
 
     /**
-     * Construct the File Field with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the File Field with the given name and required status.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public FileField(String label, boolean required) {
-        super(label);
+    public FileField(String name, boolean required) {
+        super(name);
         setRequired(required);
     }
 

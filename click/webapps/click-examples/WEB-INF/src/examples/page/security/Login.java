@@ -25,20 +25,20 @@ public class Login extends BorderedPage {
         form = new Form("form");
         addControl(form);
 
-        TextField usernameField = new TextField("Username", true);
+        TextField usernameField = new TextField("username", true);
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
         usernameField.setFocus(true);
         form.add(usernameField);
 
-        PasswordField passwordField = new PasswordField("Password", true);
+        PasswordField passwordField = new PasswordField("password", true);
         passwordField.setMaxLength(20);
         passwordField.setMinLength(5);
         form.add(passwordField);
 
-        form.add(new Submit("    OK    ", this, "onOkClicked"));
+        form.add(new Submit("ok", "    OK    ", this, "onOkClicked"));
 
-        form.add(new Submit(" Cancel ", this, "onCancelClicked"));
+        form.add(new Submit("cancel", this, "onCancelClicked"));
     }
 
     /**

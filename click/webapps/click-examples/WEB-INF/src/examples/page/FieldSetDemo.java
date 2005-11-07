@@ -31,22 +31,22 @@ public class FieldSetDemo extends BorderedPage {
 
         // Delivery fieldset
 
-        FieldSet deliveryFieldSet = new FieldSet("Delivery Details");
+        FieldSet deliveryFieldSet = new FieldSet("deliveryDetails");
         form.add(deliveryFieldSet);
 
-        TextField addressToField = new TextField("Addressed To", true);
+        TextField addressToField = new TextField("addressedTo", true);
         addressToField.setSize(30);
         deliveryFieldSet.add(addressToField);
 
-        TextArea textArea = new TextArea("Delivery Address", true);
+        TextArea textArea = new TextArea("deliveryAddress", true);
         textArea.setCols(30);
         textArea.setRows(3);
         deliveryFieldSet.add(textArea);
 
-        DateField dateField = new DateField("Delivery Date");
+        DateField dateField = new DateField("deliveryDate");
         deliveryFieldSet.add(dateField);
 
-        RadioGroup radioGroup = new RadioGroup("Packaging");
+        RadioGroup radioGroup = new RadioGroup("packaging");
         radioGroup.add(new Radio("STD", "Standard "));
         radioGroup.add(new Radio("PRO", "Protective "));
         radioGroup.add(new Radio("GFT", "Gift Wrap "));
@@ -54,22 +54,22 @@ public class FieldSetDemo extends BorderedPage {
         radioGroup.setVerticalLayout(true);
         deliveryFieldSet.add(radioGroup);
 
-        deliveryFieldSet.add(new Checkbox("Telephone on Delivery"));
+        deliveryFieldSet.add(new Checkbox("telephoneOnDelivery"));
 
         // Payment fieldset
 
-        FieldSet paymentFieldSet = new FieldSet("Payment Details");
+        FieldSet paymentFieldSet = new FieldSet("paymentDetails");
         form.add(paymentFieldSet);
 
-        paymentFieldSet.add(new TextField("Card Name"));
-        paymentFieldSet.add(new CreditCardField("Card Number"));
-        IntegerField expiryField = new IntegerField("Expiry");
+        paymentFieldSet.add(new TextField("cardName"));
+        paymentFieldSet.add(new CreditCardField("cardNumber"));
+        IntegerField expiryField = new IntegerField("expiry");
         expiryField.setSize(4);
         expiryField.setMaxLength(4);
         paymentFieldSet.add(expiryField);
 
-        form.add(new Submit("    OK    ", this, "onOkClick"));
-        form.add(new Submit("  Cancel  ", this, "onCancelClick"));
+        form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
+        form.add(new Submit("cancel", this, "onCancelClick"));
     }
 
     public boolean onOkClick() {

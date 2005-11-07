@@ -36,46 +36,46 @@ public class BigForm extends BorderedPage {
 
         form.add(new Label("<b>My Details</b>"));
 
-        TextField textField = new TextField("Username", true);
+        TextField textField = new TextField("username", true);
         textField.setMinLength(6);
         textField.setMaxLength(12);
         textField.setTitle("Your username must be between 6 and 12 characters");
         textField.setFocus(true);
         form.add(textField);
 
-        PasswordField passwordField = new PasswordField("Password");
+        PasswordField passwordField = new PasswordField("password");
         passwordField.setMinLength(6);
         passwordField.setMaxLength(20);
         form.add(passwordField);
 
-        form.add(new EmailField("Email"));
+        form.add(new EmailField("email", "Email"));
 
-        form.add(new IntegerField("Customer Number", true));
+        form.add(new IntegerField("customerNumber", true));
 
         form.add(new Label("<hr/>"));
         form.add(new Label("<b>Order Details</b>"));
 
-        DoubleField doubleField = new DoubleField("Retail Price");
+        DoubleField doubleField = new DoubleField("retailPrice");
         doubleField.setValue("99.95");
         form.add(doubleField);
 
         form.add(new CreditCardField("Credit Card"));
 
-        IntegerField monthField = new IntegerField("Expiry Month");
+        IntegerField monthField = new IntegerField("expiryMonth");
         monthField.setSize(2);
         monthField.setMaxLength(2);
         monthField.setMinValue(1);
         monthField.setMaxValue(12);
         form.add(monthField);
 
-        IntegerField yearField = new IntegerField("Expiry Year");
+        IntegerField yearField = new IntegerField("expiryYear");
         yearField.setSize(4);
         yearField.setMaxLength(4);
         yearField.setMinValue(2000);
         yearField.setMaxValue(2010);
         form.add(yearField);
 
-        Checkbox checkbox = new Checkbox("Contact me");
+        Checkbox checkbox = new Checkbox("contact", "Contact me");
         checkbox.setTitle("Please contact me before delivery");
         form.add(checkbox);
 
@@ -87,31 +87,31 @@ public class BigForm extends BorderedPage {
         radioGroup.setVerticalLayout(false);
         form.add(radioGroup);
 
-        Select select = new Select("Delivery type");
+        Select select = new Select("deliveryType");
         select.addAll(DELIVERY_OPTIONS);
         select.setTitle("Type of delivery required");
         form.add(select);
 
-        DateField dateField = new DateField("Delivery date");
+        DateField dateField = new DateField("deliveryDate");
         dateField.setRequired(true);
         form.add(dateField);
 
-        TextArea textArea = new TextArea("Delivery Notes");
+        TextArea textArea = new TextArea("deliveryNotes");
         textArea.setCols(30);
         textArea.setTitle("Please tell us about any special delivery instructions");
         form.add(textArea);
 
-        FileField fileField = new FileField("Delivery Documents");
+        FileField fileField = new FileField("deliveryDocuments");
         fileField.setSize(26);
         form.add(fileField);
 
-        form.add(new Submit("    OK    ", "Submit the form"));
+        form.add(new Submit("ok", "    OK    "));
 
-        Submit cancelButton = new Submit("  Cancel  ", this, "onCancelClick");
+        Submit cancelButton = new Submit("canel", this, "onCancelClick");
         cancelButton.setTitle("Return to Click Examples");
         form.add(cancelButton);
 
-        form.add(new Reset("  Reset  ", "Undo any form changes"));
+        form.add(new Reset("reset", "  Reset  "));
     }
 
     public boolean onCancelClick() {

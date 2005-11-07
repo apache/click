@@ -14,10 +14,24 @@
   
 <h1>Building</h1>
 
+Click uses an <a href="http://ant.apache.org">Ant</a> based build system for 
+creating JAR files, application WAR files and the Click distribution.
+
+<ul>
+  <li><a href="#configuration">Build Configuration</a>
+  </li>
+  <li><a href="#ant-targets">Ant Targets</a>
+  </li>
+  <li><a href="#framework-dependencies">Framework Dependencies</a>
+  </li>
+</ul>
+<p>&nbsp;</p>
+
+
+<a name="build-configuration"><h2>Build Configuration</h2></a>
 The Click Ant build file <tt>build.xml</tt> is located in the <tt>/build</tt> 
 directory. Build artifacts are created in the <tt>/dist</tt> directory.
 
-<h3>Building Click Framework</h3>
 <ol>
   <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
   a JDK installation (1.4 or later).<p/>
@@ -26,7 +40,53 @@ directory. Build artifacts are created in the <tt>/dist</tt> directory.
   <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
   an Ant installation (1.6.5 or later).<p/>
   </li>
+</ol>
 
+
+<a name="ant-targets"><h2>Ant Targets</h2></a>
+
+<pre class="codeConfig" style="margin-left:3em;">
+ant help
+Buildfile: build.xml
+
+help:
+     [echo] Click web application framework
+     [echo] ===============================
+
+     [echo] Main targets:
+
+     [echo] build-all             build framework, extras, webapps
+     [echo] build-distribution    build distribution ZIP file
+     [echo] build-extras          build click-extras JAR file
+     [echo] build-framework       build click framework JAR file
+     [echo] build-maven-bundles   build Maven repository upload bundles
+     [echo] build-webapps         build web application WAR files
+     [echo] deploy-webapps        copy WAR files to application server
+     [echo] get-deps              download JAR dependencies
+     [echo] get-deps-proxy        download JAR dependencies via proxy
+     [echo] help                  display the Help message
+     [echo] javadoc               create Javadoc HTML files
+
+
+     [echo] Please ensure you have configured build.properties
+
+
+BUILD SUCCESSFUL </pre>
+
+<h3>Getting Dependencies</h3>
+<ol>
+  <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
+  from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
+  <pre class="codeConfig">
+  ant get-deps </pre>
+
+  If you are behind a firewall use the Ant target <tt>get-deps-proxy</tt>
+  and configure you proxy settings in <tt>build.properties</tt>.
+  </li>
+</ol>
+
+<h3>Building Framework</h3>
+<ol>
   <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
   from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
   <pre class="codeConfig">
@@ -40,8 +100,8 @@ directory. Build artifacts are created in the <tt>/dist</tt> directory.
   <pre class="codeConfig">
   ant build-framework </pre>
   </li>
-
 </ol>
+
 
 <h3>Building Click Extras</h3>
 <ol>
@@ -55,7 +115,8 @@ directory. Build artifacts are created in the <tt>/dist</tt> directory.
   </li>
 </ol>
 
-<h3>Building Webapps</h3>
+
+<h3>Building Click Webapps</h3>
 To build the Click web applications:
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
@@ -69,7 +130,7 @@ To build the Click web applications:
 </ol>
 
 
-<h3>Click Framework Dependencies</h3>
+<a name="framework-dependencies"><h2>Framework Dependencies</h2></a>
 The Click framework has the following runtime dependencies.
 
 <table style="border: 1px solid black; margin: 1em 0em;" cellspacing="0" cellpadding="6">
@@ -147,9 +208,7 @@ The Click framework has the following runtime dependencies.
 
 <span class="red">*</span> : marked libraries and source are included in the 
 <tt>click.jar</tt> file.
-
 <p/>
-
 The standard <tt>click-xx.jar</tt> includes all of the listed dependencies.<br/> 
 Alternatively use the <tt>click-nodeps-xx.jar</tt> which includes none of these
 dependencies.

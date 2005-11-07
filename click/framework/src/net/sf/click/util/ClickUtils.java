@@ -620,6 +620,43 @@ public class ClickUtils {
     }
 
     /**
+     * Return a field label string from the given field name. For exampe:
+     * <pre class="codeHtml">
+     * <span class="blue">faxNumber</span> &nbsp; -> &nbsp; <spa class="red">Fax Number</span> </pre>
+     *
+     * @param name the field name
+     * @return a field label string from the given field name
+     */
+    public static String toLabel(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0, size = name.length(); i < size; i++) {
+            char aChar = name.charAt(i);
+
+            if (i == 0) {
+                buffer.append(Character.toUpperCase(aChar));
+
+            } else {
+                buffer.append(aChar);
+
+                if (i < name.length() - 1) {
+                    char nextChar = name.charAt(i + 1);
+                    if (Character.isLowerCase(aChar) &&
+                        Character.isUpperCase(nextChar)) {
+                       buffer.append(" ");
+                    }
+                }
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
      * Return a field name string from the given field label.
      * <p/>
      * A label of " OK do it!" is returned as "okDoIt". Any &amp;nbsp;

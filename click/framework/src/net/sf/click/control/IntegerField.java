@@ -65,14 +65,23 @@ public class IntegerField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a IntegerField field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct a IntegerField field with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public IntegerField(String label) {
-        super(label);
+    public IntegerField(String name) {
+        super(name);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+    }
+
+    /**
+     * Construct a IntegerField field with the given name and required status.
+     *
+     * @param name the name of the field
+     * @param required the field required status
+     */
+    public IntegerField(String name, boolean required) {
+        super(name, required);
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 
@@ -88,15 +97,16 @@ public class IntegerField extends TextField {
     }
 
     /**
-     * Construct a IntegerField field with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct a IntegerField field with the given name, label and required
+     * status.
      *
+     * @param name the name of the field
      * @param label the label of the field
      * @param required the field required status
      */
-    public IntegerField(String label, boolean required) {
-        this(label);
+    public IntegerField(String name, String label, boolean required) {
+        super(name, label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
         setRequired(required);
     }
 
