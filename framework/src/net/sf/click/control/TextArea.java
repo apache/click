@@ -76,15 +76,13 @@ public class TextArea extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the TextArea with the given label. The area will have a
+     * Construct the TextArea with the given name. The area will have a
      * default size of 20 cols and 3 rows.
-     * <p/>
-     * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public TextArea(String label) {
-        super(label);
+    public TextArea(String name) {
+        super(name);
     }
 
 
@@ -100,31 +98,27 @@ public class TextArea extends Field {
     }
 
     /**
-     * Construct the TextArea with the given label and required status. The
+     * Construct the TextArea with the given name and required status. The
      * area will have a default size of 20 cols and 3 rows.
-     * <p/>
-     * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public TextArea(String label, boolean required) {
-        super(label);
+    public TextArea(String name, boolean required) {
+        super(name);
         setRequired(required);
     }
 
     /**
-     * Construct the TextArea with the given label, number of columns and
+     * Construct the TextArea with the given name, number of columns and
      * number of rows.
-     * <p/>
-     * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param cols the number of text area cols
      * @param rows the number of text area rows
      */
-    public TextArea(String label, int cols, int rows) {
-        super(label);
+    public TextArea(String name, int cols, int rows) {
+        super(name);
         setCols(cols);
         setRows(rows);
     }

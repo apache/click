@@ -16,6 +16,7 @@
 package net.sf.click.control;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +25,7 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.MessagesMap;
 
 /**
  * Provides a Action Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
@@ -176,10 +178,7 @@ public class ActionLink implements Control {
     /** The Field disabled value. */
     protected boolean disabled;
 
-    /** The link name. */
-    protected String name;
-
-    /** The link label. */
+    /** The link display label. */
     protected String label;
 
     /** The listener target object. */
@@ -187,6 +186,18 @@ public class ActionLink implements Control {
 
     /** The listener method name. */
     protected String listenerMethod;
+
+    /** The link localized messages Map. */
+    protected Map messages;
+
+    /** The link name. */
+    protected String name;
+
+    /** The parent localized messages map. */
+    protected Map parentMessages;
+
+    /** The link title attribute, which acts as a tooltip help message. */
+    protected String title;
 
     /** The processed link value. */
     protected String value;
@@ -202,6 +213,18 @@ public class ActionLink implements Control {
     public ActionLink(String name) {
         setName(name);
     }
+    
+    /**
+     * Create an ActionLink for the given name and label.
+     *
+     * @param name the action link name
+     * @param label the action link label
+     * @throws IllegalArgumentException if the name is null
+     */
+    public ActionLink(String name, String label) {
+        setName(name);
+        setLabel(label);
+    }
 
     /**
      * Create an ActionLink for the given name, listener object and listener
@@ -215,6 +238,29 @@ public class ActionLink implements Control {
      */
     public ActionLink(String name, Object listener, String method) {
         setName(name);
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener parameter");
+        }
+        if (StringUtils.isBlank(method)) {
+            throw new IllegalArgumentException("Blank listener method");
+        }
+        setListener(listener, method);
+    }
+    
+    /**
+     * Create an ActionLink for the given name, label, listener object and 
+     * listener method.
+     *
+     * @param name the action link name
+     * @param label the action link label
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if the name, listener or method is null
+     * or if the method is blank
+     */
+    public ActionLink(String name, String label, Object listener, String method) {
+        setName(name);
+        setLabel(label);
         if (listener == null) {
             throw new IllegalArgumentException("Null listener parameter");
         }
@@ -259,20 +305,19 @@ public class ActionLink implements Control {
      * generally use attributes if you were creating the entire ActionLink
      * programatically and rendering it with the {@link #toString()} method.
      * <p/>
-     * For example:
+     * For example given the ActionLink:
      *
-     * <div class="codeJava"> <span class="cm">// Java code</span>
-     * ActionLink addLink = <span class="kw">new</span> ActionLink("<span class="blue">addLink</span>");
-     * addLink.setLabel("Add");
-     * addLink.setAttribute("title", "Add Product to Cart");
-     * addLink.setAttribute("class", "table");
+     * <pre class="codeJava">
+     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
+     * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
      *
-     * &lt;-- Page template --&gt;
-     * $<span class="blue">addLink</span>
+     * And the page template:
+     * <pre class="codeHtml">
+     * $<span class="red">addLink</span> </pre>
      *
-     * &lt;-- HTML output --&gt;
-     * &lt;a href='actionLink=addLink' class='table' title='Add Product to Cart'&gt;Add&lt;/a&gt;
-     * </div>
+     * Will render the HTML as:
+     * <pre class="codeHtml">
+     * &lt;a href="..?actionLink=<span class="red">addLink</span>" <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
      *
      * @param name the attribute name
      * @param value the attribute value
@@ -417,20 +462,141 @@ public class ActionLink implements Control {
 
     /**
      * Return the label for the ActionLink.
+     * <p/>
+     * If the label value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".label"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the 
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value still cannot be found then the ActinLink name will be converted 
+     * into a label using the method: {@link ClickUtils#toLabel(String)}
+     * <p/>
+     * For examle given a <tt>OrderPage</tt> with the properties file 
+     * <tt>OrderPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">checkout</span>.label=<span class="red">Checkout</span> 
+     * <span class="st">checkout</span>.title=<span class="red">Proceed to Checkout</span> </pre>
+     *
+     * The page ActionLink code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> OrderPage <span class="kw">extends</span> Page {
+     *     ActionLink checkoutLink = <span class="kw">new</span> ActionLink(<span class="st">"checkout"</span>);
+     *     ..
+     * } </pre>
+     *
+     * Will render the ActionLink label and title properties as:
+     * <pre class="codeHtml">
+     * &lt;a href="order-page.htm?actionLink=<span class="st">checkout</span>" title="<span class="red">Proceed to Checkout</span>"&gt;<span class="red">Checkout</span>&lt;/a&gt; </pre>
+     *
+     * When a label value is not set, or defined in any properties files, then
+     * its value will be created from the Fields name. 
+     * <p/>
+     * For example given the ActionLink code: 
+     *
+     * <pre class="codeJava">
+     * ActionLink nameField = <span class="kw">new</span> ActionLink(<span class="st">"deleteItem"</span>);  </pre>
+     * 
+     * Will render the ActionLink label as:
+     * <pre class="codeHtml">
+     * &lt;a href="order-page.htm?actionLink=<span class="st">deleteItem</span>"&gt;<span class="red">Delete Item</span>&lt;/a&gt; </pre>
+     *
+     * Note the ActionLink label can include raw HTML to render other elements.
+     * <p/>
+     * For example the configured label:
+     * 
+     * <pre class="codeConfig">
+     * <span class="st">edit</span>.label=<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span> </pre>
+     * 
+     * Will render the ActionLink label as:
+     * <pre class="codeHtml">
+     * &lt;a href="..?actionLink=<span class="st">edit</span>"&gt;<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span>&lt;/a&gt; </pre>
      *
      * @return the label for the ActionLink
      */
     public String getLabel() {
+        if (label == null) {
+            label = getMessage(getName() + ".label");
+        }
+        if (label == null) {
+            label = ClickUtils.toLabel(getName());
+        }
         return label;
     }
 
     /**
      * Set the label for the ActionLink.
      *
+     * @see #getLabel()
+     * 
      * @param label the label for the ActionLink
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * @see net.sf.click.Control#setListener(Object, String)
+     */
+    public void setListener(Object target, String methodName) {
+        listener = target;
+        listenerMethod = methodName;
+    }
+
+
+    /**
+     * Return the localized message for the given key, or null if not found.
+     * <p/>
+     * This method will attempt to lookup the localized message in the 
+     * parentMessages, which by default represents the Page's resource bundle.
+     * <p/>
+     * If the message was not found, the this method will attempt to look up the 
+     * value in the <tt>/click-control.properties</tt> message properties file.
+     * <p/>
+     * If still not found, this method will return null.
+     *
+     * @param name the name of the message resource
+     * @return the named localized message, or null if not found
+     */
+    public String getMessage(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        String message = null;
+
+        if (getParentMessages() != null && getParentMessages().containsKey(name))
+        {
+            message = (String) getParentMessages().get(name);
+        }
+
+        if (message == null && getMessages().containsKey(name)) {
+            message = (String) getMessages().get(name);
+        }
+
+        return message;
+    }
+
+    /**
+     * Return a Map of localized messages for the ActionLink.
+     *
+     * @return a Map of localized messages for the ActionLink
+     * @throws IllegalStateException if the context for the link has not be set
+     */
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                Locale locale = getContext().getLocale();
+                messages = new MessagesMap(Field.CONTROL_MESSAGES, locale);
+
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
     /**
@@ -451,6 +617,70 @@ public class ActionLink implements Control {
     }
 
     /**
+     * @see Control#getParentMessages()
+     */
+    public Map getParentMessages() {
+        return parentMessages;
+    }
+
+    /**
+     * @see Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+        parentMessages = messages;
+    }
+
+    /**
+     * Return the 'title' attribute, or null if not defined. The title
+     * attribute acts like tooltip message over the link.
+     * <p/>
+     * If the title value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".title"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the 
+     * <tt>/click-control.properties</tt> file using the same key.
+     * <p/>
+     * For examle given a <tt>ItemsPage</tt> with the properties file 
+     * <tt>ItemPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">edit</span>.label=<span class="red">Edit</span> 
+     * <span class="st">edit</span>.title=<span class="red">Edit Item</span> </pre>
+     *
+     * The page ActionLink code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> ItemsPage <span class="kw">extends</span> Page {
+     *     ActionLink editLink = <span class="kw">new</span> ActionLink(<span class="st">"edit"</span>);
+     *     ..
+     * } </pre>
+     *
+     * Will render the ActionLink label and title properties as:
+     * <pre class="codeHtml">
+     * &lt;a href="items-page.htm?actionLink=<span class="st">edit</span>" title="<span class="red">Edit Item</span>"&gt;<span class="red">Edit</span>&lt;/a&gt; </pre>
+     *
+     * @return the 'title' attribute tooltip message
+     */
+    public String getTitle() {
+        if (title == null) {
+            title = getMessage(getName() + ".title");
+        }
+        return title;
+    }
+
+    /**
+     * Set the 'title' attribute tooltip message.
+     * 
+     * @see #getTitle()
+     *
+     * @param value the 'title' attribute tooltip message
+     */
+    public void setTitle(String value) {
+        title = value;
+    }
+
+    /**
      * Returns the ActionLink value if the action link was processed and has
      * a value, or null otherwise.
      *
@@ -467,8 +697,8 @@ public class ActionLink implements Control {
      * @return the action link <tt>Double</tt> value if the action link was processed
      */
     public Double getValueDouble() {
-        if (value != null) {
-            return Double.valueOf(value);
+        if (getValue() != null) {
+            return Double.valueOf(getValue());
         } else {
             return null;
         }
@@ -481,8 +711,8 @@ public class ActionLink implements Control {
      * @return the ActionLink <tt>Integer</tt> value if the action link was processed
      */
     public Integer getValueInteger() {
-        if (value != null) {
-            return Integer.valueOf(value);
+        if (getValue() != null) {
+            return Integer.valueOf(getValue());
         } else {
             return null;
         }
@@ -495,8 +725,8 @@ public class ActionLink implements Control {
      * @return the ActionLink <tt>Long</tt> value if the action link was processed
      */
     public Long getValueLong() {
-        if (value != null) {
-            return Long.valueOf(value);
+        if (getValue() != null) {
+            return Long.valueOf(getValue());
         } else {
             return null;
         }
@@ -509,14 +739,6 @@ public class ActionLink implements Control {
      */
     public void setValue(String value) {
         this.value = value;
-    }
-
-    /**
-     * @see net.sf.click.Control#setListener(Object, String)
-     */
-    public void setListener(Object target, String methodName) {
-        listener = target;
-        listenerMethod = methodName;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -532,7 +754,7 @@ public class ActionLink implements Control {
         clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
 
         if (clicked) {
-            value = getContext().getRequestParameter(VALUE);
+            setValue(getContext().getRequestParameter(VALUE));
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
@@ -563,6 +785,7 @@ public class ActionLink implements Control {
         buffer.append(getHref());
         buffer.append("\"");
         buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("title", getTitle());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
@@ -571,7 +794,7 @@ public class ActionLink implements Control {
         }
         buffer.closeTag();
 
-        buffer.appendEscaped(getLabel());
+        buffer.append(getLabel());
 
         buffer.elementEnd("a");
 

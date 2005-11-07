@@ -63,14 +63,12 @@ public class DoubleField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a DoubleField with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct a DoubleField with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public DoubleField(String label) {
-        super(label);
+    public DoubleField(String name) {
+        super(name);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
     }
 
@@ -86,15 +84,13 @@ public class DoubleField extends TextField {
     }
 
     /**
-     * Construct a DoubleField with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct a DoubleField with the given name and required status.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public DoubleField(String label, boolean required) {
-        this(label);
+    public DoubleField(String name, boolean required) {
+        this(name);
         setRequired(required);
     }
 

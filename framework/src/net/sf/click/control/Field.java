@@ -19,32 +19,34 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.MessagesMap;
 
 /**
  * Provides an abstract form Field control.
  * <p/>
  * The Form control acts a container for Field control instances. When a Form
- * is processed it will inturn process all the fields in contains. All Form
+ * is processed it will inturn process all the fields it contains. All Form
  * field controls must extend this abstract class.
  * <p/>
- * Localizable field messages and error messages are defined in the resource
- * bundle:
+ * Field classes provide localizable field messages and error messages 
+ * defined in the resource bundle:
  *
  * <pre class="codeConfig">
  * /click-control.properties </pre>
- *
+ * 
+ * Access to these message is provided using the {@link #getMessage(String)}
+ * method.
+ * <p/>
  * You can modify these properties by copying this file into your applications
  * root class path and editing these properties.
  * <p/>
  * <span style="font-weight: bolder">Note</span> when customizing
  * the message properties you must include all the properties, not just the
- * ones you want to override, otherwise MissingResourceExceptions may be
- * thrown.
+ * ones you want to override.
  *
  * @author Malcolm Edgar
  * @version $Id$
@@ -56,7 +58,7 @@ public abstract class Field implements Control {
     /**
      * The control package messages bundle name: &nbsp; <tt>click-control</tt>
      */
-    protected static final String CONTROL_MESSAGES = "click-control";
+    public static final String CONTROL_MESSAGES = "click-control";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -87,8 +89,14 @@ public abstract class Field implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
+    /** The Field localized messages Map. */
+    protected Map messages;
+
     /** The Field name. */
     protected String name;
+
+    /** The parent localized messages map. */
+    protected Map parentMessages;
 
     /** The Field is readonly flag. */
     protected boolean readonly;
@@ -111,15 +119,12 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Construct the Field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the Field with the given name.
      *
-     * @param label the label of the Field
+     * @param name the name of the Field
      */
-    public Field(String label) {
-        setLabel(label);
-        setName(ClickUtils.toName(label));
+    public Field(String name) {
+        setName(name);
     }
 
     /**
@@ -152,15 +157,17 @@ public abstract class Field implements Control {
 
     /**
      * Set the Fields with the given HTML attribute name and value. These
-     * attributes will be rendered as HTML attributes, for example:
+     * attributes will be rendered as HTML attributes.
+     * <p/>
+     * For example the TextField code:
      *
      * <pre class="codeJava">
-     * TextField textField = new TextField("Username");
+     * TextField textField = <span class="kw">new</span> TextField("username");
      * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span>"); </pre>
      *
-     * HTML output:
+     * Will render the HTML:
      * <pre class="codeHtml">
-     * &lt;input type='text' name='username' value='' <span class="blue">class</span>='<span class="red">login</span>'/&gt; </pre>
+     * &lt;input type="text" name="username" size="20" <span class="blue">class</span>="<span class="red">login</span>"/&gt; </pre>
      *
      * If there is an existing named attribute in the Field it will be replaced
      * with the new value. If the given attribute value is null, any existing
@@ -219,11 +226,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Set the Field context and localize any <tt>"msg:"</tt> prefixed
-     * label or title values.
-     *
-     * @see #setLabel(String)
-     * @see #setTitle(String)
+     * Set the Field context value.
      *
      * @see Control#setContext(Context)
      */
@@ -232,15 +235,6 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
-
-        if (getLabel() != null && getLabel().startsWith("msg:")) {
-            String key = getLabel().substring(4);
-            setLabel(getMessage(key));
-        }
-        if (getTitle() != null && getTitle().startsWith("msg:")) {
-            String key = getTitle().substring(4);
-            setTitle(getMessage(key));
-        }
     }
 
     /**
@@ -350,38 +344,64 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return the display caption label.
+     * Return the field display label.
+     * <p/>
+     * If the label value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".label"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the 
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value still cannot be found then the Field name will be converted 
+     * into a label using the method: {@link ClickUtils#toLabel(String)}
+     * <p/>
+     * For examle given a <tt>CustomerPage</tt> with the properties file 
+     * <tt>CustomerPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">name</span>.label=<span class="red">Customer Name</span> 
+     * <span class="st">name</span>.title=<span class="red">Full name or Business name</span> </pre>
+     *
+     * The page TextField code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+     *     TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
+     *     ..
+     * } </pre>
+     *
+     * Will render the TextField label and title properties as:
+     * <pre class="codeHtml">
+     * &lt;td&gt;&lt;label&gt;<span class="red">Customer Name</span>&lt;/label&gt;&lt;/td&gt;
+     * &lt;td&gt;&lt;input type="text" name="<span class="st">name</span>" title="<span class="red">Full name or Business name</span>"/&gt;&lt;/td&gt; </pre>
+     *
+     * When a label value is not set, or defined in any properties files, then
+     * its value will be created from the Fields name. 
+     * <p/>
+     * For example given the TextField code: 
+     *
+     * <pre class="codeJava">
+     * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"faxNumber"</span>);  </pre>
+     * 
+     * Will render the TextField label as:
+     * <pre class="codeHtml">
+     * &lt;td&gt;&lt;label&gt;<span class="red">Fax Number</span>&lt;/label&gt;&lt;/td&gt;
+     * &lt;td&gt;&lt;input type="text" name="<span class="st">faxNumber</span>"/&gt;&lt;/td&gt; </pre>
      *
      * @return the display label of the Field
      */
     public String getLabel() {
+        if (label == null) {
+            label = getMessage(getName() + ".label");
+        }
+        if (label == null) {
+            label = ClickUtils.toLabel(getName());
+        }
         return label;
     }
 
     /**
      * Set the Field display caption.
-     * <p/>
-     * If the given label value is prefixed with <tt>"msg:"</tt> then the label will be
-     * considered to be a localized message key. This value will be replaced
-     * with the localized message string for the given key when the Field's context
-     * is set.
-     * <p/>
-     * For examle:
-     *
-     * <pre class="codeJava">
-     * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
-     * nameField.setLabel(<span class="st">"msg:name.label"</span>);
-     *
-     * <span class="cm">// Or alternatively</span>
-     * TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"msg:name.label"</span>); </pre>
-     *
-     * Will replace the Field label with the localized message
-     * <span class="red">Customer Name</span> for the key
-     * <span class="st">name.label</span>  when the context is set.
-     * This message would be defined in the <tt>/click-control.properties</tt> file:
-     *
-     * <pre class="codeConfig">
-     * <span class="st">name.label</span>=<span class="red">Customer Name</span> </pre>
      *
      * @param label the display label of the Field.
      */
@@ -402,23 +422,36 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return the package resource bundle message for the named resource key
-     * and the context's request locale.
+     * Return the localized message for the given key, or null if not found.
+     * <p/>
+     * This method will attempt to lookup the localized message in the 
+     * parentMessages, which by default represents the Page's resource bundle.
+     * <p/>
+     * If the message was not found, the this method will attempt to look up the 
+     * value in the <tt>/click-control.properties</tt> message properties file.
+     * <p/>
+     * If still not found, this method will return null.
      *
-     * @param name resource name of the message
-     * @return the named localized message for the package
+     * @param name the name of the message resource
+     * @return the named localized message, or null if not found
      */
     public String getMessage(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        Locale locale = getContext().getLocale();
+        String message = null;
 
-        ResourceBundle bundle =
-            ResourceBundle.getBundle(CONTROL_MESSAGES, locale);
+        if (getParentMessages() != null && getParentMessages().containsKey(name))
+        {
+            message = (String) getParentMessages().get(name);
+        }
 
-        return bundle.getString(name);
+        if (message == null && getMessages().containsKey(name)) {
+            message = (String) getMessages().get(name);
+        }
+
+        return message;
     }
 
     /**
@@ -451,6 +484,26 @@ public abstract class Field implements Control {
         return MessageFormat.format(value, args);
     }
 
+     /**
+      * Return a Map of localized messages for the Field.
+      *
+      * @return a Map of localized messages for the Field
+      * @throws IllegalStateException if the context for the Field has not be set
+      */
+     public Map getMessages() {
+         if (messages == null) {
+             if (getContext() != null) {
+                 Locale locale = getContext().getLocale();
+                 messages = new MessagesMap(CONTROL_MESSAGES, locale);
+
+             } else {
+                 String msg = "Cannot initialize messages as context not set";
+                 throw new IllegalStateException(msg);
+             }
+         }
+         return messages;
+     }
+
     /**
      * @see net.sf.click.Control#getName()
      */
@@ -466,6 +519,20 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+    }
+
+    /**
+     * @see Control#getParentMessages()
+     */
+    public Map getParentMessages() {
+        return parentMessages;
+    }
+
+    /**
+     * @see Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+        parentMessages = messages;
     }
 
     /**
@@ -512,20 +579,46 @@ public abstract class Field implements Control {
     /**
      * Return the 'title' attribute, or null if not defined. The title
      * attribute acts like tooltip message over the Field.
+     * <p/>
+     * If the title value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".title"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the 
+     * <tt>/click-control.properties</tt> file using the same key. If still 
+     * not found the title will be left as null and will not be rendered.
+     * <p/>
+     * For examle given a <tt>CustomerPage</tt> with the properties file 
+     * <tt>CustomerPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">name</span>.label=<span class="red">Customer Name</span> 
+     * <span class="st">name</span>.title=<span class="red">Full name or Business name</span> </pre>
+     *
+     * The page TextField code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+     *     TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
+     *     ..
+     * } </pre>
+     *
+     * Will render the TextField label and title properties as:
+     * <pre class="codeHtml">
+     * &lt;td&gt;&lt;label&gt;<span class="red">Customer Name</span>&lt;/label&gt;&lt;/td&gt;
+     * &lt;td&gt;&lt;input type="text" name="<span class="st">name</span>" title="<span class="red">Full name or Business name</span>"/&gt;&lt;/td&gt; </pre>
      *
      * @return the 'title' attribute tooltip message
      */
     public String getTitle() {
+        if (title == null) {
+            title = getMessage(getName() + ".title");
+        }
         return title;
     }
 
     /**
      * Set the 'title' attribute tooltip message.
-     * <p/>
-     * If the given title value is prefixed with <tt>"msg:"</tt> then the title will be
-     * considered to be a localized message key. This value will be replaced
-     * with the localized message string for the given key when the Field's context
-     * is set.
      *
      * @param value the 'title' attribute tooltip message
      */

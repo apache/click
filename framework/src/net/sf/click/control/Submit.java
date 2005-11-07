@@ -17,8 +17,6 @@ package net.sf.click.control;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.util.ClickUtils;
-
 /**
  * Provides a Submit control: &nbsp; &lt;input type='submit'&gt;.
  *
@@ -53,50 +51,59 @@ public class Submit extends Button {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Submit button with the given value. The value cannot contain
-     * the HTML characters <tt>&amp;nbsp;</tt> as the submitted value cannot be
-     * processed correctly.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a Submit button with the given name.
      *
-     * @param value the button value
+     * @param name the button name
      */
-    public Submit(String value) {
-        super(value);
-
-        if (value.toLowerCase().indexOf("&nbsp;") != -1) {
-            String msg = "Cannot correctly process value containing: &nbsp;";
-            throw new IllegalArgumentException(msg);
-        }
+    public Submit(String name) {
+        super(name);
     }
 
     /**
-     * Create a Submit button with the given value and title attribute. The
-     * value cannot contain the HTML characters <tt>&amp;nbsp;</tt> as the
-     * submitted value cannot be processed correctly.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a Submit button with the given name and label.
      *
-     * @param value the button value
-     * @param title the button title attribute
+     * @param name the button name
+     * @param label the button display label
      */
-    public Submit(String value, String title) {
-        this(value);
-        setTitle(title);
+    public Submit(String name, String label) {
+        super(name, label);
     }
 
     /**
-     * Create a Submit button with the given value, listener object and
+     * Create a Submit button with the given name, listener object and
      * listener method.
      *
-     * @param value the button value
+     * @param name the button name
      * @param listener the listener target object
      * @param method the listener method to call
      * @throws IllegalArgumentException if listener is null or if the method
      * is blank
      */
-    public Submit(String value, Object listener, String method) {
-        super(value);
+    public Submit(String name, Object listener, String method) {
+        super(name);
+
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener parameter");
+        }
+        if (StringUtils.isBlank(method)) {
+            throw new IllegalArgumentException("Blank listener method");
+        }
+        setListener(listener, method);
+    }
+
+    /**
+     * Create a Submit button with the given name, label, listener object and
+     * listener method.
+     *
+     * @param name the button name
+     * @param label the button display label
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method
+     * is blank
+     */
+    public Submit(String name, String label, Object listener, String method) {
+        super(name, label);
 
         if (listener == null) {
             throw new IllegalArgumentException("Null listener parameter");
@@ -157,10 +164,10 @@ public class Submit extends Button {
      * @see net.sf.click.Control#onProcess()
      */
     public boolean onProcess() {
-        String value = getContext().getRequestParameter(getName());
+        value = getContext().getRequestParameter(getName());
 
         if (value != null) {
-            clicked = getName().equals(ClickUtils.toName(value));
+            clicked = getLabel().equals(value);
 
             if (clicked) {
                 return invokeListener();

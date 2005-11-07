@@ -81,15 +81,25 @@ public class TextField extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the TextField with the given label. The default text field size
+     * Construct the TextField with the given name. The default text field size
      * is 20 characters.
-     * <p/>
-     * The field name will be Java property representation of the given label
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public TextField(String label) {
-        super(label);
+    public TextField(String name) {
+        super(name);
+    }
+
+    /**
+     * Construct the TextField with the given name and required status.
+     * The default text field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param required the field required status
+     */
+    public TextField(String name, boolean required) {
+        super(name);
+        setRequired(required);
     }
 
     /**
@@ -104,30 +114,16 @@ public class TextField extends Field {
     }
 
     /**
-     * Construct the TextField with the given label and required status. The
-     * default text field size is 20 characters.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the TextField with the given name, label and required status.
+     * The default text field size is 20 characters.
      *
+     * @param name the name of the field
      * @param label the label of the field
      * @param required the field required status
      */
-    public TextField(String label, boolean required) {
-        super(label);
+    public TextField(String name, String label, boolean required) {
+        super(label, label);
         setRequired(required);
-    }
-
-    /**
-     * Construct the TextField with the given label and size.
-     * <p/>
-     * The field name will be Java property representation of the given label
-     *
-     * @param label the label of the field
-     * @param size the size of the field
-     */
-    public TextField(String label, int size) {
-        super(label);
-        setSize(size);
     }
 
     /**

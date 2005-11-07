@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.ClickUtils;
+
 /**
  * Provides a Label display control. The Label control performs no server side
  * processing, and is used primarily to add descriptive labels or horizontal
@@ -41,11 +43,19 @@ public class Label extends Field {
 
     /**
      * Create a Label display control.
-     *
-     * @param label the label display value
+     * <p/>
+     * Note the Label control will attempt to find a localized label message 
+     * in the parent messages, and if not found then in the field messages 
+     * using the key name of <tt>getName() + ".label"</tt>.
+     * <p/>
+     * If a value cannot be found in the parent or control messages then the
+     * Field name will be converted into a label using the
+     * {@link ClickUtils#toLabel(String)} method.
+     * 
+     * @param name the name display value
      */
-    public Label(String label) {
-        super(label);
+    public Label(String name) {
+        super(name);
     }
 
     /**

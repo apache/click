@@ -16,6 +16,7 @@
 package net.sf.click;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Provides the interface for Page controls. When a Page request
@@ -90,6 +91,20 @@ public interface Control extends Serializable {
      * @throws IllegalArgumentException if the name is null
      */
     public void setName(String name);
+
+    /**
+     * Return the localized messages <tt>Map</tt> of the Control's parent.
+     *
+     * @return the localization <tt>Map</tt> of the Control's parent
+     */
+    public Map getParentMessages();
+
+    /**
+     * Set the parent's localized messages <tt>Map</tt> for the  Control.
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
+     */
+    public void setParentMessages(Map messages);
 
     /**
      * The on process event handler. Each Page control will be processed when

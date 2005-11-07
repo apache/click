@@ -80,16 +80,14 @@ public class DateField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the Date Field with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the Date Field with the given name.
      * <p/>
      * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public DateField(String label) {
-        super(label);
+    public DateField(String name) {
+        super(name);
         setAttribute("id", getName() + "-field");
         setFormatPattern("dd MMM yyyy");
     }
@@ -109,17 +107,15 @@ public class DateField extends TextField {
     }
 
     /**
-     * Construct the Date Field with the given label and required status.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Construct the Date Field with the given name and required status.
      * <p/>
      * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      * @param required the field required status
      */
-    public DateField(String label, boolean required) {
-        this(label);
+    public DateField(String name, boolean required) {
+        this(name);
         setRequired(required);
     }
 
@@ -199,7 +195,7 @@ public class DateField extends TextField {
     /**
      * Return the SimpleDateFormat pattern.
      *
-     * @return the SimpleDateFormat pattern.
+     * @return the SimpleDateFormat pattern
      */
     public String getFormatPattern() {
         return formatPattern;
@@ -208,7 +204,7 @@ public class DateField extends TextField {
     /**
      * Set the SimpleDateFormat pattern.
      *
-     * @param pattern the SimpleDateFormat pattern.
+     * @param pattern the SimpleDateFormat pattern
      */
     public void setFormatPattern(String pattern) {
         if (pattern == null) {

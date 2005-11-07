@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -35,7 +34,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * to the previous page.
  *
  * <pre class="codeJava">
- * Button backButton = <span class="kw">new</span> Button(<span class="st">" &lt Back "</span>);
+ * Button backButton = <span class="kw">new</span> Button(<span class="st">"back"</span>, <span class="st">" &lt Back "</span>);
  * backButton.setOnClick(<span class="st">"history.back();"</span>);
  * backButton.setTitle(<span class="st">"Return to previous page"</span>);
  * form.add(backButton); </pre>
@@ -64,15 +63,24 @@ public class Button extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a button with the given value.
-     * <p/>
-     * The field name will be Java property representation of the given value.
+     * Create a button with the given name.
      *
-     * @param value the button value
+     * @param name the button name
      */
-    public Button(String value) {
-        setValue(value);
-        setName(ClickUtils.toName(value));
+    public Button(String name) {
+        super(name);
+    }
+
+    /**
+     * Create a button with the given name and label. The button label is
+     * rendered as the HTML "value" attribute.
+     *
+     * @param name the button name
+     * @param label the button label
+     */
+    public Button(String name, String label) {
+        setName(name);
+        setLabel(label);
     }
 
     /**
@@ -133,7 +141,8 @@ public class Button extends Field {
     }
 
     /**
-     * Return a HTML rendered Button string.
+     * Return a HTML rendered Button string. Note the button label is rendered
+     * as the HTML "value" attribute.
      *
      * @see Object#toString()
      */
@@ -145,7 +154,7 @@ public class Button extends Field {
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
-        buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("value", getLabel());
         buffer.appendAttribute("title", getTitle());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());

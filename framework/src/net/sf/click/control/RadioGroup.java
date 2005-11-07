@@ -108,14 +108,12 @@ public class RadioGroup extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a RadioGroup with the given label.
-     * <p/>
-     * The field name will be Java property representation of the given label.
+     * Create a RadioGroup with the given name.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public RadioGroup(String label) {
-        super(label);
+    public RadioGroup(String name) {
+        super(name);
     }
 
 

@@ -117,16 +117,12 @@ public class FieldSet extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a FieldSet with the given legend.
-     * <p/>
-     * The fieldset name will be Java property representation of the given
-     * legend.
+     * Create a FieldSet with the given name.
      *
-     * @param legend the fieldset legend element value
+     * @param name the fieldset name element value
      */
-    public FieldSet(String legend) {
-        setLegend(legend);
-        setName(ClickUtils.toName(legend));
+    public FieldSet(String name) {
+        setName(name);
     }
 
     /**
@@ -288,10 +284,24 @@ public class FieldSet extends Field {
 
     /**
      * Return the fieldset Legend element value: &lt;legend&gt;
+     * <p/>
+     * If the legend value is null, this method will attempt to find a
+     * localized label message in the parent messages, and if not found then in
+     * the field messages using the key name of <tt>getName() + ".legend"</tt>.
+     * <p/>
+     * If a value cannot be found in the parent or control messages then the
+     * FieldSet name will be converted into a legend using the
+     * {@link ClickUtils#toLabel(String)} method.
      *
      * @return the fieldset Legend element value
      */
     public String getLegend() {
+        if (legend == null) {
+            legend = getMessage(getName() + ".legend");
+        }
+        if (legend == null) {
+            legend = ClickUtils.toLabel(getName());
+        }
         return legend;
     }
 
@@ -375,6 +385,17 @@ public class FieldSet extends Field {
      */
     public void setListener(Object listener, String method) {
         throw new UnsupportedOperationException("setListener not supported");
+    }
+
+    /**
+     * @see Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+        parentMessages = messages;
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            field.setParentMessages(parentMessages);
+        }
     }
 
     /**

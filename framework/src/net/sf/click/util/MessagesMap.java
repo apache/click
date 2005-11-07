@@ -15,17 +15,25 @@
  */
 package net.sf.click.util;
 
+import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 
-import net.sf.click.Page;
-
 /**
- * Provides a Map adaptor for Page messages. A MessagesMap instance is
- * available in each Velocity page using the name "<span class="blue">messages</span>".
+ * Provides a localized read only messages Map for Page and Control classes.
  * <p/>
- * For example suppose we have a localized page title, which is stored in the
+ * A MessagesMap instance is available in each Velocity page using the name
+ * "<span class="blue">messages</span>".
+ * <p/>
+ * For example suppose you have a localized page title, which is stored in the
  * Page's properties file. You can access page "title" message in your page
  * template via:
  *
@@ -52,36 +60,74 @@ import net.sf.click.Page;
  */
 public class MessagesMap implements Map {
 
-    /** The internal page object. */
-    protected final Page page;
+    /** Cache of resource bundle and locales which werer not found. */
+    protected static final Set NOT_FOUND_CACHE =
+        Collections.synchronizedSet(new HashSet());
+
+    /** Cache of messages keyed by bundleName + Locale name. */
+    protected static final Map MESSAGES_CACHE = new HashMap();
+
+    /** The cache key set load lock. */
+    protected static final Object CACHE_LOAD_LOCK = new Object();
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The resource bundle base name. */
+    protected final String baseName;
+
+    /** The map of localized messages. */
+    protected Map messages;
+
+    /** The resource bundle locale. */
+    protected final Locale locale;
+
+    /** Flag indicating no resources found after initialization. */
+    protected boolean noResourcesFound;
+
+    // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a <tt>Page</tt> getMessage() <tt>Map</tt> adaptor.
+     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
+     * bundle name and <tt>Locale</tt>.
      *
-     * @param page the Page object
+     * @param baseName the resource bundle name
+     * @param locale the locale to use
      */
-    public MessagesMap(Page page) {
-        this.page = page;
+    public MessagesMap(String baseName, Locale locale) {
+        if (baseName == null) {
+            throw new IllegalArgumentException("Null baseName parameter");
+        }
+        if (locale == null) {
+            throw new IllegalArgumentException("Null locale parameter");
+        }
+        this.baseName = baseName;
+        this.locale = locale;
     }
 
+    // --------------------------------------------------------- Public Methods
+
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#size()
      */
     public int size() {
-        throw new UnsupportedOperationException();
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.size();
+        } else {
+            return 0;
+        }
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#isEmpty()
      */
     public boolean isEmpty() {
-        throw new UnsupportedOperationException();
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.isEmpty();
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -89,30 +135,44 @@ public class MessagesMap implements Map {
      */
     public boolean containsKey(Object key) {
         if (key != null) {
-            return (page.getMessage(key.toString()) != null);
+            ensureInitialized();
+            if (!noResourcesFound) {
+                return messages.containsKey(key);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @see java.util.Map#containsValue(Object)
+     */
+    public boolean containsValue(Object value) {
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.containsValue(value);
         } else {
             return false;
         }
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
+     * Return localized resource message for the given key. If the message is
+     * not found a <tt>MissingResourceExcetion</tt> will be thrown.
      *
-     * @see java.util.Map#containsValue(Object)
-     */
-    public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
      * @see java.util.Map#get(Object)
+     * @throws MissingResourceException if the given key was not found
      */
     public Object get(Object key) {
-        if (key != null) {
-            return page.getMessage(key.toString());
+        if (containsKey(key)) {
+            return (String) messages.get(key);
+
         } else {
-            return null;
+            String msg = "Message \"{0}\" not found in bundle \"{1}\" " +
+                         "for locale \"{2}\"";
+            String keyStr = (key != null) ? key.toString() : null;
+            Object[] args = { keyStr, baseName, locale };
+            msg = MessageFormat.format(msg, args);
+            throw new MissingResourceException(msg, baseName, keyStr);
         }
     }
 
@@ -157,33 +217,83 @@ public class MessagesMap implements Map {
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#keySet()
      */
     public Set keySet() {
-        throw new UnsupportedOperationException();
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.keySet();
+        } else {
+            return Collections.EMPTY_SET;
+        }
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#values()
      */
     public Collection values() {
-        throw new UnsupportedOperationException();
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.values();
+        } else {
+            return Collections.EMPTY_SET;
+        }
     }
 
     /**
-     * This method is not supported and will throw
-     * <tt>UnsupportedOperationException</tt> if invoked.
-     *
      * @see java.util.Map#entrySet()
      */
     public Set entrySet() {
-        throw new UnsupportedOperationException();
+        ensureInitialized();
+        if (!noResourcesFound) {
+            return messages.entrySet();
+        } else {
+            return Collections.EMPTY_SET;
+        }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Ensure the messages key set has been initialized.
+     */
+    protected void ensureInitialized() {
+        if (messages == null && !noResourcesFound) {
+
+            String resourceKey = baseName + locale.toString();
+            if (!NOT_FOUND_CACHE.contains(resourceKey)) {
+                if (MESSAGES_CACHE.containsKey(resourceKey)) {
+                    messages = (Map) MESSAGES_CACHE.get(resourceKey);
+
+                } else {
+                    synchronized (CACHE_LOAD_LOCK) {
+                       try {
+                            ResourceBundle resources =
+                                ResourceBundle.getBundle(baseName, locale);
+
+                            messages = new HashMap();
+
+                            Enumeration e = resources.getKeys();
+                            while (e.hasMoreElements()) {
+                                String name = e.nextElement().toString();
+                                String value = resources.getString(name);
+                                messages.put(name, value);
+                            }
+
+                            messages = Collections.unmodifiableMap(messages);
+
+                            MESSAGES_CACHE.put(resourceKey, messages);
+
+                        } catch (MissingResourceException mre) {
+                            NOT_FOUND_CACHE.add(resourceKey);
+                            noResourcesFound = true;
+                        }
+                    }
+                }
+            } else {
+                noResourcesFound = true;
+            }
+        }
     }
 
 }

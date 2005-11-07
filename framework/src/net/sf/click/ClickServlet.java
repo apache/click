@@ -37,7 +37,6 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
-import net.sf.click.util.MessagesMap;
 import net.sf.click.util.SessionMap;
 
 import org.apache.velocity.Template;
@@ -745,8 +744,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        MessagesMap messagesMap = new MessagesMap(page);
-        pop = context.put("messages", messagesMap);
+        pop = context.put("messages", page.getMessages());
         if (pop != null) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -885,8 +883,7 @@ public class ClickServlet extends HttpServlet {
            request.setAttribute("path", path);
         }
 
-        MessagesMap messagesMap = new MessagesMap(page);
-        request.setAttribute("messages", messagesMap);
+        request.setAttribute("messages", page.getMessages());
     }
 
     // ---------------------------------------------------------- Inner Classes

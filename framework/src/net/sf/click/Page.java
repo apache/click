@@ -21,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+
+import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -83,8 +83,8 @@ public class Page {
     /** The headers have been edited flag, to support copy on write. */
     protected boolean headersEdited;
 
-    /** The messages resource bundle. **/
-    protected ResourceBundle messages;
+    /** The map of localized page resource messages. **/
+    protected MessagesMap messages;
 
     /** The page model, which is used to populate the Velocity context. */
     protected Map model = new HashMap();
@@ -118,6 +118,7 @@ public class Page {
 
         if (getContext() != null) {
             control.setContext(getContext());
+            control.setParentMessages(getMessages());
         }
 
         addModel(control.getName(), control);
@@ -170,7 +171,9 @@ public class Page {
             for (Iterator i = getModel().values().iterator(); i.hasNext();) {
                 Object object = i.next();
                 if (object instanceof Control) {
-                    ((Control)object).setContext(context);
+                    Control control = (Control) object;
+                    control.setContext(context);
+                    control.setParentMessages(getMessages());
                 }
             }
         }
@@ -353,18 +356,33 @@ public class Page {
      *
      * @param key the message property key name
      * @return the Page message for the given message property key
-     * @throws MissingResourceException if the properties file could not be
-     * found, or the message for the given key could not be found.
      */
     public String getMessage(String key) {
         if (key == null) {
             throw new IllegalArgumentException("Null key parameter");
         }
+        return (String) getMessages().get(key);
+    }
+
+    /**
+     * Return a Map of localized messages for the Page.
+     *
+     * @return a Map of localized messages for the Page
+     * @throws IllegalStateException if the context for the Page has not be set
+     */
+    public Map getMessages() {
         if (messages == null) {
-            Locale locale = getContext().getLocale();
-            messages = ResourceBundle.getBundle(getClass().getName(), locale);
+            if (getContext() != null) {
+                String baseName = getClass().getName();
+                Locale locale = getContext().getLocale();
+                messages = new MessagesMap(baseName, locale);
+
+            } else {
+                String msg = "Context not set cannot initialize messages";
+                throw new IllegalStateException(msg);
+            }
         }
-        return messages.getString(key);
+        return messages;
     }
 
     /**
