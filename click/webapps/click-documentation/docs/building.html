@@ -78,27 +78,29 @@ BUILD SUCCESSFUL </pre>
   <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
   from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
   <pre class="codeConfig">
-  ant get-deps </pre>
+ant get-deps </pre>
 
   If you are behind a firewall use the Ant target <tt>get-deps-proxy</tt>
-  and configure you proxy settings in <tt>build.properties</tt>.
+  and configure you proxy settings in <tt>build.properties</tt>
+  
+  <pre class="codeConfig">
+# Proxy hostname used by Ant target 'get-deps-proxy'
+proxy.host=192.168.0.3
+
+# Proxy port for by Ant target 'get-deps-proxy'
+proxy.port=3128 </pre>
   </li>
 </ol>
 
 <h3>Building Framework</h3>
 <ol>
-  <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
-  from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
-  <pre class="codeConfig">
-  ant get-deps </pre>
-
-  If you are behind a firewall use the Ant target <tt>get-deps-proxy</tt>
-  and configure you proxy settings in <tt>build.properties</tt>.
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
   </li>
 
   <li>Run the Ant target <tt>build-framework</tt> to build the framework:
   <pre class="codeConfig">
-  ant build-framework </pre>
+ant build-framework </pre>
   </li>
 </ol>
 
@@ -111,7 +113,7 @@ BUILD SUCCESSFUL </pre>
   
   <li>Run the Ant targets <tt>framework</tt> and <tt>build-extras</tt>:
   <pre class="codeConfig">
-  ant build-framework build-extras </pre>
+ant build-framework build-extras </pre>
   </li>
 </ol>
 
@@ -125,7 +127,7 @@ To build the Click web applications:
   
   <li>Run the Ant target <tt>build-all</tt>:
   <pre class="codeConfig">
-  ant build-all </pre>
+ant build-all </pre>
   </li>
 </ol>
 
@@ -150,8 +152,8 @@ The Click framework has the following runtime dependencies.
 </tr>
 <tr>
   <td>Servlet API</td>
-  <td>2.4</td>
-  <td>servlet-2.4.jar</td>  
+  <td>2.3</td>
+  <td>servlet-2.3.jar</td>  
   <td><a target="blank" href="http://java.sun.com/products/servlet/">Sun Microsystems</a></td>
   <td>J2EE Servlet API</td>
 </tr>
