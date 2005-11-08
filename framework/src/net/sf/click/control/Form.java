@@ -48,88 +48,79 @@ import org.apache.commons.lang.StringUtils;
  * <table class='fields'>
  * <tr>
  * <td align='left'><label>Username</label><span class="red">*</span></td>
- * <td align='left'><input type='text' name='username' value='' size='20'
- * maxlength='20' /></td>
+ * <td align='left'><input type='text' name='username' value='' size='20' maxlength='20' /></td>
  * </tr>
  * <tr>
  * <td align='left'><label>Password</label><span class="red">*</span></td>
- * <td align='left'><input type='password' name='password' value='' size='20'
- * maxlength='20' /></td>
+ * <td align='left'><input type='password' name='password' value='' size='20' maxlength='20' /></td>
  * </tr>
- * </table> <table class="buttons">
- * <tr>
- * <td> <input type='submit' name='ok' value=' OK '/>&nbsp;<input type='submit'
- * name='cancel' value=' Cancel '/> </td>
- * </tr>
+ * </table>
+ * <table class="buttons">
+ * <tr><td>
+ * <input type='submit' name='ok' value='  OK  '/>&nbsp;<input type='submit' name='cancel' value=' Cancel '/>
+ * </td></tr>
  * </table>
  *
  * </td>
  * </tr>
  * </table>
  *
- * When a Form is processed it will process its {@link Field} controls in the
- * order they were added to the form, and then it will process the
+ * When a Form is processed it will process its {@link Field} controls
+ * in the order they were added to the form, and then it will process the
  * {@link Button} controls in the added order. Once all the Fields have been
  * processed the form will invoke its action listener if defined.
  * <p/>
  * The example below illustrates a Form being used in a login Page.
  *
  * <pre class="codeJava">
- *  &lt;span class=&quot;kw&quot;&gt;public class&lt;/span&gt; Login &lt;span class=&quot;kw&quot;&gt;extends&lt;/span&gt; Page {
+ * <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
  *
- *      &lt;span class=&quot;kw&quot;&gt;private&lt;/span&gt; Form form;
+ *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  *
- *      &lt;span class=&quot;kw&quot;&gt;public void&lt;/span&gt; onInit() {
- *          form = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Form(&lt;span class=&quot;st&quot;&gt;&quot;form&quot;&lt;/span&gt;);
- *          addControl(form);
+ *     <span class="kw">public void</span> onInit() {
+ *         addControl(form);
  *
- *          form.add(&lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; TextField(&lt;span class=&quot;st&quot;&gt;&quot;Username&quot;&lt;/span&gt;, &lt;span class=&quot;kw&quot;&gt;true&lt;/span&gt;));
- *          form.add(&lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; PasswordField(&lt;span class=&quot;st&quot;&gt;&quot;Password&quot;&lt;/span&gt;, &lt;span class=&quot;kw&quot;&gt;true&lt;/span&gt;));
- *          form.add(&lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Submit(&lt;span class=&quot;st&quot;&gt;&quot;  OK  &quot;&lt;/span&gt;, &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;onOkClick&quot;&lt;/span&gt;));
- *          form.add(&lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Submit(&lt;span class=&quot;st&quot;&gt;&quot; Cancel &quot;&lt;/span&gt;, &lt;span class=&quot;kw&quot;&gt;this&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;onCancelClick&quot;&lt;/span&gt;));
- *      }
+ *         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
+ *         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
+ *     }
  *
- *      &lt;span class=&quot;kw&quot;&gt;public boolean&lt;/span&gt; onOkClick() {
- *          &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (form.isValid()) {
- *              User user = new User();
- *              form.copyTo(user);
+ *     <span class="kw">public boolean</span> onOkClick() {
+ *         <span class="kw">if</span> (form.isValid()) {
+ *             User user = new User();
+ *             form.copyTo(user);
  *
- *              &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (UserDOA.isAuthenticatedUser(user)) {
- *                  getContext().setSessionAttribute(&lt;span class=&quot;st&quot;&gt;&quot;user&quot;&lt;/span&gt;, user);
- *                  setRedirect(&lt;span class=&quot;st&quot;&gt;&quot;home.htm&quot;&lt;/span&gt;);
- *              }
- *              &lt;span class=&quot;kw&quot;&gt;else&lt;/span&gt; {
- *                   form.setError(getMessage(&lt;span class=&quot;st&quot;&gt;&quot;authentication-error&quot;&lt;/span&gt;));
- *              }
- *          }
- *          &lt;span class=&quot;kw&quot;&gt;return true&lt;/span&gt;;
- *      }
+ *             <span class="kw">if</span> (UserDOA.isAuthenticatedUser(user)) {
+ *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
+ *                 setRedirect(<span class="st">"home.htm"</span>);
+ *             }
+ *             <span class="kw">else</span> {
+ *                  form.setError(getMessage(<span class="st">"authentication-error"</span>));
+ *             }
+ *         }
+ *         <span class="kw">return true</span>;
+ *     }
  *
- *      &lt;span class=&quot;kw&quot;&gt;public boolean&lt;/span&gt; onCancelClick() {
- *          setRedirect(&lt;span class=&quot;st&quot;&gt;&quot;index.htm&quot;&lt;/span&gt;);
- *          &lt;span class=&quot;kw&quot;&gt;return false&lt;/span&gt;;
- *      }
- *  }
- * </pre>
+ *     <span class="kw">public boolean</span> onCancelClick() {
+ *         setRedirect(<span class="st">"index.htm"</span>);
+ *         <span class="kw">return false</span>;
+ *     }
+ * } </pre>
  *
  * The forms corresponding template code is below. Note the form automatically
  * renders itself when Velocity invokes its {@link #toString()} method.
  *
  * <pre class="codeHtml">
- *  &lt;span class=&quot;blue&quot;&gt;$form&lt;/span&gt;
- * </pre>
+ * <span class="blue">$form</span> </pre>
  *
- * If a Form has been posted and processed, if it has an {@link #error} defined
- * or any of its Fields hava validation errors they will be automatically
+ * If a Form has been posted and processed, if it has an {@link #error} defined or
+ * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
- * <a name="form-layout">
- * <h3>Form Layout</h3>
- * </a>
+ * <a name="form-layout"><h3>Form Layout</h3></a>
  *
- * <a name="auto-layout">
- * <h4>Auto Layout</h4>
- * </a>
+ * <a name="auto-layout"><h4>Auto Layout</h4></a>
  *
  * If you include a form variable in your template the form will be
  * automatically layed out and rendered. Auto layout, form and field rendering
@@ -137,206 +128,185 @@ import org.apache.commons.lang.StringUtils;
  *
  * <table style="margin-left: 1em;" cellpadding="3">
  * <tr>
- * <td>{@link #buttonAlign}</td>
- * <td>button alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
- * </tr>
- * <tr>
- * <td>{@link #columns}</td>
- * <td>number of form table columns, the default value number is 1</td>
- * </tr>
- * <tr>
- * <td>{@link #errorsAlign}</td>
- * <td>validation error messages alignment: &nbsp;
- * <tt>["left", "center", "right"]</tt></td>
- * </tr>
- * <tr>
- * <td>{@link #errorsPosition}</td>
- * <td>validation error messages position: &nbsp;
- * <tt>["top", "middle", "bottom"]</tt></td>
- * </tr>
- * <tr>
- * <td>{@link #labelAlign}</td>
- * <td>field label alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
- * </tr>
- * <tr>
- * <td>{@link #labelsPosition}</td>
- * <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
- * </tr>
- * <tr>
- * <td>click/form.css</td>
- * <td>form CSS styles, located under web root directory</td>
- * </tr>
- * <tr>
- * <td>/click-control.properties</td>
- * <td>form and field messages and HTML, located under classpath</td>
+ * <td>{@link #buttonAlign}</td> <td>button alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #columns}</td> <td>number of form table columns, the default value number is 1</td>
+ * </tr><tr>
+ * <td>{@link #errorsAlign}</td> <td>validation error messages alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>["top", "middle", "bottom"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
+ * </tr><tr>
+ * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
+ * </tr><tr>
+ * <td>click/form.css</td> <td>form CSS styles, located under web root directory</td>
+ * </tr><tr>
+ * <td>/click-control.properties</td> <td>form and field messages and HTML, located under classpath</td>
  * </tr>
  * </table>
  *
- * <a name="manual-layout">
- * <h4>Manual Layout</h4>
- * </a>
+ * <a name="manual-layout"><h4>Manual Layout</h4></a>
  *
- * You can also manually layout the Form in the page template specifying the
- * fields using the named field notation:
+ * You can also manually layout the Form in the page template specifying
+ * the fields using the named field notation:
  *
  * <pre class="codeHtml">
- *  $form.{@link #fields}.usernameField
- * </pre>
+ * $form.{@link #fields}.usernameField </pre>
  *
  * Whenever including your own Form markup in a page template or Velocity macro
  * always specify:
  * <ul style="margin-top: 0.5em;">
- * <li><span class="maroon">method</span> - the form submission method
- * <tt>["POST" | "GET"]</tt></li>
- * <li><span class="maroon">name</span> - the name of your form, important
- * when using JavaScript</li>
- * <li><span class="maroon">action</span> - directs the Page where the form
- * should be submitted to</li>
- * <li><span class="maroon">form_name</span> - include a hidden field which
- * specifies the {@link #name} of the Form </li>
+ *  <li><span class="maroon">method</span>
+ *      - the form submission method <tt>["POST" | "GET"]</tt></li>
+ *  <li><span class="maroon">name</span>
+ *      - the name of your form, important when using JavaScript</li>
+ *  <li><span class="maroon">action</span>
+ *      - directs the Page where the form should be submitted to</li>
+ *  <li><span class="maroon">form_name</span>
+ *      - include a hidden field which specifies the {@link #name} of the Form </li>
  * </ul>
- * The hidden field is used by Click to determine which form was posted on a
- * page which may contain multiple forms.
+ * The hidden field is used by Click to determine which form was posted on
+ * a page which may contain multiple forms.
  * <p/>
  * An example of a manually layed out Login form is provided below:
  *
  * <pre class="codeHtml">
- *  &lt;form &lt;span class=&quot;maroon&quot;&gt;method&lt;/span&gt;=&quot;&lt;span class=&quot;blue&quot;&gt;$form.post&lt;/span&gt;&quot; &lt;span class=&quot;maroon&quot;&gt;name&lt;/span&gt;=&quot;&lt;span class=&quot;blue&quot;&gt;$form.name&lt;/span&gt;&quot; &lt;span class=&quot;maroon&quot;&gt;action&lt;/span&gt;=&quot;&lt;span class=&quot;blue&quot;&gt;$request.requestURI&lt;/span&gt;&quot;&gt;
- *    &lt;input type=&quot;hidden&quot; name=&quot;&lt;span class=&quot;maroon&quot;&gt;form_name&lt;/span&gt;&quot; value=&quot;&lt;span class=&quot;blue&quot;&gt;$form.name&lt;/span&gt;&quot;/&gt;
+ * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>"&gt;
+ *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  *
- *    &lt;table style=&quot;margin: 1em;&quot;&gt;
+ *   &lt;table style="margin: 1em;"&gt;
  *
- *      &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$form.error&lt;/span&gt;)
- *      &lt;tr&gt;
- *        &lt;td colspan=&quot;2&quot; style=&quot;color: red;&quot;&gt; &lt;span class=&quot;blue&quot;&gt;$form.error&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
- *      &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *      &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$form.fields.usernameField.error&lt;/span&gt;)
- *      &lt;tr&gt;
- *        &lt;td colspan=&quot;2&quot; style=&quot;color: red;&quot;&gt; &lt;span class=&quot;blue&quot;&gt;$form.fields.usernameField.error&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
- *      &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *      &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$form.fields.passwordField.error&lt;/span&gt;)
- *      &lt;tr&gt;
- *        &lt;td colspan=&quot;2&quot; style=&quot;color: red;&quot;&gt; &lt;span class=&quot;blue&quot;&gt;$form.fields.passwordField.error&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
- *      &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
+ *     <span class="red">#if</span> (<span class="blue">$form.error</span>)
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
+ *     <span class="red">#if</span> (<span class="blue">$form.fields.usernameField.error</span>)
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.fields.usernameField.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
+ *     <span class="red">#if</span> (<span class="blue">$form.fields.passwordField.error</span>)
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.fields.passwordField.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
  *
- *      &lt;tr&gt;
- *        &lt;td&gt; Username: &lt;/td&gt;
- *        &lt;td&gt; &lt;span class=&quot;blue&quot;&gt;$form.fields.usernameField&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
- *      &lt;tr&gt;
- *        &lt;td&gt; Password: &lt;/td&gt;
- *        &lt;td&gt; &lt;span class=&quot;blue&quot;&gt;$form.fields.passwordField&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt; Username: &lt;/td&gt;
+ *       &lt;td&gt; <span class="blue">$form.fields.usernameField</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt; Password: &lt;/td&gt;
+ *       &lt;td&gt; <span class="blue">$form.fields.passwordField</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
  *
- *      &lt;tr&gt;
- *        &lt;td&gt;
- *          &lt;span class=&quot;blue&quot;&gt;$form.fields.okSubmit&lt;/span&gt;
- *          &lt;span class=&quot;blue&quot;&gt;$form.fields.cancelSubmit&lt;/span&gt;
- *        &lt;/td&gt;
- *      &lt;/tr&gt;
+ *     &lt;tr&gt;
+ *       &lt;td&gt;
+ *         <span class="blue">$form.fields.okSubmit</span>
+ *         <span class="blue">$form.fields.cancelSubmit</span>
+ *       &lt;/td&gt;
+ *     &lt;/tr&gt;
  *
- *    &lt;/table&gt;
+ *   &lt;/table&gt;
  *
- *  &lt;form&gt;
- * </pre>
+ * &lt;form&gt; </pre>
  *
  * As you can see in this example most of the code and markup is generic and
  * could be reused. This is where Velocity Macros come in.
  *
- * <a name="velocity-macros">
- * <h4>Velocity Macros</h4>
- * </a>
+ * <a name="velocity-macros"><h4>Velocity Macros</h4></a>
  *
- * Velocity Macros (<a target="topic"
- * href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
+ * Velocity Macros
+ * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
  * are a great way to encapsulate customized forms.
  * <p/>
- * To create a generic form layout you can use the Form {@link #fieldList} and {@link #buttonList}
- * properties within a Velocity macro.
+ * To create a generic form layout you can use the Form {@link #fieldList} and
+ * {@link #buttonList} properties within a Velocity macro.
  * <p/>
  * The example below provides a generic <span class="green">writeForm()</span>
- * macro which you could use through out an application. This Velocity macro
- * code would be contained in a macro file, e.g. <tt>macro.vm</tt>.
+ * macro which you could use through out an application. This Velocity macro code
+ * would be contained in a macro file, e.g. <tt>macro.vm</tt>.
  *
- * <pre class="codeHtml">
- *  &lt;span class=&quot;red&quot;&gt;#*&lt;/span&gt; Custom Form Macro Code &lt;span class=&quot;red&quot;&gt;*#&lt;/span&gt;
- *  &lt;span class=&quot;red&quot;&gt;#macro&lt;/span&gt;( &lt;span class=&quot;green&quot;&gt;writeForm&lt;/span&gt;[&lt;span class=&quot;blue&quot;&gt;$form&lt;/span&gt;] )
+ * <pre class="codeHtml"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
+ * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
  *
- *  &lt;form method=&quot;&lt;span class=&quot;blue&quot;&gt;$form.post&lt;/span&gt;&quot; name=&quot;&lt;span class=&quot;blue&quot;&gt;$form.name&lt;/span&gt;&quot; action=&quot;&lt;span class=&quot;blue&quot;&gt;$request.requestURI&lt;/span&gt;&quot;&gt;
+ * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$request.requestURI</span>"&gt;
  *
- *   &lt;span class=&quot;red&quot;&gt;#foreach&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$field&lt;/span&gt; &lt;span class=&quot;red&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;blue&quot;&gt;$form.fieldList&lt;/span&gt;)
- *     &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$field.hidden&lt;/span&gt;) &lt;span class=&quot;blue&quot;&gt;$field&lt;/span&gt; &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *   &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
+ *  <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
+ *    <span class="red">#if</span> (<span class="blue">$field.hidden</span>) <span class="blue">$field</span> <span class="red">#end</span>
+ *  <span class="red">#end</span>
  *
- *  &lt;table width=&quot;100%&quot;&gt;
+ * &lt;table width="100%"&gt;
  *
- *  &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$form.error&lt;/span&gt;)
- *    &lt;tr&gt;
- *      &lt;td colspan=&quot;2&quot; style=&quot;color: red;&quot;&gt; &lt;span class=&quot;blue&quot;&gt;$form.error&lt;/span&gt; &lt;/td&gt;
- *    &lt;/tr&gt;
- *  &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
+ * <span class="red">#if</span> (<span class="blue">$form.error</span>)
+ *   &lt;tr&gt;
+ *     &lt;td colspan="2" style="color: red;"&gt; <span class="blue">$form.error</span> &lt;/td&gt;
+ *   &lt;/tr&gt;
+ * <span class="red">#end</span>
  *
- *  &lt;span class=&quot;red&quot;&gt;#foreach&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$field&lt;/span&gt; &lt;span class=&quot;red&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;blue&quot;&gt;$form.fieldList&lt;/span&gt;)
- *    &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (!&lt;span class=&quot;blue&quot;&gt;$field.hidden&lt;/span&gt;)
- *      &lt;span class=&quot;red&quot;&gt;#if&lt;/span&gt; (!&lt;span class=&quot;blue&quot;&gt;$field.valid&lt;/span&gt;)
- *      &lt;tr&gt;
- *        &lt;td colspan=&quot;2&quot;&gt; &lt;span class=&quot;blue&quot;&gt;$field.error&lt;/span&gt; &lt;/td&gt;
- *      &lt;/tr&gt;
- *      &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *
- *    &lt;tr&gt;
- *      &lt;td&gt; &lt;span class=&quot;blue&quot;&gt;$field.label&lt;/span&gt;: &lt;/td&gt;&lt;td&gt; &lt;span class=&quot;blue&quot;&gt;$field&lt;/span&gt; &lt;/td&gt;
- *    &lt;/tr&gt;
- *    &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *  &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
+ * <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
+ *   <span class="red">#if</span> (!<span class="blue">$field.hidden</span>)
+ *     <span class="red">#if</span> (!<span class="blue">$field.valid</span>)
+ *     &lt;tr&gt;
+ *       &lt;td colspan="2"&gt; <span class="blue">$field.error</span> &lt;/td&gt;
+ *     &lt;/tr&gt;
+ *     <span class="red">#end</span>
  *
  *   &lt;tr&gt;
- *     &lt;td colspan=&quot;2&quot;&gt;
- *     &lt;span class=&quot;red&quot;&gt;#foreach&lt;/span&gt; (&lt;span class=&quot;blue&quot;&gt;$button&lt;/span&gt; &lt;span class=&quot;red&quot;&gt;in &lt;/span&gt;&lt;span class=&quot;blue&quot;&gt;$form.buttonList&lt;/span&gt;)
- *       &lt;span class=&quot;blue&quot;&gt;$button&lt;/span&gt; &amp;nbsp;
- *     &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- *     &lt;/td&gt;
+ *     &lt;td&gt; <span class="blue">$field.label</span>: &lt;/td&gt;&lt;td&gt; <span class="blue">$field</span> &lt;/td&gt;
  *   &lt;/tr&gt;
+ *   <span class="red">#end</span>
+ * <span class="red">#end</span>
  *
- *  &lt;/table&gt;
- *  &lt;/form&gt;
+ *  &lt;tr&gt;
+ *    &lt;td colspan="2"&gt;
+ *    <span class="red">#foreach</span> (<span class="blue">$button</span> <span class="red">in </span><span class="blue">$form.buttonList</span>)
+ *      <span class="blue">$button</span> &amp;nbsp;
+ *    <span class="red">#end</span>
+ *    &lt;/td&gt;
+ *  &lt;/tr&gt;
  *
- *  &lt;span class=&quot;red&quot;&gt;#end&lt;/span&gt;
- * </pre>
+ * &lt;/table&gt;
+ * &lt;/form&gt;
  *
- * You would then call this macro in your Page template passing it your <span
- * class="blue">form</span> object:
+ * <span class="red">#end</span> </pre>
  *
- * <pre class="codeHtml">
- *  &lt;span class=&quot;red&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;green&quot;&gt;writeForm&lt;/span&gt;(&lt;span class=&quot;blue&quot;&gt;$form&lt;/span&gt;)
- * </pre>
+ * You would then call this macro in your Page template passing it your
+ * <span class="blue">form</span> object:
  *
- * At render time Velocity will execute the macro using the given form and
- * render the results to the response output stream.
+ * <pre class="codeHtml"> <span class="red">#</span><span class="green">writeForm</span>(<span class="blue">$form</span>) </pre>
+ *
+ * At render time Velocity will execute the macro using the given form and render
+ * the results to the response output stream.
  *
  * <h4>Configuring Macros</h4>
  *
  * To configure your application to use your macros you can:
  * <ul>
- * <li> Put your macros if a file called <span class="st"><tt>macro.vm</tt></span>
- * in your applications root directory. </li>
- * <li> Put your macros in the auto deployed <span class="st"><tt>click/VM_global_macro.vm</tt></span>
- * file. </li>
- * <li> Create a custom named macro file and reference it in a <span class="st"><tt>WEB-INF/velocity.properties</tt></span>
- * file under the property named <tt>velocimacro.library</tt>. See
- * configuration topic <a target="topic"
- * href="../../../../../configuration.html#velocity-properties">Velocity
- * Properties</a> for more info. </li>
+ *  <li>
+ *   Put your macros if a file called <span class="st"><tt>macro.vm</tt></span>
+ *   in your applications root directory.
+ *  </li>
+ *  <li>
+ *   Put your macros in the auto deployed
+ *   <span class="st"><tt>click/VM_global_macro.vm</tt></span> file.
+ *  </li>
+ *  <li>
+ *   Create a custom named macro file and reference it in a
+ *   <span class="st"><tt>WEB-INF/velocity.properties</tt></span>
+ *   file under the property named
+ *   <tt>velocimacro.library</tt>. See configuration topic
+ *   <a target="topic" href="../../../../../configuration.html#velocity-properties">Velocity Properties</a>
+ *   for more info.
+ *  </li>
  * </ul>
  *
- * <p>
- * &nbsp;
- * <p/>
- * See also the W3C HTML reference: <a title="W3C HTML 4.01
- * Specification" href="../../../../../html/interact/forms.html#h-17.3">FORM</a>
+ * <p>&nbsp;<p/>
+ * See also the W3C HTML reference:
+ * <a title="W3C HTML 4.01 Specification"
+ *    href="../../../../../html/interact/forms.html#h-17.3">FORM</a>
  *
  * @see Field
  * @see Submit
