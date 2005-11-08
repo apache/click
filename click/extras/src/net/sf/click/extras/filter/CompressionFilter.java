@@ -82,7 +82,6 @@ public class CompressionFilter implements Filter {
      *
      * @param filterConfig The filter configuration object
      */
-
     public void init(FilterConfig filterConfig) {
 
         config = filterConfig;
@@ -105,12 +104,10 @@ public class CompressionFilter implements Filter {
     }
 
     /**
-    * Take this filter out of service.
-    */
+     * Take this filter out of service.
+     */
     public void destroy() {
-
         this.config = null;
-
     }
 
     /**
