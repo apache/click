@@ -53,7 +53,7 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  * </table>
  * <table class="buttons" align='right'>
  * <tr><td>
- * <input type='submit' name='ok' value='  OK  '/>&nbsp;<input type='submit' name='cancel' value=' Cancel '/>
+ * <input type='submit' name='ok' value='  OK  '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/>
  * </td></tr>
  * </table>
  *
@@ -88,8 +88,8 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>, 35);
  *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>, 35, 2);
  *
- *        form.add(<span class="kw">new</span> Submit(<span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
- *        form.add(<span class="kw">new</span> Submit(<span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
+ *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
  *    }
  *
  *    <span class="kw">public void</span> onGet() {
@@ -121,7 +121,7 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  */
 public class CayenneForm extends Form {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4800858697502035042L;
 
     /** The data object primary key hidden field. */
     protected HiddenField pkField = new HiddenField("DOPK", Integer.class);
