@@ -22,7 +22,7 @@ import net.sf.hibernate.cfg.Configuration;
 
 /**
  * Provides a thread local Hibernate Session context class.
- *
+ * <p/>
  * The hibernate configuration must be defined in class path file:
  * <pre class="codeConfig">
  * /hibernamte.cfg.xml </pre>
