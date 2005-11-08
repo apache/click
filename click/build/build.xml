@@ -5,6 +5,7 @@
    <property name="jar.cayenne" value="cayenne-nodeps-1.2M6.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
+   <property name="jar.hibernate" value="hibernate-2.1.8.jar"/>
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
    <property name="jar.servlet" value="servlet-api-2.4.jar"/>
@@ -12,7 +13,7 @@
    <property name="jar.upload" value="commons-fileupload-1.0.jar"/>
    <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
 	
-   <taskdef name="linetrim" 
+   <taskdef name="linetrim"
    	        classname="dev.LineTrimTask" 
    	        classpath="lib/dev.jar"/>
 							
@@ -61,6 +62,7 @@
             <exclude name="lib/${jar.cayenne}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
+            <exclude name="lib/${jar.hibernate}"/>
             <exclude name="lib/${jar.lang}"/>
             <exclude name="lib/${jar.junit}"/>
             <exclude name="lib/${jar.servlet}"/>
@@ -101,6 +103,7 @@
       <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
          <classpath>
             <pathelement location="lib/${jar.cayenne}"/>
+            <pathelement location="lib/${jar.hibernate}"/>
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="lib/${jar.spring}"/>
             <pathelement location="dist/click-${version}.jar"/>
@@ -314,6 +317,9 @@
       <get src="${repository}/commons-collections/jars/${jar.collections}"
            dest="lib/${jar.collections}"
            usetimestamp="true"/>
+      <get src="${repository}/hibernate/jars/${jar.hibernate}"
+           dest="lib/${jar.hibernate}"
+           usetimestamp="true"/>
       <get src="${repository}/commons-lang/jars/${jar.lang}"
            dest="lib/${jar.lang}"
            usetimestamp="true"/>
@@ -397,6 +403,7 @@
                doctitle="Click Extras API">
          <classpath>
             <pathelement location="lib/${jar.cayenne}"/>
+            <pathelement location="lib/${jar.hibernate}"/>
             <pathelement location="lib/${jar.servlet}"/>
             <pathelement location="lib/${jar.spring}"/>
             <pathelement location="dist/click-${version}.jar"/>
