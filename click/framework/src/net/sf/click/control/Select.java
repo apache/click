@@ -381,6 +381,15 @@ public class Select extends Field {
     }
 
     /**
+     * Set the list of selected values.
+     *
+     * @param multipleValues the list of selected values
+     */
+    public void setMultipleValues(List multipleValues) {
+        this.multipleValues = multipleValues;
+    }
+
+    /**
      * Return the Option list.
      *
      * @return the Option list
