@@ -7,3 +7,4 @@ junit-3.8.1.jar
 servlet-api-2.4.jar
 spring-1.2.5.jar
 cayenne-nodeps-1.2M6.jar
+hibernate-2.1.8.jar
