@@ -16,13 +16,12 @@ import net.sf.click.control.TextField;
  */
 public class Login extends BorderedPage {
 
-    Form form;
+    Form form = new Form("form");
 
     /**
      * @see Page#onInit()
      */
     public void onInit() {
-        form = new Form("form");
         addControl(form);
 
         TextField usernameField = new TextField("username", true);
