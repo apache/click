@@ -149,6 +149,9 @@ public class CayenneForm extends Form {
         add(pkField);
         add(classField);
 
+        if (dataClass == null) {
+            throw new IllegalArgumentException("Null dataClass parameter");
+        }
         if (!DataObject.class.isAssignableFrom(dataClass)) {
             String msg = "Not a DataObject class: " + dataClass;
             throw new IllegalArgumentException(msg);
@@ -204,7 +207,7 @@ public class CayenneForm extends Form {
 
 
     /**
-     * Set the given <tt>DataObject</tt> in the form and copy the object's
+     * Set the given <tt>DataObject</tt> in the form, copying the object's
      * properties into the form field values.
      *
      * @param dataObject the <tt>DataObject</tt> to set
@@ -314,7 +317,7 @@ public class CayenneForm extends Form {
                 ObjAttribute objAttribute = (ObjAttribute) attributes.next();
                 DbAttribute dbAttribute = objAttribute.getDbAttribute();
 
-                Field field = getField(dbAttribute.getName());
+                Field field = getField(objAttribute.getName());
                 if (field != null) {
                     field.setRequired(dbAttribute.isMandatory());
 
