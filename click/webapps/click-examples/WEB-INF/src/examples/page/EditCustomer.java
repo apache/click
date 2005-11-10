@@ -22,51 +22,38 @@ import examples.domain.CustomerDAO;
  */
 public class EditCustomer extends BorderedPage {
 
-    Form form;
-    HiddenField referrerField;
+    Form form = new Form("form");
+    HiddenField referrerField = new HiddenField("referrer", String.class);
 
     /**
      * @see Page#onInit()
      */
     public void onInit() {
-        form = new Form("form");
         addControl(form);
 
-        referrerField = new HiddenField("referrer", String.class);
         form.add(referrerField);
 
         form.add(new HiddenField("id", Long.class));
 
-        TextField nameField = new TextField("Name");
+        TextField nameField = new TextField("name", true);
         nameField.setMinLength(5);
-        nameField.setRequired(true);
-        nameField.setTitle("Customer full name");
         nameField.setFocus(true);
         form.add(nameField);
 
-        EmailField emailField = new EmailField("Email");
-        emailField.setTitle("Customers email address");
-        form.add(emailField);
+        form.add(new EmailField("email"));
 
-        IntegerField ageField = new IntegerField("Age");
+        IntegerField ageField = new IntegerField("age");
         ageField.setMinValue(1);
         ageField.setMaxValue(120);
         form.add(ageField);
 
-        DoubleField holdingsField = new DoubleField("Holdings");
-        holdingsField.setTitle("Total investment holdings");
-        form.add(holdingsField);
-
-        form.add(new InvestmentSelect("Investments"));
-
-        DateField dateJoinedField = new DateField("Date Joined");
-        dateJoinedField.setTitle("Date customer joined fund");
-        form.add(dateJoinedField);
-
+        form.add(new DoubleField("holdings"));
+        form.add(new InvestmentSelect("investments"));
+        form.add(new DateField("dateJoined"));
         form.add(new Checkbox("Active"));
 
-        form.add(new Submit("    OK    ", this, "onOkClick"));
-        form.add(new Submit(" Cancel ", this, "onCancelClick"));
+        form.add(new Submit("ok", this, "onOkClick"));
+        form.add(new Submit("cancel", this, "onCancelClick"));
     }
 
     /**
