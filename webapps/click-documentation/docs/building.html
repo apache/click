@@ -29,9 +29,35 @@ creating JAR files, application WAR files and the Click distribution.
 
 
 <a name="build-configuration"><h2>Build Configuration</h2></a>
-The Click Ant build file <tt>build.xml</tt> is located in the <tt>/build</tt> 
-directory. Build artifacts are created in the <tt>/dist</tt> directory.
+The configuration of the Click Ant build system is detailed below:
 
+<pre class="codeConfig" style="margin-left:3em;">
++--[build]                      Ant build directory
+|   |
+|   +---build.xml               Ant build script
+|   |
+|   +---build.properties        Ant build properties
+|   
++--[dist]                       JAR and WAR file output directory
+|
++--[extras]                     Click Extras source directory
+|
++--[framework]                  Click framework source directory
+|
++--[lib]                        Dependent JAR libraries directory
+|
++--[webapps]                    Web applications
+    |
+    +---[click-blank]           Click Blank starter application
+    |
+    +---[click-cayenne]         Click Cayenne ORM example application
+    |
+    +---[click-documentation]   Click documentation set application
+    |
+    +---[click-examples]        Click Examples application </pre>
+
+<h3>Build Requirements</h3>
+Ensure the following requirements are met before performing builds:
 <ol>
   <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
   a JDK installation (1.4 or later).<p/>
@@ -93,6 +119,7 @@ proxy.port=3128 </pre>
 </ol>
 
 <h3>Building Framework</h3>
+To build the Click framework JAR file <tt>click.jar</tt>
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
   been run.<p/>
@@ -106,6 +133,7 @@ ant build-framework </pre>
 
 
 <h3>Building Click Extras</h3>
+Click Extras JAR file <tt>click-extras.jar</tt>
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
   been run.<p/>
@@ -119,7 +147,8 @@ ant build-framework build-extras </pre>
 
 
 <h3>Building Click Webapps</h3>
-To build the Click web applications:
+To build the Click web application WAR files <tt>click-blank.war</tt> and 
+<tt>click-examples.war</tt>
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
   been run.<p/>
