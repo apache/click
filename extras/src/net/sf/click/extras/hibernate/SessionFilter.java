@@ -40,7 +40,12 @@ public class SessionFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) {
         // Load the SessionContext class initializing the SessionFactory
-        SessionContext.class.getName();
+        try {
+            SessionContext.class.getName();
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+            throw re;
+        }
     }
 
     /**

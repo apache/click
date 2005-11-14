@@ -21,13 +21,20 @@ import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.cfg.Configuration;
 
 /**
- * Provides a thread local Hibernate Session context class.
- * <p/>
- * The hibernate configuration must be defined in class path file:
+ * Provides a thread local Hibernate Session context class. The Hibernate 
+ * configuration should be defined in class path file:
  * <pre class="codeConfig">
  * /hibernamte.cfg.xml </pre>
- *
- * This class was adapted from <tt>HibernateUtil</tt> helper class.
+ * 
+ * Or alternatively by using System properties. 
+ * <p/>
+ * The Hibernate initialization code used by <tt>SessionContext</tt> is:
+ * 
+ * <pre class="codeJava">
+ * Configuration configuration = <span class="kw">new</span> Configuration();
+ * configuration.setProperties(System.getProperties());
+ * configuration.configure();
+ * SessionFactory sessionFactory = configuration.buildSessionFactory(); </pre>
  *
  * @author Malcolm Edgar
  * @version $Id$
@@ -39,18 +46,19 @@ public class SessionContext {
 
     /** The ThreadLocal session holder.. */
     private static final ThreadLocal sessionHolder = new ThreadLocal();
-
+    
     static {
         try {
-            Configuration cfg = new Configuration();
-            cfg.configure("/hibernate.cfg.xml");
-            sessionFactory = cfg.buildSessionFactory();
- 
+            Configuration configuration = new Configuration();
+            configuration.setProperties(System.getProperties());
+            configuration.configure();
+            sessionFactory = configuration.buildSessionFactory();
+            
         } catch (Throwable e) {
             throw new ExceptionInInitializerError(e);
         }
     }
-
+    
     /**
      * Get the Session for the current Thread, creating one if neccessary.
      *
@@ -61,7 +69,7 @@ public class SessionContext {
 
         if (session == null) {
             try {
-                session = sessionFactory.openSession();
+                session = getSessionFactory().openSession();
             } catch (HibernateException he) {
                 throw new RuntimeException(he);
             }
