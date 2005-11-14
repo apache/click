@@ -15,18 +15,15 @@
  */
 package net.sf.click.extras.hibernate;
 
-import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
-import net.sf.click.control.TextArea;
-import net.sf.click.control.TextField;
-
-import org.apache.commons.lang.StringUtils;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.Transaction;
 import net.sf.hibernate.ValidationFailure;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides Hibernate data aware Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -208,7 +205,7 @@ public class HibernateForm extends Form {
 
             transaction = session.beginTransaction();
 
-        session.saveOrUpdate(valueObject);
+            session.saveOrUpdate(valueObject);
 
             transaction.commit();
 
