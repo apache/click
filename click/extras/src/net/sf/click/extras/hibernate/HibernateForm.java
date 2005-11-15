@@ -17,13 +17,14 @@ package net.sf.click.extras.hibernate;
 
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.SessionFactory;
-import net.sf.hibernate.Transaction;
-import net.sf.hibernate.ValidationFailure;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.metadata.ClassMetadata;
 
 /**
  * Provides Hibernate data aware Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -73,6 +74,12 @@ public class HibernateForm extends Form {
 
     /** The value object class name hidden field. */
     protected HiddenField classField = new HiddenField("VOCLASS", String.class);
+
+    /**
+     * The flag specifying that object validation meta data has been applied to
+     * the form fields.
+     */
+    protected boolean metaDataApplied = false;
 
     // ----------------------------------------------------------- Constructors
 
@@ -187,11 +194,15 @@ public class HibernateForm extends Form {
      */
     public void setValueObject(Object valueObject) {
         if (valueObject != null) {
-            // TODO: determine ID property from SessionFactory.
-            // if (dataObject.getPersistenceState() != PersistenceState.TRANSIENT) {
-            //     int pk = DataObjectUtils.intPKForObject(dataObject);
-            //     pkField.setValue(new Integer(pk));
-            // }
+            // TODO: other identifier types: string
+            ClassMetadata classMetadata =
+                getSessionFactory().getClassMetadata(valueObject.getClass());
+
+            // TODO
+            //Long oid = (Long) classMetadata.getIdentifier(valueObject);
+
+            //oidField.setValue(oid);
+
             copyFrom(valueObject, true);
         }
     }
@@ -211,12 +222,6 @@ public class HibernateForm extends Form {
 
             return true;
 
-        } catch (ValidationFailure vf) {
-           String msg = (vf.getLocalizedMessage() != null) ?
-                         vf.getLocalizedMessage() : vf.toString();
-           setError(msg);
-           return false;
-
         } catch (HibernateException he) {
             if (transaction != null) {
                 try {
@@ -224,7 +229,7 @@ public class HibernateForm extends Form {
                 } catch (HibernateException re) {
                 }
             }
-            throw new RuntimeException(he);
+            throw he;
         }
     }
 
@@ -253,7 +258,23 @@ public class HibernateForm extends Form {
     // ------------------------------------------------------ Protected Methods
 
     protected void applyMetaData() {
-        // TODO: apply meta data from SessionFactor to fields
+        if (metaDataApplied) {
+            return;
+        }
+
+        try {
+            Class valueClass = Class.forName(classField.getValue());
+
+            ClassMetadata classMetadata =
+                getSessionFactory().getClassMetadata(valueClass);
+
+            // TODO: apply constraints to fields.
+
+        } catch (ClassNotFoundException cnfe) {
+            throw new RuntimeException(cnfe);
+        }
+
+        metaDataApplied = true;
     }
 
 }
