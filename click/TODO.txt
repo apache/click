@@ -1,10 +1,9 @@
 CODE
-* upload maven module
-
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
 * JSP exception handling, on tomcat find work directory
+* RichTextArea using TinyMCE, possibly in Click Extras
 
 BUGS
 * control.css, missing menuarrow.gif --- .calendar .nav {
