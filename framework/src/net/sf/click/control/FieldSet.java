@@ -283,6 +283,28 @@ public class FieldSet extends Field {
     }
 
     /**
+     * Return the HTML head element imports for the contained Fields.
+     *
+     * @see Field#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        StringBuffer buffer = null;
+
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            String include = field.getHtmlImports();
+            if (include != null) {
+                if (buffer == null) {
+                    buffer = new StringBuffer(200);
+                }
+                buffer.append(include);
+            }
+        }
+
+        return (buffer != null) ? buffer.toString(): null;
+    }
+
+    /**
      * Return the fieldset Legend element value: &lt;legend&gt;
      * <p/>
      * If the legend value is null, this method will attempt to find a

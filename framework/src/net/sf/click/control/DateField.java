@@ -16,9 +16,12 @@
 package net.sf.click.control;
 
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -62,6 +65,10 @@ import net.sf.click.util.HtmlStringBuffer;
 public class DateField extends TextField {
 
     private static final long serialVersionUID = 3379108282465075759L;
+
+    protected static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/calendar.js\"></script>\n" +
+        "<script type=\"text/javascript\" src=\"{0}/click/calendar-{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -215,6 +222,21 @@ public class DateField extends TextField {
     }
 
     /**
+     * Return the DateField <tt>calendar.js</tt> and <tt>calendar-{lang}.js</tt>
+     * includes.
+     *
+     * @see Field#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        String[] args = {
+            getContext().getRequest().getContextPath(),
+            getContext().getLocale().getLanguage()
+        };
+
+        return MessageFormat.format(HTML_IMPORTS, args);
+    }
+
+    /**
      * @see Field#setName(String)
      */
     public void setName(String name) {
@@ -340,6 +362,8 @@ public class DateField extends TextField {
         buffer.append(textField);
 
         if (!isReadonly() && !isDisabled()) {
+            Calendar calendar = new GregorianCalendar();
+
             buffer.append("<img align=\"middle\" hspace=\"2\" style=\"cursor:hand\" src=\"");
             buffer.append(getForm().getContext().getRequest().getContextPath());
             buffer.append("/click/calendar.gif\" id=\"");
@@ -366,8 +390,10 @@ public class DateField extends TextField {
             buffer.append(getId());
             buffer.append("-button', \n");
             buffer.append(" align :       'cr', \n");
-            buffer.append(" singleClick : true \n");
-            buffer.append("});\n");
+            buffer.append(" singleClick : true, \n");
+            buffer.append(" firstDay    : ");
+            buffer.append(calendar.getFirstDayOfWeek());
+            buffer.append("\n});\n");
             buffer.append("</script> \n");
         }
 
