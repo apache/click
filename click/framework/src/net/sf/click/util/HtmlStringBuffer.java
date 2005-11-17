@@ -83,6 +83,15 @@ public class HtmlStringBuffer {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Append the integer value to the buffer.
+     *
+     * @param value the integer value to append
+     */
+    public void append(int value) {
+        buffer.append(value);
+    }
+
+    /**
      * Append the raw string value of the given object to the buffer.
      *
      * @param value the object value to append
