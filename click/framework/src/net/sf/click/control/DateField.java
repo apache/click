@@ -391,7 +391,7 @@ public class DateField extends TextField {
             buffer.append("-button', \n");
             buffer.append(" align :       'cr', \n");
             buffer.append(" singleClick : true, \n");
-            buffer.append(" firstDay    : ");
+            buffer.append(" firstDay :    ");
             buffer.append(calendar.getFirstDayOfWeek());
             buffer.append("\n});\n");
             buffer.append("</script> \n");
