@@ -38,13 +38,13 @@ public class SessionFilter implements Filter {
      *
      * @see Filter#init(FilterConfig)
      */
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig) throws ServletException {
         // Load the SessionContext class initializing the SessionFactory
         try {
             SessionContext.class.getName();
-        } catch (RuntimeException re) {
-            re.printStackTrace();
-            throw re;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException(e);
         }
     }
 
