@@ -426,31 +426,35 @@ class ClickApp implements EntityResolver {
                 }
             }
 
-            // Deploy calendar image file
             deployFile("/net/sf/click/control/calendar.gif", clickTarget,
                        CLICK_PATH, "calendar.gif");
 
-            // Deploy JavaScript file
-            deployFile("/net/sf/click/control/calendar-en.js", clickTarget,
-                       CLICK_PATH, "calendar-en.js");
+            deployFile("/net/sf/click/control/calendar.js", clickTarget,
+                       CLICK_PATH, "calendar.js");
 
-            // Deploy CSS styles file
+            // Deploy DateField language localization files
+            String [] langs =
+                { "de", "en", "es", "fr", "ko", "it", "ja", "ru", "zh" };
+            for (int i = 0; i < langs.length; i++) {
+                String langFilename = "calendar-" + langs[i] + ".js";
+                deployFile("/net/sf/click/control/" + langFilename,
+                           clickTarget,
+                           CLICK_PATH,
+                           langFilename);
+            }
+
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
 
-            // Deploy JavaScript file
             deployFile("/net/sf/click/control/control.js", clickTarget,
                        CLICK_PATH, "control.js");
 
-            // Deploy error page file
             deployFile("/net/sf/click/util/error.htm", clickTarget,
                        CLICK_PATH, "error.htm");
 
-            // Deploy page not found file
             deployFile("/net/sf/click/not-found.htm", clickTarget,
                        CLICK_PATH, "not-found.htm");
 
-            // Deploy global VM file
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
 

@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -379,13 +380,13 @@ public class Form implements Control {
     /** The label-required-suffix resource property. */
     protected static String labelRequiredSuffix = "";
 
-    protected static final String HTML_IMPORTS = "<link rel=\"stylesheet\" type=\"text/css\" href=\"$/click/control.css\" title=\"style\">\n"
-            + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n"
-            + "<script type=\"text/javascript\" src=\"$/click/calendar-en.js\"></script>\n";
+    protected static final String HTML_IMPORTS =
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\">\n" +
+        "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
 
     static {
-        ResourceBundle bundle = ResourceBundle
-                .getBundle(Field.CONTROL_MESSAGES);
+        ResourceBundle bundle =
+            ResourceBundle.getBundle(Field.CONTROL_MESSAGES);
 
         errorsHeader = bundle.getString("errors-header");
         errorsFooter = bundle.getString("errors-footer");
@@ -938,9 +939,21 @@ public class Form implements Control {
      *  JavaScript files
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        StringBuffer buffer = new StringBuffer(200);
 
-        return StringUtils.replace(HTML_IMPORTS, "$", path);
+        String[] args = { getContext().getRequest().getContextPath() };
+
+        buffer.append(MessageFormat.format(HTML_IMPORTS, args));
+
+        for (int i = 0; i < getFieldList().size(); i++) {
+            Field field = (Field) getFieldList().get(i);
+            String include = field.getHtmlImports();
+            if (include != null) {
+                buffer.append(include);
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**

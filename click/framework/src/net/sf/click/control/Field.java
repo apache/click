@@ -317,6 +317,19 @@ public abstract class Field implements Control {
     }
 
     /**
+     * Return the HTML head element import string. This method returns null.
+     * <p/>
+     * Override this method to specify JavaScript and CSS includes for the
+     * HTML head element. This value will rendered by the Form
+     * {@link Form#getHtmlImports()} method.
+     *
+     * @return the HTML Header element include string.
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
      * Return true if the Field type is hidden (&lt;input type="hidden"/&gt;) or
      * false otherwise. By default this method returns false.
      *
