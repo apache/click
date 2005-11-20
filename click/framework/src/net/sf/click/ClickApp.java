@@ -85,6 +85,9 @@ class ClickApp implements EntityResolver {
     /** The click deployment directory path: &nbsp; "click" */
     static final String CLICK_PATH = "click";
 
+    /** The calendar deployment directory path: &nbsp; "click/calendar" */
+    static final String CALENDAR_PATH = "click" + File.separator + "calendar";
+
     /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>" */
     static final String DTD_FILE_NAME = "click.dtd";
 
@@ -132,6 +135,13 @@ class ClickApp implements EntityResolver {
 
     static final String[] MODE_VALUES =
         { "production", "profile", "development", "debug", "trace" };
+
+    static final String[] CALENDAR_RESOURCES =
+        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
+          "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
+          "-brown.css", "-green.css", "-system.css", "-tas.css",
+          "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
+          "-win2k-cold-2.css" };
 
     private static final Object PAGE_LOAD_LOCK = new Object();
 
@@ -426,23 +436,6 @@ class ClickApp implements EntityResolver {
                 }
             }
 
-            deployFile("/net/sf/click/control/calendar.gif", clickTarget,
-                       CLICK_PATH, "calendar.gif");
-
-            deployFile("/net/sf/click/control/calendar.js", clickTarget,
-                       CLICK_PATH, "calendar.js");
-
-            // Deploy DateField language localization files
-            String [] langs =
-                { "de", "en", "es", "fr", "ko", "it", "ja", "ru", "zh" };
-            for (int i = 0; i < langs.length; i++) {
-                String langFilename = "calendar-" + langs[i] + ".js";
-                deployFile("/net/sf/click/control/" + langFilename,
-                           clickTarget,
-                           CLICK_PATH,
-                           langFilename);
-            }
-
             deployFile("/net/sf/click/control/control.css", clickTarget,
                        CLICK_PATH, "control.css");
 
@@ -457,6 +450,26 @@ class ClickApp implements EntityResolver {
 
             deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
                        CLICK_PATH, "VM_global_library.vm");
+
+            // Create click/calendar deployment directory
+            final String calendarTarget = path + File.separator + CALENDAR_PATH;
+
+            File calendarDir = new File(calendarTarget);
+            if (!calendarDir.exists()) {
+                if (!calendarDir.mkdir()) {
+                    logger.error
+                        ("could not create deployment directory: " + calendarDir);
+                }
+            }
+
+            // Deploy DateField resources files
+            for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
+                String calendarResource = "calendar" + CALENDAR_RESOURCES[i];
+                deployFile("/net/sf/click/control/calendar/" + calendarResource,
+                           calendarTarget,
+                           CALENDAR_PATH,
+                           calendarResource);
+            }
 
             // Find extra files to deploy
             try {
