@@ -67,8 +67,9 @@ public class DateField extends TextField {
     private static final long serialVersionUID = 3379108282465075759L;
 
     protected static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/calendar.js\"></script>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/calendar-{1}.js\"></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n" +
+        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n" +
+        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -83,6 +84,15 @@ public class DateField extends TextField {
 
     /** The Calendar popup show time display bar flag. */
     protected boolean showTime;
+
+    /**
+     * The JSCalendar CSS style, default value: <tt>system</tt>
+     * <p/>
+     * Available styles include:
+     * <tt>[blue, blue2, brown, green, system, tas, win2k-1, win2k-2,
+     * win2k-cold-1, win2k-cold-2]</tt>
+     */
+    protected String style = "system";
 
     // ----------------------------------------------------------- Constructors
 
@@ -230,6 +240,7 @@ public class DateField extends TextField {
     public String getHtmlImports() {
         String[] args = {
             getContext().getRequest().getContextPath(),
+            getStyle(),
             getContext().getLocale().getLanguage()
         };
 
@@ -276,6 +287,27 @@ public class DateField extends TextField {
      */
     public void setShowTime(boolean showTime) {
         this.showTime = showTime;
+    }
+
+    /**
+     * Return the JSCalendar CSS style.
+     *
+     * @return the JSCalendar CSS style
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Set the JSCalendar CSS style.
+     *
+     * @param style the JSCalendar CSS style
+     */
+    public void setStyle(String style) {
+        if (style == null) {
+            throw new IllegalArgumentException("Null style parameter");
+        }
+        this.style = style;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -366,7 +398,7 @@ public class DateField extends TextField {
 
             buffer.append("<img align=\"middle\" hspace=\"2\" style=\"cursor:hand\" src=\"");
             buffer.append(getForm().getContext().getRequest().getContextPath());
-            buffer.append("/click/calendar.gif\" id=\"");
+            buffer.append("/click/calendar/calendar.gif\" id=\"");
             buffer.append(getId());
             buffer.append("-button\" ");
 

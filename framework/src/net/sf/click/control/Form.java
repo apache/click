@@ -381,7 +381,7 @@ public class Form implements Control {
     protected static String labelRequiredSuffix = "";
 
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\">\n" +
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
 
     static {
