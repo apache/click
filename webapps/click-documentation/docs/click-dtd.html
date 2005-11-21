@@ -23,27 +23,27 @@ Click application XML descriptor Documentation Type Definition (DTD):
     
     &lt;!-- Page definition. --&gt;
     &lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
-      &lt;!ATTLIST page <span class="blue">path</span> CDATA #REQUIRED&gt;
-      &lt;!ATTLIST page <span class="blue">classname</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">page</span> <span class="blue">path</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">page</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
 
   &lt;!-- Application default page headers. --&gt;
   &lt;!ELEMENT <span class="red">headers</span> (<span class="blue">header</span>*)&gt;
   
     &lt;-- Header definition. --&gt;
     &lt;!ELEMENT <span class="red">header</span> (#PCDATA)&gt;
-      &lt;!ATTLIST header <span class="blue">name</span> CDATA #REQUIRED&gt;
-      &lt;!ATTLIST header <span class="blue">value</span> CDATA #REQUIRED&gt;
-      &lt;!ATTLIST header <span class="blue">type</span> (String|Integer|Date) "<span class="green">String</span>"&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">value</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">header</span> <span class="blue">type</span> (String|Integer|Date) "<span class="green">String</span>"&gt;
 
   &lt;!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". --&gt;
   &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
-   &lt;!ATTLIST format <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
+   &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
  
   &lt;!-- Application mode, which configures logging and caching. --&gt;
   &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
-   &lt;!ATTLIST mode <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
-   &lt;!ATTLIST mode <span class="blue">logto</span> (console|servlet) "<span class="green">console</span>"&gt;
+   &lt;!ATTLIST <span class="red">mode</span> <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
+   &lt;!ATTLIST <span class="red">mode</span> <span class="blue">logto</span> (console|servlet) "<span class="green">console</span>"&gt;
 </pre>
 </body>
 </html>

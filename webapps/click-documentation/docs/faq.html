@@ -24,6 +24,8 @@
   </li> 
   <li><a href="#localization">How do you internationalize Pages and Control labels?</a>
   </li>
+  <li><a href="#utf8-encoding">How do you encode Pages in the UTF-8 character set?</a>
+  </li>
   <li><a href="#actionlink-parameters">How do you create an ActionLink with several parameters?</a>
   </li>
   <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
@@ -42,6 +44,8 @@
 <p>&nbsp;</p>
 
 <dl>
+
+
   
   <a name="why-click" class="heading"></a>
   <dt><b>Why develop a new Web Application Framework?</b></dt>
@@ -51,6 +55,8 @@
   <p/>
   For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
   </dd>
+
+
   
   <a name="html-control" class="heading"></a>
   <dt><b>How can the GUI designer define the HTML if Click Controls generates everything?</b></dt>
@@ -113,6 +119,8 @@
   </li>
   </ol>
   </dd>
+
+
   
   <a name="shared-template" class="heading"></a>
   <dt><b>How can I have many Pages using the same HTML template?</b></dt>
@@ -130,6 +138,8 @@
    For a live demonstration of page templating deploy and run the
    <a href="examples.html">click-examples</a> application.
   </dd>
+
+
     
   <a name="exclude-fields" class="heading"></a>
   <dt><b>Can you exclude some fields from a Form?</b></dt>
@@ -146,6 +156,8 @@
   <span class="red">$</span><span class="blue">form</span>
 </pre>
   </dd>
+
+
   
   <a name="localization" class="heading"></a>
   <dt><b>How do you internationalize Pages and Control labels?</b></dt>
@@ -214,6 +226,37 @@ TextField nameField = <span class="kw">new</span> TextField(<span class="st">"na
 <span class="st">name.label</span>=<span class="red">Customer Name</span> </pre>
    
   </dd>
+
+
+
+  <a name="utf8-encoding" class="heading"></a>
+  <dt><b>How do you encode Pages in the UTF-8 character set?</b></dt>
+  <dd>
+  To encode pages in the UTF-8 character set you need to create a
+  <tt>WEB-INF/velocity.properties</tt> file with the properties:
+<pre class="codeConfig">
+<span class="red">input.encoding</span>=<span class="blue">UTF-8</span>
+<span class="red">output.encoding</span>=<span class="blue">UTF-8</span> </pre>
+  This will configure the Velocity runtime to use UTF-8.
+  <p/>  
+  You will also need to set the page heasers content type to UTF-8. You can do this globally for all
+  your applications pages using the <tt>headers</tt> element in your 
+  <tt>WEB-INF/click.xml</tt> file:
+<pre class="codeConfig">
+&lt;click&gt;
+ ..
+ &lt;headers&gt;
+   &lt;header name="<span class="red">Content-Type</span>" value="<span class="blue">text/html;charset=UTF-8</span>"/&gt;
+ &lt;/headers&gt;
+ ..
+&lt;/click&gt; </pre>
+  This will set the pages <tt>HttpServletResponse</tt> "Content-Type" header to be 
+  "text/html;charset=UTF-8". Alternatively you can override the Page 
+  <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a> method
+  to this content type.
+  </dd>
+
+
   
   <a name="actionlink-parameters" class="heading"></a>
   <dt><b>How do you create an ActionLink with several parameters?</b></dt>
@@ -266,6 +309,8 @@ TextField nameField = <span class="kw">new</span> TextField(<span class="st">"na
   article for more information on this topic.
   </dd>
 
+
+
   <a name="spring-integration" class="heading"></a>
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
@@ -295,6 +340,8 @@ public interface Controller {
   own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
   which are Click's plugin points.
   </dd> 
+
+
 
   <a name="jsp-support" class="heading"></a>
   <dt><b>Does Click support JSP?</b></dt>
@@ -346,6 +393,8 @@ public interface Controller {
 <pre class="codeConfig">
 &lt;page path="<span class="blue">customers-table.htm</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
   </dd>
+
+
     
   <a name="performance" class="heading"></a>
   <dt><b>What is the performance of Click?</b></dt>
@@ -392,6 +441,7 @@ public interface Controller {
   </dd>
 
 
+
   <a name="logging" class="heading"></a>
   <dt><b>Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
@@ -403,6 +453,8 @@ public interface Controller {
    on the IBM WebSphere application server.
   </dd>
     
+
+
   <a name="why-velocity" class="heading"></a>
   <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
   <dd>
