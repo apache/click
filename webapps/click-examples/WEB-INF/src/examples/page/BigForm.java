@@ -59,7 +59,7 @@ public class BigForm extends BorderedPage {
         doubleField.setValue("99.95");
         form.add(doubleField);
 
-        form.add(new CreditCardField("Credit Card"));
+        form.add(new CreditCardField("creditCard"));
 
         IntegerField monthField = new IntegerField("expiryMonth");
         monthField.setSize(2);
