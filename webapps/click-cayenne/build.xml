@@ -79,13 +79,13 @@
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="webapp/WEB-INF/lib"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
-      <get src="${repository}/hsqldb/jars/${jar.hsqldb}"
+      <get src="${repository}/hsqldb/jars/${jar.hsqldb}" verbose="true"
            dest="webapp/WEB-INF/lib/${jar.hsqldb}"
            usetimestamp="true"/>
-      <get src="${repository}/log4j/jars/${jar.log4j}"
+      <get src="${repository}/log4j/jars/${jar.log4j}" verbose="true"
            dest="webapp/WEB-INF/lib/${jar.log4j}"
            usetimestamp="true"/>
-      <get src="${repository}/oro/jars/${jar.oro}"
+      <get src="${repository}/oro/jars/${jar.oro}" verbose="true" 
            dest="webapp/WEB-INF/lib/${jar.oro}"
            usetimestamp="true"/>
    </target>
