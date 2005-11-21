@@ -111,17 +111,14 @@ public class Page {
         if (StringUtils.isBlank(control.getName())) {
             throw new IllegalArgumentException("Control name not defined");
         }
-        if (controls == null) {
-            controls = new ArrayList();
-        }
-        controls.add(control);
+
+        getControls().add(control);
+        addModel(control.getName(), control);
 
         if (getContext() != null) {
             control.setContext(getContext());
             control.setParentMessages(getMessages());
         }
-
-        addModel(control.getName(), control);
     }
 
     /**
@@ -167,20 +164,18 @@ public class Page {
         }
         this.context = context;
 
-        if (!getModel().isEmpty()) {
-            for (Iterator i = getModel().values().iterator(); i.hasNext();) {
-                Object object = i.next();
-                if (object instanceof Control) {
-                    Control control = (Control) object;
-                    control.setContext(context);
-                    control.setParentMessages(getMessages());
-                }
+        if (hasControls()) {
+            for (int i = 0; i < getControls().size(); i++) {
+               Control control = (Control) getControls().get(i);
+               control.setContext(context);
+               control.setParentMessages(getMessages());
             }
         }
     }
 
     /**
-     * Return the HTTP response content type.
+     * Return the HTTP response content type. By default this method returns
+     * <tt>"text/html"</tt>.
      * <p/>
      * The ClickServlet uses the pages content type for setting the
      * HttpServletResponse content type.
