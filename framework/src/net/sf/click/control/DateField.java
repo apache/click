@@ -39,7 +39,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * &lt;div&gt;. Users can either key in a Date value or select a Date using the
  * Calendar.
  * <p/>
- * The Calendar popup is provided by the DHTML Calendar by
+ * The Calendar popup is provided by the JSCalendar library by
  * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
  * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
  * popup, reference the method {@link Form#getHtmlImports()} in the page
@@ -55,6 +55,24 @@ import net.sf.click.util.HtmlStringBuffer;
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
+ * The default Calendar style is 'system' which has a similar appearance
+ * to the Windows Calendar control. The JSCalendar styles include:
+ * <ul style="margin-top: 0.5em;">
+ * <li>blue</li>
+ * <li>blue2</li>
+ * <li>brown</li>
+ * <li>green</li>
+ * <li>system</li>
+ * <li>tas</li>
+ * <li>win2k-1</li>
+ * <li>win2k-2</li>
+ * <li>win2k-cold-1</li>
+ * <li>win2k-cold-2</li>
+ * </ul>
+ *
+ * The DateField JavaScript, CSS and image resources are automatically deployed
+ * to the <tt>click/calendar</tt> web directory on application startup.
+ * <p/>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -86,8 +104,7 @@ public class DateField extends TextField {
     protected boolean showTime;
 
     /**
-     * The JSCalendar CSS style, default value: <tt>system</tt>
-     * <p/>
+     * The JSCalendar CSS style, default value: <tt>system</tt>. &nbsp;
      * Available styles include:
      * <tt>[blue, blue2, brown, green, system, tas, win2k-1, win2k-2,
      * win2k-cold-1, win2k-cold-2]</tt>
@@ -291,6 +308,9 @@ public class DateField extends TextField {
 
     /**
      * Return the JSCalendar CSS style.
+     * <p/>
+     * Available styles include: <tt>[blue, blue2, brown, green, system, tas,
+     * win2k-1, win2k-2, win2k-cold-1, win2k-cold-2]</tt>
      *
      * @return the JSCalendar CSS style
      */
