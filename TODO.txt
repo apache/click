@@ -4,6 +4,9 @@ CODE
 * improve exception handling for method not found, walk up stack and find class
 * JSP exception handling, on tomcat find work directory
 * RichTextArea using TinyMCE, possibly in Click Extras
+* include in the project structure the sources of the libaries that are compiled into
+the click-xxx.jar: be able to make a complete ZIP (required by IDEs)
+* include the ziped sources of the other libraries used by Click (required by IDEs)
 
 BUGS
 * control.css, missing menuarrow.gif --- .calendar .nav {
@@ -18,6 +21,7 @@ DOCUMENTATION
 * discuss redirecting to HTTPS
 * add UTF-8 localization comments
 * update Control in diagrams, update Control classes diagram
+* how to use Click with the most common IDEs
 
 VELOCITY
 
