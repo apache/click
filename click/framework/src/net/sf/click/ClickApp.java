@@ -141,7 +141,7 @@ class ClickApp implements EntityResolver {
           "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
           "-brown.css", "-green.css", "-system.css", "-tas.css",
           "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
-          "-win2k-cold-2.css" };
+          "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
 
     private static final Object PAGE_LOAD_LOCK = new Object();
 

@@ -469,20 +469,22 @@ public class Form implements Control {
     /** The parent localized messages map. */
     protected Map parentMessages;
 
-    /** The perform submit check flag. */
-    protected boolean submitCheck;
-
-    /** The submit check redirect to target flag. */
-    protected boolean submitCheckRedirect;
-
-    /** The submit check failure target path. */
-    protected String submitCheckPath;
-
-    /** The listener target object. */
-    protected Object submitCheckListener;
-
-    /** The listener method name. */
-    protected String submitCheckListenerMethod;
+// Not completed in time for Release 0.16
+//
+//    /** The perform submit check flag. */
+//    protected boolean submitCheck;
+//
+//    /** The submit check redirect to target flag. */
+//    protected boolean submitCheckRedirect;
+//
+//    /** The submit check failure target path. */
+//    protected String submitCheckPath;
+//
+//    /** The listener target object. */
+//    protected Object submitCheckListener;
+//
+//    /** The listener method name. */
+//    protected String submitCheckListenerMethod;
 
     /** The form is readonly flag. */
     protected boolean readonly;
@@ -1326,79 +1328,81 @@ public class Form implements Control {
         return true;
     }
 
-    /**
-     * TODO: onSubmitCheck doco
-     *
-     * Perform a submit check.
-     *
-     * @param page the page invoking the Form submit check
-     * @return true if the submit is OK or false otherwise
-     */
-    public boolean onSubmitCheck(Page page) {
-        if (page == null) {
-            throw new IllegalArgumentException("Null page parameter");
-        }
-
-        if (submitCheck) {
-            if (submitCheckListener != null &&
-                submitCheckListenerMethod != null) {
-
-                return ClickUtils.invokeListener(submitCheckListener,
-                                                 submitCheckListenerMethod);
-            } else {
-                // Check tokens
-                boolean isValid = false;
-
-                if (!isValid) {
-                    if (page == null) {
-                        String msg = "submitCheckPath is not defined";
-                        throw new IllegalStateException(msg);
-                    }
-
-                    if (submitCheckRedirect) {
-                        page.setRedirect(submitCheckPath);
-                    } else {
-                        page.setForward(submitCheckPath);
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * TODO: setSubmitCheck doco
-     *
-     * @param path
-     * @param redirect
-     */
-    public void setSubmitCheck(String path, boolean redirect) {
-        if (path == null) {
-            throw new IllegalArgumentException("Null path parameter");
-        }
-        submitCheck = true;
-        submitCheckPath = path;
-        submitCheckRedirect = redirect;
-    }
-
-    /**
-     * TODO: setSubmitCheck doco
-     *
-     * @param listener
-     * @param method
-     */
-    public void setSubmitCheck(Object listener, String method) {
-        if (listener == null) {
-            throw new IllegalArgumentException("Null listener parameter");
-        }
-        if (method == null) {
-            throw new IllegalArgumentException("Null method parameter");
-        }
-        submitCheck = true;
-        submitCheckListener = listener;
-        submitCheckListenerMethod = method;
-    }
+// Not completed in time for Release 0.16, deferred until release 0.17
+//
+//    /**
+//     * TODO: onSubmitCheck doco
+//     *
+//     * Perform a submit check.
+//     *
+//     * @param page the page invoking the Form submit check
+//     * @return true if the submit is OK or false otherwise
+//     */
+//    public boolean onSubmitCheck(Page page) {
+//        if (page == null) {
+//            throw new IllegalArgumentException("Null page parameter");
+//        }
+//
+//        if (submitCheck) {
+//            if (submitCheckListener != null &&
+//                submitCheckListenerMethod != null) {
+//
+//                return ClickUtils.invokeListener(submitCheckListener,
+//                                                 submitCheckListenerMethod);
+//            } else {
+//                // Check tokens
+//                boolean isValid = false;
+//
+//                if (!isValid) {
+//                    if (page == null) {
+//                        String msg = "submitCheckPath is not defined";
+//                        throw new IllegalStateException(msg);
+//                    }
+//
+//                    if (submitCheckRedirect) {
+//                        page.setRedirect(submitCheckPath);
+//                    } else {
+//                        page.setForward(submitCheckPath);
+//                    }
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+//
+//    /**
+//     * TODO: setSubmitCheck doco
+//     *
+//     * @param path
+//     * @param redirect
+//     */
+//    public void setSubmitCheck(String path, boolean redirect) {
+//        if (path == null) {
+//            throw new IllegalArgumentException("Null path parameter");
+//        }
+//        submitCheck = true;
+//        submitCheckPath = path;
+//        submitCheckRedirect = redirect;
+//    }
+//
+//    /**
+//     * TODO: setSubmitCheck doco
+//     *
+//     * @param listener
+//     * @param method
+//     */
+//    public void setSubmitCheck(Object listener, String method) {
+//        if (listener == null) {
+//            throw new IllegalArgumentException("Null listener parameter");
+//        }
+//        if (method == null) {
+//            throw new IllegalArgumentException("Null method parameter");
+//        }
+//        submitCheck = true;
+//        submitCheckListener = listener;
+//        submitCheckListenerMethod = method;
+//    }
 
     /**
      * Return the HTML string representation of the form.

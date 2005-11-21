@@ -22,7 +22,7 @@ progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#DDDCCC,
 }
 
 .calendar .nav {
-  background: #edc url(menuarrow.gif) no-repeat 100% 100%;
+  background: #edc url(calendar-menuarrow.gif) no-repeat 100% 100%;
 }
 
 .calendar thead .title { /* This holds the current "month, year" */
