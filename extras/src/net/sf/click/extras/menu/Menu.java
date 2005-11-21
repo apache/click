@@ -41,6 +41,32 @@ import org.w3c.dom.NodeList;
  *     addModel(<span class="st">"rootMenu"</span>, rootMenu);
  * } </pre>
  *
+ * An example <tt>/WEB-INF/menu.xml</tt> configuration file is provided below:
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;menu&gt;
+ *    &lt;menu label="A Menu" path="menu/menu-a1.htm"&gt;
+ *       &lt;menu label="A 1 Menu" path="menu/menu-a1.htm" title="Menu item A1"/&gt;
+ *       &lt;menu label="A 2 Menu" path="menu/menu-a2.htm" title="Menu item A2"/&gt;
+ *    &lt;/menu&gt;
+ *    &lt;menu label="B Menu" path="menu/menu-b1.htm"&gt;
+ *       &lt;menu label="B 1 Menu" path="menu/menu-b1.htm" title="Menu item B1"/&gt;
+ *       &lt;menu label="B 2 Menu" path="menu/menu-b2.htm" title="Menu item B2"/&gt;
+ *    &lt;/menu&gt;
+ * &lt;/menu&gt; </pre>
+ *
+ * The Menu config file DTD is provided below:
+ *
+ * <pre class="codeConfig">
+ * &lt;!-- The Menu (menu.xml) Document Type Definition. --&gt;
+ * &lt;!ELEMENT <span class="red">menu</span> (<span class="blue">menu</span>*)&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">label</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">path</span> CATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">title</span> CATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CATA #IMPLIED&gt;  </pre>
+ *
+ *
  * @author Malcolm Edgar
  * @version $Id$
  */
