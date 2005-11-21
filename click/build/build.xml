@@ -358,7 +358,8 @@
       <echo message="get-deps              download JAR dependencies"/>  
       <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
       <echo message="help                  display the Help message"/>  
-      <echo message="javadoc               create Javadoc HTML files"/> 
+      <echo message="sources               create zips with sources for the associated jars"/>
+      <echo message="javadoc               create Javadoc HTML files"/>
       <echo/>
       <echo/>  
       <echo message="Please ensure you have configured build.properties"/> 
@@ -423,4 +424,34 @@
             todir="webapps/click-documentation/docs/servlet-api"/>
    </target>
 
+   <!-- This task is required mostly by IDEs to work smooth and to be able to navigate/debug tru the framework sources -->
+    <target name="sources"
+            description="Creates zips with sources corresponding to each built jar">
+        <property name="dir.source" value="framework/src"/>
+        <!-- zip extras -->
+        <zip destfile="dist/click-extras-${version}-src.zip" >
+            <fileset dir="extras/src">
+                <exclude name="**/*.html"/>
+            </fileset>
+        </zip>
+
+        <!-- zip the framework without dependencies-->
+        <zip destfile="dist/click-nodeps-${version}-src.zip">
+            <fileset dir="${dir.source}">
+                <exclude name="**/.html"/>
+                <exclude name="**/.css"/>
+                <exclude name="**/.js"/>
+                <exclude name="**/.gif"/>
+            </fileset>
+        </zip>
+
+        <!-- zip the framework with dependencies:-->
+        <!-- todo: include 'used' dependency libs sources -->
+        <!-- this is not ready since the sources for the used jars are not available -->
+        <zip destfile="dist/click-${version}-src.zip">
+            <fileset dir="${dir.source}">
+                <exclude name="**/package.html"/>
+            </fileset>
+        </zip>
+     </target>
 </project>
