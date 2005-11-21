@@ -386,7 +386,7 @@
            <exclude name="org/**"/>
          </packageset>
       </javadoc>
-      <copy file="framework/src/net/sf/click/control/calendar.gif"
+      <copy file="framework/src/net/sf/click/control/calendar/calendar.gif"
             todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
             todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
