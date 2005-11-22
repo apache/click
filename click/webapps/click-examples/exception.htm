@@ -45,21 +45,8 @@ it is closed.
 </dd>
 
 
-<dt><a href="missing.htm">Page Not Found</a></dt>
-<dd>
-When the ClickServlet cannot find a requested page it will render the 
-<a href="click/not-found.htm">click/not-found.htm</a> page.<br/>
-You can custome is this page templates to suite your own needs.
-</dd>
-
-
 <dt><a href="$brokenRendererLink.href">Broken Renderer</a></dt>
 <dd>
-<div>
-<b>NOTICE</b> - this error handling feature not working correctly in Click 0.13.
-This issue should be resolved by the time Velocity 1.5 release becomes stable.
-</div>
-<p/>
 This error is caused by a Page model object throwing a NPE when being rendered by 
 Velocity. When Velocity tries to merge the page model with the template, it will
 call the objects <t>toString()</tt> method which throws a <tt>NullPointerException</tt>.
@@ -73,6 +60,15 @@ to the end of the response.
    <li>Line 3</li>
 </ul>
 </dd>
+
+
+<dt><a href="missing.htm">Page Not Found</a></dt>
+<dd>
+When the ClickServlet cannot find a requested page it will render the 
+<a href="click/not-found.htm">click/not-found.htm</a> page.<br/>
+You can custome is this page templates to suite your own needs.
+</dd>
+
 
 </dl>
 
