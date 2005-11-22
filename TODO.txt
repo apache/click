@@ -5,7 +5,7 @@ CODE
 * JSP exception handling, on tomcat find work directory
 * RichTextArea using TinyMCE, possibly in Click Extras
 * include in the project structure the sources of the libaries that are compiled into
-the click-xxx.jar: be able to make a complete ZIP (required by IDEs)
+  the click-xxx.jar: be able to make a complete ZIP (required by IDEs)
 * include the ziped sources of the other libraries used by Click (required by IDEs)
 
 BUGS
@@ -22,5 +22,5 @@ DOCUMENTATION
 * how to use Click with the most common IDEs
 
 VELOCITY
-* checkin Parse.java change to throw NPE
+* submit Parse.java patch to throw RuntimeExceptions
 
