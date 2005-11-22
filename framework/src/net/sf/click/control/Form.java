@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -28,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
-import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -536,8 +536,8 @@ public class Form implements Control {
         if (StringUtils.isBlank(field.getName())) {
             throw new IllegalArgumentException("Field name not defined");
         }
-        if (getFields().containsKey(field.getName())
-                && !(field instanceof Label)) {
+        if (getFields().containsKey(field.getName()) &&
+            !(field instanceof Label)) {
             throw new IllegalArgumentException(
                     "Form already contains field named: " + field.getName());
         }
@@ -744,8 +744,8 @@ public class Form implements Control {
         }
         this.context = context;
 
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
+        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            Field field = (Field) i.next();
             field.setContext(context);
         }
     }
@@ -827,15 +827,15 @@ public class Form implements Control {
     public List getErrorFields() {
         List list = new ArrayList();
 
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            Field field = (Field) i.next();
 
             if (field instanceof FieldSet) {
                 FieldSet fieldSet = (FieldSet) field;
 
                 for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                    Field fieldSetField = (Field) fieldSet.getFieldList()
-                            .get(j);
+                    Field fieldSetField =
+                        (Field) fieldSet.getFieldList().get(j);
 
                     if (!fieldSetField.isValid() && !fieldSetField.isHidden()
                             && !fieldSetField.isDisabled()) {
@@ -844,8 +844,8 @@ public class Form implements Control {
                     }
                 }
 
-            } else if (!field.isValid() && !field.isHidden()
-                    && !field.isDisabled()) {
+            } else if (!field.isValid() && !field.isHidden() &&
+                       !field.isDisabled()) {
 
                 list.add(field);
             }
@@ -869,8 +869,8 @@ public class Form implements Control {
      * @param position the form errors position
      */
     public void setErrorsPosition(String position) {
-        if (POSITION_TOP.equals(position) || POSITION_MIDDLE.equals(position)
-                || POSITION_BOTTOM.equals(position)) {
+        if (POSITION_TOP.equals(position) || POSITION_MIDDLE.equals(position) ||
+            POSITION_BOTTOM.equals(position)) {
 
             errorsPosition = position;
 
@@ -916,11 +916,13 @@ public class Form implements Control {
      */
     public String getFieldValue(String name) {
         Field field = getField(name);
+
         if (field != null) {
             return field.getValue();
+
         } else {
-            for (int i = 0; i < getFieldList().size(); i++) {
-                field = (Field) getFieldList().get(i);
+            for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+                field = (Field) i.next();
                 if (field instanceof FieldSet) {
                     FieldSet fieldSet = (FieldSet) field;
                     if (fieldSet.getField(name) != null) {
@@ -947,8 +949,8 @@ public class Form implements Control {
 
         buffer.append(MessageFormat.format(HTML_IMPORTS, args));
 
-        for (int i = 0; i < getFieldList().size(); i++) {
-            Field field = (Field) getFieldList().get(i);
+        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            Field field = (Field) i.next();
             String include = field.getHtmlImports();
             if (include != null) {
                 buffer.append(include);
@@ -1082,8 +1084,8 @@ public class Form implements Control {
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
+        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            Field field = (Field) i.next();
             field.setParentMessages(parentMessages);
         }
     }
@@ -1116,12 +1118,14 @@ public class Form implements Control {
         if (getError() != null) {
             return false;
         }
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
+
+        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            Field field = (Field) i.next();
             if (!field.isValid()) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -1256,12 +1260,12 @@ public class Form implements Control {
 
             // If "multipart/form-data" request and not already loaded then
             // load form data FileItem into context
-            if (getContext().isMultipartRequest()
-                    && getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
+            if (getContext().isMultipartRequest() &&
+                getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
 
                 FileField fileField = null;
-                for (int i = 0, size = fieldList.size(); i < size; i++) {
-                    Field field = (Field) fieldList.get(i);
+                for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                    Field field = (Field) getFieldList().get(i);
                     if (!field.isHidden() && (field instanceof FileField)) {
                         fileField = (FileField) field;
                         break;
@@ -1305,15 +1309,15 @@ public class Form implements Control {
             }
 
             boolean continueProcessing = true;
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
+            for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                Field field = (Field) getFieldList().get(i);
                 continueProcessing = field.onProcess();
                 if (!continueProcessing) {
                     return false;
                 }
             }
-            for (int i = 0, size = buttonList.size(); i < size; i++) {
-                Button button = (Button) buttonList.get(i);
+            for (int i = 0, size = getButtonList().size(); i < size; i++) {
+                Button button = (Button) getButtonList().get(i);
                 continueProcessing = button.onProcess();
                 if (!continueProcessing) {
                     return false;
@@ -1418,7 +1422,7 @@ public class Form implements Control {
 
         // Estimate the size of the string buffer
         int bufferSize =
-            400 + (fieldList.size() * 350) + (buttonList.size() * 50);
+            400 + (getFieldList().size() * 350) + (getButtonList().size() * 50);
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
@@ -1470,8 +1474,8 @@ public class Form implements Control {
 
         // Render hidden fields
         if (hiddenCount > 0) {
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
+            for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                Field field = (Field) getFieldList().get(i);
                 if (field.isHidden()) {
                     buffer.append(field);
                     buffer.append("\n");
@@ -1497,21 +1501,20 @@ public class Form implements Control {
             buffer.append("//--></script>\n");
 
         } else {
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
+            for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                Field field = (Field) getFieldList().get(i);
 
                 if (field instanceof FieldSet) {
                     FieldSet fieldSet = (FieldSet) field;
                     for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                        Field fieldSetField = (Field) fieldSet.getFieldList()
-                                .get(j);
+                        Field fieldSetField =
+                            (Field) fieldSet.getFieldList().get(j);
 
-                        if (fieldSetField.getFocus()
-                                && !fieldSetField.isHidden()
-                                && !fieldSetField.isDisabled()) {
+                        if (fieldSetField.getFocus() &&
+                            !fieldSetField.isHidden() &&
+                            !fieldSetField.isDisabled()) {
 
-                            buffer
-                                    .append("<script type=\"text/javascript\"><!--\n");
+                            buffer.append("<script type=\"text/javascript\"><!--\n");
                             buffer.append("document.forms['");
                             buffer.append(getName());
                             buffer.append("'].elements['");
@@ -1522,8 +1525,9 @@ public class Form implements Control {
                         }
                     }
 
-                } else if (field.getFocus() && !field.isHidden()
-                        && !field.isDisabled()) {
+                } else if (field.getFocus() &&
+                           !field.isHidden() &&
+                           !field.isDisabled()) {
 
                     buffer.append("<script type=\"text/javascript\"><!--\n");
                     buffer.append("document.forms['");
@@ -1550,7 +1554,7 @@ public class Form implements Control {
      * @return the number of hidden Fields
      */
     protected int renderFields(HtmlStringBuffer buffer) {
-        if (fieldList.size() == 1 && fields.containsKey("form_name")) {
+        if (getFieldList().size() == 1 && getFields().containsKey("form_name")) {
             return 1;
         }
 
@@ -1563,9 +1567,9 @@ public class Form implements Control {
 
         int column = 1;
 
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
 
-            Field field = (Field) fieldList.get(i);
+            Field field = (Field) getFieldList().get(i);
 
             if (!field.isHidden()) {
 
@@ -1574,8 +1578,7 @@ public class Form implements Control {
                 }
 
                 if (field instanceof FieldSet) {
-                    buffer
-                            .append("<td class=\"fields\" colspan=\"2\" align=\"");
+                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getLabelAlign());
                     buffer.append("\">\n");
                     buffer.append(field);
@@ -1663,10 +1666,13 @@ public class Form implements Control {
         Field fieldWithError = null;
         if (processed && !isValid()) {
 
-            String headerTest = errorsHeader.toLowerCase()
-                    + errorsPrefix.toLowerCase();
-            boolean useErrorsHeader = (((headerTest.indexOf("<ul") > -1) || (headerTest
-                    .indexOf("<ol") > -1)) && (headerTest.indexOf("<li") > -1));
+            String headerTest =
+                errorsHeader.toLowerCase()  + errorsPrefix.toLowerCase();
+
+            boolean useErrorsHeader =
+                (((headerTest.indexOf("<ul") > -1) ||
+                 (headerTest.indexOf("<ol") > -1)) &&
+                 (headerTest.indexOf("<li") > -1));
 
             if (useErrorsHeader) {
                 buffer.append(errorsHeader);
