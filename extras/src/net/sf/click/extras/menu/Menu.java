@@ -174,6 +174,7 @@ public class Menu implements Serializable {
         setPath(menu.getPath());
         setTitle(menu.getTitle());
         setRoles(menu.getRoles());
+        setPages(menu.getPages());
         setSelected(menu.isSelected());
 
         for (int i = 0; i < menu.getChildren().size(); i++) {
