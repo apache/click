@@ -52,10 +52,20 @@ public class Label extends Field {
      * Field name will be converted into a label using the
      * {@link ClickUtils#toLabel(String)} method.
      *
-     * @param name the name display value
+     * @param name the name of the Field
      */
     public Label(String name) {
         super(name);
+    }
+    
+    /**
+     * Create a Label display control with the given name and label.
+     *
+     * @param name the name of the Field
+     * @param label the display label caption
+     */
+    public Label(String name, String label) {
+        super(name, label);
     }
 
     /**
