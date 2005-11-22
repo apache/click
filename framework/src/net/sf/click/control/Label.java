@@ -57,7 +57,7 @@ public class Label extends Field {
     public Label(String name) {
         super(name);
     }
-    
+
     /**
      * Create a Label display control with the given name and label.
      *
