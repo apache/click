@@ -9,9 +9,7 @@ the click-xxx.jar: be able to make a complete ZIP (required by IDEs)
 * include the ziped sources of the other libraries used by Click (required by IDEs)
 
 BUGS
-* control.css, missing menuarrow.gif --- .calendar .nav {
-  background: ButtonFace url(menuarrow.gif) no-repeat 100% 100%;
-}
+
 
 DOCUMENTATION
 * FAQ topic back button - possibly add example
@@ -24,5 +22,5 @@ DOCUMENTATION
 * how to use Click with the most common IDEs
 
 VELOCITY
-
+* checkin Parse.java change to throw NPE
 
