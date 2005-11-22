@@ -12,9 +12,9 @@ import net.sf.click.control.TextField;
  */
 public class FileUpload extends BorderedPage {
 
-    Form form;
-    FileField fileField;
-    TextField descField;
+    private Form form;
+    private FileField fileField;
+    private TextField descField;
 
     public void onInit() {
         form = new Form("form");
