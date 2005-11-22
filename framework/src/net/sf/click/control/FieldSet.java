@@ -227,15 +227,17 @@ public class FieldSet extends Field {
     }
 
     /**
+     * Set the fieldset's <tt>Context</tt> and also set the <tt>Context</tt>
+     * in any contained fields.
+     *
      * @see Control#setContext(Context)
      */
     public void setContext(Context context) {
         super.setContext(context);
-        this.context = context;
+
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
             field.setContext(context);
-            field.setForm(form);
         }
     }
 
@@ -276,6 +278,7 @@ public class FieldSet extends Field {
      */
     public void setForm(Form form) {
         super.setForm(form);
+
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
             field.setForm(form);
