@@ -30,7 +30,7 @@ public class SearchForm extends BorderedPage {
         typeSelect.addAll(new String[] {"ID", "Name", "Age"});
         typeSelect.setValue("Name");
         form.add(typeSelect);
-        
+
         form.add(new Submit("go"));
     }
 
