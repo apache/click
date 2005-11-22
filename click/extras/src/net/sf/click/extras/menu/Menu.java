@@ -64,7 +64,8 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">label</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">path</span> CATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">title</span> CATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CATA #IMPLIED&gt;  </pre>
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CATA #IMPLIED&gt; </pre>
  *
  *
  * @author Malcolm Edgar
@@ -91,6 +92,12 @@ public class Menu implements Serializable {
 
     /** The menu display label. */
     protected String label;
+
+    /**
+     * The list of valid page paths. If any of these page paths match the
+     * current request then the Menu item will be selected.
+     */
+    protected List pages = new ArrayList();
 
     /** The menu path. */
     protected String path;
@@ -127,6 +134,14 @@ public class Menu implements Serializable {
         String titleAtr = menuElement.getAttribute("title");
         if (StringUtils.isNotBlank(titleAtr)) {
             setTitle(titleAtr);
+        }
+
+        String pagesValue = menuElement.getAttribute("pages");
+        if (!StringUtils.isBlank(pagesValue)) {
+            StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
+            while (tokenizer.hasMoreTokens()) {
+                getPages().add(tokenizer.nextToken().trim());
+            }
         }
 
         String rolesValue = menuElement.getAttribute("roles");
@@ -194,6 +209,26 @@ public class Menu implements Serializable {
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * Return the list of valid Page paths for the Menu item. If any of these
+     * page paths match the current request then the Menu item will be selected.
+     *
+     * @return the list of valid Page paths
+     */
+    public List getPages() {
+        return pages;
+    }
+
+    /**
+     * Set the list of valid Page paths.  If any of these page paths match the
+     * current request then the Menu item will be selected.
+     *
+     * @param pages the list of valid Page paths
+     */
+    public void setPages(List pages) {
+        this.pages = pages;
     }
 
     /**
@@ -277,6 +312,7 @@ public class Menu implements Serializable {
             ",path=" + getPath() +
             ",title=" + getTitle() +
             ",selected=" + isSelected() +
+            ",pages=" + pages +
             ",roles=" + roles +
             ",children=" + children +
             "]";
@@ -356,16 +392,26 @@ public class Menu implements Serializable {
      * Set the selected status of the menu and its children depending upon
      * the current context's path. If the path equals the menus path the
      * menu will be selected.
+     * <p/>
+     * If any of these Menu items pages paths match the current request then
+     * the Menu item will be selected.
      *
      * @param context the request context
      */
     public void select(Context context) {
-        String path = getPath();
-        if (path != null) {
-            path = path.startsWith("/") ? path : "/" + path;
-            selected = path.equals(context.getResourcePath());
+        final String pageToView = context.getResourcePath();
+
+        if (pages.contains(pageToView)) {
+            selected = true;
+
         } else {
-            selected = false;
+            String path = getPath();
+            if (path != null) {
+                path = path.startsWith("/") ? path : "/" + path;
+                selected = path.equals(pageToView);
+            } else {
+                selected = false;
+            }
         }
 
         for (int i = 0; i < getChildren().size(); i++) {
