@@ -34,7 +34,7 @@ public class BigForm extends BorderedPage {
         form.setErrorsPosition(Form.POSITION_TOP);
         addControl(form);
 
-        form.add(new Label("<b>My Details</b>"));
+        form.add(new Label("user", "<b>My Details</b>"));
 
         TextField textField = new TextField("username", true);
         textField.setMinLength(6);
@@ -52,8 +52,8 @@ public class BigForm extends BorderedPage {
 
         form.add(new IntegerField("customerNumber", true));
 
-        form.add(new Label("<hr/>"));
-        form.add(new Label("<b>Order Details</b>"));
+        form.add(new Label("hr", "<hr/>"));
+        form.add(new Label("order", "<b>Order Details</b>"));
 
         DoubleField doubleField = new DoubleField("retailPrice");
         doubleField.setValue("99.95");

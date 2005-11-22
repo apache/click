@@ -15,26 +15,23 @@ import examples.domain.CustomerDAO;
  */
 public class SearchForm extends BorderedPage {
 
-    TextField textField;
-    Select typeSelect;
+    private Form form;
+    private TextField textField;
+    private Select typeSelect;
 
     public void onInit() {
-        Form form = new Form("form");
+        form = new Form("form");
         addControl(form);
 
-        textField = new TextField("Search");
-        textField.setTitle("Enter customer info");
+        textField = new TextField("search");
         form.add(textField);
 
         typeSelect = new Select("type");
         typeSelect.addAll(new String[] {"ID", "Name", "Age"});
         typeSelect.setValue("Name");
-        typeSelect.setTitle("Type of search");
         form.add(typeSelect);
-
-        Submit submit = new Submit(" Go ");
-        submit.setTitle("Click Go to search");
-        form.add(submit);
+        
+        form.add(new Submit("go"));
     }
 
     public void onPost() {
