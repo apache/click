@@ -22,7 +22,7 @@
   </li>
   <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
-  <li><a href="#localization">How do you internationalize Pages and Control labels?</a>
+  <li><a href="#localization">How do you internationalize Pages and Controls?</a>
   </li>
   <li><a href="#utf8-encoding">How do you encode Pages in the UTF-8 character set?</a>
   </li>
@@ -160,9 +160,10 @@
 
   
   <a name="localization" class="heading"></a>
-  <dt><b>How do you internationalize Pages and Control labels?</b></dt>
+  <dt><b>How do you internationalize Pages and Controls?</b></dt>
   <dd>
-   Click provides good string localization support for internationalization requirements.
+   Click provides good support for application localization and 
+   internationalization (I18N) requirements.
 
    <h4>Page Messages</h4>
 
@@ -176,20 +177,40 @@
 /com/mycorp/pages/Login_fr.properties </pre>
 
    In your Login Page class you can use the <tt>getMessage()</tt> method
-   to lookup request localized message strings.
+   to lookup request localized message strings. 
    
 <pre class="codeJava">
 <span class="kw">public void</span> onInit() {
-    form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
-    addControl(form);
-    
-    form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, getMessage(<span class="st">"username.label"</span>)));
-    form.add(<span class="kw">new</span> PasswordField(<span class="st">"username"</span>, getMessage(<span class="st">"password.label"</span>)));
-    
-    form.add(<span class="kw">new</span> Submit(getMessage(<span class="st">"label.ok"</span>), <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
-    form.add(<span class="kw">new</span> Submit(getMessage(<span class="st">"label.cancel"</span>), <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
-}
-</pre>
+    addModel(<span class="st">"title"</span>, getMessage(<span class="st">"title"</span>));
+} </pre>
+
+   In your HTML page template you can also access the localize message using
+   the <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+   object which is added to the template using the name "messages". For example:
+
+    <pre class="codeHtml">
+    &lt;h2&gt;<span class="red">$</span><span class="blue">messages.title</span>&lt;/h2&gt; </pre>
+
+   You can also define Field and ActionLink labels and title values in your pages
+   properties file using control name lookup convention. For details please see
+   the Javadoc:
+   <ul style="margin-top:1em;">
+    <li>
+     <a href="click-api/net/sf/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/Field.html#getTitle()">Field.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
+    </li>
+   </ul>
 
    <h4>Field Messages</h4>
   
@@ -200,33 +221,8 @@
    The field class provides a number of 
    <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
    methods which support localized strings and message formatting.
-   Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.
-   <p/>
-   Fields have a special feature where if you can specify the Field's localized message label. 
-   When setting a field label, if the given field label value is prefixed with <tt>"msg:"</tt> then the label will be
-   considered to be a localized message key. This value will be replaced 
-   with the localized message string for the given key when the Field's context 
-   is set.  
-   <p/>
-   For example:
-   
-<pre class="codeJava">
-TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
-nameField.setLabel(<span class="st">"msg:name.label"</span>);
-
-<span class="cm">// Or alternatively</span>
-TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"msg:name.label"</span>); </pre> 
-
-    Will replace the Field label with the localized message
-    <span class="red">Customer Name</span> for the key
-    <span class="st">name.label</span>  when the context is set.
-    This message would be defined in the <tt>/click-control.properties</tt> file:
-
-<pre class="codeConfig">
-<span class="st">name.label</span>=<span class="red">Customer Name</span> </pre>
-   
+   Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.   
   </dd>
-
 
 
   <a name="utf8-encoding" class="heading"></a>
