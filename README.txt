@@ -37,8 +37,10 @@ The main Ant targets include:
 
     build-all             build framework, extras, webapps
     build-distribution    build distribution ZIP file
-    build-extras          build click extras JAR file
+    build-extras          build click-extras JAR file
     build-framework       build click framework JAR file
+    build-maven-bundles   build Maven repository upload bundles
+    build-sources         build source ZIP files for use with IDEs
     build-webapps         build web application WAR files
     deploy-webapps        copy WAR files to application server
     get-deps              download JAR dependencies
