@@ -311,9 +311,12 @@ public class FieldSet extends Field {
      * Return the fieldset Legend element value: &lt;legend&gt;
      * <p/>
      * If the legend value is null, this method will attempt to find a
-     * localized label message in the parent messages, and if not found then in
-     * the field messages using the key name of <tt>getName() + ".legend"</tt>.
-     * <p/>
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".title"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
      * If a value cannot be found in the parent or control messages then the
      * FieldSet name will be converted into a legend using the
      * {@link ClickUtils#toLabel(String)} method.
