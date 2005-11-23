@@ -347,11 +347,12 @@ public abstract class Field implements Control {
      * @see net.sf.click.Control#getId()
      */
     public String getId() {
-        String formId = (getForm() != null) ? getForm().getId() + "-" : "";
-
         if (hasAttributes() && getAttributes().containsKey("id")) {
-            return formId + getAttribute("id");
+            return getAttribute("id");
+
         } else {
+            String formId = (getForm() != null) ? getForm().getId() + "-" : "";
+
             return formId + getName();
         }
     }
