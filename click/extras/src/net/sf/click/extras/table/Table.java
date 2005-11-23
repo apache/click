@@ -391,10 +391,16 @@ public class Table implements Control {
     }
 
     /**
+     * Return the "id" attribute value if defined, or the table name otherwise.
+     *
      * @see net.sf.click.Control#getId()
      */
     public String getId() {
-        return getName() + "-table";
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            return getName();
+        }
     }
 
     /**
