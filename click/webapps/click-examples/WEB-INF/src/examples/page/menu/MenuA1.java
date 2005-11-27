@@ -10,8 +10,8 @@ import net.sf.click.extras.menu.Menu;
  */
 public class MenuA1 extends BorderedPage {
 
-    public void onInit() {
-        addModel("rootMenu", Menu.getRootMenu(getContext()));
+    public MenuA1() {
+        addModel("rootMenu", new Menu());
     }
 
 }
