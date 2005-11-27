@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import net.sf.click.Context;
+import net.sf.click.ContextAware;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -34,11 +35,27 @@ import org.w3c.dom.NodeList;
 /**
  * Provides hierarchical Menu component. Application menus can be defined
  * using a <tt>/WEB-INF/menu.xml</tt> configuration file.
+ * <p/>
+ * To access the root Menu item of the configured menus simply use the default
+ * constructor:
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
+ *
+ *     <span class="kw">public</span> MenuPage() {
+ *         addModel(<span class="st">"rootMenu"</span>, <span class="kw">new</span> Menu());
+ *     }
+ * } </pre>
+ *
+ * Alternatively you can access the root menu item of the configured menus using
+ * the static Menu method getRootMenu():
  *
  * <pre class="codeJava">
- * <span class="kw">public void</span> onInit() {
- *     Menu rootMenu = Menu.getRootMenu(getContext());
- *     addModel(<span class="st">"rootMenu"</span>, rootMenu);
+ * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
+ *
+ *     <span class="kw">public void</span> onInit() {
+ *         Menu rootMenu = Menu.getRootMenu(getContext());
+ *         addModel(<span class="st">"rootMenu"</span>, rootMenu);
+ *     }
  * } </pre>
  *
  * An example <tt>/WEB-INF/menu.xml</tt> configuration file is provided below:
@@ -71,7 +88,7 @@ import org.w3c.dom.NodeList;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public class Menu implements Serializable {
+public class Menu implements ContextAware, Serializable {
 
     private static final long serialVersionUID = 5820272228903777866L;
 
@@ -89,6 +106,9 @@ public class Menu implements Serializable {
 
     /** The list of submenu items. */
     protected List children = new ArrayList();
+
+    /** The request context. */
+    protected Context context;
 
     /** The menu display label. */
     protected String label;
@@ -111,12 +131,16 @@ public class Menu implements Serializable {
     /** The tooltip title attribute. */
     protected String title = "";
 
+    /** The is root menu item flag. */
+    protected boolean isRootMenu;
+
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a Menu instance.
+     * Create a new root Menu instance.
      */
     public Menu() {
+        isRootMenu = true;
     }
 
     /**
@@ -195,6 +219,37 @@ public class Menu implements Serializable {
     }
 
     /**
+     * @see ContextAware#getContext()
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
+     * Set the request context. If the Menu item is the root menu item,
+     * this method will load the root Menu's children elements.
+     *
+     * @see ContextAware#setContext(Context)
+     */
+    public void setContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+        this.context = context;
+
+        if (isRootMenu()) {
+            Menu rootMenu = getRootMenu(context);
+            setLabel(rootMenu.getLabel());
+            setPath(rootMenu.getPath());
+            setTitle(rootMenu.getTitle());
+            setRoles(rootMenu.getRoles());
+            setPages(rootMenu.getPages());
+            setSelected(rootMenu.isSelected());
+            children.addAll(rootMenu.getChildren());
+        }
+    }
+
+    /**
      * Return the label of the Menu item.
      *
      * @return the label of the Menu item
@@ -269,6 +324,15 @@ public class Menu implements Serializable {
     }
 
     /**
+     * Return true if the Menu is root menu time.
+     *
+     * @return true if the Menu is root menu time
+     */
+    public boolean isRootMenu() {
+        return isRootMenu;
+    }
+
+    /**
      * Return true if the Menu item is selected.
      *
      * @return true if the Menu item is selected
@@ -312,6 +376,7 @@ public class Menu implements Serializable {
             "[label=" + getLabel() +
             ",path=" + getPath() +
             ",title=" + getTitle() +
+            ",isRootMenu=" + isRootMenu +
             ",selected=" + isSelected() +
             ",pages=" + pages +
             ",roles=" + roles +
