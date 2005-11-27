@@ -17,6 +17,7 @@ package net.sf.click;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,7 +63,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public class Page {
+public class Page implements ContextAware {
 
     /** The request context. */
     protected Context context;
@@ -143,6 +144,8 @@ public class Page {
 
     /**
      * Return the request context of the page.
+     * <p/>
+     * @see ContextAware#getContext()
      *
      * @return the request context of the page
      */
@@ -152,7 +155,11 @@ public class Page {
 
     /**
      * Set the request context of the page. If the page model contains any
-     * Controls the context will also be set in the Controls.
+     * ContextAware objects, the context will also be set in these objects.
+     * If the page model contains any Control objects, they will also have
+     * the pages localized messages set as their parent messages.
+     * <p/>
+     * @see ContextAware#setContext(Context)
      *
      * @param context the request context to set
      * @throws IllegalArgumentException if the Context is null
@@ -163,11 +170,15 @@ public class Page {
         }
         this.context = context;
 
-        if (hasControls()) {
-            for (int i = 0; i < getControls().size(); i++) {
-               Control control = (Control) getControls().get(i);
-               control.setContext(context);
-               control.setParentMessages(getMessages());
+        for (Iterator i = getModel().values().iterator(); i.hasNext(); ) {
+            Object value = i.next();
+            if (value instanceof Control) {
+                Control control = (Control) value;
+                control.setContext(context);
+                control.setParentMessages(getMessages());
+
+            } else if (value instanceof ContextAware) {
+                ((ContextAware) value).setContext(context);
             }
         }
     }

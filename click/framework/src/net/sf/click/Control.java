@@ -29,20 +29,15 @@ import java.util.Map;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public interface Control extends Serializable {
+public interface Control extends ContextAware, Serializable {
  
     /**
-     * Return the Page request Context of the Control.
-     *
-     * @return the Page request Context
+     * @see ContextAware#getContext()
      */
     public Context getContext();
 
     /**
-     * Set the Page request Context of the Control.
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
+     * @see ContextAware#setContext(Context)
      */
     public void setContext(Context context);
 
