@@ -9,7 +9,7 @@
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring" value="spring-1.2.5.jar"/>
+   <property name="jar.spring" value="spring-1.2.6.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.0.jar"/>
    <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
 	
@@ -96,7 +96,6 @@
       <mkdir dir="extras/classes"/>
       <copy todir="extras/classes">
          <fileset dir="extras/src">
-            <exclude name="**/*.java"/>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
@@ -137,7 +136,6 @@
       <mkdir dir="${dir.classes}"/>
       <copy todir="${dir.classes}">
          <fileset dir="${dir.source}">
-            <exclude name="**/*.java"/>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
