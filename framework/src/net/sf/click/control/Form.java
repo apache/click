@@ -1409,6 +1409,15 @@ public class Form implements Control {
 //    }
 
     /**
+     * Returns the action of this Form.
+     */
+    public String getActionURL(){
+        HttpServletRequest request = getContext().getRequest();
+        HttpServletResponse response = getContext().getResponse();
+        String actionURL = response.encodeURL(request.getRequestURI());
+        return actionURL;
+    }
+    /**
      * Return the HTML string representation of the form.
      * <p/>
      * If the form contains errors after processing, these errors will be

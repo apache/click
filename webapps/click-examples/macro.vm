@@ -5,7 +5,7 @@
 
 #macro( writeForm $form )
 
-<form method="$form.method" name="$form.name" action="$request.requestURI">
+<form method="$form.method" name="$form.name" action="$form.actionURL">
 
  ## Render hidden fields
  #foreach ($field in $form.fieldList)
