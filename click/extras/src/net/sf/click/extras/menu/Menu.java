@@ -20,10 +20,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import net.sf.click.Context;
-import net.sf.click.ContextAware;
+import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,30 +34,25 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Provides hierarchical Menu component. Application menus can be defined
+ * Provides a hierarchical Menu control. Application menus can be defined
  * using a <tt>/WEB-INF/menu.xml</tt> configuration file.
  * <p/>
- * To access the root Menu item of the configured menus simply use the default
+ * To access the root Menu item of the configured menus simply use the
  * constructor:
  * <pre class="codeJava">
  * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
  *
  *     <span class="kw">public</span> MenuPage() {
- *         addModel(<span class="st">"rootMenu"</span>, <span class="kw">new</span> Menu());
+ *         addControl(<span class="kw">new</span> Menu(<span class="st">"rootMenu"</span>);
  *     }
  * } </pre>
  *
- * Alternatively you can access the root menu item of the configured menus using
- * the static Menu method getRootMenu():
+ * The Menu control does not render itself, as the potential variations are
+ * endless. You will need use a Velocity macro or Velocity code in your page to
+ * render the Menu hierarchy.
  *
- * <pre class="codeJava">
- * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
- *
- *     <span class="kw">public void</span> onInit() {
- *         Menu rootMenu = Menu.getRootMenu(getContext());
- *         addModel(<span class="st">"rootMenu"</span>, rootMenu);
- *     }
- * } </pre>
+ * <pre class="codeHtml">
+ * <span class="red">#</span>writeMenu(<span class="red">$</span><span class="st">rootMenu</span>) </pre>
  *
  * An example <tt>/WEB-INF/menu.xml</tt> configuration file is provided below:
  *
@@ -88,7 +84,7 @@ import org.w3c.dom.NodeList;
  * @author Malcolm Edgar
  * @version $Id$
  */
-public class Menu implements ContextAware, Serializable {
+public class Menu implements Control, Serializable {
 
     private static final long serialVersionUID = 5820272228903777866L;
 
@@ -112,6 +108,9 @@ public class Menu implements ContextAware, Serializable {
 
     /** The menu display label. */
     protected String label;
+
+    /** The menu control name. */
+    protected String name;
 
     /**
      * The list of valid page paths. If any of these page paths match the
@@ -144,11 +143,21 @@ public class Menu implements ContextAware, Serializable {
     }
 
     /**
+     * Create a new root Menu instance with the given name.
+     *
+     * @param name the name of the menu
+     */
+    public Menu(String name) {
+        setName(name);
+        isRootMenu = true;
+    }
+
+    /**
      * Create a Menu from the given menu-item XML Element.
      *
      * @param menuElement the menu-item XML Element.
      */
-    public Menu(Element menuElement) {
+    protected Menu(Element menuElement) {
         if (menuElement == null) {
             throw new IllegalArgumentException("Null menuElement parameter");
         }
@@ -190,11 +199,12 @@ public class Menu implements ContextAware, Serializable {
      *
      * @param menu the menu to copy
      */
-    public Menu(Menu menu) {
+    protected Menu(Menu menu) {
         if (menu == null) {
             throw new IllegalArgumentException("Null menu parameter");
         }
         setLabel(menu.getLabel());
+        setName(menu.getName());
         setPath(menu.getPath());
         setTitle(menu.getTitle());
         setRoles(menu.getRoles());
@@ -219,7 +229,7 @@ public class Menu implements ContextAware, Serializable {
     }
 
     /**
-     * @see ContextAware#getContext()
+     * @see Control#getContext()
      */
     public Context getContext() {
         return context;
@@ -229,7 +239,7 @@ public class Menu implements ContextAware, Serializable {
      * Set the request context. If the Menu item is the root menu item,
      * this method will load the root Menu's children elements.
      *
-     * @see ContextAware#setContext(Context)
+     * @see Control#setContext(Context)
      */
     public void setContext(Context context) {
         if (context == null) {
@@ -369,11 +379,70 @@ public class Menu implements ContextAware, Serializable {
     }
 
     /**
+     * This method returns null.
+     *
+     * @see Control#getId()
+     */
+    public String getId() {
+        return null;
+    }
+
+    /**
+     * @see Control#getName()
+     */
+    public String getName() {
+        return name;
+    }
+
+
+    /**
+     * @see Control#setName(String)
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * This method returns null.
+     *
+     * @see Control#getParentMessages()
+     */
+    public Map getParentMessages() {
+        return null;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onProcess()
+     */
+    public boolean onProcess() {
+        return false;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#setListener(Object, String)
+     */
+    public void setListener(Object listener, String method) {
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+    }
+
+    /**
      * @see Object#toString()
      */
     public String toString() {
         return getClass().getName() +
             "[label=" + getLabel() +
+            ",name=" + name +
             ",path=" + getPath() +
             ",title=" + getTitle() +
             ",isRootMenu=" + isRootMenu +
@@ -405,7 +474,8 @@ public class Menu implements ContextAware, Serializable {
 
     /**
      * Return a copy of the Appliations root Menu as defined in the
-     * configuration file "<tt>/WEB-INF/menu.xml</tt>".
+     * configuration file "<tt>/WEB-INF/menu.xml</tt>", with the Control
+     * name <tt>"rootMenu"</tt>.
      * <p/>
      * The returned root menu is always selected.
      *
@@ -419,7 +489,7 @@ public class Menu implements ContextAware, Serializable {
 
         synchronized(loadLock) {
             if (rootMenu == null) {
-                Menu menu = new Menu();
+                Menu menu = new Menu("rootMenu");
 
                 InputStream inputStream =
                     context.getServletContext().getResourceAsStream(CONFIG_FILE);
@@ -488,5 +558,4 @@ public class Menu implements ContextAware, Serializable {
             }
         }
     }
-
 }
