@@ -15,16 +15,20 @@
  */
 package net.sf.click.extras.hibernate;
 
+import java.io.Serializable;
+
+import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 
 import org.apache.commons.lang.StringUtils;
-
+import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.type.Type;
 
 /**
  * Provides Hibernate data aware Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -70,10 +74,10 @@ public class HibernateForm extends Form {
     protected SessionFactory sessionFactory;
 
     /** The value object identifier hidden field. */
-    protected HiddenField oidField = new HiddenField("VOID", Long.class);
+    protected HiddenField oidField;
 
     /** The value object class name hidden field. */
-    protected HiddenField classField = new HiddenField("VOCLASS", String.class);
+    protected HiddenField classField;
 
     /**
      * The flag specifying that object validation meta data has been applied to
@@ -92,13 +96,20 @@ public class HibernateForm extends Form {
      */
     public HibernateForm(String name, Class valueClass) {
         super(name);
-        add(oidField);
-        add(classField);
 
         if (valueClass == null) {
             throw new IllegalArgumentException("Null valueClass parameter");
         }
+        
+        classField = new HiddenField("VOCLASS", String.class);
         classField.setValue(valueClass.getName());
+        add(classField);
+        
+        ClassMetadata classMetadata = 
+            getSessionFactory().getClassMetadata(valueClass);
+        Type identifierType = classMetadata.getIdentifierType();
+        oidField = new HiddenField("VOID", identifierType.getReturnedClass());
+        add(oidField);
     }
 
 
@@ -142,6 +153,9 @@ public class HibernateForm extends Form {
      * @return the user's Hibernate session
      */
     public SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            sessionFactory = SessionContext.getSessionFactory();
+        }
         return sessionFactory;
     }
 
@@ -166,11 +180,11 @@ public class HibernateForm extends Form {
             try {
                 Class valueClass = Class.forName(classField.getValue());
 
-                Long oid = (Long) oidField.getValueObject();
+                Serializable oid = (Serializable) oidField.getValueObject();
 
                 Object valueObject = null;
                 if (oid != null) {
-                    getSession().load(valueClass, oid);
+                    valueObject = getSession().load(valueClass, oid);
                 } else {
                     valueObject = valueClass.newInstance();
                 }
@@ -194,14 +208,12 @@ public class HibernateForm extends Form {
      */
     public void setValueObject(Object valueObject) {
         if (valueObject != null) {
-            // TODO: other identifier types: string
             ClassMetadata classMetadata =
                 getSessionFactory().getClassMetadata(valueObject.getClass());
 
-            // TODO
-            //Long oid = (Long) classMetadata.getIdentifier(valueObject);
-
-            //oidField.setValue(oid);
+            Object identifier = 
+                classMetadata.getIdentifier(valueObject, EntityMode.POJO);
+            oidField.setValue(identifier);
 
             copyFrom(valueObject, true);
         }
@@ -265,10 +277,19 @@ public class HibernateForm extends Form {
         try {
             Class valueClass = Class.forName(classField.getValue());
 
-            ClassMetadata classMetadata =
+            ClassMetadata metadata = 
                 getSessionFactory().getClassMetadata(valueClass);
-
-            // TODO: apply constraints to fields.
+            
+            String[] propertyNames = metadata.getPropertyNames();
+            
+            boolean[] propertyNullability = metadata.getPropertyNullability();
+            
+            for (int i = 0; i < propertyNames.length; i++) {
+                Field field = getField(propertyNames[i]);
+                if (field != null) {
+                    field.setRequired(propertyNullability[i]);
+                }
+            }
 
         } catch (ClassNotFoundException cnfe) {
             throw new RuntimeException(cnfe);
