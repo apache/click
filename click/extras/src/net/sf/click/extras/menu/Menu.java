@@ -173,7 +173,9 @@ public class Menu implements Control, Serializable {
         if (!StringUtils.isBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
             while (tokenizer.hasMoreTokens()) {
-                getPages().add(tokenizer.nextToken().trim());
+                String path = tokenizer.nextToken().trim();
+                path = (path.startsWith("/")) ? path : "/" + path;
+                getPages().add(path);
             }
         }
 
