@@ -412,12 +412,12 @@ public class Menu implements Control, Serializable {
     }
 
     /**
-     * This method does nothing.
+     * This method performs no processing and returns true.
      *
      * @see Control#onProcess()
      */
     public boolean onProcess() {
-        return false;
+        return true;
     }
 
     /**
