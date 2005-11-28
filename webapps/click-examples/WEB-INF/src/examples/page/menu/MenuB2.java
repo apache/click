@@ -5,6 +5,6 @@ package examples.page.menu;
  *
  * @author Malcolm Edgar
  */
-public class MenuB2 extends MenuA1 {
+public class MenuB2 extends MenuPage {
 
 }
