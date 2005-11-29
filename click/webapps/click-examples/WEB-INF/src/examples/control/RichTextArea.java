@@ -34,13 +34,22 @@ public class RichTextArea extends TextArea {
     private static final long serialVersionUID = 4955743445097747828L;
 
     protected static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"$/tiny_mce/tiny_mce.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"></script>\n";
 
     /**
      * The textarea TinyMCE theme [<tt>simle</tt> | <tt>advanced</tt>],
      * default value: &nbsp; <tt>"simle"</tt>
      */
     protected String theme = "simple";
+
+    /**
+     * Create a TinyMCE rich TextArea control with the given name.
+     *
+     * @param name the name of the control.
+     */
+    public RichTextArea(String name) {
+        super(name);
+    }
 
     /**
 
