@@ -173,7 +173,7 @@ import org.apache.commons.lang.StringUtils;
  * An example of a manually layed out Login form is provided below:
  *
  * <pre class="codeHtml">
- * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$request.requestURI</span>"&gt;
+ * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$form.actionURL</span>"&gt;
  *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  *
  *   &lt;table style="margin: 1em;"&gt;
@@ -233,7 +233,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeHtml"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
  * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
  *
- * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$request.requestURI</span>"&gt;
+ * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$form.actionURL</span>"&gt;
  *
  *  <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
  *    <span class="red">#if</span> (<span class="blue">$field.hidden</span>) <span class="blue">$field</span> <span class="red">#end</span>
@@ -595,6 +595,19 @@ public class Form implements Control {
                 removeField(fieldNames.get(i).toString());
             }
         }
+    }
+
+    /**
+     * Return the form "action" attribute URL value. The action URL will be
+     * encode by the response to ensure it includes the Session ID if required.
+     *
+     * @return the form "action" attribute URL value.
+     */
+    public String getActionURL(){
+        HttpServletRequest request = getContext().getRequest();
+        HttpServletResponse response = getContext().getResponse();
+        String actionURL = response.encodeURL(request.getRequestURI());
+        return actionURL;
     }
 
     /**
@@ -1409,15 +1422,6 @@ public class Form implements Control {
 //    }
 
     /**
-     * Returns the action of this Form.
-     */
-    public String getActionURL(){
-        HttpServletRequest request = getContext().getRequest();
-        HttpServletResponse response = getContext().getResponse();
-        String actionURL = response.encodeURL(request.getRequestURI());
-        return actionURL;
-    }
-    /**
      * Return the HTML string representation of the form.
      * <p/>
      * If the form contains errors after processing, these errors will be
@@ -1435,16 +1439,12 @@ public class Form implements Control {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        HttpServletRequest request = getContext().getRequest();
-        HttpServletResponse response = getContext().getResponse();
-        String actionURL = response.encodeURL(request.getRequestURI());
-
         buffer.elementStart("form");
 
         buffer.appendAttribute("method", getMethod());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
-        buffer.appendAttribute("action", actionURL);
+        buffer.appendAttribute("action", getActionURL());
         buffer.appendAttribute("enctype", getEnctype());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
