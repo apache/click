@@ -1,7 +1,7 @@
 This example demonstrates manually laying out a form in the page template.
 <p>
 
-<form action='$request.requestURI' method="POST">
+<form action='$form.actionURL' method="POST">
  <b>Customer</b> ${form.fields.search}${form.fields.type}${form.fields.go}
  <input type="hidden" name="form_name" value="form">
 </form>
