@@ -100,12 +100,12 @@ public class HibernateForm extends Form {
         if (valueClass == null) {
             throw new IllegalArgumentException("Null valueClass parameter");
         }
-        
+
         classField = new HiddenField("VOCLASS", String.class);
         classField.setValue(valueClass.getName());
         add(classField);
-        
-        ClassMetadata classMetadata = 
+
+        ClassMetadata classMetadata =
             getSessionFactory().getClassMetadata(valueClass);
         Type identifierType = classMetadata.getIdentifierType();
         oidField = new HiddenField("VOID", identifierType.getReturnedClass());
@@ -211,7 +211,7 @@ public class HibernateForm extends Form {
             ClassMetadata classMetadata =
                 getSessionFactory().getClassMetadata(valueObject.getClass());
 
-            Object identifier = 
+            Object identifier =
                 classMetadata.getIdentifier(valueObject, EntityMode.POJO);
             oidField.setValue(identifier);
 
@@ -277,13 +277,13 @@ public class HibernateForm extends Form {
         try {
             Class valueClass = Class.forName(classField.getValue());
 
-            ClassMetadata metadata = 
+            ClassMetadata metadata =
                 getSessionFactory().getClassMetadata(valueClass);
-            
+
             String[] propertyNames = metadata.getPropertyNames();
-            
+
             boolean[] propertyNullability = metadata.getPropertyNullability();
-            
+
             for (int i = 0; i < propertyNames.length; i++) {
                 Field field = getField(propertyNames[i]);
                 if (field != null) {

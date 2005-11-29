@@ -112,24 +112,24 @@ public class SessionContext {
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-    
+
     /**
-     * Return the persistent instance of the given entity class with the given 
-     * identifier, or null if there is no such persistent instance. (If the 
-     * instance, or a proxy for the instance, is already associated with the 
+     * Return the persistent instance of the given entity class with the given
+     * identifier, or null if there is no such persistent instance. (If the
+     * instance, or a proxy for the instance, is already associated with the
      * session, return that instance or proxy.)
      * <p/>
      * This method provides a convenience wrapper around the corresponding
      * <tt>Session</tt> method.
-     * 
+     *
      * @param clazz a persistent class
      * @param id an identifier
      * @return a persistent instance or null
      * @throws HibernateException
      */
-    public static Object get(Class clazz, Serializable id) 
+    public static Object get(Class clazz, Serializable id)
         throws HibernateException {
-        
+
         return getSession().get(clazz, id);
     }
 
