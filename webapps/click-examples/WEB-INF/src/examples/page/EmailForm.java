@@ -6,26 +6,34 @@ import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import examples.control.RichTextArea;
 
+/**
+ * Provides an example page using the custom {@link RichTextArea} control.
+ *
+ * @author Malcolm Edgar
+ */
 public class EmailForm extends BorderedPage {
 
     public EmailForm() {
         Form form = new Form("form");
         form.setLabelsPosition(Form.POSITION_TOP);
+        form.setLabelRequiredPrefix("<b>");
+        form.setLabelRequiredSuffix("</b>");
         addControl(form);
 
         EmailField addressField = new EmailField("address", "To:");
         addressField.setRequired(true);
+        addressField.setSize(60);
         form.add(addressField);
 
         TextField subjectField = new TextField("subject", "Subject:");
         subjectField.setRequired(true);
-        subjectField.setSize(30);
+        subjectField.setSize(60);
         form.add(subjectField);
 
         RichTextArea messageTextArea = new RichTextArea("message");
         messageTextArea.setLabel("Message:");
-        messageTextArea.setCols(50);
-        messageTextArea.setRows(10);
+        messageTextArea.setCols(45);
+        messageTextArea.setRows(8);
         messageTextArea.setRequired(true);
         form.add(messageTextArea);
 

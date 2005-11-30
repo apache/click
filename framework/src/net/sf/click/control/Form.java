@@ -363,22 +363,22 @@ public class Form implements Control {
     public static final String POSITION_LEFT = "left";
 
     /** The errors-header resource property */
-    protected static String errorsHeader = "";
+    protected static String ERRORS_HEADER = "";
 
     /** The errors-footer resource property. */
-    protected static String errorsFooter = "";
+    protected static String ERRORS_FOOTER = "";
 
     /** The errors-prefix resource property. */
-    protected static String errorsPrefix = "";
+    protected static String ERRORS_PREFIX = "";
 
     /** The errors-suffix resource property. */
-    protected static String errorsSuffix = "";
+    protected static String ERRORS_SUFFIX = "";
 
     /** The label-required-prefix resource property. */
-    protected static String labelRequiredPrefix = "";
+    protected static String LABEL_REQUIRED_PREFIX = "";
 
     /** The label-required-suffix resource property. */
-    protected static String labelRequiredSuffix = "";
+    protected static String LABEL_REQUIRED_SUFFIX = "";
 
     protected static final String HTML_IMPORTS =
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n" +
@@ -388,12 +388,12 @@ public class Form implements Control {
         ResourceBundle bundle =
             ResourceBundle.getBundle(Field.CONTROL_MESSAGES);
 
-        errorsHeader = bundle.getString("errors-header");
-        errorsFooter = bundle.getString("errors-footer");
-        errorsPrefix = bundle.getString("errors-prefix");
-        errorsSuffix = bundle.getString("errors-suffix");
-        labelRequiredPrefix = bundle.getString("label-required-prefix");
-        labelRequiredSuffix = bundle.getString("label-required-suffix");
+        ERRORS_HEADER = bundle.getString("errors-header");
+        ERRORS_FOOTER = bundle.getString("errors-footer");
+        ERRORS_PREFIX = bundle.getString("errors-prefix");
+        ERRORS_SUFFIX = bundle.getString("errors-suffix");
+        LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
+        LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
     }
 
     // ----------------------------------------------------- Instance Variables
@@ -450,6 +450,12 @@ public class Form implements Control {
      * <tt>"left"</tt>
      */
     protected String labelsPosition = POSITION_LEFT;
+
+    /** The field required label labelprefix. */
+    protected String labelRequiredPrefix;
+
+    /** The field required label suffix. */
+    protected String labelRequiredSuffix;
 
     /** The listener target object. */
     protected Object listener;
@@ -1028,6 +1034,50 @@ public class Form implements Control {
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
+    }
+
+    /**
+     * Return the field required label prefix. If the value is null it will
+     * be initialized with the <tt>label-required-prefix</tt> resource property.
+     *
+     * @return the field required label prefix
+     */
+    public String getLabelRequiredPrefix() {
+        if (labelRequiredPrefix == null) {
+            labelRequiredPrefix = LABEL_REQUIRED_PREFIX;
+        }
+        return labelRequiredPrefix;
+    }
+
+    /**
+     * Set the field required label prefix.
+     *
+     * @param value the field required label prefix
+     */
+    public void setLabelRequiredPrefix(String value) {
+        this.labelRequiredPrefix = value;
+    }
+
+    /**
+     * Return the field required label suffix. If the value is null it will
+     * be initialized with the <tt>label-required-suffix</tt> resource property.
+     *
+     * @return the field required label suffix
+     */
+    public String getLabelRequiredSuffix() {
+        if (labelRequiredSuffix == null) {
+            labelRequiredSuffix = LABEL_REQUIRED_SUFFIX;
+        }
+        return labelRequiredSuffix;
+    }
+
+    /**
+     * Set the field required label suffix.
+     *
+     * @param value the field required label suffix
+     */
+    public void setLabelRequiredSuffix(String value) {
+        this.labelRequiredSuffix = value;
     }
 
     /**
@@ -1616,7 +1666,7 @@ public class Form implements Control {
                     }
 
                     if (field.isRequired()) {
-                        buffer.append(labelRequiredPrefix);
+                        buffer.append(getLabelRequiredPrefix());
                     }
                     buffer.append("<label");
                     if (field.isDisabled()) {
@@ -1629,7 +1679,7 @@ public class Form implements Control {
                     buffer.append(field.getLabel());
                     buffer.append("</label>");
                     if (field.isRequired()) {
-                        buffer.append(labelRequiredSuffix);
+                        buffer.append(getLabelRequiredSuffix());
                     }
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
@@ -1676,7 +1726,7 @@ public class Form implements Control {
         if (processed && !isValid()) {
 
             String headerTest =
-                errorsHeader.toLowerCase()  + errorsPrefix.toLowerCase();
+                ERRORS_HEADER.toLowerCase()  + ERRORS_PREFIX.toLowerCase();
 
             boolean useErrorsHeader =
                 (((headerTest.indexOf("<ul") > -1) ||
@@ -1684,7 +1734,7 @@ public class Form implements Control {
                  (headerTest.indexOf("<li") > -1));
 
             if (useErrorsHeader) {
-                buffer.append(errorsHeader);
+                buffer.append(ERRORS_HEADER);
                 buffer.append("\n");
             } else {
                 buffer.append("<tr><td align=\"");
@@ -1697,7 +1747,7 @@ public class Form implements Control {
 
             if (getError() != null) {
                 if (useErrorsHeader) {
-                    buffer.append(errorsPrefix);
+                    buffer.append(ERRORS_PREFIX);
                 } else {
                     buffer.append("<tr class=\"errors\">");
                     buffer.append("<td class=\"errors\" align=\"");
@@ -1708,7 +1758,7 @@ public class Form implements Control {
                 buffer.append(getError());
                 buffer.append("</span>\n");
                 if (useErrorsHeader) {
-                    buffer.append(errorsSuffix);
+                    buffer.append(ERRORS_SUFFIX);
                     buffer.append("\n");
                 } else {
                     buffer.append("</td></tr>\n");
@@ -1724,7 +1774,7 @@ public class Form implements Control {
                     fieldWithError = field;
                 }
                 if (useErrorsHeader) {
-                    buffer.append(errorsPrefix);
+                    buffer.append(ERRORS_PREFIX);
                 } else {
                     buffer.append("<tr class=\"errors\">");
                     buffer.append("<td class=\"errors\" align=\"");
@@ -1742,7 +1792,7 @@ public class Form implements Control {
                 buffer.append("</a>");
 
                 if (useErrorsHeader) {
-                    buffer.append(errorsSuffix);
+                    buffer.append(ERRORS_SUFFIX);
                     buffer.append("\n");
                 } else {
                     buffer.append("</td></tr>\n");
@@ -1750,7 +1800,7 @@ public class Form implements Control {
             }
 
             if (useErrorsHeader) {
-                buffer.append(errorsFooter);
+                buffer.append(ERRORS_FOOTER);
                 buffer.append("\n");
             } else {
                 buffer.append("</table>\n");

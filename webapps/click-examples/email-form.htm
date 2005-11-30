@@ -1,5 +1,23 @@
- <style type="text/css">
-    br { margin-bottom: 0.5em; }
- </style> 
+<style type="text/css">
+  td.fields { margin-top: 1em; line-height: 2; }
+</style> 
 
 $form
+
+<p>&nbsp;</p>
+
+The form demonstrates a custom 
+<a href="$context/javadoc/examples/control/RichTextArea.html">RichTextArea</a>
+control using the 
+<a target="blank" href="http://sourceforge.net/projects/tinymce/">TinyMCE</a>
+JavaScript library. The control overrides the Field method <tt>getHtmlImports()</tt> to include its 
+JavaScript imports automatically:
+
+<pre class="codeJava">
+<span class="kw">protected static final</span> String HTML_IMPORTS =
+    <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"&gt;&lt;/script&gt;\n"</span>;
+
+<span class="kw">public</span> String getHtmlImports() {
+    String[] args = { getContext().getRequest().getContextPath() };
+    <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+} </pre>

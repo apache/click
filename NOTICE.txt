@@ -24,3 +24,8 @@ This product includes the rico JavaScript library,
 developed by Sabre Airline Solutions (http://openrico.org).
 Please note this library is NOT included in the
 Click runtime library.
+
+This product includes the TinyMCE JavaScript library,
+developed by Moxiecode Systems (http://www.moxiecode.com/).
+Please note this library is NOT included in the
+Click runtime library.
