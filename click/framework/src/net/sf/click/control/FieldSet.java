@@ -561,7 +561,7 @@ public class FieldSet extends Field {
                     }
 
                     if (field.isRequired()) {
-                        buffer.append(Form.labelRequiredPrefix);
+                        buffer.append(Form.LABEL_REQUIRED_PREFIX);
                     }
                     buffer.elementStart("label");
                     if (field.isDisabled()) {
@@ -574,7 +574,7 @@ public class FieldSet extends Field {
                     buffer.append(field.getLabel());
                     buffer.elementEnd("label");
                     if (field.isRequired()){
-                        buffer.append(Form.labelRequiredSuffix);
+                        buffer.append(Form.LABEL_REQUIRED_SUFFIX);
                     }
 
                     if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {

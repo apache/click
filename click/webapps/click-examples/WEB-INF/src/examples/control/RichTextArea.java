@@ -22,17 +22,22 @@ import net.sf.click.control.TextArea;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * TODO: RichTextArea documentation
+ * Provides a HTML Rich TextArea editor control using the
+ * <a href="http://sourceforge.net/projects/tinymce/">TinyMCE</a>
+ * JavaScript library.
+ * <p/>
+ * To utilize this control in your application include <tt>tiny_mce</tt>
+ * JavaScript library in the web apps root directory.
  *
  * @see TextArea
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class RichTextArea extends TextArea {
 
     private static final long serialVersionUID = 4955743445097747828L;
 
+    /** The TinyMCE JavaScript import. */
     protected static final String HTML_IMPORTS =
         "<script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"></script>\n";
 
@@ -45,13 +50,11 @@ public class RichTextArea extends TextArea {
     /**
      * Create a TinyMCE rich TextArea control with the given name.
      *
-     * @param name the name of the control.
+     * @param name the name of the control
      */
     public RichTextArea(String name) {
         super(name);
     }
-
-    /**
 
     /**
      * Return the textarea TinyMCE theme.
@@ -63,7 +66,7 @@ public class RichTextArea extends TextArea {
     }
 
     /**
-     * Return the DateField calendar.js and calendar-en.js includes.
+     * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>
      *
      * @see Field#getHtmlImports()
      */
@@ -73,6 +76,9 @@ public class RichTextArea extends TextArea {
     }
 
     /**
+     * This method overrides the TextArea <tt>toString()</tt> method to
+     * add TinyMCE JavaScript initialization code.
+     *
      * @see TextArea#toString()
      */
     public String toString() {
@@ -81,12 +87,12 @@ public class RichTextArea extends TextArea {
 
         buffer.elementStart("script");
         buffer.appendAttribute("type", "text/javascript");
-        buffer.elementEnd();
+        buffer.closeTag();
         buffer.append("\ntinyMCE.init({\n");
         buffer.append("   theme : \"");
         buffer.append(getTheme());
         buffer.append("\",\n");
-        buffer.append("  mode: \"exact\",\n");
+        buffer.append("   mode: \"exact\",\n");
         buffer.append("   elements : \"");
         buffer.append(getId());
         buffer.append("\"\n");
