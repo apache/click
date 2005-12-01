@@ -361,9 +361,9 @@ public class Context {
     /**
      * Return a new Page instance for the given path.
      * <p/>
-     * This method can be used to create a target page for the 
+     * This method can be used to create a target page for the
      * {@link Page#setForward(Page)}, for example:
-     * 
+     *
      * <pre class="codeJava">
      * UserEdit userEdit = (UserEdit) getContext().createPage(<span class="st">"/user-edit.htm"</span>);
      * userEdit.setUser(user);
