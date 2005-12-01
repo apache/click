@@ -25,11 +25,36 @@ import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 /**
- * Provides a Hibernate Session filter ensuring any open sessions are closed
- * at the end of the request.
+ * Provides a Hibernate session filter to support the SessionContext class,
+ * ensuring sessions are close at the end of each request.
+ * <p/>
+ * To use {@link SessionContext} configure the SessionFilter in you
+ * web application's <tt>/WEB-INF/web.xml</tt> file.
+ *
+ * <pre class="codeConfig">
+ * &lt;web-app&gt;
+ *   &lt;filter&gt;
+ *     &lt;filter-name&gt;<span class="blue">session-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.hibernate.SessionFilter</span>&lt;/filter-class&gt;
+ *   &lt;/filter&gt;
+ *
+ *   &lt;filter-mapping&gt;
+ *     &lt;filter-name&gt;<span class="blue">session-filter</span>&lt;/filter-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *   &lt;/filter-mapping&gt;
+ *
+ *   &lt;servlet&gt;
+ *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *   ..
+ * &lt;/web-app&gt; </pre>
+ * <p/>
+ * The SessionFilter <tt>init()</tt> method loads the SessionContext class
+ * which in turn initializes the Hibernate runtime.
+ *
+ * @see SessionContext
+ * @see HibernateForm
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class SessionFilter implements Filter {
 
