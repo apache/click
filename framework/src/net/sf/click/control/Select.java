@@ -448,7 +448,7 @@ public class Select extends Field {
                 Option firstOption = (Option) getOptionList().get(0);
 
                 if (isRequired() && firstOption.getValue().equals(value)) {
-                    setError(getMessage("select-error", getLabel()));
+                    setError(getMessage("select-error", getErrorLabel()));
                     return true;
 
                 } else {
@@ -478,7 +478,7 @@ public class Select extends Field {
 
             if (isRequired()) {
                 if (multipleValues.isEmpty()) {
-                    setError(getMessage("select-error", getLabel()));
+                    setError(getMessage("select-error", getErrorLabel()));
                     return true;
 
                 } else {

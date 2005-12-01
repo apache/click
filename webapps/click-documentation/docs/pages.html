@@ -250,6 +250,18 @@ Finally set this page as the page to forward the request to. For example:
    <span class="kw">return false</span>;
 } 
 </pre>
+You can also specify the target page using its class as long as the Page has
+a unique path. So the above code becomes:
+
+<pre class="codeJava">
+   ..
+   EditPage editPage = (EditPage) getContext().createPage(EditPage.<span class="kw">class</span>);
+   editPage.setCustomer(customer);
+   setForward(editPage);
+   
+   <span class="kw">return false</span>;
+}
+</pre>
 
 When creating a page with the <tt>createPage()</tt> method ensure you prefix
 the page path with the <tt class="st">"/"</tt> character.

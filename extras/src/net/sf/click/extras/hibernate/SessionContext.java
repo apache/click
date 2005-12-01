@@ -134,6 +134,23 @@ public class SessionContext {
     }
 
     /**
+     * Remove a persistent instance from the datastore. The argument may be an
+     * instance associated with the receiving Session or a transient instance
+     * with an identifier associated with existing persistent state.
+     * This operation cascades to associated instances if the association is
+     * mapped with <tt>cascade="delete"</tt>.
+     * <p/>
+     * This method provides a convenience wrapper around the corresponding
+     * <tt>Session</tt> method.
+     *
+     * @param object the instance to be removed
+     * @throws HibernateException
+     */
+    public static void delete(Object object) throws HibernateException {
+        getSession().delete(object);
+    }
+
+    /**
      * Create a new instance of Query for the given query string.
      * <p/>
      * This method provides a convenience wrapper around the corresponding

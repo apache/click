@@ -924,5 +924,36 @@ public class ClickServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
+
+        /**
+         * Return a new Page instance for the page Class.
+         *
+         * @param page the class of the Page to create
+         * @return a new Page object
+         * @throws IllegalArgumentException if the Page Class is not configured
+         * with a unique path
+         */
+        Page createPage(Class pageClass) {
+            String path = clickApp.getPagePath(pageClass);
+
+            if (path == null) {
+                String msg =
+                    "No path configured for Page class: " + pageClass.getName();
+                throw new IllegalArgumentException(msg);
+            }
+
+            try {
+                Page newPage = newPageInstance(path, pageClass);
+
+                newPage.setFormat(clickApp.getPageFormat(path));
+                newPage.setHeaders(clickApp.getPageHeaders(path));
+                newPage.setPath(path);
+
+                return newPage;
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

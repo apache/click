@@ -359,7 +359,16 @@ public class Context {
     }
 
     /**
-     * Return a new Page instance for the given path.
+     * Return a new Page instance for the given path. 
+     * <p/>
+     * This method can be used to create a target page for the 
+     * {@link Page#setForward(Page)}, for example:
+     * 
+     * <pre class="codeJava">
+     * UserEdit userEdit = (UserEdit) getContext().createPage(<span class="st">"/user-edit.htm"</span>);
+     * userEdit.setUser(user);
+     *
+     * setForward(userEdit); </pre>
      *
      * @param path the Page path as configured in the click.xml file
      * @return a new Page object
@@ -367,6 +376,27 @@ public class Context {
      */
     public Page createPage(String path) {
         return pageMaker.createPage(path);
+    }
+
+    /**
+     * Return a new Page instance for the given class.
+     * <p/>
+     * This method can be used to create a target page for the 
+     * {@link Page#setForward(Page)}, for example:
+     * 
+     * <pre class="codeJava">
+     * UserEdit userEdit = (UserEdit) getContext().createPage(UserEdit.<span class="kw">class</span>);
+     * userEdit.setUser(user);
+     *
+     * setForward(userEdit); </pre>
+     * 
+     * @param pageClass the Page class as configured in the click.xml file
+     * @return a new Page object
+     * @throws IllegalArgumentException if the Page is not found, or is not
+     * configured with a unique path
+     */
+    public Page createPage(Class pageClass) {
+        return pageMaker.createPage(pageClass);
     }
 
     /**

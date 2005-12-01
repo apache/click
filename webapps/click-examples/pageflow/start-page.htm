@@ -15,8 +15,7 @@ Demonstration of page flow design patterns. &nbsp; Please make a course booking:
 
 This page setting up the next page in the flow:
 <pre class="codeJava">
-NextPage nextPage = 
-   (NextPage) getContext().createPage("<span class="st">/pageflow/next-page.htm</span>");
+NextPage nextPage = (NextPage) getContext().createPage(NextPage.<span class="kw">class</span>);
 nextPage.setCourseBooking(courseBooking);
    
 setForward(nextPage);

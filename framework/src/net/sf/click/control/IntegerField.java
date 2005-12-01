@@ -233,12 +233,12 @@ public class IntegerField extends TextField {
             try {
                 int intValue = Integer.parseInt(value);
                 if (intValue > maxvalue) {
-                    Object[] args = new Object[] { getLabel(), new Integer(maxvalue) };
+                    Object[] args = new Object[] { getErrorLabel(), new Integer(maxvalue) };
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
                 if (intValue < minvalue) {
-                    Object[] args = new Object[] { getLabel(), new Integer(minvalue) };
+                    Object[] args = new Object[] { getErrorLabel(), new Integer(minvalue) };
                     setError(getMessage("number-minvalue-error", args));
                     return true;
                 }
@@ -246,11 +246,11 @@ public class IntegerField extends TextField {
                 return invokeListener();
 
             } catch (NumberFormatException nfe) {
-                setError(getMessage("integer-format-error", getLabel()));
+                setError(getMessage("integer-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getLabel()));
+                setError(getMessage("field-required-error", getErrorLabel()));
             }
         }
 

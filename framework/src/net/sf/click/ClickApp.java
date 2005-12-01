@@ -165,6 +165,9 @@ class ClickApp implements EntityResolver {
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
 
+    /** The map of ClickApp.PageElm keyed on class. */
+    private final Map pageByClassMap = new HashMap();
+
     /** The pages package prefix. */
     private String pagesPackage;
 
@@ -299,7 +302,7 @@ class ClickApp implements EntityResolver {
      */
     Class getPageClass(String path) {
 
-        // If in Pproduction or profile mode.
+        // If in production or profile mode.
         if (mode <= PROFILE) {
             PageElm page = (PageElm) pageByPathMap.get(path);
             if (page != null) {
@@ -335,6 +338,29 @@ class ClickApp implements EntityResolver {
                 }
                 return pageClass;
             }
+        }
+    }
+
+    /**
+     * Return the page path for the given page <tt>Class</tt>.
+     *
+     * @param pageClass the page class
+     * @return path the page path
+     */
+    String getPagePath(Class pageClass) {
+        Object object = pageByClassMap.get(pageClass);
+
+        if (object instanceof ClickApp.PageElm) {
+            ClickApp.PageElm page = (ClickApp.PageElm) object;
+            return page.getPath();
+
+        } else if (object instanceof List) {
+            String msg =
+                "Page class resolves to multiple paths: " + pageClass.getName();
+            throw new IllegalArgumentException(msg);
+
+        } else {
+            return null;
         }
     }
 
@@ -793,6 +819,29 @@ class ClickApp implements EntityResolver {
                 }
             }
 
+        }
+
+        // Build pages by class map
+        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext(); ) {
+            ClickApp.PageElm page = (ClickApp.PageElm) i.next();
+            Object value = pageByClassMap.get(page.pageClass);
+
+            if (value == null) {
+                pageByClassMap.put(page.pageClass, page);
+
+            } else if (value instanceof List) {
+                ((List)value).add(value);
+
+            } else if (value instanceof ClickApp.PageElm) {
+                List list = new ArrayList();
+                list.add(value);
+                list.add(page);
+                pageByClassMap.put(page.pageClass, list);
+
+            } else {
+                // should never occur
+                throw new IllegalStateException();
+            }
         }
     }
 

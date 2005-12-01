@@ -207,7 +207,7 @@ public class FileField extends Field {
 
         if (fileItem != null) {
             if (isRequired() && fileItem.getSize() == 0) {
-                setError(getMessage("file-required-error", getLabel()));
+                setError(getMessage("file-required-error", getErrorLabel()));
 
             } else {
                 return invokeListener();

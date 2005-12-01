@@ -21,3 +21,29 @@ JavaScript imports automatically:
     String[] args = { getContext().getRequest().getContextPath() };
     <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
 } </pre>
+
+The control's HTML is rendered using the <tt>toString()</tt> method. First is
+uses the parent TextArea class to render itself and then appends the
+TinyMCE JavaScript initialization code.
+
+<pre class="codeJava">
+<span class="kw">public</span> String toString() {
+    HtmlStringBuffer buffer = <span class="kw">new</span> HtmlStringBuffer();
+    buffer.append(<span class="kw">super</span>.toString());
+
+    buffer.elementStart(<span class="st">"script"</span>);
+    buffer.appendAttribute(<span class="st">"type"</span>, <span class="st">"text/javascript"</span>);
+    buffer.closeTag();
+    buffer.append(<span class="st">"\ntinyMCE.init({\n"</span>);
+    buffer.append(<span class="st">"   theme : \""</span>);
+    buffer.append(getTheme());
+    buffer.append(<span class="st">"\",\n"</span>);
+    buffer.append(<span class="st">"   mode : \"exact\",\n"</span>);
+    buffer.append(<span class="st">"   elements : \""</span>);
+    buffer.append(getId());
+    buffer.append(<span class="st">"\"\n"</span>);
+    buffer.append(<span class="st">"});\n"</span>);
+    buffer.elementEnd(<span class="st">"script"</span>);
+
+    <span class="kw">return</span> buffer.toString();
+} </pre>

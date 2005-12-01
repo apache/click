@@ -846,8 +846,8 @@ public class Form implements Control {
     public List getErrorFields() {
         List list = new ArrayList();
 
-        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
-            Field field = (Field) i.next();
+        for (int i = 0, size = getFieldList().size(); i < size; i++ ) {
+            Field field = (Field) getFieldList().get(i);
 
             if (field instanceof FieldSet) {
                 FieldSet fieldSet = (FieldSet) field;
@@ -856,8 +856,9 @@ public class Form implements Control {
                     Field fieldSetField =
                         (Field) fieldSet.getFieldList().get(j);
 
-                    if (!fieldSetField.isValid() && !fieldSetField.isHidden()
-                            && !fieldSetField.isDisabled()) {
+                    if (!fieldSetField.isValid() &&
+                        !fieldSetField.isHidden() &&
+                        !fieldSetField.isDisabled()) {
 
                         list.add(fieldSetField);
                     }

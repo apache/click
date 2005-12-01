@@ -219,13 +219,13 @@ public class DoubleField extends TextField {
                 double doubleValue = Double.parseDouble(value);
 
                 if (maxvalue != Double.MAX_VALUE && doubleValue > maxvalue) {
-                    Object[] args = new Object[] { getLabel(), new Double(maxvalue) };
+                    Object[] args = new Object[] { getErrorLabel(), new Double(maxvalue) };
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
 
                 if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
-                    Object[] args = new Object[] { getLabel(), new Double(minvalue) };
+                    Object[] args = new Object[] { getErrorLabel(), new Double(minvalue) };
                     setError(getMessage("number-minvalue-error", args));
                     return true;
                 }
@@ -233,11 +233,11 @@ public class DoubleField extends TextField {
                 return invokeListener();
 
             } catch (NumberFormatException nfe) {
-                setError(getMessage("double-format-error", getLabel()));
+                setError(getMessage("double-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getLabel()));
+                setError(getMessage("field-required-error", getErrorLabel()));
             }
         }
 

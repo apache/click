@@ -121,28 +121,28 @@ public class EmailField extends TextField {
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMinLength()) };
                 setError(getMessage("field-minlength-error", args));
                 return true;
             }
 
             if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMaxLength()) };
                 setError(getMessage("field-maxlength-error", args));
                 return true;
             }
 
             int index = value.indexOf("@");
             if (index < 1 || index == length -1) {
-                setError(getMessage("email-format-error", getLabel()));
+                setError(getMessage("email-format-error", getErrorLabel()));
                 return true;
             }
             if (!Character.isLetterOrDigit(value.charAt(0))) {
-                setError(getMessage("email-format-error", getLabel()));
+                setError(getMessage("email-format-error", getErrorLabel()));
                 return true;
             }
             if (!Character.isLetterOrDigit(value.charAt(length - 1))) {
-                setError(getMessage("email-format-error", getLabel()));
+                setError(getMessage("email-format-error", getErrorLabel()));
                 return true;
             }
 
@@ -150,7 +150,7 @@ public class EmailField extends TextField {
 
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getLabel()));
+                setError(getMessage("field-required-error", getErrorLabel()));
             }
         }
 

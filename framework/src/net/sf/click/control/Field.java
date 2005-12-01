@@ -706,6 +706,18 @@ public abstract class Field implements Control {
             return true;
         }
     }
+ 
+    /**
+     * Return a normalised label for display in error messages.
+     *
+     * @return a normalized label for error message display
+     */
+    protected String getErrorLabel() {
+        String label = getLabel().trim();
+        label = (label.endsWith(":")) ?
+                label.substring(0, label.length() - 1) : label;
+        return label;
+    }
 
     /**
      * Return the field's value from the request.
@@ -720,5 +732,4 @@ public abstract class Field implements Control {
             return "";
         }
     }
-
 }
