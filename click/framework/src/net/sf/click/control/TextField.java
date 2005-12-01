@@ -258,13 +258,13 @@ public class TextField extends Field {
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMinLength()) };
                 setError(getMessage("field-minlength-error", args));
                 return true;
             }
 
             if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMaxLength()) };
                 setError(getMessage("field-maxlength-error", args));
                 return true;
             }
@@ -273,7 +273,7 @@ public class TextField extends Field {
 
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getLabel()));
+                setError(getMessage("field-required-error", getErrorLabel()));
             }
         }
 

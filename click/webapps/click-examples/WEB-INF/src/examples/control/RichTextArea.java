@@ -92,7 +92,7 @@ public class RichTextArea extends TextArea {
         buffer.append("   theme : \"");
         buffer.append(getTheme());
         buffer.append("\",\n");
-        buffer.append("   mode: \"exact\",\n");
+        buffer.append("   mode : \"exact\",\n");
         buffer.append("   elements : \"");
         buffer.append(getId());
         buffer.append("\"\n");

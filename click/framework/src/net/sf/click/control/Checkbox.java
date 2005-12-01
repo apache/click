@@ -159,7 +159,7 @@ public class Checkbox extends Field {
         }
 
         if (isRequired() && !isChecked()) {
-            error = getMessage("not-checked-error", getLabel());
+            error = getMessage("not-checked-error", getErrorLabel());
         }
 
         return invokeListener();

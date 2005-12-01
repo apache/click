@@ -275,19 +275,19 @@ public class CreditCardField extends TextField {
         final int length = value.length();
         if (length > 0) {
             if (length < getMinLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMinLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMinLength()) };
                 setError(getMessage("field-minlength-error", args));
                 return true;
             }
             if (length > getMaxLength()) {
-                Object[] args = new Object[] { getLabel(), new Integer(getMaxLength()) };
+                Object[] args = new Object[] { getErrorLabel(), new Integer(getMaxLength()) };
                 setError(getMessage("field-maxlength-error", args));
                 return true;
             }
 
             // Shortest valid number is VISA with 13 digits
             if (length < 13) {
-                setError(getMessage("creditcard-number-error", getLabel()));
+                setError(getMessage("creditcard-number-error", getErrorLabel()));
                 return true;
             }
 
@@ -323,7 +323,7 @@ public class CreditCardField extends TextField {
                 }
 
                 if (!isValid) {
-                    setError(getMessage("creditcard-number-error", getLabel()));
+                    setError(getMessage("creditcard-number-error", getErrorLabel()));
                 }
             }
 
@@ -331,7 +331,7 @@ public class CreditCardField extends TextField {
 
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error",  getLabel()));
+                setError(getMessage("field-required-error",  getErrorLabel()));
             }
 
             return true;

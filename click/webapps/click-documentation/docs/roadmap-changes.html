@@ -46,13 +46,20 @@ Features to be included in future releases are:
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-        Improved control localization features, see <a href="faq.html#localization">FAQ</a> for details.
-        This replaces the <tt>"msg:"</tt> prefix localization feature introduced 
-        in release 0.13. This feature is based on a concept developed by Ahmed Mohombe.
+        Improved control localization support, please see 
+        <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field</a>
+        Javadoc and <a href="faq.html#localization">FAQ</a> for details.
+        <p/>
+        This feature based on a concept developed by Ahmed Mohombe,
+        and replaces the <tt>"msg:"</tt> prefix localization functionality
+        introduced in release 0.13. 
       </li>
       <li class="change">
         Added Hibernate data aware Form control
-        <a href="extras-api/net/sf/click/extras/hibernate/HibernateForm.html">HibernateForm</a>.
+        <a href="extras-api/net/sf/click/extras/hibernate/HibernateForm.html">HibernateForm</a>,
+        and supporting
+        <a href="extras-api/net/sf/click/extras/hibernate/SessionContext.html">SessionContext</a> and
+        <a href="extras-api/net/sf/click/extras/hibernate/SessionFilter.html">SessionFilter</a> classes.
       </li> 
       <li class="change">
         Added Menu 
@@ -65,6 +72,27 @@ Features to be included in future releases are:
         to implement Control interface to improve Page subclassing.
       </li>
       <li class="change">
+        Improved Form rendering flexibility with new properties
+        <a href="click-api/net/sf/click/control/Form.html#getLabelRequiredPrefix()">labelRequiredPrefix</a>
+        and
+        <a href="click-api/net/sf/click/control/Form.html#getLabelRequiredSuffix()">labelRequiredSuffix</a>.        
+      </li>
+      <li class="change">
+        Added 
+        <a href="click-api/net/sf/click/control/Select.html#setMultipleValues(java.util.List)">Select</a>
+        <tt>setMultipleValues()</tt> method. This issue was idendified by
+        Geoff Hopson
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-34">34</a>].
+      </li>
+      <li class="change">
+        Added Context
+        <a href="click-api/net/sf/click/Context.html#createPage(java.lang.Class)">createPage()</a>
+        method enabling you to specify the target page by class.
+      </li>
+      <li class="change">Added custom rich text area control demonstration 
+        in Click Examples Email Form page.
+      </li> 
+      <li class="change">
         Fixed Column null value handling bug. This issue was idendified by
         Geoff Hopson
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-32">32</a>].
@@ -73,13 +101,6 @@ Features to be included in future releases are:
         Fixed ActionLink value escaping bug. This issue was idendified by
         Geoff Hopson
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-33">33</a>].
-      </li>
-      <li class="change">
-        Added 
-        <a href="click-api/net/sf/click/control/Select.html#setMultipleValues(java.util.List)">Select</a>
-        <tt>setMultipleValues()</tt> method. This issue was idendified by
-        Geoff Hopson
-        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-34">34</a>].
       </li>
       <li class="change">
         Fixed DateField I18N issue and improved rendering. These issues were 
@@ -91,8 +112,7 @@ Features to be included in future releases are:
         Registered Click JARs with  
         <a target="blank" href="http://www.ibiblio.org/maven/net.sf.click/jars/">Ibiblio Maven</a> Repository.
       </li>
-      <li class="change">Updated documentation, examples and new Email Form 
-        custom Control example.</li> 
+      <li class="change">Updated documentation and examples.</li> 
     </ul>
   </dd>
   <p/> 
