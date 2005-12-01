@@ -27,7 +27,7 @@ import org.hibernate.cfg.Configuration;
  * Provides a thread local Hibernate Session context class. The Hibernate
  * configuration should be defined in class path file:
  * <pre class="codeConfig">
- * /hibernamte.cfg.xml </pre>
+ * /hibernate.cfg.xml </pre>
  *
  * Or alternatively by using System properties.
  * <p/>
@@ -39,8 +39,13 @@ import org.hibernate.cfg.Configuration;
  * configuration.configure();
  * SessionFactory sessionFactory = configuration.buildSessionFactory(); </pre>
  *
+ * To support the SessionContext class configure a {@link SessionFilter} in
+ * your web application.
+ *
+ * @see SessionFilter
+ * @see HibernateForm
+ *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class SessionContext {
 
