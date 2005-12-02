@@ -69,19 +69,19 @@ import org.apache.commons.lang.StringUtils;
 public class Format {
 
     /**
-     * Returns the format empty string value: &nbsp; <tt>&amp;nbsp;</tt>.
-     * <p/>
-     * The preference for <tt>&amp;nbsp;</tt> as a empty string is to ensure
-     * table cells are always rendered non-empty. Note the IE browser does
-     * not fully support CSS attribute: &nbsp; <tt>table { empty-cells: show }</tt>
+     * Returns the format empty string value: &nbsp; <tt>""</tt>
      * <p/>
      * This method is designed to be overridden. If you need a different
      * empty string value simply override this method.
+     * <p/>
+     * Note the IE browser does not fully support CSS attribute: &nbsp;
+     * <tt>table { empty-cells: show }</tt>. Also note returning "&amp;nbsp;"
+     * value will prevent AJAX XML responses being rendered in browsers.
      *
      * @return the formatter methods empty string value
      */
     public String getEmptyString() {
-        return "&nbsp";
+        return "";
     }
 
     /**

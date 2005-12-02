@@ -14,4 +14,4 @@
 9181, Charles Fisher, charles.filser@fisher.com, 58, Stocks, 872050, 2002-02-17, true
 9278, Kylie Simons, ksimons@hotmail.com, 37, Options, 255000, 2002-07-12, false
 9589, Leah Smith, lsmith@halbert.com, 25, Stocks, 55000, 2002-10-13, true
-9589, Zara Smart
+9589, Zara Smart, zsmart@johnsone.co.uk
