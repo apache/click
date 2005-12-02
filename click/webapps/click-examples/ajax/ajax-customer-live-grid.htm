@@ -6,11 +6,11 @@
 		#set ($count = $velocityCount + $offset)
 		<tr>
 			<td>$count</td>
-			<td>$customer.name</td>
+			<td>$format.string($customer.name)</td>
 			<td>$format.email($customer.email)</td>
-			<td>$customer.age</td>
+			<td>$format.string($customer.age)</td>
 			<td>$format.currency($customer.holdings)</td>
-			<td>$customer.investments</td>
+			<td>$format.string($customer.investments)</td>
 			<td>$format.date($customer.dateJoined,'dd-MMM-yyyy')</td>
         </tr>
       #end

@@ -23,10 +23,11 @@ public class SelectDemo extends BorderedPage {
 
     public void onInit() {
         form = new Form("form");
+        form.setErrorsPosition(Form.POSITION_TOP);
         addControl(form);
 
         // Gender Select
-        genderSelect = new Select("Gender");
+        genderSelect = new Select("gender");
         genderSelect.setRequired(true);
         genderSelect.add(new Option("U", ""));
         genderSelect.add(new Option("M", "Male"));
@@ -36,18 +37,18 @@ public class SelectDemo extends BorderedPage {
         // Investment Select
         List investmentOptions = new ArrayList();
 
-        OptionGroup property = new OptionGroup("Property");
+        OptionGroup property = new OptionGroup("property");
         property.add(new Option("Commerical Property", "Commercial"));
         property.add(new Option("Residential Property", "Residential"));
         investmentOptions.add(property);
 
-        OptionGroup securities = new OptionGroup("Securities");
+        OptionGroup securities = new OptionGroup("securities");
         securities.add(new Option("Bonds"));
         securities.add(new Option("Options"));
         securities.add(new Option("Stocks"));
         investmentOptions.add(securities);
 
-        investmentSelect = new Select("Investment");
+        investmentSelect = new Select("investment");
         investmentSelect.setOptionList(investmentOptions);
         investmentSelect.setMultiple(true);
         investmentSelect.setRequired(true);
@@ -55,7 +56,7 @@ public class SelectDemo extends BorderedPage {
         form.add(investmentSelect);
 
         // Location Select
-        locationSelect = new Select("Location");
+        locationSelect = new Select("location");
         locationSelect.add("QLD");
         locationSelect.add("NSW");
         locationSelect.add("NT");
@@ -65,7 +66,13 @@ public class SelectDemo extends BorderedPage {
         locationSelect.add("WA");
         form.add(locationSelect);
 
-        form.add(new Submit("Sumbit"));
+        form.add(new Submit("ok", "   OK   "));
+        form.add(new Submit("canel", this, "onCancelClick"));
+    }
+
+    public boolean onCancelClick() {
+        setRedirect("index.html");
+        return false;
     }
 
     public void onPost() {

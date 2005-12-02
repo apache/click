@@ -18,6 +18,7 @@ public class EmailForm extends BorderedPage {
         form.setLabelsPosition(Form.POSITION_TOP);
         form.setLabelRequiredPrefix("<b>");
         form.setLabelRequiredSuffix("</b>");
+        form.setErrorsPosition(Form.POSITION_TOP);
         addControl(form);
 
         EmailField addressField = new EmailField("address", "To:");
@@ -34,7 +35,6 @@ public class EmailForm extends BorderedPage {
         messageTextArea.setLabel("Message:");
         messageTextArea.setCols(45);
         messageTextArea.setRows(8);
-        messageTextArea.setRequired(true);
         form.add(messageTextArea);
 
         form.add(new Submit("send", "  Send "));
