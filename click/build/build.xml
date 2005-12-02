@@ -59,6 +59,7 @@
             <exclude name="TODO.txt"/>   
             <exclude name="bin/**"/>
             <exclude name="design/**"/>
+            <exclude name="dist/*-src.zip"/>
             <exclude name="lib/${jar.cayenne}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
