@@ -16,39 +16,30 @@ import net.sf.click.extras.cayenne.CayenneForm;
  */
 public class DepartmentEditor extends BorderedPage {
 
-    public static final String DEPARTMENT_EDIT_KEY = 
-        DepartmentEditor.class.getName();
-
     /** The Department editing CayenneForm. */
     protected CayenneForm form = new CayenneForm("form", Department.class);
 
     /**
-     * @see net.sf.click.Page#onInit()
+     * Create a new Department Editor.
      */
-    public void onInit() {
+    public DepartmentEditor() {
         form.setButtonAlign("right");
         addControl(form);
 
         form.add(new TextField("name", "Department Name", 35));
-        form.add(new TextArea("Description", 35, 6));
+        form.add(new TextArea("description", 35, 6));
 
-        form.add(new Submit("   OK   ", this, "onOkClick"));
-        form.add(new Submit("Cancel", this, "onCancelClick"));
+        form.add(new Submit("ok", "   OK   ", this, "onOkClick"));
+        form.add(new Submit("cancel", this, "onCancelClick"));
     }
-
+    
     /**
-     * If the Department has been passed to the page as a request attribute,
-     * then bind the Department object to the data aware CayenneForm.
+     * Set the department object to edit.
      * 
-     * @see net.sf.click.Page#onGet()
+     * @param department the department to edit
      */
-    public void onGet() {
-        Department department = (Department) 
-            getContext().getRequestAttribute(DEPARTMENT_EDIT_KEY);
-        
-        if (department != null) {
-            form.setDataObject(department);
-        }
+    public void setDepartment(Department department) {
+        form.setDataObject(department);
     }
 
     /**
