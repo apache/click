@@ -26,7 +26,7 @@ import java.io.IOException;
 
 /**
  * Provides a Hibernate session filter to support the SessionContext class,
- * ensuring sessions are close at the end of each request.
+ * closing sessions at the end of each request.
  * <p/>
  * To use {@link SessionContext} configure the SessionFilter in you
  * web application's <tt>/WEB-INF/web.xml</tt> file.
