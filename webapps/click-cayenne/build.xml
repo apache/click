@@ -11,7 +11,7 @@
    <property name="jar.lang" value="../../lib/commons-lang-2.1.jar"/>
    <property name="jar.log4j" value="log4j-1.2.9.jar"/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
-   <property name="jar.servlet" value="../../lib/servlet-api-2.4.jar"/>
+   <property name="jar.servlet" value="../../lib/servlet-api-2.3.jar"/>
 	
    <!-- Tasks -->
 
