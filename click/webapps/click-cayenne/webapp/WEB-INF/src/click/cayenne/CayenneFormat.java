@@ -69,13 +69,5 @@ public class CayenneFormat extends Format {
     public String prettyTrim(String value, int maxlength) {
         return Util.prettyTrim(value, maxlength);
     }
-    
-    /**
-     * Return an emptry string value.
-     * 
-     * @see Format#getEmptyString()
-     */
-    public String getEmptyString() {
-        return "";
-    }
+
 }
