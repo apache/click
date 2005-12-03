@@ -15,7 +15,7 @@
 	
    <!-- Tasks -->
 
-   <target name="build" description="build web application WAR file">
+   <target name="build" description="build web application WAR file" depends="compile">
       <delete quiet="true" failonerror="false">
          <fileset dir="webapp/javadoc" includes="**/*"/>
       </delete>
