@@ -340,31 +340,31 @@
  
    <target name="get-deps" description="download JAR dependencies">
       <property name="repository" value="http://www.ibiblio.org/maven"/>
-      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}"
+      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
            dest="lib/${jar.cayenne}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-codec/jars/${jar.codec}"
+      <get src="${repository}/commons-codec/jars/${jar.codec}" verbose="true"
            dest="lib/${jar.codec}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-collections/jars/${jar.collections}"
+      <get src="${repository}/commons-collections/jars/${jar.collections}" verbose="true"
            dest="lib/${jar.collections}"
            usetimestamp="true"/>
-      <get src="${repository}/hibernate/jars/${jar.hibernate}"
+      <get src="${repository}/hibernate/jars/${jar.hibernate}" verbose="true"
            dest="lib/${jar.hibernate}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-lang/jars/${jar.lang}"
+      <get src="${repository}/commons-lang/jars/${jar.lang}" verbose="true"
            dest="lib/${jar.lang}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-fileupload/jars/${jar.upload}"
+      <get src="${repository}/commons-fileupload/jars/${jar.upload}" verbose="true"
            dest="lib/${jar.upload}"
            usetimestamp="true"/>
-      <get src="${repository}/junit/jars/${jar.junit}"
+      <get src="${repository}/junit/jars/${jar.junit}" verbose="true"
            dest="lib/${jar.junit}"
            usetimestamp="true"/>
-      <get src="${repository}/javax.servlet/jars/${jar.servlet}"
+      <get src="${repository}/javax.servlet/jars/${jar.servlet}" verbose="true"
            dest="lib/${jar.servlet}"
            usetimestamp="true"/>
-      <get src="${repository}/springframework/jars/${jar.spring}"
+      <get src="${repository}/springframework/jars/${jar.spring}" verbose="true"
            dest="lib/${jar.spring}"
            usetimestamp="true"/>
    </target>
