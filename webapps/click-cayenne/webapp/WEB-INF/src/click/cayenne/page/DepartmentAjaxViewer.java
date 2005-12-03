@@ -65,11 +65,14 @@ public class DepartmentAjaxViewer extends CayennePage {
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();
         if (id != null) {
-            DataObject dataObject = getDataObject(Department.class, id);
-            getContext().setRequestAttribute(DepartmentEditor.DEPARTMENT_EDIT_KEY, 
-                                             dataObject);
+            Department department = 
+                (Department) getDataObject(Department.class, id);
             
-            setForward("department-editor.htm");
+            DepartmentEditor departmentEditor = (DepartmentEditor) 
+                getContext().createPage(DepartmentEditor.class);
+            departmentEditor.setDepartment(department);
+            
+            setForward(departmentEditor);
         }
 
         return false;

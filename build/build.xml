@@ -28,7 +28,7 @@
            description="build Click framework, extras and webapps"/>
 
    <target name="build-distribution" 
-           depends="build-framework, build-extras, build-webapps, javadoc" 
+           depends="clean, build-framework, build-extras, build-webapps, javadoc" 
            description="build distribution ZIP file">
       <!--  "click-documentation" WAR -->
       <available file="webapps/click-documentation/index.html" property="isDocAvail"/>
@@ -312,6 +312,11 @@
             <exclude name="**/web.xml"/>
          </fileset>
       </war>
+   </target>
+   
+   <target name="clean"> 
+      <delete dir="dist" quiet="false"/>
+      <mkdir dir="dist"/>
    </target>
 
    <target name="deploy-examples"> 
