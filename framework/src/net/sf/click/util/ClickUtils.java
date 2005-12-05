@@ -146,7 +146,7 @@ public class ClickUtils {
         Method[] methods = object.getClass().getMethods();
 
         final List fieldList = getFormFields(form);
-        
+
         if (debug && fieldList.isEmpty()) {
             String msg = "[Click] [debug] Form has no fields to copy from";
             System.out.println(msg);
@@ -298,7 +298,7 @@ public class ClickUtils {
         Method[] methods = object.getClass().getMethods();
 
         final List fieldList = getFormFields(form);
-        
+
         if (debug && fieldList.isEmpty()) {
             String msg = "[Click] [debug] Form has no fields to copy to";
             System.out.println(msg);

@@ -4,8 +4,7 @@ import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 
 /**
- * Provides examples of the Click Exception handling which includes a broken
- * Velocity template and a broken event listener.
+ * Provides examples of the Click Exception handling.
  *
  * @author Malcolm Edgar
  */
