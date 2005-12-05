@@ -340,31 +340,31 @@
  
    <target name="get-deps" description="download JAR dependencies">
       <property name="repository" value="http://www.ibiblio.org/maven"/>
-      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
+      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}"
            dest="lib/${jar.cayenne}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-codec/jars/${jar.codec}" verbose="true"
+      <get src="${repository}/commons-codec/jars/${jar.codec}"
            dest="lib/${jar.codec}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-collections/jars/${jar.collections}" verbose="true"
+      <get src="${repository}/commons-collections/jars/${jar.collections}"
            dest="lib/${jar.collections}"
            usetimestamp="true"/>
-      <get src="${repository}/hibernate/jars/${jar.hibernate}" verbose="true"
+      <get src="${repository}/hibernate/jars/${jar.hibernate}"
            dest="lib/${jar.hibernate}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-lang/jars/${jar.lang}" verbose="true"
+      <get src="${repository}/commons-lang/jars/${jar.lang}"
            dest="lib/${jar.lang}"
            usetimestamp="true"/>
-      <get src="${repository}/commons-fileupload/jars/${jar.upload}" verbose="true"
+      <get src="${repository}/commons-fileupload/jars/${jar.upload}"
            dest="lib/${jar.upload}"
            usetimestamp="true"/>
-      <get src="${repository}/junit/jars/${jar.junit}" verbose="true"
+      <get src="${repository}/junit/jars/${jar.junit}"
            dest="lib/${jar.junit}"
            usetimestamp="true"/>
-      <get src="${repository}/javax.servlet/jars/${jar.servlet}" verbose="true"
+      <get src="${repository}/javax.servlet/jars/${jar.servlet}"
            dest="lib/${jar.servlet}"
            usetimestamp="true"/>
-      <get src="${repository}/springframework/jars/${jar.spring}" verbose="true"
+      <get src="${repository}/springframework/jars/${jar.spring}"
            dest="lib/${jar.spring}"
            usetimestamp="true"/>
    </target>
