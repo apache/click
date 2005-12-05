@@ -46,8 +46,22 @@ Features to be included in future releases are:
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Modified <a href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a> 
+        to enable direct ServletResponse handling by 
+        Pages. See Click Examples Direct Page for a demonstration.
+      </li>
+      <li class="change">
+        Modified <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+        to set Spring ApplicationContext in pages implementing 
+        <tt>ApplicationContextAware</tt> interface.
+      </li>
+      <li class="change">
         Fixed Click 0.16 integration issues with Velocity 1.5-dev snapshot and 
-        Cayenne M6.
+        Cayenne 1.2.
+      </li>
+      <li class="change">
+        Registered Click JARs with  
+        <a target="blank" href="http://www.ibiblio.org/maven/net.sf.click/jars/">Ibiblio Maven</a> Repository.
       </li>
     </ul>
   </dd>
@@ -123,10 +137,6 @@ Features to be included in future releases are:
         <a href="click-api/net/sf/click/util/Format.html#getEmptyString()">getEmptyString()</a>
         to return "" strings to better support AJAX rendering. 
         This issue was idendified by Andrus Adamchik.
-      </li>
-      <li class="change">
-        Registered Click JARs with  
-        <a target="blank" href="http://www.ibiblio.org/maven/net.sf.click/jars/">Ibiblio Maven</a> Repository.
       </li>
       <li class="change">Updated documentation and examples.</li> 
     </ul>

@@ -477,9 +477,10 @@ public class ClickServlet extends HttpServlet {
             renderTemplate(page);
 
         } else {
-            String msg =
-                "Path not defined for Page " + page.getClass().getName();
-            throw new RuntimeException(msg);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Page path not defined for " +
+                             page.getClass().getName());
+            }
         }
     }
 

@@ -116,8 +116,8 @@ public class SourceViewer extends BorderedPage {
             isHtml = name.endsWith(".jsp");
         }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                inputStream));
+        BufferedReader reader =
+            new BufferedReader(new InputStreamReader(inputStream));
 
         StringBuffer buffer = new StringBuffer();
 

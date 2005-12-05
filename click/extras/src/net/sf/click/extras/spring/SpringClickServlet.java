@@ -21,7 +21,8 @@ import javax.servlet.UnavailableException;
 import net.sf.click.ClickServlet;
 import net.sf.click.Page;
 
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
@@ -38,8 +39,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
  *     String beanName = pageClass.getName();
  *
- *     <span class="kw">if</span> (beanFactory.containsBean(beanName)) {
- *         <span class="kw">return</span> (Page) beanFactory.getBean(beanName);
+ *     <span class="kw">if</span> (applicationContext.containsBean(beanName)) {
+ *         Page page = (Page) applicationContext.getBean(beanName);
+ *
+ *         <span class="kw">if</span> (page instanceof ApplicationContextAware) {
+ *             ApplicationContextAware aware =
+ *                 (ApplicationContextAware) page;
+ *             aware.setApplicationContext(applicationContext);
+ *         }
+ *
+ *         <span class="kw">return</span> page;
  *
  *     } <span class="kw">else</span> {
  *         <span class="kw">return</span> pageClass.newIntance();
@@ -68,7 +77,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *         String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
  *         <span class="kw">throw new</span> UnavailableException(msg);
  *     }
- *     beanFactory = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
+ *     applicationContext = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
  * } </pre>
  *
  * The <tt class="blue">spring-path</tt> servlet initialization parameter
@@ -109,8 +118,8 @@ public class SpringClickServlet extends ClickServlet {
      */
     public static final String SPRING_PATH = "spring-path";
 
-    /** Spring bean factory. */
-    protected BeanFactory beanFactory;
+    /** Spring application context bean factory. */
+    protected ApplicationContext applicationContext;
 
     /**
      * Initialize the SpringClickServlet and the Spring application context
@@ -128,21 +137,32 @@ public class SpringClickServlet extends ClickServlet {
             String msg = SPRING_PATH + " servlet init parameter not defined";
             throw new UnavailableException(msg);
         }
-        beanFactory = new ClassPathXmlApplicationContext(springPath);
+        applicationContext = new ClassPathXmlApplicationContext(springPath);
     }
 
     /**
      * Create a new Spring Page bean if defined in the application context, or
      * a new Page instance otherwise. The bean name used is the full class name
      * of the given pageClass.
+     * <p/>
+     * If the Page implements the <tt>ApplicationContextAware</tt> interface
+     * this method will set the application context in the newly created page.
      *
      * @see ClickServlet#newPageInstance(String, Class)
      */
     protected Page newPageInstance(String path, Class pageClass) throws Exception {
         String beanName = pageClass.getName();
 
-        if (beanFactory.containsBean(beanName)) {
-            return (Page) beanFactory.getBean(beanName);
+        if (applicationContext.containsBean(beanName)) {
+            Page page = (Page) applicationContext.getBean(beanName);
+
+            if (page instanceof ApplicationContextAware) {
+                ApplicationContextAware aware =
+                    (ApplicationContextAware) page;
+                aware.setApplicationContext(applicationContext);
+            }
+
+            return page;
 
         } else {
             return (Page) pageClass.newInstance();
