@@ -247,7 +247,7 @@ public class TabbedPanel extends BasicPanel {
      *
      * @param panel
      */
-    private void setActivePanel(Panel panel) {
+    protected void setActivePanel(Panel panel) {
         // remove the existing 'active panel'
         removeModel("_tp_activePanel");
         // add the passed in panel as the 'new' active panel
