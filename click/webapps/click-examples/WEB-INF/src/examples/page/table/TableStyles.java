@@ -20,23 +20,20 @@ public class TableStyles extends BorderedPage {
         "isi", "its", "mars", "simple", "report",
     };
 
-    Table table;
-    Select styleSelect;
+    private Table table = new Table("table");;
+    private Select styleSelect = new Select("style", "Table Style:");
 
-    public void onInit() {
-
+    public TableStyles() {
         // Setup table style select.
         Form form = new Form("form");
         form.setMethod("GET");
         addControl(form);
 
-        styleSelect = new Select("Table Style:");
         styleSelect.addAll(STYLES);
         styleSelect.setAttribute("onchange", "this.form.submit();");
         form.add(styleSelect);
 
         // Setup customers table
-        table = new Table("table");
         table.setAttribute("class", styleSelect.getValue());
 
         table.addColumn(new Column("id"));

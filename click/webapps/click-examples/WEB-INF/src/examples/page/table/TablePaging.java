@@ -14,10 +14,9 @@ import examples.page.BorderedPage;
  */
 public class TablePaging extends BorderedPage {
 
-    Table table;
+    private Table table;
 
-    public void onInit() {
-
+    public TablePaging() {
         // Setup customers table
         table = new Table("table");
         table.setAttribute("class", "its");
@@ -40,10 +39,11 @@ public class TablePaging extends BorderedPage {
         column.setAttribute("style", "{text-align:right;}");
         table.addColumn(column);
 
-        List customers = CustomerDAO.getCustomersSortedByName();
-        table.setRowList(customers);
-
         addControl(table);
     }
 
+    public void onGet() {
+        List customers = CustomerDAO.getCustomersSortedByName();
+        table.setRowList(customers);
+    }
 }

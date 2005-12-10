@@ -23,8 +23,7 @@ public class TableDecorator extends BorderedPage {
     ActionLink editLink = new ActionLink("edit");
     ActionLink deleteLink = new ActionLink("delete");
 
-    public void onInit() {
-
+    public TableDecorator() {
         // Setup customers table
         table.setAttribute("class", "simple");
 
