@@ -1131,9 +1131,12 @@ public class Form implements Control {
         }
         this.name = name;
 
-        HiddenField nameField = new HiddenField(FORM_NAME, String.class);
+        HiddenField nameField = (HiddenField) getField(FORM_NAME);
+        if (nameField == null) {
+            nameField = new HiddenField(FORM_NAME, String.class);
+            add(nameField);
+        }
         nameField.setValue(name);
-        add(nameField);
     }
 
     /**
@@ -1225,7 +1228,7 @@ public class Form implements Control {
      * attributes:
      *
      * <pre class="codeJava">
-     *  &lt;span class=&quot;kw&quot;&gt;public void&lt;/span&gt; onGet() {
+     *  <span class="kw">public void</span> onGet() {
      *     Long customerId = ..
      *     Customer customer = CustomerDAO.findByPK(customerId);
      *     form.copyFrom(customer);
@@ -1262,13 +1265,13 @@ public class Form implements Control {
      * Form's field values:
      *
      * <pre class="codeJava">
-     *  &lt;span class=&quot;kw&quot;&gt;public void&lt;/span&gt; onPost() {
-     *      &lt;span class=&quot;kw&quot;&gt;if&lt;/span&gt; (form.isValid()) {
-     *         Customer customer = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; Customer();
+     *  <span class="kw">public void</span> onPost() {
+     *      <span class="kw">if</span> (form.isValid()) {
+     *         Customer customer = <span class="kw">new</span> Customer();
      *         form.copyTo(customer);
      *         ..
      *      }
-     *      &lt;span class=&quot;kw&quot;&gt;return true&lt;/span&gt;;
+     *      <span class="kw">return true</span>;
      *  }
      * </pre>
      *
