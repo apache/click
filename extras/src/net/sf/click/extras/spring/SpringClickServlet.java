@@ -37,22 +37,24 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *
  * <pre class="codeJava">
  * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
+ *     Page page = <span class="kw">null</span>;
+ *
  *     String beanName = pageClass.getName();
  *
  *     <span class="kw">if</span> (applicationContext.containsBean(beanName)) {
  *         Page page = (Page) applicationContext.getBean(beanName);
  *
- *         <span class="kw">if</span> (page instanceof ApplicationContextAware) {
- *             ApplicationContextAware aware =
- *                 (ApplicationContextAware) page;
- *             aware.setApplicationContext(applicationContext);
- *         }
- *
- *         <span class="kw">return</span> page;
- *
  *     } <span class="kw">else</span> {
- *         <span class="kw">return</span> pageClass.newIntance();
+ *         page = (Page) pageClass.newIntance();
  *     }
+ *
+ *     <span class="kw">if</span> (page instanceof ApplicationContextAware) {
+ *         ApplicationContextAware aware =
+ *             (ApplicationContextAware) page;
+ *         aware.setApplicationContext(applicationContext);
+ *     }
+ *
+ *     <span class="kw">return</span> page;
  * } </pre>
  *
  * Spring Page beans are defined in a Sring application context XML file.
@@ -151,22 +153,24 @@ public class SpringClickServlet extends ClickServlet {
      * @see ClickServlet#newPageInstance(String, Class)
      */
     protected Page newPageInstance(String path, Class pageClass) throws Exception {
+        Page page = null;
+
         String beanName = pageClass.getName();
 
         if (applicationContext.containsBean(beanName)) {
-            Page page = (Page) applicationContext.getBean(beanName);
-
-            if (page instanceof ApplicationContextAware) {
-                ApplicationContextAware aware =
-                    (ApplicationContextAware) page;
-                aware.setApplicationContext(applicationContext);
-            }
-
-            return page;
+            page = (Page) applicationContext.getBean(beanName);
 
         } else {
-            return (Page) pageClass.newInstance();
+            page = (Page) pageClass.newInstance();
         }
+
+        if (page instanceof ApplicationContextAware) {
+            ApplicationContextAware aware =
+                (ApplicationContextAware) page;
+            aware.setApplicationContext(applicationContext);
+        }
+
+        return page;
     }
 
 }
