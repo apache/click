@@ -3,7 +3,9 @@
     <!ATTLIST menu label CDATA #IMPLIED>
     <!ATTLIST menu path CATA #IMPLIED>
     <!ATTLIST menu title CATA #IMPLIED>
-    <!ATTLIST menu roles CATA #IMPLIED>   
+    <!ATTLIST menu roles CATA #IMPLIED>
+    <!ATTLIST menu pages CATA #IMPLIED>
+
   
   
   
