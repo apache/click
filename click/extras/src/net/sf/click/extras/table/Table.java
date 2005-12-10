@@ -652,13 +652,7 @@ public class Table implements Control {
      * @return true
      */
     public boolean onPagingClick() {
-        int page = pagingLink.getValueInteger().intValue();
-
-        // Range sanity check
-        page = Math.min(page, getRowList().size() -1);
-        page = Math.max(page, 0);
-
-        setPageNumber(page);
+        setPageNumber(pagingLink.getValueInteger().intValue());
 
         return true;
     }
@@ -725,6 +719,11 @@ public class Table implements Control {
         buffer.append("<tbody>\n");
 
         final List tableRows = getRowList();
+
+        // Range sanity check
+        int pageNumber = Math.min(getPageNumber(), getRowList().size() -1);
+        pageNumber = Math.max(pageNumber, 0);
+        setPageNumber(pageNumber);
 
         int firstRow = getFirstRow();
         int lastRow = getLastRow();
