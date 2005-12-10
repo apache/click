@@ -377,7 +377,10 @@ public class Column implements Serializable {
         buffer.closeTag();
 
         if (getDecorator() != null) {
-            buffer.append(getDecorator().render(row, context));
+            Object value = getDecorator().render(row, context);
+            if (value != null) {
+                buffer.append(value);
+            }
 
         } else {
             Object columnValue = getProperty(row);
