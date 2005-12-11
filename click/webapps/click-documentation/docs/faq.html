@@ -344,23 +344,14 @@ public interface Controller {
   <a name="jsp-support" class="heading"></a>
   <dt><b>Does Click support JSP?</b></dt>
   <dd>
-   Click does provide support for JSP pages. 
-   However JSP pages are not fully integated into Click like Velocity templates. This 
-   will change in the near future and JSP pages will become first class citizens.
+   Click fully supports JSP pages. 
    <p/>
-   To forward to a JSP page for rendering simply set the Page forward to the target JSP. 
-   For example:
-
-<pre class="codeJava">
-<span class="kw">public class</span> CustomersTable <span class="kw">extends</span> Page {
-
-    <span class="kw">public void</span> onGet() {
-        List customers = CustomerDAO.getCustomers();
-        addModel(<span class="st">"customers"</span>, customers);        
-        setForward(<span class="st">"customers-table.jsp"</span>);
-    }
-} </pre>
-
+   JSP Pages can be automatically loaded, like Velocity templates, or they can be explicitly defined in the
+   <tt>click.xml</tt> file.
+   
+ <pre class="codeConfig">
+&lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
+   
    The page's model data values are automatically added to the request as
    attributes so they are available in the JSP page. Other Click values added 
    as request attributes include:
@@ -378,18 +369,13 @@ public interface Controller {
    for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method
   </li>
-  <li>path &nbsp; - &nbsp; the <a href="click-api/net/sf/click/Page.html#path">path</a> 
-    of the page template to render
+  <li>path &nbsp; - &nbsp; the mapped <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page which will have a .htm extension
   </li>
    </ul>
    <p/>
-   To have this <tt>CustomersTable</tt> page automatically handle <tt>GET customer-table.htm</tt> 
-   requests you will need to create an empty <tt>customer-table.htm</tt> file and
-   use either configure page automapping or add a page definition in <tt>click.xml</tt>. 
-   For example:
 
-<pre class="codeConfig">
-&lt;page path="<span class="blue">customers-table.htm</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
+
   </dd>
 
 
