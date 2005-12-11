@@ -305,6 +305,11 @@ class ClickApp implements EntityResolver {
         // If in production or profile mode.
         if (mode <= PROFILE) {
             PageElm page = (PageElm) pageByPathMap.get(path);
+            if (page == null) {
+                String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+                page = (PageElm) pageByPathMap.get(jspPath);
+            }
+            
             if (page != null) {
                 return page.getPageClass();
             } else {
@@ -316,6 +321,11 @@ class ClickApp implements EntityResolver {
 
             synchronized(PAGE_LOAD_LOCK) {
                 PageElm page = (PageElm) pageByPathMap.get(path);
+                if (page == null) {
+                    String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+                    page = (PageElm) pageByPathMap.get(jspPath);
+                }
+
                 if (page != null) {
                     return page.getPageClass();
                 }
@@ -372,7 +382,11 @@ class ClickApp implements EntityResolver {
      */
     Object getPageFormat(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
-
+        if (page == null) {
+            String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+            page = (PageElm) pageByPathMap.get(jspPath);
+        }
+        
         if (page != null) {
             try {
                 return page.getFormatClass().newInstance();
@@ -394,7 +408,11 @@ class ClickApp implements EntityResolver {
      */
     Map getPageHeaders(String path) {
         PageElm page = (PageElm) pageByPathMap.get(path);
-
+        if (page == null) {
+            String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+            page = (PageElm) pageByPathMap.get(jspPath);
+        }
+        
         if (page != null) {
             return page.getHeaders();
         } else {
@@ -982,7 +1000,7 @@ class ClickApp implements EntityResolver {
         for (Iterator i = resources.iterator(); i.hasNext();) {
             String resource = (String) i.next();
 
-            if (resource.endsWith(".htm")) {
+            if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
                 fileList.add(resource);
 
             } else if (resource.endsWith("/")) {

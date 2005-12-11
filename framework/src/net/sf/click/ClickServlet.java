@@ -878,7 +878,7 @@ public class ClickServlet extends HttpServlet {
         if (format != null) {
            request.setAttribute("format", format);
         }
-
+System.out.println("format="+request.getAttribute("format"));
         Object path = page.getPath();
         if (path != null) {
            request.setAttribute("path", path);
@@ -948,7 +948,13 @@ public class ClickServlet extends HttpServlet {
 
                 newPage.setFormat(clickApp.getPageFormat(path));
                 newPage.setHeaders(clickApp.getPageHeaders(path));
-                newPage.setPath(path);
+                
+                if (path.endsWith(".jsp")) {
+                    newPage.setPath(null);
+                    newPage.setForward(path);
+                } else {
+                    newPage.setPath(path);
+                }
 
                 return newPage;
 

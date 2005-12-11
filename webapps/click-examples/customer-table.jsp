@@ -82,14 +82,13 @@ for (int i = 0; i < customers.size(); i++) {
 
 <p>&nbsp;</p>
 
-The <tt>CustomerTable</tt> page is automatically mapped to the request
+The <tt>CustomerTable</tt> page is automatically mapped to the request:
 
 <pre class="codeConfig">
 GET customer-table.htm </pre>
 
-by using an empty <span class="st">customer-table.htm</span> file. 
 When pages are configured to use automapping the <tt>ClickServlet</tt>
-will automatically associated the file path <tt>customer-table.htm</tt>
+will automatically associated the file path <tt>customer-table.jsp</tt>
 with the page class <tt>CustomerTable</tt>. 
 
 </body>
