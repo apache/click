@@ -948,7 +948,7 @@ System.out.println("format="+request.getAttribute("format"));
 
                 newPage.setFormat(clickApp.getPageFormat(path));
                 newPage.setHeaders(clickApp.getPageHeaders(path));
-                
+
                 if (path.endsWith(".jsp")) {
                     newPage.setPath(null);
                     newPage.setForward(path);
