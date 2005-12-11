@@ -309,7 +309,7 @@ class ClickApp implements EntityResolver {
                 String jspPath = StringUtils.replace(path, ".htm", ".jsp");
                 page = (PageElm) pageByPathMap.get(jspPath);
             }
-            
+
             if (page != null) {
                 return page.getPageClass();
             } else {
@@ -386,7 +386,7 @@ class ClickApp implements EntityResolver {
             String jspPath = StringUtils.replace(path, ".htm", ".jsp");
             page = (PageElm) pageByPathMap.get(jspPath);
         }
-        
+
         if (page != null) {
             try {
                 return page.getFormatClass().newInstance();
@@ -412,7 +412,7 @@ class ClickApp implements EntityResolver {
             String jspPath = StringUtils.replace(path, ".htm", ".jsp");
             page = (PageElm) pageByPathMap.get(jspPath);
         }
-        
+
         if (page != null) {
             return page.getHeaders();
         } else {
