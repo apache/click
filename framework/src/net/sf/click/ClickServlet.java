@@ -39,6 +39,7 @@ import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
 import net.sf.click.util.SessionMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ParseErrorException;
@@ -585,7 +586,7 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Return a new Page instance for the given request. This method will
-     * invoke {@link #newPageInstance(String, Class)} to create
+     * invoke {@link #initPage(String, Class)} to create
      * the Page instance and then set the properties on the page.
      *
      * @param request the servlet request
@@ -620,13 +621,34 @@ public class ClickServlet extends HttpServlet {
             path = ClickApp.NOT_FOUND_PATH;
         }
 
+        Page page = initPage(path, pageClass);
+
+        page.setContext(context);
+
+        return page;
+    }
+
+    /**
+     * Initialize a new page instance using
+     * {@link #newPageInstance(String, Class)} method and setting format,
+     * headers and the forward if a JSP.
+     *
+     * @param path the
+     * @param pageClass
+     * @return
+     */
+    protected Page initPage(String path, Class pageClass) {
         try {
             Page newPage = newPageInstance(path, pageClass);
 
-            newPage.setContext(context);
             newPage.setFormat(clickApp.getPageFormat(path));
             newPage.setHeaders(clickApp.getPageHeaders(path));
-            newPage.setPath(path);
+
+            if (clickApp.isJspPage(path)) {
+                newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
+            } else {
+                newPage.setPath(path);
+            }
 
             return newPage;
 
@@ -878,7 +900,7 @@ public class ClickServlet extends HttpServlet {
         if (format != null) {
            request.setAttribute("format", format);
         }
-System.out.println("format="+request.getAttribute("format"));
+
         Object path = page.getPath();
         if (path != null) {
            request.setAttribute("path", path);
@@ -912,18 +934,7 @@ System.out.println("format="+request.getAttribute("format"));
                 throw new IllegalArgumentException(msg);
             }
 
-            try {
-                Page newPage = newPageInstance(path, pageClass);
-
-                newPage.setFormat(clickApp.getPageFormat(path));
-                newPage.setHeaders(clickApp.getPageHeaders(path));
-                newPage.setPath(path);
-
-                return newPage;
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            return initPage(path, pageClass);
         }
 
         /**
@@ -943,24 +954,7 @@ System.out.println("format="+request.getAttribute("format"));
                 throw new IllegalArgumentException(msg);
             }
 
-            try {
-                Page newPage = newPageInstance(path, pageClass);
-
-                newPage.setFormat(clickApp.getPageFormat(path));
-                newPage.setHeaders(clickApp.getPageHeaders(path));
-
-                if (path.endsWith(".jsp")) {
-                    newPage.setPath(null);
-                    newPage.setForward(path);
-                } else {
-                    newPage.setPath(path);
-                }
-
-                return newPage;
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            return initPage(path, pageClass);
         }
     }
 }

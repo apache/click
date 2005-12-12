@@ -295,6 +295,17 @@ class ClickApp implements EntityResolver {
     }
 
     /**
+     * Return true if JSP exists for the given ".htm" path.
+     *
+     * @param path the Page ".htm" path
+     * @return true if JSP exists for the given ".htm" path
+     */
+    boolean isJspPage(String path) {
+        String jspPath = StringUtils.replace(path, ".htm", ".jsp");
+        return pageByPathMap.containsKey(jspPath);
+    }
+
+    /**
      * Return the page <tt>Class</tt> for the given path.
      *
      * @param path the page path
