@@ -44,25 +44,25 @@ public class FormProperties extends BorderedPage {
         String dateJoined = "";
     }
 
-    Form form;
-    TextField nameField;
-    EmailField emailField;
-    InvestmentSelect investmentsField;
-    DateField dateJoinedField;
+    private Form form;
+    private TextField nameField;
+    private EmailField emailField;
+    private InvestmentSelect investmentsField;
+    private DateField dateJoinedField;
 
-    Form optionsForm;
-    Select buttonAlignSelect;
-    Select errorsAlignSelect;
-    Select errorsPositionSelect;
-    Select labelAlignSelect;
-    Select labelsPositionSelect;
-    Select columnsSelect;
-    Checkbox showBordersCheckbox;
-    Checkbox disabledCheckbox;
-    Checkbox readonlyCheckbox;
-    Checkbox validateCheckbox;
+    private Form optionsForm;
+    private Select buttonAlignSelect;
+    private Select errorsAlignSelect;
+    private Select errorsPositionSelect;
+    private Select labelAlignSelect;
+    private Select labelsPositionSelect;
+    private Select columnsSelect;
+    private Checkbox showBordersCheckbox;
+    private Checkbox disabledCheckbox;
+    private Checkbox readonlyCheckbox;
+    private Checkbox validateCheckbox;
 
-    public void onInit() {
+    public FormProperties() {
         //--------------------------
         // Setup demonstration form.
         form = new Form("form");
@@ -160,7 +160,12 @@ public class FormProperties extends BorderedPage {
         // setting the body onload function.
         addModel("head-include", "form-head.htm");
         addModel("body-onload", "toggleBorders(document.optionsForm.showBorders);");
+    }
 
+    /**
+     * @see Page#onInit()
+     */
+    public void onInit() {
         // Apply saved options to the demo form and the optionsForm
         Options options = (Options) getContext().getSessionObject(Options.class);
         applyOptions(options);

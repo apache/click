@@ -11,19 +11,12 @@ import net.sf.click.control.ActionLink;
  */
 public class NavigationA extends BorderedPage {
 
-    ActionLink forwardLink;
-    ActionLink forwardParamLink;
-    ActionLink redirectLink;
-    ActionLink redirectParamLink;
+    private ActionLink forwardLink;
+    private ActionLink forwardParamLink;
+    private ActionLink redirectLink;
+    private ActionLink redirectParamLink;
 
-    public String getTarget() {
-        return "/navigation-b.htm";
-    }
-
-    /**
-     * @see Page#onInit()
-     */
-    public void onInit() {
+    public NavigationA() {
         // Initialize action links
         forwardLink = new ActionLink("forwardLink");
         forwardLink.setListener(this, "onForwardClick");
@@ -40,7 +33,12 @@ public class NavigationA extends BorderedPage {
         redirectParamLink = new ActionLink("redirectParamLink");
         redirectParamLink.setListener(this, "onRedirectParamClick");
         addControl(redirectParamLink);
+    }
 
+    /**
+     * @see Page#onInit()
+     */
+    public void onInit() {
         // Initialise param ActionLink values from any parameters passed through
         // from other pages via forwards or redirects.
         Integer number = new Integer(1);
@@ -63,6 +61,10 @@ public class NavigationA extends BorderedPage {
 
         forwardParamLink.setValue(number.toString());
         redirectParamLink.setValue(number.toString());
+    }
+
+    public String getTarget() {
+        return "/navigation-b.htm";
     }
 
     public boolean onForwardClick() {

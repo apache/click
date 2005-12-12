@@ -19,7 +19,7 @@ public class SearchForm extends BorderedPage {
     private TextField textField;
     private Select typeSelect;
 
-    public void onInit() {
+    public SearchForm() {
         form = new Form("form");
         addControl(form);
 
@@ -34,6 +34,9 @@ public class SearchForm extends BorderedPage {
         form.add(new Submit("go"));
     }
 
+    /**
+     * @see Page#onPost()
+     */
     public void onPost() {
         Customer customer = null;
         String value = textField.getValue().trim();
