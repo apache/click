@@ -16,12 +16,12 @@ import net.sf.click.control.Submit;
  */
 public class SelectDemo extends BorderedPage {
 
-    Form form;
-    Select genderSelect;
-    Select investmentSelect;
-    Select locationSelect;
+    private Form form;
+    private Select genderSelect;
+    private Select investmentSelect;
+    private Select locationSelect;
 
-    public void onInit() {
+    public SelectDemo() {
         form = new Form("form");
         form.setErrorsPosition(Form.POSITION_TOP);
         addControl(form);
@@ -75,6 +75,9 @@ public class SelectDemo extends BorderedPage {
         return false;
     }
 
+    /**
+     * @see Page#onPost()
+     */
     public void onPost() {
         if (form.isValid()) {
             addModel("gender", genderSelect.getValue());

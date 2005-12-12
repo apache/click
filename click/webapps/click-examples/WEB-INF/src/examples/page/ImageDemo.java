@@ -11,9 +11,9 @@ import net.sf.click.control.Label;
  */
 public class ImageDemo extends BorderedPage {
 
-    ImageSubmit colorSubmit;
+    private ImageSubmit colorSubmit;
 
-    public void onInit() {
+    public ImageDemo() {
         // Buttons Form
         Form buttonsForm = new Form("buttonsForm");
         addControl(buttonsForm);
@@ -32,7 +32,7 @@ public class ImageDemo extends BorderedPage {
         Form form = new Form("form");
         addControl(form);
 
-        form.add(new Label("<b>Color Chooser</b>"));
+        form.add(new Label("label", "<b>Color Chooser</b>"));
 
         colorSubmit = new ImageSubmit("submit", "images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");

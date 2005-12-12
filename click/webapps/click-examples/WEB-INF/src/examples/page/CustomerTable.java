@@ -18,6 +18,5 @@ public class CustomerTable extends BorderedPage {
     public void onGet() {
         List customers = CustomerDAO.getCustomersSortedByName(10);
         addModel("customers", customers);
-        setForward("customer-table.jsp");
     }
 }

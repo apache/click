@@ -24,9 +24,9 @@ import net.sf.click.util.ClickUtils;
  */
 public class FieldSetDemo extends BorderedPage {
 
-    Form form = new Form("form");
+    private Form form = new Form("form");
 
-    public void onInit() {
+    public FieldSetDemo() {
         addControl(form);
 
         // Delivery fieldset

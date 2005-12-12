@@ -10,12 +10,9 @@ import net.sf.click.control.ActionLink;
  */
 public class ExceptionDemo extends BorderedPage {
 
-    String template;
+    private String template;
 
-    /**
-     * @see Page#onInit()
-     */
-    public void onInit() {
+    public ExceptionDemo() {
         ActionLink nullPointerLink = new ActionLink("nullPointerLink");
         nullPointerLink.setListener(this, "onNullPointerClick");
         addControl(nullPointerLink);

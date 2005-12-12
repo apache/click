@@ -22,13 +22,10 @@ import examples.domain.CustomerDAO;
  */
 public class EditCustomer extends BorderedPage {
 
-    Form form = new Form("form");
-    HiddenField referrerField = new HiddenField("referrer", String.class);
+    private Form form = new Form("form");
+    private HiddenField referrerField = new HiddenField("referrer", String.class);
 
-    /**
-     * @see Page#onInit()
-     */
-    public void onInit() {
+    public EditCustomer() {
         addControl(form);
 
         form.add(referrerField);
