@@ -42,15 +42,13 @@ public class PasswordField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a PasswordField with the given label. The default password
+     * Construct a PasswordField with the given name. The default password
      * field size is 20 characters.
-     * <p/>
-     * The field name will be Java property representation of the given label.
      *
-     * @param label the label of the field
+     * @param name the name of the field
      */
-    public PasswordField(String label) {
-        super(label);
+    public PasswordField(String name) {
+        super(name);
     }
 
     /**
