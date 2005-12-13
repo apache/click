@@ -122,7 +122,7 @@ public class TextField extends Field {
      * @param required the field required status
      */
     public TextField(String name, String label, boolean required) {
-        super(label, label);
+        super(name, label);
         setRequired(required);
     }
 
