@@ -110,16 +110,12 @@ method.
 
     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
 
-    <span class="jd">/**
-     * @see Page#onInit()
-     */</span>
-    <span class="kw">public void</span> onInit() {
-        addControl(form);
- 
+    <span class="kw">public</span> Login() { 
         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
+        addControl(form);
     }
 
     <span class="kw">public boolean</span> onOkClicked() {
