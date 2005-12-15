@@ -7,7 +7,7 @@ package examples.page;
  */
 public class AppReloading extends BorderedPage {
 
-    public void onInit() {
+    public AppReloading() {
         getModel().put("title", "Application Reloading");
     }
 

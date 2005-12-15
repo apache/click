@@ -19,7 +19,6 @@ public class FileUpload extends BorderedPage {
     public FileUpload() {
         form = new Form("form");
         form.setLabelsPosition("top");
-        addControl(form);
 
         fileField = new FileField("selectFile");
         fileField.setRequired(true);
@@ -31,6 +30,8 @@ public class FileUpload extends BorderedPage {
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+
+        addControl(form);
     }
 
     public boolean onOkClick() {

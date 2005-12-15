@@ -63,10 +63,10 @@ public class FormProperties extends BorderedPage {
     private Checkbox validateCheckbox;
 
     public FormProperties() {
-        //--------------------------
-        // Setup demonstration form.
+
+        // Setup demonstration form
+
         form = new Form("form");
-        addControl(form);
 
         FieldSet fieldSet = new FieldSet("demo", "<b>Demonstration Form</b>");
         form.add(fieldSet);
@@ -89,13 +89,14 @@ public class FormProperties extends BorderedPage {
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
 
-        //-------------------
+        addControl(form);
+
         // Setup control form
+
         optionsForm = new Form("optionsForm");
         optionsForm.setColumns(2);
         optionsForm.setLabelAlign("right");
         optionsForm.setListener(this, "onApplyChanges");
-        addControl(optionsForm);
 
         fieldSet = new FieldSet("props", "<b>Form Properites</b>");
         optionsForm.add(fieldSet);
@@ -155,6 +156,8 @@ public class FormProperties extends BorderedPage {
         fieldSet.add(labelsPositionSelect);
 
         optionsForm.add(new Submit("restoreDefaults", this, "onRestoreDefaults"));
+
+        addControl(optionsForm);
 
         // Setup showBorders checkbox Javascript using HTML head include and
         // setting the body onload function.

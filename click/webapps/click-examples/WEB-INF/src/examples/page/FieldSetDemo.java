@@ -27,8 +27,6 @@ public class FieldSetDemo extends BorderedPage {
     private Form form = new Form("form");
 
     public FieldSetDemo() {
-        addControl(form);
-
         // Delivery fieldset
 
         FieldSet deliveryFieldSet = new FieldSet("deliveryDetails");
@@ -70,6 +68,8 @@ public class FieldSetDemo extends BorderedPage {
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+
+        addControl(form);
     }
 
     public boolean onOkClick() {
