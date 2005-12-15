@@ -14,9 +14,10 @@ public class ImageDemo extends BorderedPage {
     private ImageSubmit colorSubmit;
 
     public ImageDemo() {
+
         // Buttons Form
+
         Form buttonsForm = new Form("buttonsForm");
-        addControl(buttonsForm);
 
         ImageSubmit editSubmit = new ImageSubmit("edit", "images/edit.gif");
         editSubmit.setListener(this, "onEditClick");
@@ -28,15 +29,19 @@ public class ImageDemo extends BorderedPage {
         deleteSubmit.setTitle("Delete");
         buttonsForm.add(deleteSubmit);
 
+        addControl(buttonsForm);
+
         // Colors Form
+
         Form form = new Form("form");
-        addControl(form);
 
         form.add(new Label("label", "<b>Color Chooser</b>"));
 
         colorSubmit = new ImageSubmit("submit", "images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");
         form.add(colorSubmit);
+
+        addControl(form);
     }
 
     public boolean onEditClick() {

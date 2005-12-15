@@ -12,14 +12,11 @@ import net.sf.click.control.ActionLink;
  */
 public class ActionTable extends BorderedPage {
 
-    ActionLink viewLink;
-    ActionLink editLink;
-    ActionLink deleteLink;
+    private ActionLink viewLink;
+    private ActionLink editLink;
+    private ActionLink deleteLink;
 
-    /**
-     * @see Page#onInit()
-     */
-    public void onInit() {
+    public ActionTable() {
         viewLink = new ActionLink("viewLink");
         viewLink.setListener(this, "onViewClick");
         addControl(viewLink);

@@ -80,6 +80,8 @@ for (int i = 0; i < customers.size(); i++) {
 <% } %>
 </table>
 
+<%=request.getAttribute("path")%>
+
 <p>&nbsp;</p>
 
 The <tt>CustomerTable</tt> page is automatically mapped to the request:

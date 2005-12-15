@@ -25,14 +25,13 @@ import net.sf.click.control.TextField;
  */
 public class BigForm extends BorderedPage {
 
-    String DELIVERY_OPTIONS[] = {
-            "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"
+    private static final String DELIVERY_OPTIONS[] = {
+        "[ Select ]", "Store Pickup", "Home Delivery", "Office Delivery"
     };
 
-    public void onInit() {
+    public BigForm() {
         Form form = new Form("form");
         form.setErrorsPosition(Form.POSITION_TOP);
-        addControl(form);
 
         form.add(new Label("user", "<b>My Details</b>"));
 
@@ -112,6 +111,8 @@ public class BigForm extends BorderedPage {
         form.add(cancelButton);
 
         form.add(new Reset("reset", "  Reset  "));
+
+        addControl(form);
     }
 
     public boolean onCancelClick() {

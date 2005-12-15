@@ -19,7 +19,6 @@ public class EmailForm extends BorderedPage {
         form.setLabelRequiredPrefix("<b>");
         form.setLabelRequiredSuffix("</b>");
         form.setErrorsPosition(Form.POSITION_TOP);
-        addControl(form);
 
         EmailField addressField = new EmailField("address", "To:");
         addressField.setRequired(true);
@@ -39,6 +38,8 @@ public class EmailForm extends BorderedPage {
 
         form.add(new Submit("send", "  Send "));
         form.add(new Submit("canel", this, "onCancelClick"));
+
+        addControl(form);
     }
 
     public boolean onCancelClick() {

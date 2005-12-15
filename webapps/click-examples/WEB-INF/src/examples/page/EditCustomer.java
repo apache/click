@@ -26,8 +26,6 @@ public class EditCustomer extends BorderedPage {
     private HiddenField referrerField = new HiddenField("referrer", String.class);
 
     public EditCustomer() {
-        addControl(form);
-
         form.add(referrerField);
 
         form.add(new HiddenField("id", Long.class));
@@ -51,6 +49,8 @@ public class EditCustomer extends BorderedPage {
 
         form.add(new Submit("ok", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+
+        addControl(form);
     }
 
     /**
