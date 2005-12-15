@@ -643,11 +643,10 @@ public class ClickServlet extends HttpServlet {
 
             newPage.setFormat(clickApp.getPageFormat(path));
             newPage.setHeaders(clickApp.getPageHeaders(path));
+            newPage.setPath(path);
 
             if (clickApp.isJspPage(path)) {
                 newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
-            } else {
-                newPage.setPath(path);
             }
 
             return newPage;
@@ -826,7 +825,7 @@ public class ClickServlet extends HttpServlet {
         if (clickApp == null || writerPool == null) {
             if (reloadable) {
                 String msg = "The application is temporarily unavailable" +
-                " - please try again in 1 minute";
+                             " - please try again in 1 minute";
                 throw new UnavailableException(msg, 60);
             } else {
                 String msg = "The application is unavailable.";
@@ -895,18 +894,41 @@ public class ClickServlet extends HttpServlet {
         }
 
         request.setAttribute("context", request.getContextPath());
-
-        Object format = page.getFormat();
-        if (format != null) {
-           request.setAttribute("format", format);
+        if (model.containsKey("context")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                            + " model contains an object keyed with reserved "
+                            + "name \"context\". The request attribute "
+                            + "has been replaced with the request "
+                            + "context path";
+            logger.warn(msg);
         }
 
-        Object path = page.getPath();
-        if (path != null) {
-           request.setAttribute("path", path);
+        request.setAttribute("format", page.getFormat());
+        if (model.containsKey("format")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                            + " model contains an object keyed with reserved "
+                            + "name \"format\". The request attribute "
+                            + "has been replaced with the format object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("path", page.getPath());
+        if (model.containsKey("path")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                            + " model contains an object keyed with reserved "
+                            + "name \"path\". The request attribute "
+                            + "has been replaced with the page path";
+            logger.warn(msg);
         }
 
         request.setAttribute("messages", page.getMessages());
+        if (model.containsKey("messages")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                            + " model contains an object keyed with reserved "
+                            + "name \"messages\". The request attribute "
+                            + "has been replaced with the page messages";
+            logger.warn(msg);
+        }
     }
 
     // ---------------------------------------------------------- Inner Classes
