@@ -40,7 +40,13 @@ components being defined in page elements of the
 </pre>
 
 The path attribute specifies the location of the page Velocity template, and the classname
-attribute specifies the page Java class name.
+attribute specifies the page Java class name. 
+<p/>
+Alternatively you can also configure Click to use JSP pages for rendering.
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">search.jsp</span>" classname="<span class="red">com.mycorp.page.Search</span>"/&gt; 
+</pre>
 
 <a name="page-class" class="heading"><h2>Classes</h2></a>
 
@@ -78,8 +84,7 @@ provide functionality:
 </ul>
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
-constructor. By convention in Click you place initialization code in an <tt>onInit()</tt>
-method and you generally don't implement a constructor.
+constructor.
 
 <a name="page-execution" class="heading"><h2>Execution</h2></a>
 
@@ -94,7 +99,8 @@ The GET request execution sequence for Pages is summarized below in the Figure 2
 
 Stepping through this GET request sequence, a new Page instance is created and the 
 attributes for the Page are set (context, format, headers, path). Next the <tt>onInit()</tt>
-method is invoked. This is where you typically place your initialization code.
+method is invoked, this is where you place any initialization code which requires
+access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
 <p/>
 The next method invoked is the <tt>onSecurityCheck()</tt> handler. This method can used to 
 ensure the user is authorized to access the page, and if necessary can abort any 
@@ -250,11 +256,18 @@ Finally set this page as the page to forward the request to. For example:
    <span class="kw">return false</span>;
 } 
 </pre>
+
+When creating a page with the <tt>createPage()</tt> method ensure you prefix
+the page path with the <tt class="st">"/"</tt> character.
+<p/>
 You can also specify the target page using its class as long as the Page has
-a unique path. So the above code becomes:
+a unique path. Using this technique the above code becomes:
 
 <pre class="codeJava">
-   ..
+<span class="kw">public boolean</span> onEditClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+   
    EditPage editPage = (EditPage) getContext().createPage(EditPage.<span class="kw">class</span>);
    editPage.setCustomer(customer);
    setForward(editPage);
@@ -263,8 +276,11 @@ a unique path. So the above code becomes:
 }
 </pre>
 
-When creating a page with the <tt>createPage()</tt> method ensure you prefix
-the page path with the <tt class="st">"/"</tt> character.
+This Page forwarding technique is best practice as it provides you with compile time safety and
+alleviates you from having to specify page paths in your code.
+<p/>
+Please always use the Context <tt>createPage()</tt> methods to allow Click to 
+inject Page dependencies..
 
 <a name="page-template-path" class="heading"><h3>Template Path</h3></a>
 
@@ -441,10 +457,7 @@ An example bordered Home page is provided below:
 
 <pre class="codeJava"><span class="kw">public class</span> Home <span class="kw">extends</span> BorderedPage {
    
-     <span class="jd">/**
-      * @see Page#onInit()
-      */</span>
-     <span class="kw">public void</span> onInit() {
+     <span class="kw">public</span> Home() {
          addModel(<span class="st">"title"</span>, <span class="st">"Home"</span>);
      }
 } </pre>

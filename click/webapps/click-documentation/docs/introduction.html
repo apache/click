@@ -54,10 +54,7 @@ Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt
 
 <span class="kw">public</span> HelloWorld <span class="kw">extends</span> Page {
 
-    <span class="jd">/**
-     * @see Page#onGet()
-     */</span>
-    <span class="kw">public void</span> onGet() {
+    <span class="kw">public</span> HelloWorld() {
         addModel("<span class="st">time</span>", <span class="kw">new</span> Date());
     }
 } 
@@ -79,8 +76,7 @@ And then we have the page template <span class="blue">hello-world.htm</span>:
 
 At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
 request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
-The ClickServlet then invokes the page's <tt>onGet()</tt> method. This method creates a 
-new <tt>Date</tt> object and adds it to the page's model as a value called 
+The HelloWorld page constructor creates a new <tt>Date</tt> object and adds it to its model as a value called 
 <span class="st">time</span>.
 <p/>
 The page model is then merged with the template which substitutes the 

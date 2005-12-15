@@ -92,10 +92,7 @@ listener method to be invoked. For example:
 <pre class="codeJava">
 <span class="kw">public class</span> SimpleCallback <span class="kw">extends</span> Page {
 
-    <span class="jd">/**
-     * @see Page#onInit()
-     */</span>
-    <span class="kw">public void</span> onInit() {
+    <span class="kw">public</span> SimpleCallback() {
         ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
         clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
         addControl(clickLink);    
