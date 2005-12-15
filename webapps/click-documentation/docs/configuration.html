@@ -502,7 +502,7 @@ ResourceManager will not be able to load them.
 <p/>
 The simplest way to set your own macro file is to add a file named <span class="blue"><tt>macro.vm</tt></span>
 under your web application's root directory. At startup Click will first check to see
-if this file exists, and if it does use it instead of <tt>click/VM_global_library.vm</tt>.
+if this file exists, and if it does it will use it instead of <tt>click/VM_global_library.vm</tt>.
 
 
 <a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
@@ -511,10 +511,9 @@ web application, if not already present. You can modify these support files and
 Click will not overwrite them. These files include:
 
 <ul>
-   <li>click/calendar.gif &nbsp; - &nbsp; the DateField calendar image</li>
    <li>click/error.htm &nbsp; - &nbsp; the Page <a href="pages.html#page-error-handling">Error Handling</a> template</li>
-   <li>click/form.css &nbsp; - &nbsp; the Form cascading stylesheet</li>
-   <li>click/form.js &nbsp; - &nbsp; the Form JavaScript library</li>
+   <li>click/control.css &nbsp; - &nbsp; the Controls cascading stylesheet</li>
+   <li>click/control.js &nbsp; - &nbsp; the Controls JavaScript library</li>
    <li>click/not-found.htm &nbsp; - &nbsp; the <a href="pages.html#page-not-found">Page Not Found</a> template</li>
    <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
 </ul>

@@ -346,14 +346,14 @@ public interface Controller {
   <dd>
    Click fully supports JSP pages. 
    <p/>
-   JSP Pages can be automatically loaded, like Velocity templates, or they can be explicitly defined in the
-   <tt>click.xml</tt> file.
+   JSP Pages can be automatically loaded, like Velocity templates, and 
+   can be explicitly defined in the <tt>click.xml</tt> file.
    
  <pre class="codeConfig">
 &lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
    
    The page's model data values are automatically added to the request as
-   attributes so they are available in the JSP page. Other Click values added 
+   attributes so they are available in the JSP. Other Click values added 
    as request attributes include:
    <p/>
    <ul>
@@ -369,8 +369,8 @@ public interface Controller {
    for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
    method
   </li>
-  <li>path &nbsp; - &nbsp; the mapped <a href="click-api/net/sf/click/Page.html#path">path</a> 
-    of the page which will have a .htm extension
+  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page. Note this will have a .htm not a .jsp extension
   </li>
    </ul>
    <p/>

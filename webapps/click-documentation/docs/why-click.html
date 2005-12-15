@@ -58,8 +58,8 @@ more simply.
 <p/>
 Click Forms and Controls provide automatic validation and rendering, making form development very fast and robust.
 
-<h2>JSP & MVC Free</h2>
-Click is JSP Free. This is a good thing! 
+<h2>JSP &amp; MVC Free</h2>
+Click is JSP and MVC Free. This is a good thing! 
 <p/>
 JSP's combined with the miss application of the MVC pattern have been holding back J2EE web development for many years. 
 It's a big statement I know, please let me explain.
@@ -88,7 +88,7 @@ To see this concept in action take a simple Click page where we have an ActionLi
 <pre class="codeJava">
 <span class="kw">public class</span> ExamplePage <span class="kw">extends</span> Page {
 
-    <span class="kw">public void</span> onInit() {
+    <span class="kw">public</span> ExamplePage() {
         ActionLink clickLink = new ActionLink("<span class="st">clickLink</span>");
         clickLink.setListener(this, "<span class="st">onClick</span>");
         addControl(clickLink);    
@@ -142,7 +142,7 @@ instruction set which is very easy to learn and use.
 For example take a look at the template below.
 
 <pre class="codeHtml">
-<span class="kw">#if</span> (<span class="st">$session.order.lineItems.size()</span> > 0)
+<span class="kw">#if</span> (!<span class="st">$session.order.lineItems.empty</span>)
 &lt;table&gt;
   &lt;tr&gt;
     &lt;th&gt;Name&lt;/th&gt; &lt;th&gt;Quantity&lt;/th&gt; &lt;th&gt;Total Price&lt;/th&gt;
@@ -164,6 +164,10 @@ You should have a pretty good idea of what this code does without having to cons
 documentation. Velocity's ease of use made it the ideal choice for Click. 
 <p/>
 The one tricky part of Velocity, <i>configuration</i> is handled automatically by Click.
+<p/>
+Please note after all that you can also use JSPs for rendering in Click. It 
+should be said that JSP 2.0 and the JSP Expression Language has greatly improved
+the usability of JSP in recent years.
 
 </table>
 </body>
