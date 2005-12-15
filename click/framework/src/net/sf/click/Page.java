@@ -85,7 +85,11 @@ public class Page {
     /** The map of localized page resource messages. **/
     protected MessagesMap messages;
 
-    /** The page model, which is used to populate the Velocity context. */
+    /**
+     * The page model. For Velocity templates the model is used to populate the
+     * Velocity context. For JSP pages the model values are set as named
+     * request attributes.
+     */
     protected Map model = new HashMap();
 
     /** The path of the page template to render. */
