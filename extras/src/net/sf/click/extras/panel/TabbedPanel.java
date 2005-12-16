@@ -167,8 +167,8 @@ public class TabbedPanel extends BasicPanel {
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");
             addControl(tabActionLink);
-            addModel("_tp_panels", getPanels());
         }
+        addModel("_tp_panels", getPanels());
     }
 
     /**
@@ -205,7 +205,9 @@ public class TabbedPanel extends BasicPanel {
         super.setPage(page);
         // add the context to the tabActionLink control
         // TODO: is there a better way to do set the context?
-        tabActionLink.setContext(page.getContext());
+        if(tabActionLink!=null){
+        	tabActionLink.setContext(page.getContext());
+        }
     }
 
     /**
