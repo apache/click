@@ -641,8 +641,13 @@ public class ClickServlet extends HttpServlet {
         try {
             Page newPage = newPageInstance(path, pageClass);
 
-            newPage.setFormat(clickApp.getPageFormat(path));
-            newPage.setHeaders(clickApp.getPageHeaders(path));
+            if (newPage.getFormat() == null) {
+                newPage.setFormat(clickApp.getPageFormat(path));
+            }
+            if (newPage.getHeaders() == null) {
+                newPage.setHeaders(clickApp.getPageHeaders(path));
+            }
+
             newPage.setPath(path);
 
             if (clickApp.isJspPage(path)) {
