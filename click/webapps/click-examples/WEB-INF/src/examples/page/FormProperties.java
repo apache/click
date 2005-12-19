@@ -166,7 +166,7 @@ public class FormProperties extends BorderedPage {
     }
 
     /**
-     * @see Page#onInit()
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         // Apply saved options to the demo form and the optionsForm

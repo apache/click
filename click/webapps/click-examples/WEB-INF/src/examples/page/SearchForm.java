@@ -35,7 +35,7 @@ public class SearchForm extends BorderedPage {
     }
 
     /**
-     * @see Page#onPost()
+     * @see net.sf.click.Page#onPost()
      */
     public void onPost() {
         Customer customer = null;
