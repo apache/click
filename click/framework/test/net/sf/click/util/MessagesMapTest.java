@@ -26,9 +26,9 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
         
-        locale = Locale.JAPANESE;
+        locale = Locale.CANADA;
         map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
-        
+
         assertFalse(map.isEmpty());
         assertEquals(21, map.size());
 
