@@ -17,6 +17,8 @@ package net.sf.click.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -370,6 +373,80 @@ public class ClickUtils {
                         getterName + "() method not found";
                     System.out.println(msg);
                 }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param resource
+     * @param path
+     * @param dir
+     * @param filename
+     * @throws IOException
+     */
+    public static void deployFile(ServletContext servletContext,
+        String resource, String targetDir) throws IOException {
+
+        if (servletContext == null) {
+            throw new IllegalArgumentException("Null servletContext parameter");
+        }
+
+        if (resource == null) {
+            throw new IllegalArgumentException("Null resource parameter");
+        }
+
+        if (targetDir == null) {
+            throw new IllegalArgumentException("Null targetDir parameter");
+        }
+
+        final String realTargetDir =
+            servletContext.getRealPath("/") + File.separator + targetDir;
+
+        // Create files deployment directory
+        File directory = new File(realTargetDir);
+        if (!directory.exists()) {
+            if (!directory.mkdir()) {
+                String msg =
+                    "could not create deployment directory: " + directory;
+                throw new IOException(msg);
+            }
+        }
+
+        String destination = resource;
+        int index = resource.lastIndexOf('/');
+        if (index != -1) {
+            destination = resource.substring(index + 1);
+        }
+        destination = realTargetDir + File.separator + destination;
+
+        File destinationFile = new File(destination);
+System.out.println(destinationFile);
+        if (!destinationFile.exists()) {
+            InputStream inputStream =
+                ClickUtils.class.getResourceAsStream(resource);
+
+            if (inputStream != null) {
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(destinationFile);
+                    byte[] buffer = new byte[1024];
+                    while (true) {
+                        int length = inputStream.read(buffer);
+                        if (length <  0) {
+                            break;
+                        }
+                        fos.write(buffer, 0, length);
+                    }
+
+
+                } finally {
+                    close(fos);
+                    close(inputStream);
+                }
+            } else {
+                String msg = "could not locate classpath resource: " + resource;
+                throw new IOException(msg);
             }
         }
     }
