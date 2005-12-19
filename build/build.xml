@@ -2,7 +2,7 @@
 
    <!-- Project Properties -->
    <property file="./build/build.properties"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2M6.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2M9.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.hibernate" value="hibernate-3.0.5.jar"/>
@@ -20,6 +20,27 @@
    <taskdef name="replacetabs" 
    	        classname="dev.ReplaceTabsTask" 
    	        classpath="lib/dev.jar"/>
+            
+   <!-- Paths -->
+   
+   <path id="classpath.framework">
+      <pathelement location="framework/classes"/>
+      <pathelement location="lib/${jar.codec}"/>
+      <pathelement location="lib/${jar.collections}"/>
+      <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.upload}"/>
+      <pathelement location="lib/${jar.velocity}"/>
+   </path>
+   
+   <path id="classpath.extras">
+      <pathelement location="extras/classes"/> 
+      <pathelement location="lib/${jar.cayenne}"/>
+      <pathelement location="lib/${jar.hibernate}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.spring}"/>
+      <pathelement location="dist/click-${version}.jar"/>
+   </path>
 
    <!-- Tasks -->
    
@@ -101,13 +122,7 @@
          </fileset>
       </copy>
       <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
-         <classpath>
-            <pathelement location="lib/${jar.cayenne}"/>
-            <pathelement location="lib/${jar.hibernate}"/>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="lib/${jar.spring}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-         </classpath>
+         <classpath refid="classpath.extras"/>
       </javac>  
       <jar destfile="dist/click-extras-${version}.jar">
          <manifest>
@@ -142,14 +157,7 @@
       </copy>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true">
-         <classpath>
-            <pathelement location="lib/${jar.codec}"/>
-            <pathelement location="lib/${jar.collections}"/>
-            <pathelement location="lib/${jar.lang}"/>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="lib/${jar.upload}"/>
-            <pathelement location="lib/${jar.velocity}"/>
-         </classpath>
+         <classpath refid="classpath.framework"/>
       </javac>  
       <jar destfile="dist/click-nodeps-${version}.jar">
          <manifest>
@@ -454,6 +462,36 @@
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="webapps/click-documentation/docs/servlet-api"/>
+   </target>
+   
+   <target name="test-framework">
+      <javac srcdir="framework/src;framework/test" destdir="framework/classes" debug="true">
+         <classpath refid="classpath.framework"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.framework"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes">
+            <fileset dir="framework/test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+   
+   <target name="test-extras">
+      <javac srcdir="extras/src" destdir="extras/classes" debug="true">
+         <classpath refid="classpath.extras"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.extras"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes" todir="extras/test">
+            <fileset dir="extras/test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
    </target>
    
 </project>
