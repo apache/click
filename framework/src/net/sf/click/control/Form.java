@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -1294,6 +1296,14 @@ public class Form implements Control {
      */
     public void copyTo(Object object, boolean debug) {
         ClickUtils.copyFormToObject(this, object, debug);
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
     }
 
     /**

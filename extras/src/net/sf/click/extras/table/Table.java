@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.table;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -655,6 +658,14 @@ public class Table implements Control {
         setPageNumber(pagingLink.getValueInteger().intValue());
 
         return true;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
     }
 
     /**
