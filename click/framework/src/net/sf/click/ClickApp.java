@@ -58,7 +58,6 @@ import org.xml.sax.SAXException;
  * page templates.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 class ClickApp implements EntityResolver {
 
@@ -475,7 +474,7 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Private Methods
 
-    private void deployFiles() {
+    private void deployFiles() throws IOException {
         final String path = servletContext.getRealPath("/");
 
         if (path != null) {
@@ -491,20 +490,21 @@ class ClickApp implements EntityResolver {
                 }
             }
 
-            deployFile("/net/sf/click/control/control.css", clickTarget,
-                       CLICK_PATH, "control.css");
+            ClickUtils.deployFile
+                (servletContext, "/net/sf/click/control/control.css", "click");
 
-            deployFile("/net/sf/click/control/control.js", clickTarget,
-                       CLICK_PATH, "control.js");
+            ClickUtils.deployFile
+                (servletContext, "/net/sf/click/control/control.js", "click");
 
-            deployFile("/net/sf/click/util/error.htm", clickTarget,
-                       CLICK_PATH, "error.htm");
+            ClickUtils.deployFile
+                (servletContext, "/net/sf/click/util/error.htm", "click");
 
-            deployFile("/net/sf/click/not-found.htm", clickTarget,
-                       CLICK_PATH, "not-found.htm");
+            ClickUtils.deployFile
+                (servletContext, "/net/sf/click/not-found.htm", "click");
 
-            deployFile("/net/sf/click/control/VM_global_library.vm", clickTarget,
-                       CLICK_PATH, "VM_global_library.vm");
+            ClickUtils.deployFile
+                (servletContext, "/net/sf/click/control/VM_global_library.vm", "click");
+
 
             // Create click/calendar deployment directory
             final String calendarTarget = path + File.separator + CALENDAR_PATH;
