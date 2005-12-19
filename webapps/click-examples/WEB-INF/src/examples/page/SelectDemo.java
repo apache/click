@@ -76,7 +76,7 @@ public class SelectDemo extends BorderedPage {
     }
 
     /**
-     * @see Page#onPost()
+     * @see net.sf.click.Page#onPost()
      */
     public void onPost() {
         if (form.isValid()) {
