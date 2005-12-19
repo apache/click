@@ -139,7 +139,6 @@ import org.apache.velocity.util.SimplePool;
  * &lt;/web-app&gt; </pre>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ClickServlet extends HttpServlet {
 
