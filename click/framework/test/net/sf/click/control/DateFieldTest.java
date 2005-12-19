@@ -22,7 +22,7 @@ import junit.framework.TestCase;
  *
  * @author Malcolm Edgar
  */
-public class DateFieldTestCase extends TestCase {
+public class DateFieldTest extends TestCase {
 
     public void testFormatPattern() throws Exception {
         DateField dateField = new DateField("Delivery date");
