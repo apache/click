@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.menu;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -414,15 +417,6 @@ public class Menu implements Control, Serializable {
     }
 
     /**
-     * This method performs no processing and returns true.
-     *
-     * @see Control#onProcess()
-     */
-    public boolean onProcess() {
-        return true;
-    }
-
-    /**
      * This method does nothing.
      *
      * @see Control#setListener(Object, String)
@@ -436,6 +430,25 @@ public class Menu implements Control, Serializable {
      * @see Control#setParentMessages(Map)
      */
     public void setParentMessages(Map messages) {
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+    }
+
+    /**
+     * This method performs no processing and returns true.
+     *
+     * @see Control#onProcess()
+     */
+    public boolean onProcess() {
+        return true;
     }
 
     /**

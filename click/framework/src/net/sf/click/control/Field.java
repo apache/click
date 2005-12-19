@@ -15,10 +15,13 @@
  */
 package net.sf.click.control;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -685,6 +688,16 @@ public abstract class Field implements Control {
         if (value != null) {
             this.value = value.toString();
         }
+    }
+
+    // ---------------------------------------------------------- Public Methods
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
     }
 
     // ------------------------------------------------------ Protected Methods

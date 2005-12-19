@@ -15,17 +15,20 @@
  */
 package net.sf.click.control;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
+import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Action Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
@@ -742,6 +745,14 @@ public class ActionLink implements Control {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+    }
 
     /**
      * This method will set the {@link #isClicked()} property to true if the

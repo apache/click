@@ -15,8 +15,11 @@
  */
 package net.sf.click;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 
 /**
  * Provides the interface for Page controls. When a Page request
@@ -27,7 +30,6 @@ import java.util.Map;
  * <tt>toString()</tt> method.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public interface Control extends Serializable {
  
@@ -107,6 +109,22 @@ public interface Control extends Serializable {
     public void setParentMessages(Map messages);
 
     /**
+     * The on deploy event handler, which provides control classes the
+     * opportunity to deploy static resources when the Click application is
+     * initialized.
+     * <p/>
+     * Controls which are defined in the <tt>click.xml</tt> application
+     * configuration, or the <tt>click-controls.xml</tt> or
+     * <tt>extras-controls.xml</tt> files will have the <tt>onDeploy()</tt>
+     * method invoked by the <tt>ClickServlet</tt> when the servlet is
+     * initialised.
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException;
+
+    /**
      * The on process event handler. Each Page control will be processed when
      * the Page is requested.
      * <p/>
@@ -123,5 +141,4 @@ public interface Control extends Serializable {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess();
-
 }
