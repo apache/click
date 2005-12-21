@@ -71,6 +71,9 @@ public abstract class Field implements Control {
     /** The Page request Context. */
     protected Context context;
 
+    /** The global localized control messages map. */
+    protected Map controlMessages;
+
     /** The Field disabled value. */
     protected boolean disabled;
 
@@ -468,6 +471,10 @@ public abstract class Field implements Control {
             message = (String) getMessages().get(name);
         }
 
+        if (message == null && getControlMessages().containsKey(name)) {
+            message = (String) getControlMessages().get(name);
+        }
+
         return message;
     }
 
@@ -511,7 +518,7 @@ public abstract class Field implements Control {
          if (messages == null) {
              if (getContext() != null) {
                  Locale locale = getContext().getLocale();
-                 messages = new MessagesMap(CONTROL_MESSAGES, locale);
+                 messages = new MessagesMap(getClass().getName(), locale);
 
              } else {
                  String msg = "Cannot initialize messages as context not set";
@@ -695,12 +702,35 @@ public abstract class Field implements Control {
     /**
      * This method does nothing.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sfl.click.Deployable#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return a Map of common localized control messages. This message
+     * resouces are loaded from the property file
+     * <tt>/click-control.properties</tt>.
+     *
+     * @return a Map of common localized control messages
+     * @throws IllegalStateException if the context for the Field has not be set
+     */
+    protected Map getControlMessages() {
+        if (controlMessages == null) {
+            if (getContext() != null) {
+                Locale locale = getContext().getLocale();
+                controlMessages = new MessagesMap(CONTROL_MESSAGES, locale);
+
+            } else {
+                String msg =
+                    "Cannot initialize control messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return controlMessages;
+    }
 
     /**
      * Perform a action listener callback if a listener object and listener

@@ -1,10 +1,8 @@
 package examples.page;
 
 import net.sf.click.control.Checkbox;
-import net.sf.click.control.CreditCardField;
 import net.sf.click.control.DateField;
 import net.sf.click.control.DoubleField;
-import net.sf.click.control.EmailField;
 import net.sf.click.control.FileField;
 import net.sf.click.control.Form;
 import net.sf.click.control.IntegerField;
@@ -17,6 +15,8 @@ import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.CreditCardField;
+import net.sf.click.extras.control.EmailField;
 
 /**
  * Provides a big form example which includes all the available Form Fields.

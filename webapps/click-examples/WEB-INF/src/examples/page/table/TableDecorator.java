@@ -4,9 +4,9 @@ import java.util.List;
 
 import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
-import net.sf.click.extras.table.Column;
-import net.sf.click.extras.table.Decorator;
-import net.sf.click.extras.table.Table;
+import net.sf.click.control.Column;
+import net.sf.click.control.Decorator;
+import net.sf.click.control.Table;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;
 import examples.page.BorderedPage;

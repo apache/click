@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -23,6 +25,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import javax.servlet.ServletContext;
+
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -88,6 +93,13 @@ public class DateField extends TextField {
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\"></script>\n";
+
+    protected static final String[] CALENDAR_RESOURCES =
+        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
+          "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
+          "-brown.css", "-green.css", "-system.css", "-tas.css",
+          "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
+          "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
 
     // ----------------------------------------------------- Instance Variables
 
@@ -331,6 +343,28 @@ public class DateField extends TextField {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Deploy the Calendar Javascript and CSS resources to the web app
+     * directory <tt>click/calendar</tt>.
+     *
+     * @see net.sf.click.Deployable#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        String targetDir = "click" + File.separator + "calendar";
+
+        // Deploy DateField resources files
+        for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
+
+            String calendarFilename = "calendar" + CALENDAR_RESOURCES[i];
+            String calendarResource =
+                "/net/sf/click/control/calendar/" + calendarFilename;
+
+            ClickUtils.deployFile
+                (servletContext, calendarResource, targetDir);
+        }
+    }
+
     /**
      * Process the DateField submission. If the Date value can be parsed
      * the controls listener will be invoked.
