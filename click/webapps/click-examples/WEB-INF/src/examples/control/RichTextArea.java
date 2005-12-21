@@ -47,6 +47,8 @@ public class RichTextArea extends TextArea {
      */
     protected String theme = "simple";
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a TinyMCE rich TextArea control with the given name.
      *
@@ -55,6 +57,14 @@ public class RichTextArea extends TextArea {
     public RichTextArea(String name) {
         super(name);
     }
+
+    /**
+     * Default no-args constructor used to deploy control resources.
+     */
+    public RichTextArea() {
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Return the textarea TinyMCE theme.

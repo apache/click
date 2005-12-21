@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <click-app>
+
   <pages package="examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>
   </pages>
@@ -11,4 +12,9 @@
   </headers>
 
   <mode value="profile"/>
+
+  <deployables>
+    <deployable classname="examples.control.RichTextArea"/>
+  </deployables>
+
 </click-app>

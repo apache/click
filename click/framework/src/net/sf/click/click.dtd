@@ -1,7 +1,7 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages, headers?, format?, mode?)>
+<!ELEMENT click-app (pages?, headers?, format?, mode?)>
 
-  <-- Application pages. -->
+  <!-- Application pages. -->
   <!ELEMENT pages (page*)>
     <!ATTLIST pages package CDATA #IMPLIED>
     <!ATTLIST pages automapping (true|false) "false">
@@ -29,6 +29,13 @@
   <!ELEMENT mode (#PCDATA)>
    <!ATTLIST mode value (production|profile|development|debug|trace) "development">
    <!ATTLIST mode logto (console|servlet) "console">
+
+  <!-- Application deployable objects. -->
+  <!ELEMENT deployables (deployable*)>
+  
+    <!-- Deployable object class. -->
+    <!ELEMENT deployable (#PCDATA)>
+      <!ATTLIST deployable classname CDATA #REQUIRED>
    
 
   

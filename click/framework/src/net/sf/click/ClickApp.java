@@ -16,7 +16,6 @@
 package net.sf.click;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,9 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -84,9 +81,6 @@ class ClickApp implements EntityResolver {
     /** The click deployment directory path: &nbsp; "click" */
     static final String CLICK_PATH = "click";
 
-    /** The calendar deployment directory path: &nbsp; "click/calendar" */
-    static final String CALENDAR_PATH = "click" + File.separator + "calendar";
-
     /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>" */
     static final String DTD_FILE_NAME = "click.dtd";
 
@@ -135,13 +129,6 @@ class ClickApp implements EntityResolver {
     static final String[] MODE_VALUES =
         { "production", "profile", "development", "debug", "trace" };
 
-    static final String[] CALENDAR_RESOURCES =
-        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
-          "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
-          "-brown.css", "-green.css", "-system.css", "-tas.css",
-          "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
-          "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
-
     private static final Object PAGE_LOAD_LOCK = new Object();
 
     // -------------------------------------------------------- Package Members
@@ -179,19 +166,38 @@ class ClickApp implements EntityResolver {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Initialize the click application using the given servlet context.
+     * Return the Click Application servlet context.
      *
-     * @param context the servlet context
+     * @return the application servlet context
+     */
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
+
+    /**
+     * Set the Click Application servlet context.
+     *
+     * @param servletContext the application servlet context
+     */
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    /**
+     * Initialize the click application.
+     *
      * @throws Exception if an error occurs initializing the application
      */
-    void init(ServletContext context) throws Exception {
+    public void init() throws Exception {
 
-        servletContext = context;
+        if (getServletContext() == null) {
+            throw new IllegalStateException("servlet context not defined");
+        }
 
         logger = new ClickLogger("Click");
 
         InputStream inputStream =
-            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+            getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
 
         if (inputStream == null) {
             throw new RuntimeException
@@ -217,7 +223,7 @@ class ClickApp implements EntityResolver {
             loadDefaultPages();
 
             // Deploy the application files if not present
-            deployFiles();
+            deployFiles(rootElm);
 
             // Set ServletContext instance for WebappLoader
             velocityEngine.setApplicationAttribute
@@ -474,158 +480,69 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Private Methods
 
-    private void deployFiles() throws IOException {
-        final String path = servletContext.getRealPath("/");
+    private Element getResourceRootElement(String classpathResource)
+        throws Exception {
 
-        if (path != null) {
+        InputStream inputStream =
+            getClass().getResourceAsStream(classpathResource);
 
-            final String clickTarget = path + File.separator + CLICK_PATH;
+        if (inputStream == null) {
+            String msg =
+                "could not findconfiguration file: " + classpathResource;
+            throw new RuntimeException(msg);
+        }
 
-            // Create files deployment directory
-            File clickDir = new File(clickTarget);
-            if (!clickDir.exists()) {
-                if (!clickDir.mkdir()) {
-                    logger.error
-                        ("could not create deployment directory: " + clickDir);
-                }
+        Document document = ClickUtils.buildDocument(inputStream, this);
+
+        return document.getDocumentElement();
+    }
+
+    private void deployDeployables(Element rootElm) throws Exception {
+        Element deployablesElm = getChild(rootElm, "deployables");
+
+        if (deployablesElm == null) {
+            return;
+        }
+
+        List deployableList = getChildren(deployablesElm, "deployable");
+
+        for (int i = 0; i < deployableList.size(); i++) {
+            Element deployableElm = (Element) deployableList.get(i);
+
+            String classname = deployableElm.getAttribute("classname");
+            if (StringUtils.isBlank(classname)) {
+                String msg =
+                    "'deployable' element missing 'classname' attribute.";
+                throw new RuntimeException(msg);
             }
 
-            ClickUtils.deployFile
-                (servletContext, "/net/sf/click/control/control.css", "click");
+            Class deployClass = Class.forName(classname);
+            Deployable deployable = (Deployable) deployClass.newInstance();
 
-            ClickUtils.deployFile
-                (servletContext, "/net/sf/click/control/control.js", "click");
-
-            ClickUtils.deployFile
-                (servletContext, "/net/sf/click/util/error.htm", "click");
-
-            ClickUtils.deployFile
-                (servletContext, "/net/sf/click/not-found.htm", "click");
-
-            ClickUtils.deployFile
-                (servletContext, "/net/sf/click/control/VM_global_library.vm", "click");
-
-
-            // Create click/calendar deployment directory
-            final String calendarTarget = path + File.separator + CALENDAR_PATH;
-
-            File calendarDir = new File(calendarTarget);
-            if (!calendarDir.exists()) {
-                if (!calendarDir.mkdir()) {
-                    logger.error
-                        ("could not create deployment directory: " + calendarDir);
-                }
-            }
-
-            // Deploy DateField resources files
-            for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
-                String calendarResource = "calendar" + CALENDAR_RESOURCES[i];
-                deployFile("/net/sf/click/control/calendar/" + calendarResource,
-                           calendarTarget,
-                           CALENDAR_PATH,
-                           calendarResource);
-            }
-
-            // Find extra files to deploy
-            try {
-                ResourceBundle bundle =
-                    ResourceBundle.getBundle("click-deploy");
-
-                String filenames = bundle.getString("click.deploy.files");
-                if (filenames != null) {
-                    StringTokenizer tokens =
-                            new StringTokenizer(filenames, ",");
-
-                    while (tokens.hasMoreTokens()) {
-                        String key = "click.deploy.path." + tokens.nextToken();
-
-                        String filepath = bundle.getString(key);
-
-                        if (filepath != null) {
-                            String filename =
-                                filepath.substring(filepath.lastIndexOf('/') + 1);
-
-                            deployFile(filepath,
-                                      clickTarget,
-                                      CLICK_PATH,
-                                      filename);
-                        } else {
-                            logger.warn("Could not find property: " + key);
-                        }
-                    }
-
-                } else {
-                    logger.warn("could not load /click-deploy.properties");
-                }
-
-            } catch (MissingResourceException mre) {
-                logger.info("/click-deploy.properties file not found");
-            }
-
-        } else {
-            logger.error("Servlet real path is null. Could not deploy files");
+            deployable.onDeploy(getServletContext());
         }
     }
 
-    private void deployFile(String resource, String path, String dir, String filename) {
-        String destination = path;
+    private void deployFiles(Element rootElm) throws Exception {
 
-        if (path.endsWith(File.separator)
-            || filename.startsWith(File.separator)) {
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/control/control.css", "click");
 
-            destination = destination + filename;
-        } else {
-            destination =
-                destination + File.separator + File.separator + filename;
-        }
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/control/control.js", "click");
 
-        File destinationFile = new File(destination);
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/util/error.htm", "click");
 
-        if (!destinationFile.exists()) {
-            InputStream inputStream =
-                getClass().getResourceAsStream(resource);
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/not-found.htm", "click");
 
-            if (inputStream != null) {
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(destinationFile);
-                    byte[] buffer = new byte[1024];
-                    while (true) {
-                        int length = inputStream.read(buffer);
-                        if (length <  0) {
-                            break;
-                        }
-                        fos.write(buffer, 0, length);
-                    }
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/control/VM_global_library.vm", "click");
 
-                    if (logger.isTraceEnabled()) {
-                        logger.trace
-                            ("deployed " + dir + File.separator + filename);
-                    }
-
-                } catch (IOException ioe) {
-                    logger.error("could not deploy " + destination, ioe);
-
-                } finally {
-                    if (fos != null) {
-                        try {
-                            fos.close();
-                        } catch (IOException ioe) {
-                            // ignore
-                        }
-                    }
-                    if (inputStream != null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException ioe) {
-                            // ignore
-                        }
-                    }
-                }
-            } else {
-                logger.warn("could not locate classpath resource: " + resource);
-            }
-        }
+        deployDeployables(getResourceRootElement("/click-deployables.xml"));
+        deployDeployables(getResourceRootElement("/extras-deployables.xml"));
+        deployDeployables(rootElm);
     }
 
     private void loadMode(Element rootElm) {

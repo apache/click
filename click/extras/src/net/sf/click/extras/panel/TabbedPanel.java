@@ -15,6 +15,11 @@
  */
 package net.sf.click.extras.panel;
 
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+
+import net.sf.click.Deployable;
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 import net.sf.click.util.ClickUtils;
@@ -102,16 +107,19 @@ import net.sf.click.util.ClickUtils;
  * } </pre>
  *
  * @author Phil Barnes
- * @version $Id$
  */
-public class TabbedPanel extends BasicPanel {
+public class TabbedPanel extends BasicPanel implements Deployable {
 
+    /** The debug logging flag. */
     protected boolean debug;
 
+    /** The tab listener object. */
     protected Object listener;
 
+    /** The tab listener method. */
     protected String method;
 
+    /** The tab action link. */
     protected ActionLink tabActionLink;
 
     // ----------------------------------------------------------- Constructors
@@ -119,6 +127,16 @@ public class TabbedPanel extends BasicPanel {
     public TabbedPanel(String id) {
         super(id);
         addModel("_tp_id", id);
+    }
+
+    /**
+     * Default no-args constructor used to deploy panel resources.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for resource deployment and are not
+     * intended for general use. </div>
+     */
+    public TabbedPanel() {
     }
 
     // --------------------------------------------------------- Public Methods
@@ -207,7 +225,7 @@ public class TabbedPanel extends BasicPanel {
         // TODO: is there a better way to do set the context?
         if(tabActionLink!=null){
         	tabActionLink.setContext(page.getContext());
-        }
+    	}
     }
 
     /**
@@ -254,6 +272,17 @@ public class TabbedPanel extends BasicPanel {
         removeModel("_tp_activePanel");
         // add the passed in panel as the 'new' active panel
         addModel("_tp_activePanel", panel);
+    }
+
+    /**
+     * Deploy the <tt>TabbedPanel.htm</tt> template to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Deployable#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/extras/panel/TabbedPanel.htm", "click");
     }
 
     /**
