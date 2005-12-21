@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app>
+
+  <deployables>
+    <deployable classname="net.sf.click.extras.panel.ListPanel"/>
+    <deployable classname="net.sf.click.extras.panel.TabbedPanel"/>
+  </deployables>
+
+</click-app>
