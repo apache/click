@@ -15,12 +15,16 @@
  */
 package net.sf.click.extras.panel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.Control;
+import net.sf.click.Deployable;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 
@@ -92,6 +96,16 @@ public class BasicPanel implements Panel {
         } else {
             setTemplate(getDefaultTemplateName());
         }
+    }
+
+    /**
+     * Default no-args constructor used to deploy panel resources.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for resource deployment and are not
+     * intended for general use. </div>
+     */
+    public BasicPanel() {
     }
 
     // --------------------------------------------------------- Public Methods
@@ -288,6 +302,14 @@ public class BasicPanel implements Panel {
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * This method does nothing and can be overridden by subclasses.
+     *
+     * @see Deployable#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
     }
 
     /**

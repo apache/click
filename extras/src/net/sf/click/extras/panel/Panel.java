@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.panel;
 
+import net.sf.click.Deployable;
 import net.sf.click.Page;
 
 /**
@@ -36,9 +37,8 @@ import net.sf.click.Page;
  * directly to the Page (via addControl).
  *
  * @author Phil Barnes
- * @version $Id$
  */
-public interface Panel {
+public interface Panel extends Deployable {
 
     /**
      * Sets the page associated with this panel.  This call is necessary to

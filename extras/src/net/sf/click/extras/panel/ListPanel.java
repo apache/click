@@ -15,6 +15,13 @@
  */
 package net.sf.click.extras.panel;
 
+import java.io.IOException;
+
+import javax.servlet.ServletContext;
+
+import net.sf.click.Deployable;
+import net.sf.click.util.ClickUtils;
+
 /**
  * Provides a method of adding multiple panels that will be listed out in a
  * vertical fashion, each panel being evaluated via Velocity's #parse(), and by
@@ -36,9 +43,8 @@ package net.sf.click.extras.panel;
  * context objects)
  *
  * @author Phil Barnes
- * @version $Id$
  */
-public class ListPanel extends BasicPanel {
+public class ListPanel extends BasicPanel implements Deployable {
 
     /** The context key used to lookup the ID assocaited with this panel. */
     protected static final String INTERNAL_ID_KEY = "_lp_id";
@@ -48,6 +54,8 @@ public class ListPanel extends BasicPanel {
      * panel.
      */
     protected static final String INTERNAL_PANEL_LIST_KEY = "_lp_panels";
+
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Default constructor includes the id of this list panel.  This id will be
@@ -63,11 +71,23 @@ public class ListPanel extends BasicPanel {
     }
 
     /**
+     * Default no-args constructor used to deploy panel resources.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for resource deployment and are not
+     * intended for general use. </div>
+     */
+    public ListPanel() {
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
      * Overridden method to capture and add the panels to the model with an
      * internal name ("_lp_panels") so that the template may iterate over this
      * name for each panel that was added to the list.
      *
-     * @param panel
+     * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
         super.addPanel(panel);
@@ -75,6 +95,18 @@ public class ListPanel extends BasicPanel {
         // this should continually override the existing _lp_panels entry
         removeModel(INTERNAL_PANEL_LIST_KEY);
         addModel(INTERNAL_PANEL_LIST_KEY, getPanels());
+    }
+
+    /**
+     * Deploy the <tt>ListPanel.htm</tt> template to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Deployable#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        ClickUtils.deployFile
+            (servletContext, "/net/sf/click/extras/panel/ListPanel.htm", "click");
+
     }
 
     /**
@@ -87,5 +119,6 @@ public class ListPanel extends BasicPanel {
     public String toString() {
         return "/click/" + super.toString();
     }
+
 }
 
