@@ -54,7 +54,6 @@ import org.xml.sax.EntityResolver;
  * Provides miscellaneous Form, String and Stream utility methods.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ClickUtils {
 
@@ -406,7 +405,7 @@ public class ClickUtils {
         // Create files deployment directory
         File directory = new File(realTargetDir);
         if (!directory.exists()) {
-            if (!directory.mkdir()) {
+            if (!directory.mkdirs()) {
                 String msg =
                     "could not create deployment directory: " + directory;
                 throw new IOException(msg);
