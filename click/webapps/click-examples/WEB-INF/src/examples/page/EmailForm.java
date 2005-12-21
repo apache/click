@@ -1,9 +1,9 @@
 package examples.page;
 
-import net.sf.click.control.EmailField;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.EmailField;
 import examples.control.RichTextArea;
 
 /**

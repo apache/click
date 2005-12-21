@@ -1301,7 +1301,7 @@ public class Form implements Control {
     /**
      * This method does nothing.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sfl.click.Deployable#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }

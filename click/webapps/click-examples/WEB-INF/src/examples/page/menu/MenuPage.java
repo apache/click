@@ -1,7 +1,7 @@
 package examples.page.menu;
 
 import examples.page.BorderedPage;
-import net.sf.click.extras.menu.Menu;
+import net.sf.click.extras.control.Menu;
 
 /**
  * Provides a Menu Page.
