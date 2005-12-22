@@ -22,18 +22,16 @@ you can deploy with your application. Extra packages include:
 <ul style="margin-top:0.75em;">
  <li><a href="extras-api/net/sf/click/extras/cayenne/package-summary.html">Cayenne</a> 
  - provides Cayenne data aware controls</li>
+ <li><a href="extras-api/net/sf/click/extras/control/package-summary.html">Control</a> 
+ - provides extra controls</li>
  <li><a href="extras-api/net/sf/click/extras/filter/package-summary.html">Filter</a> 
  - provides GZIP compression Filter</li>
  <li><a href="extras-api/net/sf/click/extras/hibernate/package-summary.html">Hibernate</a> 
  - provides Hibernate data aware controls</li>
- <li><a href="extras-api/net/sf/click/extras/menu/package-summary.html">Menu</a> 
- - provides Menu control</li>
  <li><a href="extras-api/net/sf/click/extras/panel/package-summary.html">Panel</a> 
  - provides Page Panel containers</li>
  <li><a href="extras-api/net/sf/click/extras/spring/package-summary.html"">Spring</a> 
  - provides Spring integration SpringClickServlet</li>
- <li><a href="extras-api/net/sf/click/extras/table/package-summary.html"">Table</a> 
- - provides HTML Table control</li>
 </ul>
 
 <p>&nbsp;</p>
@@ -88,6 +86,11 @@ This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader
 To make preconfigured resources (templates, stylesheets, etc.) available to web applications
 Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
 directory at startup (existing files will not be overwritten).
+<p/>
+To enable you component to deploy resources on startup it should implement the
+<a href="click-api/net/sf/click/Deployable.html">Deployable</a> interface.
+
+
 <p/>
 To register classpath resources to be automatically deployed add an entry to the Click Extras
 <tt>/click-deploy.properties</tt> file.

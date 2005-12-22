@@ -1,5 +1,5 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages?, headers?, format?, mode?)>
+<!ELEMENT click-app (pages?, headers?, format?, mode?, deployables?)>
 
   <!-- Application pages. -->
   <!ELEMENT pages (page*)>

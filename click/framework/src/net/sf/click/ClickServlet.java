@@ -634,9 +634,9 @@ public class ClickServlet extends HttpServlet {
      * {@link #newPageInstance(String, Class)} method and setting format,
      * headers and the forward if a JSP.
      *
-     * @param path the
-     * @param pageClass
-     * @return
+     * @param path the page path
+     * @param pageClass the page class
+     * @return initialized page
      */
     protected Page initPage(String path, Class pageClass) {
         try {

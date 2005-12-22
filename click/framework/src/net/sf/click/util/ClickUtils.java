@@ -377,12 +377,13 @@ public class ClickUtils {
     }
 
     /**
+     * Deploy the specified classpath resource to the given target directory
+     * under the web application root directory.
      *
-     * @param resource
-     * @param path
-     * @param dir
-     * @param filename
-     * @throws IOException
+     * @param servletContext the web applications servlet context
+     * @param resource the classpath resource name
+     * @param targetDir the target directory to deploy the resource to
+     * @throws IOException if an I/O error occurs
      */
     public static void deployFile(ServletContext servletContext,
         String resource, String targetDir) throws IOException {
@@ -391,16 +392,15 @@ public class ClickUtils {
             throw new IllegalArgumentException("Null servletContext parameter");
         }
 
-        if (resource == null) {
-            throw new IllegalArgumentException("Null resource parameter");
+        if (StringUtils.isBlank(resource)) {
+            throw new IllegalArgumentException("Null resource parameter not defined");
         }
 
-        if (targetDir == null) {
-            throw new IllegalArgumentException("Null targetDir parameter");
-        }
+        String realTargetDir = servletContext.getRealPath("/") + File.separator;
 
-        final String realTargetDir =
-            servletContext.getRealPath("/") + File.separator + targetDir;
+        if (StringUtils.isNotBlank(targetDir)) {
+            realTargetDir = realTargetDir + targetDir;
+        }
 
         // Create files deployment directory
         File directory = new File(realTargetDir);
