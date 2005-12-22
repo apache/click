@@ -224,8 +224,8 @@ public class TabbedPanel extends BasicPanel implements Deployable {
         // add the context to the tabActionLink control
         // TODO: is there a better way to do set the context?
         if(tabActionLink!=null){
-        	tabActionLink.setContext(page.getContext());
-    	}
+            tabActionLink.setContext(page.getContext());
+        }
     }
 
     /**

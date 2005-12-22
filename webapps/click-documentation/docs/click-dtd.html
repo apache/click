@@ -14,7 +14,7 @@ Click application XML descriptor Documentation Type Definition (DTD):
 
 <pre class="codeDtd">
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
-&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">deployables</span>?)&gt;
 
   &lt;-- Application pages. --&gt;
   &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*)&gt;
@@ -38,12 +38,19 @@ Click application XML descriptor Documentation Type Definition (DTD):
   &lt;!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". --&gt;
   &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
-   &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
+     &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
  
   &lt;!-- Application mode, which configures logging and caching. --&gt;
   &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
-   &lt;!ATTLIST <span class="red">mode</span> <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
-   &lt;!ATTLIST <span class="red">mode</span> <span class="blue">logto</span> (console|servlet) "<span class="green">console</span>"&gt;
+     &lt;!ATTLIST <span class="red">mode</span> <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
+     &lt;!ATTLIST <span class="red">mode</span> <span class="blue">logto</span> (console|servlet) "<span class="green">console</span>"&gt;
+
+  &lt;!-- Application deployable objects. --&gt;
+  &lt;!ELEMENT <span class="red">deployables</span> (<span class="blue">deployable</span>*)&gt;
+  
+    &lt;-- Deployable object class. --&gt;
+    &lt;!ELEMENT <span class="red">deployable</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">deployable</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
 </pre>
 </body>
 </html>
