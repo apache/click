@@ -1,0 +1,33 @@
+<p><i><a href="$newLink.href">
+	<img src="images/icon-plus.gif" alt="New" title="New" border="0" align="middle"/> create new person...</a></i></p>
+
+#if(!$persons.Empty)
+<table border="0" cellpadding="2" cellspacing="5">
+	<tr>
+		<td valign="top">
+	<table cellpadding="2" cellspacing="0" width="250">
+	<tr bgcolor="navy">
+		<th class="right-column">Persons</th>
+		<th>&nbsp;</th>
+	</tr>
+#foreach ( $person in $persons)
+#if( $velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
+		<td width="85%">$person.fullName</td>
+		<td align="right"><a href="#" onclick="return onPersonChange($format.id($person, 'Person'));">
+			<img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a></td>
+#end
+		</table>
+		</td>
+		<!-- Persons details rendered with AJAX-->
+		<td width="2" valign="top">
+			&nbsp;
+		</td>
+		<td width="300" valign="top">
+			<div id="personDetails"/>
+		</td>
+	</tr>
+</table>
+
+#else
+	<p><i>No persons configured.</i></p>
+#end
