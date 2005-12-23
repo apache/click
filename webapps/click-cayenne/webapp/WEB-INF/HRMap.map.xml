@@ -79,4 +79,11 @@
 		<qualifier><![CDATA[name = $name]]></qualifier>
 		<ordering><![CDATA[name]]></ordering>
 	</query>
+    <query name="PersonSearch" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Person">
+        <property name="cayenne.GenericSelectQuery.fetchingDataRows" value="true"/>
+        <property name="cayenne.GenericSelectQuery.pageSize" value="10"/>
+        <qualifier><![CDATA[fullName = $fullName]]></qualifier>
+        <ordering><![CDATA[fullName]]></ordering>
+    </query>
+
 </data-map>
