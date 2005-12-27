@@ -31,7 +31,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * rendered as HTML.
  *
  * <pre class="codeJava">
- * TextField usernameField = <span class="kw">new</span> TextField(<span class="st">"Username"</span>);
+ * TextField usernameField = <span class="kw">new</span> TextField(<span class="st">"username"</span>);
  * usernameField.setRequired(<span class="kw">true</span>);
  * usernameField.setSize(12);
  * usernameField.setMaxLength(12);
@@ -128,6 +128,7 @@ public class TextField extends Field {
     /**
      * Construct the TextField with the given name, label and size.
      *
+     * @param name the name of the field
      * @param label the label of the field
      * @param size the size of the field
      */

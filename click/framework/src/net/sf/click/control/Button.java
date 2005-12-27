@@ -52,7 +52,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see Submit
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Button extends Field {
 

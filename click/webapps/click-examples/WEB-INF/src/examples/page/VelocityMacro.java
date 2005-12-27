@@ -1,12 +1,12 @@
 package examples.page;
 
-import net.sf.click.control.DoubleField;
 import net.sf.click.control.Form;
-import net.sf.click.control.IntegerField;
 import net.sf.click.control.Reset;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
+import net.sf.click.extras.control.IntegerField;
 import examples.control.InvestmentSelect;
 
 /**

@@ -64,7 +64,6 @@ import org.apache.commons.lang.StringUtils;
  * format object will be created for every new Page.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Format {
 

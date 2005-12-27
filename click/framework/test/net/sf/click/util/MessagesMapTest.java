@@ -13,7 +13,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
         
         assertFalse(map.isEmpty());
-        assertEquals(21, map.size());
+        assertEquals(32, map.size());
 
         assertTrue(map.containsKey("calendar-image-title"));
         assertEquals("Calendar", map.get("calendar-image-title")); 
@@ -30,7 +30,7 @@ public class MessagesMapTest extends TestCase {
         map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
 
         assertFalse(map.isEmpty());
-        assertEquals(21, map.size());
+        assertEquals(32, map.size());
 
         assertTrue(map.containsKey("calendar-image-title"));
         assertEquals("Calendar", map.get("calendar-image-title")); 

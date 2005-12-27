@@ -13,17 +13,14 @@ Click Controls provide an event callback mechanism similar the
 <pre class="codeJava">
 <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
 
-    <span class="jd">/**
-     * @see Page#onInit()
-     */</span>
-    <span class="kw">public void</span> onInit() {
-        ActionLink actionLink = <span class="kw">new</span> ActionLink("link");
-        actionLink.setListener(<span class="kw">this</span>, "<span class="blue">onLinkClick</span>");
+    <span class="kw">public</span> MyPage() {
+        ActionLink actionLink = <span class="kw">new</span> ActionLink(<span class="st">"link"</span>);
+        actionLink.setListener(<span class="kw">this</span>, <span class="st">"onLinkClick"</span>);
         addControl(actionLink);
     }
     
-    <span class="kw">public boolean</span> <span class="blue">onLinkClick</span>() {
-        System.out.println("onLinkClick invoked");
+    <span class="kw">public boolean</span> onLinkClick() {
+        System.out.println(<span class="st">"onLinkClick invoked"</span>);
         <span class="kw">return true</span>;
     }
 } </pre>

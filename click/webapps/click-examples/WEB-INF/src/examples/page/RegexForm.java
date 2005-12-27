@@ -12,17 +12,19 @@ import net.sf.click.extras.control.RegexField;
 public class RegexForm extends BorderedPage {
 
     public RegexForm() {
-        RegexField version = new RegexField("version");
-        version.setPattern("[0-9]+\\.[0-9]+\\.[0-9]+");
-        version.setRequired(true);
+        RegexField versionField = new RegexField("version", "Version", 10);
+        versionField.setPattern("[0-9]+\\.[0-9]+\\.[0-9]+");
+        versionField.setRequired(true);
+        versionField.setTitle("Version number, e.g. '1.2.0'");
 
-        RegexField url = new RegexField("url", "URL");
-        url.setPattern("(http|https)://.+");
-        url.setRequired(true);
+        RegexField urlField = new RegexField("url", "URL", 30);
+        urlField.setPattern("(http|https)://.+");
+        urlField.setRequired(true);
+        urlField.setTitle("URL address, e.g. 'http://www.google.com'");
 
         Form form = new Form("form");
-        form.add(version);
-        form.add(url);
+        form.add(versionField);
+        form.add(urlField);
         form.add(new Submit("submit", "   OK   "));
         form.add(new Submit("cancel", this, "onCancelClick"));
         addControl(form);

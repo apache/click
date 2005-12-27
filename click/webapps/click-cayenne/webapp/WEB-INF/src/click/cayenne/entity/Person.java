@@ -9,6 +9,8 @@ import click.cayenne.entity.auto._Person;
  */
 public class Person extends _Person {
 
+    private static final long serialVersionUID = -8119257935908672077L;
+
 }
 
 

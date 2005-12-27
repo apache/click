@@ -10,12 +10,13 @@
 		<th class="right-column">Departments</th>
 		<th>&nbsp;</th>
 	</tr>
-#foreach ( $department in $departments)
-#if( $velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
+  #foreach ($department in $departments)
+    #if ($velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
 		<td width="85%">$department.name</td>
 		<td align="right"><a href="#" onclick="return onDepartmentChange($format.id($department, 'Department'));">
-			<img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a></td>
-#end
+	      <img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a>
+	    </td>
+  #end
 		</table>
 		</td>
 		<!-- Department details rendered with AJAX-->

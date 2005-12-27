@@ -28,7 +28,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -38,11 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.sf.click.control.DateField;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
-import net.sf.click.control.HiddenField;
 import net.sf.click.control.Label;
 
 import org.apache.commons.codec.binary.Base64;
@@ -204,32 +201,30 @@ public class ClickUtils {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Short.valueOf(field.getValue());
                         }
-                    } else if (paramClass == java.util.Date.class) {
-                        if (field instanceof DateField) {
-                            paramObject = ((DateField) field).getDate();
-                        }
-                    } else if (paramClass == java.sql.Date.class) {
-                        if (field instanceof DateField) {
-                            Date date = ((DateField) field).getDate();
-                            if (date != null) {
+                    } else if (java.util.Date.class.isAssignableFrom(paramClass) &&
+                               field.getValueClass() == java.util.Date.class) {
+
+                        java.util.Date fieldDate =
+                            (java.util.Date) field.getValueObject();
+
+                        if (paramClass == java.util.Date.class) {
+                            paramObject = fieldDate;
+
+                        } else if (paramClass == java.sql.Date.class) {
+                            if (fieldDate != null) {
                                 paramObject =
-                                    new java.sql.Date(date.getTime());
+                                    new java.sql.Date(fieldDate.getTime());
                             }
-                        }
-                    } else if (paramClass == java.sql.Time.class) {
-                        if (field instanceof DateField) {
-                            Date date = ((DateField) field).getDate();
-                            if (date != null) {
+
+                        } else if (paramClass == java.sql.Time.class) {
+                            if (fieldDate != null) {
                                 paramObject =
-                                    new java.sql.Time(date.getTime());
+                                    new java.sql.Time(fieldDate.getTime());
                             }
-                        }
-                    } else if (paramClass == java.sql.Timestamp.class) {
-                        if (field instanceof DateField) {
-                            Date date = ((DateField) field).getDate();
-                            if (date != null) {
+                        } else if (paramClass == java.sql.Timestamp.class) {
+                            if (fieldDate != null) {
                                 paramObject =
-                                    new java.sql.Timestamp(date.getTime());
+                                    new java.sql.Timestamp(fieldDate.getTime());
                             }
                         }
                     }
@@ -340,20 +335,24 @@ public class ClickUtils {
                         System.out.println(msg);
                     }
 
-                    if (result != null) {
-                        if (field instanceof DateField &&
-                            result instanceof Date) {
+                    field.setValueObject(result);
 
-                            DateField dateField = (DateField) field;
-                            dateField.setDate((Date) result);
-
-                        } else if (field instanceof HiddenField) {
-                            field.setValue(result);
-
-                        } else {
-                            field.setValue(result.toString());
-                        }
-                    }
+//                    if (result != null) {
+//                        field.setValueObject(result);
+//                        if (result instanceof Date)
+//                        if (field instanceof DateField &&
+//                            result instanceof Date) {
+//
+//                            DateField dateField = (DateField) field;
+//                            dateField.setDate((Date) result);
+//
+//                        } else if (field instanceof HiddenField) {
+//                            field.setValueObject(result);
+//
+//                        } else {
+//                            field.setValueObject(result);
+//                        }
+//                    }
 
                 } catch (Exception e) {
                     if (debug) {

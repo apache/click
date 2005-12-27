@@ -81,15 +81,15 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *
  *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.<span class="kw">class</span>);
  *
- *    <span class="kw">public void</span> onInit() {
- *        form.setButtonAlign(<span class="st">"right"</span>);
- *        addControl(form);
- *
+ *    <span class="kw">public</span> DepartmentEdit() {
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>, 35);
  *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>, 35, 2);
  *
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *
+ *        form.setButtonAlign(<span class="st">"right"</span>);
+ *        addControl(form);
  *    }
  *
  *    <span class="kw">public void</span> onGet() {
@@ -216,7 +216,7 @@ public class CayenneForm extends Form {
         if (dataObject != null) {
             if (dataObject.getPersistenceState() != PersistenceState.TRANSIENT) {
                 int pk = DataObjectUtils.intPKForObject(dataObject);
-                pkField.setValue(new Integer(pk));
+                pkField.setValueObject(new Integer(pk));
             }
             copyFrom(dataObject, true);
         }

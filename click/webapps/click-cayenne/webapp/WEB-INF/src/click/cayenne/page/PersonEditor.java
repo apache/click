@@ -1,6 +1,8 @@
 package click.cayenne.page;
 
 import net.sf.click.extras.cayenne.CayenneForm;
+import net.sf.click.extras.control.DateField;
+import net.sf.click.extras.control.DoubleField;
 import net.sf.click.control.*;
 import click.cayenne.entity.Person;
 
@@ -8,6 +10,8 @@ import click.cayenne.entity.Person;
  * Provides a Person Editor page which can be used to create or edit
  * Person data objects. This page uses the data aware CayenneForm control
  * for simplified editing data objects.
+ * 
+ * @author Ahmed Mohombe 
  */
 public class PersonEditor  extends BorderedPage {
 

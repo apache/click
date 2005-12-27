@@ -38,7 +38,6 @@ import net.sf.click.util.ClickUtils;
  * making this Panel a passthrough to the Page.
  *
  * @author Phil Barnes
- * @version $Id$
  */
 public class BasicPanel implements Panel {
 

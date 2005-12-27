@@ -36,7 +36,6 @@ import org.apache.commons.lang.StringUtils;
  * @see Table
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Column implements Serializable {
 

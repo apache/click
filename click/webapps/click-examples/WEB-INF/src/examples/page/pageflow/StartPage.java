@@ -3,12 +3,12 @@ package examples.page.pageflow;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.click.control.DateField;
 import net.sf.click.control.Form;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
+import net.sf.click.extras.control.DateField;
 import examples.control.InvestmentSelect;
 import examples.domain.CourseBooking;
 import examples.domain.Customer;
@@ -70,7 +70,7 @@ public class StartPage extends BorderedPage {
         form.add(new Submit(" Next > ", this, "onNextClick"));
 
         if (getContext().isForward() && courseBooking != null) {
-            customerSelect.setValue(courseBooking.getCustomerId());
+            customerSelect.setValueObject(courseBooking.getCustomerId());
             dateField.setDate(courseBooking.getBookingDate());
             courseSelect.setValue(courseBooking.getCourseType());
             notesField.setValue(courseBooking.getBookingNotes());

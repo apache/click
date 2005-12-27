@@ -37,7 +37,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see RadioGroup
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Radio extends Field {
 

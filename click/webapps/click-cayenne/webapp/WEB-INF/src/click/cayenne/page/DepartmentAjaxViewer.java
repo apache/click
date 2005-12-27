@@ -14,18 +14,13 @@ import click.cayenne.entity.Department;
  */
 public class DepartmentAjaxViewer extends CayennePage {
 
-    public static final String DEPARTMENT_VELOKEY = "department";
-
     /** The edit Department ActionLink. */    
     protected ActionLink editLink;
     
     /** The delete Department ActionLink. */    
     protected ActionLink deleteLink;
 
-    /**
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
+    public DepartmentAjaxViewer() {
         editLink = new ActionLink("editLink", this, "onEditClick");
         addControl(editLink);
 
@@ -52,7 +47,7 @@ public class DepartmentAjaxViewer extends CayennePage {
 
         if (id != null) {
             DataObject dataObject = getDataObject(Department.class, id);
-            addModel(DEPARTMENT_VELOKEY, dataObject);
+            addModel("department", dataObject);
         }
     }
 

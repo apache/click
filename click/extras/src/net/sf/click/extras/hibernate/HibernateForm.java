@@ -81,18 +81,18 @@ import org.hibernate.type.Type;
  *
  *   <span class="kw">private</span> HibernateForm form = <span class="kw">new</span> HibernateForm(<span class="st">"form"</span>, User.<span class="kw">class</span>);
  *
- *    <span class="kw">public void</span> onInit() {
- *        form.setButtonAlign(<span class="st">"right"</span>);
- *        form.setLabelRequiredPrefix(<span class="st">"&lt;b&gt;"</span>);
- *        form.setLabelRequiredSuffix(<span class="st">"&lt;/b&gt;"</span>);
- *        addControl(form);
- *
+ *    <span class="kw">public</span> UserEdit() {
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"firstName"</span>);
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>);
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"FamilyName"</span>);
  *
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *
+ *        form.setButtonAlign(<span class="st">"right"</span>);
+ *        form.setLabelRequiredPrefix(<span class="st">"&lt;b&gt;"</span>);
+ *        form.setLabelRequiredSuffix(<span class="st">"&lt;/b&gt;"</span>);
+ *        addControl(form);
  *    }
  *
  *    <span class="kw">public void</span> setUser(User user) {
@@ -269,7 +269,7 @@ public class HibernateForm extends Form {
 
             Object identifier =
                 classMetadata.getIdentifier(valueObject, EntityMode.POJO);
-            oidField.setValue(identifier);
+            oidField.setValueObject(identifier);
 
             copyFrom(valueObject, true);
         }

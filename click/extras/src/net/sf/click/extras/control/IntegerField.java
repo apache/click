@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.control;
+package net.sf.click.extras.control;
+
+import net.sf.click.control.Field;
+import net.sf.click.control.Form;
+import net.sf.click.control.TextField;
+
 
 /**
- * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
+ * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
- * <td>Double Field</td>
- * <td><input type='text' value='3.541' title='DoubleField Control'/></td>
+ * <td>Integer Field</td>
+ * <td><input type='text' value='101' title='IntegerField Control'/></td>
  * </tr>
  * </table>
  *
- * DoubleField will validate the number when the control is processed and invoke
+ * IntegerField will validate the number when the control is processed and invoke
  * the control listener if there is no parsing error.
  * <p/>
- * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
+ * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
  * reference the method {@link Form#getHtmlImports()} in the page template
  * (imports click/form.js file). For example:
@@ -48,54 +53,69 @@ package net.sf.click.control;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
-public class DoubleField extends TextField {
+public class IntegerField extends TextField {
 
-    private static final long serialVersionUID = -6326214893690121356L;
+    private static final long serialVersionUID = -2239992411551673682L;
+
+    // ----------------------------------------------------- Instance Variables
 
     /** The maximum field value. */
-    protected double maxvalue = Double.MAX_VALUE;
+    protected int maxvalue = Integer.MAX_VALUE;
 
     /** The minimum field value. */
-    protected double minvalue = Double.MIN_VALUE;
+    protected int minvalue = Integer.MIN_VALUE;
 
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct a DoubleField with the given name.
+     * Construct a IntegerField field with the given name.
      *
      * @param name the name of the field
      */
-    public DoubleField(String name) {
+    public IntegerField(String name) {
         super(name);
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 
     /**
-     * Construct a DoubleField with the given name and label.
-     *
-     * @param name the name of the field
-     * @param label the label of the field
-     */
-    public DoubleField(String name, String label) {
-        super(name, label);
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
-    }
-
-    /**
-     * Construct a DoubleField with the given name and required status.
+     * Construct a IntegerField field with the given name and required status.
      *
      * @param name the name of the field
      * @param required the field required status
      */
-    public DoubleField(String name, boolean required) {
-        this(name);
+    public IntegerField(String name, boolean required) {
+        super(name, required);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+    }
+
+    /**
+     * Construct a IntegerField field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public IntegerField(String name, String label) {
+        super(name, label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+    }
+
+    /**
+     * Construct a IntegerField field with the given name, label and required
+     * status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public IntegerField(String name, String label, boolean required) {
+        super(name, label);
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
         setRequired(required);
     }
 
     /**
-     * Create a DoubleField with no name defined, <b>please note</b> the
+     * Create a IntegerField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
      * <div style="border: 1px solid red;padding:0.5em;">
@@ -104,24 +124,23 @@ public class DoubleField extends TextField {
      * no-args constructor you must define its name before adding it to its
      * parent. </div>
      */
-    public DoubleField() {
-        super();
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+    public IntegerField() {
+        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
     }
 
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the field Double value, or null if value was empty or a parsing
+     * Return the field Integer value, or null if value was empty or a parsing
      * error occured.
      *
-     * @return the field Double value
+     * @return the field Integer value
      */
-    public Double getDouble() {
+    public Integer getInteger() {
         String value = getValue();
         if (value != null && value.length() > 0) {
             try {
-                return Double.valueOf(value);
+                return Integer.valueOf(value);
 
             } catch (NumberFormatException nfe) {
                 return null;
@@ -132,16 +151,16 @@ public class DoubleField extends TextField {
     }
 
     /**
-     * Return the field Float value, or null if value was empty or a parsing
+     * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
-     * @return the field Float value
+     * @return the field Long value
      */
-    public Float getFloat() {
+    public Long getLong() {
         String value = getValue();
         if (value != null && value.length() > 0) {
             try {
-                return Float.valueOf(value);
+                return Long.valueOf(value);
 
             } catch (NumberFormatException nfe) {
                 return null;
@@ -152,45 +171,77 @@ public class DoubleField extends TextField {
     }
 
     /**
-     * Return the maximum valid double field value.
+     * Return the maximum valid integer field value.
      *
-     * @return the maximum valid double field value
+     * @return the maximum valid integer field value
      */
-    public double getMaxValue() {
+    public int getMaxValue() {
         return maxvalue;
     }
 
     /**
-     * Set the maximum valid double field value.
+     * Set the maximum valid integer field value.
      *
-     * @param value the maximum valid double field value
+     * @param value the maximum valid integer field value
      */
-    public void setMaxValue(double value) {
+    public void setMaxValue(int value) {
         maxvalue = value ;
     }
 
     /**
-     * Set the miminum valid double field value.
+     * Return the minimum valid integer field value.
      *
-     * @param value the miminum valid double field value
+     * @return the minimum valid integer field value
      */
-    public void setMinValue(double value) {
+    public int getMinValue() {
+        return minvalue;
+    }
+
+    /**
+     * Set the miminum valid integer field value.
+     *
+     * @param value the miminum valid integer field value
+     */
+    public void setMinValue(int value) {
         minvalue = value;
     }
 
     /**
-     * Return the minimum valid double field value.
+     * Return the <tt>Integer.class</tt>.
      *
-     * @return the minimum valid double field value.
+     * @see Field#getValueClass()
+     *
+     * @return the <tt>Integer.class</tt>
      */
-    public double getMinValue() {
-        return minvalue;
+    public Class getValueClass() {
+        return Integer.class;
+    }
+
+    /**
+     * Return the field integer value, or null if value was empty or a parsing
+     * error occured.
+     *
+     * @see Field#getValueObject()
+     */
+    public Object getValueObject() {
+        return getInteger();
+    }
+
+    /**
+     * Set the integer value of the field using the given object.
+     *
+     * @see Field#setValueObject(Object)
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            value = object.toString();
+        }
     }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the DoubleField submission. If the Double value can be parsed
+     * Process the IntegerField submission. If the Integer value can be parsed
      * the controls listener will be invoked.
      * <p/>
      * A field error message is displayed if a validation error occurs.
@@ -198,8 +249,8 @@ public class DoubleField extends TextField {
      * <pre>/click-control.properties</pre></blockquote>
      * <p/>
      * Error message bundle key names include: <blockquote><ul>
-     * <li>double-format-error</li>
      * <li>field-required-error</li>
+     * <li>integer-format-error</li>
      * <li>number-maxvalue-error</li>
      * <li>number-minvalue-error</li>
      * </ul></blockquote>
@@ -216,16 +267,14 @@ public class DoubleField extends TextField {
         int length = value.length();
         if (length > 0) {
             try {
-                double doubleValue = Double.parseDouble(value);
-
-                if (maxvalue != Double.MAX_VALUE && doubleValue > maxvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Double(maxvalue) };
+                int intValue = Integer.parseInt(value);
+                if (intValue > maxvalue) {
+                    Object[] args = new Object[] { getErrorLabel(), new Integer(maxvalue) };
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
-
-                if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Double(minvalue) };
+                if (intValue < minvalue) {
+                    Object[] args = new Object[] { getErrorLabel(), new Integer(minvalue) };
                     setError(getMessage("number-minvalue-error", args));
                     return true;
                 }
@@ -233,7 +282,7 @@ public class DoubleField extends TextField {
                 return invokeListener();
 
             } catch (NumberFormatException nfe) {
-                setError(getMessage("double-format-error", getErrorLabel()));
+                setError(getMessage("integer-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {

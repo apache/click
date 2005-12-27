@@ -16,6 +16,8 @@ import click.cayenne.entity.auto._Department;
  */
 public class Department extends _Department {
 
+    private static final long serialVersionUID = 5503402952367552302L;
+
     protected void validateForSave(ValidationResult validationResult) {
         super.validateForSave(validationResult);
 

@@ -35,7 +35,7 @@ public class NextPage extends BorderedPage {
         form.add(new Submit("  Next > ", this, "onNextClick"));
 
         if (getContext().isForward() && courseBooking != null) {
-            courseField.setValue(courseBooking);
+            courseField.setValueObject(courseBooking);
 
             Customer customer =
                 CustomerDAO.findCustomerByID(courseBooking.getCustomerId());

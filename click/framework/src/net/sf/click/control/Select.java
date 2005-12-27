@@ -54,19 +54,19 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> GenderPage <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     Select genderSelect;
+ *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> Select genderSelect = <span class="kw">new</span> Select(<span class="st">"Gender"</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
- *         addControl(form);
- *
- *         genderSelect = <span class="kw">new</span> Select(<span class="st">"Gender"</span>);
+ *     <span class="kw">public</span> GenderPage() {
  *         genderSelect.setRequired(<span class="kw">true</span>);
  *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"U"</span>, <span class="st">""</span>);
  *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"M"</span>, <span class="st">"Male"</span>));
  *         genderSelect.add(<span class="kw">new</span> Option(<span class="st">"F"</span>, <span class="st">"Female"</span>));
  *         form.add(genderSelect);
+ *
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
+ *
+ *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {
@@ -85,7 +85,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'>
- * <input type='submit' value='Submit'/>
+ * <input type='submit' value='  OK  '/>
  * </td></tr>
  * </table>
  * </td></tr>
@@ -110,14 +110,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> LocationPage <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     Select locationSelect;
+ *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> Select locationSelect = <span class="kw">new</span> Select(<span class="st">"location"</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
- *         addControl(form);
- *
- *         locationSelect = <span class="st">new</span> Select(<span class="st">"Location"</span>);
+ *     <span class="kw">public</span> LocationPage() {
  *         locationSelect.setMutliple(<span class="kw">true</span>);
  *         locationSelect.setRequired(<span class="kw">true</span>);
  *         locationSelect.setSize(7);
@@ -129,6 +125,10 @@ import net.sf.click.util.HtmlStringBuffer;
  *         locationSelect.add(<span class="st">"VIC"</span>);
  *         locationSelect.add(<span class="st">"WA"</span>);
  *         form.add(locationSelect);
+ *
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
+ *
+ *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {
@@ -147,7 +147,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <td align='left'><select name='location'size='7' multiple ><option value='QLD'>QLD</option><option value='NSW'>NSW</option><option value='NT'>NT</option><option value='SA'>SA</option><option value='TAS'>TAS</option><option value='VIC'>VIC</option><option value='WA'>WA</option></select></td>
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
- * <tr align='left'><td colspan='2'><input type='submit' value='Submit'/></td></tr>
+ * <tr align='left'><td colspan='2'><input type='submit' value='  OK  '/></td></tr>
  * </table>
  * </td></tr>
  * </table>
@@ -164,7 +164,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see OptionGroup
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Select extends Field {
 

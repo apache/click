@@ -85,7 +85,6 @@ import org.w3c.dom.NodeList;
  *
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Menu implements Control, Serializable {
 

@@ -61,9 +61,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * In this file the Page bean id maps to the page class name:
  *
  * <pre class="codeConfig">
- * &lt;beans&gt;
- *   &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
- *         singleton="false" autowire="byName"/&gt;
+ * &lt;beans default-autowire="byName"&gt;
+ *   &lt;bean id="com.mycorp.pages.CustomerEdit"
+ *         class="com.mycorp.pages.CustomerEdit"
+ *         singleton="false"/&gt;
  *   ..
  * &lt;/beans&gt; </pre>
  *
@@ -90,7 +91,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * &lt;web-app&gt;
  *
  *    &lt;servlet&gt;
- *       &lt;servlet-name&gt;spring-click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
  *       &lt;servlet-class&gt;net.sf.click.extras.spring.SpringClickServlet&lt;/servlet-class&gt;
  *       &lt;init-param&gt;
  *         &lt;param-name&gt;<font color="blue">spring-path</font>&lt;/param-name&gt;
@@ -100,7 +101,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  *    &lt;/servlet&gt;
  *
  *    &lt;servlet-mapping&gt;
- *       &lt;servlet-name&gt;spring-click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
  *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
  *    &lt;/servlet-mapping&gt;
  *

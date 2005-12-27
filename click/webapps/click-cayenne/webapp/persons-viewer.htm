@@ -10,12 +10,13 @@
 		<th class="right-column">Persons</th>
 		<th>&nbsp;</th>
 	</tr>
-#foreach ( $person in $persons)
-#if( $velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
+  #foreach ($person in $persons)
+    #if ($velocityCount % 2 == 0) <tr bgcolor="#f7f7e7"> #else <tr> #end
 		<td width="85%">$person.fullName</td>
 		<td align="right"><a href="#" onclick="return onPersonChange($format.id($person, 'Person'));">
-			<img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a></td>
-#end
+			<img src="images/icon-view.gif" alt="View" title="View" border="0" align="middle"></a>
+	    </td>
+  #end
 		</table>
 		</td>
 		<!-- Persons details rendered with AJAX-->

@@ -4,7 +4,7 @@
    <property file="../../build/build.properties"/>
    <property name="name" value="click-cayenne"/>
    <property name="jar.ashwood" value="../../lib/ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2M6.jar"/>
+   <property name="jar.cayenne" value="../../lib/cayenne-nodeps-1.2M9.jar"/>
    <property name="jar.click" value="../../dist/click-${version}.jar"/>
    <property name="jar.click-extras" value="../../dist/click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
@@ -33,6 +33,10 @@
        	    <pathelement location="${jar.servlet}"/>
          </classpath>
          <packageset dir="webapp/WEB-INF/src"/>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://click.sourceforge.net/docs/extras-api/"/>
+         <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
       </javadoc>
       <copy file="../../framework/stylesheet.css"  
       	    overwrite="true"

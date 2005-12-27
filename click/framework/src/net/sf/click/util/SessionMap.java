@@ -44,7 +44,6 @@ import javax.servlet.http.HttpSession;
  * it is merged with the page template.
  *
  * @author Malcolm.Edgar
- * @version $Id$
  */
 public class SessionMap implements Map {
 

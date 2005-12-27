@@ -31,7 +31,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * rendered as HTML.
  *
  * <pre class="codeJava">
- * TextArea commentsField = <span class="kw">new</span> TextArea(<span class="st">"Comments"</span>);
+ * TextArea commentsField = <span class="kw">new</span> TextArea(<span class="st">"comments"</span>);
  * commentsField.setCols(40);
  * commentsField.setRows(6);
  * form.add(commentsField); </pre>
@@ -45,7 +45,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *    href="../../../../../html/interact/forms.html#h-17.7">TEXTAREA</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class TextArea extends Field {
 

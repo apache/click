@@ -15,14 +15,10 @@
  */
 package net.sf.click.extras.control;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import net.sf.click.control.TextField;
-import net.sf.click.util.MessagesMap;
 
 /**
  * Provides a Regex Field control: &nbsp; &lt;input type='text'&gt;.
@@ -30,21 +26,34 @@ import net.sf.click.util.MessagesMap;
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Regex Field</td>
- * <td><input type='text' value='string' title='RegexField Control'/></td>
+ * <td><input type='text' value='1.0.2' title='RegexField Control'/></td>
  * </tr>
  * </table>
  *
  * RegexField will validate the value using regular expression
  * when the control is processed and invoke the control listener
  * if the value format is valid.
+ * <p/>
+ * Examples using RegexField for version number and URL input are provided below:
  *
  * <pre class="codeJava">
- * RegexField field = <span class="kw">new</span> RegexField(<span class="st">"versionNumber"</span>);
- * field.setPattern(<span class="st">"[0-9]+\\.[0-9]+\\.[0-9]+"</span>);
- * form.add(field);</pre>
+ * RegexField versionField = <span class="kw">new</span> RegexField(<span class="st">"version"</span>);
+ * versionField.setPattern(<span class="st">"[0-9]+\\.[0-9]+\\.[0-9]+"</span>);
+ * form.add(versionField);
  *
- * For more usage of RegexField see the {@link net.sf.click.control.TextField}.
+ * RegexField urlField = <span class="kw">new</span> RegexField(<span class="st">"url"</span>, <span class="st">"URL"</span>);
+ * urlField.setPattern(<span class="st">"(http|https)://.+"</span>);
+ * form.add(urlField); </pre>
  *
+ * For details on valid regular expression patterns see
+ * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html">Pattern</a>
+ * Javadoc.
+ * <p/>
+ * Note for performance reasons the regular expression pattern is compiled when
+ * the field is processed not when its value is set. If you set an invalid
+ * expression pattern a
+ * <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/PatternSyntaxException.html">PatternSyntaxException</a>
+ * will be thrown by the {@link #onProcess()} method.
  * <p>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
@@ -59,10 +68,6 @@ public class RegexField extends TextField {
     private static final long serialVersionUID = 1030492442713326113L;
 
     // ----------------------------------------------------- Instance Variables
-    /**
-     * The Click Extras messages bundle name: &nbsp; <tt>click-extras</tt>
-     */
-    protected static final String CONTROL_MESSAGES = "click-extras";
 
     /**
      * The field pattern based on regular expression.
@@ -73,11 +78,12 @@ public class RegexField extends TextField {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a TextField with no name defined,
-     * <b>please note</b> the control's name must be defined before it is valid.
+     * Construct the RegexField with the given name.
+     *
+     * @param name the name of the field
      */
-    public RegexField() {
-        super();
+    public RegexField(String name) {
+        super(name);
     }
 
     /**
@@ -106,7 +112,7 @@ public class RegexField extends TextField {
      *
      * @param name the name of the field
      * @param label the label of the field
-     * @param size
+     * @param size the size of the field
      */
     public RegexField(String name, String label, int size) {
         super(name, label, size);
@@ -123,22 +129,28 @@ public class RegexField extends TextField {
     }
 
     /**
-     * Construct the RegexField with the given name.
-     *
-     * @param name the name of the field
+     * Create a RegexField with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
      */
-    public RegexField(String name) {
-        super(name);
+    public RegexField() {
+        super();
     }
 
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Sets the field pattern as regular expression.
-     * This field validates the value using this pattern.
+     * Sets the field pattern as regular expression. Note compiling the regex
+     * pattern is deferred until <tt>onProcess()</tt> method is invoked. If
+     * at this point the pattern is invalid a <tt>PatternSyntaxException</tt>
+     * will be thrown.
      *
-     * @param pattern the field pattern
-     * @throws PatternSyntaxException if the pattern has a syntax error
+     * @param pattern the field regular expression pattern
      */
     public void setPattern(String pattern){
         Pattern.compile(pattern);
@@ -181,6 +193,8 @@ public class RegexField extends TextField {
      * </blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @throws PatternSyntaxException if the pattern has a syntax error
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -203,7 +217,7 @@ public class RegexField extends TextField {
                 return true;
             }
 
-            if(pattern!=null && !Pattern.matches(pattern, value)){
+            if (pattern!=null && !Pattern.matches(pattern, value)){
                 Object[] args = new Object[] { getErrorLabel(), pattern };
                 setError(getMessage("field-pattern-error", args));
                 return true;
@@ -220,27 +234,4 @@ public class RegexField extends TextField {
         return true;
     }
 
-    /**
-     * Return a Map of localized messages for the Field.
-     *
-     * @return a Map of localized messages for the Field
-     * @throws IllegalStateException if the context for the Field has not be set
-     */
-    public Map getMessages() {
-        // TODO: will become redundant, when Field getMessages() is updated...
-
-        if (messages == null) {
-            if (getContext() != null) {
-                Locale locale = getContext().getLocale();
-                messages = new HashMap();
-                messages.putAll(new MessagesMap(TextField.CONTROL_MESSAGES, locale));
-                messages.putAll(new MessagesMap(getClass().getName(), locale));
-
-            } else {
-                String msg = "Cannot initialize messages as context not set";
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
-    }
 }

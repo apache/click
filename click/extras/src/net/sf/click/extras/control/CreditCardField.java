@@ -60,30 +60,25 @@ import net.sf.click.control.TextField;
  * <pre class="codeJava">
  * <span class="kw">public class</span> PaymentPage <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     CreditCardField creditCardField;
- *     IntegerField expiryField;
+ *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> CreditCardField creditCardField  = <span class="kw">new</span> CreditCardField(<span class="st">"creditCard"</span>, <span class="kw">true</span>);
+ *     <span class="kw">private</span> IntegerField expiryField  = <span class="kw">new</span> IntegerField(<span class="st">"expiryDate"</span>, <span class="kw">true</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
- *         addControl(form);
- *
- *         creditCardField = <span class="kw">new</span> CreditCardField(<span class="st">"Credit Card"</span>);
- *         creditCardField.setRequired(<span class="kw">true</span>);
+ *     <span class="kw">public</span> PaymentPage() {
  *         form.add(creditCardField);
  *
- *         expiryField = <span class="kw">new</span> IntegerField(<span class="st">"Expiry Date"</span>);
- *         expiryField.setRequired(<span class="kw">true</span>);
  *         expiryField.setMinLength(4);
  *         expiryField.setMaxLength(4);
  *         expiryField.setSize(4);
  *         form.add(expiryField);
  *
- *         form.add(<span class="kw">new</span> Submit(<span class="st">"  OK  "</span>));
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
  *
- *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">" Cancel "</span>);
+ *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">"cancel"</span>);
  *         cancelButton.setListener(<span class="kw">this</span>, "<span class="st">onCancelClick"</span>);
  *         form.add(cancelButton);
+ *
+ *         addControl(form);
  *     }
  *
  *     <span class="kw">public boolean</span> onCancelClick() {
@@ -108,7 +103,6 @@ import net.sf.click.control.TextField;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class CreditCardField extends TextField {
 

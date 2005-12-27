@@ -49,7 +49,6 @@ import org.apache.velocity.exception.ParseErrorException;
  * display of error information.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ErrorReport {
 

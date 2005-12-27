@@ -2,6 +2,7 @@
 <click-app>
 
   <deployables>
+    <deployable classname="net.sf.click.extras.control.DateField"/>
     <deployable classname="net.sf.click.extras.panel.ListPanel"/>
     <deployable classname="net.sf.click.extras.panel.TabbedPanel"/>
   </deployables>

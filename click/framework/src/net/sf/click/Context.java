@@ -40,7 +40,6 @@ import org.apache.commons.fileupload.FileUploadException;
  * is created for each Page.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Context {
 

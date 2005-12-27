@@ -25,7 +25,6 @@ package net.sf.click.control;
  *
  * @author Phil Barnes
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ImageSubmit extends Submit {
 

@@ -3,13 +3,13 @@ package examples.page;
 import java.io.Serializable;
 
 import net.sf.click.control.Checkbox;
-import net.sf.click.control.DateField;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
 import examples.control.InvestmentSelect;
 

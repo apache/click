@@ -72,7 +72,7 @@ import org.apache.commons.lang.StringUtils;
  * attribute. For examle:
  *
  * <pre class="codeJava">
- * <span class="kw">public void</span> onInit() {
+ * <span class="kw">public</span> CustomersPage() {
  *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
  *     table.setAttribute(<span class="st">"class"</span>, <span class="st">"simple"</span>);
  *     ..
