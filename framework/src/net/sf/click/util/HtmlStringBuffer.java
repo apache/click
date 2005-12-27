@@ -45,7 +45,6 @@ import org.apache.commons.lang.StringEscapeUtils;
  * &lt;input type="text" name="address" value="23 Holt's Street"/&gt; </pre>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class HtmlStringBuffer {
 

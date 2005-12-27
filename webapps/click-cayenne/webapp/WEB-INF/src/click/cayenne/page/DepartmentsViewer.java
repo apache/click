@@ -13,10 +13,7 @@ import net.sf.click.control.ActionLink;
  */
 public class DepartmentsViewer extends BorderedPage {
 
-    /**
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
+    public DepartmentsViewer() {
         addModel("head-include", "ajax-head.htm");
         addModel("body-onload", "registerAjaxStuff();");
 

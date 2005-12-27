@@ -49,7 +49,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">public void</span> onInit() {
+ *     <span class="kw">public</span> MyPage() {
  *         ActionLink link = <span class="kw">new</span> ActionLink(<span class="st">"logoutLink"</span>);
  *         link.setListener(<span class="kw">this</span>, <span class="st">"onLogoutClick"</span>);
  *         addControl(link);
@@ -105,7 +105,7 @@ import org.apache.commons.lang.StringUtils;
  *     ActionLink addLink;
  *     ActionLink detailsLink;
  *
- *     <span class="kw">public void</span> onInit() {
+ *     <span class="kw">public</span> ProductsPage() {
  *         addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>);
  *         addLink.setListener(<span class="kw">this</span>, <span class="st">"onAddClick"</span>);
  *         addControl(addLink);
@@ -153,7 +153,6 @@ import org.apache.commons.lang.StringUtils;
  * @see Submit
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ActionLink implements Control {
 

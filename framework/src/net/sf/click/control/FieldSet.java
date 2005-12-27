@@ -65,23 +65,28 @@ import org.apache.commons.lang.StringUtils;
  * An FieldSet example containing credit card payment details is provided below:
  *
  * <pre class='codeJava'>
- * <span class='kw'>public void</span> onInit() {
- *     Form form = <span class='kw'>new</span> Form(<span class='st'>"form"</span>);
- *     addControl(form);
+ * <span class='kw'>public class</span> PaymentDetails() {
  *
- *     FieldSet paymentFieldSet = <span class='kw'>new</span> FieldSet(<span class='st'>"Payment Details"</span>);
- *     form.add(paymentFieldSet);
+ *     <span class='kw'>public</span> PaymentDetails() {
+ *         Form form = <span class='kw'>new</span> Form(<span class='st'>"form"</span>);
  *
- *     paymentFieldSet.add(<span class='kw'>new</span> TextField(<span class='st'>"Card Name"</span>, <span class='kw'>true</span>));
- *     paymentFieldSet.add(<span class='kw'>new</span> CreditCardField(<span class='st'>"Card Number"</span>, <span class='kw'>true</span>));
- *     IntegerField expiryField = <span class='kw'>new</span> IntegerField(<span class='st'>"Expiry"</span>, <span class='kw'>true</span>);
- *     expiryField.setSize(4);
- *     expiryField.setMaxLength(4);
- *     paymentFieldSet.add(expiryField);
+ *         FieldSet paymentFieldSet = <span class='kw'>new</span> FieldSet(<span class='st'>"paymentDetails"</span>);
+ *         form.add(paymentFieldSet);
  *
- *     form.add(<span class='kw'>new</span> Submit(<span class='st'>"    OK    "</span>, <span class='kw'>this</span>, <span class='st'>"onOkClick"</span>);
- *     form.add(<span class='kw'>new</span> Submit(<span class='st'>"  Cancel  "</span>, <span class='kw'>this</span>, <span class='st'>"onCancelClick"</span>));
- * } </pre>
+ *         paymentFieldSet.add(<span class='kw'>new</span> TextField(<span class='st'>"cardName"</span>, <span class='kw'>true</span>));
+ *         paymentFieldSet.add(<span class='kw'>new</span> CreditCardField(<span class='st'>"cardNumber"</span>, <span class='kw'>true</span>));
+ *         IntegerField expiryField = <span class='kw'>new</span> IntegerField(<span class='st'>"expiry"</span>, <span class='kw'>true</span>);
+ *         expiryField.setSize(4);
+ *         expiryField.setMaxLength(4);
+ *         paymentFieldSet.add(expiryField);
+ *
+ *         form.add(<span class='kw'>new</span> Submit(<span class='st'>"ok"</span>, <span class='st'>"    OK    "</span>, <span class='kw'>this</span>, <span class='st'>"onOkClick"</span>);
+ *         form.add(<span class='kw'>new</span> Submit(<span class='st'>"  Cancel  "</span>, <span class='kw'>this</span>, <span class='st'>"onCancelClick"</span>));
+ *
+ *         addControl(form);
+ *     }
+ *
+ * }</pre>
  *
  * When the FieldSet is processed it invokes the <tt>onProcess()</tt> method
  * of its contained Fields. Beyond this the FieldSet performs no server side
@@ -94,7 +99,6 @@ import org.apache.commons.lang.StringUtils;
  *    href="../../../../../html/interact/forms.html#h-17.10">FIELDSET</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class FieldSet extends Field {
 

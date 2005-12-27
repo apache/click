@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.extras.control.DateField;
 import junit.framework.TestCase;
 
 /**

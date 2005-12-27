@@ -51,31 +51,28 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> CountPage <span class="kw">extends</span> Page {
  *
- *     HiddenField counterField;
+ *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> HiddenField counterField = <span class="kw">new</span> HiddenField(<span class="st">"counterField"</span>, Integer.<span class="kw">class</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
- *         addControl(form);
- *
- *         counterField = <span class="kw">new</span> HiddenField(<span class="st">"counterField"</span>, Integer.<span class="kw">class</span>);
+ *     <span class="kw">public</span> CountPage() {
  *         form.add(counterField);
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
  *
- *         form.add(<span class="kw">new</span> Submit(<span class="st">" OK "</span>));
+ *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onGet() {
  *         Integer count = <span class="kw">new</span> Integer(0);
+ *         counterField.setValueObject(count);
  *
- *         counterField.setValue(count);
  *         addModel(<span class="st">"count"</span>, count);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {
  *         Integer count = (Integer) counterField.getValueObject();
- *
  *         count = <span class="kw">new</span> Integer(count.intValue() + 1);
  *
- *         counterField.setValue(count);
+ *         counterField.setValueObject(count);
  *         addModel(<span class="st">"count"</span>, count);
  *     }
  * } </pre>
@@ -85,7 +82,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class HiddenField extends Field {
 
@@ -151,22 +147,14 @@ public class HiddenField extends Field {
      * @see Field#getValue()
      */
     public String getValue() {
-        return (valueObject != null) ? valueObject.toString() : "";
+        return (getValueObject() != null) ? getValueObject().toString() : "";
     }
 
     /**
-     * @see Field#setValue(Object)
+     * @see Field#setValue(String)
      */
-    public void setValue(Object value) {
-        if ((value != null) && (value.getClass() != valueClass)) {
-            String msg = "The value.getClass() must be the same as the " +
-                         "HiddenField valueClass: " +
-                         ((valueClass != null) ? valueClass.getName() : "null");
-
-            throw new IllegalArgumentException(msg);
-        }
-
-        this.valueObject = value;
+    public void setValue(String value) {
+        setValueObject(value);
     }
 
     /**
@@ -188,12 +176,27 @@ public class HiddenField extends Field {
     }
 
     /**
-     * Return the value Object.
+     * Return the value Object of the hidden field.
      *
-     * @return the value Object
+     * @see Field#getValueObject()
      */
     public Object getValueObject() {
         return valueObject;
+    }
+
+    /**
+     * @see Field#setValueObject(Object)
+     */
+    public void setValueObject(Object value) {
+        if ((value != null) && (value.getClass() != valueClass)) {
+            String msg = "The value.getClass() must be the same as the " +
+                         "HiddenField valueClass: " +
+                         ((valueClass != null) ? valueClass.getName() : "null");
+
+            throw new IllegalArgumentException(msg);
+        }
+
+        this.valueObject = value;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -216,30 +219,30 @@ public class HiddenField extends Field {
         } else if (aValue != null && aValue.length() > 0) {
 
              if (valueClass == Integer.class) {
-                setValue(Integer.valueOf(aValue));
+                setValueObject(Integer.valueOf(aValue));
 
             } else if (valueClass == Boolean.class) {
-                setValue(Boolean.valueOf(aValue));
+                setValueObject(Boolean.valueOf(aValue));
 
             } else if (valueClass == Double.class) {
-                setValue(Double.valueOf(aValue));
+                setValueObject(Double.valueOf(aValue));
 
             } else if (valueClass == Float.class) {
-                setValue(Float.valueOf(aValue));
+                setValueObject(Float.valueOf(aValue));
 
             } else if (valueClass == Long.class) {
-                setValue(Long.valueOf(aValue));
+                setValueObject(Long.valueOf(aValue));
 
             } else if (valueClass == Short.class) {
-                setValue(Short.valueOf(aValue));
+                setValueObject(Short.valueOf(aValue));
 
             } else if (Date.class.isAssignableFrom(valueClass)) {
                 long time = Long.parseLong(aValue);
-                setValue(new Date(time));
+                setValueObject(new Date(time));
 
             } else if (Serializable.class.isAssignableFrom(valueClass)) {
                 try {
-                    setValue(ClickUtils.decode(aValue));
+                    setValueObject(ClickUtils.decode(aValue));
                 } catch (ClassNotFoundException cnfe) {
                     String msg =
                         "could not decode value for hidden field: " + aValue;
@@ -273,6 +276,8 @@ public class HiddenField extends Field {
         buffer.appendAttribute("id", getId());
 
         String valueStr = null;
+        Class valueClass = getValueClass();
+
         if (valueClass == String.class
             || valueClass == Integer.class
             || valueClass == Boolean.class
@@ -291,7 +296,8 @@ public class HiddenField extends Field {
                 valueStr = ClickUtils.encode(getValueObject());
             } catch (IOException ioe) {
                 String msg =
-                    "could not encode value for hidden field: " + getValueObject();
+                    "could not encode value for hidden field: " +
+                    getValueObject();
                 throw new RuntimeException(msg, ioe);
             }
         } else {

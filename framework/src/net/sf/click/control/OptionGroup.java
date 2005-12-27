@@ -37,7 +37,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see Option
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class OptionGroup {
 

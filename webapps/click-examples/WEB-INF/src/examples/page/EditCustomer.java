@@ -2,14 +2,14 @@ package examples.page;
 
 import net.sf.click.Page;
 import net.sf.click.control.Checkbox;
-import net.sf.click.control.DateField;
-import net.sf.click.control.DoubleField;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
-import net.sf.click.control.IntegerField;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.DateField;
+import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
+import net.sf.click.extras.control.IntegerField;
 import examples.control.InvestmentSelect;
 import examples.domain.Customer;
 import examples.domain.CustomerDAO;

@@ -52,7 +52,6 @@ import net.sf.click.util.MessagesMap;
  * ones you want to override.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public abstract class Field implements Control {
 
@@ -691,9 +690,49 @@ public abstract class Field implements Control {
      *
      * @param value the Field value
      */
-    public void setValue(Object value) {
+    public void setValue(String value) {
         if (value != null) {
             this.value = value.toString();
+        }
+    }
+
+    /**
+     * Return the value object class of the Field. This method returns
+     * <tt>String.class</tt>.
+     *
+     * @return the value object class of the field
+     */
+    public Class getValueClass() {
+        return String.class;
+    }
+
+    /**
+     * Return the object representation of the Field value. This method will
+     * return a string value, or null if the string value is null or is zero
+     * length.
+     * <p/>
+     * Specialized object field subclasses should override this method to
+     * return a non string object. For examples a <tt>DoubleField</tt> would
+     * return a <tt>Double</tt> value instead.
+     *
+     * @return the object representation of the Field value
+     */
+    public Object getValueObject() {
+        if (value == null || value.length() == 0) {
+            return null;
+        } else {
+            return value;
+        }
+    }
+
+    /**
+     * Set the value of the field using the given object.
+     *
+     * @param object the object value to set
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            value = object.toString();
         }
     }
 

@@ -41,7 +41,6 @@ import org.apache.velocity.runtime.log.LogChute;
  * and appender issues that plague existing logging frameworks.
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ClickLogger implements LogChute {
 

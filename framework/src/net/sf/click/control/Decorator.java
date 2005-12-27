@@ -18,7 +18,7 @@ package net.sf.click.control;
 import net.sf.click.Context;
 
 /**
- * Provides a decorator interface for rendering Table column values.
+ * Provides a decorator interface for delegating object rendering.
  * <p/>
  * The following example illustrates how to render a email hyperlink in a
  * email table column.
@@ -41,16 +41,15 @@ import net.sf.click.Context;
  * @see Table
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public interface Decorator {
 
     /**
      * Returns a decorated string representation of the given object.
      *
-     * @param row the Table row object to render
+     * @param object the object to render
      * @param context the request context
      * @return a decorated string representation of the given object
      */
-    public String render(Object row, Context context);
+    public String render(Object object, Context context);
 }

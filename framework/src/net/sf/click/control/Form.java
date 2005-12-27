@@ -80,13 +80,13 @@ import org.apache.commons.lang.StringUtils;
  *
  *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         addControl(form);
- *
+ *     <span class="kw">public</span> Login() {
  *         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
  *         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
+ *
+ *         addControl(form);
  *     }
  *
  *     <span class="kw">public boolean</span> onOkClick() {
@@ -99,7 +99,7 @@ import org.apache.commons.lang.StringUtils;
  *                 setRedirect(<span class="st">"home.htm"</span>);
  *             }
  *             <span class="kw">else</span> {
- *                  form.setError(getMessage(<span class="st">"authentication-error"</span>));
+ *                 form.setError(getMessage(<span class="st">"authentication-error"</span>));
  *             }
  *         }
  *         <span class="kw">return true</span>;
@@ -315,7 +315,6 @@ import org.apache.commons.lang.StringUtils;
  * @see Submit
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Form implements Control {
 
@@ -1358,7 +1357,7 @@ public class Form implements Control {
                     }
                 } else {
                     String msg = "No FileField defined for POST "
-                            + "Content-type 'multipart' request";
+                                 + "Content-type 'multipart' request";
                     throw new RuntimeException(msg);
                 }
 
@@ -1409,7 +1408,7 @@ public class Form implements Control {
         return true;
     }
 
-// Not completed in time for Release 0.16, deferred until release 0.17
+// Not completed in time for Release 0.16, deferred until release 0.18
 //
 //    /**
 //     * TODO: onSubmitCheck doco

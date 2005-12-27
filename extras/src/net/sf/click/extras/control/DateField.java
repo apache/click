@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.control;
+package net.sf.click.extras.control;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +27,9 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.control.Field;
+import net.sf.click.control.Form;
+import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -83,7 +86,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class DateField extends TextField {
 
@@ -342,6 +344,45 @@ public class DateField extends TextField {
         this.style = style;
     }
 
+    /**
+     * Return the <tt>java.util.Date.class</tt>.
+     *
+     * @see Field#getValueClass()
+     *
+     * @return the <tt>java.util.Date.class</tt>
+     */
+    public Class getValueClass() {
+        return Date.class;
+    }
+
+    /**
+     * Return the field Date value, or null if value was empty or a parsing
+     * error occured.
+     *
+     * @see Field#getValueObject()
+     */
+    public Object getValueObject() {
+        return getDate();
+    }
+
+    /**
+     * Set the date value of the field using the given object.
+     *
+     * @see Field#setValueObject(Object)
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            if (getValueClass().isAssignableFrom(object.getClass())) {
+                setDate((Date)object);
+
+            } else {
+                String msg =
+                    "Invalid object class: " + object.getClass().getName();
+                throw new IllegalArgumentException(msg);
+            }
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -358,7 +399,7 @@ public class DateField extends TextField {
 
             String calendarFilename = "calendar" + CALENDAR_RESOURCES[i];
             String calendarResource =
-                "/net/sf/click/control/calendar/" + calendarFilename;
+                "/net/sf/click/extras/control/calendar/" + calendarFilename;
 
             ClickUtils.deployFile
                 (servletContext, calendarResource, targetDir);

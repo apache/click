@@ -2,7 +2,6 @@
 <click-app>
 
   <deployables>
-    <deployable classname="net.sf.click.control.DateField"/>
     <deployable classname="net.sf.click.control.Table"/>
   </deployables>
 

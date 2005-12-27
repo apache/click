@@ -75,7 +75,6 @@ import net.sf.click.Page;
  * </ul>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class ErrorPage extends Page {
 

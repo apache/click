@@ -34,7 +34,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> InvestmentSelect <span class="kw">extends</span> Select {
  *
- *     <span class="kw">static final</span> List INVESTMENT_OPTIONS = <span class="kw">new</span> ArrayList();
+ *     <span class="kw">private static final</span> List INVESTMENT_OPTIONS = <span class="kw">new</span> ArrayList();
  *
  *     <span class="kw">static</span> {
  *         OptionGroup property = <span class="kw">new</span> OptionGroup(<span class="st">"Property"</span>);
@@ -57,17 +57,17 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * <span class="kw">public class</span> InvestmentsPage <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     Select investmentsSelect;
+ *     <span class="kw">private</span> Form form = new Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> Select investmentsSelect  = <span class="kw">new</span> InvestmentsSelect(<span class="st">"investments"</span>);;
  *
- *     <span class="kw">public void</span> onInit() {
- *         form = new Form(<span class="st">"form"</span>, getContext());
- *         addControl(form);
- *
- *         investmentsSelect = <span class="kw">new</span> InvestmentsSelect(<span class="st">"Investments"</span>);
+ *     <span class="kw">public</span> InvestmentsPage() {
  *         investmentsSelect.setMutliple(<span class="kw">true</span>);
  *         investmentsSelect(7);
  *         form.add(investmentsSelect);
+ *
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
+ *
+ *         addControl(form);
  *     }
  *
  *     ..
@@ -81,7 +81,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * <tr><td colspan='2'>&nbsp;</td></tr>
  * <tr align='left'><td colspan='2'>
- * <input type='submit' value='Submit'/>
+ * <input type='submit' value='  OK  '/>
  * </td></tr>
  * </table>
  * </td></tr></table>
@@ -94,11 +94,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see OptionGroup
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Option {
 
-    // ------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The Options display label */
     protected final String label;
@@ -106,7 +105,7 @@ public class Option {
     /** The Option value. */
     protected final String value;
 
-    // ------------------------------------------------------- Constructors
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Create an Option with the given value and display label.
@@ -129,7 +128,7 @@ public class Option {
         this(value, value);
     }
 
-    // -------------------------------------------------- Public Attributes
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the Option display label.
@@ -149,7 +148,7 @@ public class Option {
         return value;
     }
 
-    // ----------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Return a HTML rendered Option string.

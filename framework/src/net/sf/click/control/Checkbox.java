@@ -35,7 +35,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Checkbox extends Field {
 
@@ -131,15 +130,49 @@ public class Checkbox extends Field {
      * Set checked value of the field. If the given value is null, the checked
      * value is set to false.
      *
-     * @see Field#setValue(Object)
+     * @see Field#setValue(String)
      */
-    public void setValue(Object value) {
-        if (value != null) {
-            checked = Boolean.valueOf(value.toString()).booleanValue();
+    public void setValue(String value) {
+        checked = Boolean.valueOf(value).booleanValue();;
+     }
+
+    /**
+     * Return the <tt>Boolean.class</tt>.
+     *
+     * @see Field#getValueClass()
+     *
+     * @return the <tt>Boolean.class</tt>
+     */
+    public Class getValueClass() {
+        return Boolean.class;
+    }
+
+    /**
+     * Return the field Boolean value.
+     *
+     * @see Field#getValueObject()
+     */
+    public Object getValueObject() {
+        if (checked) {
+            return Boolean.TRUE;
+
         } else {
-            checked = false;
+            return Boolean.FALSE;
         }
     }
+
+    /**
+     * Set the checked value of the field using the given object.
+     *
+     * @see Field#setValueObject(Object)
+     */
+    public void setValueObject(Object object) {
+        if (object != null && object instanceof Boolean) {
+            checked = ((Boolean) object).booleanValue();
+        }
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Process the request Context setting the checked value and invoking
@@ -164,8 +197,6 @@ public class Checkbox extends Field {
 
         return invokeListener();
     }
-
-    // --------------------------------------------------------- Public Methods
 
     /**
      * Return the HTML rendered Checkbox string.

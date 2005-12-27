@@ -8,13 +8,11 @@ import java.util.List;
  * Provides a Persons viewer page with an ActonLink to create new
  * persons.
  *
+ * @author Ahmed Mohombe 
  */
-public class PersonsViewer  extends BorderedPage {
+public class PersonsViewer extends BorderedPage {
 
-    /**
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
+    public PersonsViewer() {
         addModel("head-include", "ajax-head-person.htm");
         addModel("body-onload", "registerAjaxStuff();");
 

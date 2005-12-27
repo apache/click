@@ -26,14 +26,13 @@ import net.sf.click.util.ClickUtils;
  * Form form = <span class="kw">new</span> Form(getContext(), <span class="st">"form"</span>);
  * ..
  *
- * form.add(<span class="kw">new</span> Label(<span class="st">"&lt;hr/&gt;"</span>)); </pre>
+ * form.add(<span class="kw">new</span> Label(<span class="st">"hr"</span>, <span class="st">"&lt;hr/&gt;"</span>)); </pre>
  *
  * HTML output:
  * <pre class="codeHtml">
  * &lt;tr&gt;&lt;td colspan='2' align='left'&gt;&lt;hr/&gt;&lt;/td&gt;&lt;/tr&gt; </pre>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Label extends Field {
 

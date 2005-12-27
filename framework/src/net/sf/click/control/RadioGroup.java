@@ -47,15 +47,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
  *
- *     Form form;
- *     RadioGroup radioGroup;
- *     ..
+ *     <span class="kw">privte</span> Form form  = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">private</span> RadioGroup radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"packaging"</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>, getContext());
- *         ..
- *
- *         radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"Packaging"</span>, getContext());
+ *     <span class="kw">public</span> Purchase() {
  *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"STD"</span>, <span class="st">"Standard "</span>));
  *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"PRO"</span>, <span class="st">"Protective "</span>));
  *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"GFT"</span>, <span class="st">"Gift Wrap "</span>));
@@ -64,6 +59,8 @@ import net.sf.click.util.HtmlStringBuffer;
  *         form.add(radioGroup);
  *
  *         ..
+ *
+ *         addControl(form);
  *     }
  * } </pre>
  *
@@ -87,7 +84,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * @see Radio
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class RadioGroup extends Field {
 

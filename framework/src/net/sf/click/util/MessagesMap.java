@@ -56,7 +56,6 @@ import java.util.Set;
  * it is merged with the page template.
  *
  * @author Malcolm.Edgar
- * @version $Id$
  */
 public class MessagesMap implements Map {
 

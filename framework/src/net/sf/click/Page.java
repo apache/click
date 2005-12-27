@@ -60,7 +60,6 @@ import org.apache.commons.lang.StringUtils;
  * </ul>
  *
  * @author Malcolm Edgar
- * @version $Id$
  */
 public class Page {
 
