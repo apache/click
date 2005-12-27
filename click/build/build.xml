@@ -304,6 +304,9 @@
             <pathelement location="dist/click-extras-${version}.jar"/>
          </classpath>
          <packageset dir="webapps/click-examples/WEB-INF/src"/>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://click.sourceforge.net/docs/extras-api/"/>
       </javadoc>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
@@ -426,9 +429,9 @@
            <include name="net/**"/>
            <exclude name="org/**"/>
          </packageset>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
       </javadoc>
-      <copy file="framework/src/net/sf/click/control/calendar/calendar.gif"
-            todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
             todir="webapps/click-documentation/docs/click-api/net/sf/click/control"/>
       <!-- Extras -->
@@ -452,7 +455,14 @@
          <packageset dir="extras/src">
             <include name="net/**"/>
          </packageset>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
+         <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
+         <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
+      <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
+            todir="webapps/click-documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
             todir="webapps/click-documentation/docs/click-api"/>
@@ -465,8 +475,9 @@
    </target>
    
    <target name="test-framework">
-      <javac srcdir="framework/src;framework/test" destdir="framework/classes" debug="true">
+      <javac srcdir="framework/src;framework/test;extras/src;" destdir="framework/classes" debug="true">
          <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">
          <classpath refid="classpath.framework"/>
@@ -493,5 +504,7 @@
          </batchtest>
       </junit>
    </target>
+   
+   <target name="test-all" depends="test-framework, test-extras"/>
    
 </project>
