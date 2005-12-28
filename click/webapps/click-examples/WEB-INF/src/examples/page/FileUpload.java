@@ -1,5 +1,6 @@
 package examples.page;
 
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.FileField;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
@@ -19,14 +20,17 @@ public class FileUpload extends BorderedPage {
     public FileUpload() {
         form = new Form("form");
         form.setLabelsPosition("top");
-
+        
+        FieldSet fieldSet = new FieldSet("upload", "<b>Upload File</b>");
+        form.add(fieldSet);
+        
         fileField = new FileField("selectFile");
         fileField.setRequired(true);
         fileField.setSize(40);
-        form.add(fileField);
+        fieldSet.add(fileField);
 
-        descField = new TextField("description");
-        form.add(descField);
+        descField = new TextField("description", "File Description", 30);
+        fieldSet.add(descField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
