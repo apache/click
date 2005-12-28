@@ -488,6 +488,9 @@
             </fileset>
          </batchtest>
       </junit>
+      <delete>
+        <fileset dir="." includes="TEST-*.txt"/>
+      </delete>
    </target>
    
    <target name="test-extras">
@@ -503,6 +506,9 @@
             </fileset>
          </batchtest>
       </junit>
+      <delete>
+        <fileset dir="." includes="TEST-*.txt"/>
+      </delete>
    </target>
    
    <target name="test-all" depends="test-framework, test-extras"/>
