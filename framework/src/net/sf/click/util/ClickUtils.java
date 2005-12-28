@@ -419,7 +419,7 @@ public class ClickUtils {
         destination = realTargetDir + File.separator + destination;
 
         File destinationFile = new File(destination);
-System.out.println(destinationFile);
+
         if (!destinationFile.exists()) {
             InputStream inputStream =
                 ClickUtils.class.getResourceAsStream(resource);
