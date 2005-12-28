@@ -777,6 +777,7 @@ public class Form implements Control {
      */
     public String getEnctype() {
         if (enctype == null) {
+            List fieldList = ClickUtils.getFormFields(this);
             for (int i = 0, size = fieldList.size(); i < size; i++) {
                 Field field = (Field) fieldList.get(i);
                 if (!field.isHidden() && (field instanceof FileField)) {
@@ -1340,8 +1341,9 @@ public class Form implements Control {
                 getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
 
                 FileField fileField = null;
-                for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                    Field field = (Field) getFieldList().get(i);
+                List fieldList = ClickUtils.getFormFields(this);
+                for (int i = 0, size = fieldList.size(); i < size; i++) {
+                    Field field = (Field) fieldList.get(i);
                     if (!field.isHidden() && (field instanceof FileField)) {
                         fileField = (FileField) field;
                         break;
