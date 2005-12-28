@@ -29,7 +29,6 @@ up to a 1.0 release in the Q4 2005.
 <p/>
 Features to be included in future releases are:
 <ul>
- <li>Cayenne and Hibernate Data aware controls</li>
  <li>Automatic Form back button handling</li>
  <li>Client-side JavaScript Form validation</li>
  <li>Additonal Table control functionality</li>
@@ -45,6 +44,15 @@ Features to be included in future releases are:
   <dt>Version 0.18 - 30th December 2005</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Created new package 
+        <a href="extras-api/net/sf/click/extras/control/package-summary.html">net.sf.click.extras.control</a>
+        for extended HTML controls. The following controls have been moved
+        into this package: CreditCardField, DateField, DoubleField, EmailField,
+        IntegerField and Menu.
+        <p/>
+        Table control promoted to core <a href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>.
+      </li>
       <li class="change">
         Added full JSP Click Page integration
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-24">24</a>].
@@ -76,6 +84,11 @@ Features to be included in future releases are:
         Fixed JSCalendar problem in Japanese. This fix was provided by
         Naoki Takezoe
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-43">43</a>].
+      </li>
+      <li class="change">
+        Fixed Form FieldSet FileField enctype bug. This issue was idendified by
+        Christian Essl
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-48">48</a>].
       </li>
       <li class="change">
         Fixed Velocity RuntimeException handling bug
