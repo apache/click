@@ -14,6 +14,12 @@ import examples.domain.CustomerDAO;
  */
 public class TabbedPanelDemo extends BorderedPage {
 
+    /**
+     * Note TabbbedPanel must be setup in page onInit() method as the
+     * page's context must be set.
+     *
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         List customers = CustomerDAO.getCustomersSortedByName(12);
         addModel("customers", customers);

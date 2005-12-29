@@ -17,13 +17,10 @@ import examples.page.BorderedPage;
 public class NextPage extends BorderedPage {
 
     private HiddenField courseField;
+
     private CourseBooking courseBooking;
 
-    public void setCourseBooking(CourseBooking courseBooking) {
-        this.courseBooking = courseBooking;
-    }
-
-    public void onInit() {
+    public NextPage() {
         Form form = new Form("form");
         addControl(form);
 
@@ -31,9 +28,17 @@ public class NextPage extends BorderedPage {
         form.add(courseField);
 
         form.add(new Submit(" < Back ", this, "onBackClick"));
-
         form.add(new Submit("  Next > ", this, "onNextClick"));
+    }
 
+    public void setCourseBooking(CourseBooking courseBooking) {
+        this.courseBooking = courseBooking;
+    }
+
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
+    public void onInit() {
         if (getContext().isForward() && courseBooking != null) {
             courseField.setValueObject(courseBooking);
 
@@ -47,7 +52,7 @@ public class NextPage extends BorderedPage {
 
     public boolean onBackClick() {
         StartPage startPage =
-            (StartPage) getContext().createPage("/pageflow/start-page.htm");
+            (StartPage) getContext().createPage(StartPage.class);
 
         courseBooking = (CourseBooking) courseField.getValueObject();
         startPage.setCourseBooking(courseBooking);

@@ -71,7 +71,7 @@ import net.sf.click.Page;
  * the normal Page properties:<ul>
  * <li>{@link #error} - the error causing exception</li>
  * <li>{@link #mode} - the Click application mode</li>
- * <li>{@link #page} - the Page object in error</tt>
+ * <li>{@link #pageClass} - the Page class which cause the error</tt>
  * </ul>
  *
  * @author Malcolm Edgar
@@ -90,8 +90,8 @@ public class ErrorPage extends Page {
      */
     protected String mode;
 
-    /** The page in error. */
-    protected Page page;
+    /** The page class in error. */
+    protected Class pageClass;
 
     // --------------------------------------------------------- Public Methods
 
@@ -140,21 +140,21 @@ public class ErrorPage extends Page {
     }
 
     /**
-     * Return the page in error
+     * Return the page class in error.
      *
-     * @return the page in error
+     * @return the page class in error
      */
-    public Page getPage() {
-        return page;
+    public Class getPageClass() {
+        return pageClass;
     }
 
     /**
-     * Set the page in error.
+     * Set the page class in error.
      *
-     * @param page the page in error
+     * @param pageClass the page class in error
      */
-    public void setPage(Page page) {
-        this.page = page;
+    public void setPageClass(Class pageClass) {
+        this.pageClass = pageClass;
     }
 
     /**
@@ -175,7 +175,11 @@ public class ErrorPage extends Page {
     public void onInit() {
         addModel("mode", getMode());
 
-        ErrorReport errorReport = new ErrorReport(error, page, false);
+        ErrorReport errorReport = new ErrorReport(error,
+                                                  getPageClass(),
+                                                  false,
+                                                  getContext().getRequest(),
+                                                  getContext().getServletContext());
 
         addModel("errorReport", errorReport.getErrorReport());
     }

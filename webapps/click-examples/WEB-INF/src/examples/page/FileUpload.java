@@ -20,10 +20,10 @@ public class FileUpload extends BorderedPage {
     public FileUpload() {
         form = new Form("form");
         form.setLabelsPosition("top");
-        
+
         FieldSet fieldSet = new FieldSet("upload", "<b>Upload File</b>");
         form.add(fieldSet);
-        
+
         fileField = new FileField("selectFile");
         fileField.setRequired(true);
         fileField.setSize(40);
