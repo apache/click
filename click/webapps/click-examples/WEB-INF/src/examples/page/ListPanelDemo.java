@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class ListPanelDemo extends BorderedPage {
 
-    public void onInit() {
+    public ListPanelDemo() {
         List customers = CustomerDAO.getCustomersSortedByName(8);
         addModel("customers", customers);
 

@@ -217,13 +217,17 @@ public class TabbedPanel extends BasicPanel implements Deployable {
     }
 
     /**
+     * Note the Pages context must be set before this method is invoked.
+     *
      * @see Panel#setPage(Page)
      */
     public void setPage(Page page) {
         super.setPage(page);
         // add the context to the tabActionLink control
         // TODO: is there a better way to do set the context?
-        if(tabActionLink!=null){
+        // Need to refactor Panel to extend Control, this will cause an
+        // IllegalArgumentException if page's context has not been set
+        if (tabActionLink != null) {
             tabActionLink.setContext(page.getContext());
         }
     }

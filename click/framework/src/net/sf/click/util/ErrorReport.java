@@ -37,8 +37,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.Page;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.exception.ParseErrorException;
@@ -76,8 +74,14 @@ public class ErrorReport {
     /** The applicaiton is in "production" mode flag. */
     protected final boolean isProductionMode;
 
-    /** The page which caused the error. */
-    protected final Page page;
+    /** The page class which caused the error. */
+    protected final Class pageClass;
+
+    /** The servlet request. */
+    protected final HttpServletRequest request;
+
+    /** The servlet context. */
+    protected final ServletContext servletContext;
 
     /** The name of the error source. */
     protected final String sourceName;
@@ -86,16 +90,22 @@ public class ErrorReport {
     protected LineNumberReader sourceReader;
 
     /**
-     * Create a ErrorReport instance from the given error and ServletContext.
+     * Create a ErrorReport instance from the given error and page.
      *
      * @param error the cause of the error
-     * @param page the Page causing the error
+     * @param pageClass the Page class which caused the error
      * @param isProductionMode the application is in "production" mode
+     * @param request the page request
+     * @param servletContext the servlet context
      */
-    public ErrorReport(Throwable error, Page page, boolean isProductionMode) {
-        this.page = page;
+    public ErrorReport(Throwable error, Class pageClass, boolean isProductionMode,
+            HttpServletRequest request, ServletContext servletContext) {
+
         this.error = error;
+        this.pageClass = pageClass;
         this.isProductionMode = isProductionMode;
+        this.request = request;
+        this.servletContext = servletContext;
 
         isParseError = error instanceof ParseErrorException;
 
@@ -105,10 +115,8 @@ public class ErrorReport {
             lineNumber = pee.getLineNumber();
             columnNumber = pee.getColumnNumber();
 
-            ServletContext context = page.getContext().getServletContext();
-
             InputStream is =
-                context.getResourceAsStream(pee.getTemplateName());
+                servletContext.getResourceAsStream(pee.getTemplateName());
 
             sourceReader = new LineNumberReader(new InputStreamReader(is));
 
@@ -161,7 +169,7 @@ public class ErrorReport {
     public String getErrorReport() {
 
         if (isProductionMode()) {
-            Locale locale = page.getContext().getLocale();
+            Locale locale = request.getLocale();
             ResourceBundle bundle =
                 ResourceBundle.getBundle("click-control", locale);
             return bundle.getString("production-error-message");
@@ -170,8 +178,6 @@ public class ErrorReport {
         StringBuffer buffer = new StringBuffer(10 * 1024);
 
         Throwable cause = getCause();
-
-        HttpServletRequest request = page.getContext().getRequest();
 
         buffer.append("<div id='errorReport' class='errorReport'>\n");
 
@@ -208,14 +214,14 @@ public class ErrorReport {
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
         buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
-        buffer.append(page.getClass().getName());
+        buffer.append(pageClass.getName());
         buffer.append("</td></tr>");
         buffer.append("<tr><td width='12%'><b>Path</b></td><td>");
-        buffer.append(page.getPath());
+        buffer.append(ClickUtils.getResourcePath(request));
         buffer.append("</td></tr>");
-        buffer.append("<tr><td><b width='12%'>Template</b></td><td>");
-        buffer.append(page.getTemplate());
-        buffer.append("</td></tr>");
+//        buffer.append("<tr><td><b width='12%'>Template</b></td><td>");
+//        buffer.append(page.getTemplate());
+//        buffer.append("</td></tr>");
         buffer.append("</table>");
         buffer.append("<br/>");
 
@@ -294,7 +300,7 @@ public class ErrorReport {
         buffer.append("</td></tr>");
 
         TreeMap sessionAttributes = new TreeMap();
-        if (page.getContext().hasSession()) {
+        if (request.getSession(false) != null) {
             HttpSession session = request.getSession();
             attributeNames = session.getAttributeNames();
             while (attributeNames.hasMoreElements()) {
@@ -434,14 +440,13 @@ public class ErrorReport {
         throws FileNotFoundException {
 
         // Look for source file on classpath
-        InputStream is = page.getClass().getResourceAsStream(filename);
+        InputStream is = pageClass.getResourceAsStream(filename);
         if (is != null) {
             return new LineNumberReader(new InputStreamReader(is));
         }
 
         // Else search for source file under WEB-INF
-        String rootPath =
-            page.getContext().getServletContext().getRealPath("/");
+        String rootPath = servletContext.getRealPath("/");
 
         String webInfPath = rootPath + File.separator + "WEB-INF";
 

@@ -30,11 +30,7 @@ public class StartPage extends BorderedPage {
 
     private CourseBooking courseBooking;
 
-    public void setCourseBooking(CourseBooking courseBooking) {
-        this.courseBooking = courseBooking;
-    }
-
-    public void onInit() {
+    public StartPage() {
         addModel("head-include", "ajax/ajax-head.htm");
         addModel("body-onload", "registerAjax();");
 
@@ -68,7 +64,16 @@ public class StartPage extends BorderedPage {
         form.add(new Submit(" < Back ", this, "onBackClick"));
 
         form.add(new Submit(" Next > ", this, "onNextClick"));
+    }
 
+    public void setCourseBooking(CourseBooking courseBooking) {
+        this.courseBooking = courseBooking;
+    }
+
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
+    public void onInti() {
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValueObject(courseBooking.getCustomerId());
             dateField.setDate(courseBooking.getBookingDate());

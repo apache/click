@@ -9,18 +9,10 @@ import javax.servlet.ServletContext;
  * starts up.
  * <p/>
  * For example a custom TextField control could <tt>custom.js</tt> file to the
- * click directory.
+ * click directory:
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
- *
- *     <span class="kw">protected static final</span> String HTML_IMPORT =
- *         <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
- *
- *     <span class="kw">public</span> String getHtmlImports() {
- *         String[] args = { getContext().getRequest().getContextPath() };
- *         <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
- *     }
  *
  *     <span class="kw">public void</span> onDeploy(ServletContext servletContext) <span class="kw">throws</span> IOException {
  *         ClickUtils.deployFile
@@ -30,7 +22,36 @@ import javax.servlet.ServletContext;
  *     ..
  * } </pre>
  *
+ * This JavaScript file can then be included by the fields parent Form by
+ * overridding the {@link net.sf.click.control.Field#getHtmlImports()} method:
+ * For example:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
+ *     ..
+ *
+ *     <span class="kw">protected static final</span> String HTML_IMPORT =
+ *         <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
+ *
+ *     <span class="kw">public</span> String getHtmlImports() {
+ *         String[] args = { getContext().getRequest().getContextPath() };
+ *         <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+ *     }
+ * } </pre>
+ *
+ * To enable a deployable class to be deployed on startup it must be
+ * specified in your applications <tt>WEB-INF/click.xml</tt> file. For example:
  * <p/>
+ *
+ * <pre class="codeConfig">
+ * &lt;click-app&gt;
+ *   &lt;pages package="com.mycorp.page" automapping="true"/&gt;
+ *
+ *   &lt;deployables&gt;
+ *     &lt;deployable classname=<span class="st">"com.mycorp.control.CustomField"</span>/&gt;
+ *   &lt;/deployables&gt;
+ * &lt;/click-app&gt; </pre>
+ *
  * When the Click applicatin starts up it will deploy any deployable elements
  * defined in the following files:
  * <ul>

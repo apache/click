@@ -275,7 +275,7 @@ public class ClickServlet extends HttpServlet {
      * <p/>
      * If an exception occurs within this method the exception will be delegated
      * to: <p/>
-     * {@link #handleException(HttpServletRequest, HttpServletResponse, boolean, Throwable, Page)}
+     * {@link #handleException(HttpServletRequest, HttpServletResponse, boolean, Throwable, Class)}
      *
      * @param request the servlet request to process
      * @param response the servlet response to render the results to
@@ -315,13 +315,19 @@ public class ClickServlet extends HttpServlet {
             processPage(page);
 
         } catch (Exception e) {
-            handleException(request, response, isPost, e, page);
+            Class pageClass =
+                clickApp.getPageClass(ClickUtils.getResourcePath(request));
+
+            handleException(request, response, isPost, e, pageClass);
 
         } catch (ExceptionInInitializerError eiie) {
             Throwable cause = eiie.getException();
             cause = (cause != null) ? cause : eiie;
 
-            handleException(request, response, isPost, cause, page);
+            Class pageClass =
+                clickApp.getPageClass(ClickUtils.getResourcePath(request));
+
+            handleException(request, response, isPost, cause, pageClass);
 
         } finally {
             if (page != null) {
@@ -354,11 +360,11 @@ public class ClickServlet extends HttpServlet {
      * @param response the servlet response
      * @param isPost boolean flag denoting the request method is "POST"
      * @param exception the error causing exception
-     * @param page the error causing page
+     * @param pageClass the page class with the error
      */
     protected void handleException(HttpServletRequest request,
         HttpServletResponse response, boolean isPost, Throwable exception,
-        Page page) {
+        Class pageClass) {
 
         if (exception instanceof ParseErrorException == false) {
             logger.error("handleException: ", exception);
@@ -380,7 +386,7 @@ public class ClickServlet extends HttpServlet {
             errorPage.setFormat(clickApp.getPageFormat(ClickApp.ERROR_PATH));
             errorPage.setHeaders(clickApp.getPageHeaders(ClickApp.ERROR_PATH));
             errorPage.setMode(clickApp.getModeValue());
-            errorPage.setPage(page);
+            errorPage.setPageClass(pageClass);
             errorPage.setPath(ClickApp.ERROR_PATH);
 
             processPage(errorPage);
@@ -476,7 +482,7 @@ public class ClickServlet extends HttpServlet {
             dispatcher.forward(request, response);
 
         } else if (page.getPath() != null) {
-            renderTemplate(page);
+            renderTemplate(page, request);
 
         } else {
             if (logger.isDebugEnabled()) {
@@ -496,9 +502,11 @@ public class ClickServlet extends HttpServlet {
      * This method was adapted from org.apache.velocity.servlet.VelocityServlet.
      *
      * @param page the page template to merge
+     * @param request the page request
      * @throws Exception if an error occurs
      */
-    protected void renderTemplate(Page page) throws Exception {
+    protected void renderTemplate(Page page, HttpServletRequest request)
+        throws Exception {
 
         long startTime = System.currentTimeMillis();
 
@@ -538,8 +546,11 @@ public class ClickServlet extends HttpServlet {
             // Exception occured merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
-            ErrorReport errorReport =
-                new ErrorReport(error, page, clickApp.isProductionMode());
+            ErrorReport errorReport = new ErrorReport(error,
+                                                      page.getClass(),
+                                                      clickApp.isProductionMode(),
+                                                      request,
+                                                      getServletContext());
 
             velocityWriter.write(errorReport.getErrorReport());
 

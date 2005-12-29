@@ -9,18 +9,13 @@ import click.cayenne.entity.Person;
  */
 public class PersonAjaxViewer extends CayennePage {
 
-    public static final String PERSON_VELOKEY = "person";
-
     /** The edit Person ActionLink. */
     protected ActionLink editLink;
 
     /** The delete Person ActionLink. */
     protected ActionLink deleteLink;
 
-    /**
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
+    public PersonAjaxViewer() {
         editLink = new ActionLink("editLink", this, "onEditClick");
         addControl(editLink);
 
@@ -47,7 +42,7 @@ public class PersonAjaxViewer extends CayennePage {
 
         if (id != null) {
             DataObject dataObject = getDataObject(Person.class, id);
-            addModel(PERSON_VELOKEY, dataObject);
+            addModel("person", dataObject);
         }
     }
 

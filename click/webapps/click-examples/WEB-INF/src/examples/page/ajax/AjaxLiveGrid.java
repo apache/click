@@ -12,7 +12,7 @@ import examples.page.BorderedPage;
  */
 public class AjaxLiveGrid extends BorderedPage {
 
-    public void onInit() {
+    public AjaxLiveGrid() {
         addModel("body-onload", "javascript:bodyOnLoad();");
 
         List customerList = CustomerDAO.getAllCustomers();

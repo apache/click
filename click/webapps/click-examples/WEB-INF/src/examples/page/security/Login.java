@@ -16,14 +16,9 @@ import net.sf.click.control.TextField;
  */
 public class Login extends BorderedPage {
 
-    Form form = new Form("form");
+    private Form form = new Form("form");
 
-    /**
-     * @see Page#onInit()
-     */
-    public void onInit() {
-        addControl(form);
-
+    public Login() {
         TextField usernameField = new TextField("username", true);
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
@@ -36,8 +31,9 @@ public class Login extends BorderedPage {
         form.add(passwordField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClicked"));
-
         form.add(new Submit("cancel", this, "onCancelClicked"));
+
+        addControl(form);
     }
 
     /**
@@ -73,7 +69,6 @@ public class Login extends BorderedPage {
 
     public boolean onCancelClicked() {
         setRedirect("/index.html");
-
         return false;
     }
 }
