@@ -454,11 +454,13 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (page.getRedirect() != null) {
-            String url = response.encodeRedirectURL(page.getRedirect());
+            String url = page.getRedirect();
 
             if (url.charAt(0) == '/') {
                 url = request.getContextPath() + url;
             }
+
+            url = response.encodeRedirectURL(url);
 
             if (logger.isDebugEnabled()) {
                 logger.debug("redirect=" + url);
