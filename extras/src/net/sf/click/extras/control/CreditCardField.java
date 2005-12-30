@@ -73,10 +73,7 @@ import net.sf.click.control.TextField;
  *         form.add(expiryField);
  *
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
- *
- *         Submit cancelButton = <span class="kw">new</span> Submit(<span class="st">"cancel"</span>);
- *         cancelButton.setListener(<span class="kw">this</span>, "<span class="st">onCancelClick"</span>);
- *         form.add(cancelButton);
+ *         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, "<span class="st">onCancelClick"</span>));
  *
  *         addControl(form);
  *     }
