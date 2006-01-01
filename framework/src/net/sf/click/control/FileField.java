@@ -15,12 +15,13 @@
  */
 package net.sf.click.control;
 
-import org.apache.commons.fileupload.DefaultFileItemFactory;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
-import org.apache.commons.fileupload.FileUploadBase;
-
 import net.sf.click.util.HtmlStringBuffer;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadBase;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Provides a File Field control: &nbsp; &lt;input type='file'&gt;.
@@ -85,7 +86,7 @@ public class FileField extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Construct the File Field with the given name.
+     * Construct the FileField with the given name.
      *
      * @param name the name of the field
      */
@@ -94,7 +95,7 @@ public class FileField extends Field {
     }
 
     /**
-     * Construct the File Field with the given name and label.
+     * Construct the FileField with the given name and label.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -104,18 +105,30 @@ public class FileField extends Field {
     }
 
     /**
-     * Construct the File Field with the given name and required status.
+     * Construct the FileField with the given name, label and size.
      *
      * @param name the name of the field
-     * @param required the field required status
+     * @param label the label of the field
+     * @param size the size of the field
      */
-    public FileField(String name, boolean required) {
-        super(name);
-        setRequired(required);
+    public FileField(String name, String label, int size) {
+        this(name, label);
+        setSize(size);
     }
 
     /**
-     * Create an File Field with no name defined, <b>please note</b> the
+     * Construct the FileField with the given name and field size.
+     *
+     * @param name the name of the field
+     * @param size the field required status
+     */
+    public FileField(String name, int size) {
+        super(name);
+        setSize(size);
+    }
+
+    /**
+     * Create an FileField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
      * <div style="border: 1px solid red;padding:0.5em;">
@@ -151,8 +164,8 @@ public class FileField extends Field {
      */
     public FileUploadBase getFileUpload() {
         if (fileUpload == null) {
-            fileUpload = new FileUpload();
-            fileUpload.setFileItemFactory(new DefaultFileItemFactory());
+            FileItemFactory factory = new DiskFileItemFactory();
+            fileUpload = new ServletFileUpload(factory);
         }
         return fileUpload;
     }
