@@ -34,11 +34,11 @@ import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
-import org.apache.commons.fileupload.DefaultFileItemFactory;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -1354,7 +1354,7 @@ public class Form implements Control {
                 if (fileField != null) {
                     fileUpload = fileField.getFileUpload();
                     if (fileUpload.getFileItemFactory() == null) {
-                        FileItemFactory fif = new DefaultFileItemFactory();
+                        FileItemFactory fif = new DiskFileItemFactory();
                         fileUpload.setFileItemFactory(fif);
                     }
                 } else {

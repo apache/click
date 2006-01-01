@@ -29,11 +29,12 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.click.util.ClickUtils;
 
-import org.apache.commons.fileupload.DefaultFileItemFactory;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUpload;
+import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Provides the HTTP request context information for pages. A new Context object
@@ -217,8 +218,8 @@ public class Context {
             // If form has not alreay initialized multipart form data, load it
             // now. Form will overwrite it later during the request processing
             if (multiPartFormData == null) {
-                FileUpload fileUpload = new FileUpload();
-                fileUpload.setFileItemFactory(new DefaultFileItemFactory());
+                FileItemFactory factory = new DiskFileItemFactory();
+                ServletFileUpload fileUpload = new ServletFileUpload(factory);
 
                 try {
                     List itemsList = fileUpload.parseRequest(request);

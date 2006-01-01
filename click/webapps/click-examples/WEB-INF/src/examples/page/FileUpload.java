@@ -24,9 +24,8 @@ public class FileUpload extends BorderedPage {
         FieldSet fieldSet = new FieldSet("upload", "<b>Upload File</b>");
         form.add(fieldSet);
 
-        fileField = new FileField("selectFile");
+        fileField = new FileField("selectFile", "SelectFile", 40);
         fileField.setRequired(true);
-        fileField.setSize(40);
         fieldSet.add(fileField);
 
         descField = new TextField("description", "File Description", 30);
