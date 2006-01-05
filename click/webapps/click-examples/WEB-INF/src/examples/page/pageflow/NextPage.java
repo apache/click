@@ -16,19 +16,18 @@ import examples.page.BorderedPage;
  */
 public class NextPage extends BorderedPage {
 
+    private Form form = new Form("form");
     private HiddenField courseField;
-
     private CourseBooking courseBooking;
 
     public NextPage() {
-        Form form = new Form("form");
-        addControl(form);
-
         courseField = new HiddenField("courseField", CourseBooking.class);
         form.add(courseField);
 
         form.add(new Submit(" < Back ", this, "onBackClick"));
-        form.add(new Submit("  Next > ", this, "onNextClick"));
+        form.add(new Submit(" Confirm ", this, "onConfirmClick"));
+
+        addControl(form);
     }
 
     public void setCourseBooking(CourseBooking courseBooking) {
@@ -61,7 +60,7 @@ public class NextPage extends BorderedPage {
         return false;
     }
 
-    public boolean onNextClick() {
+    public boolean onConfirmClick() {
         CourseBooking booking = (CourseBooking) courseField.getValueObject();
         Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
 

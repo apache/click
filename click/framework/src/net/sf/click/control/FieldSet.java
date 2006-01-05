@@ -457,9 +457,11 @@ public class FieldSet extends Field {
     public boolean onProcess() {
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
-            boolean continueProcessing = field.onProcess();
-            if (!continueProcessing) {
-                return false;
+            if (!field.getName().startsWith(Form.SUBMIT_CHECK)) {
+                boolean continueProcessing = field.onProcess();
+                if (!continueProcessing) {
+                    return false;
+                }
             }
         }
 
