@@ -123,6 +123,9 @@ public class CayenneForm extends Form {
 
     private static final long serialVersionUID = 4800858697502035042L;
 
+    private static final String FK_PREFIX = "DOFK_";
+    private static final String PROP_PREFIX = "FKPROP_";
+
     /** The data object primary key hidden field. */
     protected HiddenField pkField = new HiddenField("DOPK", Integer.class);
 
@@ -195,6 +198,8 @@ public class CayenneForm extends Form {
                 }
 
                 copyTo(dataObject, true);
+                // todo: take care of the diff situations: new object, existing object new FK, existing object old FK, etc.
+                copyRelationsTo(dataObject);
 
                 return dataObject;
 
@@ -208,7 +213,8 @@ public class CayenneForm extends Form {
 
     /**
      * Set the given <tt>DataObject</tt> in the form, copying the object's
-     * properties into the form field values.
+     * properties into the form field values.<br/>
+     * Also fix the right selection for the relations.
      *
      * @param dataObject the <tt>DataObject</tt> to set
      */
@@ -219,6 +225,96 @@ public class CayenneForm extends Form {
                 pkField.setValueObject(new Integer(pk));
             }
             copyFrom(dataObject, true);
+            // fix the form selection for the relations too:
+            copyRelationFrom(dataObject);
+        }
+    }
+    /**
+     * Adds/registers a new relation with the given form name and <tt>DataObject</tt>
+     * class as choosable values.
+     *
+     * @param name the control name
+     * @param dataClass the <tt>DataObject</tt> class
+     * @param propName the name of the property for this DataObject (this is just a hack till an automatic way is found)
+     */
+    public void addRelation(String name, Class dataClass, String propName){
+        //    add a hidden field with the Data Object name of this relation.
+        //    in the same way it was done for the FORM, but here in a generic way
+        //    cause there might be more than one relation/fk for an entity
+        HiddenField fkField = new HiddenField(FK_PREFIX+name,String.class);
+
+        // todo: refactor the code below, cause it's used in the constructor too.
+        if (dataClass == null) {
+            throw new IllegalArgumentException("Null dataClass parameter");
+        }
+        if (!DataObject.class.isAssignableFrom(dataClass)) {
+            String msg = "Not a DataObject class: " + dataClass;
+            throw new IllegalArgumentException(msg);
+        }
+        // end
+
+        fkField.setValueObject(dataClass.getName());
+        add(fkField);
+
+        // hack
+        HiddenField propNameField = new HiddenField(PROP_PREFIX+name,String.class);
+        propNameField.setValueObject(propName);
+        add(propNameField);
+    }
+
+    /**
+     * This is more just a fix, because copyFrom can't handle such Relation Select Fields.
+     */
+    private void copyRelationFrom(DataObject dataObject) {
+//        System.out.println("**-----> CayenneForm.copyRelationFrom");
+        Iterator fieldIterator = getFields().keySet().iterator();
+        while (fieldIterator.hasNext()) {
+            String key = (String) fieldIterator.next();
+            if (key != null && key.startsWith(FK_PREFIX)) {
+                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
+                String fkClassName = (String) hiddenFKField.getValueObject();
+                HiddenField hiddenPropField = (HiddenField) getFields().get(PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX));
+                String propName = (String) hiddenPropField.getValueObject();
+                Field fkField = (Field) getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
+//                System.out.println("**---->FKField:"+fkField.getName());
+//                System.out.println("**-----> Relation:class["+fkClassName+"],propName["+propName+"]");
+                if (fkClassName != null && propName != null) {
+                    DataObject fkDataObject = (DataObject) dataObject.readProperty(propName);
+                    if(fkDataObject!=null) {
+                        int pk4FkData = DataObjectUtils.intPKForObject(fkDataObject);
+//                        System.out.println("**-----> Relation was set to:"+pk4FkData);
+                        fkField.setValueObject(String.valueOf(pk4FkData));
+                    } else {
+//                        System.out.println("**-----> Relation was NOT set.");
+                    }
+                }
+            }
+        }
+    }
+
+    private void copyRelationsTo(DataObject dataObject) throws Exception{
+//        System.out.println("**-----> CayenneForm.copyRelationsTo");
+        Iterator fieldIterator = getFields().keySet().iterator();
+        while (fieldIterator.hasNext()) {
+            String key = (String) fieldIterator.next();
+            if (key != null && key.startsWith(FK_PREFIX)) {
+                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
+                String fkClassName = (String) hiddenFKField.getValueObject();
+                HiddenField hiddenPropField = (HiddenField) getFields().get(PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX));
+                String propName = (String) hiddenPropField.getValueObject();
+                Field fkField = (Field) getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
+//                System.out.println("**---->FKField:"+fkField.getName());
+                String fkValue = fkField.getValue();
+//                System.out.println("**-----> Relation:class["+fkClassName+"],propName["+propName+"],fk["+fkValue+"]");
+                if (fkClassName != null && propName != null && StringUtils.isNotEmpty(fkValue)) {
+                    Class fkClass = Class.forName(fkClassName);
+                    DataObject fkDataObject = DataObjectUtils.objectForPK(getDataContext(), fkClass, Integer.parseInt(fkValue));
+                    if (fkDataObject != null) {
+                        dataObject.writeProperty(propName, fkDataObject);
+//                        System.out.println("**-----> Written with:"+fkDataObject);
+                    }
+                }
+            }
         }
     }
 

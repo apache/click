@@ -23,7 +23,20 @@
 			<td width="110px;" valign="top" align="right"><b>Date Hired</b></td>
 			<td width="150">$person.dateHired</td>
 		</tr>
-	</table>
+        <tr bgcolor="#dddddd">
+            <td width="110px;" valign="top" align="right"><b>Department</b></td>
+            <td width="150">#if($person.department) $person.department.name #else None #end</td>
+        </tr>
+        <tr bgcolor="#dddddd">
+            <td width="110px;" valign="top" align="right"><b>No. of Projects</b></td>
+            <td width="150">$person.projects.size()</td>
+        </tr>
+        <tr bgcolor="#dddddd">
+            <td width="110px;" valign="top" align="right"><b>No. of Managed Projects</b></td>
+            <td width="150">$person.managedProjects.size()</td>
+        </tr>
+        
+    </table>
 	<table border="0" cellspacing="0" cellpadding="2" width="100%">
 		<tr bgcolor="#cccccc">
 			<th width="95%" align="right"><a href="$editLink.getHref($format.id($person))">
@@ -33,6 +46,7 @@
 				onclick="return window.confirm('Are you sure you want to delete this Person?');">
 			  <img src="images/icon-trash.gif" alt="Delete" title="Delete" border="0" align="middle"/></a></th>
 		</tr>
+
 	</table>
 #end
 </response>
