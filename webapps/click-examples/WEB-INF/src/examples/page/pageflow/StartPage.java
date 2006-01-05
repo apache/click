@@ -62,7 +62,6 @@ public class StartPage extends BorderedPage {
         form.add(notesField);
 
         form.add(new Submit(" < Back ", this, "onBackClick"));
-
         form.add(new Submit(" Next > ", this, "onNextClick"));
     }
 
@@ -73,13 +72,20 @@ public class StartPage extends BorderedPage {
     /**
      * @see net.sf.click.Page#onInit()
      */
-    public void onInti() {
+    public void onInit() {
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValueObject(courseBooking.getCustomerId());
             dateField.setDate(courseBooking.getBookingDate());
             courseSelect.setValue(courseBooking.getCourseType());
             notesField.setValue(courseBooking.getBookingNotes());
         }
+    }
+
+    /**
+     * @see net.sf.click.Page#onSecurityCheck()
+     */
+    public boolean onSecurityCheck() {
+        return form.onSubmitCheck(this, "/pageflow/invalid-submit.html");
     }
 
     public boolean onBackClick() {

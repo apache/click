@@ -7,7 +7,7 @@
 
   <headers>
     <header name="Pragma" value="no-cache"/>
-    <header name="Cache-Control" value="no-cache"/>
+    <header name="Cache-Control" value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/>
     <header name="Expires" value="1" type="Date"/>
   </headers>
 

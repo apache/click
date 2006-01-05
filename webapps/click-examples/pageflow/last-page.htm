@@ -54,11 +54,26 @@ No course booking has been made.
 
 The LastPage gets the booking details from a "bookingId" URL request parameter. 
 <pre class="codeJava">
-String bookingId = getContext().getRequest().getParameter("<span class="st">bookingId=</span>");
+String bookingId = getContext().getRequest().getParameter(<span class="st">"bookingId="</span>);
 
 CourseBooking courseBooking = CourseBookingDAO.findCourseBookingByID(<span class="kw">new</span> Long(bookingId));
 </pre>
 
 The advantage of the Post-Redirect pattern is that it will not make the POST
 request again of the previous page even if the users does a refresh.
+
+<p/>
+
+To prevent users from submitting the order twice by pressing the back button,
+the <tt>StartPage</tt> of this page flow uses a form submit check.
+
+<pre class="codeJava">
+<span class="kw">public class</span> StartPage <span class="kw">extends</span> BorderedPage {
+    ..
+    
+    <span class="kw">public boolean</span> onSecurityCheck() {
+        <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+    }
+}
+</pre>
 

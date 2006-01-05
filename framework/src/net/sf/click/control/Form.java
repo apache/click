@@ -20,10 +20,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -121,7 +124,20 @@ import org.apache.commons.lang.StringUtils;
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
+ * <a name="form-layout"><h3>Data Binding</h3></a>
+ *
+ * To bind value objects to a forms fields use the copy methods:
+ * <ul>
+ * <li>data object &nbsp; -> &nbsp; form fields  &nbsp; &nbsp; &nbsp;
+ * {@link #copyFrom(Object)}</li>
+ * <li>form fields &nbsp; -> &nbsp; data object  &nbsp; &nbsp; &nbsp;
+ * {@link #copyTo(Object)}</li>
+ * </ul>
+ * To debug the data binding being performed, use the debug copy methods.
+ *
  * <a name="form-layout"><h3>Form Layout</h3></a>
+ * The Form control supports rendering using automatic and manual layout
+ * techniques.
  *
  * <a name="auto-layout"><h4>Auto Layout</h4></a>
  *
@@ -385,6 +401,12 @@ public class Form implements Control {
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
 
+    /**
+     * The submit check reserved request parameter prefix: &nbsp;
+     * <tt>SUBMIT_CHECK_</tt>
+     */
+    protected static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
+
     static {
         ResourceBundle bundle =
             ResourceBundle.getBundle(Field.CONTROL_MESSAGES);
@@ -475,23 +497,6 @@ public class Form implements Control {
 
     /** The parent localized messages map. */
     protected Map parentMessages;
-
-// Not completed in time for Release 0.16
-//
-//    /** The perform submit check flag. */
-//    protected boolean submitCheck;
-//
-//    /** The submit check redirect to target flag. */
-//    protected boolean submitCheckRedirect;
-//
-//    /** The submit check failure target path. */
-//    protected String submitCheckPath;
-//
-//    /** The listener target object. */
-//    protected Object submitCheckListener;
-//
-//    /** The listener method name. */
-//    protected String submitCheckListenerMethod;
 
     /** The form is readonly flag. */
     protected boolean readonly;
@@ -971,11 +976,20 @@ public class Form implements Control {
 
         buffer.append(MessageFormat.format(HTML_IMPORTS, args));
 
+        Set includeSet = null;
+
         for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            if (includeSet == null) {
+                includeSet = new HashSet();
+            }
+
             Field field = (Field) i.next();
             String include = field.getHtmlImports();
-            if (include != null) {
-                buffer.append(include);
+            if (!includeSet.contains(include)) {
+                if (include != null) {
+                    buffer.append(include);
+                    includeSet.add(include);
+                }
             }
         }
 
@@ -1389,9 +1403,11 @@ public class Form implements Control {
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
                 Field field = (Field) getFieldList().get(i);
-                continueProcessing = field.onProcess();
-                if (!continueProcessing) {
-                    return false;
+                if (!field.getName().startsWith(SUBMIT_CHECK)) {
+                    continueProcessing = field.onProcess();
+                    if (!continueProcessing) {
+                        return false;
+                    }
                 }
             }
             for (int i = 0, size = getButtonList().size(); i < size; i++) {
@@ -1410,81 +1426,63 @@ public class Form implements Control {
         return true;
     }
 
-// Not completed in time for Release 0.16, deferred until release 0.18
-//
-//    /**
-//     * TODO: onSubmitCheck doco
-//     *
-//     * Perform a submit check.
-//     *
-//     * @param page the page invoking the Form submit check
-//     * @return true if the submit is OK or false otherwise
-//     */
-//    public boolean onSubmitCheck(Page page) {
-//        if (page == null) {
-//            throw new IllegalArgumentException("Null page parameter");
-//        }
-//
-//        if (submitCheck) {
-//            if (submitCheckListener != null &&
-//                submitCheckListenerMethod != null) {
-//
-//                return ClickUtils.invokeListener(submitCheckListener,
-//                                                 submitCheckListenerMethod);
-//            } else {
-//                // Check tokens
-//                boolean isValid = false;
-//
-//                if (!isValid) {
-//                    if (page == null) {
-//                        String msg = "submitCheckPath is not defined";
-//                        throw new IllegalStateException(msg);
-//                    }
-//
-//                    if (submitCheckRedirect) {
-//                        page.setRedirect(submitCheckPath);
-//                    } else {
-//                        page.setForward(submitCheckPath);
-//                    }
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
-//
-//    /**
-//     * TODO: setSubmitCheck doco
-//     *
-//     * @param path
-//     * @param redirect
-//     */
-//    public void setSubmitCheck(String path, boolean redirect) {
-//        if (path == null) {
-//            throw new IllegalArgumentException("Null path parameter");
-//        }
-//        submitCheck = true;
-//        submitCheckPath = path;
-//        submitCheckRedirect = redirect;
-//    }
-//
-//    /**
-//     * TODO: setSubmitCheck doco
-//     *
-//     * @param listener
-//     * @param method
-//     */
-//    public void setSubmitCheck(Object listener, String method) {
-//        if (listener == null) {
-//            throw new IllegalArgumentException("Null listener parameter");
-//        }
-//        if (method == null) {
-//            throw new IllegalArgumentException("Null method parameter");
-//        }
-//        submitCheck = true;
-//        submitCheckListener = listener;
-//        submitCheckListenerMethod = method;
-//    }
+    /**
+     * TODO: onSubmitCheck doco
+     *
+     * Perform a submit check.
+     *
+     * @param page the page invoking the Form submit check
+     * @param path TODO
+     * @return true if the submit is OK or false otherwise
+     */
+    public boolean onSubmitCheck(Page page, String path) {
+        if (page == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
+        if (path == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
+
+        if (performSubmitCheck()) {
+            return true;
+
+        } else {
+            page.setRedirect(path);
+
+            return false;
+        }
+    }
+
+    /**
+     * TODO: onSubmitCheck doco
+     *
+     * Perform a submit check.
+     *
+     * @param page the page invoking the Form submit check
+     * @param submitListener TODO
+     * @return submitListenerMethod TODO
+     */
+    public boolean onSubmitCheck(Page page, Object submitListener,
+            String submitListenerMethod) {
+
+        if (page == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
+        if (submitListener == null) {
+            throw new IllegalArgumentException("Null submitListener parameter");
+        }
+        if (submitListenerMethod == null) {
+            throw new IllegalArgumentException
+                ("Null submitListenerMethod parameter");
+        }
+
+        if (performSubmitCheck()) {
+            return true;
+
+        } else {
+            return ClickUtils.invokeListener(submitListener, submitListenerMethod);
+        }
+    }
 
     /**
      * Return the HTML string representation of the form.
@@ -1619,6 +1617,55 @@ public class Form implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Perform a back button submit check, returning true if the request is
+     * valid or false otherwise. This method will add a submit check token
+     * to the form as a hidden field, and to the session.
+     *
+     * @return true if the submit is OK or false otherwise
+     */
+    protected boolean performSubmitCheck() {
+
+        final HttpServletRequest request = getContext().getRequest();
+        final String submitTokenName =
+            SUBMIT_CHECK + getContext().getResourcePath();
+
+        boolean isValidSubmit = true;
+
+        // If not this form exit
+        String formName = getContext().getRequestParameter(FORM_NAME);
+
+        // Only test if submit for this form
+        if (!getContext().isForward() &&
+            request.getMethod().equalsIgnoreCase(getMethod()) &&
+            getName().equals(formName)) {
+
+            Long sessionTime =
+                (Long) getContext().getSessionAttribute(submitTokenName);
+
+            if (sessionTime != null) {
+                String value = request.getParameter(submitTokenName);
+                Long formTime = Long.valueOf(value);
+                isValidSubmit = formTime.equals(sessionTime);
+            }
+        }
+
+        // Save state info to form and session
+        final Long time = new Long(System.currentTimeMillis());
+        HiddenField field = new HiddenField(submitTokenName, Long.class);
+        field.setValueObject(time);
+        add(field);
+
+        getContext().setSessionAttribute(submitTokenName, time);
+
+        if (isValidSubmit) {
+            return true;
+
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Render the non hidden Form Fields to the string buffer and return a count
