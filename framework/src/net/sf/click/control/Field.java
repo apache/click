@@ -357,8 +357,17 @@ public abstract class Field implements Control {
 
         } else {
             String formId = (getForm() != null) ? getForm().getId() + "-" : "";
+            
+            String id = formId + getName();
+            
+            if (id.indexOf('/') != -1) {
+                id = id.replace('/', '_');
+            }
+            if (id.indexOf(' ') != -1) {
+                id = id.replace(' ', '_');
+            }
 
-            return formId + getName();
+            return id;
         }
     }
 
