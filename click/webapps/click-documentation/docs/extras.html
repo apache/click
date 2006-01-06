@@ -87,24 +87,10 @@ To make preconfigured resources (templates, stylesheets, etc.) available to web 
 Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
 directory at startup (existing files will not be overwritten).
 <p/>
-To enable you component to deploy resources on startup it should implement the
+To enable your component to deploy resources on startup it should implement the
 <a href="click-api/net/sf/click/Deployable.html">Deployable</a> interface.
-
-
-<p/>
-To register classpath resources to be automatically deployed add an entry to the Click Extras
-<tt>/click-deploy.properties</tt> file.
-
-<pre class="codeConfig">
-# Define list files to be deployed
-click.deploy.files=<span class="red">ListPanel</span>,<span class="red">TabbedPanel</span>,<span class="red">table</span>
-
-# Define file resource paths
-click.deploy.path.<span class="red">ListPanel</span>=<span class="blue">/net/sf/click/extras/panel/ListPanel.htm</span>
-
-click.deploy.path.<span class="red">TabbedPanel</span>=<span class="blue">/net/sf/click/extras/panel/TabbedPanel.htm</span>
-
-click.deploy.path.<span class="red">table</span>=<span class="blue">/net/sf/click/extras/table/table.css</span> </pre>
+Click extra controls which implement deployable should be registered in
+<tt>/extras-deployables.xml</tt>
 
 <h3>Coding Style and Practices</h3>
 

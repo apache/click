@@ -292,19 +292,29 @@
   <dt><b>How can you prevent multiple form posts?</b></dt>
   <dd>
   You can prevent multiple form posts by using the Post Redirect pattern. With 
-  this pattern once the user has posted form you redirect another page. If the
-  user then presses the refresh button, they will making a GET request on the
+  this pattern once the user has posted a form you redirect to another page. 
+  If the user then presses the refresh button, they will making a GET request on the
   current page.
-  <p/>
-  Please see the Click Examples 'Page Flow' for a demostration of this pattern.
-  <p/>
-  When you want to be doubly careful, store a token in the users session to 
-  make sure they don't do the same thing twice. The Page 
-  <tt>onSecurityCheck()</tt> method is a good location for this type of
-  functionality.
   <p/>
   Please see the <a target="blank" href="http://www.theserverside.com/articles/content/RedirectAfterPost/article.html">Redirect After Post</a> 
   article for more information on this topic.
+  <p/>
+  To prevent users resubmitting a form with the browser back button use the
+  Form 
+  <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+  method:
+  
+<pre class="codeJava">
+<span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+    ..
+    
+    <span class="kw">public boolean</span> onSecurityCheck() {
+        <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+    }
+} </pre>
+  <p/>
+  Please see the Click Examples 'Page Flow' for a demonstration of the
+  Post-Redirect and submit check patterns.
   </dd>
 
 
