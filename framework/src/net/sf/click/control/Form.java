@@ -1427,47 +1427,91 @@ public class Form implements Control {
     }
 
     /**
-     * TODO: onSubmitCheck doco
+     * Perform a form submission check ensuring the user has not replayed the
+     * form submission by using the browser back button. If the form submit
+     * is valid this method will return true, otherwise set the page to
+     * redirect to the given redirectPath and return false.
+     * <p/>
+     * This method will add a token to the user's session and a hidden field
+     * to the form to validate future submits.
+     * <p/>
+     * Form submit checks should be performed before the pages controls are
+     * processed in the Page onSecurityCheck method. For example:
      *
-     * Perform a submit check.
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     *     ..
+     *
+     *     <span class="kw">public boolean</span> onSecurityCheck() {
+     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+     *     }
+     * } </pre>
+     *
+     * Form submit checks should generally be combined with the Post-Redirect
+     * pattern which provides a better user experience when pages are refreshed.
      *
      * @param page the page invoking the Form submit check
-     * @param path TODO
-     * @return true if the submit is OK or false otherwise
+     * @param redirectPath the path to redirect invalid submissions to
+     * @return true if the form submit is OK or false otherwise
      */
-    public boolean onSubmitCheck(Page page, String path) {
+    public boolean onSubmitCheck(Page page, String redirectPath) {
         if (page == null) {
             throw new IllegalArgumentException("Null page parameter");
         }
-        if (path == null) {
-            throw new IllegalArgumentException("Null page parameter");
+        if (redirectPath == null) {
+            throw new IllegalArgumentException("Null redirectPath parameter");
         }
 
         if (performSubmitCheck()) {
             return true;
 
         } else {
-            page.setRedirect(path);
+            page.setRedirect(redirectPath);
 
             return false;
         }
     }
 
     /**
-     * TODO: onSubmitCheck doco
+     * Perform a form submission check ensuring the user has not replayed the
+     * form submission by using the browser back button. If the form submit
+     * is valid this method will return true, otherwise the given listener
+     * object and method will be invoked.
+     * <p/>
+     * This method will add a token to the users session and a hidden field
+     * to the form to validate future submit's.
+     * <p/>
+     * Form submit checks should be performed before the pages controls are
+     * processed in the Page onSecurityCheck method. For example:
      *
-     * Perform a submit check.
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     *     ..
      *
-     * @param page the page invoking the Form submit check
-     * @param submitListener TODO
-     * @return submitListenerMethod TODO
+     *     <span class="kw">public boolean</span> onSecurityCheck() {
+     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"onInvalidSubmit"</span>);
+     *     }
+     *
+     *     <span class="kw">public boolean</span> onInvalidSubmit() {
+     *        getContext().setRequestAttribute(<span class="st">"invalidPath"</span>, getPath());
+     *        setForward(<span class="st">"invalid-submit.htm"</span>);
+     *        <span class="kw">return false</span>;
+     *     }
+     * } </pre>
+     *
+     * Form submit checks should generally be combined with the Post-Redirect
+     * pattern which provides a better user experience when pages are refreshed.
+     *
+     * @param submitListener the listener object to call when an invalid submit
+     *      occurs
+     * @param submitListenerMethod the listener method to invoke when an
+     *      invalid submit occurs
+     * @return true if the form submit is valid, or the return value of the
+     *      listener method otherwise
      */
-    public boolean onSubmitCheck(Page page, Object submitListener,
+    public boolean onSubmitCheck(Object submitListener,
             String submitListenerMethod) {
 
-        if (page == null) {
-            throw new IllegalArgumentException("Null page parameter");
-        }
         if (submitListener == null) {
             throw new IllegalArgumentException("Null submitListener parameter");
         }
