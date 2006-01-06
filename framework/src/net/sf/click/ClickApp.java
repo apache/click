@@ -486,18 +486,21 @@ class ClickApp implements EntityResolver {
         InputStream inputStream =
             getClass().getResourceAsStream(classpathResource);
 
-        if (inputStream == null) {
-            String msg =
-                "could not findconfiguration file: " + classpathResource;
-            throw new RuntimeException(msg);
+        if (inputStream != null) {
+            Document document = ClickUtils.buildDocument(inputStream, this);
+            return document.getDocumentElement();
+
+        } else {
+            return null;
         }
-
-        Document document = ClickUtils.buildDocument(inputStream, this);
-
-        return document.getDocumentElement();
     }
 
     private void deployDeployables(Element rootElm) throws Exception {
+
+        if (rootElm == null) {
+            return;
+        }
+
         Element deployablesElm = getChild(rootElm, "deployables");
 
         if (deployablesElm == null) {
