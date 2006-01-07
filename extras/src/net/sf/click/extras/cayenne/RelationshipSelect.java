@@ -1,17 +1,17 @@
 package net.sf.click.extras.cayenne;
 
-import net.sf.click.control.Select;
-import net.sf.click.control.Option;
-import net.sf.click.control.Decorator;
-import net.sf.click.Context;
-
 import java.util.List;
+
+import net.sf.click.Context;
+import net.sf.click.control.Decorator;
+import net.sf.click.control.Option;
+import net.sf.click.control.Select;
 
 import org.objectstyle.cayenne.DataObject;
 import org.objectstyle.cayenne.DataObjectUtils;
 
 /**
- * Provides a Cayenne relationship Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
+ * Provides a Cayenne data object Relationship Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
@@ -30,8 +30,30 @@ import org.objectstyle.cayenne.DataObjectUtils;
  * labels can be rendered using a provided {@link net.sf.click.control.Decorator}
  * or will render the primary key value otherwise.
  * <p/>
+ * The example below add a RelationshipSelect for the department property of
+ * the <tt>Person</tt> data object.
+ * <pre class="codeJava">
+ * RelationshipSelect departmentSelect =
+ *     <span class="kw">new</span> RelationshipSelect(<span class="st">"departmentSelect"</span>, <span class="st">"Department"</span>);
+ *
+ * departmentSelect.setDecorator(<span class="kw">new</span> Decorator() {
+ *     <span class="kw">public</span> String render(Object row, Context context) {
+ *         <span class="kw">return</span> ((Department) row).getName();
+ *     }
+ * });
+ *
+ * SelectQuery query = <span class="kw">new</span> SelectQuery(Department.<span class="kw">class</span>);
+ * List departmentList = getDataContext().performQuery(query);
+ * departmentSelect.addRelationshipList(departmentList);
+ *
+ * CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Person.<span class="kw">class</span>);
+ * form.add(departmentSelect);
+ * form.addRelation(<span class="st">"department"</span>, Department.<span class="kw">class</span>, departmentSelect); </pre>
+ *
  * <b>PLEASE NOTE</b>: this control  is undergoing preliminary development and
  * is subject to significant change
+ *
+ * @see CayenneForm
  *
  * @author Ahmed Mohombe
  */
