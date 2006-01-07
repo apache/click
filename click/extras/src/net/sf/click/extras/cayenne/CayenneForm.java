@@ -16,12 +16,14 @@
 package net.sf.click.extras.cayenne;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.DataObject;
@@ -132,6 +134,9 @@ public class CayenneForm extends Form {
     /** The data object class name hidden field. */
     protected HiddenField classField = new HiddenField("DOCLASS", String.class);
 
+    /** The data object binding debug flag. */
+    protected boolean debug;
+
     /**
      * The flag specifying that object validation meta data has been applied to
      * the form fields.
@@ -198,7 +203,9 @@ public class CayenneForm extends Form {
                 }
 
                 copyTo(dataObject, true);
-                // todo: take care of the diff situations: new object, existing object new FK, existing object old FK, etc.
+
+                // TODO: take care of the diff situations: new object, existing
+                // object new FK, existing object old FK, etc.
                 copyRelationsTo(dataObject);
 
                 return dataObject;
@@ -210,11 +217,10 @@ public class CayenneForm extends Form {
         return null;
     }
 
-
     /**
      * Set the given <tt>DataObject</tt> in the form, copying the object's
-     * properties into the form field values.<br/>
-     * Also fix the right selection for the relations.
+     * properties into the form field values. This method will also set the
+     * relationship selection.
      *
      * @param dataObject the <tt>DataObject</tt> to set
      */
@@ -224,26 +230,22 @@ public class CayenneForm extends Form {
                 int pk = DataObjectUtils.intPKForObject(dataObject);
                 pkField.setValueObject(new Integer(pk));
             }
-            copyFrom(dataObject, true);
-            // fix the form selection for the relations too:
+
+            copyFrom(dataObject, debug);
+
             copyRelationFrom(dataObject);
         }
     }
-    /**
-     * Adds/registers a new relation with the given form name and <tt>DataObject</tt>
-     * class as choosable values.
-     *
-     * @param name the control name
-     * @param dataClass the <tt>DataObject</tt> class
-     * @param propName the name of the property for this DataObject (this is just a hack till an automatic way is found)
-     */
-    public void addRelation(String name, Class dataClass, String propName){
-        //    add a hidden field with the Data Object name of this relation.
-        //    in the same way it was done for the FORM, but here in a generic way
-        //    cause there might be more than one relation/fk for an entity
-        HiddenField fkField = new HiddenField(FK_PREFIX+name,String.class);
 
-        // todo: refactor the code below, cause it's used in the constructor too.
+    /**
+     * Adds and registers a new <tt>DataObject</tt> relation for the given
+     * control name, data object class, and data object property.
+     *
+     * @param name the name of the control which provide the relationship
+     * @param dataClass the <tt>DataObject</tt> class
+     * @param property the name of the property of the data object relationship
+     */
+    public void addRelation(String name, Class dataClass, String property) {
         if (dataClass == null) {
             throw new IllegalArgumentException("Null dataClass parameter");
         }
@@ -251,71 +253,23 @@ public class CayenneForm extends Form {
             String msg = "Not a DataObject class: " + dataClass;
             throw new IllegalArgumentException(msg);
         }
-        // end
+        if (property == null) {
+            throw new IllegalArgumentException("Null property parameter");
+        }
+
+        // Add a hidden field with the Data Object name of this relation.
+        // in the same way it was done for the FORM, but here in a generic way
+        // cause there might be more than one relation/fk for an entity
+        HiddenField fkField = new HiddenField(FK_PREFIX + name, String.class);
 
         fkField.setValueObject(dataClass.getName());
         add(fkField);
 
-        // hack
-        HiddenField propNameField = new HiddenField(PROP_PREFIX+name,String.class);
-        propNameField.setValueObject(propName);
+        HiddenField propNameField =
+            new HiddenField(PROP_PREFIX + name, String.class);
+
+        propNameField.setValueObject(property);
         add(propNameField);
-    }
-
-    /**
-     * This is more just a fix, because copyFrom can't handle such Relation Select Fields.
-     */
-    private void copyRelationFrom(DataObject dataObject) {
-//        System.out.println("**-----> CayenneForm.copyRelationFrom");
-        Iterator fieldIterator = getFields().keySet().iterator();
-        while (fieldIterator.hasNext()) {
-            String key = (String) fieldIterator.next();
-            if (key != null && key.startsWith(FK_PREFIX)) {
-                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
-                String fkClassName = (String) hiddenFKField.getValueObject();
-                HiddenField hiddenPropField = (HiddenField) getFields().get(PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX));
-                String propName = (String) hiddenPropField.getValueObject();
-                Field fkField = (Field) getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
-//                System.out.println("**---->FKField:"+fkField.getName());
-//                System.out.println("**-----> Relation:class["+fkClassName+"],propName["+propName+"]");
-                if (fkClassName != null && propName != null) {
-                    DataObject fkDataObject = (DataObject) dataObject.readProperty(propName);
-                    if(fkDataObject!=null) {
-                        int pk4FkData = DataObjectUtils.intPKForObject(fkDataObject);
-//                        System.out.println("**-----> Relation was set to:"+pk4FkData);
-                        fkField.setValueObject(String.valueOf(pk4FkData));
-                    } else {
-//                        System.out.println("**-----> Relation was NOT set.");
-                    }
-                }
-            }
-        }
-    }
-
-    private void copyRelationsTo(DataObject dataObject) throws Exception{
-//        System.out.println("**-----> CayenneForm.copyRelationsTo");
-        Iterator fieldIterator = getFields().keySet().iterator();
-        while (fieldIterator.hasNext()) {
-            String key = (String) fieldIterator.next();
-            if (key != null && key.startsWith(FK_PREFIX)) {
-                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
-                String fkClassName = (String) hiddenFKField.getValueObject();
-                HiddenField hiddenPropField = (HiddenField) getFields().get(PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX));
-                String propName = (String) hiddenPropField.getValueObject();
-                Field fkField = (Field) getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
-//                System.out.println("**---->FKField:"+fkField.getName());
-                String fkValue = fkField.getValue();
-//                System.out.println("**-----> Relation:class["+fkClassName+"],propName["+propName+"],fk["+fkValue+"]");
-                if (fkClassName != null && propName != null && StringUtils.isNotEmpty(fkValue)) {
-                    Class fkClass = Class.forName(fkClassName);
-                    DataObject fkDataObject = DataObjectUtils.objectForPK(getDataContext(), fkClass, Integer.parseInt(fkValue));
-                    if (fkDataObject != null) {
-                        dataObject.writeProperty(propName, fkDataObject);
-//                        System.out.println("**-----> Written with:"+fkDataObject);
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -434,4 +388,128 @@ public class CayenneForm extends Form {
         metaDataApplied = true;
     }
 
+    /**
+     * Copy the relationships from the give data object to the form.
+     * The standard Form <tt>copyFrom()</tt> method cannot handle
+     * <tt>RelationSelect</tt> Fields.
+     *
+     * @param dataObject to copy relationships from
+     */
+    protected void copyRelationFrom(DataObject dataObject) {
+        if (dataObject == null) {
+            throw new IllegalArgumentException("Null dataObject parameter");
+        }
+
+        log("copyRelationFrom");
+
+        Iterator fieldIterator = ClickUtils.getFormFields(this).iterator();
+        while (fieldIterator.hasNext()) {
+
+            String key = ((Field) fieldIterator.next()).getName();
+
+            if (key != null && key.startsWith(FK_PREFIX)) {
+
+                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
+                String fkClassName = (String) hiddenFKField.getValueObject();
+
+                HiddenField hiddenPropField = (HiddenField)
+                    getFields().get(PROP_PREFIX +
+                                    StringUtils.substringAfter(key, FK_PREFIX));
+
+                String propName = (String) hiddenPropField.getValueObject();
+
+                Field fkField = (Field)
+                    getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
+
+                log("FKField: " + fkField.getName());
+                log("relation: class[" +fkClassName + "], " +
+                    "propName[" + propName + "]");
+
+                if (fkClassName != null && propName != null) {
+                    DataObject fkDataObject = (DataObject)
+                        dataObject.readProperty(propName);
+
+                    if (fkDataObject != null) {
+
+                        int pk4FkData =
+                            DataObjectUtils.intPKForObject(fkDataObject);
+
+                        log("relation was set to: " + pk4FkData);
+                        fkField.setValueObject(String.valueOf(pk4FkData));
+
+                    } else {
+                        log("relation was NOT set");
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Copy the relationships from the form to the given give data object.
+     * The standard Form <tt>copyTo()</tt> method cannot handle
+     * <tt>RelationSelect</tt> Fields.
+     *
+     * @param dataObject to copy relationships to
+     */
+    protected void copyRelationsTo(DataObject dataObject) throws Exception {
+        if (dataObject == null) {
+            throw new IllegalArgumentException("Null dataObject parameter");
+        }
+
+        log("copyRelationsTo");
+
+        Iterator fieldIterator = ClickUtils.getFormFields(this).iterator();
+        while (fieldIterator.hasNext()) {
+
+            String key = ((Field) fieldIterator.next()).getName();
+
+            if (key != null && key.startsWith(FK_PREFIX)) {
+
+                HiddenField hiddenFKField = (HiddenField) getFields().get(key);
+                String fkClassName = (String) hiddenFKField.getValueObject();
+
+                HiddenField hiddenPropField = (HiddenField)
+                    getFields().get(PROP_PREFIX +
+                                    StringUtils.substringAfter(key, FK_PREFIX));
+
+                String propName = (String) hiddenPropField.getValueObject();
+                Field fkField = (Field)
+                    getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
+
+                log("FKField: " + fkField.getName());
+
+                String fkValue = fkField.getValue();
+                log("relation: class[" + fkClassName + "], " +
+                    "propName[" + propName + "], fk[" + fkValue + "]");
+
+                if (fkClassName != null &&
+                    propName != null &&
+                    StringUtils.isNotEmpty(fkValue)) {
+
+                    Class fkClass = Class.forName(fkClassName);
+                    DataObject fkDataObject =
+                        DataObjectUtils.objectForPK(getDataContext(),
+                                                    fkClass,
+                                                    Integer.parseInt(fkValue));
+
+                    if (fkDataObject != null) {
+                        dataObject.writeProperty(propName, fkDataObject);
+                        log("written with: " + fkDataObject);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Log the given message to the System out console if debug is enabled.
+     *
+     * @param msg the message to log to System out
+     */
+    protected void log(Object msg) {
+        if (debug) {
+            System.out.println("[CayenneForm] [debug] " + msg);
+        }
+    }
 }
