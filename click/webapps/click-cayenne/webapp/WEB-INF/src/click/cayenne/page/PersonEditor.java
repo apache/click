@@ -35,8 +35,7 @@ public class PersonEditor  extends BorderedPage {
         form.add(new DateField("dateHired","Date Hired"));
         form.add(new DoubleField("baseSalary","Base Salary"));
 
-        form.addRelation("departmentSelect", Department.class, "department");
-        departmentSelect = new RelationshipSelect("department", "Department");
+        departmentSelect = new RelationshipSelect("departmentSelect", "Department");
         departmentSelect.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Department departmentDataObject = (Department) row;
@@ -44,6 +43,7 @@ public class PersonEditor  extends BorderedPage {
             }
         });
         form.add(departmentSelect);
+        form.addRelation("department", Department.class, departmentSelect);
 
         SelectQuery query = new SelectQuery(Department.class);
         List departmentList = getDataContext().performQuery(query);

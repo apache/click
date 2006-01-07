@@ -16,7 +16,6 @@
 package net.sf.click.extras.cayenne;
 
 import java.util.Iterator;
-import java.util.List;
 
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
@@ -238,14 +237,20 @@ public class CayenneForm extends Form {
     }
 
     /**
-     * Adds and registers a new <tt>DataObject</tt> relation for the given
-     * control name, data object class, and data object property.
+     * Adds and registers a new property relationship with the given
+     * property name, foreign <tt>DataObject</tt> class and property field.
      *
-     * @param name the name of the control which provide the relationship
-     * @param dataClass the <tt>DataObject</tt> class
-     * @param property the name of the property of the data object relationship
+     * @param propertyName the form's data object relationship property name
+     * @param dataClass the relationship foreign <tt>DataObject</tt> class
+     * @param propertyField the property field for the relationship
      */
-    public void addRelation(String name, Class dataClass, String property) {
+    public void addRelation(String propertyName, Class dataClass,
+            Field propertyField) {
+
+        if (propertyName == null) {
+            throw new IllegalArgumentException
+                ("Null propertyName parameter");
+        }
         if (dataClass == null) {
             throw new IllegalArgumentException("Null dataClass parameter");
         }
@@ -253,22 +258,23 @@ public class CayenneForm extends Form {
             String msg = "Not a DataObject class: " + dataClass;
             throw new IllegalArgumentException(msg);
         }
-        if (property == null) {
-            throw new IllegalArgumentException("Null property parameter");
+        if (propertyField == null) {
+            throw new IllegalArgumentException("Null field parameter");
         }
 
         // Add a hidden field with the Data Object name of this relation.
         // in the same way it was done for the FORM, but here in a generic way
         // cause there might be more than one relation/fk for an entity
-        HiddenField fkField = new HiddenField(FK_PREFIX + name, String.class);
+        HiddenField fkField =
+            new HiddenField(FK_PREFIX + propertyField.getName(), String.class);
 
         fkField.setValueObject(dataClass.getName());
         add(fkField);
 
         HiddenField propNameField =
-            new HiddenField(PROP_PREFIX + name, String.class);
+            new HiddenField(PROP_PREFIX + propertyField.getName(), String.class);
 
-        propNameField.setValueObject(property);
+        propNameField.setValueObject(propertyName);
         add(propNameField);
     }
 
@@ -476,7 +482,7 @@ public class CayenneForm extends Form {
                 String propName = (String) hiddenPropField.getValueObject();
                 Field fkField = (Field)
                     getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
-
+System.out.println(fkField + " " + StringUtils.substringAfter(key, FK_PREFIX));
                 log("FKField: " + fkField.getName());
 
                 String fkValue = fkField.getValue();
