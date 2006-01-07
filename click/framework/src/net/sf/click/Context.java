@@ -240,14 +240,16 @@ public class Context {
 
             FileItem fileItem = (FileItem) multiPartFormData.get(name);
             if (fileItem != null) {
-                if(request.getCharacterEncoding()==null){
+                if (request.getCharacterEncoding() == null) {
                     return fileItem.getString();
                 }
                 try {
                     return fileItem.getString(request.getCharacterEncoding());
-                } catch(UnsupportedEncodingException ex){
+                    
+                } catch (UnsupportedEncodingException ex) {
                     throw new RuntimeException(ex);
                 }
+                
             } else {
                 return null;
             }
