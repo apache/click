@@ -24,37 +24,36 @@ public class PersonEditor  extends BorderedPage {
     /** The Person editing CayenneForm. */
     protected CayenneForm form = new CayenneForm("form", Person.class);
 
-    protected RelationshipSelect department;
+    /** The departments relationship select. */
+    protected RelationshipSelect departmentSelect;
+    
     /**
      * Create a new Person Editor.
      */
     public PersonEditor() {
-        form.setButtonAlign("right");
-        addControl(form);
-
         form.add(new TextField("fullName", "Full Name", 35));
         form.add(new DateField("dateHired","Date Hired"));
         form.add(new DoubleField("baseSalary","Base Salary"));
 
-
-        form.addRelation("department",Department.class,"department");
-        department = new RelationshipSelect("department","Department");
-        department.setEmptyOption(true);
-        department.setDecorator(new Decorator() {
+        form.addRelation("departmentSelect", Department.class, "department");
+        departmentSelect = new RelationshipSelect("department", "Department");
+        departmentSelect.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Department departmentDataObject = (Department) row;
                 return departmentDataObject.getName();
             }
         });
-        form.add(department);
+        form.add(departmentSelect);
 
         SelectQuery query = new SelectQuery(Department.class);
         List departmentList = getDataContext().performQuery(query);
-        setDepartmentRelation(departmentList);
-
+        departmentSelect.addRelationshipList(departmentList);
 
         form.add(new Submit("ok", "   OK   ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+        
+        form.setButtonAlign("right");
+        addControl(form);
     }
 
     /**
@@ -65,23 +64,6 @@ public class PersonEditor  extends BorderedPage {
     public void setPerson(Person person) {
         form.setDataObject(person);
     }
-
-    public void setDepartmentRelation(List departments){
-//        System.out.println("*-----> PersonEditor.setDepartmentRelation");
-//        for (int i = 0; i < departments.size(); i++) {
-//            Object o = departments.get(i);
-//            System.out.println("*----> Element in Departments:"+o);
-//        }
-        department.setRelations(departments);
-    }
-
-/*
-    public void onGet() {
-        SelectQuery query = new SelectQuery(Department.class);
-        List departmentList = getDataContext().performQuery(query);
-        setDepartmentRelation(departmentList);
-    }
-*/
     
     /**
      * Handle the OK button click, saving the Person if valid and
