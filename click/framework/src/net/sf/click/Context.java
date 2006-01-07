@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -239,7 +240,14 @@ public class Context {
 
             FileItem fileItem = (FileItem) multiPartFormData.get(name);
             if (fileItem != null) {
-                return fileItem.getString();
+                if(request.getCharacterEncoding()==null){
+                    return fileItem.getString();
+                }
+                try {
+                    return fileItem.getString(request.getCharacterEncoding());
+                } catch(UnsupportedEncodingException ex){
+                    throw new RuntimeException(ex);
+                }
             } else {
                 return null;
             }
