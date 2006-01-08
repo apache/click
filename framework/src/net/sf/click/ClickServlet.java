@@ -18,6 +18,7 @@ package net.sf.click;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -183,6 +184,9 @@ public class ClickServlet extends HttpServlet {
 
     /** Cache of velocity writers */
     protected SimplePool writerPool;
+    
+    /** The charcter encoding of this application. */
+    protected String charset;
 
     // --------------------------------------------------------- Public Methods
 
@@ -206,6 +210,7 @@ public class ClickServlet extends HttpServlet {
             ClickApp newClickApp = new ClickApp();
 
             newClickApp.setServletContext(getServletContext());
+            newClickApp.setServletConfig(getServletConfig());
 
             newClickApp.init();
 
@@ -217,7 +222,10 @@ public class ClickServlet extends HttpServlet {
             // Set the new ClickApp and writer pool
             clickApp = newClickApp;
             writerPool = newWriterPool;
-
+            
+            // Set the character encoding of this application
+            charset = getInitParameter("charset");
+            
             if (logger.isInfoEnabled()) {
                 logger.info("initialized in " + clickApp.getModeValue() + " mode");
             }
@@ -285,7 +293,15 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost) {
 
         long startTime = System.currentTimeMillis();
-
+        
+        if(charset!=null){
+            try {
+                request.setCharacterEncoding(charset);
+            } catch(UnsupportedEncodingException ex){
+                logger.warn("The character encoding " + charset + " is invalid.",ex);
+            }
+        }
+        
         if (logger.isDebugEnabled()) {
             StringBuffer buffer = new StringBuffer(200);
             buffer.append(request.getMethod());
