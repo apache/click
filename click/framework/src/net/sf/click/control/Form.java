@@ -978,12 +978,14 @@ public class Form implements Control {
 
         Set includeSet = null;
 
-        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+        List list = ClickUtils.getFormFields(this);
+        for (int i = 0, size = list.size(); i < size; i++) {
             if (includeSet == null) {
                 includeSet = new HashSet();
             }
 
-            Field field = (Field) i.next();
+            Field field = (Field) list.get(i);
+
             String include = field.getHtmlImports();
             if (!includeSet.contains(include)) {
                 if (include != null) {
