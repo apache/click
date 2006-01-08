@@ -245,11 +245,11 @@ public class Context {
                 }
                 try {
                     return fileItem.getString(request.getCharacterEncoding());
-                    
+
                 } catch (UnsupportedEncodingException ex) {
                     throw new RuntimeException(ex);
                 }
-                
+
             } else {
                 return null;
             }
