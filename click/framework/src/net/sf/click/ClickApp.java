@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import javax.servlet.ServletConfig;
 
 import javax.servlet.ServletContext;
 
@@ -159,7 +160,10 @@ class ClickApp implements EntityResolver {
 
     /** The ServletContext instance. */
     private ServletContext servletContext;
-
+    
+    /** The ServletConfig instance. */
+    private ServletConfig servletConfig;
+    
     /** The VelocityEngine instance. */
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
@@ -183,6 +187,24 @@ class ClickApp implements EntityResolver {
         this.servletContext = servletContext;
     }
 
+    /**
+     * Return the Click Application servlet config.
+     *
+     * @return the application servlet config
+     */
+    public ServletConfig getServletConfig() {
+        return servletConfig;
+    }
+
+    /**
+     * Set the Click Application servlet config.
+     *
+     * @param servletContext the application servlet config
+     */
+    public void setServletConfig(ServletConfig servletConfig) {
+        this.servletConfig = servletConfig;
+    }
+    
     /**
      * Initialize the click application.
      *
@@ -833,7 +855,14 @@ class ClickApp implements EntityResolver {
             velProps.put("velocimacro.library", CLICK_PATH + File.separator
                          + VM_FILE_NAME);
         }
-
+        
+        // Set the character encoding
+        String charset = servletConfig.getInitParameter("charset");
+        if(charset!=null){
+            velProps.put("input.encoding", charset);
+            velProps.put("output.encoding", charset);
+        }
+        
         // Load user velocity properties.
         Properties userProperties = new Properties();
 
