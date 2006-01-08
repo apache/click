@@ -47,8 +47,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * The Calendar popup is provided by the JSCalendar library by
  * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
  * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
- * popup, reference the method {@link Form#getHtmlImports()} in the page
- * template (imports click/form.js file). For example:
+ * popup, reference the method {@link net.sf.click.control.Form#getHtmlImports()}
+ * in the page template (imports click/form.js file). For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -263,7 +263,7 @@ public class DateField extends TextField {
      * Return the DateField <tt>calendar.js</tt> and <tt>calendar-{lang}.js</tt>
      * includes.
      *
-     * @see Field#getHtmlImports()
+     * @see net.sf.click.control.Field#getHtmlImports()
      */
     public String getHtmlImports() {
         String[] args = {
@@ -276,7 +276,7 @@ public class DateField extends TextField {
     }
 
     /**
-     * @see Field#setName(String)
+     * @see net.sf.click.control.Field#setName(String)
      */
     public void setName(String name) {
         super.setName(name);
@@ -344,7 +344,7 @@ public class DateField extends TextField {
     /**
      * Return the <tt>java.util.Date.class</tt>.
      *
-     * @see Field#getValueClass()
+     * @see net.sf.click.control.Field#getValueClass()
      *
      * @return the <tt>java.util.Date.class</tt>
      */
@@ -356,7 +356,7 @@ public class DateField extends TextField {
      * Return the field Date value, or null if value was empty or a parsing
      * error occured.
      *
-     * @see Field#getValueObject()
+     * @see net.sf.click.control.Field#getValueObject()
      */
     public Object getValueObject() {
         return getDate();
@@ -365,7 +365,7 @@ public class DateField extends TextField {
     /**
      * Set the date value of the field using the given object.
      *
-     * @see Field#setValueObject(Object)
+     * @see net.sf.click.control.Field#setValueObject(Object)
      */
     public void setValueObject(Object object) {
         if (object != null) {
