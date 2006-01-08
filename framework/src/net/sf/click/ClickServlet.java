@@ -164,6 +164,12 @@ public class ClickServlet extends HttpServlet {
     protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
+     * The click application character encoding servlet init parameter name:
+     * &nbsp; "<tt>charset</tt>"
+     */
+    protected final static String CHARSET = "charset";
+
+    /**
      * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
      */
     protected final static String FORWARD_PAGE = "forward-page";
@@ -184,9 +190,6 @@ public class ClickServlet extends HttpServlet {
 
     /** Cache of velocity writers */
     protected SimplePool writerPool;
-    
-    /** The charcter encoding of this application. */
-    protected String charset;
 
     // --------------------------------------------------------- Public Methods
 
@@ -210,7 +213,9 @@ public class ClickServlet extends HttpServlet {
             ClickApp newClickApp = new ClickApp();
 
             newClickApp.setServletContext(getServletContext());
-            newClickApp.setServletConfig(getServletConfig());
+
+            // Set the character encoding of this application
+            newClickApp.setCharset(getInitParameter(CHARSET));
 
             newClickApp.init();
 
@@ -222,10 +227,7 @@ public class ClickServlet extends HttpServlet {
             // Set the new ClickApp and writer pool
             clickApp = newClickApp;
             writerPool = newWriterPool;
-            
-            // Set the character encoding of this application
-            charset = getInitParameter("charset");
-            
+
             if (logger.isInfoEnabled()) {
                 logger.info("initialized in " + clickApp.getModeValue() + " mode");
             }
@@ -293,15 +295,18 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost) {
 
         long startTime = System.currentTimeMillis();
-        
-        if(charset!=null){
+
+        if (clickApp.getCharset() != null) {
             try {
-                request.setCharacterEncoding(charset);
-            } catch(UnsupportedEncodingException ex){
-                logger.warn("The character encoding " + charset + " is invalid.",ex);
+                request.setCharacterEncoding(clickApp.getCharset());
+
+            } catch (UnsupportedEncodingException ex) {
+                String msg = "The character encoding " +
+                             clickApp.getCharset() + " is invalid.";
+                logger.warn(msg, ex);
             }
         }
-        
+
         if (logger.isDebugEnabled()) {
             StringBuffer buffer = new StringBuffer(200);
             buffer.append(request.getMethod());

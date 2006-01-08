@@ -29,7 +29,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import javax.servlet.ServletConfig;
 
 import javax.servlet.ServletContext;
 
@@ -137,6 +136,9 @@ class ClickApp implements EntityResolver {
     /** The format class. */
     private Class formatClass;
 
+    /** The charcter encoding of this application. */
+    private String charset;
+
     /** The Map of global page headers. */
     private Map commonHeaders;
 
@@ -160,14 +162,29 @@ class ClickApp implements EntityResolver {
 
     /** The ServletContext instance. */
     private ServletContext servletContext;
-    
-    /** The ServletConfig instance. */
-    private ServletConfig servletConfig;
-    
+
     /** The VelocityEngine instance. */
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the application character encoding.
+     *
+     * @return the application character encoding
+     */
+    public String getCharset() {
+        return charset;
+    }
+
+    /**
+     * Set the application character encoding.
+     *
+     * @param charset the application character encoding.
+     */
+    public void setCharset(String charset) {
+        this.charset = charset;
+    }
 
     /**
      * Return the Click Application servlet context.
@@ -187,24 +204,6 @@ class ClickApp implements EntityResolver {
         this.servletContext = servletContext;
     }
 
-    /**
-     * Return the Click Application servlet config.
-     *
-     * @return the application servlet config
-     */
-    public ServletConfig getServletConfig() {
-        return servletConfig;
-    }
-
-    /**
-     * Set the Click Application servlet config.
-     *
-     * @param servletContext the application servlet config
-     */
-    public void setServletConfig(ServletConfig servletConfig) {
-        this.servletConfig = servletConfig;
-    }
-    
     /**
      * Initialize the click application.
      *
@@ -855,14 +854,13 @@ class ClickApp implements EntityResolver {
             velProps.put("velocimacro.library", CLICK_PATH + File.separator
                          + VM_FILE_NAME);
         }
-        
+
         // Set the character encoding
-        String charset = servletConfig.getInitParameter("charset");
-        if(charset!=null){
-            velProps.put("input.encoding", charset);
-            velProps.put("output.encoding", charset);
+        if (getCharset() != null) {
+            velProps.put("input.encoding", getCharset());
+            velProps.put("output.encoding", getCharset());
         }
-        
+
         // Load user velocity properties.
         Properties userProperties = new Properties();
 
