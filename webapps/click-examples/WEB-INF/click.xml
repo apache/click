@@ -13,8 +13,4 @@
 
   <mode value="profile"/>
 
-  <deployables>
-    <deployable classname="examples.control.RichTextArea"/>
-  </deployables>
-
 </click-app>
