@@ -2,7 +2,7 @@
 
 // Calendar JA language
 // Author: Naoki Takezoe, <takezoe@gmail.com>
-// Encoding: Shift_JIS
+// Encoding: utf-8
 // Distributed under the same terms as the calendar itself.
 
 // For translators: please use UTF-8 if possible.  We strongly believe that
@@ -11,14 +11,14 @@
 
 // full day names
 Calendar._DN = new Array
-("“ú—j“ú",
- "Œ—j“ú",
- "‰Î—j“ú",
- "…—j“ú",
- "–Ø—j“ú",
- "‹à—j“ú",
- "“y—j“ú",
- "“ú—j“ú");
+("æ—¥æ›œæ—¥",
+ "æœˆæ›œæ—¥",
+ "ç«æ›œæ—¥",
+ "æ°´æ›œæ—¥",
+ "æœ¨æ›œæ—¥",
+ "é‡‘æ›œæ—¥",
+ "åœŸæ›œæ—¥",
+ "æ—¥æ›œæ—¥");
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -34,14 +34,14 @@ Calendar._DN = new Array
 
 // short day names
 Calendar._SDN = new Array
-("“ú",
- "Œ",
- "‰Î",
- "…",
- "–Ø",
- "‹à",
- "“y",
- "“ú");
+("æ—¥",
+ "æœˆ",
+ "ç«",
+ "æ°´",
+ "æœ¨",
+ "é‡‘",
+ "åœŸ",
+ "æ—¥");
 
 // First day of the week. "0" means display Sunday first, "1" means display
 // Monday first, etc.
@@ -49,37 +49,37 @@ Calendar._FD = 0;
 
 // full month names
 Calendar._MN = new Array
-("1Œ",
- "2Œ",
- "3Œ",
- "4Œ",
- "5Œ",
- "6Œ",
- "7Œ",
- "8Œ",
- "9Œ",
- "10Œ",
- "11Œ",
- "12Œ");
+("1æœˆ",
+ "2æœˆ",
+ "3æœˆ",
+ "4æœˆ",
+ "5æœˆ",
+ "6æœˆ",
+ "7æœˆ",
+ "8æœˆ",
+ "9æœˆ",
+ "10æœˆ",
+ "11æœˆ",
+ "12æœˆ");
 
 // short month names
 Calendar._SMN = new Array
-("1Œ",
- "2Œ",
- "3Œ",
- "4Œ",
- "5Œ",
- "6Œ",
- "7Œ",
- "8Œ",
- "9Œ",
- "10Œ",
- "11Œ",
- "12Œ");
+("1æœˆ",
+ "2æœˆ",
+ "3æœˆ",
+ "4æœˆ",
+ "5æœˆ",
+ "6æœˆ",
+ "7æœˆ",
+ "8æœˆ",
+ "9æœˆ",
+ "10æœˆ",
+ "11æœˆ",
+ "12æœˆ");
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "ƒJƒŒƒ“ƒ_‚É‚Â‚¢‚Ä";
+Calendar._TT["INFO"] = "ã‚«ãƒ¬ãƒ³ãƒ€ã«ã¤ã„ã¦";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
@@ -97,31 +97,31 @@ Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "- or Shift-click to decrease it\n" +
 "- or click and drag for faster selection.";
 
-Calendar._TT["PREV_YEAR"] = "‘O”N";
-Calendar._TT["PREV_MONTH"] = "‘OŒ";
-Calendar._TT["GO_TODAY"] = "¡“ú";
-Calendar._TT["NEXT_MONTH"] = "—‚Œ";
-Calendar._TT["NEXT_YEAR"] = "—‚”N";
-Calendar._TT["SEL_DATE"] = "“ú•t‘I‘ğ";
-Calendar._TT["DRAG_TO_MOVE"] = "ƒEƒBƒ“ƒhƒE‚ÌˆÚ“®";
-Calendar._TT["PART_TODAY"] = " (¡“ú)";
+Calendar._TT["PREV_YEAR"] = "å‰å¹´";
+Calendar._TT["PREV_MONTH"] = "å‰æœˆ";
+Calendar._TT["GO_TODAY"] = "ä»Šæ—¥";
+Calendar._TT["NEXT_MONTH"] = "ç¿Œæœˆ";
+Calendar._TT["NEXT_YEAR"] = "ç¿Œå¹´";
+Calendar._TT["SEL_DATE"] = "æ—¥ä»˜é¸æŠ";
+Calendar._TT["DRAG_TO_MOVE"] = "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ç§»å‹•";
+Calendar._TT["PART_TODAY"] = " (ä»Šæ—¥)";
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = "%s ‚ğæ“ª‚É";
+Calendar._TT["DAY_FIRST"] = "%s ã‚’å…ˆé ­ã«";
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
 Calendar._TT["WEEKEND"] = "0,6";
 
-Calendar._TT["CLOSE"] = "•Â‚¶‚é";
-Calendar._TT["TODAY"] = "¡“ú";
-Calendar._TT["TIME_PART"] = "(Shift-)Click ‚©ƒhƒ‰ƒbƒO‚Å’l‚ğ•ÏX";
+Calendar._TT["CLOSE"] = "é–‰ã˜ã‚‹";
+Calendar._TT["TODAY"] = "ä»Šæ—¥";
+Calendar._TT["TIME_PART"] = "(Shift-)Click ã‹ãƒ‰ãƒ©ãƒƒã‚°ã§å€¤ã‚’å¤‰æ›´";
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
 Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
 
-Calendar._TT["WK"] = "T";
-Calendar._TT["TIME"] = ":";
+Calendar._TT["WK"] = "é€±";
+Calendar._TT["TIME"] = "æ™‚:";
