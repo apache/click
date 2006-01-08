@@ -26,9 +26,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.servlet.ServletContext;
-
-import net.sf.click.control.Field;
-import net.sf.click.control.Form;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -94,7 +91,7 @@ public class DateField extends TextField {
     protected static final String HTML_IMPORTS =
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
 
     protected static final String[] CALENDAR_RESOURCES =
         { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
