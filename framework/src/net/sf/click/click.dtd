@@ -1,5 +1,6 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
 <!ELEMENT click-app (pages?, headers?, format?, mode?, deployables?)>
+  <!ATTLIST click-app charset CDATA #IMPLIED>
 
   <!-- Application pages. -->
   <!ELEMENT pages (page*)>
