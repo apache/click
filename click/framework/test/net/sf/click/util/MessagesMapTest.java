@@ -13,14 +13,14 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
         
         assertFalse(map.isEmpty());
-        assertEquals(32, map.size());
+        assertEquals(28, map.size());
 
-        assertTrue(map.containsKey("calendar-image-title"));
-        assertEquals("Calendar", map.get("calendar-image-title")); 
+        assertTrue(map.containsKey("table-first-label"));
+        assertEquals("First", map.get("table-first-label")); 
         
-        assertFalse(map.containsKey("Calendar"));
+        assertFalse(map.containsKey("First"));
         try {
-            assertNull(map.get("Calendar"));
+            assertNull(map.get("First"));
             assertTrue(false);
         } catch (MissingResourceException mre) {
             assertTrue(true);
@@ -30,14 +30,14 @@ public class MessagesMapTest extends TestCase {
         map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
 
         assertFalse(map.isEmpty());
-        assertEquals(32, map.size());
+        assertEquals(28, map.size());
 
-        assertTrue(map.containsKey("calendar-image-title"));
-        assertEquals("Calendar", map.get("calendar-image-title")); 
+        assertTrue(map.containsKey("table-first-label"));
+        assertEquals("First", map.get("table-first-label")); 
         
-        assertFalse(map.containsKey("Calendar"));
+        assertFalse(map.containsKey("First"));
         try {
-            assertNull(map.get("Calendar"));
+            assertNull(map.get("First"));
             assertTrue(false);
         } catch (MissingResourceException mre) {
             assertTrue(true);
@@ -51,10 +51,10 @@ public class MessagesMapTest extends TestCase {
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
 
-        assertFalse(map.containsKey("Calendar"));
+        assertFalse(map.containsKey("table-first-label"));
         
         try {
-            assertNull(map.get("Calendar"));
+            assertNull(map.get("table-first-label"));
             assertTrue(false);
         } catch (MissingResourceException mre) {
             assertTrue(true);
@@ -65,10 +65,10 @@ public class MessagesMapTest extends TestCase {
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
 
-        assertFalse(map.containsKey("Calendar"));
+        assertFalse(map.containsKey("table-first-label"));
         
         try {
-            assertNull(map.get("Calendar"));
+            assertNull(map.get("table-first-label"));
             assertTrue(false);
         } catch (MissingResourceException mre) {
             assertTrue(true);
