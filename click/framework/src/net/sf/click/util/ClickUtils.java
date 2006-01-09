@@ -177,27 +177,33 @@ public class ClickUtils {
                     if (paramClass == String.class) {
                         paramObject = field.getValue();
 
-                    } else if (paramClass == Integer.class) {
+                    } else if (paramClass == Integer.class ||
+                               paramClass == Integer.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Integer.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Boolean.class) {
+                    } else if (paramClass == Boolean.class ||
+                               paramClass == Boolean.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Boolean.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Double.class) {
+                    } else if (paramClass == Double.class ||
+                               paramClass == Double.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Double.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Float.class) {
+                    } else if (paramClass == Float.class ||
+                               paramClass == Float.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Float.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Long.class) {
+                    } else if (paramClass == Long.class ||
+                               paramClass == Long.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Long.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Short.class) {
+                    } else if (paramClass == Short.class ||
+                               paramClass == Short.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Short.valueOf(field.getValue());
                         }
