@@ -15,6 +15,7 @@ Click application XML descriptor Documentation Type Definition (DTD):
 <pre class="codeDtd">
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
 &lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">deployables</span>?)&gt;
+  &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">charset</span> CDATA #IMPLIED&gt;
 
   &lt;-- Application pages. --&gt;
   &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*)&gt;
