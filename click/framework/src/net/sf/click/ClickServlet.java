@@ -355,7 +355,7 @@ public class ClickServlet extends HttpServlet {
                 page.onDestroy();
             }
 
-            if (!clickApp.isProductionMode()) {
+            if (!clickApp.isProductionMode() && page != null) {
                 logger.info("handleRequest:  " + page.getPath() + " - "
                             + (System.currentTimeMillis() - startTime) + " ms");
             }
