@@ -177,8 +177,11 @@ public class Page {
 
     /**
      * Return the HTTP response content type. By default this method returns
-     * <tt>"text/html"</tt>. If {@link javax.servlet.ServletRequest#getCharacterEncoding()} is not null,
-     * this method returns <tt>"text/html; charset=encoding"</tt>.
+     * <tt>"text/html"</tt>.
+     * <p/>
+     * If the request specifies a character encoding via
+     * If {@link javax.servlet.ServletRequest#getCharacterEncoding()}
+     * then this method will return <tt>"text/html; charset=encoding"</tt>.
      * <p/>
      * The ClickServlet uses the pages content type for setting the
      * HttpServletResponse content type.
