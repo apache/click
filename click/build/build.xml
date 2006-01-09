@@ -437,6 +437,7 @@
            <exclude name="org/**"/>
          </packageset>
          <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
          <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
       </javadoc>
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
