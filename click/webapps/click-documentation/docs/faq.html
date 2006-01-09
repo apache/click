@@ -26,6 +26,8 @@
   </li>
   <li><a href="#utf8-encoding">How do you encode Pages in the UTF-8 character set?</a>
   </li>
+  <li><a href="#charset">How do you specify the character set which is used in your application?</a>
+  </li>
   <li><a href="#actionlink-parameters">How do you create an ActionLink with several parameters?</a>
   </li>
   <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
@@ -255,7 +257,28 @@
   </dd>
 
 
+  <a name="charset" class="heading"></a>
+  <dt><b>How do you specify the character set which is used in your application?</b></dt>
+  <dd>
   
+  You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
+
+<pre class="codeConfig">
+&lt;click charset="<span class="blue">UTF-8</span>"&gt;
+ ..
+&lt;/click&gt; </pre>
+
+  This character set is used for Velocity input / output encoding, decoding request 
+  parameters and response Content-Type. So if you specify the character set in 
+  <tt>WEB-INF/click.xml</tt>, you don't have to create <tt>WEB-INF/velocity.properties</tt>.
+  <p/>
+  If you want to use the other character set in your Velocity templates, 
+  you can override input / output encoding by <tt>WEB-INF/velocity.properties</tt>. 
+  See <a href="#utf8-encoding">the previous section</a>.
+
+  </dd>
+
+
   <a name="actionlink-parameters" class="heading"></a>
   <dt><b>How do you create an ActionLink with several parameters?</b></dt>
   <dd>
