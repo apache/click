@@ -164,12 +164,6 @@ public class ClickServlet extends HttpServlet {
     protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
-     * The click application character encoding servlet init parameter name:
-     * &nbsp; "<tt>charset</tt>"
-     */
-    protected final static String CHARSET = "charset";
-
-    /**
      * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
      */
     protected final static String FORWARD_PAGE = "forward-page";
@@ -213,9 +207,6 @@ public class ClickServlet extends HttpServlet {
             ClickApp newClickApp = new ClickApp();
 
             newClickApp.setServletContext(getServletContext());
-
-            // Set the character encoding of this application
-            newClickApp.setCharset(getInitParameter(CHARSET));
 
             newClickApp.init();
 
