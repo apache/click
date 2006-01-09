@@ -22,10 +22,6 @@
    <param-name>app-reloadable</param-name>
    <param-value>true</param-value>
   </init-param>
-  <init-param>
-   <param-name>charset</param-name>
-   <param-value>UTF-8</param-value>
-  </init-param>
   <load-on-startup>0</load-on-startup>
  </servlet>
 
