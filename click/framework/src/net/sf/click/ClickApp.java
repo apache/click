@@ -242,7 +242,7 @@ class ClickApp implements EntityResolver {
 
             // Load the error and not-found pages
             loadDefaultPages();
-            
+
             // Load the charset
             loadCharset(rootElm);
 
@@ -544,9 +544,9 @@ class ClickApp implements EntityResolver {
             }
 
             Class deployClass = Class.forName(classname);
-            Deployable deployable = (Deployable) deployClass.newInstance();
+            Control control = (Control) deployClass.newInstance();
 
-            deployable.onDeploy(getServletContext());
+            control.onDeploy(getServletContext());
         }
     }
 
@@ -817,14 +817,14 @@ class ClickApp implements EntityResolver {
             }
         }
     }
-    
+
     private void loadCharset(Element rootElm){
         String charset = rootElm.getAttribute("charset");
-        if(charset!=null && charset.length()>0){
+        if (charset != null && charset.length() > 0) {
             setCharset(charset);
         }
     }
-    
+
     private Properties getVelocityProperties(ServletContext context)
             throws Exception {
 
