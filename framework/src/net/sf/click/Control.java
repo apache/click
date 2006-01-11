@@ -15,8 +15,11 @@
  */
 package net.sf.click;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
 
 /**
  * Provides the interface for Page controls. When a Page request
@@ -26,9 +29,71 @@ import java.util.Map;
  * Controls are generally rendered in a Page by calling their
  * <tt>toString()</tt> method.
  *
+ * <h4>HTML Header Imports</h4>
+ *
+ * Control HTML header imports can be exposed by overriding the
+ * {@link #getHtmlImports()} method.
+ * <p/>
+ * For example a custom TextField control specifies that the
+ * <tt>custom.js</tt> file should be included in the HTML header imports:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
+ *
+ *     <span class="kw">protected static final</span> String HTML_IMPORT =
+ *         <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
+ *
+ *     <span class="kw">public</span> String getHtmlImports() {
+ *         String[] args = { getContext().getRequest().getContextPath() };
+ *         <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+ *     }
+ *     
+ *     .. 
+ * } </pre>
+ * 
+ * <a name="on-deploy"><h4>Deploying Resources</h4></a>
+ *
+ * To deploy static resource to the web application directory on application 
+ * startup the Control interface provides an {@link #onDeploy(ServletContext)}
+ * method.
+ * <p/>
+ * Continuing our example the <tt>CustomField</tt> control deploys its
+ * <tt>custom.js</tt> file to the <tt>/click</tt> directory:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
+ *     ..
+ *     
+ *     <span class="kw">public void</span> onDeploy(ServletContext servletContext) <span class="kw">throws</span> IOException {
+ *         ClickUtils.deployFile
+ *             (servletContext, <span class="st">"/com/mycorp/control/custom.js"</span>, <span class="st">"click"</span>);
+ *     }
+ * } </pre>
+ *
+ * To enable a control class to be deployed on startup it must be
+ * specified in your applications <tt>WEB-INF/click.xml</tt> file. For example:
+ * <p/>
+ *
+ * <pre class="codeConfig">
+ * &lt;click-app&gt;
+ *   &lt;pages package="com.mycorp.page" automapping="true"/&gt;
+ *
+ *   &lt;controls&gt;
+ *     &lt;control classname=<span class="st">"com.mycorp.control.CustomField"</span>/&gt;
+ *   &lt;/controls&gt;
+ * &lt;/click-app&gt; </pre>
+ *
+ * When the Click applicatin starts up it will deploy any control elements
+ * defined in the following files in sequential order:
+ * <ul>
+ *  <li><tt>/click-controls.xml</tt>
+ *  <li><tt>/extras-controls.xml</tt>
+ *  <li><tt>WEB-INF/click.xml</tt>
+ * </ul>
+ *
  * @author Malcolm Edgar
  */
-public interface Control extends Deployable, Serializable {
+public interface Control extends Serializable {
  
     /**
      * Return the Page request Context of the Control.
@@ -44,6 +109,34 @@ public interface Control extends Deployable, Serializable {
      * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context);
+
+    /**
+     * Return the HTML head element import string. This method returns null.
+     * <p/>
+     * Override this method to specify JavaScript and CSS includes for the
+     * HTML head element. For example:
+     *
+     * <pre class="codeJava">
+     * <span class="kw">protected static final</span> String HTML_IMPORT =
+     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
+     *
+     * <span class="kw">public</span> String getHtmlImports() {
+     *     String[] args = { getContext().getRequest().getContextPath() };
+     *     <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+     * } </pre>
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
+     */
+    public String getHtmlImports();
+
+    /**
+     * Return HTML element identifier attribute "id" value.
+     *
+     * @return HTML element identifier attribute "id" value
+     */
+    public String getId();
+
 
     /**
      * Set the controls event listener.
@@ -66,13 +159,6 @@ public interface Control extends Deployable, Serializable {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method);
-
-    /**
-     * Return HTML element identifier attribute "id" value.
-     *
-     * @return HTML element identifier attribute "id" value
-     */
-    public String getId();
 
     /**
      * Return the name of the Control. Each control name must be unique in the
@@ -104,6 +190,23 @@ public interface Control extends Deployable, Serializable {
      * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages);
+
+    /**
+     * The on deploy event handler, which provides classes the
+     * opportunity to deploy static resources when the Click application is
+     * initialized.
+     * <p/>
+     * For example:
+     * <pre class="codeJava">
+     * <span class="kw">public void</span> onDeploy(ServletContext servletContext) <span class="kw">throws</span> IOException {
+     *     ClickUtils.deployFile
+     *         (servletContext, <span class="st">"/com/mycorp/control/custom.js"</span>, <span class="st">"click"</span>);
+     * } </pre>
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException;
 
     /**
      * The on process event handler. Each Page control will be processed when

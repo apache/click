@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Deployable;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -44,7 +43,9 @@ import net.sf.click.util.ClickUtils;
  *
  * @author Phil Barnes
  */
-public class ListPanel extends BasicPanel implements Deployable {
+public class ListPanel extends BasicPanel {
+
+    private static final long serialVersionUID = -4502242739456119044L;
 
     /** The context key used to lookup the ID assocaited with this panel. */
     protected static final String INTERNAL_ID_KEY = "_lp_id";
@@ -101,7 +102,7 @@ public class ListPanel extends BasicPanel implements Deployable {
      * Deploy the <tt>ListPanel.htm</tt> template to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile

@@ -1,5 +1,5 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages?, headers?, format?, mode?, deployables?)>
+<!ELEMENT click-app (pages?, headers?, format?, mode?, controls?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
 
   <!-- Application pages. -->
@@ -31,12 +31,12 @@
    <!ATTLIST mode value (production|profile|development|debug|trace) "development">
    <!ATTLIST mode logto (console|servlet) "console">
 
-  <!-- Application deployable objects. -->
-  <!ELEMENT deployables (deployable*)>
+  <!-- Application control objects. -->
+  <!ELEMENT controls (control*)>
   
-    <!-- Deployable object class. -->
-    <!ELEMENT deployable (#PCDATA)>
-      <!ATTLIST deployable classname CDATA #REQUIRED>
+    <!-- Deployable control class. -->
+    <!ELEMENT control (#PCDATA)>
+      <!ATTLIST control classname CDATA #REQUIRED>
    
 
   

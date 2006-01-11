@@ -17,7 +17,6 @@ package net.sf.click.extras.control;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,7 +85,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Malcolm Edgar
  */
-public class Menu implements Control, Serializable {
+public class Menu implements Control {
 
     private static final long serialVersionUID = 5820272228903777866L;
 
@@ -385,10 +384,27 @@ public class Menu implements Control, Serializable {
     /**
      * This method returns null.
      *
+     * @see Control#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
+     * This method returns null.
+     *
      * @see Control#getId()
      */
     public String getId() {
         return null;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#setListener(Object, String)
+     */
+    public void setListener(Object listener, String method) {
     }
 
     /**
@@ -397,7 +413,6 @@ public class Menu implements Control, Serializable {
     public String getName() {
         return name;
     }
-
 
     /**
      * @see Control#setName(String)
@@ -413,14 +428,6 @@ public class Menu implements Control, Serializable {
      */
     public Map getParentMessages() {
         return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see Control#setListener(Object, String)
-     */
-    public void setListener(Object listener, String method) {
     }
 
     /**
@@ -572,4 +579,5 @@ public class Menu implements Control, Serializable {
             }
         }
     }
+
 }

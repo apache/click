@@ -62,6 +62,9 @@ public class ClickLogger implements LogChute {
     private static final String[] LEVELS =
         { " [trace] ", " [debug] ", " [info ] ", " [warn ] ", " [error] " };
 
+    /** The ThreadLocal logger holder. */
+    private static final ThreadLocal loggerHolder = new ThreadLocal();
+
     // ----------------------------------------------------- Instance Variables
 
     /** The logging level. */
@@ -131,6 +134,24 @@ public class ClickLogger implements LogChute {
      */
     public static ClickLogger getInstance(VelocityEngine ve) {
         return (ClickLogger) ve.getApplicationAttribute(LOG_INSTANCE);
+    }
+
+    /**
+     * Return the thread bound Click logger instance.
+     *
+     * @return the thread bound Click logger instance
+     */
+    public static ClickLogger getInstance() {
+        return (ClickLogger) loggerHolder.get();
+    }
+
+    /**
+     * Set the thread bound Click logger instance.
+     *
+     * @param logger the Click logger instance to set on the thread
+     */
+    public static void setInstance(ClickLogger logger) {
+        loggerHolder.set(logger);
     }
 
     /**

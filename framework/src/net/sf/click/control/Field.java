@@ -328,7 +328,7 @@ public abstract class Field implements Control {
      * HTML head element. This value will rendered by the Form
      * {@link Form#getHtmlImports()} method.
      *
-     * @return the HTML Header element include string.
+     * @see Control#getHtmlImports()
      */
     public String getHtmlImports() {
         return null;
@@ -750,7 +750,7 @@ public abstract class Field implements Control {
     /**
      * This method does nothing.
      *
-     * @see net.sf.click.Deployable#onDeploy(ServletContext)
+     * @see Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }

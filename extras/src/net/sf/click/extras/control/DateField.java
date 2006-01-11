@@ -386,7 +386,7 @@ public class DateField extends TextField {
      * Deploy the Calendar Javascript and CSS resources to the web app
      * directory <tt>click/calendar</tt>.
      *
-     * @see net.sf.click.Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         String targetDir = "click" + File.separator + "calendar";

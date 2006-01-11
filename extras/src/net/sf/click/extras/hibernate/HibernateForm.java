@@ -245,7 +245,7 @@ public class HibernateForm extends Form {
                     valueObject = valueClass.newInstance();
                 }
 
-                copyTo(valueObject, true);
+                copyTo(valueObject);
 
                 return valueObject;
 
@@ -271,7 +271,7 @@ public class HibernateForm extends Form {
                 classMetadata.getIdentifier(valueObject, EntityMode.POJO);
             oidField.setValueObject(identifier);
 
-            copyFrom(valueObject, true);
+            copyFrom(valueObject);
         }
     }
 

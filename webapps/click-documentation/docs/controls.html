@@ -64,12 +64,16 @@ Methods on the Control interface include:
    &nbsp; - &nbsp; provides access to the request <a href="click-api/net/sf/click/Context.html">Context</a>.
   </li>
   <li>
-   <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener()</a>
-   &nbsp; - &nbsp; set the control action callback listener.
+   <a href="click-api/net/sf/click/Control.html#getHtmlImports()">getHtmlImports()</a>
+   &nbsp; - &nbsp; defines the controls HTML header imports.
   </li>
   <li>
    <a href="click-api/net/sf/click/Control.html#getId()">getId()</a>
    &nbsp; - &nbsp; defines the controls HTML id attribute.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener()</a>
+   &nbsp; - &nbsp; set the control action callback listener.
   </li>
   <li>
    <a href="click-api/net/sf/click/Control.html#getName()">getName()</a> /
@@ -80,7 +84,12 @@ Methods on the Control interface include:
    <a href="click-api/net/sf/click/Control.html#getParentMessages()">getParentMessages()</a> /
    <a href="click-api/net/sf/click/Control.html#setParentMessages(java.util.Map)">setParentMessages()</a>
    &nbsp; - &nbsp; defines the controls parent localized messages map.
-  </li>  <li>
+  </li>  
+  <li>
+   <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+   &nbsp; - &nbsp; deploy resources on startup.
+  </li>
+  <li>
    <a href="click-api/net/sf/click/Control.html#onProcess()">onProcess()</a>
    &nbsp; - &nbsp; process request event handler.
   </li>
