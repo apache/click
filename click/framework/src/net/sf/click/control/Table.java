@@ -27,7 +27,6 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
-import net.sf.click.Deployable;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
@@ -385,7 +384,7 @@ public class Table implements Control {
     /**
      * Return the "id" attribute value if defined, or the table name otherwise.
      *
-     * @see net.sf.click.Control#getId()
+     * @see Control#getId()
      */
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
@@ -633,7 +632,7 @@ public class Table implements Control {
      * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Deployable#onDeploy(ServletContext)
+     * @see Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile

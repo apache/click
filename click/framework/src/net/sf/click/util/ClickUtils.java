@@ -146,9 +146,8 @@ public class ClickUtils {
 
         final List fieldList = getFormFields(form);
 
-        if (debug && fieldList.isEmpty()) {
-            String msg = "[Click] [debug] Form has no fields to copy from";
-            System.out.println(msg);
+        if (fieldList.isEmpty()) {
+            log("Form has no fields to copy from", debug);
         }
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
@@ -240,41 +239,28 @@ public class ClickUtils {
                     try {
                         method.invoke(object, params);
 
-                        if (debug) {
-                            String msg =
-                                "[Click] [debug] Form -> " + objectClassname +
-                                "." + method.getName() + " : " +
-                                paramObject;
-                            System.out.println(msg);
-                        }
+                        String msg = "Form -> " + objectClassname + "." +
+                                     method.getName() + " : " + paramObject;
+                        log(msg, debug);
 
                     } catch (Exception e) {
-                        if (debug) {
-                            String msg =
-                                "[Click] [debug] Error incurred invoking " +
-                                objectClassname + "." + method.getName() +
-                                "() with " + paramObject + " error: " +
-                                e.toString();
-                            System.out.println(msg);
-                        }
+                        String msg =
+                            "Error incurred invoking " +
+                            objectClassname + "." + method.getName() +
+                            "() with " + paramObject + " error: " +
+                            e.toString();
+                        log(msg, debug);
                     }
 
                 } else {
-                    if (debug) {
-                        String msg =
-                            "[Click] [debug] " +
-                            objectClassname + "." + method.getName() +
-                            "() method has invalid number of parameters";
-                        System.out.println(msg);
-                    }
+                    String msg = objectClassname + "." + method.getName() +
+                                 "() method has invalid number of parameters";
+                    log(msg, debug);
                 }
             } else {
-                if (debug) {
-                    String msg =
-                        "[Click] [debug] " + objectClassname + "." +
-                        setterName + "() method not found";
-                    System.out.println(msg);
-                }
+                String msg =
+                    objectClassname + "." + setterName + "() method not found";
+                log(msg, debug);
             }
         }
     }
@@ -302,9 +288,8 @@ public class ClickUtils {
 
         final List fieldList = getFormFields(form);
 
-        if (debug && fieldList.isEmpty()) {
-            String msg = "[Click] [debug] Form has no fields to copy to";
-            System.out.println(msg);
+        if (fieldList.isEmpty()) {
+            log("Form has no fields to copy to", debug);
         }
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
@@ -334,49 +319,23 @@ public class ClickUtils {
                 try {
                     Object result = method.invoke(object, null);
 
-                    if (debug) {
-                        String msg =
-                            "[Click] [debug] Form <- " + objectClassname +
-                            "." + method.getName() + " : " + result;
-                        System.out.println(msg);
-                    }
+                    String msg = "Form <- " + objectClassname + "." +
+                                 method.getName() + " : " + result;
+                    log(msg, debug);
 
                     field.setValueObject(result);
 
-//                    if (result != null) {
-//                        field.setValueObject(result);
-//                        if (result instanceof Date)
-//                        if (field instanceof DateField &&
-//                            result instanceof Date) {
-//
-//                            DateField dateField = (DateField) field;
-//                            dateField.setDate((Date) result);
-//
-//                        } else if (field instanceof HiddenField) {
-//                            field.setValueObject(result);
-//
-//                        } else {
-//                            field.setValueObject(result);
-//                        }
-//                    }
-
                 } catch (Exception e) {
-                    if (debug) {
-                        String msg =
-                            "[Click] [debug] Error incurred invoking " +
-                            objectClassname + "." + method.getName() +
-                            "() error: " + e.toString();
-                        System.out.println(msg);
-                    }
+                    String msg =
+                        "Error incurred invoking " + objectClassname + "." +
+                        method.getName() + "() error: " + e.toString();
+                    log(msg, debug);
                 }
 
             } else {
-                if (debug) {
-                    String msg =
-                        "[Click] [debug] " + objectClassname + "." +
-                        getterName + "() method not found";
-                    System.out.println(msg);
-                }
+                String msg =
+                    objectClassname + "." + getterName + "() method not found";
+                log(msg, debug);
             }
         }
     }
@@ -443,6 +402,17 @@ public class ClickUtils {
                         fos.write(buffer, 0, length);
                     }
 
+                    ClickLogger logger = ClickLogger.getInstance();
+                    if (logger.isTraceEnabled()) {
+                        int lastIndex =
+                            destination.lastIndexOf(File.separatorChar);
+                        if (lastIndex != -1) {
+                            destination = destination.substring(lastIndex + 1);
+                        }
+                        String msg =
+                            "deployed " + targetDir + File.separator + destination;
+                        logger.trace(msg);
+                    }
 
                 } finally {
                     close(fos);
@@ -817,6 +787,16 @@ public class ClickUtils {
         buffer.append(property.substring(1));
 
         return buffer.toString();
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    private static void log(String msg, boolean debug) {
+        if (debug ) {
+            System.out.println("[Click] [debug] " + msg);
+        } else {
+            ClickLogger.getInstance().debug(msg);
+        }
     }
 
 }

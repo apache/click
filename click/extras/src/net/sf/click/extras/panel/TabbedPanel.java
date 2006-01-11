@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Deployable;
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 import net.sf.click.util.ClickUtils;
@@ -108,7 +107,9 @@ import net.sf.click.util.ClickUtils;
  *
  * @author Phil Barnes
  */
-public class TabbedPanel extends BasicPanel implements Deployable {
+public class TabbedPanel extends BasicPanel {
+
+    private static final long serialVersionUID = 8912519148498010558L;
 
     /** The debug logging flag. */
     protected boolean debug;
@@ -282,7 +283,7 @@ public class TabbedPanel extends BasicPanel implements Deployable {
      * Deploy the <tt>TabbedPanel.htm</tt> template to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile

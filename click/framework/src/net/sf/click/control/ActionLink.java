@@ -449,6 +449,15 @@ public class ActionLink implements Control {
     }
 
     /**
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
      * Return the "id" attribute value if defined, or the ActionLink name
      * otherwise.
      *
@@ -748,7 +757,7 @@ public class ActionLink implements Control {
     /**
      * This method does nothing.
      *
-     * @see net.sf.click.Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }

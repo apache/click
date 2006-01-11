@@ -245,6 +245,8 @@ public class ClickServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
+        ClickLogger.setInstance(logger);
+
         ensureAppInitialized();
 
         if (ifAuthorizedReloadRequest(request)) {
@@ -264,6 +266,8 @@ public class ClickServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+
+        ClickLogger.setInstance(logger);
 
         ensureAppInitialized();
 
@@ -344,11 +348,12 @@ public class ClickServlet extends HttpServlet {
         } finally {
             if (page != null) {
                 page.onDestroy();
-            }
 
-            if (!clickApp.isProductionMode() && page != null) {
-                logger.info("handleRequest:  " + page.getPath() + " - "
-                            + (System.currentTimeMillis() - startTime) + " ms");
+                if (!clickApp.isProductionMode()) {
+                    logger.info("handleRequest:  " + page.getPath() + " - " +
+                                (System.currentTimeMillis() - startTime) +
+                                " ms");
+                }
             }
         }
     }

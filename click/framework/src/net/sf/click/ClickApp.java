@@ -217,6 +217,8 @@ class ClickApp implements EntityResolver {
 
         logger = new ClickLogger("Click");
 
+        ClickLogger.setInstance(logger);
+
         InputStream inputStream =
             getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
 
@@ -519,19 +521,19 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void deployDeployables(Element rootElm) throws Exception {
+    private void deployControls(Element rootElm) throws Exception {
 
         if (rootElm == null) {
             return;
         }
 
-        Element deployablesElm = getChild(rootElm, "deployables");
+        Element controlsElm = getChild(rootElm, "controls");
 
-        if (deployablesElm == null) {
+        if (controlsElm == null) {
             return;
         }
 
-        List deployableList = getChildren(deployablesElm, "deployable");
+        List deployableList = getChildren(controlsElm, "control");
 
         for (int i = 0; i < deployableList.size(); i++) {
             Element deployableElm = (Element) deployableList.get(i);
@@ -539,7 +541,7 @@ class ClickApp implements EntityResolver {
             String classname = deployableElm.getAttribute("classname");
             if (StringUtils.isBlank(classname)) {
                 String msg =
-                    "'deployable' element missing 'classname' attribute.";
+                    "'control' element missing 'classname' attribute.";
                 throw new RuntimeException(msg);
             }
 
@@ -567,9 +569,9 @@ class ClickApp implements EntityResolver {
         ClickUtils.deployFile
             (servletContext, "/net/sf/click/control/VM_global_library.vm", "click");
 
-        deployDeployables(getResourceRootElement("/click-deployables.xml"));
-        deployDeployables(getResourceRootElement("/extras-deployables.xml"));
-        deployDeployables(rootElm);
+        deployControls(getResourceRootElement("/click-controls.xml"));
+        deployControls(getResourceRootElement("/extras-controls.xml"));
+        deployControls(rootElm);
     }
 
     private void loadMode(Element rootElm) {

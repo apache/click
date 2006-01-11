@@ -23,8 +23,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.Control;
-import net.sf.click.Deployable;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 
@@ -40,6 +40,8 @@ import net.sf.click.util.ClickUtils;
  * @author Phil Barnes
  */
 public class BasicPanel implements Panel {
+
+    private static final long serialVersionUID = -90197062712407312L;
 
     // ----------------------------------------------------- Instance Variables
 
@@ -69,12 +71,24 @@ public class BasicPanel implements Panel {
 
     // ----------------------------------------------------------- Constructors
 
+    /**
+     * Create a basic panel with the given id.
+     *
+     * @param id the panel id
+     */
     public BasicPanel(String id) {
         // null template will be replaced with a default template name - see
         // BasicPanel(String id, String name, String template, Context context)
         this(id, ClickUtils.toName(id), null);
     }
 
+
+    /**
+     * Create a basic panel with the given id and Velocity template.
+     *
+     * @param id the panel id
+     * @param template the Velocity template
+     */
     public BasicPanel(String id, String template) {
         this(id, ClickUtils.toName(id), template);
     }
@@ -83,9 +97,9 @@ public class BasicPanel implements Panel {
      * Constructor to specify the id and name of this Panel, as well as the
      * template to use in rendering the Panel.
      *
-     * @param id
-     * @param name
-     * @param template
+     * @param id the panel id
+     * @param name the panel name
+     * @param template the Velocity template
      */
     public BasicPanel(String id, String name, String template) {
         setId(id);
@@ -306,9 +320,18 @@ public class BasicPanel implements Panel {
     /**
      * This method does nothing and can be overridden by subclasses.
      *
-     * @see Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
+    }
+
+    /**
+     * This method returns true.
+     *
+     * @see net.sf.click.Control#onProcess()
+     */
+    public boolean onProcess() {
+        return true;
     }
 
     /**
@@ -333,9 +356,61 @@ public class BasicPanel implements Panel {
      *
      * @return the short class name + the default template extension (.htm)
      */
-    public String getDefaultTemplateName() {
+    protected String getDefaultTemplateName() {
         String classname = getClass().getName();
         int index = classname.lastIndexOf('.');
         return classname.substring(index + 1) + ".htm";
     }
+
+    /**
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#getContext()
+     */
+    public Context getContext() {
+        return null;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see net.sf.click.Control#setContext(Context)
+     */
+    public void setContext(Context context) {
+    }
+
+    /**
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#setListener(Object, String)
+     */
+    public void setListener(Object listener, String method) {
+    }
+
+    /**
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#setParentMessages(Map)
+     */
+    public Map getParentMessages() {
+        return null;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see net.sf.click.Control#setParentMessages(Map)
+     */
+    public void setParentMessages(Map messages) {
+    }
+
 }

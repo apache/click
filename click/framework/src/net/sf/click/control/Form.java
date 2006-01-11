@@ -966,8 +966,7 @@ public class Form implements Control {
      * (<tt>click/control.css</tt>) and JavaScript
      * (<tt>click/control.js</tt>) files.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     *  JavaScript files
+     * @see Control#getHtmlImports()
      */
     public String getHtmlImports() {
         StringBuffer buffer = new StringBuffer(200);
@@ -1317,7 +1316,7 @@ public class Form implements Control {
     /**
      * This method does nothing.
      *
-     * @see net.sf.click.Deployable#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }

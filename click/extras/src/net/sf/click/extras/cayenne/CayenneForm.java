@@ -22,6 +22,7 @@ import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -133,9 +134,6 @@ public class CayenneForm extends Form {
     /** The data object class name hidden field. */
     protected HiddenField classField = new HiddenField("DOCLASS", String.class);
 
-    /** The data object binding debug flag. */
-    protected boolean debug;
-
     /**
      * The flag specifying that object validation meta data has been applied to
      * the form fields.
@@ -230,7 +228,7 @@ public class CayenneForm extends Form {
                 pkField.setValueObject(new Integer(pk));
             }
 
-            copyFrom(dataObject, debug);
+            copyFrom(dataObject);
 
             copyRelationFrom(dataObject);
         }
@@ -514,8 +512,6 @@ System.out.println(fkField + " " + StringUtils.substringAfter(key, FK_PREFIX));
      * @param msg the message to log to System out
      */
     protected void log(Object msg) {
-        if (debug) {
-            System.out.println("[CayenneForm] [debug] " + msg);
-        }
+        ClickLogger.getInstance().debug(msg);
     }
 }
