@@ -33,9 +33,6 @@ import org.apache.velocity.runtime.log.LogChute;
  * <pre class="codeConfig">
  * &lt;mode< value="production" <span class="blue">logto</span>="<span class="red">servlet</span>"&gt; </pre>
  *
- * This class was adapted from
- * <tt>org.apache.velocity.tools.view.servlet.ServletLogger</tt>
- *
  * <p/>
  * The ClickLogger is designed to avoid the logging configuration, classpath
  * and appender issues that plague existing logging frameworks.

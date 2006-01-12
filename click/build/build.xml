@@ -97,8 +97,10 @@
             <exclude name="**/classes/**"/>
             <exclude name="**/WEB-INF/lib/**"/>
             <exclude name="webapps/click-cayenne/deploy/**"/>
+            <exclude name="webapps/click-cayenne/webapp/click/**"/>
             <exclude name="webapps/click-cayenne/webapp/javadoc/**"/>
             <exclude name="webapps/click-documentation/**"/>
+            <exclude name="webapps/click-examples/click/**"/>
             <exclude name="webapps/click-examples/javadoc/**"/>
          </fileset>
       </copy>
