@@ -47,15 +47,21 @@ import javax.servlet.ServletContext;
  *         String[] args = { getContext().getRequest().getContextPath() };
  *         <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
  *     }
- *     
- *     .. 
+ *
+ *     ..
  * } </pre>
- * 
+ *
  * <a name="on-deploy"><h4>Deploying Resources</h4></a>
  *
- * To deploy static resource to the web application directory on application 
- * startup the Control interface provides an {@link #onDeploy(ServletContext)}
- * method.
+ * The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates.
+ * This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
+ * <tt>FileResourceLoader</tt> on J2EE application servers.
+ * To make preconfigured resources (templates, stylesheets, etc.) available to web applications
+ * Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt>
+ * directory at startup (existing files will not be overwritten).
+ * <p/>
+ * To enable Controls to deploy static resources on startup this interface
+ * provides an {@link #onDeploy(ServletContext)} method.
  * <p/>
  * Continuing our example the <tt>CustomField</tt> control deploys its
  * <tt>custom.js</tt> file to the <tt>/click</tt> directory:
@@ -63,16 +69,16 @@ import javax.servlet.ServletContext;
  * <pre class="codeJava">
  * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
  *     ..
- *     
+ *
  *     <span class="kw">public void</span> onDeploy(ServletContext servletContext) <span class="kw">throws</span> IOException {
  *         ClickUtils.deployFile
  *             (servletContext, <span class="st">"/com/mycorp/control/custom.js"</span>, <span class="st">"click"</span>);
  *     }
  * } </pre>
  *
- * To enable a control class to be deployed on startup it must be
- * specified in your applications <tt>WEB-INF/click.xml</tt> file. For example:
- * <p/>
+ * Controls using the <tt>onDeploy()</tt> method must be registered in the
+ * application <tt>WEB-INF/click.xml</tt> for them to be invoked.
+ * For example:
  *
  * <pre class="codeConfig">
  * &lt;click-app&gt;

@@ -118,7 +118,7 @@ A simple Click app config file is provided below:
 An example of a fully optioned up config file is:
 
 <pre class="codeConfig">
-&lt;click-app&gt; 
+&lt;click-app charset="UTF-8"&gt; 
   &lt;pages&gt;
     &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
     &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
@@ -128,14 +128,14 @@ An example of a fully optioned up config file is:
   &lt;/pages&gt;
   &lt;headers&gt;
     &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
   &lt;/headers&gt;
   &lt;format classname="<span class="maroon">com.mycorp.util.Format</span>"/&gt;
   &lt;mode value="<span class="blue">debug</span>"/&gt;
 &lt;/click-app&gt; 
 </pre>
 
-Alternatively pages can be automatically configured using page auto mapping:
+Alternatively these pages can be automatically configured using page auto mapping:
 
 <pre class="codeConfig">
 &lt;click-app&gt; 
@@ -278,7 +278,7 @@ caching in the login page, note the value for a Date type should be a long numbe
 <pre class="codeConfig">
 &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
+  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
 &lt;/page&gt; 
 </pre>
@@ -292,7 +292,7 @@ To apply header values globally define header values in the headers element. For
   &lt;/pages&gt;
   &lt;headers&gt;
     &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
     &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
   &lt;/headers&gt;
 &lt;/click-app&gt; 
@@ -459,9 +459,43 @@ Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays
 detailed debugging information. When the application mode is <tt>production</tt>
-no debug information is displayed to prevent sensitive information being displayed.
+no debug information is displayed to prevent sensitive information being revealed.
 This behaviour can be changed by modifying the 
+
 <span class="blue"><tt>error.htm</tt></span> page template.
+
+
+<a name="application-controls" class="heading"><h3>Controls</h3></a>
+
+The optional <tt>controls</tt> element defines a list of <tt>control</tt> elements
+which will be deployed on application startup.
+
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="blue">controls</span> (<span class="red">control</span>*)&gt; 
+</pre>
+
+The <tt><span class="red">control</span></tt> registers 
+<a href="click-api/net/sf/click/Control.html">Control</a>
+classes which
+will have their <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+method invoked when the click application starts.
+
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="red">control</span> (#PCDATA)&gt;
+   &lt;!ATTLIST control <span class="blue">classname</span> CDATA #REQUIRED&gt;
+</pre>
+
+For example to register a <tt>CustomField</tt> control
+class you would add the following elements to your <tt>click.xml</tt> file:
+
+<pre class="codeConfig">
+&lt;click-app&gt;
+   ..
+
+   &lt;controls&gt;
+     &lt;<span class="blue">control</span> classname=<span class="red">"com.mycorp.control.CustomField"</span>/&gt;
+   &lt;/controls&gt;
+&lt;/click-app&gt; </pre>
 
 <a name="velocity-properties" class="heading"><h2>Velocity Properties</h2></a>
 
@@ -506,9 +540,16 @@ if this file exists, and if it does it will use it instead of <tt>click/VM_globa
 
 
 <a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
-At startup the ClickServlet will automatically deploy support files into the
-web application, if not already present. You can modify these support files and 
-Click will not overwrite them. These files include:
+
+The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates. 
+This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
+<tt>FileResourceLoader</tt> on J2EE application servers.
+<p/>
+To make preconfigured resources (templates, stylesheets, etc.) available to web applications
+Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
+directory at startup (if not already present).
+<p/>
+You can modify these support files and Click will not overwrite them. These files include:
 
 <ul>
    <li>click/error.htm &nbsp; - &nbsp; the Page <a href="pages.html#page-error-handling">Error Handling</a> template</li>
@@ -518,6 +559,13 @@ Click will not overwrite them. These files include:
    <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
 </ul>
 
+<h3>Control Deployment</h3>
+
+Controls can be registered to automatically deploy static resource on startup using
+their <a href="click-api/net/sf/click/Control.html#on-deploy">onDeploy()</a> method.
+<p/>
+Please see the <a href="#application-controls">Controls</a>
+topic for details on how to register controls for deployment.
 
 </body>
 </html>

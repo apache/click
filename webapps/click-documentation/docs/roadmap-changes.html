@@ -60,6 +60,11 @@ Features to be included in future releases are:
         <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>.
       </li>
       <li class="change">
+        Added form back button support. See Form 
+        <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+        API for details.
+      </li>
+      <li class="change">
         Added full JSP Click Page integration
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-24">24</a>].
       </li>
@@ -74,11 +79,6 @@ Features to be included in future releases are:
         <a href="extras-api/net/sf/click/extras/cayenne/RelationshipSelect.html">RelationshipSelect</a> 
         provided by Ahmed Mohombe. Please see Click Cayenne web application for
         a demonstration.
-      </li>
-      <li class="change">
-        Added form back button support. See Form 
-        <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
-        API for details.
       </li>
       <li class="change">
         Added Japanese message resources provided by Naoki Takezoe
@@ -118,7 +118,6 @@ Features to be included in future releases are:
         Fixed Form FieldSet FileField enctype bug. This issue was idendified by
         Christian Essl
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-48">48</a>].
-        Updated commons-fileupload to version 1.1 [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-49">49</a>].
       </li>
       <li class="change">
         Fixed session rewrite bug when using absolute redirects. 
