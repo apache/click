@@ -1,0 +1,20 @@
+Demonstration of Table containing Form fields.
+<p/>
+
+#if($form.error)
+	$form.error
+#end
+
+<form method="$form.method" name="$form.name" action="$form.actionURL">
+    <input type="hidden" name="form_name" value="$form.name"/>
+    $table
+    <p/>
+    $form.fields.okSubmit 
+    $form.fields.cancelSubmit
+</form>
+
+<p>&nbsp</p>
+
+$dataTable
+
+
