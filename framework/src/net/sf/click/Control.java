@@ -51,6 +51,8 @@ import javax.servlet.ServletContext;
  *     ..
  * } </pre>
  *
+ * Please also see {@link net.sf.click.util.PageImports}.
+ *
  * <a name="on-deploy"><h4>Deploying Resources</h4></a>
  *
  * The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates.

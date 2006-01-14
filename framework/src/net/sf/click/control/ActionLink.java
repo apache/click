@@ -102,23 +102,21 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public class</span> ProductsPage <span class="kw">extends</span> Page {
  *
- *     ActionLink addLink;
- *     ActionLink detailsLink;
+ *     <span class="kw">private</span> ActionLink addLink;
+ *     <span class="kw">private</span> ActionLink detailsLink;
  *
  *     <span class="kw">public</span> ProductsPage() {
- *         addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>);
- *         addLink.setListener(<span class="kw">this</span>, <span class="st">"onAddClick"</span>);
+ *         addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>, <span class="kw">this</span>, <span class="st">"onAddClick"</span>);
  *         addControl(addLink);
  *
- *         detailsLink = <span class="kw">new</span> ActionLink(<span class="st">"detailsLink"</span>);
- *         detailsLink.setListener(<span class="kw">this</span>, <span class="st">"onDetailsClick"</span>);
+ *         detailsLink = <span class="kw">new</span> ActionLink(<span class="st">"detailsLink"</span>, <span class="kw">this</span>, <span class="st">"onDetailsClick"</span>);
  *         addControl(detailsLink);
  *     }
  *
  *     <span class="kw">public boolean</span> onAddClick() {
  *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = addLink.getValueInteger();
- *         Product product = ProductDatabase.getProduct(productId);
+ *         Product product = ProductDAO.getProduct(productId);
  *
  *         <span class="cm">// Add product to basket</span>
  *         List basket = (List) getContext().getSessionAttribute(<span class="st">"basket"</span>);
@@ -130,7 +128,7 @@ import org.apache.commons.lang.StringUtils;
  *     <span class="kw">public boolean</span> onDetailsClick() {
  *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = detailsLink.getValueInteger();
- *         Product product = ProductDatabase.getProduct(productId);
+ *         Product product = ProductDAO.getProduct(productId);
  *
  *         <span class="cm">// Store the product in the request and display in the details page</span>
  *         getContext().setRequestAttribute(<span class="st">"product"</span>, product);
@@ -141,7 +139,7 @@ import org.apache.commons.lang.StringUtils;
  *
  *     <span class="kw">public void</span> onGet() {
  *         <span class="cm">// Display the list of available products</span>
- *         List productList = ProductDatabase.getProducts();
+ *         List productList = ProductDAO.getProducts();
  *         addModel("<span class="blue">productList</span>", productList);
  *     }
  * } </pre>

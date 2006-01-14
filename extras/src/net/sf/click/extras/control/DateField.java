@@ -47,16 +47,16 @@ import net.sf.click.util.HtmlStringBuffer;
  * The Calendar popup is provided by the JSCalendar library by
  * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
  * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
- * popup, reference the method {@link net.sf.click.control.Form#getHtmlImports()}
- * in the page template (imports click/form.js file). For example:
+ * popup, reference the {@link net.sf.click.util.PageImports} object
+ * in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  *  &lt;head&gt;
- *   <span class="blue">$form.htmlImports</span>
+ *   <span class="blue">$imports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   <span class="blue">$form</span>
+ *   <span class="red">$form</span>
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *

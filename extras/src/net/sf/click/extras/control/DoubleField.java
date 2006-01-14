@@ -34,16 +34,16 @@ import net.sf.click.control.TextField;
  * <p/>
  * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
- * reference the method {@link Form#getHtmlImports()} in the page template
- * (imports click/form.js file). For example:
+ * reference the {@link Form#getHtmlImports()} object in the page template.
+ * For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  *  &lt;head&gt;
- *   <span class="blue">$form.htmlImports</span>
+ *   <span class="blue">$imports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   <span class="blue">$form</span>
+ *   <span class="red">$form</span>
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *

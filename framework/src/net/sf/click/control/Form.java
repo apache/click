@@ -124,6 +124,24 @@ import org.apache.commons.lang.StringUtils;
  * any of its Fields hava validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
+ * <h3>HTML Imports</h3>
+ *
+ * The Form control automatically deploys the control CSS style sheet
+ * (<tt>control.css</tt>) and JavaScript file (<tt>control.js</tt>) to
+ * the application directory <tt>/click</tt>.
+ * To import these files and any form control imports simpley reference the
+ * {@link net.sf.click.util.PageImports} object. For example:
+ *
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$imports</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="red">$form</span>
+ *  &lt;/body&gt;
+ * &lt;/html&gt; </pre>
+ *
  * <a name="form-layout"><h3>Data Binding</h3></a>
  *
  * To bind value objects to a forms fields use the copy methods:
@@ -969,11 +987,22 @@ public class Form implements Control {
      * @see Control#getHtmlImports()
      */
     public String getHtmlImports() {
-        StringBuffer buffer = new StringBuffer(200);
-
         String[] args = { getContext().getRequest().getContextPath() };
 
-        buffer.append(MessageFormat.format(HTML_IMPORTS, args));
+        return MessageFormat.format(HTML_IMPORTS, args);
+    }
+
+    /**
+     * Return the HTML head imports for the form and all its controls.
+     *
+     * {@link Control#getHtmlImports()}
+     *
+     * @return all the HTML head imports for the form and all its controls
+     */
+    public String getHtmlImportsAll() {
+        StringBuffer buffer = new StringBuffer(200);
+
+        buffer.append(getHtmlImports());
 
         Set includeSet = null;
 
