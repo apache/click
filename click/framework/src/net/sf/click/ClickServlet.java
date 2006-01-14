@@ -38,6 +38,7 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
+import net.sf.click.util.PageImports;
 import net.sf.click.util.SessionMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -812,6 +813,15 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
+        pop = context.put("imports", new PageImports(page));
+        if (pop != null) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"imports\". The page model object "
+                         + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
         return context;
     }
 
@@ -965,6 +975,16 @@ public class ClickServlet extends HttpServlet {
                             + "has been replaced with the page messages";
             logger.warn(msg);
         }
+
+        request.setAttribute("imports", new PageImports(page));
+        if (model.containsKey("imports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"imports\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
     }
 
     // ---------------------------------------------------------- Inner Classes

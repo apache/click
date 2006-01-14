@@ -26,16 +26,14 @@ import examples.page.BorderedPage;
  */
 public class TableForm extends BorderedPage {
 
-    public static final String[] INVESTMENTS = { "Residential Property",
-            "Bonds", "Stocks", "Options", "Commercial Property" };
-
     private Form form = new Form("form");
-    private Table table = new Table("table");
+    private Table formTable = new Table("formTable");
     private Table dataTable = new Table("dataTable");
 
     public TableForm() {
 
         // Populate the form
+
         List customers = getCustomers();
         for (Iterator it = customers.iterator(); it.hasNext();) {
             Customer cust = (Customer) it.next();
@@ -70,10 +68,11 @@ public class TableForm extends BorderedPage {
 
         addControl(form);
 
-        // Polulate the table
-        table.setAttribute("class", "simple");
+        // Polulate the formTable
 
-        // the id with hiddefield
+        formTable.setAttribute("class", "simple");
+
+        // The id with hidden field
         Column column = new Column("id");
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
@@ -81,9 +80,9 @@ public class TableForm extends BorderedPage {
                 return form.getField("id-" + id).toString() + id;
             }
         });
-        table.addColumn(column);
+        formTable.addColumn(column);
 
-        // the name
+        // The name
         column = new Column("name");
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
@@ -91,9 +90,9 @@ public class TableForm extends BorderedPage {
                 return form.getField("name-" + id).toString();
             }
         });
-        table.addColumn(column);
+        formTable.addColumn(column);
 
-        // the investments select
+        // The investments select
         column = new Column("investments");
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
@@ -101,9 +100,9 @@ public class TableForm extends BorderedPage {
                 return form.getField("investment-" + id).toString();
             }
         });
-        table.addColumn(column);
+        formTable.addColumn(column);
 
-        // the active checkbox
+        // The active checkbox
         column = new Column("active");
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
@@ -112,11 +111,12 @@ public class TableForm extends BorderedPage {
 
             }
         });
-        table.addColumn(column);
+        formTable.addColumn(column);
 
-        addControl(table);
+        addControl(formTable);
 
         // A table which just shows the data
+
         dataTable.setAttribute("class", "simple");
 
         dataTable.addColumn(new Column("id"));
@@ -129,40 +129,73 @@ public class TableForm extends BorderedPage {
 
     public boolean onOkClick() {
         if (form.isValid()) {
-            for (Iterator i = form.getFieldList().iterator(); i.hasNext();) {
-                Field field = (Field) i.next();
-                if (field instanceof HiddenField) {
-                    HiddenField hiddenField = (HiddenField) field;
+            tableRowsIterator(new RowCallback() {
+                public void process(Customer customer) {
+                    TextField name =
+                        (TextField) form.getField("name-" + customer.getId());
+                    customer.setName(name.getValue());
 
-                    if (hiddenField.getName().startsWith("id-")) {
-                        Long id = (Long) hiddenField.getValueObject();
-                        Customer customer = CustomerDAO.getCustomer(id);
+                    Select investment =
+                        (Select) form.getField("investment-" + customer.getId());
+                    customer.setInvestments(investment.getValue());
 
-                        if (customer != null) {
-                            TextField name = (TextField)
-                                form.getField("name-" + id);
-
-                            Select investment = (Select)
-                                form.getField("investment-" + id);
-
-                            Checkbox active = (Checkbox)
-                                form.getField("active-" + id);
-
-                            customer.setName(name.getValue());
-                            customer.setInvestments(investment.getValue());
-                            customer.setActive((Boolean)active.getValueObject());
-                        }
-                    }
+                    Checkbox active =
+                        (Checkbox) form.getField("active-" + customer.getId());
+                    customer.setActive((Boolean)active.getValueObject());
                 }
-            }
+            });
         }
 
-        table.setRowList(getCustomers());
+        formTable.setRowList(getCustomers());
 
         return true;
     }
 
     public boolean onCancelClick() {
+        tableRowsIterator(new RowCallback() {
+            public void process(Customer customer) {
+                TextField name =
+                    (TextField) form.getField("name-" + customer.getId());
+                name.setValue(customer.getName());
+
+                Select investment =
+                    (Select) form.getField("investment-" + customer.getId());
+                investment.setValue(customer.getInvestments());
+
+                Checkbox active =
+                    (Checkbox) form.getField("active-" + customer.getId());
+                active.setValueObject(customer.getActive());
+            }
+        });
+
+        formTable.setRowList(getCustomers());
+
+        return true;
+    }
+
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
+    public void onGet() {
+        List customers = getCustomers();
+        formTable.setRowList(customers);
+        dataTable.setRowList(customers);
+    }
+
+    /**
+     * @see net.sf.click.Page#onPost()
+     */
+    public void onPost() {
+        dataTable.setRowList(getCustomers());
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    private List getCustomers() {
+        return CustomerDAO.getCustomersSortedByName(6);
+    }
+
+    private void tableRowsIterator(RowCallback rowCallback) {
         for (Iterator i = form.getFieldList().iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             if (field instanceof HiddenField) {
@@ -173,46 +206,15 @@ public class TableForm extends BorderedPage {
                     Customer customer = CustomerDAO.getCustomer(id);
 
                     if (customer != null) {
-                        TextField name = (TextField)
-                            form.getField("name-" + id);
-                        name.setValue(customer.getName());
-
-                        Select investment = (Select)
-                            form.getField("investment-" + id);
-                        investment.setValue(customer.getInvestments());
-
-                        Checkbox active = (Checkbox)
-                            form.getField("active-" + id);
-                        active.setValueObject(customer.getActive());
+                        rowCallback.process(customer);
                     }
                 }
             }
         }
-
-        table.setRowList(getCustomers());
-
-        return true;
     }
 
-    /**
-     * @see net.sf.click.Page#onGet()
-     */
-    public void onGet() {
-        List customers = getCustomers();
-        table.setRowList(customers);
-        dataTable.setRowList(customers);
-    }
-
-    /**
-     * @see net.sf.click.Page#onPost()
-     */
-    public void onPost() {
-        List customers = getCustomers();
-        dataTable.setRowList(customers);
-    }
-
-    private List getCustomers() {
-        return CustomerDAO.getCustomersSortedByName(6);
+    private static interface RowCallback {
+        public void process(Customer customer);
     }
 
 }

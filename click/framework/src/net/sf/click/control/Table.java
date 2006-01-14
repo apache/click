@@ -42,18 +42,18 @@ import org.apache.commons.lang.StringUtils;
  * the excellent DisplayTag library, with the aim of making this control easy to
  * learn for DisplayTag users.
  * <p/>
- * The Table control automatically deploys the table CSS style sheet to the
- * click application directory <tt>/click/table.css</tt>. To import the style
- * sheet simpley reference the method {@link Table#getHtmlImports()}. For
- * example:
+ * The Table control automatically deploys the table CSS style sheet
+ * (<tt>table.css</tt>) to the application directory <tt>/click</tt>.
+ * To import the style sheet simply reference the
+ * {@link net.sf.click.util.PageImports} object. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
  *  &lt;head&gt;
- *   <span class="blue">$table.htmlImports</span>
+ *   <span class="blue">$imports</span>
  *  &lt;/head&gt;
  *  &lt;body&gt;
- *   <span class="blue">$table</span>
+ *   <span class="red">$table</span>
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *

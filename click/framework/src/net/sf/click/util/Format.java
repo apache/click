@@ -25,9 +25,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides the default Velocity template format object. A format object
- * is added to the Velocity Context using the name "<span class="blue">format</span>",
- * and is then available in the Page for formatting objects.
+ * Provides the default object for formatting the display of model objects
+ * in Velocity templates and JSP pages.
+ * <p/>
+ * For Velocity templates a Format object is added to the Velocity Context using
+ * the name "<span class="blue">format</span>", while for JSP pages an instance
+ * is added as a request attribute using the same key.
  * <p/>
  * For example the following Page code adds a date to the model:
  *
@@ -62,6 +65,8 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * When designing a format object ensure it is light weight, as a new
  * format object will be created for every new Page.
+ *
+ * @see PageImports
  *
  * @author Malcolm Edgar
  */
