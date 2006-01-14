@@ -209,7 +209,7 @@ import org.apache.commons.lang.StringUtils;
  * An example of a manually layed out Login form is provided below:
  *
  * <pre class="codeHtml">
- * &lt;form <span class="maroon">method</span>="<span class="blue">$form.post</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$form.actionURL</span>"&gt;
+ * &lt;form <span class="maroon">method</span>="<span class="blue">$form.method</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$form.actionURL</span>"&gt;
  *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
  *
  *   &lt;table style="margin: 1em;"&gt;
@@ -269,7 +269,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeHtml"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
  * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
  *
- * &lt;form method="<span class="blue">$form.post</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$form.actionURL</span>"&gt;
+ * &lt;form method="<span class="blue">$form.method</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$form.actionURL</span>"&gt;
  *
  *  <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
  *    <span class="red">#if</span> (<span class="blue">$field.hidden</span>) <span class="blue">$field</span> <span class="red">#end</span>
