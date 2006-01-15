@@ -19,8 +19,9 @@ import java.io.IOException;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Page;
+import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -111,11 +112,11 @@ public class TabbedPanel extends BasicPanel {
 
     private static final long serialVersionUID = 8912519148498010558L;
 
-    /** The debug logging flag. */
-    protected boolean debug;
-
     /** The tab listener object. */
     protected Object listener;
+
+    /** The click application logger instance. */
+    protected ClickLogger logger = ClickLogger.getInstance();
 
     /** The tab listener method. */
     protected String method;
@@ -151,10 +152,13 @@ public class TabbedPanel extends BasicPanel {
      * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
-        debug("WARNING: TabbedPanel should have panels added ONLY via" +
-              " addPanel(panel, boolean) to ensure the active panel" +
-              " is correctly set.  Setting active panel to *this* |" +
-              " panel ('" + panel.getName() + "') as a result");
+        String msg =
+            "TabbedPanel should have panels added ONLY via " +
+             "addPanel(panel, boolean) to ensure the active panel " +
+             "is correctly set.  Setting active panel to *this* | " +
+             "panel ('" + panel.getName() + "') as a result";
+        logger.warn(msg);
+
         this.addPanel(panel, true);
     }
 
@@ -171,17 +175,17 @@ public class TabbedPanel extends BasicPanel {
     public void addPanel(Panel panel, boolean isActivePanel) {
         super.addPanel(panel);
         if (isActivePanel) {
-            if (isDebugEnabled()) {
-                debug("Adding panel with id " + panel.getId() +
-                      " as the active panel");
+            if (logger.isTraceEnabled()) {
+                logger.trace("Adding panel with id " + panel.getId() +
+                             " as the active panel");
             }
             setActivePanel(panel);
         }
         if (getPanels().size() > 1 && tabActionLink == null) {
-            if (isDebugEnabled()) {
-                debug("Two or more panels detected, enabling " +
-                       "tabActionLink. Current listener status = " +
-                       listener + "." + method + "()");
+            if (logger.isTraceEnabled()) {
+                logger.trace("Two or more panels detected, enabling " +
+                             "tabActionLink. Current listener status = " +
+                             listener + "." + method + "()");
             }
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");
@@ -205,8 +209,8 @@ public class TabbedPanel extends BasicPanel {
      *
      * <pre class="codeJava">
      * <span class="kw">public boolean</span> onClick() {
-     * System.out.println(<span class="st">"onClick called"</span>);
-     * <span class="kw">return true</span>;
+     *     System.out.println(<span class="st">"onClick called"</span>);
+     *     <span class="kw">return true</span>;
      * } </pre>
      *
      * @param listener the listener object with the named method to invoke
@@ -218,18 +222,13 @@ public class TabbedPanel extends BasicPanel {
     }
 
     /**
-     * Note the Pages context must be set before this method is invoked.
-     *
-     * @see Panel#setPage(Page)
+     * @see net.sf.click.Control#setContext(Context)
      */
-    public void setPage(Page page) {
-        super.setPage(page);
-        // add the context to the tabActionLink control
-        // TODO: is there a better way to do set the context?
-        // Need to refactor Panel to extend Control, this will cause an
-        // IllegalArgumentException if page's context has not been set
+    public void setContext(Context context) {
+        super.setContext(context);
+
         if (tabActionLink != null) {
-            tabActionLink.setContext(page.getContext());
+            tabActionLink.setContext(context);
         }
     }
 
@@ -253,15 +252,15 @@ public class TabbedPanel extends BasicPanel {
         // if a listener has been explicitely set to handle a tab switch,
         // then invoke it
         if (listener != null && method != null) {
-            if (isDebugEnabled()) {
-                debug("Invoking listener " + listener + "." + method + "()");
+            if (logger.isTraceEnabled()) {
+                logger.trace("Invoking listener " + listener + "." + method + "()");
             }
             return ClickUtils.invokeListener(listener, method);
         }
         // this implies that everything needed to render the next tab has been
         // added to the "model" context already
         else {
-            debug("No listener method found, continuing processing");
+            logger.trace("No listener method found, continuing processing");
             return true;
         }
     }
@@ -301,32 +300,4 @@ public class TabbedPanel extends BasicPanel {
         return "/click/" + super.toString();
     }
 
-    /**
-     * Return true if debug logging is enabled.
-     *
-     * @return true if debug loggin is enabled
-     */
-    public boolean isDebugEnabled() {
-        return debug;
-    }
-
-    /**
-     * Set the debug logging status.
-     *
-     * @param debug the debug logging status
-     */
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
-    /**
-     * Log the given message to <tt>System.out</tt> if debug logging is enabled.
-     *
-     * @param msg the debug message to log write to <tt>System.out</tt>
-     */
-    public void debug(String msg) {
-        if (isDebugEnabled()) {
-            System.out.println("[Click] [debug] TabledPannel " + msg);
-        }
-    }
 }
