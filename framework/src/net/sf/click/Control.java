@@ -51,7 +51,9 @@ import javax.servlet.ServletContext;
  *     ..
  * } </pre>
  *
- * Please also see {@link net.sf.click.util.PageImports}.
+ * Please note multiple import lines should be separated by a <tt>'\n'</tt> char,
+ * as the {@link net.sf.click.util.PageImports} will parse multiple import lines
+ * on the <tt>'\n'</tt> char and ensure that imports are not included twice.
  *
  * <a name="on-deploy"><h4>Deploying Resources</h4></a>
  *
@@ -99,6 +101,8 @@ import javax.servlet.ServletContext;
  *  <li><tt>WEB-INF/click.xml</tt>
  * </ul>
  *
+ * @see net.sf.click.util.PageImports
+ *
  * @author Malcolm Edgar
  */
 public interface Control extends Serializable {
@@ -126,12 +130,17 @@ public interface Control extends Serializable {
      *
      * <pre class="codeJava">
      * <span class="kw">protected static final</span> String HTML_IMPORT =
-     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;\n"</span>;
+     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
      *
      * <span class="kw">public</span> String getHtmlImports() {
      *     String[] args = { getContext().getRequest().getContextPath() };
      *     <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
      * } </pre>
+     *
+     * <b>Note</b> multiple import lines should be separated by a
+     * <tt>'\n'</tt> char, as the {@link net.sf.click.util.PageImports} will
+     * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
+     * imports are not included twice.
      *
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files

@@ -45,6 +45,9 @@ public class BasicPanel implements Panel {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** A request context. */
+    protected Context context;
+
     /** A temporary storage for control objects until the Page is set. */
     protected List controls = new ArrayList();
 
@@ -121,7 +124,7 @@ public class BasicPanel implements Panel {
     public BasicPanel() {
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------------- Properties
 
     /**
      * Adds a 'sub-panel' to this panel.  This is useful for 'panels of panels',
@@ -129,7 +132,7 @@ public class BasicPanel implements Panel {
      * layout functionality.  See {@link ListPanel} and {@link TabbedPanel} for
      * examples.
      *
-     * @param panel
+     * @param panel the pannel to add
      */
     public void addPanel(Panel panel) {
         // assert not null
@@ -197,6 +200,37 @@ public class BasicPanel implements Panel {
     }
 
     /**
+     * @see net.sf.click.Control#getContext()
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
+     * @see net.sf.click.Control#setContext(Context)
+     */
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    /**
+     * @see Panel#getName()
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name for this panel.  This is used to uniquely identify the panel
+     * in the model context.
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * The page this panel is associated to.
      *
      * @return the page for this panel
@@ -233,43 +267,7 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * The template associated with this Panel.  If null, the simple class name
-     * plus the default extension (".htm") will be used.
-     *
-     * @see Panel#getTemplate()
-     */
-    public String getTemplate() {
-        return template;
-    }
-
-    /**
-     * Set the Velocity template to be used for this Panel.
-     *
-     * @param template
-     */
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    /**
-     * @see Panel#getName()
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name for this panel.  This is used to uniquely identify the panel
-     * in the model context.
-     *
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @see Panel#getId()
+     * @see net.sf.click.Control#getId()
      */
     public String getId() {
         return id;
@@ -283,6 +281,37 @@ public class BasicPanel implements Panel {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
+     * @see Panel#getLabel()
+     */
+    public String getLabel() {
+        return label == null ? name : label;
+    }
+
+    /**
+     * @see Panel#setLabel(String)
+     */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * This method does nothing.
+     *
+     * @see Control#setListener(Object, String)
+     */
+    public void setListener(Object listener, String method) {
     }
 
     /**
@@ -304,18 +333,42 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * @see Panel#getLabel()
+     * This method returns null.
+     *
+     * @see net.sf.click.Control#setParentMessages(Map)
      */
-    public String getLabel() {
-        return label == null ? name : label;
+    public Map getParentMessages() {
+        return null;
     }
 
     /**
-     * @see Panel#setLabel(String)
+     * This method does nothing.
+     *
+     * @see net.sf.click.Control#setParentMessages(Map)
      */
-    public void setLabel(String label) {
-        this.label = label;
+    public void setParentMessages(Map messages) {
     }
+
+    /**
+     * The template associated with this Panel.  If null, the simple class name
+     * plus the default extension (".htm") will be used.
+     *
+     * @see Panel#getTemplate()
+     */
+    public String getTemplate() {
+        return template;
+    }
+
+    /**
+     * Set the Velocity template to be used for this Panel.
+     *
+     * @param template
+     */
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * This method does nothing and can be overridden by subclasses.
@@ -337,14 +390,14 @@ public class BasicPanel implements Panel {
     /**
      * Overridden toString to return the name of the template associated with
      * this panel.
-     * <p/>
-     * TODO: Question: Should this not be done in favor of rendering the panel
-     * template implicitly?  i.e. #parse($somePanelName.template) A potential
-     * issue might be in debugger evaluation of the toString method.
      *
      * @return the template associated with this panel-see {@link #getTemplate()}
      */
     public String toString() {
+        // TODO: Question: Should this not be done in favor of rendering the panel
+        // template implicitly?  i.e. #parse($somePanelName.template) A potential
+        // issue might be in debugger evaluation of the toString method.
+
         return getTemplate();
     }
 
@@ -360,57 +413,6 @@ public class BasicPanel implements Panel {
         String classname = getClass().getName();
         int index = classname.lastIndexOf('.');
         return classname.substring(index + 1) + ".htm";
-    }
-
-    /**
-     * This method returns null.
-     *
-     * @see net.sf.click.Control#getContext()
-     */
-    public Context getContext() {
-        return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#setContext(Context)
-     */
-    public void setContext(Context context) {
-    }
-
-    /**
-     * This method returns null.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see Control#setListener(Object, String)
-     */
-    public void setListener(Object listener, String method) {
-    }
-
-    /**
-     * This method returns null.
-     *
-     * @see net.sf.click.Control#setParentMessages(Map)
-     */
-    public Map getParentMessages() {
-        return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#setParentMessages(Map)
-     */
-    public void setParentMessages(Map messages) {
     }
 
 }
