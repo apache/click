@@ -215,6 +215,7 @@ public class Select extends Field {
      */
     public Select(String name, boolean required) {
         super(name);
+        setRequired(required);
     }
 
     /**
