@@ -232,7 +232,7 @@ public class DateField extends TextField {
      */
     public SimpleDateFormat getDateFormat() {
         if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat(formatPattern);
+            dateFormat = new SimpleDateFormat(formatPattern, getContext().getLocale());
         }
         return dateFormat;
     }
