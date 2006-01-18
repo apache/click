@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,9 @@ class ClickApp implements EntityResolver {
      * [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG | TRACE ]
      */
     private int mode;
+
+    /** The page automapping override page class for path list. */
+    private final List excludesList = new ArrayList();
 
     /** The map of ClickApp.PageElm keyed on path. */
     private final Map pageByPathMap = new HashMap();
@@ -765,6 +769,15 @@ class ClickApp implements EntityResolver {
         }
 
         if (automap) {
+
+            // Build list of automap path page class overrides
+            excludesList.clear();
+            for (Iterator i = getChildren(pagesElm, "excludes").iterator();
+                 i.hasNext(); ) {
+
+                excludesList.add(new ClickApp.ExcludesElm((Element) i.next()));
+            }
+
             if (logger.isDebugEnabled()) {
                 logger.debug("automapped pages:");
             }
@@ -793,7 +806,6 @@ class ClickApp implements EntityResolver {
                     }
                 }
             }
-
         }
 
         // Build pages by class map
@@ -1005,6 +1017,11 @@ class ClickApp implements EntityResolver {
         // Strip off .htm extension
         String path = pagePath.substring(0, pagePath.lastIndexOf("."));
 
+        Class excludePageClass = getExcludesPageClass(path);
+        if (excludePageClass != null) {
+            return excludePageClass;
+        }
+
         if (path.indexOf("/") != -1) {
             StringTokenizer tokenizer = new StringTokenizer(path, "/");
             while (tokenizer.hasMoreTokens()) {
@@ -1049,6 +1066,19 @@ class ClickApp implements EntityResolver {
         }
 
         return pageClass;
+    }
+
+    private Class getExcludesPageClass(String path) {
+        for (int i = 0; i < excludesList.size(); i++) {
+            ClickApp.ExcludesElm override =
+                (ClickApp.ExcludesElm) excludesList.get(i);
+
+            if (override.isMatch(path)) {
+                return override.getPageClass();
+            }
+        }
+
+        return null;
     }
 
     private Element getChild(Element element, String name) {
@@ -1162,6 +1192,80 @@ class ClickApp implements EntityResolver {
 
         private String getPath() {
             return path;
+        }
+    }
+
+    private static class ExcludesElm {
+
+        private Set pathSet = new HashSet();
+        private Set fileSet = new HashSet();
+
+        private ExcludesElm(Element element) throws ClassNotFoundException {
+
+            String pattern = element.getAttribute("pattern");
+
+            if (StringUtils.isNotBlank(pattern)) {
+                StringTokenizer tokenizer = new StringTokenizer(pattern, ", ");
+                while (tokenizer.hasMoreTokens()) {
+                    String token = tokenizer.nextToken();
+
+                    if (token.charAt(0) != '/') {
+                        token = "/" + token;
+                    }
+
+                    int index = token.lastIndexOf(".");
+                    if (index != -1) {
+                        token = token.substring(0, index);
+                        fileSet.add(token);
+
+                    } else {
+                        index = token.indexOf("*");
+                        if (index != -1) {
+                            token = token.substring(0, index);
+                        }
+                        pathSet.add(token);
+                    }
+                }
+            }
+        }
+
+        private Class getPageClass() {
+            return ClickApp.ExcludePage.class;
+        }
+
+        private boolean isMatch(String resourcePath) {
+            if (fileSet.contains(resourcePath)) {
+                return true;
+            }
+
+            for (Iterator i = pathSet.iterator(); i.hasNext(); ) {
+                String path = i.next().toString();
+                if (resourcePath.startsWith(path)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public String toString() {
+            return getClass().getName() +
+                "[fileSet=" + fileSet +
+                ",pathSet=" + pathSet +
+                "]";
+        }
+    }
+
+    private static class ExcludePage extends Page {
+
+        private static final Map HEADERS = new HashMap();
+
+        static {
+            HEADERS.put("Cache-Control", "max-age=3600, public");
+        }
+
+        public Map getHeaders() {
+            return HEADERS;
         }
     }
 
