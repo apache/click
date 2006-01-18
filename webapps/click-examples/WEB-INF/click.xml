@@ -3,6 +3,7 @@
 
   <pages package="examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>
+    <excludes pattern="/tiny_mce/*"/>
   </pages>
 
   <headers>
@@ -11,6 +12,6 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="profile"/>
+  <mode value="debug"/>
 
 </click-app>
