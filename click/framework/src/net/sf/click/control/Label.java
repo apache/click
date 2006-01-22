@@ -87,6 +87,8 @@ public class Label extends Field {
      * Returns true.
      *
      * @see Field#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         return true;
@@ -96,6 +98,8 @@ public class Label extends Field {
      * Returns the label.
      *
      * @see Object#toString()
+     *
+     * @return the label string value
      */
     public String toString() {
         return getLabel();

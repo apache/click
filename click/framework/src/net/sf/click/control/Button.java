@@ -134,6 +134,8 @@ public class Button extends Field {
      * Returns true, as buttons perform no server side logic.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true
      */
     public boolean onProcess() {
         return true;
@@ -144,6 +146,8 @@ public class Button extends Field {
      * as the HTML "value" attribute.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered Button string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(40);

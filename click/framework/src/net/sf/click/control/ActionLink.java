@@ -375,6 +375,8 @@ public class ActionLink implements Control {
 
     /**
      * @see Control#getContext()
+     *
+     * @return the Page request Context
      */
     public Context getContext() {
         return context;
@@ -382,6 +384,9 @@ public class ActionLink implements Control {
 
     /**
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
         if (context == null) {
@@ -450,6 +455,8 @@ public class ActionLink implements Control {
      * This method returns null.
      *
      * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return null
      */
     public String getHtmlImports() {
         return null;
@@ -460,6 +467,8 @@ public class ActionLink implements Control {
      * otherwise.
      *
      * @see net.sf.click.Control#getId()
+     *
+     * @return HTML element identifier attribute "id" value
      */
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
@@ -548,12 +557,14 @@ public class ActionLink implements Control {
 
     /**
      * @see net.sf.click.Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
      */
-    public void setListener(Object target, String methodName) {
-        listener = target;
-        listenerMethod = methodName;
+    public void setListener(Object listener, String method) {
+        this.listener = listener;
+        this.listenerMethod = method;
     }
-
 
     /**
      * Return the localized message for the given key, or null if not found.
@@ -610,6 +621,8 @@ public class ActionLink implements Control {
 
     /**
      * @see net.sf.click.Control#getName()
+     *
+     * @return the name of the control
      */
     public String getName() {
         return name;
@@ -617,6 +630,9 @@ public class ActionLink implements Control {
 
     /**
      * @see net.sf.click.Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
      */
     public void setName(String name) {
         if (name == null) {
@@ -627,6 +643,8 @@ public class ActionLink implements Control {
 
     /**
      * @see Control#getParentMessages()
+     *
+     * @return the localization <tt>Map</tt> of the Control's parent
      */
     public Map getParentMessages() {
         return parentMessages;
@@ -634,6 +652,8 @@ public class ActionLink implements Control {
 
     /**
      * @see Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
@@ -756,6 +776,9 @@ public class ActionLink implements Control {
      * This method does nothing.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }
@@ -766,6 +789,8 @@ public class ActionLink implements Control {
      * this will be invoked.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
@@ -792,6 +817,8 @@ public class ActionLink implements Control {
      * example.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered anchor link string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();

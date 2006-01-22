@@ -37,11 +37,10 @@ import org.apache.commons.lang.StringUtils;
  * <li>Set {@link #context} property.</li>
  * <li>Set {@link #format} property.</li>
  * <li>Set {@link #headers} property.</li>
- * <li>Set {@link #path} property.</tt>
+ * <li>Set {@link #path} property.</li>
  * <li>Call {@link #onInit()} to initialize the page.</li>
  * <li>Call {@link #onSecurityCheck()} to check the users permissions.</li>
  * <li>Process any {@link #controls} calling their {@link Control#onProcess()} method.</li>
- * </tt>
  * <li>Call {@link #onGet()} for any additional processing.</li>
  * <li>Render the page merging the {@link #model} with the
  * Velocity template defined by the {@link #getTemplate()}.</li>
@@ -53,9 +52,9 @@ import org.apache.commons.lang.StringUtils;
  * When a Velocity template is rendered the ClickServlet uses Pages:<ul>
  * <li>the {@link #getTemplate()} to find the Velocity
  * template.</li>
- * <li>the {@link #model} to populate the Velocity Context</tt>
- * <li>the {@link #format} to add to the Velocity Context</tt>
- * <li>the {@link #getContentType()} to set as the HttpServletResponse content type</tt>
+ * <li>the {@link #model} to populate the Velocity Context</li>
+ * <li>the {@link #format} to add to the Velocity Context</li>
+ * <li>the {@link #getContentType()} to set as the HttpServletResponse content type</li>
  * <li>the {@link #headers} to set as the HttpServletResponse headers</li>
  * </ul>
  *
@@ -191,7 +190,7 @@ public class Page {
     public String getContentType() {
         String charset = context.getRequest().getCharacterEncoding();
 
-        if (charset == null ) {
+        if (charset == null) {
             return "text/html";
 
         } else {

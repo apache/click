@@ -214,6 +214,8 @@ public class FileField extends Field {
      * Processes the FileField submission.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         fileItem = (FileItem) getContext().getMultiPartFormData().get(getName());
@@ -238,6 +240,8 @@ public class FileField extends Field {
      * Return a HTML rendered FileField string.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered FileField string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);

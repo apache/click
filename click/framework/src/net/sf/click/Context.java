@@ -77,6 +77,13 @@ public class Context {
 
     /**
      * Create a new request context.
+     *
+     * @param context the servlet context
+     * @param config the servlet config
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param isPost the servlet request is a POST
+     * @param pageMaker the Page maker factor
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,

@@ -249,7 +249,8 @@ public class ClickUtils {
                             objectClassname + "." + method.getName() +
                             "() with " + paramObject + " error: " +
                             e.toString();
-                        log(msg, debug);
+
+                        log(msg, e, debug);
                     }
 
                 } else {
@@ -329,7 +330,8 @@ public class ClickUtils {
                     String msg =
                         "Error incurred invoking " + objectClassname + "." +
                         method.getName() + "() error: " + e.toString();
-                    log(msg, debug);
+
+                    log(msg, e, debug);
                 }
 
             } else {
@@ -621,6 +623,7 @@ public class ClickUtils {
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
      *
+     * @param request the page servlet request
      * @return the page resource path from the request
      */
     public static String getResourcePath(HttpServletRequest request) {
@@ -792,10 +795,21 @@ public class ClickUtils {
     // -------------------------------------------------------- Private Methods
 
     private static void log(String msg, boolean debug) {
-        if (debug ) {
+        if (debug) {
             System.out.println("[Click] [debug] " + msg);
         } else {
             ClickLogger.getInstance().debug(msg);
+        }
+    }
+
+    private static void log(String msg, Throwable error, boolean debug) {
+        if (debug) {
+            System.out.println("[Click] [debug] " + msg);
+            if (error != null) {
+                error.printStackTrace(System.out);
+            }
+        } else {
+            ClickLogger.getInstance().debug(msg, error);
         }
     }
 
