@@ -251,6 +251,8 @@ public class TextArea extends Field {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -288,6 +290,8 @@ public class TextArea extends Field {
      * Return a HTML rendered TextArea string.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered TextArea string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);

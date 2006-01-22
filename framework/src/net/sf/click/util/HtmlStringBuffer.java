@@ -305,6 +305,8 @@ public class HtmlStringBuffer {
 
     /**
      * @see Object#toString()
+     *
+     * @return a string representation of the string buffer
      */
     public String toString() {
         return buffer.toString();

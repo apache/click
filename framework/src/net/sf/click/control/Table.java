@@ -308,6 +308,11 @@ public class Table implements Control {
         }
     }
 
+    /**
+     * Return the list of table columns.
+     *
+     * @return the list of table columns
+     */
     public List getColumnList() {
         return columnList;
     }
@@ -323,6 +328,8 @@ public class Table implements Control {
 
     /**
      * @see Control#getContext()
+     *
+     * @return the Page request Context
      */
     public Context getContext() {
         return context;
@@ -330,6 +337,8 @@ public class Table implements Control {
 
     /**
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
      */
     public void setContext(Context context) {
         this.context = context;
@@ -375,16 +384,11 @@ public class Table implements Control {
     }
 
     /**
-     * @see Control#setListener(Object, String)
-     */
-    public void setListener(Object listener, String method) {
-        // Does nothing
-    }
-
-    /**
      * Return the "id" attribute value if defined, or the table name otherwise.
      *
      * @see Control#getId()
+     *
+     * @return HTML element identifier attribute "id" value
      */
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
@@ -392,6 +396,16 @@ public class Table implements Control {
         } else {
             return getName();
         }
+    }
+
+    /**
+     * @see Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
+     */
+    public void setListener(Object listener, String method) {
+        // Does nothing
     }
 
     /**
@@ -459,6 +473,8 @@ public class Table implements Control {
 
     /**
      * @see Control#getName()
+     *
+     * @return the name of the control
      */
     public String getName() {
         return name;
@@ -466,6 +482,8 @@ public class Table implements Control {
 
     /**
      * @see Control#setName(String)
+     *
+     * @param name of the control
      */
     public void setName(String name) {
         if (name == null) {
@@ -538,6 +556,8 @@ public class Table implements Control {
 
     /**
      * @see Control#getParentMessages()
+     *
+     * @return the localization <tt>Map</tt> of the Control's parent
      */
     public Map getParentMessages() {
         return parentMessages;
@@ -545,6 +565,8 @@ public class Table implements Control {
 
     /**
      * @see Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
@@ -589,7 +611,7 @@ public class Table implements Control {
     /**
      * Return the list of table rows.
      *
-     * @return the list of table rows
+     * @param rowList the list of table rows to set
      */
     public void setRowList(List rowList) {
         this.rowList = rowList;
@@ -633,6 +655,9 @@ public class Table implements Control {
      * directory when the application is initialized.
      *
      * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a I/O error occurs
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile
@@ -645,6 +670,8 @@ public class Table implements Control {
      * Controls.
      *
      * @see Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         if (pagingLink != null) {
@@ -668,6 +695,8 @@ public class Table implements Control {
      * Return a HTML rendered Table string.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered Table string
      */
     public String toString() {
         int bufferSize =

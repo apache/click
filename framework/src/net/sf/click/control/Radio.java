@@ -124,6 +124,8 @@ public class Radio extends Field {
      * and invoking the controls listener if defined.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         String value = getRequestValue();
@@ -145,6 +147,8 @@ public class Radio extends Field {
      * Return the HTML rendered Radio string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered Radio string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();

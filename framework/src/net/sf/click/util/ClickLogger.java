@@ -103,6 +103,9 @@ public class ClickLogger implements LogChute {
      * is invoked by the Velocity runtime.
      *
      * @see LogChute#init(RuntimeServices)
+     *
+     * @param rs the Velocity runtime services
+     * @throws Exception if an initialization error occurs
      */
     public void init(RuntimeServices rs) throws Exception {
         String logto = (String) rs.getApplicationAttribute(LOG_TO);
@@ -155,6 +158,9 @@ public class ClickLogger implements LogChute {
      * Log the given message and optional error at the specified logging level.
      *
      * @see LogChute#log(int, java.lang.String)
+     *
+     * @param level the logging level
+     * @param message the message to log
      */
     public void log(int level, String message) {
         log(level, message, null);
@@ -206,6 +212,9 @@ public class ClickLogger implements LogChute {
      * Tell whether or not a log level is enabled.
      *
      * @see LogChute#isLevelEnabled(int)
+     *
+     * @param level the logging level to test
+     * @return true if the given logging level is enabled
      */
     public boolean isLevelEnabled(int level) {
         return logLevel >= level;

@@ -247,6 +247,8 @@ public class TextField extends Field {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -284,6 +286,8 @@ public class TextField extends Field {
      * Return a HTML rendered TextField string.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered TextField string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);

@@ -121,6 +121,8 @@ public class Checkbox extends Field {
      * Returns "true" if the checkbox is checked, or false otherwise.
      *
      * @see Field#getValue()
+     *
+     * @return the Field value
      */
     public String getValue() {
         return String.valueOf(checked);
@@ -131,6 +133,8 @@ public class Checkbox extends Field {
      * value is set to false.
      *
      * @see Field#setValue(String)
+     *
+     * @param value the Field value
      */
     public void setValue(String value) {
         checked = Boolean.valueOf(value).booleanValue();;
@@ -151,6 +155,8 @@ public class Checkbox extends Field {
      * Return the field Boolean value.
      *
      * @see Field#getValueObject()
+     *
+     * @return the object representation of the Field value
      */
     public Object getValueObject() {
         if (checked) {
@@ -165,6 +171,8 @@ public class Checkbox extends Field {
      * Set the checked value of the field using the given object.
      *
      * @see Field#setValueObject(Object)
+     *
+     * @param object the object value to set
      */
     public void setValueObject(Object object) {
         if (object != null && object instanceof Boolean) {
@@ -183,6 +191,8 @@ public class Checkbox extends Field {
      * property will be displayed.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         setChecked(getContext().getRequestParameter(getName()) != null);
@@ -202,6 +212,8 @@ public class Checkbox extends Field {
      * Return the HTML rendered Checkbox string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered Checkbox string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();

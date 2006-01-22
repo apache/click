@@ -1,6 +1,5 @@
 package net.sf.click.control;
 
-
 /**
  * Provides an ImageSubmit control: &nbsp; &lt;input type='image' src='edit.gif'&gt;.
  *
@@ -145,6 +144,8 @@ public class ImageSubmit extends Submit {
      * order they were added to the Form.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         //  Note IE does not submit name

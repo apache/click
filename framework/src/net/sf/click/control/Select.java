@@ -432,6 +432,8 @@ public class Select extends Field {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         // Page developer has not initialized options
@@ -500,6 +502,8 @@ public class Select extends Field {
      * Return a HTML rendered Select string.
      *
      * @see Object#toString()
+     *
+     * @return a HTML rendered Select string
      */
     public String toString() {
 

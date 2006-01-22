@@ -192,6 +192,8 @@ public class ClickServlet extends HttpServlet {
      * Initialize the Click servlet and the Velocity runtime.
      *
      * @see GenericServlet#init()
+     *
+     * @throws ServletException if the click app could not be initialized
      */
     public void init() throws ServletException {
 
@@ -241,7 +243,11 @@ public class ClickServlet extends HttpServlet {
      * {@link #handleRequest(HttpServletRequest, HttpServletResponse, boolean)}.
      *
      * @see HttpServlet#doGet(HttpServletRequest, HttpServletResponse)
-     * @throws UnavailableException if click app has not been initialized
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @throws ServletException if click app has not been initialized
+     * @throws IOException if an I/O error occurs
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -263,7 +269,11 @@ public class ClickServlet extends HttpServlet {
      * {@link #handleRequest(HttpServletRequest, HttpServletResponse, boolean)}.
      *
      * @see HttpServlet#doPost(HttpServletRequest, HttpServletResponse)
-     * @throws UnavailableException if click app has not been initialized
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @throws ServletException if click app has not been initialized
+     * @throws IOException if an I/O error occurs
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {

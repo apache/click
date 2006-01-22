@@ -161,6 +161,8 @@ public class Submit extends Button {
      * they were added to the Form.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getContext().getRequestParameter(getName());

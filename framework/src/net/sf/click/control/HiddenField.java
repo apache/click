@@ -129,6 +129,8 @@ public class HiddenField extends Field {
      * Returns true.
      *
      * @see Field#isHidden()
+     *
+     * @return true
      */
     public boolean isHidden() {
         return true;
@@ -145,6 +147,8 @@ public class HiddenField extends Field {
 
     /**
      * @see Field#getValue()
+     *
+     * @return the Field value
      */
     public String getValue() {
         return (getValueObject() != null) ? getValueObject().toString() : "";
@@ -152,6 +156,8 @@ public class HiddenField extends Field {
 
     /**
      * @see Field#setValue(String)
+     *
+     * @param value the Field value
      */
     public void setValue(String value) {
         setValueObject(value);
@@ -179,6 +185,8 @@ public class HiddenField extends Field {
      * Return the value Object of the hidden field.
      *
      * @see Field#getValueObject()
+     *
+     * @return the object representation of the Field value
      */
     public Object getValueObject() {
         return valueObject;
@@ -186,6 +194,8 @@ public class HiddenField extends Field {
 
     /**
      * @see Field#setValueObject(Object)
+     *
+     * @param value the object value to set
      */
     public void setValueObject(Object value) {
         if ((value != null) && (value.getClass() != valueClass)) {
@@ -208,6 +218,8 @@ public class HiddenField extends Field {
      * The value object will be set with the HiddenField's string value.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         String aValue = getRequestValue();
@@ -266,6 +278,8 @@ public class HiddenField extends Field {
      * Return the HTML rendered Hidden Field string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered Hidden Field string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();

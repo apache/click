@@ -162,6 +162,8 @@ public class RadioGroup extends Field {
 
     /**
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
      */
     public void setContext(Context context) {
         if (context == null) {
@@ -181,6 +183,8 @@ public class RadioGroup extends Field {
 
     /**
      * @see Field#setForm(Form)
+     *
+     * @param form Field's parent <tt>Form</tt>
      */
     public void setForm(Form form) {
         super.setForm(form);
@@ -238,6 +242,8 @@ public class RadioGroup extends Field {
      * the controls listener if defined.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -266,6 +272,8 @@ public class RadioGroup extends Field {
      * Return the HTML rendered RadioGroup string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered RadioGroup string
      */
     public String toString() {
         final int size = getRadioList().size();
