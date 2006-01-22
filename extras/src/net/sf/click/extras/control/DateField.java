@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.servlet.ServletContext;
 import net.sf.click.control.TextField;
@@ -232,7 +233,13 @@ public class DateField extends TextField {
      */
     public SimpleDateFormat getDateFormat() {
         if (dateFormat == null) {
-            dateFormat = new SimpleDateFormat(formatPattern, getContext().getLocale());
+            if (getContext() != null) {
+                Locale locale = getContext().getLocale();
+                dateFormat = new SimpleDateFormat(formatPattern, locale);
+
+            } else {
+                dateFormat = new SimpleDateFormat(formatPattern);
+            }
         }
         return dateFormat;
     }
