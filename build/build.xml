@@ -7,6 +7,7 @@
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.hibernate" value="hibernate-3.0.5.jar"/>
    <property name="jar.io" value="commons-io-1.1.jar"/>
+   <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
@@ -21,6 +22,9 @@
    <taskdef name="replacetabs" 
    	        classname="dev.ReplaceTabsTask" 
    	        classpath="lib/dev.jar"/>
+            
+   <taskdef resource="checkstyletask.properties"
+            classpath="lib/${jar.checkstyle}"/>
             
    <!-- Paths -->
    
@@ -331,6 +335,12 @@
       </war>
    </target>
    
+   <target name="checkstyle" description="run checkstyle report on Java soruce">
+      <checkstyle config="build/checkstyle-checks.xml">
+         <fileset dir="framework/src/net" includes="**/*.java"/>
+      </checkstyle>
+   </target>
+   
    <target name="clean"> 
       <delete dir="dist" quiet="false"/>
       <mkdir dir="dist"/>
@@ -366,9 +376,6 @@
       <get src="${repository}/commons-collections/jars/${jar.collections}" verbose="true"
            dest="lib/${jar.collections}"
            usetimestamp="true"/>
-      <get src="${repository}/hibernate/jars/${jar.hibernate}" verbose="true"
-           dest="lib/${jar.hibernate}"
-           usetimestamp="true"/>
       <get src="${repository}/commons-io/jars/${jar.io}" verbose="true"
            dest="lib/${jar.io}"
            usetimestamp="true"/>
@@ -377,6 +384,9 @@
            usetimestamp="true"/>
       <get src="${repository}/commons-fileupload/jars/${jar.upload}" verbose="true"
            dest="lib/${jar.upload}"
+           usetimestamp="true"/>
+      <get src="${repository}/hibernate/jars/${jar.hibernate}" verbose="true"
+           dest="lib/${jar.hibernate}"
            usetimestamp="true"/>
       <get src="${repository}/junit/jars/${jar.junit}" verbose="true"
            dest="lib/${jar.junit}"
