@@ -243,6 +243,46 @@ changePassword.htm   =>  ChangePassword
 ChangePassword.htm   =>  ChangePassword
 </pre>
 
+<a name="application-excludes" class="heading"><h4>Automapping Excludes</h4></a>
+
+With Page automapping there can be resources where you don't want automapping 
+applied. For example when using a JavaScript library with lots of
+<tt>.htm</tt> files, you don't want automapping to try and find Page class for 
+each of these files.
+<p/>
+In these situations you can use the pages <tt>excludes</tt> element.
+
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="red">excludes</span> (#PCDATA)&gt;
+   &lt;!ATTLIST excludes <span class="blue">pattern</span> CDATA #REQUIRED&gt;
+</pre>
+
+For example if our application uses the TinyMCE JavaScript library we could 
+configure our pages automapping to exclude all <tt>.htm</tt> files under the
+<tt>/tiny_mce</tt> directory.
+
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages package="com.mycorp.page" automapping="true"&gt;
+    &lt;<span class="blue">excludes</span> pattern="<span class="red">/tiny_mce/*</span>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
+
+The excludes pattern can specify multiple directories or files using a comma
+separated notation. For example:
+
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages package="com.mycorp.page" automapping="true"&gt;
+    &lt;<span class="blue">excludes</span> pattern="<span class="red">/dhtml/*, /tiny_mce/*, banner.htm, about.htm</span>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
+
+HTM files excluded from Page automapping are handled by an internal Page class
+with caching headers enabled.
+
 <a name="application-headers" class="heading"><h3>Headers</h3></a>
 
 The optional <tt>headers</tt> element defines a list of <tt>header</tt> elements
