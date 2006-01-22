@@ -3,7 +3,7 @@
   <!ATTLIST click-app charset CDATA #IMPLIED>
 
   <!-- Application pages. -->
-  <!ELEMENT pages (page*)>
+  <!ELEMENT pages (page*, excludes*)>
     <!ATTLIST pages package CDATA #IMPLIED>
     <!ATTLIST pages automapping (true|false) "false">
 
@@ -11,6 +11,10 @@
     <!ELEMENT page (header*)>
       <!ATTLIST page path CDATA #REQUIRED>
       <!ATTLIST page classname CDATA #REQUIRED>
+      
+    <!-- Excludes definition. -->
+    <!ELEMENT excludes (#PCDATA)>
+      <!ATTLIST excludes pattern CDATA #REQUIRED>
 
   <!-- Application default page headers. -->
   <!ELEMENT headers (header*)>
