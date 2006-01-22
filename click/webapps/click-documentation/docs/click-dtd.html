@@ -14,11 +14,11 @@ Click application XML descriptor Documentation Type Definition (DTD):
 
 <pre class="codeDtd">
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
-&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">deployables</span>?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">controls</span>?)&gt;
   &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">charset</span> CDATA #IMPLIED&gt;
 
   &lt;-- Application pages. --&gt;
-  &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*)&gt;
+  &lt;!ELEMENT <span class="red">pages</span> (<span class="blue">page</span>*, <span class="blue">excludes</span>*)&gt;
     &lt;!ATTLIST <span class="red">pages</span> <span class="blue">package</span> CDATA #IMPLIED&gt;
     &lt;!ATTLIST <span class="red">pages</span> <span class="blue">automapping</span> (true|false) "<span class="green">false</span>"&gt;
     
@@ -26,6 +26,10 @@ Click application XML descriptor Documentation Type Definition (DTD):
     &lt;!ELEMENT <span class="red">page</span> (<span class="blue">header</span>*)&gt;
       &lt;!ATTLIST <span class="red">page</span> <span class="blue">path</span> CDATA #REQUIRED&gt;
       &lt;!ATTLIST <span class="red">page</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
+
+    &lt;!-- Excludes definition. --&gt;
+    &lt;!ELEMENT <span class="red">excludes</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">excludes</span> <span class="blue">pattern</span> CDATA #REQUIRED&gt;
 
   &lt;!-- Application default page headers. --&gt;
   &lt;!ELEMENT <span class="red">headers</span> (<span class="blue">header</span>*)&gt;
@@ -39,7 +43,7 @@ Click application XML descriptor Documentation Type Definition (DTD):
   &lt;!-- Page template formatter class. An new format object added to
        the Velocity context under the key: "format". --&gt;
   &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
-     &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
+    &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
  
   &lt;!-- Application mode, which configures logging and caching. --&gt;
   &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
