@@ -338,6 +338,7 @@
    <target name="checkstyle" description="run checkstyle report on Java soruce">
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/net" includes="**/*.java"/>
+         <fileset dir="extras/src" includes="**/*.java"/>
       </checkstyle>
    </target>
    
