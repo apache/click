@@ -151,7 +151,8 @@ import org.apache.commons.lang.StringUtils;
  * <li>form fields &nbsp; -> &nbsp; data object  &nbsp; &nbsp; &nbsp;
  * {@link #copyTo(Object)}</li>
  * </ul>
- * To debug the data binding being performed, use the debug copy methods.
+ * To debug the data binding being performed, use the Click application mode to
+ * "<tt>debug</tt>" or use the debug copy methods.
  *
  * <a name="form-layout"><h3>Form Layout</h3></a>
  * The Form control supports rendering using automatic and manual layout
@@ -167,17 +168,25 @@ import org.apache.commons.lang.StringUtils;
  * <tr>
  * <td>{@link #buttonAlign}</td> <td>button alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
+ * <td>{@link #buttonStyle}</td> <td>button &lt;td&gt; "style" attribute value</tt></td>
+ * </tr><tr>
  * <td>{@link #columns}</td> <td>number of form table columns, the default value number is 1</td>
  * </tr><tr>
  * <td>{@link #errorsAlign}</td> <td>validation error messages alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
  * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>["top", "middle", "bottom"]</tt></td>
  * </tr><tr>
+ * <td>{@link #errorsStyle}</td> <td>errors &lt;td&gt; "style" attribute value</tt></td>
+ * </tr><tr>
+ * <td>{@link #fieldStyle}</td> <td>field &lt;td&gt; "style" attribute value</tt></td>
+ * </tr><tr>
  * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
- * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
+ * <td>{@link #labelPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
  * </tr><tr>
- * <td>click/form.css</td> <td>form CSS styles, located under web root directory</td>
+ * <td>{@link #labelStyle}</td> <td>label &lt;td&gt; "style" attribute value</tt></td>
+ * </tr><tr>
+ * <td>click/control.css</td> <td>control CSS styles, automatically deployed to the <tt>click</tt> web directory</td>
  * </tr><tr>
  * <td>/click-control.properties</td> <td>form and field messages and HTML, located under classpath</td>
  * </tr>
@@ -415,6 +424,7 @@ public class Form implements Control {
     /** The label-required-suffix resource property. */
     protected static String LABEL_REQUIRED_SUFFIX = "";
 
+    /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
@@ -448,6 +458,9 @@ public class Form implements Control {
     /** The ordered list of button values. */
     protected final List buttonList = new ArrayList(5);
 
+    /** The button &lt;td&gt; "style" attribute value. */
+    protected String buttonStyle;
+
     /**
      * The number of form layout table columns, default value: <tt>1</tt>.
      * <p/>
@@ -477,11 +490,17 @@ public class Form implements Control {
      */
     protected String errorsPosition = POSITION_MIDDLE;
 
+    /** The error &lt;td&gt; "style" attribute value. */
+    protected String errorsStyle;
+
     /** The ordered list of field values, excluding buttons. */
     protected final List fieldList = new ArrayList();
 
     /** The map of fields keyed by field name. */
     protected final Map fields = new HashMap();
+
+    /** The field &lt;td&gt; "style" attribute value. */
+    protected String fieldStyle;
 
     /** The label align, default value is <tt>"left"</tt> */
     protected String labelAlign = ALIGN_LEFT;
@@ -497,6 +516,9 @@ public class Form implements Control {
 
     /** The field required label suffix. */
     protected String labelRequiredSuffix;
+
+    /** The label &lt;td&gt; "style" attribute value. */
+    protected String labelStyle;
 
     /** The listener target object. */
     protected Object listener;
@@ -734,6 +756,24 @@ public class Form implements Control {
     }
 
     /**
+     * Return the button &lt;td&gt; "style" attribute value.
+     *
+     * @return the button &lt;td&gt; "style" attribute value
+     */
+    public String getButtonStyle() {
+        return buttonStyle;
+    }
+
+    /**
+     * Set the button &lt;td&gt; "style" attribute value.
+     *
+     * @param value the button &lt;td&gt; "style" attribute value
+     */
+    public void setButtonStyle(String value) {
+        this.buttonStyle = value;
+    }
+
+    /**
      * Return true if the form is a disabled.
      *
      * @return true if the form is a disabled
@@ -773,6 +813,8 @@ public class Form implements Control {
 
     /**
      * @see Control#getContext()
+     *
+     * @return the Page request Context
      */
     public Context getContext() {
         return context;
@@ -780,6 +822,9 @@ public class Form implements Control {
 
     /**
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
         if (context == null) {
@@ -925,6 +970,24 @@ public class Form implements Control {
     }
 
     /**
+     * Return the error &lt;td&gt; "style" attribute value.
+     *
+     * @return the error &lt;td&gt; "style" attribute value
+     */
+    public String getErrorsStyle() {
+        return errorsStyle;
+    }
+
+    /**
+     * Set the errors &lt;td&gt; "style" attribute value.
+     *
+     * @param value the errors &lt;td&gt; "style" attribute value
+     */
+    public void setErrorsStyle(String value) {
+        this.errorsStyle = value;
+    }
+
+    /**
      * Return the named field if contained in the form, or null if not found.
      *
      * @param name the name of the field
@@ -980,11 +1043,32 @@ public class Form implements Control {
     }
 
     /**
+     * Return the field &lt;td&gt; "style" attribute value.
+     *
+     * @return the field &lt;td&gt; "style" attribute value
+     */
+    public String getFieldStyle() {
+        return fieldStyle;
+    }
+
+    /**
+     * Set the field &lt;td&gt; "style" attribute value.
+     *
+     * @param value the field &lt;td&gt; "style" attribute value
+     */
+    public void setFieldStyle(String value) {
+        this.fieldStyle = value;
+    }
+
+    /**
      * Return the HTML head import statements for the CSS stylesheet
      * (<tt>click/control.css</tt>) and JavaScript
      * (<tt>click/control.js</tt>) files.
      *
      * @see Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
      */
     public String getHtmlImports() {
         String[] args = { getContext().getRequest().getContextPath() };
@@ -1030,6 +1114,8 @@ public class Form implements Control {
      * Return the "id" attribute value if defined, or the Form name otherwise.
      *
      * @see net.sf.click.Control#getId()
+     *
+     * @return HTML element identifier attribute "id" value
      */
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
@@ -1128,15 +1214,36 @@ public class Form implements Control {
     }
 
     /**
+     * Return the label &lt;td&gt; "style" attribute value.
+     *
+     * @return the label &lt;td&gt; "style" attribute value
+     */
+    public String getLabelStyle() {
+        return labelStyle;
+    }
+
+    /**
+     * Set the label &lt;td&gt; "style" attribute value.
+     *
+     * @param value the label &lt;td&gt; "style" attribute value
+     */
+    public void setLabelStyle(String value) {
+        this.labelStyle = value;
+    }
+
+    /**
      * The callback listener will only be called during processing if the field
      * value is valid. If the field has validation errors the listener will not
      * be called.
      *
      * @see net.sf.click.Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
      */
-    public void setListener(Object target, String methodName) {
-        listener = target;
-        listenerMethod = methodName;
+    public void setListener(Object listener, String method) {
+        this.listener = listener;
+        this.listenerMethod = method;
     }
 
     /**
@@ -1161,6 +1268,8 @@ public class Form implements Control {
      * Return the name of the form.
      *
      * @see net.sf.click.Control#getName()
+     *
+     * @return the name of the control
      */
     public String getName() {
         return name;
@@ -1170,6 +1279,9 @@ public class Form implements Control {
      * Set the name of the form.
      *
      * @see net.sf.click.Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
      */
     public void setName(String name) {
         if (name == null) {
@@ -1187,6 +1299,8 @@ public class Form implements Control {
 
     /**
      * @see Control#getParentMessages()
+     *
+     * @return the localization <tt>Map</tt> of the Control's parent
      */
     public Map getParentMessages() {
         return parentMessages;
@@ -1194,6 +1308,8 @@ public class Form implements Control {
 
     /**
      * @see Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
@@ -1346,6 +1462,9 @@ public class Form implements Control {
      * This method does nothing.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }
@@ -1373,6 +1492,8 @@ public class Form implements Control {
      * @see Context#getMultiPartFormData()
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         HttpServletRequest request = getContext().getRequest();
@@ -1565,6 +1686,8 @@ public class Form implements Control {
      * rendered.
      *
      * @see Object#toString()
+     *
+     * @return the HTML string representation of the form
      */
     public String toString() {
         final boolean process =
@@ -1780,8 +1903,7 @@ public class Form implements Control {
                     buffer.append("</td>\n");
 
                 } else if (field instanceof Label) {
-                    buffer
-                            .append("<td class=\"fields\" colspan=\"2\" align=\"");
+                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getLabelAlign());
                     buffer.append("\"");
                     if (field.hasAttributes()) {
@@ -1794,11 +1916,14 @@ public class Form implements Control {
                 } else {
                     // Write out label
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
-                        buffer.append("<td class=\"fields\" align=\"");
-                        buffer.append(getLabelAlign());
-                        buffer.append("\">");
+                        buffer.append("<td class=\"fields\"");
+                        buffer.appendAttribute("align", getLabelAlign());
+                        buffer.appendAttribute("style", getLabelStyle());
+                        buffer.append(">");
                     } else {
-                        buffer.append("<td class=\"fields\" valign=\"top\">");
+                        buffer.append("<td class=\"fields\" valign=\"top\"");
+                        buffer.appendAttribute("style", getLabelStyle());
+                        buffer.append(">");
                     }
 
                     if (field.isRequired()) {
@@ -1820,7 +1945,9 @@ public class Form implements Control {
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
                         buffer.append("</td>\n");
-                        buffer.append("<td align=\"left\">");
+                        buffer.append("<td align=\"left\"");
+                        buffer.appendAttribute("style", getFieldStyle());
+                        buffer.append(">");
                     } else {
                         buffer.append("<br>");
                     }
@@ -1886,9 +2013,10 @@ public class Form implements Control {
                     buffer.append(ERRORS_PREFIX);
                 } else {
                     buffer.append("<tr class=\"errors\">");
-                    buffer.append("<td class=\"errors\" align=\"");
-                    buffer.append(getErrorsAlign());
-                    buffer.append("\">\n");
+                    buffer.append("<td class=\"errors\"");
+                    buffer.appendAttribute("align", getErrorsAlign());
+                    buffer.appendAttribute("style", getErrorsStyle());
+                    buffer.append(">\n");
                 }
                 buffer.append("<span class=\"error\">");
                 buffer.append(getError());
@@ -1913,9 +2041,10 @@ public class Form implements Control {
                     buffer.append(ERRORS_PREFIX);
                 } else {
                     buffer.append("<tr class=\"errors\">");
-                    buffer.append("<td class=\"errors\" align=\"");
-                    buffer.append(getErrorsAlign());
-                    buffer.append("\">");
+                    buffer.append("<td class=\"errors\"");
+                    buffer.appendAttribute("align", getErrorsAlign());
+                    buffer.appendAttribute("style", getErrorsStyle());
+                    buffer.append(">");
                 }
 
                 buffer.append("<a class=\"error\"");
@@ -1954,13 +2083,15 @@ public class Form implements Control {
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
         if (!buttonList.isEmpty()) {
-            buffer.append("<tr><td align=\"");
-            buffer.append(getButtonAlign());
-            buffer.append("\">\n");
+            buffer.append("<tr><td");
+            buffer.appendAttribute("align", getButtonAlign());
+            buffer.append(">\n");
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
             buffer.append("-buttons\">\n");
-            buffer.append("<tr class=\"buttons\"><td class=\"buttons\">");
+            buffer.append("<tr class=\"buttons\"><td class=\"buttons\"");
+            buffer.appendAttribute("style", getButtonStyle());
+            buffer.closeTag();
             for (int i = 0, size = buttonList.size(); i < size; i++) {
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);

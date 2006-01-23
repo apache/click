@@ -28,6 +28,9 @@ public class FieldSetDemo extends BorderedPage {
     private Form form = new Form("form");
 
     public FieldSetDemo() {
+        form.setLabelAlign(Form.ALIGN_RIGHT);
+        form.setFieldStyle("width:22em;");
+
         // Delivery fieldset
 
         FieldSet deliveryFieldSet = new FieldSet("deliveryDetails");
