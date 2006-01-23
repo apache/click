@@ -235,6 +235,9 @@ public class FieldSet extends Field {
      * in any contained fields.
      *
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
         super.setContext(context);
@@ -392,6 +395,9 @@ public class FieldSet extends Field {
      * <tt>UnsupportedOperationException</tt>.
      *
      * @see Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
         throw new UnsupportedOperationException("setListener not supported");
@@ -399,6 +405,8 @@ public class FieldSet extends Field {
 
     /**
      * @see Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
@@ -412,6 +420,8 @@ public class FieldSet extends Field {
      * Return true if all contained fields are valid.
      *
      * @see Field#isValid()
+     *
+     * @return true if all contained fields are valid
      */
     public boolean isValid() {
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
@@ -450,6 +460,8 @@ public class FieldSet extends Field {
      * Return the HTML string representation of the fieldset.
      *
      * @see Object#toString()
+     *
+     * @return the HTML string representation of the fieldset
      */
     public String toString() {
         // Estimate the size of the string buffer
@@ -537,11 +549,14 @@ public class FieldSet extends Field {
                 } else {
                     // Write out label
                     if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
-                        buffer.append("<td class=\"fields\" align=\"");
-                        buffer.append(getForm().getLabelAlign());
-                        buffer.append("\">");
+                        buffer.append("<td class=\"fields\"");
+                        buffer.appendAttribute("align", form.getLabelAlign());
+                        buffer.appendAttribute("style", form.getLabelStyle());
+                        buffer.append(">");
                     } else {
-                        buffer.append("<td class=\"fields\" valign=\"top\">");
+                        buffer.append("<td class=\"fields\" valign=\"top\"");
+                        buffer.appendAttribute("style", form.getLabelStyle());
+                        buffer.append(">");
                     }
 
                     if (field.isRequired()) {
@@ -563,7 +578,9 @@ public class FieldSet extends Field {
 
                     if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
                         buffer.append("</td>\n");
-                        buffer.append("<td align=\"left\">");
+                        buffer.append("<td align=\"left\"");
+                        buffer.appendAttribute("style", form.getFieldStyle());
+                        buffer.append(">");
                     } else {
                         buffer.append("<br/>");
                     }
