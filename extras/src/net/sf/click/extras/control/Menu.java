@@ -92,11 +92,11 @@ public class Menu implements Control {
     private static final Object loadLock = new Object();
 
     /**
-     * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>"
+     * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
      */
     protected static final String CONFIG_FILE = "/WEB-INF/menu.xml";
 
-    /** The cached root Menu as defined in <tt>menu.xml</tt> */
+    /** The cached root Menu as defined in <tt>menu.xml</tt>. */
     protected static Menu rootMenu;
 
     // ----------------------------------------------------- Instance Variables
@@ -233,6 +233,8 @@ public class Menu implements Control {
 
     /**
      * @see Control#getContext()
+     *
+     * @return the Page request Context
      */
     public Context getContext() {
         return context;
@@ -243,6 +245,9 @@ public class Menu implements Control {
      * this method will load the root Menu's children elements.
      *
      * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
         if (context == null) {
@@ -385,6 +390,8 @@ public class Menu implements Control {
      * This method returns null.
      *
      * @see Control#getHtmlImports()
+     *
+     * @return null
      */
     public String getHtmlImports() {
         return null;
@@ -394,6 +401,8 @@ public class Menu implements Control {
      * This method returns null.
      *
      * @see Control#getId()
+     *
+     * @return null
      */
     public String getId() {
         return null;
@@ -403,12 +412,17 @@ public class Menu implements Control {
      * This method does nothing.
      *
      * @see Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
     }
 
     /**
      * @see Control#getName()
+     *
+     * @return the name of the control
      */
     public String getName() {
         return name;
@@ -416,6 +430,8 @@ public class Menu implements Control {
 
     /**
      * @see Control#setName(String)
+     *
+     * @param name of the control
      */
     public void setName(String name) {
         this.name = name;
@@ -425,6 +441,8 @@ public class Menu implements Control {
      * This method returns null.
      *
      * @see Control#getParentMessages()
+     *
+     * @return null
      */
     public Map getParentMessages() {
         return null;
@@ -434,6 +452,8 @@ public class Menu implements Control {
      * This method does nothing.
      *
      * @see Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
     }
@@ -444,6 +464,9 @@ public class Menu implements Control {
      * This method does nothing.
      *
      * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }
@@ -452,13 +475,19 @@ public class Menu implements Control {
      * This method performs no processing and returns true.
      *
      * @see Control#onProcess()
+     *
+     * @return true
      */
     public boolean onProcess() {
         return true;
     }
 
     /**
+     * Return a debug string representation of the menu.
+     *
      * @see Object#toString()
+     *
+     * @return a debug string representation of the menu
      */
     public String toString() {
         return getClass().getName() +

@@ -194,6 +194,7 @@ public class RegexField extends TextField {
      *
      * @see net.sf.click.Control#onProcess()
      *
+     * @return true to continue Page event processing or false otherwise
      * @throws PatternSyntaxException if the pattern has a syntax error
      */
     public boolean onProcess() {

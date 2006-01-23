@@ -126,6 +126,11 @@ public class TabbedPanel extends BasicPanel {
 
     // ----------------------------------------------------------- Constructors
 
+    /**
+     * Create a new TabbedPanel with the given id.
+     *
+     * @param id the tabbed panel id
+     */
     public TabbedPanel(String id) {
         super(id);
         addModel("_tp_id", id);
@@ -152,6 +157,8 @@ public class TabbedPanel extends BasicPanel {
      * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
+        // TODO: this method is valid if we add logic to set the first panel as active
+
         String msg =
             "TabbedPanel should have panels added ONLY via " +
              "addPanel(panel, boolean) to ensure the active panel " +
@@ -169,8 +176,8 @@ public class TabbedPanel extends BasicPanel {
      * (handleTabSwitch) noted in this class that will handle the cycling
      * through the various panels according to the clicked link.
      *
-     * @param panel
-     * @param isActivePanel
+     * @param panel the panel to add
+     * @param isActivePanel make the added panel active
      */
     public void addPanel(Panel panel, boolean isActivePanel) {
         super.addPanel(panel);
@@ -214,7 +221,7 @@ public class TabbedPanel extends BasicPanel {
      * } </pre>
      *
      * @param listener the listener object with the named method to invoke
-     * @param method   the name of the method to invoke
+     * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
         this.listener = listener;
@@ -223,6 +230,9 @@ public class TabbedPanel extends BasicPanel {
 
     /**
      * @see net.sf.click.Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
         super.setContext(context);
@@ -269,7 +279,7 @@ public class TabbedPanel extends BasicPanel {
      * Removes the current 'active panel' from the model, and adds the passed
      * panel as the new active panel.
      *
-     * @param panel
+     * @param panel the active panel to set
      */
     protected void setActivePanel(Panel panel) {
         // remove the existing 'active panel'
@@ -283,6 +293,9 @@ public class TabbedPanel extends BasicPanel {
      * directory when the application is initialized.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile
@@ -290,9 +303,11 @@ public class TabbedPanel extends BasicPanel {
     }
 
     /**
-     * Overridden toString to add the path '/click/' to the beginning of the
-     * template name, as the template file will be copied to this directory
-     * upon first time start of ClickServlet
+     * Return the default template path.
+     * <p/>
+     * Overridden toString to add the path <tt>'/click/'</tt> to the beginning
+     * of the template name, as the template file will be copied to this
+     * directory upon first time start of ClickServlet.
      *
      * @return the default template path and name of '/click/ListPanel.htm'
      */

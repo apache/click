@@ -19,7 +19,6 @@ import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.TextField;
 
-
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
  *
@@ -222,6 +221,8 @@ public class IntegerField extends TextField {
      * error occured.
      *
      * @see Field#getValueObject()
+     *
+     * @return the Integer object representation of the Field value
      */
     public Object getValueObject() {
         return getInteger();
@@ -231,6 +232,8 @@ public class IntegerField extends TextField {
      * Set the integer value of the field using the given object.
      *
      * @see Field#setValueObject(Object)
+     *
+     * @param object the object value to set
      */
     public void setValueObject(Object object) {
         if (object != null) {
@@ -256,6 +259,8 @@ public class IntegerField extends TextField {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();

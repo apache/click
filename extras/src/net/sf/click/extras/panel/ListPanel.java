@@ -64,7 +64,7 @@ public class ListPanel extends BasicPanel {
      * that the list itself may be stylized with CSS.  This id will be made
      * available in the internal name "_lp_id".
      *
-     * @param id
+     * @param id the HTML id attribute value
      */
     public ListPanel(String id) {
         super(id);
@@ -103,6 +103,9 @@ public class ListPanel extends BasicPanel {
      * directory when the application is initialized.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile
@@ -111,9 +114,11 @@ public class ListPanel extends BasicPanel {
     }
 
     /**
-     * Overridden toString to add the path '/click/' to the beginning of the
-     * template name, as the template file will be copied to this directory
-     * upon first time start of ClickServlet
+     * Return the default template path.
+     * <p/>
+     * Overridden toString to add the path <tt>'/click/'</tt> to the beginning
+     * of the template name, as the template file will be copied to this
+     * directory upon first time start of ClickServlet.
      *
      * @return the default template path and name of '/click/ListPanel.htm'
      */

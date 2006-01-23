@@ -27,7 +27,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
  * content. The content will only be compressed if it is bigger than a
@@ -36,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
  * To configure your application to GZIP compress HTML content include the
  * click-extras.jar in you application and add the following filter elements to
  * your <tt>/WEB-INF/web.xml</tt> file:
- * <pre class="codeConfig"/>
+ * <pre class="codeConfig">
  * &lt;filter&gt;
  *  &lt;filter-name&gt;<span class="blue">compression-filter</span>&lt;/filter-name&gt;
  *  &lt;filter-class&gt;<span class="red">net.sf.click.extras.filter.CompressionFilter</span>&lt;/filter-class&gt;
@@ -67,14 +66,10 @@ public class CompressionFilter implements Filter {
      */
     private FilterConfig config = null;
 
-    /**
-     * Minimal reasonable threshold
-     */
+    /** Minimal reasonable threshold. */
     private int minThreshold = 128;
 
-    /**
-     * The threshold number to compress
-     */
+    /** The threshold number to compress. */
     protected int compressionThreshold;
 
     /**
@@ -124,12 +119,16 @@ public class CompressionFilter implements Filter {
      * CompressionServletResponseWrapper object which compresses the content and
      * modifies the header if the content length is big enough.
      * It then invokes the next entity in the chain using the FilterChain object
-     * (<code>chain.doFilter()</code>), <br>
-     **/
-
-    public void doFilter ( ServletRequest request, ServletResponse response,
-                        FilterChain chain ) throws IOException, ServletException {
-
+     * (<code>chain.doFilter()</code>)
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param chain the filter chain
+     * @throws IOException if an I/O error occurs
+     * @throws ServletException if a servlet error occurs
+     */
+    public void doFilter(ServletRequest request, ServletResponse response,
+            FilterChain chain) throws IOException, ServletException {
 
         if (compressionThreshold == 0) {
             chain.doFilter(request, response);
@@ -177,18 +176,19 @@ public class CompressionFilter implements Filter {
     }
 
     /**
-     * Set filter config
-     * This function is equivalent to init. Required by Weblogic 6.1
+     * Set filter configuration. This function is equivalent to init and is
+     * required by Weblogic 6.1.
      *
-     * @param filterConfig The filter configuration object
+     * @param filterConfig the filter configuration object
      */
     public void setFilterConfig(FilterConfig filterConfig) {
         init(filterConfig);
     }
 
     /**
-     * Return filter config
-     * Required by Weblogic 6.1
+     * Return filter config. This is required by Weblogic 6.1
+     *
+     * @return the filter configuration
      */
     public FilterConfig getFilterConfig() {
         return config;

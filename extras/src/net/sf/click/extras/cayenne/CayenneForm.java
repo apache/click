@@ -326,6 +326,8 @@ public class CayenneForm extends Form {
      * invokes the <tt>super.onProcess()</tt> method.
      *
      * @see Form#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         applyMetaData();
@@ -337,6 +339,8 @@ public class CayenneForm extends Form {
      * invokes the <tt>super.toString()</tt> method.
      *
      * @see Form#toString()
+     *
+     * @return the HTML string representation of the form
      */
     public String toString() {
         applyMetaData();
@@ -455,8 +459,12 @@ public class CayenneForm extends Form {
      * <tt>RelationSelect</tt> Fields.
      *
      * @param dataObject to copy relationships to
+     * @throws ClassNotFoundException if the foreign key class could not be
+     * initialized
      */
-    protected void copyRelationsTo(DataObject dataObject) throws Exception {
+    protected void copyRelationsTo(DataObject dataObject)
+        throws ClassNotFoundException {
+
         if (dataObject == null) {
             throw new IllegalArgumentException("Null dataObject parameter");
         }
@@ -480,7 +488,7 @@ public class CayenneForm extends Form {
                 String propName = (String) hiddenPropField.getValueObject();
                 Field fkField = (Field)
                     getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
-System.out.println(fkField + " " + StringUtils.substringAfter(key, FK_PREFIX));
+
                 log("FKField: " + fkField.getName());
 
                 String fkValue = fkField.getValue();

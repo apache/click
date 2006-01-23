@@ -206,6 +206,8 @@ public class DoubleField extends TextField {
      * error occured.
      *
      * @see Field#getValueObject()
+     *
+     * @return the Double object representation of the Field value
      */
     public Object getValueObject() {
         return getDouble();
@@ -215,6 +217,8 @@ public class DoubleField extends TextField {
      * Set the double value of the field using the given object.
      *
      * @see Field#setValueObject(Object)
+     *
+     * @param object the object value to set
      */
     public void setValueObject(Object object) {
         if (object != null) {
@@ -240,6 +244,8 @@ public class DoubleField extends TextField {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();
