@@ -117,7 +117,7 @@ public class SpringClickServlet extends ClickServlet {
 
     /**
      * The path to the Spring XML appliation context definition file:
-     * &nbsp; <tt>"spring-path"</tt>
+     * &nbsp; <tt>"spring-path"</tt>.
      */
     public static final String SPRING_PATH = "spring-path";
 
@@ -131,6 +131,8 @@ public class SpringClickServlet extends ClickServlet {
      * named <tt>"spring-path"</tt>.
      *
      * @see ClickServlet#init()
+     *
+     * @throws ServletException if the click app could not be initialized
      */
     public void init() throws ServletException {
         super.init();
@@ -152,6 +154,11 @@ public class SpringClickServlet extends ClickServlet {
      * this method will set the application context in the newly created page.
      *
      * @see ClickServlet#newPageInstance(String, Class)
+     *
+     * @param path the request page path
+     * @param pageClass the page Class the request is mapped to
+     * @return a new Page object
+     * @throws Exception if an error occurs creating the Page
      */
     protected Page newPageInstance(String path, Class pageClass) throws Exception {
         Page page = null;

@@ -130,7 +130,7 @@ public class SessionContext {
      * @param clazz a persistent class
      * @param id an identifier
      * @return a persistent instance or null
-     * @throws HibernateException
+     * @throws HibernateException if a Hibernate error occurs
      */
     public static Object get(Class clazz, Serializable id)
         throws HibernateException {
@@ -149,7 +149,7 @@ public class SessionContext {
      * <tt>Session</tt> method.
      *
      * @param object the instance to be removed
-     * @throws HibernateException
+     * @throws HibernateException if a Hibernate error occurs
      */
     public static void delete(Object object) throws HibernateException {
         getSession().delete(object);

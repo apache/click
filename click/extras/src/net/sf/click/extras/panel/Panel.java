@@ -63,10 +63,7 @@ public interface Panel extends Control {
      * The "context name" that this Panel is associated with.  This name will be
      * used to uniquely identify this panel in the Page's model context.
      *
-     * The  setter is not part of the interface, as this name can be specified
-     * by multiple means: a constructor, a setter, or inferred from any number
-     * of other methods (getTemplate(), getId(), getLabel(), etc.).  Thus the
-     * implementation is left up to the Panel creator.
+     * @see Control#getName()
      *
      * @return the name of this panel, to be used to uniquely identify it in the
      * model context
@@ -83,10 +80,7 @@ public interface Panel extends Control {
      *      ## content here
      *  &lt;/div&gt; </pre>
      *
-     * The setter is not part of the interface, as this id can be specified by
-     * multiple means: a constructor, a setter, or inferred from any number of
-     * other methods (getTemplate(), getName(), getLabel(), etc.).  Thus the
-     * implementation is left up to the Panel creator.
+     * @see Control#getId()
      *
      * @return the id of this panel, to be used to uniquely identify it in the
      * HTML page

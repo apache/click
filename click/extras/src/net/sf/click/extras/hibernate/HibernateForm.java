@@ -297,7 +297,7 @@ public class HibernateForm extends Form {
      * @return true if the object was saved or false otherwise
      * @throws HibernateException if a persistence error occured
      */
-    public boolean saveChanges() {
+    public boolean saveChanges() throws HibernateException {
         Object valueObject = getValueObject();
 
         Transaction transaction = null;
@@ -328,6 +328,8 @@ public class HibernateForm extends Form {
      * invokes the <tt>super.onProcess()</tt> method.
      *
      * @see Form#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         applyMetaData();
@@ -339,6 +341,8 @@ public class HibernateForm extends Form {
      * invokes the <tt>super.toString()</tt> method.
      *
      * @see Form#toString()
+     *
+     * @return the HTML string representation of the form
      */
     public String toString() {
         applyMetaData();
@@ -353,7 +357,7 @@ public class HibernateForm extends Form {
      * <p/>
      * The field validation attributes include:
      * <ul>
-     * <li>required - is a mandatory field and cannot be null</tt>
+     * <li>required - is a mandatory field and cannot be null</li>
      * </ul>
      */
     protected void applyMetaData() {

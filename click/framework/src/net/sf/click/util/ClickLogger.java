@@ -335,7 +335,7 @@ public class ClickLogger implements LogChute {
     }
 
     /**
-     * Return true if [info] level logging is enabled
+     * Return true if [info] level logging is enabled.
      *
      * @return true if [info] level logging is enabled
      */
@@ -344,7 +344,7 @@ public class ClickLogger implements LogChute {
     }
 
     /**
-     * Return true if [trace] level logging is enabled
+     * Return true if [trace] level logging is enabled.
      *
      * @return true if [trace] level logging is enabled
      */

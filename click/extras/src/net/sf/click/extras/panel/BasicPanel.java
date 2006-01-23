@@ -60,7 +60,7 @@ public class BasicPanel implements Panel {
     /** A temporary storage for model objects until the Page is set. */
     protected Map model = new HashMap();
 
-    /** The "name" of this panel (context key) */
+    /** The "name" of this panel (context key). */
     protected String name;
 
     /** The page this panel is associated with. */
@@ -158,6 +158,7 @@ public class BasicPanel implements Panel {
      * @throws IllegalArgumentException if the control is null
      */
     protected void addControl(Control control) {
+        // TODO: add null check
         if (getPage() != null) {
             getPage().addControl(control);
         } else {
@@ -173,8 +174,7 @@ public class BasicPanel implements Panel {
      * @param name  the key name of the object to add
      * @param value the object to add
      * @throws IllegalArgumentException if the name or value parameters are
-     *                                  null, or if there is already a named
-     *                                  value in the model
+     *      null, or if there is already a named value in the model
      */
     protected void addModel(String name, Object value) {
         if (getPage() != null) {
@@ -189,7 +189,7 @@ public class BasicPanel implements Panel {
      * Allows removal of a model object in the Pages or panel model map,
      * depending on whether the page has been set yet or not for this Panel.
      *
-     * @param key
+     * @param key the key of the page model value to remove
      */
     protected void removeModel(String key) {
         if (getPage() != null) {
@@ -201,6 +201,8 @@ public class BasicPanel implements Panel {
 
     /**
      * @see net.sf.click.Control#getContext()
+     *
+     * @return the Page request Context
      */
     public Context getContext() {
         return context;
@@ -208,13 +210,20 @@ public class BasicPanel implements Panel {
 
     /**
      * @see net.sf.click.Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
+        // TODO: throw exception if null
         this.context = context;
     }
 
     /**
      * @see Panel#getName()
+     *
+     * @return the name of this panel, to be used to uniquely identify it in the
+     * model context
      */
     public String getName() {
         return name;
@@ -224,7 +233,9 @@ public class BasicPanel implements Panel {
      * Set the name for this panel.  This is used to uniquely identify the panel
      * in the model context.
      *
-     * @param name
+     * @see Control#setName()
+     *
+     * @param name the name of this control
      */
     public void setName(String name) {
         this.name = name;
@@ -244,6 +255,8 @@ public class BasicPanel implements Panel {
      * sub-panels pages as well
      *
      * @see Panel#setPage(Page)
+     *
+     * @param page the page associated with this panel
      */
     public void setPage(Page page) {
         this.page = page;
@@ -268,6 +281,8 @@ public class BasicPanel implements Panel {
 
     /**
      * @see net.sf.click.Control#getId()
+     *
+     * @return HTML element identifier attribute "id" value
      */
     public String getId() {
         return id;
@@ -287,6 +302,8 @@ public class BasicPanel implements Panel {
      * This method returns null.
      *
      * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return null
      */
     public String getHtmlImports() {
         return null;
@@ -294,13 +311,18 @@ public class BasicPanel implements Panel {
 
     /**
      * @see Panel#getLabel()
+     *
+     * @return the internationalized label associated with this control
      */
     public String getLabel() {
+        // TODO: add localization logic, as done with fields
         return label == null ? name : label;
     }
 
     /**
      * @see Panel#setLabel(String)
+     *
+     * @param label the internationalized label for this panel
      */
     public void setLabel(String label) {
         this.label = label;
@@ -310,6 +332,9 @@ public class BasicPanel implements Panel {
      * This method does nothing.
      *
      * @see Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
     }
@@ -329,15 +354,19 @@ public class BasicPanel implements Panel {
      * @return the list of sub-panels, if any
      */
     public List getPanels() {
+        // TODO: lazy load this
         return panels;
     }
 
     /**
      * This method returns null.
      *
-     * @see net.sf.click.Control#setParentMessages(Map)
+     * @see net.sf.click.Control#getParentMessages()
+     *
+     * @return null
      */
     public Map getParentMessages() {
+        // TODO: add support for parent messages
         return null;
     }
 
@@ -345,8 +374,11 @@ public class BasicPanel implements Panel {
      * This method does nothing.
      *
      * @see net.sf.click.Control#setParentMessages(Map)
+     *
+     * @param messages the parent's the localized messages <tt>Map</tt>
      */
     public void setParentMessages(Map messages) {
+        // TODO: add support for parent messages
     }
 
     /**
@@ -354,6 +386,8 @@ public class BasicPanel implements Panel {
      * plus the default extension (".htm") will be used.
      *
      * @see Panel#getTemplate()
+     *
+     * @return the path/name of the template to use when rendering this panel
      */
     public String getTemplate() {
         return template;
@@ -362,7 +396,7 @@ public class BasicPanel implements Panel {
     /**
      * Set the Velocity template to be used for this Panel.
      *
-     * @param template
+     * @param template the Velocity template to render
      */
     public void setTemplate(String template) {
         this.template = template;
@@ -374,6 +408,9 @@ public class BasicPanel implements Panel {
      * This method does nothing and can be overridden by subclasses.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
     }
@@ -382,16 +419,20 @@ public class BasicPanel implements Panel {
      * This method returns true.
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true
      */
     public boolean onProcess() {
         return true;
     }
 
     /**
+     * Return the template path.
+     * <p/>
      * Overridden toString to return the name of the template associated with
-     * this panel.
+     * this panel, see {@link #getTemplate()}.
      *
-     * @return the template associated with this panel-see {@link #getTemplate()}
+     * @return the template associated with this panel
      */
     public String toString() {
         // TODO: Question: Should this not be done in favor of rendering the panel

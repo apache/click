@@ -89,11 +89,13 @@ public class DateField extends TextField {
 
     private static final long serialVersionUID = 3379108282465075759L;
 
+    /** The HTML import statements. */
     protected static final String HTML_IMPORTS =
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n" +
         "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
 
+    /** The Calendar resource file names. */
     protected static final String[] CALENDAR_RESOURCES =
         { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
           "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
@@ -271,6 +273,9 @@ public class DateField extends TextField {
      * includes.
      *
      * @see net.sf.click.control.Field#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
      */
     public String getHtmlImports() {
         String[] args = {
@@ -284,6 +289,9 @@ public class DateField extends TextField {
 
     /**
      * @see net.sf.click.control.Field#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
      */
     public void setName(String name) {
         super.setName(name);
@@ -364,6 +372,8 @@ public class DateField extends TextField {
      * error occured.
      *
      * @see net.sf.click.control.Field#getValueObject()
+     *
+     * @return the Date object representation of the Field value
      */
     public Object getValueObject() {
         return getDate();
@@ -373,6 +383,8 @@ public class DateField extends TextField {
      * Set the date value of the field using the given object.
      *
      * @see net.sf.click.control.Field#setValueObject(Object)
+     *
+     * @param object the object value to set
      */
     public void setValueObject(Object object) {
         if (object != null) {
@@ -394,6 +406,9 @@ public class DateField extends TextField {
      * directory <tt>click/calendar</tt>.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         String targetDir = "click" + File.separator + "calendar";
@@ -426,6 +441,8 @@ public class DateField extends TextField {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         if (formatPattern == null) {
@@ -485,6 +502,8 @@ public class DateField extends TextField {
      * Return the HTML rendered Date Field string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered Date Field string
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();

@@ -104,19 +104,19 @@ public class CreditCardField extends TextField {
 
     private static final long serialVersionUID = -4591403023871778803L;
 
-    /** The Visa type credit card: "VISA" */
+    /** The Visa type credit card: "VISA". */
     public static final String VISA = "VISA";
 
-    /** The MasterCard type credit card: "MASTER" */
+    /** The MasterCard type credit card: "MASTER". */
     public static final String MASTER = "MASTER";
 
-    /** The American Express type credit card: "AMEX" */
+    /** The American Express type credit card: "AMEX". */
     public static final String AMEX = "AMEX";
 
-    /** The Diners Club type credit card: "DINERS" */
+    /** The Diners Club type credit card: "DINERS". */
     public static final String DINERS = "DINERS";
 
-    /** The Discovery type credit card: "DISCOVER" */
+    /** The Discovery type credit card: "DISCOVER". */
     public static final String DISCOVER = "DISCOVER";
 
     /** The statically initialized card type options list. */
@@ -207,7 +207,7 @@ public class CreditCardField extends TextField {
 
     /**
      * Return the selected Credit Card type: &nbsp;
-     * <tt>[ "VISA" | "MASTER" | "AMEX" | "DINERS" | "DISCOVER" ]</tt>
+     * <tt>[ "VISA" | "MASTER" | "AMEX" | "DINERS" | "DISCOVER" ]</tt>.
      *
      * @return the selected Credit Card type
      */
@@ -247,6 +247,8 @@ public class CreditCardField extends TextField {
      * </ul></blockquote>
      *
      * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -337,6 +339,8 @@ public class CreditCardField extends TextField {
      * Return the HTML rendered CreditCardField string.
      *
      * @see Object#toString()
+     *
+     * @return the HTML rendered CreditCardField string
      */
     public String toString() {
         StringBuffer buffer = new StringBuffer(400);

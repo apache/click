@@ -62,6 +62,9 @@ public class SessionFilter implements Filter {
      * Initialize the Hibernate Configuration and SessionFactory.
      *
      * @see Filter#init(FilterConfig)
+     *
+     * @param filterConfig the filter configuration
+     * @throws ServletException if an initialization error occurs
      */
     public void init(FilterConfig filterConfig) throws ServletException {
         // Load the SessionContext class initializing the SessionFactory
@@ -83,6 +86,12 @@ public class SessionFilter implements Filter {
      * Close any user defined sessions if present.
      *
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param chain the filter chain
+     * @throws IOException if an I/O error occurs
+     * @throws ServletException if a servlet error occurs
      */
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
