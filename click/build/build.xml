@@ -515,7 +515,7 @@
    </target>
    
    <target name="test-extras">
-      <javac srcdir="extras/src" destdir="extras/classes" debug="true">
+      <javac srcdir="extras/src;extras/test" destdir="extras/classes" debug="true">
          <classpath refid="classpath.extras"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">
