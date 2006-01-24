@@ -223,7 +223,9 @@ public class CayenneForm extends Form {
      */
     public void setDataObject(DataObject dataObject) {
         if (dataObject != null) {
-            if (dataObject.getPersistenceState() != PersistenceState.TRANSIENT) {
+            if (dataObject.getPersistenceState() !=
+                PersistenceState.TRANSIENT) {
+
                 int pk = DataObjectUtils.intPKForObject(dataObject);
                 pkField.setValueObject(new Integer(pk));
             }
@@ -270,7 +272,8 @@ public class CayenneForm extends Form {
         add(fkField);
 
         HiddenField propNameField =
-            new HiddenField(PROP_PREFIX + propertyField.getName(), String.class);
+            new HiddenField(PROP_PREFIX + propertyField.getName(),
+                            String.class);
 
         propNameField.setValueObject(propertyName);
         add(propNameField);
@@ -355,8 +358,8 @@ public class CayenneForm extends Form {
      * <p/>
      * The field validation attributes include:
      * <ul>
-     * <li>required - is a mandatory field and cannot be null</tt>
-     * <li>maxLength - the maximum length of the field</tt>
+     * <li>required - is a mandatory field and cannot be null</li>
+     * <li>maxLength - the maximum length of the field</li>
      * </ul>
      */
     protected void applyMetaData() {

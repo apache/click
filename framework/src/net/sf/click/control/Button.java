@@ -120,7 +120,7 @@ public class Button extends Field {
     }
 
     /**
-     * Return the input type: '<tt>button</tt>'
+     * Return the input type: '<tt>button</tt>'.
      *
      * @return the input type: '<tt>button</tt>'
      */

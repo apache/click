@@ -241,7 +241,8 @@ public class Select extends Field {
      */
     public void add(Option option) {
         if (option == null) {
-            throw new IllegalArgumentException("option parameter cannot be null");
+            String msg = "option parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         getOptionList().add(option);
         if (getOptionList().size() == 1) {
@@ -257,7 +258,8 @@ public class Select extends Field {
      */
     public void add(OptionGroup optionGroup) {
         if (optionGroup == null) {
-            throw new IllegalArgumentException("optionGroup parameter cannot be null");
+            String msg = "optionGroup parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         getOptionList().add(optionGroup);
     }
@@ -272,7 +274,8 @@ public class Select extends Field {
      */
     public void add(String value) {
         if (value == null) {
-            throw new IllegalArgumentException("value parameter cannot be null");
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         getOptionList().add(new Option(value));
         if (getOptionList().size() == 1) {
@@ -288,7 +291,8 @@ public class Select extends Field {
      */
     public void addAll(Collection options) {
         if (options == null) {
-            throw new IllegalArgumentException("options parameter cannot be null");
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         getOptionList().addAll(options);
         setInitialValue();
@@ -302,7 +306,8 @@ public class Select extends Field {
      */
     public void addAll(List options) {
         if (options == null) {
-            throw new IllegalArgumentException("options parameter cannot be null");
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         for (int i = 0, size = options.size(); i < size; i++) {
             getOptionList().add(options.get(i));
@@ -321,7 +326,8 @@ public class Select extends Field {
      */
     public void addAll(String[] options) {
         if (options == null) {
-            throw new IllegalArgumentException("options parameter cannot be null");
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         for (int i = 0; i < options.length; i++) {
             String value = options[i];
@@ -467,7 +473,9 @@ public class Select extends Field {
             // Load the selected items.
             multipleValues = new ArrayList();
             // TODO: resolve multiple values when multipart/form-data
-            String[] values = getContext().getRequest().getParameterValues(getName());
+            String[] values =
+                getContext().getRequest().getParameterValues(getName());
+
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
                     multipleValues.add(values[i]);

@@ -16,7 +16,6 @@
 package net.sf.click.extras.control;
 
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import net.sf.click.control.TextField;
 
@@ -195,7 +194,8 @@ public class RegexField extends TextField {
      * @see net.sf.click.Control#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
-     * @throws PatternSyntaxException if the pattern has a syntax error
+     * @throws java.util.regex.PatternSyntaxException if the pattern has a
+     *      syntax error
      */
     public boolean onProcess() {
         value = getRequestValue();
@@ -207,13 +207,17 @@ public class RegexField extends TextField {
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] { getErrorLabel(), new Integer(getMinLength()) };
+                Object[] args = new Object[] {
+                    getErrorLabel(), new Integer(getMinLength())
+                };
                 setError(getMessage("field-minlength-error", args));
                 return true;
             }
 
             if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] { getErrorLabel(), new Integer(getMaxLength()) };
+                Object[] args = new Object[] {
+                    getErrorLabel(), new Integer(getMaxLength())
+                };
                 setError(getMessage("field-maxlength-error", args));
                 return true;
             }

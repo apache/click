@@ -86,7 +86,7 @@ public class ErrorReport {
     /** The name of the error source. */
     protected final String sourceName;
 
-    /** The error souce LineNumberReader */
+    /** The error souce LineNumberReader. */
     protected LineNumberReader sourceReader;
 
     /**
@@ -98,8 +98,9 @@ public class ErrorReport {
      * @param request the page request
      * @param servletContext the servlet context
      */
-    public ErrorReport(Throwable error, Class pageClass, boolean isProductionMode,
-            HttpServletRequest request, ServletContext servletContext) {
+    public ErrorReport(Throwable error, Class pageClass,
+            boolean isProductionMode, HttpServletRequest request,
+            ServletContext servletContext) {
 
         this.error = error;
         this.pageClass = pageClass;
@@ -128,7 +129,8 @@ public class ErrorReport {
             PrintWriter pw = new PrintWriter(sw);
             getCause().printStackTrace(pw);
 
-            StringTokenizer tokenizer = new StringTokenizer(sw.toString(), "\n");
+            StringTokenizer tokenizer =
+                new StringTokenizer(sw.toString(), "\n");
 
             try {
                 tokenizer.nextToken();
@@ -148,7 +150,8 @@ public class ErrorReport {
 
                     this.lineNumber = Integer.parseInt(linenumber);
 
-                    String filename = "/" + classname.replace('.', '/') + ".java";
+                    String filename =
+                        "/" + classname.replace('.', '/') + ".java";
 
                     sourceReader = getJavaSourceReader(filename);
                 }
@@ -406,7 +409,7 @@ public class ErrorReport {
     }
 
     /**
-     * Return the error source name
+     * Return the error source name.
      *
      * @return the error source name
      */
@@ -416,7 +419,7 @@ public class ErrorReport {
 
     /**
      * Return a LineNumberReader for the error source file, or null if not
-     * defined
+     * defined.
      *
      * @return LineNumberReader for the error source file, or null if not
      *      defined

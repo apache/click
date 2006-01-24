@@ -458,12 +458,16 @@ public class DateField extends TextField {
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] { getErrorLabel(), new Integer(getMinLength()) };
+                Object[] args = new Object[] {
+                    getErrorLabel(), new Integer(getMinLength())
+                };
                 setError(getMessage("field-minlength-error", args));
                 return true;
 
             } else if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[]{ getErrorLabel(), new Integer(getMaxLength()) };
+                Object[] args = new Object[] {
+                    getErrorLabel(), new Integer(getMaxLength())
+                };
                 setError(getMessage("field-maxlength-error", args));
                 return true;
 
@@ -477,7 +481,9 @@ public class DateField extends TextField {
                     parsedOk = true;
 
                 } catch (ParseException pe) {
-                    Object[] args = new Object[] { getErrorLabel(), formatPattern };
+                    Object[] args = new Object[] {
+                        getErrorLabel(), formatPattern
+                    };
                     setError(getMessage("date-format-error", args));
                 }
 
@@ -514,7 +520,8 @@ public class DateField extends TextField {
         if (!isReadonly() && !isDisabled()) {
             Calendar calendar = new GregorianCalendar();
 
-            buffer.append("<img align=\"middle\" hspace=\"2\" style=\"cursor:hand\" src=\"");
+            buffer.append("<img align=\"middle\" hspace=\"2\" ");
+            buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getForm().getContext().getRequest().getContextPath());
             buffer.append("/click/calendar/calendar.gif\" id=\"");
             buffer.append(getId());
@@ -652,7 +659,8 @@ public class DateField extends TextField {
                     }
 
                     if (debug) {
-                        System.err.println("token["+tokenStart+","+tokenEnd+"]='" + token + "'");
+                        System.err.println("token[" + tokenStart + "," +
+                                           tokenEnd + "]='" + token + "'");
                     }
                     tokenStart = -1;
                     tokenEnd = -1;

@@ -15,8 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import net.sf.click.control.Field;
-import net.sf.click.control.Form;
 import net.sf.click.control.TextField;
 
 /**
@@ -34,8 +32,8 @@ import net.sf.click.control.TextField;
  * <p/>
  * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
- * reference the {@link Form#getHtmlImports()} object in the page template.
- * For example:
+ * reference the {@link net.sf.click.control.Form#getHtmlImports()} object in
+ * the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -193,7 +191,7 @@ public class DoubleField extends TextField {
     /**
      * Return the <tt>Double.class</tt>.
      *
-     * @see Field#getValueClass()
+     * @see net.sf.click.control.Field#getValueClass()
      *
      * @return the <tt>Double.class</tt>
      */
@@ -205,7 +203,7 @@ public class DoubleField extends TextField {
      * Return the field Double value, or null if value was empty or a parsing
      * error occured.
      *
-     * @see Field#getValueObject()
+     * @see net.sf.click.control.Field#getValueObject()
      *
      * @return the Double object representation of the Field value
      */
@@ -216,7 +214,7 @@ public class DoubleField extends TextField {
     /**
      * Set the double value of the field using the given object.
      *
-     * @see Field#setValueObject(Object)
+     * @see net.sf.click.control.Field#setValueObject(Object)
      *
      * @param object the object value to set
      */
@@ -260,13 +258,17 @@ public class DoubleField extends TextField {
                 double doubleValue = Double.parseDouble(value);
 
                 if (maxvalue != Double.MAX_VALUE && doubleValue > maxvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Double(maxvalue) };
+                    Object[] args = new Object[] {
+                        getErrorLabel(), new Double(maxvalue)
+                    };
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
 
                 if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Double(minvalue) };
+                    Object[] args = new Object[] {
+                        getErrorLabel(), new Double(minvalue)
+                    };
                     setError(getMessage("number-minvalue-error", args));
                     return true;
                 }

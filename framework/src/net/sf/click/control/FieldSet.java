@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -168,12 +167,15 @@ public class FieldSet extends Field {
      */
     public void add(Field field) {
         if (field == null) {
-            throw new IllegalArgumentException("field parameter cannot be null");
+            String msg = "field parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         if (StringUtils.isBlank(field.getName())) {
             throw new IllegalArgumentException("Field name not defined");
         }
-        if (getFields().containsKey(field.getName()) && !(field instanceof Label)) {
+        if (getFields().containsKey(field.getName()) &&
+            !(field instanceof Label)) {
+
             throw new IllegalArgumentException
                 ("Form already contains field named: " + field.getName());
         }
@@ -234,7 +236,7 @@ public class FieldSet extends Field {
      * Set the fieldset's <tt>Context</tt> and also set the <tt>Context</tt>
      * in any contained fields.
      *
-     * @see Control#setContext(Context)
+     * @see net.sf.click.Control#setContext(Context)
      *
      * @param context the Page request Context
      * @throws IllegalArgumentException if the Context is null
@@ -319,7 +321,7 @@ public class FieldSet extends Field {
     }
 
     /**
-     * Set the fieldset Legend element value: &lt;legend&gt;
+     * Set the fieldset Legend element value: &lt;legend&gt;.
      *
      * @param legend the fieldset Legend element value
      */
@@ -394,7 +396,7 @@ public class FieldSet extends Field {
      * This method is not supported and will throw a
      * <tt>UnsupportedOperationException</tt>.
      *
-     * @see Control#setListener(Object, String)
+     * @see net.sf.click.Control#setListener(Object, String)
      *
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
@@ -404,7 +406,7 @@ public class FieldSet extends Field {
     }
 
     /**
-     * @see Control#setParentMessages(Map)
+     * @see net.sf.click.Control#setParentMessages(Map)
      *
      * @param messages the parent's the localized messages <tt>Map</tt>
      */

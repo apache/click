@@ -60,7 +60,7 @@ public class ClickLogger implements LogChute {
         { " [trace] ", " [debug] ", " [info ] ", " [warn ] ", " [error] " };
 
     /** The ThreadLocal logger holder. */
-    private static final ThreadLocal loggerHolder = new ThreadLocal();
+    private static final ThreadLocal LOGGER_HOLDER = new ThreadLocal();
 
     // ----------------------------------------------------- Instance Variables
 
@@ -142,7 +142,7 @@ public class ClickLogger implements LogChute {
      * @return the thread bound Click logger instance
      */
     public static ClickLogger getInstance() {
-        return (ClickLogger) loggerHolder.get();
+        return (ClickLogger) LOGGER_HOLDER.get();
     }
 
     /**
@@ -151,7 +151,7 @@ public class ClickLogger implements LogChute {
      * @param logger the Click logger instance to set on the thread
      */
     public static void setInstance(ClickLogger logger) {
-        loggerHolder.set(logger);
+        LOGGER_HOLDER.set(logger);
     }
 
     /**
@@ -222,7 +222,7 @@ public class ClickLogger implements LogChute {
 
     /**
      * Set the logging level
-     * <tt>[ TRACE_ID | DEBUG_ID | INFO_ID | WARN_ID | ERROR_ID ]</tt>
+     * <tt>[ TRACE_ID | DEBUG_ID | INFO_ID | WARN_ID | ERROR_ID ]</tt>.
      *
      * @param level the logging level
      */
@@ -326,7 +326,7 @@ public class ClickLogger implements LogChute {
     }
 
     /**
-     * Return true if [debug] level logging is enabled
+     * Return true if [debug] level logging is enabled.
      *
      * @return true if [debug] level logging is enabled
      */

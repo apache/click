@@ -157,7 +157,8 @@ public class TabbedPanel extends BasicPanel {
      * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
-        // TODO: this method is valid if we add logic to set the first panel as active
+        // TODO: this method is valid if we add logic to set the first panel as
+        // active
 
         String msg =
             "TabbedPanel should have panels added ONLY via " +
@@ -263,7 +264,9 @@ public class TabbedPanel extends BasicPanel {
         // then invoke it
         if (listener != null && method != null) {
             if (logger.isTraceEnabled()) {
-                logger.trace("Invoking listener " + listener + "." + method + "()");
+                String msg =
+                    "Invoking listener " + listener + "." + method + "()";
+                logger.trace(msg);
             }
             return ClickUtils.invokeListener(listener, method);
         }
@@ -298,8 +301,9 @@ public class TabbedPanel extends BasicPanel {
      * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/extras/panel/TabbedPanel.htm", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/panel/TabbedPanel.htm",
+                              "click");
     }
 
     /**

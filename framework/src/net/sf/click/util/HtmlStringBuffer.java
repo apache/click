@@ -153,7 +153,7 @@ public class HtmlStringBuffer {
      * <p/>
      * For example:
      * <pre class="javaCode">
-     *    appendAttribute(<span class="st">"size"</span>, 10</span>)  <span class="green">-></span>  <span class="st">size="10"</span> </pre>
+     *    appendAttribute(<span class="st">"size"</span>, 10)  <span class="green">-&gt;</span>  <span class="st">size="10"</span> </pre>
      *
      * @param name the HTML attribute name
      * @param value the HTML attribute value

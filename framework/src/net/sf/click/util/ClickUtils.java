@@ -130,7 +130,9 @@ public class ClickUtils {
      * @param object the object to populate with field values
      * @param debug log debug statements when populating the object
      */
-    public static void copyFormToObject(Form form, Object object, boolean debug) {
+    public static void copyFormToObject(Form form, Object object,
+            boolean debug) {
+
         if (form == null) {
             throw new IllegalArgumentException("Null form parameter");
         }
@@ -273,7 +275,9 @@ public class ClickUtils {
      * @param form the Form to populate
      * @param debug log debug statements when populating the form
      */
-    public static void copyObjectToForm(Object object, Form form, boolean debug) {
+    public static void copyObjectToForm(Object object, Form form,
+            boolean debug) {
+
         if (object == null) {
             throw new IllegalArgumentException("Null object parameter");
         }
@@ -359,7 +363,8 @@ public class ClickUtils {
         }
 
         if (StringUtils.isBlank(resource)) {
-            throw new IllegalArgumentException("Null resource parameter not defined");
+            String msg = "Null resource parameter not defined";
+            throw new IllegalArgumentException(msg);
         }
 
         String realTargetDir = servletContext.getRealPath("/") + File.separator;
@@ -412,7 +417,8 @@ public class ClickUtils {
                             destination = destination.substring(lastIndex + 1);
                         }
                         String msg =
-                            "deployed " + targetDir + File.separator + destination;
+                            "deployed " + targetDir + File.separator +
+                            destination;
                         logger.trace(msg);
                     }
 
@@ -604,7 +610,9 @@ public class ClickUtils {
             if (field instanceof FieldSet) {
                 FieldSet fieldSet = (FieldSet) field;
                 for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                    Field fieldSetField = (Field) fieldSet.getFieldList().get(j);
+                    Field fieldSetField =
+                        (Field) fieldSet.getFieldList().get(j);
+
                     if (!(fieldSetField instanceof Label)) {
                         fieldList.add(fieldSetField);
                     }
@@ -630,14 +638,17 @@ public class ClickUtils {
         // Adapted from VelocityViewServlet.handleRequest() method:
 
         // If we get here from RequestDispatcher.include(), getServletPath()
-        // will return the original (wrong) URI requested.  The following special
-        // attribute holds the correct path.  See section 8.3 of the Servlet
-        // 2.3 specification.
+        // will return the original (wrong) URI requested.  The following
+        // special attribute holds the correct path.  See section 8.3 of the
+        // Servlet 2.3 specification.
 
-        String path = (String) request.getAttribute("javax.servlet.include.servlet_path");
+        String path = (String)
+            request.getAttribute("javax.servlet.include.servlet_path");
 
-        // Also take into account the PathInfo stated on SRV.4.4 Request Path Elements.
-        String info = (String) request.getAttribute("javax.servlet.include.path_info");
+        // Also take into account the PathInfo stated on
+        // SRV.4.4 Request Path Elements.
+        String info = (String)
+            request.getAttribute("javax.servlet.include.path_info");
 
         if (path == null) {
             path = request.getServletPath();
@@ -686,7 +697,7 @@ public class ClickUtils {
     /**
      * Return a field label string from the given field name. For exampe:
      * <pre class="codeHtml">
-     * <span class="blue">faxNumber</span> &nbsp; -> &nbsp; <spa class="red">Fax Number</span> </pre>
+     * <span class="blue">faxNumber</span> &nbsp; -&gt; &nbsp; <span class="red">Fax Number</span> </pre>
      *
      * @param name the field name
      * @return a field label string from the given field name

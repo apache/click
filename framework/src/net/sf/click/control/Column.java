@@ -196,7 +196,7 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the table data &lt;td&gt; CSS class
+     * Set the table data &lt;td&gt; CSS class.
      *
      * @param dataClass the table data CSS class
      */
@@ -214,7 +214,7 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the table data &lt;td&gt; CSS style
+     * Set the table data &lt;td&gt; CSS style.
      *
      * @param style the table data CSS style
      */
@@ -305,7 +305,7 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the table header &lt;th&gt; CSS class
+     * Set the table header &lt;th&gt; CSS class.
      *
      * @param headerClass the table header CSS class
      */
@@ -323,7 +323,7 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the table header &lt;th&gt; CSS style
+     * Set the table header &lt;th&gt; CSS style.
      *
      * @param style the table header CSS style
      */
@@ -341,7 +341,7 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the table header &lt;th&gt; title
+     * Set the table header &lt;th&gt; title.
      *
      * @param title the table header title
      */

@@ -109,7 +109,7 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Return the input type: '<tt>checkbox</tt>'
+     * Return the input type: '<tt>checkbox</tt>'.
      *
      * @return the input type '<tt>checkbox</tt>'
      */

@@ -99,7 +99,7 @@ public class Option {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The Options display label */
+    /** The Options display label. */
     protected final String label;
 
     /** The Option value. */

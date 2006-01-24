@@ -160,7 +160,9 @@ public class SpringClickServlet extends ClickServlet {
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(String path, Class pageClass) throws Exception {
+    protected Page newPageInstance(String path, Class pageClass)
+        throws Exception {
+
         Page page = null;
 
         String beanName = pageClass.getName();

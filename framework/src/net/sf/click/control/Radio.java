@@ -22,7 +22,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
- * <td><input type='radio' name='header' value='Radio Control'/>Radio</input></td>
+ * <td><input type='radio' name='header' value='Radio Control'>Radio</input></td>
  * </tr>
  * </table>
  *
