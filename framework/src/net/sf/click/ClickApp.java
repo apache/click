@@ -61,54 +61,54 @@ class ClickApp implements EntityResolver {
 
     /**
      * The default Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>"
+     * "<tt>/WEB-INF/click.xml</tt>".
      */
     static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
     /**
      * The default velocity properties filename: &nbsp;
-     * "<tt>/WEB-INF/velocity.properties</tt>"
+     * "<tt>/WEB-INF/velocity.properties</tt>".
      */
     static final String DEFAULT_VEL_PROPS = "/WEB-INF/velocity.properties";
 
-    /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>" */
+    /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>". */
     static final String CLICK_LOGGER = "net.sf.click";
 
     /**
-     * The name of the Velocity logger: &nbsp; "<tt>org.apache.velocity</tt>"
+     * The name of the Velocity logger: &nbsp; "<tt>org.apache.velocity</tt>".
      */
     static final String VELOCITY_LOGGER = "org.apache.velocity";
 
-    /** The click deployment directory path: &nbsp; "click" */
+    /** The click deployment directory path: &nbsp; "click". */
     static final String CLICK_PATH = "click";
 
-    /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>" */
+    /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>". */
     static final String DTD_FILE_NAME = "click.dtd";
 
     /**
      * The resource path of the click DTD file: &nbsp;
-     * "<tt>/net/sf/click/click.dtd</tt>";
+     * "<tt>/net/sf/click/click.dtd</tt>".
      */
     static final String DTD_FILE_PATH = "/net/sf/click/" + DTD_FILE_NAME;
 
-    /** The error page file name: &nbsp; "<tt>error.html</tt>" */
+    /** The error page file name: &nbsp; "<tt>error.html</tt>". */
     static final String ERROR_FILE_NAME = "error.htm";
 
     static final String ERROR_PATH = CLICK_PATH + "/" + ERROR_FILE_NAME;
 
-    /** The page not found file name: &nbsp; "<tt>not-found.html</tt>" */
+    /** The page not found file name: &nbsp; "<tt>not-found.html</tt>". */
     static final String NOT_FOUND_FILE_NAME = "not-found.htm";
 
     static final String NOT_FOUND_PATH = CLICK_PATH + "/" + NOT_FOUND_FILE_NAME;
 
     /**
      * The global Velocity macro file name: &nbsp;
-     * "<tt>VM_global_library.vm</tt>"
+     * "<tt>VM_global_library.vm</tt>".
      */
     static final String VM_FILE_NAME = "VM_global_library.vm";
 
     /**
-     * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>"
+     * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>".
      */
     static final String MACRO_VM_FILE_NAME = "macro.vm";
 
@@ -148,7 +148,7 @@ class ClickApp implements EntityResolver {
 
     /**
      * The application mode:
-     * [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG | TRACE ]
+     * [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG | TRACE ].
      */
     private int mode;
 
@@ -283,7 +283,7 @@ class ClickApp implements EntityResolver {
 
     /**
      * This method resolves the click.dtd for the XML parser using the
-     * classpath resource: <tt>/net/sf/click/click.dtd</tt>
+     * classpath resource: <tt>/net/sf/click/click.dtd</tt>.
      *
      * @see EntityResolver#resolveEntity(String, String)
      */
@@ -381,8 +381,10 @@ class ClickApp implements EntityResolver {
                     pageClass = getPageClass(path, pagesPackage);
 
                     if (pageClass != null) {
-                        page = new
-                            PageElm(path, pageClass, commonHeaders, formatClass);
+                        page = new PageElm(path,
+                                           pageClass,
+                                           commonHeaders,
+                                           formatClass);
 
                         pageByPathMap.put(page.getPath(), page);
 
@@ -570,8 +572,9 @@ class ClickApp implements EntityResolver {
         ClickUtils.deployFile
             (servletContext, "/net/sf/click/not-found.htm", "click");
 
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/control/VM_global_library.vm", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/control/VM_global_library.vm",
+                              "click");
 
         deployControls(getResourceRootElement("/click-controls.xml"));
         deployControls(getResourceRootElement("/extras-controls.xml"));
@@ -666,7 +669,9 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadFormatClass(Element rootElm) throws ClassNotFoundException {
+    private void loadFormatClass(Element rootElm)
+            throws ClassNotFoundException {
+
         Element formatElm = getChild(rootElm, "format");
 
         if (formatElm != null) {
@@ -800,7 +805,8 @@ class ClickApp implements EntityResolver {
                         pageByPathMap.put(page.getPath(), page);
 
                         if (logger.isDebugEnabled()) {
-                            String msg = pagePath + " -> " + pageClass.getName();
+                            String msg =
+                                pagePath + " -> " + pageClass.getName();
                             logger.debug(msg);
                         }
                     }
@@ -1010,7 +1016,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private Class getPageClass(final String pagePath, final String pagesPackage) {
+    private Class getPageClass(String pagePath, String pagesPackage) {
         String packageName = pagesPackage + ".";
         String className = "";
 

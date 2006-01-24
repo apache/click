@@ -94,7 +94,7 @@ public class SessionFilter implements Filter {
      * @throws ServletException if a servlet error occurs
      */
     public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
+            FilterChain chain) throws IOException, ServletException {
 
 
         chain.doFilter(request, response);
