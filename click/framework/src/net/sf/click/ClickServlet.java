@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.servlet.GenericServlet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
@@ -154,18 +153,18 @@ public class ClickServlet extends HttpServlet {
         "<body><h2>Application Reloaded</h2></body></html>";
 
     /**
-     * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>"
+     * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
      */
     protected final static String CLICK_FORWARD = "click-forward";
 
     /**
      * The click application is reloadable flag servlet init parameter name:
-     * &nbsp; "<tt>app-reloadable</tt>"
+     * &nbsp; "<tt>app-reloadable</tt>".
      */
     protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
-     * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>"
+     * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>".
      */
     protected final static String FORWARD_PAGE = "forward-page";
 
@@ -183,7 +182,7 @@ public class ClickServlet extends HttpServlet {
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
 
-    /** Cache of velocity writers */
+    /** Cache of velocity writers. */
     protected SimplePool writerPool;
 
     // --------------------------------------------------------- Public Methods
@@ -191,7 +190,7 @@ public class ClickServlet extends HttpServlet {
     /**
      * Initialize the Click servlet and the Velocity runtime.
      *
-     * @see GenericServlet#init()
+     * @see javax.servlet.GenericServlet#init()
      *
      * @throws ServletException if the click app could not be initialized
      */
@@ -223,16 +222,17 @@ public class ClickServlet extends HttpServlet {
             writerPool = newWriterPool;
 
             if (logger.isInfoEnabled()) {
-                logger.info("initialized in " + clickApp.getModeValue() + " mode");
+                logger.info("initialized in " + clickApp.getModeValue() +
+                            " mode");
             }
 
         } catch (Throwable e) {
             e.printStackTrace();
 
-            String message =
-                "error initializing throwing javax.servlet.UnavailableException";
+            String msg = "error initializing throwing " +
+                         "javax.servlet.UnavailableException";
 
-            log(message, e);
+            log(msg, e);
 
             throw new UnavailableException(e.toString());
         }
@@ -249,8 +249,8 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if click app has not been initialized
      * @throws IOException if an I/O error occurs
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
 
         ClickLogger.setInstance(logger);
 
@@ -275,8 +275,8 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if click app has not been initialized
      * @throws IOException if an I/O error occurs
      */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
 
         ClickLogger.setInstance(logger);
 
@@ -567,7 +567,8 @@ public class ClickServlet extends HttpServlet {
                     (new OutputStreamWriter(output, encoding), 4 * 1024, true);
 
             } else {
-                velocityWriter.recycle(new OutputStreamWriter(output, encoding));
+                velocityWriter.recycle
+                    (new OutputStreamWriter(output, encoding));
             }
 
             template.merge(context, velocityWriter);
@@ -576,11 +577,12 @@ public class ClickServlet extends HttpServlet {
             // Exception occured merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
-            ErrorReport errorReport = new ErrorReport(error,
-                                                      page.getClass(),
-                                                      clickApp.isProductionMode(),
-                                                      request,
-                                                      getServletContext());
+            ErrorReport errorReport =
+                new ErrorReport(error,
+                                page.getClass(),
+                                clickApp.isProductionMode(),
+                                request,
+                                getServletContext());
 
             velocityWriter.write(errorReport.getErrorReport());
 

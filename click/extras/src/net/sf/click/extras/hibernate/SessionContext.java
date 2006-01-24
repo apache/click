@@ -50,17 +50,17 @@ import org.hibernate.cfg.Configuration;
 public class SessionContext {
 
     /** The Hibernate session factory. */
-    private static final SessionFactory sessionFactory;
+    private static final SessionFactory SESSION_FACTORY;
 
     /** The ThreadLocal session holder. */
-    private static final ThreadLocal sessionHolder = new ThreadLocal();
+    private static final ThreadLocal SESSION_HOLDER = new ThreadLocal();
 
     static {
         try {
             Configuration configuration = new Configuration();
             configuration.setProperties(System.getProperties());
             configuration.configure();
-            sessionFactory = configuration.buildSessionFactory();
+            SESSION_FACTORY = configuration.buildSessionFactory();
 
         } catch (Throwable e) {
             throw new ExceptionInInitializerError(e);
@@ -74,11 +74,11 @@ public class SessionContext {
      * @throws HibernateException if an error occurs opening the session
      */
     public static Session getSession() throws HibernateException {
-        Session session = (Session) sessionHolder.get();
+        Session session = (Session) SESSION_HOLDER.get();
 
         if (session == null) {
             session = getSessionFactory().openSession();
-            sessionHolder.set(session);
+            SESSION_HOLDER.set(session);
         }
 
         return session;
@@ -91,13 +91,13 @@ public class SessionContext {
      * @throws HibernateException if an error occurs closing the session
      */
     public static void close() throws HibernateException {
-        Session session = (Session) sessionHolder.get();
+        Session session = (Session) SESSION_HOLDER.get();
 
         if (session != null && session.isOpen()) {
             session.close();
         }
 
-        sessionHolder.set(null);
+        SESSION_HOLDER.set(null);
     }
 
     /**
@@ -106,7 +106,7 @@ public class SessionContext {
      * @return true if a session is currently open.
      */
     public static boolean hasSession() {
-        return (sessionHolder.get() != null);
+        return (SESSION_HOLDER.get() != null);
     }
 
     /**
@@ -115,7 +115,7 @@ public class SessionContext {
      * @return the Hibernate SessionFactory
      */
     public static SessionFactory getSessionFactory() {
-        return sessionFactory;
+        return SESSION_FACTORY;
     }
 
     /**

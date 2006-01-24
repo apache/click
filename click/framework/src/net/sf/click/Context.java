@@ -45,7 +45,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class Context {
 
-    /** The user's session Locale key: &nbsp; <tt>locale</tt> */
+    /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
     public static final String LOCALE = "locale";
 
     /** The servlet context. */
