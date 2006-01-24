@@ -233,7 +233,7 @@ public class BasicPanel implements Panel {
      * Set the name for this panel.  This is used to uniquely identify the panel
      * in the model context.
      *
-     * @see Control#setName()
+     * @see Control#setName(String)
      *
      * @param name the name of this control
      */
@@ -435,9 +435,10 @@ public class BasicPanel implements Panel {
      * @return the template associated with this panel
      */
     public String toString() {
-        // TODO: Question: Should this not be done in favor of rendering the panel
-        // template implicitly?  i.e. #parse($somePanelName.template) A potential
-        // issue might be in debugger evaluation of the toString method.
+        // TODO: Question: Should this not be done in favor of rendering the
+        // panel template implicitly?  i.e. #parse($somePanelName.template)
+        // A potential issue might be in debugger evaluation of the toString
+        // method.
 
         return getTemplate();
     }

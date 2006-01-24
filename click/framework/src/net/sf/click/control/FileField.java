@@ -70,7 +70,8 @@ public class FileField extends Field {
     /** The text field size attribute. The default size is 20. */
     protected int size = 20;
 
-    /** The
+    /**
+     * The
      * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/DefaultFileItem.html">DefaultFileItem</a>
      * after processing a file upload request.
      */
@@ -218,7 +219,8 @@ public class FileField extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        fileItem = (FileItem) getContext().getMultiPartFormData().get(getName());
+        fileItem = (FileItem)
+            getContext().getMultiPartFormData().get(getName());
 
         if (!validate()) {
             return true;

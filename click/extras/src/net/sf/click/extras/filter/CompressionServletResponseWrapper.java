@@ -52,50 +52,46 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     // ----------------------------------------------------- Instance Variables
 
     /**
-     * Original response
+     * Original response.
      */
     protected HttpServletResponse origResponse = null;
 
     /**
      * Descriptive information about this Response implementation.
      */
-
-    protected static final String info = "CompressionServletResponseWrapper";
+    protected static final String INFO = "CompressionServletResponseWrapper";
 
     /**
      * The ServletOutputStream that has been returned by
      * <code>getOutputStream()</code>, if any.
      */
-
     protected ServletOutputStream stream = null;
-
 
     /**
      * The PrintWriter that has been returned by
      * <code>getWriter()</code>, if any.
      */
-
     protected PrintWriter writer = null;
 
     /**
-     * The threshold number to compress
+     * The threshold number to compress.
      */
     protected int threshold = 0;
 
     /**
-     * Debug level
+     * Debug level.
      */
     private int debug = 0;
 
     /**
-     * Content type
+     * Content type.
      */
     protected String contentType = null;
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Set content type
+     * Set content type.
      */
     public void setContentType(String contentType) {
         this.contentType = contentType;
@@ -104,7 +100,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
 
 
     /**
-     * Set threshold number
+     * Set threshold number.
      */
     public void setCompressionThreshold(int threshold) {
         this.threshold = threshold;
@@ -119,7 +115,8 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      */
     public ServletOutputStream createOutputStream() throws IOException {
 
-        CompressionResponseStream stream = new CompressionResponseStream(origResponse);
+        CompressionResponseStream stream =
+            new CompressionResponseStream(origResponse);
         stream.setBuffer(threshold);
 
         return stream;
@@ -166,7 +163,8 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     public ServletOutputStream getOutputStream() throws IOException {
 
         if (writer != null)
-            throw new IllegalStateException("getWriter() has already been called for this response");
+            throw new IllegalStateException
+                ("getWriter() has already been called for this response");
 
         if (stream == null)
             stream = createOutputStream();
@@ -188,7 +186,8 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
             return (writer);
 
         if (stream != null)
-            throw new IllegalStateException("getOutputStream() has already been called for this response");
+            throw new IllegalStateException
+                ("getOutputStream() has already been called for this response");
 
         stream = createOutputStream();
         if (debug > 1) {

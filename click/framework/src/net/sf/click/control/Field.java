@@ -58,7 +58,7 @@ public abstract class Field implements Control {
     // -------------------------------------------------------------- Constants
 
     /**
-     * The control package messages bundle name: &nbsp; <tt>click-control</tt>
+     * The control package messages bundle name: &nbsp; <tt>click-control</tt>.
      */
     public static final String CONTROL_MESSAGES = "click-control";
 
@@ -262,7 +262,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Set the Field disabled flag
+     * Set the Field disabled flag.
      *
      * @param disabled the Field disabled flag
      */
@@ -300,7 +300,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Set the Field request focus flag
+     * Set the Field request focus flag.
      *
      * @param focus the request focus flag
      */
@@ -482,8 +482,9 @@ public abstract class Field implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null && getParentMessages().containsKey(name))
-        {
+        if (getParentMessages() != null &&
+            getParentMessages().containsKey(name)) {
+
             message = (String) getParentMessages().get(name);
         }
 
@@ -603,7 +604,7 @@ public abstract class Field implements Control {
     }
  
     /**
-     * Set the Field readonly flag
+     * Set the Field readonly flag.
      *
      * @param readonly the Field readonly flag
      */

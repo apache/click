@@ -89,7 +89,7 @@ public class Menu implements Control {
 
     private static final long serialVersionUID = 5820272228903777866L;
 
-    private static final Object loadLock = new Object();
+    private static final Object LOAD_LOCK = new Object();
 
     /**
      * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
@@ -537,15 +537,17 @@ public class Menu implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
 
-        synchronized(loadLock) {
+        synchronized(LOAD_LOCK) {
             if (rootMenu == null) {
                 Menu menu = new Menu("rootMenu");
 
+                ServletContext servletContext = context.getServletContext();
                 InputStream inputStream =
-                    context.getServletContext().getResourceAsStream(CONFIG_FILE);
+                    servletContext.getResourceAsStream(CONFIG_FILE);
 
                 if (inputStream == null) {
-                    String msg = "could not find configuration file:" + CONFIG_FILE;
+                    String msg =
+                        "could not find configuration file:" + CONFIG_FILE;
                     throw new RuntimeException(msg);
                 }
 

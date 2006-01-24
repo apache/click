@@ -42,7 +42,8 @@ class CompressionResponseStream extends ServletOutputStream {
      *
      * @param response The associated response
      */
-    public CompressionResponseStream(HttpServletResponse response) throws IOException{
+    public CompressionResponseStream(HttpServletResponse response)
+        throws IOException{
 
         super();
         closed = false;
@@ -60,7 +61,7 @@ class CompressionResponseStream extends ServletOutputStream {
     protected int compressionThreshold = 0;
 
     /**
-     * Debug level
+     * Debug level.
      */
     private int debug = 0;
 
@@ -103,7 +104,7 @@ class CompressionResponseStream extends ServletOutputStream {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Set the compressionThreshold number and create buffer for this size
+     * Set the compressionThreshold number and create buffer for this size.
      */
     protected void setBuffer(int threshold) {
         compressionThreshold = threshold;

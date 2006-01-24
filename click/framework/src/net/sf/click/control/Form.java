@@ -168,7 +168,7 @@ import org.apache.commons.lang.StringUtils;
  * <tr>
  * <td>{@link #buttonAlign}</td> <td>button alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
- * <td>{@link #buttonStyle}</td> <td>button &lt;td&gt; "style" attribute value</tt></td>
+ * <td>{@link #buttonStyle}</td> <td>button &lt;td&gt; "style" attribute value</td>
  * </tr><tr>
  * <td>{@link #columns}</td> <td>number of form table columns, the default value number is 1</td>
  * </tr><tr>
@@ -176,15 +176,15 @@ import org.apache.commons.lang.StringUtils;
  * </tr><tr>
  * <td>{@link #errorsPosition}</td> <td>validation error messages position: &nbsp; <tt>["top", "middle", "bottom"]</tt></td>
  * </tr><tr>
- * <td>{@link #errorsStyle}</td> <td>errors &lt;td&gt; "style" attribute value</tt></td>
+ * <td>{@link #errorsStyle}</td> <td>errors &lt;td&gt; "style" attribute value</td>
  * </tr><tr>
- * <td>{@link #fieldStyle}</td> <td>field &lt;td&gt; "style" attribute value</tt></td>
+ * <td>{@link #fieldStyle}</td> <td>field &lt;td&gt; "style" attribute value</td>
  * </tr><tr>
  * <td>{@link #labelAlign}</td> <td>field label alignment: &nbsp; <tt>["left", "center", "right"]</tt></td>
  * </tr><tr>
- * <td>{@link #labelPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
+ * <td>{@link #labelsPosition}</td> <td>label position relative to field: &nbsp; <tt>["left", "top"]</tt></td>
  * </tr><tr>
- * <td>{@link #labelStyle}</td> <td>label &lt;td&gt; "style" attribute value</tt></td>
+ * <td>{@link #labelStyle}</td> <td>label &lt;td&gt; "style" attribute value</td>
  * </tr><tr>
  * <td>click/control.css</td> <td>control CSS styles, automatically deployed to the <tt>click</tt> web directory</td>
  * </tr><tr>
@@ -365,17 +365,17 @@ public class Form implements Control {
 
     private static final long serialVersionUID = -8288409197675214969L;
 
-    /** The align left, form layout contant: &nbsp; <tt>"left"</tt> */
+    /** The align left, form layout contant: &nbsp; <tt>"left"</tt>. */
     public static final String ALIGN_LEFT = "left";
 
-    /** The align center, form layout contant: &nbsp; <tt>"center"</tt> */
+    /** The align center, form layout contant: &nbsp; <tt>"center"</tt>. */
     public static final String ALIGN_CENTER = "center";
 
-    /** The align right, form layout contant: &nbsp; <tt>"right"</tt> */
+    /** The align right, form layout contant: &nbsp; <tt>"right"</tt>. */
     public static final String ALIGN_RIGHT = "right";
 
     /**
-     * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>
+     * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
      */
     public static final String FORM_NAME = "form_name";
 
@@ -384,29 +384,29 @@ public class Form implements Control {
 
     /**
      * The position top, errors and labels form layout constant: &nbsp;
-     * <tt>"top"</tt>
+     * <tt>"top"</tt>.
      */
     public static final String POSITION_TOP = "top";
 
     /**
      * The position middle, errors in middle form layout constant: &nbsp;
-     * <tt>"middle"</tt>
+     * <tt>"middle"</tt>.
      */
     public static final String POSITION_MIDDLE = "middle";
 
     /**
      * The position bottom, errors on bottom form layout constant: &nbsp;
-     * <tt>"top"</tt>
+     * <tt>"top"</tt>.
      */
     public static final String POSITION_BOTTOM = "bottom";
 
     /**
      * The position left, labels of left form layout contant: &nbsp;
-     * <tt>"left"</tt>
+     * <tt>"left"</tt>.
      */
     public static final String POSITION_LEFT = "left";
 
-    /** The errors-header resource property */
+    /** The errors-header resource property. */
     protected static String ERRORS_HEADER = "";
 
     /** The errors-footer resource property. */
@@ -431,7 +431,7 @@ public class Form implements Control {
 
     /**
      * The submit check reserved request parameter prefix: &nbsp;
-     * <tt>SUBMIT_CHECK_</tt>
+     * <tt>SUBMIT_CHECK_</tt>.
      */
     protected static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
 
@@ -452,7 +452,7 @@ public class Form implements Control {
     /** The form attributes map. */
     protected Map attributes;
 
-    /** The button align, default value is "<tt>left</tt>" */
+    /** The button align, default value is "<tt>left</tt>". */
     protected String buttonAlign = ALIGN_LEFT;
 
     /** The ordered list of button values. */
@@ -481,12 +481,12 @@ public class Form implements Control {
     /** The form level error message. */
     protected String error;
 
-    /** The errors block align, default value is <tt>"left"</tt> */
+    /** The errors block align, default value is <tt>"left"</tt>. */
     protected String errorsAlign = ALIGN_LEFT;
 
     /**
      * The form errors position <tt>["top", "middle", "bottom"]</tt> default
-     * value: &nbsp; <tt>"middle"</tt>
+     * value: &nbsp; <tt>"middle"</tt>.
      */
     protected String errorsPosition = POSITION_MIDDLE;
 
@@ -502,12 +502,12 @@ public class Form implements Control {
     /** The field &lt;td&gt; "style" attribute value. */
     protected String fieldStyle;
 
-    /** The label align, default value is <tt>"left"</tt> */
+    /** The label align, default value is <tt>"left"</tt>. */
     protected String labelAlign = ALIGN_LEFT;
 
     /**
      * The form labels position <tt>["left", "top"]</tt> default value: &nbsp;
-     * <tt>"left"</tt>
+     * <tt>"left"</tt>.
      */
     protected String labelsPosition = POSITION_LEFT;
 
@@ -528,7 +528,7 @@ public class Form implements Control {
 
     /**
      * The form method <tt>["POST, "GET"]</tt>, default value: &nbsp;
-     * <tt>POST</tt>
+     * <tt>POST</tt>.
      */
     protected String method = "POST";
 
@@ -783,7 +783,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form disabled flag
+     * Set the form disabled flag.
      *
      * @param disabled the form disabled flag
      */
@@ -1247,7 +1247,7 @@ public class Form implements Control {
     }
 
     /**
-     * Return the form method <tt>["POST" | "GET"]</tt>
+     * Return the form method <tt>["POST" | "GET"]</tt>.
      *
      * @return the form method
      */
@@ -1256,7 +1256,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form method <tt>["POST" | "GET"]</tt>
+     * Set the form method <tt>["POST" | "GET"]</tt>.
      *
      * @param value the form method
      */
@@ -1329,7 +1329,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form readonly flag
+     * Set the form readonly flag.
      *
      * @param readonly the form readonly flag
      */

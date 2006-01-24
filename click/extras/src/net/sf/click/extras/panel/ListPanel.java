@@ -108,9 +108,9 @@ public class ListPanel extends BasicPanel {
      * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/extras/panel/ListPanel.htm", "click");
-
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/panel/ListPanel.htm",
+                              "click");
     }
 
     /**

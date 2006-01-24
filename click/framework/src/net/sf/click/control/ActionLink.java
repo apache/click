@@ -158,10 +158,10 @@ public class ActionLink implements Control {
 
     private static final long serialVersionUID = 8469056846426557956L;
 
-    /** The action link parameter name: &nbsp; <tt>actionLink</tt> */
+    /** The action link parameter name: &nbsp; <tt>actionLink</tt>. */
     public static final String ACTION_LINK = "actionLink";
 
-    /** The value parameter name: &nbsp; <tt>value</tt> */
+    /** The value parameter name: &nbsp; <tt>value</tt>. */
     public static final String VALUE = "value";
 
     // ----------------------------------------------------- Instance Variables
@@ -258,7 +258,9 @@ public class ActionLink implements Control {
      * @throws IllegalArgumentException if the name, listener or method is null
      * or if the method is blank
      */
-    public ActionLink(String name, String label, Object listener, String method) {
+    public ActionLink(String name, String label, Object listener,
+            String method) {
+
         setName(name);
         setLabel(label);
         if (listener == null) {
@@ -587,8 +589,9 @@ public class ActionLink implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null && getParentMessages().containsKey(name))
-        {
+        if (getParentMessages() != null &&
+            getParentMessages().containsKey(name)) {
+
             message = (String) getParentMessages().get(name);
         }
 
@@ -793,7 +796,8 @@ public class ActionLink implements Control {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
+        clicked =
+            getName().equals(getContext().getRequestParameter(ACTION_LINK));
 
         if (clicked) {
             setValue(getContext().getRequestParameter(VALUE));

@@ -262,7 +262,8 @@ public class Table implements Control {
      */
     public void addColumn(Column column) {
         if (column == null) {
-            throw new IllegalArgumentException("column parameter cannot be null");
+            String msg = "column parameter cannot be null";
+            throw new IllegalArgumentException(msg);
         }
         if (getColumns().containsKey(column.getName())) {
             throw new IllegalArgumentException
@@ -422,8 +423,9 @@ public class Table implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null && getParentMessages().containsKey(name))
-        {
+        if (getParentMessages() != null &&
+            getParentMessages().containsKey(name)) {
+
             message = (String) getParentMessages().get(name);
         }
 
@@ -888,7 +890,8 @@ public class Table implements Control {
                 } else {
                     pagingLink.setLabel(pageNumber);
                     pagingLink.setValue(String.valueOf(i));
-                    pagingLink.setAttribute("title", gotoTitle + " " + pageNumber);
+                    pagingLink.setAttribute("title",
+                                            gotoTitle + " " + pageNumber);
                     pagesBuffer.append(pagingLink.toString());
                 }
 

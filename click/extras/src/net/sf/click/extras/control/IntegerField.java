@@ -15,8 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import net.sf.click.control.Field;
-import net.sf.click.control.Form;
 import net.sf.click.control.TextField;
 
 /**
@@ -34,8 +32,8 @@ import net.sf.click.control.TextField;
  * <p/>
  * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
- * reference the {@link Form#getHtmlImports()} object in the page template.
- * For example:
+ * reference the {@link net.sf.click.control.Form#getHtmlImports()} object in
+ * the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -208,7 +206,7 @@ public class IntegerField extends TextField {
     /**
      * Return the <tt>Integer.class</tt>.
      *
-     * @see Field#getValueClass()
+     * @see net.sf.click.control.Field#getValueClass()
      *
      * @return the <tt>Integer.class</tt>
      */
@@ -220,7 +218,7 @@ public class IntegerField extends TextField {
      * Return the field integer value, or null if value was empty or a parsing
      * error occured.
      *
-     * @see Field#getValueObject()
+     * @see net.sf.click.control.Field#getValueObject()
      *
      * @return the Integer object representation of the Field value
      */
@@ -231,7 +229,7 @@ public class IntegerField extends TextField {
     /**
      * Set the integer value of the field using the given object.
      *
-     * @see Field#setValueObject(Object)
+     * @see net.sf.click.control.Field#setValueObject(Object)
      *
      * @param object the object value to set
      */
@@ -274,12 +272,16 @@ public class IntegerField extends TextField {
             try {
                 int intValue = Integer.parseInt(value);
                 if (intValue > maxvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Integer(maxvalue) };
+                    Object[] args = new Object[] {
+                        getErrorLabel(), new Integer(maxvalue)
+                    };
                     setError(getMessage("number-maxvalue-error", args));
                     return true;
                 }
                 if (intValue < minvalue) {
-                    Object[] args = new Object[] { getErrorLabel(), new Integer(minvalue) };
+                    Object[] args = new Object[] {
+                        getErrorLabel(), new Integer(minvalue)
+                    };
                     setError(getMessage("number-minvalue-error", args));
                     return true;
                 }

@@ -85,7 +85,9 @@ public class CompressionFilter implements Filter {
             String str = filterConfig.getInitParameter("compressionThreshold");
             if (str!=null) {
                 compressionThreshold = Integer.parseInt(str);
-                if (compressionThreshold != 0 && compressionThreshold < minThreshold) {
+                if (compressionThreshold != 0 &&
+                    compressionThreshold < minThreshold) {
+
                     compressionThreshold = minThreshold;
                 }
             } else {
@@ -139,7 +141,7 @@ public class CompressionFilter implements Filter {
         if (request instanceof HttpServletRequest) {
 
             // Are we allowed to compress ?
-            String s = (String) ((HttpServletRequest)request).getParameter("gzip");
+            String s = ((HttpServletRequest)request).getParameter("gzip");
             if ("false".equals(s)) {
                 chain.doFilter(request, response);
                 return;
@@ -161,7 +163,8 @@ public class CompressionFilter implements Filter {
         } else {
             if (response instanceof HttpServletResponse) {
                 CompressionServletResponseWrapper wrappedResponse =
-                    new CompressionServletResponseWrapper((HttpServletResponse)response);
+                    new CompressionServletResponseWrapper
+                            ((HttpServletResponse)response);
 
                 wrappedResponse.setCompressionThreshold(compressionThreshold);
 
