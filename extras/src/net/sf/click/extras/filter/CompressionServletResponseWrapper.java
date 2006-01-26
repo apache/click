@@ -132,8 +132,9 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
             if (writer != null) {
                 writer.close();
             } else {
-                if (stream != null)
+                if (stream != null) {
                     stream.close();
+                }
             }
         } catch (IOException e) {
         }
@@ -167,8 +168,9 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
             throw new IllegalStateException(msg);
         }
 
-        if (stream == null)
+        if (stream == null) {
             stream = createOutputStream();
+        }
 
         return (stream);
 
@@ -183,8 +185,9 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      */
     public PrintWriter getWriter() throws IOException {
 
-        if (writer != null)
+        if (writer != null) {
             return (writer);
+        }
 
         if (stream != null) {
             String msg =

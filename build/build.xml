@@ -528,7 +528,7 @@
          </batchtest>
       </junit>
       <delete>
-        <fileset dir="." includes="TEST-*.txt"/>
+        <fileset dir="extras/test" includes="TEST-*.txt"/>
       </delete>
    </target>
    
