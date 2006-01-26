@@ -270,10 +270,10 @@ public class TabbedPanel extends BasicPanel {
                 logger.trace(msg);
             }
             return ClickUtils.invokeListener(listener, method);
-        }
-        // this implies that everything needed to render the next tab has been
-        // added to the "model" context already
-        else {
+
+        } else {
+            // this implies that everything needed to render the next tab has
+            // been added to the "model" context already
             logger.trace("No listener method found, continuing processing");
             return true;
         }

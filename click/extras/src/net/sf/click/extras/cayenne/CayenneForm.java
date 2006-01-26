@@ -311,8 +311,8 @@ public class CayenneForm extends Form {
         try {
             getDataContext().commitChanges();
             return true;
-        }
-        catch (ValidationException e) {
+
+        } catch (ValidationException e) {
             getDataContext().rollbackChanges();
 
             ValidationResult validation = e.getValidationResult();

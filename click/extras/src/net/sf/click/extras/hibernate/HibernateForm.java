@@ -317,6 +317,7 @@ public class HibernateForm extends Form {
                 try {
                    transaction.rollback();
                 } catch (HibernateException re) {
+                    // ignore
                 }
             }
             throw he;
