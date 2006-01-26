@@ -22,7 +22,7 @@
               files="ErrorReport.java"/>  
     <suppress checks="LineLength"
               files="ClickUtils.java"
-              lines="211"/> 
+              lines="211,212"/> 
     <suppress checks="LineLength"
               files="Table.java"
               lines="102"/>      
@@ -30,6 +30,9 @@
               files="Form.java"/> 
     <suppress checks="LineLength"
               files="FieldSet.java"
-              lines="541,553,581"/>  
+              lines="542,554,582"/>  
+    <suppress checks="MethodLength"
+              files="ErrorReport.java"
+              lines="172"/>
                             
 </suppressions>

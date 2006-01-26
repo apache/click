@@ -483,7 +483,7 @@ public class ErrorReport {
      */
     protected String getRenderedSource() {
 
-        StringBuffer buffer = new StringBuffer(5*1024);
+        StringBuffer buffer = new StringBuffer(5 * 1024);
 
         buffer.append("<pre style='font-family: Courier New, courier;'>");
 
@@ -608,7 +608,7 @@ public class ErrorReport {
      * @param buffer the string buffer to write out the values to
      */
     protected void writeMap(Map map, StringBuffer buffer) {
-        for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+        for (Iterator i = map.keySet().iterator(); i.hasNext();) {
             Object key = i.next();
             buffer.append(key);
             buffer.append("=");
@@ -656,8 +656,9 @@ public class ErrorReport {
         String markupToken =
             "<span style='color:#7f0055;font-weight:bold;'>" + keyword + "</span>";
 
-        line = StringUtils.replace
-            (line, " " + keyword + " ", " " + markupToken + " ");
+        line = StringUtils.replace(line,
+                                   " " + keyword + " ",
+                                   " " + markupToken + " ");
 
         if (line.startsWith(keyword)) {
             line = markupToken + line.substring(keyword.length());

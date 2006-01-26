@@ -175,7 +175,7 @@ public class RadioGroup extends Field {
             for (Iterator i = getRadioList().iterator(); i.hasNext();) {
                 Object object = i.next();
                 if (object instanceof Control) {
-                    ((Control)object).setContext(context);
+                    ((Control) object).setContext(context);
                 }
             }
         }

@@ -182,7 +182,7 @@ public class IntegerField extends TextField {
      * @param value the maximum valid integer field value
      */
     public void setMaxValue(int value) {
-        maxvalue = value ;
+        maxvalue = value;
     }
 
     /**

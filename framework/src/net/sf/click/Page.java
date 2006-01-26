@@ -402,18 +402,18 @@ public class Page {
      */
     public void addModel(String name, Object value) {
         if (name == null) {
-            String msg = "Cannot add null parameter name to " +
-                         getClass().getName() + " model";
+            String msg = "Cannot add null parameter name to "
+                         + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
         if (value == null) {
-            String msg = "Cannot add null " + name + " parameter " +
-                         "to " + getClass().getName() + " model";
+            String msg = "Cannot add null " + name + " parameter "
+                         + "to " + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
         if (getModel().containsKey(name)) {
-            String msg = getClass().getName() + " model already contains " +
-                         "value named " + name;
+            String msg = getClass().getName() + " model already contains "
+                         + "value named " + name;
             throw new IllegalArgumentException(msg);
         } else {
             getModel().put(name, value);

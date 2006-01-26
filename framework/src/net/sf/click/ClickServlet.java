@@ -148,9 +148,9 @@ public class ClickServlet extends HttpServlet {
     private static final long serialVersionUID = 3835158375989262128L;
 
     private static final String APPLICAION_RELOADED_MSG  =
-        "<html><head>" +
-        "<style type='text/css'>body{font-family:Arial;}</style></head>" +
-        "<body><h2>Application Reloaded</h2></body></html>";
+        "<html><head>"
+        + "<style type='text/css'>body{font-family:Arial;}</style></head>"
+        + "<body><h2>Application Reloaded</h2></body></html>";
 
     /**
      * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
@@ -222,15 +222,15 @@ public class ClickServlet extends HttpServlet {
             writerPool = newWriterPool;
 
             if (logger.isInfoEnabled()) {
-                logger.info("initialized in " + clickApp.getModeValue() +
-                            " mode");
+                logger.info("initialized in " + clickApp.getModeValue()
+                            + " mode");
             }
 
         } catch (Throwable e) {
             e.printStackTrace();
 
-            String msg = "error initializing throwing " +
-                         "javax.servlet.UnavailableException";
+            String msg = "error initializing throwing "
+                         + "javax.servlet.UnavailableException";
 
             log(msg, e);
 
@@ -307,8 +307,8 @@ public class ClickServlet extends HttpServlet {
                 request.setCharacterEncoding(clickApp.getCharset());
 
             } catch (UnsupportedEncodingException ex) {
-                String msg = "The character encoding " +
-                             clickApp.getCharset() + " is invalid.";
+                String msg = "The character encoding "
+                             + clickApp.getCharset() + " is invalid.";
                 logger.warn(msg, ex);
             }
         }
@@ -361,9 +361,9 @@ public class ClickServlet extends HttpServlet {
                 page.onDestroy();
 
                 if (!clickApp.isProductionMode()) {
-                    logger.info("handleRequest:  " + page.getPath() + " - " +
-                                (System.currentTimeMillis() - startTime) +
-                                " ms");
+                    logger.info("handleRequest:  " + page.getPath() + " - "
+                                + (System.currentTimeMillis() - startTime)
+                                + " ms");
                 }
             }
         }
@@ -516,8 +516,8 @@ public class ClickServlet extends HttpServlet {
 
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Page path not defined for " +
-                             page.getClass().getName());
+                logger.debug("Page path not defined for "
+                             + page.getClass().getName());
             }
         }
     }
@@ -562,13 +562,15 @@ public class ClickServlet extends HttpServlet {
         try {
             velocityWriter = (VelocityWriter) writerPool.get();
 
+            OutputStreamWriter outputStreamWriter =
+                new OutputStreamWriter(output, encoding);
+
             if (velocityWriter == null) {
-                velocityWriter = new VelocityWriter
-                    (new OutputStreamWriter(output, encoding), 4 * 1024, true);
+                velocityWriter =
+                    new VelocityWriter(outputStreamWriter, 4 * 1024, true);
 
             } else {
-                velocityWriter.recycle
-                    (new OutputStreamWriter(output, encoding));
+                velocityWriter.recycle(outputStreamWriter);
             }
 
             template.merge(context, velocityWriter);
@@ -882,8 +884,8 @@ public class ClickServlet extends HttpServlet {
     protected void ensureAppInitialized() throws UnavailableException {
         if (clickApp == null || writerPool == null) {
             if (reloadable) {
-                String msg = "The application is temporarily unavailable" +
-                             " - please try again in 1 minute";
+                String msg = "The application is temporarily unavailable"
+                             + " - please try again in 1 minute";
                 throw new UnavailableException(msg, 60);
             } else {
                 String msg = "The application is unavailable.";
@@ -927,8 +929,8 @@ public class ClickServlet extends HttpServlet {
         init();
 
         final String msg =
-            "ClickApp reloaded by " + request.getRemoteUser() + " on " +
-            (new Date()).toString();
+            "ClickApp reloaded by " + request.getRemoteUser() + " on "
+            + (new Date()).toString();
         logger.info(msg);
 
         response.setContentType("text/html");

@@ -149,8 +149,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * @exception IOException if an input/output error occurs
      */
     public void flushBuffer() throws IOException {
-        ((CompressionResponseStream)stream).flush();
-
+        ((CompressionResponseStream) stream).flush();
     }
 
     /**
@@ -162,9 +161,11 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      */
     public ServletOutputStream getOutputStream() throws IOException {
 
-        if (writer != null)
-            throw new IllegalStateException
-                ("getWriter() has already been called for this response");
+        if (writer != null) {
+            String msg =
+                "getWriter() has already been called for this response";
+            throw new IllegalStateException(msg);
+        }
 
         if (stream == null)
             stream = createOutputStream();
@@ -185,13 +186,15 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         if (writer != null)
             return (writer);
 
-        if (stream != null)
-            throw new IllegalStateException
-                ("getOutputStream() has already been called for this response");
+        if (stream != null) {
+            String msg =
+                "getOutputStream() has already been called for this response";
+            throw new IllegalStateException(msg);
+        }
 
         stream = createOutputStream();
         if (debug > 1) {
-            System.out.println("stream is set to "+stream+" in getWriter");
+            System.out.println("stream is set to " + stream + " in getWriter");
         }
         //String charset = getCharsetFromContentType(contentType);
         String charEnc = origResponse.getCharacterEncoding();

@@ -178,38 +178,38 @@ public class ClickUtils {
                     if (paramClass == String.class) {
                         paramObject = field.getValue();
 
-                    } else if (paramClass == Integer.class ||
-                               paramClass == Integer.TYPE) {
+                    } else if (paramClass == Integer.class
+                               || paramClass == Integer.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Integer.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Boolean.class ||
-                               paramClass == Boolean.TYPE) {
+                    } else if (paramClass == Boolean.class
+                               || paramClass == Boolean.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Boolean.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Double.class ||
-                               paramClass == Double.TYPE) {
+                    } else if (paramClass == Double.class
+                               || paramClass == Double.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Double.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Float.class ||
-                               paramClass == Float.TYPE) {
+                    } else if (paramClass == Float.class
+                               || paramClass == Float.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Float.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Long.class ||
-                               paramClass == Long.TYPE) {
+                    } else if (paramClass == Long.class
+                               || paramClass == Long.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Long.valueOf(field.getValue());
                         }
-                    } else if (paramClass == Short.class ||
-                               paramClass == Short.TYPE) {
+                    } else if (paramClass == Short.class
+                               || paramClass == Short.TYPE) {
                         if (!StringUtils.isBlank(field.getValue())) {
                             paramObject = Short.valueOf(field.getValue());
                         }
-                    } else if (java.util.Date.class.isAssignableFrom(paramClass) &&
-                               field.getValueClass() == java.util.Date.class) {
+                    } else if (java.util.Date.class.isAssignableFrom(paramClass)
+                               && field.getValueClass() == java.util.Date.class) {
 
                         java.util.Date fieldDate =
                             (java.util.Date) field.getValueObject();
@@ -241,23 +241,23 @@ public class ClickUtils {
                     try {
                         method.invoke(object, params);
 
-                        String msg = "Form -> " + objectClassname + "." +
-                                     method.getName() + " : " + paramObject;
+                        String msg = "Form -> " + objectClassname + "."
+                                     + method.getName() + " : " + paramObject;
                         log(msg, debug);
 
                     } catch (Exception e) {
                         String msg =
-                            "Error incurred invoking " +
-                            objectClassname + "." + method.getName() +
-                            "() with " + paramObject + " error: " +
-                            e.toString();
+                            "Error incurred invoking "
+                            + objectClassname + "." + method.getName()
+                            + "() with " + paramObject + " error: "
+                            + e.toString();
 
                         log(msg, e, debug);
                     }
 
                 } else {
-                    String msg = objectClassname + "." + method.getName() +
-                                 "() method has invalid number of parameters";
+                    String msg = objectClassname + "." + method.getName()
+                                 + "() method has invalid number of parameters";
                     log(msg, debug);
                 }
             } else {
@@ -324,16 +324,16 @@ public class ClickUtils {
                 try {
                     Object result = method.invoke(object, null);
 
-                    String msg = "Form <- " + objectClassname + "." +
-                                 method.getName() + " : " + result;
+                    String msg = "Form <- " + objectClassname + "."
+                                 + method.getName() + " : " + result;
                     log(msg, debug);
 
                     field.setValueObject(result);
 
                 } catch (Exception e) {
                     String msg =
-                        "Error incurred invoking " + objectClassname + "." +
-                        method.getName() + "() error: " + e.toString();
+                        "Error incurred invoking " + objectClassname + "."
+                        + method.getName() + "() error: " + e.toString();
 
                     log(msg, e, debug);
                 }
@@ -417,8 +417,8 @@ public class ClickUtils {
                             destination = destination.substring(lastIndex + 1);
                         }
                         String msg =
-                            "deployed " + targetDir + File.separator +
-                            destination;
+                            "deployed " + targetDir + File.separator
+                            + destination;
                         logger.trace(msg);
                     }
 
@@ -547,12 +547,12 @@ public class ClickUtils {
             Object result = targetMethod.invoke(listener, null);
 
             if (result instanceof Boolean) {
-                return ((Boolean)result).booleanValue();
+                return ((Boolean) result).booleanValue();
 
             } else {
                 String msg =
-                    "Invalid listener method, missing boolean return type: " +
-                    targetMethod;
+                    "Invalid listener method, missing boolean return type: "
+                    + targetMethod;
                 throw new RuntimeException(msg);
             }
 
@@ -720,8 +720,8 @@ public class ClickUtils {
 
                 if (i < name.length() - 1) {
                     char nextChar = name.charAt(i + 1);
-                    if (Character.isLowerCase(aChar) &&
-                        Character.isUpperCase(nextChar)) {
+                    if (Character.isLowerCase(aChar)
+                        && Character.isUpperCase(nextChar)) {
                        buffer.append(" ");
                     }
                 }

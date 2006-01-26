@@ -426,8 +426,8 @@ public class Form implements Control {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
 
     /**
      * The submit check reserved request parameter prefix: &nbsp;
@@ -588,8 +588,9 @@ public class Form implements Control {
         if (StringUtils.isBlank(field.getName())) {
             throw new IllegalArgumentException("Field name not defined");
         }
-        if (getFields().containsKey(field.getName()) &&
-            !(field instanceof Label)) {
+        if (getFields().containsKey(field.getName())
+            && !(field instanceof Label)) {
+
             throw new IllegalArgumentException(
                     "Form already contains field named: " + field.getName());
         }
@@ -655,7 +656,7 @@ public class Form implements Control {
      *
      * @return the form "action" attribute URL value.
      */
-    public String getActionURL(){
+    public String getActionURL() {
         HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
         String actionURL = response.encodeURL(request.getRequestURI());
@@ -832,7 +833,7 @@ public class Form implements Control {
         }
         this.context = context;
 
-        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             field.setContext(context);
         }
@@ -916,7 +917,7 @@ public class Form implements Control {
     public List getErrorFields() {
         List list = new ArrayList();
 
-        for (int i = 0, size = getFieldList().size(); i < size; i++ ) {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
 
             if (field instanceof FieldSet) {
@@ -926,16 +927,17 @@ public class Form implements Control {
                     Field fieldSetField =
                         (Field) fieldSet.getFieldList().get(j);
 
-                    if (!fieldSetField.isValid() &&
-                        !fieldSetField.isHidden() &&
-                        !fieldSetField.isDisabled()) {
+                    if (!fieldSetField.isValid()
+                        && !fieldSetField.isHidden()
+                        && !fieldSetField.isDisabled()) {
 
                         list.add(fieldSetField);
                     }
                 }
 
-            } else if (!field.isValid() && !field.isHidden() &&
-                       !field.isDisabled()) {
+            } else if (!field.isValid()
+                       && !field.isHidden()
+                       && !field.isDisabled()) {
 
                 list.add(field);
             }
@@ -959,8 +961,9 @@ public class Form implements Control {
      * @param position the form errors position
      */
     public void setErrorsPosition(String position) {
-        if (POSITION_TOP.equals(position) || POSITION_MIDDLE.equals(position) ||
-            POSITION_BOTTOM.equals(position)) {
+        if (POSITION_TOP.equals(position)
+            || POSITION_MIDDLE.equals(position)
+            || POSITION_BOTTOM.equals(position)) {
 
             errorsPosition = position;
 
@@ -1029,7 +1032,7 @@ public class Form implements Control {
             return field.getValue();
 
         } else {
-            for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+            for (Iterator i = getFields().values().iterator(); i.hasNext();) {
                 field = (Field) i.next();
                 if (field instanceof FieldSet) {
                     FieldSet fieldSet = (FieldSet) field;
@@ -1313,7 +1316,7 @@ public class Form implements Control {
      */
     public void setParentMessages(Map messages) {
         parentMessages = messages;
-        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             field.setParentMessages(parentMessages);
         }
@@ -1348,7 +1351,7 @@ public class Form implements Control {
             return false;
         }
 
-        for (Iterator i = getFields().values().iterator(); i.hasNext(); ) {
+        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             if (!field.isValid()) {
                 return false;
@@ -1502,8 +1505,8 @@ public class Form implements Control {
 
             // If "multipart/form-data" request and not already loaded then
             // load form data FileItem into context
-            if (getContext().isMultipartRequest() &&
-                getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
+            if (getContext().isMultipartRequest()
+                && getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
 
                 FileField fileField = null;
                 List fieldList = ClickUtils.getFormFields(this);
@@ -1667,8 +1670,8 @@ public class Form implements Control {
             throw new IllegalArgumentException("Null submitListener parameter");
         }
         if (submitListenerMethod == null) {
-            throw new IllegalArgumentException
-                ("Null submitListenerMethod parameter");
+            String msg = "Null submitListenerMethod parameter";
+            throw new IllegalArgumentException(msg);
         }
 
         if (performSubmitCheck()) {
@@ -1779,9 +1782,9 @@ public class Form implements Control {
                         Field fieldSetField =
                             (Field) fieldSet.getFieldList().get(j);
 
-                        if (fieldSetField.getFocus() &&
-                            !fieldSetField.isHidden() &&
-                            !fieldSetField.isDisabled()) {
+                        if (fieldSetField.getFocus()
+                            && !fieldSetField.isHidden()
+                            && !fieldSetField.isDisabled()) {
 
                             buffer.append("<script type=\"text/javascript\"><!--\n");
                             buffer.append("document.forms['");
@@ -1794,9 +1797,9 @@ public class Form implements Control {
                         }
                     }
 
-                } else if (field.getFocus() &&
-                           !field.isHidden() &&
-                           !field.isDisabled()) {
+                } else if (field.getFocus()
+                           && !field.isHidden()
+                           && !field.isDisabled()) {
 
                     buffer.append("<script type=\"text/javascript\"><!--\n");
                     buffer.append("document.forms['");
@@ -1834,9 +1837,9 @@ public class Form implements Control {
         String formName = getContext().getRequestParameter(FORM_NAME);
 
         // Only test if submit for this form
-        if (!getContext().isForward() &&
-            request.getMethod().equalsIgnoreCase(getMethod()) &&
-            getName().equals(formName)) {
+        if (!getContext().isForward()
+            && request.getMethod().equalsIgnoreCase(getMethod())
+            && getName().equals(formName)) {
 
             Long sessionTime =
                 (Long) getContext().getSessionAttribute(submitTokenName);
@@ -1992,9 +1995,9 @@ public class Form implements Control {
                 ERRORS_HEADER.toLowerCase()  + ERRORS_PREFIX.toLowerCase();
 
             boolean useErrorsHeader =
-                (((headerTest.indexOf("<ul") > -1) ||
-                 (headerTest.indexOf("<ol") > -1)) &&
-                 (headerTest.indexOf("<li") > -1));
+                (((headerTest.indexOf("<ul") > -1)
+                 || (headerTest.indexOf("<ol") > -1))
+                 && (headerTest.indexOf("<li") > -1));
 
             if (useErrorsHeader) {
                 buffer.append(ERRORS_HEADER);

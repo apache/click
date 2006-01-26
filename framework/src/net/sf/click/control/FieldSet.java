@@ -173,19 +173,20 @@ public class FieldSet extends Field {
         if (StringUtils.isBlank(field.getName())) {
             throw new IllegalArgumentException("Field name not defined");
         }
-        if (getFields().containsKey(field.getName()) &&
-            !(field instanceof Label)) {
+        if (getFields().containsKey(field.getName())
+            && !(field instanceof Label)) {
 
-            throw new IllegalArgumentException
-                ("Form already contains field named: " + field.getName());
+            String msg =
+                "Form already contains field named: " + field.getName();
+            throw new IllegalArgumentException(msg);
         }
         if (field instanceof FieldSet) {
-            throw new IllegalArgumentException
-                ("FieldSet does not support nested fieldsets");
+            String msg = "FieldSet does not support nested fieldsets";
+            throw new IllegalArgumentException(msg);
         }
         if (field instanceof Button) {
-            throw new IllegalArgumentException
-                ("FieldSet does not support Buttons");
+            String msg = "FieldSet does not support Buttons";
+            throw new IllegalArgumentException(msg);
         }
 
         getFieldList().add(field);
@@ -574,7 +575,7 @@ public class FieldSet extends Field {
                     buffer.closeTag();
                     buffer.append(field.getLabel());
                     buffer.elementEnd("label");
-                    if (field.isRequired()){
+                    if (field.isRequired()) {
                         buffer.append(Form.LABEL_REQUIRED_SUFFIX);
                     }
 

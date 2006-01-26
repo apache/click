@@ -266,8 +266,9 @@ public class Table implements Control {
             throw new IllegalArgumentException(msg);
         }
         if (getColumns().containsKey(column.getName())) {
-            throw new IllegalArgumentException
-                ("Table already contains column named: " + column.getName());
+            String msg =
+                "Table already contains column named: " + column.getName();
+            throw new IllegalArgumentException(msg);
         }
 
         getColumns().put(column.getName(), column);
@@ -423,8 +424,8 @@ public class Table implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null &&
-            getParentMessages().containsKey(name)) {
+        if (getParentMessages() != null
+            && getParentMessages().containsKey(name)) {
 
             message = (String) getParentMessages().get(name);
         }
@@ -508,7 +509,9 @@ public class Table implements Control {
             return 1;
         }
 
-        return (int) Math.ceil((double)rowList.size() / (double) getPageSize());
+        double value = (double) rowList.size() / (double) getPageSize();
+
+        return (int) Math.ceil(value);
     }
 
     /**
@@ -662,9 +665,9 @@ public class Table implements Control {
      * @throws IOException if a I/O error occurs
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/control/table.css", "click");
-
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/control/table.css",
+                              "click");
     }
 
     /**
@@ -722,7 +725,7 @@ public class Table implements Control {
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
             column.renderTableHeader(buffer, context);
-            if (j < tableColumns.size() -1) {
+            if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
             }
         }
@@ -735,7 +738,7 @@ public class Table implements Control {
         final List tableRows = getRowList();
 
         // Range sanity check
-        int pageNumber = Math.min(getPageNumber(), getRowList().size() -1);
+        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
         pageNumber = Math.max(pageNumber, 0);
         setPageNumber(pageNumber);
 
@@ -745,7 +748,7 @@ public class Table implements Control {
         for (int i = firstRow; i < lastRow; i++) {
             Object row = tableRows.get(i);
 
-            if ((i+1) % 2 == 0) {
+            if ((i + 1) % 2 == 0) {
                 buffer.append("<tr class=\"even\">\n");
             } else {
                 buffer.append("<tr class=\"odd\">\n");
@@ -754,13 +757,13 @@ public class Table implements Control {
             for (int j = 0; j < tableColumns.size(); j++) {
                 Column column = (Column) tableColumns.get(j);
                 column.renderTableData(row, buffer, context);
-                if (j < tableColumns.size() -1) {
+                if (j < tableColumns.size() - 1) {
                     buffer.append("\n");
                 }
             }
 
             buffer.append("</tr>");
-            if (i < tableRows.size() -1) {
+            if (i < tableRows.size() - 1) {
                 buffer.append("\n");
             }
         }

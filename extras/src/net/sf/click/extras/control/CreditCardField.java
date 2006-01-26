@@ -308,17 +308,17 @@ public class CreditCardField extends TextField {
                 } else if (cardType.equals(MASTER)) {
 
                     isValid = (length == 16) && (firstdig == '5')
-                              && ("12345".indexOf(seconddig)>=0);
+                              && ("12345".indexOf(seconddig) >= 0);
 
                 } else if (cardType.equals(AMEX)) {
 
                     isValid = (length == 15) && (firstdig == '3')
-                              && ("47".indexOf(seconddig)>=0);
+                              && ("47".indexOf(seconddig) >= 0);
 
                 } else if (cardType.equals(DINERS)) {
 
                     isValid = (length == 14) && (firstdig == '3')
-                              && ("068".indexOf(seconddig) >=0 );
+                              && ("068".indexOf(seconddig) >= 0);
 
                 } else if (cardType.equals(DISCOVER)) {
 

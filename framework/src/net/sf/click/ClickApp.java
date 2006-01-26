@@ -227,9 +227,10 @@ class ClickApp implements EntityResolver {
             getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
 
         if (inputStream == null) {
-            throw new RuntimeException
-                ("could not find click app configuration file: "
-                 + DEFAULT_APP_CONFIG);
+            String msg =
+                "could not find click app configuration file: "
+                + DEFAULT_APP_CONFIG;
+            throw new RuntimeException(msg);
         }
 
         try {
@@ -256,8 +257,8 @@ class ClickApp implements EntityResolver {
             deployFiles(rootElm);
 
             // Set ServletContext instance for WebappLoader
-            velocityEngine.setApplicationAttribute
-                (ServletContext.class.getName(), servletContext);
+            String className = ServletContext.class.getName();
+            velocityEngine.setApplicationAttribute(className, servletContext);
 
             // Load velocity properties
             Properties properties = getVelocityProperties(servletContext);
@@ -365,7 +366,7 @@ class ClickApp implements EntityResolver {
         // Else in development, debug or trace mode
         } else {
 
-            synchronized(PAGE_LOAD_LOCK) {
+            synchronized (PAGE_LOAD_LOCK) {
                 PageElm page = (PageElm) pageByPathMap.get(path);
                 if (page == null) {
                     String jspPath = StringUtils.replace(path, ".htm", ".jsp");
@@ -560,17 +561,21 @@ class ClickApp implements EntityResolver {
 
     private void deployFiles(Element rootElm) throws Exception {
 
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/control/control.css", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/control/control.css",
+                              "click");
 
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/control/control.js", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/control/control.js",
+                              "click");
 
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/util/error.htm", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/util/error.htm",
+                              "click");
 
-        ClickUtils.deployFile
-            (servletContext, "/net/sf/click/not-found.htm", "click");
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/not-found.htm",
+                              "click");
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/VM_global_library.vm",
@@ -634,20 +639,20 @@ class ClickApp implements EntityResolver {
         }
 
         logger.setLevel(clickLogLevel);
-        velocityEngine.setApplicationAttribute
-            (ClickLogger.LOG_LEVEL, velocityLogLevel);
+        velocityEngine.setApplicationAttribute(ClickLogger.LOG_LEVEL,
+                                               velocityLogLevel);
 
         if (logto.equalsIgnoreCase("servlet")) {
             logger.setServletContext(servletContext);
-            velocityEngine.setApplicationAttribute
-                (ClickLogger.LOG_TO, "servlet");
+            velocityEngine.setApplicationAttribute(ClickLogger.LOG_TO,
+                                                   "servlet");
 
         } else if (logto.equalsIgnoreCase("console")) {
             // Do nothing
 
         } else {
-            String msg = "Invalid mode logto attribute '" + logto +
-                         "' logging to console instead.";
+            String msg = "Invalid mode logto attribute '" + logto
+                         + "' logging to console instead.";
             logger.warn(msg);
         }
     }
@@ -655,15 +660,19 @@ class ClickApp implements EntityResolver {
     private void loadDefaultPages() throws ClassNotFoundException {
 
         if (!pageByPathMap.containsKey(ERROR_PATH)) {
-            ClickApp.PageElm page = new ClickApp.PageElm
-                ("net.sf.click.util.ErrorPage", ERROR_PATH, formatClass);
+            ClickApp.PageElm page =
+                new ClickApp.PageElm("net.sf.click.util.ErrorPage",
+                                     ERROR_PATH,
+                                     formatClass);
 
             pageByPathMap.put(ERROR_PATH, page);
         }
 
         if (!pageByPathMap.containsKey(NOT_FOUND_PATH)) {
-            ClickApp.PageElm page = new ClickApp.PageElm
-                ("net.sf.click.Page", NOT_FOUND_PATH, formatClass);
+            ClickApp.PageElm page =
+                new ClickApp.PageElm("net.sf.click.Page",
+                                     NOT_FOUND_PATH,
+                                     formatClass);
 
             pageByPathMap.put(NOT_FOUND_PATH, page);
         }
@@ -678,8 +687,8 @@ class ClickApp implements EntityResolver {
             String classname = formatElm.getAttribute("classname");
 
             if (classname == null) {
-                throw new RuntimeException
-                    ("'format' element missing 'classname' attribute.");
+                String msg = "'format' element missing 'classname' attribute.";
+                throw new RuntimeException(msg);
             }
 
             formatClass = Class.forName(classname);
@@ -712,8 +721,8 @@ class ClickApp implements EntityResolver {
         Element pagesElm = getChild(rootElm, "pages");
 
         if (pagesElm == null) {
-            throw new RuntimeException
-                ("required configuration 'pages' element missing.");
+            String msg = "required configuration 'pages' element missing.";
+            throw new RuntimeException(msg);
         }
 
         pagesPackage = pagesElm.getAttribute("package");
@@ -778,7 +787,7 @@ class ClickApp implements EntityResolver {
             // Build list of automap path page class overrides
             excludesList.clear();
             for (Iterator i = getChildren(pagesElm, "excludes").iterator();
-                 i.hasNext(); ) {
+                 i.hasNext();) {
 
                 excludesList.add(new ClickApp.ExcludesElm((Element) i.next()));
             }
@@ -815,7 +824,7 @@ class ClickApp implements EntityResolver {
         }
 
         // Build pages by class map
-        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext(); ) {
+        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
             ClickApp.PageElm page = (ClickApp.PageElm) i.next();
             Object value = pageByClassMap.get(page.pageClass);
 
@@ -823,7 +832,7 @@ class ClickApp implements EntityResolver {
                 pageByClassMap.put(page.pageClass, page);
 
             } else if (value instanceof List) {
-                ((List)value).add(value);
+                ((List) value).add(value);
 
             } else if (value instanceof ClickApp.PageElm) {
                 List list = new ArrayList();
@@ -838,7 +847,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadCharset(Element rootElm){
+    private void loadCharset(Element rootElm) {
         String charset = rootElm.getAttribute("charset");
         if (charset != null && charset.length() > 0) {
             setCharset(charset);
@@ -992,8 +1001,8 @@ class ClickApp implements EntityResolver {
                 fileList.add(resource);
 
             } else if (resource.endsWith("/")) {
-                if (!resource.equals("/click/") &&
-                    !resource.equalsIgnoreCase("/WEB-INF/")) {
+                if (!resource.equals("/click/")
+                    && !resource.equalsIgnoreCase("/WEB-INF/")) {
                     processDirectory(resource, fileList);
                 }
             }
@@ -1057,8 +1066,8 @@ class ClickApp implements EntityResolver {
             pageClass = Class.forName(className);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Automapped page class " + className +
-                             " is not a subclass of net.sf.clic.Page";
+                String msg = "Automapped page class " + className
+                             + " is not a subclass of net.sf.clic.Page";
                 throw new RuntimeException(msg);
             }
 
@@ -1160,8 +1169,8 @@ class ClickApp implements EntityResolver {
             pageClass = Class.forName(value);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Page class " + value +
-                             " is not a subclass of net.sf.clic.Page";
+                String msg = "Page class " + value
+                             + " is not a subclass of net.sf.clic.Page";
                 throw new RuntimeException(msg);
             }
         }
@@ -1244,7 +1253,7 @@ class ClickApp implements EntityResolver {
                 return true;
             }
 
-            for (Iterator i = pathSet.iterator(); i.hasNext(); ) {
+            for (Iterator i = pathSet.iterator(); i.hasNext();) {
                 String path = i.next().toString();
                 if (resourcePath.startsWith(path)) {
                     return true;
@@ -1255,10 +1264,8 @@ class ClickApp implements EntityResolver {
         }
 
         public String toString() {
-            return getClass().getName() +
-                "[fileSet=" + fileSet +
-                ",pathSet=" + pathSet +
-                "]";
+            return getClass().getName()
+                + "[fileSet=" + fileSet + ",pathSet=" + pathSet + "]";
         }
     }
 

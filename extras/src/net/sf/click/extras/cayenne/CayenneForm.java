@@ -192,8 +192,9 @@ public class CayenneForm extends Form {
 
                 Integer id = (Integer) pkField.getValueObject();
                 if (id != null) {
-                    dataObject = DataObjectUtils.objectForPK
-                        (getDataContext(), dataClass,  id);
+                    dataObject = DataObjectUtils.objectForPK(getDataContext(),
+                                                             dataClass,
+                                                             id);
                 } else {
                     dataObject =
                         getDataContext().createAndRegisterNewObject(dataClass);
@@ -223,8 +224,8 @@ public class CayenneForm extends Form {
      */
     public void setDataObject(DataObject dataObject) {
         if (dataObject != null) {
-            if (dataObject.getPersistenceState() !=
-                PersistenceState.TRANSIENT) {
+            if (dataObject.getPersistenceState()
+                != PersistenceState.TRANSIENT) {
 
                 int pk = DataObjectUtils.intPKForObject(dataObject);
                 pkField.setValueObject(new Integer(pk));
@@ -248,8 +249,7 @@ public class CayenneForm extends Form {
             Field propertyField) {
 
         if (propertyName == null) {
-            throw new IllegalArgumentException
-                ("Null propertyName parameter");
+            throw new IllegalArgumentException("Null propertyName parameter");
         }
         if (dataClass == null) {
             throw new IllegalArgumentException("Null dataClass parameter");
@@ -423,9 +423,10 @@ public class CayenneForm extends Form {
                 HiddenField hiddenFKField = (HiddenField) getFields().get(key);
                 String fkClassName = (String) hiddenFKField.getValueObject();
 
-                HiddenField hiddenPropField = (HiddenField)
-                    getFields().get(PROP_PREFIX +
-                                    StringUtils.substringAfter(key, FK_PREFIX));
+                String fieldName =
+                    PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX);
+                HiddenField hiddenPropField =
+                    (HiddenField) getFields().get(fieldName);
 
                 String propName = (String) hiddenPropField.getValueObject();
 
@@ -433,8 +434,8 @@ public class CayenneForm extends Form {
                     getFields().get(StringUtils.substringAfter(key, FK_PREFIX));
 
                 log("FKField: " + fkField.getName());
-                log("relation: class[" +fkClassName + "], " +
-                    "propName[" + propName + "]");
+                log("relation: class[" + fkClassName + "], "
+                    + "propName[" + propName + "]");
 
                 if (fkClassName != null && propName != null) {
                     DataObject fkDataObject = (DataObject)
@@ -484,9 +485,10 @@ public class CayenneForm extends Form {
                 HiddenField hiddenFKField = (HiddenField) getFields().get(key);
                 String fkClassName = (String) hiddenFKField.getValueObject();
 
-                HiddenField hiddenPropField = (HiddenField)
-                    getFields().get(PROP_PREFIX +
-                                    StringUtils.substringAfter(key, FK_PREFIX));
+                String fieldName =
+                    PROP_PREFIX + StringUtils.substringAfter(key, FK_PREFIX);
+                HiddenField hiddenPropField =
+                    (HiddenField) getFields().get(fieldName);
 
                 String propName = (String) hiddenPropField.getValueObject();
                 Field fkField = (Field)
@@ -495,12 +497,12 @@ public class CayenneForm extends Form {
                 log("FKField: " + fkField.getName());
 
                 String fkValue = fkField.getValue();
-                log("relation: class[" + fkClassName + "], " +
-                    "propName[" + propName + "], fk[" + fkValue + "]");
+                log("relation: class[" + fkClassName + "], "
+                    + "propName[" + propName + "], fk[" + fkValue + "]");
 
-                if (fkClassName != null &&
-                    propName != null &&
-                    StringUtils.isNotEmpty(fkValue)) {
+                if (fkClassName != null
+                    && propName != null
+                    && StringUtils.isNotEmpty(fkValue)) {
 
                     Class fkClass = Class.forName(fkClassName);
                     DataObject fkDataObject =

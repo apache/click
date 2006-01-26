@@ -167,7 +167,7 @@ public class DoubleField extends TextField {
      * @param value the maximum valid double field value
      */
     public void setMaxValue(double value) {
-        maxvalue = value ;
+        maxvalue = value;
     }
 
     /**

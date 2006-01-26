@@ -151,7 +151,7 @@ public class RegexField extends TextField {
      *
      * @param pattern the field regular expression pattern
      */
-    public void setPattern(String pattern){
+    public void setPattern(String pattern) {
         Pattern.compile(pattern);
         this.pattern = pattern;
     }
@@ -161,7 +161,7 @@ public class RegexField extends TextField {
      *
      * @return the field pattern
      */
-    public String getPattern(){
+    public String getPattern() {
         return this.pattern;
     }
 
@@ -222,8 +222,10 @@ public class RegexField extends TextField {
                 return true;
             }
 
-            if (pattern!=null && !Pattern.matches(pattern, value)){
-                Object[] args = new Object[] { getErrorLabel(), pattern };
+            if (pattern != null && !Pattern.matches(pattern, value)) {
+                Object[] args = new Object[] {
+                        getErrorLabel(), pattern
+                };
                 setError(getMessage("field-pattern-error", args));
                 return true;
             }
