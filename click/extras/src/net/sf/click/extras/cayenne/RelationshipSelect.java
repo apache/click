@@ -130,8 +130,8 @@ public class RelationshipSelect extends Select {
             DataObject relation = (DataObject) relationshipList.get(i);
             int pk = DataObjectUtils.intPKForObject(relation);
 
-            Option option = new Option
-                (String.valueOf(pk), decorator.render(relation, getContext()));
+            String label = decorator.render(relation, getContext());
+            Option option = new Option(String.valueOf(pk), label);
 
             add(option);
         }

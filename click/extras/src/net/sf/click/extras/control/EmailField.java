@@ -140,7 +140,7 @@ public class EmailField extends TextField {
             }
 
             int index = value.indexOf("@");
-            if (index < 1 || index == length -1) {
+            if (index < 1 || index == length - 1) {
                 setError(getMessage("email-format-error", getErrorLabel()));
                 return true;
             }

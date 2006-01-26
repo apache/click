@@ -161,10 +161,11 @@ public class TabbedPanel extends BasicPanel {
         // active
 
         String msg =
-            "TabbedPanel should have panels added ONLY via " +
-             "addPanel(panel, boolean) to ensure the active panel " +
-             "is correctly set.  Setting active panel to *this* | " +
-             "panel ('" + panel.getName() + "') as a result";
+            "TabbedPanel should have panels added ONLY via "
+            + "addPanel(panel, boolean) to ensure the active panel "
+            + "is correctly set.  Setting active panel to *this* | "
+            + "panel ('" + panel.getName() + "') as a result";
+
         logger.warn(msg);
 
         this.addPanel(panel, true);
@@ -184,16 +185,16 @@ public class TabbedPanel extends BasicPanel {
         super.addPanel(panel);
         if (isActivePanel) {
             if (logger.isTraceEnabled()) {
-                logger.trace("Adding panel with id " + panel.getId() +
-                             " as the active panel");
+                logger.trace("Adding panel with id " + panel.getId()
+                             + " as the active panel");
             }
             setActivePanel(panel);
         }
         if (getPanels().size() > 1 && tabActionLink == null) {
             if (logger.isTraceEnabled()) {
-                logger.trace("Two or more panels detected, enabling " +
-                             "tabActionLink. Current listener status = " +
-                             listener + "." + method + "()");
+                logger.trace("Two or more panels detected, enabling "
+                             + "tabActionLink. Current listener status = "
+                             + listener + "." + method + "()");
             }
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");

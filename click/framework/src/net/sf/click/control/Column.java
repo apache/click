@@ -455,8 +455,9 @@ public class Column implements Serializable {
             String valueStr = value.toString();
 
             // If email
-            if (valueStr.indexOf('@') != -1 && !valueStr.startsWith("@") &&
-                !valueStr.endsWith("@")) {
+            if (valueStr.indexOf('@') != -1
+                && !valueStr.startsWith("@")
+                && !valueStr.endsWith("@")) {
 
                 buffer.append("<a href=\"mailto:");
                 buffer.append(valueStr);

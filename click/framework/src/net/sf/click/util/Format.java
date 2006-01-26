@@ -243,9 +243,9 @@ public class Format {
      */
     public String email(String email, String attribute) {
         if (StringUtils.isNotBlank(email)) {
-            if (email.indexOf('@') != -1 &&
-                !email.startsWith("@") &&
-                !email.endsWith("@")) {
+            if (email.indexOf('@') != -1
+                && !email.startsWith("@")
+                && !email.endsWith("@")) {
 
                 HtmlStringBuffer buffer = new HtmlStringBuffer(128);
                 buffer.elementStart("a");
@@ -372,9 +372,9 @@ public class Format {
             HtmlStringBuffer buffer = new HtmlStringBuffer(128);
 
             // If email
-            if (value.indexOf('@') != -1 &&
-                !value.startsWith("@") &&
-                !value.endsWith("@")) {
+            if (value.indexOf('@') != -1
+                && !value.startsWith("@")
+                && !value.endsWith("@")) {
 
                 buffer.elementStart("a");
                 buffer.appendAttribute("href", "mailto:" + value);

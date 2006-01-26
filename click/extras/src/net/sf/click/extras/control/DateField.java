@@ -91,9 +91,9 @@ public class DateField extends TextField {
 
     /** The HTML import statements. */
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n" +
-        "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
 
     /** The Calendar resource file names. */
     protected static final String[] CALENDAR_RESOURCES =
@@ -389,7 +389,7 @@ public class DateField extends TextField {
     public void setValueObject(Object object) {
         if (object != null) {
             if (getValueClass().isAssignableFrom(object.getClass())) {
-                setDate((Date)object);
+                setDate((Date) object);
 
             } else {
                 String msg =
@@ -420,8 +420,7 @@ public class DateField extends TextField {
             String calendarResource =
                 "/net/sf/click/extras/control/calendar/" + calendarFilename;
 
-            ClickUtils.deployFile
-                (servletContext, calendarResource, targetDir);
+            ClickUtils.deployFile(servletContext, calendarResource, targetDir);
         }
     }
 
@@ -573,29 +572,30 @@ public class DateField extends TextField {
         for (int i = 0; i < pattern.length(); i++) {
             char aChar = pattern.charAt(i);
             if (debug) {
-                System.err.print("["+i+","+tokenStart+","+tokenEnd+"]="+aChar);
+                System.err.print("[" + i + "," + tokenStart + "," + tokenEnd
+                                 + "]=" + aChar);
             }
 
             // If character is in SimpleDateFormat pattern character set
-            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == -1) {
+            if ("GyMwWDdFEaHkKhmsSzZ".indexOf(aChar) == - 1) {
                 if (debug) {
                     System.err.println(" N");
                 }
-                if (tokenStart > -1) {
+                if (tokenStart > - 1) {
                     tokenEnd = i;
                 }
             } else {
                 if (debug) {
                     System.err.println(" Y");
                 }
-                if (tokenStart == -1) {
+                if (tokenStart == - 1) {
                     tokenStart = i;
                 }
             }
 
             if (tokenStart > -1) {
 
-                if (tokenEnd == -1 && i == pattern.length() -1) {
+                if (tokenEnd == -1 && i == pattern.length() - 1) {
                     tokenEnd = pattern.length();
                 }
 
@@ -659,8 +659,8 @@ public class DateField extends TextField {
                     }
 
                     if (debug) {
-                        System.err.println("token[" + tokenStart + "," +
-                                           tokenEnd + "]='" + token + "'");
+                        System.err.println("token[" + tokenStart + ","
+                                           + tokenEnd + "]='" + token + "'");
                     }
                     tokenStart = -1;
                     tokenEnd = -1;

@@ -482,8 +482,8 @@ public abstract class Field implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null &&
-            getParentMessages().containsKey(name)) {
+        if (getParentMessages() != null
+            && getParentMessages().containsKey(name)) {
 
             message = (String) getParentMessages().get(name);
         }
@@ -830,8 +830,8 @@ public abstract class Field implements Control {
      */
     protected String getErrorLabel() {
         String label = getLabel().trim();
-        label = (label.endsWith(":")) ?
-                label.substring(0, label.length() - 1) : label;
+        label = (label.endsWith(":"))
+                ? label.substring(0, label.length() - 1) : label;
         return label;
     }
 

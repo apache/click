@@ -199,9 +199,10 @@ public class HiddenField extends Field {
      */
     public void setValueObject(Object value) {
         if ((value != null) && (value.getClass() != valueClass)) {
-            String msg = "The value.getClass() must be the same as the " +
-                         "HiddenField valueClass: " +
-                         ((valueClass != null) ? valueClass.getName() : "null");
+            String msg =
+                "The value.getClass() must be the same as the "
+                + "HiddenField valueClass: "
+                + ((valueClass != null) ? valueClass.getName() : "null");
 
             throw new IllegalArgumentException(msg);
         }
@@ -303,15 +304,15 @@ public class HiddenField extends Field {
             valueStr = String.valueOf(getValue());
 
         } else if (getValueObject() instanceof Date) {
-            valueStr = String.valueOf(((Date)getValueObject()).getTime());
+            valueStr = String.valueOf(((Date) getValueObject()).getTime());
 
         } else if (getValueObject() instanceof Serializable) {
             try {
                 valueStr = ClickUtils.encode(getValueObject());
             } catch (IOException ioe) {
                 String msg =
-                    "could not encode value for hidden field: " +
-                    getValueObject();
+                    "could not encode value for hidden field: "
+                    + getValueObject();
                 throw new RuntimeException(msg, ioe);
             }
         } else {

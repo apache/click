@@ -589,8 +589,8 @@ public class ActionLink implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null &&
-            getParentMessages().containsKey(name)) {
+        if (getParentMessages() != null
+            && getParentMessages().containsKey(name)) {
 
             message = (String) getParentMessages().get(name);
         }

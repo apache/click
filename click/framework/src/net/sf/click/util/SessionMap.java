@@ -151,7 +151,7 @@ public class SessionMap implements Map {
      */
     public void putAll(Map map) {
         if (session != null && map != null) {
-            for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+            for (Iterator i = map.keySet().iterator(); i.hasNext();) {
                 String key = i.next().toString();
                 Object value = map.get(key);
                 session.setAttribute(key, value);

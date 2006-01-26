@@ -189,7 +189,7 @@ public class ClickLogger implements LogChute {
         buffer.append(name);
         buffer.append("]");
 
-        buffer.append(LEVELS[level+1]);
+        buffer.append(LEVELS[level + 1]);
         buffer.append(message);
 
         if (servletContext != null) {

@@ -83,10 +83,10 @@ public class CompressionFilter implements Filter {
         if (filterConfig != null) {
 
             String str = filterConfig.getInitParameter("compressionThreshold");
-            if (str!=null) {
+            if (str != null) {
                 compressionThreshold = Integer.parseInt(str);
-                if (compressionThreshold != 0 &&
-                    compressionThreshold < minThreshold) {
+                if (compressionThreshold != 0
+                    && compressionThreshold < minThreshold) {
 
                     compressionThreshold = minThreshold;
                 }
@@ -141,16 +141,16 @@ public class CompressionFilter implements Filter {
         if (request instanceof HttpServletRequest) {
 
             // Are we allowed to compress ?
-            String s = ((HttpServletRequest)request).getParameter("gzip");
+            String s = ((HttpServletRequest) request).getParameter("gzip");
             if ("false".equals(s)) {
                 chain.doFilter(request, response);
                 return;
             }
 
             Enumeration e =
-                ((HttpServletRequest)request).getHeaders("Accept-Encoding");
+                ((HttpServletRequest) request).getHeaders("Accept-Encoding");
             while (e.hasMoreElements()) {
-                String name = (String)e.nextElement();
+                String name = (String) e.nextElement();
                 if (name.indexOf("gzip") != -1) {
                     supportCompression = true;
                 }
@@ -162,9 +162,9 @@ public class CompressionFilter implements Filter {
             return;
         } else {
             if (response instanceof HttpServletResponse) {
+                HttpServletResponse hsr = (HttpServletResponse) response;
                 CompressionServletResponseWrapper wrappedResponse =
-                    new CompressionServletResponseWrapper
-                            ((HttpServletResponse)response);
+                    new CompressionServletResponseWrapper(hsr);
 
                 wrappedResponse.setCompressionThreshold(compressionThreshold);
 

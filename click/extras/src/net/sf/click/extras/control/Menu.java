@@ -490,17 +490,17 @@ public class Menu implements Control {
      * @return a debug string representation of the menu
      */
     public String toString() {
-        return getClass().getName() +
-            "[label=" + getLabel() +
-            ",name=" + name +
-            ",path=" + getPath() +
-            ",title=" + getTitle() +
-            ",isRootMenu=" + isRootMenu +
-            ",selected=" + isSelected() +
-            ",pages=" + pages +
-            ",roles=" + roles +
-            ",children=" + children +
-            "]";
+        return getClass().getName()
+            + "[label=" + getLabel()
+            + ",name=" + name
+            + ",path=" + getPath()
+            + ",title=" + getTitle()
+            + ",isRootMenu=" + isRootMenu
+            + ",selected=" + isSelected()
+            + ",pages=" + pages
+            + ",roles=" + roles
+            + ",children=" + children
+            + "]";
     }
 
     // --------------------------------------------------------- Public Methods
@@ -537,7 +537,7 @@ public class Menu implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
 
-        synchronized(LOAD_LOCK) {
+        synchronized (LOAD_LOCK) {
             if (rootMenu == null) {
                 Menu menu = new Menu("rootMenu");
 

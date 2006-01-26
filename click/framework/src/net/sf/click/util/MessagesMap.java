@@ -166,8 +166,9 @@ public class MessagesMap implements Map {
             return (String) messages.get(key);
 
         } else {
-            String msg = "Message \"{0}\" not found in bundle \"{1}\" " +
-                         "for locale \"{2}\"";
+            String msg =
+                "Message \"{0}\" not found in bundle \"{1}\" "
+                + "for locale \"{2}\"";
             String keyStr = (key != null) ? key.toString() : null;
             Object[] args = { keyStr, baseName, locale };
             msg = MessageFormat.format(msg, args);

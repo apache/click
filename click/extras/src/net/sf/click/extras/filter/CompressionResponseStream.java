@@ -43,7 +43,7 @@ class CompressionResponseStream extends ServletOutputStream {
      * @param response The associated response
      */
     public CompressionResponseStream(HttpServletResponse response)
-        throws IOException{
+        throws IOException {
 
         super();
         closed = false;
