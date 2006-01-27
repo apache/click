@@ -162,15 +162,13 @@ public class RegexField extends TextField {
      * @return the field pattern
      */
     public String getPattern() {
-        return this.pattern;
+        return pattern;
     }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the RegexField submission. If the text value passes the validation
-     * constraints and a Control listener is defined then the listener method will
-     * be invoked.
+     * Validate the RegexField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle:
@@ -191,54 +189,22 @@ public class RegexField extends TextField {
      * </ul>
      * </blockquote>
      *
-     * @see net.sf.click.Control#onProcess()
+     * @see net.sf.click.control.Field#validate()
      *
-     * @return true to continue Page event processing or false otherwise
      * @throws java.util.regex.PatternSyntaxException if the pattern has a
      *      syntax error
      */
-    public boolean onProcess() {
-        value = getRequestValue();
+    public void validate() {
+        super.validate();
 
-        if (!validate()) {
-            return true;
-        }
-
-        int length = value.length();
-        if (length > 0) {
-            if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMinLength())
-                };
-                setError(getMessage("field-minlength-error", args));
-                return true;
-            }
-
-            if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMaxLength())
-                };
-                setError(getMessage("field-maxlength-error", args));
-                return true;
-            }
+        if (isValid()) {
+            String value = getValue();
+            String pattern = getPattern();
 
             if (pattern != null && !Pattern.matches(pattern, value)) {
-                Object[] args = new Object[] {
-                        getErrorLabel(), pattern
-                };
-                setError(getMessage("field-pattern-error", args));
-                return true;
-            }
-
-            return invokeListener();
-
-        } else {
-            if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
+                setErrorMessage("field-pattern-error", pattern);
             }
         }
-
-        return true;
     }
 
 }

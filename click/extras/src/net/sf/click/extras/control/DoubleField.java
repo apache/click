@@ -227,8 +227,7 @@ public class DoubleField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the DoubleField submission. If the Double value can be parsed
-     * the controls listener will be invoked.
+     * Process the DoubleField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
@@ -241,49 +240,30 @@ public class DoubleField extends TextField {
      * <li>number-minvalue-error</li>
      * </ul></blockquote>
      *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * @see net.sf.click.control.Field#validate()
      */
-    public boolean onProcess() {
-        value = getRequestValue();
-
-        if (!validate()) {
-            return true;
-        }
+    public void validate() {
+        String value = getValue();
 
         int length = value.length();
         if (length > 0) {
             try {
                 double doubleValue = Double.parseDouble(value);
 
-                if (maxvalue != Double.MAX_VALUE && doubleValue > maxvalue) {
-                    Object[] args = new Object[] {
-                        getErrorLabel(), new Double(maxvalue)
-                    };
-                    setError(getMessage("number-maxvalue-error", args));
-                    return true;
-                }
+                if (doubleValue > maxvalue) {
+                    setErrorMessage("number-maxvalue-error", maxvalue);
 
-                if (minvalue != Double.MIN_VALUE && doubleValue < minvalue) {
-                    Object[] args = new Object[] {
-                        getErrorLabel(), new Double(minvalue)
-                    };
-                    setError(getMessage("number-minvalue-error", args));
-                    return true;
+                } else if (doubleValue < minvalue) {
+                    setErrorMessage("number-minvalue-error", minvalue);
                 }
-
-                return invokeListener();
 
             } catch (NumberFormatException nfe) {
                 setError(getMessage("double-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
+                setErrorMessage("field-required-error");
             }
         }
-
-        return true;
     }
 }

@@ -120,6 +120,15 @@ public class Radio extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * TODO:
+     */
+    public void bindRequestValue() {
+        String value = getRequestValue();
+
+        setChecked(getValue().equals(value));
+    }
+
+    /**
      * Process the request Context setting the checked value if selected
      * and invoking the controls listener if defined.
      *
@@ -128,16 +137,11 @@ public class Radio extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        String value = getRequestValue();
+        bindRequestValue();
 
-        checked = getValue().equals(value);
-
-        if (!validate()) {
-            return true;
-        }
-
-        if (checked) {
+        if (isChecked()) {
             return invokeListener();
+
         } else {
             return true;
         }

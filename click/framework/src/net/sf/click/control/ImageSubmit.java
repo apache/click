@@ -133,45 +133,28 @@ public class ImageSubmit extends Submit {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the submit event and return true to continue event processing.
-     * <p/>
-     * If the image is clicked and a Control listener is defined, the
-     * listener method will be invoked and its boolean return value will be
-     * returned by this method.
-     * <p/>
-     * Submit button controls will be processed after all the non Button
-     * Controls have been processed. Submit buttons will be processed in the
-     * order they were added to the Form.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * TODO:
      */
-    public boolean onProcess() {
+    public void bindRequestValue() {
+
         //  Note IE does not submit name
         String xValue = getContext().getRequestParameter(getName() + ".x");
 
         if (xValue != null) {
-            clicked = true;
+            this.clicked = true;
 
             try {
-                x = Integer.parseInt(xValue);
+                this.x = Integer.parseInt(xValue);
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
             }
 
             String yValue = getContext().getRequestParameter(getName() + ".y");
             try {
-                y = Integer.parseInt(yValue);
+                this.y = Integer.parseInt(yValue);
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
             }
-
-            if (clicked) {
-                return invokeListener();
-            }
         }
-
-        return true;
     }
 }

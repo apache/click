@@ -96,8 +96,7 @@ public class EmailField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the EmailField submission. If the Email value is valid the
-     * controls listener will be invoked.
+     * Process the EmailField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
@@ -110,58 +109,44 @@ public class EmailField extends TextField {
      * <li>field-required-error</li>
      * </ul></blockquote>
      *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * @see net.sf.click.control.Field#validate()
      */
-    public boolean onProcess() {
-        value = getRequestValue();
-
-        if (!validate()) {
-            return true;
-        }
+    public void validate() {
+        String value = getValue();
 
         int length = value.length();
         if (length > 0) {
             if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMinLength())
-                };
-                setError(getMessage("field-minlength-error", args));
-                return true;
+                setErrorMessage("field-minlength-error", getMinLength());
+                return;
             }
 
             if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMaxLength())
-                };
-                setError(getMessage("field-maxlength-error", args));
-                return true;
+                setErrorMessage("field-maxlength-error", getMaxLength());
+                return;
             }
 
             int index = value.indexOf("@");
             if (index < 1 || index == length - 1) {
-                setError(getMessage("email-format-error", getErrorLabel()));
-                return true;
-            }
-            if (!Character.isLetterOrDigit(value.charAt(0))) {
-                setError(getMessage("email-format-error", getErrorLabel()));
-                return true;
-            }
-            if (!Character.isLetterOrDigit(value.charAt(length - 1))) {
-                setError(getMessage("email-format-error", getErrorLabel()));
-                return true;
+                setErrorMessage("email-format-error");
+                return;
             }
 
-            return invokeListener();
+            if (!Character.isLetterOrDigit(value.charAt(0))) {
+                setErrorMessage("email-format-error");
+                return;
+            }
+
+            if (!Character.isLetterOrDigit(value.charAt(length - 1))) {
+                setErrorMessage("email-format-error");
+                return;
+            }
 
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
+                setErrorMessage("field-required-error");
             }
         }
-
-        return true;
     }
 
 }

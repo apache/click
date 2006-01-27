@@ -133,7 +133,7 @@ public class Button extends Field {
     /**
      * Returns true, as buttons perform no server side logic.
      *
-     * @see net.sf.click.Control#onProcess()
+     * @see net.sf.click.control.Field#onProcess()
      *
      * @return true
      */
