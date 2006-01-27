@@ -246,26 +246,18 @@ public class RadioGroup extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        value = getRequestValue();
+        bindRequestValue();
 
         boolean continueProcessing = true;
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
             continueProcessing = radio.onProcess();
-            if (!continueProcessing && validate()) {
+            if (!continueProcessing && getValidate()) {
                 return false;
             }
         }
 
-        if (!validate()) {
-            return true;
-        }
-
-        if (value.length() > 0) {
-            return invokeListener();
-        } else {
-            return true;
-        }
+        return invokeListener();
     }
 
     /**

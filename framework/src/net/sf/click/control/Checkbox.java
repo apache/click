@@ -183,29 +183,10 @@ public class Checkbox extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the request Context setting the checked value and invoking
-     * the controls listener if defined.
-     * <p/>
-     * If a checked value is {@link Field#required} and the Checkbox is not
-     * checked the error message defined by <tt>not-checked-error</tt>
-     * property will be displayed.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * TODO: doco
      */
-    public boolean onProcess() {
+    public void bindRequestValue() {
         setChecked(getContext().getRequestParameter(getName()) != null);
-
-        if (!validate()) {
-            return true;
-        }
-
-        if (isRequired() && !isChecked()) {
-            error = getMessage("not-checked-error", getErrorLabel());
-        }
-
-        return invokeListener();
     }
 
     /**
@@ -243,5 +224,20 @@ public class Checkbox extends Field {
         buffer.elementEnd();
 
         return buffer.toString();
+    }
+
+    /**
+     * Validate the Checkbox request submission.
+     * <p/>
+     * If a checked value is {@link Field#required} and the Checkbox is not
+     * checked the error message defined by <tt>not-checked-error</tt>
+     * property will be displayed.
+     *
+     * @see net.sf.click.control.Field#validate()
+     */
+    public void validate() {
+        if (isRequired() && !isChecked()) {
+            setErrorMessage("not-checked-error");
+        }
     }
 }

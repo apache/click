@@ -213,16 +213,12 @@ public class HiddenField extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the HiddenField submission. If the value can be parsed any
-     * control listener will be invoked.
+     * TODO: doco
      * <p/>
      * The value object will be set with the HiddenField's string value.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
      */
-    public boolean onProcess() {
+    public void bindRequestValue() {
+
         String aValue = getRequestValue();
         Class valueClass = getValueClass();
 
@@ -271,8 +267,6 @@ public class HiddenField extends Field {
         } else {
             setValue(null);
         }
-
-        return invokeListener();
     }
 
     /**

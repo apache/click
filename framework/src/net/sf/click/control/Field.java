@@ -112,6 +112,11 @@ public abstract class Field implements Control {
     /** The Field 'title' attribute, which acts as a tooltip help message. */
     protected String title;
 
+    /**
+     * The validate Field value <tt>onProcess()</tt> invokation flag.
+     */
+    protected Boolean validate;
+
     /** The Field value. */
     protected String value;
 
@@ -685,14 +690,29 @@ public abstract class Field implements Control {
      * The Field inherits its validate status from its parent Form, see
      * {@link Form#getValidate()}.
      *
+     * TODO: doco
+     *
      * @return true if the Field should validate itself when being processed.
      */
-    public boolean validate() {
-        if (getForm() != null) {
+    public boolean getValidate() {
+        if (validate != null) {
+            return validate.booleanValue();
+
+        } else if (getForm() != null) {
             return getForm().getValidate();
+
         } else {
             return true;
         }
+    }
+
+    /**
+     * Set the validate Field value when being processed flag.
+     *
+     * @param validate the field value when processed
+     */
+    public void setValidate(boolean validate) {
+        this.validate = Boolean.valueOf(validate);
     }
 
     /**
@@ -722,9 +742,7 @@ public abstract class Field implements Control {
      * @param value the Field value
      */
     public void setValue(String value) {
-        if (value != null) {
-            this.value = value.toString();
-        }
+        this.value = value;
     }
 
     /**
@@ -770,7 +788,15 @@ public abstract class Field implements Control {
     // ---------------------------------------------------------- Public Methods
 
     /**
-     * This method does nothing.
+     * TODO: what level of visibility ? public ?
+     */
+    public void bindRequestValue() {
+        setValue(getRequestValue());
+    }
+
+    /**
+     * This method does nothing. Subclasses may override this method to deploy
+     * static web resources.
      *
      * @see Control#onDeploy(ServletContext)
      *
@@ -778,6 +804,41 @@ public abstract class Field implements Control {
      * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
+    }
+
+    /**
+     * TODO: doco
+     *
+     * <pre class="codeJava">
+     * <span class="kw">public boolean</span> onProcess() {
+     *     bindRequestValue();
+     *
+     *     <span class="kw">if</span> (getValidate()) {
+     *         validate();
+     *     }
+     *
+     *     <span class="kw">return</span> invokeListener();
+     * } </pre>
+     *
+     * @see Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    public boolean onProcess() {
+        bindRequestValue();
+
+        if (getValidate()) {
+            validate();
+        }
+
+        return invokeListener();
+    }
+
+    /**
+     * TODO: validate documentation
+     */
+    protected void validate() {
+
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -807,7 +868,7 @@ public abstract class Field implements Control {
 
     /**
      * Perform a action listener callback if a listener object and listener
-     * method is defined.
+     * method is defined, otherwise returns true.
      *
      * @see ClickUtils#invokeListener(Object, String)
      *
@@ -835,6 +896,31 @@ public abstract class Field implements Control {
         return label;
     }
 
+    protected void setErrorMessage(String key) {
+        setError(getMessage(key, getErrorLabel()));
+    }
+
+    protected void setErrorMessage(String key, Object value) {
+        Object[] args = new Object[] {
+            getErrorLabel(), value
+        };
+        setError(getMessage(key, args));
+    }
+
+    protected void setErrorMessage(String key, int value) {
+        Object[] args = new Object[] {
+            getErrorLabel(), new Integer(value)
+        };
+        setError(getMessage(key, args));
+    }
+
+    protected void setErrorMessage(String key, double value) {
+        Object[] args = new Object[] {
+            getErrorLabel(), new Double(value)
+        };
+        setError(getMessage(key, args));
+    }
+
     /**
      * Return the field's value from the request.
      *
@@ -848,4 +934,5 @@ public abstract class Field implements Control {
             return "";
         }
     }
+
 }

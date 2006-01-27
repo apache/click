@@ -419,88 +419,34 @@ public class Select extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the Select submission.
-     * <p/>
-     * If a Select is {@link #required} then the user must select a value
-     * other than the first value is the list, otherwise the Select will
-     * have a validation error. If the Select is not required then no
-     * validation errors will occur.
-     * <p/>
-     * If the Select is valid, an item(s) is selected, and a Control listener is
-     * defined then the listener method will be invoked.
-     * <p/>
-     * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>select-error</li>
-     * </ul></blockquote>
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * TODO: doco
      */
-    public boolean onProcess() {
+    public void bindRequestValue() {
+
         // Page developer has not initialized options
         if (getOptionList().isEmpty()) {
-            return true;
+            return;
         }
 
         // Process single item select case, do the easy one first.
         if (!isMultiple()) {
             // Load the selected item.
-            value = getContext().getRequestParameter(getName());
-
-            if (validate() && value != null) {
-                Option firstOption = (Option) getOptionList().get(0);
-
-                if (isRequired() && firstOption.getValue().equals(value)) {
-                    setError(getMessage("select-error", getErrorLabel()));
-                    return true;
-
-                } else {
-                    return invokeListener();
-                }
-
-            } else {
-                return true;
-            }
+            this.value = getContext().getRequestParameter(getName());
 
         // Process the multiple item select case.
         } else {
 
             // Load the selected items.
-            multipleValues = new ArrayList();
+            this.multipleValues = new ArrayList();
+
             // TODO: resolve multiple values when multipart/form-data
+
             String[] values =
                 getContext().getRequest().getParameterValues(getName());
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
                     multipleValues.add(values[i]);
-                }
-            }
-
-            if (!validate()) {
-                return true;
-            }
-
-            if (isRequired()) {
-                if (multipleValues.isEmpty()) {
-                    setError(getMessage("select-error", getErrorLabel()));
-                    return true;
-
-                } else {
-                    return invokeListener();
-                }
-
-            } else {
-                if (multipleValues.isEmpty()) {
-                    return true;
-
-                } else {
-                    return invokeListener();
                 }
             }
         }
@@ -567,6 +513,42 @@ public class Select extends Field {
         buffer.elementEnd("select");
 
         return buffer.toString();
+    }
+
+    /**
+     * Validate the Select request submission.
+     * <p/>
+     * If a Select is {@link #required} then the user must select a value
+     * other than the first value is the list, otherwise the Select will
+     * have a validation error. If the Select is not required then no
+     * validation errors will occur.
+     * <p/>
+     * A field error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle: <blockquote>
+     * <pre>/click-control.properties</pre></blockquote>
+     * <p/>
+     * Error message bundle key names include: <blockquote><ul>
+     * <li>select-error</li>
+     * </ul></blockquote>
+     *
+     * @see net.sf.click.control.Field#validate()
+     */
+    public void validate() {
+
+        if (isRequired()) {
+            if (isMultiple()) {
+                if (getMultipleValues().isEmpty()) {
+                    setErrorMessage("select-error");
+                }
+
+            } else {
+                Option firstOption = (Option) getOptionList().get(0);
+
+                if (firstOption.getValue().equals(getValue())) {
+                    setErrorMessage("select-error");
+                }
+            }
+        }
     }
 
     // ------------------------------------------------------ Protected Methods

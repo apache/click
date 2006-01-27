@@ -232,8 +232,40 @@ public class CreditCardField extends TextField {
     // -------------------------------------------------------- Public Methods
 
     /**
-     * Process the Credit Card submission, using the card type to validate
-     * the card number.
+     * TODO: DOCO
+     */
+    public void bindRequestValue() {
+        super.bindRequestValue();
+
+        cardType = getContext().getRequestParameter(SELECT_NAME);
+    }
+
+    /**
+     * Return the HTML rendered CreditCardField string.
+     *
+     * @see Object#toString()
+     *
+     * @return the HTML rendered CreditCardField string
+     */
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(400);
+
+        // Render card number field
+        String textField = super.toString();
+        buffer.append(textField);
+
+        // Render card type select
+        cardTypeSelect.setContext(getContext());
+        cardTypeSelect.setValue(cardType);
+        cardTypeSelect.setForm(getForm());
+        buffer.append(cardTypeSelect);
+
+        return buffer.toString();
+    }
+
+    /**
+     * Validate the CreditCardField request submission, using the card type to
+     * validate the card number.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
@@ -246,18 +278,12 @@ public class CreditCardField extends TextField {
      * <li>field-required-error</li>
      * </ul></blockquote>
      *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * @see net.sf.click.control.Field#validate()
      */
-    public boolean onProcess() {
-        value = getRequestValue();
+    public void validate() {
+        String value = getValue();
 
-        cardType = getContext().getRequestParameter(SELECT_NAME);
-
-        if (!validate()) {
-            return true;
-        }
+        String cardType = getCardType();
 
         // Strip spaces and '-' chars
         StringBuffer buffer = new StringBuffer(value.length());
@@ -272,26 +298,19 @@ public class CreditCardField extends TextField {
         final int length = value.length();
         if (length > 0) {
             if (length < getMinLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMinLength())
-                };
-                setError(getMessage("field-minlength-error", args));
-                return true;
+                setErrorMessage("field-minlength-error", getMinLength());
+                return;
             }
+
             if (length > getMaxLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMaxLength())
-                };
-                setError(getMessage("field-maxlength-error", args));
-                return true;
+                setErrorMessage("field-maxlength-error", getMaxLength());
+                return;
             }
 
             // Shortest valid number is VISA with 13 digits
             if (length < 13) {
-                String msg =
-                    getMessage("creditcard-number-error", getErrorLabel());
-                setError(msg);
-                return true;
+                setErrorMessage("creditcard-number-error");
+                return;
             }
 
             if (cardType != null) {
@@ -326,43 +345,15 @@ public class CreditCardField extends TextField {
                 }
 
                 if (!isValid) {
-                    String msg =
-                        getMessage("creditcard-number-error", getErrorLabel());
-                    setError(msg);
+                    setErrorMessage("creditcard-number-error");
                 }
             }
 
-            return invokeListener();
-
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error",  getErrorLabel()));
+                setErrorMessage("field-required-error");
             }
-
-            return true;
         }
     }
 
-    /**
-     * Return the HTML rendered CreditCardField string.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML rendered CreditCardField string
-     */
-    public String toString() {
-        StringBuffer buffer = new StringBuffer(400);
-
-        // Render card number field
-        String textField = super.toString();
-        buffer.append(textField);
-
-        // Render card type select
-        cardTypeSelect.setContext(getContext());
-        cardTypeSelect.setValue(cardType);
-        cardTypeSelect.setForm(getForm());
-        buffer.append(cardTypeSelect);
-
-        return buffer.toString();
-    }
 }

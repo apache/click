@@ -450,7 +450,7 @@ public class DateField extends TextField {
 
         value = getRequestValue();
 
-        if (!validate()) {
+        if (!getValidate()) {
             return true;
         }
 

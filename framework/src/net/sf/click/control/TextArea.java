@@ -236,61 +236,6 @@ public class TextArea extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the TextArea submission. If the text value passes the validation
-     * constraints and a Control listener is defined then the listener
-     * method will be invoked.
-     * <p/>
-     * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>field-maxlength-error</li>
-     * <li>field-minlength-error</li>
-     * <li>field-required-error</li>
-     * </ul></blockquote>
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
-     */
-    public boolean onProcess() {
-        value = getRequestValue();
-
-        if (!validate()) {
-            return true;
-        }
-
-        int length = value.length();
-        if (length > 0) {
-            if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMinLength())
-                };
-                setError(getMessage("field-minlength-error", args));
-                return true;
-            }
-
-            if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMaxLength())
-                };
-                setError(getMessage("field-maxlength-error", args));
-                return true;
-            }
-
-            return invokeListener();
-
-        } else {
-            if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Return a HTML rendered TextArea string.
      *
      * @see Object#toString()
@@ -330,4 +275,40 @@ public class TextArea extends Field {
         return buffer.toString();
     }
 
+    /**
+     * Validate the TextArea request submission.
+     * <p/>
+     * A field error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle: <blockquote>
+     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <p/>
+     * Error message bundle key names include: <blockquote><ul>
+     * <li>field-maxlength-error</li>
+     * <li>field-minlength-error</li>
+     * <li>field-required-error</li>
+     * </ul></blockquote>
+     *
+     * @see net.sf.click.Field#validate()
+     */
+    public void validate() {
+        String value = getValue();
+
+        int length = value.length();
+        if (length > 0) {
+            if (getMinLength() > 0 && length < getMinLength()) {
+                setErrorMessage("field-minlength-error", getMinLength());
+                return;
+            }
+
+            if (getMaxLength() > 0 && length > getMaxLength()) {
+                setErrorMessage("field-maxlength-error", getMaxLength());
+                return;
+            }
+
+        } else {
+            if (isRequired()) {
+                setErrorMessage("field-required-error");
+            }
+        }
+    }
 }

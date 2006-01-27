@@ -212,30 +212,11 @@ public class FileField extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Processes the FileField submission.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * TODO:
      */
-    public boolean onProcess() {
-        fileItem = (FileItem)
-            getContext().getMultiPartFormData().get(getName());
-
-        if (!validate()) {
-            return true;
-        }
-
-        if (fileItem != null) {
-            if (isRequired() && fileItem.getSize() == 0) {
-                setError(getMessage("file-required-error", getErrorLabel()));
-
-            } else {
-                return invokeListener();
-            }
-        }
-
-        return true;
+    public void bindRequestValue() {
+        fileItem =
+            (FileItem) getContext().getMultiPartFormData().get(getName());
     }
 
     /**
@@ -273,4 +254,32 @@ public class FileField extends Field {
 
         return buffer.toString();
     }
+
+    /**
+     * Validate the FileField request submission.
+     * <p/>
+     * A field error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>file-required-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
+     *
+     * @see net.sf.click.control.Field#validate()
+     */
+    public void validate() {
+        FileItem fileItem = getFileItem();
+
+        if (fileItem != null) {
+            if (isRequired() && fileItem.getSize() == 0) {
+                setErrorMessage("file-required-error");
+            }
+        }
+    }
+
 }

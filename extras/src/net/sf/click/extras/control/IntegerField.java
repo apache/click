@@ -242,8 +242,7 @@ public class IntegerField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Process the IntegerField submission. If the Integer value can be parsed
-     * the controls listener will be invoked.
+     * Validate the IntegerField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle: <blockquote>
@@ -256,47 +255,30 @@ public class IntegerField extends TextField {
      * <li>number-minvalue-error</li>
      * </ul></blockquote>
      *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * @see net.sf.click.control.Field#validate()
      */
-    public boolean onProcess() {
-        value = getRequestValue();
-
-        if (!validate()) {
-            return true;
-        }
+    public void validate() {
+        String value = getValue();
 
         int length = value.length();
         if (length > 0) {
             try {
                 int intValue = Integer.parseInt(value);
-                if (intValue > maxvalue) {
-                    Object[] args = new Object[] {
-                        getErrorLabel(), new Integer(maxvalue)
-                    };
-                    setError(getMessage("number-maxvalue-error", args));
-                    return true;
-                }
-                if (intValue < minvalue) {
-                    Object[] args = new Object[] {
-                        getErrorLabel(), new Integer(minvalue)
-                    };
-                    setError(getMessage("number-minvalue-error", args));
-                    return true;
-                }
 
-                return invokeListener();
+                if (intValue > maxvalue) {
+                    setErrorMessage("number-maxvalue-error", maxvalue);
+
+                } else if (intValue < minvalue) {
+                    setErrorMessage("number-minvalue-error", minvalue);
+                }
 
             } catch (NumberFormatException nfe) {
                 setError(getMessage("integer-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
+                setErrorMessage("field-required-error");
             }
         }
-
-        return true;
     }
 }
