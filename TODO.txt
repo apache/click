@@ -1,7 +1,6 @@
 CODE
-* modify click utils to not load submit check values
-* add german properties files
-* add click utils patch
+* update Field doco: bindRequestValue, onProcess, validate
+* update Field message keys doco, as done in RegexField
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
