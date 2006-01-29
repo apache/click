@@ -98,15 +98,18 @@ public class DateField extends TextField {
 
     /** The Calendar resource file names. */
     protected static final String[] CALENDAR_RESOURCES =
-        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-it.js",
-          "-ja.js", "-ko.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
+        { ".gif", ".js", "-al.js", "-bg.js", "-cs.js", "-da.js", "-de.js",
+          "-el.js", "-en.js", "-es.js", "-fi.js", "-fr.js", "-he.js", "-it.js",
+          "-ja.js", "-ko.js", "-lt.js", "-lv.js", "-no.js", "-pl.js", "-pt.js",
+          "-ru.js", "-sk.js", "-sv.js", "-zh.js", "-blue.css", "-blue2.css",
           "-brown.css", "-green.css", "-system.css", "-tas.css",
           "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
           "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
 
     /** Supported locales. */
     protected static final String[] SUPPORTTED_LANGUAGES =
-        {"de", "en", "es", "fr", "it", "ja", "ko", "ru", "zh"};
+        {"al", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "it",
+         "ja", "ko", "lt", "lv", "no", "pl", "pt", "ru", "sk", "sv", "zh"};
 
     // ----------------------------------------------------- Instance Variables
 
