@@ -1,24 +1,32 @@
 // ** I18N
 
 // Calendar JA language
-// Author: Naoki Takezoe, <takezoe@gmail.com>
-// Encoding: utf-8
+// Author: AKIMOTO, Hiroki, <akimoto aaaa---t cybozu.co.jp>
+// Encoding: UTF-8
 // Distributed under the same terms as the calendar itself.
 
 // For translators: please use UTF-8 if possible.  We strongly believe that
 // Unicode is the answer to a real internationalized world.  Also please
 // include your contact information in the header, as can be seen above.
 
+// FYI: Locale identifiers for Japanese/Japan are a bit confusing. Use 'ja'.
+//  'ja'   Japanese, Language Code
+//  'JP'   Japan, Country Code
+//  So, 'ja-JP' locale means Japanese in Japan, however, there are no other
+//  countries Japanese primarily used so usually '-JP' is omittable.
+//  Not a small amount of internationalized software use 'jp' in mistake,
+//  but as you see now that the locale name 'ja' is the right one.
+
 // full day names
 Calendar._DN = new Array
-("日曜日",
- "月曜日",
- "火曜日",
- "水曜日",
- "木曜日",
- "金曜日",
- "土曜日",
- "日曜日");
+("日",
+ "月",
+ "火",
+ "水",
+ "木",
+ "金",
+ "土",
+ "日");
 
 // Please note that the following array of short day names (and the same goes
 // for short month names, _SMN) isn't absolutely necessary.  We give it here
@@ -79,18 +87,18 @@ Calendar._SMN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "カレンダについて";
+Calendar._TT["INFO"] = "このカレンダーについて";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
-"For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
-"Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
+"最新版の情報: http://www.dynarch.com/projects/calendar/\n" +
+"GNU LGPL で配布されています。 詳細は http://gnu.org/licenses/lgpl.html をご覧ください。" +
 "\n\n" +
-"Date selection:\n" +
-"- Use the \xab, \xbb buttons to select year\n" +
-"- Use the " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " buttons to select month\n" +
-"- Hold mouse button on any of the above buttons for faster selection.";
+"日付の選択:\n" +
+"- ボタン \xab, \xbb で年を選択します\n" +
+"- ボタン " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " で月を選択します\n" +
+"- 上記ボタンでマウスを押したままにすると、より大きな移動ができます";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
 "Time selection:\n" +
 "- Click on any of the time parts to increase it\n" +
@@ -108,7 +116,7 @@ Calendar._TT["PART_TODAY"] = " (今日)";
 
 // the following is to inform that "%s" is to be the first day of week
 // %s will be replaced with the day name.
-Calendar._TT["DAY_FIRST"] = "%s を先頭に";
+Calendar._TT["DAY_FIRST"] = "%s曜日を週の先頭に";
 
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
@@ -117,11 +125,11 @@ Calendar._TT["WEEKEND"] = "0,6";
 
 Calendar._TT["CLOSE"] = "閉じる";
 Calendar._TT["TODAY"] = "今日";
-Calendar._TT["TIME_PART"] = "(Shift-)Click かドラッグで値を変更";
+Calendar._TT["TIME_PART"] = "(Shift-)Click or drag to change value";
 
 // date formats
 Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
-Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
+Calendar._TT["TT_DATE_FORMAT"] = "%m月 %d日 (%a)";
 
 Calendar._TT["WK"] = "週";
-Calendar._TT["TIME"] = "時:";
+Calendar._TT["TIME"] = "Time:";
