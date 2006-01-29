@@ -29,27 +29,118 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.MessagesMap;
 
 /**
- * Provides an abstract form Field control.
- * <p/>
- * The Form control acts a container for Field control instances. When a Form
- * is processed it will inturn process all the fields it contains. All Form
- * field controls must extend this abstract class.
- * <p/>
- * Field classes provide localizable field messages and error messages
- * defined in the resource bundle:
+ * Provides an abstract form Field control. Field controls are contained by
+ * the {@link Form} control which will orchestrate the processing and
+ * rendering of the contained fields. All Form field controls must extend this
+ * abstract class.
  *
+ * <h3>Field Processing</h3>
+ *
+ * <h4>Post Requests</h4>
+ *
+ * When processing POST requests forms typically invoke the {@link #onProcess()}
+ * method on all its fields. The Field <tt>onProcess()</tt> method is used
+ * to bind the fields request value, validate the submission and invoke any
+ * control listener method. If the <tt>onProcess()</tt> method returns true
+ * the form will continue processing fields, otherwise the form will abort
+ * further processing.
+ * <p/>
+ * The body of the Field <tt>onProcess()</tt> method is detailed below.
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public boolean</span> onProcess() {
+ *     bindRequestValue();
+ *
+ *     <span class="kw">if</span> (getValidate()) {
+ *         validate();
+ *     }
+ *
+ *     <span class="kw">return</span> invokeListener();
+ * } </pre>
+ *
+ * The Field methods called by <tt>onProcess()</tt> include:
+ *
+ * <dl>
+ * <dt>{@link #bindRequestValue()}</dt>
+ * <dd>This method will bind the HTTP request value to the Field's value.
+ * </dd>
+ * <dt>{@link #getValidate()}</dt>
+ * <dd>This method will return true if the Field should validate itself. This
+ * value is generally inherited from the parent Form, however the Field can
+ * override this value and specify whether it should be validated.
+ * </dd>
+ * <dt>{@link #validate()}</dt>
+ * <dd>This method will validate the submitted Field value. If the submitted
+ * value is not valid this method should set the Field {@link #error} property,
+ * which can be rendered by the Form.
+ * </dd>
+ * <dt>{@link #invokeListener()}</dt>
+ * <dd>This method will invoke any Control listener method which has be defined
+ * for the Field. If no listener is defined this method will return null.
+ * </dd>
+ * </dl>
+ *
+ * Field subclasses generally only have to override the <tt>validate()</tt>
+ * method, and possibly the <tt>bindRequestValue()</tt> method, to provide their
+ * own behaviour.
+ *
+ * <h4>Get Requests</h4>
+ *
+ * When processing GET requests a Page's Form will typically perform no
+ * processing and simply render itself and its Fields.
+ *
+ * <h3>Rendering</h3>
+ *
+ * Field subclasses must override the <tt>Object.toString()</tt> method to
+ * enable themselves to be rendered as HTML. With the increasing use of AJAX
+ * Field should render themselves as valid XHTML, so that they may be parsed
+ * correctly and used as the <tt>innerHtml</tt> in the DOM.
+ * <p/>
+ * When the Form class render a field using autolayout it renders the
+ * Field in a table row using the Field's {@link #label} attribute, its
+ * {@link #error} attribute if defined, and the Fields <tt>toString()</tt>
+ * method.
+ * <p/>
+ * To assist with rendering valid HTML Field subclasses can use the
+ * {@link net.sf.click.util.HtmlStringBuffer} class.
+ *
+ * <h3>Message Resources</h3>
+ *
+ * Fields support a hiearchy of resource bundles for displaying validation
+ * error messages and display messages. These localized messages can be accessed
+ * through the methods:
+ *
+ * <ul>
+ * <li>{@link #getMessage(String)}</li>
+ * <li>{@link #getMessage(String, Object)}</li>
+ * <li>{@link #getMessage(String, Object[])}</li>
+ * <li>{@link #getMessages()}</li>
+ * <li>{@link #setErrorMessage(String)}</li>
+ * <li>{@link #setErrorMessage(String, Object)}</li>
+ * </ul>
+ *
+ * The order in which localized messages are resolve is:
+ * <dl>
+ * <dt style="font-weight:bold">Page scope messages</dt>
+ * <dd>Pages localized messages, if they exist. This message bundle in injected
+ * into the Field using the {@link #setParentMessages(Map)} method.
+ * </dd>
+ * <dt style="font-weight:bold">Control scope messages</dt>
+ * <dd>Controls localized messages, if they exist. This message bundle in injected
+ * into the Field using the {@link #setParentMessages(Map)} method.
+ * </dd>
+ * <dt style="font-weight:bold">Global scope messages</dt>
+ * <dd>
  * <pre class="codeConfig">
  * /click-control.properties </pre>
  *
- * Access to these message is provided using the {@link #getMessage(String)}
- * method.
- * <p/>
  * You can modify these properties by copying this file into your applications
  * root class path and editing these properties.
  * <p/>
- * <span style="font-weight: bolder">Note</span> when customizing
- * the message properties you must include all the properties, not just the
- * ones you want to override.
+ * Note when customizing the message properties you must include all the
+ * properties, not just the ones you want to override.
+ * </dd>
+ * </dl>
  *
  * @author Malcolm Edgar
  */
@@ -687,10 +778,14 @@ public abstract class Field implements Control {
 
     /**
      * Return true if the Field should validate itself when being processed.
-     * The Field inherits its validate status from its parent Form, see
-     * {@link Form#getValidate()}.
-     *
-     * TODO: doco
+     * <p/>
+     * If the validate attribute for the Field is not explicity set, this
+     * method will return the validation status of its parent Form, see
+     * {@link Form#getValidate()}. If the Field validate attribute is not set
+     * and the parent Form is not set this method will return true.
+     * <p/>
+     * This method is called by the {@link #onProcess()} method to determine
+     * whether the the Field {@link #validate()} method should be invoked.
      *
      * @return true if the Field should validate itself when being processed.
      */
@@ -788,7 +883,7 @@ public abstract class Field implements Control {
     // ---------------------------------------------------------- Public Methods
 
     /**
-     * TODO: what level of visibility ? public ?
+     * This method binds the HTTP request value to the Field's value.
      */
     public void bindRequestValue() {
         setValue(getRequestValue());
@@ -807,7 +902,14 @@ public abstract class Field implements Control {
     }
 
     /**
-     * TODO: doco
+     * This method processes the page request returning true to continue
+     * processing or false otherwise. The Field <tt>onProcess()</tt> method is
+     * typically invoked by the Form <tt>onProcess()</tt> method when
+     * processing POST request.
+     * <p/>
+     * This method will bind the Field request parameter value to the field,
+     * validate the sumission and invoke its callback listener if defined.
+     * The code of this method is provided below:
      *
      * <pre class="codeJava">
      * <span class="kw">public boolean</span> onProcess() {
@@ -837,7 +939,7 @@ public abstract class Field implements Control {
     /**
      * TODO: validate documentation
      */
-    protected void validate() {
+    public void validate() {
 
     }
 
@@ -866,24 +968,6 @@ public abstract class Field implements Control {
         return controlMessages;
     }
 
-    /**
-     * Perform a action listener callback if a listener object and listener
-     * method is defined, otherwise returns true.
-     *
-     * @see ClickUtils#invokeListener(Object, String)
-     *
-     * @return true if the invoked listener returns true, or if not listener
-     * is defined
-     */
-    protected boolean invokeListener() {
-        if (listener != null && listenerMethod != null) {
-            return ClickUtils.invokeListener(listener, listenerMethod);
-
-        } else {
-            return true;
-        }
-    }
- 
     /**
      * Return a normalised label for display in error messages.
      *
@@ -919,6 +1003,24 @@ public abstract class Field implements Control {
             getErrorLabel(), new Double(value)
         };
         setError(getMessage(key, args));
+    }
+
+    /**
+     * Perform a action listener callback if a listener object and listener
+     * method is defined, otherwise returns true.
+     *
+     * @see ClickUtils#invokeListener(Object, String)
+     *
+     * @return true if the invoked listener returns true, or if not listener
+     * is defined
+     */
+    protected boolean invokeListener() {
+        if (listener != null && listenerMethod != null) {
+            return ClickUtils.invokeListener(listener, listenerMethod);
+
+        } else {
+            return true;
+        }
     }
 
     /**

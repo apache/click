@@ -141,6 +141,17 @@ table.buttons {
 	margin-top: 1em;
 }
 
+dt {
+	margin-left: 2em;
+	margin-bottom: 0.25em;
+	margin-top: 0.5em;
+}
+
+li {
+	margin-bottom: 0.25em;
+	margin-top: 0.25em;
+}
+
 /* Headings */
 h1 { font-size: 18px }
 
