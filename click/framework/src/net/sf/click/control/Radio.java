@@ -120,7 +120,8 @@ public class Radio extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO:
+     * Bind the request submission, setting the Field {@link #checked} property
+     * if defined in the request.
      */
     public void bindRequestValue() {
         String value = getRequestValue();
@@ -131,8 +132,6 @@ public class Radio extends Field {
     /**
      * Process the request Context setting the checked value if selected
      * and invoking the controls listener if defined.
-     *
-     * @see net.sf.click.Control#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
      */
@@ -149,8 +148,6 @@ public class Radio extends Field {
 
     /**
      * Return the HTML rendered Radio string.
-     *
-     * @see Object#toString()
      *
      * @return the HTML rendered Radio string
      */

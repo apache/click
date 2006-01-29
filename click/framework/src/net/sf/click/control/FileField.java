@@ -212,7 +212,8 @@ public class FileField extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO:
+     * Set the {@link #fileItem} property from the multi-part form data
+     * submission.
      */
     public void bindRequestValue() {
         fileItem =
@@ -221,8 +222,6 @@ public class FileField extends Field {
 
     /**
      * Return a HTML rendered FileField string.
-     *
-     * @see Object#toString()
      *
      * @return a HTML rendered FileField string
      */
@@ -269,8 +268,6 @@ public class FileField extends Field {
      *   </li>
      * </ul>
      * </blockquote>
-     *
-     * @see net.sf.click.control.Field#validate()
      */
     public void validate() {
         FileItem fileItem = getFileItem();

@@ -133,7 +133,8 @@ public class ImageSubmit extends Submit {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO:
+     * Bind the request submission, setting the field {@link Submit#clicked},
+     * {@link #x} and {@link #y} if defined in the request.
      */
     public void bindRequestValue() {
 

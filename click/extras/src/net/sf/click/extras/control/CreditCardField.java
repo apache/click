@@ -232,7 +232,8 @@ public class CreditCardField extends TextField {
     // -------------------------------------------------------- Public Methods
 
     /**
-     * TODO: DOCO
+     * Bind the request submission, setting the value property and
+     * {@link #cardType} property if defined in the request.
      */
     public void bindRequestValue() {
         super.bindRequestValue();
@@ -242,8 +243,6 @@ public class CreditCardField extends TextField {
 
     /**
      * Return the HTML rendered CreditCardField string.
-     *
-     * @see Object#toString()
      *
      * @return the HTML rendered CreditCardField string
      */
@@ -277,8 +276,6 @@ public class CreditCardField extends TextField {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     *
-     * @see net.sf.click.control.Field#validate()
      */
     public void validate() {
         String value = getValue();

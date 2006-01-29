@@ -149,21 +149,9 @@ public class Submit extends Button {
 
     // --------------------------------------------------------- Public Methods
 
-
     /**
-     * Process the submit event and return true to continue event processing.
-     * <p/>
-     * If the submit button is clicked and a Control listener is defined, the
-     * listener method will be invoked and its boolean return value will be
-     * returned by this method.
-     * <p/>
-     * Submit buttons will be processed after all the non Button Form Controls
-     * have been processed. Submit buttons will be processed in the order
-     * they were added to the Form.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
+     * Bind the request submission, setting the {@link Field#value} and
+     * {@link #clicked} properties if defined.
      */
     public void bindRequestValue() {
         this.value = getContext().getRequestParameter(getName());
@@ -183,8 +171,6 @@ public class Submit extends Button {
      * Submit buttons will be processed after all the non Button Form Controls
      * have been processed. Submit buttons will be processed in the order
      * they were added to the Form.
-     *
-     * @see net.sf.click.Control#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
      */
