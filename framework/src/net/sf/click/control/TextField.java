@@ -234,8 +234,6 @@ public class TextField extends Field {
     /**
      * Return a HTML rendered TextField string.
      *
-     * @see Object#toString()
-     *
      * @return a HTML rendered TextField string
      */
     public String toString() {
@@ -284,8 +282,6 @@ public class TextField extends Field {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     *
-     * @see net.sf.click.Field#validate()
      */
     public void validate() {
         String value = getValue();

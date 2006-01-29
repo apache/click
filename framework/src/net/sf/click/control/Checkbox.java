@@ -183,7 +183,8 @@ public class Checkbox extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO: doco
+     * Set the {@link #checked} property to true if the fields value is
+     * submitted.
      */
     public void bindRequestValue() {
         setChecked(getContext().getRequestParameter(getName()) != null);
@@ -191,8 +192,6 @@ public class Checkbox extends Field {
 
     /**
      * Return the HTML rendered Checkbox string.
-     *
-     * @see Object#toString()
      *
      * @return the HTML rendered Checkbox string
      */
@@ -232,8 +231,6 @@ public class Checkbox extends Field {
      * If a checked value is {@link Field#required} and the Checkbox is not
      * checked the error message defined by <tt>not-checked-error</tt>
      * property will be displayed.
-     *
-     * @see net.sf.click.control.Field#validate()
      */
     public void validate() {
         if (isRequired() && !isChecked()) {

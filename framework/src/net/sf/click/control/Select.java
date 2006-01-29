@@ -419,7 +419,8 @@ public class Select extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO: doco
+     * Bind the request submission, setting the {@link #value} or
+     * {@link #multipleValues} property if defined in the request.
      */
     public void bindRequestValue() {
 
@@ -454,8 +455,6 @@ public class Select extends Field {
 
     /**
      * Return a HTML rendered Select string.
-     *
-     * @see Object#toString()
      *
      * @return a HTML rendered Select string
      */
@@ -530,8 +529,6 @@ public class Select extends Field {
      * Error message bundle key names include: <blockquote><ul>
      * <li>select-error</li>
      * </ul></blockquote>
-     *
-     * @see net.sf.click.control.Field#validate()
      */
     public void validate() {
 

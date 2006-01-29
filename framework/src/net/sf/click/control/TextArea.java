@@ -238,8 +238,6 @@ public class TextArea extends Field {
     /**
      * Return a HTML rendered TextArea string.
      *
-     * @see Object#toString()
-     *
      * @return a HTML rendered TextArea string
      */
     public String toString() {
@@ -287,8 +285,6 @@ public class TextArea extends Field {
      * <li>field-minlength-error</li>
      * <li>field-required-error</li>
      * </ul></blockquote>
-     *
-     * @see net.sf.click.Field#validate()
      */
     public void validate() {
         String value = getValue();
