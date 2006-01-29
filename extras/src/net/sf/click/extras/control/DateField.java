@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -97,11 +98,15 @@ public class DateField extends TextField {
 
     /** The Calendar resource file names. */
     protected static final String[] CALENDAR_RESOURCES =
-        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-ko.js",
-          "-it.js", "-ja.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
+        { ".gif", ".js", "-de.js", "-en.js", "-es.js", "-fr.js", "-it.js",
+          "-ja.js", "-ko.js", "-ru.js", "-zh.js", "-blue.css", "-blue2.css",
           "-brown.css", "-green.css", "-system.css", "-tas.css",
           "-win2k-1.css", "-win2k-2.css", "-win2k-cold-1.css",
           "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
+
+    /** Supported locales. */
+    protected static final String[] SUPPORTTED_LANGUAGES =
+        {"de", "en", "es", "fr", "it", "ja", "ko", "ru", "zh"};
 
     // ----------------------------------------------------- Instance Variables
 
@@ -235,13 +240,7 @@ public class DateField extends TextField {
      */
     public SimpleDateFormat getDateFormat() {
         if (dateFormat == null) {
-            if (getContext() != null) {
-                Locale locale = getContext().getLocale();
-                dateFormat = new SimpleDateFormat(formatPattern, locale);
-
-            } else {
-                dateFormat = new SimpleDateFormat(formatPattern);
-            }
+            dateFormat = new SimpleDateFormat(formatPattern, getLocale());
         }
         return dateFormat;
     }
@@ -281,7 +280,7 @@ public class DateField extends TextField {
         String[] args = {
             getContext().getRequest().getContextPath(),
             getStyle(),
-            getContext().getLocale().getLanguage()
+            getLocale().getLanguage()
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -675,5 +674,32 @@ public class DateField extends TextField {
         }
 
         return jsPattern.toString();
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Returns the <tt>Locale</tt> that should be used in this control.
+     *
+     * @return the locale that should be used in this control
+     */
+    protected Locale getLocale(){
+        Locale locale = null;
+
+        if(getContext()!=null){
+            locale = getContext().getLocale();
+            String lang = locale.getLanguage();
+            if(Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0){
+                return locale;
+            }
+        }
+
+        locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if(Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0){
+            return locale;
+        }
+
+        return Locale.ENGLISH;
     }
 }
