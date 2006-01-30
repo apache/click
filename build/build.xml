@@ -418,6 +418,7 @@
       <echo message="build-maven-bundles   build Maven repository upload bundles"/>
       <echo message="build-sources         build source ZIP files for use with IDEs"/>
       <echo message="build-webapps         build web application WAR files"/> 
+      <echo message="checkstyle            run checkstyle report on Java soruce"/>       
       <echo message="deploy-webapps        copy WAR files to application server"/>
       <echo message="get-deps              download JAR dependencies"/>  
       <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
