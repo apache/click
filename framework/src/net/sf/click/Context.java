@@ -60,8 +60,8 @@ public class Context {
      */
     protected Map multiPartFormData;
 
-    /** The page maker factory. */
-    protected final ClickServlet.PageMaker pageMaker;
+    /** The click services interface. */
+    protected final ClickServlet.ClickService clickService;
 
     /** The servlet request. */
     protected final HttpServletRequest request;
@@ -83,18 +83,18 @@ public class Context {
      * @param request the servlet request
      * @param response the servlet response
      * @param isPost the servlet request is a POST
-     * @param pageMaker the Page maker factor
+     * @param clickService the click service interface
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
-        boolean isPost, ClickServlet.PageMaker pageMaker) {
+        boolean isPost, ClickServlet.ClickService clickService) {
 
         this.context = context;
         this.config = config;
         this.request = request;
         this.response = response;
         this.isPost = isPost;
-        this.pageMaker = pageMaker;
+        this.clickService = clickService;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -392,7 +392,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page is not found
      */
     public Page createPage(String path) {
-        return pageMaker.createPage(path);
+        return clickService.createPage(path);
     }
 
     /**
@@ -413,7 +413,29 @@ public class Context {
      * configured with a unique path
      */
     public Page createPage(Class pageClass) {
-        return pageMaker.createPage(pageClass);
+        return clickService.createPage(pageClass);
+    }
+
+    /**
+     * Return the path for the given page Class.
+     *
+     * @param pageClass the class of the Page to lookup the path for
+     * @return the path for the given page Class
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
+    public String getPagePath(Class pageClass) {
+        return clickService.getPagePath(pageClass);
+    }
+
+    /**
+     * Return the Click application mode value: &nbsp;
+     * <tt>["production", "profile", "development", "debug"]</tt>.
+     *
+     * @return the application mode value
+     */
+    public String getApplicationMode() {
+        return clickService.getApplicationMode();
     }
 
     /**
@@ -488,5 +510,36 @@ public class Context {
      */
     public boolean isMultipartRequest() {
         return (isPost() && FileUploadBase.isMultipartContent(request));
+    }
+
+    /**
+     * Return a rendered Velocity template and model for the given
+     * class and model data.
+     * <p/>
+     * This method will merge the class <tt>.htm</tt> Velocity template and
+     * model data using the applications Velocity Engine.
+     * <p/>
+     * An example of the class template resolution is provided below:
+     * <pre class="codeConfig">
+     * <span class="cm">// Full class name</span>
+     * com.mycorp.control.CustomTextField
+     *
+     * <span class="cm">// Template path name</span>
+     * /com/mycorp/control/CustomTextField.htm </pre>
+     *
+     * Example method usage:
+     * <pre class="codeJava">
+     * <span class="kw">public String</span> toString() {
+     *     Map model = getModel();
+     *     <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
+     * } </pre>
+     *
+     * @param templateClass the class to resolve the template for
+     * @param model the model data to merge with the template
+     * @return rendered Velocity template merged with the model data
+     * @throws RuntimeException if an error occurs
+     */
+    public String renderTemplate(Class templateClass, Map model) {
+        return clickService.renderTemplate(templateClass, model);
     }
 }

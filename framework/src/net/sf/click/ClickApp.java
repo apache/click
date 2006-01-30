@@ -41,6 +41,7 @@ import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -504,11 +505,24 @@ class ClickApp implements EntityResolver {
     /**
      * Return the Velocity Template for the give page path.
      *
+     * @param path the Velocity template path
      * @return the Velocity Template for the give page path
      * @throws Exception if Velocity error occurs
      */
     Template getTemplate(String path) throws Exception {
         return velocityEngine.getTemplate(path);
+    }
+
+    /**
+     * Return the Velocity Template for the give page path.
+     *
+     * @param path the Velocity template path
+     * @param charset the template encoding charset
+     * @return the Velocity Template for the give page path
+     * @throws Exception if Velocity error occurs
+     */
+    Template getTemplate(String path, String charset) throws Exception {
+        return velocityEngine.getTemplate(path, charset);
     }
 
     // -------------------------------------------------------- Private Methods
@@ -861,17 +875,23 @@ class ClickApp implements EntityResolver {
 
         // Set default velocity runtime properties.
 
-        velProps.setProperty(RuntimeConstants.RESOURCE_LOADER, "webapp");
+        velProps.setProperty(RuntimeConstants.RESOURCE_LOADER, "webapp, class");
         velProps.setProperty("webapp.resource.loader.class",
                              WebappLoader.class.getName());
+        velProps.setProperty("class.resource.loader.class",
+                             ClasspathResourceLoader.class.getName());
 
         if (mode == PRODUCTION || mode == PROFILE) {
             velProps.put("webapp.resource.loader.cache", "true");
             velProps.put("webapp.resource.loader.modificationCheckInterval",
                          "0");
+            velProps.put("class.resource.loader.cache", "true");
+            velProps.put("class.resource.loader.modificationCheckInterval",
+                         "0");
             velProps.put("velocimacro.library.autoreload", "false");
         } else {
             velProps.put("webapp.resource.loader.cache", "false");
+            velProps.put("class.resource.loader.cache", "false");
             velProps.put("velocimacro.library.autoreload", "true");
         }
 
