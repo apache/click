@@ -106,7 +106,7 @@ import net.sf.click.util.MessagesMap;
  *
  * <h3>Message Resources</h3>
  *
- * Fields support a hiearchy of resource bundles for displaying validation
+ * Fields support a hierarchy of resource bundles for displaying validation
  * error messages and display messages. These localized messages can be accessed
  * through the methods:
  *
@@ -122,15 +122,30 @@ import net.sf.click.util.MessagesMap;
  * The order in which localized messages are resolve is:
  * <dl>
  * <dt style="font-weight:bold">Page scope messages</dt>
- * <dd>Pages localized messages, if they exist. This message bundle in injected
- * into the Field using the {@link #setParentMessages(Map)} method.
+ * <dd>Message lookups are first resolved to the Pages message bundle if it
+ * exists. For example a <tt>Login</tt> page may define the message properties:
+ *
+ * <pre class="codeConfig">
+ * /com/mycorp/page/Login.properties </pre>
+ *
+ * The Page message bundle is injected into the Field by the using
+ * the {@link #setParentMessages(Map)} method.
  * </dd>
+ *
  * <dt style="font-weight:bold">Control scope messages</dt>
- * <dd>Controls localized messages, if they exist. This message bundle in injected
- * into the Field using the {@link #setParentMessages(Map)} method.
+ * <dd>Next message lookups are resolved to the Control message bundle if it
+ * exists. For example a <tt>CustomTextField</tt> control may define the
+ * message properties:
+ *
+ * <pre class="codeConfig">
+ * /com/mycorp/control/CustomTextField.properties </pre>
  * </dd>
+ *
  * <dt style="font-weight:bold">Global scope messages</dt>
- * <dd>
+ * <dd>Finally message lookups are resolved to the global application control
+ * message bundle if the message has not already found. The global control
+ * properties file is:
+ *
  * <pre class="codeConfig">
  * /click-control.properties </pre>
  *
