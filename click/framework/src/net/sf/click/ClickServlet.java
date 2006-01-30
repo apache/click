@@ -18,6 +18,7 @@ package net.sf.click;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Enumeration;
@@ -177,7 +178,7 @@ public class ClickServlet extends HttpServlet {
     protected ClickLogger logger;
 
     /** The page creator factory. */
-    protected final PageMaker pageMaker = new PageMaker();
+    protected final ClickService pageMaker = new ClickService();
 
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
@@ -1004,12 +1005,12 @@ public class ClickServlet extends HttpServlet {
     // ---------------------------------------------------------- Inner Classes
 
     /**
-     * Provides a package visibility interface for creating Page objects using
-     * a given path.
+     * Provdes a package visibility interface for the Context class for
+     * accessing ClickApp and ClickServlet services.
      *
      * @author Malcolm Edgar
      */
-    class PageMaker {
+    class ClickService {
 
         /**
          * Return a new Page instance for the given path.
@@ -1047,6 +1048,112 @@ public class ClickServlet extends HttpServlet {
             }
 
             return initPage(path, pageClass);
+        }
+
+        /**
+         * Return the Click application mode value: &nbsp;
+         * <tt>["production", "profile", "development", "debug"]</tt>.
+         *
+         * @return the application mode value
+         */
+        String getApplicationMode() {
+            return clickApp.getModeValue();
+        }
+
+        /**
+         * Return the path for the given page Class.
+         *
+         * @param pageClass the class of the Page to lookup the path for
+         * @return the path for the given page Class
+         * @throws IllegalArgumentException if the Page Class is not configured
+         * with a unique path
+         */
+        String getPagePath(Class pageClass) {
+            String path = clickApp.getPagePath(pageClass);
+
+            if (path == null) {
+                String msg =
+                    "No path configured for Page class: " + pageClass.getName();
+                throw new IllegalArgumentException(msg);
+            }
+
+            return path;
+        }
+
+        /**
+         * Return a rendered Velocity template and model for the given
+         * class and model data.
+         * <p/>
+         * This method will merge the class <tt>.htm</tt> and model using the
+         * Velocity Engine.
+         * <p/>
+         * An example of the class template resolution is provided below:
+         * <pre class="codeConfig">
+         * <span class="cm">// Full class name</span>
+         * com.mycorp.control.CustomTextField
+         *
+         * <span class="cm">// Template path name</span>
+         * /com/mycorp/control/CustomTextField.htm </pre>
+         *
+         * Example method usage:
+         * <pre class="codeJava">
+         * <span class="kw">public String</span> toString() {
+         *     Map model = getModel();
+         *     <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
+         * } </pre>
+         *
+         * @param templateClass the class to resolve the template for
+         * @param model the model data to merge with the template
+         * @return rendered Velocity template merged with the model data
+         * @throws RuntimeException if an error occurs
+         */
+        String renderTemplate(Class templateClass, Map model) {
+
+            if (templateClass == null) {
+                String msg = "Null templateClass parameter";
+                throw new IllegalArgumentException(msg);
+            }
+
+            if (model == null) {
+                String msg = "Null model parameter";
+                throw new IllegalArgumentException(msg);
+            }
+
+            String templateName = templateClass.getName();
+            templateName = '/' + templateName.replace('.', '/') + ".htm";
+
+            VelocityContext context = new VelocityContext(model);
+
+            StringWriter stringWriter = new StringWriter(1024);
+
+            try {
+                Template template = null;
+
+                String charset = clickApp.getCharset();
+                if (charset != null) {
+                    template = clickApp.getTemplate(templateName, charset);
+                } else {
+                    template = clickApp.getTemplate(templateName);
+                }
+
+                if (template == null) {
+                    String msg =
+                        "Template '" + templateName + "' not found for class: "
+                        + templateClass.getName();
+                    throw new IllegalArgumentException(msg);
+                }
+
+                template.merge(context, stringWriter);
+
+            } catch (Exception e) {
+                String msg = "Error occured rendering template: "
+                             + templateName;
+                logger.error(msg, e);
+
+                throw new RuntimeException(e);
+            }
+
+            return stringWriter.toString();
         }
     }
 }

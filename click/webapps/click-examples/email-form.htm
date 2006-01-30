@@ -28,22 +28,29 @@ TinyMCE JavaScript initialization code.
 
 <pre class="codeJava">
 <span class="kw">public</span> String toString() {
-    HtmlStringBuffer buffer = <span class="kw">new</span> HtmlStringBuffer();
-    buffer.append(<span class="kw">super</span>.toString());
+    Map model = <span class="kw">new</span> HashMap();
+    model.put(<span class="st">"textArea"</span>, super.toString());
+    model.put(<span class="st">"theme"</span>, getTheme());
+    model.put(<span class="st">"id"</span>, getId());
 
-    buffer.elementStart(<span class="st">"script"</span>);
-    buffer.appendAttribute(<span class="st">"type"</span>, <span class="st">"text/javascript"</span>);
-    buffer.closeTag();
-    buffer.append(<span class="st">"\ntinyMCE.init({\n"</span>);
-    buffer.append(<span class="st">"   theme : \""</span>);
-    buffer.append(getTheme());
-    buffer.append(<span class="st">"\",\n"</span>);
-    buffer.append(<span class="st">"   mode : \"exact\",\n"</span>);
-    buffer.append(<span class="st">"   elements : \""</span>);
-    buffer.append(getId());
-    buffer.append(<span class="st">"\"\n"</span>);
-    buffer.append(<span class="st">"});\n"</span>);
-    buffer.elementEnd(<span class="st">"script"</span>);
-
-    <span class="kw">return</span> buffer.toString();
+    <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
 } </pre>
+
+The <tt>RichTextArea</tt> classpath template is:
+
+<pre class="codeConfig">
+/examples/control/RichTextArea.htm </pre>
+
+The template contains a reference to rendered parent TextArea and includes the 
+JavaScript initialization code:
+
+<pre class="codeHtml">
+<span class="st">${textArea}</span>
+&lt;script type="text/javascript"&gt;
+tinyMCE.init({
+   theme : "<span class="st">${theme}</span>",
+   mode : "exact",
+   elements : "<span class="st">${id}</span>"
+});
+&lt;/script&gt;
+</pre>

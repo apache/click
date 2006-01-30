@@ -16,10 +16,11 @@
 package examples.control;
 
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.click.control.Field;
 import net.sf.click.control.TextArea;
-import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a HTML Rich TextArea editor control using the
@@ -92,24 +93,11 @@ public class RichTextArea extends TextArea {
      * @see TextArea#toString()
      */
     public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-        buffer.append(super.toString());
+        Map model = new HashMap();
+        model.put("textArea", super.toString());
+        model.put("theme", getTheme());
+        model.put("id", getId());
 
-        buffer.elementStart("script");
-        buffer.appendAttribute("type", "text/javascript");
-        buffer.closeTag();
-        buffer.append("\ntinyMCE.init({\n");
-        buffer.append("   theme : \"");
-        buffer.append(getTheme());
-        buffer.append("\",\n");
-        buffer.append("   mode : \"exact\",\n");
-        buffer.append("   elements : \"");
-        buffer.append(getId());
-        buffer.append("\"\n");
-        buffer.append("});\n");
-        buffer.elementEnd("script");
-
-        return buffer.toString();
+        return getContext().renderTemplate(getClass(), model);
     }
-
 }
