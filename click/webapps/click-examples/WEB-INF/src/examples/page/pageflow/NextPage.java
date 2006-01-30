@@ -64,7 +64,9 @@ public class NextPage extends BorderedPage {
         CourseBooking booking = (CourseBooking) courseField.getValueObject();
         Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
 
-        setRedirect("/pageflow/last-page.htm?bookingId=" + bookingId);
+        String path = getContext().getPagePath(LastPage.class);
+        setRedirect(path + "?bookingId=" + bookingId);
+
         return true;
     }
 
