@@ -15,7 +15,10 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import net.sf.click.control.TextField;
+import java.util.Locale;
 
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
@@ -248,7 +251,9 @@ public class DoubleField extends TextField {
         int length = value.length();
         if (length > 0) {
             try {
-                double doubleValue = Double.parseDouble(value);
+                Locale locale = getContext().getLocale();
+                NumberFormat format = NumberFormat.getNumberInstance(locale);
+                double doubleValue = format.parse(value).doubleValue();
 
                 if (doubleValue > maxvalue) {
                     setErrorMessage("number-maxvalue-error", maxvalue);
@@ -257,7 +262,7 @@ public class DoubleField extends TextField {
                     setErrorMessage("number-minvalue-error", minvalue);
                 }
 
-            } catch (NumberFormatException nfe) {
+            } catch (ParseException pe) {
                 setError(getMessage("double-format-error", getErrorLabel()));
             }
         } else {
