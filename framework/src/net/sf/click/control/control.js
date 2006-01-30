@@ -8,7 +8,7 @@ function doubleFilter(event) {
         keyCode = event.which;   
     }
   
-    if (keyCode >= 33 && keyCode <= 44) {
+    if (keyCode >= 33 && keyCode <= 43) {
         return false;
         
     } else if (keyCode == 47) {
