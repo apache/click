@@ -17,7 +17,7 @@
               files="Form.java"/>
     <suppress checks="LineLength"
               files="DateField.java"
-              lines="94,95,96"/>
+              lines="95,96,97"/>
     <suppress checks="LineLength"
               files="ErrorReport.java"/>  
     <suppress checks="LineLength"
