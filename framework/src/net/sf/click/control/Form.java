@@ -1688,8 +1688,6 @@ public class Form implements Control {
      * If the form contains errors after processing, these errors will be
      * rendered.
      *
-     * @see Object#toString()
-     *
      * @return the HTML string representation of the form
      */
     public String toString() {
