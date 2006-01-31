@@ -267,42 +267,42 @@ public class CreditCardField extends TextField {
      * validate the card number.
      * <p/>
      * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>creditcard-number-error</li>
-     * <li>field-maxlength-error</li>
-     * <li>field-minlength-error</li>
-     * <li>field-required-error</li>
-     * </ul></blockquote>
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>field-maxlenght-error</li>
+     *       <li>field-minlength-error</li>
+     *       <li>field-required-error</li>
+     *     </ul>
+     *   </li>
+     *   <li>/net/sf/click/extras/control/CreditCardField.properties
+     *     <ul>
+     *       <li>creditcard-number-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
      */
     public void validate() {
-        String value = getValue();
+        super.validate();
 
-        String cardType = getCardType();
+        if (isValid()) {
+            String value = getValue();
+            String cardType = getCardType();
 
-        // Strip spaces and '-' chars
-        StringBuffer buffer = new StringBuffer(value.length());
-        for (int i = 0, size = value.length(); i < size; i++) {
-            char aChar = value.charAt(i);
-            if (aChar != '-' && aChar != ' ') {
-                buffer.append(aChar);
+            // Strip spaces and '-' chars
+            StringBuffer buffer = new StringBuffer(value.length());
+            for (int i = 0, size = value.length(); i < size; i++) {
+                char aChar = value.charAt(i);
+                if (aChar != '-' && aChar != ' ') {
+                    buffer.append(aChar);
+                }
             }
-        }
-        value = buffer.toString();
+            value = buffer.toString();
 
-        final int length = value.length();
-        if (length > 0) {
-            if (length < getMinLength()) {
-                setErrorMessage("field-minlength-error", getMinLength());
-                return;
-            }
-
-            if (length > getMaxLength()) {
-                setErrorMessage("field-maxlength-error", getMaxLength());
-                return;
-            }
+            final int length = value.length();
 
             // Shortest valid number is VISA with 13 digits
             if (length < 13) {
@@ -311,44 +311,40 @@ public class CreditCardField extends TextField {
             }
 
             if (cardType != null) {
-                final char firstdig = value.charAt(0);
-                final char seconddig = value.charAt(1);
+                throw new IllegalArgumentException("cardType is null");
+            }
+            final char firstdig = value.charAt(0);
+            final char seconddig = value.charAt(1);
 
-                boolean isValid = false;
+            boolean isValid = false;
 
-                if (cardType.equals(VISA)) {
+            if (cardType.equals(VISA)) {
 
-                    isValid = ((length == 16) || (length == 13))
-                              && (firstdig == '4');
+                isValid = ((length == 16) || (length == 13))
+                        && (firstdig == '4');
 
-                } else if (cardType.equals(MASTER)) {
+            } else if (cardType.equals(MASTER)) {
 
-                    isValid = (length == 16) && (firstdig == '5')
-                              && ("12345".indexOf(seconddig) >= 0);
+                isValid = (length == 16) && (firstdig == '5')
+                        && ("12345".indexOf(seconddig) >= 0);
 
-                } else if (cardType.equals(AMEX)) {
+            } else if (cardType.equals(AMEX)) {
 
-                    isValid = (length == 15) && (firstdig == '3')
-                              && ("47".indexOf(seconddig) >= 0);
+                isValid = (length == 15) && (firstdig == '3')
+                        && ("47".indexOf(seconddig) >= 0);
 
-                } else if (cardType.equals(DINERS)) {
+            } else if (cardType.equals(DINERS)) {
 
-                    isValid = (length == 14) && (firstdig == '3')
-                              && ("068".indexOf(seconddig) >= 0);
+                isValid = (length == 14) && (firstdig == '3')
+                        && ("068".indexOf(seconddig) >= 0);
 
-                } else if (cardType.equals(DISCOVER)) {
+            } else if (cardType.equals(DISCOVER)) {
 
-                    isValid = (length == 16) && value.startsWith("6011");
-                }
-
-                if (!isValid) {
-                    setErrorMessage("creditcard-number-error");
-                }
+                isValid = (length == 16) && value.startsWith("6011");
             }
 
-        } else {
-            if (isRequired()) {
-                setErrorMessage("field-required-error");
+            if (!isValid) {
+                setErrorMessage("creditcard-number-error");
             }
         }
     }

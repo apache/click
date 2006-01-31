@@ -189,8 +189,6 @@ public class RegexField extends TextField {
      * </ul>
      * </blockquote>
      *
-     * @see net.sf.click.control.Field#validate()
-     *
      * @throws java.util.regex.PatternSyntaxException if the pattern has a
      *      syntax error
      */

@@ -427,85 +427,6 @@ public class DateField extends TextField {
     }
 
     /**
-     * Process the DateField submission. If the Date value can be parsed
-     * the controls listener will be invoked.
-     * <p/>
-     * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>date-format-error</li>
-     * <li>field-maxlength-error</li>
-     * <li>field-minlength-error</li>
-     * <li>field-required-error</li>
-     * </ul></blockquote>
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true to continue Page event processing or false otherwise
-     */
-    public boolean onProcess() {
-        if (formatPattern == null) {
-            throw new IllegalStateException("dateFormat attribute is null");
-        }
-
-        value = getRequestValue();
-
-        if (!getValidate()) {
-            return true;
-        }
-
-        int length = value.length();
-        if (length > 0) {
-            if (getMinLength() > 0 && length < getMinLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMinLength())
-                };
-                setError(getMessage("field-minlength-error", args));
-                return true;
-
-            } else if (getMaxLength() > 0 && length > getMaxLength()) {
-                Object[] args = new Object[] {
-                    getErrorLabel(), new Integer(getMaxLength())
-                };
-                setError(getMessage("field-maxlength-error", args));
-                return true;
-
-            } else {
-                SimpleDateFormat dateFormat = getDateFormat();
-                dateFormat.setLenient(false);
-
-                boolean parsedOk = false;
-                try {
-                    dateFormat.parse(value).getTime();
-                    parsedOk = true;
-
-                } catch (ParseException pe) {
-                    Object[] args = new Object[] {
-                        getErrorLabel(), formatPattern
-                    };
-                    setError(getMessage("date-format-error", args));
-                }
-
-                // Dont want to invoke listener if unable to parse dateFormat.
-                if (parsedOk) {
-                    return invokeListener();
-
-                } else {
-                    return true;
-                }
-            }
-
-        } else {
-            if (isRequired()) {
-                setError(getMessage("field-required-error", getErrorLabel()));
-            }
-            return true;
-        }
-    }
-
-    /**
      * Return the HTML rendered Date Field string.
      *
      * @see Object#toString()
@@ -556,6 +477,78 @@ public class DateField extends TextField {
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * Validate the DateField request submission.
+     * <p/>
+     * A field error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>field-maxlength-error</li>
+     *       <li>field-minlength-error</li>
+     *       <li>field-required-error</li>
+     *     </ul>
+     *   </li>
+     *   <li>/net/sf/click/extras/control/DateField.properties
+     *     <ul>
+     *       <li>date-format-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
+     */
+    public void validate() {
+        if (formatPattern == null) {
+            throw new IllegalStateException("dateFormat attribute is null");
+        }
+
+        super.validate();
+
+        if (isValid()) {
+            SimpleDateFormat dateFormat = getDateFormat();
+            dateFormat.setLenient(false);
+
+            try {
+                dateFormat.parse(getValue()).getTime();
+
+            } catch (ParseException pe) {
+                Object[] args = new Object[] {
+                    getErrorLabel(), formatPattern
+                };
+                setError(getMessage("date-format-error", args));
+            }
+        }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Returns the <tt>Locale</tt> that should be used in this control.
+     *
+     * @return the locale that should be used in this control
+     */
+    protected Locale getLocale() {
+        Locale locale = null;
+
+        if (getContext() != null) {
+            locale = getContext().getLocale();
+            String lang = locale.getLanguage();
+            if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
+                return locale;
+            }
+        }
+
+        locale = Locale.getDefault();
+        String lang = locale.getLanguage();
+        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
+            return locale;
+        }
+
+        return Locale.ENGLISH;
     }
 
     /**
@@ -679,30 +672,4 @@ public class DateField extends TextField {
         return jsPattern.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Returns the <tt>Locale</tt> that should be used in this control.
-     *
-     * @return the locale that should be used in this control
-     */
-    protected Locale getLocale(){
-        Locale locale = null;
-
-        if(getContext()!=null){
-            locale = getContext().getLocale();
-            String lang = locale.getLanguage();
-            if(Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0){
-                return locale;
-            }
-        }
-
-        locale = Locale.getDefault();
-        String lang = locale.getLanguage();
-        if(Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0){
-            return locale;
-        }
-
-        return Locale.ENGLISH;
-    }
 }
