@@ -99,32 +99,30 @@ public class EmailField extends TextField {
      * Process the EmailField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>email-format-error</li>
-     * <li>field-maxlength-error</li>
-     * <li>field-minlength-error</li>
-     * <li>field-required-error</li>
-     * </ul></blockquote>
-     *
-     * @see net.sf.click.control.Field#validate()
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>field-maxlenght-error</li>
+     *       <li>field-minlength-error</li>
+     *       <li>field-required-error</li>
+     *     </ul>
+     *   </li>
+     *   <li>/net/sf/click/extras/control/EmailField.properties
+     *     <ul>
+     *       <li>email-format-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
      */
     public void validate() {
-        String value = getValue();
+        super.validate();
 
-        int length = value.length();
-        if (length > 0) {
-            if (getMinLength() > 0 && length < getMinLength()) {
-                setErrorMessage("field-minlength-error", getMinLength());
-                return;
-            }
-
-            if (getMaxLength() > 0 && length > getMaxLength()) {
-                setErrorMessage("field-maxlength-error", getMaxLength());
-                return;
-            }
+        if (isValid()) {
+            String value = getValue();
+            int length = value.length();
 
             int index = value.indexOf("@");
             if (index < 1 || index == length - 1) {
@@ -140,11 +138,6 @@ public class EmailField extends TextField {
             if (!Character.isLetterOrDigit(value.charAt(length - 1))) {
                 setErrorMessage("email-format-error");
                 return;
-            }
-
-        } else {
-            if (isRequired()) {
-                setErrorMessage("field-required-error");
             }
         }
     }

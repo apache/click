@@ -245,17 +245,23 @@ public class IntegerField extends TextField {
      * Validate the IntegerField request submission.
      * <p/>
      * A field error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle: <blockquote>
-     * <pre>/click-control.properties</pre></blockquote>
-     * <p/>
-     * Error message bundle key names include: <blockquote><ul>
-     * <li>field-required-error</li>
-     * <li>integer-format-error</li>
-     * <li>number-maxvalue-error</li>
-     * <li>number-minvalue-error</li>
-     * </ul></blockquote>
-     *
-     * @see net.sf.click.control.Field#validate()
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>field-required-error</li>
+     *       <li>number-maxvalue-error</li>
+     *       <li>number-minvalue-error</li>
+     *     </ul>
+     *   </li>
+     *   <li>/net/sf/click/extras/control/IntegerField.properties
+     *     <ul>
+     *       <li>integer-format-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
      */
     public void validate() {
         String value = getValue();
