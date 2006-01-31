@@ -1,5 +1,4 @@
 CODE
-* update Field doco: bindRequestValue, onProcess, validate
 * update Field message keys doco, as done in RegexField
 
 * review table.css
