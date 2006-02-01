@@ -22,27 +22,8 @@ JavaScript imports automatically:
     <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
 } </pre>
 
-The control's HTML is rendered using the <tt>toString()</tt> method. First is
-uses the parent TextArea class to render itself and then appends the
-TinyMCE JavaScript initialization code.
-
-<pre class="codeJava">
-<span class="kw">public</span> String toString() {
-    Map model = <span class="kw">new</span> HashMap();
-    model.put(<span class="st">"textArea"</span>, super.toString());
-    model.put(<span class="st">"theme"</span>, getTheme());
-    model.put(<span class="st">"id"</span>, getId());
-
-    <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
-} </pre>
-
-The <tt>RichTextArea</tt> classpath template is:
-
-<pre class="codeConfig">
-/examples/control/RichTextArea.htm </pre>
-
-The template contains a reference to rendered parent TextArea and includes the 
-JavaScript initialization code:
+The control is rendered using a Velocity template 
+<tt>(/examples/control/RichTextArea.htm)</tt> which loaded from the classpath:
 
 <pre class="codeHtml">
 <span class="st">${textArea}</span>
@@ -54,3 +35,18 @@ tinyMCE.init({
 });
 &lt;/script&gt;
 </pre>
+
+The control's <tt>toString()</tt> method merges the <tt>RichTextArea.htm</tt>
+template and the model returning rendred HTML.
+
+<pre class="codeJava">
+<span class="kw">public</span> String toString() {
+    Map model = <span class="kw">new</span> HashMap();
+    model.put(<span class="st">"textArea"</span>, super.toString());
+    model.put(<span class="st">"theme"</span>, getTheme());
+    model.put(<span class="st">"id"</span>, getId());
+
+    <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
+} </pre>
+
+

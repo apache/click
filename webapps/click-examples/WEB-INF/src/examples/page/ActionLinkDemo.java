@@ -9,9 +9,9 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class ActionDemo extends BorderedPage {
+public class ActionLinkDemo extends BorderedPage {
 
-    public ActionDemo() {
+    public ActionLinkDemo() {
         ActionLink actionLink = new ActionLink("link");
         actionLink.setListener(this, "onLinkClick");
         addControl(actionLink);
