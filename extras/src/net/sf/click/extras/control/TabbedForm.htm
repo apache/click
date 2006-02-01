@@ -1,0 +1,95 @@
+<script type="text/javascript">
+function onShowTab(index) {
+    var numberTabs = ${form.tabSheets.size()};
+	for (var i = 1; i < (numberTabs + 1); i++) {
+	
+		var tabTitle = document.getElementById('tab-title-' + i);
+		tabTitle.style.border = "solid 1px #aaa999";
+		tabTitle.className = "card";
+		tabTitle.style.backgroundColor = "fff";
+		
+		var tabSheet = document.getElementById('tab-sheet-' + i);
+		tabSheet.style.display = "none";
+	}
+	
+	var tabTitle = document.getElementById('tab-title-' + index);
+	tabTitle.className = "selCard";
+	tabTitle.style.backgroundColor = "eed";
+	tabTitle.style.borderBottom = "0px";
+	
+	var tabSheet = document.getElementById('tab-sheet-' + index);
+	tabSheet.style.display = "block";
+}
+</script>
+
+<form method="$form.method" name="$form.name" action="$form.actionURL">
+
+#* Render hidden fields *#
+#foreach ($field in $form.fieldList)
+	#if ($field.hidden) $field #end
+#end
+
+<table>
+
+	#* Render form error *#
+	#if ($form.error)
+	<tr>
+    	<td colspan="2" style="color: red;"> $form.error </td>
+	</tr>
+	#end
+	
+	#* Render field errors *#
+	#foreach ($errorField in $form.errorFields)
+	<tr>
+    	<td>
+    		<a class="error" href="#" onclick="document.getElementById('$errorField.id').focus()"> $errorField.error </a>
+    	</td>
+	</tr>		
+	#end
+
+	#* Render tab titles *#
+	<tr>
+    	<td> 
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<td> &nbsp; &nbsp; </td>
+					#foreach ($tabSheet in $form.tabSheets)
+					<td class="selcard" 
+						id="tab-title-${velocityCount}" 
+						style="background-color:#eed;border-bottom:0px;">
+						<a href="#" onClick="onShowTab('${velocityCount}')">${tabSheet.label}</a>
+					</td>
+					<td> &nbsp; </td>
+					#end
+				</tr>
+			</table>
+		</td>
+   	</tr>
+
+	#* Render tab sheets *#
+	<tr>
+    	<td style="padding:0px; background-color:#eed;">
+			#foreach ($tabSheet in $form.tabSheets)
+			<div id="tab-sheet-${velocityCount}" 
+				 #if ($velocityCount == 1) style="display:block;" #else style="display:none;" #end
+                 class="">
+				${tabSheet}
+			</div>
+			#end
+		</td>
+   	</tr>
+	
+
+	#* Render buttons *#
+  	<tr>
+    	<td>
+    	#foreach ($button in $form.buttonList)
+      		$button &nbsp;
+    	#end
+    	</td>
+ 	</tr>
+
+</table>
+</form>
+
+

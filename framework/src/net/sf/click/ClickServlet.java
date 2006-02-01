@@ -1114,13 +1114,38 @@ public class ClickServlet extends HttpServlet {
                 throw new IllegalArgumentException(msg);
             }
 
+            String templatePath = templateClass.getName();
+            templatePath = '/' + templatePath.replace('.', '/') + ".htm";
+
+            return renderTemplate(templatePath, model);
+        }
+
+        /**
+         * Return a rendered Velocity template and model data.
+         * <p/>
+         * Example method usage:
+         * <pre class="codeJava">
+         * <span class="kw">public String</span> toString() {
+         *     Map model = getModel();
+         *     <span class="kw">return</span> getContext().renderTemplate(<span class="st">"/custom-table.htm"</span>, model);
+         * } </pre>
+         *
+         * @param templatePath the path of the Velocity template to render
+         * @param model the model data to merge with the template
+         * @return rendered Velocity template merged with the model data
+         * @throws RuntimeException if an error occurs
+         */
+        String renderTemplate(String templatePath, Map model) {
+
+            if (templatePath == null) {
+                String msg = "Null templatePath parameter";
+                throw new IllegalArgumentException(msg);
+            }
+
             if (model == null) {
                 String msg = "Null model parameter";
                 throw new IllegalArgumentException(msg);
             }
-
-            String templateName = templateClass.getName();
-            templateName = '/' + templateName.replace('.', '/') + ".htm";
 
             VelocityContext context = new VelocityContext(model);
 
@@ -1131,15 +1156,15 @@ public class ClickServlet extends HttpServlet {
 
                 String charset = clickApp.getCharset();
                 if (charset != null) {
-                    template = clickApp.getTemplate(templateName, charset);
+                    template = clickApp.getTemplate(templatePath, charset);
                 } else {
-                    template = clickApp.getTemplate(templateName);
+                    template = clickApp.getTemplate(templatePath);
                 }
 
                 if (template == null) {
                     String msg =
-                        "Template '" + templateName + "' not found for class: "
-                        + templateClass.getName();
+                        "Template '" + templatePath + "' not found for class: "
+                        + templatePath;
                     throw new IllegalArgumentException(msg);
                 }
 
@@ -1147,7 +1172,7 @@ public class ClickServlet extends HttpServlet {
 
             } catch (Exception e) {
                 String msg = "Error occured rendering template: "
-                             + templateName;
+                             + templatePath;
                 logger.error(msg, e);
 
                 throw new RuntimeException(e);
@@ -1155,5 +1180,6 @@ public class ClickServlet extends HttpServlet {
 
             return stringWriter.toString();
         }
+
     }
 }
