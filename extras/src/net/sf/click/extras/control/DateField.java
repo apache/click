@@ -274,8 +274,6 @@ public class DateField extends TextField {
      * Return the DateField <tt>calendar.js</tt> and <tt>calendar-{lang}.js</tt>
      * includes.
      *
-     * @see net.sf.click.control.Field#getHtmlImports()
-     *
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files
      */
@@ -361,8 +359,6 @@ public class DateField extends TextField {
     /**
      * Return the <tt>java.util.Date.class</tt>.
      *
-     * @see net.sf.click.control.Field#getValueClass()
-     *
      * @return the <tt>java.util.Date.class</tt>
      */
     public Class getValueClass() {
@@ -373,8 +369,6 @@ public class DateField extends TextField {
      * Return the field Date value, or null if value was empty or a parsing
      * error occured.
      *
-     * @see net.sf.click.control.Field#getValueObject()
-     *
      * @return the Date object representation of the Field value
      */
     public Object getValueObject() {
@@ -383,8 +377,6 @@ public class DateField extends TextField {
 
     /**
      * Set the date value of the field using the given object.
-     *
-     * @see net.sf.click.control.Field#setValueObject(Object)
      *
      * @param object the object value to set
      */
@@ -407,8 +399,6 @@ public class DateField extends TextField {
      * Deploy the Calendar Javascript and CSS resources to the web app
      * directory <tt>click/calendar</tt>.
      *
-     * @see net.sf.click.Control#onDeploy(ServletContext)
-     *
      * @param servletContext the servlet context
      * @throws IOException if a resource could not be deployed
      */
@@ -428,8 +418,6 @@ public class DateField extends TextField {
 
     /**
      * Return the HTML rendered Date Field string.
-     *
-     * @see Object#toString()
      *
      * @return the HTML rendered Date Field string
      */
@@ -508,7 +496,7 @@ public class DateField extends TextField {
 
         super.validate();
 
-        if (isValid()) {
+        if (isValid() && isRequired()) {
             SimpleDateFormat dateFormat = getDateFormat();
             dateFormat.setLenient(false);
 

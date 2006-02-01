@@ -194,8 +194,6 @@ public class DoubleField extends TextField {
     /**
      * Return the <tt>Double.class</tt>.
      *
-     * @see net.sf.click.control.Field#getValueClass()
-     *
      * @return the <tt>Double.class</tt>
      */
     public Class getValueClass() {
@@ -206,8 +204,6 @@ public class DoubleField extends TextField {
      * Return the field Double value, or null if value was empty or a parsing
      * error occured.
      *
-     * @see net.sf.click.control.Field#getValueObject()
-     *
      * @return the Double object representation of the Field value
      */
     public Object getValueObject() {
@@ -216,8 +212,6 @@ public class DoubleField extends TextField {
 
     /**
      * Set the double value of the field using the given object.
-     *
-     * @see net.sf.click.control.Field#setValueObject(Object)
      *
      * @param object the object value to set
      */

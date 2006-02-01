@@ -120,7 +120,7 @@ public class EmailField extends TextField {
     public void validate() {
         super.validate();
 
-        if (isValid()) {
+        if (isValid() && isRequired()) {
             String value = getValue();
             int length = value.length();
 
