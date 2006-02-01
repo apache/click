@@ -542,4 +542,23 @@ public class Context {
     public String renderTemplate(Class templateClass, Map model) {
         return clickService.renderTemplate(templateClass, model);
     }
+
+    /**
+     * Return a rendered Velocity template and model data.
+     * <p/>
+     * Example method usage:
+     * <pre class="codeJava">
+     * <span class="kw">public String</span> toString() {
+     *     Map model = getModel();
+     *     <span class="kw">return</span> getContext().renderTemplate(<span class="st">"/custom-table.htm"</span>, model);
+     * } </pre>
+     *
+     * @param templatePath the path of the Velocity template to render
+     * @param model the model data to merge with the template
+     * @return rendered Velocity template merged with the model data
+     * @throws RuntimeException if an error occurs
+     */
+    public String renderTemplate(String templatePath, Map model) {
+        return clickService.renderTemplate(templatePath, model);
+    }
 }
