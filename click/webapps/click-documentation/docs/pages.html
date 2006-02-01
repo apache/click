@@ -342,6 +342,18 @@ For example if an application is deployed to the context
 <tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
 will redirect the request to:
 <span class="wr">"/mycorp/customer/details.htm"</span>
+<p/>
+You can also obtain the redirect path via the target Page's class. For example:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   String path = getContext().getPagePath(Logout.<span class="kw">class</span>);
+   setRedirect(path);
+   <span class="kw">return false</span>;
+} 
+</pre>
+
+Note when using this redirect method, the target Page class must have a unique path.
 
 <h4>Redirect Parameter Passing</h4>
 
