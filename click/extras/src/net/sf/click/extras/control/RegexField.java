@@ -195,7 +195,7 @@ public class RegexField extends TextField {
     public void validate() {
         super.validate();
 
-        if (isValid()) {
+        if (isValid() && isRequired()) {
             String value = getValue();
             String pattern = getPattern();
 
