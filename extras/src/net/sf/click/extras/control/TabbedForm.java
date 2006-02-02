@@ -32,11 +32,23 @@ public class TabbedForm extends Form {
 
     private static final long serialVersionUID = -5131480863117157372L;
 
+    /** The form HTML background color, default value: &nbsp; "#eed" */
+    protected String backgroundColor = "#EFEFEF";
+
+    /** The tab sheet height HTML attribute value. */
+    protected String tabHeight = "";
+
     /** The list of FieldSet tab sheets. */
     protected List tabSheets = new ArrayList();
 
-    /** The Velocity template override path. */
-    protected String template;
+    /** The tab sheet width HTML attribute value. */
+    protected String tabWidth = "";
+
+    /**
+     * The path of the tabbed form Velocity template to render: &nbsp;
+     * <tt>"/net/sf/click/extras/control/TabbedForm.htm"</tt>
+     */
+    protected String template = "/net/sf/click/extras/control/TabbedForm.htm";
 
     // ---------------------------------------------------------- Constructors
 
@@ -47,12 +59,16 @@ public class TabbedForm extends Form {
      */
     public TabbedForm(String name) {
         super(name);
+        setErrorsStyle("");
+        setButtonStyle("");
     }
 
     /**
      * Create a new tabbed form instance.
      */
     public TabbedForm() {
+        setErrorsStyle("");
+        setButtonStyle("");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -66,8 +82,35 @@ public class TabbedForm extends Form {
         if (tabSheet == null) {
             throw new IllegalArgumentException("Null tabSeet parameter");
         }
+        tabSheet.setShowBorder(false);
         getTabSheets().add(tabSheet);
         add(tabSheet);
+    }
+
+    /**
+     * Return the form HTML background color.
+     *
+     * @return the form HTML background color
+     */
+    public String getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    /**
+     * Set the form HTML background color.
+     *
+     * @param value the form HTML background color
+     */
+    public void setBackgroundColor(String value) {
+        this.backgroundColor = value;
+    }
+
+    public String getTabHeight() {
+        return tabHeight;
+    }
+
+    public void setTabHeight(String value) {
+        this.tabHeight = value;
     }
 
     /**
@@ -80,20 +123,43 @@ public class TabbedForm extends Form {
     }
 
     /**
-     * Return the Velocity override path. If the returned value is not null
-     * this template will be used to render tabbed form.
+     * Return the tab sheet number for the given field name, indexed from 1.
+     * If the field is not found this method will return 1.
      *
-     * @return the override Velocity template path
+     * @param fieldName the name of the form field
+     * @return the tab sheet number for the given field (indexed from 1)
+     */
+    public int getTabSheetNumber(String fieldName) {
+        for (int i = 0; i < getTabSheets().size(); i++) {
+            FieldSet fieldSet = (FieldSet) getTabSheets().get(i);
+            if (fieldSet.getFields().containsKey(fieldName)) {
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+
+    public String getTabWidth() {
+        return tabWidth;
+    }
+
+    public void setTabWidth(String value) {
+        this.tabWidth = value;
+    }
+
+    /**
+     * Return the path of the Velocity template to render.
+     *
+     * @return the path of the Velocity template to render
      */
     public String getTemplate() {
         return template;
     }
 
     /**
-     * Set the override Velocity template path. If this value is not null
-     * this template will be used to render the tabbed form.
+     * Set the path of the Velocity template to render.
      *
-     * @param template the Velocity template to render
+     * @param template the path of the Velocity template to render
      */
     public void setTemplate(String template) {
         this.template = template;
@@ -107,7 +173,7 @@ public class TabbedForm extends Form {
      *
      * <pre class="codeConfig">
      * /net/sf/click/extras/control/TabbedForm.htm </pre>
-     * 
+     *
      * TODO: discuss template override
      *
      * If the form contains errors after processing, these errors will be
@@ -118,13 +184,8 @@ public class TabbedForm extends Form {
     public String toString() {
         Map model = new HashMap();
         model.put("form", this);
-        
-        if (getTemplate() != null) {
-            return getContext().renderTemplate(getTemplate(), model);
-            
-        } else {
-            return getContext().renderTemplate(getClass(), model);
-        }
+
+        return getContext().renderTemplate(getTemplate(), model);
     }
 
 }
