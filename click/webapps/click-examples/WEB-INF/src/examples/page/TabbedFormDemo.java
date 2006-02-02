@@ -3,25 +3,16 @@ package examples.page;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.click.Page;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
-import net.sf.click.control.FileField;
-import net.sf.click.control.Form;
-import net.sf.click.control.Label;
-import net.sf.click.control.PasswordField;
 import net.sf.click.control.Radio;
 import net.sf.click.control.RadioGroup;
-import net.sf.click.control.Reset;
-import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.control.CreditCardField;
 import net.sf.click.extras.control.DateField;
-import net.sf.click.extras.control.DoubleField;
-import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.extras.control.TabbedForm;
 import net.sf.click.util.ClickUtils;
@@ -31,8 +22,30 @@ public class TabbedFormDemo extends BorderedPage {
     private TabbedForm form = new TabbedForm("form");
 
     public TabbedFormDemo() {
+        form.setBackgroundColor("#F5FF9F");
+        form.setTabHeight("230px");
+        form.setTabWidth("420px");
+
+        // Contact tab sheet
+
+        FieldSet contactTabSheet = new FieldSet("contactDetails");
+        form.addTabSheet(contactTabSheet);
+
+        TextField titleField = new TextField("title");
+        titleField.setSize(4);
+        contactTabSheet.add(titleField);
+
+        TextField firstNameField = new TextField("firstName");
+        contactTabSheet.add(firstNameField);
+
+        TextField middleNamesField = new TextField("middleNames");
+        contactTabSheet.add(middleNamesField);
+
+        TextField surnameField = new TextField("surname", true);
+        contactTabSheet.add(surnameField);
 
         // Delivery tab sheet
+
         FieldSet deliveryTabSheet = new FieldSet("deliveryDetails");
         form.addTabSheet(deliveryTabSheet);
 
@@ -65,7 +78,7 @@ public class TabbedFormDemo extends BorderedPage {
 
         paymentTabSheet.add(new TextField("cardName"));
         paymentTabSheet.add(new CreditCardField("cardNumber"));
-        IntegerField expiryField = new IntegerField("expiry");
+        IntegerField expiryField = new IntegerField("expiry", true);
         expiryField.setSize(4);
         expiryField.setMaxLength(4);
         paymentTabSheet.add(expiryField);

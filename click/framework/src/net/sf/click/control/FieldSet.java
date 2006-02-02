@@ -117,6 +117,9 @@ public class FieldSet extends Field {
     /** The FieldSet legend attributes map. */
     protected Map legendAttributes;
 
+    /** The render the FieldSet border element flag. Default value is true. */
+    protected boolean showBorder = true;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -419,6 +422,14 @@ public class FieldSet extends Field {
         }
     }
 
+    public boolean getShowBorder() {
+        return showBorder;
+    }
+
+    public void setShowBorder(boolean value) {
+        this.showBorder = value;
+    }
+
     /**
      * Return true if all contained fields are valid.
      *
@@ -471,34 +482,38 @@ public class FieldSet extends Field {
         int bufferSize = 160 + (fieldList.size() * 350);
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        buffer.elementStart("fieldset");
+        if (getShowBorder()) {
+            buffer.elementStart("fieldset");
 
-        buffer.appendAttribute("id", getId());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        if (isDisabled()) {
-            buffer.appendAttributeDisabled();
-        }
-        buffer.closeTag();
-        buffer.append("\n");
-
-        if (getLegend() != null) {
-            buffer.elementStart("legend");
-            buffer.appendAttribute("id", getId() + "-legend");
-            if (hasLegendAttributes()) {
-                buffer.appendAttributes(getLegendAttributes());
+            buffer.appendAttribute("id", getId());
+            if (hasAttributes()) {
+                buffer.appendAttributes(getAttributes());
+            }
+            if (isDisabled()) {
+                buffer.appendAttributeDisabled();
             }
             buffer.closeTag();
-            buffer.append(getLegend());
-            buffer.elementEnd("legend");
             buffer.append("\n");
+
+            if (getLegend() != null) {
+                buffer.elementStart("legend");
+                buffer.appendAttribute("id", getId() + "-legend");
+                if (hasLegendAttributes()) {
+                    buffer.appendAttributes(getLegendAttributes());
+                }
+                buffer.closeTag();
+                buffer.append(getLegend());
+                buffer.elementEnd("legend");
+                buffer.append("\n");
+            }
         }
 
         renderFields(buffer);
 
-        buffer.elementEnd("fieldset");
-        buffer.append("\n");
+        if (getShowBorder()) {
+            buffer.elementEnd("fieldset");
+            buffer.append("\n");
+        }
 
         return buffer.toString();
     }
