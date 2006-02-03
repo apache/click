@@ -16,8 +16,10 @@
 package net.sf.click.control;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -112,6 +114,16 @@ public class RadioGroup extends Field {
         super(name);
     }
 
+    /**
+     * Create a RadioGroup with the given name and required status.
+     *
+     * @param name the name of the field
+     * @param required the field required status
+     */
+    public RadioGroup(String name, boolean required) {
+        super(name);
+        setRequired(required);
+    }
 
     /**
      * Create a RadioGroup with the given name and label.
@@ -121,6 +133,18 @@ public class RadioGroup extends Field {
      */
     public RadioGroup(String name, String label) {
         super(name, label);
+    }
+
+    /**
+     * Create a RadioGroup with the given name, label and required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public RadioGroup(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
     }
 
     /**
@@ -157,6 +181,47 @@ public class RadioGroup extends Field {
         getRadioList().add(radio);
         if (getContext() != null) {
             radio.setContext(getContext());
+        }
+    }
+
+    /**
+     * Add the given collection Radio item options to the RadioGroup.
+     *
+     * @param options the collection of Radio items to add
+     * @throws IllegalArgumentException if options is null
+     */
+    public void addAll(Collection options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (Iterator i = options.iterator(); i.hasNext();) {
+            Radio radio = (Radio) i.next();
+            add(radio);
+        }
+    }
+
+    /**
+     * Add the given Map of radio values and labels to the RadioGroup.
+     * The Map entry key will be used as the radio value and the Map entry
+     * value will be used as the radio label.
+     * <p/>
+     * It is recommended that <tt>LinkedHashMap</tt> is used as the Map
+     * parameter to maintain the order of the radio items.
+     *
+     * @param options the Map of radio option values and labels to add
+     * @throws IllegalArgumentException if options is null
+     */
+    public void addAll(Map options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            Radio radio = new Radio(entry.getKey().toString(),
+                                    entry.getValue().toString());
+            add(radio);
         }
     }
 
@@ -252,9 +317,13 @@ public class RadioGroup extends Field {
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
             continueProcessing = radio.onProcess();
-            if (!continueProcessing && getValidate()) {
+            if (!continueProcessing) {
                 return false;
             }
+        }
+
+        if (getValidate()) {
+            validate();
         }
 
         return invokeListener();
@@ -293,5 +362,22 @@ public class RadioGroup extends Field {
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * Validate the RadioGroup request submission.
+     * <p/>
+     * A field error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle: <blockquote>
+     * <pre>net.sf.click.control.MessageProperties</pre></blockquote>
+     * <p/>
+     * Error message bundle key names include: <blockquote><ul>
+     * <li>field-required-error</li>
+     * </ul></blockquote>
+     */
+    public void validate() {
+        if (isRequired() && getValue().length() == 0) {
+            setErrorMessage("select-error");
+        }
     }
 }
