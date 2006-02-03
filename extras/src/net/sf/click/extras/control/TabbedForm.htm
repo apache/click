@@ -4,17 +4,15 @@ function onShowTab(index) {
 	for (var i = 1; i < (numberTabs + 1); i++) {
 	
 		var tabTitle = document.getElementById('tab-title-' + i);
-		tabTitle.style.border = "solid 1px #aaa999";
-		tabTitle.className = "card";
-		tabTitle.style.backgroundColor = "fff";
+		tabTitle.style.backgroundColor = "white";
+		tabTitle.style.borderBottom = "1px solid #336699";
 		
 		var tabSheet = document.getElementById('tab-sheet-' + i);
 		tabSheet.style.display = "none";
 	}
 	
 	var tabTitle = document.getElementById('tab-title-' + index);
-	tabTitle.className = "selCard";
-	tabTitle.style.backgroundColor = "eed";
+	tabTitle.style.backgroundColor = "${form.backgroundColor}";
 	tabTitle.style.borderBottom = "0px";
 	
 	var tabSheet = document.getElementById('tab-sheet-' + index);
@@ -29,38 +27,48 @@ function onShowTab(index) {
 	#if ($field.hidden) $field #end
 #end
 
-<table>
+<table border="0" cellpadding="0" cellspacing="0">
 
 	#* Render form error *#
 	#if ($form.error)
-	<tr>
-    	<td colspan="2" style="color: red;"> $form.error </td>
+	<tr style="${form.errorsStyle}">
+    	<td class="tf_error"> $form.error </td>
 	</tr>
 	#end
 	
 	#* Render field errors *#
 	#foreach ($errorField in $form.errorFields)
 	<tr>
-    	<td>
-    		<a class="error" href="#" onclick="document.getElementById('$errorField.id').focus()"> $errorField.error </a>
+    	<td style="${form.errorsStyle}" class="tf_error">
+    		<a class="error" href="#" 
+			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));document.getElementById('$errorField.id').focus();"
+			  > $errorField.error </a>
     	</td>
 	</tr>		
 	#end
+	
+	<tr><td style="height:0.5em;">&nbsp;</td></tr>
 
 	#* Render tab titles *#
 	<tr>
     	<td> 
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td> &nbsp; &nbsp; </td>
+					<td class="tf_separator"> &nbsp;&nbsp; </td>
 					#foreach ($tabSheet in $form.tabSheets)
-					<td class="selcard" 
-						id="tab-title-${velocityCount}" 
-						style="background-color:#eed;border-bottom:0px;">
-						<a href="#" onClick="onShowTab('${velocityCount}')">${tabSheet.label}</a>
+					<td id="tab-title-${velocityCount}" 
+						#if ($velocityCount == $form.displayTab)
+						style="border-bottom:0px;background-color:${form.backgroundColor};"
+						#end
+						class="tf_tab">
+						<a href="#"
+						   style="text-decoration:none"
+						   onClick="onShowTab(${velocityCount})"
+						   >${tabSheet.label}</a>
 					</td>
-					<td> &nbsp; </td>
+					<td class="tf_separator"> &nbsp; </td>
 					#end
+					<td class="tf_separator" style="width:100%"> &nbsp; </td>
 				</tr>
 			</table>
 		</td>
@@ -68,10 +76,14 @@ function onShowTab(index) {
 
 	#* Render tab sheets *#
 	<tr>
-    	<td style="padding:0px; background-color:#eed;">
+    	<td class="tf_sheet" 
+			width="${form.tabWidth};"
+			height="${form.tabHeight};"
+			style="background-color:${form.backgroundColor};">
 			#foreach ($tabSheet in $form.tabSheets)
 			<div id="tab-sheet-${velocityCount}" 
-				 #if ($velocityCount == 1) style="display:block;" #else style="display:none;" #end
+				 class="tf_sheet"
+				 #if ($velocityCount == $form.displayTab) style="display:block;" #else style="display:none;" #end
                  class="">
 				${tabSheet}
 			</div>
@@ -79,12 +91,13 @@ function onShowTab(index) {
 		</td>
    	</tr>
 	
+	<tr><td style="height:0.5em;">&nbsp;</td></tr>
 
 	#* Render buttons *#
   	<tr>
-    	<td>
+    	<td class="buttons" align="${form.buttonAlign}" style="${form.buttonStyle}">
     	#foreach ($button in $form.buttonList)
-      		$button &nbsp;
+      		$button
     	#end
     	</td>
  	</tr>

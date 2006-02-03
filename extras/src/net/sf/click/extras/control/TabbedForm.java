@@ -24,7 +24,14 @@ import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 
 /**
- * TODO: work in progress
+ * Provides a tabbed Form control: &nbsp; &lt;form method='post'&gt;.
+ * <p/>
+ * This class provides a JavaScript enabled tab sheet for control. This control
+ * is particularly useful for large forms as fields can be grouped into
+ * fieldsets and displayed in individual tab sheets.
+ * <p/>
+ * The rendered field error messages are tab sheet aware so that clicking on
+ * a error message link will open the appropriate tab sheet.
  *
  * @author Malcolm Edgar
  */
@@ -32,8 +39,16 @@ public class TabbedForm extends Form {
 
     private static final long serialVersionUID = -5131480863117157372L;
 
-    /** The form HTML background color, default value: &nbsp; "#eed" */
+    /**
+     * The form HTML background color. The default background color is
+     * "#EFEFEF".
+     */
     protected String backgroundColor = "#EFEFEF";
+
+    /**
+     * The tab number to display (indexed from 1). The default tab number is 1.
+     */
+    protected int displayTab = 1;
 
     /** The tab sheet height HTML attribute value. */
     protected String tabHeight = "";
@@ -45,8 +60,9 @@ public class TabbedForm extends Form {
     protected String tabWidth = "";
 
     /**
-     * The path of the tabbed form Velocity template to render: &nbsp;
-     * <tt>"/net/sf/click/extras/control/TabbedForm.htm"</tt>
+     * The path of the tabbed form Velocity template to render. The
+     * default template path is
+     * <tt>"/net/sf/click/extras/control/TabbedForm.htm"</tt>.
      */
     protected String template = "/net/sf/click/extras/control/TabbedForm.htm";
 
@@ -105,10 +121,38 @@ public class TabbedForm extends Form {
         this.backgroundColor = value;
     }
 
+    /**
+     * Return the number of the tab sheet to display (indexed from 1).
+     *
+     * @return the number of the tab sheet to display
+     */
+    public int getDisplayTab() {
+        return displayTab;
+    }
+
+    /**
+     * Set the number of the tab sheet to display (indexed from 1).
+     *
+     * @param value the number of the tab sheet to display
+     */
+    public void setDisplayTab(int value) {
+        this.displayTab = value;
+    }
+
+    /**
+     * Return the tab sheet height HTML attribute value.
+     *
+     * @return the tab sheet height attribute value
+     */
     public String getTabHeight() {
         return tabHeight;
     }
 
+    /**
+     * Set the tab sheet height HTML attribute value.
+     *
+     * @param value the tab sheet height attribute value
+     */
     public void setTabHeight(String value) {
         this.tabHeight = value;
     }
@@ -139,10 +183,20 @@ public class TabbedForm extends Form {
         return 1;
     }
 
+    /**
+     * Return the tab sheet width HTML attribute value.
+     *
+     * @return the tab sheet width attribute value
+     */
     public String getTabWidth() {
         return tabWidth;
     }
 
+    /**
+     * Set the tab sheet width HTML attribute value.
+     *
+     * @param value the tab sheet width attribute value
+     */
     public void setTabWidth(String value) {
         this.tabWidth = value;
     }
