@@ -18,7 +18,9 @@ package net.sf.click.control;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -299,18 +301,26 @@ public class Select extends Field {
     }
 
     /**
-     * Add the given list of Option/OptionGroup objects to the Select.
+     * Add the given Map of option values and labels to the Select.
+     * The Map entry key will be used as the option value and the Map entry
+     * value will be used as the option label.
+     * <p/>
+     * It is recommended that <tt>LinkedHashMap</tt> is used as the Map
+     * parameter to maintain the order of the option vales.
      *
-     * @param options the list of Option/OptionGroup objects to add
+     * @param options the Map of option values and labels to add
      * @throws IllegalArgumentException if options is null
      */
-    public void addAll(List options) {
+    public void addAll(Map options) {
         if (options == null) {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        for (int i = 0, size = options.size(); i < size; i++) {
-            getOptionList().add(options.get(i));
+        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            Option option = new Option(entry.getKey().toString(),
+                                       entry.getValue().toString());
+            getOptionList().add(option);
         }
         setInitialValue();
     }
