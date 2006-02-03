@@ -42,12 +42,12 @@ public class InvestmentSelect extends Select {
     }
 
     /**
-     * Create the Investment option Select control with the given field label.
+     * Create the Investment option Select control with the given field name.
      *
-     * @param label the Selection option field label
+     * @param name the Selection option field name
      */
-    public InvestmentSelect(String label) {
-        super(label);
+    public InvestmentSelect(String name) {
+        super(name);
         setOptionList(INVESTMENT_OPTIONS);
     }
 }
