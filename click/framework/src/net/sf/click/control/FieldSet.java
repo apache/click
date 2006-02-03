@@ -117,7 +117,7 @@ public class FieldSet extends Field {
     /** The FieldSet legend attributes map. */
     protected Map legendAttributes;
 
-    /** The render the FieldSet border element flag. Default value is true. */
+    /** The render the fieldset border flag, default value is true. */
     protected boolean showBorder = true;
 
     // ----------------------------------------------------------- Constructors
@@ -422,10 +422,22 @@ public class FieldSet extends Field {
         }
     }
 
+    /**
+     * Return the render the fieldset border flag. The border is the HTML
+     * &lt;fieldset&gt; element.
+     *
+     * @return the render the fieldset border flag
+     */
     public boolean getShowBorder() {
         return showBorder;
     }
 
+    /**
+     * Set the render the fieldset border flag. The border is the HTML
+     * &lt;fieldset&gt; element.
+     *
+     * @param value the render the fieldset border flag
+     */
     public void setShowBorder(boolean value) {
         this.showBorder = value;
     }
