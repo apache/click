@@ -3,13 +3,10 @@ package examples.page;
 import java.util.Iterator;
 import java.util.List;
 
-
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
-import net.sf.click.control.Radio;
-import net.sf.click.control.RadioGroup;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
@@ -17,6 +14,7 @@ import net.sf.click.extras.control.CreditCardField;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.util.ClickUtils;
+import examples.control.PackagingRadioGroup;
 
 /**
  * Provides a form FieldSet example.
@@ -48,10 +46,7 @@ public class FieldSetDemo extends BorderedPage {
         DateField dateField = new DateField("deliveryDate");
         deliveryFieldSet.add(dateField);
 
-        RadioGroup radioGroup = new RadioGroup("packaging");
-        radioGroup.add(new Radio("STD", "Standard "));
-        radioGroup.add(new Radio("PRO", "Protective "));
-        radioGroup.add(new Radio("GFT", "Gift Wrap "));
+        PackagingRadioGroup radioGroup = new PackagingRadioGroup("packaging");
         radioGroup.setValue("STD");
         radioGroup.setVerticalLayout(true);
         deliveryFieldSet.add(radioGroup);
