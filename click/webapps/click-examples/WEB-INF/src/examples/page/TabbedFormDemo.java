@@ -29,6 +29,7 @@ public class TabbedFormDemo extends BorderedPage {
     private IntegerField expiry = new IntegerField("expiry");
 
     public TabbedFormDemo() {
+
         form.setBackgroundColor("#F7FFAF");
         form.setTabHeight("210px");
         form.setTabWidth("420px");
@@ -76,6 +77,7 @@ public class TabbedFormDemo extends BorderedPage {
         paymentGroup.add(new Radio("cod", "Cash On Delivery "));
         paymentGroup.add(new Radio("credit", "Credit Card "));
         paymentGroup.setVerticalLayout(false);
+        paymentGroup.setListener(this, "onPaymentClick");
         paymentTabSheet.add(paymentGroup);
 
         paymentTabSheet.add(cardName);
@@ -94,25 +96,7 @@ public class TabbedFormDemo extends BorderedPage {
 
     public boolean onOkClick() {
         if (form.isValid()) {
-
-            if (paymentGroup.getValue().equals("credit")) {
-                cardName.setRequired(true);
-                cardName.validate();
-
-                cardNumber.setRequired(true);
-                cardNumber.validate();
-
-                expiry.setRequired(true);
-                expiry.validate();
-
-                if (form.isValid()) {
-                    processDelivery();
-                }
-
-            } else {
-                processDelivery();
-            }
-
+            processDelivery();
         }
         return true;
     }
@@ -120,6 +104,15 @@ public class TabbedFormDemo extends BorderedPage {
     public boolean onCancelClick() {
         setRedirect("index.html");
         return false;
+    }
+
+    public boolean onPaymentClick() {
+        if (paymentGroup.getValue().equals("credit")) {
+            cardName.setRequired(true);
+            cardNumber.setRequired(true);
+            expiry.setRequired(true);
+        }
+        return true;
     }
 
     private void processDelivery() {
