@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 
@@ -220,6 +221,24 @@ public class TabbedForm extends Form {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * TODO: doco
+     */
+    public boolean onProcess() {
+        boolean result = super.onProcess();
+
+        if (!isValid()) {
+            List errorFields = getErrorFields();
+            if (!errorFields.isEmpty()) {
+                Field field = (Field) errorFields.get(0);
+                int sheetNumber = getTabSheetNumber(field.getName());
+                setDisplayTab(sheetNumber);
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Return the HTML string representation of the form. The form will
