@@ -223,7 +223,11 @@ public class TabbedForm extends Form {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO: doco
+     * Process the Form request. In addition to the normal Form 
+     * <tt>onProcess()</tt> processing, if the Form is invalid this method 
+     * will display the tab sheet with the first field error.
+     * 
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         boolean result = super.onProcess();
@@ -246,8 +250,6 @@ public class TabbedForm extends Form {
      *
      * <pre class="codeConfig">
      * /net/sf/click/extras/control/TabbedForm.htm </pre>
-     *
-     * TODO: discuss template override
      *
      * If the form contains errors after processing, these errors will be
      * rendered.
