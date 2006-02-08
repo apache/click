@@ -1473,8 +1473,8 @@ public class Form implements Control {
     }
 
     /**
-     * Process the Form when the Context request method is the same as the
-     * Forms, by default "POST" method.
+     * Process the Form when the request method is the same as the Form's 
+     * method. The default Form method is "POST".
      * <p/>
      * The Forms processing order is:
      * <ol>
@@ -1493,8 +1493,6 @@ public class Form implements Control {
      *
      * @see Context#getRequestParameter(String)
      * @see Context#getMultiPartFormData()
-     *
-     * @see net.sf.click.Control#onProcess()
      *
      * @return true to continue Page event processing or false otherwise
      */
