@@ -175,6 +175,22 @@ public class DateField extends TextField {
         setRequired(required);
     }
 
+
+    /**
+     * Construct the Date Field with the given name, label and required status.
+     * <p/>
+     * The date format pattern will be set to <tt>dd MMM yyyy</tt>.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public DateField(String name, String label, boolean required) {
+        super(name, label, required);
+        setAttribute("id", getName() + "-field");
+        setFormatPattern("dd MMM yyyy");
+    }
+
     /**
      * Create a date field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
