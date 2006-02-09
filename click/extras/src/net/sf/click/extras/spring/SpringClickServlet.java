@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.spring;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 
@@ -24,6 +25,7 @@ import net.sf.click.Page;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Provides an example Spring framework integration <tt>SpringClickServlet</tt>.
@@ -137,12 +139,22 @@ public class SpringClickServlet extends ClickServlet {
     public void init() throws ServletException {
         super.init();
 
-        String springPath = getInitParameter(SPRING_PATH);
-        if (springPath == null) {
-            String msg = SPRING_PATH + " servlet init parameter not defined";
-            throw new UnavailableException(msg);
+        // TODO: update doco
+
+        ServletContext servletContext = getServletContext();
+        applicationContext =
+            WebApplicationContextUtils.getWebApplicationContext(servletContext);
+
+        if (applicationContext == null) {
+            String springPath = getInitParameter(SPRING_PATH);
+            if (springPath == null) {
+                String msg =
+                    SPRING_PATH + " servlet init parameter not defined";
+                throw new UnavailableException(msg);
+            }
+
+            applicationContext = new ClassPathXmlApplicationContext(springPath);
         }
-        applicationContext = new ClassPathXmlApplicationContext(springPath);
     }
 
     /**
