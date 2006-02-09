@@ -1473,7 +1473,7 @@ public class Form implements Control {
     }
 
     /**
-     * Process the Form when the request method is the same as the Form's 
+     * Process the Form when the request method is the same as the Form's
      * method. The default Form method is "POST".
      * <p/>
      * The Forms processing order is:
