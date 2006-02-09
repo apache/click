@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -221,6 +223,18 @@ public class Select extends Field {
     }
 
     /**
+     * Create a Select field with the given name, label and required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public Select(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
+    }
+
+    /**
      * Create a Select field with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
@@ -343,6 +357,75 @@ public class Select extends Field {
             String value = options[i];
             getOptionList().add(new Option(value, value));
         }
+        setInitialValue();
+    }
+
+    /**
+     * Add the given collection of objects to the Select, creating new Option
+     * instances based on the object properties specified by value and label.
+     *
+     * <pre class="codeJava">
+     * Select select = <span class="kw">new</span> Select(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
+     * select.addAll(getCustomerService().getCustomerTypes(), <span class="st">"id"</span>, <span class="st">"name"</span>);
+     * form.add(select); </pre>
+     *
+     * @param objects the collection of objects to render as options
+     * @param value the name of the object property to render as the Option value
+     * @param label the name of the object property to render as the Option label
+     * @throws IllegalArgumentException if options, value or label parameter is null
+     */
+    public void addAll(Collection objects, String value, String label) {
+        if (objects == null) {
+            String msg = "objects parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (label == null) {
+            String msg = "label parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (objects.isEmpty()) {
+            return;
+        }
+ 
+        Method valueMethod = null;
+        Method labelMethod = null;
+        Class objectClass = null;
+
+        for (Iterator i = objects.iterator(); i.hasNext();) {
+            Object object = i.next();
+
+            if (!object.getClass().equals(objectClass)) {
+                objectClass = object.getClass();
+                valueMethod = null;
+                labelMethod = null;
+            }
+
+            try {
+                if (valueMethod == null) {
+                    String getterName = ClickUtils.toGetterName(value);
+                    valueMethod = objectClass.getMethod(getterName, null);
+                }
+                if (labelMethod == null) {
+                    String getterName = ClickUtils.toGetterName(label);
+                    labelMethod = objectClass.getMethod(getterName, null);
+                }
+
+                Object valueResult = valueMethod.invoke(object, null);
+                Object labelResult = labelMethod.invoke(object, null);
+
+                Option option = new Option(valueResult, labelResult.toString());
+                getOptionList().add(option);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         setInitialValue();
     }
 
