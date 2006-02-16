@@ -10,6 +10,7 @@
    <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
+   <property name="jar.ognl" value="ognl-2.6.7.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
    <property name="jar.spring" value="spring-1.2.6.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.1.jar"/>
@@ -34,6 +35,7 @@
       <pathelement location="lib/${jar.collections}"/>
       <pathelement location="lib/${jar.io}"/>
       <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.ognl}"/>
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.upload}"/>
       <pathelement location="lib/${jar.velocity}"/>
@@ -94,6 +96,7 @@
             <exclude name="lib/${jar.io}"/>
             <exclude name="lib/${jar.lang}"/>
             <exclude name="lib/${jar.junit}"/>
+            <exclude name="lib/${jar.ognl}"/>
             <exclude name="lib/${jar.servlet}"/>
             <exclude name="lib/${jar.spring}"/>
             <exclude name="lib/${jar.upload}"/>
@@ -181,6 +184,7 @@
       <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
+      <unzip src="lib/${jar.ognl}" dest="${dir.classes}"/> 
       <unzip src="lib/${jar.upload}" dest="${dir.classes}"/> 
       <unzip src="lib/${jar.velocity}" dest="${dir.classes}"/> 
       <jar destfile="dist/click-${version}.jar">
@@ -382,6 +386,9 @@
            usetimestamp="true"/>
       <get src="${repository}/commons-lang/jars/${jar.lang}" verbose="true"
            dest="lib/${jar.lang}"
+           usetimestamp="true"/>
+      <get src="${repository}/ognl/jars/${jar.ognl}" verbose="true"
+           dest="lib/${jar.ognl}"
            usetimestamp="true"/>
       <get src="${repository}/commons-fileupload/jars/${jar.upload}" verbose="true"
            dest="lib/${jar.upload}"
