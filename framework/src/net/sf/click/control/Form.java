@@ -775,24 +775,6 @@ public class Form implements Control {
     }
 
     /**
-     * Return true if the form is a disabled.
-     *
-     * @return true if the form is a disabled
-     */
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    /**
-     * Set the form disabled flag.
-     *
-     * @param disabled the form disabled flag
-     */
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    /**
      * Return the number of form layout table columns. This property is used to
      * layout the number of table columns the form is rendered in.
      *
@@ -837,6 +819,24 @@ public class Form implements Control {
             Field field = (Field) i.next();
             field.setContext(context);
         }
+    }
+
+    /**
+     * Return true if the form is a disabled.
+     *
+     * @return true if the form is a disabled
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * Set the form disabled flag.
+     *
+     * @param disabled the form disabled flag
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**
@@ -1061,6 +1061,19 @@ public class Form implements Control {
      */
     public void setFieldStyle(String value) {
         this.fieldStyle = value;
+    }
+
+    /**
+     * Return true if the page request is a form submission.
+     *
+     * @return true if the page request is a form submission
+     */
+    public boolean isFormSubmission() {
+        if (getContext() == null) {
+            throw new IllegalStateException("Context has not been set");
+        }
+        String requestMethod = getContext().getRequest().getMethod();
+        return getMethod().equalsIgnoreCase(requestMethod);
     }
 
     /**
@@ -1497,9 +1510,8 @@ public class Form implements Control {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        HttpServletRequest request = getContext().getRequest();
 
-        if (request.getMethod().equalsIgnoreCase(getMethod())) {
+        if (isFormSubmission()) {
 
             // If "multipart/form-data" request and not already loaded then
             // load form data FileItem into context
@@ -1530,7 +1542,8 @@ public class Form implements Control {
                 }
 
                 try {
-                    List itemsList = fileUpload.parseRequest(request);
+                    List itemsList =
+                        fileUpload.parseRequest(getContext().getRequest());
 
                     Map itemsMap = new HashMap(itemsList.size());
                     for (int i = 0; i < itemsList.size(); i++) {
@@ -1552,6 +1565,8 @@ public class Form implements Control {
                 return true;
             }
 
+            onBeforeProcessFields();
+
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
                 Field field = (Field) getFieldList().get(i);
@@ -1562,6 +1577,9 @@ public class Form implements Control {
                     }
                 }
             }
+
+            onAfterProcessFields();
+
             for (int i = 0, size = getButtonList().size(); i < size; i++) {
                 Button button = (Button) getButtonList().get(i);
                 continueProcessing = button.onProcess();
@@ -1813,6 +1831,26 @@ public class Form implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * This method is invoked by <tt>onProcess()</tt> immediately before the
+     * Form fields are processed.
+     * <p/>
+     * Subclasses can override this empty method to provide their own
+     * functionality.
+     */
+    protected void onBeforeProcessFields() {
+    }
+
+    /**
+     * This method is invoked by <tt>onProcess()</tt> immediately after the
+     * Form fields are processed.
+     * <p/>
+     * Subclasses can override this empty method to provide their own
+     * functionality.
+     */
+    protected void onAfterProcessFields() {
+    }
 
     /**
      * Perform a back button submit check, returning true if the request is
