@@ -28,7 +28,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -41,6 +43,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
+import ognl.Ognl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -144,13 +147,13 @@ public class ClickUtils {
         objectClassname =
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
-        Method[] methods = object.getClass().getMethods();
-
         final List fieldList = getFormFields(form);
 
         if (fieldList.isEmpty()) {
             log("Form has no fields to copy from", debug);
         }
+
+        Map ognlContext = new HashMap();
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
@@ -159,110 +162,23 @@ public class ClickUtils {
                 continue;
             }
 
-            String setterName = toSetterName(field.getName());
+            try {
+                Ognl.setValue(field.getName(),
+                              ognlContext,
+                              object,
+                              field.getValueObject());
 
-            Method method = null;
-            for (int j = 0; j < methods.length; j++) {
-                if (setterName.equals(methods[j].getName())) {
-                    method = methods[j];
-                    break;
-                }
-            }
+                String msg = "Form -> " + objectClassname + "."
+                             + field.getName() + " : " + field.getValueObject();
 
-            if (method != null) {
-                Class[] parameterTypes = method.getParameterTypes();
-                if (parameterTypes.length == 1) {
-                    Class paramClass = parameterTypes[0];
-                    Object paramObject = null;
+                log(msg, debug);
 
-                    if (paramClass == String.class) {
-                        paramObject = field.getValue();
-
-                    } else if (paramClass == Integer.class
-                               || paramClass == Integer.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Integer.valueOf(field.getValue());
-                        }
-                    } else if (paramClass == Boolean.class
-                               || paramClass == Boolean.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Boolean.valueOf(field.getValue());
-                        }
-                    } else if (paramClass == Double.class
-                               || paramClass == Double.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Double.valueOf(field.getValue());
-                        }
-                    } else if (paramClass == Float.class
-                               || paramClass == Float.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Float.valueOf(field.getValue());
-                        }
-                    } else if (paramClass == Long.class
-                               || paramClass == Long.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Long.valueOf(field.getValue());
-                        }
-                    } else if (paramClass == Short.class
-                               || paramClass == Short.TYPE) {
-                        if (!StringUtils.isBlank(field.getValue())) {
-                            paramObject = Short.valueOf(field.getValue());
-                        }
-                    } else if (java.util.Date.class.isAssignableFrom(paramClass)
-                               && field.getValueClass() == java.util.Date.class) {
-
-                        java.util.Date fieldDate =
-                            (java.util.Date) field.getValueObject();
-
-                        if (paramClass == java.util.Date.class) {
-                            paramObject = fieldDate;
-
-                        } else if (paramClass == java.sql.Date.class) {
-                            if (fieldDate != null) {
-                                paramObject =
-                                    new java.sql.Date(fieldDate.getTime());
-                            }
-
-                        } else if (paramClass == java.sql.Time.class) {
-                            if (fieldDate != null) {
-                                paramObject =
-                                    new java.sql.Time(fieldDate.getTime());
-                            }
-                        } else if (paramClass == java.sql.Timestamp.class) {
-                            if (fieldDate != null) {
-                                paramObject =
-                                    new java.sql.Timestamp(fieldDate.getTime());
-                            }
-                        }
-                    }
-
-                    Object[] params = { paramObject };
-
-                    try {
-                        method.invoke(object, params);
-
-                        String msg = "Form -> " + objectClassname + "."
-                                     + method.getName() + " : " + paramObject;
-                        log(msg, debug);
-
-                    } catch (Exception e) {
-                        String msg =
-                            "Error incurred invoking "
-                            + objectClassname + "." + method.getName()
-                            + "() with " + paramObject + " error: "
-                            + e.toString();
-
-                        log(msg, e, debug);
-                    }
-
-                } else {
-                    String msg = objectClassname + "." + method.getName()
-                                 + "() method has invalid number of parameters";
-                    log(msg, debug);
-                }
-            } else {
+            } catch (Exception e) {
                 String msg =
-                    objectClassname + "." + setterName + "() method not found";
+                    "Error incurred invoking " + objectClassname + "."
+                    + field.getName() + " with " + field.getValueObject()
+                    + " error: " + e.toString();
+
                 log(msg, debug);
             }
         }
@@ -285,17 +201,17 @@ public class ClickUtils {
             throw new IllegalArgumentException("Null form parameter");
         }
 
-        String objectClassname = object.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
-        Method[] methods = object.getClass().getMethods();
-
         final List fieldList = getFormFields(form);
 
         if (fieldList.isEmpty()) {
             log("Form has no fields to copy to", debug);
         }
+
+        String objectClassname = object.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        Map ognlContext = new HashMap();
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
@@ -304,43 +220,20 @@ public class ClickUtils {
                 continue;
             }
 
-            String getterName = toGetterName(field.getName());
-            String isGetterName = toIsGetterName(field.getName());
+            try {
+                Object result =
+                    Ognl.getValue(field.getName(), ognlContext, object);
 
-            Method method = null;
-            for (int j = 0; j < methods.length; j++) {
-                if (getterName.equals(methods[j].getName())) {
-                    method = methods[j];
-                    break;
-                }
-                if (isGetterName.equals(methods[j].getName())) {
-                    method = methods[j];
-                    break;
-                }
-            }
+                field.setValueObject(result);
 
-            if (method != null) {
-                // call method
-                try {
-                    Object result = method.invoke(object, null);
+                String msg = "Form <- " + objectClassname + "."
+                             + field.getName() + " : " + result;
+                log(msg, debug);
 
-                    String msg = "Form <- " + objectClassname + "."
-                                 + method.getName() + " : " + result;
-                    log(msg, debug);
+            } catch (Exception e) {
+                String msg = "Error incurred invoking " + objectClassname + "."
+                             + field.getName() + " error: " + e.toString();
 
-                    field.setValueObject(result);
-
-                } catch (Exception e) {
-                    String msg =
-                        "Error incurred invoking " + objectClassname + "."
-                        + method.getName() + "() error: " + e.toString();
-
-                    log(msg, e, debug);
-                }
-
-            } else {
-                String msg =
-                    objectClassname + "." + getterName + "() method not found";
                 log(msg, debug);
             }
         }
@@ -810,17 +703,6 @@ public class ClickUtils {
             System.out.println("[Click] [debug] " + msg);
         } else {
             ClickLogger.getInstance().debug(msg);
-        }
-    }
-
-    private static void log(String msg, Throwable error, boolean debug) {
-        if (debug) {
-            System.out.println("[Click] [debug] " + msg);
-            if (error != null) {
-                error.printStackTrace(System.out);
-            }
-        } else {
-            ClickLogger.getInstance().debug(msg, error);
         }
     }
 
