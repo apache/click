@@ -141,19 +141,22 @@ public class ErrorReport {
                 if (line.indexOf("$") != -1) {
                     nameEnd = line.indexOf("$");
                 }
-                String classname = line.substring(nameStart + 3, nameEnd);
 
-                int lineStart = line.indexOf(":");
-                if (lineStart != -1) {
-                    int lineEnd = line.indexOf(")");
-                    String linenumber = line.substring(lineStart + 1, lineEnd);
+                if (nameStart == -1 && nameEnd != -1) {
+                    String classname = line.substring(nameStart + 3, nameEnd);
 
-                    this.lineNumber = Integer.parseInt(linenumber);
+                    int lineStart = line.indexOf(":");
+                    if (lineStart != -1) {
+                        int lineEnd = line.indexOf(")");
+                        String linenumber = line.substring(lineStart + 1, lineEnd);
 
-                    String filename =
-                        "/" + classname.replace('.', '/') + ".java";
+                        this.lineNumber = Integer.parseInt(linenumber);
 
-                    sourceReader = getJavaSourceReader(filename);
+                        String filename =
+                            "/" + classname.replace('.', '/') + ".java";
+
+                        sourceReader = getJavaSourceReader(filename);
+                    }
                 }
 
             } catch (Exception e) {
