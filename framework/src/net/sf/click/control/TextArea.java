@@ -109,6 +109,19 @@ public class TextArea extends Field {
     }
 
     /**
+     * Construct the TextArea with the given name, label and required status.
+     * The area will have a default size of 20 cols and 3 rows.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public TextArea(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
+    }
+
+    /**
      * Construct the TextArea with the given name, number of columns and
      * number of rows.
      *
