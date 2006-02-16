@@ -169,7 +169,7 @@ public class ActionLink implements Control {
     /** The link attributes map. */
     protected Map attributes;
 
-    /** The button is clicked. */
+    /** The link is clicked. */
     protected boolean clicked;
 
     /** The context. */
@@ -829,9 +829,7 @@ public class ActionLink implements Control {
 
         buffer.elementStart("a");
 
-        buffer.append(" href=\"");
-        buffer.append(getHref());
-        buffer.append("\"");
+        buffer.appendAttribute("href", getHref());
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("title", getTitle());
         if (hasAttributes()) {
