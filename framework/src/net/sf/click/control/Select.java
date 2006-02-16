@@ -15,16 +15,16 @@
  */
 package net.sf.click.control;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import ognl.Ognl;
 
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -392,31 +392,14 @@ public class Select extends Field {
             return;
         }
  
-        Method valueMethod = null;
-        Method labelMethod = null;
-        Class objectClass = null;
+        Map ognlContext = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
-            if (!object.getClass().equals(objectClass)) {
-                objectClass = object.getClass();
-                valueMethod = null;
-                labelMethod = null;
-            }
-
             try {
-                if (valueMethod == null) {
-                    String getterName = ClickUtils.toGetterName(value);
-                    valueMethod = objectClass.getMethod(getterName, null);
-                }
-                if (labelMethod == null) {
-                    String getterName = ClickUtils.toGetterName(label);
-                    labelMethod = objectClass.getMethod(getterName, null);
-                }
-
-                Object valueResult = valueMethod.invoke(object, null);
-                Object labelResult = labelMethod.invoke(object, null);
+                Object valueResult = Ognl.getValue(value, ognlContext, object);
+                Object labelResult = Ognl.getValue(label, ognlContext, object);
 
                 Option option = new Option(valueResult, labelResult.toString());
                 getOptionList().add(option);
@@ -647,7 +630,7 @@ public class Select extends Field {
      * Set the initial select option value.
      */
     protected void setInitialValue() {
-        if (!getOptionList().isEmpty()) {
+        if ((getValue().length() == 0) && !getOptionList().isEmpty()) {
             Object object = getOptionList().get(0);
 
             if (object instanceof String) {
