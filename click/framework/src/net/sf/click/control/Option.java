@@ -19,8 +19,6 @@ import java.util.List;
 
 import net.sf.click.util.HtmlStringBuffer;
 
-//---------------------------------------------------------- Inner Classes
-
 /**
  * Provides a select Option element: &nbsp; &lt;option&gt;&lt;/option&gt;.
  * <p/>
@@ -96,6 +94,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class Option {
+    
+    /** The empty select empty option. */
+    public static final Option EMPTY_OPTION = new Option("", "");
 
     // ----------------------------------------------------- Instance Variables
 
