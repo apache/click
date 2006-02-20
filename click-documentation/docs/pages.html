@@ -1,0 +1,676 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body> 
+   
+<h1>Pages</h1>
+Pages are the heart of web applications. In Click, Pages encapsulate the processing of 
+HTML requests and the rendering of HTML responses. The section discusses Click pages 
+and covers to following topics:
+<ul>
+  <li><a href="#page-class">Classes</a> - page Java classes
+  </li>
+  <li><a href="#page-execution">Execution</a> - page execution sequence
+  </li>
+  <li><a href="#page-navigation">Navigation</a> - navigation between pages
+  </li>
+  <li><a href="#page-templating">Page Templating</a> - templating common page content
+  </li>
+  <li><a href="#page-security">Security</a> - page security model
+  </li>
+  <li><a href="#page-error-handling">Error Handling</a> - page error handling
+  </li>
+  <li><a href="#page-not-found">Page Not Found</a> - page not found handling
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+
+In Click, a logical page is composed of a Java class and a Velocity template, with these
+components being defined in page elements of the 
+<a target="topic" href="configuration.html#application-configuration">click.xml</a> file.
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">search.htm</span>" classname="<span class="red">com.mycorp.page.Search</span>"/&gt; 
+</pre>
+
+The path attribute specifies the location of the page Velocity template, and the classname
+attribute specifies the page Java class name. 
+<p/>
+Alternatively you can also configure Click to use JSP pages for rendering.
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">search.jsp</span>" classname="<span class="red">com.mycorp.page.Search</span>"/&gt; 
+</pre>
+
+<a name="page-class" class="heading"><h2>Classes</h2></a>
+
+All custom Click pages must subclass the
+<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> base class.
+The Page class and its associated companion classes, Context and Control, are depicted 
+below in Figure 1.
+
+<p/>
+<img src="../images/click-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 1. &nbsp; Page Class Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+The Page class provides a model attribute which is used to hold all the objects that
+are rendered in the page's Velocity template. The model may also contain
+<a target="topic" href="click-api/net/sf/click/Control.html">Control</a> objects, which
+provide user interface controls on the Page.
+<p/>
+Pages also have an associated  
+<a target="topic" href="click-api/net/sf/click/Context.html">Context</a> object
+which references all the javax.servlet objects associated with the request. When 
+programming in Click you use the Context object to access HttpServletRequest attributes, 
+parameters and the HttpSession object.
+<p/>
+The Page class provide a number of empty handler methods which subclasses can override to
+provide functionality:
+<ul>
+  <li><a href="click-api/net/sf/click/Page.html#onInit()">onInit()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onGet()">onGet()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onPost()">onPost()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onDestroy()">onDestroy()</a></li>
+</ul>
+The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
+so when you create Page subclasses you must ensure you don't add an incompatible
+constructor.
+
+<a name="page-execution" class="heading"><h2>Execution</h2></a>
+
+The GET request execution sequence for Pages is summarized below in the Figure 2.
+
+<p/>
+<img src="../images/get-sequence-diagram.png"/>
+<p class="diagram">
+<b>Figure 2. &nbsp; GET Request Sequence Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+Stepping through this GET request sequence, a new Page instance is created and the 
+attributes for the Page are set (context, format, headers, path). Next the <tt>onInit()</tt>
+method is invoked, this is where you place any initialization code which requires
+access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
+<p/>
+The next method invoked is the <tt>onSecurityCheck()</tt> handler. This method can used to 
+ensure the user is authorized to access the page, and if necessary can abort any 
+further processing.
+<p/>
+The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
+Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
+If any of the Control's <tt>onProcess()</tt> methods return false, processing of 
+subsequent controls and the Page's <tt>onGet()</tt> method is aborted.
+<p/>
+If everything is executing normally the Page's <tt>onGet()</tt> method is now called.
+<p/>
+The next step is rendering the page template to generate the displayed HTML. The
+ClickServlet gets the model (<tt>Map</tt>) from the Page then adds the following 
+objects to the model:
+<ul>
+  <li>context &nbsp; - &nbsp; 
+   the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li>format &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects
+  </li>
+  <li>imports &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    object for rendering page controls HTML header imports
+  </li>
+  <li>messages &nbsp; - &nbsp; 
+   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   method
+  </li>
+  <li>path &nbsp; - &nbsp; the <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page template to render
+  </li>
+  <li>request &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletRequest.html">HttpServletRequest</a>
+    object
+  </li>
+  <li>response &nbsp; - &nbsp; 
+    the pages <a href="servlet-api/javax/servlet/http/HttpServletResponse.html">HttpServletResponse</a>
+    object
+  </li>
+  <li>session &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/SessionMap.html">SessionMap</a> adaptor
+   for the users <a href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+  </li>
+</ul>
+
+It then merges the template with the page model and writes out results to the HttpServletResponse.
+When the model is being merged with the template, any Controls in the model may be
+rendered using their <tt>toString()</tt> method.
+<p/>
+The final step in this sequence is invoking the Page's <tt>onDestroy()</tt> method. This 
+method can be used to clean up resource associated with the Page before it is garbage
+collected. The <tt>onDestroy()</tt> method is guaranteed to be called even if an exception
+occurs in the previous steps.
+<p/>
+The execution sequence for POST requests is almost identical, except the <tt>onPost()</tt>
+method is invoked instead on <tt>onGet()</tt>. See the 
+<a href="../images/post-sequence-diagram.png">POST Request Sequence Diagram</a>.
+<p/>
+Another view on the execution flow of Pages is illustrated in the Activity diagram below.
+<p/>
+<a name="activity-diagram" class="heading"><img src="../images/activity-diagram.png"/></a>
+<p class="diagram">
+<b>Figure 3. &nbsp; Page Execution Activity Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+<a name="page-navigation" class="heading"><h2>Navigation</h2></a>
+
+Navigation between pages is achieved by using forwards, redirects and by setting the 
+page template path.
+
+<a name="page-foward" class="heading"><h3>Forward</h3></a>
+
+To forward to another page using the servlet 
+<a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
+set the Page's forward property. For example to forward to a page with a path 
+<span class="html">index.htm</span>:
+
+<pre class="codeJava">
+<span class="jd">/**
+ * @see Page#onPost()
+ */</span>
+<span class="kw">public void</span> onPost() {
+   <span class="cm">// Process form post</span>
+   ..
+   
+   setForward(<span class="st">"index.htm"</span>);
+} 
+</pre>
+
+This will invoke a new Page class instance mapped to the path 
+<span class="html">index.htm</span>. Note when a request is forwarded to another Page, 
+the controls on the second page will not be processed. This prevents confusion and bugs,
+like a form on the second page trying to process a POST request from the first page.
+
+<h4>Forward Parameter Passing</h4>
+
+When you forward to another page the request parameters are maintained. This is a handy way
+of passing through state information through with the request. For example to you could
+add a customer object as request parameter which is displayed in the template of the 
+forwarded page.
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onViewClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+    
+   getContext().setRequestAttribute(<span class="st">"customer"</span>, customer);
+   setForward(<span class="st">"view-customer.htm"</span>);
+   
+   <span class="kw">return false</span>;
+} 
+</pre>
+
+Forwarded to page template <span class="html">view-customer.htm</span>:
+
+<pre class="codeHtml">
+&lt;html&gt;
+ &lt;head&gt;
+   &lt;title&gt;Customer Details&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+   &lt;h1&gt;Customer Details&lt;/h1&gt;
+   &lt;pre&gt;
+     Full Name: <span class="st">$customer.fullName</span>
+     Email:     <span class="st">$customer.email</span>
+     Telephone: <span class="st">$customer.telephone</span>
+    &lt;/pre&gt;
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+Request attributes are automatically added to the Velocity Context object so are  
+available in the page template.
+
+<a name="page-forwarding" class="heading"><h4>Page Forwarding</h4></a>
+
+Page forwarding is another way of passing information between pages. In this case
+you create the page to be forwarded to using the Context
+<a href="click-api/net/sf/click/Context.html#createPage(java.lang.String)">createPage()</a> 
+method and then set properties directly on the Page.
+Finally set this page as the page to forward the request to. For example:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onEditClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+   
+   EditPage editPage = (EditPage) getContext().createPage(<span class="st">"/edit-customer.htm"</span>);
+   editPage.setCustomer(customer);
+   setForward(editPage);
+   
+   <span class="kw">return false</span>;
+} 
+</pre>
+
+When creating a page with the <tt>createPage()</tt> method ensure you prefix
+the page path with the <tt class="st">"/"</tt> character.
+<p/>
+You can also specify the target page using its class as long as the Page has
+a unique path. Using this technique the above code becomes:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onEditClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+   
+   EditPage editPage = (EditPage) getContext().createPage(EditPage.<span class="kw">class</span>);
+   editPage.setCustomer(customer);
+   setForward(editPage);
+   
+   <span class="kw">return false</span>;
+}
+</pre>
+
+This Page forwarding technique is best practice as it provides you with compile time safety and
+alleviates you from having to specify page paths in your code.
+<p/>
+Please always use the Context <tt>createPage()</tt> methods to allow Click to 
+inject Page dependencies.
+
+<a name="page-template-path" class="heading"><h3>Template Path</h3></a>
+
+An alternative to forwarding to a new page is to simply set the path to the new
+page template to render. With this approach the page template  being rendered must have 
+everything it needs without having its associated Page object being created. Our modified 
+example would be:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onViewClick() {
+   Long id = viewLink.getValueLong();
+   Customer customer = CustomerDAO.findByPK(id); 
+    
+   addModel(<span class="st">"customer"</span>, customer);
+   setPath(<span class="st">"view-customer.htm"</span>);
+   
+   <span class="kw">return false</span>;
+} 
+</pre>
+
+Note how the <font color="red">customer</font> object is passed through to the template in the Page model. This
+approach of using the Page model is not available when you forward to another Page, as
+the first Page object is 
+"<a target="topic" href="click-api/net/sf/click/Page.html#onDestroy()">destroyed</a>"
+before the second Page object is created and any model values would be lost.
+
+<a name="page-redirect" class="heading"><h3>Redirect</h3></a>
+
+Redirects are another very useful way to navigate between pages. See 
+HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
+for details.
+<p/>
+The great thing about redirects are that they provide a clean URL in the users browser 
+which matches the page that they are viewing. This is important for when users want to
+bookmark a page. The downside of redirects are that they involve a communications round 
+trip with the users browser which requests the new page. Not only does this take time, 
+it also means that all the page and request information is lost. 
+<p/>
+An example of a redirect to a <span class="html">logout.htm</span>
+page is provided below:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   setRedirect(<span class="st">"/logout.htm"</span>);
+   <span class="kw">return false</span>;
+} 
+</pre>
+
+If the redirect location is begins with a <span class="wr">"/"</span> 
+character the redirect location will be prefixed with the web applications 
+context path. 
+<p/>
+For example if an application is deployed to the context 
+<span class="wr">"mycorp"</span> calling 
+<tt>setRedirect(<span class="navy">"/customer/details.htm"</span>)</tt>
+will redirect the request to:
+<span class="wr">"/mycorp/customer/details.htm"</span>
+
+<h4>Redirect Parameter Passing</h4>
+
+You can pass information between redirected pages using URL request parameters. 
+The ClickServlet will encode the URL for you using
+HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url)
+method. 
+<p/>
+In the example below a user will click on an OK button to confirm a payment. The 
+<tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
+redirects to the <span class="html">trans-complete.htm</span> page with the
+transaction id encoded in the URL.
+
+<pre class="codeJava">
+<span class="kw">public class</span> Payment <span class="kw">extends</span> Page {
+   ..
+   
+   <span class="kw">public boolean</span> onOkClick() {
+      <span class="kw">if</span> (form.isValid()) {
+         <span class="cm">// Process payment</span>
+         ..
+         
+         <span class="cm">// Get transaction id</span>
+         Long transId = OrderDAO.purchase(order);
+   
+         setRedirect(<span class="st">"trans-complete.htm?transId="</span> + transId);
+      
+         <span class="kw">return false</span>; 
+      } 
+  
+      <span class="kw">return true</span>;
+   }
+} 
+</pre>
+
+The Page class for the <span clas="html">trans-complete.htm</span> page can 
+then get the transaction id through the request parameter 
+<tt>"<span color="red">transId</span>"</tt>:
+
+<pre class="codeJava">
+<span class="kw">public class</span> TransComplete <span class="kw">extends</span> Page {
+   
+   <span class="jd">/**
+    * @see Page#onInit()
+    */</span>
+   <span class="kw">public void</span> onInit() {
+      String transId = getContext().getRequest().getParameter(<span class="st">"transId"</span>);
+   
+      <span class="kw">if</span> (transId != <span class="kw">null</span>) {
+      
+         <span class="cm">// Get order details</span>
+         Order order = OrderDAO.findOrderByPK(<span class="kw">new</span> Long(transId));
+         <span class="kw">if</span> (order != <span class="kw">null</span>) {
+            addModel(<span class="st">"order"</span>, order);
+         }
+      }
+   }
+} 
+</pre>
+
+<h4>Post Redirect</h4>
+The parameter passing example above is also an example of a Post Redirect. The Post
+Redirect technique is a very useful method of preventing users from submitting a form 
+twice by hitting the refresh button.
+
+
+<a name="page-templating" class="heading"><h2>Page Templating</h2></a>
+
+Click supports page templating (a.k.a. <i>Tiles</i> in Struts) enabling you to
+create a standardized look and feel for your web application and greatly reducing
+the amount of HTML you need to maintain.
+<p/>
+To implement templating define a border template base Page 
+which content Pages should extend. The template base Page class overrides the
+Page <a href="click-api/net/sf/click/Page.html#getTemplate()">getTemplate()</a>
+method, returning the path of the border template to render. For example:
+
+<pre class="codeJava"><span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span class="kw">public</span> String getTemplate() {
+        <span class="kw">return</span> <span class="st">"border.htm"</span>;  
+    }
+} </pre>
+
+<p/>
+The BorderedPage template <span class="blue">border.htm</span>: 
+
+<pre class="codeHtml">
+ &lt;html&gt;
+   &lt;head&gt;
+     &lt;title&gt;<span class="blue">$title</span>&lt;/title&gt;
+     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+ 
+     &lt;h2 class="title"&gt;<span class="blue">$title</span>&lt;/h2&gt;
+ 
+     <span class="red">#parse</span>(<span class="blue">$path</span>)
+ 
+   &lt;/body&gt;
+ &lt;/html&gt; </pre>
+ 
+Other pages insert their content into this template using the Velocity 
+<a href="velocity/vtl-reference-guide.html#parse">#parse</a> directive,
+passing it their contents pages <a href="click-api/net/sf/click/Page.html#path">path</a>.
+The <span class="blue">$path</span> value is automatically added to 
+the VelocityContext by the ClickServlet.
+<p/>
+An example bordered Home page is provided below:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">home.htm</span>" classname="Home"/&gt; 
+</pre>
+
+<pre class="codeJava"><span class="kw">public class</span> Home <span class="kw">extends</span> BorderedPage {
+   
+     <span class="kw">public</span> Home() {
+         addModel(<span class="st">"title"</span>, <span class="st">"Home"</span>);
+     }
+} </pre>
+
+The Home page's content <span class="blue">home.htm</span>:
+
+<pre class="codeHtml">
+&lt;b&gt;Welcome&lt;/b&gt; to Home page your starting point for the application.
+</pre>
+
+When a request is made for the Home page (home.htm) Velocity will
+merge the <span class="blue">border.htm</span> page and 
+<span class="blue">home.htm</span> page together returning:
+
+<pre class="codeHtml">
+ &lt;html&gt;
+   &lt;head&gt;
+     &lt;title&gt;Home&lt;/title&gt;
+     &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+   &lt;/head&gt;
+   &lt;body&gt;
+ 
+     &lt;h2 class="title"&gt;Home&lt;/h2&gt;
+ 
+     &lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point.
+ 
+   &lt;/body&gt;
+ &lt;/html&gt; </pre>
+ 
+Which may be rendered:
+ 
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ <h2 style="color: white; background-color: navy; padding: 0.25em; margin-top: 0em;">
+  Home
+ </h2>
+ <p>
+ <b>Welcome</b> to Home page your application starting point.
+ <p/>
+ </td>
+</tr>
+</table>
+
+Note how the Home page class defines a <span class="blue">title</span> model value 
+which is referenced in the <span class="blue">border.htm</span> template as <span class="blue">$title</span>.
+Each bordered page can define their own title which is rendered in this template.
+
+
+<a name="page-security" class="heading"><h2>Security</h2></a>
+
+Pages provide an 
+<a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
+event handler which application pages override to implement authentication or
+authorization capabilities. 
+<p/>
+Please note you generally don't need to use this capability. Where possible
+you should use the J2EE path based security model and the facilities proivded
+by your app server. For information of the J2EE Servlet security facilities see the Sun 
+<a target="topic" href="http://java.sun.com/products/servlet/reference/api/index.html">Servlet Specification</a>, 
+and Louis E. Mauget's 
+<a target="topic" href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form-Based Web Authentication</a>
+paper.
+
+<h4>Application Authentication</h4>
+Applications can use the <tt>onSecurityCheck()</tt> method to implement their own security model. The example 
+class below provides a base Secure page class which other pages can extend
+to ensure the user is logged in. In this example the login page creates a session 
+when a user successfully authenticates. This Secure page then checks to make sure
+the user has a session, otherwise the request is redirected to the login page.
+
+<pre class="codeJava">
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().hasSession()) {
+            <span class="kw">return true</span>;
+            
+        } <span class="kw">else</span> (
+            setRedirect(<span class="st">"login.htm"</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+} 
+</pre>
+
+<h4>Container Authentication</h4>
+Alternatively you can also use the security services provided by the J2EE Servlet 
+Container. For instance to ensure users have been authenticated by the Serlvet Container
+you could use a Secure page of:
+
+<pre class="codeJava">
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
+            <span class="kw">return true</span>;
+            
+        } <span class="kw">else</span> (
+            setRedirect(<span class="st">"login.htm"</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+}
+</pre>
+
+<h4>Container Access Control</h4>
+The Servlet Container also provides facilities to enforce role based access control 
+(authorization). The example below is a base page to ensure only users
+in the "admin" role can access the page, otherwise users are redirected to the login page.
+Application Admin pages would extend this secure page to provide their functionality.
+
+<pre class="codeJava">
+<span class="kw">public class</span> AdminPage <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
+            <span class="kw">return true</span>;
+
+        } <span class="kw">else</span> (
+            setRedirect(<span class="st">"login.htm"</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+}
+</pre>
+
+<h4>Logging Out</h4>
+To logout using the application or container based security models you would simply 
+invalidate the session.
+
+<pre class="codeJava">
+<span class="kw">public class</span> Logout <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public boolean</span> onInit() {
+        getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
+    }
+} 
+</pre>
+
+<a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
+
+If an Exception occurs processing a Page object or rendering a template the error
+is delegated to the registered handler. The default Click error handler is the
+<a target="topic" href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>,
+which is automatically configured as:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">net.sf.click.util.ErrorPage</span>"/&gt; 
+</pre>
+
+To register an alternative error handler you must subclass ErrorPage and define
+your page using the path "<span class="html">click/error.htm</span>". For example:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.pages.ErrorPage</span>"/&gt; 
+</pre>
+
+When the ClickSevlet starts up it checks to see whether the <span class="html">error.htm</span> template exists in the 
+<span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
+You can tailor the <span class="html">click/error.htm</span> template to suite you own tastes, and the ClickServlet
+will not overwrite it. 
+<p/>
+The default error template will display extensive debug information when the application is in <tt>development</tt>
+or <tt>debug</tt> mode. Example error page displays include:
+<ul>
+   <li><a href="error-npe.html">NullPointerException</a> - in a page method</li>
+   <li><a href="error-parsing.html">ParseErrorException</a> - in a page template </li>
+</ul>
+When the application is in <tt>production</tt> mode only a simple 
+error message is displayed. See <a target="topic" href="configuration.html#application-mode">Configuration</a>
+for details on how to set the application mode.
+<p/>
+Please also see the <a href="examples.html">Examples</a> web app Exception Demo for demonstrations of Clicks error 
+handling.
+
+<a name="page-not-found" class="heading"><h2>Page Not Found</h2></a>
+
+If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
+it will use the registered <a href="not-found.html">not-found.htm</a> page. 
+<p/>
+The Click not found page is automatically configured as:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">click/not-found.htm</span>" classname="<span class="red">net.sf.click.Page</span>"/&gt; 
+</pre>
+
+You can override the default configuration and specify your own class, but you cannot change the path.
+<p/>
+When the ClickSevlet starts up it checks to see whether the <span class="html">not-found.htm</span> template exists in the 
+<span class="html">click</span> web sub directory. If it cannot find the page the ClickServlet will automatically deploy one.
+<p/>
+You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
+has access to the usual Click objects.
+
+</body>
+</html>
