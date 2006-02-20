@@ -171,7 +171,7 @@ import ognl.Ognl;
  */
 public class Select extends Field {
 
-    private static final long serialVersionUID = -1192953011321870296L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 
