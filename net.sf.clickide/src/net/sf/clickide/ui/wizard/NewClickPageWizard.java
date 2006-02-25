@@ -23,6 +23,14 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * The wizard to create new click page.
@@ -127,6 +135,83 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 				return false;
 			}
 		}
+		// Adds the page mapping to the click.xml
+		if(page.shouldAddToClickXML()){
+			IStructuredModel model = null;
+			
+			String newClazz = page.getClassName();
+			if(page.getPackageName().length()!=0){
+				newClazz = page.getPackageName() + "." + newClazz;
+			}
+			
+			String newPath = page.getFilename();
+			String parentFolder = page.getParentFolder();
+			String webAppRoot = ClickUtils.getWebAppRootFolder(project);
+			if(parentFolder.startsWith(webAppRoot)){
+				parentFolder = parentFolder.substring(webAppRoot.length()).replaceAll("^/|/$","");
+				newPath = parentFolder + "/" + newPath;
+			}
+			
+			try {
+				IFile file = ClickUtils.getClickConfigFile(project);
+				IModelManager manager = StructuredModelManager.getModelManager();
+				model = manager.getExistingModelForEdit(file);
+				
+				IDOMDocument doc = ((IDOMModel)model).getDocument();
+				
+				Element root  = doc.getDocumentElement();
+				Element pages = null;
+				NodeList list = doc.getElementsByTagName(ClickPlugin.TAG_PAGES);
+				
+				if(list.getLength()==0){
+					pages = doc.createElement(ClickPlugin.TAG_PAGES);
+					boolean inserted = false;
+					NodeList children = root.getChildNodes();
+					for(int i=0;i<children.getLength();i++){
+						Node node = children.item(i);
+						if(node instanceof Element){
+							root.insertBefore(pages, node);
+							inserted = true;
+							break;
+						}
+					}
+					if(!inserted){
+						root.appendChild(pages);
+					}
+				} else {
+					pages = (Element)list.item(0);
+				}
+				
+				NodeList children = pages.getChildNodes();
+				boolean found = false;
+				for(int i=0;i<children.getLength();i++){
+					Node node = children.item(i);
+					if(node instanceof Element && ((Element)node).getNodeName().equals(ClickPlugin.TAG_PAGE)){
+						Element page = (Element)node;
+						String path  = page.getAttribute(ClickPlugin.ATTR_PATH);
+						String clazz = page.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+						if(newPath.equals(path) && newClazz.equals(clazz)){
+							found = true;
+							break;
+						}
+					}
+				}
+				if(!found){
+					Element page = doc.createElement(ClickPlugin.TAG_PAGE);
+					page.setAttribute(ClickPlugin.ATTR_PATH, newPath);
+					page.setAttribute(ClickPlugin.ATTR_CLASSNAME, newClazz);
+					pages.appendChild(page);
+				}
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
+				return false;
+			} finally {
+				if(model!=null){
+					model.releaseFromEdit();
+				}
+			}
+		}
+		
 		return true;
 	}
 	
