@@ -13,6 +13,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -22,11 +23,13 @@ import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jdt.internal.core.search.JavaSearchScope;
 import org.eclipse.jdt.internal.ui.dialogs.PackageSelectionDialog;
+import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.jdt.internal.ui.util.BusyIndicatorRunnableContext;
 import org.eclipse.jdt.internal.ui.wizards.TypedElementSelectionValidator;
 import org.eclipse.jdt.internal.ui.wizards.TypedViewerFilter;
 import org.eclipse.jdt.internal.ui.wizards.buildpaths.FolderSelectionDialog;
 import org.eclipse.jface.operation.IRunnableContext;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -109,9 +112,11 @@ public class NewClickPageWizardPage extends WizardPage {
 		project.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(selection!=null){
 			IJavaProject initProject = ClickUtils.getJavaProject(selection);
-			if(initProject!=null){
-				project.setText(initProject.getElementName());
-			}
+			try {
+				if(initProject!=null && initProject.getProject().hasNature(JavaCore.NATURE_ID)){
+					project.setText(initProject.getElementName());
+				}
+			} catch(Exception ex){}
 		}
 		project.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
@@ -477,9 +482,33 @@ public class NewClickPageWizardPage extends WizardPage {
 	
 	private void selectProject(){
 		IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
-		Class[] acceptedClasses = new Class[] { IProject.class };
-		ISelectionStatusValidator validator = new TypedElementSelectionValidator(acceptedClasses, false);
-		ViewerFilter filter = new TypedViewerFilter(acceptedClasses);
+		
+		// required validator
+		ISelectionStatusValidator validator = new ISelectionStatusValidator(){
+			private IStatus fgErrorStatus= new StatusInfo(IStatus.ERROR, ""); //$NON-NLS-1$
+			private IStatus fgOKStatus= new StatusInfo();
+			
+			public IStatus validate(Object[] selection){
+				if(selection==null || selection.length != 1){
+					return fgErrorStatus;
+				}
+				return fgOKStatus;
+			}
+		};
+		
+		// select only IJavaProject
+		ViewerFilter filter = new ViewerFilter(){
+		    public boolean select(Viewer viewer, Object parentElement, Object element){
+		    	try {
+			    	if(element instanceof IProject){
+			    		if(((IProject)element).hasNature(JavaCore.NATURE_ID)){
+			    			return true;
+			    		}
+			    	}
+		    	} catch(Exception ex){}
+		    	return false;
+		    }
+		};
 		
 		FolderSelectionDialog dialog = new FolderSelectionDialog(
 				getShell(), new WorkbenchLabelProvider(), new WorkbenchContentProvider());
@@ -652,10 +681,12 @@ public class NewClickPageWizardPage extends WizardPage {
 		try {
 			IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
 			IProject project = wsroot.getProject(this.project.getText());
-			return project;
+			if(project.hasNature(JavaCore.NATURE_ID)){
+				return project;
+			}
 		} catch(Exception ex){
-			return null;
 		}
+		return null;
 	}
 
 }

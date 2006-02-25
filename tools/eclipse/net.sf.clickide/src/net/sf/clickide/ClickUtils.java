@@ -265,8 +265,11 @@ public class ClickUtils {
 			if(containers.length > 0){
 				return containers[0].getProjectRelativePath().toString();
 			}
+		} catch(Exception ex){
 		} finally {
-			edit.dispose();
+			if(edit!=null){
+				edit.dispose();
+			}
 		}
 		return "";
 	}
