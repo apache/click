@@ -149,13 +149,15 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			String webAppRoot = ClickUtils.getWebAppRootFolder(project);
 			if(parentFolder.startsWith(webAppRoot)){
 				parentFolder = parentFolder.substring(webAppRoot.length()).replaceAll("^/|/$","");
-				newPath = parentFolder + "/" + newPath;
+				if(parentFolder.length() > 0){
+					newPath = parentFolder + "/" + newPath;
+				}
 			}
 			
 			try {
 				IFile file = ClickUtils.getClickConfigFile(project);
 				IModelManager manager = StructuredModelManager.getModelManager();
-				model = manager.getExistingModelForEdit(file);
+				model = manager.getModelForEdit(file);
 				
 				IDOMDocument doc = ((IDOMModel)model).getDocument();
 				
@@ -202,6 +204,9 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 					page.setAttribute(ClickPlugin.ATTR_CLASSNAME, newClazz);
 					pages.appendChild(page);
 				}
+				
+				model.save();
+				
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 				return false;
