@@ -282,4 +282,13 @@ public class ClickUtils {
 	public static IWorkbenchPage getActivePage(){
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
+	
+	public static IFile getClickConfigFile(IProject project){
+		String webAppRoot = getWebAppRootFolder(project);
+		IFile file = project.getFile(new Path(webAppRoot).append("WEB-INF/click.xml"));
+		if(file.exists()){
+			return file;
+		}
+		return null;
+	}
 }
