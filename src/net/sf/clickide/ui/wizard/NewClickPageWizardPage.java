@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -385,7 +386,7 @@ public class NewClickPageWizardPage extends WizardPage {
 						new Object[]{ className.getText() }), ERROR);
 				setPageComplete(false);
 				return;
-			} else if(existsClass(packageName.getText(), className.getText())){
+			} else if(existsClass(sourceFolder.getText(), packageName.getText(), className.getText())){
 				setMessage(ClickPlugin.getString("wizard.newPage.error.typeAlreadyExists"), ERROR);
 				setPageComplete(false);
 				return;
@@ -456,15 +457,28 @@ public class NewClickPageWizardPage extends WizardPage {
 		return file.exists();
 	}
 	
-	private boolean existsClass(String packageName, String className){
+	private boolean existsClass(String sourceFolder, String packageName, String className){
 		try {
-			IJavaProject project = JavaCore.create(getProject());
-			if(!packageName.equals("")){
-				className = packageName + "." + className;
+			IProject project = getProject();
+			IResource resource = project.getProject();
+			if(!sourceFolder.equals("")){
+				resource = project.getFolder(sourceFolder);
 			}
-			return project.findType(className).exists();
+			
+			IJavaProject javaProject = JavaCore.create(project);
+			IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(resource);
+			IPackageFragment fragment = root.getPackageFragment(packageName);
+			if(!fragment.exists()){
+				System.out.println("パッケージがない");
+				return false;
+			}
+			
+			ICompilationUnit unit = fragment.getCompilationUnit(className + ".java");
+			System.out.println("クラスがある？ "+unit.exists());
+			return unit.exists();
+			
 		} catch(Exception ex){
-			ClickPlugin.log(ex);
+			ex.printStackTrace();
 			return false;
 		}
 	}
