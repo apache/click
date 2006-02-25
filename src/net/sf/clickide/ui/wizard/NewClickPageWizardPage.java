@@ -469,12 +469,10 @@ public class NewClickPageWizardPage extends WizardPage {
 			IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(resource);
 			IPackageFragment fragment = root.getPackageFragment(packageName);
 			if(!fragment.exists()){
-				System.out.println("パッケージがない");
 				return false;
 			}
 			
 			ICompilationUnit unit = fragment.getCompilationUnit(className + ".java");
-			System.out.println("クラスがある？ "+unit.exists());
 			return unit.exists();
 			
 		} catch(Exception ex){
