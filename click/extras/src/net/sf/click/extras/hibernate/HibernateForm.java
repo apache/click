@@ -20,6 +20,7 @@ import java.io.Serializable;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EntityMode;
@@ -123,17 +124,17 @@ public class HibernateForm extends Form {
 
     private static final long serialVersionUID = -7134198516606088333L;
 
+    /** The value object class name hidden field. */
+    protected HiddenField classField;
+
+    /** The value object identifier hidden field. */
+    protected HiddenField oidField;
+
     /** The Hibernate session. */
     protected Session session;
 
     /** The Hibernate session factory. */
     protected SessionFactory sessionFactory;
-
-    /** The value object identifier hidden field. */
-    protected HiddenField oidField;
-
-    /** The value object class name hidden field. */
-    protected HiddenField classField;
 
     /**
      * The flag specifying that object validation meta data has been applied to
@@ -157,14 +158,14 @@ public class HibernateForm extends Form {
             throw new IllegalArgumentException("Null valueClass parameter");
         }
 
-        classField = new HiddenField("VOCLASS", String.class);
+        classField = new HiddenField(ClickUtils.FO_CLASS, String.class);
         classField.setValue(valueClass.getName());
         add(classField);
 
         ClassMetadata classMetadata =
             getSessionFactory().getClassMetadata(valueClass);
         Type identifierType = classMetadata.getIdentifierType();
-        oidField = new HiddenField("VOID", identifierType.getReturnedClass());
+        oidField = new HiddenField(ClickUtils.FO_ID, identifierType.getReturnedClass());
         add(oidField);
     }
 
