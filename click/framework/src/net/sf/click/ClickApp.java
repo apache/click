@@ -18,9 +18,11 @@ package net.sf.click;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -527,11 +529,9 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Private Methods
 
-    private Element getResourceRootElement(String classpathResource)
-        throws Exception {
+    private Element getResourceRootElement(URL url) throws Exception {
 
-        InputStream inputStream =
-            getClass().getResourceAsStream(classpathResource);
+        InputStream inputStream = url.openStream();
 
         if (inputStream != null) {
             Document document = ClickUtils.buildDocument(inputStream, this);
@@ -541,7 +541,7 @@ class ClickApp implements EntityResolver {
             return null;
         }
     }
-
+    
     private void deployControls(Element rootElm) throws Exception {
 
         if (rootElm == null) {
@@ -595,8 +595,13 @@ class ClickApp implements EntityResolver {
                               "/net/sf/click/control/VM_global_library.vm",
                               "click");
 
-        deployControls(getResourceRootElement("/click-controls.xml"));
-        deployControls(getResourceRootElement("/extras-controls.xml"));
+        Enumeration e = 
+            getClass().getClassLoader().getResources("click-controls.xml");
+        while (e.hasMoreElements()) {
+            URL url = (URL) e.nextElement();
+            deployControls(getResourceRootElement(url));
+        }
+        
         deployControls(rootElm);
     }
 
