@@ -94,7 +94,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class Option {
-    
+
     /** The empty select empty option. */
     public static final Option EMPTY_OPTION = new Option("", "");
 
