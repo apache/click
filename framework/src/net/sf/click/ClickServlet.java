@@ -146,7 +146,7 @@ public class ClickServlet extends HttpServlet {
 
     // --------------------------------------------------------------- Contants
 
-    private static final long serialVersionUID = 3835158375989262128L;
+    private static final long serialVersionUID = 1L;
 
     private static final String APPLICAION_RELOADED_MSG  =
         "<html><head>"
