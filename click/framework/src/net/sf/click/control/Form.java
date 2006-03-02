@@ -142,17 +142,40 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
- * <a name="form-layout"><h3>Data Binding</h3></a>
+ * <a name="data-binding"><h3>Data Binding</h3></a>
  *
  * To bind value objects to a forms fields use the copy methods:
  * <ul>
- * <li>data object &nbsp; -> &nbsp; form fields  &nbsp; &nbsp; &nbsp;
+ * <li>value object &nbsp; -> &nbsp; form fields  &nbsp; &nbsp; &nbsp;
  * {@link #copyFrom(Object)}</li>
- * <li>form fields &nbsp; -> &nbsp; data object  &nbsp; &nbsp; &nbsp;
+ * <li>form fields &nbsp; -> &nbsp; value object  &nbsp; &nbsp; &nbsp;
  * {@link #copyTo(Object)}</li>
  * </ul>
  * To debug the data binding being performed, use the Click application mode to
  * "<tt>debug</tt>" or use the debug copy methods.
+ * <p/>
+ * Binding of nested data objects is supported using the 
+ * <a target="blank" href="http://www.ognl.org">OGNL</a> library. To use
+ * nested objects in your form, simply specify the object path as the Field
+ * name. Note in the object path you exclude the root object, so the path
+ * <tt>customer.address.state</tt> is specified as <tt>address.state</tt>. 
+ * <p/>
+ * For example:
+ *
+ * <pre class="codeJava">
+ * <span class="cm">// The customer.address.state field</span>
+ * TextField stateField = <span class="kw">new</span> TextField(<span class="st">"address.state"</span>);
+ * form.add(stateField);
+ * ..
+ * 
+ * <span class="cm">// Loads the customer address state into the form stateField</span>
+ * Customer customer = getCustomer();
+ * form.copyFrom(customer);
+ * ..
+ * 
+ * <span class="cm">// Copies form stateField value into the customer address state</span>
+ * Customer customer = <span class="kw">new</span> Customer();
+ * form.copyTo(customer); </pre>
  *
  * <a name="form-layout"><h3>Form Layout</h3></a>
  * The Form control supports rendering using automatic and manual layout
@@ -363,7 +386,7 @@ public class Form implements Control {
 
     // ------------------------------------------------------- Static Variables
 
-    private static final long serialVersionUID = -8288409197675214969L;
+    private static final long serialVersionUID = 1L;
 
     /** The align left, form layout contant: &nbsp; <tt>"left"</tt>. */
     public static final String ALIGN_LEFT = "left";
@@ -406,6 +429,12 @@ public class Form implements Control {
      */
     public static final String POSITION_LEFT = "left";
 
+    /**
+     * The submit check reserved request parameter prefix: &nbsp;
+     * <tt>SUBMIT_CHECK_</tt>.
+     */
+    public static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
+
     /** The errors-header resource property. */
     protected static String ERRORS_HEADER = "";
 
@@ -428,12 +457,6 @@ public class Form implements Control {
     protected static final String HTML_IMPORTS =
         "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
-
-    /**
-     * The submit check reserved request parameter prefix: &nbsp;
-     * <tt>SUBMIT_CHECK_</tt>.
-     */
-    protected static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
 
     static {
         ResourceBundle bundle =
