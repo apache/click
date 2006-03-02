@@ -56,12 +56,12 @@ import org.xml.sax.EntityResolver;
  * @author Malcolm Edgar
  */
 public class ClickUtils {
-    
+
     /** The form object classname request parameter name. */
     public static final String FO_CLASS = "FO_CLASS";
-    
-    /** The form object primary key request parameter name. */
-    public static final String FO_PK = "FO_PK";
+
+    /** The form object id request parameter name. */
+    public static final String FO_ID = "FO_ID";
 
     /**
      * Return a new XML Document for the given input stream.
@@ -165,9 +165,10 @@ public class ClickUtils {
             Field field = (Field) fieldList.get(i);
 
             if (field.getName().equals(Form.FORM_NAME)
-                || field.getName().equals("FO_CLASS")
-                || field.getName().equals("FO_PK")) {
-                
+                || field.getName().equals(FO_CLASS)
+                || field.getName().equals(FO_ID)
+                || field.getName().startsWith(Form.SUBMIT_CHECK)) {
+
                 continue;
             }
 
@@ -226,9 +227,10 @@ public class ClickUtils {
             Field field = (Field) fieldList.get(i);
 
             if (field.getName().equals(Form.FORM_NAME)
-                || field.getName().equals("FO_CLASS")
-                || field.getName().equals("FO_PK")) {
-                    
+                || field.getName().equals(FO_CLASS)
+                || field.getName().equals(FO_ID)
+                || field.getName().startsWith(Form.SUBMIT_CHECK)) {
+
                 continue;
             }
 
