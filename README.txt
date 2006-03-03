@@ -22,9 +22,7 @@ Distributed Click JAR files include:
 
    dist/click-extras-xx.jar - Click Extras JAR	
 
-Example pre-built web appliations include:
-
-   dist/click-blank.war
+Example pre-built web appliation include:
 
    dist/click-examples.war
 
@@ -35,14 +33,14 @@ the build directory.
 
 The main Ant targets include:
 
-    build-all             build framework, extras, webapps
+    build-all             build framework, extras, examples
     build-distribution    build distribution ZIP file
+    build-examples        build click-examples WAR file
     build-extras          build click-extras JAR file
     build-framework       build click framework JAR file
     build-maven-bundles   build Maven repository upload bundles
     build-sources         build source ZIP files for use with IDEs
-    build-webapps         build web application WAR files
-    deploy-webapps        copy WAR files to application server
+    deploy-examples       copy click-examples WAR file to app server
     get-deps              download JAR dependencies
     get-deps-proxy        download JAR dependencies via proxy
     help                  display the Help message
