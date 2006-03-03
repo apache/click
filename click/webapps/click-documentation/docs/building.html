@@ -48,10 +48,6 @@ The configuration of the Click Ant build system is detailed below:
 |
 +--[webapps]                    Web applications
     |
-    +---[click-blank]           Click Blank starter application
-    |
-    +---[click-cayenne]         Click Cayenne ORM example application
-    |
     +---[click-documentation]   Click documentation set application
     |
     +---[click-examples]        Click Examples application </pre>
@@ -81,14 +77,14 @@ help:
 
      [echo] Main targets:
 
-     [echo] build-all             build framework, extras, webapps
+     [echo] build-all             build framework, extras, examples
      [echo] build-distribution    build distribution ZIP file
+     [echo] build-examples        build click-examples WAR file
      [echo] build-extras          build click-extras JAR file
      [echo] build-framework       build click framework JAR file
      [echo] build-maven-bundles   build Maven repository upload bundles
      [echo] build-sources         build source ZIP files for use with IDEs
-     [echo] build-webapps         build web application WAR files
-     [echo] deploy-webapps        copy WAR files to application server
+     [echo] deploy-examples       copy click-examples WAR file to app server
      [echo] get-deps              download JAR dependencies
      [echo] get-deps-proxy        download JAR dependencies via proxy
      [echo] help                  display the Help message
@@ -148,8 +144,7 @@ ant build-framework build-extras </pre>
 
 
 <h3>Building Click Webapps</h3>
-To build the Click web application WAR files <tt>click-blank.war</tt> and 
-<tt>click-examples.war</tt>
+To build the Click web application WAR files <tt>click-examples.war</tt>
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
   been run.<p/>

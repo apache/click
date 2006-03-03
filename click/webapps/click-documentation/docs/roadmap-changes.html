@@ -37,6 +37,12 @@ up to a 1.0 release in the Q2 2006.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+       Added new Click Extras controls 
+       <a href="extras-api/net/sf/click/extras/control/ActionButton.html">ActionButton</a>,
+       <a href="extras-api/net/sf/click/extras/control/LongField.html">LongField</a> and
+       <a href="extras-api/net/sf/click/extras/control/TabbedForm.html">TabbedForm</a>.
+      </li>
+      <li class="change">
         Added support for 
         <a href="click-api/net/sf/click/control/Form.html#data-binding">data binding</a>
         of nested objects in form fields using 
@@ -48,10 +54,27 @@ up to a 1.0 release in the Q2 2006.
         <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layouts</a>.
       </li>
       <li class="change">
+       Added Form 
+       <a href="click-api/net/sf/click/control/Form.html#onBeforeProcessFields()">onBeforeProcessFields()</a> and
+       <a href="click-api/net/sf/click/control/Form.html#onBeforeProcessFields()">onAfterProcessFields()</a>
+       methods so support customized behaviour. (TODO: review whether still required, look at removing..)
+      </li>
+      <li class="change">
+        Added support for Control Velocity templates using new Context
+        <a href="click-api/net/sf/click/Context.html#renderTemplate(java.lang.Class, java.util.Map)">renderTemplate()</a>
+        methods. See Click Examples 'Rich Text Area' and 'Tabbed Form' for 
+        demonstrations.
+      </li>
+      <li class="change">
         Added page automapping
         <a href="configuration.html#application-excludes">excludes</a>.
         This issue was identified by Ahmed Mohombe
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-52">52</a>].
+      </li>
+      <li class="change">
+        Example <tt>click-blank</tt> and <tt>click-cayenne</tt> applications
+        removed from main distribution. These examples will be released as separate 
+        packages under sourceforge.
       </li>
       <li class="change">Updated documentation and examples.</li> 
     </ul>

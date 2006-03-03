@@ -25,27 +25,6 @@ get you up and running as quickly as possible. These web applications include:
     View online at &nbsp; <a target="blank" href="http://www.sunvolt.com/examples">http://www.sunvolt.com/examples</a>
   </dd>
   <p/>
-  <dt><b>Click Blank</b></dt>
-  <dd>Click Blank (<tt>click-blank.war</tt>) provides a blank application
-    template for starting a new application.
-    <p/>
-    Context Path: &nbsp; <a>/click-blank</a>
-  </dd>
-  <p/>
-  <dt><b>Click Cayenne</b></dt>
-  <dd>Click Cayenne (<tt>click-cayenne.war</tt>) provides a simple
-    <a target="blank" href="http://objectstyle.org/cayenne">Cayenne</a>
-    example application. This application was contributed by Andrus Adamchik.
-    <p/>
-    To build this application see the <tt>README.txt</tt> instructions and the
-    <tt>build.xml</tt> files in the directory: <tt>webapps/click-cayenne</tt>
-    <p/>
-    Note a <tt>click-cayenne.war</tt> file is not bundled in the Click distribution
-    in the interests of keeping the distribution small. 
-    <p/>
-    Context Path: &nbsp; <a>/click-cayenne</a>
-  </dd>
-  <p/>
   <dt><b>Click Documentation</b></dt>
   <dd>Click Documentation (<tt>click-documentation.war</tt>) provides the complete
     documentation set you are now reading.
@@ -78,9 +57,9 @@ To deploy the example web applications:
   </li>
   <li>Run the Ant target:
   <pre class="codeConfig">
-  ant deploy-webapps </pre>
+  ant deploy-examples </pre>
   
-  This will copy the example application WAR files to your Application Servers 
+  This will copy the click-examples application WAR file to your Application Servers 
   deployment directory.
   <p/>
   The example application WAR files come pre-built with the Click distribution.
