@@ -23,7 +23,7 @@ import net.sf.click.control.TextField;
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
  * <td>Long Field</td>
- * <td><input type='text' value='101' title='LongField Control'/></td>
+ * <td><input type='text' value='93019382701' title='LongField Control'/></td>
  * </tr>
  * </table>
  *
@@ -31,9 +31,9 @@ import net.sf.click.control.TextField;
  * the control listener if there is no parsing error.
  * <p/>
  * The LongField uses a JavaScript onKeyPress() integerFilter() method to prevent
- * users from entering invalid characters. To enable number key filtering
- * reference the {@link net.sf.click.control.Form#getHtmlImports()} object in
- * the page template. For example:
+ * users from entering invalid characters. To enable number key filtering 
+ * reference the {@link net.sf.click.util.PageImports} object in your page 
+ * header section. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -215,7 +215,7 @@ public class LongField extends TextField {
     }
 
     /**
-     * Return the field integer value, or null if value was empty or a parsing
+     * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
      * @see net.sf.click.control.Field#getValueObject()
