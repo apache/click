@@ -53,11 +53,11 @@
    <!-- Tasks -->
    
    <target name="build-all" 
-           depends="build-framework, build-extras, build-webapps" 
-           description="build Click framework, extras and webapps"/>
+           depends="build-framework, build-extras, build-examples" 
+           description="build Click framework, extras, examples"/>
 
    <target name="build-distribution" 
-           depends="clean, build-framework, build-extras, build-webapps, javadoc" 
+           depends="clean, build-framework, build-extras, build-examples, javadoc" 
            description="build distribution ZIP file">
       <!--  "click-documentation" WAR -->
       <available file="webapps/click-documentation/index.html" property="isDocAvail"/>
@@ -103,11 +103,7 @@
             <exclude name="**/Thumbs.db"/>
             <exclude name="**/classes/**"/>
             <exclude name="**/WEB-INF/lib/**"/>
-            <exclude name="webapps/click-cayenne/deploy/**"/>
-            <exclude name="webapps/click-cayenne/webapp/click/**"/>
-            <exclude name="webapps/click-cayenne/webapp/javadoc/**"/>
             <exclude name="webapps/click-documentation/**"/>
-            <exclude name="webapps/click-examples/click/**"/>
             <exclude name="webapps/click-examples/javadoc/**"/>
          </fileset>
       </copy>
@@ -118,6 +114,69 @@
       <delete dir="click-${version}" quiet="false"/>
    </target>  
 
+   <target name="build-examples" description="build click-examples WAR file">
+      <available file="dist/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <fail message="Build extras first with 'build-extras'">
+         <condition>
+  	        <or><isfalse value="${isExtrasAvail}"/></or>
+  	     </condition>
+      </fail>
+      <!--  "click-examples" WAR  -->
+      <delete file="dist/click-examples.war" quiet="false"/>
+      <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
+	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
+             destdir="webapps/click-examples/WEB-INF/classes" 
+             debug="true">
+         <classpath> 
+       	   <pathelement location="lib/${jar.servlet}"/>
+           <pathelement location="dist/click-${version}.jar"/>
+           <pathelement location="dist/click-extras-${version}.jar"/>
+         </classpath>
+      </javac>
+      <copy todir="webapps/click-examples/WEB-INF/classes">
+         <fileset dir="webapps/click-examples/WEB-INF/src">
+            <exclude name="**/*.java"/>
+       	   <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <delete quiet="false" failonerror="false">
+         <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
+               destdir="webapps/click-examples/javadoc"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Examples"
+               doctitle="Click Examples API">
+         <classpath>
+            <pathelement location="lib/${jar.servlet}"/>
+            <pathelement location="dist/click-${version}.jar"/>
+            <pathelement location="dist/click-extras-${version}.jar"/>
+         </classpath>
+         <packageset dir="webapps/click-examples/WEB-INF/src"/>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://click.sourceforge.net/docs/extras-api/"/>
+      </javadoc>
+      <copy file="framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="webapps/click-examples/javadoc"/>
+      <war destfile="dist/click-examples.war"
+           webxml="webapps/click-examples/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <lib file="dist/click-${version}.jar"/>
+         <lib file="dist/click-extras-${version}.jar"/>
+         <fileset dir="webapps/click-examples">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+   
    <target name="build-extras" description="build extras JAR file">
       <available file="dist/click-${version}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
@@ -259,86 +318,6 @@
       </zip>
    </target>
 
-   <target name="build-webapps" description="build web application WAR files">
-      <available file="dist/click-extras-${version}.jar" property="isExtrasAvail"/>
-      <fail message="Build extras first with 'build-extras'">
-         <condition>
-  	        <or><isfalse value="${isExtrasAvail}"/></or>
-  	     </condition>
-      </fail>
-      <!--  "click-blank" WAR  -->
-      <delete file="dist/click-blank.war" quiet="false"/>
-      <copy file="framework/src/click-control.properties" 
-            todir="webapps/click-blank/WEB-INF/src"/>
-      <copy file="framework/src/click-control.properties" 
-            todir="webapps/click-blank/WEB-INF/classes"/>
-      <war destfile="dist/click-blank.war"
-           webxml="webapps/click-blank/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <lib file="dist/click-${version}.jar"/>
-         <fileset dir="webapps/click-blank">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
-      <!--  "click-examples" WAR  -->
-      <delete file="dist/click-examples.war" quiet="false"/>
-      <delete dir="webapps/click-examples/WEB-INF/classes" quiet="false"/>
-      <mkdir dir="webapps/click-examples/WEB-INF/classes"/>
-	  <javac srcdir="webapps/click-examples/WEB-INF/src" 
-             destdir="webapps/click-examples/WEB-INF/classes" 
-             debug="true">
-         <classpath> 
-       	   <pathelement location="lib/${jar.servlet}"/>
-           <pathelement location="dist/click-${version}.jar"/>
-           <pathelement location="dist/click-extras-${version}.jar"/>
-         </classpath>
-      </javac>
-      <copy todir="webapps/click-examples/WEB-INF/classes">
-         <fileset dir="webapps/click-examples/WEB-INF/src">
-            <exclude name="**/*.java"/>
-       	   <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
-      <delete quiet="false" failonerror="false">
-         <fileset dir="webapps/click-examples/javadoc" includes="**/*"/>
-      </delete>
-      <javadoc sourcepath="webapps/click-examples/WEF-INF/src"
-               destdir="webapps/click-examples/javadoc"
-               author="true"
-               version="true"
-               verbose="false"
-               windowtitle="Click Examples"
-               doctitle="Click Examples API">
-         <classpath>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-            <pathelement location="dist/click-extras-${version}.jar"/>
-         </classpath>
-         <packageset dir="webapps/click-examples/WEB-INF/src"/>
-         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-         <link href="http://click.sourceforge.net/docs/click-api/"/>
-         <link href="http://click.sourceforge.net/docs/extras-api/"/>
-      </javadoc>
-      <copy file="framework/stylesheet.css"  
-      	    overwrite="true"
-            todir="webapps/click-examples/javadoc"/>
-      <war destfile="dist/click-examples.war"
-           webxml="webapps/click-examples/WEB-INF/web.xml">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <lib file="dist/click-${version}.jar"/>
-         <lib file="dist/click-extras-${version}.jar"/>
-         <fileset dir="webapps/click-examples">
-            <exclude name="**/web.xml"/>
-         </fileset>
-      </war>
-   </target>
-   
    <target name="checkstyle" description="run checkstyle report on Java soruce">
       <checkstyle config="build/checkstyle-checks.xml">
          <fileset dir="framework/src/net" includes="**/*.java"/>
@@ -351,16 +330,10 @@
       <mkdir dir="dist"/>
    </target>
 
-   <target name="deploy-examples"> 
+   <target name="deploy-examples" description="copy click-examples WAR file to app server"> 
      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
                
-   <target name="deploy-webapps" description="copy WAR files to application server"> 
-      <copy file="dist/click-blank.war" todir="${dir.appserver}" overwrite="true"/>
-      <copy file="dist/click-documentation.war" todir="${dir.appserver}" overwrite="true"/>
-      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
-   </target>
-
    <target name="format-java">
       <linetrim srcdir="extras/src" includes="**/*.java"/>
       <replacetabs srcdir="extras/src" includes="**/*.java"/>
@@ -418,15 +391,15 @@
       <echo/>  
       <echo message="Main targets:"/> 
       <echo/>    
-      <echo message="build-all             build framework, extras, webapps"/>
+      <echo message="build-all             build framework, extras, examples"/>
       <echo message="build-distribution    build distribution ZIP file"/>
+      <echo message="build-examples        build click-examples WAR file"/> 
       <echo message="build-extras          build click-extras JAR file"/> 
       <echo message="build-framework       build click framework JAR file"/> 
       <echo message="build-maven-bundles   build Maven repository upload bundles"/>
       <echo message="build-sources         build source ZIP files for use with IDEs"/>
-      <echo message="build-webapps         build web application WAR files"/> 
       <echo message="checkstyle            run checkstyle report on Java source"/>       
-      <echo message="deploy-webapps        copy WAR files to application server"/>
+      <echo message="deploy-examples       copy click-examples WAR file to app server"/>
       <echo message="get-deps              download JAR dependencies"/>  
       <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
       <echo message="help                  display the Help message"/>  
