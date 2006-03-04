@@ -1,0 +1,14 @@
+<script type='text/javascript' src='prototype.js'></script>
+<script type='text/javascript' src='rico.js'></script>
+<script type='text/javascript'>
+function registerAjaxStuff() {
+    ajaxEngine.registerRequest('getPersonInfo', 'person-ajax-viewer.htm');
+    ajaxEngine.registerAjaxElement('personDetails');
+}
+
+function onPersonChange(id) {
+    document.getElementById('personDetails').style.display= '';
+    ajaxEngine.sendRequest('getPersonInfo', 'id=' + id);
+    return false;
+}
+</script>

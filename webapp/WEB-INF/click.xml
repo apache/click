@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app>
+	
+	<pages package="click.cayenne.page" automapping="true"/>
+	
+	<headers>
+		<header name="Pragma" value="no-cache"/>
+		<header name="Cache-Control" value="no-cache"/>
+		<header name="Expires" value="1" type="Date"/>
+	</headers>
+	
+	<format classname="click.cayenne.CayenneFormat"/>
+
+	<mode value="trace"/>
+
+</click-app>
