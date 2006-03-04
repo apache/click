@@ -35,12 +35,25 @@ up to a 1.0 release in the Q2 2006.
 <dl>
   <dt>Version 0.19 - ??th March 2006</dt>
   <dd>
+    <div style="margin-left:-2em;margin-bottom:0.5em;"> New developer
+    <a target="blank" href="http://sourceforge.net/users/chrisichris/">Christian Essl</a>
+    joins the Click project.</div>
     <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+       New <a href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a> 
+       Eclipse WTP plug-in released by Naoki Takezoe.
+      </li>
       <li class="change">
        Added new Click Extras controls 
        <a href="extras-api/net/sf/click/extras/control/ActionButton.html">ActionButton</a>,
        <a href="extras-api/net/sf/click/extras/control/LongField.html">LongField</a> and
        <a href="extras-api/net/sf/click/extras/control/TabbedForm.html">TabbedForm</a>.
+      </li>
+      <li class="change">
+        Added Context page path lookup method 
+        <a href="click-api/net/sf/click/Context.html#getPagePath(java.lang.Class)">getPagePath()</a>.
+        This feature was suggested by Christian Essl
+        [<a href="http://www.sunvolt.com/jira/browse/CLK-68">68</a>].
       </li>
       <li class="change">
         Added support for 
@@ -54,12 +67,6 @@ up to a 1.0 release in the Q2 2006.
         <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layouts</a>.
       </li>
       <li class="change">
-       Added Form 
-       <a href="click-api/net/sf/click/control/Form.html#onBeforeProcessFields()">onBeforeProcessFields()</a> and
-       <a href="click-api/net/sf/click/control/Form.html#onBeforeProcessFields()">onAfterProcessFields()</a>
-       methods so support customized behaviour. (TODO: review whether still required, look at removing..)
-      </li>
-      <li class="change">
         Added support for Control Velocity templates using new Context
         <a href="click-api/net/sf/click/Context.html#renderTemplate(java.lang.Class, java.util.Map)">renderTemplate()</a>
         methods. See Click Examples 'Rich Text Area' and 'Tabbed Form' for 
@@ -70,6 +77,23 @@ up to a 1.0 release in the Q2 2006.
         <a href="configuration.html#application-excludes">excludes</a>.
         This issue was identified by Ahmed Mohombe
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-52">52</a>].
+      </li>
+      <li clas="change">
+       Added French and Italian properties files provided by 
+       Lorenzo Orselli [<a href="http://www.sunvolt.com/jira/browse/CLK-65">65</a>, 
+       <a href="http://www.sunvolt.com/jira/browse/CLK-66">66</a>].
+      </li>
+      <li class="change">
+        Updated Velocity library to latest 1.5-dev build.
+      </li>
+      <li class="change">
+        Fixed CayenneForm duplicate insert bug. This issue was identified by
+        Bob Schellink [<a href="http://www.sunvolt.com/jira/browse/CLK-63">63</a>].
+      </li>
+      <li clas="change">
+        Fixed DateField internationaliztion bug. Issue identified by 
+        Lorenzo Orselli and fix provided by  Naoki Takezoe
+        [<a href="http://www.sunvolt.com/jira/browse/CLK-60">60</a>].
       </li>
       <li class="change">
         Example <tt>click-blank</tt> and <tt>click-cayenne</tt> applications
