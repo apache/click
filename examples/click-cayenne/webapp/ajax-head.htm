@@ -1,0 +1,14 @@
+<script type='text/javascript' src='prototype.js'></script>
+<script type='text/javascript' src='rico.js'></script>
+<script type='text/javascript'>
+function registerAjaxStuff() {
+    ajaxEngine.registerRequest('getDepartmentInfo', 'department-ajax-viewer.htm');
+    ajaxEngine.registerAjaxElement('departmentDetails');
+}
+
+function onDepartmentChange(id) {
+    document.getElementById('departmentDetails').style.display= '';
+    ajaxEngine.sendRequest('getDepartmentInfo', 'id=' + id);
+    return false;
+}
+</script>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="webapp/WEB-INF/src"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/hsqldb-1.8.0.1.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/oro-2.0.8.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
+	<classpathentry sourcepath="C:/java/cayenne-1.2M9/src/cayenne" kind="lib" path="webapp/WEB-INF/lib/cayenne-nodeps-1.2M9.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/click-0.19.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/click-extras-0.19.jar"/>
+	<classpathentry kind="output" path="webapp/WEB-INF/classes"/>
+</classpath>
