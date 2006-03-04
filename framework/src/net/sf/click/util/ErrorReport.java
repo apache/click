@@ -142,7 +142,7 @@ public class ErrorReport {
                     nameEnd = line.indexOf("$");
                 }
 
-                if (nameStart == -1 && nameEnd != -1) {
+                if (nameStart != -1 && nameEnd != -1) {
                     String classname = line.substring(nameStart + 3, nameEnd);
 
                     int lineStart = line.indexOf(":");
