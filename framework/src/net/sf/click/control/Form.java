@@ -1588,8 +1588,6 @@ public class Form implements Control {
                 return true;
             }
 
-            onBeforeProcessFields();
-
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
                 Field field = (Field) getFieldList().get(i);
@@ -1600,8 +1598,6 @@ public class Form implements Control {
                     }
                 }
             }
-
-            onAfterProcessFields();
 
             for (int i = 0, size = getButtonList().size(); i < size; i++) {
                 Button button = (Button) getButtonList().get(i);
@@ -1854,26 +1850,6 @@ public class Form implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * This method is invoked by <tt>onProcess()</tt> immediately before the
-     * Form fields are processed.
-     * <p/>
-     * Subclasses can override this empty method to provide their own
-     * functionality.
-     */
-    protected void onBeforeProcessFields() {
-    }
-
-    /**
-     * This method is invoked by <tt>onProcess()</tt> immediately after the
-     * Form fields are processed.
-     * <p/>
-     * Subclasses can override this empty method to provide their own
-     * functionality.
-     */
-    protected void onAfterProcessFields() {
-    }
 
     /**
      * Perform a back button submit check, returning true if the request is
