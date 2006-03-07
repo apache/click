@@ -185,7 +185,7 @@ public class CayenneForm extends Form {
      * Return a <tt>DataObject</tt> from the form with the form field values
      * copied into the data object's properties.
      *
-     * @param copyTo option to copy the form properties to the returned data 
+     * @param copyTo option to copy the form properties to the returned data
      *  object
      * @return the data object from the form with the form field values applied
      *  to the data object properties.
