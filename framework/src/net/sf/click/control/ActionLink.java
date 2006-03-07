@@ -435,7 +435,7 @@ public class ActionLink implements Control {
         buffer.append("=");
         buffer.append(getName());
         if (value != null) {
-            buffer.append("&amp;");
+            buffer.append("&");
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(value);
@@ -771,6 +771,17 @@ public class ActionLink implements Control {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    /**
+     * Set the value of the ActionLink using the given object.
+     *
+     * @param object the object value to set
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            value = object.toString();
+        }
     }
 
     // --------------------------------------------------------- Public Methods
