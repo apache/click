@@ -541,7 +541,7 @@ class ClickApp implements EntityResolver {
             return null;
         }
     }
-    
+
     private void deployControls(Element rootElm) throws Exception {
 
         if (rootElm == null) {
@@ -595,13 +595,13 @@ class ClickApp implements EntityResolver {
                               "/net/sf/click/control/VM_global_library.vm",
                               "click");
 
-        Enumeration e = 
+        Enumeration e =
             getClass().getClassLoader().getResources("click-controls.xml");
         while (e.hasMoreElements()) {
             URL url = (URL) e.nextElement();
             deployControls(getResourceRootElement(url));
         }
-        
+
         deployControls(rootElm);
     }
 
