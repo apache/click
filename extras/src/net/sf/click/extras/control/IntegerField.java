@@ -31,8 +31,8 @@ import net.sf.click.control.TextField;
  * the control listener if there is no parsing error.
  * <p/>
  * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent
- * users from entering invalid characters. To enable number key filtering 
- * reference the {@link net.sf.click.util.PageImports} object in your page 
+ * users from entering invalid characters. To enable number key filtering
+ * reference the {@link net.sf.click.util.PageImports} object in your page
  * header section. For example:
  *
  * <pre class="codeHtml">

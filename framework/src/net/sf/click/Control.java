@@ -81,7 +81,7 @@ import javax.servlet.ServletContext;
  * } </pre>
  *
  * Controls using the <tt>onDeploy()</tt> method must be registered in a
- * classpath or JAR base <tt>click-controls.xml</tt> file or in the 
+ * classpath or JAR base <tt>click-controls.xml</tt> file or in the
  * application <tt>WEB-INF/click.xml</tt> for them to be deployed.
  * <p/>
  * For example a web application may include an addition control in the
@@ -95,10 +95,10 @@ import javax.servlet.ServletContext;
  *     &lt;control classname=<span class="st">"com.mycorp.control.TelephoneField"</span>/&gt;
  *   &lt;/controls&gt;
  * &lt;/click-app&gt; </pre>
- * 
- * Alternatively you may package a series of custom controls in a JAR file 
- * for inclusion in a number of web applications. In this case you would 
- * ensusre you JAR file contains a <tt>click-controls.xml</tt> file in its root 
+ *
+ * Alternatively you may package a series of custom controls in a JAR file
+ * for inclusion in a number of web applications. In this case you would
+ * ensusre you JAR file contains a <tt>click-controls.xml</tt> file in its root
  * directory. For example:
  *
  * <pre class="codeConfig">
@@ -108,9 +108,9 @@ import javax.servlet.ServletContext;
  *     &lt;control classname=<span class="st">"com.mycorp.control.DbTable"</span>/&gt;
  *   &lt;/controls&gt;
  * &lt;/click-app&gt; </pre>
- * 
- * When the Click applicatin starts up it will deploy controls found in any 
- * classpath and JAR path <tt>click-controls.xml</tt> files and then any 
+ *
+ * When the Click applicatin starts up it will deploy controls found in any
+ * classpath and JAR path <tt>click-controls.xml</tt> files and then any
  * controls in the <tt>WEB-INF/click.xml</tt> file.
  *
  * @see net.sf.click.util.PageImports

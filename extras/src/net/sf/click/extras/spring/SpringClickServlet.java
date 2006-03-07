@@ -59,16 +59,53 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *     <span class="kw">return</span> page;
  * } </pre>
  *
- * Spring Page beans are defined in a Sring application context XML file.
- * In this file the Page bean id maps to the page class name:
+ * <h4>Spring Page Injection</h4>
+ *
+ * The SpringClickServlet support Spring Page injection in two ways. Using the
+ * first method you can define your Pages as beans in a Spring appliction
+ * context XML file. For example in this file the Page bean id maps to the
+ * page class name:
  *
  * <pre class="codeConfig">
- * &lt;beans default-autowire="byName"&gt;
- *   &lt;bean id="com.mycorp.pages.CustomerEdit"
- *         class="com.mycorp.pages.CustomerEdit"
- *         singleton="false"/&gt;
- *   ..
+ * &lt;beans&gt;
+ *
+ *    &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
+ *         singleton="false"&gt;
+ *       &lt;property name="userService" ref="userService"/&gt;
+ *    &lt;/bean&gt;
+ *
  * &lt;/beans&gt; </pre>
+ *
+ * Using this technique the SpringClickServlet will look up the Page bean and
+ * have Spring create the page instance and inject all its dependencies.
+ * <p/>
+ * The other technique it to have your Page classes implement the Spring
+ * <tt>ApplicationContextAware</tt> interface and have the SpringClickServlet
+ * create the Page instance an inject the Spring <tt>ApplicationContext</tt>
+ * instance. The advantage of using this technique is that you don't need to
+ * define your Pages as beans in Spring configuration files. The disadvantage
+ * is that you will need hard code acessor methods in you Click pages. For
+ * example:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> SpringPage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
+ *
+ *     <span class="kw">protected</span> ApplicationContext applicationContext;
+ *
+ *     <span class="kw">public void</span> setApplicationContext(ApplicationContext applicationContext)  {
+ *         <span class="kw">this</span>.applicationContext = applicationContext;
+ *     }
+ *
+ *     <span class="kw">public</span> Object getBean(String beanName) {
+ *         <span class="kw">return</span> applicationContext.getBean(beanName);
+ *     }
+ *
+ *     <span class="kw">public</span> UserService getUserService() {
+ *         <span class="kw">return</span> (UserService) getBean(<span class="st">"userService"</span>);
+ *     }
+ * } </pre>
+ *
+ * <h4>Servlet Configuration</h4>
  *
  * <p/>
  * The servlets Spring bean factory is configured when the servlet is initialized on
@@ -77,12 +114,18 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * <span class="kw">public void</span> init() <span class="kw">throws</span>ServletException {
  *     <span class="kw">super</span>.init();
  *
- *     String springPath = getInitParameter(SPRING_PATH);
- *     <span class="kw">if</span> (springPath == <span class="kw">null</span>) {
- *         String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
- *         <span class="kw">throw new</span> UnavailableException(msg);
+ *     ServletContext servletContext = getServletContext();
+ *     applicationContext =
+ *         WebApplicationContextUtils.getWebApplicationContext(servletContext);
+ *
+ *     <span class="kw">if</span> (applicationContext == <span class="kw">null</span>) {
+ *         String springPath = getInitParameter(SPRING_PATH);
+ *         <span class="kw">if</span> (springPath == <span class="kw">null</span>) {
+ *             String msg = SPRING_PATH + <span class="st">" servlet init parameter not defined"</span>;
+ *             <span class="kw">throw new</span> UnavailableException(msg);
+ *         }
+ *         applicationContext = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
  *     }
- *     applicationContext = <span class="kw">new</span> ClassPathXmlApplicationContext(springPath);
  * } </pre>
  *
  * The <tt class="blue">spring-path</tt> servlet initialization parameter
@@ -138,8 +181,6 @@ public class SpringClickServlet extends ClickServlet {
      */
     public void init() throws ServletException {
         super.init();
-
-        // TODO: update doco
 
         ServletContext servletContext = getServletContext();
         applicationContext =

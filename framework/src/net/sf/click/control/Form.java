@@ -136,11 +136,11 @@ import org.apache.commons.lang.StringUtils;
  * To debug the data binding being performed, use the Click application mode to
  * "<tt>debug</tt>" or use the debug copy methods.
  * <p/>
- * Binding of nested data objects is supported using the 
+ * Binding of nested data objects is supported using the
  * <a target="blank" href="http://www.ognl.org">OGNL</a> library. To use
  * nested objects in your form, simply specify the object path as the Field
  * name. Note in the object path you exclude the root object, so the path
- * <tt>customer.address.state</tt> is specified as <tt>address.state</tt>. 
+ * <tt>customer.address.state</tt> is specified as <tt>address.state</tt>.
  * <p/>
  * For example:
  *
@@ -149,12 +149,12 @@ import org.apache.commons.lang.StringUtils;
  * TextField stateField = <span class="kw">new</span> TextField(<span class="st">"address.state"</span>);
  * form.add(stateField);
  * ..
- * 
+ *
  * <span class="cm">// Loads the customer address state into the form stateField</span>
  * Customer customer = getCustomer();
  * form.copyFrom(customer);
  * ..
- * 
+ *
  * <span class="cm">// Copies form stateField value into the customer address state</span>
  * Customer customer = <span class="kw">new</span> Customer();
  * form.copyTo(customer); </pre>
@@ -371,6 +371,33 @@ import org.apache.commons.lang.StringUtils;
  *   for more info.
  *  </li>
  * </ul>
+ *
+ * <h3>Preventing Accidental Form Posts</h3>
+ *
+ * Users may accidentially make multiple form submissions by refreshing a page
+ * or by pressing the back button.
+ * <p/>
+ * To prevent multiple form posts from page refreshes use the Post
+ * Redirect pattern. With this pattern once the user has posted a form you
+ * redirect to another page. If the user then presses the refresh button, they
+ * will making a GET request on the current page. Please see the
+ * <a target="blank" href="http://www.theserverside.com/articles/content/RedirectAfterPost/article.html">Redirect After Post</a>
+ * article for more information on this topic.
+ * <p/>
+ * To prevent multiple form posts from use of the browser back button use one
+ * of the Form {@link #onSubmitCheck(Page, String)} methods. For example:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+ *     ..
+ *
+ *     <span class="kw">public boolean</span> onSecurityCheck() {
+ *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+ *     }
+ * } </pre>
+ *
+ * The form submit check methods store a special token in the users session
+ * and in a hidden field in the form to ensure a form post isn't replayed.
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:

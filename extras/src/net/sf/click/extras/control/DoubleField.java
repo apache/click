@@ -34,8 +34,8 @@ import java.util.Locale;
  * the control listener if there is no parsing error.
  * <p/>
  * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
- * users from entering invalid characters. To enable number key filtering 
- * reference the {@link net.sf.click.util.PageImports} object in your page 
+ * users from entering invalid characters. To enable number key filtering
+ * reference the {@link net.sf.click.util.PageImports} object in your page
  * header section. For example:
  *
  * <pre class="codeHtml">
