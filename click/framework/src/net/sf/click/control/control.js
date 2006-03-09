@@ -45,3 +45,27 @@ function integerFilter(event) {
         return true;     
     }
 }
+
+function noLetterFilter(event) {
+    var keyCode;
+    if (document.all) {
+        keyCode = event.keyCode; 
+    } else if (document.getElementById) {
+        keyCode = event.which;   
+    } else if (document.layers) {
+        keyCode = event.which;   
+    } 
+
+    if (keyCode >= 33 && keyCode <= 39) {
+        return false;
+        
+    } else if (keyCode == 47) {
+        return false;
+        
+    } else if (keyCode >= 58 && keyCode <= 126) {
+        return false;
+        
+    } else {  
+        return true;     
+    }
+}
