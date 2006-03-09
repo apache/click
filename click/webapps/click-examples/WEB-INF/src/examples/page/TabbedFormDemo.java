@@ -16,6 +16,7 @@ import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.extras.control.TabbedForm;
+import net.sf.click.extras.control.TelephoneField;
 import net.sf.click.util.ClickUtils;
 import examples.control.PackagingRadioGroup;
 import examples.control.TitleSelect;
@@ -24,6 +25,8 @@ public class TabbedFormDemo extends BorderedPage {
 
     private TabbedForm form = new TabbedForm("form");
     private RadioGroup paymentGroup = new RadioGroup("paymentOption", true);
+    private TelephoneField contactNumber = new TelephoneField("contactNumber");
+    private Checkbox telephoneOnDelivery = new Checkbox("telephoneOnDelivery");
     private TextField cardName = new TextField("cardName");
     private CreditCardField cardNumber = new CreditCardField("cardNumber");
     private IntegerField expiry = new IntegerField("expiry");
@@ -47,7 +50,7 @@ public class TabbedFormDemo extends BorderedPage {
 
         contactTabSheet.add(new TextField("surname", true));
 
-        contactTabSheet.add(new TextField("contactNumber"));
+        contactTabSheet.add(contactNumber);
 
         contactTabSheet.add(new EmailField("email"));
 
@@ -67,7 +70,7 @@ public class TabbedFormDemo extends BorderedPage {
         packaging.setValue("STD");
         deliveryTabSheet.add(packaging);
 
-        deliveryTabSheet.add(new Checkbox("telephoneOnDelivery"));
+        deliveryTabSheet.add(telephoneOnDelivery);
 
         // Payment tab sheet
 
@@ -77,7 +80,6 @@ public class TabbedFormDemo extends BorderedPage {
         paymentGroup.add(new Radio("cod", "Cash On Delivery "));
         paymentGroup.add(new Radio("credit", "Credit Card "));
         paymentGroup.setVerticalLayout(false);
-        paymentGroup.setListener(this, "onPaymentClick");
         paymentTabSheet.add(paymentGroup);
 
         paymentTabSheet.add(cardName);
@@ -95,7 +97,7 @@ public class TabbedFormDemo extends BorderedPage {
     }
 
     public boolean onOkClick() {
-        if (form.isValid()) {
+        if (isFormValid()) {
             processDelivery();
         }
         return true;
@@ -106,13 +108,27 @@ public class TabbedFormDemo extends BorderedPage {
         return false;
     }
 
-    public boolean onPaymentClick() {
+    /**
+     * Perform additional form cross field validation returning true if valid.
+     *
+     * @return true if form is valid after cross field validation
+     */
+    protected boolean isFormValid() {
+        if (telephoneOnDelivery.isChecked()) {
+            contactNumber.setRequired(true);
+            contactNumber.validate();
+        }
+
         if (paymentGroup.getValue().equals("credit")) {
             cardName.setRequired(true);
+            cardName.validate();
             cardNumber.setRequired(true);
+            cardNumber.validate();
             expiry.setRequired(true);
+            expiry.validate();
         }
-        return true;
+
+        return form.isValid();
     }
 
     private void processDelivery() {
