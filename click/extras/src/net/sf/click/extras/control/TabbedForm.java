@@ -25,7 +25,7 @@ import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 
 /**
- * Provides a tabbed Form control: &nbsp; &lt;form method='post'&gt;.
+ * Provides a Tabbed Form control: &nbsp; &lt;form method='post'&gt;.
  * <p/>
  * This class provides a JavaScript enabled tab sheet for control. This control
  * is particularly useful for large forms as fields can be grouped into
