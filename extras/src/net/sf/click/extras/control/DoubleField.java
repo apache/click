@@ -31,7 +31,7 @@ import java.util.Locale;
  * </table>
  *
  * DoubleField will validate the number when the control is processed and invoke
- * the control listener if there is no parsing error.
+ * the control listener if defined.
  * <p/>
  * The DoubleField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
@@ -56,7 +56,7 @@ import java.util.Locale;
  */
 public class DoubleField extends TextField {
 
-    private static final long serialVersionUID = -6326214893690121356L;
+    private static final long serialVersionUID = 1L;
 
     /** The maximum field value. */
     protected double maxvalue = Double.MAX_VALUE;

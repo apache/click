@@ -28,7 +28,7 @@ import net.sf.click.control.TextField;
  * </table>
  *
  * LongField will validate the number when the control is processed and invoke
- * the control listener if there is no parsing error.
+ * the control listener if defined.
  * <p/>
  * The LongField uses a JavaScript onKeyPress() integerFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
@@ -53,7 +53,7 @@ import net.sf.click.control.TextField;
  */
 public class LongField extends TextField {
 
-    private static final long serialVersionUID = -2239992411551673682L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

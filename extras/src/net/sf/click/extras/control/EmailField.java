@@ -28,7 +28,7 @@ import net.sf.click.control.TextField;
  * </table>
  *
  * EmailField will validate the email when the control is processed and invoke
- * the control listener if the email format is valid.
+ * the control listener if defined.
  * <p/>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -38,7 +38,7 @@ import net.sf.click.control.TextField;
  */
 public class EmailField extends TextField {
 
-    private static final long serialVersionUID = 7526447883893011813L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------------- Constructors
 

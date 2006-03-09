@@ -29,9 +29,8 @@ import net.sf.click.control.TextField;
  * </tr>
  * </table>
  *
- * RegexField will validate the value using regular expression
- * when the control is processed and invoke the control listener
- * if the value format is valid.
+ * RegexField will validate the value using regular expression when the control
+ * is processed and invoke the control listener if defined.
  * <p/>
  * Examples using RegexField for version number and URL input are provided below:
  *

@@ -18,7 +18,9 @@ import org.objectstyle.cayenne.access.DataContext;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
- * TODO:
+ * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
+
+ * TODO: doco
  *
  * @author Malcolm Edgar
  */
@@ -120,10 +122,22 @@ public class PropertySelect extends Select {
         this.decorator = decorator;
     }
 
+    /**
+     * Return the name of the configured query to populate the options list
+     * with.
+     *
+     * @return the name of the configured query to populate the options list with
+     */
     public String getQueryName() {
         return queryName;
     }
 
+    /**
+     * Set the name of the configured query to populate the options list
+     * with.
+     *
+     * @param queryName the name of the configured query to populate the options list with
+     */
     public void setQueryName(String queryName) {
         this.queryName = queryName;
     }
@@ -151,22 +165,54 @@ public class PropertySelect extends Select {
         throw new UnsupportedOperationException(msg);
     }
 
+    /**
+     * Set the <tt>DataObject</tt> property to render as the option label.
+     *
+     * @param optionLabel the <tt>DataObject</tt> property to render as the
+     *  option label
+     */
     public void setOptionLabel(String optionLabel) {
         this.optionLabel = optionLabel;
     }
 
+    /**
+     * Return the <tt>SelectQuery</tt> to populate the options list with.
+     *
+     * @return the <tt>SelectQuery</tt> to populate the options list with
+     */
     public SelectQuery getSelectQuery() {
         return selectQuery;
     }
 
+    /**
+     * Set the <tt>SelectQuery</tt> to populate the options list with.
+     *
+     * @param selectQuery the <tt>SelectQuery</tt> to populate the options
+     *  list with
+     */
     public void setSelectQuery(SelectQuery selectQuery) {
         this.selectQuery = selectQuery;
     }
 
+    /**
+     * Return the <tt>DataObject</tt> property class.
+     *
+     * @see net.sf.click.control.Field#getValueClass()
+     *
+     * @return the <tt>DataObject</tt> property class
+     */
     public Class getValueClass() {
         return valueObject.getClass();
     }
 
+    /**
+     * Return the property <tt>DataObject</tt> value, or null if value was not
+     * defined.
+     *
+     * @see net.sf.click.control.Field#getValueObject()
+     *
+     * @return the property <tt>DataObject</tt> value
+     */
     public Object getValueObject() {
         return valueObject;
     }
@@ -174,6 +220,10 @@ public class PropertySelect extends Select {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Bind the request value to the control, looking up the <tt>DataObject</tt>
+     * based on the submitted primary key value and setting this object as
+     * the Select <tt>valueObject</tt>.
+     *
      * @see Select#bindRequestValue()
      */
     public void bindRequestValue() {
@@ -197,9 +247,9 @@ public class PropertySelect extends Select {
 
                 Integer propertyPk = new Integer(getValue());
 
-                valueObject =
-                    DataObjectUtils.objectForPK
-                        (dataContext, propertyClass, propertyPk);
+                valueObject = DataObjectUtils.objectForPK(dataContext,
+                                                          propertyClass,
+                                                          propertyPk);
 
                 setValue(propertyPk.toString());
 
@@ -210,7 +260,12 @@ public class PropertySelect extends Select {
     }
 
     /**
+     * Return a HTML rendered Select string. If the Select option list is
+     * empty this method will load option list so that it can be rendered.
+     *
      * @see Select#toString()
+     *
+     * @return a HTML rendered Select string
      */
     public String toString() {
 
@@ -255,6 +310,15 @@ public class PropertySelect extends Select {
 
     // ------------------------------------------------------ Protected Methods
 
+    /**
+     * Load the Select options list. This method will attempt to select the
+     * options using the following techniques.
+     * <ol>
+     * <li>if a <tt>SelectQuery</tt> is defined load options from SelectQuery</li>
+     * <li>if a query name is defined load options from configured named query</li>
+     * <li>else create a <tt>SelectQuery</tt> based on the property class</li>
+     * </ol>
+     */
     protected void loadOptionList() {
 
         CayenneForm form = (CayenneForm) getForm();
