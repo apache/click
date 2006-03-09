@@ -1,3 +1,18 @@
+/*
+ * Copyright 2004-2005 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.control;
 
 import org.apache.commons.lang.StringUtils;
@@ -6,6 +21,32 @@ import net.sf.click.control.Button;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
+/**
+ * Provides a ActionButton control: &nbsp; &lt;input type="button"/&gt;.
+ *
+ * <table class='htmlHeader' cellspacing='6'>
+ * <tr><td>
+ * <input type='button' value='Action Button' title='ActionButton Control'/>
+ * </td></tr>
+ * </table>
+ *
+ * The ActionButton provides equivalent functionality to the
+ * {@link net.sf.click.control.ActionLink} control, where you can attach
+ * action listeners to the button. When the button is clicked it will make a
+ * JavaScript GET request. This request is then processed by the ActionButton
+ * and its listener is invoked.
+ * <p/>
+ * Example usage of the ActionButton:
+ *
+ * <pre class="codeJava">
+ * ActionButton actionButton = <span class="kw">new</span> ActionButton(<span class="st">"button"</span>);
+ * actionButton.setListener(<span class="kw">this</span>, <span class="st">"onButtonClick"</span>);
+ * addControl(actionButton); </pre>
+ *
+ * @see net.sf.click.control.ActionLink
+ *
+ * @author Malcolm Edgar
+ */
 public class ActionButton extends Button {
 
     private static final long serialVersionUID = 1L;
@@ -23,10 +64,24 @@ public class ActionButton extends Button {
 
     // ----------------------------------------------------------- Constructors
 
+    /**
+     * Create an ActionButton for the given name.
+     *
+     * @param name the action button name
+     * @throws IllegalArgumentException if the name is null
+     */
+
     public ActionButton(String name) {
         super(name);
     }
 
+    /**
+     * Create an ActionButton for the given name and label.
+     *
+     * @param name the action button name
+     * @param label the action button label
+     * @throws IllegalArgumentException if the name is null
+     */
     public ActionButton(String name, String label) {
         super(name, label);
     }
@@ -56,8 +111,8 @@ public class ActionButton extends Button {
      * Create an ActionButton for the given name, label, listener object and
      * listener method.
      *
-     * @param name the action link name
-     * @param label the action link label
+     * @param name the action button name
+     * @param label the action button label
      * @param listener the listener target object
      * @param method the listener method to call
      * @throws IllegalArgumentException if the name, listener or method is null
@@ -77,6 +132,16 @@ public class ActionButton extends Button {
         setListener(listener, method);
     }
 
+    /**
+     * Create an ActionButton with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
     public ActionButton() {
         super();
     }
@@ -112,7 +177,7 @@ public class ActionButton extends Button {
         url.append("=");
         url.append(getName());
         if (value != null) {
-            url.append("&amp;");
+            url.append("&");
             url.append(VALUE);
             url.append("=");
             url.append(value);
@@ -129,14 +194,14 @@ public class ActionButton extends Button {
      * @return the ActionButton anchor &lt;a&gt; tag HTML href attribute value
      */
     public String getOnClick() {
-        return getOnClick(getValue());
+        return getOnClick(getValueObject());
     }
 
     /**
-     * Returns the action link <tt>Double</tt> value if the action link was
+     * Returns the ActionButton <tt>Double</tt> value if the action button was
      * processed and has a value, or null otherwise.
      *
-     * @return the action link <tt>Double</tt> value if the action link was processed
+     * @return the action button <tt>Double</tt> value if the action button was processed
      */
     public Double getValueDouble() {
         if (getValue() != null) {
@@ -147,14 +212,28 @@ public class ActionButton extends Button {
     }
 
     /**
-     * Returns the ActionButton <tt>Integer</tt> value if the ActionButton was
+     * Returns the ActionButton <tt>Integer</tt> value if the action button was
      * processed and has a value, or null otherwise.
      *
-     * @return the ActionButton <tt>Integer</tt> value if the action link was processed
+     * @return the ActionButton <tt>Integer</tt> value if the action button was processed
      */
     public Integer getValueInteger() {
         if (getValue() != null) {
             return Integer.valueOf(getValue());
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the ActionButton <tt>Long</tt> value if the action button was
+     * processed and has a value, or null otherwise.
+     *
+     * @return the ActionButton <tt>Long</tt> value if the action button was processed
+     */
+    public Long getValueLong() {
+        if (getValue() != null) {
+            return Long.valueOf(getValue());
         } else {
             return null;
         }

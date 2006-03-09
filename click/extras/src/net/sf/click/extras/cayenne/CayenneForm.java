@@ -182,8 +182,8 @@ public class CayenneForm extends Form {
     }
 
     /**
-     * Return a <tt>DataObject</tt> from the form with the form field values
-     * copied into the data object's properties.
+     * Return a <tt>DataObject</tt> from the form, with the form field values
+     * set on the object if the copyTo parameter is true.
      *
      * @param copyTo option to copy the form properties to the returned data
      *  object
@@ -200,8 +200,10 @@ public class CayenneForm extends Form {
 
                 Integer id = (Integer) oidField.getValueObject();
                 if (id != null) {
-                    dataObject = DataObjectUtils.objectForPK
-                        (getDataContext(), dataClass,  id);
+                    dataObject = DataObjectUtils.objectForPK(getDataContext(),
+                                                             dataClass,
+                                                             id);
+
                 } else {
                     dataObject = (DataObject) dataClass.newInstance();
                 }
@@ -221,6 +223,13 @@ public class CayenneForm extends Form {
         }
     }
 
+    /**
+     * Return a <tt>DataObject</tt> from the form with the form field values
+     * set on the object's properties.
+     *
+     * @return the <tt>DataObject</tt> with the Form field values applied to
+     *      the object
+     */
     public DataObject getDataObject() {
         return getDataObject(true);
     }
@@ -251,6 +260,11 @@ public class CayenneForm extends Form {
         }
     }
 
+    /**
+     * Return the Class of the form <tt>DataObject</tt>.
+     *
+     * @return the Class of the form <tt>DataObject</tt>.
+     */
     public Class getDataObjectClass() {
         String className = null;
         if (classField.getValueObject() != null) {
@@ -268,6 +282,11 @@ public class CayenneForm extends Form {
         }
     }
 
+    /**
+     * Return the <tt>DataObject</tt> primary key.
+     *
+     * @return the <tt>DataObject</tt> primary key
+     */
     public Integer getDataObjectPk() {
         if (oidField.getValueObject() != null) {
             return (Integer) oidField.getValueObject();
@@ -320,8 +339,8 @@ public class CayenneForm extends Form {
         try {
             getDataContext().commitChanges();
             return true;
-        }
-        catch (ValidationException e) {
+
+        } catch (ValidationException e) {
             getDataContext().rollbackChanges();
 
             ValidationResult validation = e.getValidationResult();
@@ -338,6 +357,8 @@ public class CayenneForm extends Form {
      * invokes the <tt>super.onProcess()</tt> method.
      *
      * @see Form#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         applyMetaData();
@@ -349,6 +370,8 @@ public class CayenneForm extends Form {
      * invokes the <tt>super.toString()</tt> method.
      *
      * @see Form#toString()
+     *
+     * @return the HTML string representation of the form
      */
     public String toString() {
         applyMetaData();
@@ -363,8 +386,8 @@ public class CayenneForm extends Form {
      * <p/>
      * The field validation attributes include:
      * <ul>
-     * <li>required - is a mandatory field and cannot be null</tt>
-     * <li>maxLength - the maximum length of the field</tt>
+     * <li>required - is a mandatory field and cannot be null</li>
+     * <li>maxLength - the maximum length of the field</li>
      * </ul>
      */
     protected void applyMetaData() {
