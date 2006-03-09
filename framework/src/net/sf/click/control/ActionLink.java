@@ -156,7 +156,7 @@ public class ActionLink implements Control {
 
     // -------------------------------------------------------------- Constants
 
-    private static final long serialVersionUID = 8469056846426557956L;
+    private static final long serialVersionUID = 1L;
 
     /** The action link parameter name: &nbsp; <tt>actionLink</tt>. */
     public static final String ACTION_LINK = "actionLink";
