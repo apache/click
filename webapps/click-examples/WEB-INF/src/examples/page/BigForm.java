@@ -17,6 +17,7 @@ import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
+import net.sf.click.extras.control.TelephoneField;
 
 /**
  * Provides a big form example which includes all the available Form Fields.
@@ -48,6 +49,8 @@ public class BigForm extends BorderedPage {
         form.add(passwordField);
 
         form.add(new EmailField("email", "Email"));
+
+        form.add(new TelephoneField("Telepone"));
 
         form.add(new IntegerField("customerNumber", true));
 
