@@ -82,9 +82,8 @@ function onShowTab(index) {
 			style="background-color:${form.backgroundColor};">
 			#foreach ($tabSheet in $form.tabSheets)
 			<div id="tab-sheet-${velocityCount}" 
-				 class="tf_sheet"
 				 #if ($velocityCount == $form.displayTab) style="display:block;" #else style="display:none;" #end
-                 class="">
+                 class="tf_sheet">
 				${tabSheet}
 			</div>
 			#end
