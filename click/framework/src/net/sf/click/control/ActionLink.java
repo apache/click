@@ -17,7 +17,6 @@ package net.sf.click.control;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -611,8 +610,8 @@ public class ActionLink implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                Locale locale = getContext().getLocale();
-                messages = new MessagesMap(Field.CONTROL_MESSAGES, locale);
+                messages =
+                    new MessagesMap(Field.CONTROL_MESSAGES, getContext());
 
             } else {
                 String msg = "Cannot initialize messages as context not set";

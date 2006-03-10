@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
+import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextField;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.DoubleField;
@@ -56,6 +57,9 @@ public class ClickUtilsTest extends TestCase {
         LongField telephoneField = new LongField("telephone");
         form.add(telephoneField);
         
+        HiddenField hidden = new HiddenField("hidden", String.class);
+        form.add(hidden);
+        
         // Populate fields
         idField.setValueObject(ID);
         nameField.setValue(NAME);
@@ -76,7 +80,7 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(telephoneField.getValueObject().toString(), sampleObject.getTelephone());
         assertTrue(sampleObject.getInt() == intField.getInteger().intValue());
         assertTrue(sampleObject.getDouble() == doubleField.getDouble().doubleValue());
-        assertTrue(sampleObject.getBoolean() == checkBox.isChecked());
+        assertTrue(sampleObject.isBoolean() == checkBox.isChecked());
         
         // Test object path copying
         
@@ -117,6 +121,9 @@ public class ClickUtilsTest extends TestCase {
         Checkbox checkBox = new Checkbox("boolean");
         form.add(checkBox);
         
+        HiddenField hidden = new HiddenField("hidden", String.class);
+        form.add(hidden);
+        
         // Populate object
         SampleObject sampleObject = new SampleObject();
         sampleObject.setId(ID);
@@ -135,7 +142,7 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(sampleObject.getDateOfBirth(), dateField.getDate());
         assertTrue(sampleObject.getInt() == intField.getInteger().intValue());
         assertTrue(sampleObject.getDouble() == doubleField.getDouble().doubleValue());
-        assertTrue(sampleObject.getBoolean() == checkBox.isChecked());
+        assertTrue(sampleObject.isBoolean() == checkBox.isChecked());
         
         // Test object path copying
         
@@ -156,153 +163,10 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("Customer Number", ClickUtils.toLabel("customerNumber"));
         assertEquals("Card PIN", ClickUtils.toLabel("cardPIN"));
     }
-
-    public static class SampleObject {
-        private Integer id;
-        private String name;
-        private java.util.Date dateOfBirth;
-        private boolean _boolean;
-        private int _int;
-        private double _double;
-        private String telephone;
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public java.util.Date getDateOfBirth() {
-            return dateOfBirth;
-        }
-
-        public void setDateOfBirth(java.util.Date dateOfBirth) {
-            this.dateOfBirth = dateOfBirth;
-        }
-        
-        public boolean getBoolean() {
-            return _boolean;
-        }
-        
-        public void setBoolean(boolean b) {
-            _boolean = b;
-        }
-        
-        public double getDouble() {
-            return _double;
-        }
-        
-        public void setDouble(double d) {
-            _double = d;
-        }
-        
-        public int getInt() {
-            return _int;
-        }
-        
-        public void setInt(int i) {
-            _int = i;
-        }
-        
-        public String getTelephone() {
-            return telephone;
-        }
-        
-        public void setTelephone(String telephone) {
-            this.telephone = telephone;
-        }
-    }
-
-    public static class User {
-        private Integer id;
-        private String name;
-        private Address address;
-        private String telephone;
-        
-        public Address getAddress() {
-            return address;
-        }
-        public void setAddress(Address address) {
-            this.address = address;
-        }
-        public Integer getId() {
-            return id;
-        }
-        public void setId(Integer id) {
-            this.id = id;
-        }
-        public String getName() {
-            return name;
-        }
-        public void setName(String name) {
-            this.name = name;
-        }
-        public String getTelephone() {
-            return telephone;
-        }
-        public void setTelephone(String telephone) {
-            this.telephone = telephone;
-        }
-    }
-
-    public static class Address {
-        private Integer id;
-        private String lineOne;
-        private String lineTwo;
-        private String lineThree;
-        private State state;
-        
-        public State getState() {
-            return state;
-        }
-        public void setState(State state) {
-            this.state = state;
-        }
-        public Integer getId() {
-            return id;
-        }
-        public void setId(Integer id) {
-            this.id = id;
-        }
-        public String getLineOne() {
-            return lineOne;
-        }
-        public void setLineOne(String lineOne) {
-            this.lineOne = lineOne;
-        }
-        public String getLineThree() {
-            return lineThree;
-        }
-        public void setLineThree(String lineThree) {
-            this.lineThree = lineThree;
-        }
-        public String getLineTwo() {
-            return lineTwo;
-        }
-        public void setLineTwo(String lineTwo) {
-            this.lineTwo = lineTwo;
-        }
-    }
     
-    public static class State {
-        private String code;
-
-        public String getCode() {
-            return code;
-        }
-        public void setCode(String code) {
-            this.code = code;
-        } 
+    public void testToMD5Hash() {
+        assertEquals("5f4dcc3b5aa765d61d8327deb882cf99", 
+                     ClickUtils.toMD5Hash("password"));
     }
 
 }

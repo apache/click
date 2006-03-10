@@ -27,10 +27,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -57,11 +60,11 @@ import org.xml.sax.EntityResolver;
  */
 public class ClickUtils {
 
-    /** The form object classname request parameter name. */
-    public static final String FO_CLASS = "FO_CLASS";
+    /** Hexidecimal characters for MD5 encoding. */
+    private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
-    /** The form object id request parameter name. */
-    public static final String FO_ID = "FO_ID";
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Return a new XML Document for the given input stream.
@@ -159,16 +162,13 @@ public class ClickUtils {
             log("Form has no fields to copy from", debug);
         }
 
+        Set properties = getObjectPropertyNames(object);
         Map ognlContext = new HashMap();
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
 
-            if (field.getName().equals(Form.FORM_NAME)
-                || field.getName().equals(FO_CLASS)
-                || field.getName().equals(FO_ID)
-                || field.getName().startsWith(Form.SUBMIT_CHECK)) {
-
+            if (!hasMatchingProperty(field, properties)) {
                 continue;
             }
 
@@ -221,16 +221,13 @@ public class ClickUtils {
         objectClassname =
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
+        Set properties = getObjectPropertyNames(object);
         Map ognlContext = new HashMap();
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
 
-            if (field.getName().equals(Form.FORM_NAME)
-                || field.getName().equals(FO_CLASS)
-                || field.getName().equals(FO_ID)
-                || field.getName().startsWith(Form.SUBMIT_CHECK)) {
-
+            if (!hasMatchingProperty(field, properties)) {
                 continue;
             }
 
@@ -639,6 +636,42 @@ public class ClickUtils {
     }
 
     /**
+     * Return an 32 char MD5 encoded string from the given plain text.
+     * The returned value is MD5 hash compatible with Tomcat catalina Realm.
+     * <p/>
+     * Adapted from <tt>org.apache.catalina.util.MD5Encoder</tt>
+     *
+     * @param plaintext the plain text value to encodet
+     * @return encoded MD5 string
+     */
+    public static String toMD5Hash(String plaintext) {
+        if (plaintext == null) {
+            throw new IllegalArgumentException("Null plaintext parameter");
+        }
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            md.update(plaintext.getBytes("UTF-8"));
+
+            byte[] binaryData = md.digest();
+
+            char[] buffer = new char[32];
+
+            for (int i = 0; i < 16; i++) {
+                int low = (int) (binaryData[i] & 0x0f);
+                int high = (int) ((binaryData[i] & 0xf0) >> 4);
+                buffer[i * 2] = HEXADECIMAL[high];
+                buffer[i * 2 + 1] = HEXADECIMAL[low];
+            }
+
+            return new String(buffer);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Return a field name string from the given field label.
      * <p/>
      * A label of " OK do it!" is returned as "okDoIt". Any &amp;nbsp;
@@ -711,6 +744,45 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
+
+    private static Set getObjectPropertyNames(Object object) {
+        HashSet hashSet = new HashSet();
+
+        Method[] methods = object.getClass().getMethods();
+
+        for (int i = 0; i < methods.length; i++) {
+            String methodName = methods[i].getName();
+
+            if (methodName.startsWith("get") && methodName.length() > 3) {
+                String propertyName =
+                    "" + Character.toLowerCase(methodName.charAt(3))
+                    + methodName.substring(4);
+                hashSet.add(propertyName);
+            }
+            if (methodName.startsWith("is") && methodName.length() > 2) {
+                String propertyName =
+                    "" + Character.toLowerCase(methodName.charAt(2))
+                    + methodName.substring(3);
+                hashSet.add(propertyName);
+            }
+            if (methodName.startsWith("set") && methodName.length() > 3) {
+                String propertyName =
+                    "" + Character.toLowerCase(methodName.charAt(3))
+                    + methodName.substring(4);
+                hashSet.add(propertyName);
+            }
+        }
+
+        return hashSet;
+    }
+
+    private static boolean hasMatchingProperty(Field field, Set properties) {
+        String fieldName = field.getName();
+        if (fieldName.indexOf(".") != -1) {
+            fieldName = fieldName.substring(0, fieldName.indexOf("."));
+        }
+        return properties.contains(fieldName);
+    }
 
     private static void log(String msg, boolean debug) {
         if (debug) {

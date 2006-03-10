@@ -4,13 +4,15 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
+import net.sf.click.Context;
 import net.sf.click.control.Field;
 
 public class MessagesMapTest extends TestCase {
     
     public void testMap() {
-        Locale locale = Locale.ENGLISH;
-        MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
+        Context context = new MockContext(Locale.ENGLISH);
+        
+        MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, context);
         
         assertFalse(map.isEmpty());
         assertEquals(28, map.size());
@@ -26,8 +28,8 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
         
-        locale = Locale.CANADA;
-        map = new MessagesMap(Field.CONTROL_MESSAGES, locale);
+        context = new MockContext(Locale.CANADA);
+        map = new MessagesMap(Field.CONTROL_MESSAGES, context);
 
         assertFalse(map.isEmpty());
         assertEquals(28, map.size());
@@ -45,8 +47,8 @@ public class MessagesMapTest extends TestCase {
     }
     
     public void testCaching() {
-        Locale locale = Locale.ENGLISH;
-        MessagesMap map = new MessagesMap("missingResource", locale);
+        Context context = new MockContext(Locale.ENGLISH);
+        MessagesMap map = new MessagesMap("missingResource", context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
@@ -60,7 +62,7 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
         
-        map = new MessagesMap("missingResource", locale);
+        map = new MessagesMap("missingResource", context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());

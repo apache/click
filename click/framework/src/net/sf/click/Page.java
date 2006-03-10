@@ -18,7 +18,6 @@ package net.sf.click;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import net.sf.click.util.MessagesMap;
@@ -381,8 +380,7 @@ public class Page {
         if (messages == null) {
             if (getContext() != null) {
                 String baseName = getClass().getName();
-                Locale locale = getContext().getLocale();
-                messages = new MessagesMap(baseName, locale);
+                messages = new MessagesMap(baseName, getContext());
 
             } else {
                 String msg = "Context not set cannot initialize messages";
