@@ -25,7 +25,7 @@
               lines="211,212"/> 
     <suppress checks="LineLength"
               files="Table.java"
-              lines="102"/>      
+              lines="101"/>      
     <suppress checks="LineLength"
               files="Form.java"/> 
     <suppress checks="LineLength"
