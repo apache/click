@@ -18,7 +18,6 @@ package net.sf.click.control;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -649,8 +648,7 @@ public abstract class Field implements Control {
      public Map getMessages() {
          if (messages == null) {
              if (getContext() != null) {
-                 Locale locale = getContext().getLocale();
-                 messages = new MessagesMap(getClass().getName(), locale);
+                 messages = new MessagesMap(getClass().getName(), getContext());
 
              } else {
                  String msg = "Cannot initialize messages as context not set";
@@ -971,8 +969,8 @@ public abstract class Field implements Control {
     protected Map getControlMessages() {
         if (controlMessages == null) {
             if (getContext() != null) {
-                Locale locale = getContext().getLocale();
-                controlMessages = new MessagesMap(CONTROL_MESSAGES, locale);
+                controlMessages =
+                    new MessagesMap(CONTROL_MESSAGES, getContext());
 
             } else {
                 String msg =

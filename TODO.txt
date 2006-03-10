@@ -1,6 +1,5 @@
 CODE
-* use ClassLoader.getResources() to load click-controls.xml out of JAR files
-* make MessagesMap caching dependent upon application mode
+* add Cayenne QuerySelect control
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
@@ -9,8 +8,7 @@ CODE
 
 
 DOCUMENTATION
-* update examples documentation
-* complete PropertySelect and ActionButton documentation
+* complete PropertySelect documentation
 * update Velocity documentation
 * provide more Column Javadoc
 * discuss redirecting to HTTPS

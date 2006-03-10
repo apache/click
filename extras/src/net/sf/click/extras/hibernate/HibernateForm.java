@@ -20,7 +20,6 @@ import java.io.Serializable;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
-import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EntityMode;
@@ -124,6 +123,14 @@ public class HibernateForm extends Form {
 
     private static final long serialVersionUID = -7134198516606088333L;
 
+    /** The form value object classname parameter name. */
+    protected static final String FO_CLASS = "FO_CLASS";
+
+    /** The form value object id parameter name. */
+    protected static final String FO_ID = "FO_ID";
+
+    // ----------------------------------------------------- Instance Variables
+
     /** The value object class name hidden field. */
     protected HiddenField classField;
 
@@ -158,14 +165,14 @@ public class HibernateForm extends Form {
             throw new IllegalArgumentException("Null valueClass parameter");
         }
 
-        classField = new HiddenField(ClickUtils.FO_CLASS, String.class);
+        classField = new HiddenField(FO_CLASS, String.class);
         classField.setValue(valueClass.getName());
         add(classField);
 
         ClassMetadata classMetadata =
             getSessionFactory().getClassMetadata(valueClass);
         Type identifierType = classMetadata.getIdentifierType();
-        oidField = new HiddenField(ClickUtils.FO_ID, identifierType.getReturnedClass());
+        oidField = new HiddenField(FO_ID, identifierType.getReturnedClass());
         add(oidField);
     }
 

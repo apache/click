@@ -398,6 +398,7 @@ Velocity caching, template loading on startup and logging levels are:
  <th align="center">Application mode</th>
  <th align="center">Page auto loading</th>
  <th align="center">Velocity caching</th>
+ <th align="center">Message caching</th>
  <th align="center">Load templates on startup</th>
  <th align="center">Click logging level</th>
  <th align="center">Velocity logging level</th>
@@ -405,6 +406,7 @@ Velocity caching, template loading on startup and logging levels are:
 <tr>
  <td align="center"><tt><span class="blue">production</span></tt></td>
  <td align="center">No</td>
+ <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">WARN</td>
@@ -415,12 +417,14 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center">No</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
+ <td align="center">Yes</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">development</span></tt></td>
  <td align="center">Yes</td>
+ <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">INFO</td>
@@ -431,12 +435,14 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center">Yes</td>
  <td align="center">No</td>
  <td align="center">No</td>
+ <td align="center">No</td>
  <td align="center">DEBUG</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">trace</span></tt></td>
  <td align="center">Yes</td>
+ <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">TRACE</td>
@@ -479,6 +485,12 @@ Template reloading is useful for application development as you can edit page te
 a running application server and see the changes immediately. Note however, this 
 should <b>not</b> be used for production as Velocity can use a lot of memory when 
 introspecting templates and template reloading is significantly slower.
+
+<h4>Message Caching</h4>
+
+When Message Caching is enabled Page and Control messages will be lazy loaded
+and then cached. For more information about localized page and control messages 
+see <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>.
 
 <a name="click-logging" class="heading"><h4>Click and Velocity Logging</h4></a>
 

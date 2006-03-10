@@ -22,7 +22,6 @@ import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
-import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.DataObject;
@@ -125,10 +124,10 @@ public class CayenneForm extends Form {
     private static final long serialVersionUID = 1;
 
     /** The form data object classname parameter name. */
-    protected static final String FO_CLASS = ClickUtils.FO_CLASS;
+    protected static final String FO_CLASS = "FO_CLASS";
 
     /** The form data object id parameter name. */
-    protected static final String FO_ID = ClickUtils.FO_ID;
+    protected static final String FO_ID = "FO_ID";
 
     // ----------------------------------------------------- Instance Variables
 

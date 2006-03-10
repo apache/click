@@ -27,6 +27,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import net.sf.click.Context;
+
 /**
  * Provides a localized read only messages Map for Page and Control classes.
  * <p/>
@@ -54,6 +56,9 @@ import java.util.Set;
  * <p/>
  * The ClickServlet adds a MessagesMap instance to the Velocity Context before
  * it is merged with the page template.
+ * <p/>
+ * The MessagesMap will automatically cache loaded message properties when
+ * the application is in <tt>"production"</tt> or <tt>"profile"</tt> mode.
  *
  * @author Malcolm.Edgar
  */
@@ -74,6 +79,9 @@ public class MessagesMap implements Map {
     /** The resource bundle base name. */
     protected final String baseName;
 
+    /** The cache resources flag. */
+    protected final boolean cache;
+
     /** The map of localized messages. */
     protected Map messages;
 
@@ -87,20 +95,23 @@ public class MessagesMap implements Map {
 
     /**
      * Create a resource bundle messages <tt>Map</tt> adaptor for the given
-     * bundle name and <tt>Locale</tt>.
+     * bundle name and <tt>Context</tt>.
      *
      * @param baseName the resource bundle name
      * @param locale the locale to use
      */
-    public MessagesMap(String baseName, Locale locale) {
+    public MessagesMap(String baseName, Context context) {
         if (baseName == null) {
             throw new IllegalArgumentException("Null baseName parameter");
         }
-        if (locale == null) {
-            throw new IllegalArgumentException("Null locale parameter");
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
         }
         this.baseName = baseName;
-        this.locale = locale;
+        this.locale = context.getLocale();
+
+        // Cache resources if application in "production" or "profile" mode
+        this.cache = context.getApplicationMode().startsWith("pro");
     }
 
     // --------------------------------------------------------- Public Methods
@@ -268,6 +279,7 @@ public class MessagesMap implements Map {
                 } else {
                     synchronized (CACHE_LOAD_LOCK) {
                        try {
+                            // TODO: JDK is caching resources, need fix
                             ResourceBundle resources =
                                 ResourceBundle.getBundle(baseName, locale);
 
@@ -282,10 +294,14 @@ public class MessagesMap implements Map {
 
                             messages = Collections.unmodifiableMap(messages);
 
-                            MESSAGES_CACHE.put(resourceKey, messages);
+                            if (cache) {
+                                MESSAGES_CACHE.put(resourceKey, messages);
+                            }
 
                         } catch (MissingResourceException mre) {
-                            NOT_FOUND_CACHE.add(resourceKey);
+                            if (cache) {
+                                NOT_FOUND_CACHE.add(resourceKey);
+                            }
                             noResourcesFound = true;
                         }
                     }
