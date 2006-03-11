@@ -15,6 +15,7 @@
  */
 package net.sf.click.util;
 
+import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -81,6 +82,9 @@ public class MessagesMap implements Map {
 
     /** The cache resources flag. */
     protected final boolean cache;
+
+    /** The time the cache was lasted updated. */
+    protected static long cacheLastUpdated;
 
     /** The map of localized messages. */
     protected Map messages;
@@ -265,10 +269,7 @@ public class MessagesMap implements Map {
 
     // ------------------------------------------------------ Protected Methods
 
-    /**
-     * Ensure the messages key set has been initialized.
-     */
-    protected void ensureInitialized() {
+    private void ensureInitialized() {
         if (messages == null && !noResourcesFound) {
 
             String resourceKey = baseName + locale.toString();
@@ -279,29 +280,27 @@ public class MessagesMap implements Map {
                 } else {
                     synchronized (CACHE_LOAD_LOCK) {
                        try {
-                            // TODO: JDK is caching resources, need fix
-                            ResourceBundle resources =
-                                ResourceBundle.getBundle(baseName, locale);
 
-                            messages = new HashMap();
+                           ResourceBundle resources =
+                               getBundle(baseName, locale);
 
-                            Enumeration e = resources.getKeys();
-                            while (e.hasMoreElements()) {
-                                String name = e.nextElement().toString();
-                                String value = resources.getString(name);
-                                messages.put(name, value);
-                            }
+                           messages = new HashMap();
 
-                            messages = Collections.unmodifiableMap(messages);
+                           Enumeration e = resources.getKeys();
+                           while (e.hasMoreElements()) {
+                               String name = e.nextElement().toString();
+                               String value = resources.getString(name);
+                               messages.put(name, value);
+                           }
 
-                            if (cache) {
-                                MESSAGES_CACHE.put(resourceKey, messages);
-                            }
+                           messages = Collections.unmodifiableMap(messages);
+
+                           if (cache) {
+                               MESSAGES_CACHE.put(resourceKey, messages);
+                           }
 
                         } catch (MissingResourceException mre) {
-                            if (cache) {
-                                NOT_FOUND_CACHE.add(resourceKey);
-                            }
+                            NOT_FOUND_CACHE.add(resourceKey);
                             noResourcesFound = true;
                         }
                     }
@@ -309,6 +308,43 @@ public class MessagesMap implements Map {
             } else {
                 noResourcesFound = true;
             }
+        }
+    }
+
+    private ResourceBundle getBundle(String baseName, Locale locale) {
+        if (!cache) {
+            clearResourceBundleCache(baseName, locale);
+        }
+
+        return ResourceBundle.getBundle(baseName, locale);
+    }
+
+    private void clearResourceBundleCache(String baseName, Locale locale) {
+        if (cacheLastUpdated == 0) {
+            cacheLastUpdated = System.currentTimeMillis();
+        }
+
+        if (System.currentTimeMillis() - cacheLastUpdated < 2000) {
+            return;
+        }
+
+        cacheLastUpdated = System.currentTimeMillis();
+
+        try {
+            ResourceBundle rb = ResourceBundle.getBundle(baseName, locale);
+            Class aClass = rb.getClass().getSuperclass();
+
+            Field field = aClass.getDeclaredField("cacheList");
+            field.setAccessible(true);
+            sun.misc.SoftCache cache = (sun.misc.SoftCache) field.get(null);
+            cache.clear();
+            field.setAccessible(false);
+
+        } catch (MissingResourceException mre) {
+            throw mre;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
