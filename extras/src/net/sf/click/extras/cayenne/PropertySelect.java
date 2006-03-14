@@ -114,9 +114,9 @@ public class PropertySelect extends Select {
     }
 
     /**
-     * Set the decorator to render the select values.
+     * Set the decorator to render the option labels.
      *
-     * @param decorator the decorator to render the select values with
+     * @param decorator the decorator to render the select option labels
      */
     public void setDecorator(Decorator decorator) {
         this.decorator = decorator;
