@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -445,9 +446,24 @@ public class ClickUtils {
         }
 
         Method targetMethod = null;
+        boolean isAccessible = true;
         try {
-            targetMethod = listener.getClass().getMethod(method, null);
+            Class cl = listener.getClass();
+            targetMethod = cl.getMethod(method, null);
+            
+            //change accessible for annonymous inner classes
+            //public methods only
+            if(!Modifier.isPublic(cl.getModifiers()) //anon inner cl are not public
+                    && Modifier.isPublic(targetMethod.getModifiers()) //only public methods
+                    && cl.getDeclaringClass() == null //anon inner classes have no declCl 
+                    && cl.getName().indexOf('$') != -1 //innerclasses have this name
+                    && !targetMethod.isAccessible() //if accessibel anyway
+            ) {
+                isAccessible = false;
+                targetMethod.setAccessible(true);
+            }
 
+            
             Object result = targetMethod.invoke(listener, null);
 
             if (result instanceof Boolean) {
@@ -490,6 +506,10 @@ public class ClickUtils {
                 "Exception occured invoking public method: " + targetMethod;
 
             throw new RuntimeException(msg, e);
+        } finally {
+            if(targetMethod != null && !isAccessible) {
+                targetMethod.setAccessible(false);
+            }
         }
     }
 
