@@ -9,7 +9,6 @@ import junit.framework.TestCase;
  * would have no meaning. 
  * 
  * @author Christian Essl
- *
  */
 public class ClickUtilsInvokeListenerTest extends TestCase {
 
