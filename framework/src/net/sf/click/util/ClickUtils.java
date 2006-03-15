@@ -448,22 +448,27 @@ public class ClickUtils {
         Method targetMethod = null;
         boolean isAccessible = true;
         try {
-            Class cl = listener.getClass();
-            targetMethod = cl.getMethod(method, null);
-            
-            //change accessible for annonymous inner classes
-            //public methods only
-            if(!Modifier.isPublic(cl.getModifiers()) //anon inner cl are not public
-                    && Modifier.isPublic(targetMethod.getModifiers()) //only public methods
-                    && cl.getDeclaringClass() == null //anon inner classes have no declCl 
-                    && cl.getName().indexOf('$') != -1 //innerclasses have this name
-                    && !targetMethod.isAccessible() //if accessibel anyway
-            ) {
+            Class listenerClass = listener.getClass();
+            targetMethod = listenerClass.getMethod(method, null);
+
+            // Change accessible for annonymous inner classes public methods
+            // only. Conditional checks:
+            // #1 - Target method is not accessible
+            // #2 - Annonomous inner classes are not public
+            // #3 - Only modify public methods
+            // #4 - Annonomous inner classes have no declaring class
+            // #5 - Annonomous inner classes have $ in name
+            if (!targetMethod.isAccessible()
+                && !Modifier.isPublic(listenerClass.getModifiers())
+                && Modifier.isPublic(targetMethod.getModifiers())
+                && listenerClass.getDeclaringClass() == null
+                && listenerClass.getName().indexOf('$') != -1) {
+
                 isAccessible = false;
                 targetMethod.setAccessible(true);
             }
 
-            
+
             Object result = targetMethod.invoke(listener, null);
 
             if (result instanceof Boolean) {
@@ -506,8 +511,9 @@ public class ClickUtils {
                 "Exception occured invoking public method: " + targetMethod;
 
             throw new RuntimeException(msg, e);
+
         } finally {
-            if(targetMethod != null && !isAccessible) {
+            if (targetMethod != null && !isAccessible) {
                 targetMethod.setAccessible(false);
             }
         }
