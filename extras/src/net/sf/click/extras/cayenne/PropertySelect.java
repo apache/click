@@ -33,9 +33,74 @@ import org.objectstyle.cayenne.access.DataContext;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
- * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
+ * Provides a DataObject property Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
  *
- * TODO: doco
+ * <table class='htmlHeader' cellspacing='6'>
+ * <tr>
+ * <td>Property Select</td>
+ * <td>
+ * <select title='PropertySelect Control'>
+ * <option value='110'>P. Barnes</option>
+ * <option value='220'>M. Edgar</option>
+ * <option value='330'>C. Essl</option>
+ * <option value='440'>A. Mohombe</option>
+ * <option value='550'>N. Takezoe</option>
+ * </select>
+ * </td>
+ * </tr>
+ * </table>
+ *
+ * The PropertySelect provides a Select control for {@link DataObject}
+ * relationship properties (properties which are also DataObjects). For
+ * properties which are not DataObjects use the {@link QuerySelect} control.
+ * <p/>
+ * The PropertySelect control will only work inside a CayenneForm
+ * as it obtains meta data about DataObject property from the parent form.
+ * <p/>
+ * Currently this control only supports selecting a single elements.
+ *
+ * <h4>Example</h4>
+ *
+ * For example given a Pet DataObject which has a PetType DataObject property.
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> Pet <span class="kw">implements</span> DataObject {
+ *     <span class="kw">public</span> PetType getType() {
+ *         ..
+ *     }
+ *
+ *     <span class="kw">public void</span> setType(PetType value) {
+ *         ..
+ *     }
+ * }
+ *
+ * <span class="kw">public class</span> PetType <span class="kw">implements</span> DataObject {
+ *     <span class="kw">public</span> String getName() {
+ *         ..
+ *     }
+ * } </pre>
+ *
+ * You would use the PropertySelect in a CayenneForm to edit the Pet type
+ * property. In this example the PetType name property is rendered as the
+ * select options label.
+ *
+ * <pre class="codeJava">
+ * CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Pet.<span class="kw">class</span>);
+ *
+ * PropertySelect typeSelect = <span class="kw">new</span> PropertySelect(<span class="st">"type"</span>, <span class="kw">true</span>);
+ * typeSelect.setOptionLabel(<span class="st">"name"</span>);
+ * form.add(typeSelect); </pre>
+ *
+ * In this example no query is specified and the control will create a
+ * simple {@link SelectQuery} based on the property class. However,
+ * generally you should a named query (configured in the Cayenne Modeller)
+ * or a explicity set a <tt>SelectQuery</tt>.
+ * <p/>
+ * Note when using a named query ensure that it will return DataObjects and not
+ * DataRows.
+ *
+ * @see CayenneForm
+ * @see QuerySelect
  *
  * @author Malcolm Edgar
  */
