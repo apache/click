@@ -102,7 +102,7 @@ public class MessagesMap implements Map {
      * bundle name and <tt>Context</tt>.
      *
      * @param baseName the resource bundle name
-     * @param locale the locale to use
+     * @param context the request context
      */
     public MessagesMap(String baseName, Context context) {
         if (baseName == null) {
@@ -324,7 +324,7 @@ public class MessagesMap implements Map {
             cacheLastUpdated = System.currentTimeMillis();
         }
 
-        if (System.currentTimeMillis() - cacheLastUpdated < 2000) {
+        if (System.currentTimeMillis() - cacheLastUpdated < 1000) {
             return;
         }
 
@@ -336,7 +336,7 @@ public class MessagesMap implements Map {
 
             Field field = aClass.getDeclaredField("cacheList");
             field.setAccessible(true);
-            sun.misc.SoftCache cache = (sun.misc.SoftCache) field.get(null);
+            Map cache = (Map) field.get(null);
             cache.clear();
             field.setAccessible(false);
 

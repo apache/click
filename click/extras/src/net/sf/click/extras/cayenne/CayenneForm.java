@@ -63,7 +63,7 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *
  * <a href="http://objectstyle.org/cayenne/">Cayenne</a> is an Object Relational
  * Mapping (ORM) framework. The CayenneForm supports creating (inserting) and
- * saving (updating) Cayenne <tt>DataObject</tt> instances. This form will
+ * saving (updating) Cayenne {@link DataObject} instances. This form will
  * automatically apply the given data objects validation constraints to the
  * form fields.
  * <p/>
