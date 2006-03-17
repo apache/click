@@ -16,7 +16,6 @@
 
 package net.sf.click.sandbox.chrisichris.resource;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -24,9 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import javax.servlet.ServletContext;
 
@@ -45,104 +42,125 @@ import org.apache.velocity.runtime.resource.loader.ResourceLoader;
  * is useful ie for AJAX requests where parts of the template should be in the
  * template but can be rendered separately.
  * <p>
- * This class is a functional full replacement of Click's default webapp resource loader. 
- * To use this class add to the /WEB-INF/velocity.properties the following line:
+ * This class is a functional full replacement of Click's default webapp
+ * resource loader. To use this class add to the /WEB-INF/velocity.properties
+ * the following line:
  * </p>
+ *
  * <pre>
- * webapp.resource.loader.class=net.sf.click.sandbox.chrisichris.resource.WebappPartialLoader
+ * webapp.resource.loader.class = net.sf.click.sandbox.chrisichris.resource.WebappPartialLoader
  * </pre>
+ *
  * <p>
- * This way the ResourceLoader gets configured automatically by click along the 
- * mode specified in click.xml. 
+ * This way the ResourceLoader gets configured automatically by click along the
+ * mode specified in click.xml.
  * <p>
  * The start of a template part is marked by ##PT{partName} and the end is
- * marked by ##PT{/partName}. Where partName is the name of the template-part. 
- * (PT stands for partial template).
- * If the template path is ended with ? + partname ie
- * (/template/foo.htm?fooPart) than this resource loader will return the text
- * between ##PT{fooPart} and ##PT{/fooPart} as the template for the path. 
+ * marked by ##PT{/partName}. Where partName is the name of the template-part.
+ * (PT stands for partial template). If the template path is ended with ? +
+ * partname ie (/template/foo.htm?fooPart) than this resource loader will return
+ * the text between ##PT{fooPart} and ##PT{/fooPart} as the template for the
+ * path.
  * </p>
  * <p>
- * The
- * part-names must be unique within a template. Part-names can be nested and mixed
- * as wanted. All this ResourceLoader does is take the String between the start
- * and the end tag for the name (wheter there are start and/or endtags in between or not). 
- * Especially this ResourceLoader does not care about proper nesting of start and
- * end tags. I think I have mentioned already: PT names have to be unique within one template.
+ * The part-names must be unique within a template. Part-names can be nested and
+ * mixed as wanted. All this ResourceLoader does is take the String between the
+ * start and the end tag for the name (wheter there are start and/or endtags in
+ * between or not). Especially this ResourceLoader does not care about proper
+ * nesting of start and end tags. I think I have mentioned already: PT names
+ * have to be unique within one template.
  * </p>
  * <p>
  * For example if the following template is at the path '/template/foo.htm':
  * </p>
- * 
+ *
  * <pre>
- * 
- *  [file: /template/foo.htm]
- *  
- *  &lt;html&gt;
- *  &lt;head&gt;&lt;/head&gt;
- *  &lt;body&gt;
- *     Some template code
- *     ##PT{updateDyn}
- *       show some result
- *       #if(false)
- *         ##PT{update}
- *           updateString
- *         ##PT{/update}
- *       #end
- *     ##PT{/updateDyn}
- *  &lt;/body&gt;
- *  &lt;/html&gt;   
- *  
+ *
+ *
+ *   [file: /template/foo.htm]
+ *
+ *   &lt;html&gt;
+ *   &lt;head&gt;&lt;/head&gt;
+ *   &lt;body&gt;
+ *      Some template code
+ *      ##PT{updateDyn}
+ *        show some result
+ *        #if(false)
+ *          ##PT{update}
+ *            updateString
+ *          ##PT{/update}
+ *        #end
+ *      ##PT{/updateDyn}
+ *   &lt;/body&gt;
+ *   &lt;/html&gt;
+ *
+ *
  * </pre>
- * 
+ *
  * <p>
  * The path '/template/foo.htm' will return the full template as above.
  * </p>
  * <p>
  * The path '/template/foo.htm?updateDyn' will return the following template.
  * </p>
- * 
+ *
  * <pre>
- *       show some result
- *       #if(false)
- *         ##PT{update}
- *           updateString
- *         ##PT{/update}
- *       #end
+ *
+ *        show some result
+ *        #if(false)
+ *          ##PT{update}
+ *            updateString
+ *          ##PT{/update}
+ *        #end
+ *
  * </pre>
- * 
+ *
  * <p>
  * The path '/template/foo.htm?update' will return the following template.
  * </p>
- * 
+ *
  * <pre>
  * updateString
  * </pre>
- * 
+ *
  * <p>
  * The code is a modified version of
  * org.apache.velocity.tools.view.servlet.WebappLoader, which is under the
  * Apache Lincense as this code is.
  * </p>
- * 
+ *
  * @author <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
  * @author <a href="mailto:nathan@esha.com">Nathan Bubna</a>
  * @author <a href="mailto:claude@savoirweb.com">Claude Brisson</a>
  * @author Christian Essl
- * @version $Id$
+ * @version $Id: WebappPartialLoader.java,v 1.1 2006/03/15 21:55:31 chrisichris
+ *          Exp $
  */
 
 public class WebappPartialLoader extends ResourceLoader {
 
+    /**
+     * The separator which indicates the name of a paratial template
+     * '?'.
+     */
     public final static char NAME_SEP = '?';
 
     /** The root paths for templates (relative to webapp's root). */
     protected String[] paths = null;
 
+    /**
+     * The pathes of tempaltes.
+     */
     protected HashMap templatePaths = null;
 
+    /**
+     * The servlet context.
+     */
     protected ServletContext servletContext = null;
 
+    /**
+     * The encoding of the files.
+     */
     protected String encoding;
 
     /**
@@ -150,7 +168,7 @@ public class WebappPartialLoader extends ResourceLoader {
      * NOTE: this expects that the ServletContext has already been placed in the
      * runtime's application attributes under its full class name (i.e.
      * "javax.servlet.ServletContext").
-     * 
+     *
      * @param configuration
      *            the {@link ExtendedProperties} associated with this resource
      *            loader.
@@ -180,8 +198,8 @@ public class WebappPartialLoader extends ResourceLoader {
         if (obj instanceof ServletContext) {
             servletContext = (ServletContext) obj;
         } else {
-            log
-                    .error("WebappPartialLoader : unable to retrieve ServletContext");
+            log.error("WebappPartialLoader : "
+                    + "unable to retrieve ServletContext");
         }
 
         /* init the template paths map */
@@ -196,8 +214,8 @@ public class WebappPartialLoader extends ResourceLoader {
 
     /**
      * Get an InputStream so that the Runtime can build a template with it.
-     * 
-     * @param name
+     *
+     * @param nameIn
      *            name of template to get
      * @return InputStream containing the template
      * @throws ResourceNotFoundException
@@ -288,7 +306,7 @@ public class WebappPartialLoader extends ResourceLoader {
 
     /**
      * Checks to see if a resource has been deleted, moved or modified.
-     * 
+     *
      * @param resource
      *            Resource The resource to check for modification
      * @return boolean True if the resource has been modified
@@ -343,8 +361,8 @@ public class WebappPartialLoader extends ResourceLoader {
     }
 
     /**
-     * Checks to see when a resource was last modified
-     * 
+     * Checks to see when a resource was last modified.
+     *
      * @param resource
      *            Resource the resource to check
      * @return long The time when the resource was last modified or 0 if the
@@ -371,20 +389,51 @@ public class WebappPartialLoader extends ResourceLoader {
         }
     }
 
+    /**
+     * Extracts the partial template from the file. For now
+     * just takes a substring.
+     * @author Christian Essl
+     *
+     */
     public static class Tokenizer {
 
+        /**
+         * start of the template.
+         */
         public static final String TAG_START = "##PT{";
 
+        /**
+         * end of the template.
+         */
         public static final String TAG_END = "##PT{/";
 
+        /**
+         * tag close char.
+         */
         public static final char TAG_END_CHAR = '}';
 
-        final Reader in;
+        /**
+         * Input reader.
+         */
+        private final Reader in;
 
+        /**
+         * constructor.
+         * @param in with reader.
+         */
         public Tokenizer(Reader in) {
             this.in = in;
         }
 
+        /**
+         * Extracts a part inputStream.
+         * @param baseIs original InputStream
+         * @param partName name of the template part
+         * @param encoding the encoding of the original InputStream and of the
+         * returned one
+         * @return InputStream of the template or null
+         * @throws IOException if one reader throws one.
+         */
         public static InputStream find(InputStream baseIs, String partName,
                 String encoding) throws IOException {
             try {
@@ -404,6 +453,12 @@ public class WebappPartialLoader extends ResourceLoader {
 
         }
 
+        /**
+         * Find in the reader the partial template.
+         * @param name template name
+         * @return template string
+         * @throws IOException if something goes wrong
+         */
         public String find(String name) throws IOException {
             // TODO: This can obviously be made faster
             // until this is settled
@@ -440,6 +495,11 @@ public class WebappPartialLoader extends ResourceLoader {
 
         }
 
+        /**
+         * Wheter the name is a valid partial name (not used for now).
+         * @param name partial template name
+         * @return true or false
+         */
         public static boolean isValidName(String name) {
             if (name == null || name.length() == 0) {
                 return false;
@@ -454,6 +514,12 @@ public class WebappPartialLoader extends ResourceLoader {
             return true;
         }
 
+        /**
+         * the filename of a template path. Strips of the
+         * ?+name part.
+         * @param name part name
+         * @return file name
+         */
         public static String getFileName(String name) {
             int cut = name.lastIndexOf(NAME_SEP);
             if (cut == -1) {
