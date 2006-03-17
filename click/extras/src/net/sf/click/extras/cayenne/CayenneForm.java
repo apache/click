@@ -43,11 +43,15 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *
  * <table class='fields'>
  * <tr>
- * <td align='left'><label>Department Name</label><span class="red">*</span></td>
+ * <td align='left'><label>Organisation Name:</label><span class="red">*</span></td>
  * <td align='left'><input type='text' name='name' value='' size='35' /></td>
  * </tr>
  * <tr>
- * <td align='left'><label>Description</label></td>
+ * <td align='left'><label>Type:</label><span class="red">*</span></td>
+ * <td align='left'><select><option value="PR">Private Company</option><option value="PU">Public Company</option><option value="NP">Non Profit</option></select></td>
+ * </tr>
+ * <tr>
+ * <td align='left'><label>Description:</label></td>
  * <td align='left'><textarea name='description' cols='35' rows='3'></textarea></td>
  * </tr>
  * </table>
@@ -64,57 +68,104 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  * <a href="http://objectstyle.org/cayenne/">Cayenne</a> is an Object Relational
  * Mapping (ORM) framework. The CayenneForm supports creating (inserting) and
  * saving (updating) Cayenne {@link DataObject} instances. This form will
- * automatically apply the given data objects validation constraints to the
- * form fields.
+ * automatically apply the given data objects required and max length validation
+ * constraints to the form fields.
  * <p/>
  * The CayenneForm uses the thread local <tt>DataContext</tt> obtained via
  * <tt>DataContext.getThreadDataContext()</tt> for all object for persistence
  * operations.
- * <p/>
+ *
+ * <h4>Examples</h4>
+ *
  * The example below provides a <tt>Department</tt> data object creation
  * and editing page. To edit an existing department object, the object is passed
  * to the page as a request parameter. Otherwise a new department object will
  * be created when {@link #saveChanges()} is called.
  *
  * <pre class="codeJava">
- * <span class="kw">public class</span> DepartmentEdit <span class="kw">extends</span> Page {
+ * <span class="kw">public class</span> OrganisationEdit <span class="kw">extends</span> Page {
  *
- *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Department.<span class="kw">class</span>);
+ *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Organisation.<span class="kw">class</span>);
  *
- *    <span class="kw">public void</span> onInit() {
- *        form.setButtonAlign(<span class="st">"right"</span>);
- *        addControl(form);
+ *    <span class="kw">public</span> OrganisationEdit() {
  *
- *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Department Name"</span>, 35);
- *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description"</span>, 35, 2);
+ *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Organisation Name:"</span>, 35);
+ *
+ *        QuerySelect type = <span class="kw">new</span> QuerySelect(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
+ *        type.setQueryValueLabel(<span class="st">"organisation-types"</span>, <span class="st">"VALUE"</span>, <span class="st">"LABEL"</span>);
+ *        form.add(type);
+ *
+ *        form.add(<span class="kw">new</span> TextArea(<span class="st">"description"</span>, <span class="st">"Description:"</span>, 35, 2);
  *
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
  *        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ *
+ *        form.setButtonAlign(<span class="st">"right"</span>);
+ *        addControl(form);
  *    }
  *
  *    <span class="kw">public void</span> onGet() {
- *        Department department = (Department)
- *           getContext().getRequestAttribute(<span class="st">"department"</span>);
+ *        Organisation organisation = (Organisation)
+ *           getContext().getRequestAttribute(<span class="st">"organisation"</span>);
  *
- *        <span class="kw">if</span> (department != <span class="kw">null</span>) {
- *            form.setDataObject(department);
+ *        <span class="kw">if</span> (organisation != <span class="kw">null</span>) {
+ *            form.setDataObject(organisation);
  *        }
  *    }
  *
  *    <span class="kw">public boolean</span> onOkClicked() {
  *        <span class="kw">if</span> (form.isValid()) {
  *           <span class="kw">if</span> (form.saveChanges()) {
- *               setRedirect(<span class="st">"departments-view.htm"</span>);
+ *               Organisation organisation = (Organisation) form.getDataObject();
+ *               String url = getContext().getPagePath(OrganisationViewer.<span class="kw">class</span>);
+ *               setRedirect(url + <span class="st">"?id="</span> + organisation.getId());
+ *               <span class="kw">return false</span>;
  *           }
  *        }
  *        <span class="kw">return true</span>;
  *    }
  *
  *    <span class="kw">public boolean</span> onCancelClicked() {
- *        setRedirect(<span class="st">"departments-view.htm"</span>);
+ *        Organisation organisation = (Organisation) form.getDataObject(<span class="kw">false</span>);
+ *        String url = getContext().getPagePath(OrganisationViewer.<span class="kw">class</span>);
+ *        setRedirect(url + <span class="st">"?id="</span> + organisation.getId());
  *        <span class="kw">return false</span>;
  *    }
  * } </pre>
+ *
+ * Note the <tt>getDataObject(false)</tt> method is used to obtain the
+ * DataObject from the Form without applying the field values to the data object.
+ * This is very important when dealing with already persistent objects and you
+ * dont want to apply any form changes.
+ * <p/>
+ * Alternatively you can save a submitted DataObject using a Service or DAO
+ * pattern. For example:
+ *
+ * <pre class="codeJava">
+ *    <span class="kw">public boolean</span> onOkClicked() {
+ *        <span class="kw">if</span> (form.isValid()) {
+ *           Organisation organisation = (Organisation) form.getDataObject();
+ *
+ *           getOrganisationService().save(organisation);
+ *
+ *           String url = getContext().getPagePath(OrganisationViewer.<span class="kw">class</span>);
+ *           setRedirect(url + <span class="st">"?id="</span> + organisation.getId());
+ *           <span class="kw">return false</span>;
+ *        }
+ *        <span class="kw">return true</span>;
+ *    } </pre>
+ *
+ * <b>Please Note</b> if you are using this pattern with objects already saved, take
+ * care to ensure that the form submission is valid before calling
+ * {@link #getDataObject()} as this method changes the DataObject's properties
+ * using the submitted form field values.
+ * <p/>
+ * If you don't commit the changes at this point they will still be present in
+ * the session {@link DataContext} and will be applied in the next
+ * <tt>commitChanges()</tt> call, which may happen in a subsequent request.
+ * In these exceptional situations the object should be removed from the cache
+ * DataContext using <tt>invalidateObjects()</tt> method or by reloading the
+ * object from the database.
  *
  * @author Malcolm Edgar
  * @author Andrus Adamchik

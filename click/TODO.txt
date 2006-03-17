@@ -1,5 +1,4 @@
 CODE
-* add Cayenne QuerySelect control
 
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
@@ -8,7 +7,6 @@ CODE
 
 
 DOCUMENTATION
-* complete PropertySelect documentation
 * update Velocity documentation
 * provide more Column Javadoc
 * discuss redirecting to HTTPS
