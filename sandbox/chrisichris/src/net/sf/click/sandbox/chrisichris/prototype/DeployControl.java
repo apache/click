@@ -20,6 +20,10 @@ import net.sf.click.util.ClickUtils;
  */
 public class DeployControl implements Control {
 
+    /**
+     * Default constructor.
+     *
+     */
     public DeployControl() {
         super();
     }
@@ -35,7 +39,7 @@ public class DeployControl implements Control {
 
     /**
      * Throws unsupported op exception.
-     *
+     * 
      * @see net.sf.click.Control#setContext(net.sf.click.Context)
      */
     public void setContext(Context context) {
@@ -44,6 +48,7 @@ public class DeployControl implements Control {
 
     /**
      * Throws unsupported op exception.
+     *
      *
      * @see net.sf.click.Control#getHtmlImports()
      */
@@ -165,7 +170,7 @@ public class DeployControl implements Control {
     }
 
     /**
-     * The script tag for prototype import
+     * The script tag for prototype import.
      * @param ctxt current context
      * @return script tag
      */

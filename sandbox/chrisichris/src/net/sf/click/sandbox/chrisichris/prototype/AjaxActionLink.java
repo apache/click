@@ -31,26 +31,36 @@ public class AjaxActionLink extends ActionLink {
     protected boolean enableAjax = true;
 
     /**
-     *
+     * Create an AjaxActionLink. Maily for tools.
      */
     public AjaxActionLink() {
         super();
     }
 
     /**
-     * @param name
-     * @param listener
-     * @param method
+     * Create an AjaxActionLink for the given name, listener object and listener
+     * method.
+     *
+     * @param name the action link name
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if the name, listener or method is null
+     * or if the method is blank
      */
     public AjaxActionLink(String name, Object listener, String method) {
         super(name, listener, method);
     }
 
     /**
-     * @param name
-     * @param label
-     * @param listener
-     * @param method
+     * Create an AjaxActionLink for the given name, label, listener object and
+     * listener method.
+     *
+     * @param name the action link name
+     * @param label the action link label
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if the name, listener or method is null
+     * or if the method is blank
      */
     public AjaxActionLink(String name, String label, Object listener,
             String method) {
@@ -58,20 +68,31 @@ public class AjaxActionLink extends ActionLink {
     }
 
     /**
-     * @param name
-     * @param label
+     * Create an AjaxActionLink for the given name and label.
+     *
+     * @param name the action link name
+     * @param label the action link label
+     * @throws IllegalArgumentException if the name is null
      */
     public AjaxActionLink(String name, String label) {
         super(name, label);
     }
 
     /**
-     * @param name
+     * Create an ActionLink for the given name.
+     *
+     * @param name the action link name
+     * @throws IllegalArgumentException if the name is null
      */
     public AjaxActionLink(String name) {
         super(name);
     }
 
+    /**
+     * The PrototypeAjax used by this AjaxActionLink to create the
+     * Ajax JS code.
+     * @return PrototypeAjax
+     */
     public PrototypeAjax getPrototypeAjax() {
         return ajaxReq;
     }

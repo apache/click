@@ -76,15 +76,25 @@ public class AutoCompleteTextField extends TextField {
     protected AjaxAction ajaxAction;
 
     /**
-     *
+     * Create an AutoCompleteTextField with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
      */
     public AutoCompleteTextField() {
         super();
     }
 
     /**
-     * @param name
-     * @param required
+     * Construct an AutoCompleteTextField with the given name and required status.
+     * The default text field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param required the field required status
      * @param ac
      *            the action which renders the ul response
      */
@@ -94,9 +104,12 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * @param name
-     * @param label
-     * @param required
+     * Construct an AutocompleteTextField with the given name, label and required status.
+     * The default text field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
      * @param ac
      *            the action which renders the ul response
      */
@@ -107,9 +120,11 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * @param name
-     * @param label
-     * @param size
+     * Construct the TextField with the given name, label and size.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
      * @param ac
      *            the action which renders the ul response
      */
@@ -120,16 +135,22 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * @param name
-     * @param label
+     * Construct an AutocompleteTextField with the given name and label. The default text
+     * field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
      */
     public AutoCompleteTextField(String name, String label) {
         super(name, label);
     }
 
     /**
-     * @param name
-     * @param label
+     * Construct an AutocompleteTextField with the given name and label. The default text
+     * field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
      * @param ac
      *            the action which renders the ul response
      */
@@ -139,14 +160,20 @@ public class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * @param name
+     * Construct an AutoCompleteTextField with the given name. The default text field size
+     * is 20 characters.
+     *
+     * @param name the name of the field
      */
     public AutoCompleteTextField(String name) {
         super(name);
     }
 
     /**
-     * @param name
+     * Construct an AutoCompleteTextField with the given name. The default text field size
+     * is 20 characters.
+     *
+     * @param name the name of the field
      * @param ac
      *            the action which renders the ul response
      */
@@ -400,8 +427,9 @@ public class AutoCompleteTextField extends TextField {
                         + "AutoComplete.Action.getData()" });
 
         /**
-         * Calls {@link #makeListString(String)}
+         * Calls {@link #makeListString(String)}.
          *
+         * @param page the page this Action is part of
          * @see net.sf.click.sandbox.chrisichris.prototype.AjaxAction#doExecute(net.sf.click.Page)
          */
         protected void doExecute(Page page) {
@@ -467,7 +495,7 @@ public class AutoCompleteTextField extends TextField {
          *
          * @param value
          *            item from the list returned from {@link #getData(String)}
-         * @return
+         * @return String to propse to the user
          */
         protected String getInputString(Object value) {
             return value.toString();

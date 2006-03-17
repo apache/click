@@ -30,39 +30,64 @@ public class AjaxSubmit extends Submit {
     protected AjaxAction ajaxAction;
 
     /**
-     * @param name
-     * @param listener
-     * @param method
+     * Create a AjaxSubmit button with the given name, listener object and
+     * listener method.
+     *
+     * @param name the button name
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method
+     * is blank
      */
     public AjaxSubmit(String name, Object listener, String method) {
         super(name, listener, method);
     }
 
     /**
-     * @param name
-     * @param label
-     * @param listener
-     * @param method
+     * Create a Submit button with the given name, label, listener object and
+     * listener method.
+     *
+     * @param name the button name
+     * @param label the button display label
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method
+     * is blank
      */
-    public AjaxSubmit(String name, String label, Object listener, String method) {
+    public AjaxSubmit(String name, String label, 
+                        Object listener, String method) {
         super(name, label, listener, method);
     }
 
     /**
-     * @param name
-     * @param label
+     * Create a Submit button with the given name and label.
+     *
+     * @param name the button name
+     * @param label the button display label
      */
     public AjaxSubmit(String name, String label) {
         super(name, label);
     }
 
     /**
-     * @param name
+     * Create a Submit button with the given name.
+     *
+     * @param name the button name
      */
     public AjaxSubmit(String name) {
         super(name);
     }
 
+    /**
+     * Create an Submit button with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
     public AjaxSubmit() {
         super();
     }
