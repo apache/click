@@ -90,14 +90,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Table implements Control {
 
-    private static final long serialVersionUID = 8465121273938579765L;
-
     // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The table.css style sheet import link.
      */
-    protected static final String TABLE_IMPORTS =
+    public static final String TABLE_IMPORTS =
         "<link rel='stylesheet' type='text/css' href='$/click/table.css' title='style'>\n";
 
     // ----------------------------------------------------- Instance Variables
