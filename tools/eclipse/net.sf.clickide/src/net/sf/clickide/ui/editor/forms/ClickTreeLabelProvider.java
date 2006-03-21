@@ -5,8 +5,32 @@ import net.sf.clickide.ClickPlugin;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.ui.internal.contentoutline.JFaceNodeLabelProvider;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 
 public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
+	
+	public String getText(Object object) {
+		if(object instanceof Element){
+			Element element = (Element)object;
+			StringBuffer sb = new StringBuffer();
+			sb.append(element.getNodeName());
+			sb.append(" ");
+			NamedNodeMap attrs = element.getAttributes();
+			for(int i=0;i<attrs.getLength();i++){
+				if(i!=0){
+					sb.append(", ");
+				}
+				Attr attr = (Attr)attrs.item(i);
+				sb.append(attr.getName());
+				sb.append("=");
+				sb.append(attr.getValue());
+			}
+			return sb.toString();
+		}
+		return super.getText(object);
+	}
 
 	public Image getImage(Object object) {
 		if(object instanceof IDOMElement){
