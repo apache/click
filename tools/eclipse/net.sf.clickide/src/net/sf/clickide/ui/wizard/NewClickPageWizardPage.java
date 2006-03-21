@@ -158,9 +158,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		createPageHTML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_CREATE_HTML));
 		createPageHTML.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
-				parentFolder.setEnabled(createPageHTML.getSelection());
-				browseParent.setEnabled(createPageHTML.getSelection());
-				pageName.setEnabled(createPageHTML.getSelection());
+				updateHTMLGroup();
 				validate();
 			}
 		});
@@ -228,13 +226,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		createPageClass.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_CREATE_CLASS));
 		createPageClass.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
-				sourceFolder.setEnabled(createPageClass.getSelection());
-				browseSource.setEnabled(createPageClass.getSelection());
-				packageName.setEnabled(createPageClass.getSelection());
-				browsePackage.setEnabled(createPageClass.getSelection());
-				className.setEnabled(createPageClass.getSelection());
-				superClass.setEnabled(createPageClass.getSelection());
-				browseSuperClass.setEnabled(createPageClass.getSelection());
+				updateClassGroup();
 				validate();
 			}
 		});
@@ -367,8 +359,26 @@ public class NewClickPageWizardPage extends WizardPage {
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
 		addToClickXML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_ADD_TO_CLICK_XML));
 		
+		updateHTMLGroup();
+		updateClassGroup();
 		validate();
 		setControl(composite);
+	}
+	
+	private void updateHTMLGroup(){
+		parentFolder.setEnabled(createPageHTML.getSelection());
+		browseParent.setEnabled(createPageHTML.getSelection());
+		pageName.setEnabled(createPageHTML.getSelection());
+	}
+	
+	private void updateClassGroup(){
+		sourceFolder.setEnabled(createPageClass.getSelection());
+		browseSource.setEnabled(createPageClass.getSelection());
+		packageName.setEnabled(createPageClass.getSelection());
+		browsePackage.setEnabled(createPageClass.getSelection());
+		className.setEnabled(createPageClass.getSelection());
+		superClass.setEnabled(createPageClass.getSelection());
+		browseSuperClass.setEnabled(createPageClass.getSelection());
 	}
 	
 	private void validate(){
@@ -448,7 +458,6 @@ public class NewClickPageWizardPage extends WizardPage {
 		
 		// all valid
 		setMessage(null);
-//		setErrorMessage(null);
 		setPageComplete(true);
 	}
 	
