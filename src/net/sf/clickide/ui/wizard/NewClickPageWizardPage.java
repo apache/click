@@ -15,11 +15,14 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.internal.core.JarPackageFragmentRoot;
 import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jdt.internal.core.search.JavaSearchScope;
@@ -29,6 +32,10 @@ import org.eclipse.jdt.internal.ui.util.BusyIndicatorRunnableContext;
 import org.eclipse.jdt.internal.ui.wizards.TypedElementSelectionValidator;
 import org.eclipse.jdt.internal.ui.wizards.TypedViewerFilter;
 import org.eclipse.jdt.internal.ui.wizards.buildpaths.FolderSelectionDialog;
+import org.eclipse.jdt.ui.IJavaElementSearchConstants;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -44,8 +51,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
+import org.eclipse.ui.dialogs.SelectionDialog;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
@@ -65,9 +74,11 @@ public class NewClickPageWizardPage extends WizardPage {
 	private Button createPageClass;
 	private Text sourceFolder;
 	private Text packageName;
+	private Text superClass;
 	private Text className;
 	private Button browseSource;
 	private Button browsePackage;
+	private Button browseSuperClass;
 	private Button addToClickXML;
 	
 	private Object selection;
@@ -87,6 +98,9 @@ public class NewClickPageWizardPage extends WizardPage {
 	}
 	
 	public void createControl(Composite parent) {
+		IDialogSettings settings = 
+			ClickPlugin.getDefault().getDialogSettings().getSection(
+					NewClickPageWizard.SECTION_NEW_CLICK_PAGE);
 		
 		String initClassName = this.initialClassName;
 		String initPackage = "";
@@ -141,7 +155,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		createPageHTML = new Button(htmlGroup, SWT.CHECK);
 		createPageHTML.setText(ClickPlugin.getString("wizard.newPage.templateGroup.checkbox"));
 		createPageHTML.setLayoutData(createGridData(3));
-		createPageHTML.setSelection(true);
+		createPageHTML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_CREATE_HTML));
 		createPageHTML.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				parentFolder.setEnabled(createPageHTML.getSelection());
@@ -211,7 +225,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		createPageClass = new Button(classGroup, SWT.CHECK);
 		createPageClass.setText(ClickPlugin.getString("wizard.newPage.pageClassGroup.checkbox"));
 		createPageClass.setLayoutData(createGridData(3));
-		createPageClass.setSelection(true);
+		createPageClass.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_CREATE_CLASS));
 		createPageClass.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				sourceFolder.setEnabled(createPageClass.getSelection());
@@ -219,6 +233,8 @@ public class NewClickPageWizardPage extends WizardPage {
 				packageName.setEnabled(createPageClass.getSelection());
 				browsePackage.setEnabled(createPageClass.getSelection());
 				className.setEnabled(createPageClass.getSelection());
+				superClass.setEnabled(createPageClass.getSelection());
+				browseSuperClass.setEnabled(createPageClass.getSelection());
 				validate();
 			}
 		});
@@ -311,11 +327,45 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
+		createLabel(classGroup, "");
+		
+		createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.superclass"));
+		superClass = new Text(classGroup, SWT.BORDER);
+		superClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		superClass.setText(settings.get(NewClickPageWizard.SUPERCLASS));
+		superClass.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e){
+				validate();
+			}
+		});
+		browseSuperClass = new Button(classGroup, SWT.PUSH);
+		browseSuperClass.setText(ClickPlugin.getString("action.browse"));
+		browseSuperClass.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent evt){
+				Shell shell = getShell();
+				try {
+					IJavaProject project = JavaCore.create(getProject());
+					
+					SelectionDialog dialog = JavaUI.createTypeDialog(
+							shell, new ProgressMonitorDialog(shell),
+							SearchEngine.createJavaSearchScope(new IJavaElement[]{project}),
+							IJavaElementSearchConstants.CONSIDER_CLASSES,false);
+					
+					if(dialog.open()==SelectionDialog.OK){
+						Object[] result = dialog.getResult();
+						superClass.setText(((IType)result[0]).getFullyQualifiedName());
+					}
+				} catch(Exception ex){
+					ClickPlugin.log(ex);
+				}
+			}
+		});
+		
 		createLabel(composite, "");
 		
 		addToClickXML = new Button(composite, SWT.CHECK);
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
-		addToClickXML.setSelection(true);
+		addToClickXML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_ADD_TO_CLICK_XML));
 		
 		validate();
 		setControl(composite);
@@ -329,7 +379,6 @@ public class NewClickPageWizardPage extends WizardPage {
 			browseParent.setEnabled(false);
 			browseSource.setEnabled(false);
 			return;
-			
 		} else {
 			browsePackage.setEnabled(createPageClass.getSelection());
 			browseParent.setEnabled(createPageClass.getSelection());
@@ -687,6 +736,10 @@ public class NewClickPageWizardPage extends WizardPage {
 	 */
 	public boolean shouldAddToClickXML(){
 		return addToClickXML.getSelection();
+	}
+	
+	public String getSuperClass(){
+		return superClass.getText();
 	}
 	
 	private IProject getProject(){
