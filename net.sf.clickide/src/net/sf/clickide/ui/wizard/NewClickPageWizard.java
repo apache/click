@@ -3,6 +3,9 @@ package net.sf.clickide.ui.wizard;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
@@ -11,17 +14,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -39,15 +45,33 @@ import org.w3c.dom.NodeList;
  */
 public class NewClickPageWizard extends Wizard implements INewWizard {
 	
+	// keys of dialog settings
+	public static final String SECTION_NEW_CLICK_PAGE = "NewClickPageWizard";
+	public static final String SHOULD_CREATE_HTML = "shouldCreateHTML";
+	public static final String SHOULD_CREATE_CLASS = "shouldCreateClass";
+	public static final String SHOULD_ADD_TO_CLICK_XML = "shouldAddToClickXML";
+	public static final String SUPERCLASS = "superclass";
+	
 	private IStructuredSelection selection;
 	private NewClickPageWizardPage page;
 	private String initialPageName = null;
 	private String initialClassName = null;
+	private IFile[] openFiles = null;
 	
 	public NewClickPageWizard() {
 		super();
 		setNeedsProgressMonitor(true);
 		setWindowTitle(ClickPlugin.getString("wizard.newPage.title"));
+		
+		IDialogSettings settings = ClickPlugin.getDefault().getDialogSettings();
+		if(settings.getSection(SECTION_NEW_CLICK_PAGE)==null){
+			IDialogSettings section = settings.addNewSection(SECTION_NEW_CLICK_PAGE);
+			section.put(SHOULD_CREATE_HTML, true);
+			section.put(SHOULD_CREATE_CLASS, true);
+			section.put(SHOULD_ADD_TO_CLICK_XML, true);
+			section.put(SUPERCLASS, "net.sf.click.Page");
+		}
+		setDialogSettings(settings.getSection(SECTION_NEW_CLICK_PAGE));
 	}
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
@@ -67,16 +91,81 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 				this.initialClassName, this.initialPageName);
 		addPage(page);
 	}
-
-	public boolean performFinish() {
+	
+	public boolean performFinish(){
+		
+		final boolean shouldCreateHTML = page.shouldCreateHTML();
+		final boolean shouldCreateClass = page.shouldCreateClass();
+		final boolean shouldAddToClickXML = page.shouldAddToClickXML();
+		final String parentFolder = page.getParentFolder();
+		final String filename = page.getFilename();
+		final String sourceFolder = page.getSourceFolder();
+		final String packageName = page.getPackageName();
+		final String className = page.getClassName();
+		final String superClass = page.getSuperClass();
+		
+		IDialogSettings settings = getDialogSettings();
+		settings.put(SHOULD_CREATE_HTML, shouldCreateHTML);
+		settings.put(SHOULD_CREATE_CLASS, shouldCreateClass);
+		settings.put(SHOULD_ADD_TO_CLICK_XML, shouldAddToClickXML);
+		settings.put(SUPERCLASS, superClass);
+		
+		IRunnableWithProgress op = new IRunnableWithProgress() {
+			public void run(IProgressMonitor monitor) throws InvocationTargetException {
+				try {
+					openFiles = doFinish(monitor, shouldCreateHTML, shouldCreateClass, shouldAddToClickXML,
+							parentFolder, filename, sourceFolder, packageName, className, superClass);
+				} catch (Exception e) {
+					throw new InvocationTargetException(e);
+				} finally {
+					monitor.done();
+				}
+			}
+		};
+		try {
+			getContainer().run(true, false, op);
+			for(int i=0;i<openFiles.length;i++){
+				IDE.openEditor(ClickUtils.getActivePage(), openFiles[i]);
+			}
+		} catch (PartInitException e){
+			// TODO display the error message?
+			ClickPlugin.log(e);
+		} catch (InterruptedException e) {
+			// TODO display the error message?
+			ClickPlugin.log(e);
+			return false;
+		} catch (InvocationTargetException e) {
+			// TODO display the error message.
+			Throwable realException = e.getTargetException();
+			ClickPlugin.log(realException);
+			return false;
+		}
+		return true;
+	}
+	
+	private IFile[] doFinish(IProgressMonitor monitor,
+			boolean shouldCreateHTML,boolean shouldCreateClass, boolean shouldAddToClickXML,
+			String parentFolder, String filename, String sourceFolder, String packageName,
+			String className, String superClass) throws Exception {
+		
+		List files = new ArrayList();
+		int totalTask = 0;
+		if(shouldCreateHTML){
+			totalTask++;
+		}
+		if(shouldCreateClass){
+			totalTask++;
+		}
+		if(shouldAddToClickXML){
+			totalTask++;
+		}
+		monitor.beginTask(ClickPlugin.getString("wizard.newPage.progress"), totalTask);
+		
 		IProject project = ClickUtils.getJavaProject(selection.getFirstElement()).getProject();
 		
 		// Creates the HTML file
-		if(page.shouldCreateHTML()){
+		if(shouldCreateHTML){
 			try {
-				String parentFolder = page.getParentFolder();
-				String filename = page.getFilename();
-				
 				IFile file = null;
 				if(parentFolder.equals("")){
 					file = project.getFile(filename);
@@ -87,26 +176,18 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 //					}
 					file = folder.getFile(filename);
 				}
-				if(file.exists()){
-					return false;
-				} else {
+				if(!file.exists()){
 					file.create(getPageHTMLInputStream(), true, new NullProgressMonitor());
 				}
-				
-				IDE.openEditor(ClickUtils.getActivePage(), file);
-				
-			} catch(Exception ex){
-				ClickPlugin.log(ex);
-				return false;
+				files.add(file);
+			} finally {
+				monitor.worked(1);
 			}
 		}
+		
 		// Creates the page class
-		if(page.shouldCreateClass()){
+		if(shouldCreateClass){
 			try {
-				String sourceFolder = page.getSourceFolder();
-				String packageName = page.getPackageName();
-				String className = page.getClassName();
-				
 				IResource resource = project;
 				if(!sourceFolder.equals("")){
 					resource = project.getFolder(sourceFolder);
@@ -120,37 +201,32 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 					fragment = root.getPackageFragment(packageName);
 				}
 				ICompilationUnit unit = fragment.getCompilationUnit(className+".java");
-				if(unit.exists()){
-					return false;
-				} else {
+				if(!unit.exists()){
 					IFile file = (IFile)unit.getResource();
-					file.create(getPageClassInputStream(packageName, className), true, 
-							new NullProgressMonitor());
-					
-					IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file);
+					file.create(getPageClassInputStream(packageName, className, superClass),
+							true, new NullProgressMonitor());
+					files.add(file);
 				}
-				
-			} catch(Exception ex){
-				ClickPlugin.log(ex);
-				return false;
+			} finally {
+				monitor.worked(1);
 			}
 		}
+		
 		// Adds the page mapping to the click.xml
-		if(page.shouldAddToClickXML()){
+		if(shouldAddToClickXML){
 			IStructuredModel model = null;
 			
-			String newClazz = page.getClassName();
-			if(page.getPackageName().length()!=0){
-				newClazz = page.getPackageName() + "." + newClazz;
+			String newClazz = className;
+			if(packageName.length()!=0){
+				newClazz = packageName + "." + className;
 			}
 			
-			String newPath = page.getFilename();
-			String parentFolder = page.getParentFolder();
+			String newPath = filename;
 			String webAppRoot = ClickUtils.getWebAppRootFolder(project);
 			if(parentFolder.startsWith(webAppRoot)){
 				parentFolder = parentFolder.substring(webAppRoot.length()).replaceAll("^/|/$","");
 				if(parentFolder.length() > 0){
-					newPath = parentFolder + "/" + newPath;
+					newPath = parentFolder + "/" + filename;
 				}
 			}
 			
@@ -204,27 +280,24 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 					page.setAttribute(ClickPlugin.ATTR_CLASSNAME, newClazz);
 					pages.appendChild(page);
 				}
-				
 				model.save();
-				
-			} catch(Exception ex){
-				ClickPlugin.log(ex);
-				return false;
 			} finally {
 				if(model!=null){
 					model.releaseFromEdit();
 				}
+				monitor.worked(1);
 			}
 		}
 		
-		return true;
+		return (IFile[])files.toArray(new IFile[files.size()]);
 	}
 	
 	private InputStream getPageHTMLInputStream(){
 		return getClass().getResourceAsStream("pagehtml.tmpl");
 	}
 	
-	private InputStream getPageClassInputStream(String packageName, String className) throws IOException {
+	private InputStream getPageClassInputStream(
+			String packageName, String className, String superClass) throws IOException {
 		
 		InputStream in = null;
 		byte[] buf = null;
@@ -242,6 +315,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		String source = new String(buf, "Windows-31J"); // TODO charset
 		source = source.replaceAll("\\$\\{package\\}", packageName);
 		source = source.replaceAll("\\$\\{classname\\}", className);
+		source = source.replaceAll("\\$\\{superclass\\}", superClass);
 		
 		return new ByteArrayInputStream(source.getBytes());
 	}
