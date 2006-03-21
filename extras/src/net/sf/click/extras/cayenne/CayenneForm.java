@@ -116,7 +116,7 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *    <span class="kw">public boolean</span> onOkClicked() {
  *        <span class="kw">if</span> (form.isValid()) {
  *           <span class="kw">if</span> (form.saveChanges()) {
- *               Organisation organisation = (Organisation) form.getDataObject();
+ *               Organisation organisation = (Organisation) form.getDataObject(<span class="kw">false</span>);
  *               String url = getContext().getPagePath(OrganisationViewer.<span class="kw">class</span>);
  *               setRedirect(url + <span class="st">"?id="</span> + organisation.getId());
  *               <span class="kw">return false</span>;
