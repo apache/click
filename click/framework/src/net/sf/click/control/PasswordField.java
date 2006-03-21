@@ -73,6 +73,18 @@ public class PasswordField extends TextField {
     }
 
     /**
+     * Construct a PasswordField with the given name, label and required status.
+     * The default password field size is 20 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public PasswordField(String name, String label, boolean required) {
+        super(name, label, required);
+    }
+
+    /**
      * Create a PasswordField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
