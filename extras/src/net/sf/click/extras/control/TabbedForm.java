@@ -15,14 +15,20 @@
  */
 package net.sf.click.extras.control;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
+import net.sf.click.util.ClickUtils;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Tabbed Form control: &nbsp; &lt;form method='post'&gt;.
@@ -38,7 +44,17 @@ import net.sf.click.control.Form;
  */
 public class TabbedForm extends Form {
 
-    private static final long serialVersionUID = -5131480863117157372L;
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * The TabbedForm.css style sheet import link.
+     */
+    public static final String TABBED_FORM_IMPORTS =
+        "<link rel='stylesheet' type='text/css' href='$/click/TabbedForm.css' title='style'>\n";
+
+    // ----------------------------------------------------- Instance Variables
 
     /**
      * The form HTML background color. The default background color is
@@ -88,7 +104,7 @@ public class TabbedForm extends Form {
         setButtonStyle("");
     }
 
-    // --------------------------------------------------------- Public Methods
+    // ------------------------------------------------------------ Properities
 
     /**
      * Add the given FieldSet tab sheet to the form.
@@ -138,6 +154,19 @@ public class TabbedForm extends Form {
      */
     public void setDisplayTab(int value) {
         this.displayTab = value;
+    }
+
+    /**
+     * Return the HTML head import statements for the CSS stylesheet file:
+     * <tt>click/TabbedForm.css</tt>.
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(TABBED_FORM_IMPORTS, "$", path);
     }
 
     /**
@@ -221,6 +250,22 @@ public class TabbedForm extends Form {
     }
 
     // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     * @throws IOException if a I/O error occurs
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/TabbedForm.css",
+                              "click");
+    }
 
     /**
      * Process the Form request. In addition to the normal Form

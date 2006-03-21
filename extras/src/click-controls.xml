@@ -3,6 +3,7 @@
 
   <controls>
     <control classname="net.sf.click.extras.control.DateField"/>
+    <control classname="net.sf.click.extras.control.TabbedForm"/>
     <control classname="net.sf.click.extras.panel.ListPanel"/>
     <control classname="net.sf.click.extras.panel.TabbedPanel"/>
   </controls>
