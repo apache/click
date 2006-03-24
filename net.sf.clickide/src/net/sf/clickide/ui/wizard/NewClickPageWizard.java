@@ -135,7 +135,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			ClickPlugin.log(e);
 			return false;
 		} catch (InvocationTargetException e) {
-			// TODO display the error message.
+			// TODO display the error message?
 			Throwable realException = e.getTargetException();
 			ClickPlugin.log(realException);
 			return false;
@@ -216,11 +216,6 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		if(shouldAddToClickXML){
 			IStructuredModel model = null;
 			
-			String newClazz = className;
-			if(packageName.length()!=0){
-				newClazz = packageName + "." + className;
-			}
-			
 			String newPath = filename;
 			String webAppRoot = ClickUtils.getWebAppRootFolder(project);
 			if(parentFolder.startsWith(webAppRoot)){
@@ -262,6 +257,15 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 				
 				NodeList children = pages.getChildNodes();
 				boolean found = false;
+				
+				String newClazz = className;
+				String pagesPackage = pages.getAttribute(ClickPlugin.ATTR_PACKAGE);
+				if(packageName.length()!=0){
+					if(pagesPackage==null || !packageName.equals(pagesPackage)){
+						newClazz = packageName + "." + className;
+					}
+				}
+				
 				for(int i=0;i<children.getLength();i++){
 					Node node = children.item(i);
 					if(node instanceof Element && ((Element)node).getNodeName().equals(ClickPlugin.TAG_PAGE)){

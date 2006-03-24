@@ -34,6 +34,7 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.w3c.dom.Element;
 
 /**
  * 
@@ -139,9 +140,16 @@ public class AttributeEditorUtils {
 						}
 					}
 					if(text!=null && !text.getText().equals("")){
+						String className = text.getText();
+						if(superClass!=null && superClass==ClickPlugin.CLICK_PAGE_CLASS){
+							String packageName = ((Element)element.getParentNode()).getAttribute(ClickPlugin.ATTR_PACKAGE);
+							if(packageName!=null && packageName.length()!=0){
+								className = packageName + "." + className;
+							}
+						}
 						IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
 						IJavaProject project = JavaCore.create(file.getProject());
-						IType type = project.findType(text.getText());
+						IType type = project.findType(className);
 						if(type!=null){
 							JavaUI.revealInEditor(JavaUI.openInEditor(type), (IJavaElement)type);
 						} else {
@@ -149,7 +157,7 @@ public class AttributeEditorUtils {
 								// Opens the new page creation wizard
 								NewClickPageWizard wizard = new NewClickPageWizard();
 								wizard.init(PlatformUI.getWorkbench(), new StructuredSelection(project));
-								wizard.setInitialClassName(text.getText());
+								wizard.setInitialClassName(className);
 								if(textFileName!=null){
 									wizard.setInitialPageName(textFileName.getText());
 								}
@@ -166,7 +174,7 @@ public class AttributeEditorUtils {
 										wizard.setSuperClass(superClass);
 									}
 								}
-								wizard.setClassName(text.getText());
+								wizard.setClassName(className);
 								WizardDialog dialog = new WizardDialog(text.getShell(), wizard);
 								dialog.open();
 							}

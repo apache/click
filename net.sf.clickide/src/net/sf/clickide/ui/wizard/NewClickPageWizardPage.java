@@ -269,8 +269,16 @@ public class NewClickPageWizardPage extends WizardPage {
 		packageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(selection instanceof IPackageFragment){
 			packageName.setText(((IPackageFragment)selection).getElementName());
-		} else if(initPackage!=null){
+		} else if(initPackage!=null && initPackage.length()!=0){
 			packageName.setText(initPackage);
+		} else if(getProject()!=null){
+			System.out.println("プロジェクトはnullじゃないよー");
+			String pagesPackage = ClickUtils.getPagePackageName(getProject());
+			if(pagesPackage != null){
+				packageName.setText(pagesPackage);
+			} else {
+				System.out.println("パッケージはnullでしたー");
+			}
 		}
 		packageName.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
