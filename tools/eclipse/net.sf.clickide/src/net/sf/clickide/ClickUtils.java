@@ -31,6 +31,8 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 
@@ -288,6 +290,30 @@ public class ClickUtils {
 		IFile file = project.getFile(new Path(webAppRoot).append("WEB-INF/click.xml"));
 		if(file.exists()){
 			return file;
+		}
+		return null;
+	}
+	
+	public static String getPagePackageName(IProject project){
+		IStructuredModel model = null;
+		try {
+			IFile file = ClickUtils.getClickConfigFile(project);
+			if(file==null){
+				return null;
+			}
+			model = StructuredModelManager.getModelManager().getModelForRead(file);
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
+			if(list.getLength()==1){
+				Element pages = (Element)list.item(0);
+				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
+					return pages.getAttribute(ClickPlugin.ATTR_PACKAGE);
+				}
+			}
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
 		}
 		return null;
 	}
