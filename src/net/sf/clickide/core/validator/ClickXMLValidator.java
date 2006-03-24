@@ -44,9 +44,11 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  * @author Naoki Takezoe
  */
 public class ClickXMLValidator implements IValidator {
-
+	
+	private String packageName = null;
+	
 	public void cleanup(IReporter reporter) {
-		// nothing to do
+		packageName = null;
 	}
 
 	public void validate(IValidationContext context, IReporter reporter) throws ValidationException {
@@ -113,8 +115,17 @@ public class ClickXMLValidator implements IValidator {
 	private void validateAttributeValue(IReporter reporter, IFile file, 
 			String tagName, String attrName, String attrValue, int start, int length){
 		
+		// package of <pages>
+		if(tagName.equals(ClickPlugin.TAG_PAGES) && attrName.equals(ClickPlugin.ATTR_PACKAGE)){
+			packageName = attrValue;
+			return;
+		}
+		
 		// classname of <control>, <page> and <format>
 		if(tagName.equals(ClickPlugin.TAG_CONTROL) || tagName.equals(ClickPlugin.TAG_PAGE) || tagName.equals(ClickPlugin.TAG_FORMAT)){
+			if(tagName.equals(ClickPlugin.TAG_PAGE) && packageName!=null && !packageName.equals("")){
+				attrValue = packageName + "." + attrValue;
+			}
 			if(attrName.equals(ClickPlugin.ATTR_CLASSNAME)){
 				if(!existsJavaClass(file, attrValue)){
 					createErrorMessage(reporter, file, "notExist", new String[]{attrValue}, start, length);
