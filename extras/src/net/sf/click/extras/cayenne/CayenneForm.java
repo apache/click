@@ -31,6 +31,7 @@ import org.objectstyle.cayenne.access.DataContext;
 import org.objectstyle.cayenne.map.DbAttribute;
 import org.objectstyle.cayenne.map.ObjAttribute;
 import org.objectstyle.cayenne.map.ObjEntity;
+import org.objectstyle.cayenne.map.ObjRelationship;
 import org.objectstyle.cayenne.validation.ValidationException;
 import org.objectstyle.cayenne.validation.ValidationResult;
 
@@ -235,6 +236,9 @@ public class CayenneForm extends Form {
      * Return a <tt>DataObject</tt> from the form, with the form field values
      * set on the object if the copyTo parameter is true.
      *
+     * TODO: copyTo will register object, while copyTo false will create a
+     * new instance!!!
+     *
      * @param copyTo option to copy the form properties to the returned data
      *  object
      * @return the data object from the form with the form field values applied
@@ -255,7 +259,12 @@ public class CayenneForm extends Form {
                                                              id);
 
                 } else {
-                    dataObject = (DataObject) dataClass.newInstance();
+                    if (copyTo) {
+                        dataObject = getDataContext().createAndRegisterNewObject(dataClass);
+
+                    } else {
+                        dataObject = (DataObject) dataClass.newInstance();
+                    }
                 }
 
                 if (copyTo) {
@@ -451,33 +460,20 @@ public class CayenneForm extends Form {
             ObjEntity objEntity =
                 getDataContext().getEntityResolver().lookupObjEntity(dataClass);
 
-            Iterator attributes = objEntity.getAttributes().iterator();
-            while (attributes.hasNext()) {
-                ObjAttribute objAttribute = (ObjAttribute) attributes.next();
-                DbAttribute dbAttribute = objAttribute.getDbAttribute();
+            setObjEntityFieldConstrains(null, objEntity);
 
-                Field field = getField(objAttribute.getName());
-                if (field != null) {
-                    if (!field.isRequired() && dbAttribute.isMandatory()) {
-                        field.setRequired(true);
-                    }
+            Iterator relationships = objEntity.getRelationships().iterator();
+            while (relationships.hasNext()) {
+                ObjRelationship objRelationship =
+                    (ObjRelationship) relationships.next();
 
-                    int maxlength = dbAttribute.getMaxLength();
-                    if (maxlength != -1) {
-                        if (field instanceof TextField) {
-                            TextField textField = (TextField) field;
-                            if (textField.getMaxLength() == 0) {
-                                textField.setMaxLength(maxlength);
-                            }
-                        } else if (field instanceof TextArea) {
-                            TextArea textArea = (TextArea) field;
-                            if (textArea.getMaxLength() == 0) {
-                                textArea.setMaxLength(maxlength);
-                            }
-                        }
-                    }
-                }
+                String relName = objRelationship.getName();
+                ObjEntity relObjEntity =
+                    (ObjEntity) objRelationship.getTargetEntity();
+
+                setObjEntityFieldConstrains(relName, relObjEntity);
             }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -495,4 +491,50 @@ public class CayenneForm extends Form {
         return dataObject.getPersistenceState() != PersistenceState.TRANSIENT
                 && dataObject.getPersistenceState() != PersistenceState.NEW;
     }
+
+    /**
+     * Set the <tt>ObjEntity</tt> meta data constraints on the form fields.
+     *
+     * @param relationshipName the object relationship name, null if the
+     *      ObjEntity of the CayenneForm
+     * @param objEntity the ObjEntity to lookup meta data from
+     */
+    protected void setObjEntityFieldConstrains(String relationshipName,
+            ObjEntity objEntity) {
+
+        Iterator attributes = objEntity.getAttributes().iterator();
+        while (attributes.hasNext()) {
+            ObjAttribute objAttribute = (ObjAttribute) attributes.next();
+            DbAttribute dbAttribute = objAttribute.getDbAttribute();
+
+            String fieldName = objAttribute.getName();
+            if (relationshipName != null) {
+                fieldName = relationshipName + "." + fieldName;
+            }
+
+            Field field = getField(fieldName);
+
+            if (field != null) {
+                if (!field.isRequired() && dbAttribute.isMandatory()) {
+                    field.setRequired(true);
+                }
+
+                int maxlength = dbAttribute.getMaxLength();
+                if (maxlength != -1) {
+                    if (field instanceof TextField) {
+                        TextField textField = (TextField) field;
+                        if (textField.getMaxLength() == 0) {
+                            textField.setMaxLength(maxlength);
+                        }
+                    } else if (field instanceof TextArea) {
+                        TextArea textArea = (TextArea) field;
+                        if (textArea.getMaxLength() == 0) {
+                            textArea.setMaxLength(maxlength);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
