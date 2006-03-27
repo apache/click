@@ -8,7 +8,21 @@ public class Address {
     private String lineTwo;
     private String lineThree;
     private State state;
+    private boolean active;
+    private Boolean registered;
     
+    public Boolean isRegistered() {
+        return registered;
+    }
+    public void setRegistered(Boolean registered) {
+        this.registered = registered;
+    }
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
     public State getState() {
         return state;
     }

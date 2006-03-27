@@ -157,6 +157,38 @@ public class ClickUtilsTest extends TestCase {
         form.copyFrom(user, true);
         assertEquals("NSW", codeField.getValueObject());
     }
+    
+    public void testCopyToNullNestedObject() {
+        final String lineOne = "55 Dunkley Avenue";
+        final String code = "NSW";
+        final boolean active = false;
+        final Boolean registered = Boolean.TRUE;
+        
+        Form form = new Form();
+        IntegerField idField = new IntegerField("address.id");
+        form.add(idField);
+        TextField lineOneField = new TextField("address.lineOne");
+        lineOneField.setValue(lineOne);
+        form.add(lineOneField);
+        Checkbox activeField = new Checkbox("address.active");
+        activeField.setChecked(active);
+        form.add(activeField);
+        Checkbox registeredField = new Checkbox("address.registered");
+        registeredField.setValueObject(registered);
+        form.add(registeredField);
+        TextField codeField = new TextField("address.state.code");
+        codeField.setValue(code);
+        form.add(codeField);
+        
+        User user = new User();        
+        form.copyTo(user, true);
+        
+        assertNull(user.getAddress().getId());
+        assertEquals(lineOne, user.getAddress().getLineOne());        
+        assertEquals(active, user.getAddress().isActive()); 
+        assertEquals(registered, user.getAddress().isRegistered());
+        assertEquals(code, user.getAddress().getState().getCode());        
+    }
 
     public void testToLabel() {
         assertEquals("Customer", ClickUtils.toLabel("customer"));
