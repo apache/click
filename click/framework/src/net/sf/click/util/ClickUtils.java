@@ -173,6 +173,8 @@ public class ClickUtils {
                 continue;
             }
 
+            ensureObjectPathNotNull(object, field.getName());
+
             try {
                 Ognl.setValue(field.getName(),
                               ognlContext,
@@ -808,6 +810,64 @@ public class ClickUtils {
             fieldName = fieldName.substring(0, fieldName.indexOf("."));
         }
         return properties.contains(fieldName);
+    }
+
+    private static void ensureObjectPathNotNull(Object object, String path) {
+
+        final int index = path.indexOf('.');
+
+        if (index == -1) {
+            return;
+        }
+
+        try {
+            String value = path.substring(0, index);
+            String getterName = toGetterName(value);
+            String isGetterName = toIsGetterName(value);
+
+            Method foundMethod = null;
+            Method[] methods = object.getClass().getMethods();
+            for (int i = 0; i < methods.length; i++) {
+                String name = methods[i].getName();
+                if (name.equals(getterName)) {
+                    foundMethod = methods[i];
+                    break;
+
+                } else if (name.equals(isGetterName)) {
+                    foundMethod = methods[i];
+                    break;
+                }
+            }
+
+            if (foundMethod == null) {
+                String msg =
+                    "Getter method not found for path value : " + value;
+                throw new RuntimeException(msg);
+            }
+
+            Object result = foundMethod.invoke(object, null);
+
+            if (result == null) {
+                result = foundMethod.getReturnType().newInstance();
+
+                String setterName = toSetterName(value);
+                Class[] classArgs = { foundMethod.getReturnType() };
+
+                Method setterMethod =
+                    object.getClass().getMethod(setterName, classArgs);
+
+                Object[] objectArgs = { result };
+
+                setterMethod.invoke(object, objectArgs);
+            }
+
+            String remainingPath = path.substring(index + 1);
+
+            ensureObjectPathNotNull(result, remainingPath);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void log(String msg, boolean debug) {
