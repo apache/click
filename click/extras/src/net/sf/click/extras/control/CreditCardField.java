@@ -288,7 +288,7 @@ public class CreditCardField extends TextField {
     public void validate() {
         super.validate();
 
-        if (isValid() && isRequired()) {
+        if (isValid() && getValue().length() > 0) {
             String value = getValue();
             String cardType = getCardType();
 
