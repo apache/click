@@ -512,7 +512,7 @@ public class DateField extends TextField {
 
         super.validate();
 
-        if (isValid() && isRequired()) {
+        if (isValid() && getValue().length() > 0) {
             SimpleDateFormat dateFormat = getDateFormat();
             dateFormat.setLenient(false);
 
