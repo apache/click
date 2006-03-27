@@ -482,8 +482,8 @@ public class Form implements Control {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/control.css\" title=\"style\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control.js\"></script>\n";
+        "<link rel=\"stylesheet\" type=\"text/css\" href=\"$/click/control.css\" title=\"style\"/>\n"
+        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
 
     static {
         ResourceBundle bundle =
@@ -1041,13 +1041,30 @@ public class Form implements Control {
     }
 
     /**
-     * Return the named field if contained in the form, or null if not found.
+     * Return the named field if contained in the form or the forms fieldsets,
+     * or null if not found.
      *
      * @param name the name of the field
      * @return the named field if contained in the form
      */
     public Field getField(String name) {
-        return (Field) fields.get(name);
+        Field field = (Field) fields.get(name);
+
+        if (field != null) {
+            return field;
+
+        } else {
+            for (Iterator i = getFields().values().iterator(); i.hasNext();) {
+                field = (Field) i.next();
+                if (field instanceof FieldSet) {
+                    FieldSet fieldSet = (FieldSet) field;
+                    if (fieldSet.getField(name) != null) {
+                        return fieldSet.getField(name);
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     /**
@@ -1082,15 +1099,6 @@ public class Form implements Control {
             return field.getValue();
 
         } else {
-            for (Iterator i = getFields().values().iterator(); i.hasNext();) {
-                field = (Field) i.next();
-                if (field instanceof FieldSet) {
-                    FieldSet fieldSet = (FieldSet) field;
-                    if (fieldSet.getField(name) != null) {
-                        return fieldSet.getField(name).getValue();
-                    }
-                }
-            }
             return null;
         }
     }
@@ -1137,9 +1145,9 @@ public class Form implements Control {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String[] args = { getContext().getRequest().getContextPath() };
+        String path = getContext().getRequest().getContextPath();
 
-        return MessageFormat.format(HTML_IMPORTS, args);
+        return StringUtils.replace(HTML_IMPORTS, "$", path);
     }
 
     /**
