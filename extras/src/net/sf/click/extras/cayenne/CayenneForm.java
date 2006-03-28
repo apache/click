@@ -89,7 +89,6 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *   <span class="kw">private</span> CayenneForm form = <span class="kw">new</span> CayenneForm(<span class="st">"form"</span>, Organisation.<span class="kw">class</span>);
  *
  *    <span class="kw">public</span> OrganisationEdit() {
- *
  *        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="st">"Organisation Name:"</span>, 35);
  *
  *        QuerySelect type = <span class="kw">new</span> QuerySelect(<span class="st">"type"</span>, <span class="st">"Type:"</span>);

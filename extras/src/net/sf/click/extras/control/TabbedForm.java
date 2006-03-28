@@ -32,13 +32,86 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Tabbed Form control: &nbsp; &lt;form method='post'&gt;.
- * <p/>
+ *
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr>
+ * <td>
+ * <img align='middle' hspace='2'src='tabbed-form.png' title='TabbedForm'/>
+ * </td>
+ * </tr>
+ * </table>
+ *
  * This class provides a JavaScript enabled tab sheet for control. This control
  * is particularly useful for large forms as fields can be grouped into
  * fieldsets and displayed in individual tab sheets.
  * <p/>
  * The rendered field error messages are tab sheet aware so that clicking on
  * a error message link will open the appropriate tab sheet.
+ *
+ * <h4>Example</h4>
+ *
+ * An example tabbed form is provided below:
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public</span> DeliveryDetailsEditor() {
+ *
+ *     form.setBackgroundColor(<span class="st">"#F7FFAF"</span>);
+ *     form.setTabHeight(<span class="st">"210px"</span>);
+ *     form.setTabWidth(<span class="st">"420px"</span>);
+ *
+ *     // Contact tab sheet
+ *
+ *     FieldSet contactTabSheet = <span class="kw">new</span> FieldSet(<span class="st">"contactDetails"</span>);
+ *     form.addTabSheet(contactTabSheet);
+ *
+ *     contactTabSheet.add(<span class="kw">new</span> TitleSelect(<span class="st">"title"</span>));
+ *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"firstName"</span>));
+ *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>));
+ *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"surname"</span>, <span class="kw">true</span>));
+ *     contactTabSheet.add(contactNumber);
+ *     contactTabSheet.add(<span class="kw">new</span> EmailField("email"));
+ *
+ *     // Delivery tab sheet
+ *
+ *     FieldSet deliveryTabSheet = <span class="kw">new</span> FieldSet("deliveryDetails");
+ *     form.addTabSheet(deliveryTabSheet);
+ *
+ *     TextArea textArea = <span class="kw">new</span> TextArea("deliveryAddress", true);
+ *     textArea.setCols(30);
+ *     textArea.setRows(3);
+ *     deliveryTabSheet.add(textArea);
+ *
+ *     deliveryTabSheet.add(<span class="kw">new</span> DateField("deliveryDate"));
+ *
+ *     PackagingRadioGroup packaging = <span class="kw">new</span> PackagingRadioGroup("packaging");
+ *     packaging.setValue("STD");
+ *     deliveryTabSheet.add(packaging);
+ *
+ *     deliveryTabSheet.add(telephoneOnDelivery);
+ *
+ *     // Payment tab sheet
+ *
+ *     FieldSet paymentTabSheet = <span class="kw">new</span> FieldSet("paymentDetails");
+ *     form.addTabSheet(paymentTabSheet);
+ *
+ *     paymentGroup.add(<span class="kw">new</span> Radio("cod", "Cash On Delivery "));
+ *     paymentGroup.add(<span class="kw">new</span> Radio("credit", "Credit Card "));
+ *     paymentGroup.setVerticalLayout(false);
+ *     paymentTabSheet.add(paymentGroup);
+ *
+ *     paymentTabSheet.add(cardName);
+ *     paymentTabSheet.add(cardNumber);
+ *     paymentTabSheet.add(expiry);
+ *     expiry.setSize(4);
+ *     expiry.setMaxLength(4);
+ *
+ *     // Buttons
+ *
+ *     form.add(<span class="kw">new</span> Submit("ok", "   OK   ",  this, "onOkClick"));
+ *     form.add(<span class="kw">new</span> Submit("cancel", this, "onCancelClick"));
+ *
+ *     addControl(form);
+ * } </pre>
  *
  * @author Malcolm Edgar
  */
