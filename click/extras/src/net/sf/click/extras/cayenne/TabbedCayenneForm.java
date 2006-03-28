@@ -27,7 +27,16 @@ import net.sf.click.extras.control.TabbedForm;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * TODO: doco.
+ * Provides Cayenne data aware tabbed Form control: &nbsp; &lt;form method='POST'&gt;.
+ * <p/>
+ * This control provides t form capabilities to the standard CayenneForm.
+ * For more information and examples please see:
+ * <ul>
+ * <li>{@link CayenneForm}</li>
+ * <li>{@link net.sf.click.extras.control.TabbedForm}</li>
+ * </ul>
+ *
+ * <p>&nbsp;</p>
  *
  * @author Malcolm Edgar
  */
