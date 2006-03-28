@@ -2,7 +2,7 @@
 
    <!-- Project Properties -->
    <property file="./build/build.properties"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2M9.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2M12.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
    <property name="jar.hibernate" value="hibernate-3.0.5.jar"/>
@@ -464,6 +464,8 @@
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
       <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
+            todir="webapps/click-documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="webapps/click-documentation/images/tabbed-form.png"
             todir="webapps/click-documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
