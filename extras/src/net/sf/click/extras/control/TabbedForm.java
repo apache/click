@@ -59,7 +59,7 @@ import org.apache.commons.lang.StringUtils;
  *     form.setTabHeight(<span class="st">"210px"</span>);
  *     form.setTabWidth(<span class="st">"420px"</span>);
  *
- *     // Contact tab sheet
+ *     <span class="green">// Contact tab sheet</span>
  *
  *     FieldSet contactTabSheet = <span class="kw">new</span> FieldSet(<span class="st">"contactDetails"</span>);
  *     form.addTabSheet(contactTabSheet);
@@ -69,33 +69,33 @@ import org.apache.commons.lang.StringUtils;
  *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"middleNames"</span>));
  *     contactTabSheet.add(<span class="kw">new</span> TextField(<span class="st">"surname"</span>, <span class="kw">true</span>));
  *     contactTabSheet.add(contactNumber);
- *     contactTabSheet.add(<span class="kw">new</span> EmailField("email"));
+ *     contactTabSheet.add(<span class="kw">new</span> EmailField(<span class="st">"email"</span>));
  *
- *     // Delivery tab sheet
+ *     <span class="green">// Delivery tab sheet</span>
  *
  *     FieldSet deliveryTabSheet = <span class="kw">new</span> FieldSet("deliveryDetails");
  *     form.addTabSheet(deliveryTabSheet);
  *
- *     TextArea textArea = <span class="kw">new</span> TextArea("deliveryAddress", true);
+ *     TextArea textArea = <span class="kw">new</span> TextArea(<span class="st">"deliveryAddress"</span>, <span class="kw">true</span>);
  *     textArea.setCols(30);
  *     textArea.setRows(3);
  *     deliveryTabSheet.add(textArea);
  *
- *     deliveryTabSheet.add(<span class="kw">new</span> DateField("deliveryDate"));
+ *     deliveryTabSheet.add(<span class="kw">new</span> DateField(<span class="st">"deliveryDate"</span>));
  *
- *     PackagingRadioGroup packaging = <span class="kw">new</span> PackagingRadioGroup("packaging");
- *     packaging.setValue("STD");
+ *     PackagingRadioGroup packaging = <span class="kw">new</span> PackagingRadioGroup(<span class="st">"packaging"</span>);
+ *     packaging.setValue(<span class="st">"STD"</span>);
  *     deliveryTabSheet.add(packaging);
  *
  *     deliveryTabSheet.add(telephoneOnDelivery);
  *
- *     // Payment tab sheet
+ *     <span class="green">// Payment tab sheet</span>
  *
- *     FieldSet paymentTabSheet = <span class="kw">new</span> FieldSet("paymentDetails");
+ *     FieldSet paymentTabSheet = <span class="kw">new</span> FieldSet(<span class="st">"paymentDetails"</span>);
  *     form.addTabSheet(paymentTabSheet);
  *
- *     paymentGroup.add(<span class="kw">new</span> Radio("cod", "Cash On Delivery "));
- *     paymentGroup.add(<span class="kw">new</span> Radio("credit", "Credit Card "));
+ *     paymentGroup.add(<span class="kw">new</span> Radio(<span class="st">"cod"</span>, <span class="st">"Cash On Delivery"</span>));
+ *     paymentGroup.add(<span class="kw">new</span> Radio(<span class="st">"credit"</span>, <span class="st">"Credit Card"</span>));
  *     paymentGroup.setVerticalLayout(false);
  *     paymentTabSheet.add(paymentGroup);
  *
@@ -105,10 +105,10 @@ import org.apache.commons.lang.StringUtils;
  *     expiry.setSize(4);
  *     expiry.setMaxLength(4);
  *
- *     // Buttons
+ *     <span class="green">// Buttons</span>
  *
- *     form.add(<span class="kw">new</span> Submit("ok", "   OK   ",  this, "onOkClick"));
- *     form.add(<span class="kw">new</span> Submit("cancel", this, "onCancelClick"));
+ *     form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>,  <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
+ *     form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
  *
  *     addControl(form);
  * } </pre>
