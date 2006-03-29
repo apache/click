@@ -432,12 +432,13 @@ public class ActionLink implements Control {
         buffer.append("?");
         buffer.append(ACTION_LINK);
         buffer.append("=");
-        buffer.append(getName());
+        buffer.append(ClickUtils.encodeURLParameter(getContext(), getName()));
         if (value != null) {
             buffer.append("&");
             buffer.append(VALUE);
             buffer.append("=");
-            buffer.append(value);
+            buffer.append(ClickUtils.encodeURLParameter(getContext(),
+                                                        value.toString()));
         }
 
         return getContext().getResponse().encodeURL(buffer.toString());

@@ -175,12 +175,13 @@ public class ActionButton extends Button {
         url.append("?");
         url.append(ACTION_BUTTON);
         url.append("=");
-        url.append(getName());
+        url.append(ClickUtils.encodeURLParameter(getContext(), getName()));
         if (value != null) {
             url.append("&");
             url.append(VALUE);
             url.append("=");
-            url.append(value);
+            url.append(ClickUtils.encodeURLParameter(getContext(),
+                                                     value.toString()));
         }
 
         return "javascript:document.location.href='"
