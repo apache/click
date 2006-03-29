@@ -561,4 +561,25 @@ public class Context {
     public String renderTemplate(String templatePath, Map model) {
         return clickService.renderTemplate(templatePath, model);
     }
+
+    /**
+     * The charset for the application or ISO-8859-1 if none is defined.
+     * <p>
+     * The charset is defined in click.xml through the charset attribute
+     * on the click-app element.
+     * </p>
+     * <pre>
+     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+     * &ltclick-app charset="UTF-8"&gt;
+     * .....
+     * </pre>
+     * @return defined charset or ISO-8859-1
+     */
+    public String getCharset() {
+        String ret = clickService.getCharset();
+        if (ret == null) {
+            ret = "ISO-8859-1";
+        }
+        return ret;
+    }
 }

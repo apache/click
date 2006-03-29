@@ -1181,5 +1181,13 @@ public class ClickServlet extends HttpServlet {
             return stringWriter.toString();
         }
 
+        /**
+         * The charset defined in ClickApp or null if none is defined.
+         * @return charset
+         */
+        String getCharset() {
+            return clickApp.getCharset();
+        }
+
     }
 }

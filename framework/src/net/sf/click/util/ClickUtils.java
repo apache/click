@@ -25,9 +25,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +45,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.sf.click.Context;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -769,6 +772,34 @@ public class ClickUtils {
         buffer.append(property.substring(1));
 
         return buffer.toString();
+    }
+
+    /**
+     * URLEncodes the given value with the charset from
+     * {@link Context#getCharset()}. If the value is null
+     * an empty string is returned.
+     * <p>
+     * Uses {@link URLEncoder#encode(java.lang.String, java.lang.String)}
+     *  with the charset from the context.
+     * </p>
+     * @param ctxt the current context
+     * @param value the string to encode (maybe null)
+     * @return the encoded value or the empty String if value is null
+     * @throws IllegalStateException if the encoding is not supported.
+     */
+    public static String encodeURLParameter(Context ctxt, String value) {
+        if (value == null) {
+            return "";
+        }
+        String encoding = ctxt.getCharset();
+        try {
+            value = URLEncoder.encode(value, encoding);
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("The encoding [" + encoding
+                    + "] is not supported for the value [" + value + "]");
+        }
+
+        return value;
     }
 
     // -------------------------------------------------------- Private Methods
