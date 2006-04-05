@@ -434,6 +434,38 @@ public class ClickUtils {
     }
 
     /**
+     * Return an encoded URL value for the given object using the context
+     * request character encoding. This method uses
+     * {@link URLEncoder#encode(java.lang.String, java.lang.String)}
+     * internally.
+     *
+     * @param object the object value to encode as a URL string
+     * @param context the context providing the request character encoding
+     * @return an encoded URL string
+     */
+    public static String encodeUrl(Object object, Context context) {
+        if (object == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+
+        String charset = context.getRequest().getCharacterEncoding();
+
+        if (charset == null) {
+            charset = "UTF-8";
+        }
+
+        try {
+            return URLEncoder.encode(object.toString(), charset);
+
+        } catch (UnsupportedEncodingException uee) {
+            throw new RuntimeException(uee);
+        }
+    }
+
+    /**
      * Invoke the named method on the given object and return the boolean result.
      *
      * @see net.sf.click.Control#setListener(Object, String)
@@ -772,34 +804,6 @@ public class ClickUtils {
         buffer.append(property.substring(1));
 
         return buffer.toString();
-    }
-
-    /**
-     * URLEncodes the given value with the charset from
-     * {@link Context#getCharset()}. If the value is null
-     * an empty string is returned.
-     * <p>
-     * Uses {@link URLEncoder#encode(java.lang.String, java.lang.String)}
-     *  with the charset from the context.
-     * </p>
-     * @param ctxt the current context
-     * @param value the string to encode (maybe null)
-     * @return the encoded value or the empty String if value is null
-     * @throws IllegalStateException if the encoding is not supported.
-     */
-    public static String encodeURLParameter(Context ctxt, String value) {
-        if (value == null) {
-            return "";
-        }
-        String encoding = ctxt.getCharset();
-        try {
-            value = URLEncoder.encode(value, encoding);
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("The encoding [" + encoding
-                    + "] is not supported for the value [" + value + "]");
-        }
-
-        return value;
     }
 
     // -------------------------------------------------------- Private Methods
