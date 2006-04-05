@@ -272,12 +272,9 @@ public class NewClickPageWizardPage extends WizardPage {
 		} else if(initPackage!=null && initPackage.length()!=0){
 			packageName.setText(initPackage);
 		} else if(getProject()!=null){
-			System.out.println("プロジェクトはnullじゃないよー");
 			String pagesPackage = ClickUtils.getPagePackageName(getProject());
 			if(pagesPackage != null){
 				packageName.setText(pagesPackage);
-			} else {
-				System.out.println("パッケージはnullでしたー");
 			}
 		}
 		packageName.addModifyListener(new ModifyListener(){
