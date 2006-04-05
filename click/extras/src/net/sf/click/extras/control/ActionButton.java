@@ -168,24 +168,23 @@ public class ActionButton extends Button {
     public String getOnClick(Object value) {
         String uri = getContext().getRequest().getRequestURI();
 
-        StringBuffer url =
+        StringBuffer buffer =
             new StringBuffer(uri.length() + getName().length() + 40);
 
-        url.append(uri);
-        url.append("?");
-        url.append(ACTION_BUTTON);
-        url.append("=");
-        url.append(ClickUtils.encodeURLParameter(getContext(), getName()));
+        buffer.append(uri);
+        buffer.append("?");
+        buffer.append(ACTION_BUTTON);
+        buffer.append("=");
+        buffer.append(getName());
         if (value != null) {
-            url.append("&");
-            url.append(VALUE);
-            url.append("=");
-            url.append(ClickUtils.encodeURLParameter(getContext(),
-                                                     value.toString()));
+            buffer.append("&");
+            buffer.append(VALUE);
+            buffer.append("=");
+            buffer.append(ClickUtils.encodeUrl(value, getContext()));
         }
 
         return "javascript:document.location.href='"
-               + getContext().getResponse().encodeURL(url.toString())
+               + getContext().getResponse().encodeURL(buffer.toString())
                + "'";
     }
 
