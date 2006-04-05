@@ -50,7 +50,9 @@ import org.apache.commons.lang.StringUtils;
  *
  * <h4>Example</h4>
  *
- * An example tabbed form is provided below:
+ * A form delivery details editor example, with separate "Contact Detais", "Delivery Details"
+ * and "Payment Details" tab sheets, is provided below. Note how tabsheets
+ * are created with {@link FieldSet} control which are added to the form.
  *
  * <pre class="codeJava">
  * <span class="kw">public</span> DeliveryDetailsEditor() {

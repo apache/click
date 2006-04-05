@@ -128,26 +128,6 @@ public class LongField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the field Integer value, or null if value was empty or a parsing
-     * error occured.
-     *
-     * @return the field Integer value
-     */
-    public Integer getInteger() {
-        String value = getValue();
-        if (value != null && value.length() > 0) {
-            try {
-                return Integer.valueOf(value);
-
-            } catch (NumberFormatException nfe) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
      * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
@@ -162,6 +142,21 @@ public class LongField extends TextField {
             } catch (NumberFormatException nfe) {
                 return null;
             }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Return the field Integer value, or null if value was empty or a parsing
+     * error occured.
+     *
+     * @return the field Integer value
+     */
+    public Integer getInteger() {
+        Long value = getLong();
+        if (value != null) {
+            return new Integer(value.intValue());
         } else {
             return null;
         }
@@ -264,6 +259,8 @@ public class LongField extends TextField {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         String value = getValue();
 
         int length = value.length();

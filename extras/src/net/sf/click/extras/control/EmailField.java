@@ -118,6 +118,8 @@ public class EmailField extends TextField {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         super.validate();
 
         if (isValid() && getValue().length() > 0) {

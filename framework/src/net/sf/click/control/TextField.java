@@ -284,6 +284,8 @@ public class TextField extends Field {
      * </ul></blockquote>
      */
     public void validate() {
+        setError(null);
+
         String value = getValue();
 
         int length = value.length();

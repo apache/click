@@ -607,6 +607,7 @@ public class Select extends Field {
      * </ul></blockquote>
      */
     public void validate() {
+        setError(null);
 
         if (isRequired()) {
             if (isMultiple()) {

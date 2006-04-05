@@ -479,7 +479,7 @@
    </target>
    
    <target name="test-framework">
-      <javac srcdir="framework/src;framework/test;extras/src;" destdir="framework/classes" debug="true">
+      <javac srcdir="mock/src;framework/src;framework/test" destdir="framework/classes" debug="true">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
       </javac>
@@ -498,7 +498,7 @@
    </target>
    
    <target name="test-extras">
-      <javac srcdir="extras/src;extras/test" destdir="extras/classes" debug="true">
+      <javac srcdir="mock/src;extras/src;extras/test" destdir="extras/classes" debug="true">
          <classpath refid="classpath.extras"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">

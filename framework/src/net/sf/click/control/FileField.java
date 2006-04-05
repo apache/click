@@ -270,6 +270,8 @@ public class FileField extends Field {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         FileItem fileItem = getFileItem();
 
         if (fileItem != null) {

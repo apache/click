@@ -144,6 +144,8 @@ public class TelephoneField extends TextField {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         super.validate();
 
         if (isValid()) {
