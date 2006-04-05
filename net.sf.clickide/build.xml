@@ -1,0 +1,9 @@
+<project name="ClickIDE" default="docs">
+	<target name="docs">
+		<cvs cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/click" 
+			command="checkout -d click-documentation"
+			package="click/webapps/click-documentation"
+			quiet="true">
+		</cvs>
+	</target>
+</project>
