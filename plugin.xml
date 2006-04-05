@@ -46,7 +46,7 @@
      <wizard
            category="net.sf.clickide.category"
            class="net.sf.clickide.ui.wizard.NewClickPageWizard"
-           icon="icons/click.gif"
+           icon="icons/page_add.gif"
            id="net.sf.clickide.ui.wizard.NewClickPageWizard"
            name="%wizard.newPage"/>
      <category
@@ -121,6 +121,27 @@
      <toc
            file="toc.xml"
            primary="true"/>
+  </extension>
+  <extension
+        point="org.eclipse.ui.actionSets">
+     <actionSet
+           id="net.sf.clickide.ui.actionSet"
+           label="Click Action Set"
+           visible="true">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="net.sf.clickide.ui.actions.NewClickPageAction"
+              icon="icons/page_add.gif"
+              id="net.sf.clickide.ui.actions.SampleAction"
+              label="New Click Page"
+              menubarPath="clickMenu/clickGroup"
+              toolbarPath="clickGroup"
+              tooltip="New Click page"/>
+     </actionSet>
   </extension>
 
 </plugin>
