@@ -376,6 +376,8 @@ public class RadioGroup extends Field {
      * </ul></blockquote>
      */
     public void validate() {
+        setError(null);
+
         if (isRequired() && getValue().length() == 0) {
             setErrorMessage("select-error");
         }

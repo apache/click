@@ -115,16 +115,16 @@ public class FormProperties extends BorderedPage {
         buttonAlignSelect.setAttribute("onChange", "optionsForm.submit();");
         fieldSet.add(buttonAlignSelect);
 
-        buttonStyle = new TextField("buttonStyle");
-        buttonStyle.setTitle("Button td style attribute");
-        buttonStyle.setAttribute("onChange", "optionsForm.submit();");
-        fieldSet.add(buttonStyle);
-
         columnsSelect = new Select("columns");
         columnsSelect.addAll(new String[] { "1", "2", "3", "4" });
         columnsSelect.setTitle("Number of Form table columns");
         columnsSelect.setAttribute("onChange", "optionsForm.submit();");
         fieldSet.add(columnsSelect);
+
+        buttonStyle = new TextField("buttonStyle");
+        buttonStyle.setTitle("Button td style attribute");
+        buttonStyle.setAttribute("onChange", "optionsForm.submit();");
+        fieldSet.add(buttonStyle);
 
         errorsAlignSelect = new Select("errorsAlign");
         errorsAlignSelect.addAll(new String[] { "left", "center", "right" });

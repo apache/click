@@ -154,14 +154,9 @@ public class IntegerField extends TextField {
      * @return the field Long value
      */
     public Long getLong() {
-        String value = getValue();
-        if (value != null && value.length() > 0) {
-            try {
-                return Long.valueOf(value);
-
-            } catch (NumberFormatException nfe) {
-                return null;
-            }
+        Integer value = getInteger();
+        if (value != null) {
+            return new Long(value.longValue());
         } else {
             return null;
         }
@@ -264,6 +259,8 @@ public class IntegerField extends TextField {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         String value = getValue();
 
         int length = value.length();

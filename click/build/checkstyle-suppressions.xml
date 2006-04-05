@@ -12,7 +12,7 @@
               files="SessionMap.java"/>
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="465,468,471,474,477,480"/>
+              lines="469,472,475,478,481,484"/>
     <suppress checks="FileLength"
               files="Form.java"/>
     <suppress checks="LineLength"

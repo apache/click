@@ -5,6 +5,7 @@ import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
 import net.sf.click.Context;
+import net.sf.click.MockContext;
 import net.sf.click.control.Field;
 
 public class MessagesMapTest extends TestCase {

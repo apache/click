@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
+import net.sf.click.MockContext;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -32,6 +33,7 @@ public class ClickUtilsTest extends TestCase {
     public void testCopyFormToObject() {
         // set up the form
         Form form = new Form("sample");
+        form.setContext(new MockContext());
         
         IntegerField idField = new IntegerField("id");
         form.add(idField);
@@ -89,6 +91,7 @@ public class ClickUtilsTest extends TestCase {
         user.getAddress().setState(new State());
         
         form = new Form();
+        form.setContext(new MockContext());
         TextField codeField = new TextField("address.state.code");
         codeField.setValue("NSW");
         form.add(codeField);
@@ -99,6 +102,7 @@ public class ClickUtilsTest extends TestCase {
     public void testCopyObjectToForm() {
         // set up the form
         Form form = new Form("sample");
+        form.setContext(new MockContext());
         
         IntegerField idField = new IntegerField("id");
         form.add(idField);
@@ -152,6 +156,7 @@ public class ClickUtilsTest extends TestCase {
         user.getAddress().getState().setCode("NSW");
         
         form = new Form();
+        form.setContext(new MockContext());
         TextField codeField = new TextField("address.state.code");
         form.add(codeField);
         form.copyFrom(user, true);
@@ -165,6 +170,8 @@ public class ClickUtilsTest extends TestCase {
         final Boolean registered = Boolean.TRUE;
         
         Form form = new Form();
+        form.setContext(new MockContext());
+        
         IntegerField idField = new IntegerField("address.id");
         form.add(idField);
         TextField lineOneField = new TextField("address.lineOne");

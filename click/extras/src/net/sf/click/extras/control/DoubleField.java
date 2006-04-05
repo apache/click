@@ -125,9 +125,13 @@ public class DoubleField extends TextField {
         String value = getValue();
         if (value != null && value.length() > 0) {
             try {
-                return Double.valueOf(value);
+                Locale locale = getContext().getLocale();
+                NumberFormat format = NumberFormat.getNumberInstance(locale);
+                double doubleValue = format.parse(value).doubleValue();
 
-            } catch (NumberFormatException nfe) {
+                return new Double(doubleValue);
+
+            } catch (ParseException nfe) {
                 return null;
             }
         } else {
@@ -142,14 +146,9 @@ public class DoubleField extends TextField {
      * @return the field Float value
      */
     public Float getFloat() {
-        String value = getValue();
-        if (value != null && value.length() > 0) {
-            try {
-                return Float.valueOf(value);
-
-            } catch (NumberFormatException nfe) {
-                return null;
-            }
+        Double value = getDouble();
+        if (value != null) {
+            return new Float(value.floatValue());
         } else {
             return null;
         }
@@ -246,6 +245,8 @@ public class DoubleField extends TextField {
      * </blockquote>
      */
     public void validate() {
+        setError(null);
+
         String value = getValue();
 
         int length = value.length();

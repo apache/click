@@ -158,6 +158,10 @@ import org.apache.commons.lang.StringUtils;
  * Customer customer = <span class="kw">new</span> Customer();
  * form.copyTo(customer); </pre>
  *
+ * When populating an object from a form post Click will automatically create
+ * any null nested objects so their properties can be set. To do this Click
+ * uses the no-args constructor of the nested objects class.
+ *
  * <h3>HTML Imports</h3>
  *
  * The Form control automatically deploys the control CSS style sheet
