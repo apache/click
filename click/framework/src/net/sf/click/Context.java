@@ -439,6 +439,28 @@ public class Context {
     }
 
     /**
+     * Return the Click application charset or ISO-8859-1 if not is defined.
+     * <p/>
+     * The charset is defined in click.xml through the charset attribute
+     * on the click-app element.
+     *
+     * <pre class="codeConfig">
+     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+     * &lt;click-app <span class="blue">charset</span>="<span class="red">UTF-8</span>"&gt;
+     *    ..
+     * &lt;/click-app&gt; </pre>
+     *
+     * @return the application charset or ISO-8859-1 if not defined
+     */
+    public String getCharset() {
+        String charset = clickService.getCharset();
+        if (charset == null) {
+            charset = "ISO-8859-1";
+        }
+        return charset;
+    }
+
+    /**
      * Return the users Locale stored in their session, or the request Locale
      * if not available. To override the default request Locale set the users
      * Locale using the {@link #setLocale(Locale)} method.
@@ -562,24 +584,4 @@ public class Context {
         return clickService.renderTemplate(templatePath, model);
     }
 
-    /**
-     * The charset for the application or ISO-8859-1 if none is defined.
-     * <p>
-     * The charset is defined in click.xml through the charset attribute
-     * on the click-app element.
-     * </p>
-     * <pre>
-     * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
-     * &ltclick-app charset="UTF-8"&gt;
-     * .....
-     * </pre>
-     * @return defined charset or ISO-8859-1
-     */
-    public String getCharset() {
-        String ret = clickService.getCharset();
-        if (ret == null) {
-            ret = "ISO-8859-1";
-        }
-        return ret;
-    }
 }

@@ -1061,6 +1061,15 @@ public class ClickServlet extends HttpServlet {
         }
 
         /**
+         * Return the Click application charset or null if not defined.
+         *
+         * @return the application charset value
+         */
+        String getCharset() {
+            return clickApp.getCharset();
+        }
+
+        /**
          * Return the path for the given page Class.
          *
          * @param pageClass the class of the Page to lookup the path for
@@ -1179,14 +1188,6 @@ public class ClickServlet extends HttpServlet {
             }
 
             return stringWriter.toString();
-        }
-
-        /**
-         * The charset defined in ClickApp or null if none is defined.
-         * @return charset
-         */
-        String getCharset() {
-            return clickApp.getCharset();
         }
 
     }

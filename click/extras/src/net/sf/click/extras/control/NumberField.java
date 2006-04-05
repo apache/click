@@ -67,7 +67,7 @@ import java.util.Locale;
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
  *
- * @author Christian Essl, Malcolm Edgar 
+ * @author Christian Essl
  */
 public class NumberField extends TextField {
 
@@ -79,12 +79,11 @@ public class NumberField extends TextField {
     /** The minimum field value. */
     protected double minvalue = Double.MIN_VALUE;
 
-    /** The decimal pattern to use for a NumberFormat. */
-    protected String pattern;
-
     /** The NumberFormat for formatting the output. */
     protected NumberFormat numberFormat;
 
+    /** The decimal pattern to use for a NumberFormat. */
+    protected String pattern;
 
     // ----------------------------------------------------------- Constructors
 
@@ -141,58 +140,6 @@ public class NumberField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the field Number value, or null if value was empty or a parsing
-     * error occured.
-     *
-     * @return the Double object representation of the Field value
-     */
-    public Object getValueObject() {
-        return getNumber();
-    }
-
-    /**
-     * Set the Number value of the field using the given object.
-     *
-     * @param object the object value to set
-     */
-    public void setValueObject(Object object) {
-        if (object instanceof Number) {
-            setNumber((Number) object);
-        }
-    }
-
-    /**
-     * Return the field Number value, or null if value was empty or a parsing
-     * error occured.
-     *
-     * @return the field Double value
-     */
-    public Number getNumber() {
-        String value = getValue();
-        if (value != null && value.length() > 0) {
-            try {
-                Number num = getNumberFormat().parse(value);
-                return num;
-            } catch (ParseException nfe) {
-                return null;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the Number value.
-     * @param number value
-     */
-    public void setNumber(Number number) {
-        if (number != null) {
-            setValue(getNumberFormat().format(number));
-        }
-    }
-
-
-    /**
      * Return the maximum valid double field value.
      *
      * @return the maximum valid double field value
@@ -229,16 +176,6 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the <tt>Number.class</tt>.
-     *
-     * @return the <tt>Number.class</tt>
-     */
-    public Class getValueClass() {
-        return Number.class;
-    }
-
-
-    /**
      * The pattern used to format and parse the value.
      * @return returns the outputPattern.
      */
@@ -253,6 +190,37 @@ public class NumberField extends TextField {
      */
     public void setPattern(String pattern) {
         this.pattern = pattern;
+    }
+
+    /**
+     * Return the field Number value, or null if value was empty or a parsing
+     * error occured.
+     *
+     * @return the field Double value
+     */
+    public Number getNumber() {
+        String value = getValue();
+        if (value != null && value.length() > 0) {
+            try {
+                return getNumberFormat().parse(value);
+
+            } catch (ParseException nfe) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the Number value.
+     *
+     * @param number value
+     */
+    public void setNumber(Number number) {
+        if (number != null) {
+            setValue(getNumberFormat().format(number));
+        }
     }
 
     /**
@@ -284,24 +252,36 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Returns the <tt>Locale</tt> that should be used in this control.
+     * Return the field Number value, or null if value was empty or a parsing
+     * error occured.
      *
-     * @return the locale that should be used in this control
+     * @return the Double object representation of the Field value
      */
-    protected Locale getLocale() {
-        Locale locale = null;
+    public Object getValueObject() {
+        return getNumber();
+    }
 
-        if (getContext() != null) {
-            locale = getContext().getLocale();
-        } else {
-            locale = Locale.getDefault();
+    /**
+     * Set the Number value of the field using the given object.
+     *
+     * @param object the object value to set
+     */
+    public void setValueObject(Object object) {
+        if (object instanceof Number) {
+            setNumber((Number) object);
         }
+    }
 
-        return locale;
+    /**
+     * Return the <tt>Number.class</tt>.
+     *
+     * @return the <tt>Number.class</tt>
+     */
+    public Class getValueClass() {
+        return Number.class;
     }
 
     // --------------------------------------------------------- Public Methods
-
 
     /**
      * Validates the NumberField request submission.
@@ -332,11 +312,9 @@ public class NumberField extends TextField {
         if (length > 0) {
             try {
                 NumberFormat format = getNumberFormat();
-                Number num = format.parse(value);
+                Number number = format.parse(value);
 
-                this.setValue(format.format(num));
-
-                double doubleValue = num.doubleValue();
+                double doubleValue = number.doubleValue();
 
                 if (doubleValue > maxvalue) {
                     setErrorMessage("number-maxvalue-error",
@@ -354,6 +332,25 @@ public class NumberField extends TextField {
                 setErrorMessage("field-required-error");
             }
         }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Returns the <tt>Locale</tt> that should be used in this control.
+     *
+     * @return the locale that should be used in this control
+     */
+    protected Locale getLocale() {
+        Locale locale = null;
+
+        if (getContext() != null) {
+            locale = getContext().getLocale();
+        } else {
+            locale = Locale.getDefault();
+        }
+
+        return locale;
     }
 
 }
