@@ -1,8 +1,10 @@
 <project name="ClickIDE" default="docs">
 	<target name="docs">
+		<delete dir="docs" />
 		<cvs cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/click" 
-			command="checkout -d click-documentation"
+			command="export -d docs"
 			package="click/webapps/click-documentation"
+			tag="HEAD"
 			quiet="true">
 		</cvs>
 	</target>
