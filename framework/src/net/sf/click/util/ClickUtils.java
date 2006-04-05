@@ -454,7 +454,7 @@ public class ClickUtils {
         String charset = context.getRequest().getCharacterEncoding();
 
         if (charset == null) {
-            charset = "UTF-8";
+            charset = "";
         }
 
         try {
