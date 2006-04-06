@@ -38,6 +38,7 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
+import net.sf.click.util.Format;
 import net.sf.click.util.PageImports;
 import net.sf.click.util.SessionMap;
 
@@ -412,7 +413,7 @@ public class ClickServlet extends HttpServlet {
 
             errorPage.setContext(context);
             errorPage.setError(exception);
-            errorPage.setFormat(clickApp.getPageFormat(ClickApp.ERROR_PATH));
+            errorPage.setFormat(clickApp.getFormat(context.getLocale()));
             errorPage.setHeaders(clickApp.getPageHeaders(ClickApp.ERROR_PATH));
             errorPage.setMode(clickApp.getModeValue());
             errorPage.setPageClass(pageClass);
@@ -655,7 +656,10 @@ public class ClickServlet extends HttpServlet {
 
         if (request.getAttribute(FORWARD_PAGE) != null) {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
+
             forwardPage.setContext(context);
+            forwardPage.setFormat(clickApp.getFormat(context.getLocale()));
+
             request.removeAttribute(FORWARD_PAGE);
 
             return forwardPage;
@@ -671,6 +675,7 @@ public class ClickServlet extends HttpServlet {
         Page page = initPage(path, pageClass);
 
         page.setContext(context);
+        page.setFormat(clickApp.getFormat(context.getLocale()));
 
         return page;
     }
@@ -688,9 +693,6 @@ public class ClickServlet extends HttpServlet {
         try {
             Page newPage = newPageInstance(path, pageClass);
 
-            if (newPage.getFormat() == null) {
-                newPage.setFormat(clickApp.getPageFormat(path));
-            }
             if (newPage.getHeaders() == null) {
                 newPage.setHeaders(clickApp.getPageHeaders(path));
             }
@@ -792,7 +794,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        Object format = page.getFormat();
+        Format format = page.getFormat();
         if (format != null) {
            pop = context.put("format", format);
             if (pop != null) {

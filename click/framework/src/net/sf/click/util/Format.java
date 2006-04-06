@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -53,24 +54,53 @@ import org.apache.commons.lang.StringUtils;
  * </td></tr>
  * </table>
  *
- * The format object class can defined in the "click.xml" configuration file
+ * The format class can defined in the "click.xml" configuration file
  * using the syntax:
  *
  * <pre class="codeConfig">
  * &lt;format classname="<span class="st">com.mycorp.utils.Format</span>"/&gt; </pre>
  *
- * The format class must provide a no-args public constructor . After a Page is
+ * The format subclass must provide a public constructor which takes a single
+ * Locale object argument. After a Page is
  * created its <a href="../Page.html#format">format</a> property is set.
  * The ClickServlet will then add this property to the Velocity Context.
  * <p/>
- * When designing a format object ensure it is light weight, as a new
- * format object will be created for every new Page.
+ * When subclassing Format ensure it is light weight object, as a new format
+ * object will be created for every new Page.
  *
  * @see PageImports
  *
  * @author Malcolm Edgar
  */
 public class Format {
+
+    /** The request context locale. */
+    protected Locale locale;
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new Format object with the given locale.
+     *
+     * @param locale the locale to use to format objects
+     */
+    public Format(Locale locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("Null locale parameter");
+        }
+        this.locale = locale;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the locale used to format objects.
+     *
+     * @return the locale used to format objects
+     */
+    public Locale getLocale() {
+        return locale;
+    }
 
     /**
      * Returns the format empty string value: &nbsp; <tt>""</tt>.
@@ -101,7 +131,7 @@ public class Format {
      */
     public String currency(Number number) {
         if (number != null) {
-            NumberFormat format = NumberFormat.getCurrencyInstance();
+            NumberFormat format = NumberFormat.getCurrencyInstance(getLocale());
 
             return format.format(number.doubleValue());
 
@@ -129,7 +159,8 @@ public class Format {
                 throw new IllegalArgumentException("Null pattern parameter");
             }
 
-            SimpleDateFormat format = new SimpleDateFormat(pattern);
+            SimpleDateFormat format =
+                new SimpleDateFormat(pattern, getLocale());
 
             return format.format(date);
 
@@ -150,7 +181,8 @@ public class Format {
      */
     public String date(Date date) {
         if (date != null) {
-            DateFormat format = DateFormat.getDateInstance();
+            DateFormat format =
+                DateFormat.getDateInstance(DateFormat.DEFAULT, getLocale());
 
             return format.format(date);
 
@@ -435,7 +467,7 @@ public class Format {
      */
     public String percentage(Number number) {
         if (number != null) {
-            NumberFormat format = NumberFormat.getPercentInstance();
+            NumberFormat format = NumberFormat.getPercentInstance(getLocale());
 
             return format.format(number.doubleValue());
 
@@ -456,7 +488,8 @@ public class Format {
      */
     public String time(Date date) {
         if (date != null) {
-            DateFormat format = DateFormat.getTimeInstance();
+            DateFormat format =
+                DateFormat.getTimeInstance(DateFormat.DEFAULT, getLocale());
 
             return format.format(date);
 

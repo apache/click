@@ -33,7 +33,7 @@ up to a 1.0 release in the Q2 2006.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 0.19 - 26th March 2006</dt>
+  <dt>Version 0.19 - 9th April 2006</dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:0.5em;"> New developer
     <a target="blank" href="http://sourceforge.net/users/chrisichris/">Christian Essl</a>
@@ -99,10 +99,18 @@ up to a 1.0 release in the Q2 2006.
         configuration options and documentation.
       </li>
       <li class="change">
+        Improved <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+        class now uses request context Locale. 
+        Please note this change requires modification to Format subclass
+        constructors.        
+        This issue was raised by Christian Essl
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-79">79</a>].
+      </li>
+      <li class="change">
         Updated Velocity library to latest 1.5-dev build.
       </li>
       <li class="change">
-       Updated Cayenne library to version 1.2M12.
+        Updated Cayenne library to version 1.2M12.
        </li>
       <li class="change">
         Fixed <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
@@ -121,12 +129,12 @@ up to a 1.0 release in the Q2 2006.
       </li>
       <li class="change">
         Fixed ActionLink parameter encoding bug. This issue was idendified by
-        ?? and fixed by Christian Essl
+        Steven Van Hoof and fixed by Christian Essl
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-78">78</a>].
       </li>
       <li class="change">
-        Example <tt>click-blank</tt> and <tt>click-cayenne</tt> applications
-        removed from main distribution. These examples will be released as separate 
+        Removed example <tt>click-blank</tt> and <tt>click-cayenne</tt> applications
+        from main distribution. These examples will be released as separate 
         packages under sourceforge.
       </li>
       <li class="change">Updated documentation and examples.</li> 

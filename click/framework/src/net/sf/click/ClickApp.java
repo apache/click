@@ -18,6 +18,7 @@ package net.sf.click;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -37,6 +39,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.Format;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
@@ -306,6 +309,31 @@ class ClickApp implements EntityResolver {
     // -------------------------------------------------------- Package Methods
 
     /**
+     * Return a new format object for the given locale.
+     *
+     * @param locale the request locale
+     * @return a new format object for request locale
+     */
+    Format getFormat(Locale locale) {
+        if (locale == null) {
+            throw new IllegalArgumentException("null locale parameter");
+        }
+
+        try {
+            Class[] classArgs = { Locale.class };
+
+            Constructor constructor = formatClass.getConstructor(classArgs);
+
+            Object[] objectArgs = { locale };
+
+            return (Format) constructor.newInstance(objectArgs);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Return the application logger.
      *
      * @return the application logger.
@@ -385,10 +413,7 @@ class ClickApp implements EntityResolver {
                     pageClass = getPageClass(path, pagesPackage);
 
                     if (pageClass != null) {
-                        page = new PageElm(path,
-                                           pageClass,
-                                           commonHeaders,
-                                           formatClass);
+                        page = new PageElm(path, pageClass, commonHeaders);
 
                         pageByPathMap.put(page.getPath(), page);
 
@@ -421,32 +446,6 @@ class ClickApp implements EntityResolver {
                 "Page class resolves to multiple paths: " + pageClass.getName();
             throw new IllegalArgumentException(msg);
 
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Return a new format object for page of the given path.
-     *
-     * @param path the path of the page
-     * @return a new format object for page of the given path
-     */
-    Object getPageFormat(String path) {
-        PageElm page = (PageElm) pageByPathMap.get(path);
-        if (page == null) {
-            String jspPath = StringUtils.replace(path, ".htm", ".jsp");
-            page = (PageElm) pageByPathMap.get(jspPath);
-        }
-
-        if (page != null) {
-            try {
-                return page.getFormatClass().newInstance();
-            } catch (IllegalAccessException iae) {
-                throw new RuntimeException(iae);
-            } catch (InstantiationException ie) {
-                throw new RuntimeException(ie);
-            }
         } else {
             return null;
         }
@@ -680,18 +679,14 @@ class ClickApp implements EntityResolver {
 
         if (!pageByPathMap.containsKey(ERROR_PATH)) {
             ClickApp.PageElm page =
-                new ClickApp.PageElm("net.sf.click.util.ErrorPage",
-                                     ERROR_PATH,
-                                     formatClass);
+                new ClickApp.PageElm("net.sf.click.util.ErrorPage", ERROR_PATH);
 
             pageByPathMap.put(ERROR_PATH, page);
         }
 
         if (!pageByPathMap.containsKey(NOT_FOUND_PATH)) {
             ClickApp.PageElm page =
-                new ClickApp.PageElm("net.sf.click.Page",
-                                     NOT_FOUND_PATH,
-                                     formatClass);
+                new ClickApp.PageElm("net.sf.click.Page", NOT_FOUND_PATH);
 
             pageByPathMap.put(NOT_FOUND_PATH, page);
         }
@@ -787,10 +782,8 @@ class ClickApp implements EntityResolver {
         for (int i = 0; i < pageList.size(); i++) {
             Element pageElm = (Element) pageList.get(i);
 
-            ClickApp.PageElm page = new ClickApp.PageElm(pageElm,
-                    pagesPackage,
-                    commonHeaders,
-                    formatClass);
+            ClickApp.PageElm page =
+                new ClickApp.PageElm(pageElm, pagesPackage, commonHeaders);
 
             pageByPathMap.put(page.getPath(), page);
 
@@ -827,8 +820,7 @@ class ClickApp implements EntityResolver {
                     if (pageClass != null) {
                         ClickApp.PageElm page = new ClickApp.PageElm(pagePath,
                                 pageClass,
-                                commonHeaders,
-                                formatClass);
+                                commonHeaders);
 
                         pageByPathMap.put(page.getPath(), page);
 
@@ -1152,19 +1144,14 @@ class ClickApp implements EntityResolver {
 
     private static class PageElm {
 
-        private final Class formatClass;
-
         private final Map headers;
 
         private final Class pageClass;
 
         private final String path;
 
-        private PageElm(Element element, String pagesPackage, Map commonHeaders,
-                Class formatClass) throws ClassNotFoundException {
-
-            // Set formatClass
-            this.formatClass = formatClass;
+        private PageElm(Element element, String pagesPackage, Map commonHeaders)
+            throws ClassNotFoundException {
 
             // Set headers
             Map aggregationMap = new HashMap(commonHeaders);
@@ -1200,26 +1187,19 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        private PageElm(String path, Class pageClass, Map commonHeaders,
-                Class formatClass) {
+        private PageElm(String path, Class pageClass, Map commonHeaders) {
 
-            this.formatClass = formatClass;
             headers = Collections.unmodifiableMap(commonHeaders);
             this.pageClass = pageClass;
             this.path = path;
         }
 
-        private PageElm(String classname, String path, Class formatClass)
+        private PageElm(String classname, String path)
             throws ClassNotFoundException {
 
-            this.formatClass = formatClass;
             this.headers = Collections.EMPTY_MAP;
             pageClass = Class.forName(classname);
             this.path = path;
-        }
-
-        private Class getFormatClass() {
-            return formatClass;
         }
 
         private Map getHeaders() {
