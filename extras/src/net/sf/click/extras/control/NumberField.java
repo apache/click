@@ -188,34 +188,30 @@ public class NumberField extends TextField {
     }
 
     /**
-     * The pattern used to format and parse the value.
-     * @return returns the outputPattern or null if none is set.
+     * Return a Map of localized messages for the Field (uses DoubleField).
+     *
+     * @return a Map of localized messages for the Field
+     * @throws IllegalStateException if the context for the Field has not be set
      */
-    public String getPattern() {
-        return pattern;
-    }
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                messages = new MessagesMap(DoubleField.class.getName(),
+                                           getContext());
 
-    /**
-     * The pattern used to format and parse the value. By default it is
-     * null and the pattern of the current locale is used. If set
-     * the pattern will be also applied to an already set NumberFormat.
-     * @param pattern the pattern to use.
-     */
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
-
-        if (pattern != null) {
-            if (numberFormat instanceof DecimalFormat) {
-                ((DecimalFormat) numberFormat).applyPattern(pattern);
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
             }
         }
+        return messages;
     }
 
     /**
      * Return the field Number value, or null if value was empty or a parsing
      * error occured.
      *
-     * @return the field Double value
+     * @return the field Number value
      */
     public Number getNumber() {
         String value = getValue();
@@ -234,7 +230,7 @@ public class NumberField extends TextField {
     /**
      * Set the Number value.
      *
-     * @param number value
+     * @param number the number value
      */
     public void setNumber(Number number) {
         if (number != null) {
@@ -270,13 +266,38 @@ public class NumberField extends TextField {
      * is set. If the {@link #getPattern()} is set than
      * the pattern will be applied to the new Format if it
      * is a DecimalFormat.
-     * @param format NumberFormat
+     *
+     * @param format the number format
      */
     public void setNumberFormat(NumberFormat format) {
         this.numberFormat = format;
         if (format instanceof DecimalFormat
            && getPattern() != null) {
             ((DecimalFormat) format).applyPattern(getPattern());
+        }
+    }
+
+    /**
+     * The pattern used to format and parse the value.
+     * @return returns the outputPattern or null if none is set.
+     */
+    public String getPattern() {
+        return pattern;
+    }
+
+    /**
+     * The pattern used to format and parse the value. By default it is
+     * null and the pattern of the current locale is used. If set
+     * the pattern will be also applied to an already set NumberFormat.
+     * @param pattern the pattern to use.
+     */
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+
+        if (pattern != null) {
+            if (numberFormat instanceof DecimalFormat) {
+                ((DecimalFormat) numberFormat).applyPattern(pattern);
+            }
         }
     }
 
@@ -296,8 +317,8 @@ public class NumberField extends TextField {
      * @param object the object value to set
      */
     public void setValueObject(Object object) {
-        if (object instanceof Number) {
-            setNumber((Number) object);
+        if (object != null) {
+            value = object.toString();
         }
     }
 
@@ -310,16 +331,7 @@ public class NumberField extends TextField {
         return Number.class;
     }
 
-    /** The String the user has entered.
-     * @see net.sf.click.control.Field#getRequestValue()
-     * @return the string entered into the user field or an empty string
-     */
-    public String getRequestValue() {
-        return super.getRequestValue();
-    }
-
     // --------------------------------------------------------- Public Methods
-
 
     /**
      * Validates the NumberField request submission. If the value entered
@@ -357,7 +369,7 @@ public class NumberField extends TextField {
 
                 double doubleValue = number.doubleValue();
 
-                this.value = format.format(number);
+                String formattedValue = format.format(number);
 
                 if (doubleValue > maxvalue) {
                     setErrorMessage("number-maxvalue-error",
@@ -366,7 +378,10 @@ public class NumberField extends TextField {
                 } else if (doubleValue < minvalue) {
                     setErrorMessage("number-minvalue-error",
                                     getNumberFormat().format(minvalue));
+                } else {
+                    setValue(formattedValue);
                 }
+
             } catch (ParseException pe) {
                 setError(getMessage("double-format-error", getErrorLabel()));
             }
@@ -399,23 +414,17 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return a Map of localized messages for the Field (uses DoubleField).
+     * Return the field's value from the request.
      *
-     * @return a Map of localized messages for the Field
-     * @throws IllegalStateException if the context for the Field has not be set
+     * @return the field's value from the request
      */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages = new MessagesMap(DoubleField.class.getName()
-                                            , getContext());
-
-            } else {
-                String msg = "Cannot initialize messages as context not set";
-                throw new IllegalStateException(msg);
-            }
+    protected String getRequestValue() {
+        String value = getContext().getRequestParameter(getName());
+        if (value != null) {
+            return value.trim();
+        } else {
+            return "";
         }
-        return messages;
     }
 
 }
