@@ -20,8 +20,10 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 
 import net.sf.click.control.TextField;
+import net.sf.click.util.MessagesMap;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Provides a Number Field control: &nbsp; &lt;input type='text'&gt;.
@@ -39,14 +41,24 @@ import java.util.Locale;
  * {@link #setNumberFormat(NumberFormat)} or alternatively the pattern of
  * the NumberFormat can be set with {@link #setPattern(String)}.
  * <p/>
- * NumberFormat parses the input to the Number which matches the format pattern. Ie if
+ * When NumberField is validated and the input string can be parsed by the
+ * NumberFormat than the string value of this field
+ * (@link net.sf.click.control.Field#getValue()} is set to the formatted value
+ * of the input. Ie if
  * you define an integer-pattern of #,##0 and the users enters 2.54 than the
  * resulting Number is 3. For all such cases the NumberFormat does recognize
  * the input as valid and <b>does not mark the NumberField as invalid</b>.
+ * To get the exact string the user entered either turn validation
+ * off or call {@link #getRequestValue()}.
+ * <p/>
+ * When the Number is set through {@link #setNumber(Number)} the value of the field
+ * is also set to the formated number. The number returned from
+ * {@link #getNumber()} is than the formated number. It is not the orginal Number
+ * passed in. To circumvent formatting use setValue().
  * <p/>
  * NumberField adds the attribute style="text-align:right", so that the number is
  * by default aligned right in the input-field. You can replace this style by
- * setting the style-attribute to something else.
+ * setting the style-attribute to something else (or null).
  * <p/>
  * The NumberField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
@@ -177,19 +189,26 @@ public class NumberField extends TextField {
 
     /**
      * The pattern used to format and parse the value.
-     * @return returns the outputPattern.
+     * @return returns the outputPattern or null if none is set.
      */
     public String getPattern() {
         return pattern;
     }
 
-    /** The pattern used to format and parse the value. By default it is
-     * null and the pattern of the current locale is used. The pattern
-     * is only used if not NumberFormat is set explicitly.
+    /**
+     * The pattern used to format and parse the value. By default it is
+     * null and the pattern of the current locale is used. If set
+     * the pattern will be also applied to an already set NumberFormat.
      * @param pattern the pattern to use.
      */
     public void setPattern(String pattern) {
         this.pattern = pattern;
+
+        if (pattern != null) {
+            if (numberFormat instanceof DecimalFormat) {
+                ((DecimalFormat) numberFormat).applyPattern(pattern);
+            }
+        }
     }
 
     /**
@@ -228,6 +247,10 @@ public class NumberField extends TextField {
      * If no NumberFormat has been set before, the NumberFormat for the
      * requests locale is used. If this format is a DecimalNumberFormat the
      * {@link #pattern} is applied to it.
+     * <p/>
+     * This method is used through-out this class to obtain the NumberFormat.
+     * By overriding this method full control is given onto which
+     * NumberFormat is used for formatting, parsing and validating.
      *
      * @return the NumberFormat to format/parse the field's value
      */
@@ -244,11 +267,17 @@ public class NumberField extends TextField {
     /**
      * The NumberFormat for this TextField. By default the format
      * of the request locale is used and the {@link #pattern}
-     * is set.
+     * is set. If the {@link #getPattern()} is set than
+     * the pattern will be applied to the new Format if it
+     * is a DecimalFormat.
      * @param format NumberFormat
      */
     public void setNumberFormat(NumberFormat format) {
         this.numberFormat = format;
+        if (format instanceof DecimalFormat
+           && getPattern() != null) {
+            ((DecimalFormat) format).applyPattern(getPattern());
+        }
     }
 
     /**
@@ -281,10 +310,22 @@ public class NumberField extends TextField {
         return Number.class;
     }
 
+    /** The String the user has entered.
+     * @see net.sf.click.control.Field#getRequestValue()
+     * @return the string entered into the user field or an empty string
+     */
+    public String getRequestValue() {
+        return super.getRequestValue();
+    }
+
     // --------------------------------------------------------- Public Methods
 
+
     /**
-     * Validates the NumberField request submission.
+     * Validates the NumberField request submission. If the value entered
+     * by the user can be parsed by the NumberFormat the string value
+     * of this Field ({@link net.sf.click.control.Field#getValue()}) is
+     * set to the formatted value of the user input.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle:
@@ -316,6 +357,8 @@ public class NumberField extends TextField {
 
                 double doubleValue = number.doubleValue();
 
+                this.value = format.format(number);
+
                 if (doubleValue > maxvalue) {
                     setErrorMessage("number-maxvalue-error",
                                     getNumberFormat().format(maxvalue));
@@ -338,8 +381,10 @@ public class NumberField extends TextField {
 
     /**
      * Returns the <tt>Locale</tt> that should be used in this control.
+     * By default returns the Locale of the current Context.
      *
      * @return the locale that should be used in this control
+     * @throws IllegalStateException if not Context is set
      */
     protected Locale getLocale() {
         Locale locale = null;
@@ -347,10 +392,30 @@ public class NumberField extends TextField {
         if (getContext() != null) {
             locale = getContext().getLocale();
         } else {
-            locale = Locale.getDefault();
+            throw new IllegalStateException("No context to get Locale from");
         }
 
         return locale;
+    }
+
+    /**
+     * Return a Map of localized messages for the Field (uses DoubleField).
+     *
+     * @return a Map of localized messages for the Field
+     * @throws IllegalStateException if the context for the Field has not be set
+     */
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                messages = new MessagesMap(DoubleField.class.getName()
+                                            , getContext());
+
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
 }
