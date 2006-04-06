@@ -26,7 +26,6 @@ public class NumberFieldTest extends TestCase{
         MockRequest req = new MockRequest(Locale.US);
         MockContext ctxt = new MockContext(req);
         Number decNum = new Float(2.56f);
-        Number intNum = new Integer(3);
         
         NumberField engF = new NumberField("en");
         assertTrue(engF.getValueClass() == Number.class);
@@ -174,7 +173,7 @@ public class NumberFieldTest extends TestCase{
         engF.setValue("123,45");
         engF.validate();
         assertFalse(engF.isValid());
-        assertEquals("123",engF.getValue());
+        assertEquals("123,45",engF.getValue());
         
         engF.setValue("-12");
         engF.validate();
@@ -198,10 +197,7 @@ public class NumberFieldTest extends TestCase{
         
         engF.setValue("some text");
         assertFalse(engF.isValid());
-        assertEquals("some text",engF.getValue());
-        
+        assertEquals("some text",engF.getValue());    
     }
     
-    
-
 }
