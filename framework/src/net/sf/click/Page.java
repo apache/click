@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.click.util.Format;
 import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -68,7 +69,7 @@ public class Page {
     protected List controls;
 
     /** The Velocity template formatter object. */
-    protected Object format;
+    protected Format format;
 
     /** The forward path. */
     protected String forward;
@@ -205,7 +206,7 @@ public class Page {
      *
      * @return the Velocity template formatter object
      */
-    public Object getFormat() {
+    public Format getFormat() {
         return format;
     }
 
@@ -214,7 +215,7 @@ public class Page {
      *
      * @param value the Velocity template formatter object.
      */
-    public void setFormat(Object value) {
+    public void setFormat(Format value) {
         format = value;
     }
 
