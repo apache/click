@@ -140,8 +140,8 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Package Members
 
-    /** The format class. */
-    private Class formatClass;
+    /** The format constructor. */
+    private Constructor formatConstructor;
 
     /** The charcter encoding of this application. */
     private String charset;
@@ -320,13 +320,9 @@ class ClickApp implements EntityResolver {
         }
 
         try {
-            Class[] classArgs = { Locale.class };
-
-            Constructor constructor = formatClass.getConstructor(classArgs);
-
             Object[] objectArgs = { locale };
 
-            return (Format) constructor.newInstance(objectArgs);
+            return (Format) formatConstructor.newInstance(objectArgs);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -697,6 +693,8 @@ class ClickApp implements EntityResolver {
 
         Element formatElm = getChild(rootElm, "format");
 
+        Class formatClass = null;
+
         if (formatElm != null) {
             String classname = formatElm.getAttribute("classname");
 
@@ -709,6 +707,15 @@ class ClickApp implements EntityResolver {
 
         } else {
             formatClass = net.sf.click.util.Format.class;
+        }
+
+        try {
+            Class[] classArgs = { Locale.class };
+
+            formatConstructor = formatClass.getConstructor(classArgs);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

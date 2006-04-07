@@ -155,8 +155,8 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  *        <span class="kw">return true</span>;
  *    } </pre>
  *
- * <b>Please Note</b> if you are using this pattern with objects already saved, take
- * care to ensure that the form submission is valid before calling
+ * <b>Please Note</b> if you are using this pattern with objects already saved,
+ * take care to ensure that the form submission is valid before calling
  * {@link #getDataObject()} as this method changes the DataObject's properties
  * using the submitted form field values.
  * <p/>
@@ -166,6 +166,9 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  * In these exceptional situations the object should be removed from the cache
  * DataContext using <tt>invalidateObjects()</tt> method or by reloading the
  * object from the database.
+ * <p/>
+ * <b>Alternatively</b> use the {@link DataContextFilter} which will
+ * automatically rollback any uncommitted changes at the end of each request.
  *
  * @author Malcolm Edgar
  * @author Andrus Adamchik

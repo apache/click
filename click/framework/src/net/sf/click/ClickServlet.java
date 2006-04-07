@@ -413,7 +413,9 @@ public class ClickServlet extends HttpServlet {
 
             errorPage.setContext(context);
             errorPage.setError(exception);
-            errorPage.setFormat(clickApp.getFormat(context.getLocale()));
+            if (errorPage.getFormat() == null) {
+                errorPage.setFormat(clickApp.getFormat(context.getLocale()));
+            }
             errorPage.setHeaders(clickApp.getPageHeaders(ClickApp.ERROR_PATH));
             errorPage.setMode(clickApp.getModeValue());
             errorPage.setPageClass(pageClass);
@@ -658,7 +660,10 @@ public class ClickServlet extends HttpServlet {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
 
             forwardPage.setContext(context);
-            forwardPage.setFormat(clickApp.getFormat(context.getLocale()));
+
+            if (forwardPage.getFormat() == null) {
+                forwardPage.setFormat(clickApp.getFormat(context.getLocale()));
+            }
 
             request.removeAttribute(FORWARD_PAGE);
 
@@ -675,7 +680,10 @@ public class ClickServlet extends HttpServlet {
         Page page = initPage(path, pageClass);
 
         page.setContext(context);
-        page.setFormat(clickApp.getFormat(context.getLocale()));
+
+        if (page.getFormat() == null) {
+            page.setFormat(clickApp.getFormat(context.getLocale()));
+        }
 
         return page;
     }
