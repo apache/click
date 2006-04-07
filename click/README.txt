@@ -1,6 +1,6 @@
 
-Welcome to the Click
-====================
+Welcome to Click
+================
 
 Click is a J2EE web application framework featuring a Page
 and Component oriented design. Click is an open source project 
