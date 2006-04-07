@@ -10,11 +10,6 @@ developed by Sun Microsystems Inc (http://www.sun.com).
 Please note the Java Servlet API is NOT included in the 
 Click runtime library.
 
-This product includes the Cayenne ORM library,
-developed by ObjectStyle (http://objectstyle.org).
-Please note this library is NOT included in the
-Click runtime library.
-
 This product includes the prototype JavaScript library,
 developed by Sam Stephenson (http://prototype.conio.net).
 Please note this library is NOT included in the
