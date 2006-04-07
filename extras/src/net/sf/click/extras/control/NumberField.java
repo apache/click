@@ -32,28 +32,30 @@ import java.util.Map;
  * <tr>
  * <td>Number Field</td>
  * <td><input type='text' style="text-align:right"
- *      value='3.541' title='NumberField Control'/></td>
+ *      value='127,500.00' title='NumberField Control'/></td>
  * </tr>
  * </table>
  *
- * NumberField uses a NumberFormat to format, parse and validate the text
- * input. The NumberFormat can either directly be set through
- * {@link #setNumberFormat(NumberFormat)} or alternatively the pattern of
- * the NumberFormat can be set with {@link #setPattern(String)}.
+ * NumberField uses a {@link NumberFormat} to format, parse and validate the
+ * input text. The number format can either directly be set through
+ * {@link #setNumberFormat(NumberFormat)} or by setting the number format
+ * pattern with {@link #setPattern(String)}.
  * <p/>
  * When NumberField is validated and the input string can be parsed by the
- * NumberFormat than the string value of this field
+ * NumberFormat then the string value of this field
  * (@link net.sf.click.control.Field#getValue()} is set to the formatted value
- * of the input. Ie if
- * you define an integer-pattern of #,##0 and the users enters 2.54 than the
- * resulting Number is 3. For all such cases the NumberFormat does recognize
- * the input as valid and <b>does not mark the NumberField as invalid</b>.
+ * of the input.
+ * <p/>
+ * For example if you define an integer-pattern of <tt>"#,##0"</tt> and the
+ * users enters "2.54" then the resulting Number is 3. For all such cases the
+ * NumberFormat does recognize the input as valid and does <b>not</b> mark the
+ * field as invalid.
  * To get the exact string the user entered either turn validation
  * off or call {@link #getRequestValue()}.
  * <p/>
  * When the Number is set through {@link #setNumber(Number)} the value of the field
  * is also set to the formated number. The number returned from
- * {@link #getNumber()} is than the formated number. It is not the orginal Number
+ * {@link #getNumber()} is then the formatted number. It is not the orginal Number
  * passed in. To circumvent formatting use setValue().
  * <p/>
  * NumberField adds the attribute style="text-align:right", so that the number is
@@ -261,11 +263,11 @@ public class NumberField extends TextField {
     }
 
     /**
-     * The NumberFormat for this TextField. By default the format
-     * of the request locale is used and the {@link #pattern}
-     * is set. If the {@link #getPattern()} is set than
-     * the pattern will be applied to the new Format if it
-     * is a DecimalFormat.
+     * Set the NumberFormat for this field.
+     * <p/>
+     * By default the format of the request locale is used and the
+     * {@link #pattern} is set. If the {@link #getPattern()} is set then
+     * the pattern will be applied to the new Format if it a DecimalFormat.
      *
      * @param format the number format
      */
@@ -278,18 +280,22 @@ public class NumberField extends TextField {
     }
 
     /**
-     * The pattern used to format and parse the value.
-     * @return returns the outputPattern or null if none is set.
+     * Return the number pattern used for formatting and parsing.
+     *
+     * @return the number pattern used for formatting and parsing
      */
     public String getPattern() {
         return pattern;
     }
 
     /**
-     * The pattern used to format and parse the value. By default it is
-     * null and the pattern of the current locale is used. If set
-     * the pattern will be also applied to an already set NumberFormat.
-     * @param pattern the pattern to use.
+     * Set the number pattern used for formatting and parsing.
+     * <p/>
+     * By default the pattern is null and the default number pattern of the
+     * context locale is used. If set the pattern will be also applied to an
+     * already set NumberFormat.
+     *
+     * @param pattern the pattern used for formatting and parsing
      */
     public void setPattern(String pattern) {
         this.pattern = pattern;
@@ -299,6 +305,15 @@ public class NumberField extends TextField {
                 ((DecimalFormat) numberFormat).applyPattern(pattern);
             }
         }
+    }
+
+    /**
+     * Return the field's value from the request.
+     *
+     * @return the field's value from the request
+     */
+    public String getRequestValue() {
+        return super.getRequestValue();
     }
 
     /**
@@ -411,20 +426,6 @@ public class NumberField extends TextField {
         }
 
         return locale;
-    }
-
-    /**
-     * Return the field's value from the request.
-     *
-     * @return the field's value from the request
-     */
-    protected String getRequestValue() {
-        String value = getContext().getRequestParameter(getName());
-        if (value != null) {
-            return value.trim();
-        } else {
-            return "";
-        }
     }
 
 }

@@ -14,8 +14,8 @@
   
 <h1>Frequently Asked Questions</h1>
 <ul>
-  <li><a href="#why-click">Why develop a new Web Application Framework?</a>
-  </li> 
+  <li><a href="#tool-support">What development tools are there?</a>
+  </li>
   <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
   </li> 
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
@@ -40,26 +40,49 @@
   </li>
   <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
   </li>
-  <li><a href="#why-velocity">Why not use FreeMarker instead of Velocity?</a>
+  <li><a href="#why-velocity">Why doesn't Click use FreeMarker for rendering?</a>
   </li>  
-  <li><a href="#tool-support">What development tools are there?</a>
-  </li>
+  <li><a href="#why-click">Why develop a new Web Application Framework?</a>
+  </li> 
 </ul>
 <p>&nbsp;</p>
 
 <dl>
 
-
   
-  <a name="why-click" class="heading"></a>
-  <dt><b>Why develop a new Web Application Framework?</b></dt>
+  <a name="tool-support" class="heading"></a>
+  <dt><b>What development tools are there?</b></dt>
   <dd>
-  Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
-  while Tapestry is too complicated. 
-  <p/>
-  For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
+   Recommended Click development tools include:
+   <p/>
+   <ul>
+    <li>
+     <a target="blank" href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a> 
+     plugin for Eclipse <a target="blank" href="http://www.eclipse.org/webtools/">WTP</a>.
+     ClickIDE is developed by Naoki Takezoe.
+     <p/>
+     <img src="../images/clickide_2.png"/>
+    </li>
+    <li>
+     <a target="blank" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+     <p/>
+     <img src="../images/velwebedit.png"/>
+     <p/>
+     After installing Velocity Web Edit configure Eclipe *.htm file associations 
+     to use Velocity Editor. Do this via the Eclipse menus:
+     Window &gt; Preferences &gt; General &gt; File Associations
+     </li>
+    <li>
+     <a target="blank" href="http://propsorter.sourceforge.net">Veloeclipse</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+    </li>
+    <li>
+     <a target="blank" href="http://veloedit.sourceforge.net">Veloedit</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+     </li>
+   </ul>  
   </dd>
-
 
   
   <a name="html-control" class="heading"></a>
@@ -466,13 +489,12 @@ public interface Controller {
 
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>Why not use FreeMarker instead of Velocity?</b></dt>
+  <dt><b>Why doesn't Click use FreeMarker instead of Velocity?</b></dt>
   <dd>
-   FreeMarker was evaluated against Velocity for template rendering,
-   and has some features Velocity doesn't. However Velocity was
-   chosen over FreeMaker because it doesn't use an XML based 
-   syntax, so its easier to read, and because Velocity is easier
-   to learn.
+   FreeMarker is a powerful templating engine which was evaluated along side 
+   Velocity for use in Click. While FreeMarker has many sophisticated
+   features Velocity doesn't, Velocity was chosen because it easier to learn
+   and doesn't use an XML style markup syntax.
    <p/>
    One of FreeMarker's strong points compared to Velocity is error reporting.
    This issue is addressed in Click by using the new enhanced error reporting
@@ -486,41 +508,16 @@ public interface Controller {
   </dd>
 
 
-
-  <a name="tool-support" class="heading"></a>
-  <dt><b>What development tools are there?</b></dt>
+  <a name="why-click" class="heading"></a>
+  <dt><b>Why develop a new Web Application Framework?</b></dt>
   <dd>
-   Recommended Click development tools include:
-   <p/>
-   <ul>
-    <li>
-     <a target="blank" href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a>
-     for Eclipse WTP.
-    </li>
-    <li>
-     <a target="blank" href="http://www.eclipse.org">Eclipse</a> &nbsp; - &nbsp;
-     the Java IDE which needs no introduction.
-    </li>
-    <li>
-     <a target="blank" href="http://propsorter.sourceforge.net">Veloeclipse</a> &nbsp; - &nbsp;
-     Velocity and HTML Editor plugin for Eclipse
-    </li>
-    <li>
-     <a target="blank" href="http://veloedit.sourceforge.net">Veloedit</a> &nbsp; - &nbsp;
-     Velocity and HTML Editor plugin for Eclipse
-     </li>
-    <li>
-     <a target="blank" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a> &nbsp; - &nbsp;
-     Velocity and HTML Editor plugin for Eclipse
-     <p/>
-     <img src="../images/velwebedit.png"/>
-     <p/>
-     After installing Velocity Web Edit configure Eclipe *.htm file associations 
-     to use Velocity Editor. Do this via the Eclipse menus:
-     Window &gt; Preferences &gt; General &gt; File Associations
-     </li>
-   </ul>  
+  Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
+  while Tapestry is too complicated. 
+  <p/>
+  For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
   </dd>
+
+
   
 </dl>
 

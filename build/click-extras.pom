@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.objectstyle.cayenne</groupId>
       <artifactId>cayenne-nodeps</artifactId>
-      <version>1.2M9</version>
+      <version>1.2B1</version>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>
