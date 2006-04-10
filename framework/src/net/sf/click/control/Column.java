@@ -32,6 +32,55 @@ import org.apache.commons.lang.StringUtils;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  *
+ * <h3>Rendering Options</h3>
+ * 
+ * The Column class supports a number of rendering options which include:
+ * 
+ * <ul>
+ * <li>{@link #dataClass} - the CSS class for the table data cell</li>
+ * <li>{@link #dataStyle} - the CSS style for the table data cell</li>
+ * <li>{@link #headerClass} - the CSS class for the table header cell</li>
+ * <li>{@link #headerStyle} - the CSS style for the table header cell</li>
+ * <li>{@link #headerTitle} - the table header cell value to render</li>
+ * <li>{@link #format} - the <tt>MessageFormat</tt> pattern rendering
+ *      the column value</li>
+ * <li>{@link #attributes} - the CSS style attributes for the table data cell</li>
+ * <li>{@link #autolink} - the option to automatically render href links 
+ *      for email and URL column values</li>
+ * <li>{@link #decorator} - the custom column value renderer</li>
+ * </ul>
+ * 
+ * <h4>Format Pattern</h4>
+ * 
+ * The {@link #format} property which specifies {@link MessageFormat} pattern
+ * a is very useful for formatting column values. For example to render 
+ * formatted number and date values you simply specify:
+ * 
+ * <pre class="codeJava">
+ * Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
+ * table.setStyle(<span class="st">"simple"</span>);
+ * 
+ * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>);
+ * idColumn.setPattern(<span class="st">"{0,number,#,###}"</span>);
+ * table.add(idColumn);
+ * 
+ * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>);
+ * priceColumn.setPattern(<span class="st">"{0,currenty}"</span>);
+ * table.add(priceColumn);
+ * 
+ * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>);
+ * dateColumn.setPattern(<span class="st">"{0,date,dd MM yyyy}"</span>);
+ * table.add(dateColumn); </pre>
+ * 
+ * <h4>Column Decorators</h4>
+ * 
+ * The support custom column value rendering you can specify a {@link Decorator}
+ * class on columns. For example:
+ * 
+ * <pre class="codeJava">
+ *  // TODO
+ * </pre>
+ * 
  * @see Decorator
  * @see Table
  *
