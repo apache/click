@@ -262,7 +262,7 @@ public class ClickUtils {
 	public static String getWebAppRootFolder(IProject project){
 		WebArtifactEdit edit = getWebArtifactEditForRead(project);
 		try {
-			J2EEFlexProjDeployable deployable = new J2EEFlexProjDeployable(project, edit.getComponent());
+			J2EEFlexProjDeployable deployable = new J2EEFlexProjDeployable(project);
 			IContainer[] containers = deployable.getResourceFolders();
 			if(containers.length > 0){
 				return containers[0].getProjectRelativePath().toString();
