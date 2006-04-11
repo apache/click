@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app charset="UTF-8">
+
+<!--
+  <pages>
+    <page path="welcome.htm" classname="net.sf.click.Page"/>
+  </pages>
+-->
+ 
+  <headers>
+    <header name="Pragma" value="no-cache"/>
+    <header name="Cache-Control" value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/>
+    <header name="Expires" value="1" type="Date"/>
+  </headers>
+  
+  <mode value="development"/>
+  
+</click-app>
