@@ -34,7 +34,33 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a HTML Table control: &lt;table&gt;.
+ *
+ * <table id="table" class="simple">
+ * <thead>
+ * <tr>
+ * <th>Id</th>
+ * <th>Name</th>
+ * <th>Category</th>
+ * <th>Action</th></tr></thead>
+ * <tbody>
+ * <tr class="odd">
+ * <td>834501</td>
+ * <td>Alison Smart</td>
+ * <td>Residential Property</td>
+ * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr>
+ * <tr class="even">
+ * <td>238454</td>
+ * <td>Angus Robins</td>
+ * <td>Bonds</td>
+ * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr>
+ * <tr class="odd">
+ * <td>784191</td>
+ * <td>Ann Melan</td>
+ * <td>Residential Property</td>
+ * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr></tr></tbody></table>
+ *
  * <p/>
+ *  
  * The Table control provides a HTML &lt;table&gt; control with
  * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
  * like functionality. The design of the Table control has been informed by
