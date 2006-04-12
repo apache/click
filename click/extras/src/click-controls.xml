@@ -7,6 +7,7 @@
     <control classname="net.sf.click.extras.panel.ListPanel"/>
     <control classname="net.sf.click.extras.panel.TabbedPanel"/>
     <control classname="net.sf.click.extras.control.CheckList"/>
+    <control classname="net.sf.click.extras.control.ColorPicker"/>
   </controls>
 
 </click-app>
