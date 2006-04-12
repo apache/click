@@ -6,6 +6,7 @@
     <control classname="net.sf.click.extras.control.TabbedForm"/>
     <control classname="net.sf.click.extras.panel.ListPanel"/>
     <control classname="net.sf.click.extras.panel.TabbedPanel"/>
+    <control classname="net.sf.click.extras.control.CheckList"/>
   </controls>
 
 </click-app>
