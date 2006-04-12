@@ -32,6 +32,34 @@ import org.apache.commons.lang.StringUtils;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  *
+ * <table id="table" class="simple">
+ * <thead>
+ * <tr>
+ * <th>Id</th>
+ * <th>Name</th>
+ * <th>Category</th>
+ * <th>Action</th></tr></thead>
+ * <tbody>
+ * <tr class="odd">
+ * <td>834501</td>
+ * <td>Alison Smart</td>
+ * <td>Residential Property</td>
+ * <td><a href="#">View</a></td></tr>
+ * <tr class="even">
+ * <td>238454</td>
+ * <td>Angus Robins</td>
+ * <td>Bonds</td>
+ * <td><a href="#">View</a></td></tr>
+ * <tr class="odd">
+ * <td>784191</td>
+ * <td>Ann Melan</td>
+ * <td>Residential Property</td>
+ * <td><a href="#">View</a></td></tr></tr></tbody></table>
+ *
+ * <p/>
+ * 
+ * The Column object provide column definitions for the {@link Table} object.
+ *
  * <h3>Rendering Options</h3>
  * 
  * The Column class supports a number of rendering options which include:
@@ -60,26 +88,83 @@ import org.apache.commons.lang.StringUtils;
  * Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
  * table.setStyle(<span class="st">"simple"</span>);
  * 
- * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>);
+ * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
  * idColumn.setPattern(<span class="st">"{0,number,#,###}"</span>);
- * table.add(idColumn);
+ * table.addColumn(idColumn);
  * 
- * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>);
- * priceColumn.setPattern(<span class="st">"{0,currenty}"</span>);
- * table.add(priceColumn);
+ * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>, <span class="st">"Price"</span>);
+ * priceColumn.setPattern(<span class="st">"${0,currenty}"</span>);
+ * priceColumn.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
+ * table.addColumn(priceColumn);
  * 
- * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>);
+ * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
  * dateColumn.setPattern(<span class="st">"{0,date,dd MM yyyy}"</span>);
- * table.add(dateColumn); </pre>
+ * table.addColumn(dateColumn); </pre>
  * 
  * <h4>Column Decorators</h4>
  * 
  * The support custom column value rendering you can specify a {@link Decorator}
- * class on columns. For example:
+ * class on columns. The decorator <tt>render</tt> method is passed the table 
+ * row object and the page request Context. Using the table row you can access
+ * all the column values enabling you to render a compound value composed of
+ * multiple column values. For example: 
  * 
  * <pre class="codeJava">
- *  // TODO
- * </pre>
+ * Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
+ *
+ * column.setDecorator(<span class="kw">new</span> Decorator() {
+ *     <span class="kw">public</span> String render(Object row, Context context) {
+ *         Person person = (Person) row;
+ *         String email = person.getEmail();
+ *         String fullName = person.getFullName();
+ *         <span class="kw">return</span> <span class="st">"&lt;a href='mailto:"</span> + email + <span class="st">"'&gt;"</span> + fullName + <span class="st">"&lt;/a&gt;"</span>;
+ *     }
+ * });
+ *
+ * table.addColumn(column); </pre>
+
+ * The <tt>Context</tt> parameter of the decorator <tt>render()</tt> method enables you to 
+ * render controls to provid additional functionality. For example:
+ * 
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomerList <span class="kw">extends</span> BorderedPage {
+ * 
+ *     <span class="kw">private</span> Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
+ *     <span class="kw">private</span> ActionLink viewLink = <span class="kw">new</span> ActionLink(<span class="st">"view"</span>);
+ *
+ *     <span class="kw">public</span> CustomerList() {
+ *   
+ *         viewLink.setListener(<span class="kw">this</span>, <span class="st">"onViewClick"</span>);
+ *         viewLink.setLabel(<span class="st">"View"</span>);
+ *         viewLink.setAttribute(<span class="st">"title"</span>, <span class="st">"View customer details"</span>);
+ *         table.addControl(viewLink);
+ *         
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"category"</span>));
+ *
+ *         Column column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
+ *         column.setDecorator(<span class="kw">new</span> Decorator() {
+ *             public String render(Object row, Context context) {
+ *                 Customer customer = (Customer) row;
+ *                 viewLink.setValue(<span class="st">""</span> + customer.getId());
+ *                 viewLink.setContext(context);
+ *
+ *                 return viewLink.toString();
+ *             }
+ *          });
+ *         table.addColumn(column);
+ *
+ *         addControl(table);
+ *     }
+ *     
+ *     <span class="kw">public boolean</span> onViewClick() {
+ *         String path = getContext().getPagePath(Logout.class);
+ *         setRedirect(path + <span class="st">"?id="</span> + viewLink.getValue());
+ *         <span class="kw">return true</span>;
+ *     }
+ * } </pre>
+ *
  * 
  * @see Decorator
  * @see Table
@@ -142,8 +227,28 @@ public class Column implements Serializable {
      * @param name the name of the property to render
      */
     public Column(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
         this.name = name;
         this.headerTitle = StringUtils.capitalize(name);
+    }
+
+    /**
+     * Create a table column with the given property name and header title.
+     *
+     * @param name the name of the property to render
+     * @param title the column header title to render
+     */
+    public Column(String name, String title) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+        if (title == null) {
+            throw new IllegalArgumentException("Null title parameter");
+        }
+        this.name = name;
+        this.headerTitle = title;
     }
 
     /**
