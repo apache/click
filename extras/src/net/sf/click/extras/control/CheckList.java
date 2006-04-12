@@ -1,0 +1,773 @@
+/*
+ * Copyright 2004-2005 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.sf.click.extras.control;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.control.Field;
+import net.sf.click.control.Option;
+import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
+import ognl.Ognl;
+
+/**
+ * Provides scrollable check list. This is an implementation of the Checklist
+ * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
+ * <p/> A scrollable check list is a more userfriendly substitution for
+ * multiple-select-boxes. It is a scrollabel div which has many select-boxes.
+ * <p/> The CheckList is also sortable by drag-drop if the
+ * {@link #setSortable(boolean)} property is set to true. In this case the
+ * method [@link #getSortorder()} returns the keys of all the options wheter
+ * they where selected or not in the order provided by the user. <p/> The
+ * Control listener will be invoked if the Select is valid and item(s) are
+ * selected by the user. <p/> If a select is required at least one item must be
+ * selected so that the input is valid. Other validations are not done. <p/> To
+ * populate the select use one of the add methods. <p/> The selected values can
+ * be retrieved from {@link #getValues()}. <p/> The select uses the
+ * /click/checklist.css style. By providing a style which extends this style the
+ * appearance of the list can be changed. To set the additonal style class use
+ * setAttribute("class","additionalClass"). This will append the given class to
+ * the default class of this control. Alternatively {@link #addStyle(String)}
+ * can be used to set the style of the outer div. <p/> For an example please
+ * look at the click-examples and the at the above blog.
+ *
+ *
+ * @see net.sf.click.control.Option
+ * @author Christian Essl, Malcolm Edgar
+ */
+public class CheckList extends Field {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * The style class which is always set on this element (checkList).
+     */
+    public static final String STYLE_CLASS = "checkList";
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The Select Option list. */
+    protected List optionList;
+
+    /**
+     * The selected values.
+     */
+    protected List values;
+
+    /** The height if null not scrollable. */
+    protected String height;
+
+    /** If sortable by drag and drop. */
+    protected boolean sortable;
+
+    /**
+     * The key of the values in the order they are present. (only set when
+     * sortable)
+     */
+    protected List sortorder;
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a CheckList field with the given name.
+     *
+     * @param name
+     *            the name of the field
+     */
+    public CheckList(String name) {
+        super(name);
+    }
+
+    /**
+     * Create a CheckList field with the given name and label.
+     *
+     * @param name
+     *            the name of the field
+     * @param label
+     *            the label of the field
+     */
+    public CheckList(String name, String label) {
+        super(name, label);
+    }
+
+    /**
+     * Create a CheckList field with the given name and required status.
+     *
+     * @param name
+     *            the name of the field
+     * @param required
+     *            the field required status
+     */
+    public CheckList(String name, boolean required) {
+        super(name);
+        setRequired(required);
+    }
+
+    /**
+     * Create a CheckList field with the given name, label and required status.
+     *
+     * @param name
+     *            the name of the field
+     * @param label
+     *            the label of the field
+     * @param required
+     *            the field required status
+     */
+    public CheckList(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
+    }
+
+    /**
+     * Create a CheckList field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid. <p/> <div
+     * style="border: 1px solid red;padding:0.5em;"> No-args constructors are
+     * provided for Java Bean tools support and are not intended for general
+     * use. If you create a control instance using a no-args constructor you
+     * must define its name before adding it to its parent. </div>
+     */
+    public CheckList() {
+    }
+
+    // ------------------------------------------------------ Public Attributes
+
+    /**
+     * Add the given Option.
+     *
+     * @param option
+     *            the Option value to add
+     * @throws IllegalArgumentException
+     *             if option is null
+     */
+    public void add(Option option) {
+        if (option == null) {
+            String msg = "option parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getOptionList().add(option);
+    }
+
+    /**
+     * Add the given option value. This covenience method will create a new
+     * {@link Option} with the given value and add it to the CheckList. The new
+     * Option display label will be the same as its value.
+     *
+     * @param value
+     *            the option value to add
+     * @throws IllegalArgumentException
+     *             if the value is null
+     */
+    public void add(String value) {
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getOptionList().add(new Option(value));
+    }
+
+    /**
+     * Add the given Option collection to the CheckList.
+     *
+     * @param options
+     *            the collection of Option objects to add
+     * @throws IllegalArgumentException
+     *             if options is null
+     */
+    public void addAll(Collection options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getOptionList().addAll(options);
+    }
+
+    /**
+     * Add the given Map of option values and labels to the CheckList. The Map
+     * entry key will be used as the option value and the Map entry value will
+     * be used as the option label. <p/> It is recommended that
+     * <tt>LinkedHashMap</tt> is used as the Map parameter to maintain the
+     * order of the option vales.
+     *
+     * @param options
+     *            the Map of option values and labels to add
+     * @throws IllegalArgumentException
+     *             if options is null
+     */
+    public void addAll(Map options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            Option option = new Option(entry.getKey().toString(), entry
+                    .getValue().toString());
+            getOptionList().add(option);
+        }
+    }
+
+    /**
+     * Add the given array of string options to the Select option list. <p/> The
+     * options array string value will be used for the {@link Option#value} and
+     * {@link Option#label}.
+     *
+     * @param options
+     *            the array of option values to add
+     * @throws IllegalArgumentException
+     *             if options is null
+     */
+    public void addAll(String[] options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (int i = 0; i < options.length; i++) {
+            String value = options[i];
+            getOptionList().add(new Option(value, value));
+        }
+    }
+
+    /**
+     * Add the given collection of objects to the CheckList, creating new Option
+     * instances based on the object properties specified by value and label.
+     *
+     * <pre class="codeJava">
+     *
+     *
+     *   CheckList list = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; CheckList(&lt;span class=&quot;st&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Type:&quot;&lt;/span&gt;);
+     *   list.addAll(getCustomerService().getCustomerTypes(), &lt;span class=&quot;st&quot;&gt;&quot;id&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;name&quot;&lt;/span&gt;);
+     *   form.add(select);
+     *
+     * </pre>
+     *
+     * @param objects
+     *            the collection of objects to render as options
+     * @param value
+     *            the name of the object property to render as the Option value
+     * @param label
+     *            the name of the object property to render as the Option label
+     * @throws IllegalArgumentException
+     *             if options, value or label parameter is null
+     */
+    public void addAll(Collection objects, String value, String label) {
+        if (objects == null) {
+            String msg = "objects parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (label == null) {
+            String msg = "label parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (objects.isEmpty()) {
+            return;
+        }
+
+        Map ognlContext = new HashMap();
+
+        for (Iterator i = objects.iterator(); i.hasNext();) {
+            Object object = i.next();
+
+            try {
+                Object valueResult = Ognl.getValue(value, ognlContext, object);
+                Object labelResult = Ognl.getValue(label, ognlContext, object);
+
+                Option option = new Option(valueResult, labelResult.toString());
+                getOptionList().add(option);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+    }
+
+    /**
+     * Return the list of selected values. The values are the values of the
+     * Options selected.
+     *
+     * @return a list of Strings
+     */
+    public List getValues() {
+        if (values != null) {
+            return values;
+
+        } else {
+            return Collections.EMPTY_LIST;
+        }
+    }
+
+    /**
+     * Set the list of selected values. The values must be matche the values of
+     * the Options
+     *
+     * @param values
+     *            a list of strings or null
+     */
+    public void setValues(List values) {
+        this.values = values;
+    }
+
+    /**
+     * Return the Option list.
+     *
+     * @return a list of Option objects
+     */
+    public List getOptionList() {
+        if (optionList == null) {
+            optionList = new ArrayList();
+        }
+        return optionList;
+    }
+
+    /**
+     * Set the Option list.
+     *
+     * @param options
+     *            a list of Option objects
+     */
+    public void setOptionList(List options) {
+        optionList = options;
+    }
+
+    /**
+     * Returns the values list {@link #getValues()} return a list or String.
+     *
+     * @see net.sf.click.control.Field#getValueObject()
+     * @return List of seclecte values (Strings)
+     */
+    public Object getValueObject() {
+        return getValues();
+    }
+
+    /**
+     * Set the value the value must be a List of String.
+     *
+     * @param object
+     *            a List or null
+     * @see net.sf.click.control.Field#setValueObject(java.lang.Object)
+     */
+    public void setValueObject(Object object) {
+        if (object instanceof List) {
+            setValues((List) object);
+        }
+    }
+
+    /**
+     * Returns List.class.
+     *
+     * @return class
+     * @see net.sf.click.control.Field#getValueClass()
+     */
+    public Class getValueClass() {
+        return List.class;
+    }
+
+    /**
+     * The css height attribute-value. If null no height is set.
+     *
+     * @param height
+     *            one of css height values (ie 40px) or null.
+     */
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * The css-height attribute.
+     *
+     * @return Returns the height or null.
+     */
+    public String getHeight() {
+        return height;
+    }
+
+    /**
+     * Wheter the list should be drag-drop sortable. This is supported by
+     * scriptacolus. Note when the list also has a size than this might not work
+     * on different browsers.
+     *
+     * @param sortable
+     *            default is false.
+     */
+    public void setSortable(boolean sortable) {
+        this.sortable = sortable;
+    }
+
+    /**
+     * Wheter the list is also sortable.
+     *
+     * @return Returns the sortable.
+     */
+    public boolean isSortable() {
+        return sortable;
+    }
+
+    /**
+     * A list of the values transmitted in the order they are present int the
+     * list. This is only available if the list is sortable
+     *
+     * @return Returns list of strings of the option values.
+     */
+    public List getSortorder() {
+        return sortorder;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Adds the given style-value pair to the style attribute of the outer div.
+     * Does not check wheter the style is already set. <p/> Typically used for
+     * the width and height:
+     *
+     * <pre>
+     * list.addStyle(&quot;width: 100%; height: 25em&quot;);
+     * </pre>
+     *
+     * @param style
+     *            the style name:value pair without a ending ;
+     */
+    public void addStyle(String style) {
+        if (StringUtils.isBlank(style)) {
+            throw new IllegalArgumentException("The style is empty");
+        }
+        style = style.trim();
+
+        if (style.charAt(style.length() - 1) == ';') {
+            style = style + ";";
+        }
+
+        String old = getAttribute("style");
+        if (old == null || (old = old.trim()).length() == 0) {
+            setAttribute("style", style);
+        } else {
+            if (old.charAt(old.length() - 1) != ';') {
+                old = old + ';';
+            }
+            old = old + style;
+            setAttribute("style", old);
+        }
+    }
+
+    /**
+     * Bind the request submission, setting the {@link #values} or property if
+     * defined in the request.
+     */
+    public void bindRequestValue() {
+
+        // Page developer has not initialized options
+        if (getOptionList().isEmpty()) {
+            return;
+        }
+
+        // Load the selected items.
+        this.values = new ArrayList();
+
+        // TODO: resolve multiple values when multipart/form-data
+
+        String[] values = getContext().getRequest().getParameterValues(
+                getName());
+
+        if (values != null) {
+            for (int i = 0; i < values.length; i++) {
+                this.values.add(values[i]);
+            }
+        }
+
+        if (isSortable()) {
+            String[] order = getContext().getRequest().getParameterValues(
+                    getName() + "_order");
+            if (order != null) {
+                this.sortorder = new ArrayList(order.length);
+                for (int i = 0; i < order.length; i++) {
+                    sortorder.add(order[i]);
+                }
+            }
+        }
+    }
+
+    /**
+     * Return a HTML rendered CheckList.
+     *
+     * @return a HTML rendered CheckList string
+     */
+    public String toString() {
+
+        int bufferSize = 50;
+        if (!getOptionList().isEmpty()) {
+            bufferSize = bufferSize + (optionList.size() * 48);
+        }
+        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+
+        // the div element
+        buffer.elementStart("div");
+
+        buffer.appendAttribute("id", getId());
+
+        // style class
+        buffer.append(" class=\"");
+        buffer.append(STYLE_CLASS);
+        String classAttr = getAttribute("class");
+        if (classAttr != null) {
+            setAttribute("class", null);
+            buffer.append(" ");
+            buffer.append(classAttr);
+        }
+
+        if (!isValid()) {
+            buffer.append(" error");
+        }
+        buffer.append("\"");
+
+        // the style
+        String style = getAttribute("style");
+        if (style != null) {
+            setAttribute("style", null);
+        }
+
+        String styleValue = style == null ? "" : style;
+        if (getHeight() != null) {
+            styleValue = "height: " + getHeight() + ";" + styleValue;
+        }
+        if (styleValue.length() > 0) {
+            buffer.appendAttribute("style", styleValue);
+        }
+
+        // other attributes
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+
+        // reset attrubutes
+        if (classAttr != null) {
+            setAttribute("class", classAttr);
+        }
+        if (style != null) {
+            setAttribute("style", style);
+        }
+
+        buffer.closeTag();
+
+        // the ul tag
+        buffer.elementStart("ul");
+        buffer.appendAttribute("id", getId() + "_ul");
+        buffer.closeTag();
+
+        // the options
+        List optionsList = getOptionList();
+        if (!optionsList.isEmpty()) {
+            int i = -1;
+            final boolean sortable = isSortable();
+            for (Iterator it = optionsList.iterator(); it.hasNext();) {
+                Option option = (Option) it.next();
+                i++;
+                final String liId = getName() + "_" + i;
+
+                buffer.append("<li>");
+                if (sortable) {
+                    buffer.elementStart("div");
+                    buffer.appendAttribute("style", "cursor:move;");
+                } else {
+                    buffer.elementStart("label");
+                    buffer.appendAttribute("for", liId);
+                }
+                buffer.appendAttribute("class", "checkListLabel");
+                buffer.closeTag();
+
+                buffer.append("<input type=\"checkbox\" ");
+                buffer.appendAttribute("value", option.getValue());
+                buffer.appendAttribute("id", liId);
+                buffer.appendAttribute("name", getName());
+
+                if (sortable) {
+                    buffer.appendAttribute("style", "cursor:default;");
+                }
+
+                // wheter checked
+                if (getValues().contains(option.getValue())) {
+                    buffer.appendAttribute("checked", "checked");
+                }
+
+                if (isDisabled()) {
+                    buffer.appendAttributeDisabled();
+                }
+                if (isReadonly()) {
+                    buffer.appendAttributeReadonly();
+                }
+                buffer.elementEnd();
+
+                buffer.append(option.getLabel());
+
+                if (sortable) {
+                    buffer.append("</div>");
+                } else {
+                    buffer.append("</label>");
+                }
+
+                // hiddenfield if sortable
+
+                if (sortable) {
+                    buffer.append("<input type=\"hidden\"");
+                    buffer.appendAttribute("name", getName() + "_order");
+                    buffer.appendAttribute("value", option.getValue());
+                    buffer.elementEnd();
+                }
+
+                buffer.append("</li>");
+            }
+        }
+        buffer.append("</ul>");
+        buffer.append("</div>");
+
+        return buffer.toString();
+    }
+
+    /**
+     * Validate the CheckList request submission. <p/> If a CheckList is
+     * {@link #required} then the user must select a value, otherwise the Select
+     * will have a validation error. If the Select is not required then no
+     * validation errors will occur. <p/> A field error message is displayed if
+     * a validation error occurs. These messages are defined in the resource
+     * bundle: <blockquote>
+     *
+     * <pre>
+     *
+     *  /click-control.properties
+     *
+     * </pre>
+     *
+     * </blockquote> <p/> Error message bundle key names include: <blockquote>
+     * <ul>
+     * <li>select-error</li>
+     * </ul>
+     * </blockquote>
+     */
+    public void validate() {
+        if (isRequired()) {
+            if (getValues().isEmpty()) {
+                setErrorMessage("select-error");
+            }
+        }
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Deploys the style-sheet 'checklist.css' to the /click directory.
+     *
+     * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
+     * @param servletContext
+     *            the context
+     * @throws IOException
+     *             if the file can not be depolyed
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/checklist.css", "click");
+
+        // scriptaculous and prototype js
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/builder.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/controls.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/dragdrop.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/effects.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/prototype.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/scriptaculous.js",
+                "click/prototype");
+
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/prototype/slider.js",
+                "click/prototype");
+
+    }
+
+    /**
+     * Returns the header tags for the import of checklist.css, control.js and
+     * adds the script the checklist onload event.
+     *
+     * @return the two import tags
+     * @see net.sf.click.control.Field#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        String im = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
+                + getContext().getRequest().getContextPath()
+                + "/click/checklist.css\"/>\n";
+
+        if (isSortable()) {
+            im = im + "<script type=\"text/javascript\" src=\""
+                    + getContext().getRequest().getContextPath()
+                    + "/click/prototype/prototype.js\"></script>\n";
+            im = im + "<script type=\"text/javascript\" src=\""
+                    + getContext().getRequest().getContextPath()
+                    + "/click/prototype/scriptaculous.js\"></script>\n";
+
+            // string script to execute
+            String script = "Sortable.create('"
+                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul" + "'";
+
+            if (getHeight() != null) {
+                script += ", { scroll : '"
+                        + StringEscapeUtils.escapeJavaScript(getId()) + "'}";
+            }
+            script += ");";
+
+            im = im + "<script type=\"text/javascript\">";
+            if (getHeight() != null) {
+                im = im + "Position.includeScrollOffset = true;";
+            }
+            im = im + "addLoadEvent(function () {" + script + "});";
+            im = im + "</script>\n";
+        } else {
+            im = im + "<script type=\"text/javascript\">"
+                    + "addLoadEvent(function () {initChecklist('"
+                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul'"
+                    + ");});</script>\n";
+        }
+
+        return im;
+    }
+}
