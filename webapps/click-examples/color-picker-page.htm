@@ -1,0 +1,17 @@
+$form
+
+#if($colors)
+<table>
+ <tr>
+    #foreach($color in $colors)
+        <td #if($color != false) style="background-color:${color};" #end >
+            #if($color == false)
+               nocolor
+            #else
+               $color
+            #end
+        </td>
+    #end
+ </tr>
+</table>
+#end

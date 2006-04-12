@@ -1,0 +1,35 @@
+#if($field.showTextField)
+<input id="$id" type="text" name="$field.name" value="$value" $attributes/>
+#else
+<input id="$id" type="hidden" name="$field.name" value="$value" $attributes/>
+#end
+
+
+<span id="${id}_c" style="border: 1px solid #333; background-color:${back_color}">
+    
+    <img id="${id}_c_i" title="${chooseColorMsg}"
+        #if($value != "")
+         src="${ctxt}/click/colorpicker/arrowdown.gif" width="30" height="12"
+        #else
+         src="${ctxt}/click/colorpicker/nocolor.gif" width="30" height="12"
+        #end
+         onclick="new ColorPicker('${id}','${ctxt}/click/colorpicker').toggle()"/>
+</span>
+<div id="${id}_p_d" style="border: 2px solid #333;position: absolute; display: none; cursor: crosshair; z-index: 1; background-color:#fff">
+    <table cellspacing="0" cellpadding="0" width="100px">
+        <tr>
+            <td align="left">
+                #if($field.required == false)
+                <img src="${ctxt}/click/colorpicker/nocolorchoose.gif" height="16px" widht="16px"
+                    onclick="new ColorPicker('${id}','${ctxt}/click/colorpicker').blank()" title="${noColorMsg}"/>
+                #end
+            </td>
+            <td align="right">
+                <img src="${ctxt}/click/colorpicker/close.gif" height="16px" widht="16px"
+                    onclick="$('${id}_p_d').style.display='none'" title="${closeMsg}"/>
+            </td>
+        </tr>
+    </table>
+    <img id="${id}_p_d_i" src="${ctxt}/click/colorpicker/colorscale.png" height="192px" widht="100px"/>
+    <div id="${id}_p_d_s" style="margin: 2px;padding:2px; text-align:center; font-family: Verdana, sans-serif; background-color:${back_color}">${back_color}</div>
+</div>
