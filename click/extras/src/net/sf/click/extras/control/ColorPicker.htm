@@ -9,27 +9,27 @@
     
     <img id="${id}_c_i" title="${chooseColorMsg}" align="middle" style="cursor:pointer"
         #if($value != "")
-         src="${ctxt}/click/colorpicker/arrowdown.gif" width="30" height="12"
+         src="${path}/click/colorpicker/arrowdown.gif" width="30" height="12"
         #else
-         src="${ctxt}/click/colorpicker/nocolor.gif" width="30" height="12"
+         src="${path}/click/colorpicker/nocolor.gif" width="30" height="12"
         #end
-         onclick="new ColorPicker('${id}','${ctxt}/click/colorpicker').toggle()"/>
+         onclick="new ColorPicker('${id}','${path}/click/colorpicker').toggle()"/>
 </span>
 <div id="${id}_p_d" style="border: 2px solid #333;position: absolute; display: none; cursor: crosshair; z-index: 1; background-color:#fff">
     <table cellspacing="0" cellpadding="0" width="100px">
         <tr>
             <td align="left">
                 #if($field.required == false)
-                <img src="${ctxt}/click/colorpicker/nocolorchoose.gif" height="16px" widht="16px" style="cursor:pointer"
-                    onclick="new ColorPicker('${id}','${ctxt}/click/colorpicker').blank()" title="${noColorMsg}"/>
+                <img src="${path}/click/colorpicker/nocolorchoose.gif" height="16px" widht="16px" style="cursor:pointer"
+                    onclick="new ColorPicker('${id}','${path}/click/colorpicker').blank()" title="${noColorMsg}"/>
                 #end
             </td>
             <td align="right">
-                <img src="${ctxt}/click/colorpicker/close.gif" height="16px" widht="16px" style="cursor:pointer"
+                <img src="${path}/click/colorpicker/close.gif" height="16px" widht="16px" style="cursor:pointer"
                     onclick="$('${id}_p_d').style.display='none'" title="${closeMsg}"/>
             </td>
         </tr>
     </table>
-    <img id="${id}_p_d_i" src="${ctxt}/click/colorpicker/colorscale.png" height="192px" widht="100px"/>
+    <img id="${id}_p_d_i" src="${path}/click/colorpicker/colorscale.png" height="192px" widht="100px"/>
     <div id="${id}_p_d_s" style="margin: 2px;padding:2px; text-align:center; font-family: Verdana, sans-serif; background-color:${back_color}">${back_color}</div>
 </div>
