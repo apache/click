@@ -75,9 +75,9 @@ import ognl.Ognl;
  * <p/> For an example please
  * look at the click-examples and the at the above blog.
  *
- *
  * @see net.sf.click.control.Option
- * @author Christian Essl, Malcolm Edgar
+ *
+ * @author Christian Essl
  */
 public class CheckList extends Field {
 
@@ -115,8 +115,7 @@ public class CheckList extends Field {
     /**
      * Create a CheckList field with the given name.
      *
-     * @param name
-     *            the name of the field
+     * @param name the name of the field
      */
     public CheckList(String name) {
         super(name);
@@ -705,10 +704,9 @@ public class CheckList extends Field {
      * Deploys the style-sheet 'checklist.css' to the /click directory.
      *
      * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     * @param servletContext
-     *            the context
-     * @throws IOException
-     *             if the file can not be depolyed
+     *
+     * @param servletContext the context
+     * @throws IOException if the file can not be depolyed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
         ClickUtils.deployFile(servletContext,

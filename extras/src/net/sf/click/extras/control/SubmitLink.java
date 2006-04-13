@@ -25,46 +25,45 @@ import net.sf.click.control.Submit;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Link which submits a Form through JavaScript. <b> Note: This Field only works
- * when JavaScript is enabled in the user browser</b>
+ * Provides a JavaScript form Submit button which renders itself as a link.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
- * <td> <a href='' title='SubmitLink Control'>Action Link</a> </td>
+ * <td><a href='' title='SubmitLink Control'>Action Link</a> </td>
  * </tr>
  * </table>
- * <p>
+ *
+ * <b>Note</b> this Field only works when JavaScript is enabled in the user
+ * browser.
+ * <p/>
  * SubmitLink can be rendered inside of its form like a Submit button or it can
  * be placed outside of its form anywhere on the Page like an ActionLink. If
- * used inside of the Form it is added to the form like a regular Form field
- * ({@link net.sf.click.control.Form#add(Field)}).
+ * used inside of the Form it is added to the form like a regular Form field ({@link net.sf.click.control.Form#add(Field)}).
  * If used outside of the Form the Form must be set through
  * {@link #setForm(Form)} and the SubmitLink must be added to the Page
  * ({@link net.sf.click.Page#addControl(Control)})
  * <b>after</b> the form has been added to the Page.
- * </p>
- * <p>
+ * <p/>
  * Like Button SubmitLink supports invoking control listeners. When the
  * SubmitLink was clicked the {@link net.sf.click.control.Submit#isClicked()}
  * property is true. Like ActionLink the control can render the "href" URL
  * attribute using {@link #getHref()} and {@link #getHref(Object)} or render the
  * whole anchor tag in the toString() method.
- * </p>
- * <p>
+ * <p/>
  * SubmitLink does also submit the {@link net.sf.click.control.Field#getValue()}
  * property when it is clicked. The value is transported through a hidden-field
  * which is shared by all SubmitLinks of one Form instance. Therefore if you set
  * the value of a SubmitLink it will only be present on the request when the
  * SubmitLink has been clicked. The value is not stored like for other Fields
  * over multiple submits.
- * </p>
  *
  * @see Submit
  *
  * @author Christian Essl
- *
  */
 public class SubmitLink extends Submit {
+
+    private static final long serialVersionUID = 1L;
 
     /** Name Suffix for the hidden-field for the clicked value. */
     public static final String CLICK_FIELD_NAME = ActionLink.ACTION_LINK;
@@ -72,11 +71,12 @@ public class SubmitLink extends Submit {
     /** Name Suffix for the hidden-field fot the value. */
     public static final String VALUE_FIELD_NAME = "click_submitlink_value";
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a SubmitLink button with the given name.
      *
-     * @param name
-     *            the button name
+     * @param name the button name
      */
     public SubmitLink(String name) {
         super(name);
@@ -85,10 +85,8 @@ public class SubmitLink extends Submit {
     /**
      * Create a SubmitLink with the given name and label.
      *
-     * @param name
-     *            the button name
-     * @param label
-     *            the button display label
+     * @param name the button name
+     * @param label the button display label
      */
     public SubmitLink(String name, String label) {
         super(name, label);
@@ -98,14 +96,10 @@ public class SubmitLink extends Submit {
      * Create a SubmitLink with the given name, listener object and listener
      * method.
      *
-     * @param name
-     *            the button name
-     * @param listener
-     *            the listener target object
-     * @param method
-     *            the listener method to call
-     * @throws IllegalArgumentException
-     *             if listener is null or if the method is blank
+     * @param name the button name
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method is blank
      */
     public SubmitLink(String name, Object listener, String method) {
         super(name, listener, method);
@@ -115,19 +109,16 @@ public class SubmitLink extends Submit {
      * Create a SubmitLink with the given name, label, listener object and
      * listener method.
      *
-     * @param name
-     *            the button name
-     * @param label
-     *            the button display label
-     * @param listener
-     *            the listener target object
-     * @param method
-     *            the listener method to call
-     * @throws IllegalArgumentException
-     *             if listener is null or if the method is blank
+     * @param name the button name
+     * @param label the button display label
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if listener is null or if the method
+     *      is blank
      */
-    public SubmitLink(String name, String label,
-                        Object listener, String method) {
+    public SubmitLink(String name, String label, Object listener,
+            String method) {
+
         super(name, label, listener, method);
     }
 
@@ -149,6 +140,7 @@ public class SubmitLink extends Submit {
      * Returns "hidden", because the field uses a hidden input type.
      *
      * @see net.sf.click.control.Submit#getType()
+     *
      * @return "hidden"
      */
     public String getType() {
@@ -160,8 +152,7 @@ public class SubmitLink extends Submit {
      * value. This method will create a JavaScript which stores the value to a
      * hidden-field an submits the form the Link belongs to.
      *
-     * @param value
-     *            the ActionLink value parameter
+     * @param value the ActionLink value parameter
      * @return the ActionLink HTML href attribute
      */
     public String getHref(Object value) {
@@ -201,8 +192,7 @@ public class SubmitLink extends Submit {
      * and any attributes, see {@link Field#setAttribute(String, String)} for an
      * example.
      *
-     * @param value
-     *            which is submitted as a value when the link is clicked.
+     * @param value which is submitted as a value when the link is clicked.
      * @return the HTML rendered anchor link string
      */
     public String getAnchorElement(Object value) {
@@ -233,8 +223,7 @@ public class SubmitLink extends Submit {
      *
      * @see net.sf.click.control.Field#setForm(net.sf.click.control.Form)
      *
-     * @param form
-     *            the Form this belongs to or null
+     * @param form the Form this belongs to or null
      */
     public void setForm(Form form) {
         super.setForm(form);
@@ -247,6 +236,8 @@ public class SubmitLink extends Submit {
             }
         }
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Bind the request submission, setting the {@link Field#value} and
@@ -277,8 +268,6 @@ public class SubmitLink extends Submit {
      * Return the HTML rendered anchor link string. This method will render the
      * entire anchor link including the tags, the label and any attributes, see
      * {@link #setAttribute(String, String)} for an example.
-     *
-     * @see Object#toString()
      *
      * @return the HTML rendered anchor link string
      */

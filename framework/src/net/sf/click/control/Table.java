@@ -57,10 +57,10 @@ import org.apache.commons.lang.StringUtils;
  * <td>784191</td>
  * <td>Ann Melan</td>
  * <td>Residential Property</td>
- * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr></tr></tbody></table>
+ * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr></tbody></table>
  *
  * <p/>
- *  
+ *
  * The Table control provides a HTML &lt;table&gt; control with
  * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
  * like functionality. The design of the Table control has been informed by

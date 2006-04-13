@@ -54,16 +54,16 @@ import org.apache.commons.lang.StringUtils;
  * <td>784191</td>
  * <td>Ann Melan</td>
  * <td>Residential Property</td>
- * <td><a href="#">View</a></td></tr></tr></tbody></table>
+ * <td><a href="#">View</a></td></tr></tbody></table>
  *
  * <p/>
- * 
+ *
  * The Column object provide column definitions for the {@link Table} object.
  *
  * <h3>Rendering Options</h3>
- * 
+ *
  * The Column class supports a number of rendering options which include:
- * 
+ *
  * <ul>
  * <li>{@link #dataClass} - the CSS class for the table data cell</li>
  * <li>{@link #dataStyle} - the CSS style for the table data cell</li>
@@ -73,42 +73,42 @@ import org.apache.commons.lang.StringUtils;
  * <li>{@link #format} - the <tt>MessageFormat</tt> pattern rendering
  *      the column value</li>
  * <li>{@link #attributes} - the CSS style attributes for the table data cell</li>
- * <li>{@link #autolink} - the option to automatically render href links 
+ * <li>{@link #autolink} - the option to automatically render href links
  *      for email and URL column values</li>
  * <li>{@link #decorator} - the custom column value renderer</li>
  * </ul>
- * 
+ *
  * <h4>Format Pattern</h4>
- * 
+ *
  * The {@link #format} property which specifies {@link MessageFormat} pattern
- * a is very useful for formatting column values. For example to render 
+ * a is very useful for formatting column values. For example to render
  * formatted number and date values you simply specify:
- * 
+ *
  * <pre class="codeJava">
  * Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
  * table.setStyle(<span class="st">"simple"</span>);
- * 
+ *
  * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
  * idColumn.setPattern(<span class="st">"{0,number,#,###}"</span>);
  * table.addColumn(idColumn);
- * 
+ *
  * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>, <span class="st">"Price"</span>);
  * priceColumn.setPattern(<span class="st">"${0,currenty}"</span>);
  * priceColumn.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
  * table.addColumn(priceColumn);
- * 
+ *
  * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
  * dateColumn.setPattern(<span class="st">"{0,date,dd MM yyyy}"</span>);
  * table.addColumn(dateColumn); </pre>
- * 
+ *
  * <h4>Column Decorators</h4>
- * 
+ *
  * The support custom column value rendering you can specify a {@link Decorator}
- * class on columns. The decorator <tt>render</tt> method is passed the table 
+ * class on columns. The decorator <tt>render</tt> method is passed the table
  * row object and the page request Context. Using the table row you can access
  * all the column values enabling you to render a compound value composed of
- * multiple column values. For example: 
- * 
+ * multiple column values. For example:
+ *
  * <pre class="codeJava">
  * Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
  *
@@ -123,22 +123,22 @@ import org.apache.commons.lang.StringUtils;
  *
  * table.addColumn(column); </pre>
 
- * The <tt>Context</tt> parameter of the decorator <tt>render()</tt> method enables you to 
+ * The <tt>Context</tt> parameter of the decorator <tt>render()</tt> method enables you to
  * render controls to provid additional functionality. For example:
- * 
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> CustomerList <span class="kw">extends</span> BorderedPage {
- * 
+ *
  *     <span class="kw">private</span> Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
  *     <span class="kw">private</span> ActionLink viewLink = <span class="kw">new</span> ActionLink(<span class="st">"view"</span>);
  *
  *     <span class="kw">public</span> CustomerList() {
- *   
+ *
  *         viewLink.setListener(<span class="kw">this</span>, <span class="st">"onViewClick"</span>);
  *         viewLink.setLabel(<span class="st">"View"</span>);
  *         viewLink.setAttribute(<span class="st">"title"</span>, <span class="st">"View customer details"</span>);
  *         table.addControl(viewLink);
- *         
+ *
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"category"</span>));
@@ -157,7 +157,7 @@ import org.apache.commons.lang.StringUtils;
  *
  *         addControl(table);
  *     }
- *     
+ *
  *     <span class="kw">public boolean</span> onViewClick() {
  *         String path = getContext().getPagePath(Logout.class);
  *         setRedirect(path + <span class="st">"?id="</span> + viewLink.getValue());
@@ -165,7 +165,7 @@ import org.apache.commons.lang.StringUtils;
  *     }
  * } </pre>
  *
- * 
+ *
  * @see Decorator
  * @see Table
  *

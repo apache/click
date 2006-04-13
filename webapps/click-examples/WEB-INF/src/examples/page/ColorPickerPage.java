@@ -16,38 +16,31 @@ public class ColorPickerPage extends BorderedPage {
     private Form form;
 
     public ColorPickerPage() {
-        super();
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
         form = new Form("form");
         addControl(form);
 
         cp1 = new ColorPicker("cp1");
-        cp1.setLabel("CP1 - not required");
+        cp1.setLabel("CP1");
         form.add(cp1);
 
         cp2 = new ColorPicker("cp2");
         cp2.setRequired(true);
         cp2.setValue("#999");
-        cp2.setLabel("CP2 - required");
+        cp2.setLabel("CP2");
         form.add(cp2);
 
         cp3 = new ColorPicker("cp3");
         cp3.setShowTextField(false);
-        cp3.setLabel("CP3 - not required");
+        cp3.setLabel("CP3");
         form.add(cp3);
 
         cp4 = new ColorPicker("cp4");
         cp4.setShowTextField(false);
         cp4.setRequired(true);
-        cp4.setLabel("CP4 - required");
+        cp4.setLabel("CP4");
         form.add(cp4);
 
-        form.add(new Submit("ok"," submit "));
+        form.add(new Submit("ok", " OK "));
     }
 
     public void onPost() {
@@ -64,7 +57,7 @@ public class ColorPickerPage extends BorderedPage {
     }
 
     private Object makeColor(String c) {
-        if(c == null || c.length() == 0) {
+        if (c == null || c.length() == 0) {
             return Boolean.FALSE;
         }
         return c;
