@@ -7,7 +7,7 @@
 
 <span id="${id}_c" style="border: 1px solid #333; background-color:${back_color}">
     
-    <img id="${id}_c_i" title="${chooseColorMsg}"
+    <img id="${id}_c_i" title="${chooseColorMsg}" align="middle" style="cursor:pointer"
         #if($value != "")
          src="${ctxt}/click/colorpicker/arrowdown.gif" width="30" height="12"
         #else
@@ -20,12 +20,12 @@
         <tr>
             <td align="left">
                 #if($field.required == false)
-                <img src="${ctxt}/click/colorpicker/nocolorchoose.gif" height="16px" widht="16px"
+                <img src="${ctxt}/click/colorpicker/nocolorchoose.gif" height="16px" widht="16px" style="cursor:pointer"
                     onclick="new ColorPicker('${id}','${ctxt}/click/colorpicker').blank()" title="${noColorMsg}"/>
                 #end
             </td>
             <td align="right">
-                <img src="${ctxt}/click/colorpicker/close.gif" height="16px" widht="16px"
+                <img src="${ctxt}/click/colorpicker/close.gif" height="16px" widht="16px" style="cursor:pointer"
                     onclick="$('${id}_p_d').style.display='none'" title="${closeMsg}"/>
             </td>
         </tr>

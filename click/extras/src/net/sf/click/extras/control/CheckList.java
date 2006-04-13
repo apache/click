@@ -38,22 +38,41 @@ import ognl.Ognl;
 /**
  * Provides scrollable check list. This is an implementation of the Checklist
  * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
- * <p/> A scrollable check list is a more userfriendly substitution for
+ * <p/>
+ * A scrollable check list is a more userfriendly substitution for
  * multiple-select-boxes. It is a scrollabel div which has many select-boxes.
- * <p/> The CheckList is also sortable by drag-drop if the
+ * <p/>
+ * To make the CheckList scrollable set the height of the CheckList through
+ * {@link #setHeight(String)}. <b>Note when setting the height it is recommended
+ * that the CheckList should not be sortable, because of browser incompaitbilities</b>
+ * <p/>
+ * The CheckList is also sortable by drag-drop if the
  * {@link #setSortable(boolean)} property is set to true. In this case the
- * method [@link #getSortorder()} returns the keys of all the options wheter
- * they where selected or not in the order provided by the user. <p/> The
- * Control listener will be invoked if the Select is valid and item(s) are
- * selected by the user. <p/> If a select is required at least one item must be
- * selected so that the input is valid. Other validations are not done. <p/> To
- * populate the select use one of the add methods. <p/> The selected values can
- * be retrieved from {@link #getValues()}. <p/> The select uses the
- * /click/checklist.css style. By providing a style which extends this style the
- * appearance of the list can be changed. To set the additonal style class use
- * setAttribute("class","additionalClass"). This will append the given class to
+ * method {@link #getSortorder()} returns the keys of all the options wheter
+ * they where selected or not in the order provided by the user. Sortable is
+ * provided by scriptaculous which only supports on IE6, FF and Safari1.2 and higher. This
+ * control is only tested on IE6 and FF on windows.
+ * <p/>
+ * If a select is required at least one item must be
+ * selected so that the input is valid. Other validations are not done.
+ * <p/>
+ * The Control listener will be invoked in any case wheter the CheckList is valid or not.
+ * <p/>
+ * The values of the CheckList are provided by {@link net.sf.click.control.Option} objects
+ * like for a Select. To populate the CheckList with Options use the add methods. From
+ * the Option the label is shown to the user and the value is the what is provided in
+ * the {@link #getValues()} and {@link #getSortorder()} returned Lists.
+ * <p/>
+ * The selected values can be retrieved from {@link #getValues()}. The get/setValue()
+ * property is not supported. The selected values are the
+ * <p/>
+ * The select uses the /click/checklist.css style. By providing a style which
+ * extends this style the appearance of the list can be changed.
+ * To set the additonal style class use setAttribute("class","additionalClass").
+ * This will append the given class to
  * the default class of this control. Alternatively {@link #addStyle(String)}
- * can be used to set the style of the outer div. <p/> For an example please
+ * can be used to set the style of the outer div.
+ * <p/> For an example please
  * look at the click-examples and the at the above blog.
  *
  *
@@ -393,7 +412,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * The css height attribute-value. If null no height is set.
+     * The css height attribute-value.
+     * If null no height is set and the CheckList is not scrollable.
      *
      * @param height
      *            one of css height values (ie 40px) or null.
@@ -447,7 +467,7 @@ public class CheckList extends Field {
     /**
      * Adds the given style-value pair to the style attribute of the outer div.
      * Does not check wheter the style is already set. <p/> Typically used for
-     * the width and height:
+     * the width:
      *
      * <pre>
      * list.addStyle(&quot;width: 100%; height: 25em&quot;);
