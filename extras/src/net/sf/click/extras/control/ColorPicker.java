@@ -1,3 +1,17 @@
+ /* Copyright 2004-2005 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.control;
 
 import java.io.IOException;
@@ -13,28 +27,42 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Field to input a number. Shows a button with a pop-up to show a
- * color-palette, by default also shows a text-input to enter the color as a
- * hex-rgb-number. <table class='htmlHeader' cellspacing='6'>
+ * Provides a ColorPicker control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
+ *
+ * <table class='htmlHeader' cellspacing='6'>
  * <tr>
- * <td>Color Field</td>
- * <td><input type='text' size='30' value='medgar@mycorp.com' title='EmailField
- * Control' value='#dddddd'/> <span style="background-color:#dddddd"> <img
- * src="colorpicker/arrowdown.gif"/> </span> </td>
+ * <td>Date Field</td>
+ * <td><input type='text' size='7' title='ColorPicker Control' value='#ee0000'/>
+ * <div style="background-color:'#ee0000">
+ * <img align='middle' style='cursor:pointer' src='colorpicker/arrowdown.gif' title='choose color'/>
+ * </div>
+ * </td>
  * </tr>
  * </table>
+ * The ColorPicker control provides a popup DHTML color picker
+ * &lt;div&gt; and a text input where users can enter the color in hex format. The text input
+ * field can be turned off by setting {@link #setShowTextField(boolean)} to false (default is true).
+ * <p/>
+ * The ColorPicker control will validate wheter the entered color is present (if required) and that it
+ * is a valid hex color either in 3-digit presentation (ie #eee) or 6-digit presentation (ie #eeeee).
+ * If the color is not required the color-picker popup will show a button for 'no-color' on the top-left.
+ * <p/>
+ * The color picker popup is based on JS script code from liferay.com which in turn is based on code
+ * from http://typetester.maratz.com/. To enable the color
+ * popup, reference the {@link net.sf.click.util.PageImports} object
+ * in the page template. For example:
  *
- * The text-input is shown by default. If {@link #setShowTextField(boolean)} is
- * set to false the only the color-button is shown. <p/> ColorPicker will
- * validate its input that it is a RGB-hex number. The number must be either a
- * tree-part (ie #fff) or 6-part number (ie #ffffff). ColorPicker will also
- * validate it's required status. <p/> Note: This control uses JS and should
- * work on IE6, FireFox and Safari. It is only tested on IE6 and FireFox on
- * windows.
- *
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$imports</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="red">$form</span>
+ *  &lt;/body&gt;
+ * &lt;/html&gt; </pre>
  *
  * @author Christian Essl
- *
  */
 public class ColorPicker extends Field {
 
@@ -126,7 +154,7 @@ public class ColorPicker extends Field {
 
     /**
      * Wheter the TextField to enter the color hex number should be shown or
-     * not. Default is true
+     * not. Default is true.
      *
      * @return Returns the showTextField.
      */
@@ -238,7 +266,8 @@ public class ColorPicker extends Field {
     }
 
     /**
-     * Imports the files in the colorpicker package.
+     * Deploys the files in the colorpicker package to the /click/colorpicker
+     * directory.
      *
      * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
      * @param servletContext the ServletContext
