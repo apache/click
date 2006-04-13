@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.control.Field;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -31,7 +33,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr>
- * <td>Date Field</td>
+ * <td>Color Field</td>
  * <td><input type='text' size='7' title='ColorPicker Control' value='#ee0000'/>
  * <div style="background-color:'#ee0000">
  * <img align='middle' style='cursor:pointer' src='colorpicker/arrowdown.gif' title='choose color'/>
@@ -66,11 +68,30 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class ColorPicker extends Field {
 
-    /** The HEX number pattern. */
-    public static final Pattern HEX_PATTERN = Pattern
-            .compile("#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?");
+    private static final long serialVersionUID = 1L;
 
-    /** The text field size attribute. The default size is 20. */
+    /** The Calendar resource file names. */
+    protected static final String[] COLOR_PICKER_RESOURCES = {
+        "/net/sf/click/extras/control/colorpicker/colorpicker.js",
+        "/net/sf/click/extras/control/colorpicker/colorscale.png",
+        "/net/sf/click/extras/control/colorpicker/arrowdown.gif",
+        "/net/sf/click/extras/control/colorpicker/close.gif",
+        "/net/sf/click/extras/control/colorpicker/nocolor.gif",
+        "/net/sf/click/extras/control/colorpicker/nocolorchoose.gif"
+    };
+
+    /** The HTML imports statements. */
+    protected static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"${path}/click/prototype/prototype.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"${path}/click/colorpicker/colorpicker.js\"></script>\n";
+
+    /** The color validation hexidecimal pattern. */
+    protected static final Pattern HEX_PATTERN =
+        Pattern.compile("#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?");
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The text field size attribute. The default size is 7. */
     protected int size = 7;
 
     /**
@@ -79,12 +100,13 @@ public class ColorPicker extends Field {
      */
     protected boolean showTextField;
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Contrutcs a ColorPicker with the given name, which shows the text-input
      * field. The field is not required.
      *
-     * @param name
-     *            name of the ColorPicker
+     * @param name name of the ColorPicker
      */
     public ColorPicker(String name) {
         this(name, true, false);
@@ -94,10 +116,8 @@ public class ColorPicker extends Field {
      * Constructs a ColorPicker with the given name and text-field option. The
      * field is not required.
      *
-     * @param name
-     *            the name of the ColorPicker
-     * @param showTextField
-     *            wheter to show the text-field
+     * @param name the name of the ColorPicker
+     * @param showTextField wheter to show the text-field
      */
     public ColorPicker(String name, boolean showTextField) {
         this(name, showTextField, false);
@@ -107,12 +127,9 @@ public class ColorPicker extends Field {
      * Constructs a ColorPicker with the given name, text-field option and
      * required-status.
      *
-     * @param name
-     *            name of ColorPicker
-     * @param showTextField
-     *            wheter to show the text-input
-     * @param required
-     *            wheter required or not.
+     * @param name the name of ColorPicker
+     * @param showTextField flag to show the text-input
+     * @param required the field required status
      */
     public ColorPicker(String name, boolean showTextField, boolean required) {
         super(name);
@@ -132,6 +149,42 @@ public class ColorPicker extends Field {
         super();
     }
 
+    // ------------------------------------------------------ Public Attributes
+
+    /**
+     * Return the HTML head import statements for the JavaScript files
+     * <tt>click/prototype.js</tt>) and <tt>click/colorpicker.js</tt>.
+     *
+     * @see net.sf.click.control.Field#getHtmlImports()
+     *
+     * @return the HTML head import statements for prototype.js and colorpicker.js
+     */
+    public String getHtmlImports() {
+        String path = getContext().getRequest().getContextPath();
+
+        return StringUtils.replace(HTML_IMPORTS, "${path}", path);
+    }
+
+    /**
+     * Wheter the TextField to enter the color hex number should be shown or
+     * not. Default is true
+     *
+     * @return Returns the showTextField.
+     */
+    public boolean getShowTextField() {
+        return showTextField;
+    }
+
+    /**
+     * Wheter the TextField to enter the color hex number should be shown or
+     * not. Default is true.
+     *
+     * @param showTextField the showTextField to set
+     */
+    public void setShowTextField(boolean showTextField) {
+        this.showTextField = showTextField;
+    }
+
     /**
      * Return the field size. By default is 7. Only used when
      * {@link #getShowTextField()} true.
@@ -145,37 +198,83 @@ public class ColorPicker extends Field {
     /**
      * Set the field size.
      *
-     * @param size
-     *            the field size
+     * @param size the field size
      */
     public void setSize(int size) {
         this.size = size;
     }
 
+    // --------------------------------------------------------- Public Methods
+
     /**
-     * Wheter the TextField to enter the color hex number should be shown or
-     * not. Default is true.
+     * Deploy the static resource files in the colorpicker package.
      *
-     * @return Returns the showTextField.
+     * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
+     * @param servletContext the ServletContext
+     * @throws IOException if can not write
      */
-    public boolean getShowTextField() {
-        return showTextField;
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        for (int i = 0; i < COLOR_PICKER_RESOURCES.length; i++) {
+            ClickUtils.deployFile(servletContext,
+                                  COLOR_PICKER_RESOURCES[i],
+                                  "click/colorpicker");
+        }
     }
 
     /**
-     * Wheter the TextField to enter the color hex number should be shown or
-     * not. Default is true.
+     * Returns the HTML for the color-picker. This is the content of the
+     * ColorPicker.htm template.
      *
-     * @param showTextField
-     *            The showTextField to set.
+     * @return a HTML rendered TextField string
      */
-    public void setShowTextField(boolean showTextField) {
-        this.showTextField = showTextField;
+    public String toString() {
+        Map values = new HashMap();
+
+        values.put("id", getId());
+        values.put("field", this);
+        values.put("path", getContext().getRequest().getContextPath());
+
+        if (isColor(getValue())) {
+            values.put("back_color", getValue());
+            values.put("value", getValue());
+        } else {
+            values.put("back_color", "#ffffff");
+            values.put("value", "");
+        }
+
+        HtmlStringBuffer textFieldAttributes = new HtmlStringBuffer(96);
+        if (getShowTextField()) {
+            textFieldAttributes.appendAttribute("size", getSize());
+            textFieldAttributes.appendAttribute("title", getTitle());
+            if (isReadonly()) {
+                textFieldAttributes.appendAttributeReadonly();
+            }
+            textFieldAttributes.appendAttribute("maxlength", 7);
+            if (!isValid()) {
+                textFieldAttributes.appendAttribute("class", "error");
+            } else if (isDisabled()) {
+                textFieldAttributes.appendAttribute("class", "disabled");
+            }
+        }
+        if (hasAttributes()) {
+            textFieldAttributes.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            textFieldAttributes.appendAttributeDisabled();
+        }
+        values.put("attributes", textFieldAttributes.toString());
+
+        // The image messages
+        values.put("chooseColorMsg", getMessage("choose-color"));
+        values.put("noColorMsg", getMessage("no-color"));
+        values.put("closeMsg", getMessage("close"));
+
+        return getContext().renderTemplate(ColorPicker.class, values);
     }
 
     /**
-     * Validates the input to check wheter is required or not and that the input
-     * contains a valid color hex value.
+     * Validates the input to check wheter is required or not and that the
+     * input contains a valid color hex value.
      *
      * @see net.sf.click.control.TextField#validate()
      */
@@ -197,59 +296,7 @@ public class ColorPicker extends Field {
         }
     }
 
-    /**
-     * Returns the HTML for the color-picker. This is the content of the
-     * ColorPicker.htm template.
-     *
-     * @return a HTML rendered TextField string
-     */
-    public String toString() {
-        Map values = new HashMap();
-
-        values.put("id", getId());
-        values.put("field", this);
-
-        if (isColor(getValue())) {
-            values.put("back_color", getValue());
-            values.put("value", getValue());
-        } else {
-            values.put("back_color", "#ffffff");
-            values.put("value", "");
-        }
-
-        values.put("ctxt", getContext().getRequest().getContextPath());
-
-        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
-        if (getShowTextField()) {
-            buffer.appendAttribute("size", getSize());
-            buffer.appendAttribute("title", getTitle());
-            if (isReadonly()) {
-                buffer.appendAttributeReadonly();
-            }
-            buffer.appendAttribute("maxlength", 7);
-            if (!isValid()) {
-                buffer.appendAttribute("class", "error");
-            } else if (isDisabled()) {
-                buffer.appendAttribute("class", "disabled");
-            }
-        }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        if (isDisabled()) {
-            buffer.appendAttributeDisabled();
-        }
-        values.put("attributes", buffer.toString());
-
-        // the img messages
-        values.put("chooseColorMsg", getMessage("choose-color"));
-        values.put("noColorMsg", getMessage("no-color"));
-        values.put("closeMsg", getMessage("close"));
-
-        String ret = getContext().renderTemplate(ColorPicker.class, values);
-
-        return ret;
-    }
+    // -------------------------------------------------------- Private Methods
 
     private boolean isColor(String value) {
         if (value == null) {
@@ -263,53 +310,6 @@ public class ColorPicker extends Field {
             return false;
         }
 
-    }
-
-    /**
-     * Deploys the files in the colorpicker package to the /click/colorpicker
-     * directory.
-     *
-     * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     * @param servletContext the ServletContext
-     * @throws IOException if can not write
-     */
-    public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/colorpicker.js",
-                "click/colorpicker");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/colorscale.png",
-                "click/colorpicker");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/arrowdown.gif",
-                "click/colorpicker");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/close.gif",
-                "click/colorpicker");
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/nocolor.gif",
-                "click/colorpicker");
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/colorpicker/nocolorchoose.gif",
-                "click/colorpicker");
-    }
-
-    /**
-     * Imports prototype.js and colorpicker.js.
-     *
-     * @see net.sf.click.control.Field#getHtmlImports()
-     * @return import for prototype.js and colorpicker.js
-     */
-    public String getHtmlImports() {
-        String ctxt = getContext().getRequest().getContextPath();
-        String ret = "<script type=\"text/javascript\" src=\"" + ctxt
-                + "/click/prototype/prototype.js\"></script>\n";
-        ret += "<script type=\"text/javascript\" src=\"" + ctxt
-                + "/click/colorpicker/colorpicker.js\"></script>\n";
-        return ret;
     }
 
 }
