@@ -92,7 +92,7 @@ public class DateField extends TextField {
 
     /** The HTML import statements. */
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/calendar/calendar-{1}.css\" title=\"style\"/>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
 

@@ -127,7 +127,7 @@ public class TabbedForm extends Form {
      * The TabbedForm.css style sheet import link.
      */
     public static final String TABBED_FORM_IMPORTS = Form.HTML_IMPORTS
-        + "<link rel='stylesheet' type='text/css' href='$/click/TabbedForm.css' title='style'>\n";
+        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/TabbedForm.css\"/>\n";
 
     // ----------------------------------------------------- Instance Variables
 

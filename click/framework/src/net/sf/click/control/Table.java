@@ -124,7 +124,7 @@ public class Table implements Control {
      * The table.css style sheet import link.
      */
     public static final String TABLE_IMPORTS =
-        "<link rel='stylesheet' type='text/css' href='$/click/table.css' title='style'>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n";
 
     // ----------------------------------------------------- Instance Variables
 
