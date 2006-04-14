@@ -323,6 +323,8 @@ public class Context {
      * created. The specified class must be <tt>public</tt> visibility and
      * provide an no-args public constructor.
      *
+     * @deprecated - This method will be removed in release 0.21.
+     *
      * @param aClass the class of the object to get from the session
      * @return a object stored in the session using the objects class name, or
      * a new object instance if it does not exist.
@@ -346,6 +348,8 @@ public class Context {
      * Store the given object in the session using the object's class name as
      * the key.
      *
+     * @deprecated - This method will be removed in release 0.21.
+     *
      * @param object the object to store in the session
      */
     public void setSessionObject(Object object) {
@@ -357,6 +361,8 @@ public class Context {
     /**
      * Remove the class object from the session. If the session does not exist
      * or the class is null, this method does nothing.
+     *
+     * @deprecated - This method will be removed in release 0.21.
      *
      * @param aClass the class object to remove from the session
      */
