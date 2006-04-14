@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,11 +69,11 @@ import ognl.Ognl;
  * The select uses the /click/checklist.css style. By providing a style which
  * extends this style the appearance of the list can be changed.
  * To set the additonal style class use setAttribute("class","additionalClass").
- * This will append the given class to
- * the default class of this control. Alternatively {@link #addStyle(String)}
- * can be used to set the style of the outer div.
- * <p/> For an example please
- * look at the click-examples and the at the above blog.
+ * This will append the given class to the default class of this control. 
+ * Alternatively {@link #addStyle(String)} can be used to set the style of the 
+ * outer div.
+ * <p/> 
+ * For an example please look at the click-examples and the at the above blog.
  *
  * @see net.sf.click.control.Option
  *
@@ -83,32 +83,39 @@ public class CheckList extends Field {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The style class which is always set on this element (checkList).
-     */
-    public static final String STYLE_CLASS = "checkList";
+    /** The Prototype resource file names. */
+    protected static final String[] PROTOTYPE_RESOURCES = {
+        "/net/sf/click/extras/control/prototype/builder.js",
+        "/net/sf/click/extras/control/prototype/controls.js",
+        "/net/sf/click/extras/control/prototype/dragdrop.js",
+        "/net/sf/click/extras/control/prototype/effects.js",
+        "/net/sf/click/extras/control/prototype/prototype.js",
+        "/net/sf/click/extras/control/prototype/scriptaculous.js",
+        "/net/sf/click/extras/control/prototype/slider.js"
+    };
 
+    /** The style class which is always set on this element (checkList). */
+    protected static final String STYLE_CLASS = "checkList";
+    
     // ----------------------------------------------------- Instance Variables
-
-    /** The Select Option list. */
-    protected List optionList;
-
-    /**
-     * The selected values.
-     */
-    protected List values;
 
     /** The height if null not scrollable. */
     protected String height;
+
+    /** The Select Option list. */
+    protected List optionList;
 
     /** If sortable by drag and drop. */
     protected boolean sortable;
 
     /**
-     * The key of the values in the order they are present. (only set when
-     * sortable)
+     * The key of the values in the order they are present (only set when
+     * sortable).
      */
     protected List sortorder;
+
+    /** The selected values. */
+    protected List values;
 
     // ----------------------------------------------------------- Constructors
 
@@ -124,10 +131,8 @@ public class CheckList extends Field {
     /**
      * Create a CheckList field with the given name and label.
      *
-     * @param name
-     *            the name of the field
-     * @param label
-     *            the label of the field
+     * @param name the name of the field
+     * @param label the label of the field
      */
     public CheckList(String name, String label) {
         super(name, label);
@@ -136,10 +141,8 @@ public class CheckList extends Field {
     /**
      * Create a CheckList field with the given name and required status.
      *
-     * @param name
-     *            the name of the field
-     * @param required
-     *            the field required status
+     * @param name the name of the field
+     * @param required the field required status
      */
     public CheckList(String name, boolean required) {
         super(name);
@@ -149,12 +152,9 @@ public class CheckList extends Field {
     /**
      * Create a CheckList field with the given name, label and required status.
      *
-     * @param name
-     *            the name of the field
-     * @param label
-     *            the label of the field
-     * @param required
-     *            the field required status
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
      */
     public CheckList(String name, String label, boolean required) {
         super(name, label);
@@ -177,10 +177,8 @@ public class CheckList extends Field {
     /**
      * Add the given Option.
      *
-     * @param option
-     *            the Option value to add
-     * @throws IllegalArgumentException
-     *             if option is null
+     * @param option the Option value to add
+     * @throws IllegalArgumentException if option is null
      */
     public void add(Option option) {
         if (option == null) {
@@ -195,10 +193,8 @@ public class CheckList extends Field {
      * {@link Option} with the given value and add it to the CheckList. The new
      * Option display label will be the same as its value.
      *
-     * @param value
-     *            the option value to add
-     * @throws IllegalArgumentException
-     *             if the value is null
+     * @param value the option value to add
+     * @throws IllegalArgumentException if the value is null
      */
     public void add(String value) {
         if (value == null) {
@@ -211,10 +207,8 @@ public class CheckList extends Field {
     /**
      * Add the given Option collection to the CheckList.
      *
-     * @param options
-     *            the collection of Option objects to add
-     * @throws IllegalArgumentException
-     *             if options is null
+     * @param options the collection of Option objects to add
+     * @throws IllegalArgumentException if options is null
      */
     public void addAll(Collection options) {
         if (options == null) {
@@ -227,14 +221,13 @@ public class CheckList extends Field {
     /**
      * Add the given Map of option values and labels to the CheckList. The Map
      * entry key will be used as the option value and the Map entry value will
-     * be used as the option label. <p/> It is recommended that
-     * <tt>LinkedHashMap</tt> is used as the Map parameter to maintain the
-     * order of the option vales.
+     * be used as the option label.
+     * <p/>
+     * It is recommended that <tt>LinkedHashMap</tt> is used as the Map
+     * parameter to maintain the order of the option vales.
      *
-     * @param options
-     *            the Map of option values and labels to add
-     * @throws IllegalArgumentException
-     *             if options is null
+     * @param options the Map of option values and labels to add
+     * @throws IllegalArgumentException if options is null
      */
     public void addAll(Map options) {
         if (options == null) {
@@ -254,10 +247,8 @@ public class CheckList extends Field {
      * options array string value will be used for the {@link Option#value} and
      * {@link Option#label}.
      *
-     * @param options
-     *            the array of option values to add
-     * @throws IllegalArgumentException
-     *             if options is null
+     * @param options the array of option values to add
+     * @throws IllegalArgumentException if options is null
      */
     public void addAll(String[] options) {
         if (options == null) {
@@ -275,22 +266,14 @@ public class CheckList extends Field {
      * instances based on the object properties specified by value and label.
      *
      * <pre class="codeJava">
-     *
-     *
      *   CheckList list = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; CheckList(&lt;span class=&quot;st&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Type:&quot;&lt;/span&gt;);
      *   list.addAll(getCustomerService().getCustomerTypes(), &lt;span class=&quot;st&quot;&gt;&quot;id&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;name&quot;&lt;/span&gt;);
-     *   form.add(select);
+     *   form.add(select); </pre>
      *
-     * </pre>
-     *
-     * @param objects
-     *            the collection of objects to render as options
-     * @param value
-     *            the name of the object property to render as the Option value
-     * @param label
-     *            the name of the object property to render as the Option label
-     * @throws IllegalArgumentException
-     *             if options, value or label parameter is null
+     * @param objects the collection of objects to render as options
+     * @param value the name of the object property to render as the Option value
+     * @param label the name of the object property to render as the Option label
+     * @throws IllegalArgumentException if options, value or label parameter is null
      */
     public void addAll(Collection objects, String value, String label) {
         if (objects == null) {
@@ -326,33 +309,109 @@ public class CheckList extends Field {
                 throw new RuntimeException(e);
             }
         }
-
     }
-
+    
     /**
-     * Return the list of selected values. The values are the values of the
-     * Options selected.
+     * Adds the given style-value pair to the style attribute of the outer div.
+     * Does not check wheter the style is already set. <p/> Typically used for
+     * the width:
      *
-     * @return a list of Strings
+     * <pre class="codeJava">
+     * list.addStyle(<span class="st">"&quot;width: 100%; height: 25em&quot;"</span>); </pre>
+     *
+     * @param style the style name:value pair without a ending ;
      */
-    public List getValues() {
-        if (values != null) {
-            return values;
+    public void addStyle(String style) {
+        if (StringUtils.isBlank(style)) {
+            throw new IllegalArgumentException("The style is empty");
+        }
+        style = style.trim();
 
+        if (style.charAt(style.length() - 1) == ';') {
+            style = style + ";";
+        }
+
+        String old = getAttribute("style");
+        if (old == null || (old = old.trim()).length() == 0) {
+            setAttribute("style", style);
         } else {
-            return Collections.EMPTY_LIST;
+            if (old.charAt(old.length() - 1) != ';') {
+                old = old + ';';
+            }
+            old = old + style;
+            setAttribute("style", old);
         }
     }
 
     /**
-     * Set the list of selected values. The values must be matche the values of
-     * the Options
+     * The css height attribute-value.
+     * If null no height is set and the CheckList is not scrollable.
      *
-     * @param values
-     *            a list of strings or null
+     * @param height one of css height values (ie 40px) or null.
      */
-    public void setValues(List values) {
-        this.values = values;
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    /**
+     * The css-height attribute.
+     *
+     * @return Returns the height or null.
+     */
+    public String getHeight() {
+        return height;
+    }
+
+    /**
+     * Returns the header tags for the import of checklist.css, control.js and
+     * adds the script the checklist onload event.
+     *
+     * @return the two import tags
+     * @see net.sf.click.control.Field#getHtmlImports()
+     */
+    public String getHtmlImports() {
+        StringBuffer buffer = new StringBuffer(400);
+
+        String path = getContext().getRequest().getContextPath();
+
+        buffer.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"");
+        buffer.append(path);
+        buffer.append("/click/checklist.css\"/>\n");
+
+        if (isSortable()) {
+            buffer.append("<script type=\"text/javascript\" src=\"");
+            buffer.append(path);
+            buffer.append("/click/prototype/prototype.js\"></script>\n");
+
+            buffer.append("<script type=\"text/javascript\" src=\"");
+            buffer.append(path);
+            buffer.append("/click/prototype/scriptaculous.js\"></script>\n");
+
+            // Script to execute
+            String script = "Sortable.create('"
+                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul" + "'";
+
+            if (getHeight() != null) {
+                script += ", { scroll : '"
+                        + StringEscapeUtils.escapeJavaScript(getId()) + "'}";
+            }
+            script += ");";
+
+            buffer.append("<script type=\"text/javascript\">");
+            if (getHeight() != null) {
+                buffer.append("Position.includeScrollOffset = true;");
+            }
+            buffer.append("addLoadEvent(function () {" + script + "});");
+            buffer.append("</script>\n");
+
+        } else {
+            buffer.append("<script type=\"text/javascript\">");
+            buffer.append("addLoadEvent(function () {initChecklist('");
+            buffer.append(StringEscapeUtils.escapeJavaScript(getId()) + "_ul'");
+            buffer.append(");});</script>\n");
+        }
+
+        return buffer.toString();
     }
 
     /**
@@ -370,66 +429,11 @@ public class CheckList extends Field {
     /**
      * Set the Option list.
      *
-     * @param options
-     *            a list of Option objects
+     * @param options a list of Option objects
      */
     public void setOptionList(List options) {
         optionList = options;
     }
-
-    /**
-     * Returns the values list {@link #getValues()} return a list or String.
-     *
-     * @see net.sf.click.control.Field#getValueObject()
-     * @return List of seclecte values (Strings)
-     */
-    public Object getValueObject() {
-        return getValues();
-    }
-
-    /**
-     * Set the value the value must be a List of String.
-     *
-     * @param object
-     *            a List or null
-     * @see net.sf.click.control.Field#setValueObject(java.lang.Object)
-     */
-    public void setValueObject(Object object) {
-        if (object instanceof List) {
-            setValues((List) object);
-        }
-    }
-
-    /**
-     * Returns List.class.
-     *
-     * @return class
-     * @see net.sf.click.control.Field#getValueClass()
-     */
-    public Class getValueClass() {
-        return List.class;
-    }
-
-    /**
-     * The css height attribute-value.
-     * If null no height is set and the CheckList is not scrollable.
-     *
-     * @param height
-     *            one of css height values (ie 40px) or null.
-     */
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    /**
-     * The css-height attribute.
-     *
-     * @return Returns the height or null.
-     */
-    public String getHeight() {
-        return height;
-    }
-
     /**
      * Wheter the list should be drag-drop sortable. This is supported by
      * scriptacolus. Note when the list also has a size than this might not work
@@ -461,41 +465,67 @@ public class CheckList extends Field {
         return sortorder;
     }
 
-    // --------------------------------------------------------- Public Methods
-
     /**
-     * Adds the given style-value pair to the style attribute of the outer div.
-     * Does not check wheter the style is already set. <p/> Typically used for
-     * the width:
+     * Return the list of selected values. The values are the values of the
+     * Options selected.
      *
-     * <pre>
-     * list.addStyle(&quot;width: 100%; height: 25em&quot;);
-     * </pre>
-     *
-     * @param style
-     *            the style name:value pair without a ending ;
+     * @return a list of Strings
      */
-    public void addStyle(String style) {
-        if (StringUtils.isBlank(style)) {
-            throw new IllegalArgumentException("The style is empty");
-        }
-        style = style.trim();
+    public List getValues() {
+        if (values != null) {
+            return values;
 
-        if (style.charAt(style.length() - 1) == ';') {
-            style = style + ";";
-        }
-
-        String old = getAttribute("style");
-        if (old == null || (old = old.trim()).length() == 0) {
-            setAttribute("style", style);
         } else {
-            if (old.charAt(old.length() - 1) != ';') {
-                old = old + ';';
-            }
-            old = old + style;
-            setAttribute("style", old);
+            return Collections.EMPTY_LIST;
         }
     }
+
+    /**
+     * Set the list of selected values. The values must be matche the values of
+     * the Options
+     *
+     * @param values a list of strings or null
+     */
+    public void setValues(List values) {
+        this.values = values;
+    }
+
+    /**
+     * Returns the values list {@link #getValues()} return a list or String.
+     *
+     * @see net.sf.click.control.Field#getValueObject()
+     *
+     * @return List of seclecte values (Strings)
+     */
+    public Object getValueObject() {
+        return getValues();
+    }
+
+    /**
+     * Set the value the value must be a List of String.
+     *
+     * @see net.sf.click.control.Field#setValueObject(java.lang.Object)
+     *
+     * @param object a List or null
+     */
+    public void setValueObject(Object object) {
+        if (object instanceof List) {
+            setValues((List) object);
+        }
+    }
+
+    /**
+     * Returns List.class.
+     *
+     * @see net.sf.click.control.Field#getValueClass()
+     *
+     * @return class
+     */
+    public Class getValueClass() {
+        return List.class;
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Bind the request submission, setting the {@link #values} or property if
@@ -531,6 +561,26 @@ public class CheckList extends Field {
                     sortorder.add(order[i]);
                 }
             }
+        }
+    }
+
+    /**
+     * Deploys the style-sheet 'checklist.css' to the /click directory.
+     *
+     * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
+     *
+     * @param servletContext the context
+     * @throws IOException if the file can not be depolyed
+     */
+    public void onDeploy(ServletContext servletContext) throws IOException {
+        ClickUtils.deployFile(servletContext,
+                "/net/sf/click/extras/control/checklist.css", "click");
+
+        // Scriptaculous and prototype js
+        for (int i = 0; i < PROTOTYPE_RESOURCES.length; i++) {
+            ClickUtils.deployFile(servletContext,
+                                  PROTOTYPE_RESOURCES[i],
+                                  "click/prototype");
         }
     }
 
@@ -678,11 +728,8 @@ public class CheckList extends Field {
      * a validation error occurs. These messages are defined in the resource
      * bundle: <blockquote>
      *
-     * <pre>
-     *
-     *  /click-control.properties
-     *
-     * </pre>
+     * <pre class="codeConfig>
+     *  /click-control.properties </pre>
      *
      * </blockquote> <p/> Error message bundle key names include: <blockquote>
      * <ul>
@@ -698,94 +745,4 @@ public class CheckList extends Field {
         }
     }
 
-    // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Deploys the style-sheet 'checklist.css' to the /click directory.
-     *
-     * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
-     *
-     * @param servletContext the context
-     * @throws IOException if the file can not be depolyed
-     */
-    public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/checklist.css", "click");
-
-        // scriptaculous and prototype js
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/builder.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/controls.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/dragdrop.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/effects.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/prototype.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/scriptaculous.js",
-                "click/prototype");
-
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/prototype/slider.js",
-                "click/prototype");
-
-    }
-
-    /**
-     * Returns the header tags for the import of checklist.css, control.js and
-     * adds the script the checklist onload event.
-     *
-     * @return the two import tags
-     * @see net.sf.click.control.Field#getHtmlImports()
-     */
-    public String getHtmlImports() {
-        String im = "<link rel=\"stylesheet\" type=\"text/css\" href=\""
-                + getContext().getRequest().getContextPath()
-                + "/click/checklist.css\"/>\n";
-
-        if (isSortable()) {
-            im = im + "<script type=\"text/javascript\" src=\""
-                    + getContext().getRequest().getContextPath()
-                    + "/click/prototype/prototype.js\"></script>\n";
-            im = im + "<script type=\"text/javascript\" src=\""
-                    + getContext().getRequest().getContextPath()
-                    + "/click/prototype/scriptaculous.js\"></script>\n";
-
-            // string script to execute
-            String script = "Sortable.create('"
-                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul" + "'";
-
-            if (getHeight() != null) {
-                script += ", { scroll : '"
-                        + StringEscapeUtils.escapeJavaScript(getId()) + "'}";
-            }
-            script += ");";
-
-            im = im + "<script type=\"text/javascript\">";
-            if (getHeight() != null) {
-                im = im + "Position.includeScrollOffset = true;";
-            }
-            im = im + "addLoadEvent(function () {" + script + "});";
-            im = im + "</script>\n";
-        } else {
-            im = im + "<script type=\"text/javascript\">"
-                    + "addLoadEvent(function () {initChecklist('"
-                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul'"
-                    + ");});</script>\n";
-        }
-
-        return im;
-    }
 }
