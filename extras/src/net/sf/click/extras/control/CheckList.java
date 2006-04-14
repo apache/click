@@ -69,10 +69,10 @@ import ognl.Ognl;
  * The select uses the /click/checklist.css style. By providing a style which
  * extends this style the appearance of the list can be changed.
  * To set the additonal style class use setAttribute("class","additionalClass").
- * This will append the given class to the default class of this control. 
- * Alternatively {@link #addStyle(String)} can be used to set the style of the 
+ * This will append the given class to the default class of this control.
+ * Alternatively {@link #addStyle(String)} can be used to set the style of the
  * outer div.
- * <p/> 
+ * <p/>
  * For an example please look at the click-examples and the at the above blog.
  *
  * @see net.sf.click.control.Option
@@ -96,7 +96,7 @@ public class CheckList extends Field {
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
-    
+
     // ----------------------------------------------------- Instance Variables
 
     /** The height if null not scrollable. */
@@ -310,7 +310,7 @@ public class CheckList extends Field {
             }
         }
     }
-    
+
     /**
      * Adds the given style-value pair to the style attribute of the outer div.
      * Does not check wheter the style is already set. <p/> Typically used for
