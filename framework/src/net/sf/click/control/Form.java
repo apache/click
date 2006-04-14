@@ -485,7 +485,7 @@ public class Form implements Control {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link rel=\"stylesheet\" type=\"text/css\" href=\"$/click/control.css\" title=\"style\"/>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/control.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
 
     static {
