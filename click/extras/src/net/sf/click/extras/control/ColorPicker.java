@@ -91,59 +91,69 @@ public class ColorPicker extends Field {
 
     // ----------------------------------------------------- Instance Variables
 
+    /**
+     * The show text field option for entering a color hex value. The default
+     * value is true.
+     */
+    protected boolean showTextField = true;
+
     /** The text field size attribute. The default size is 7. */
     protected int size = 7;
-
-    /**
-     * Wheter only the color chooser should be shown or also a text field to
-     * enter a hex value.
-     */
-    protected boolean showTextField;
-
+    
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Contrutcs a ColorPicker with the given name, which shows the text-input
-     * field. The field is not required.
+     * Construct a ColorPicker with the given name. The color picker will show
+     * the text input field.
      *
-     * @param name name of the ColorPicker
+     * @param name the name of the field
      */
     public ColorPicker(String name) {
-        this(name, true, false);
+        super(name);
     }
 
     /**
-     * Constructs a ColorPicker with the given name and text-field option. The
-     * field is not required.
+     * Construct the ColorPicker with the given name and label.
      *
-     * @param name the name of the ColorPicker
-     * @param showTextField wheter to show the text-field
+     * @param name the name of the field
+     * @param label the label of the field
      */
-    public ColorPicker(String name, boolean showTextField) {
-        this(name, showTextField, false);
+    public ColorPicker(String name, String label) {
+        super(name, label);
     }
 
     /**
-     * Constructs a ColorPicker with the given name, text-field option and
-     * required-status.
+     * Construct a ColorPicker with the given name and required status.
      *
-     * @param name the name of ColorPicker
-     * @param showTextField flag to show the text-input
+     * @param name the name of the field
      * @param required the field required status
      */
-    public ColorPicker(String name, boolean showTextField, boolean required) {
+    public ColorPicker(String name, boolean required) {
         super(name);
-        this.showTextField = true;
-        this.setRequired(required);
+        setRequired(required);
+    }
+
+    /**
+     * Constructs a ColorPicker with the given name, required status and
+     * display text field option.
+     *
+     * @param name the name of field
+     * @param required the field required status
+     * @param showTextField flag to show the text input field
+     */
+    public ColorPicker(String name, boolean required, boolean showTextField) {
+        this(name, required);
+        this.showTextField = showTextField;
     }
 
     /**
      * Create a ColorPicker with no name defined, <b>please note</b> the
-     * control's name must be defined before it is valid. <p/> <div
-     * style="border: 1px solid red;padding:0.5em;"> No-args constructors are
-     * provided for Java Bean tools support and are not intended for general
-     * use. If you create a control instance using a no-args constructor you
-     * must define its name before adding it to its parent. </div>
+     * control's name must be defined before it is valid. 
+     * <p/> 
+     * <div style="border: 1px solid red;padding:0.5em;"> 
+     * No-args constructors are provided for Java Bean tools support and are not 
+     * intended for general use. If you create a control instance using a no-args 
+     * constructor you must define its name before adding it to its parent. </div>
      */
     public ColorPicker() {
         super();
