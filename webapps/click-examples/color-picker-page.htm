@@ -1,7 +1,17 @@
 $form
 
-#if($colors)
-<table>
+<p>&nbsp;</p>
+
+#if ($colors)
+Selected colors:
+<p/>
+
+<table border="1" cellspacing="0" cellpadding="6"> 
+ <tr bgcolor="navy">
+	#foreach ($color in $colors)
+		<th style="color:white;">$velocityCount</th>
+	#end
+ </tr>
  <tr>
     #foreach($color in $colors)
         <td #if($color != false) style="background-color:${color};" #end >

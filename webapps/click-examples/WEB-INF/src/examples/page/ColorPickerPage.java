@@ -17,30 +17,27 @@ public class ColorPickerPage extends BorderedPage {
 
     public ColorPickerPage() {
         form = new Form("form");
-        addControl(form);
 
-        cp1 = new ColorPicker("cp1");
-        cp1.setLabel("CP1");
+        cp1 = new ColorPicker("cp1", "Color Picker 1");
         form.add(cp1);
 
-        cp2 = new ColorPicker("cp2");
+        cp2 = new ColorPicker("cp2", "Color Picker 2");
         cp2.setRequired(true);
         cp2.setValue("#999");
-        cp2.setLabel("CP2");
         form.add(cp2);
 
-        cp3 = new ColorPicker("cp3");
+        cp3 = new ColorPicker("cp3", "Color Picker 3");
         cp3.setShowTextField(false);
-        cp3.setLabel("CP3");
         form.add(cp3);
 
-        cp4 = new ColorPicker("cp4");
+        cp4 = new ColorPicker("cp4", "Color Picker 4");
         cp4.setShowTextField(false);
         cp4.setRequired(true);
-        cp4.setLabel("CP4");
         form.add(cp4);
 
-        form.add(new Submit("ok", " OK "));
+        form.add(new Submit("ok", "  OK  "));
+
+        addControl(form);
     }
 
     public void onPost() {
@@ -52,7 +49,7 @@ public class ColorPickerPage extends BorderedPage {
             colors.add(makeColor(cp3.getValue()));
             colors.add(makeColor(cp4.getValue()));
 
-            addModel("colors",colors);
+            addModel("colors", colors);
         }
     }
 
