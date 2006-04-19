@@ -9,11 +9,11 @@ import net.sf.click.extras.control.ColorPicker;
 
 public class ColorPickerPage extends BorderedPage {
 
+    private Form form;
     private ColorPicker cp1;
     private ColorPicker cp2;
     private ColorPicker cp3;
     private ColorPicker cp4;
-    private Form form;
 
     public ColorPickerPage() {
         form = new Form("form");
@@ -36,12 +36,18 @@ public class ColorPickerPage extends BorderedPage {
         form.add(cp4);
 
         form.add(new Submit("ok", "  OK  "));
+        form.add(new Submit("cancel", this, "onCancelClick"));
 
         addControl(form);
     }
 
+    public boolean onCancelClick() {
+        setRedirect("index.html");
+        return false;
+    }
+
     public void onPost() {
-        if(form.isValid()) {
+        if (form.isValid()) {
             List colors = new ArrayList(4);
 
             colors.add(makeColor(cp1.getValue()));

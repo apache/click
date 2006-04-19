@@ -13,80 +13,76 @@ import net.sf.click.extras.control.CheckList;
 
 public class CheckListDemo extends BorderedPage{
 
-    private static List OPTIONS = new ArrayList();
-    private static List SORT_OPTIONS = new ArrayList();
-    static{
-        for(int i=0;i<30;i++) {
-            OPTIONS.add(new Option(Integer.toString(i),"tutam gallia deviso est in partes "+i));
-        }
-        OPTIONS = Collections.unmodifiableList(OPTIONS);
+    private static List STANDARD_OPTIONS = new ArrayList();
+    private static List SORTABLE_OPTIONS = new ArrayList();
 
-        for(int i=0;i<15;i++) {
-            SORT_OPTIONS.add(new Option(Integer.toString(i),"drag to sort me "+i));
+    static {
+        for (int i = 1; i <= 8; i++) {
+            STANDARD_OPTIONS.add(new Option(Integer.toString(i),
+                        "Tutam gallia deviso est in partes " + i));
+        }
+        STANDARD_OPTIONS = Collections.unmodifiableList(STANDARD_OPTIONS);
+
+        for(int i = 1; i <= 6; i++) {
+            SORTABLE_OPTIONS.add(new Option(Integer.toString(i),
+                             "Drag to sort me " + i));
         }
     }
 
     private Form form;
-    private CheckList list1;
-    private CheckList list2;
-    private CheckList list3;
+    private CheckList standardCheckList;
+    private CheckList sortableCheckList;
 
     public CheckListDemo() {
-        super();
-    }
-
-    /* (non-Javadoc)
-     * @see net.sf.click.Page#onInit()
-     */
-    public void onInit() {
-        super.onInit();
-
         form = new Form("form");
+        form.setFieldStyle("width:20em;");
+
+        standardCheckList = new CheckList("standardList", "Standard List ", true);
+        standardCheckList.setOptionList(STANDARD_OPTIONS);
+        standardCheckList.setAttribute("class", "cl1");
+        standardCheckList.addStyle("width: 100%;");
+        standardCheckList.setHeight("10em");
+        form.add(standardCheckList);
+
+        sortableCheckList = new CheckList("sortableList", "Sortable List ");
+        sortableCheckList.setOptionList(SORTABLE_OPTIONS);
+        sortableCheckList.setAttribute("class", "cl2");
+        sortableCheckList.setSortable(true);
+        sortableCheckList.addStyle("width: 100%;");
+        form.add(sortableCheckList);
+
+        form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
+        form.add(new Submit("cancel", this, "onCancelClick"));
+
         addControl(form);
-
-        list1 = new CheckList("list1", "First List", false);
-        list1.setOptionList(SORT_OPTIONS);
-        list1.setAttribute("class", "cl2");
-        list1.setSortable(true);
-        form.add(list1);
-
-        list2 = new CheckList("list2", "Second List", true);
-        list2.setOptionList(OPTIONS);
-        List selected = new ArrayList(Arrays.asList(new String[]{"1","3","6","10"}));
-        list2.setValues(selected);
-        list2.setAttribute("class", "cl2");
-        list2.setHeight("25em");
-        form.add(list2);
-
-        list3 = new CheckList("list3", "Third List",false);
-        list3.setOptionList(OPTIONS);
-        list3.addStyle("width: 50em; height: 15em");
-        list3.setAttribute("class", "cl3");
-        form.add(list3);
-
-        form.add(new Submit("ok","   Ok   ",this,"onOk"));
     }
 
-    public boolean onOk(){
-        if(form.isValid()){
-            addModel("showSelected",Boolean.TRUE);
-            addModel("list1",list1.getValues());
-            addModel("list2",list2.getValues());
-            addModel("list3",list3.getValues());
+    public boolean onOkClick() {
+        if (form.isValid()) {
+            addModel("showSelected", Boolean.TRUE);
+            addModel("list1", standardCheckList.getValues());
+            addModel("list2", sortableCheckList.getValues());
 
-            //take the sort out of the list1
-            List order = list1.getSortorder();
+            // Use the sort out of the list2
+            List order = sortableCheckList.getSortorder();
             Option[] tmp = new Option[order.size()];
-            for (Iterator it = SORT_OPTIONS.iterator(); it.hasNext(); ) {
+            for (Iterator it = SORTABLE_OPTIONS.iterator(); it.hasNext(); ) {
                 Option opt = (Option) it.next();
                 String value = opt.getValue();
                 int i = order.indexOf(value);
                 tmp[i] = opt;
             }
-            SORT_OPTIONS = new ArrayList(Arrays.asList(tmp));
-            list1.setOptionList(SORT_OPTIONS);
-            addModel("list1Order",order);
+            SORTABLE_OPTIONS = new ArrayList(Arrays.asList(tmp));
+            sortableCheckList.setOptionList(SORTABLE_OPTIONS);
+            addModel("list2Order", order);
         }
+
         return true;
     }
+
+    public boolean onCancelClick() {
+        setRedirect("index.html");
+        return false;
+    }
+
 }

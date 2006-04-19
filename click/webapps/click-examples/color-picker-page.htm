@@ -9,14 +9,14 @@ Selected colors:
 <table border="1" cellspacing="0" cellpadding="6"> 
  <tr bgcolor="navy">
 	#foreach ($color in $colors)
-		<th style="color:white;">$velocityCount</th>
+		<th style="color:white;">Color $velocityCount</th>
 	#end
  </tr>
  <tr>
     #foreach($color in $colors)
-        <td #if($color != false) style="background-color:${color};" #end >
-            #if($color == false)
-               nocolor
+        <td #if ($color != false) style="background-color:${color};" #end >
+            #if ($color == false)
+               no color
             #else
                $color
             #end
