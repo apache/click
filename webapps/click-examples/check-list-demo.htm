@@ -1,58 +1,56 @@
 <style type="text/css">
+.checkListLabel { 
+	border-bottom: 1px solid #769550; 
+	padding: 0.2em 0.2em 0.2em 25px; 
+}
+.checkListLabel:hover, .checkListLabel.hover { 
+	background: #306B34; 
+	color: #fff; 
+}
 		
-		/* Checklist 2 */
-		.cl2 {
-			background: #67893d;
-			color: #D1DCC5;
-			font-family: Tahoma, Geneva, Arial, sans-serif;
-			width: 50%;
-		}
-		.cl2 input { vertical-align: middle; }
-		.checkListLabel { border-bottom: 1px solid #769550; padding: 0.2em 0.2em 0.2em 25px; }
-		.checkListLabel:hover, .checkListLabel.hover { background: #306B34; color: #fff; }
-		
-		/* Checklist 3 */
-		.cl3 {
-			border: 1px dotted #a17c04;
-			color: #a05a04;
-			font-family: "Trebuchet MS", Tahoma, Geneva, Arial, sans-serif;
-			font-size: 0.9em;
-			height: 19em;
-		}
-		.cl3 .alt { background: #f8f6ed; }
-		.cl3 label { padding: 0.2em 0.2em 0.2em 25px; }
-		.cl3 label:hover, .cl3 label.hover { background: #EFE9D4; color: #a05a04; }	
+/* Checklist 1 */
+.cl1 {
+	border: 1px dotted #a17c04;
+	color: #a05a04;
+	font-family: "Trebuchet MS", Tahoma, Geneva, Arial, sans-serif;
+	font-size: 0.9em;
+	height: 19em;
+}
+.cl1 .alt { background: #f8f6ed; }
+.cl1 label { padding: 0.2em 0.2em 0.2em 25px; }
+.cl1 label:hover, .cl3 label.hover { background: #EFE9D4; color: #a05a04; }	
+
+/* Checklist 2 */
+.cl2 {
+	background: #67893d;
+	color: #D1DCC5;
+	font-family: Tahoma, Geneva, Arial, sans-serif;
+	width: 50%;
+}
+.cl2 input { vertical-align: middle; }
 </style>
 
 $form
 
-#if($showSelected)
+<p>&nbsp</p>
 
-<h2> Selection for first list</h2>
-<ul>
-#foreach($selected in $list1)
-	<li>$selected</li>
-#end
-</ul>	
+#if ($showSelected)
 
-<h2> Order for first list</h2>
+ <b>Standard list selection</b>:
+ #foreach ($item in $list1)
+	$item,
+ #end
+ <p/>
 
-#foreach($it in $list1Order)
-	${it}, 
-#end
-
-<h2> Selection for second list</h2>
-<ul>
-#foreach($selected in $list2)
-	<li>$selected</li>
-#end
-</ul>
-
-<h2> Selection for third list</h2>
-<ul>
-#foreach($selected in $list3)
-	<li>$selected</li>
-#end
-</ul>
+ <b>Sortable list selection</b>:
+ #foreach ($item in $list2)
+	$item,
+ #end
+ <p/>
 	
+ <b>Sortable list order</b>:
+ #foreach ($item in $list2Order)
+	${item},
+ #end
+
 #end
