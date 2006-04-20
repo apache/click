@@ -142,7 +142,7 @@ public class Table implements Control {
 
     /** The list of Table controls. */
     protected final List controlList = new ArrayList();
- 
+
     /** The Field localized messages Map. */
     protected Map messages;
 
@@ -298,6 +298,7 @@ public class Table implements Control {
 
         getColumns().put(column.getName(), column);
         getColumnList().add(column);
+        column.setTable(this);
     }
 
     /**
@@ -470,7 +471,7 @@ public class Table implements Control {
      * @param args the message arguments to format
      * @return the named localized message for the package
      */
-     public String getMessage(String name, Object[] args) {
+    public String getMessage(String name, Object[] args) {
         if (args == null) {
             throw new IllegalArgumentException("Null args parameter");
         }
@@ -480,23 +481,24 @@ public class Table implements Control {
     }
 
     /**
-     * Return a Map of localized messages for the Field.
+     * Return a Map of localized messages for the Control.
+     * The returned message-bundle is {@link Field#CONTROL_MESSAGES}.
      *
-     * @return a Map of localized messages for the Field
-     * @throws IllegalStateException if the context for the Field has not be set
+     * @return a Map of localized messages for the Control
+     * @throws IllegalStateException if the context for the Field has not been set
      */
     public Map getMessages() {
-         if (messages == null) {
-             if (getContext() != null) {
-                 messages =
-                     new MessagesMap(Field.CONTROL_MESSAGES, getContext());
+        if (messages == null) {
+            if (getContext() != null) {
+                messages =
+                    new MessagesMap(Field.CONTROL_MESSAGES, getContext());
 
-             } else {
-                 String msg = "Cannot initialize messages as context not set";
-                 throw new IllegalStateException(msg);
-             }
-         }
-         return messages;
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
     /**
@@ -569,7 +571,7 @@ public class Table implements Control {
         return pageSize;
     }
 
-   /**
+    /**
      * Set the maximum page size in rows. A page size of 0
      * means there is no maximum page size.
      *
@@ -743,58 +745,11 @@ public class Table implements Control {
         buffer.closeTag();
         buffer.append("\n");
 
-        // Render table header row.
-        buffer.append("<thead>\n<tr>\n");
-
-        final List tableColumns = getColumnList();
-        for (int j = 0; j < tableColumns.size(); j++) {
-            Column column = (Column) tableColumns.get(j);
-            column.renderTableHeader(buffer, context);
-            if (j < tableColumns.size() - 1) {
-                buffer.append("\n");
-            }
-        }
-
-        buffer.append("</tr></thead>\n");
-
-        // Render table rows.
-        buffer.append("<tbody>\n");
-
-        final List tableRows = getRowList();
-
-        // Range sanity check
-        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
-        pageNumber = Math.max(pageNumber, 0);
-        setPageNumber(pageNumber);
-
-        int firstRow = getFirstRow();
-        int lastRow = getLastRow();
-
-        for (int i = firstRow; i < lastRow; i++) {
-            Object row = tableRows.get(i);
-
-            if ((i + 1) % 2 == 0) {
-                buffer.append("<tr class=\"even\">\n");
-            } else {
-                buffer.append("<tr class=\"odd\">\n");
-            }
-
-            for (int j = 0; j < tableColumns.size(); j++) {
-                Column column = (Column) tableColumns.get(j);
-                column.renderTableData(row, buffer, context);
-                if (j < tableColumns.size() - 1) {
-                    buffer.append("\n");
-                }
-            }
-
-            buffer.append("</tr>");
-            if (i < tableRows.size() - 1) {
-                buffer.append("\n");
-            }
-        }
+        renderHeaderRow(buffer);
+        renderBodyRows(buffer);
 
         // Render table end.
-        buffer.append("</tbody></table>\n");
+        buffer.append("</table>\n");
 
         renderTableBanner(buffer);
         renderPagingControls(buffer);
@@ -835,6 +790,99 @@ public class Table implements Control {
             lastRow = Math.min(lastRow, numbRows);
         }
         return lastRow;
+    }
+
+    /**
+     * Render the table header row of column names.
+     *
+     * @param buffer the StringBuffer to render the header row in
+     */
+    protected void renderHeaderRow(HtmlStringBuffer buffer) {
+        buffer.append("<thead>\n<tr>\n");
+
+        final List tableColumns = getColumnList();
+        for (int j = 0; j < tableColumns.size(); j++) {
+            Column column = (Column) tableColumns.get(j);
+            column.renderTableHeader(buffer, context);
+            if (j < tableColumns.size() - 1) {
+                buffer.append("\n");
+            }
+        }
+
+        buffer.append("</tr></thead>\n");
+    }
+
+    /**
+     * Render the table body rows for each of the rows in <tt>getRowList</tt>.
+     *
+     * @param buffer the StringBuffer to render the table body rows in
+     */
+    protected void renderBodyRows(HtmlStringBuffer buffer) {
+        buffer.append("<tbody>\n");
+
+        // Range sanity check
+        int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
+        pageNumber = Math.max(pageNumber, 0);
+        setPageNumber(pageNumber);
+
+        int firstRow = getFirstRow();
+        int lastRow = getLastRow();
+
+        if (lastRow == 0) {
+            renderBodyNoRows(buffer);
+        } else {
+            final List tableRows = getRowList();
+
+            for (int i = firstRow; i < lastRow; i++) {
+                if ((i + 1) % 2 == 0) {
+                    buffer.append("<tr class=\"even\">\n");
+                } else {
+                    buffer.append("<tr class=\"odd\">\n");
+                }
+
+                renderBodyRowColumns(buffer, i);
+
+                buffer.append("</tr>");
+                if (i < tableRows.size() - 1) {
+                    buffer.append("\n");
+                }
+            }
+        }
+
+        buffer.append("</tbody>");
+    }
+
+    /**
+     * Render the current table body row cells.
+     *
+     * @param buffer the StringBuffer to render the table row cells in
+     * @param rowIndex the 0-based index in tableRows to render
+     */
+    protected void renderBodyRowColumns(HtmlStringBuffer buffer, int rowIndex) {
+        Object row = getRowList().get(rowIndex);
+
+        final List tableColumns = getColumnList();
+
+        for (int j = 0; j < tableColumns.size(); j++) {
+            Column column = (Column) tableColumns.get(j);
+            column.renderTableData(rowIndex, row, buffer, context);
+            if (j < tableColumns.size() - 1) {
+                buffer.append("\n");
+            }
+        }
+    }
+
+    /**
+     * Render the table body content if no rows are in the row list.
+     *
+     * @param buffer the StringBuffer to render the no row message to
+     */
+    protected void renderBodyNoRows(HtmlStringBuffer buffer) {
+        buffer.append("<tr class=\"odd\"><td colspan=\"");
+        buffer.append(getColumns().size());
+        buffer.append("\" class=\"error\">");
+        buffer.append(getMessage("table-no-rows-found"));
+        buffer.append("</td></tr>\n");
     }
 
     /**
