@@ -506,6 +506,51 @@ public class Column implements Serializable {
         headerTitle = title;
     }
 
+    /**
+     * Return the parent Table containing the Column.
+     *
+     * @return the parent Table containing the Column
+     */
+    public Table getTable() {
+        return table;
+    }
+
+    /**
+     * Set the Column's the parent <tt>Table</tt>.
+     *
+     * @param table Column's parent <tt>Table</tt>
+     */
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
+    /**
+     * Return the Table and Column id appended: &nbsp; "<tt>table-column</tt>"
+     * <p/>
+     * Use the field the "id" attribute value if defined, or the name otherwise.
+     *
+     * @return HTML element identifier attribute "id" value
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            String tableId = (getTable() != null)
+                                ? getTable().getId() + "-" : "";
+
+            String id = tableId + getName();
+
+            if (id.indexOf('/') != -1) {
+                id = id.replace('/', '_');
+            }
+            if (id.indexOf(' ') != -1) {
+                id = id.replace(' ', '_');
+            }
+
+            return id;
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -539,6 +584,26 @@ public class Column implements Serializable {
     }
 
     /**
+     * Render the column table header &lt;tr&gt; element to the given buffer.
+     *
+     * @param buffer the string buffer to render to
+     * @param context the request context
+     */
+    public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
+        buffer.elementStart("th");
+        buffer.appendAttribute("class", getHeaderClass());
+        buffer.appendAttribute("style", getHeaderStyle());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        buffer.closeTag();
+        buffer.append(getHeaderTitle());
+        buffer.elementEnd("th");
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
      * Render the content within the column table data &lt;td&gt; element.
      *
      * @param rowIndex the index of the current row within the parent table
@@ -570,26 +635,6 @@ public class Column implements Serializable {
             }
         }
     }
-
-    /**
-     * Render the column table header &lt;tr&gt; element to the given buffer.
-     *
-     * @param buffer the string buffer to render to
-     * @param context the request context
-     */
-    public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
-        buffer.elementStart("th");
-        buffer.appendAttribute("class", getHeaderClass());
-        buffer.appendAttribute("style", getHeaderStyle());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        buffer.closeTag();
-        buffer.append(getHeaderTitle());
-        buffer.elementEnd("th");
-    }
-
-    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return the named column property value from the given row object.
@@ -663,48 +708,4 @@ public class Column implements Serializable {
         return false;
     }
 
-    /**
-     * Return the Table and Column id appended: &nbsp; "<tt>table-column</tt>"
-     * <p/>
-     * Use the field the "id" attribute value if defined, or the name otherwise.
-     *
-     * @return HTML element identifier attribute "id" value
-     */
-    public String getId() {
-        if (hasAttributes() && getAttributes().containsKey("id")) {
-            return getAttribute("id");
-        } else {
-            String tableId = (getTable() != null)
-                                ? getTable().getId() + "-" : "";
-
-            String id = tableId + getName();
-
-            if (id.indexOf('/') != -1) {
-                id = id.replace('/', '_');
-            }
-            if (id.indexOf(' ') != -1) {
-                id = id.replace(' ', '_');
-            }
-
-            return id;
-        }
-    }
-
-    /**
-     * Return the parent Table containing the Column.
-     *
-     * @return the parent Table containing the Column
-     */
-    public Table getTable() {
-        return table;
-    }
-
-    /**
-     * Set the Column's the parent <tt>Table</tt>.
-     *
-     * @param table Column's parent <tt>Table</tt>
-     */
-    public void setTable(Table table) {
-        this.table = table;
-    }
 }
