@@ -218,6 +218,9 @@ public class Column implements Serializable {
     /** The cached column property method. */
     protected Method propertyMethod;
 
+    /** The parent Table. */
+    protected Table table;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -509,19 +512,20 @@ public class Column implements Serializable {
      * Render the column table data &lt;td&gt; element to the given buffer using
      * the passed row object.
      *
+     * @param rowIndex the index of the current row within the parent table
      * @param row the row object to render
      * @param buffer the string buffer to render to
      * @param context the request context
      */
-    public void renderTableData(Object row, HtmlStringBuffer buffer,
-            Context context) {
-
+    public void renderTableData(int rowIndex, Object row,
+                                HtmlStringBuffer buffer, Context context) {
         if (getMessageFormat() == null && getFormat() != null) {
             Locale locale = context.getLocale();
             setMessageFormat(new MessageFormat(getFormat(), locale));
         }
 
         buffer.elementStart("td");
+        buffer.appendAttribute("id", getId() + "_" + rowIndex);
         buffer.appendAttribute("class", getDataClass());
         buffer.appendAttribute("style", getDataStyle());
         if (hasAttributes()) {
@@ -529,6 +533,21 @@ public class Column implements Serializable {
         }
         buffer.closeTag();
 
+        renderTableDataContent(rowIndex, row, buffer, context);
+
+        buffer.elementEnd("td");
+    }
+
+    /**
+     * Render the content within the column table data &lt;td&gt; element.
+     *
+     * @param rowIndex the index of the current row within the parent table
+     * @param row the row object to render
+     * @param buffer the string buffer to render to
+     * @param context the request context
+     */
+    protected void renderTableDataContent(int rowIndex, Object row,
+                                HtmlStringBuffer buffer, Context context) {
         if (getDecorator() != null) {
             Object value = getDecorator().render(row, context);
             if (value != null) {
@@ -550,8 +569,6 @@ public class Column implements Serializable {
                 }
             }
         }
-
-        buffer.elementEnd("td");
     }
 
     /**
@@ -644,5 +661,50 @@ public class Column implements Serializable {
             }
         }
         return false;
+    }
+
+    /**
+     * Return the Table and Column id appended: &nbsp; "<tt>table-column</tt>"
+     * <p/>
+     * Use the field the "id" attribute value if defined, or the name otherwise.
+     *
+     * @return HTML element identifier attribute "id" value
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            String tableId = (getTable() != null)
+                                ? getTable().getId() + "-" : "";
+
+            String id = tableId + getName();
+
+            if (id.indexOf('/') != -1) {
+                id = id.replace('/', '_');
+            }
+            if (id.indexOf(' ') != -1) {
+                id = id.replace(' ', '_');
+            }
+
+            return id;
+        }
+    }
+
+    /**
+     * Return the parent Table containing the Column.
+     *
+     * @return the parent Table containing the Column
+     */
+    public Table getTable() {
+        return table;
+    }
+
+    /**
+     * Set the Column's the parent <tt>Table</tt>.
+     *
+     * @param table Column's parent <tt>Table</tt>
+     */
+    public void setTable(Table table) {
+        this.table = table;
     }
 }
