@@ -16,7 +16,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, context);
         
         assertFalse(map.isEmpty());
-        assertEquals(28, map.size());
+        assertEquals(29, map.size());
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
