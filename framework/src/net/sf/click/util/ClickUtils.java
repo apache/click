@@ -344,6 +344,29 @@ public class ClickUtils {
     }
 
     /**
+     * Deploy the specified classpath resources to the given target directory
+     * under the web application root directory.
+     *
+     * @param servletContext the web applications servlet context
+     * @param resources the array of classpath resource names
+     * @param targetDir the target directory to deploy the resource to
+     * @throws IOException if an I/O error occurs
+     */
+    public static void deployFiles(ServletContext servletContext,
+            String[] resources, String targetDir) throws IOException {
+
+        if (resources == null) {
+            throw new IllegalArgumentException("Null resources parameter");
+        }
+
+        for (int i = 0; i < resources.length; i++) {
+            ClickUtils.deployFile(servletContext,
+                                  resources[i],
+                                  targetDir);
+        }
+    }
+
+    /**
      * Return an encoded version of the <tt>Serializble</tt> object. The object
      * will be serialized, compressed and Base 64 encoded.
      *
