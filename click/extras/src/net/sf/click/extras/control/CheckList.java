@@ -83,6 +83,12 @@ public class CheckList extends Field {
 
     private static final long serialVersionUID = 1L;
 
+    /** The Checklist resource file names. */
+    protected static final String[] CHECKLIST_RESOURCES = {
+        "/net/sf/click/extras/control/checklist/checklist.css",
+        "/net/sf/click/extras/control/checklist/checklist.js"
+    };
+
     /** The Prototype resource file names. */
     protected static final String[] PROTOTYPE_RESOURCES = {
         "/net/sf/click/extras/control/prototype/builder.js",
@@ -366,8 +372,9 @@ public class CheckList extends Field {
      * Returns the header tags for the import of checklist.css, control.js and
      * adds the script the checklist onload event.
      *
-     * @return the two import tags
      * @see net.sf.click.control.Field#getHtmlImports()
+     *
+     * @return the two import tags
      */
     public String getHtmlImports() {
         StringBuffer buffer = new StringBuffer(400);
@@ -376,7 +383,11 @@ public class CheckList extends Field {
 
         buffer.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"");
         buffer.append(path);
-        buffer.append("/click/checklist.css\"/>\n");
+        buffer.append("/click/checklist/checklist.css\"/>\n");
+
+        buffer.append("<script type=\"text/javascript\" src=\"");
+        buffer.append(path);
+        buffer.append("/click/checklist/checklist.js\"/>\n");
 
         if (isSortable()) {
             buffer.append("<script type=\"text/javascript\" src=\"");
@@ -388,27 +399,31 @@ public class CheckList extends Field {
             buffer.append("/click/prototype/scriptaculous.js\"></script>\n");
 
             // Script to execute
-            String script = "Sortable.create('"
-                    + StringEscapeUtils.escapeJavaScript(getId()) + "_ul" + "'";
+            StringBuffer script = new StringBuffer(50);
+            script.append("Sortable.create('");
+            script.append(StringEscapeUtils.escapeJavaScript(getId()));
+            script.append("_ul'");
 
             if (getHeight() != null) {
-                script += ", { scroll : '"
-                        + StringEscapeUtils.escapeJavaScript(getId()) + "'}";
+                script.append(", { scroll : '");
+                script.append(StringEscapeUtils.escapeJavaScript(getId()));
+                script.append("'}");
             }
-            script += ");";
+            script.append(");");
 
             buffer.append("<script type=\"text/javascript\">");
             if (getHeight() != null) {
                 buffer.append("Position.includeScrollOffset = true;");
             }
-            buffer.append("addLoadEvent(function () {" + script + "});");
-            buffer.append("</script>\n");
+            buffer.append("addLoadEvent(function () {");
+            buffer.append(script);
+            buffer.append("});</script>\n");
 
         } else {
             buffer.append("<script type=\"text/javascript\">");
             buffer.append("addLoadEvent(function () {initChecklist('");
-            buffer.append(StringEscapeUtils.escapeJavaScript(getId()) + "_ul'");
-            buffer.append(");});</script>\n");
+            buffer.append(StringEscapeUtils.escapeJavaScript(getId()));
+            buffer.append("_ul');});</script>\n");
         }
 
         return buffer.toString();
@@ -435,19 +450,18 @@ public class CheckList extends Field {
         optionList = options;
     }
     /**
-     * Wheter the list should be drag-drop sortable. This is supported by
+     * Whether the list should be drag-drop sortable. This is supported by
      * scriptacolus. Note when the list also has a size than this might not work
      * on different browsers.
      *
-     * @param sortable
-     *            default is false.
+     * @param sortable default is false.
      */
     public void setSortable(boolean sortable) {
         this.sortable = sortable;
     }
 
     /**
-     * Wheter the list is also sortable.
+     * Whether the list is also sortable.
      *
      * @return Returns the sortable.
      */
@@ -573,15 +587,13 @@ public class CheckList extends Field {
      * @throws IOException if the file can not be depolyed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
-        ClickUtils.deployFile(servletContext,
-                "/net/sf/click/extras/control/checklist.css", "click");
+        ClickUtils.deployFiles(servletContext,
+                               CHECKLIST_RESOURCES,
+                               "click/checklist");
 
-        // Scriptaculous and prototype js
-        for (int i = 0; i < PROTOTYPE_RESOURCES.length; i++) {
-            ClickUtils.deployFile(servletContext,
-                                  PROTOTYPE_RESOURCES[i],
-                                  "click/prototype");
-        }
+        ClickUtils.deployFiles(servletContext,
+                               PROTOTYPE_RESOURCES,
+                               "click/prototype");
     }
 
     /**
