@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
@@ -28,6 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
+
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -419,16 +419,15 @@ public class DateField extends TextField {
      * @throws IOException if a resource could not be deployed
      */
     public void onDeploy(ServletContext servletContext) throws IOException {
-        String targetDir = "click" + File.separator + "calendar";
-
         // Deploy DateField resources files
         for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
-
             String calendarFilename = "calendar" + CALENDAR_RESOURCES[i];
             String calendarResource =
                 "/net/sf/click/extras/control/calendar/" + calendarFilename;
 
-            ClickUtils.deployFile(servletContext, calendarResource, targetDir);
+            ClickUtils.deployFile(servletContext,
+                                  calendarResource,
+                                  "click/calendar");
         }
     }
 
