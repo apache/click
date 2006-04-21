@@ -186,6 +186,9 @@ public class Table implements Control {
      */
     protected boolean showBanner;
 
+    /** Wheter the table rows should be hovered on mouseover (default false). */
+    protected boolean hoverRows;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -669,6 +672,24 @@ public class Table implements Control {
         this.showBanner = showBanner;
     }
 
+    /**
+     * Wheter the rows should highlight when the mouse is over them.
+     * If true the rows (&lt;tr&gt;) add the style class 'hover' when they the mouse is over them.
+     * @return wheter to hover (default false).
+     */
+    public boolean getHoverRows() {
+        return hoverRows;
+    }
+
+    /**
+     * Set that the rows should highlight when the mouse is over them.
+     * If true the rows (&lt;tr&gt;) add the style class 'hover' when they the mouse is over them.
+     * @param hooverRows wheter to hover (default false).
+     */
+    public void setHoverRows(boolean hooverRows) {
+        this.hoverRows = hooverRows;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -834,11 +855,25 @@ public class Table implements Control {
             final List tableRows = getRowList();
 
             for (int i = firstRow; i < lastRow; i++) {
-                if ((i + 1) % 2 == 0) {
-                    buffer.append("<tr class=\"even\">\n");
+                boolean even = (i + 1) % 2 == 0;
+                if (even) {
+                    buffer.append("<tr class=\"even\"");
                 } else {
-                    buffer.append("<tr class=\"odd\">\n");
+                    buffer.append("<tr class=\"odd\"");
                 }
+
+                if (getHoverRows()) {
+                    buffer.append(" onmouseover=\"this.className ='hover';\"");
+                    buffer.append(" onmouseout=\"this.className = '");
+                    if (even) {
+                        buffer.append("even");
+                    } else {
+                        buffer.append("odd");
+                    }
+                    buffer.append("';\"");
+                }
+
+                buffer.append(">\n");
 
                 renderBodyRowColumns(buffer, i);
 

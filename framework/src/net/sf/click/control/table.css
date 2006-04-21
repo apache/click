@@ -47,6 +47,10 @@ tr.tableRowEven, tr.even {
     background-color: #fea
 }
 
+tr.hover {
+	background: #777; color: #fff;
+}
+
 ul#showsource {
 	float: right;
 	background-color: #eee;
