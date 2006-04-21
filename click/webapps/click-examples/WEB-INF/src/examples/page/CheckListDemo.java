@@ -13,19 +13,20 @@ import net.sf.click.extras.control.CheckList;
 
 public class CheckListDemo extends BorderedPage{
 
-    private static List STANDARD_OPTIONS = new ArrayList();
+    private static final List STANDARD_OPTIONS;
     private static List SORTABLE_OPTIONS = new ArrayList();
 
     static {
-        for (int i = 1; i <= 8; i++) {
-            STANDARD_OPTIONS.add(new Option(Integer.toString(i),
-                        "Tutam gallia deviso est in partes " + i));
+        List list = new ArrayList();
+        for (int i = 1; i <= 4; i++) {
+            list.add(new Option(Integer.toString(i),
+                     "Tutam gallia deviso est in partes " + i));
         }
-        STANDARD_OPTIONS = Collections.unmodifiableList(STANDARD_OPTIONS);
+        STANDARD_OPTIONS = Collections.unmodifiableList(list);
 
         for(int i = 1; i <= 6; i++) {
             SORTABLE_OPTIONS.add(new Option(Integer.toString(i),
-                             "Drag to sort me " + i));
+                                 "Drag to sort me " + i));
         }
     }
 
@@ -39,9 +40,6 @@ public class CheckListDemo extends BorderedPage{
 
         standardCheckList = new CheckList("standardList", "Standard List ", true);
         standardCheckList.setOptionList(STANDARD_OPTIONS);
-        standardCheckList.setAttribute("class", "cl1");
-        standardCheckList.addStyle("width: 100%;");
-        standardCheckList.setHeight("10em");
         form.add(standardCheckList);
 
         sortableCheckList = new CheckList("sortableList", "Sortable List ");
