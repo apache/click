@@ -1836,11 +1836,10 @@ public class Form implements Control {
         // Set field focus
         if (fieldWithError != null) {
             buffer.append("<script type=\"text/javascript\"><!--\n");
-            buffer.append("document.forms['");
-            buffer.append(getName());
-            buffer.append("'].elements['");
-            buffer.append(fieldWithError.getName());
-            buffer.append("'].focus();\n");
+            buffer.append("var field = document.getElementById('");
+            buffer.append(fieldWithError.getId());
+            buffer.append("');\n");
+            buffer.append("if (field && field.focus) { field.focus(); };\n");
             buffer.append("//--></script>\n");
 
         } else {
@@ -2122,11 +2121,9 @@ public class Form implements Control {
                 }
 
                 buffer.append("<a class=\"error\"");
-                buffer.append(" href=\"javascript:document.");
-                buffer.append(getName());
-                buffer.append(".");
-                buffer.append(field.getName());
-                buffer.append(".focus();\">");
+                buffer.append(" href=\"javascript:setFocus('");
+                buffer.append(field.getId());
+                buffer.append("');\">");
                 buffer.append(field.getError());
                 buffer.append("</a>");
 
