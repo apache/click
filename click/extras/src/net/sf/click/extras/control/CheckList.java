@@ -51,7 +51,11 @@ import ognl.Ognl;
  * method {@link #getSortorder()} returns the keys of all the options wheter
  * they where selected or not in the order provided by the user. Sortable is
  * provided by scriptaculous which only supports on IE6, FF and Safari1.2 and higher. This
- * control is only tested on IE6 and FF on windows.
+ * control is only tested on IE6 and FF on windows. With IE the text of the dragged element
+ * has a black-outline which does not look good. To turn this off define an explicit
+ * back-ground color for the &lt;li&gt; elements. Typically you will do this in a
+ * style: .listClass li {background-color: #xxx}, where the listClass is set through
+ * {@link #setHtmlClass(String)}.
  * <p/>
  * If a select is required at least one item must be
  * selected so that the input is valid. Other validations are not done.
@@ -59,9 +63,9 @@ import ognl.Ognl;
  * The Control listener will be invoked in any case wheter the CheckList is valid or not.
  * <p/>
  * The values of the CheckList are provided by {@link net.sf.click.control.Option} objects
- * like for a Select. To populate the CheckList with Options use the add methods. From
- * the Option the label is shown to the user and the value is the what is provided in
- * the {@link #getValues()} and {@link #getSortorder()} returned Lists.
+ * like for a Select. To populate the CheckList with Options use the add methods.
+ * The label of the Option is shown to the user and the value is the what is provided in
+ * the {@link #getValues()} and the {@link #getSortorder()} returned Lists.
  * <p/>
  * The selected values can be retrieved from {@link #getValues()}. The get/setValue()
  * property is not supported. The selected values are the
@@ -369,6 +373,30 @@ public class CheckList extends Field {
     }
 
     /**
+     * Set the given html class. The class will
+     * be set on the select list together with
+     * the {@link #STYLE_CLASS}. Ie
+     * class="checkList my-class" where my-class is
+     * the set class. The default value is null.
+     *
+     * @param clazz the class to set or null
+     */
+    public void setHtmlClass(String clazz) {
+        setAttribute("class", clazz);
+    }
+
+    /**
+     * The html class to set on this control.
+     *
+     * @see #setHtmlClass(String)
+     *
+     * @return the class or null (default null)
+     */
+    public String getHtmlClass() {
+        return getAttribute("class");
+    }
+
+    /**
      * Returns the header tags for the import of checklist.css, control.js and
      * adds the script the checklist onload event.
      *
@@ -442,7 +470,10 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the Option list.
+     * Set the Option list. Note: if the CheckList is sortable
+     * than the List <b>must be fully modifiable</b>, because
+     * it will be sorted according to the order choosen by the
+     * user.
      *
      * @param options a list of Option objects
      */
@@ -572,10 +603,43 @@ public class CheckList extends Field {
             if (order != null) {
                 this.sortorder = new ArrayList(order.length);
                 for (int i = 0; i < order.length; i++) {
-                    sortorder.add(order[i]);
+                    String value = order[i];
+                    if (value != null) {
+                        sortorder.add(value);
+                    }
+                }
+                sortOptions(order);
+            }
+        }
+    }
+
+    /**
+     * Sorts the current Options List. This method is called
+     * in {@link #bindRequestValue()} when the CheckList
+     * is sortable.
+     *
+     * @param order values in the order to sort the list.
+     */
+    protected void sortOptions(String[] order) {
+        final List options = getOptionList();
+        final List orderList = new ArrayList(options.size());
+
+        for (int i = 0, size = order.length; i < size; i++) {
+            String value = order[i];
+            if (value != null) {
+                int oI = -1;
+                for (int j = 0, jSize = options.size(); j < jSize; j++) {
+                    Option optT = (Option) options.get(j);
+                    if (value.equals(optT.getValue())) {
+                        oI = j;
+                    }
+                }
+                if (oI != -1) {
+                    orderList.add(options.remove(oI));
                 }
             }
         }
+        options.addAll(0, orderList);
     }
 
     /**
@@ -607,7 +671,8 @@ public class CheckList extends Field {
         if (!getOptionList().isEmpty()) {
             bufferSize = bufferSize + (optionList.size() * 48);
         }
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+        final HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+        final boolean sortable = isSortable();
 
         // the div element
         buffer.elementStart("div");
@@ -639,6 +704,14 @@ public class CheckList extends Field {
         if (getHeight() != null) {
             styleValue = "height: " + getHeight() + ";" + styleValue;
         }
+
+        if (!sortable || getHeight() != null) {
+            styleValue = "overflow: auto;" + styleValue;
+        } else {
+            styleValue = "overflow: hidden;" + styleValue;
+        }
+
+
         if (styleValue.length() > 0) {
             buffer.appendAttribute("style", styleValue);
         }
@@ -667,7 +740,6 @@ public class CheckList extends Field {
         List optionsList = getOptionList();
         if (!optionsList.isEmpty()) {
             int i = -1;
-            final boolean sortable = isSortable();
             for (Iterator it = optionsList.iterator(); it.hasNext();) {
                 Option option = (Option) it.next();
                 i++;
