@@ -63,15 +63,6 @@ public class CheckListDemo extends BorderedPage{
 
             // Use the sort out of the list2
             List order = sortableCheckList.getSortorder();
-            Option[] tmp = new Option[order.size()];
-            for (Iterator it = SORTABLE_OPTIONS.iterator(); it.hasNext(); ) {
-                Option opt = (Option) it.next();
-                String value = opt.getValue();
-                int i = order.indexOf(value);
-                tmp[i] = opt;
-            }
-            SORTABLE_OPTIONS = new ArrayList(Arrays.asList(tmp));
-            sortableCheckList.setOptionList(SORTABLE_OPTIONS);
             addModel("list2Order", order);
         }
 
