@@ -10,7 +10,8 @@ BUGS
 
 DOCUMENTATION
 * update Velocity documentation
-* provide more Column Javadoc
+* finish more Column Javadoc
+* add FAQ topic about Cayenne dependencies
 * discuss redirecting to HTTPS
 
 
