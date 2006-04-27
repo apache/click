@@ -32,6 +32,8 @@
   </li>
   <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
   </li>
+  <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
+  </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
   </li>
   <li><a href="#jsp-support">Does Click support JSP?</a>
@@ -364,6 +366,27 @@
 
 
 
+  <a name="cayenne-integration" class="heading"></a>
+  <dt><b>What JARs should I use with Click and Cayenne?</b></dt>
+  <dd>
+   To get Click and Cayenne to work happily with each other you will need to 
+   include the following JAR files in your WEB-INF/lib directory:
+   <ul style="margin-top:1em;">
+    <li>ashwood-1.1.jar</li>
+    <li>cayenne-nodeps-1.2xx.jar</li>
+    <li>click-xx.jar</li>
+    <li>click-extras-xx.jar</li>
+    <li>log4j-1.2.9.jar</li>
+    <li>oro-2.0.8.jar</li>
+   </ul>
+   The default Cayenne JAR includes Velocity 1.3 which is not compatible with
+   Click which uses Velocity 1.5-dev, so instead we use the Cayenne no 
+   dependencies JAR. When using Cayenne nodeps JAR we need to add some additional
+   Java libraries which include ashwood, log4j and oro.
+  </dd>
+
+
+
   <a name="spring-integration" class="heading"></a>
   <dt><b>How can you integrate Click into Spring?</b></dt>
   <dd>
@@ -483,7 +506,7 @@ public interface Controller {
    addressed with latest Velocity 1.5 development stream. 
    <p/>
    Commons Logging is not used because of class loader issues which occur
-   on the IBM WebSphere application server.
+   on versions of IBM's WebSphere application server.
   </dd>
     
 

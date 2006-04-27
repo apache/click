@@ -18,6 +18,7 @@ package net.sf.click.extras.spring;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.ClickServlet;
 import net.sf.click.Page;
@@ -38,7 +39,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  * to provide new Page instances:
  *
  * <pre class="codeJava">
- * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
+ * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, HttpServletRequest request) <span class="kw">throws</span> Exception {
  *     Page page = <span class="kw">null</span>;
  *
  *     String beanName = pageClass.getName();
@@ -206,15 +207,16 @@ public class SpringClickServlet extends ClickServlet {
      * If the Page implements the <tt>ApplicationContextAware</tt> interface
      * this method will set the application context in the newly created page.
      *
-     * @see ClickServlet#newPageInstance(String, Class)
+     * @see ClickServlet#newPageInstance(String, Class, HttpServletRequest)
      *
      * @param path the request page path
      * @param pageClass the page Class the request is mapped to
+     * @param request the page request
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(String path, Class pageClass)
-        throws Exception {
+    protected Page newPageInstance(String path, Class pageClass,
+            HttpServletRequest request) throws Exception {
 
         Page page = null;
 
