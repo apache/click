@@ -9,9 +9,8 @@ BUGS
 * tomcat jar locking
 
 DOCUMENTATION
-* update Velocity documentation
 * finish more Column Javadoc
-* add FAQ topic about Cayenne dependencies
+* update Velocity documentation
 * discuss redirecting to HTTPS
 
 
