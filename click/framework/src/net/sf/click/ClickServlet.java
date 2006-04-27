@@ -636,7 +636,7 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Return a new Page instance for the given request. This method will
-     * invoke {@link #initPage(String, Class)} to create
+     * invoke {@link #initPage(String, Class, HttpServletRequest)} to create
      * the Page instance and then set the properties on the page.
      *
      * @param request the servlet request
@@ -677,7 +677,7 @@ public class ClickServlet extends HttpServlet {
             path = ClickApp.NOT_FOUND_PATH;
         }
 
-        Page page = initPage(path, pageClass);
+        Page page = initPage(path, pageClass, request);
 
         page.setContext(context);
 
@@ -690,16 +690,19 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Initialize a new page instance using
-     * {@link #newPageInstance(String, Class)} method and setting format,
-     * headers and the forward if a JSP.
+     * {@link #newPageInstance(String, Class, HttpServletRequest)} method and
+     * setting format, headers and the forward if a JSP.
      *
      * @param path the page path
      * @param pageClass the page class
+     * @param request the page request
      * @return initialized page
      */
-    protected Page initPage(String path, Class pageClass) {
+    protected Page initPage(String path, Class pageClass,
+            HttpServletRequest request) {
+
         try {
-            Page newPage = newPageInstance(path, pageClass);
+            Page newPage = newPageInstance(path, pageClass, request);
 
             if (newPage.getHeaders() == null) {
                 newPage.setHeaders(clickApp.getPageHeaders(path));
@@ -719,34 +722,51 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return a new Page instance for the given page Class and request.
+     * Return a new Page instance for the given page path, class and request.
      * <p/>
-     * This method is designed to be overridden by applications using
-     * Inversion of Control (IocC) frameworks such as Spring or HiveHind.
-     * <p/>
-     * For example a Spring application could override this method and use a
-     * BeanFactory to instantiate new Page objects:
+     * The default implementation of this method simply creates a new page 
+     * instances:
      * <pre class="codeJava">
-     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass) <span class="kw">throws</span> Exception {
-     *       String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
-     *
-     *       Page page = (Page) beanFactory.getBean(beanName);
-     *
-     *       <span class="kw">if</span> (page == <span class="kw">null</span>) {
-     *           page = (Page) pageClass.newInstance();
-     *       }
-     *
-     *       <span class="kw">return</span> page;
-     *    }
+     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, 
+     *     HttpServletRequest request) <span class="kw">throws</span> Exception {
+     *       
+     *     <span class="kw">return</span> (Page) pageClass.newInstance();
      * } </pre>
+     * 
+     * This method is designed to be overridden by applications providing their
+     * own page creation patterns.
+     * <p/>
+     * A typical example of this would be with Inversion of Control (IoC) 
+     * frameworks such as Spring or HiveMind. For example a Spring application 
+     * could override this method and use a <tt>ApplicationContext</tt> to instantiate 
+     * new Page objects:
+     * <pre class="codeJava">
+     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, 
+     *     HttpServletRequest request) <span class="kw">throws</span> Exception {
+     *       
+     *     String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
+     *
+     *     <span class="kw">if</span> (applicationContext.containsBean(beanName)) {
+     *         Page page = (Page) applicationContext.getBean(beanName);
+     *
+     *     } <span class="kw">else</span> {
+     *         page = (Page) pageClass.newIntance();
+     *     }
+     *
+     *     <span class="kw">return</span> page;
+     * } </pre>
+     * <p/>
+     * Another use of this method would be to create and cache page instances
+     * for reuse in a user's HttpSession.
      *
      * @param path the request page path
      * @param pageClass the page Class the request is mapped to
+     * @param request the page request
      * @return a new Page object
      * @throws Exception if an error occurs creating the Page
      */
-    protected Page newPageInstance(String path, Class pageClass)
-        throws Exception {
+    protected Page newPageInstance(String path, Class pageClass,
+            HttpServletRequest request) throws Exception {
 
         return (Page) pageClass.newInstance();
     }
@@ -1029,7 +1049,7 @@ public class ClickServlet extends HttpServlet {
          * @return a new Page object
          * @throws IllegalArgumentException if the Page is not found
          */
-        Page createPage(String path) {
+        Page createPage(String path, HttpServletRequest request) {
             Class pageClass = clickApp.getPageClass(path);
 
             if (pageClass == null) {
@@ -1037,7 +1057,7 @@ public class ClickServlet extends HttpServlet {
                 throw new IllegalArgumentException(msg);
             }
 
-            return initPage(path, pageClass);
+            return initPage(path, pageClass, request);
         }
 
         /**
@@ -1048,7 +1068,7 @@ public class ClickServlet extends HttpServlet {
          * @throws IllegalArgumentException if the Page Class is not configured
          * with a unique path
          */
-        Page createPage(Class pageClass) {
+        Page createPage(Class pageClass, HttpServletRequest request) {
             String path = clickApp.getPagePath(pageClass);
 
             if (path == null) {
@@ -1057,7 +1077,7 @@ public class ClickServlet extends HttpServlet {
                 throw new IllegalArgumentException(msg);
             }
 
-            return initPage(path, pageClass);
+            return initPage(path, pageClass, request);
         }
 
         /**

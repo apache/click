@@ -398,7 +398,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page is not found
      */
     public Page createPage(String path) {
-        return clickService.createPage(path);
+        return clickService.createPage(path, request);
     }
 
     /**
@@ -419,7 +419,7 @@ public class Context {
      * configured with a unique path
      */
     public Page createPage(Class pageClass) {
-        return clickService.createPage(pageClass);
+        return clickService.createPage(pageClass, request);
     }
 
     /**
