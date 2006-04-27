@@ -23,7 +23,7 @@ public class JavaScriptUtils {
 		for(int i=0;i<args.length;i++){
 			newArgs[i+1] = args[i];
 		}
-		return "alert('" + field.getMessage(key, newArgs) + "');\n";
+		return "alert('" + field.getMessage(key, newArgs) + "');";
 	}
 	
 	public static String getFieldValue(Field field){
@@ -31,7 +31,7 @@ public class JavaScriptUtils {
 	}
 	
 	public static String focusField(Field field){
-		return "form." + field.getName() + ".focus();\n";
+		return "form." + field.getName() + ".focus();";
 	}
 	
 	public static String createValidationFunction(Field field){

@@ -106,15 +106,15 @@ public class ValidatableForm extends Form {
         	
        	StringBuffer buffer = new StringBuffer();
        	
-       	buffer.append("<script language=\"JavaScript\">\n");
+       	buffer.append("<script language=\"JavaScript\">");
        	buffer.append(validateBuffer.toString());
-       	buffer.append("function validate_").append(getName()).append("(form){\n");
-       	buffer.append("  if(").append(formValidateBuffer.toString()).append("){\n");
-       	buffer.append("    return true;\n");
-       	buffer.append("  }\n");
-       	buffer.append("  return false;\n");
-       	buffer.append("}\n");
-       	buffer.append("</script>\n");
+       	buffer.append("function validate_").append(getName()).append("(form){");
+       	buffer.append("  if(").append(formValidateBuffer.toString()).append("){");
+       	buffer.append("    return true;");
+       	buffer.append("  }");
+       	buffer.append("  return false;");
+       	buffer.append("}");
+       	buffer.append("</script>");
        	
        	setAttribute("onsubmit","return validate_" + getName() + "(this)");
        	

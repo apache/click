@@ -24,30 +24,30 @@ public class TextFieldValidator implements Validator {
 		
     	StringBuffer sb = new StringBuffer();
     	
-    	sb.append(JavaScriptUtils.createValidationFunction(field) + "{\n");
+    	sb.append(JavaScriptUtils.createValidationFunction(field) + "{");
     	if(field.isRequired()){
-	    	sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append("==''){\n");
+	    	sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append("==''){");
 	    	sb.append(JavaScriptUtils.fieldAlert("field-required-error", field));
     		sb.append(JavaScriptUtils.focusField(field));
-	    	sb.append("return false;\n");
-	    	sb.append("}\n");
+	    	sb.append("return false;");
+	    	sb.append("}");
     	}
     	if(field.getMinLength() > 0){
-    		sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append(".length <").append(field.getMinLength()).append("){\n");
+    		sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append(".length <").append(field.getMinLength()).append("){");
     		sb.append(JavaScriptUtils.fieldAlert("field-minlength-error", field, new Integer(field.getMinLength())));
     		sb.append(JavaScriptUtils.focusField(field));
-	    	sb.append("return false;\n");
-	    	sb.append("}\n");
+	    	sb.append("return false;");
+	    	sb.append("}");
     	}
     	if(field.getMaxLength() > 0){
-    		sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append(".length >").append(field.getMaxLength()).append("){\n");
+    		sb.append("if(").append(JavaScriptUtils.getFieldValue(field)).append(".length >").append(field.getMaxLength()).append("){");
     		sb.append(JavaScriptUtils.fieldAlert("field-maxlength-error", field, new Integer(field.getMaxLength())));
     		sb.append(JavaScriptUtils.focusField(field));
-	    	sb.append("return false;\n");
-	    	sb.append("}\n");
+	    	sb.append("return false;");
+	    	sb.append("}");
     	}
-    	sb.append("return true;\n");
-    	sb.append("}\n");
+    	sb.append("return true;");
+    	sb.append("}");
     	
     	return sb.toString();
 	}
