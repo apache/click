@@ -162,6 +162,22 @@ public class ColorPicker extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the Field focus JavaScript.
+     *
+     * @return the Field focus JavaScript
+     */
+    public String getFocusJavaScript() {
+        StringBuffer buffer = new StringBuffer();
+
+        // TODO: surround picker image with achor tag which is focusable
+        buffer.append("setFocus('");
+        buffer.append(getName());
+        buffer.append("');");
+
+        return buffer.toString();
+    }
+
+    /**
      * Return the HTML head import statements for the JavaScript files
      * <tt>click/prototype.js</tt>) and <tt>click/colorpicker.js</tt>.
      *
