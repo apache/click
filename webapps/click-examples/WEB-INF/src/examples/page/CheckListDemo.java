@@ -1,9 +1,7 @@
 package examples.page;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import net.sf.click.control.Form;
@@ -11,10 +9,15 @@ import net.sf.click.control.Option;
 import net.sf.click.control.Submit;
 import net.sf.click.extras.control.CheckList;
 
+/**
+ * Provides CheckList control example.
+ *
+ * @author Christian Essel
+ */
 public class CheckListDemo extends BorderedPage{
 
     private static final List STANDARD_OPTIONS;
-    private static List SORTABLE_OPTIONS = new ArrayList();
+    private static final List SORTABLE_OPTIONS = new ArrayList();
 
     static {
         List list = new ArrayList();

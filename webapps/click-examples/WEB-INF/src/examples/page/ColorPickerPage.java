@@ -7,6 +7,11 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.extras.control.ColorPicker;
 
+/**
+ * Provides ColorPicker control example.
+ *
+ * @author Christian Essel
+ */
 public class ColorPickerPage extends BorderedPage {
 
     private Form form;
