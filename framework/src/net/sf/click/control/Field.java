@@ -419,6 +419,21 @@ public abstract class Field implements Control {
     }
 
     /**
+     * Return the Field focus JavaScript.
+     *
+     * @return the Field focus JavaScript
+     */
+    public String getFocusJavaScript() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("setFocus('");
+        buffer.append(getId());
+        buffer.append("');");
+
+        return buffer.toString();
+    }
+
+    /**
      * Return the parent Form containing the Field.
      *
      * @return the parent Form containing the Field

@@ -1764,6 +1764,7 @@ public class Form implements Control {
      * @return the HTML string representation of the form
      */
     public String toString() {
+
         final boolean process =
             context.getRequest().getMethod().equalsIgnoreCase(getMethod());
 
@@ -2121,9 +2122,9 @@ public class Form implements Control {
                 }
 
                 buffer.append("<a class=\"error\"");
-                buffer.append(" href=\"javascript:setFocus('");
-                buffer.append(field.getId());
-                buffer.append("');\">");
+                buffer.append(" href=\"javascript:");
+                buffer.append(field.getFocusJavaScript());
+                buffer.append("\">");
                 buffer.append(field.getError());
                 buffer.append("</a>");
 
