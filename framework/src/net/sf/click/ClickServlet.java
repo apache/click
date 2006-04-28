@@ -724,26 +724,26 @@ public class ClickServlet extends HttpServlet {
     /**
      * Return a new Page instance for the given page path, class and request.
      * <p/>
-     * The default implementation of this method simply creates a new page 
+     * The default implementation of this method simply creates a new page
      * instances:
      * <pre class="codeJava">
-     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, 
+     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass,
      *     HttpServletRequest request) <span class="kw">throws</span> Exception {
-     *       
+     *
      *     <span class="kw">return</span> (Page) pageClass.newInstance();
      * } </pre>
-     * 
+     *
      * This method is designed to be overridden by applications providing their
      * own page creation patterns.
      * <p/>
-     * A typical example of this would be with Inversion of Control (IoC) 
-     * frameworks such as Spring or HiveMind. For example a Spring application 
-     * could override this method and use a <tt>ApplicationContext</tt> to instantiate 
+     * A typical example of this would be with Inversion of Control (IoC)
+     * frameworks such as Spring or HiveMind. For example a Spring application
+     * could override this method and use a <tt>ApplicationContext</tt> to instantiate
      * new Page objects:
      * <pre class="codeJava">
-     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass, 
+     * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass,
      *     HttpServletRequest request) <span class="kw">throws</span> Exception {
-     *       
+     *
      *     String beanName = path.substring(0, path.indexOf(<span class="st">"."</span>));
      *
      *     <span class="kw">if</span> (applicationContext.containsBean(beanName)) {
