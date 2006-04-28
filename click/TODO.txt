@@ -9,12 +9,10 @@ BUGS
 * tomcat jar locking
 
 DOCUMENTATION
-* finish more Column Javadoc
 * update Velocity documentation
 * discuss redirecting to HTTPS
 
-
 VELOCITY
-* get latest Velocity build
+
 
 
