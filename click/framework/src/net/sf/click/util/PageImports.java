@@ -90,7 +90,7 @@ public class PageImports {
             return "";
         }
 
-        StringBuffer buffer = new StringBuffer(80);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(80);
         includeSet = null;
 
         for (int i = 0; i < page.getControls().size(); i++) {
@@ -130,7 +130,7 @@ public class PageImports {
      * @param value the control HTML header imports value
      * @param buffer the string buffer to append the import lines to
      */
-    protected void addImport(String value, StringBuffer buffer) {
+    protected void addImport(String value, HtmlStringBuffer buffer) {
         if (value == null || value.length() == 0) {
             return;
         }

@@ -360,7 +360,7 @@ public class CheckList extends Field {
      * @return the Field focus JavaScript
      */
     public String getFocusJavaScript() {
-        StringBuffer buffer = new StringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         buffer.append("setFocus('");
         buffer.append(getName() + "_0");
@@ -421,7 +421,7 @@ public class CheckList extends Field {
      * @return the two import tags
      */
     public String getHtmlImports() {
-        StringBuffer buffer = new StringBuffer(400);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(400);
 
         String path = getContext().getRequest().getContextPath();
 
@@ -443,7 +443,7 @@ public class CheckList extends Field {
             buffer.append("/click/prototype/scriptaculous.js\"></script>\n");
 
             // Script to execute
-            StringBuffer script = new StringBuffer(50);
+            HtmlStringBuffer script = new HtmlStringBuffer(50);
             script.append("Sortable.create('");
             script.append(StringEscapeUtils.escapeJavaScript(getId()));
             script.append("_ul'");

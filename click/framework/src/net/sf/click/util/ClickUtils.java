@@ -659,7 +659,7 @@ public class ClickUtils {
      * @return the getter method name for the given property name.
      */
     public static String toGetterName(String property) {
-        StringBuffer buffer = new StringBuffer(property.length() + 3);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(property.length() + 3);
 
         buffer.append("get");
         buffer.append(Character.toUpperCase(property.charAt(0)));
@@ -675,7 +675,7 @@ public class ClickUtils {
      * @return the is getter method name for the given property name.
      */
     public static String toIsGetterName(String property) {
-        StringBuffer buffer = new StringBuffer(property.length() + 3);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(property.length() + 3);
 
         buffer.append("is");
         buffer.append(Character.toUpperCase(property.charAt(0)));
@@ -697,7 +697,7 @@ public class ClickUtils {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        StringBuffer buffer = new StringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         for (int i = 0, size = name.length(); i < size; i++) {
             char aChar = name.charAt(i);
@@ -777,7 +777,7 @@ public class ClickUtils {
         boolean lastCharBlank = false;
         boolean hasWhiteSpace = (label.indexOf(' ') != -1);
 
-        StringBuffer buffer = new StringBuffer(label.length());
+        HtmlStringBuffer buffer = new HtmlStringBuffer(label.length());
         for (int i = 0, size = label.length(); i < size; i++) {
             char aChar = label.charAt(i);
 
@@ -820,7 +820,7 @@ public class ClickUtils {
      * @return the setter method name for the given property name.
      */
     public static String toSetterName(String property) {
-        StringBuffer buffer = new StringBuffer(property.length() + 3);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(property.length() + 3);
 
         buffer.append("set");
         buffer.append(Character.toUpperCase(property.charAt(0)));

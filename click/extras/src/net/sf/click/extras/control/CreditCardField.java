@@ -21,6 +21,7 @@ import java.util.List;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.control.TextField;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Credit Card control: &nbsp; &lt;input type='text'&gt;&lt;select&gt;.
@@ -247,7 +248,7 @@ public class CreditCardField extends TextField {
      * @return the HTML rendered CreditCardField string
      */
     public String toString() {
-        StringBuffer buffer = new StringBuffer(400);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(400);
 
         // Render card number field
         String textField = super.toString();
@@ -293,7 +294,7 @@ public class CreditCardField extends TextField {
             String cardType = getCardType();
 
             // Strip spaces and '-' chars
-            StringBuffer buffer = new StringBuffer(value.length());
+            HtmlStringBuffer buffer = new HtmlStringBuffer(value.length());
             for (int i = 0, size = value.length(); i < size; i++) {
                 char aChar = value.charAt(i);
                 if (aChar != '-' && aChar != ' ') {
