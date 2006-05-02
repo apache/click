@@ -7,7 +7,9 @@ import net.sf.click.extras.control.EmailField;
 import examples.control.RichTextArea;
 
 /**
- * Provides an example page using the custom {@link RichTextArea} control.
+ * Provides an example page using the custom RichTextArea control.
+ *
+ * @see RichTextArea
  *
  * @author Malcolm Edgar
  */

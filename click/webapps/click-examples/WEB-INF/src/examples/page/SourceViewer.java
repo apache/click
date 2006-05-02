@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -119,7 +120,7 @@ public class SourceViewer extends BorderedPage {
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(inputStream));
 
-        StringBuffer buffer = new StringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         String line = reader.readLine();
 
