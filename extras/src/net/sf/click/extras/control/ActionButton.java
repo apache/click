@@ -168,8 +168,8 @@ public class ActionButton extends Button {
     public String getOnClick(Object value) {
         String uri = getContext().getRequest().getRequestURI();
 
-        StringBuffer buffer =
-            new StringBuffer(uri.length() + getName().length() + 40);
+        HtmlStringBuffer buffer =
+            new HtmlStringBuffer(uri.length() + getName().length() + 40);
 
         buffer.append(uri);
         buffer.append("?");

@@ -39,6 +39,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
 import net.sf.click.util.Format;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
 import net.sf.click.util.SessionMap;
 
@@ -316,7 +317,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (logger.isDebugEnabled()) {
-            StringBuffer buffer = new StringBuffer(200);
+            HtmlStringBuffer buffer = new HtmlStringBuffer(200);
             buffer.append(request.getMethod());
             buffer.append(" ");
             buffer.append(request.getRequestURL());
@@ -620,7 +621,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (!clickApp.isProductionMode()) {
-            StringBuffer buffer = new StringBuffer(50);
+            HtmlStringBuffer buffer = new HtmlStringBuffer(50);
             buffer.append("renderTemplate: ");
             if (!page.getTemplate().equals(page.getPath())) {
                 buffer.append(page.getPath());

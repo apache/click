@@ -181,7 +181,7 @@ public class ErrorReport {
             return bundle.getString("production-error-message");
         }
 
-        StringBuffer buffer = new StringBuffer(10 * 1024);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(10 * 1024);
 
         Throwable cause = getCause();
 
@@ -486,7 +486,7 @@ public class ErrorReport {
      */
     protected String getRenderedSource() {
 
-        StringBuffer buffer = new StringBuffer(5 * 1024);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(5 * 1024);
 
         buffer.append("<pre style='font-family: Courier New, courier;'>");
 
@@ -538,7 +538,9 @@ public class ErrorReport {
                 // Write out line content
                 if (isErrorLine) {
                     if (isParseError()) {
-                        StringBuffer htmlLine = new StringBuffer(line.length() * 2);
+                        HtmlStringBuffer htmlLine =
+                            new HtmlStringBuffer(line.length() * 2);
+
                         for (int i = 0; i < line.length(); i++) {
                             if (i == getColumnNumber() - 1) {
                                 htmlLine.append(errorCharSpan);
@@ -595,7 +597,8 @@ public class ErrorReport {
         PrintWriter pw = new PrintWriter(sw);
         getCause().printStackTrace(pw);
 
-        StringBuffer buffer = new StringBuffer(sw.toString().length() + 80);
+        HtmlStringBuffer buffer
+            = new HtmlStringBuffer(sw.toString().length() + 80);
         buffer.append("<pre><tt style='font-size:10pt;'>");
         buffer.append(StringEscapeUtils.escapeHtml(sw.toString().trim()));
         buffer.append("</tt></pre>");
@@ -610,7 +613,7 @@ public class ErrorReport {
      * @param map the Map of name value pairs
      * @param buffer the string buffer to write out the values to
      */
-    protected void writeMap(Map map, StringBuffer buffer) {
+    protected void writeMap(Map map, HtmlStringBuffer buffer) {
         for (Iterator i = map.keySet().iterator(); i.hasNext();) {
             Object key = i.next();
             buffer.append(key);

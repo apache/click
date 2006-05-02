@@ -44,6 +44,12 @@ import org.apache.commons.lang.StringEscapeUtils;
  * <pre class="codeHtml">
  * &lt;input type="text" name="address" value="23 Holt's Street"/&gt; </pre>
  *
+ * <h4>Synchronization</h4>
+ *
+ * To improve performance in Click's thread safe environment this
+ * class does not synchronize append operations. Internally this class uses
+ * a character buffer adapted from the JDK 1.5 <tt>AbstractStringBuilder</tt>.
+ *
  * @author Malcolm Edgar
  */
 public class HtmlStringBuffer {
@@ -56,8 +62,11 @@ public class HtmlStringBuffer {
        "onselect", "onchange"
     };
 
-    /** The underlying StringBuffer. */
-    protected final StringBuffer buffer;
+    /** The character storage array. */
+    protected char[] characters;
+
+    /** The count is the number of characters used. */
+    protected int count;
 
     // ----------------------------------------------------------- Constructors
 
@@ -68,18 +77,31 @@ public class HtmlStringBuffer {
      * @param length the initial capacity
      */
     public HtmlStringBuffer(int length) {
-        buffer = new StringBuffer(length);
+        characters = new char[length];
     }
 
     /**
-     * Create a new HTML StringBuffer with an initial capacity of 64
+     * Create a new HTML StringBuffer with an initial capacity of 128
      * characters.
      */
     public HtmlStringBuffer() {
-        buffer = new StringBuffer(64);
+        characters = new char[128];
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Append the char value to the buffer.
+     *
+     * @param value the char value to append
+     */
+    public void append(char value) {
+        int newcount = count + 1;
+        if (newcount > characters.length) {
+            expandCapacity(newcount);
+        }
+        characters[count++] = value;
+    }
 
     /**
      * Append the integer value to the buffer.
@@ -87,20 +109,52 @@ public class HtmlStringBuffer {
      * @param value the integer value to append
      */
     public void append(int value) {
-        buffer.append(value);
+        append(String.valueOf(value));
     }
 
     /**
-     * Append the raw string value of the given object to the buffer.
+     * Append the long value to the buffer.
+     *
+     * @param value the long value to append
+     */
+    public void append(long value) {
+        append(String.valueOf(value));
+    }
+
+    /**
+     * Append the raw object value of the given object to the buffer.
      *
      * @param value the object value to append
      * @throws IllegalArgumentException if the value is null
      */
     public void append(Object value) {
-        if (value == null) {
-            throw new IllegalArgumentException("Null value parameter");
+        String string = String.valueOf(value);
+        int length = string.length();
+
+        int newCount = count + length;
+        if (newCount > characters.length) {
+            expandCapacity(newCount);
         }
-        buffer.append(value);
+        string.getChars(0, length, characters, count);
+        count = newCount;
+    }
+
+    /**
+     * Append the raw string value of the given object to the buffer.
+     *
+     * @param value the string value to append
+     * @throws IllegalArgumentException if the value is null
+     */
+    public void append(String value) {
+        String string = (value != null) ? value : "null";
+        int length = string.length();
+
+        int newCount = count + length;
+        if (newCount > characters.length) {
+            expandCapacity(newCount);
+        }
+        string.getChars(0, length, characters, count);
+        count = newCount;
     }
 
     /**
@@ -113,7 +167,7 @@ public class HtmlStringBuffer {
         if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
-        buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
+        append(StringEscapeUtils.escapeHtml(value.toString()));
     }
 
     /**
@@ -136,15 +190,15 @@ public class HtmlStringBuffer {
             throw new IllegalArgumentException("Null name parameter");
         }
         if (value != null) {
-            buffer.append(" ");
-            buffer.append(name);
-            buffer.append("=\"");
+            append(" ");
+            append(name);
+            append("=\"");
             if (isJavaScriptAttribute(name)) {
-                buffer.append(value);
+                append(value);
             } else {
-                buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
+                append(StringEscapeUtils.escapeHtml(value.toString()));
             }
-            buffer.append("\"");
+            append("\"");
         }
     }
 
@@ -163,11 +217,11 @@ public class HtmlStringBuffer {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
-        buffer.append(" ");
-        buffer.append(name);
-        buffer.append("=\"");
-        buffer.append(value);
-        buffer.append("\"");
+        append(" ");
+        append(name);
+        append("=\"");
+        append(value);
+        append("\"");
     }
 
     /**
@@ -178,7 +232,7 @@ public class HtmlStringBuffer {
      *    appendAttributeDisabled()  <span class="green">-></span>  <span class="st">disabled="disabled"</span> </pre>
      */
     public void appendAttributeDisabled() {
-        buffer.append(" disabled=\"disabled\"");
+        append(" disabled=\"disabled\"");
     }
 
     /**
@@ -189,7 +243,7 @@ public class HtmlStringBuffer {
      *    appendAttributeReadonly()  <span class="green">-></span>  <span class="st">readonly="readonly"</span> </pre>
      */
     public void appendAttributeReadonly() {
-        buffer.append(" readonly=\"readonly\"");
+        append(" readonly=\"readonly\"");
     }
 
     /**
@@ -225,9 +279,9 @@ public class HtmlStringBuffer {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
-        buffer.append("</");
-        buffer.append(name);
-        buffer.append(">");
+        append("</");
+        append(name);
+        append(">");
     }
 
     /**
@@ -239,7 +293,7 @@ public class HtmlStringBuffer {
      *
      */
     public void closeTag() {
-        buffer.append(">");
+        append(">");
     }
 
     /**
@@ -251,7 +305,7 @@ public class HtmlStringBuffer {
      *
      */
     public void elementEnd() {
-        buffer.append("/>");
+        append("/>");
     }
 
     /**
@@ -264,8 +318,8 @@ public class HtmlStringBuffer {
      * @param name the HTML element name to start
      */
     public void elementStart(String name) {
-        buffer.append("<");
-        buffer.append(name);
+        append("<");
+        append(name);
     }
 
     /**
@@ -290,7 +344,6 @@ public class HtmlStringBuffer {
             }
         }
 
-
         return false;
     }
 
@@ -300,7 +353,7 @@ public class HtmlStringBuffer {
      * @return the length of the string buffer
      */
     public int length() {
-        return buffer.length();
+        return count;
     }
 
     /**
@@ -309,7 +362,37 @@ public class HtmlStringBuffer {
      * @return a string representation of the string buffer
      */
     public String toString() {
-        return buffer.toString();
+        return new String(characters, 0, count);
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Ensures that the capacity is at least equal to the specified minimum.
+     * If the current capacity is less than the argument, then a new internal
+     * array is allocated with greater capacity. The new capacity is the
+     * larger of:
+     * <ul>
+     * <li>The <code>minimumCapacity</code> argument.
+     * <li>Twice the old capacity, plus <code>2</code>.
+     * </ul>
+     * If the <code>minimumCapacity</code> argument is nonpositive, this method
+     * takes no action and simply returns.
+     *
+     * @param minimumCapacity the minimum desired capacity
+     */
+    protected void expandCapacity(int minimumCapacity) {
+        int newCapacity = (characters.length + 1) * 2;
+
+        if (newCapacity < 0) {
+            newCapacity = Integer.MAX_VALUE;
+        } else if (minimumCapacity > newCapacity) {
+            newCapacity = minimumCapacity;
+        }
+
+        char newValue[] = new char[newCapacity];
+        System.arraycopy(characters, 0, newValue, 0, count);
+        characters = newValue;
     }
 
 }

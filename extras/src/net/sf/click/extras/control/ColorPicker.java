@@ -167,7 +167,7 @@ public class ColorPicker extends Field {
      * @return the Field focus JavaScript
      */
     public String getFocusJavaScript() {
-        StringBuffer buffer = new StringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         // TODO: surround picker image with achor tag which is focusable
         buffer.append("setFocus('");

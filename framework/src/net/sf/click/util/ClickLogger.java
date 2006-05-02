@@ -183,7 +183,7 @@ public class ClickLogger implements LogChute {
             return;
         }
 
-        StringBuffer buffer = new StringBuffer(80);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         buffer.append("[");
         buffer.append(name);

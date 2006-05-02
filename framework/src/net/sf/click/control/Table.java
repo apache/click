@@ -993,7 +993,9 @@ public class Table implements Control {
                 previousLabel = pagingLink.toString();
             }
 
-            StringBuffer pagesBuffer = new StringBuffer(getNumberPages() * 70);
+            HtmlStringBuffer pagesBuffer =
+                new HtmlStringBuffer(getNumberPages() * 70);
+
             for (int i = 0; i < getNumberPages(); i++) {
                 String pageNumber = String.valueOf(i + 1);
                 if (i == getPageNumber()) {
