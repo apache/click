@@ -36,6 +36,7 @@ public class FormProperties extends BorderedPage {
         boolean readonly = false;
         boolean showBorders = false;
         boolean validate = true;
+        boolean javaScriptValidate = false;
     }
 
     /** Form values holder.*/
@@ -68,6 +69,7 @@ public class FormProperties extends BorderedPage {
     private Checkbox disabledCheckbox;
     private Checkbox readonlyCheckbox;
     private Checkbox validateCheckbox;
+    private Checkbox javaScriptValidateCheckbox;
 
     public FormProperties() {
 
@@ -88,13 +90,17 @@ public class FormProperties extends BorderedPage {
         fieldSet.add(emailField);
 
         investmentsField = new InvestmentSelect("investments");
+        investmentsField.setRequired(true);
         fieldSet.add(investmentsField);
 
-        dateJoinedField = new DateField("dateJoined");
+        dateJoinedField = new DateField("dateJoined", true);
         fieldSet.add(dateJoinedField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+
+        Submit cancel = new Submit("cancel", this, "onCancelClick");
+        cancel.setAttribute("onclick", "form.onsubmit=null;");
+        form.add(cancel);
 
         addControl(form);
 
@@ -177,6 +183,10 @@ public class FormProperties extends BorderedPage {
         validateCheckbox.setAttribute("onClick", "optionsForm.submit();");
         fieldSet.add(validateCheckbox);
 
+        javaScriptValidateCheckbox = new Checkbox("javaScriptValidate", "JavaScript Validate");
+        javaScriptValidateCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        fieldSet.add(javaScriptValidateCheckbox);
+
         showBordersCheckbox = new Checkbox("showBorders");
         showBordersCheckbox.setAttribute("onClick", "optionsForm.submit();");
         fieldSet.add(showBordersCheckbox);
@@ -234,6 +244,7 @@ public class FormProperties extends BorderedPage {
         options.disabled = disabledCheckbox.isChecked();
         options.readonly = readonlyCheckbox.isChecked();
         options.validate = validateCheckbox.isChecked();
+        options.javaScriptValidate = javaScriptValidateCheckbox.isChecked();
         options.showBorders = showBordersCheckbox.isChecked();
 
         applyOptions(options);
@@ -274,6 +285,7 @@ public class FormProperties extends BorderedPage {
         form.setLabelStyle(options.labelStyle);
         form.setReadonly(options.readonly);
         form.setValidate(options.validate);
+        form.setJavaScriptValidation(options.javaScriptValidate);
 
         buttonAlignSelect.setValue(options.buttonAlign);
         buttonStyle.setValue(options.buttonStyle);
@@ -289,5 +301,6 @@ public class FormProperties extends BorderedPage {
         readonlyCheckbox.setChecked(options.readonly);
         disabledCheckbox.setChecked(options.disabled);
         validateCheckbox.setChecked(options.validate);
+        javaScriptValidateCheckbox.setChecked(options.javaScriptValidate);
     }
 }

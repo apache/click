@@ -144,7 +144,7 @@ public class DateField extends TextField {
      */
     public DateField(String name) {
         super(name);
-        setAttribute("id", getName() + "-field");
+        setAttribute("id", getName() + "_field");
         setFormatPattern("dd MMM yyyy");
     }
 
@@ -158,7 +158,7 @@ public class DateField extends TextField {
      */
     public DateField(String name, String label) {
         super(name, label);
-        setAttribute("id", getName() + "-field");
+        setAttribute("id", getName() + "_field");
         setFormatPattern("dd MMM yyyy");
     }
 
@@ -187,7 +187,7 @@ public class DateField extends TextField {
      */
     public DateField(String name, String label, boolean required) {
         super(name, label, required);
-        setAttribute("id", getName() + "-field");
+        setAttribute("id", getName() + "_field");
         setFormatPattern("dd MMM yyyy");
     }
 
@@ -311,7 +311,7 @@ public class DateField extends TextField {
      */
     public void setName(String name) {
         super.setName(name);
-        setAttribute("id", getName() + "-field");
+        setAttribute("id", getName() + "_field");
     }
 
     /**
@@ -562,7 +562,7 @@ public class DateField extends TextField {
      * @return JavaScript Calendar pattern
      */
     protected String parseDateFormatPattern(String pattern) {
-        StringBuffer jsPattern = new StringBuffer(20);
+        HtmlStringBuffer jsPattern = new HtmlStringBuffer(20);
         int tokenStart = -1;
         int tokenEnd = -1;
         boolean debug = false;

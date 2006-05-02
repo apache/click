@@ -76,3 +76,77 @@ function setFocus(id) {
 		field.focus();
 	}
 }
+
+function trim(str) {  
+	while (str.charAt(0) == (" ")) {  
+		str = str.substring(1);
+  	}
+  	while (str.charAt(str.length - 1) == " ") {  
+  		str = str.substring(0,str.length-1);
+  	}
+  	return str;
+}
+
+
+function setFieldValidColor(field) {
+	field.style.background = 'white';
+}
+
+function setFieldErrorColor(field) {
+	field.style.background = '#FFFF80';
+}
+
+function validateField(id) {
+    var field = document.getElementById(id);
+    if (field) {
+    	var value = trim(field.value);
+    	if (value.length > 0) {
+    		setFieldValidColor(field);
+    		return true;
+    	} else {
+    		setFieldErrorColor(field);
+    		return false;
+    	}
+    } else {
+    	alert('Field ' + id + ' not found.');
+    	return false;
+    }
+}
+
+function validateForm(msgs, id, align, style) {
+    var errorsHtml = '';
+    
+	for (i = 0; i < msgs.length; i++) {
+		var value = msgs[i];
+		if (value != null) {
+			var index = value.indexOf('|');
+			var fieldMsg = value.substring(0, index);
+			var fieldId = value.substring(index + 1);
+			
+			errorsHtml += '<tr class="errors"><td class="errors" align="';
+			errorsHtml += align;
+			errorsHtml += '" style="';
+			errorsHtml += style;
+			errorsHtml += '">';
+			errorsHtml += '<a class="error" href="javascript:setFocus(\'';
+			errorsHtml += fieldId; 
+			errorsHtml += '\')">';
+			errorsHtml += fieldMsg;
+			errorsHtml += '</a>';
+			errorsHtml += '</td></tr>';
+		}
+	}
+	
+	if (errorsHtml.length > 0) {
+	    errorsHtml = '<table class="errors">' + errorsHtml + '</table>';	    
+	    //alert(errorsHtml);
+	    
+	    document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
+	    document.getElementById(id + '-errorsTr').style.display = 'inline';
+	    
+		return false;
+		
+	} else {	    
+		return true;
+	}
+}

@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 
 /**
@@ -424,7 +425,7 @@ public abstract class Field implements Control {
      * @return the Field focus JavaScript
      */
     public String getFocusJavaScript() {
-        StringBuffer buffer = new StringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         buffer.append("setFocus('");
         buffer.append(getId());
@@ -490,7 +491,7 @@ public abstract class Field implements Control {
             return getAttribute("id");
 
         } else {
-            String formId = (getForm() != null) ? getForm().getId() + "-" : "";
+            String formId = (getForm() != null) ? getForm().getId() + "_" : "";
 
             String id = formId + getName();
 
@@ -836,6 +837,41 @@ public abstract class Field implements Control {
      */
     public void setValidate(boolean validate) {
         this.validate = Boolean.valueOf(validate);
+    }
+
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        if (isRequired()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("function validate_");
+            buffer.append(getId());
+            buffer.append("() {\n");
+            buffer.append("   if (!validateField('");
+            buffer.append(getId());
+            buffer.append("')) {\n");
+            buffer.append("      return '");
+            buffer.append(getMessage("field-required-error", getErrorLabel()));
+            buffer.append("|");
+            buffer.append(getId());
+            buffer.append("';\n");
+            buffer.append("   } else {\n");
+            buffer.append("      return null;\n");
+            buffer.append("   }\n");
+            buffer.append("}\n");
+
+            return buffer.toString();
+
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -554,6 +555,12 @@ public class Form implements Control {
 
     /** The field &lt;td&gt; "style" attribute value. */
     protected String fieldStyle;
+
+    /**
+     * The JavaScript client side form fields validation flag. By default
+     * JavaScript validation is not enabled.
+     */
+    protected boolean javaScriptValidation;
 
     /** The label align, default value is <tt>"left"</tt>. */
     protected String labelAlign = ALIGN_LEFT;
@@ -1161,7 +1168,7 @@ public class Form implements Control {
      * @return all the HTML head imports for the form and all its controls
      */
     public String getHtmlImportsAll() {
-        StringBuffer buffer = new StringBuffer(200);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(200);
 
         buffer.append(getHtmlImports());
 
@@ -1200,6 +1207,24 @@ public class Form implements Control {
         } else {
             return getName();
         }
+    }
+
+    /**
+     * Return true if JavaScript client side form validation is enabled.
+     *
+     * @return true if JavaScript client side form validation is enabled
+     */
+    public boolean getJavaScriptValidation() {
+        return javaScriptValidation;
+    }
+
+    /**
+     * Set the JavaScript client side form validation flag.
+     *
+     * @param validate the JavaScript client side validation flag
+     */
+    public void setJavaScriptValidation(boolean validate) {
+        javaScriptValidation = validate;
     }
 
     /**
@@ -1784,6 +1809,9 @@ public class Form implements Control {
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
+        if (getJavaScriptValidation()) {
+            buffer.appendAttribute("onsubmit", "return onFormSubmit();");
+        }
         buffer.closeTag();
         buffer.append("\n");
 
@@ -1883,6 +1911,8 @@ public class Form implements Control {
                 }
             }
         }
+
+        renderValidationJavaScript(buffer);
 
         return buffer.toString();
     }
@@ -2143,6 +2173,19 @@ public class Form implements Control {
                 buffer.append("</table>\n");
                 buffer.append("</td></tr>\n");
             }
+
+        }
+
+        if (getValidate() && getJavaScriptValidation()) {
+            buffer.append("<tr style=\"display:none\" id=\"");
+            buffer.append(getId());
+            buffer.append("-errorsTr\"><td align=\"");
+            buffer.append(getErrorsAlign());
+            buffer.append("\">\n");
+            buffer.append("<div class=\"errors\" id=\"");
+            buffer.append(getId());
+            buffer.append("-errorsDiv\"/>\n");
+            buffer.append("</td></tr>\n");
         }
 
         return fieldWithError;
@@ -2174,6 +2217,61 @@ public class Form implements Control {
             buffer.append("</td></tr>\n");
             buffer.append("</table>\n");
             buffer.append("</td></tr>\n");
+        }
+    }
+
+    /**
+     * Render the Form validation JavaScript to the string buffer.
+     *
+     * @param buffer the StringBuffer to render to
+     */
+    protected void renderValidationJavaScript(HtmlStringBuffer buffer) {
+
+        // Render JavaScript form validation code
+        if (getValidate() && getJavaScriptValidation()) {
+            List functionNames = new ArrayList();
+
+            buffer.append("<script type=\"text/javascript\"><!--\n");
+
+            // Render field validation functions & build list of function names
+            List formFields = ClickUtils.getFormFields(this);
+            for (Iterator i = formFields.iterator(); i.hasNext();) {
+                Field field = (Field) i.next();
+                String fieldJS = field.getValidationJavaScript();
+                if (fieldJS != null) {
+                    buffer.append(fieldJS);
+
+                    StringTokenizer tokenizer = new StringTokenizer(fieldJS);
+                    tokenizer.nextToken();
+                    functionNames.add(tokenizer.nextToken());
+                }
+            }
+
+            if (!functionNames.isEmpty()) {
+                buffer.append("function onFormSubmit() {\n");
+                buffer.append("   var msgs = new Array(");
+                buffer.append(functionNames.size());
+                buffer.append(");\n");
+                for (int i = 0; i < functionNames.size(); i++) {
+                    buffer.append("   msgs[");
+                    buffer.append(i);
+                    buffer.append("] = ");
+                    buffer.append(functionNames.get(i).toString());
+                    buffer.append(";\n");
+                }
+                buffer.append("   return validateForm(msgs, '");
+                buffer.append(getId());
+                buffer.append("', '");
+                buffer.append(getErrorsAlign());
+                buffer.append("', '");
+                buffer.append(getErrorsStyle());
+                buffer.append("');\n");
+                buffer.append("}\n");
+
+            } else {
+                buffer.append("function onFormSubmit() { return true; }\n");
+            }
+            buffer.append("//--></script>\n");
         }
     }
 
