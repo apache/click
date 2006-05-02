@@ -21,6 +21,11 @@ import net.sf.click.util.ClickUtils;
 import examples.control.PackagingRadioGroup;
 import examples.control.TitleSelect;
 
+/**
+ * Provides an TabbedForm control example.
+ *
+ * @author Malcolm Edgar
+ */
 public class TabbedFormDemo extends BorderedPage {
 
     private TabbedForm form = new TabbedForm("form");
