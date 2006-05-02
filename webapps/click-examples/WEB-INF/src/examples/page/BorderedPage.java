@@ -1,6 +1,7 @@
 package examples.page;
 
 import net.sf.click.Page;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a page border template. This Page returns the template
@@ -23,7 +24,7 @@ public class BorderedPage extends Page {
         String className = getClass().getName();
 
         String shortName = className.substring(className.lastIndexOf('.') + 1);
-        StringBuffer title = new StringBuffer(shortName.length() + 1);
+        HtmlStringBuffer title = new HtmlStringBuffer();
         title.append(shortName.charAt(0));
         for (int i = 1; i < shortName.length(); i++) {
             char aChar = shortName.charAt(i);
