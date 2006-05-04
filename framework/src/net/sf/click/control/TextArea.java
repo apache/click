@@ -48,7 +48,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class TextArea extends Field {
 
-    private static final long serialVersionUID = 850919582013675611L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

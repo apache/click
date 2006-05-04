@@ -57,7 +57,7 @@ public class Button extends Field {
 
     // -------------------------------------------------------------- Constants
 
-    private static final long serialVersionUID = -4565346013990356183L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------------- Constructors
 

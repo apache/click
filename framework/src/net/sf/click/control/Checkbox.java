@@ -38,7 +38,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class Checkbox extends Field {
 
-    private static final long serialVersionUID = -6767031397352259579L;
+    private static final long serialVersionUID = 1L;
 
     /** The field checked value. */
     protected boolean checked;

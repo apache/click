@@ -36,7 +36,7 @@ package net.sf.click.control;
  */
 public class PasswordField extends TextField {
 
-    private static final long serialVersionUID = -1220129260834465418L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------------- Constructors
 

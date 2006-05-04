@@ -53,9 +53,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class TextField extends Field {
 
-    // ----------------------------------------------------------- Constructors
-
-    private static final long serialVersionUID = 6187190854708434969L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

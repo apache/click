@@ -415,7 +415,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Form implements Control {
 
-    // ------------------------------------------------------- Static Variables
+    // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
 
@@ -466,6 +466,13 @@ public class Form implements Control {
      */
     public static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
 
+    /** The HTML imports statements. */
+    protected static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/control.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
+
+    // -------------------------------------------------------- Class Variables
+
     /** The errors-header resource property. */
     protected static String ERRORS_HEADER = "";
 
@@ -483,11 +490,6 @@ public class Form implements Control {
 
     /** The label-required-suffix resource property. */
     protected static String LABEL_REQUIRED_SUFFIX = "";
-
-    /** The HTML imports statements. */
-    protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/control.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
 
     static {
         ResourceBundle bundle =

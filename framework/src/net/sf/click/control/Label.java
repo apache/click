@@ -34,7 +34,7 @@ package net.sf.click.control;
  */
 public class Label extends Field {
 
-    private static final long serialVersionUID = -6211362222692407741L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------------- Constructors
 

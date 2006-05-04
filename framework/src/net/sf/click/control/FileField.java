@@ -63,7 +63,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class FileField extends Field {
 
-    private static final long serialVersionUID = 2557325521464484964L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 
@@ -96,6 +96,17 @@ public class FileField extends Field {
     }
 
     /**
+     * Construct the FileField with the given name and required status.
+     *
+     * @param name the name of the field
+     * @param required the field required status
+     */
+    public FileField(String name, boolean required) {
+        super(name);
+        setRequired(required);
+    }
+
+    /**
      * Construct the FileField with the given name and label.
      *
      * @param name the name of the field
@@ -114,17 +125,6 @@ public class FileField extends Field {
      */
     public FileField(String name, String label, int size) {
         this(name, label);
-        setSize(size);
-    }
-
-    /**
-     * Construct the FileField with the given name and field size.
-     *
-     * @param name the name of the field
-     * @param size the field required status
-     */
-    public FileField(String name, int size) {
-        super(name);
         setSize(size);
     }
 

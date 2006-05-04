@@ -40,7 +40,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Submit extends Button {
 
-    private static final long serialVersionUID = 866770311383007541L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

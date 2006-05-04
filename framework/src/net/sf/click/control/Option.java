@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.io.Serializable;
 import java.util.List;
 
 import net.sf.click.util.HtmlStringBuffer;
@@ -93,7 +94,9 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @author Malcolm Edgar
  */
-public class Option {
+public class Option implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The empty select empty option. */
     public static final Option EMPTY_OPTION = new Option("", "");

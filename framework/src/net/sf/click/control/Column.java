@@ -173,7 +173,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Column implements Serializable {
 
-    private static final long serialVersionUID = -4573607961095404555L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

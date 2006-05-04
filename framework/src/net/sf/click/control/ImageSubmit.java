@@ -27,7 +27,7 @@ package net.sf.click.control;
  */
 public class ImageSubmit extends Submit {
 
-    private static final long serialVersionUID = 3716073195606023304L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 
