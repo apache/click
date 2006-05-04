@@ -103,7 +103,9 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class CreditCardField extends TextField {
 
-    private static final long serialVersionUID = -4591403023871778803L;
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     /** The Visa type credit card: "VISA". */
     public static final String VISA = "VISA";

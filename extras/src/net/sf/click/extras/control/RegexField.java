@@ -61,9 +61,7 @@ import net.sf.click.control.TextField;
  */
 public class RegexField extends TextField {
 
-    // ----------------------------------------------------------- Constructors
-
-    private static final long serialVersionUID = 1030492442713326113L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

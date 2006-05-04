@@ -87,7 +87,9 @@ import org.w3c.dom.NodeList;
  */
 public class Menu implements Control {
 
-    private static final long serialVersionUID = 5820272228903777866L;
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     private static final Object LOAD_LOCK = new Object();
 
@@ -95,6 +97,8 @@ public class Menu implements Control {
      * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
      */
     protected static final String CONFIG_FILE = "/WEB-INF/menu.xml";
+
+    // -------------------------------------------------------- Class Variables
 
     /** The cached root Menu as defined in <tt>menu.xml</tt>. */
     protected static Menu rootMenu;

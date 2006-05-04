@@ -58,6 +58,8 @@ public class DoubleField extends TextField {
 
     private static final long serialVersionUID = 1L;
 
+    // ----------------------------------------------------- Instance Variables
+
     /** The maximum field value. */
     protected double maxvalue = Double.MAX_VALUE;
 
