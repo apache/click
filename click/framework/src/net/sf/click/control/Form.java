@@ -2179,7 +2179,7 @@ public class Form implements Control {
         if (getValidate() && getJavaScriptValidation()) {
             buffer.append("<tr style=\"display:none\" id=\"");
             buffer.append(getId());
-            buffer.append("-errorsTr\"><td align=\"");
+            buffer.append("-errorsTr\"><td width='100%' align=\"");
             buffer.append(getErrorsAlign());
             buffer.append("\">\n");
             buffer.append("<div class=\"errors\" id=\"");

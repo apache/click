@@ -492,6 +492,45 @@ public class Select extends Field {
         optionList = options;
     }
 
+    /**
+     * Return the Select JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        if (isRequired()) {
+            Option firstOption = (Option) getOptionList().get(0);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("function validate_");
+            buffer.append(getId());
+            buffer.append("() {\n");
+            buffer.append("   if (!validateSelectField('");
+            buffer.append(getId());
+            buffer.append("','");
+            buffer.append(firstOption.getValue());
+            buffer.append("')) {\n");
+            buffer.append("      return '");
+            buffer.append(getMessage("select-error", getErrorLabel()));
+            buffer.append("|");
+            buffer.append(getId());
+            buffer.append("';\n");
+            buffer.append("   } else {\n");
+            buffer.append("      return null;\n");
+            buffer.append("   }\n");
+            buffer.append("}\n");
+
+            return buffer.toString();
+
+        } else {
+            return null;
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**

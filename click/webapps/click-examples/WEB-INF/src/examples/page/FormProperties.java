@@ -90,16 +90,15 @@ public class FormProperties extends BorderedPage {
         fieldSet.add(emailField);
 
         investmentsField = new InvestmentSelect("investments");
-        investmentsField.setRequired(true);
         fieldSet.add(investmentsField);
 
-        dateJoinedField = new DateField("dateJoined", true);
+        dateJoinedField = new DateField("dateJoined");
         fieldSet.add(dateJoinedField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
 
         Submit cancel = new Submit("cancel", this, "onCancelClick");
-        cancel.setAttribute("onclick", "form.onsubmit=null;");
+        cancel.setCancelJavaScriptValidation(true);
         form.add(cancel);
 
         addControl(form);
@@ -206,19 +205,19 @@ public class FormProperties extends BorderedPage {
      */
     public void onInit() {
         // Apply saved options to the demo form and the optionsForm
-        Options options = (Options) getContext().getSessionObject(Options.class);
+        Options options = (Options) getSessionObject(Options.class);
         applyOptions(options);
     }
 
     public boolean onOkClick() {
-        Values values = (Values) getContext().getSessionObject(Values.class);
+        Values values = (Values) getSessionObject(Values.class);
 
         values.name = nameField.getValue();
         values.email = emailField.getValue();
         values.investments = investmentsField.getValue();
         values.dateJoined = dateJoinedField.getValue();
 
-        getContext().setSessionObject(values);
+        setSessionObject(values);
 
         return true;
     }
@@ -249,10 +248,10 @@ public class FormProperties extends BorderedPage {
 
         applyOptions(options);
 
-        getContext().setSessionObject(options);
+        setSessionObject(options);
 
         // Apply any saved form values to demo form.
-        Values values = (Values) getContext().getSessionObject(Values.class);
+        Values values = (Values) getSessionObject(Values.class);
 
         nameField.setValue(values.name);
         emailField.setValue(values.email);
@@ -263,8 +262,8 @@ public class FormProperties extends BorderedPage {
     }
 
     public boolean onRestoreDefaults() {
-        getContext().removeSessionObject(Options.class);
-        getContext().removeSessionObject(Values.class);
+        removeSessionObject(Options.class);
+        removeSessionObject(Values.class);
 
         applyOptions(new Options());
 
@@ -302,5 +301,32 @@ public class FormProperties extends BorderedPage {
         disabledCheckbox.setChecked(options.disabled);
         validateCheckbox.setChecked(options.validate);
         javaScriptValidateCheckbox.setChecked(options.javaScriptValidate);
+    }
+
+    private Object getSessionObject(Class aClass) {
+        if (aClass == null) {
+            throw new IllegalArgumentException("Null class parameter.");
+        }
+        Object object = getContext().getSessionAttribute(aClass.getName());
+        if (object == null) {
+            try {
+                object = aClass.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return object;
+    }
+
+    private void setSessionObject(Object object) {
+        if (object != null) {
+            getContext().setSessionAttribute(object.getClass().getName(), object);
+        }
+    }
+
+    public void removeSessionObject(Class aClass) {
+        if (getContext().hasSession() && aClass != null) {
+            getContext().getSession().removeAttribute(aClass.getName());
+        }
     }
 }
