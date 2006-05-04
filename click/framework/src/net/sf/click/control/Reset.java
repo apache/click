@@ -51,7 +51,7 @@ package net.sf.click.control;
  */
 public class Reset extends Button {
 
-    private static final long serialVersionUID = 8277685511901684189L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------------- Constructors
 

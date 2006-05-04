@@ -101,7 +101,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class FieldSet extends Field {
 
-    private static final long serialVersionUID = -1811752204415596846L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

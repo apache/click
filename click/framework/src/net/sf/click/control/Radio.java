@@ -40,7 +40,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class Radio extends Field {
 
-    private static final long serialVersionUID = 6352053148711861658L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

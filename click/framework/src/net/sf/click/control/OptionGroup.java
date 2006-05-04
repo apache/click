@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,9 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @author Malcolm Edgar
  */
-public class OptionGroup {
+public class OptionGroup implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     // ------------------------------------------------- Instance Variables
 

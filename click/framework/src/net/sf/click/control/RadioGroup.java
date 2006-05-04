@@ -89,7 +89,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class RadioGroup extends Field {
 
-    private static final long serialVersionUID = 2978451472698468194L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

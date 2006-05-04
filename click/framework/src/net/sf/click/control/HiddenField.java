@@ -85,7 +85,7 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class HiddenField extends Field {
 
-    private static final long serialVersionUID = 4705251470274077158L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 
