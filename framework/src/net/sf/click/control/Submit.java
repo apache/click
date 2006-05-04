@@ -129,6 +129,33 @@ public class Submit extends Button {
 
     // ------------------------------------------------------ Public Attributes
 
+
+    /**
+     * Return true if client side JavaScript form validation will be cancelled
+     * by pressing this button.
+     *
+     * @return true if button will cancel JavaScript form validation
+     */
+    public boolean getCancelJavaScriptValidation() {
+        String value = getAttribute("onclick");
+
+        return "form.onsubmit=null;".equals(value);
+    }
+
+    /**
+     * Set flag whether client side JavaScript form validation will be cancelled
+     * by pressing this button.
+     *
+     * @param cancel the cancel JavaScript form validation flag
+     */
+    public void setCancelJavaScriptValidation(boolean cancel) {
+        if (cancel) {
+            setAttribute("onclick", "form.onsubmit=null;");
+        } else {
+            setAttribute("onclick", null);
+        }
+    }
+
     /**
      * Returns the true if the submit button was clicked, or false otherwise.
      *
@@ -184,4 +211,5 @@ public class Submit extends Button {
             return true;
         }
     }
+
 }
