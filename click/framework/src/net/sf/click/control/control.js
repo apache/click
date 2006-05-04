@@ -113,8 +113,26 @@ function validateField(id) {
     }
 }
 
+function validateSelectField(id, defaultValue) {
+    var field = document.getElementById(id);
+    if (field) {
+    	var value = field.value;
+    	if (value != defaultValue) {
+    		setFieldValidColor(field);
+    		return true;
+    	} else {
+    		setFieldErrorColor(field);
+    		return false;
+    	}
+    } else {
+    	alert('Field ' + id + ' not found.');
+    	return false;
+    }
+}
+
 function validateForm(msgs, id, align, style) {
     var errorsHtml = '';
+	var focusFieldId = null;
     
 	for (i = 0; i < msgs.length; i++) {
 		var value = msgs[i];
@@ -123,6 +141,10 @@ function validateForm(msgs, id, align, style) {
 			var fieldMsg = value.substring(0, index);
 			var fieldId = value.substring(index + 1);
 			
+			if (focusFieldId == null) {
+				focusFieldId = fieldId;
+			}
+			
 			errorsHtml += '<tr class="errors"><td class="errors" align="';
 			errorsHtml += align;
 			errorsHtml += '" style="';
@@ -130,7 +152,7 @@ function validateForm(msgs, id, align, style) {
 			errorsHtml += '">';
 			errorsHtml += '<a class="error" href="javascript:setFocus(\'';
 			errorsHtml += fieldId; 
-			errorsHtml += '\')">';
+			errorsHtml += '\');">';
 			errorsHtml += fieldMsg;
 			errorsHtml += '</a>';
 			errorsHtml += '</td></tr>';
@@ -143,6 +165,8 @@ function validateForm(msgs, id, align, style) {
 	    
 	    document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
 	    document.getElementById(id + '-errorsTr').style.display = 'inline';
+	    
+	    setFocus(focusFieldId);
 	    
 		return false;
 		
