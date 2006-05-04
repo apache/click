@@ -37,6 +37,10 @@ up to a 1.0 release in the Q2 2006.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+       Added client side JavaScript form validation
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-16">16</a>].
+      </li>        
+      <li class="change">
        Added new Click extras controls
        <a href="extras-api/net/sf/click/extras/control/CheckList.html">CheckList</a> and
        <a href="extras-api/net/sf/click/extras/control/ColorPicker.html">ColorPicker</a>.
@@ -66,6 +70,11 @@ up to a 1.0 release in the Q2 2006.
        Improved    
        <a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
        performance with unsynchronized append methods.
+      </li>
+      <li class="change">
+       Fixed <tt>UnsupportedEncodingException</tt> in ClickUtils.encodeUrl() when
+       application charset is undefined
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-87">87</a>].
       </li>
       <li class="change">
        Updated Velocity 1.5-dev JAR snapshot to revision 390735.
