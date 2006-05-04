@@ -85,6 +85,8 @@ import ognl.Ognl;
  */
 public class CheckList extends Field {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
     /** The Checklist resource file names. */

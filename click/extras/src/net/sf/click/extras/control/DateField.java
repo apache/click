@@ -88,7 +88,9 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class DateField extends TextField {
 
-    private static final long serialVersionUID = 3379108282465075759L;
+    // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     /** The HTML import statements. */
     protected static final String HTML_IMPORTS =

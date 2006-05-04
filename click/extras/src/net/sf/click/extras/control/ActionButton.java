@@ -49,6 +49,8 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class ActionButton extends Button {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
     /** The action button parameter name: &nbsp; <tt>actionButton</tt>. */

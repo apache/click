@@ -68,6 +68,8 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class ColorPicker extends Field {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
 
     /** The Calendar resource file names. */
