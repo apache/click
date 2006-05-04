@@ -12,12 +12,12 @@
               files="SessionMap.java"/>
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="470,473,476,479,482,485"/>
+              lines="477,480,483,486,489,492"/>
     <suppress checks="FileLength"
               files="Form.java"/>
     <suppress checks="LineLength"
               files="DateField.java"
-              lines="95,96,97"/>
+              lines="97,98,99"/>
     <suppress checks="LineLength"
               files="ErrorReport.java"/>  
     <suppress checks="LineLength"
@@ -36,6 +36,6 @@
               lines="175"/>
     <suppress checks="LineLength"
               files="ColorPicker.java"
-              lines="85,86"/>    
+              lines="87,88"/>    
                                         
 </suppressions>
