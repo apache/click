@@ -476,12 +476,13 @@ public class ClickUtils {
 
         String charset = context.getRequest().getCharacterEncoding();
 
-        if (charset == null) {
-            charset = "";
-        }
-
         try {
-            return URLEncoder.encode(object.toString(), charset);
+            if (charset == null) {
+                return URLEncoder.encode(object.toString());
+
+            } else {
+                return URLEncoder.encode(object.toString(), charset);
+            }
 
         } catch (UnsupportedEncodingException uee) {
             throw new RuntimeException(uee);
