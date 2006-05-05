@@ -305,17 +305,6 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-        if (clickApp.getCharset() != null) {
-            try {
-                request.setCharacterEncoding(clickApp.getCharset());
-
-            } catch (UnsupportedEncodingException ex) {
-                String msg = "The character encoding "
-                             + clickApp.getCharset() + " is invalid.";
-                logger.warn(msg, ex);
-            }
-        }
-
         if (logger.isDebugEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(200);
             buffer.append(request.getMethod());
@@ -324,17 +313,23 @@ public class ClickServlet extends HttpServlet {
             logger.debug(buffer);
         }
         if (logger.isTraceEnabled()) {
-            TreeMap requestParams = new TreeMap();
-            Enumeration paramNames = request.getParameterNames();
-            while (paramNames.hasMoreElements()) {
-                String name = paramNames.nextElement().toString();
-                requestParams.put(name, request.getParameter(name));
-            }
+            Map requestParams = getRequestParameters(request);
             Iterator i = requestParams.keySet().iterator();
             while (i.hasNext()) {
                 String name = i.next().toString();
                 String value = requestParams.get(name).toString();
                 logger.trace("   " + name + "=" + value);
+            }
+        }
+
+        if (clickApp.getCharset() != null) {
+            try {
+                request.setCharacterEncoding(clickApp.getCharset());
+
+            } catch (UnsupportedEncodingException ex) {
+                String msg = "The character encoding "
+                             + clickApp.getCharset() + " is invalid.";
+                logger.warn(msg, ex);
             }
         }
 
@@ -1031,6 +1026,45 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
+    }
+
+    /**
+     * Return an ordered map of request parameters from the given request.
+     *
+     * @param request the servlet request to obtain request parameters from
+     * @return the ordered map of request parameters
+     */
+    protected Map getRequestParameters(HttpServletRequest request) {
+
+        TreeMap requestParams = new TreeMap();
+
+        Enumeration paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String name = paramNames.nextElement().toString();
+
+            String[] values = request.getParameterValues(name);
+            HtmlStringBuffer valsBuffer = new HtmlStringBuffer(32);
+
+            if (values.length == 1) {
+                valsBuffer.append(values[0]);
+
+            } else {
+                for (int i = 0; i < values.length; i++) {
+                    if (i == 0) {
+                        valsBuffer.append("[");
+                    }
+                    valsBuffer.append(values[i]);
+                    if (i == values.length - 1) {
+                        valsBuffer.append("]");
+                    } else {
+                        valsBuffer.append(",");
+                    }
+                }
+            }
+            requestParams.put(name, valsBuffer.toString());
+        }
+
+        return requestParams;
     }
 
     // ---------------------------------------------------------- Inner Classes
