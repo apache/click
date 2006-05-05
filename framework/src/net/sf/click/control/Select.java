@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -494,37 +495,17 @@ public class Select extends Field {
 
     /**
      * Return the Select JavaScript client side validation function.
-     * <p/>
-     * The function name must follow the format <tt>validate_[id]</tt>, where
-     * the id is the DOM element id of the fields focusable HTML element, to
-     * ensure the function has a unique name.
      *
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
         if (isRequired()) {
-            Option firstOption = (Option) getOptionList().get(0);
+            Object[] args = new Object[3];
+            args[0] = getId();
+            args[1] = "validateSelectField";
+            args[2] = getMessage("field-required-error", getErrorLabel());
 
-            HtmlStringBuffer buffer = new HtmlStringBuffer();
-            buffer.append("function validate_");
-            buffer.append(getId());
-            buffer.append("() {\n");
-            buffer.append("   if (!validateSelectField('");
-            buffer.append(getId());
-            buffer.append("','");
-            buffer.append(firstOption.getValue());
-            buffer.append("')) {\n");
-            buffer.append("      return '");
-            buffer.append(getMessage("select-error", getErrorLabel()));
-            buffer.append("|");
-            buffer.append(getId());
-            buffer.append("';\n");
-            buffer.append("   } else {\n");
-            buffer.append("      return null;\n");
-            buffer.append("   }\n");
-            buffer.append("}\n");
-
-            return buffer.toString();
+            return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
 
         } else {
             return null;

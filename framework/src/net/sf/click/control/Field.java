@@ -168,6 +168,20 @@ public abstract class Field implements Control {
      */
     public static final String CONTROL_MESSAGES = "click-control";
 
+    /**
+     * The field validation JavaScript function template. Where argument 0 is
+     * the field id, argument 1 is the name of the static JavaScript function to
+     * call and argument 2 is the localized error message.
+     */
+    protected final static String VALIDATE_JAVASCRIPT_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   if (!{1}(''{0}'')) '{'\n"
+        + "      return ''{2}|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
     // ----------------------------------------------------- Instance Variables
 
     /** The Field attributes Map. */
@@ -850,24 +864,12 @@ public abstract class Field implements Control {
      */
     public String getValidationJavaScript() {
         if (isRequired()) {
-            HtmlStringBuffer buffer = new HtmlStringBuffer();
-            buffer.append("function validate_");
-            buffer.append(getId());
-            buffer.append("() {\n");
-            buffer.append("   if (!validateField('");
-            buffer.append(getId());
-            buffer.append("')) {\n");
-            buffer.append("      return '");
-            buffer.append(getMessage("field-required-error", getErrorLabel()));
-            buffer.append("|");
-            buffer.append(getId());
-            buffer.append("';\n");
-            buffer.append("   } else {\n");
-            buffer.append("      return null;\n");
-            buffer.append("   }\n");
-            buffer.append("}\n");
+            Object[] args = new Object[3];
+            args[0] = getId();
+            args[1] = "validateField";
+            args[2] = getMessage("field-required-error", getErrorLabel());
 
-            return buffer.toString();
+            return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
 
         } else {
             return null;

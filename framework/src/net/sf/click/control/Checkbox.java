@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
+
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -177,6 +179,25 @@ public class Checkbox extends Field {
     public void setValueObject(Object object) {
         if (object != null && object instanceof Boolean) {
             checked = ((Boolean) object).booleanValue();
+        }
+    }
+
+    /**
+     * Return the Checkbox JavaScript client side validation function.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        if (isRequired()) {
+            Object[] args = new Object[3];
+            args[0] = getId();
+            args[1] = "validateCheckboxField";
+            args[2] = getMessage("field-required-error", getErrorLabel());
+
+            return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
+
+        } else {
+            return null;
         }
     }
 
