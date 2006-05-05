@@ -113,6 +113,22 @@ function validateField(id) {
     }
 }
 
+function validateCheckboxField(id) {
+    var field = document.getElementById(id);
+    if (field) {
+    	if (value.checked) {
+    		setFieldValidColor(field);
+    		return true;
+    	} else {
+    		setFieldErrorColor(field);
+    		return false;
+    	}
+    } else {
+    	alert('Field ' + id + ' not found.');
+    	return false;
+    }
+}
+
 function validateSelectField(id, defaultValue) {
     var field = document.getElementById(id);
     if (field) {
