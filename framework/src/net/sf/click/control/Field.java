@@ -439,7 +439,7 @@ public abstract class Field implements Control {
      * @return the Field focus JavaScript
      */
     public String getFocusJavaScript() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(32);
 
         buffer.append("setFocus('");
         buffer.append(getId());
