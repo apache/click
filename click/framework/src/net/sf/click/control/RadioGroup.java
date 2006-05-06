@@ -17,9 +17,12 @@ package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import ognl.Ognl;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -226,6 +229,58 @@ public class RadioGroup extends Field {
     }
 
     /**
+     * Add the given collection of objects to the RadioGroup, creating new
+     * Radio instances based on the object properties specified by value and
+     * label.
+     *
+     * <pre class="codeJava">
+     * RadioGroup radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
+     * radioGroup.addAll(getCustomerService().getCustomerTypes(), <span class="st">"id"</span>, <span class="st">"name"</span>);
+     * form.add(select); </pre>
+     *
+     * @param objects the collection of objects to render as radio options
+     * @param value the name of the object property to render as the Radio value
+     * @param label the name of the object property to render as the Radio label
+     * @throws IllegalArgumentException if options, value or label parameter is null
+     */
+    public void addAll(Collection objects, String value, String label) {
+        if (objects == null) {
+            String msg = "objects parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (label == null) {
+            String msg = "label parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (objects.isEmpty()) {
+            return;
+        }
+ 
+        Map ognlContext = new HashMap();
+
+        for (Iterator i = objects.iterator(); i.hasNext();) {
+            Object object = i.next();
+
+            try {
+                Object valueResult = Ognl.getValue(value, ognlContext, object);
+                Object labelResult = Ognl.getValue(label, ognlContext, object);
+
+                Radio radio = new Radio(valueResult.toString(),
+                                        labelResult.toString());
+                add(radio);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
      * @see Control#setContext(Context)
      *
      * @param context the Page request Context
@@ -243,6 +298,27 @@ public class RadioGroup extends Field {
                     ((Control) object).setContext(context);
                 }
             }
+        }
+    }
+
+    /**
+     * Return the RadioGroup focus JavaScript.
+     *
+     * @return the RadioGroup focus JavaScript
+     */
+    public String getFocusJavaScript() {
+        if (!getRadioList().isEmpty()) {
+            Radio radio = (Radio) getRadioList().get(0);
+
+            HtmlStringBuffer buffer = new HtmlStringBuffer(32);
+            buffer.append("setFocus('");
+            buffer.append(radio.getId());
+            buffer.append("');");
+
+            return buffer.toString();
+
+        } else {
+            return super.getFocusJavaScript();
         }
     }
 

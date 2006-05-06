@@ -108,6 +108,32 @@ public class Radio extends Field {
         checked = value;
     }
 
+
+    /**
+     * Return the Radio field id attribute.
+     *
+     * @return HTML element identifier attribute "id" value
+     */
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+
+        } else {
+            String formId = (getForm() != null) ? getForm().getId() + "_" : "";
+
+            String id = formId + getName() + "_" + getValue();
+
+            if (id.indexOf('/') != -1) {
+                id = id.replace('/', '_');
+            }
+            if (id.indexOf(' ') != -1) {
+                id = id.replace(' ', '_');
+            }
+
+            return id;
+        }
+    }
+
     /**
      * Return the input type: 'radio'.
      *
@@ -159,6 +185,7 @@ public class Radio extends Field {
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("value", getValue());
+        buffer.appendAttribute("id", getId());
         buffer.appendAttribute("title", getTitle());
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
