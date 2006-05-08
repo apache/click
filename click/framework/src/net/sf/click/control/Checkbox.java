@@ -191,7 +191,7 @@ public class Checkbox extends Field {
         if (isRequired()) {
             Object[] args = new Object[3];
             args[0] = getId();
-            args[1] = "validateCheckboxField";
+            args[1] = "validateCheckbox";
             args[2] = getMessage("field-required-error", getErrorLabel());
 
             return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);

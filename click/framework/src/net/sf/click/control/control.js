@@ -113,14 +113,12 @@ function validateField(id) {
     }
 }
 
-function validateCheckboxField(id) {
+function validateCheckbox(id) {
     var field = document.getElementById(id);
     if (field) {
     	if (value.checked) {
-    		setFieldValidColor(field);
     		return true;
     	} else {
-    		setFieldErrorColor(field);
     		return false;
     	}
     } else {
@@ -129,7 +127,7 @@ function validateCheckboxField(id) {
     }
 }
 
-function validateSelectField(id, defaultValue) {
+function validateSelect(id, defaultValue) {
     var field = document.getElementById(id);
     if (field) {
     	var value = field.value;
@@ -144,6 +142,16 @@ function validateSelectField(id, defaultValue) {
     	alert('Field ' + id + ' not found.');
     	return false;
     }
+}
+
+function validateRadioGroup(pathName) {
+    var value = pathName.value;
+    for (i = 0; i < pathName.length; i++) {
+		if (pathName[i].checked) {
+			return true;
+		}
+    }
+    return false;
 }
 
 function validateForm(msgs, id, align, style) {

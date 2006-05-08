@@ -502,7 +502,7 @@ public class Select extends Field {
         if (isRequired()) {
             Object[] args = new Object[3];
             args[0] = getId();
-            args[1] = "validateSelectField";
+            args[1] = "validateSelect";
             args[2] = getMessage("field-required-error", getErrorLabel());
 
             return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
