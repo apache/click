@@ -169,9 +169,12 @@ public abstract class Field implements Control {
     public static final String CONTROL_MESSAGES = "click-control";
 
     /**
-     * The field validation JavaScript function template. Where argument 0 is
-     * the field id, argument 1 is the name of the static JavaScript function to
-     * call and argument 2 is the localized error message.
+     * The field validation JavaScript function template. 
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the name of the static JavaScript function to call</li>
+     * <li>2 - is the localized error message</li>
+     * </ul>
      */
     protected final static String VALIDATE_JAVASCRIPT_FUNCTION =
         "function validate_{0}() '{'\n"
