@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -93,6 +94,22 @@ import net.sf.click.util.HtmlStringBuffer;
 public class RadioGroup extends Field {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * The field validation JavaScript function template. Where argument 0 is
+     * the field id, argument 1 is the name of the static JavaScript function to
+     * call, argument 2 is the full path name to the radio button,
+     * argument 3 is the localized error message, and argument 4 is the
+     * first radio id to select.
+     */
+    protected final static String VALIDATE_RADIOGROUP_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   if (!{1}({2})) '{'\n"
+        + "      return ''{3}|{4}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -307,19 +324,19 @@ public class RadioGroup extends Field {
      * @return the RadioGroup focus JavaScript
      */
     public String getFocusJavaScript() {
+        String id = "";
+
         if (!getRadioList().isEmpty()) {
             Radio radio = (Radio) getRadioList().get(0);
-
-            HtmlStringBuffer buffer = new HtmlStringBuffer(32);
-            buffer.append("setFocus('");
-            buffer.append(radio.getId());
-            buffer.append("');");
-
-            return buffer.toString();
-
-        } else {
-            return super.getFocusJavaScript();
+            id = radio.getId();
         }
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(32);
+        buffer.append("setFocus('");
+        buffer.append(id);
+        buffer.append("');");
+
+        return buffer.toString();
     }
 
     /**
@@ -374,6 +391,33 @@ public class RadioGroup extends Field {
      */
     public boolean hasRadios() {
         return radioList != null && !radioList.isEmpty();
+    }
+
+    /**
+     * Return the RadioGroup JavaScript client side validation function.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        if (isRequired()) {
+            Object[] args = new Object[5];
+            args[0] = getId();
+            args[1] = "validateRadioGroup";
+            args[2] = "document." + getForm().getName() + "." + getName();
+            args[3] = getMessage("field-required-error", getErrorLabel());
+
+            if (!getRadioList().isEmpty()) {
+                Radio radio = (Radio) getRadioList().get(0);
+                args[4] = radio.getId();
+            } else {
+                args[4] = "";
+            }
+
+            return MessageFormat.format(VALIDATE_RADIOGROUP_FUNCTION, args);
+
+        } else {
+            return null;
+        }
     }
 
     // --------------------------------------------------------- Public Methods
