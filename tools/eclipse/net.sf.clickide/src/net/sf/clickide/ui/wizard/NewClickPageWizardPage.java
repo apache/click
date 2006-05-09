@@ -3,9 +3,11 @@ package net.sf.clickide.ui.wizard;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.preferences.Template;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -48,9 +50,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
@@ -65,6 +67,8 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  */
 public class NewClickPageWizardPage extends WizardPage {
 	
+	private List templates = Template.loadFromPreference();
+	private Combo template;
 	private Text project;
 	private Button browseProject;
 	private Button createPageHTML;
@@ -121,7 +125,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		GridLayout layout = new GridLayout(3, false);
 		projectPanel.setLayout(layout);
 		projectPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		createLabel(projectPanel, ClickPlugin.getString("wizard.newPage.project"));
+		ClickUtils.createLabel(projectPanel, ClickPlugin.getString("wizard.newPage.project"));
 		
 		project = new Text(projectPanel, SWT.BORDER);
 		project.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -146,6 +150,14 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
+		ClickUtils.createLabel(projectPanel, ClickPlugin.getString("preferences.template") + ":");
+		template = new Combo(projectPanel, SWT.READ_ONLY);
+		for(int i=0;i<templates.size();i++){
+			template.add(((Template)templates.get(i)).getName());
+			if(i==0){
+				template.setText(((Template)templates.get(i)).getName());
+			}
+		}
 		
 		Group htmlGroup = new Group(composite, SWT.NULL);
 		htmlGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -176,7 +188,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		}
 		
-		createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.parentFolder"));
+		ClickUtils.createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.parentFolder"));
 		parentFolder = new Text(htmlGroup, SWT.BORDER);
 		parentFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(selection instanceof IFolder){
@@ -201,7 +213,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.filename"));
+		ClickUtils.createLabel(htmlGroup, ClickPlugin.getString("wizard.newPage.templateGroup.filename"));
 		pageName = new Text(htmlGroup, SWT.BORDER);
 		pageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(initPageName!=null){
@@ -231,7 +243,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.sourceFolder"));
+		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.sourceFolder"));
 		sourceFolder = new Text(classGroup, SWT.BORDER);
 		sourceFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		IPackageFragmentRoot root = ClickUtils.getSourceFolder(selection);
@@ -264,7 +276,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.package"));
+		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.package"));
 		packageName = new Text(classGroup, SWT.BORDER);
 		packageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(selection instanceof IPackageFragment){
@@ -312,7 +324,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.classname"));
+		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.classname"));
 		className = new Text(classGroup, SWT.BORDER);
 		className.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(initClassName!=null){
@@ -324,9 +336,9 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(classGroup, "");
+		ClickUtils.createLabel(classGroup, "");
 		
-		createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.superclass"));
+		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.superclass"));
 		superClass = new Text(classGroup, SWT.BORDER);
 		superClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		superClass.setText(settings.get(NewClickPageWizard.SUPERCLASS));
@@ -358,7 +370,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			}
 		});
 		
-		createLabel(composite, "");
+		ClickUtils.createLabel(composite, "");
 		
 		addToClickXML = new Button(composite, SWT.CHECK);
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
@@ -398,6 +410,14 @@ public class NewClickPageWizardPage extends WizardPage {
 			browsePackage.setEnabled(createPageClass.getSelection());
 			browseParent.setEnabled(createPageClass.getSelection());
 			browseSource.setEnabled(createPageHTML.getSelection());
+		}
+		
+		if(createPageHTML.getSelection() || createPageClass.getSelection()){
+			if(template.getText().length()==0){
+				setMessage(ClickPlugin.getString("wizard.newPage.error.noTemplate"), ERROR);
+				setPageComplete(false);
+				return;
+			}
 		}
 		
 		// for the HTML file part
@@ -542,11 +562,6 @@ public class NewClickPageWizardPage extends WizardPage {
 			ex.printStackTrace();
 			return false;
 		}
-	}
-	
-	private void createLabel(Composite composite, String text){
-		Label label = new Label(composite, SWT.NULL);
-		label.setText(text);
 	}
 	
 	private GridData createGridData(int colspan){
@@ -754,6 +769,10 @@ public class NewClickPageWizardPage extends WizardPage {
 	
 	public String getSuperClass(){
 		return superClass.getText();
+	}
+	
+	public Template getTemplate(){
+		return (Template)templates.get(template.getSelectionIndex());
 	}
 	
 	private IProject getProject(){
