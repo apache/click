@@ -1,0 +1,22 @@
+<style type="text/css">
+td.fields { padding-top: 0.75em; }
+</style>
+
+Demonstration of page flow design patterns. &nbsp; Please make a course booking:
+
+<table>
+  <tr valign="top">
+    <td> $form </td> 
+    <td style="padding-top:1em;"> <div id="customerDetails"/> </td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+This page setting up the next page in the flow:
+<pre class="codeJava">
+NextPage nextPage = (NextPage) getContext().createPage(NextPage.<span class="kw">class</span>);
+nextPage.setCourseBooking(courseBooking);
+   
+setForward(nextPage);
+</pre>

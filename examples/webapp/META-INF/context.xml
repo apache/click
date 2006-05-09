@@ -1,0 +1,10 @@
+<Context
+   path="/click-examples" 
+   reloadable="true"
+   antiJARLocking="true">
+
+   <ResourceLink 
+      name="users" 
+      global="UserDatabase"
+      type="org.apache.catalina.UserDatabase"/>
+</Context>
