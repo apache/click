@@ -1,0 +1,41 @@
+This example demonstrates manually laying out a form in the page template.
+<p>
+
+<form action='$form.actionURL' method="POST">
+ <b>Customer</b> ${form.fields.search}${form.fields.type}${form.fields.go}
+ <input type="hidden" name="form_name" value="form">
+</form>
+
+<p>&nbsp;</p>
+
+#if ($customerDetail) 
+<b>Customer Details</b>
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>ID</b></td><td>&nbsp;</td><td>$customerDetail.id</td>
+ </tr>
+ <tr>
+  <td><b>Name</b></td><td>&nbsp;</td><td>$customerDetail.name</td>
+ </tr>
+ <tr>
+  <td><b>Email</b></td><td>&nbsp;</td>
+  <td><a style="{text-decoration:none;}" href="mailto:$customerDetail.email">$customerDetail.email</a></td>
+ </tr>
+ <tr>
+  <td><b>Age</b></td><td>&nbsp;</td><td>$customerDetail.age</td>
+ </tr>
+ <tr>
+  <td><b>Investments</b></td><td>&nbsp;</td><td>$customerDetail.investments</td>
+ </tr>
+ <tr>
+  <td><b>Holdings</b></td><td>&nbsp;</td><td>$format.currency($customerDetail.holdings)</td>
+ </tr>
+ <tr>
+  <td><b>Date Joined</b></td><td>&nbsp;</td><td>$format.date($customerDetail.dateJoined)</td>
+ </tr>
+</table>
+<p>
+#end
+
+#if( $message ) <i> $message </i> #end
+

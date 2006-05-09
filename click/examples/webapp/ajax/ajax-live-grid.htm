@@ -1,0 +1,121 @@
+<script type='text/javascript' src='$context/ajax/prototype.js'></script>
+<script type='text/javascript' src='$context/ajax/rico.js'></script>
+<script>
+var onloads = new Array();
+function bodyOnLoad() {
+    new Effect.Round(null, 'roundNormal');
+    new Effect.Round(null, 'roundCompact', {compact:true});
+    for (var i = 0; i < onloads.length; i++) {
+        onloads[i]();
+    }
+}
+</script>
+#set ($pageSize = 10)
+<style>
+    .fixedTable {
+        table-layout: fixed;
+    }
+
+    td.cell {
+        padding: 2px 0px 2px 3px;
+        margin: 0px;
+        border-bottom: 1px solid #b8b8b8;
+        border-right: 1px solid #b8b8b8;
+        height: 22px;
+        overflow: hidden;
+        font-size: 11px;
+        font-family: verdana, arial, helvetica, sans-serif;
+        line-height: 12px;
+    }
+
+    .first {
+        border-left: 1px solid #b8b8b8;
+    }
+
+    .tableCellHeader {
+        padding: 2px 0px 2px 3px;
+        text-align: left;
+        font-size: 11px;
+        border-top: 1px solid #b8b8b8;
+        border-right: 1px solid #b8b8b8;
+        background-color: #cedebd;
+    }
+</style>
+<script>
+var tu = null;
+var opts = { prefetchBuffer : true,
+        #if ($request.getParameter("data_grid_index"))
+             offset: $request.getParameter("data_grid_index") ,
+        #end
+        #if ($request.getParameter("data_grid_sort_col"))
+             sortCol: '$request.getParameter("data_grid_sort_col")',
+        #end
+        #if ($request.getParameter("data_grid_sort_dir"))
+             sortDir: '$request.getParameter("data_grid_sort_dir")',
+        #end
+             onscroll: updateHeader };
+
+onloads.push(function() {
+    tu = new Rico.LiveGrid('data_grid',
+                           $pageSize,
+                           $totalRows,
+                           '$context/ajax/ajax-customer-live-grid.htm', opts)
+    });
+
+function updateHeader(liveGrid, offset) {
+    $('bookmark').innerHTML = "Listing customers " + (offset + 1) + " - " + (offset + liveGrid.metaData.getPageSize()) + " of " +
+                              liveGrid.metaData.getTotalRows();
+    var sortInfo = "";
+    if (liveGrid.sortCol) {
+        sortInfo = "&data_grid_sort_col=" + liveGrid.sortCol + "&data_grid_sort_dir=" + liveGrid.sortDir;
+    }
+    $('bookmark').href = "$context/ajax/ajax-live-grid.htm" + "?data_grid_index=" + offset + sortInfo;
+}
+</script>
+
+Demonstration of <a href="http://en.wikipedia.org/wiki/AJAX">AJAX</a> 
+dynamic retrieval of paged grid content using the 
+<a href="http://openrico.org/home.page">Rico</a> JavaScript library.
+
+<p/>
+
+<br style="clear:both"/>
+
+<a id="bookmark" style="font-size:12px">Customer Listings</a>
+<div id="container">
+    <table id="data_grid_header" class="fixedTable" cellspacing="0" cellpadding="0" style="width:755px">
+        <tr>
+            <th class="first tableCellHeader" style="width:45px;text-align:center">#</th>
+            <th class="tableCellHeader" style="width:140px">Name</th>
+            <th class="tableCellHeader" style="width:200px">Email</th>
+            <th class="tableCellHeader" style="width:40px;text-align:center;">Age</th>
+            <th class="tableCellHeader" style="width:90px;text-align:right;">Holdings</th>
+            <th class="tableCellHeader" style="width:140px">Investments</th>
+            <th class="tableCellHeader" style="width:100px">Date Joined</th>
+        </tr>
+    </table>
+    <div id="data_grid_container" style="width:803px;margin:0px;padding:0px">
+        <div id="viewPort" style="float:left">
+            <table id="data_grid"
+                   class="fixedTable"
+                   cellspacing="0"
+                   cellpadding="0"
+                   style="width:755px; border-left:1px solid #ababab">
+                #set ($listSize = $pageSize + 1)
+                #foreach ($customer in $customers.subList($offset, $listSize))
+                #set ($count = $velocityCount + $offset)
+                    <tr>
+                        <td class="cell" style="width:45px;text-align:center">$count</td>
+                        <td class="cell" style="width:140px">$format.string($customer.name)</td>
+                        <td class="cell" style="width:200px">$format.email($customer.email)</td>
+                        <td class="cell" style="width:40px;text-align:center;">$format.string($customer.age)</td>
+                        <td class="cell" style="width:90px;text-align:right;">$format.currency($customer.holdings)</td>
+                        <td class="cell" style="width:140px">$format.string($customer.investments)</td>
+                        <td class="cell" style="width:100px">$format.date($customer.dateJoined)</td>
+                    </tr>
+                #end
+            </table>
+        </div>
+    </div>
+</div>
+
