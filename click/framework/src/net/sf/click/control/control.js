@@ -101,25 +101,25 @@ function validateField(id) {
     if (field) {
     	var value = trim(field.value);
     	if (value.length > 0) {
-    		setFieldValidColor(field);
-    		return true;
+            setFieldValidColor(field);
+            return true;
     	} else {
-    		setFieldErrorColor(field);
-    		return false;
+            setFieldErrorColor(field);
+            return false;
     	}
     } else {
-    	alert('Field ' + id + ' not found.');
-    	return false;
+        alert('Field ' + id + ' not found.');
+        return false;
     }
 }
 
 function validateCheckbox(id) {
     var field = document.getElementById(id);
     if (field) {
-    	if (value.checked) {
-    		return true;
+    	if (field.checked) {
+			return true;
     	} else {
-    		return false;
+			return false;
     	}
     } else {
     	alert('Field ' + id + ' not found.');
@@ -132,11 +132,11 @@ function validateSelect(id, defaultValue) {
     if (field) {
     	var value = field.value;
     	if (value != defaultValue) {
-    		setFieldValidColor(field);
-    		return true;
+            setFieldValidColor(field);
+            return true;
     	} else {
-    		setFieldErrorColor(field);
-    		return false;
+            setFieldErrorColor(field);
+            return false;
     	}
     } else {
     	alert('Field ' + id + ' not found.');
@@ -147,9 +147,9 @@ function validateSelect(id, defaultValue) {
 function validateRadioGroup(pathName) {
     var value = pathName.value;
     for (i = 0; i < pathName.length; i++) {
-		if (pathName[i].checked) {
-			return true;
-		}
+        if (pathName[i].checked) {
+            return true;
+        }
     }
     return false;
 }
