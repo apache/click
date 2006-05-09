@@ -47,6 +47,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};
 	
+	public static final String PREF_TEMPLATES = "click.templates";
+	
 	/**
 	 * The constructor.
 	 */
