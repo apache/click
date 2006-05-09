@@ -1,10 +1,10 @@
 Click 0.20 Release
 ------------------
-3. move click-documentation directory into docs
 4. add Parent property to Control
 5. remove struts style form validation messages 
 6. add Core Controls example
 7. add Extra Controls example
+8. javadoc JavaScript validation in Form class
 
 CODE
 * get localizations for Telephone.properties, Japanese, Italian, French

@@ -10,9 +10,9 @@ Comprehensive HTML documentation is available online at:
 
     http://click.sourceforge.net
 
-This documentation is also available in the WAR file:
+This documentation is also available in the directory:
 
-   dist/click-documentation.war
+   documentation
 	
 Distributed Click JAR files include:
 
