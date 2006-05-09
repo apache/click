@@ -9,6 +9,7 @@ import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.preferences.Template;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -103,6 +104,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		final String packageName = page.getPackageName();
 		final String className = page.getClassName();
 		final String superClass = page.getSuperClass();
+		final Template template = page.getTemplate();
 		
 		IDialogSettings settings = getDialogSettings();
 		settings.put(SHOULD_CREATE_HTML, shouldCreateHTML);
@@ -114,7 +116,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
 					openFiles = doFinish(monitor, shouldCreateHTML, shouldCreateClass, shouldAddToClickXML,
-							parentFolder, filename, sourceFolder, packageName, className, superClass);
+							parentFolder, filename, sourceFolder, packageName, className, superClass, template);
 				} catch (Exception e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -146,7 +148,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 	private IFile[] doFinish(IProgressMonitor monitor,
 			boolean shouldCreateHTML,boolean shouldCreateClass, boolean shouldAddToClickXML,
 			String parentFolder, String filename, String sourceFolder, String packageName,
-			String className, String superClass) throws Exception {
+			String className, String superClass, Template template) throws Exception {
 		
 		List files = new ArrayList();
 		int totalTask = 0;
@@ -177,7 +179,8 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 					file = folder.getFile(filename);
 				}
 				if(!file.exists()){
-					file.create(getPageHTMLInputStream(), true, new NullProgressMonitor());
+					file.create(new ByteArrayInputStream(template.getHtmlTemplate().getBytes()), 
+							true, new NullProgressMonitor());
 				}
 				files.add(file);
 			} finally {
@@ -203,7 +206,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 				ICompilationUnit unit = fragment.getCompilationUnit(className+".java");
 				if(!unit.exists()){
 					IFile file = (IFile)unit.getResource();
-					file.create(getPageClassInputStream(packageName, className, superClass),
+					file.create(getPageClassInputStream(template, packageName, className, superClass),
 							true, new NullProgressMonitor());
 					files.add(file);
 				}
@@ -296,27 +299,10 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		return (IFile[])files.toArray(new IFile[files.size()]);
 	}
 	
-	private InputStream getPageHTMLInputStream(){
-		return getClass().getResourceAsStream("pagehtml.tmpl");
-	}
-	
-	private InputStream getPageClassInputStream(
+	private InputStream getPageClassInputStream(Template template,
 			String packageName, String className, String superClass) throws IOException {
 		
-		InputStream in = null;
-		byte[] buf = null;
-		
-		try {
-			in  = getClass().getResourceAsStream("pageclass.tmpl");
-			buf = new byte[in.available()];
-			in.read(buf);
-		} finally {
-			if(in!=null){
-				in.close();
-			}
-		}
-		
-		String source = new String(buf, "Windows-31J"); // TODO charset
+		String source = new String(template.getPageClass());
 		source = source.replaceAll("\\$\\{package\\}", packageName);
 		source = source.replaceAll("\\$\\{classname\\}", className);
 		source = source.replaceAll("\\$\\{superclass\\}", superClass);
