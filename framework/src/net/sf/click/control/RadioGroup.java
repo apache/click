@@ -96,7 +96,7 @@ public class RadioGroup extends Field {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The field validation JavaScript function template. 
+     * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
      * <li>1 - is the name of the static JavaScript function to call</li>
