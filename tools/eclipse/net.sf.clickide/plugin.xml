@@ -143,5 +143,21 @@
               tooltip="New Click page"/>
      </actionSet>
   </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           class="net.sf.clickide.preferences.ClickPreferencePage"
+           id="net.sf.clickide.preferences.ClickPreferencePage"
+           name="Click"/>
+     <page
+           class="net.sf.clickide.preferences.ClickTemplatePreferencePage"
+           id="net.sf.clickide.preferences.ClickTemplatePreferencePage"
+           name="%preference.template"
+           category="net.sf.clickide.preferences.ClickPreferencePage"/>
+  </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer class="net.sf.clickide.preferences.ClickPreferenceInitializer"/>
+  </extension>
 
 </plugin>

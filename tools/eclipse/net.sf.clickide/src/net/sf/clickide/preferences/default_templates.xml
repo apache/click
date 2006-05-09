@@ -1,0 +1,30 @@
+<templates>
+	<template name="Simple Form">
+		<class>
+package ${package};
+
+import net.sf.click.control.Form;
+
+public class ${classname} extends ${superclass} {
+	
+	private Form form = new Form("form");
+	
+	public ${classname}(){
+		addControl(form);
+	}
+
+}
+		</class>
+		<html>
+&lt;html&gt;
+&lt;head&gt;
+&lt;title>&lt;/title&gt;
+$imports
+&lt;/head&gt;
+&lt;body&gt;
+$form
+&lt;/body&gt;
+&lt;/html&gt;
+		</html>
+	</template>
+</templates>
