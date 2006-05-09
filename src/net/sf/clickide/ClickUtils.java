@@ -24,7 +24,10 @@ import org.eclipse.jst.j2ee.webapplication.ServletType;
 import org.eclipse.jst.j2ee.webapplication.WebApp;
 import org.eclipse.jst.j2ee.webapplication.WebapplicationFactory;
 import org.eclipse.jst.j2ee.webapplication.WelcomeFileList;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -71,7 +74,7 @@ public class ClickUtils {
 //	}
 	
 	/**
-	 * Utility method to create GridData.
+	 * Creates GridData.
 	 * 
 	 * @param colspan the horizontal span
 	 * @param style the style constants
@@ -81,6 +84,27 @@ public class ClickUtils {
 		GridData gd = new GridData(style);
 		gd.horizontalSpan = colspan;
 		return gd;
+	}
+	
+	/**
+	 * Creates Label.
+	 * 
+	 * @param parent the parent composite
+	 * @param text the text which will be displayed on the Label
+	 * @return created Label
+	 */
+	public static Label createLabel(Composite parent, String text){
+		Label label = new Label(parent, SWT.NULL);
+		label.setText(text);
+		return label;
+	}
+	
+	public static String escapeXML(String value){
+		value = value.replaceAll("&", "&amp;");
+		value = value.replaceAll("<", "&lt;");
+		value = value.replaceAll(">", "&gt;");
+		value = value.replaceAll("\"", "&quot;");
+		return value;
 	}
 	
 	/**
