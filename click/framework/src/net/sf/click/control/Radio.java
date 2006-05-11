@@ -26,8 +26,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * </table>
  *
- * For an Radio code example see the {@link net.sf.click.control.RadioGroup}
- * Javadoc example.
+ * The Radio control is generally used within a RadioGroup, for an code example
+ * pleasse see the {@link net.sf.click.control.RadioGroup} Javadoc example.
+ * When used with a RadioGroup the Radio control will derrive its name from the
+ * parent RadioGroup, if the Radio's name is not defined.
  *
  * <p/>
  * See also W3C HTML reference
@@ -48,12 +50,6 @@ public class Radio extends Field {
     protected boolean checked;
 
     // ----------------------------------------------------------- Constructors
-
-    /**
-     * Create a radio field.
-     */
-    public Radio() {
-    }
 
     /**
      * Create a radio field with the given value.
@@ -86,6 +82,20 @@ public class Radio extends Field {
         setValue(value);
         setLabel(label);
         setName(name);
+    }
+
+    /**
+     * Create an Radio field with no name defined, <b>please note</b> the
+     * control's name must be defined before it is valid.
+     * <p/>
+     * <div style="border: 1px solid red;padding:0.5em;">
+     * No-args constructors are provided for Java Bean tools support and are not
+     * intended for general use. If you create a control instance using a
+     * no-args constructor you must define its name before adding it to its
+     * parent. </div>
+     */
+
+    public Radio() {
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -131,6 +141,29 @@ public class Radio extends Field {
             }
 
             return id;
+        }
+    }
+
+    /**
+     * Return the name of the Radio field. If the Radio name attribute has not
+     * been explicitly set, this method will return its parent RadioGroup's
+     * name if defined.
+     *
+     * @return the name of the control
+     */
+    public String getName() {
+        if (super.getName() != null) {
+            return super.getName();
+
+        } else {
+            Object parent = getParent();
+            if (parent instanceof RadioGroup) {
+                RadioGroup radioGroup = (RadioGroup) parent;
+                return radioGroup.getName();
+
+            } else {
+                return null;
+            }
         }
     }
 
@@ -204,8 +237,8 @@ public class Radio extends Field {
         }
         buffer.closeTag();
 
-        if (getLabel() != null) {
-            buffer.appendEscaped(getLabel());
+        if (label != null) {
+            buffer.appendEscaped(label);
         } else {
             buffer.appendEscaped(getValue());
         }

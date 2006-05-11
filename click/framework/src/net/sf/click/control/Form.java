@@ -473,18 +473,6 @@ public class Form implements Control {
 
     // -------------------------------------------------------- Class Variables
 
-    /** The errors-header resource property. */
-    protected static String ERRORS_HEADER = "";
-
-    /** The errors-footer resource property. */
-    protected static String ERRORS_FOOTER = "";
-
-    /** The errors-prefix resource property. */
-    protected static String ERRORS_PREFIX = "";
-
-    /** The errors-suffix resource property. */
-    protected static String ERRORS_SUFFIX = "";
-
     /** The label-required-prefix resource property. */
     protected static String LABEL_REQUIRED_PREFIX = "";
 
@@ -495,10 +483,6 @@ public class Form implements Control {
         ResourceBundle bundle =
             ResourceBundle.getBundle(Field.CONTROL_MESSAGES);
 
-        ERRORS_HEADER = bundle.getString("errors-header");
-        ERRORS_FOOTER = bundle.getString("errors-footer");
-        ERRORS_PREFIX = bundle.getString("errors-prefix");
-        ERRORS_SUFFIX = bundle.getString("errors-suffix");
         LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
         LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
     }
@@ -526,7 +510,7 @@ public class Form implements Control {
     protected int columns = 1;
 
     /** The form context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The form disabled value. */
     protected boolean disabled;
@@ -597,6 +581,9 @@ public class Form implements Control {
     /** The form name. */
     protected String name;
 
+    /** The control's parent. */
+    protected transient Object parent;
+
     /** The parent localized messages map. */
     protected Map parentMessages;
 
@@ -662,12 +649,17 @@ public class Form implements Control {
         } else {
             getFieldList().add(field);
         }
+
         getFields().put(field.getName(), field);
+
         field.setForm(this);
 
         if (getContext() != null) {
             field.setContext(getContext());
         }
+
+        field.setParent(this);
+
         if (getParentMessages() != null) {
             field.setParentMessages(getParentMessages());
         }
@@ -681,6 +673,9 @@ public class Form implements Control {
     public void remove(Field field) {
         if (field != null && getFields().containsKey(field.getName())) {
             field.setForm(null);
+            if (field.getParent() == this) {
+                field.setParent(null);
+            }
             getFields().remove(field.getName());
             if (field instanceof Button) {
                 getButtonList().remove(field);
@@ -1402,6 +1397,24 @@ public class Form implements Control {
     }
 
     /**
+     * @see Control#getParent(Object)
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
+    }
+
+    /**
      * @see Control#getParentMessages()
      *
      * @return the localization <tt>Map</tt> of the Control's parent
@@ -2094,45 +2107,23 @@ public class Form implements Control {
         Field fieldWithError = null;
         if (processed && !isValid()) {
 
-            String headerTest =
-                ERRORS_HEADER.toLowerCase()  + ERRORS_PREFIX.toLowerCase();
-
-            boolean useErrorsHeader =
-                (((headerTest.indexOf("<ul") > -1)
-                 || (headerTest.indexOf("<ol") > -1))
-                 && (headerTest.indexOf("<li") > -1));
-
-            if (useErrorsHeader) {
-                buffer.append(ERRORS_HEADER);
-                buffer.append("\n");
-            } else {
-                buffer.append("<tr><td align=\"");
-                buffer.append(getErrorsAlign());
-                buffer.append("\">\n");
-                buffer.append("<table class=\"errors\" id=\"");
-                buffer.append(getId());
-                buffer.append("-errors\">\n");
-            }
+            buffer.append("<tr><td align=\"");
+            buffer.append(getErrorsAlign());
+            buffer.append("\">\n");
+            buffer.append("<table class=\"errors\" id=\"");
+            buffer.append(getId());
+            buffer.append("-errors\">\n");
 
             if (getError() != null) {
-                if (useErrorsHeader) {
-                    buffer.append(ERRORS_PREFIX);
-                } else {
-                    buffer.append("<tr class=\"errors\">");
-                    buffer.append("<td class=\"errors\"");
-                    buffer.appendAttribute("align", getErrorsAlign());
-                    buffer.appendAttribute("style", getErrorsStyle());
-                    buffer.append(">\n");
-                }
+                buffer.append("<tr class=\"errors\">");
+                buffer.append("<td class=\"errors\"");
+                buffer.appendAttribute("align", getErrorsAlign());
+                buffer.appendAttribute("style", getErrorsStyle());
+                buffer.append(">\n");
                 buffer.append("<span class=\"error\">");
                 buffer.append(getError());
                 buffer.append("</span>\n");
-                if (useErrorsHeader) {
-                    buffer.append(ERRORS_SUFFIX);
-                    buffer.append("\n");
-                } else {
-                    buffer.append("</td></tr>\n");
-                }
+                buffer.append("</td></tr>\n");
             }
 
             List errorFieldList = getErrorFields();
@@ -2143,15 +2134,12 @@ public class Form implements Control {
                 if (fieldWithError == null && !field.isDisabled()) {
                     fieldWithError = field;
                 }
-                if (useErrorsHeader) {
-                    buffer.append(ERRORS_PREFIX);
-                } else {
-                    buffer.append("<tr class=\"errors\">");
-                    buffer.append("<td class=\"errors\"");
-                    buffer.appendAttribute("align", getErrorsAlign());
-                    buffer.appendAttribute("style", getErrorsStyle());
-                    buffer.append(">");
-                }
+
+                buffer.append("<tr class=\"errors\">");
+                buffer.append("<td class=\"errors\"");
+                buffer.appendAttribute("align", getErrorsAlign());
+                buffer.appendAttribute("style", getErrorsStyle());
+                buffer.append(">");
 
                 buffer.append("<a class=\"error\"");
                 buffer.append(" href=\"javascript:");
@@ -2159,23 +2147,11 @@ public class Form implements Control {
                 buffer.append("\">");
                 buffer.append(field.getError());
                 buffer.append("</a>");
-
-                if (useErrorsHeader) {
-                    buffer.append(ERRORS_SUFFIX);
-                    buffer.append("\n");
-                } else {
-                    buffer.append("</td></tr>\n");
-                }
-            }
-
-            if (useErrorsHeader) {
-                buffer.append(ERRORS_FOOTER);
-                buffer.append("\n");
-            } else {
-                buffer.append("</table>\n");
                 buffer.append("</td></tr>\n");
             }
 
+            buffer.append("</table>\n");
+            buffer.append("</td></tr>\n");
         }
 
         if (getValidate() && getJavaScriptValidation()) {
@@ -2206,17 +2182,18 @@ public class Form implements Control {
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
             buffer.append("-buttons\">\n");
-            buffer.append("<tr class=\"buttons\"><td class=\"buttons\"");
-            buffer.appendAttribute("style", getButtonStyle());
-            buffer.closeTag();
+            buffer.append("<tr class=\"buttons\">");
             for (int i = 0, size = buttonList.size(); i < size; i++) {
+                buffer.append("<td class=\"buttons\"");
+                buffer.appendAttribute("style", getButtonStyle());
+                buffer.closeTag();
+
                 Button button = (Button) buttonList.get(i);
                 buffer.append(button);
-                if (i <= size - 1) {
-                    buffer.append(" ");
-                }
+
+                buffer.append("</td>");
             }
-            buffer.append("</td></tr>\n");
+            buffer.append("</tr>\n");
             buffer.append("</table>\n");
             buffer.append("</td></tr>\n");
         }

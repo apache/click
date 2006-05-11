@@ -138,7 +138,7 @@ public class Table implements Control {
     protected List columnList = new ArrayList();
 
     /** The request context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The list of Table controls. */
     protected final List controlList = new ArrayList();
@@ -163,6 +163,9 @@ public class Table implements Control {
 
     /** The Table paging action link. */
     protected ActionLink pagingLink;
+
+    /** The control's parent. */
+    protected transient Object parent;
 
     /** The parent localized messages map. */
     protected Map parentMessages;
@@ -587,6 +590,24 @@ public class Table implements Control {
             pagingLink = new ActionLink("paging");
             pagingLink.setListener(this, "onPagingClick");
         }
+    }
+
+    /**
+     * @see Control#getParent()
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
     }
 
     /**

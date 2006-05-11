@@ -207,6 +207,20 @@ public interface Control extends Serializable {
     public void setName(String name);
 
     /**
+     * Return the Control's parent.
+     *
+     * @return the Control's parent
+     */
+    public Object getParent();
+
+    /**
+     * Set the parent of the  Control.
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent);
+
+    /**
      * Return the localized messages <tt>Map</tt> of the Control's parent.
      *
      * @return the localization <tt>Map</tt> of the Control's parent

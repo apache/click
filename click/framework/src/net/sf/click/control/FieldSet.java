@@ -85,7 +85,7 @@ import org.apache.commons.lang.StringUtils;
  *         addControl(form);
  *     }
  *
- * }</pre>
+ * } </pre>
  *
  * When the FieldSet is processed it invokes the <tt>onProcess()</tt> method
  * of its contained Fields. Beyond this the FieldSet performs no server side
@@ -199,6 +199,7 @@ public class FieldSet extends Field {
         if (getContext() != null) {
             field.setContext(getContext());
         }
+        field.setParent(this);
     }
 
     /**
@@ -209,6 +210,9 @@ public class FieldSet extends Field {
     public void remove(Field field) {
         if (field != null && getFields().containsKey(field.getName())) {
             field.setForm(null);
+            if (field.getParent() == this) {
+                field.setParent(null);
+            }
             getFields().remove(field.getName());
             getFieldList().remove(field);
         }

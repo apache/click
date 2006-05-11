@@ -172,7 +172,7 @@ public class ActionLink implements Control {
     protected boolean clicked;
 
     /** The context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The Field disabled value. */
     protected boolean disabled;
@@ -191,6 +191,9 @@ public class ActionLink implements Control {
 
     /** The link name. */
     protected String name;
+
+    /** The control's parent. */
+    protected transient Object parent;
 
     /** The parent localized messages map. */
     protected Map parentMessages;
@@ -641,6 +644,24 @@ public class ActionLink implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+    }
+
+    /**
+     * @see Control#getParent()
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
     }
 
     /**
