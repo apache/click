@@ -70,7 +70,7 @@ public class BasicPanel implements Panel {
     protected List panels;
 
     /** The control's parent. */
-    protected transient Object parent;
+    protected Object parent;
 
     /** The template this panel is tied to for rendering. */
     protected String template;

@@ -165,7 +165,7 @@ public class Table implements Control {
     protected ActionLink pagingLink;
 
     /** The control's parent. */
-    protected transient Object parent;
+    protected Object parent;
 
     /** The parent localized messages map. */
     protected Map parentMessages;
