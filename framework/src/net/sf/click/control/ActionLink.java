@@ -193,7 +193,7 @@ public class ActionLink implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected transient Object parent;
+    protected Object parent;
 
     /** The parent localized messages map. */
     protected Map parentMessages;
