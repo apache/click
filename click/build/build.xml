@@ -321,8 +321,8 @@
       <replacetabs srcdir="extras/src" includes="**/*.java"/>
       <linetrim srcdir="framework/src" includes="**/*.java"/>
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
-      <linetrim srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
-      <replacetabs srcdir="webapps/click-examples/WEB-INF/src" includes="**/*.java"/>
+      <linetrim srcdir="examples/src" includes="**/*.java"/>
+      <replacetabs srcdir="examples/src" includes="**/*.java"/>
    </target>
  
    <target name="get-deps" description="download JAR dependencies">
