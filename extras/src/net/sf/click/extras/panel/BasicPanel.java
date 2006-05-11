@@ -46,7 +46,7 @@ public class BasicPanel implements Panel {
     // ----------------------------------------------------- Instance Variables
 
     /** A request context. */
-    protected Context context;
+    protected transient Context context;
 
     /** A temporary storage for control objects until the Page is set. */
     protected List controls = new ArrayList();
@@ -68,6 +68,9 @@ public class BasicPanel implements Panel {
 
     /** The list of sub panels. */
     protected List panels;
+
+    /** The control's parent. */
+    protected transient Object parent;
 
     /** The template this panel is tied to for rendering. */
     protected String template;
@@ -356,6 +359,25 @@ public class BasicPanel implements Panel {
     public List getPanels() {
         // TODO: lazy load this
         return panels;
+    }
+
+    /**
+     * @see Control#getParent()
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        // TODO: setPage()
+        this.parent = parent;
     }
 
     /**

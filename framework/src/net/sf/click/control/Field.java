@@ -191,7 +191,7 @@ public abstract class Field implements Control {
     protected Map attributes;
 
     /** The Page request Context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The global localized control messages map. */
     protected Map controlMessages;
@@ -222,6 +222,9 @@ public abstract class Field implements Control {
 
     /** The Field name. */
     protected String name;
+
+    /** The control's parent. */
+    protected transient Object parent;
 
     /** The parent localized messages map. */
     protected Map parentMessages;
@@ -711,6 +714,24 @@ public abstract class Field implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
+    }
+
+    /**
+     * @see Control#getParent()
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
     }
 
     /**

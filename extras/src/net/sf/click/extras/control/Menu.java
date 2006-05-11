@@ -109,7 +109,7 @@ public class Menu implements Control {
     protected List children = new ArrayList();
 
     /** The request context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The menu display label. */
     protected String label;
@@ -125,6 +125,9 @@ public class Menu implements Control {
 
     /** The menu path. */
     protected String path;
+
+    /** The control's parent. */
+    protected transient Object parent;
 
     /** The list of valid role names. */
     protected List roles = new ArrayList();
@@ -439,6 +442,24 @@ public class Menu implements Control {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * @see Control#getParent()
+     *
+     * @return the Control's parent
+     */
+    public Object getParent() {
+        return parent;
+    }
+
+    /**
+     * @see Control#setParent(Object)
+     *
+     * @param parent the parent of the Control
+     */
+    public void setParent(Object parent) {
+        this.parent = parent;
     }
 
     /**

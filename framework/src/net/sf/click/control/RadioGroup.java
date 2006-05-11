@@ -189,8 +189,8 @@ public class RadioGroup extends Field {
 
     /**
      * Add the given radio to the radio group. When the radio is added to the
-     * group its name is set to that of the radio group and its context is
-     * set.
+     * group it will use its parent RadioGroup's name when rendering if it
+     * has not already been set.
      *
      * @param radio the radio control to add to the radio group
      * @throws IllegalArgumentException if the radio parameter is null
@@ -200,10 +200,13 @@ public class RadioGroup extends Field {
             throw new IllegalArgumentException("Null radio parameter");
         }
 
-        radio.setName(getName());
+        radio.setParent(this);
         getRadioList().add(radio);
         if (getContext() != null) {
             radio.setContext(getContext());
+        }
+        if (getForm() != null) {
+            radio.setForm(getForm());
         }
     }
 

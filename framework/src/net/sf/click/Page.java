@@ -99,11 +99,12 @@ public class Page {
     /**
      * Add the control to the page. The control will be added to the pages model
      * using the controls name as the key. The Controls context property will
-     * also be set.
+     * be set if the context is available. The Controls parent property will
+     * also be set to the page instance.
      *
      * @param control the control to add
      * @throws IllegalArgumentException if the control is null, or if the name
-     * of the control is not defined
+     *      of the control is not defined
      */
     public void addControl(Control control) {
         if (control == null) {
@@ -120,6 +121,8 @@ public class Page {
             control.setContext(getContext());
             control.setParentMessages(getMessages());
         }
+
+        control.setParent(this);
     }
 
     /**
