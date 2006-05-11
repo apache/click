@@ -751,9 +751,6 @@ public class ClickServlet extends HttpServlet {
      *
      *     <span class="kw">return</span> page;
      * } </pre>
-     * <p/>
-     * Another use of this method would be to create and cache page instances
-     * for reuse in a user's HttpSession.
      *
      * @param path the request page path
      * @param pageClass the page Class the request is mapped to
