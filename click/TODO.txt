@@ -5,6 +5,7 @@ Click 0.20 Release
 6. add Core Controls example
 7. add Extra Controls example
 8. javadoc JavaScript validation in Form class
+9. add PageLink control
 
 CODE
 * get localizations for Telephone.properties, Japanese, Italian, French
