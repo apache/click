@@ -1,35 +1,35 @@
 <toc label="Click Documentation">
-  <topic label="Click" href="click-documentation/docs/click.html">
-    <topic label="Introduction" href="click-documentation/docs/introduction.html"/>
-    <topic label="Why Click" href="click-documentation/docs/why-click.html"/>
-    <topic label="Pages" href="click-documentation/docs/pages.html"/>
-    <topic label="Controls" href="click-documentation/docs/controls.html"/>
-    <topic label="Configuration" href="click-documentation/docs/configuration.html"/>
-    <topic label="Control API" href="click-documentation/docs/click-api/net/sf/click/control/package-summary.html"/>
-    <topic label="Click API" href="click-documentation/docs/click-api/overview-summary.html"/>
-    <topic label="Click DTD" href="click-documentation/docs/click-dtd.html"/>
-    <topic label="Building" href="click-documentation/docs/building.html"/>
-    <topic label="RoadMap &amp; Changes" href="click-documentation/docs/roadmap-changes.html"/>
-    <topic label="Click Online" href="click-documentation/docs/click-online.html"/>
-    <topic label="FAQ" href="click-documentation/docs/faq.html"/>
+  <topic label="Click" href="documentation/docs/click.html">
+    <topic label="Introduction" href="documentation/docs/introduction.html"/>
+    <topic label="Why Click" href="documentation/docs/why-click.html"/>
+    <topic label="Pages" href="documentation/docs/pages.html"/>
+    <topic label="Controls" href="documentation/docs/controls.html"/>
+    <topic label="Configuration" href="documentation/docs/configuration.html"/>
+    <topic label="Control API" href="documentation/docs/click-api/net/sf/click/control/package-summary.html"/>
+    <topic label="Click API" href="documentation/docs/click-api/overview-summary.html"/>
+    <topic label="Click DTD" href="documentation/docs/click-dtd.html"/>
+    <topic label="Building" href="documentation/docs/building.html"/>
+    <topic label="RoadMap &amp; Changes" href="documentation/docs/roadmap-changes.html"/>
+    <topic label="Click Online" href="documentation/docs/click-online.html"/>
+    <topic label="FAQ" href="documentation/docs/faq.html"/>
     <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095"/>
   </topic>
-  <topic label="Click Extras" href="click-documentation/docs/extras.html">
-    <topic label="Extras API" href="click-documentation/docs/extras-api/overview-summary.html"/>
-    <topic label="Examples" href="click-documentation/docs/examples.html"/>
+  <topic label="Click Extras" href="documentation/docs/extras.html">
+    <topic label="Extras API" href="documentation/docs/extras-api/overview-summary.html"/>
+    <topic label="Examples" href="documentation/docs/examples.html"/>
   </topic>
-  <topic label="Velocity" href="click-documentation/docs/velocity/velocity.html">
-    <topic label="Users Guide" href="click-documentation/docs/velocity/user-guide.html"/>
-    <topic label="Developers Guide" href="click-documentation/docs/velocity/developer-guide.html"/>
-    <topic label="VTL Reference" href="click-documentation/docs/velocity/vtl-reference-guide.html"/>
+  <topic label="Velocity" href="documentation/docs/velocity/velocity.html">
+    <topic label="Users Guide" href="documentation/docs/velocity/user-guide.html"/>
+    <topic label="Developers Guide" href="documentation/docs/velocity/developer-guide.html"/>
+    <topic label="VTL Reference" href="documentation/docs/velocity/vtl-reference-guide.html"/>
   </topic>
   <!--
   <topic label="Reference">
-    <topic label="CSS 2.1" href="click-documentation/docs/css2/cover.html"/>
+    <topic label="CSS 2.1" href="documentation/docs/css2/cover.html"/>
     <topic label="DOM Reference" href="http://developer.mozilla.org/en/docs/Gecko_DOM_Reference"/>
-    <topic label="HTML 4.01" href="click-documentation/docs/html/cover.html"/>
+    <topic label="HTML 4.01" href="documentation/docs/html/cover.html"/>
     <topic label="JavaScript 1.5" href="http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide"/>
-    <topic label="Servlet 2.3 API" href="click-documentation/docs/servlet-api/overview-summary.html"/>
+    <topic label="Servlet 2.3 API" href="documentation/docs/servlet-api/overview-summary.html"/>
   </topic>
   -->
 </toc>
