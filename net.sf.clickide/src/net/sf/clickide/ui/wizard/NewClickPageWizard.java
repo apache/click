@@ -105,6 +105,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		final String className = page.getClassName();
 		final String superClass = page.getSuperClass();
 		final Template template = page.getTemplate();
+		final IProject project = page.getProject();
 		
 		IDialogSettings settings = getDialogSettings();
 		settings.put(SHOULD_CREATE_HTML, shouldCreateHTML);
@@ -115,7 +116,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-					openFiles = doFinish(monitor, shouldCreateHTML, shouldCreateClass, shouldAddToClickXML,
+					openFiles = doFinish(monitor, project, shouldCreateHTML, shouldCreateClass, shouldAddToClickXML,
 							parentFolder, filename, sourceFolder, packageName, className, superClass, template);
 				} catch (Exception e) {
 					throw new InvocationTargetException(e);
@@ -145,7 +146,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		return true;
 	}
 	
-	private IFile[] doFinish(IProgressMonitor monitor,
+	private IFile[] doFinish(IProgressMonitor monitor, IProject project,
 			boolean shouldCreateHTML,boolean shouldCreateClass, boolean shouldAddToClickXML,
 			String parentFolder, String filename, String sourceFolder, String packageName,
 			String className, String superClass, Template template) throws Exception {
@@ -162,8 +163,6 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			totalTask++;
 		}
 		monitor.beginTask(ClickPlugin.getString("wizard.newPage.progress"), totalTask);
-		
-		IProject project = ClickUtils.getJavaProject(selection.getFirstElement()).getProject();
 		
 		// Creates the HTML file
 		if(shouldCreateHTML){
