@@ -775,7 +775,7 @@ public class NewClickPageWizardPage extends WizardPage {
 		return (Template)templates.get(template.getSelectionIndex());
 	}
 	
-	private IProject getProject(){
+	public IProject getProject(){
 		try {
 			IWorkspaceRoot wsroot = ResourcesPlugin.getWorkspace().getRoot();
 			IProject project = wsroot.getProject(this.project.getText());
