@@ -1,0 +1,550 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+   dt { margin-top:2em; }
+   dd { margin:1em; margin-left:2em; }
+ </style>
+</head>
+<body>
+  
+<h1>Frequently Asked Questions</h1>
+<ul>
+  <li><a href="#tool-support">What development tools are there?</a>
+  </li>
+  <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
+  </li> 
+  <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
+  </li>
+  <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
+  </li> 
+  <li><a href="#localization">How do you internationalize Pages and Controls?</a>
+  </li>
+  <li><a href="#utf8-encoding">How do you encode Pages in the UTF-8 character set?</a>
+  </li>
+  <li><a href="#charset">How do you specify the character set which is used in your application?</a>
+  </li>
+  <li><a href="#actionlink-parameters">How do you create an ActionLink with several parameters?</a>
+  </li>
+  <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
+  </li>
+  <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
+  </li>
+  <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
+  </li>
+  <li><a href="#jsp-support">Does Click support JSP?</a>
+  </li>
+  <li><a href="#performance">What is the performance of Click?</a>
+  </li>
+  <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
+  </li>
+  <li><a href="#why-velocity">Why doesn't Click use FreeMarker for rendering?</a>
+  </li>  
+  <li><a href="#why-click">Why develop a new Web Application Framework?</a>
+  </li> 
+</ul>
+<p>&nbsp;</p>
+
+<dl>
+
+  
+  <a name="tool-support" class="heading"></a>
+  <dt><b>What development tools are there?</b></dt>
+  <dd>
+   Recommended Click development tools include:
+   <p/>
+   <ul>
+    <li>
+     <a target="blank" href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a> 
+     plugin for Eclipse <a target="blank" href="http://www.eclipse.org/webtools/">WTP</a>.
+     ClickIDE is developed by Naoki Takezoe.
+     <p/>
+     <img src="../images/clickide_2.png"/>
+    </li>
+    <li>
+     <a target="blank" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+     <p/>
+     <img src="../images/velwebedit.png"/>
+     <p/>
+     After installing Velocity Web Edit configure Eclipe *.htm file associations 
+     to use Velocity Editor. Do this via the Eclipse menus:
+     Window &gt; Preferences &gt; General &gt; File Associations
+     </li>
+    <li>
+     <a target="blank" href="http://propsorter.sourceforge.net">Veloeclipse</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+    </li>
+    <li>
+     <a target="blank" href="http://veloedit.sourceforge.net">Veloedit</a> &nbsp; - &nbsp;
+     Velocity and HTML Editor plugin for Eclipse
+     </li>
+   </ul>  
+  </dd>
+
+  
+  <a name="html-control" class="heading"></a>
+  <dt><b>How can the GUI designer define the HTML if Click Controls generates everything?</b></dt>
+  <dd>
+  In Click there is nothing preventing you from laying out HTML forms by hand. 
+  It just provides the option of doing it automatically for you.
+  <p/>
+  There are a number of approaches you can use for generating for HTML,
+  each with pros &amp; cons:
+  <p/>
+  <ol>
+  <li>
+  <u>Use Click forms and controls to do all the HTML rendering for you.</u> 
+  <p/>
+  This a 80/20 approach where you can quickly get stuff developed, but it may
+  not meet all your UI style requirements. 
+  <p/>
+  Please note the Forms control provides many 
+  <a href="click-api/net/sf/click/control/Form.html#auto-layout">auto layout</a> 
+  options, see the <a href="examples.html">click-examples</a> 'Form Properties' 
+  for a demonstration. 
+  <p/>
+  The Form control also renders the class attributes 'form', 'fields', 'errors' and 'buttons'
+  in the form's HTML elements enabling fine grained CSS control. 
+  <p/>
+  As an example you could configure a form to display the labels on top, and want to
+  increase the vertical spacing between fields. To do this simply define the CSS
+  style in front of your form:
+  <pre class="codeHtml">
+ &lt;style type="<span class="st">text/css</span>"&gt;
+    td.<span class="kw">fields</span> { padding-top: 0.75em; }
+ &lt;/style&gt; 
+ 
+ <span class="red">$</span><span class="blue">form</span> </pre>
+  Fields are also rendered with an 'id' attribute enabling manipulation of individual fields.
+  <p/>
+  </li><li>
+  <u>Subclass Click Form/Controls to customise HTML rendering.</u> 
+  <p/>
+  This is a good approach for ensuring a common LAF across your web application, 
+  but you will have to get your hands dirty and write some code.
+  </li><li>
+  <u>Use Velocity macros for a generic HTML layout.</u>
+  <p/>
+  This is easy to do and gives you good reuse across your web application.
+  <p/>
+  Please see the Form 
+  <a href="click-api/net/sf/click/control/Form.html#velocity-macros">velocity macros</a> 
+  example, and also see the <a href="examples.html">click-examples</a> 'Velocity Macro' 
+  demonstration. 
+  </li><li>
+  <u>Layout your HTML forms by hand.</u> 
+  <p/>
+  This gives you the ultimate control in presentation, but provides no reuse 
+  across your web application. 
+  <p/>
+  Please see the Form
+  <a href="click-api/net/sf/click/control/Form.html#manual-layout">manual layout</a>
+  example.
+  </li>
+  </ol>
+  </dd>
+
+
+  
+  <a name="shared-template" class="heading"></a>
+  <dt><b>How can I have many Pages using the same HTML template?</b></dt>
+  <dd>
+   To do this use the Page templating technique detailed in the 
+   <a href="pages.html#page-templating">Page Templating</a> topic. 
+   <p/>
+   Page templating is highly recommended for your web applications, as it provides
+   numerous benefits including:
+   <ul>
+      <li>greatly reduces the amount of HTML you need to maintain</li>
+      <li>ensures you have a common look and feel across you application</li>
+      <li>makes your application more robust, as there is less code to test</li>
+   </ul>
+   For a live demonstration of page templating deploy and run the
+   <a href="examples.html">click-examples</a> application.
+  </dd>
+
+
+    
+  <a name="exclude-fields" class="heading"></a>
+  <dt><b>Can you exclude some fields from a Form?</b></dt>
+  <dd>
+   To exclude some fields from being displayed in a shared Form class use the
+   <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
+   method. 
+   <p/>
+   You can even do this in your page template. Just make sure you call you call 
+   it before $form renders itself. For example:
+<pre class="codeHtml">
+  <span class="red">$</span><span class="blue">form</span>.<span class="blue">removeFields</span>(["field11", "field15", "field22"])
+
+  <span class="red">$</span><span class="blue">form</span>
+</pre>
+  </dd>
+
+
+  
+  <a name="localization" class="heading"></a>
+  <dt><b>How do you internationalize Pages and Controls?</b></dt>
+  <dd>
+   Click provides good support for application localization and 
+   internationalization (I18N) requirements.
+
+   <h4>Page Messages</h4>
+
+   The Page class supports page specific string localisation bundles using the 
+   method 
+   <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage(String)</a>.
+   For example a Login class with three locale string property files on the classpath:
+<pre class="codeConfig">
+/com/mycorp/pages/Login.properties
+/com/mycorp/pages/Login_en.properties
+/com/mycorp/pages/Login_fr.properties </pre>
+
+   In your Login Page class you can use the <tt>getMessage()</tt> method
+   to lookup request localized message strings. 
+   
+<pre class="codeJava">
+<span class="kw">public void</span> onInit() {
+    addModel(<span class="st">"title"</span>, getMessage(<span class="st">"title"</span>));
+} </pre>
+
+   In your HTML page template you can also access the localize message using
+   the <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+   object which is added to the template using the name "messages". For example:
+
+    <pre class="codeHtml">
+    &lt;h2&gt;<span class="red">$</span><span class="blue">messages.title</span>&lt;/h2&gt; </pre>
+
+   You can also define Field and ActionLink labels and title values in your pages
+   properties file using control name lookup convention. For details please see
+   the Javadoc:
+   <ul style="margin-top:1em;">
+    <li>
+     <a href="click-api/net/sf/click/control/ActionLink.html#getLabel()">ActionLink.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/ActionLink.html#getTitle()">ActionLink.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/Field.html#getLabel()">Field.getLabel()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/Field.html#getTitle()">Field.getTitle()</a>
+    </li>
+    <li>
+     <a href="click-api/net/sf/click/control/FieldSet.html#getLegend()">FieldSet.getLegend()</a>
+    </li>
+   </ul>
+
+   <h4>Field Messages</h4>
+  
+   The Field control classes share a common messages properties file:
+<pre class="codeConfig">
+/click-control.properties </pre>  
+
+   The field class provides a number of 
+   <a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a>
+   methods which support localized strings and message formatting.
+   Please also see the Control topic <a href="controls.html#message-properties">Message Properties</a>.   
+  </dd>
+
+
+  <a name="utf8-encoding" class="heading"></a>
+  <dt><b>How do you encode Pages in the UTF-8 character set?</b></dt>
+  <dd>
+  To encode pages in the UTF-8 character set you need to create a
+  <tt>WEB-INF/velocity.properties</tt> file with the properties:
+<pre class="codeConfig">
+<span class="red">input.encoding</span>=<span class="blue">UTF-8</span>
+<span class="red">output.encoding</span>=<span class="blue">UTF-8</span> </pre>
+  This will configure the Velocity runtime to use UTF-8.
+  <p/>  
+  You will also need to set the page heasers content type to UTF-8. You can do this globally for all
+  your applications pages using the <tt>headers</tt> element in your 
+  <tt>WEB-INF/click.xml</tt> file:
+<pre class="codeConfig">
+&lt;click&gt;
+ ..
+ &lt;headers&gt;
+   &lt;header name="<span class="red">Content-Type</span>" value="<span class="blue">text/html;charset=UTF-8</span>"/&gt;
+ &lt;/headers&gt;
+ ..
+&lt;/click&gt; </pre>
+  This will set the pages <tt>HttpServletResponse</tt> "Content-Type" header to be 
+  "text/html;charset=UTF-8". Alternatively you can override the Page 
+  <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a> method
+  to this content type.
+  </dd>
+
+
+  <a name="charset" class="heading"></a>
+  <dt><b>How do you specify the character set which is used in your application?</b></dt>
+  <dd>
+  
+  You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
+
+<pre class="codeConfig">
+&lt;click charset="<span class="blue">UTF-8</span>"&gt;
+ ..
+&lt;/click&gt; </pre>
+
+  This character set is used for Velocity input / output encoding, and response Content-Type. So if you specify the character set in 
+  <tt>WEB-INF/click.xml</tt>, you don't have to create <tt>WEB-INF/velocity.properties</tt>.
+  <p/>
+  If you want to use the other character set in your Velocity templates, 
+  you can override input / output encoding by <tt>WEB-INF/velocity.properties</tt>. 
+  See <a href="#utf8-encoding">the previous topic</a>.
+
+  </dd>
+
+
+  <a name="actionlink-parameters" class="heading"></a>
+  <dt><b>How do you create an ActionLink with several parameters?</b></dt>
+  <dd>
+   If you need to have an ActionLink with several parameters create a composite
+   parameter and pass this to the ActionLink. For example:
+   
+<pre class="codeHtml">
+   <span class="red">#set</span> (<span class="red">$</span><span class="blue">id</span> = <span class="red">$</span><span class="blue">customer.id</span> + "-" + <span class="red">$</span><span class="blue">account.id</span>)
+   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.getHref(</span><span class="red">$</span><span class="blue">id</span>)" 
+      onclick="return window.confirm('Please confirm to delete this account.');"&gt;
+     &lt;img src="images/delete.gif" title="Delete" border="0" align="middle"&gt;
+   &lt;/a&gt;
+</pre>
+   
+   In your ActionLink onClick handler method parse out the two parameter values. 
+   For example:
+   
+<pre class="codeJava">
+<span class="kw">public boolean</span> onDeleteClick() {
+    String value = deleteLink.getValue();
+    <span class="kw">int</span> index = value.indexOf(<span class="st">"-"</span>); 
+    Long customerId = Long.valueOf(value.substring(0, index)); 
+    Long accountId = Long.valueOf(value.substring(index + 1)); 
+    
+    <span class="cm">// Delete customer account</span>
+    ..
+    
+    <span class="kw">return true</span>;
+} </pre>
+  </dd>
+  
+      
+  <a name="multiple-posts" class="heading"></a>
+  <dt><b>How can you prevent multiple form posts?</b></dt>
+  <dd>
+  You can prevent multiple form posts by using the Post Redirect pattern. With 
+  this pattern once the user has posted a form you redirect to another page. 
+  If the user then presses the refresh button, they will making a GET request on the
+  current page.
+  <p/>
+  Please see the <a target="blank" href="http://www.theserverside.com/articles/content/RedirectAfterPost/article.html">Redirect After Post</a> 
+  article for more information on this topic.
+  <p/>
+  To prevent users resubmitting a form with the browser back button use the
+  Form 
+  <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">onSubmitCheck()</a>
+  method:
+  
+<pre class="codeJava">
+<span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
+    ..
+    
+    <span class="kw">public boolean</span> onSecurityCheck() {
+        <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
+    }
+} </pre>
+  <p/>
+  Please see the Click Examples 'Page Flow' for a demonstration of the
+  Post-Redirect and submit check patterns.
+  </dd>
+
+
+
+  <a name="cayenne-integration" class="heading"></a>
+  <dt><b>What JARs should I use with Click and Cayenne?</b></dt>
+  <dd>
+   To get Click and Cayenne to work happily with each other you will need to 
+   include the following JAR files in your WEB-INF/lib directory:
+   <ul style="margin-top:1em;">
+    <li>ashwood-1.1.jar</li>
+    <li>cayenne-nodeps-1.2xx.jar</li>
+    <li>click-xx.jar</li>
+    <li>click-extras-xx.jar</li>
+    <li>log4j-1.2.9.jar</li>
+    <li>oro-2.0.8.jar</li>
+   </ul>
+   The default Cayenne JAR includes Velocity 1.3 which is not compatible with
+   Click which uses Velocity 1.5-dev, so instead we use the Cayenne no 
+   dependencies JAR. When using Cayenne nodeps JAR we need to add some additional
+   Java libraries which include ashwood, log4j and oro.
+  </dd>
+
+
+
+  <a name="spring-integration" class="heading"></a>
+  <dt><b>How can you integrate Click into Spring?</b></dt>
+  <dd>
+   To integrate Spring with Click configure the
+   <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+   instead of the normal 
+   <a href="extras-api/net/sf/click/ClickServlet.html">ClickServlet</a>. 
+   <p/>
+   The SpringClickServlet is contained in the Click <a href="extras.html">Extras</a> package.
+
+   <h4>Spring Web MVC Framework</h4>
+
+   The Spring Web MVC Framework however, is not compatible with Click. The Spring framework
+   uses a low level command pattern design like Struts and WebWork.
+   Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
+   objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
+
+<pre class="codeJava">
+public interface Controller {
+   public ModelAndView handleRequest(HttpServletRequest request, 
+                                     HttpServletResponse response) throws Exception;
+} </pre>
+
+  In Spring MVC the integration plugin points are the Controllers.
+  <p/>
+  Click uses higher level design constructs focusing on Pages and Controls. Click uses its
+  own <tt>ClickServlet</tt> for dispatching requests to <tt>Pages</tt> and <tt>Control</tt>s, 
+  which are Click's plugin points.
+  </dd> 
+
+
+
+  <a name="jsp-support" class="heading"></a>
+  <dt><b>Does Click support JSP?</b></dt>
+  <dd>
+   Click fully supports JSP pages. 
+   <p/>
+   JSP Pages can be automatically loaded, like Velocity templates, and 
+   can be explicitly defined in the <tt>click.xml</tt> file.
+   
+ <pre class="codeConfig">
+&lt;page path="<span class="blue">customers-table.jsp</span>" class="<span class="red">com.mycorp.pages.CustomersTable</span>"/&gt; </pre>
+   
+   The page's model data values are automatically added to the request as
+   attributes so they are available in the JSP. Other Click values added 
+   as request attributes include:
+   <p/>
+   <ul>
+  <li>context &nbsp; - &nbsp; 
+   the Servlet context path, e.g. <span class="">/mycorp</span>
+  </li>  
+  <li>format &nbsp; - &nbsp; 
+   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects
+  </li>
+  <li>messages &nbsp; - &nbsp; 
+   the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
+   for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+   method
+  </li>
+  <li>path &nbsp; - &nbsp; the mapped request <a href="click-api/net/sf/click/Page.html#path">path</a> 
+    of the page. Note this will have a .htm not a .jsp extension
+  </li>
+   </ul>
+   <p/>
+  </dd>
+
+
+    
+  <a name="performance" class="heading"></a>
+  <dt><b>What is the performance of Click?</b></dt>
+  <dd>
+  Click is fast. 
+  <p/>
+  When the Click framework processes a request it creates a relatively small 
+  number of objects. These include a Page, a Context, a Format and a number of
+  Contols which in turn contain some Lists, Maps and Strings.
+  <p/>
+  The allocation of small/moderate numbers of short lived objects by 
+  modern JVMs is very, very fast. Please see the IBM article 
+  <a target="blank" href="http://www-128.ibm.com/developerworks/java/library/j-jtp09275.html">Urban performance legends, revisited</a>.
+  <p/>
+  The amount of actual work Click does is pretty small. 
+  <p/>
+  The <tt>onProcess()</tt> methods traverse a list of Controls and do simple 
+  operations.  
+  <p/>
+  The Control <tt>toString()</tt> methods can allocate large StringBuffers when 
+  rendering tables, but forms rarely get larger than 4,000 characters.  
+  When Click creates a new StringBuffer it attempts to determine the
+  maximum likely size to avoid additional memory allocation and arraycopy
+  operations.
+  <p/>
+  There is not much reflection in Click at all. With reflection only really used by
+  the Control call back listeners:
+  <blockquote> 
+  <tt style="white-space:nowrap">okButton.setListener(<span class="kw">this</span>, <span class="st">"onOkClicked"</span>);</tt>
+  </blockquote>
+  The next step in processing the request is rendering the response.
+  Velocity is largely responsible for this step. 
+  <p/>
+  Velocity is also fast.
+  <p/>
+  While hard performance numbers are difficult to come by in this area, 
+  until recently Velocity was considered to be faster than JSP. 
+  However, recent discussions on Velocity mail lists indicate that JSP 
+  compilers have improved to the point where JSP has a small performance lead over
+  Velocity. What ever the case, JSP is very fast and so is Velocity.
+  </dd>
+
+
+  <a name="logging" class="heading"></a>
+  <dt><b>Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dd>
+   Click does not use Log4J with Velocity because of an appender closing
+   memory leak  associated with garbage collecting VelocityEngines. This issue is being
+   addressed with latest Velocity 1.5 development stream. 
+   <p/>
+   Commons Logging is not used because of class loader issues which occur
+   on versions of IBM's WebSphere application server.
+  </dd>
+    
+
+
+  <a name="why-velocity" class="heading"></a>
+  <dt><b>Why doesn't Click use FreeMarker instead of Velocity?</b></dt>
+  <dd>
+   FreeMarker is a powerful templating engine which was evaluated along side 
+   Velocity for use in Click. While FreeMarker has many sophisticated
+   features Velocity doesn't, Velocity was chosen because it easier to learn
+   and doesn't use an XML style markup syntax.
+   <p/>
+   One of FreeMarker's strong points compared to Velocity is error reporting.
+   This issue is addressed in Click by using the new enhanced error reporting
+   feature of Velocity 1.5.
+   <p/>
+   Click will render the source code with the error. For example:
+   <ul>
+      <li><a href="error-parsing.html">Page Parsing Error</a></li>
+      <li><a href="error-npe.html">Null Pointer Error</a></li>
+   </ul>
+  </dd>
+
+
+  <a name="why-click" class="heading"></a>
+  <dt><b>Why develop a new Web Application Framework?</b></dt>
+  <dd>
+  Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
+  while Tapestry is too complicated. 
+  <p/>
+  For a more comprehensive answer please see <a href="why-click.html">Why Click</a>.
+  </dd>
+
+
+  
+</dl>
+
+
+</body>
+</html>
+
