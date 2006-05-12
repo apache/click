@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+ th { text-align: left; }
+ td { vertical-align: top; white-space: nowrap; }
+ </style>
+</head>
+<body>
+  
+<h1>Building</h1>
+
+Click uses an <a href="http://ant.apache.org">Ant</a> based build system for 
+creating JAR files, application WAR files and the Click distribution.
+
+<ul>
+  <li><a href="#configuration">Build Configuration</a>
+  </li>
+  <li><a href="#ant-targets">Ant Targets</a>
+  </li>
+  <li><a href="#framework-dependencies">Framework Dependencies</a>
+  </li>
+</ul>
+<p>&nbsp;</p>
+
+
+<a name="build-configuration"><h2>Build Configuration</h2></a>
+The configuration of the Click Ant build system is detailed below:
+
+<pre class="codeConfig" style="margin-left:3em;">
++--[build]                      Ant build directory
+|   |
+|   +---build.xml               Ant build script
+|   |
+|   +---build.properties        Ant build properties
+|   
++--[dist]                       JAR and WAR file output directory
+|
++--[documentation]              Click documentation set application
+|
++--[examples]                   Click Examples application
+|
++--[extras]                     Click Extras source directory
+|
++--[framework]                  Click framework source directory
+|
++--[lib]                        Dependent JAR libraries directory
+|
++--[mock]                       Mock objects source directory </pre>
+
+<h3>Build Requirements</h3>
+Ensure the following requirements are met before performing builds:
+<ol>
+  <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
+  a JDK installation (1.4 or later).<p/>
+  </li>
+  
+  <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
+  an Ant installation (1.6.5 or later).<p/>
+  </li>
+</ol>
+
+
+<a name="ant-targets"><h2>Ant Targets</h2></a>
+
+<pre class="codeConfig" style="margin-left:3em;">
+ant help
+Buildfile: build.xml
+
+help:
+     [echo] Click web application framework
+     [echo] ===============================
+
+     [echo] Main targets:
+
+     [echo] build-all             build framework, extras, examples
+     [echo] build-distribution    build distribution ZIP file
+     [echo] build-examples        build click-examples WAR file
+     [echo] build-extras          build click-extras JAR file
+     [echo] build-framework       build click framework JAR file
+     [echo] build-maven-bundles   build Maven repository upload bundles
+     [echo] build-sources         build source ZIP files for use with IDEs
+     [echo] deploy-examples       copy click-examples WAR file to app server
+     [echo] get-deps              download JAR dependencies
+     [echo] get-deps-proxy        download JAR dependencies via proxy
+     [echo] help                  display the Help message
+     [echo] javadoc               create Javadoc HTML files
+
+
+     [echo] Please ensure you have configured build.properties
+
+
+BUILD SUCCESSFUL </pre>
+
+<h3>Getting Dependencies</h3>
+<ol>
+  <li>Run the Ant target <tt>get-deps</tt> to download JAR dependencies
+  from <a href="http://www.ibiblio.org/maven/">Ibiblio</a> Maven repository:
+  <pre class="codeConfig">
+ant get-deps </pre>
+
+  If you are behind a firewall use the Ant target <tt>get-deps-proxy</tt>
+  and configure you proxy settings in <tt>build.properties</tt>
+  
+  <pre class="codeConfig">
+# Proxy hostname used by Ant target 'get-deps-proxy'
+proxy.host=192.168.0.3
+
+# Proxy port for by Ant target 'get-deps-proxy'
+proxy.port=3128 </pre>
+  </li>
+</ol>
+
+<h3>Building Framework</h3>
+To build the Click framework JAR file <tt>click.jar</tt>
+<ol>
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
+  </li>
+
+  <li>Run the Ant target <tt>build-framework</tt> to build the framework:
+  <pre class="codeConfig">
+ant build-framework </pre>
+  </li>
+</ol>
+
+
+<h3>Building Click Extras</h3>
+Click Extras JAR file <tt>click-extras.jar</tt>
+<ol>
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
+  </li>
+  
+  <li>Run the Ant targets <tt>framework</tt> and <tt>build-extras</tt>:
+  <pre class="codeConfig">
+ant build-framework build-extras </pre>
+  </li>
+</ol>
+
+
+<h3>Building Click Webapps</h3>
+To build the Click web application WAR files <tt>click-examples.war</tt>
+<ol>
+  <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
+  been run.<p/>
+  </li>
+  
+  <li>Run the Ant target <tt>build-all</tt>:
+  <pre class="codeConfig">
+ant build-all </pre>
+  </li>
+</ol>
+
+
+<a name="framework-dependencies"><h2>Framework Dependencies</h2></a>
+The Click framework has the following runtime dependencies.
+
+<table style="border: 1px solid black; margin: 1em 0em;" cellspacing="0" cellpadding="6">
+<tr style="background-color: navy; color: white;">
+  <th>Library</th>
+  <th>Version</th>
+  <th>JAR / Source</th>
+  <th>Author</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td>Java Runtime</td>  
+  <td>1.4</td>
+  <td>n/a</td>
+  <td><a target="blank" href="http://java.sun.com/j2se/">Sun Microsystems</a></td>
+  <td>J2SE Runtime Environment</td>
+</tr>
+<tr>
+  <td>Servlet API</td>
+  <td>2.3</td>
+  <td>servlet-2.3.jar</td>  
+  <td><a target="blank" href="http://java.sun.com/products/servlet/">Sun Microsystems</a></td>
+  <td>J2EE Servlet API</td>
+</tr>
+<tr>
+  <td>Velocity Engine</td>
+  <td>1.5-dev</td>
+  <td>velocity-1.5-dev.jar<span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/velocity/">Jakarta Velocity</a></td>
+  <td>Velocity Templating Framework</td>
+</tr>
+<tr>
+  <td>Velocity Tools</td>
+  <td>1.1</td>
+  <td>WebappLoader source<span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/velocity/tools/">Jakarta Velocity Tools</a></td>
+  <td>Velocity Tools Utility Library</td>
+</tr>
+<tr>
+  <td>OGNL</td>
+  <td>2.6.7</td>
+  <td>ognl-2.6.7.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://www.ognl.org/">OGNL</a></td>
+  <td>Object Graph Navigation Library</td>
+</tr>
+<tr>
+  <td>Common Language</td>
+  <td>2.1</td>
+  <td>commons-lang-2.1.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/commons/">Jakarta Commons</a></td>
+  <td>General Language Utilities Library</td>
+</tr>
+<tr>
+  <td>Common FileUpload</td>
+  <td>1.1</td>
+  <td>commons-fileupload-1.1.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/commons/">Jakarta Commons</a></td>
+  <td>HTTP File Upload Library</td>
+</tr>
+<tr>
+  <td>Commons Codec</td>
+  <td>1.3</td>
+  <td>commons-codec-1.3.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/commons/">Jakarta Commons</a></td>
+  <td>Encoding Decoding Library</td>
+</tr>
+<tr>
+  <td>Commons Collections</td>
+  <td>3.1</td>
+  <td>commons-collections-3.1.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/commons/">Jakarta Commons</a></td>
+  <td>Collection Utilities Library</td>
+</tr>
+<tr>
+  <td>Common IO</td>
+  <td>1.1</td>
+  <td>commons-io-1.1.jar <span class="red">*</span></td>  
+  <td><a target="blank" href="http://jakarta.apache.org/commons/">Jakarta Commons</a></td>
+  <td>IO Utilities Library</td>
+</tr>
+<tr>
+  <td>DHTML Calendar</td>
+  <td>1.0</td>
+  <td>JavaScript source<span class="red">*</span></td>  
+  <td><a target="blank" href="http://www.dynarch.com">Dynarch.com</a></td>
+  <td>DHTML Calendar Widget</td>
+</tr>
+</table>
+
+<span class="red">*</span> : marked libraries and source are included in the 
+<tt>click.jar</tt> file.
+<p/>
+The standard <tt>click-xx.jar</tt> includes all of the listed dependencies.<br/> 
+Alternatively use the <tt>click-nodeps-xx.jar</tt> which includes none of these
+dependencies.
+
+
+</body>
+</html>
+
