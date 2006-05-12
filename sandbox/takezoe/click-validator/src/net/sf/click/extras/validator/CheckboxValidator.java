@@ -10,24 +10,24 @@ import net.sf.click.control.Checkbox;
  */
 public class CheckboxValidator implements Validator {
 	
-	private Checkbox checkbox;
+	private Checkbox field;
 	
-	public CheckboxValidator(Checkbox checkbox){
-		this.checkbox = checkbox;
+	public CheckboxValidator(Checkbox field){
+		this.field = field;
 	}
 	
 	public String getName(){
-		return checkbox.getName();
+		return field.getName();
 	}
 	
 	public String getClientValidationScript(){
 		
     	StringBuffer sb = new StringBuffer();
     	
-    	sb.append(JavaScriptUtils.createValidationFunction(checkbox) + "{");
-    	if(checkbox.isRequired()){
-	    	sb.append("if(").append(JavaScriptUtils.getFieldChecked(checkbox)).append("==false){");
-	    	sb.append(JavaScriptUtils.fieldAlert("not-checked-error", checkbox));
+    	sb.append(JavaScriptUtils.createValidationFunction(field) + "{");
+    	if(field.isRequired()){
+	    	sb.append("if(").append(JavaScriptUtils.getFieldChecked(field)).append("==false){");
+	    	sb.append(JavaScriptUtils.fieldAlert("not-checked-error", field));
 	    	sb.append("return false;");
 	    	sb.append("}");
     	}
