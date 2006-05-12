@@ -4,8 +4,14 @@ import net.sf.click.control.TextField;
 
 /**
  * The implementation of {@link net.sf.click.extras.validator.Validator}
- * for {@link net.sf.click.control.TextField}.
- * 
+ * for {@link net.sf.click.control.TextField} and subclasses.
+ * <ul>
+ *   <li>{@link net.sf.click.control.TextField}</li>
+ *   <li>{@link net.sf.click.control.PasswordField}</li>
+ * </ul>
+ * For more extra controls which extend TextField, it possible to implement
+ * Validator based on this class.
+ *  
  * @author Naoki Takezoe
  */
 public class TextFieldValidator implements Validator {
