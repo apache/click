@@ -210,12 +210,19 @@ public class HiddenField extends Field {
         this.valueObject = value;
     }
 
+    /**
+     * Returns null to ensure no client side JavaScript validation is performed.
+     * 
+     * @return null to ensure no client side JavaScript validation is performed
+     */
+    public String getValidationJavaScript() {
+        return null;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO: doco
-     * <p/>
-     * The value object will be set with the HiddenField's string value.
+     * This method binds the submitted request value to the Field's value.
      */
     public void bindRequestValue() {
 
