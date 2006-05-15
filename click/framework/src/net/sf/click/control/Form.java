@@ -163,6 +163,36 @@ import org.apache.commons.lang.StringUtils;
  * any null nested objects so their properties can be set. To do this Click
  * uses the no-args constructor of the nested objects class.
  *
+ * <a name="form-validation"><h3>Form Validation</h3></a>
+ *
+ * The Form control supports automatic field validation. By default when a POST
+ * request is made the form will validate the field values. To disable
+ * automatic validation set {@link #setValidate(boolean)} to false.
+ * <p/>
+ * <b>JavaScript Validation</b>
+ * <p/>
+ * The Form control also supports client side JavaScript validation. By default
+ * JavaScript validation is not enabled. To enable JavaScript validation set
+ * {@link #setJavaScriptValidation(boolean)} to true. For example:
+ *
+ * <pre class="codeJava">
+ * Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ * form.setJavaScriptValidation(<span class="kw">true</span>);
+ *
+ * <span class="cm">// Add form fields</span>
+ * ..
+ *
+ * form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">" OK "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>);
+ *
+ * Submit cancel = <span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="st">"Cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>);
+ * cancel.setCancelJavaScriptValidation(<span class="kw">true</span>);
+ *
+ * addControl(form); </pre>
+ *
+ * Please note in that is this example the cancel submit button has
+ * {@link Submit#setCancelJavaScriptValidation(boolean)} set to true. This
+ * prevents JavaScript form validation being performed the cancel button is clicked.
+ *
  * <h3>HTML Imports</h3>
  *
  * The Form control automatically deploys the control CSS style sheet
