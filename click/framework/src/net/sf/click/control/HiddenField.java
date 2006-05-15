@@ -212,7 +212,7 @@ public class HiddenField extends Field {
 
     /**
      * Returns null to ensure no client side JavaScript validation is performed.
-     * 
+     *
      * @return null to ensure no client side JavaScript validation is performed
      */
     public String getValidationJavaScript() {
