@@ -86,14 +86,14 @@ public class MessagesMap implements Map {
     /** The time the cache was lasted updated. */
     protected static long cacheLastUpdated;
 
+    /** The class global resource bundle base name. */
+    protected final String globalBaseName;
+
     /** The map of localized messages. */
     protected Map messages;
 
     /** The resource bundle locale. */
     protected final Locale locale;
-
-    /** Flag indicating no resources found after initialization. */
-    protected boolean noResourcesFound;
 
     // ----------------------------------------------------------- Constructors
 
@@ -105,6 +105,19 @@ public class MessagesMap implements Map {
      * @param context the request context
      */
     public MessagesMap(String baseName, Context context) {
+        this(baseName, null, context);
+    }
+
+    /**
+     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
+     * bundle name, global bundle name and <tt>Context</tt>.
+     *
+     * @param baseName the resource bundle name
+     * @param context the request context
+     * @param globalBaseName the global resource bundle name
+     */
+    public MessagesMap(String baseName, String globalBaseName, Context context)
+    {
         if (baseName == null) {
             throw new IllegalArgumentException("Null baseName parameter");
         }
@@ -116,6 +129,8 @@ public class MessagesMap implements Map {
 
         // Cache resources if application in "production" or "profile" mode
         this.cache = context.getApplicationMode().startsWith("pro");
+
+        this.globalBaseName = globalBaseName;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -125,11 +140,7 @@ public class MessagesMap implements Map {
      */
     public int size() {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.size();
-        } else {
-            return 0;
-        }
+        return messages.size();
     }
 
     /**
@@ -137,11 +148,7 @@ public class MessagesMap implements Map {
      */
     public boolean isEmpty() {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.isEmpty();
-        } else {
-            return true;
-        }
+        return messages.isEmpty();
     }
 
     /**
@@ -150,9 +157,7 @@ public class MessagesMap implements Map {
     public boolean containsKey(Object key) {
         if (key != null) {
             ensureInitialized();
-            if (!noResourcesFound) {
-                return messages.containsKey(key);
-            }
+            return messages.containsKey(key);
         }
         return false;
     }
@@ -162,11 +167,8 @@ public class MessagesMap implements Map {
      */
     public boolean containsValue(Object value) {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.containsValue(value);
-        } else {
-            return false;
-        }
+        return messages.containsValue(value);
+
     }
 
     /**
@@ -236,11 +238,7 @@ public class MessagesMap implements Map {
      */
     public Set keySet() {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.keySet();
-        } else {
-            return Collections.EMPTY_SET;
-        }
+        return messages.keySet();
     }
 
     /**
@@ -248,11 +246,7 @@ public class MessagesMap implements Map {
      */
     public Collection values() {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.values();
-        } else {
-            return Collections.EMPTY_SET;
-        }
+        return messages.values();
     }
 
     /**
@@ -260,53 +254,60 @@ public class MessagesMap implements Map {
      */
     public Set entrySet() {
         ensureInitialized();
-        if (!noResourcesFound) {
-            return messages.entrySet();
-        } else {
-            return Collections.EMPTY_SET;
-        }
+        return messages.entrySet();
     }
 
     // ------------------------------------------------------ Protected Methods
 
     private void ensureInitialized() {
-        if (messages == null && !noResourcesFound) {
+        if (messages == null) {
 
             String resourceKey = baseName + locale.toString();
-            if (!NOT_FOUND_CACHE.contains(resourceKey)) {
-                if (MESSAGES_CACHE.containsKey(resourceKey)) {
-                    messages = (Map) MESSAGES_CACHE.get(resourceKey);
 
-                } else {
-                    synchronized (CACHE_LOAD_LOCK) {
-                       try {
+            messages = (Map) MESSAGES_CACHE.get(resourceKey);
 
-                           ResourceBundle resources =
-                               getBundle(baseName, locale);
+            if (messages != null) {
+                return;
+            }
 
-                           messages = new HashMap();
+            messages = new HashMap();
 
-                           Enumeration e = resources.getKeys();
-                           while (e.hasMoreElements()) {
-                               String name = e.nextElement().toString();
-                               String value = resources.getString(name);
-                               messages.put(name, value);
-                           }
+            synchronized (CACHE_LOAD_LOCK) {
 
-                           messages = Collections.unmodifiableMap(messages);
+                loadResourceValuesIntoMap(globalBaseName, messages);
 
-                           if (cache) {
-                               MESSAGES_CACHE.put(resourceKey, messages);
-                           }
+                loadResourceValuesIntoMap(baseName, messages);
 
-                        } catch (MissingResourceException mre) {
-                            NOT_FOUND_CACHE.add(resourceKey);
-                            noResourcesFound = true;
-                        }
-                    }
+                messages = Collections.unmodifiableMap(messages);
+
+                if (cache) {
+                    MESSAGES_CACHE.put(resourceKey, messages);
                 }
-            } else {
-                noResourcesFound = true;
+            }
+        }
+    }
+
+    private void loadResourceValuesIntoMap(String resourceName, Map map) {
+        if (resourceName == null) {
+            return;
+        }
+
+        String resourceKey = resourceName + locale.toString();
+
+        if (!NOT_FOUND_CACHE.contains(resourceKey)) {
+            try {
+                ResourceBundle resources =
+                    getBundle(resourceName, locale);
+
+                Enumeration e = resources.getKeys();
+                while (e.hasMoreElements()) {
+                    String name = e.nextElement().toString();
+                    String value = resources.getString(name);
+                    map.put(name, value);
+                }
+
+            } catch (MissingResourceException mre) {
+                NOT_FOUND_CACHE.add(resourceKey);
             }
         }
     }
