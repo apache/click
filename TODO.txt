@@ -1,11 +1,9 @@
 Click 0.20 Release
 ------------------
 4. document add Parent property to Control
-5. document remove struts style form validation messages 
-7. finish Extra Controls example
-8. javadoc JavaScript validation in Form class
 9. add PageLink control
 10. review form submit check
+11. default error postion, canvas support for changing to TOP
 
 
 CODE
