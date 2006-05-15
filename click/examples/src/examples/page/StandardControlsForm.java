@@ -23,6 +23,11 @@ import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import examples.domain.CustomerDAO;
 
+/**
+ * Provides a form containing all the Standard Click Controls.
+ *
+ * @author Malcolm Edgar
+ */
 public class StandardControlsForm extends BorderedPage {
 
     private Form form = new Form("form");
@@ -32,7 +37,7 @@ public class StandardControlsForm extends BorderedPage {
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
 
     public StandardControlsForm() {
-        
+
         // Controls FieldSet
         form.add(fieldSet);
 
@@ -51,7 +56,7 @@ public class StandardControlsForm extends BorderedPage {
         fieldSet.add(select);
         fieldSet.add(new TextArea("textArea"));
         fieldSet.add(new TextField("textField"));
-        
+
         form.add(new Button("button"));
         ImageSubmit imageSubmit = new ImageSubmit("image", "images/edit-button.gif");
         imageSubmit.setTitle("ImageSubmit");
@@ -64,7 +69,9 @@ public class StandardControlsForm extends BorderedPage {
         settingsFieldSet.add(allFieldsRequired);
         settingsFieldSet.add(jsValidate);
         form.add(settingsFieldSet);
-        
+
+        form.setErrorsPosition(Form.POSITION_TOP);
+
         addControl(form);
     }
 
@@ -72,7 +79,7 @@ public class StandardControlsForm extends BorderedPage {
         List customers = CustomerDAO.getCustomersSortedByName();
         select.add(new Option("[Select]"));
         select.addAll(customers, "id", "name");
-        
+
         applySettings();
     }
 
