@@ -613,8 +613,7 @@ public class ActionLink implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages =
-                    new MessagesMap(Field.CONTROL_MESSAGES, getContext());
+                messages = new MessagesMap(CONTROL_MESSAGES, getContext());
 
             } else {
                 String msg = "Cannot initialize messages as context not set";

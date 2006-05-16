@@ -510,8 +510,7 @@ public class Form implements Control {
     protected static String LABEL_REQUIRED_SUFFIX = "";
 
     static {
-        ResourceBundle bundle =
-            ResourceBundle.getBundle(Field.CONTROL_MESSAGES);
+        ResourceBundle bundle = ResourceBundle.getBundle(CONTROL_MESSAGES);
 
         LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
         LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
@@ -1427,7 +1426,7 @@ public class Form implements Control {
     }
 
     /**
-     * @see Control#getParent(Object)
+     * @see Control#getParent()
      *
      * @return the Control's parent
      */

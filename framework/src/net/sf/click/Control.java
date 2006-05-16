@@ -120,6 +120,11 @@ import javax.servlet.ServletContext;
 public interface Control extends Serializable {
  
     /**
+     * The global control messages bundle name: &nbsp; <tt>click-control</tt>.
+     */
+    public static final String CONTROL_MESSAGES = "click-control";
+
+    /**
      * Return the Page request Context of the Control.
      *
      * @return the Page request Context
