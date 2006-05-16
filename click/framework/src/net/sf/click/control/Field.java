@@ -164,11 +164,6 @@ public abstract class Field implements Control {
     // -------------------------------------------------------------- Constants
 
     /**
-     * The control package messages bundle name: &nbsp; <tt>click-control</tt>.
-     */
-    public static final String CONTROL_MESSAGES = "click-control";
-
-    /**
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
