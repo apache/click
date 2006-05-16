@@ -143,7 +143,7 @@ public class Submit extends Button {
     }
 
     /**
-     * Set flag whether client side JavaScript form validation will be cancelled
+     * Set whether client side JavaScript form validation will be cancelled
      * by pressing this button.
      *
      * @param cancel the cancel JavaScript form validation flag
