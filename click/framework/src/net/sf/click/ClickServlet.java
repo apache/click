@@ -312,15 +312,6 @@ public class ClickServlet extends HttpServlet {
             buffer.append(request.getRequestURL());
             logger.debug(buffer);
         }
-        if (logger.isTraceEnabled()) {
-            Map requestParams = getRequestParameters(request);
-            Iterator i = requestParams.keySet().iterator();
-            while (i.hasNext()) {
-                String name = i.next().toString();
-                String value = requestParams.get(name).toString();
-                logger.trace("   " + name + "=" + value);
-            }
-        }
 
         if (clickApp.getCharset() != null) {
             try {
@@ -332,6 +323,17 @@ public class ClickServlet extends HttpServlet {
                 logger.warn(msg, ex);
             }
         }
+
+        if (logger.isTraceEnabled()) {
+            Map requestParams = getRequestParameters(request);
+            Iterator i = requestParams.keySet().iterator();
+            while (i.hasNext()) {
+                String name = i.next().toString();
+                String value = requestParams.get(name).toString();
+                logger.trace("   " + name + "=" + value);
+            }
+        }
+
 
         Page page = null;
         try {
