@@ -25,7 +25,7 @@
 
 <h2>Road Map</h2>
 Click is currently being developed using a short feature release cycle leading
-up to a 1.0 release in the Q2 2006.
+up to a 1.0 release in the Q3 2006.
 
 
 <p>&nbsp;</p>
@@ -33,11 +33,12 @@ up to a 1.0 release in the Q2 2006.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 0.20 - 8th May 2006</dt>
+  <dt>Version 0.20 - 21st May 2006</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-       Added client side JavaScript form validation
+       Added client side JavaScript
+       <a href="click-api/net/sf/click/control/Form.html#form-validation">Form Validation</a>
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-16">16</a>].
       </li>        
       <li class="change">
@@ -47,19 +48,22 @@ up to a 1.0 release in the Q2 2006.
        These controls were developed by Christian Essel
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-81">81</a>].        
       </li>
-      <li clas="change">
-       Added Brazilian properties files provided by 
-       Ricardo Lecheta [<a href="http://www.sunvolt.com/jira/browse/CLK-86">86</a>].
+      <li class="change">
+       Added Control parent property 
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-88">88</a>].
       </li>
       <li class="change">
        Added request parameter to ClickServlet   
        <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
        method.
       </li>
-      <li class="change">
-       Improved CSS link rendering to enable alternate style sheets. This
-       issue was raised by Enrico Donelli
-       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-81">81</a>].        
+      <li clas="change">
+       Added a default page resource bundle <tt>/click-page.properties</tt>. This issue raised by
+       Claudio Rossetto [<a href="http://www.sunvolt.com/jira/browse/CLK-72">72</a>].
+      </li>
+      <li clas="change">
+       Added Brazilian properties files provided by 
+       Ricardo Lecheta [<a href="http://www.sunvolt.com/jira/browse/CLK-86">86</a>].
       </li>
       <li class="change">
        Improved Velocity rendering performance. This issue was identified and 
@@ -72,6 +76,11 @@ up to a 1.0 release in the Q2 2006.
        performance with unsynchronized append methods.
       </li>
       <li class="change">
+       Improved CSS link rendering to enable alternate style sheets. This
+       issue was raised by Enrico Donelli
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-81">81</a>].        
+      </li>
+      <li class="change">
        Fixed <tt>UnsupportedEncodingException</tt> in ClickUtils.encodeUrl() when
        application charset is undefined
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-87">87</a>].
@@ -80,7 +89,8 @@ up to a 1.0 release in the Q2 2006.
        Removed Form support for Struts style error message rendering.
       </li>
       <li class="change">
-       Updated Velocity 1.5-dev JAR snapshot to revision 390735.
+       Updated Velocity 1.5-dev JAR snapshot to revision 390735, with
+       patch VELOCITY-438 applied.
       </li>
       <li class="change">
        Updated packaging: <tt>click-documentation.war</tt> replaced by 
