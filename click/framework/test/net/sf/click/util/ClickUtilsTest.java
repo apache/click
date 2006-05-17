@@ -1,6 +1,7 @@
 package net.sf.click.util;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import net.sf.click.Context;
 import net.sf.click.MockContext;
+import net.sf.click.Page;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -220,6 +222,30 @@ public class ClickUtilsTest extends TestCase {
         Map map = ClickUtils.getParentMessages(textField);
         assertNotNull(map);
         assertTrue(map.isEmpty());
+        assertTrue(map == Collections.EMPTY_MAP);
+        
+        Page page = new Page();
+        page.setContext(context);
+        page.addControl(textField);
+        
+        Map map2 = ClickUtils.getParentMessages(textField);
+        assertNotNull(map2);
+        assertEquals(2, map2.size());
+        assertFalse(map2 == Collections.EMPTY_MAP);
+        
+        Page page2 = new Page();
+        page2.setContext(context);
+        
+        Form form = new Form("form");
+        page2.addControl(form);
+        
+        TextField textField2 = new TextField("test");
+        form.add(textField2);
+
+        Map map3 = ClickUtils.getParentMessages(textField2);
+        assertNotNull(map3);
+        assertEquals(2, map3.size());
+        assertFalse(map3 == Collections.EMPTY_MAP);        
     }
 
 }
