@@ -28,6 +28,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
@@ -113,6 +114,9 @@ public class Menu implements Control {
 
     /** The menu display label. */
     protected String label;
+
+    /** The controls localized messages. */
+    protected Map messages;
 
     /** The menu control name. */
     protected String name;
@@ -290,6 +294,26 @@ public class Menu implements Control {
      */
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    /**
+     * Return a Map of localized messages for the Menu.
+     *
+     * @return a Map of localized messages for the Menu
+     * @throws IllegalStateException if the context for the Menu has not be set
+     */
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                messages =
+                    new MessagesMap(this, CONTROL_MESSAGES, getContext());
+
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
     /**

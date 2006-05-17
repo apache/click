@@ -201,6 +201,7 @@ public class NumberField extends TextField {
         if (messages == null) {
             if (getContext() != null) {
                 messages = new MessagesMap(DoubleField.class.getName(),
+                                           CONTROL_MESSAGES,
                                            getContext());
 
             } else {

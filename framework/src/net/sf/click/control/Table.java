@@ -496,7 +496,8 @@ public class Table implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages = new MessagesMap(CONTROL_MESSAGES, getContext());
+                messages =
+                    new MessagesMap(this, CONTROL_MESSAGES, getContext());
 
             } else {
                 String msg = "Cannot initialize messages as context not set";
