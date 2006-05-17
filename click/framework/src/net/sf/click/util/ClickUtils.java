@@ -32,6 +32,7 @@ import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.sf.click.Context;
+import net.sf.click.Control;
+import net.sf.click.Page;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -615,6 +618,50 @@ public class ClickUtils {
         }
 
         return fieldList;
+    }
+
+    /**
+     * Return the given control's top level parent's localized messages Map.
+     * <p/>
+     * This method will walk up to the control's parent page object and
+     * return pages messages. If the control's top level parent is a control
+     * then the parent's messages map will be returned. If the top level
+     * parent is not a Page or Control instance an empty map will be returned.
+     *
+     * @param control the control to get the parent messages Map for
+     * @return the top level parent's Map of localized messages
+     */
+    public static Map getParentMessages(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+
+        Object parent = control.getParent();
+        if (parent == null) {
+            return Collections.EMPTY_MAP;
+
+        } else {
+            while (parent != null) {
+                if (parent instanceof Control) {
+                    control = (Control) parent;
+                    parent = control.getParent();
+
+                    if (parent == null) {
+                        return control.getMessages();
+                    }
+
+                } else if (parent instanceof Page) {
+                    Page page = (Page) parent;
+                    return page.getMessages();
+
+                } else if (parent != null) {
+                    // Unknown parent class
+                    return Collections.EMPTY_MAP;
+                }
+            }
+        }
+
+        return Collections.EMPTY_MAP;
     }
 
     /**

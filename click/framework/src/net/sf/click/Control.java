@@ -195,6 +195,13 @@ public interface Control extends Serializable {
     public void setListener(Object listener, String method);
 
     /**
+     * Return TODO: message doco.
+     * 
+     * @return todo
+     */
+    public Map getMessages();
+
+    /**
      * Return the name of the Control. Each control name must be unique in the
      * containing Page model or the containing Form.
      *

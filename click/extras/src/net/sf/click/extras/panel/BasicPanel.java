@@ -27,6 +27,7 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.MessagesMap;
 
 /**
  * A simple implementation of a Panel, that will render a basic panel.  If
@@ -56,6 +57,9 @@ public class BasicPanel implements Panel {
 
     /** The (localized) label of this panel. */
     protected String label;
+
+    /** The map of localized messages for this panel. */
+    protected Map messages;
 
     /** A temporary storage for model objects until the Page is set. */
     protected Map model = new HashMap();
@@ -218,8 +222,30 @@ public class BasicPanel implements Panel {
      * @throws IllegalArgumentException if the Context is null
      */
     public void setContext(Context context) {
-        // TODO: throw exception if null
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
         this.context = context;
+    }
+
+    /**
+     * Return a Map of localized messages for the Field.
+     *
+     * @return a Map of localized messages for the Field
+     * @throws IllegalStateException if the context for the Field has not be set
+     */
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                messages =
+                    new MessagesMap(this, CONTROL_MESSAGES, getContext());
+
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
     /**

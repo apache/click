@@ -2,8 +2,11 @@ package net.sf.click.util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.Map;
 
 import junit.framework.TestCase;
+import net.sf.click.Context;
 import net.sf.click.MockContext;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
@@ -206,6 +209,17 @@ public class ClickUtilsTest extends TestCase {
     public void testToMD5Hash() {
         assertEquals("5f4dcc3b5aa765d61d8327deb882cf99", 
                      ClickUtils.toMD5Hash("password"));
+    }
+    
+    public void testGetParentMessages() {
+        Context context = new MockContext(Locale.ENGLISH);
+        
+        TextField textField = new TextField("test");
+        textField.setContext(context);
+        
+        Map map = ClickUtils.getParentMessages(textField);
+        assertNotNull(map);
+        assertTrue(map.isEmpty());
     }
 
 }

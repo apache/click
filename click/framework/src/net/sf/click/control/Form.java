@@ -36,6 +36,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -600,6 +601,9 @@ public class Form implements Control {
 
     /** The listener method name. */
     protected String listenerMethod;
+
+    /** The map of localized messages for the form. */
+    protected Map messages;
 
     /**
      * The form method <tt>["POST, "GET"]</tt>, default value: &nbsp;
@@ -1372,6 +1376,26 @@ public class Form implements Control {
     public void setListener(Object listener, String method) {
         this.listener = listener;
         this.listenerMethod = method;
+    }
+
+    /**
+     * Return a Map of localized messages for the Form.
+     *
+     * @return a Map of localized messages for the Form
+     * @throws IllegalStateException if the context for the Field has not be set
+     */
+    public Map getMessages() {
+        if (messages == null) {
+            if (getContext() != null) {
+                messages =
+                    new MessagesMap(this, CONTROL_MESSAGES, getContext());
+
+            } else {
+                String msg = "Cannot initialize messages as context not set";
+                throw new IllegalStateException(msg);
+            }
+        }
+        return messages;
     }
 
     /**

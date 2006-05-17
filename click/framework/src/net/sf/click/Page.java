@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,10 +61,19 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Page {
+public class Page implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * The global page messages bundle name: &nbsp; <tt>click-page</tt>.
+     */
+    public static final String PAGE_MESSAGES = "click-page";
+
+    // ----------------------------------------------------- Instance Variables
 
     /** The request context. */
-    protected Context context;
+    protected transient Context context;
 
     /** The list of page controls. */
     protected List controls;
@@ -95,6 +105,8 @@ public class Page {
 
     /** The redirect path. */
     protected String redirect;
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Add the control to the page. The control will be added to the pages model
@@ -356,11 +368,25 @@ public class Page {
      *  /com/mycorp/pages/Login_en.properties
      *  /com/mycorp/pages/Login_fr.properties </pre>
      *
-     * Note page messages can be accessed directly in the page template using
+     * Page messages can also be defined in the optional global messages
+     * bundle:
+     *
+     * <pre class="codeConfig">
+     *  /click-page.properties </pre>
+     *
+     * To define global page messages simply add <tt>click-page.properties</tt>
+     * file to your application's class path. Message defined in this properties
+     * file will be available to all of your application pages.
+     * <p/>
+     * Note messages in your page class properties file will override any
+     * messages in the global <tt>click-page.properties</tt> file.
+     * <p/>
+     * Page messages can be accessed directly in the page template using
      * the <span class="st">$messages</span> reference. For examples:
      *
      * <pre class="codeHtml">
      * <span class="blue">$messages.title</span> </pre>
+     *
      *
      * Please see the {@link net.sf.click.util.MessagesMap} adaptor for more details.
      *
@@ -377,6 +403,8 @@ public class Page {
     /**
      * Return a Map of localized messages for the Page.
      *
+     * @see #getMessage(String)
+     *
      * @return a Map of localized messages for the Page
      * @throws IllegalStateException if the context for the Page has not be set
      */
@@ -384,7 +412,8 @@ public class Page {
         if (messages == null) {
             if (getContext() != null) {
                 String baseName = getClass().getName();
-                messages = new MessagesMap(baseName, getContext());
+                messages =
+                    new MessagesMap(baseName, PAGE_MESSAGES, getContext());
 
             } else {
                 String msg = "Context not set cannot initialize messages";

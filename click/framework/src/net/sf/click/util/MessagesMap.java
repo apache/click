@@ -99,38 +99,58 @@ public class MessagesMap implements Map {
 
     /**
      * Create a resource bundle messages <tt>Map</tt> adaptor for the given
-     * bundle name and <tt>Context</tt>.
+     * resource bundle name, global resource bundle name and <tt>Context</tt>.
+     * <p/>
+     * Messages located in the resource bundle will override any messages
+     * defined in the global resource bundle.
      *
-     * @param baseName the resource bundle name
+     * @param resource the resource bundle name
+     * @param globalResource the global resource bundle name
      * @param context the request context
      */
-    public MessagesMap(String baseName, Context context) {
-        this(baseName, null, context);
-    }
-
-    /**
-     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
-     * bundle name, global bundle name and <tt>Context</tt>.
-     *
-     * @param baseName the resource bundle name
-     * @param context the request context
-     * @param globalBaseName the global resource bundle name
-     */
-    public MessagesMap(String baseName, String globalBaseName, Context context)
+    public MessagesMap(String resource, String globalResource, Context context)
     {
-        if (baseName == null) {
+        if (resource == null) {
             throw new IllegalArgumentException("Null baseName parameter");
         }
         if (context == null) {
             throw new IllegalArgumentException("Null context parameter");
         }
-        this.baseName = baseName;
+        this.baseName = resource;
         this.locale = context.getLocale();
 
         // Cache resources if application in "production" or "profile" mode
         this.cache = context.getApplicationMode().startsWith("pro");
 
-        this.globalBaseName = globalBaseName;
+        this.globalBaseName = globalResource;
+    }
+
+    /**
+     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
+     * object's class resource bundle, the global resource bundle and
+     * <tt>Context</tt>.
+     * <p/>
+     * Messages located in the object's resource bundle will override any
+     * messages defined in the global resource bundle.
+     *
+     * @param object the target objects class resource bundle
+     * @param globalResource the global resource bundle name
+     * @param context the request context
+     */
+    public MessagesMap(Object object, String globalResource, Context context) {
+        if (object == null) {
+            throw new IllegalArgumentException("Null object parameter");
+        }
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+        this.baseName = object.getClass().getName();
+        this.locale = context.getLocale();
+
+        // Cache resources if application in "production" or "profile" mode
+        this.cache = context.getApplicationMode().startsWith("pro");
+
+        this.globalBaseName = globalResource;
     }
 
     // --------------------------------------------------------- Public Methods

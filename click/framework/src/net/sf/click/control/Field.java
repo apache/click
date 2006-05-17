@@ -188,9 +188,6 @@ public abstract class Field implements Control {
     /** The Page request Context. */
     protected transient Context context;
 
-    /** The global localized control messages map. */
-    protected Map controlMessages;
-
     /** The Field disabled value. */
     protected boolean disabled;
 
@@ -609,7 +606,8 @@ public abstract class Field implements Control {
      * parentMessages, which by default represents the Page's resource bundle.
      * <p/>
      * If the message was not found, the this method will attempt to look up the
-     * value in the <tt>/click-control.properties</tt> message properties file.
+     * value in the fields class properties file and then finally in the global
+     * controls <tt>/click-control.properties</tt> message properties file.
      * <p/>
      * If still not found, this method will return null.
      *
@@ -631,10 +629,6 @@ public abstract class Field implements Control {
 
         if (message == null && getMessages().containsKey(name)) {
             message = (String) getMessages().get(name);
-        }
-
-        if (message == null && getControlMessages().containsKey(name)) {
-            message = (String) getControlMessages().get(name);
         }
 
         return message;
@@ -679,7 +673,8 @@ public abstract class Field implements Control {
      public Map getMessages() {
          if (messages == null) {
              if (getContext() != null) {
-                 messages = new MessagesMap(getClass().getName(), getContext());
+                 messages =
+                     new MessagesMap(this, CONTROL_MESSAGES, getContext());
 
              } else {
                  String msg = "Cannot initialize messages as context not set";
@@ -1029,29 +1024,6 @@ public abstract class Field implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Return a Map of common localized control messages. This message
-     * resouces are loaded from the property file
-     * <tt>/click-control.properties</tt>.
-     *
-     * @return a Map of common localized control messages
-     * @throws IllegalStateException if the context for the Field has not be set
-     */
-    protected Map getControlMessages() {
-        if (controlMessages == null) {
-            if (getContext() != null) {
-                controlMessages =
-                    new MessagesMap(CONTROL_MESSAGES, getContext());
-
-            } else {
-                String msg =
-                    "Cannot initialize control messages as context not set";
-                throw new IllegalStateException(msg);
-            }
-        }
-        return controlMessages;
-    }
 
     /**
      * Return a normalised label for display in error messages.

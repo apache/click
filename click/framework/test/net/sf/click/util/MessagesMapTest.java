@@ -5,15 +5,17 @@ import java.util.MissingResourceException;
 
 import junit.framework.TestCase;
 import net.sf.click.Context;
+import net.sf.click.Control;
 import net.sf.click.MockContext;
-import net.sf.click.control.Field;
 
 public class MessagesMapTest extends TestCase {
+    
+    private static final String TEST_MESSAGES = "click-test";
     
     public void testMap() {
         Context context = new MockContext(Locale.ENGLISH);
         
-        MessagesMap map = new MessagesMap(Field.CONTROL_MESSAGES, context);
+        MessagesMap map = new MessagesMap(Control.CONTROL_MESSAGES, null, context);
         
         assertFalse(map.isEmpty());
         assertEquals(29, map.size());
@@ -30,7 +32,7 @@ public class MessagesMapTest extends TestCase {
         }
         
         context = new MockContext(Locale.CANADA);
-        map = new MessagesMap(Field.CONTROL_MESSAGES, context);
+        map = new MessagesMap(Control.CONTROL_MESSAGES, null, context);
 
         assertFalse(map.isEmpty());
         assertEquals(29, map.size());
@@ -49,7 +51,7 @@ public class MessagesMapTest extends TestCase {
     
     public void testCaching() {
         Context context = new MockContext(Locale.ENGLISH);
-        MessagesMap map = new MessagesMap("missingResource", context);
+        MessagesMap map = new MessagesMap("missingResource", null, context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
@@ -63,7 +65,7 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
         
-        map = new MessagesMap("missingResource", context);
+        map = new MessagesMap("missingResource", null, context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
@@ -76,6 +78,37 @@ public class MessagesMapTest extends TestCase {
         } catch (MissingResourceException mre) {
             assertTrue(true);
         }
+    }
+    
+    public void testGlobalResourses() {
+        Context context = new MockContext(Locale.ENGLISH);
+        
+        MessagesMap map = new MessagesMap(Control.CONTROL_MESSAGES, 
+                                          TEST_MESSAGES,
+                                          context);
+        
+        assertFalse(map.isEmpty());
+        assertEquals(30, map.size());
+
+        assertTrue(map.containsKey("table-first-label"));
+        assertEquals("First", map.get("table-first-label")); 
+        
+        assertTrue(map.containsKey("test-key"));
+        assertEquals("Test Key Value", map.get("test-key"));
+        
+        MessagesMap map2 = new MessagesMap(TEST_MESSAGES,
+                                           Control.CONTROL_MESSAGES,
+                                           context);
+
+        assertFalse(map2.isEmpty());
+        assertEquals(30, map2.size());
+        
+        assertTrue(map2.containsKey("table-first-label"));
+        assertEquals("Test Value", map2.get("table-first-label")); 
+        
+        assertTrue(map2.containsKey("test-key"));
+        assertEquals("Test Key Value", map2.get("test-key")); 
+
     }
 
 }
