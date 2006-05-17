@@ -10,7 +10,7 @@ import net.sf.click.MockContext;
 
 public class MessagesMapTest extends TestCase {
     
-    private static final String TEST_MESSAGES = "click-test";
+    private static final String TEST_MESSAGES = "click-page";
     
     public void testMap() {
         Context context = new MockContext(Locale.ENGLISH);
