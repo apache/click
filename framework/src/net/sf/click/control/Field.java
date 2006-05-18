@@ -218,9 +218,6 @@ public abstract class Field implements Control {
     /** The control's parent. */
     protected Object parent;
 
-    /** The parent localized messages map. */
-    protected Map parentMessages;
-
     /** The Field is readonly flag. */
     protected boolean readonly;
 
@@ -602,6 +599,8 @@ public abstract class Field implements Control {
     /**
      * Return the localized message for the given key, or null if not found.
      * <p/>
+     * TODO: update doco
+     * <p/>
      * This method will attempt to lookup the localized message in the
      * parentMessages, which by default represents the Page's resource bundle.
      * <p/>
@@ -621,10 +620,10 @@ public abstract class Field implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null
-            && getParentMessages().containsKey(name)) {
+        Map parentMessages = ClickUtils.getParentMessages(this);
+        if (parentMessages.containsKey(name)) {
 
-            message = (String) getParentMessages().get(name);
+            message = (String) parentMessages.get(name);
         }
 
         if (message == null && getMessages().containsKey(name)) {
@@ -722,24 +721,6 @@ public abstract class Field implements Control {
      */
     public void setParent(Object parent) {
         this.parent = parent;
-    }
-
-    /**
-     * @see Control#getParentMessages()
-     *
-     * @return the localization <tt>Map</tt> of the Control's parent
-     */
-    public Map getParentMessages() {
-        return parentMessages;
-    }
-
-    /**
-     * @see Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-        parentMessages = messages;
     }
 
     /**

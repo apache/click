@@ -30,7 +30,7 @@
               files="Form.java"/> 
     <suppress checks="LineLength"
               files="FieldSet.java"
-              lines="573,585,613"/>  
+              lines="560,572,600"/>  
     <suppress checks="MethodLength"
               files="ErrorReport.java"
               lines="175"/>

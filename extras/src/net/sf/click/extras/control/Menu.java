@@ -486,27 +486,6 @@ public class Menu implements Control {
         this.parent = parent;
     }
 
-    /**
-     * This method returns null.
-     *
-     * @see Control#getParentMessages()
-     *
-     * @return null
-     */
-    public Map getParentMessages() {
-        return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**

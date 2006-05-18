@@ -195,9 +195,6 @@ public class ActionLink implements Control {
     /** The control's parent. */
     protected Object parent;
 
-    /** The parent localized messages map. */
-    protected Map parentMessages;
-
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
 
@@ -591,10 +588,10 @@ public class ActionLink implements Control {
 
         String message = null;
 
-        if (getParentMessages() != null
-            && getParentMessages().containsKey(name)) {
+        Map parentMessages = ClickUtils.getParentMessages(this);
+        if (parentMessages.containsKey(name)) {
 
-            message = (String) getParentMessages().get(name);
+            message = (String) parentMessages.get(name);
         }
 
         if (message == null && getMessages().containsKey(name)) {
@@ -662,24 +659,6 @@ public class ActionLink implements Control {
      */
     public void setParent(Object parent) {
         this.parent = parent;
-    }
-
-    /**
-     * @see Control#getParentMessages()
-     *
-     * @return the localization <tt>Map</tt> of the Control's parent
-     */
-    public Map getParentMessages() {
-        return parentMessages;
-    }
-
-    /**
-     * @see Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-        parentMessages = messages;
     }
 
     /**

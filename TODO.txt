@@ -6,6 +6,7 @@ Click 0.20 Release
 11. default error postion, canvas support for changing to TOP
 12. update control UML images
 13. remove parentMessages property
+14. add Page messages documentation section
 
 
 CODE

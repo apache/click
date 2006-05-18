@@ -15,7 +15,6 @@
  */
 package net.sf.click;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +60,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Page implements Serializable {
+public class Page {
 
     private static final long serialVersionUID = 1L;
 
@@ -131,7 +130,6 @@ public class Page implements Serializable {
 
         if (getContext() != null) {
             control.setContext(getContext());
-            control.setParentMessages(getMessages());
         }
 
         control.setParent(this);
@@ -184,7 +182,6 @@ public class Page implements Serializable {
             for (int i = 0; i < getControls().size(); i++) {
                Control control = (Control) getControls().get(i);
                control.setContext(context);
-               control.setParentMessages(getMessages());
             }
         }
     }
