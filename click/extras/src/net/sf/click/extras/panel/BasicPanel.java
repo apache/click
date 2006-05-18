@@ -407,29 +407,6 @@ public class BasicPanel implements Panel {
     }
 
     /**
-     * This method returns null.
-     *
-     * @see net.sf.click.Control#getParentMessages()
-     *
-     * @return null
-     */
-    public Map getParentMessages() {
-        // TODO: add support for parent messages
-        return null;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-        // TODO: add support for parent messages
-    }
-
-    /**
      * The template associated with this Panel.  If null, the simple class name
      * plus the default extension (".htm") will be used.
      *

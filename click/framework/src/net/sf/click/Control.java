@@ -195,9 +195,9 @@ public interface Control extends Serializable {
     public void setListener(Object listener, String method);
 
     /**
-     * Return TODO: message doco.
-     * 
-     * @return todo
+     * Return the localized messages <tt>Map</tt> of the Control.
+     *
+     * @return the localized messages <tt>Map</tt> of the Control
      */
     public Map getMessages();
 
@@ -219,9 +219,9 @@ public interface Control extends Serializable {
     public void setName(String name);
 
     /**
-     * Return the Control's parent.
+     * Return the parent of the Control.
      *
-     * @return the Control's parent
+     * @return the parent of the Control
      */
     public Object getParent();
 
@@ -231,20 +231,6 @@ public interface Control extends Serializable {
      * @param parent the parent of the Control
      */
     public void setParent(Object parent);
-
-    /**
-     * Return the localized messages <tt>Map</tt> of the Control's parent.
-     *
-     * @return the localization <tt>Map</tt> of the Control's parent
-     */
-    public Map getParentMessages();
-
-    /**
-     * Set the parent's localized messages <tt>Map</tt> for the  Control.
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages);
 
     /**
      * The on deploy event handler, which provides classes the

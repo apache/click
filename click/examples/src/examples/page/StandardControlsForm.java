@@ -57,7 +57,9 @@ public class StandardControlsForm extends BorderedPage {
         fieldSet.add(new TextArea("textArea"));
         fieldSet.add(new TextField("textField"));
 
-        form.add(new Button("button"));
+        Button button = new Button("button");
+        button.setAttribute("onclick", "alert('Button clicked');");
+        form.add(button);
         ImageSubmit imageSubmit = new ImageSubmit("image", "images/edit-button.gif");
         imageSubmit.setTitle("ImageSubmit");
         form.add(imageSubmit);

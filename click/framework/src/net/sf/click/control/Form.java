@@ -617,9 +617,6 @@ public class Form implements Control {
     /** The control's parent. */
     protected Object parent;
 
-    /** The parent localized messages map. */
-    protected Map parentMessages;
-
     /** The form is readonly flag. */
     protected boolean readonly;
 
@@ -692,10 +689,6 @@ public class Form implements Control {
         }
 
         field.setParent(this);
-
-        if (getParentMessages() != null) {
-            field.setParentMessages(getParentMessages());
-        }
     }
 
     /**
@@ -1465,28 +1458,6 @@ public class Form implements Control {
      */
     public void setParent(Object parent) {
         this.parent = parent;
-    }
-
-    /**
-     * @see Control#getParentMessages()
-     *
-     * @return the localization <tt>Map</tt> of the Control's parent
-     */
-    public Map getParentMessages() {
-        return parentMessages;
-    }
-
-    /**
-     * @see Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-        parentMessages = messages;
-        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
-            field.setParentMessages(parentMessages);
-        }
     }
 
     /**

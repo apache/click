@@ -18,7 +18,7 @@
 &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/index.html" title="Examples Index">Examples</a>
 &nbsp; | &nbsp;
-<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/src/<%=request.getAttribute("srcPath")%>" title="Page Java source">Page Java</a> 
+<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/classes/<%=request.getAttribute("srcPath")%>" title="Page Java source">Page Java</a> 
 &nbsp; | &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=customer-table.jsp" title="Page Content source">Page JSP</a>
 &nbsp; | &nbsp;

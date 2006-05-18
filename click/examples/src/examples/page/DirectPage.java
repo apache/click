@@ -20,7 +20,7 @@ import net.sf.click.util.ClickUtils;
 public class DirectPage extends Page {
 
     private static final String SRC_FILENAME =
-        "/WEB-INF/src/examples/page/DirectPage.java";
+        "/WEB-INF/classes/examples/page/DirectPage.java";
 
     /**
      * Render the Java source file as "text/plain".

@@ -414,19 +414,6 @@ public class FieldSet extends Field {
     }
 
     /**
-     * @see net.sf.click.Control#setParentMessages(Map)
-     *
-     * @param messages the parent's the localized messages <tt>Map</tt>
-     */
-    public void setParentMessages(Map messages) {
-        parentMessages = messages;
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.setParentMessages(parentMessages);
-        }
-    }
-
-    /**
      * Return the render the fieldset border flag. The border is the HTML
      * &lt;fieldset&gt; element.
      *

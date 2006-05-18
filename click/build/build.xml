@@ -35,6 +35,36 @@
    <taskdef resource="checkstyletask.properties"
             classpath="lib/${jar.checkstyle}"/>
 
+
+    <!--
+     Macro Definitions
+     -->
+    
+    <macrodef name="downloadMacro">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <sequential>
+            <get src="${repository}/@{path}/jars/@{name}" 
+                 dest="lib/@{name}"
+                 verbose="true"
+                 usetimestamp="true"/>            
+        </sequential>
+    </macrodef> 
+    
+    <macrodef name="buildBundleMacro">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="upload-bundle"/>
+            <copy file="LICENSE.txt" todir="upload-bundle"/> 
+            <copy file="build/@{name}.pom" tofile="upload-bundle/project.xml"/> 
+            <replace file="upload-bundle/project.xml" 
+                     token="VERSION" 
+                     value="${version}"/>
+            <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
+            <jar basedir="upload-bundle" destfile="../@{name}-${version}-bundle.jar"/>
+            <delete dir="upload-bundle" quiet="false"/>
+        </sequential>
+    </macrodef>
             
    <!-- 
     Path Definitions
@@ -264,31 +294,9 @@
    <target name="build-maven-bundles" 
            depends="build-framework, build-extras"
            description="build Maven repository upload bundles">
-      <!-- Make click bundle -->
-      <delete dir="upload-bundle" quiet="false"/>
-      <mkdir dir="upload-bundle"/>
-      <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="build/click.pom" tofile="upload-bundle/project.xml"/> 
-      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
-      <copy file="dist/click-${version}.jar" todir="upload-bundle"/> 
-      <jar basedir="upload-bundle" destfile="../click-${version}-bundle.jar"/>
-      <delete dir="upload-bundle" quiet="false"/>
-      <!-- Make click-nodeps bundle -->
-      <mkdir dir="upload-bundle"/>
-      <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="build/click-nodeps.pom" tofile="upload-bundle/project.xml"/> 
-      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
-      <copy file="dist/click-nodeps-${version}.jar" todir="upload-bundle"/> 
-      <jar basedir="upload-bundle" destfile="../click-nodeps-${version}-bundle.jar"/>
-      <delete dir="upload-bundle" quiet="false"/>
-      <!-- Make click-extras bundle -->
-      <mkdir dir="upload-bundle"/>
-      <copy file="LICENSE.txt" todir="upload-bundle"/> 
-      <copy file="build/click-extras.pom" tofile="upload-bundle/project.xml"/> 
-      <replace file="upload-bundle/project.xml" token="VERSION" value="${version}"/>
-      <copy file="dist/click-extras-${version}.jar" todir="upload-bundle"/> 
-      <jar basedir="upload-bundle" destfile="../click-extras-${version}-bundle.jar"/>
-      <delete dir="upload-bundle" quiet="false"/>
+      <buildBundleMacro name="click"/>
+      <buildBundleMacro name="click-nodeps"/>
+      <buildBundleMacro name="click-extras"/>
    </target>
 
    
@@ -305,7 +313,6 @@
          </fileset>
       </zip>
       <!-- zip the framework with dependencies:-->
-      <!-- todo: include 'used' dependency libs sources -->
       <!-- this is not ready since the sources for the used jars are not available -->
       <zip destfile="dist/click-${version}-src.zip">
          <fileset dir="${dir.source}">
@@ -352,39 +359,17 @@
  
    <target name="get-deps" description="download JAR dependencies">
       <property name="repository" value="http://www.ibiblio.org/maven"/>
-      <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
-           dest="lib/${jar.cayenne}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-codec/jars/${jar.codec}" verbose="true"
-           dest="lib/${jar.codec}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-collections/jars/${jar.collections}" verbose="true"
-           dest="lib/${jar.collections}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-io/jars/${jar.io}" verbose="true"
-           dest="lib/${jar.io}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-lang/jars/${jar.lang}" verbose="true"
-           dest="lib/${jar.lang}"
-           usetimestamp="true"/>
-      <get src="${repository}/ognl/jars/${jar.ognl}" verbose="true"
-           dest="lib/${jar.ognl}"
-           usetimestamp="true"/>
-      <get src="${repository}/commons-fileupload/jars/${jar.upload}" verbose="true"
-           dest="lib/${jar.upload}"
-           usetimestamp="true"/>
-      <get src="${repository}/hibernate/jars/${jar.hibernate}" verbose="true"
-           dest="lib/${jar.hibernate}"
-           usetimestamp="true"/>
-      <get src="${repository}/junit/jars/${jar.junit}" verbose="true"
-           dest="lib/${jar.junit}"
-           usetimestamp="true"/>
-      <get src="${repository}/javax.servlet/jars/${jar.servlet}" verbose="true"
-           dest="lib/${jar.servlet}"
-           usetimestamp="true"/>
-      <get src="${repository}/springframework/jars/${jar.spring}" verbose="true"
-           dest="lib/${jar.spring}"
-           usetimestamp="true"/>
+      <downloadMacro name="${jar.cayenne}" path="org.objectstyle.cayenne"/>
+      <downloadMacro name="${jar.codec}" path="commons-codec"/>
+      <downloadMacro name="${jar.collections}" path="commons-collections"/>
+      <downloadMacro name="${jar.io}" path="commons-io"/>
+      <downloadMacro name="${jar.lang}" path="commons-lang"/>
+      <downloadMacro name="${jar.ognl}" path="ognl"/>
+      <downloadMacro name="${jar.upload}" path="commons-fileupload"/>
+      <downloadMacro name="${jar.hibernate}" path="hibernate"/>
+      <downloadMacro name="${jar.junit}" path="junit"/>
+      <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
+      <downloadMacro name="${jar.spring}" path="springframework"/>
    </target>
 
    
