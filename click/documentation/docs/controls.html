@@ -83,14 +83,19 @@ Methods on the Control interface include:
    &nbsp; - &nbsp; set the control action callback listener.
   </li>
   <li>
+   <a href="click-api/net/sf/click/Control.html#getMessages()">getMessages()</a> /
+   <a href="click-api/net/sf/click/Control.html#setMessages(java.util.Map)">setMessages()</a>
+   &nbsp; - &nbsp; defines the controls localized messages map.
+  </li>  
+  <li>
    <a href="click-api/net/sf/click/Control.html#getName()">getName()</a> /
    <a href="click-api/net/sf/click/Control.html#setName(java.lang.String)">setName()</a>
    &nbsp; - &nbsp; defines the controls name in the Page model or Form fields.
   </li>
   <li>
-   <a href="click-api/net/sf/click/Control.html#getParentMessages()">getParentMessages()</a> /
-   <a href="click-api/net/sf/click/Control.html#setParentMessages(java.util.Map)">setParentMessages()</a>
-   &nbsp; - &nbsp; defines the controls parent localized messages map.
+   <a href="click-api/net/sf/click/Control.html#getParent()">getParent()</a> /
+   <a href="click-api/net/sf/click/Control.html#setParent(java.lang.Object)">setParent()</a>
+   &nbsp; - &nbsp; defines the controls parent.
   </li>  
   <li>
    <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
@@ -187,14 +192,66 @@ control to render the different credit card types.
 <a name="message-properties" class="heading"><h2>Message Properties</h2></a>
 
 Control strings for field validation messages and HTML formatting strings are
-externalized in the properties file:
+externalized in the properties file. By using these properties files you can
+localize a Click application for your particular language and dialect.
 
-<pre class="code">
-/click-control.properties
-</pre>
+<h3>Message Resolution</h3>
 
-To customize the control properties simply add this file to your classpath and 
-tailor the specific values.
+Messages are looked up in a particular order enabling taylor specific messages,
+for your controls, individual pages or across your entire application.
+The order in which localized messages are resolve is:
+<dl>
+ <dt style="font-weight:bold">Page scope messages</dt>
+ <dd>Message lookups are first resolved to the Page classes message bundle if it
+ exists. For example a <tt>Login</tt> page may define the message properties:
+ 
+ <pre class="codeConfig">
+ /com/mycorp/page/Login.properties </pre>
+ 
+ If you want to tailor messages for a particular page this is where to place
+ them.
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Global scope page messages</dt>
+ <dd>Next message lookups are resolved to the global pages message bundle if it
+ exists.
+ 
+ <pre class="codeConfig">
+ /click-page.properties </pre>
+ 
+ If you want messages to be used across your entire application this is where
+ to place them.
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Control scope messages</dt>
+ <dd>Next message lookups are resolved to the Control classes message bundle if 
+ it exists. For example a <tt>CustomTextField</tt> control may define the 
+ message properties:
+ 
+ <pre class="codeConfig">
+ /com/mycorp/control/CustomTextField.properties </pre>
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Global scope control messages</dt>
+ <dd>Finally message lookups are resolved to the global application control 
+ message bundle if the message has not already found. The global control
+ properties file is:
+ 
+ <pre class="codeConfig">
+ /click-control.properties </pre>
+
+ You can modify these properties by copying this file into your applications
+ root class path and editing these properties.
+ </dd>
+ </dl>
+
+<h3>Control Properties</h3>
+
+To customize the <tt>click-control.properties</tt> simply add this file to your 
+classpath and tailor the specific values.
+<p/>
+Note when customizing the message properties you must include all the properties, 
+not just the ones you want to override.
 
 <pre class="codeConfig">
 # Click Control messages
@@ -234,11 +291,12 @@ production-error-message=
   &lt;div id='errorReport' class='errorReport'&gt;The application encountered an unexpected error.
   &lt;/div&gt; </pre>
 
+
 <h3>Accessing Messages</h3>
 
-ActionLink and Field classes support a hierarchy of resource bundles for displaying 
+Field classes support a hierarchy of resource bundles for displaying 
 validation error messages and display messages. These localized messages can be 
-accessed through the Field and ActionLink methods:
+accessed through the Field methods:
 
 <ul>
  <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a></li>
@@ -249,48 +307,8 @@ accessed through the Field and ActionLink methods:
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String, java.lang.Object)">setErrorMessage(String, Object)</a></li>
 </ul>
 
-These methods use the <tt>Locale</tt> of the request to lookup the string resource bundle, 
-and use <tt>MessageFormat</tt> for any string formatting.
-
-<h3>Message Resolution</h3>
-
-The order in which localized messages are resolve is:
-<dl>
- <dt style="font-weight:bold">Page scope messages</dt>
- <dd>Message lookups are first resolved to the Pages message bundle if it
- exists. For example a <tt>Login</tt> page may define the message properties:
- 
- <pre class="codeConfig">
- /com/mycorp/page/Login.properties </pre>
- 
- The Page message bundle is injected into the Field by the using
- the {@link #setParentMessages(Map)} method.
- </dd>
- 
- <dt style="font-weight:bold">Control scope messages</dt>
- <dd>Next message lookups are resolved to the Control message bundle if it
- exists. For example a <tt>CustomTextField</tt> control may define the 
- message properties:
- 
- <pre class="codeConfig">
- /com/mycorp/control/CustomTextField.properties </pre>
- </dd>
- 
- <dt style="font-weight:bold">Global scope messages</dt>
- <dd>Finally message lookups are resolved to the global application control 
- message bundle if the message has not already found. The global control
- properties file is:
- 
- <pre class="codeConfig">
- /click-control.properties </pre>
-
- You can modify these properties by copying this file into your applications
- root class path and editing these properties.
- <p/>
- Note when customizing the message properties you must include all the
- properties, not just the ones you want to override.
- </dd>
- </dl>
+These methods use the <tt>Locale</tt> of the request to lookup the string resource 
+bundle, and use <tt>MessageFormat</tt> for any string formatting.
 
 </body>
 </html>
