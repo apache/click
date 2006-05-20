@@ -211,7 +211,7 @@ The order in which localized messages are resolve is:
  them.
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global scope page messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
  <dd>Next message lookups are resolved to the global pages message bundle if it
  exists.
  
@@ -231,16 +231,13 @@ The order in which localized messages are resolve is:
  /com/mycorp/control/CustomTextField.properties </pre>
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global scope control messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">Global control scope messages</dt>
  <dd>Finally message lookups are resolved to the global application control 
  message bundle if the message has not already found. The global control
  properties file is:
  
  <pre class="codeConfig">
  /click-control.properties </pre>
-
- You can modify these properties by copying this file into your applications
- root class path and editing these properties.
  </dd>
  </dl>
 

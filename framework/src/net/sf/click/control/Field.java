@@ -96,7 +96,7 @@ import net.sf.click.util.MessagesMap;
  * Field should render themselves as valid XHTML, so that they may be parsed
  * correctly and used as the <tt>innerHtml</tt> in the DOM.
  * <p/>
- * When the Form class render a field using autolayout it renders the
+ * When a Form object renders a Field using autolayout, it renders the
  * Field in a table row using the Field's {@link #label} attribute, its
  * {@link #error} attribute if defined, and the Fields <tt>toString()</tt>
  * method.
@@ -127,9 +127,20 @@ import net.sf.click.util.MessagesMap;
  *
  * <pre class="codeConfig">
  * /com/mycorp/page/Login.properties </pre>
- *
- * The Page message bundle is injected into the Field by the using
- * the {@link #setParentMessages(Map)} method.
+ * 
+ * If you want messages to be used across your entire application this is where
+ * to place them.
+ * </dd>
+ * 
+ * <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
+ * <dd>Next message lookups are resolved to the global pages message bundle if it
+ * exists.
+ * 
+ * <pre class="codeConfig">
+ * /click-page.properties </pre>
+ * 
+ * If you want messages to be used across your entire application this is where
+ * to place them.
  * </dd>
  *
  * <dt style="font-weight:bold">Control scope messages</dt>
@@ -141,7 +152,7 @@ import net.sf.click.util.MessagesMap;
  * /com/mycorp/control/CustomTextField.properties </pre>
  * </dd>
  *
- * <dt style="font-weight:bold">Global scope messages</dt>
+ * <dt style="font-weight:bold">Global control scope messages</dt>
  * <dd>Finally message lookups are resolved to the global application control
  * message bundle if the message has not already found. The global control
  * properties file is:

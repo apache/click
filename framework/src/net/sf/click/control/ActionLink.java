@@ -571,7 +571,7 @@ public class ActionLink implements Control {
      * Return the localized message for the given key, or null if not found.
      * <p/>
      * This method will attempt to lookup the localized message in the
-     * parentMessages, which by default represents the Page's resource bundle.
+     * parent's messages, which by resolves to the Page's resource bundle.
      * <p/>
      * If the message was not found, the this method will attempt to look up the
      * value in the <tt>/click-control.properties</tt> message properties file.
