@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+    
+<beans>
+    
+    <bean id="courseBookingService" class="examples.domain.CourseBookingService"/>
+    
+    <bean id="customerService" class="examples.domain.CustomerService"/>
+    
+    <bean id="userService" class="examples.domain.UserService"/>
+
+</beans>
