@@ -4,15 +4,14 @@ import java.util.List;
 
 import net.sf.click.control.Column;
 import net.sf.click.control.Table;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
-public class TablePaging extends BorderedPage {
+public class TablePaging extends BorderPage {
 
     private Table table;
 
@@ -43,7 +42,7 @@ public class TablePaging extends BorderedPage {
     }
 
     public void onGet() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = getCustomerService().getCustomersSortedByName();
         table.setRowList(customers);
     }
 }

@@ -12,15 +12,14 @@ import net.sf.click.extras.control.DateField;
 import examples.control.InvestmentSelect;
 import examples.domain.CourseBooking;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Provides the start page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
-public class StartPage extends BorderedPage {
+public class StartPage extends BorderPage {
 
     private Form form;
     private Select customerSelect;
@@ -41,12 +40,6 @@ public class StartPage extends BorderedPage {
         customerSelect = new Select("Customer");
         customerSelect.setRequired(true);
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
-        List customerList = CustomerDAO.getCustomersSortedByName();
-        customerSelect.add(new Option(""));
-        for (Iterator i = customerList.iterator(); i.hasNext();) {
-            Customer customer = (Customer) i.next();
-            customerSelect.add(new Option(customer.getId(), customer.getName()));
-        }
         form.add(customerSelect);
 
         dateField = new DateField("Booking Date");
@@ -73,6 +66,13 @@ public class StartPage extends BorderedPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        List customerList = getCustomerService().getCustomersSortedByName();
+        customerSelect.add(new Option(""));
+        for (Iterator i = customerList.iterator(); i.hasNext();) {
+            Customer customer = (Customer) i.next();
+            customerSelect.add(new Option(customer.getId(), customer.getName()));
+        }
+
         if (getContext().isForward() && courseBooking != null) {
             customerSelect.setValueObject(courseBooking.getCustomerId());
             dateField.setDate(courseBooking.getBookingDate());

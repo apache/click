@@ -9,7 +9,7 @@ import net.sf.click.control.Label;
  *
  * @author Malcolm Edgar
  */
-public class ImageDemo extends BorderedPage {
+public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
 

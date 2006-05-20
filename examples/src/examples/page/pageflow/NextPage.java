@@ -4,17 +4,15 @@ import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.Submit;
 import examples.domain.CourseBooking;
-import examples.domain.CourseBookingDAO;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Provides the next page of a multi page work flow.
  *
  * @author Malcolm Edgar
  */
-public class NextPage extends BorderedPage {
+public class NextPage extends BorderPage {
 
     private Form form = new Form("form");
     private HiddenField courseField;
@@ -42,7 +40,7 @@ public class NextPage extends BorderedPage {
             courseField.setValueObject(courseBooking);
 
             Customer customer =
-                CustomerDAO.findCustomerByID(courseBooking.getCustomerId());
+                getCustomerService().findCustomerByID(courseBooking.getCustomerId());
 
             addModel("customer", customer);
             addModel("courseBooking", courseBooking);
@@ -62,7 +60,7 @@ public class NextPage extends BorderedPage {
 
     public boolean onConfirmClick() {
         CourseBooking booking = (CourseBooking) courseField.getValueObject();
-        Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
+        Long bookingId = getCourseBookingService().insertCourseBooking(booking);
 
         String path = getContext().getPagePath(LastPage.class);
         setRedirect(path + "?bookingId=" + bookingId);

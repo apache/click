@@ -8,7 +8,7 @@ import java.util.Date;
  *
  * @author Malcolm Edgar
  */
-public class HelloWorld extends BorderedPage {
+public class HelloWorld extends BorderPage {
 
     public HelloWorld() {
         addModel("time", new Date());

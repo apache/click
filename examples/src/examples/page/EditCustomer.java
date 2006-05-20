@@ -12,7 +12,6 @@ import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
 import examples.control.InvestmentSelect;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
 
 /**
  * Provides an edit Customer Form example. The Customer business object
@@ -20,7 +19,7 @@ import examples.domain.CustomerDAO;
  *
  * @author Malcolm Edgar
  */
-public class EditCustomer extends BorderedPage {
+public class EditCustomer extends BorderPage {
 
     private Form form = new Form("form");
     private HiddenField referrerField = new HiddenField("referrer", String.class);
@@ -82,7 +81,7 @@ public class EditCustomer extends BorderedPage {
 
             Customer customer = new Customer();
             form.copyTo(customer);
-            CustomerDAO.setCustomer(customer);
+            getCustomerService().setCustomer(customer);
 
             String referrer = referrerField.getValue();
             if (referrer != null) {

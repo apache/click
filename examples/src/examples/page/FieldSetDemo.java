@@ -21,7 +21,7 @@ import examples.control.PackagingRadioGroup;
  *
  * @author Malcolm Edgar
  */
-public class FieldSetDemo extends BorderedPage {
+public class FieldSetDemo extends BorderPage {
 
     private Form form = new Form("form");
 

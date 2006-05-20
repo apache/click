@@ -10,7 +10,7 @@ import net.sf.click.extras.control.ActionButton;
  *
  * @author Malcolm Edgar
  */
-public class ActionDemo extends BorderedPage {
+public class ActionDemo extends BorderPage {
 
     public ActionDemo() {
         ActionLink actionLink = new ActionLink("link");

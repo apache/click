@@ -8,7 +8,7 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class ExceptionDemo extends BorderedPage {
+public class ExceptionDemo extends BorderPage {
 
     private String template;
 

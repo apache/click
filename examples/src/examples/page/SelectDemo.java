@@ -14,7 +14,7 @@ import net.sf.click.control.Submit;
  *
  * @author Malcolm Edgar
  */
-public class SelectDemo extends BorderedPage {
+public class SelectDemo extends BorderPage {
 
     private Form form;
     private Select genderSelect;

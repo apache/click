@@ -10,7 +10,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @author Malcolm Edgar
  */
-public class BorderedPage extends Page {
+public class BorderPage extends SpringPage {
 
     /**
      * Create a BorderedPage and set the model attributes <tt>$title</tt> and
@@ -20,7 +20,7 @@ public class BorderedPage extends Page {
      * <li><tt>$srcPath</tt> &nbsp; - &nbsp; the Page Java source path</li>
      * </ul>
      */
-    public BorderedPage() {
+    public BorderPage() {
         String className = getClass().getName();
 
         String shortName = className.substring(className.lastIndexOf('.') + 1);
@@ -47,4 +47,5 @@ public class BorderedPage extends Page {
     public String getTemplate() {
         return "/border.htm";
     }
+
 }

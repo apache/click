@@ -17,7 +17,11 @@
 
  <servlet>
   <servlet-name>click-servlet</servlet-name>
-  <servlet-class>net.sf.click.ClickServlet</servlet-class>
+  <servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
+  <init-param>
+   <param-name>spring-path</param-name>
+   <param-value>/applicationContext.xml</param-value>
+  </init-param>
   <init-param>
    <param-name>app-reloadable</param-name>
    <param-value>true</param-value>

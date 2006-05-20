@@ -5,17 +5,16 @@ import java.util.List;
 import net.sf.click.extras.panel.BasicPanel;
 import net.sf.click.extras.panel.Panel;
 import net.sf.click.extras.panel.TabbedPanel;
-import examples.domain.CustomerDAO;
 
 /**
  * Provides an TabbedPanel demonstration.
  *
  * @author Phil Barnes
  */
-public class TabbedPanelDemo extends BorderedPage {
+public class TabbedPanelDemo extends BorderPage {
 
-    public TabbedPanelDemo() {
-        List customers = CustomerDAO.getCustomersSortedByName(12);
+    public void onInit() {
+        List customers = getCustomerService().getCustomersSortedByName(12);
         addModel("customers", customers);
 
         TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");

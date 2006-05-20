@@ -26,7 +26,7 @@ import examples.control.TitleSelect;
  *
  * @author Malcolm Edgar
  */
-public class TabbedFormDemo extends BorderedPage {
+public class TabbedFormDemo extends BorderPage {
 
     private TabbedForm form = new TabbedForm("form");
     private RadioGroup paymentGroup = new RadioGroup("paymentOption", true);

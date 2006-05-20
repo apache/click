@@ -6,15 +6,14 @@ import net.sf.click.control.Column;
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
 import net.sf.click.control.Table;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Provides an demonstration of Table control styles.
  *
  * @author Malcolm Edgar
  */
-public class TableStyles extends BorderedPage {
+public class TableStyles extends BorderPage {
 
     private static final String[] STYLES = {
         "isi", "its", "mars", "simple", "report",
@@ -53,10 +52,12 @@ public class TableStyles extends BorderedPage {
         column.setAttribute("style", "{text-align:right;}");
         table.addColumn(column);
 
-        List customers = CustomerDAO.getCustomersSortedByName();
-        table.setRowList(customers);
-
         addControl(table);
+    }
+
+    public void onInit() {
+        List customers = getCustomerService().getCustomersSortedByName();
+        table.setRowList(customers);
     }
 
     public void onGet() {

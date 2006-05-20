@@ -9,7 +9,7 @@ import net.sf.click.extras.control.RegexField;
  *
  * @author Naoki Takezoe
  */
-public class RegexForm extends BorderedPage {
+public class RegexForm extends BorderPage {
 
     public RegexForm() {
         RegexField versionField = new RegexField("version", "Version", 10);
