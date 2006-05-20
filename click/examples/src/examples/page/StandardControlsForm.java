@@ -21,14 +21,13 @@ import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
-import examples.domain.CustomerDAO;
 
 /**
  * Provides a form containing all the Standard Click Controls.
  *
  * @author Malcolm Edgar
  */
-public class StandardControlsForm extends BorderedPage {
+public class StandardControlsForm extends BorderPage {
 
     private Form form = new Form("form");
     private FieldSet fieldSet = new FieldSet("fieldSet");
@@ -78,7 +77,7 @@ public class StandardControlsForm extends BorderedPage {
     }
 
     public void onInit() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = getCustomerService().getCustomersSortedByName();
         select.add(new Option("[Select]"));
         select.addAll(customers, "id", "name");
 

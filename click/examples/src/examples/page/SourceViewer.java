@@ -20,7 +20,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class SourceViewer extends BorderedPage {
+public class SourceViewer extends BorderPage {
 
     private static final String[] JAVA_KEYWORDS = { "package", "import",
             "class", "public", "protected", "private", "extends", "implements",

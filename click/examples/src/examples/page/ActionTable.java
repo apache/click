@@ -1,16 +1,15 @@
 package examples.page;
 
-import examples.domain.Customer;
-import examples.domain.CustomerDAO;
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
+import examples.domain.Customer;
 
 /**
  * Provides a dynamic ActionLink example in a HTML table.
  *
  * @author Malcolm Edgar
  */
-public class ActionTable extends BorderedPage {
+public class ActionTable extends BorderPage {
 
     private ActionLink viewLink;
     private ActionLink editLink;
@@ -32,7 +31,7 @@ public class ActionTable extends BorderedPage {
 
     public boolean onViewClick() {
         Long id = viewLink.getValueLong();
-        Customer customer = CustomerDAO.getCustomer(id);
+        Customer customer = getCustomerService().getCustomer(id);
         addModel("customerDetail", customer);
 
         return true;
@@ -45,7 +44,7 @@ public class ActionTable extends BorderedPage {
      */
     public boolean onEditClick() {
         Long id = editLink.getValueLong();
-        Customer customer = CustomerDAO.getCustomer(id);
+        Customer customer = getCustomerService().getCustomer(id);
 
         if (customer != null) {
             getContext().setRequestAttribute("customer", customer);
@@ -59,7 +58,7 @@ public class ActionTable extends BorderedPage {
 
     public boolean onDeleteClick() {
         Long id = deleteLink.getValueLong();
-        CustomerDAO.deleteCustomer(id);
+        getCustomerService().deleteCustomer(id);
 
         return true;
     }
@@ -71,7 +70,7 @@ public class ActionTable extends BorderedPage {
      * @see Page#onGet()
      */
     public void onGet() {
-        addModel("customers", CustomerDAO.getCustomersSortedByName(7));
+        addModel("customers", getCustomerService().getCustomersSortedByName(7));
     }
 
 }

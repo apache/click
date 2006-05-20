@@ -9,7 +9,7 @@ import net.sf.click.control.ActionLink;
  *
  * @author Malcolm Edgar
  */
-public class NavigationA extends BorderedPage {
+public class NavigationA extends BorderPage {
 
     private ActionLink forwardLink;
     private ActionLink forwardParamLink;

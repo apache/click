@@ -14,7 +14,7 @@ import examples.control.InvestmentSelect;
  *
  * @author Malcolm Edgar
  */
-public class VelocityMacro extends BorderedPage {
+public class VelocityMacro extends BorderPage {
 
     public VelocityMacro() {
         Form form = new Form("form");

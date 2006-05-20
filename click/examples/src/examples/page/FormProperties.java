@@ -17,7 +17,7 @@ import examples.control.InvestmentSelect;
  *
  * @author Malcolm Edgar
  */
-public class FormProperties extends BorderedPage {
+public class FormProperties extends BorderPage {
 
     /** Form options holder. */
     public static class Options implements Serializable {

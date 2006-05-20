@@ -8,15 +8,14 @@ import net.sf.click.control.Column;
 import net.sf.click.control.Decorator;
 import net.sf.click.control.Table;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Provides an demonstration of Table control paging.
  *
  * @author Malcolm Edgar
  */
-public class TableDecorator extends BorderedPage {
+public class TableDecorator extends BorderPage {
 
     Table table = new Table("table");
     ActionLink viewLink = new ActionLink("view");
@@ -89,7 +88,7 @@ public class TableDecorator extends BorderedPage {
 
     public boolean onViewClick() {
         Long id = viewLink.getValueLong();
-        Customer customer = CustomerDAO.getCustomer(id);
+        Customer customer = getCustomerService().getCustomer(id);
         addModel("customerDetail", customer);
 
         return true;
@@ -97,7 +96,7 @@ public class TableDecorator extends BorderedPage {
 
     public boolean onEditClick() {
         Long id = editLink.getValueLong();
-        Customer customer = CustomerDAO.getCustomer(id);
+        Customer customer = getCustomerService().getCustomer(id);
 
         if (customer != null) {
             getContext().setRequestAttribute("customer", customer);
@@ -111,13 +110,13 @@ public class TableDecorator extends BorderedPage {
 
     public boolean onDeleteClick() {
         Long id = deleteLink.getValueLong();
-        CustomerDAO.deleteCustomer(id);
+        getCustomerService().deleteCustomer(id);
 
         return true;
     }
 
     public void onGet() {
-        List customers = CustomerDAO.getCustomersSortedByName(12);
+        List customers = getCustomerService().getCustomersSortedByName(12);
         table.setRowList(customers);
     }
 

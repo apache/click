@@ -13,7 +13,7 @@ import examples.control.RichTextArea;
  *
  * @author Malcolm Edgar
  */
-public class EmailForm extends BorderedPage {
+public class EmailForm extends BorderPage {
 
     public EmailForm() {
         Form form = new Form("form");

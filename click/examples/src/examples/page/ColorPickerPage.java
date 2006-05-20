@@ -12,7 +12,7 @@ import net.sf.click.extras.control.ColorPicker;
  *
  * @author Christian Essel
  */
-public class ColorPickerPage extends BorderedPage {
+public class ColorPickerPage extends BorderPage {
 
     private Form form;
     private ColorPicker cp1;

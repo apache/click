@@ -91,6 +91,14 @@
       <pathelement location="dist/click-${version}.jar"/>
    </path>
 
+   <path id="classpath.examples"> 
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="dist/click-${version}.jar"/>
+      <pathelement location="dist/click-extras-${version}.jar"/>
+      <fileset dir="examples/webapp/WEB-INF/lib">
+         <include name="**/*.jar"/>
+      </fileset>
+   </path>
 
    <!-- 
     Target Definitions 
@@ -157,11 +165,7 @@
 	  <javac srcdir="examples/src" 
              destdir="examples/webapp/WEB-INF/classes" 
              debug="true">
-         <classpath> 
-       	   <pathelement location="lib/${jar.servlet}"/>
-           <pathelement location="dist/click-${version}.jar"/>
-           <pathelement location="dist/click-extras-${version}.jar"/>
-         </classpath>
+         <classpath refid="classpath.examples"/>
       </javac>
       <copy todir="examples/webapp/WEB-INF/classes">
          <fileset dir="examples/src">
@@ -178,11 +182,7 @@
                verbose="false"
                windowtitle="Click Examples"
                doctitle="Click Examples API">
-         <classpath>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-            <pathelement location="dist/click-extras-${version}.jar"/>
-         </classpath>
+         <classpath refid="classpath.examples"/>
          <packageset dir="examples/src"/>
          <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
          <link href="http://click.sourceforge.net/docs/click-api/"/>

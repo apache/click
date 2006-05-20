@@ -19,14 +19,13 @@ import net.sf.click.extras.control.LongField;
 import net.sf.click.extras.control.NumberField;
 import net.sf.click.extras.control.RegexField;
 import net.sf.click.extras.control.TelephoneField;
-import examples.domain.CustomerDAO;
 
 /**
  * Provides a form containing all the Click Extras Controls.
  *
  * @author Malcolm Edgar
  */
-public class ExtraControlsForm extends BorderedPage {
+public class ExtraControlsForm extends BorderPage {
 
     private Form form = new Form("form");
     private CheckList checkList = new CheckList("checkList");
@@ -62,7 +61,7 @@ public class ExtraControlsForm extends BorderedPage {
     }
 
     public void onInit() {
-        List customers = CustomerDAO.getCustomersSortedByName();
+        List customers = getCustomerService().getCustomersSortedByName();
         checkList.addAll(customers, "id", "name");
 
         applySettings();

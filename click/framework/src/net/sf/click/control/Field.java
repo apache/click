@@ -127,18 +127,18 @@ import net.sf.click.util.MessagesMap;
  *
  * <pre class="codeConfig">
  * /com/mycorp/page/Login.properties </pre>
- * 
+ *
  * If you want messages to be used across your entire application this is where
  * to place them.
  * </dd>
- * 
+ *
  * <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
  * <dd>Next message lookups are resolved to the global pages message bundle if it
  * exists.
- * 
+ *
  * <pre class="codeConfig">
  * /click-page.properties </pre>
- * 
+ *
  * If you want messages to be used across your entire application this is where
  * to place them.
  * </dd>

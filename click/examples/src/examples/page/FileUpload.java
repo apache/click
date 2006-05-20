@@ -11,7 +11,7 @@ import net.sf.click.control.TextField;
  *
  * @author Malcolm Edgar
  */
-public class FileUpload extends BorderedPage {
+public class FileUpload extends BorderPage {
 
     private Form form;
     private FileField fileField;

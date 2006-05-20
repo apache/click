@@ -16,21 +16,20 @@ import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
 import examples.control.InvestmentSelect;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 
 /**
  * Demonstration of a Table containing Form Fields.
  *
  * @author Christian Essl
  */
-public class TableForm extends BorderedPage {
+public class TableForm extends BorderPage {
 
     private Form form = new Form("form");
     private Table formTable = new Table("formTable");
     private Table dataTable = new Table("dataTable");
 
-    public TableForm() {
+    public void onInit() {
 
         // Populate the form
 
@@ -192,7 +191,7 @@ public class TableForm extends BorderedPage {
     // -------------------------------------------------------- Private Methods
 
     private List getCustomers() {
-        return CustomerDAO.getCustomersSortedByName(6);
+        return getCustomerService().getCustomersSortedByName(6);
     }
 
     private void tableRowsIterator(RowCallback rowCallback) {
@@ -203,7 +202,7 @@ public class TableForm extends BorderedPage {
 
                 if (hiddenField.getName().startsWith("id-")) {
                     Long id = (Long) hiddenField.getValueObject();
-                    Customer customer = CustomerDAO.getCustomer(id);
+                    Customer customer = getCustomerService().getCustomer(id);
 
                     if (customer != null) {
                         rowCallback.process(customer);

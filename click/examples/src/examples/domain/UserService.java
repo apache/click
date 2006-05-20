@@ -4,15 +4,15 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Provides a mockup User DAO for the examples.
+ * Provides a mockup User Service for the examples.
  *
  * @see User
  *
  * @author Malcolm Edgar
  */
-public class UserDAO {
+public class UserService {
 
-    public static boolean isAuthenticatedUser(User user) {
+    public boolean isAuthenticatedUser(User user) {
         if (user != null) {
             User foundUser = getUser(user.getUsername());
             if (foundUser != null) {
@@ -22,15 +22,15 @@ public class UserDAO {
         return false;
     }
 
-    public static User getUser(String username) {
+    public User getUser(String username) {
         return (User) USERS_MAP.get(username.toLowerCase());
     }
 
-    public static void addUser(User user) {
+    public void addUser(User user) {
         USERS_MAP.put(user.username.toLowerCase(), user);
     }
 
-    public static void deleteUser(User user) {
+    public void deleteUser(User user) {
         USERS_MAP.remove(user.username.toLowerCase());
     }
 

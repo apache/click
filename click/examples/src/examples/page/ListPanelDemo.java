@@ -1,21 +1,20 @@
 package examples.page;
 
-import examples.domain.CustomerDAO;
+import java.util.List;
+
 import net.sf.click.extras.panel.BasicPanel;
 import net.sf.click.extras.panel.ListPanel;
 import net.sf.click.extras.panel.Panel;
-
-import java.util.List;
 
 /**
  * Provides an ListPanel demonstration.
  *
  * @author Phil Barnes
  */
-public class ListPanelDemo extends BorderedPage {
+public class ListPanelDemo extends BorderPage {
 
-    public ListPanelDemo() {
-        List customers = CustomerDAO.getCustomersSortedByName(8);
+    public void onInit() {
+        List customers = getCustomerService().getCustomersSortedByName(8);
         addModel("customers", customers);
 
         ListPanel listPanel = new ListPanel("listPanel");

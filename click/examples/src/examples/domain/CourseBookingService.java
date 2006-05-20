@@ -20,19 +20,19 @@ import java.util.Map;
 
 
 /**
- * Provides a mockup CourseBooking DAO for the examples.
+ * Provides a mockup CourseBooking Service for the examples.
  *
  * @see Customer
  *
  * @author Malcolm Edgar
  */
-public class CourseBookingDAO {
+public class CourseBookingService {
 
-    public static CourseBooking findCourseBookingByID(Long id) {
+    public CourseBooking findCourseBookingByID(Long id) {
         return (CourseBooking) COURSE_BOOKING_BY_ID.get(id);
     }
 
-    public static Long insertCourseBooking(CourseBooking courseBooking) {
+    public Long insertCourseBooking(CourseBooking courseBooking) {
         seqNumber++;
 
         courseBooking.setId(new Long(seqNumber));

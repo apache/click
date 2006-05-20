@@ -2,7 +2,7 @@ package examples.page.ajax;
 
 import net.sf.click.Page;
 import examples.domain.Customer;
-import examples.domain.CustomerDAO;
+import examples.page.SpringPage;
 
 /**
  * Retrieves the Customer details using the given customerId parameter and
@@ -19,7 +19,7 @@ import examples.domain.CustomerDAO;
  *
  * @author Malcolm Edgar
  */
-public class AjaxCustomer extends Page {
+public class AjaxCustomer extends SpringPage {
 
     /**
      * Process the AJAX request and return XML customer table.
@@ -29,7 +29,7 @@ public class AjaxCustomer extends Page {
     public void onGet() {
         String customerId = getContext().getRequest().getParameter("customerId");
 
-        Customer customer = CustomerDAO.findCustomerByID(customerId);
+        Customer customer = getCustomerService().findCustomerByID(customerId);
 
         if (customer != null) {
             addModel("customer", customer);
@@ -43,5 +43,14 @@ public class AjaxCustomer extends Page {
      */
     public String getContentType() {
         return "text/xml";
+    }
+
+    /**
+     * Override border template to return page path.
+     *
+     * @see Page#getTemplate()
+     */
+    public String getTemplate() {
+        return getPath();
     }
 }

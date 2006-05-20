@@ -1,6 +1,6 @@
 package examples.page.menu;
 
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 import net.sf.click.extras.control.Menu;
 
 /**
@@ -8,7 +8,7 @@ import net.sf.click.extras.control.Menu;
  *
  * @author Malcolm Edgar
  */
-public class MenuPage extends BorderedPage {
+public class MenuPage extends BorderPage {
 
     public MenuPage() {
         addControl(new Menu("rootMenu"));

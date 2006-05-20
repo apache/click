@@ -1,6 +1,6 @@
 package examples.page.security;
 
-import examples.page.BorderedPage;
+import examples.page.BorderPage;
 import net.sf.click.Page;
 
 /**
@@ -9,7 +9,7 @@ import net.sf.click.Page;
  *
  * @author Malcolm Edgar
  */
-public class Secure extends BorderedPage {
+public class Secure extends BorderPage {
 
     /**
      * @see Page#onSecurityCheck()

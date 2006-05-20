@@ -2,8 +2,7 @@ package examples.page.ajax;
 
 import java.util.List;
 
-import examples.domain.CustomerDAO;
-import net.sf.click.Page;
+import examples.page.SpringPage;
 
 /**
  * Retrieves the current page and "buffered" Customer list using the given offset
@@ -19,7 +18,7 @@ import net.sf.click.Page;
  *
  * @author Phil Barnes
  */
-public class AjaxCustomerLiveGrid extends Page {
+public class AjaxCustomerLiveGrid extends SpringPage {
 
     /**
      * Process the AJAX request and return XML customer table.  This method
@@ -34,7 +33,7 @@ public class AjaxCustomerLiveGrid extends Page {
         String pageSize = getContext().getRequest().getParameter("page_size");
 
         if (offset != null && pageSize != null) {
-            List customers = CustomerDAO.findCustomersByPage(
+            List customers = getCustomerService().findCustomersByPage(
                     Integer.parseInt(offset),
                     Integer.parseInt(pageSize));
 

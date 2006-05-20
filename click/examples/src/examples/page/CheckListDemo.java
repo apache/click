@@ -14,7 +14,7 @@ import net.sf.click.extras.control.CheckList;
  *
  * @author Christian Essel
  */
-public class CheckListDemo extends BorderedPage{
+public class CheckListDemo extends BorderPage{
 
     private static final List STANDARD_OPTIONS;
     private static final List SORTABLE_OPTIONS = new ArrayList();

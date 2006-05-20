@@ -1,20 +1,19 @@
 package examples.page.security;
 
-import examples.domain.User;
-import examples.domain.UserDAO;
-import examples.page.BorderedPage;
 import net.sf.click.Page;
 import net.sf.click.control.Form;
 import net.sf.click.control.PasswordField;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import examples.domain.User;
+import examples.page.BorderPage;
 
 /**
  * Provides a user authentication login Page.
  *
  * @author Malcolm Edgar
  */
-public class Login extends BorderedPage {
+public class Login extends BorderPage {
 
     private Form form = new Form("form");
 
@@ -54,8 +53,8 @@ public class Login extends BorderedPage {
             User user = new User();
             form.copyTo(user);
 
-            if (UserDAO.isAuthenticatedUser(user)) {
-                user = UserDAO.getUser(user.getUsername());
+            if (getUserService().isAuthenticatedUser(user)) {
+                user = getUserService().getUser(user.getUsername());
                 getContext().setSessionAttribute("user", user);
                 setRedirect("/security/secure.htm");
 

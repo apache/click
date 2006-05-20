@@ -16,12 +16,12 @@ import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 /**
- * Provides a mockup Customer DAO for the examples.
+ * Provides a mockup Customer Service for the examples.
  *
  * @see Customer
  * @author Malcolm Edgar
  */
-public class CustomerDAO {
+public class CustomerService {
 
     private static final SimpleDateFormat FORMAT
         = new SimpleDateFormat("yyyy-MM-dd");
@@ -38,13 +38,13 @@ public class CustomerDAO {
 
     // --------------------------------------------------------- Public Methods
 
-    public static synchronized List getCustomersSortedByName() {
+    public synchronized List getCustomersSortedByName() {
         ensureDataAvailable();
         List customers = new ArrayList(CUSTOMER_BY_NAME.values());
         return customers;
     }
 
-    public static synchronized List getCustomersSortedByName(int rows) {
+    public synchronized List getCustomersSortedByName(int rows) {
         ensureDataAvailable();
         List customers = new ArrayList(rows);
 
@@ -59,7 +59,7 @@ public class CustomerDAO {
         return customers;
     }
 
-    public static synchronized void setCustomer(Customer customer) {
+    public synchronized void setCustomer(Customer customer) {
         ensureDataAvailable();
         if (customer != null) {
             deleteCustomer(customer.id);
@@ -68,12 +68,12 @@ public class CustomerDAO {
         }
     }
 
-    public static synchronized Customer getCustomer(Long id) {
+    public synchronized Customer getCustomer(Long id) {
         ensureDataAvailable();
         return (Customer) CUSTOMER_BY_ID.get(id);
     }
 
-    public static synchronized void deleteCustomer(Long id) {
+    public synchronized void deleteCustomer(Long id) {
         ensureDataAvailable();
         CUSTOMER_BY_ID.remove(id);
 
@@ -87,12 +87,12 @@ public class CustomerDAO {
         }
     }
 
-    public static synchronized Customer findCustomerByID(Long id) {
+    public synchronized Customer findCustomerByID(Long id) {
         ensureDataAvailable();
         return (Customer) CUSTOMER_BY_ID.get(id);
     }
 
-    public static synchronized Customer findCustomerByID(String value) {
+    public synchronized Customer findCustomerByID(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
         }
@@ -108,7 +108,7 @@ public class CustomerDAO {
         }
     }
 
-    public static synchronized Customer findCustomerByName(String value) {
+    public synchronized Customer findCustomerByName(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
         }
@@ -130,7 +130,7 @@ public class CustomerDAO {
         return null;
     }
 
-    public static synchronized Customer findCustomerByAge(String value) {
+    public synchronized Customer findCustomerByAge(String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
         }
@@ -157,20 +157,20 @@ public class CustomerDAO {
         }
     }
 
-    public static synchronized List findCustomersByPage(int offset, int pageSize) {
+    public synchronized List findCustomersByPage(int offset, int pageSize) {
         ensureDataAvailable();
         List customers = getAllCustomers();
         int toIndex = Math.min(offset + pageSize, customers.size());
         return customers.subList(offset, toIndex);
     }
 
-    public static synchronized List getAllCustomers() {
+    public synchronized List getAllCustomers() {
         return ALL_CUSTOMER_LIST;
     }
 
     // -------------------------------------------------------- Private Methods
 
-    private static synchronized void ensureDataAvailable() {
+    private synchronized void ensureDataAvailable() {
         if (CUSTOMER_BY_NAME.size() < 6) {
             loadCustomers();
         }
@@ -179,7 +179,7 @@ public class CustomerDAO {
     private static synchronized void loadCustomers() {
         try {
             InputStream is =
-                CustomerDAO.class.getResourceAsStream("customers.txt");
+                CustomerService.class.getResourceAsStream("customers.txt");
 
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(is));
@@ -218,7 +218,7 @@ public class CustomerDAO {
 
             ALL_CUSTOMER_LIST.clear();
             for (int i = 0; i < 1000; i++) {
-                ALL_CUSTOMER_LIST.addAll(getCustomersSortedByName());
+                ALL_CUSTOMER_LIST.addAll(new ArrayList(CUSTOMER_BY_NAME.values()));
             }
 
         } catch (IOException ioe) {
