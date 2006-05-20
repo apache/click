@@ -1,12 +1,11 @@
 Click 0.20 Release
 ------------------
-4. document add Parent property to Control
 9. add PageLink control
 10. review form submit check
 11. default error postion, canvas support for changing to TOP
-12. update control UML images
 13. remove parentMessages property
 14. add Page messages documentation section
+15. fix ColorPicker rendering bug
 
 
 CODE
