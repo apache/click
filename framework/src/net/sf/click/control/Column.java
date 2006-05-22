@@ -638,22 +638,55 @@ public class Column implements Serializable {
 
     /**
      * Return the named column property value from the given row object.
+     * <p/>
+     * If the row object is a <tt>Map</tt> this method will attempt to return
+     * the map value for the column {@link #name}.
+     * <p/>
+     * The row map lookup will be performed using the property name,
+     * if a value is not found the property name in uppercase will be used,
+     * if a value is still not found the property name in lowercase will be used.
+     * If a map value is still not found then this method will return null.
      *
      * @param row the row object to obtain the property from
      * @return the named row object property value
      * @throws RuntimeException if an error occured obtaining the property
      */
     protected Object getProperty(Object row) {
-        try {
-            if (propertyMethod == null) {
-                String methodName = ClickUtils.toGetterName(name);
-                propertyMethod = row.getClass().getMethod(methodName, null);
+        if (row instanceof Map) {
+            Map map = (Map) row;
+
+            Object object = map.get(name);
+            if (object != null) {
+                return object;
             }
 
-            return propertyMethod.invoke(row, null);
+            String upperCaseName = name.toUpperCase();
+            object = map.get(upperCaseName);
+            if (object != null) {
+                return object;
+            }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            String lowerCaseName = name.toLowerCase();
+            object = map.get(lowerCaseName);
+            if (object != null) {
+                return object;
+            }
+
+            return null;
+
+        } else {
+
+            try {
+                if (propertyMethod == null) {
+                    String methodName = ClickUtils.toGetterName(name);
+                    propertyMethod = row.getClass().getMethod(methodName, null);
+                }
+
+                return propertyMethod.invoke(row, null);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
