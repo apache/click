@@ -1,0 +1,29 @@
+package net.sf.click.examples.domain;
+
+import org.objectstyle.cayenne.CayenneDataObject;
+import org.objectstyle.cayenne.DataObjectUtils;
+import org.objectstyle.cayenne.PersistenceState;
+
+public class BaseEntity extends CayenneDataObject {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Convenience method to get an id that may be used by the view. There is
+     * no setter as id is managed by Cayenne.
+     */
+    public Integer getId() {
+        return (Integer) DataObjectUtils.pkForObject(this);
+    }
+
+    /**
+     * Return true if the object is new or transient object.
+     *
+     * @return true if the object is new or transient object
+     */
+    public boolean isNew() {
+        return getPersistenceState() == PersistenceState.TRANSIENT
+                || getPersistenceState() == PersistenceState.NEW;
+    }
+
+}
