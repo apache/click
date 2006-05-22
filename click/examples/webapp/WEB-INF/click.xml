@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <click-app charset="UTF-8">
 
-  <pages package="examples.page" automapping="true">
+  <pages package="net.sf.click.examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>
     <excludes pattern="/tiny_mce/*"/>
   </pages>
