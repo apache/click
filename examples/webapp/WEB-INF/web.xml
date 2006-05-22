@@ -2,19 +2,53 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" 
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
+    
  <display-name>Click Examples</display-name>
- <description>Example Click pages.</description>
  
+ <!-- 
+   Provides an in memory databae initialization filter. In a production 
+   application a separate database should be used, and this filter would not
+   be needed.
+   -->
+ <filter>
+  <filter-name>database-filter</filter-name>
+  <filter-class>net.sf.click.examples.util.DatabaseInitFilter</filter-class>
+ </filter>
+ 
+ <!--
+    Provides a thread local Cayenne DataContext filter.
+    -->
+ <filter>
+  <filter-name>cayenne-filter</filter-name>
+  <filter-class>net.sf.click.extras.cayenne.DataContextFilter</filter-class>
+ </filter>
+ 
+ <!-- 
+    Provides a HTTP response GZIP compression filter to improve network 
+    performance. In production applications you may use a compression module
+    provided by a web server instead.
+    -->
  <filter>
   <filter-name>compression-filter</filter-name>
   <filter-class>net.sf.click.extras.filter.CompressionFilter</filter-class>
  </filter>
+	
+ <filter-mapping>
+  <filter-name>cayenne-filter</filter-name>
+  <servlet-name>click-servlet</servlet-name>
+ </filter-mapping>
  
  <filter-mapping>
   <filter-name>compression-filter</filter-name>
   <servlet-name>click-servlet</servlet-name>
  </filter-mapping>
 
+ <!--
+   The Spring Click Servlet which handles *.htm requests. The "spring-path"
+   init parameter tells the servlet where to find the Spring application
+   context file on the classpath. The "app-reloadable" init parameter specifies
+   that the Click Application can be reloaded when running.
+    -->
  <servlet>
   <servlet-name>click-servlet</servlet-name>
   <servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
@@ -38,6 +72,10 @@
   <welcome-file>index.html</welcome-file>
  </welcome-file-list>
  
+ <!--
+   Provides a security constraint requiring click admin users to authenticate 
+   before reloading the application.
+    -->
  <security-constraint>
   <web-resource-collection>
    <url-pattern>/click/reload-app.htm</url-pattern>
