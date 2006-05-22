@@ -3,7 +3,7 @@
     pageEncoding="ISO-8859-1"
     import="java.util.List"
     import="net.sf.click.util.Format"
-    import="examples.domain.Customer"%>
+    import="net.sf.click.examples.domain.Customer"%>
 
 <html>
 <head>
