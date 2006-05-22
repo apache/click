@@ -29,7 +29,7 @@ $form
 
 When the booking is confirmed the page will redirect to the last page:
 <pre class="codeJava">
-Long bookingId = CourseBookingDAO.insertCourseBooking(booking);
+Long bookingId = getBookingService().insertCourseBooking(booking);
 
 String path = getContext().getPagePath(LastPage.<span class="kw">class</span>);
 setRedirect(path + <span class="st">"?bookingId="</span> + bookingId);

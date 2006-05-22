@@ -56,7 +56,7 @@ The LastPage gets the booking details from a "bookingId" URL request parameter.
 <pre class="codeJava">
 String bookingId = getContext().getRequest().getParameter(<span class="st">"bookingId="</span>);
 
-CourseBooking courseBooking = CourseBookingDAO.findCourseBookingByID(<span class="kw">new</span> Long(bookingId));
+CourseBooking courseBooking = getBookingService().findCourseBookingByID(<span class="kw">new</span> Integer(bookingId));
 </pre>
 
 The advantage of the Post-Redirect pattern is that it will not make the POST
