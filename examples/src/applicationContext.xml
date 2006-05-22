@@ -4,10 +4,10 @@
     
 <beans>
     
-    <bean id="courseBookingService" class="examples.domain.CourseBookingService"/>
+    <bean id="bookingService" class="net.sf.click.examples.service.BookingService"/>
     
-    <bean id="customerService" class="examples.domain.CustomerService"/>
+    <bean id="customerService" class="net.sf.click.examples.service.CustomerService"/>
     
-    <bean id="userService" class="examples.domain.UserService"/>
+    <bean id="userService" class="net.sf.click.examples.service.UserService"/>
 
 </beans>
