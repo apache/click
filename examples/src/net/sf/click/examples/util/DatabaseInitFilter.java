@@ -29,10 +29,10 @@ import org.objectstyle.cayenne.map.DataMap;
 
 /**
  * Provides a database initialization filter. This servlet filter creates a
- * examples database schema using the Cayenne {@link DbGenerator} utility class.
+ * examples database schema using the Cayenne {@link DbGenerator} utility class,
+ * and loads data files into the database.
  *
  * @author Malcolm Edgar
- * @author Andrus Adamchik
  */
 public class DatabaseInitFilter implements Filter {
 
@@ -50,10 +50,10 @@ public class DatabaseInitFilter implements Filter {
         try {
             DataDomain cayenneDomain =
                 Configuration.getSharedConfiguration().getDomain();
-            DataMap dataMap = cayenneDomain.getMap("examplesMap");
-            DataNode dataNode = cayenneDomain.getNode("examplesNode");
+            DataMap dataMap = cayenneDomain.getMap("cayenneMap");
+            DataNode dataNode = cayenneDomain.getNode("cayenneNode");
 
-            initDatabaseScema(dataNode, dataMap);
+            initDatabaseSchema(dataNode, dataMap);
 
             loadDatabase();
 
@@ -88,7 +88,7 @@ public class DatabaseInitFilter implements Filter {
      * @param dataMap the Cayenne DataMap
      * @throws Exception
      */
-    private void initDatabaseScema(DataNode dataNode, DataMap dataMap)
+    private void initDatabaseSchema(DataNode dataNode, DataMap dataMap)
             throws Exception {
 
         DbGenerator generator = new DbGenerator(dataNode.getAdapter(), dataMap);
@@ -101,72 +101,96 @@ public class DatabaseInitFilter implements Filter {
         generator.runGenerator(dataNode.getDataSource());
     }
 
+    /**
+     * Load data files into the database
+     *
+     * @throws IOException if an I/O error occurs
+     */
     private void loadDatabase() throws IOException {
-        DataContext dataContext = DataContext.createDataContext();
+        final DataContext dataContext = DataContext.createDataContext();
 
-        // Create some sample users
-        User user = new User();
-        user.setFullname("Ann Melan");
-        user.setEmail("amelan@mycorp.com");
-        user.setUsername("amelan");
-        user.setPassword("password");
-        dataContext.registerNewObject(user);
+        // Load users data file
+        loadFile("users.txt", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
 
-        user = new User();
-        user.setFullname("Rodger Alan");
-        user.setEmail("ralan@mycorp.com");
-        user.setUsername("ralan");
-        user.setPassword("password");
-        dataContext.registerNewObject(user);
+                User user = new User();
 
-        user = new User();
-        user.setFullname("David Henderson");
-        user.setEmail("dhenderson@mycorp.com");
-        user.setUsername("dhenderson");
-        user.setPassword("password");
-        dataContext.registerNewObject(user);
+                user.setUsername(next(tokenizer));
+                user.setPassword(next(tokenizer));
+                user.setFullname(next(tokenizer));
+                user.setEmail(next(tokenizer));
 
-        // Load some customers
-        InputStream is =
-            DatabaseInitFilter.class.getResourceAsStream("customers.txt");
+                context.registerNewObject(user);
+            }
+        });
+
+        // Load customers data file
+        loadFile("customers.txt", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                Customer customer = new Customer();
+                customer.setName(next(tokenizer));
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setEmail(next(tokenizer));
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setAge(Integer.valueOf(next(tokenizer)));
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setInvestments(next(tokenizer));
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setHoldings(Double.valueOf(next(tokenizer)));
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setDateJoined(createDate(next(tokenizer)));
+                }
+                if (tokenizer.hasMoreTokens()) {
+                    customer.setActive(Boolean.valueOf(next(tokenizer)));
+                }
+
+                dataContext.registerNewObject(customer);
+            }
+        });
+ 
+        dataContext.commitChanges();
+    }
+
+    private void loadFile(String filename, DataContext dataContext,
+            LineProcessor lineProcessor) throws IOException {
+
+        InputStream is = DatabaseInitFilter.class.getResourceAsStream(filename);
+
+        if (is == null) {
+            throw new RuntimeException("classpath file not found: " + filename);
+        }
 
         BufferedReader reader =
             new BufferedReader(new InputStreamReader(is));
 
         String line = reader.readLine();
         while (line != null) {
-            StringTokenizer tokenizer = new StringTokenizer(line, ",");
+            line = line.trim();
 
-            Customer customer = new Customer();
-            customer.setName(tokenizer.nextToken().trim());
-            if (tokenizer.hasMoreTokens()) {
-                customer.setEmail(tokenizer.nextToken().trim());
+            if (line.length() > 0 && !line.startsWith("#")) {
+                lineProcessor.processLine(line, dataContext);
             }
-            if (tokenizer.hasMoreTokens()) {
-                customer.setAge(Integer.valueOf(tokenizer.nextToken().trim()));
-            }
-            if (tokenizer.hasMoreTokens()) {
-                customer.setInvestments(tokenizer.nextToken().trim());
-            }
-            if (tokenizer.hasMoreTokens()) {
-                customer.setHoldings(Double.valueOf(tokenizer.nextToken().trim()));
-            }
-            if (tokenizer.hasMoreTokens()) {
-                customer.setDateJoined(createDate(tokenizer.nextToken().trim()));
-            }
-            if (tokenizer.hasMoreTokens()) {
-                customer.setActive(Boolean.valueOf(tokenizer.nextToken().trim()));
-            }
-
-            dataContext.registerNewObject(customer);
 
             line = reader.readLine();
         }
- 
-        dataContext.commitChanges();
     }
 
-    private static Date createDate(String pattern) {
+    private static interface LineProcessor {
+        public void processLine(String line, DataContext dataContext);
+    }
+
+    private String next(StringTokenizer tokenizer) {
+        return tokenizer.nextToken().trim();
+    }
+
+    private Date createDate(String pattern) {
         try {
             return FORMAT.parse(pattern);
         } catch (ParseException pe) {

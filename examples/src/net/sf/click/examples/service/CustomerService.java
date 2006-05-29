@@ -10,6 +10,19 @@ import org.objectstyle.cayenne.query.SelectQuery;
 
 public class CustomerService extends CayenneTemplate {
 
+    // Mock list of customers for AjaxLiveGrid example
+    private static final List ALL_CUSTOMER_LIST = new ArrayList(20000);
+
+    public List getAllCustomers() {
+        if (ALL_CUSTOMER_LIST.isEmpty()) {
+            List list = getCustomersSortedByName();
+            for (int i = 0; i < 1; i++) {
+                ALL_CUSTOMER_LIST.addAll(list);
+            }
+        }
+        return ALL_CUSTOMER_LIST;
+    }
+
     public List getCustomersSortedByName() {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering("name", true);
@@ -54,6 +67,7 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public List findCustomersByPage(int offset, int pageSize) {
+        // TODO: need to work out paging usage...
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering("name", true);
         query.setPageSize(pageSize);

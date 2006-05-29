@@ -1,3 +1,7 @@
+#
+# CUSTOMERS table data file, format: 
+# fullname, email, age, investments, holdings, date joined, active status
+#
 Ann Melan, ann_melan@iinet.com, 41, Residential Property, 434560, 1986-12-05, true
 Joh Holgate, jholgate@gate.com, 55, Residential Property, 145000, 1998-01-29, true
 Peter Harold, peterh@easymail.com, 43, Stocks, 10200, 2002-11-02, true
