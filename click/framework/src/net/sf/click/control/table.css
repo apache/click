@@ -231,6 +231,7 @@ span.pagebanner-nolinks {
 	padding: 2px 4px 2px 4px;
 	width: 300px;
 	margin-top: 10px;
+	margin-bottom: 10px;
 	display: block;
 }
 
@@ -240,7 +241,7 @@ span.pagelinks {
 	padding: 2px 4px 2px 4px;
 	width: 300px;
 	display: block;
-	margin-bottom: -5px;
+	margin-bottom: 10px;
 	border-top: none;
 }
 
@@ -248,10 +249,10 @@ span.pagelinks-nobanner {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 150px;
+	width: 300px;
 	display: block;
 	margin-top: 10px;
-	margin-bottom: -5px;
+	margin-bottom: 10px;
 }
 
 /* 
