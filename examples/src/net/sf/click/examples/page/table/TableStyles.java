@@ -2,8 +2,10 @@ package net.sf.click.examples.page.table;
 
 import java.util.List;
 
+import net.sf.click.control.Checkbox;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
+import net.sf.click.control.Label;
 import net.sf.click.control.Select;
 import net.sf.click.control.Table;
 import net.sf.click.examples.page.BorderPage;
@@ -21,10 +23,13 @@ public class TableStyles extends BorderPage {
 
     private Table table = new Table("table");;
     private Select styleSelect = new Select("style", "Table Style:");
+    private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
     public TableStyles() {
         // Setup table style select.
         Form form = new Form("form");
+        form.setColumns(3);
+        form.setLabelAlign(Form.ALIGN_LEFT);
         form.setMethod("GET");
         addControl(form);
 
@@ -32,8 +37,14 @@ public class TableStyles extends BorderPage {
         styleSelect.setAttribute("onchange", "this.form.submit();");
         form.add(styleSelect);
 
+        form.add(new Label("&nbsp; &nbsp;"));
+
+        hoverCheckbox.setAttribute("onchange", "this.form.submit();");
+        form.add(hoverCheckbox);
+
         // Setup customers table
         table.setAttribute("class", styleSelect.getValue());
+        table.setHoverRows(true);
 
         table.addColumn(new Column("id"));
 
@@ -63,6 +74,7 @@ public class TableStyles extends BorderPage {
     public void onGet() {
         // Note the style form uses GET method.
         table.setAttribute("class", styleSelect.getValue());
+        table.setHoverRows(hoverCheckbox.isChecked());
     }
 
 }
