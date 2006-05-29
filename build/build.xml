@@ -379,10 +379,7 @@
                verbose="false"
                windowtitle="Click API"
                doctitle="Click API">
-         <classpath>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-         </classpath>
+         <classpath refid="classpath.framework"/>
          <packageset dir="framework/src">
            <include name="net/**"/>
            <exclude name="org/**"/>
@@ -404,13 +401,7 @@
                verbose="false"
                windowtitle="Click Extras API"
                doctitle="Click Extras API">
-         <classpath>
-            <pathelement location="lib/${jar.cayenne}"/>
-            <pathelement location="lib/${jar.hibernate}"/>
-            <pathelement location="lib/${jar.servlet}"/>
-            <pathelement location="lib/${jar.spring}"/>
-            <pathelement location="dist/click-${version}.jar"/>
-         </classpath>
+         <classpath refid="classpath.extras"/>
          <packageset dir="extras/src">
             <include name="net/**"/>
          </packageset>
