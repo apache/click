@@ -126,24 +126,46 @@ public class Table implements Control {
     public static final String TABLE_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n";
 
+    /** The table top banner position. */
+    public static final int POSITION_TOP = 1;
+
+    /** The table bottom banner position. */
+    public static final int POSITION_BOTTOM = 2;
+
+    /** The table top and bottom banner. */
+    public static final int POSITION_BOTH = 3;
+
     // ----------------------------------------------------- Instance Variables
 
-    /** The Table attributes Map. */
+    /** The table HTML attributes Map. */
     protected Map attributes = new HashMap();
 
-    /** The map of Table Columns keyed by column name. */
+    /**
+     * The table pagination banner position:
+     * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
+     * The default position is <tt>POSITION_BOTTOM</tt>.
+     */
+    protected int bannerPosition = POSITION_BOTTOM;
+
+    /** The map of table columns keyed by column name. */
     protected Map columns = new HashMap();
 
-    /** The list of Table Columns. */
+    /** The list of table Columns. */
     protected List columnList = new ArrayList();
 
     /** The request context. */
     protected transient Context context;
 
-    /** The list of Table controls. */
+    /** The list of table controls. */
     protected final List controlList = new ArrayList();
 
-    /** The Field localized messages Map. */
+    /**
+     * The table rows set 'hover' CSS class on mouseover events flag. By default
+     * hoverRows is false.
+     */
+    protected boolean hoverRows;
+
+    /** The table localized messages Map. */
     protected Map messages;
 
     /** The control name. */
@@ -161,7 +183,7 @@ public class Table implements Control {
      */
     protected int pageSize;
 
-    /** The Table paging action link. */
+    /** The table paging action link. */
     protected ActionLink pagingLink;
 
     /** The control's parent. */
@@ -182,12 +204,10 @@ public class Table implements Control {
     protected List rowList;
 
     /**
-     * The show Table banner flag detailing number of rows and rows displayed.
+     * The show table banner flag detailing number of rows and rows
+     * displayed.
      */
     protected boolean showBanner;
-
-    /** Wheter the table rows should be hovered on mouseover (default false). */
-    protected boolean hoverRows;
 
     // ----------------------------------------------------------- Constructors
 
@@ -278,6 +298,27 @@ public class Table implements Control {
      */
     public boolean hasAttributes() {
         return !getAttributes().isEmpty();
+    }
+
+    /**
+     * Return the Table pagination banner position. Banner position values:
+     * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
+     * The default banner position is <tt>POSITION_BOTTOM</tt>.
+     *
+     * @return the table pagination banner position.
+     */
+    public int getBannerPosition() {
+        return bannerPosition;
+    }
+
+    /**
+     * Set Table pagination banner position. Banner position values:
+     * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
+     *
+     * @param value the table pagination banner position
+     */
+    public void setBannerPosition(int value) {
+        bannerPosition = value;
     }
 
     /**
@@ -399,6 +440,34 @@ public class Table implements Control {
      */
     public List getControls() {
         return controlList;
+    }
+
+    /**
+     * Return true if the table row (&lt;tr&gt;) elements should have the
+     * class="hover" attribute set on JavaScript mouseover events. This class
+     * can be used to define mouse over :hover CSS pseudo classes to create
+     * table row highlite effects.
+     *
+     * @return true if table rows elements will have the class 'hover' attribute
+     * set on JavaScript mouseover events
+     */
+    public boolean getHoverRows() {
+        return hoverRows;
+    }
+
+    /**
+     * Set whether the table row (&lt;tr&gt;) elements should have the
+     * class="hover" attribute set on JavaScript mouseover events. This class
+     * can be used to define mouse over :hover CSS pseudo classes to create
+     * table row highlite effects. For example:
+     *
+     * <pre class="codeHtml">
+     * hover:hover { color: navy } </pre>
+     *
+     * @param hooverRows specify whether class 'hover' rows attribute is rendered (default false).
+     */
+    public void setHoverRows(boolean hooverRows) {
+        this.hoverRows = hooverRows;
     }
 
     /**
@@ -672,24 +741,6 @@ public class Table implements Control {
         this.showBanner = showBanner;
     }
 
-    /**
-     * Wheter the rows should highlight when the mouse is over them.
-     * If true the rows (&lt;tr&gt;) add the style class 'hover' when they the mouse is over them.
-     * @return wheter to hover (default false).
-     */
-    public boolean getHoverRows() {
-        return hoverRows;
-    }
-
-    /**
-     * Set that the rows should highlight when the mouse is over them.
-     * If true the rows (&lt;tr&gt;) add the style class 'hover' when they the mouse is over them.
-     * @param hooverRows wheter to hover (default false).
-     */
-    public void setHoverRows(boolean hooverRows) {
-        this.hoverRows = hooverRows;
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -757,6 +808,16 @@ public class Table implements Control {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
+        if (getBannerPosition() == POSITION_TOP
+            || getBannerPosition() == POSITION_BOTH) {
+
+            renderTableBanner(buffer);
+            renderPagingControls(buffer);
+            if (buffer.length() > 0) {
+                buffer.append("\n");
+            }
+        }
+
         // Render table start.
         buffer.elementStart("table");
         buffer.appendAttribute("id", getId());
@@ -772,8 +833,12 @@ public class Table implements Control {
         // Render table end.
         buffer.append("</table>\n");
 
-        renderTableBanner(buffer);
-        renderPagingControls(buffer);
+        if (getBannerPosition() == POSITION_BOTTOM
+            || getBannerPosition() == POSITION_BOTH) {
+
+            renderTableBanner(buffer);
+            renderPagingControls(buffer);
+        }
 
         return buffer.toString();
     }
@@ -863,8 +928,8 @@ public class Table implements Control {
                 }
 
                 if (getHoverRows()) {
-                    buffer.append(" onmouseover=\"this.className ='hover';\"");
-                    buffer.append(" onmouseout=\"this.className = '");
+                    buffer.append(" onmouseover=\"this.className='hover';\"");
+                    buffer.append(" onmouseout=\"this.className='");
                     if (even) {
                         buffer.append("even");
                     } else {
@@ -923,7 +988,7 @@ public class Table implements Control {
     /**
      * Render the table banner detailing number of rows and number displayed.
      * <p/>
-     * See the <tt>/click-extras.properies</tt> for the HTML templates:
+     * See the <tt>/click-controls.properies</tt> for the HTML templates:
      * <tt>table-page-banner</tt> and <tt>table-page-banner-nolinks</tt>
      *
      * @param buffer the StringBuffer to render the paging controls to
@@ -964,7 +1029,7 @@ public class Table implements Control {
     /**
      * Render the table paging action link controls.
      * <p/>
-     * See the <tt>/click-extras.properies</tt> for the HTML templates:
+     * See the <tt>/click-controls.properies</tt> for the HTML templates:
      * <tt>table-page-links</tt> and <tt>table-page-links-nobanner</tt>
      *
      * @param buffer the StringBuffer to render the paging controls to

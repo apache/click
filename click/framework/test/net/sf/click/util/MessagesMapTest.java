@@ -88,7 +88,7 @@ public class MessagesMapTest extends TestCase {
                                           context);
         
         assertFalse(map.isEmpty());
-        assertEquals(30, map.size());
+        assertEquals(31, map.size());
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
@@ -101,7 +101,7 @@ public class MessagesMapTest extends TestCase {
                                            context);
 
         assertFalse(map2.isEmpty());
-        assertEquals(30, map2.size());
+        assertEquals(31, map2.size());
         
         assertTrue(map2.containsKey("table-first-label"));
         assertEquals("Test Value", map2.get("table-first-label")); 
