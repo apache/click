@@ -1,0 +1,8 @@
+#
+# USERS table data file, format: 
+# username, password, full name, email
+#
+amelan, password, Ann Melan, amelan@mycorp.com
+ralan, password, Rodger Alan, ralan@mycorp.com
+dhenderson, password, David Henderson, dhenderson@mycorp.com
+lstacpoole, password, Lisa Stacpoole, lstacpoole@mycorp.com
