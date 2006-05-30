@@ -965,7 +965,7 @@ public class Table implements Control {
 
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
-            column.renderTableData(rowIndex, row, buffer, context);
+            column.renderTableData(row, buffer, context, rowIndex);
             if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
             }

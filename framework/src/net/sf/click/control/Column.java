@@ -557,13 +557,14 @@ public class Column implements Serializable {
      * Render the column table data &lt;td&gt; element to the given buffer using
      * the passed row object.
      *
-     * @param rowIndex the index of the current row within the parent table
      * @param row the row object to render
      * @param buffer the string buffer to render to
      * @param context the request context
+     * @param rowIndex the index of the current row within the parent table
      */
-    public void renderTableData(int rowIndex, Object row,
-                                HtmlStringBuffer buffer, Context context) {
+    public void renderTableData(Object row, HtmlStringBuffer buffer,
+            Context context, int rowIndex) {
+
         if (getMessageFormat() == null && getFormat() != null) {
             Locale locale = context.getLocale();
             setMessageFormat(new MessageFormat(getFormat(), locale));
@@ -578,7 +579,7 @@ public class Column implements Serializable {
         }
         buffer.closeTag();
 
-        renderTableDataContent(rowIndex, row, buffer, context);
+        renderTableDataContent(row, buffer, context, rowIndex);
 
         buffer.elementEnd("td");
     }
@@ -606,13 +607,14 @@ public class Column implements Serializable {
     /**
      * Render the content within the column table data &lt;td&gt; element.
      *
-     * @param rowIndex the index of the current row within the parent table
      * @param row the row object to render
      * @param buffer the string buffer to render to
      * @param context the request context
+     * @param rowIndex the index of the current row within the parent table
      */
-    protected void renderTableDataContent(int rowIndex, Object row,
-                                HtmlStringBuffer buffer, Context context) {
+    protected void renderTableDataContent(Object row, HtmlStringBuffer buffer,
+            Context context, int rowIndex) {
+
         if (getDecorator() != null) {
             Object value = getDecorator().render(row, context);
             if (value != null) {

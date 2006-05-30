@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.sf.click.examples.page.SpringPage;
 
-
 /**
  * Retrieves the current page and "buffered" Customer list using the given offset
  * and page_size parameters and adds them to the Page model.
