@@ -20,7 +20,7 @@ public class TablePaging extends BorderPage {
         table = new Table("table");
         table.setAttribute("class", "its");
         table.setAttribute("width", "550px");
-        table.setPageSize(4);
+        table.setPageSize(10);
         table.setShowBanner(true);
 
         table.addColumn(new Column("name"));
@@ -42,7 +42,7 @@ public class TablePaging extends BorderPage {
     }
 
     public void onGet() {
-        List customers = getCustomerService().getCustomersSortedByName();
+        List customers = getCustomerService().getCustomers();
         table.setRowList(customers);
     }
 }

@@ -67,7 +67,7 @@ public class TableStyles extends BorderPage {
     }
 
     public void onInit() {
-        List customers = getCustomerService().getCustomersSortedByName();
+        List customers = getCustomerService().getCustomersSortedByName(12);
         table.setRowList(customers);
     }
 
