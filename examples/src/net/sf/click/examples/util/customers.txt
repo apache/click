@@ -63,3 +63,14 @@ Thong Tran, ttran@avion.net, 53, Stocks, 432000, true
 Tien Tong, ttong@gmail.com, 37, Stocks, 2030000, true
 Zack Benders, zack.benders@mycorp.com, 28, Options, 145000, true
 Joe Tessel, joet@yoodle.net, 31, Options, 287000, true
+Finn Peterson, finnp@gmail.com, 37, Stocks, 215000, true
+David Warren, dwarren@biz.net, 36, Residential Property, 546500, false
+John Quinn, johnq@apple.com, 38, Options, 500000, true
+Peter Williams, pwilliams@iinet.net.au, 36, Stocks, 150000, false
+Rhoda Mason, rmason@gmail.com, 34, Residential Property, 2400000, false
+David Dockery, davidd@yahoo.com, 40, Residential Property, 4500000, true
+Brad Cole, bradc@hotmail.com, 42, Stocks, 234000, true
+William Thong, wthong@westnet.com, 40, Options, 345000, false
+Tanya Stockwell, t.stockwell@abs.com, 39, Stocks, 289000, true
+Steve Haywood, steve.haywood@timbercorp.com, 45, Stocks, 150000, true
+Rove Apple, rove.apple@bignet.com, 31, Stocks, 34000, true
