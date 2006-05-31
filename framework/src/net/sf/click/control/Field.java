@@ -610,10 +610,8 @@ public abstract class Field implements Control {
     /**
      * Return the localized message for the given key, or null if not found.
      * <p/>
-     * TODO: update doco
-     * <p/>
-     * This method will attempt to lookup the localized message in the
-     * parentMessages, which by default represents the Page's resource bundle.
+     * This method will attempt to lookup for the localized message in the
+     * parent, which by default represents the Page's resource bundle.
      * <p/>
      * If the message was not found, the this method will attempt to look up the
      * value in the fields class properties file and then finally in the global
