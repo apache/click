@@ -40,12 +40,12 @@ public class BorderPage extends SpringPage {
     }
 
     /**
-     * Returns the name of the border template: &nbsp; <tt>"border.htm"</tt>
+     * Returns the name of the border template: &nbsp; <tt>"border-template.htm"</tt>
      *
      * @see Page#getTemplate()
      */
     public String getTemplate() {
-        return "/border.htm";
+        return "/border-template.htm";
     }
 
 }

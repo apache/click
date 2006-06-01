@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1605,9 +1604,8 @@ public class Form implements Control {
      * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
     }
 
     /**

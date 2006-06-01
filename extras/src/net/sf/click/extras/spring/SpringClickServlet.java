@@ -225,6 +225,9 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *     }
  * } </pre>
  *
+ * <h3>Examples</h3>
+ *
+ * Please see the Click Examples application for a demonstration of Spring integration.
  *
  * @author Phil Barnes
  * @author Paul Rule

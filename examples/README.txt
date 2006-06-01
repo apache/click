@@ -2,8 +2,6 @@
 Click Example Application
 =========================
 
-TODO: doco
-
 The structure of this web application is detailed below:
 
  +---[src]                  Java source files directory
@@ -34,7 +32,7 @@ Download JAR dependencies using Ant command:
     ant get-deps
 
 If you are behind a firewall configure your proxy settings in
-the build.properties file: ../build/build/build.properties
+the build.properties file: build.properties
 
 Then use the Ant command:
 
@@ -60,7 +58,7 @@ Step 3.
 -------
 
 Configure the location of you application server in the
-build.properties file:  ../build/build.properties
+build.properties file:  build.properties
 
 Then deploy the application use the Ant command:
 

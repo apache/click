@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -761,9 +760,8 @@ public class Table implements Control {
      * @see Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
-     * @throws IOException if a I/O error occurs
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/table.css",
                               "click");

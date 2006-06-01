@@ -67,6 +67,10 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *   ..
  * &lt;/web-app&gt; </pre>
  *
+ * <h3>Examples</h3>
+ *
+ * Please see the Click Examples application for a demonstration of Cayenne integration.
+ * <p/>
  * This class is adapted from the Cayenne
  * {@link org.objectstyle.cayenne.conf.WebApplicationContextFilter}.
  *

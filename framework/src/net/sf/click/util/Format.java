@@ -141,6 +141,38 @@ public class Format {
     }
 
     /**
+     * Return a formatted current date string using the default DateFormat.
+     *
+     * @return a formatted date string
+     */
+    public String currentDate() {
+        DateFormat format =
+            DateFormat.getDateInstance(DateFormat.DEFAULT, getLocale());
+
+        return format.format(new Date());
+    }
+
+    /**
+     * Return a formatted current date string using the given formatting
+     * pattern. See SimpleDateFormat for information on the format
+     * pattern string.
+     *
+     * @param pattern the SimpleDateFormat formatting pattern
+     * @return a formatted date string
+     * @throws IllegalArgumentException if the pattern string is null
+     */
+    public String currentDate(String pattern) {
+        if (pattern == null) {
+            throw new IllegalArgumentException("Null pattern parameter");
+        }
+
+        SimpleDateFormat format =
+            new SimpleDateFormat(pattern, getLocale());
+
+        return format.format(new Date());
+    }
+
+    /**
      * Return a formatted date string using the given date and formatting
      * pattern. See SimpleDateFormat for information on the format
      * pattern string.

@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -326,7 +325,6 @@ public class TabbedForm extends Form {
 
     // --------------------------------------------------------- Public Methods
 
-
     /**
      * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
@@ -334,9 +332,8 @@ public class TabbedForm extends Form {
      * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
-     * @throws IOException if a I/O error occurs
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/TabbedForm.css",
                               "click");

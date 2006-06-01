@@ -71,6 +71,15 @@ up to a 1.0 release in the Q3 2006.
        [<a href="http://www.sunvolt.com/jira/browse/CLK-92">92</a>].
       </li>
       <li class="change">
+       Added support for 'Page' suffix when automapping path -> classname.
+       See <a href="configuration.html#application-automapping">automapping</a>
+       topic for details. This issue raised by Stephen Haberman.
+      </li>
+      <li class="change">
+       Added Format <a href="click-api/net/sf/click/util/Format.html#currentDate()">currentDate()</a>
+       methods.
+      </li>
+      <li class="change">
        Added request parameter to ClickServlet   
        <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
        method.
@@ -80,7 +89,12 @@ up to a 1.0 release in the Q3 2006.
        Ricardo Lecheta [<a href="http://www.sunvolt.com/jira/browse/CLK-86">86</a>].
       </li>
       <li class="change">
-       Added Spring integration example to click-examples and improved 
+       Added <a target="blank" class="external" href="www.objectstyle.org/cayenne/">Cayenne</a> 
+       integration example to Examples.
+      </li>
+      <li class="change">
+       Added <a target="blank" class="external" href="www.springframework.org">Spring</a> 
+       integration example to Examples and improved 
        <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
        documentation.
       </li>
@@ -103,6 +117,11 @@ up to a 1.0 release in the Q3 2006.
        Fixed <tt>UnsupportedEncodingException</tt> in ClickUtils.encodeUrl() when
        application charset is undefined
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-87">87</a>].
+      </li>
+      <li class="change">
+       Fixed file deployment issue on servers with restricted permissions.
+       This issue was raised by David Felis
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-95">95</a>].
       </li>
       <li>
        Removed Control <tt>parentMessages</tt> property which was effectively

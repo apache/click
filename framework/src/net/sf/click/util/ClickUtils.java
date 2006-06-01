@@ -262,14 +262,16 @@ public class ClickUtils {
     /**
      * Deploy the specified classpath resource to the given target directory
      * under the web application root directory.
+     * <p/>
+     * If an IOException or SecurityException occurs this method will log a
+     * warning message.
      *
      * @param servletContext the web applications servlet context
      * @param resource the classpath resource name
      * @param targetDir the target directory to deploy the resource to
-     * @throws IOException if an I/O error occurs
      */
     public static void deployFile(ServletContext servletContext,
-        String resource, String targetDir) throws IOException {
+        String resource, String targetDir) {
 
         if (servletContext == null) {
             throw new IllegalArgumentException("Null servletContext parameter");
@@ -286,63 +288,81 @@ public class ClickUtils {
             realTargetDir = realTargetDir + targetDir;
         }
 
-        // Create files deployment directory
-        File directory = new File(realTargetDir);
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                String msg =
-                    "could not create deployment directory: " + directory;
-                throw new IOException(msg);
-            }
-        }
+        ClickLogger logger = ClickLogger.getInstance();
 
-        String destination = resource;
-        int index = resource.lastIndexOf('/');
-        if (index != -1) {
-            destination = resource.substring(index + 1);
-        }
-        destination = realTargetDir + File.separator + destination;
+        try {
 
-        File destinationFile = new File(destination);
-
-        if (!destinationFile.exists()) {
-            InputStream inputStream =
-                ClickUtils.class.getResourceAsStream(resource);
-
-            if (inputStream != null) {
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(destinationFile);
-                    byte[] buffer = new byte[1024];
-                    while (true) {
-                        int length = inputStream.read(buffer);
-                        if (length <  0) {
-                            break;
-                        }
-                        fos.write(buffer, 0, length);
-                    }
-
-                    ClickLogger logger = ClickLogger.getInstance();
-                    if (logger.isTraceEnabled()) {
-                        int lastIndex =
-                            destination.lastIndexOf(File.separatorChar);
-                        if (lastIndex != -1) {
-                            destination = destination.substring(lastIndex + 1);
-                        }
-                        String msg =
-                            "deployed " + targetDir + File.separator
-                            + destination;
-                        logger.trace(msg);
-                    }
-
-                } finally {
-                    close(fos);
-                    close(inputStream);
+            // Create files deployment directory
+            File directory = new File(realTargetDir);
+            if (!directory.exists()) {
+                if (!directory.mkdirs()) {
+                    String msg =
+                        "could not create deployment directory: " + directory;
+                    throw new IOException(msg);
                 }
-            } else {
-                String msg = "could not locate classpath resource: " + resource;
-                throw new IOException(msg);
             }
+
+            String destination = resource;
+            int index = resource.lastIndexOf('/');
+            if (index != -1) {
+                destination = resource.substring(index + 1);
+            }
+            destination = realTargetDir + File.separator + destination;
+
+            File destinationFile = new File(destination);
+
+            if (!destinationFile.exists()) {
+                InputStream inputStream =
+                    ClickUtils.class.getResourceAsStream(resource);
+
+                if (inputStream != null) {
+                    FileOutputStream fos = null;
+                    try {
+                        fos = new FileOutputStream(destinationFile);
+                        byte[] buffer = new byte[1024];
+                        while (true) {
+                            int length = inputStream.read(buffer);
+                            if (length <  0) {
+                                break;
+                            }
+                            fos.write(buffer, 0, length);
+                        }
+
+                        if (logger.isTraceEnabled()) {
+                            int lastIndex =
+                                destination.lastIndexOf(File.separatorChar);
+                            if (lastIndex != -1) {
+                                destination =
+                                    destination.substring(lastIndex + 1);
+                            }
+                            String msg =
+                                "deployed " + targetDir + File.separator
+                                + destination;
+                            logger.trace(msg);
+                        }
+
+                    } finally {
+                        close(fos);
+                        close(inputStream);
+                    }
+                } else {
+                    String msg =
+                        "could not locate classpath resource: " + resource;
+                    throw new IOException(msg);
+                }
+            }
+
+        } catch (IOException ioe) {
+            String msg =
+                "error occured deploying resource " + resource
+                + ", error " + ioe;
+            logger.warn(msg);
+
+        } catch (SecurityException se) {
+            String msg =
+                "error occured deploying resource " + resource
+                + ", error " + se;
+            logger.warn(msg);
         }
     }
 
@@ -353,10 +373,9 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resources the array of classpath resource names
      * @param targetDir the target directory to deploy the resource to
-     * @throws IOException if an I/O error occurs
      */
     public static void deployFiles(ServletContext servletContext,
-            String[] resources, String targetDir) throws IOException {
+            String[] resources, String targetDir) {
 
         if (resources == null) {
             throw new IllegalArgumentException("Null resources parameter");

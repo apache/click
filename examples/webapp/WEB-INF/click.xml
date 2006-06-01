@@ -3,7 +3,7 @@
 
   <pages package="net.sf.click.examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>
-    <excludes pattern="/tiny_mce/*"/>
+    <excludes pattern="/tiny_mce/"/>
   </pages>
 
   <headers>

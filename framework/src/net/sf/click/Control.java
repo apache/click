@@ -15,7 +15,6 @@
  */
 package net.sf.click;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -245,9 +244,8 @@ public interface Control extends Serializable {
      * } </pre>
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException;
+    public void onDeploy(ServletContext servletContext);
 
     /**
      * The on process event handler. Each Page control will be processed when

@@ -1096,11 +1096,33 @@ class ClickApp implements EntityResolver {
             }
 
         } catch (ClassNotFoundException cnfe) {
-            if (logger.isDebugEnabled()) {
-                logger.debug(pagePath + " -> CLASS NOT FOUND");
+
+            boolean classFound = false;
+
+            if (!className.endsWith("Page")) {
+                String classNameWithPage = className + "Page";
+                try {
+                    pageClass = Class.forName(classNameWithPage);
+
+                    if (!Page.class.isAssignableFrom(pageClass)) {
+                        String msg = "Automapped page class " + className
+                                     + " is not a subclass of net.sf.clic.Page";
+                        throw new RuntimeException(msg);
+                    }
+
+                    classFound = true;
+
+                } catch (ClassNotFoundException cnfe2) {
+                }
             }
-            if (logger.isTraceEnabled()) {
-                logger.trace("class not found: " + className);
+
+            if (!classFound) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug(pagePath + " -> CLASS NOT FOUND");
+                }
+                if (logger.isTraceEnabled()) {
+                    logger.trace("class not found: " + className);
+                }
             }
         }
 
