@@ -15,8 +15,6 @@
  */
 package net.sf.click.extras.panel;
 
-import java.io.IOException;
-
 import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
@@ -299,9 +297,8 @@ public class TabbedPanel extends BasicPanel {
      * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/panel/TabbedPanel.htm",
                               "click");

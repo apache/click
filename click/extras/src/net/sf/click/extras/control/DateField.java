@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.text.ParseException;
@@ -418,9 +417,8 @@ public class DateField extends TextField {
      * directory <tt>click/calendar</tt>.
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         // Deploy DateField resources files
         for (int i = 0; i < CALENDAR_RESOURCES.length; i++) {
             String calendarFilename = "calendar" + CALENDAR_RESOURCES[i];

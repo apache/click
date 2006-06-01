@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -494,9 +493,8 @@ public class Menu implements Control {
      * @see Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
     }
 
     /**

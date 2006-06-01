@@ -14,7 +14,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -22,11 +21,11 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.control.Field;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a ColorPicker control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
@@ -239,9 +238,8 @@ public class ColorPicker extends Field {
      *
      * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
      * @param servletContext the ServletContext
-     * @throws IOException if can not write
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         for (int i = 0; i < COLOR_PICKER_RESOURCES.length; i++) {
             ClickUtils.deployFile(servletContext,
                                   COLOR_PICKER_RESOURCES[i],

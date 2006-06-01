@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,14 +25,14 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.control.Field;
 import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides scrollable check list. This is an implementation of the Checklist
@@ -666,9 +665,8 @@ public class CheckList extends Field {
      * @see net.sf.click.control.Field#onDeploy(javax.servlet.ServletContext)
      *
      * @param servletContext the context
-     * @throws IOException if the file can not be depolyed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext,
                                CHECKLIST_RESOURCES,
                                "click/checklist");

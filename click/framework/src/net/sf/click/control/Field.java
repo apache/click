@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -964,9 +963,8 @@ public abstract class Field implements Control {
      * static web resources.
      *
      * @param servletContext the servlet context
-     * @throws IOException if a resource could not be deployed
      */
-    public void onDeploy(ServletContext servletContext) throws IOException {
+    public void onDeploy(ServletContext servletContext) {
     }
 
     /**
