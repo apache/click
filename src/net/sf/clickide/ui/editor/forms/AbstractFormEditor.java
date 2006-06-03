@@ -14,6 +14,11 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 
+/**
+ * The base class for form editors.
+ * 
+ * @author Naoki Takezoe
+ */
 public abstract class AbstractFormEditor extends EditorPart {
 
 	protected FormToolkit toolkit;

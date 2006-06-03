@@ -9,6 +9,10 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
 	
 	public String getText(Object object) {

@@ -5,6 +5,10 @@ import net.sf.clickide.ClickPlugin;
 import org.eclipse.jface.action.Action;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class ElementRemoveAction extends Action{
 	
 	private IDOMElement element;
