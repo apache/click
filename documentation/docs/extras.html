@@ -58,26 +58,13 @@ When developing Click Extras contributions please follow these principles.
 
 Components and controls should have minimal dependencies. This is to support easy 
 deployment of the click-examples and keeps the click build process simple. 
-Current dependencies include:
-<ul style="margin-top:0.75em;margin-bottom:0.75em;">
- <li>Cayenne</li>
- <li>Click<span class="red">*</span></li>
- <li>Commons Codec<span class="red">*</span></li>
- <li>Commons Collections<span class="red">*</span></li>
- <li>Commons FileUpload<span class="red">*</span></li>
- <li>Commons IO<span class="red">*</span></li>
- <li>Commons Lang<span class="red">*</span></li>
- <li>Hibernate</li>
- <li>OGNL<span class="red">*</span></li>
- <li>Spring</li>
- <li>Velocity<span class="red">*</span></li>
-</ul>
-
-<span style="margin-left:1em;" class="red">*</span> : marked libraries are included in <tt>click.jar</tt><br/>
+See <a href="building.html#extras-dependencies">Extras Dependencies</a> for 
+details.
 <p/>
-<b>Please Note</b> the Cayenne and Spring dependencies are only required if you use these particular features.
-For example if you are using Hibernate for your persistence framework, the <tt>CayenneForm</tt> control will not 
-cause any issues as this class would never be loaded by your application.
+Please Note the Cayenne and Spring dependencies are only required if you use these particular features.
+For example if you are using Hibernate for your persistence framework, the 
+<a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+control will not cause any issues as this class would never be loaded by your application.
 
 <h3>Auto File Deployment</h3>
 

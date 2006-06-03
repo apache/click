@@ -118,7 +118,7 @@ First we have a Login page class which setups up a login form in the constructor
             User user = new User();
             form.copyTo(user);
 
-            <span class="kw">if</span> (UserDAO.isAuthenticatedUser(user)) {
+            <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
                 setRedirect(<span class="st">"secure.htm"</span>);
 
