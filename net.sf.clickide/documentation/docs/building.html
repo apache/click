@@ -24,6 +24,8 @@ creating JAR files, application WAR files and the Click distribution.
   </li>
   <li><a href="#framework-dependencies">Framework Dependencies</a>
   </li>
+  <li><a href="#extras-dependencies">Extras Dependencies</a>
+  </li>
 </ul>
 <p>&nbsp;</p>
 
@@ -43,6 +45,12 @@ The configuration of the Click Ant build system is detailed below:
 +--[documentation]              Click documentation set application
 |
 +--[examples]                   Click Examples application
+|   |
+|   +---build.xml               Ant build script
+|   |
+|   +---build.properties        Ant build properties
+|   |  
+|   +---README.txt              Click Examples Readme file
 |
 +--[extras]                     Click Extras source directory
 |
@@ -129,7 +137,7 @@ ant build-framework </pre>
 </ol>
 
 
-<h3>Building Click Extras</h3>
+<h3>Building Extras</h3>
 Click Extras JAR file <tt>click-extras.jar</tt>
 <ol>
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
@@ -143,9 +151,13 @@ ant build-framework build-extras </pre>
 </ol>
 
 
-<h3>Building Click Webapps</h3>
-To build the Click web application WAR files <tt>click-examples.war</tt>
+<h3>Building Examples</h3>
+To build the Click Examples web application file <tt>click-examples.war</tt>
 <ol>
+  <li>Please see the <tt>examples/README.txt</tt> file, ensuring the 
+  required properties have been configured and the dependencies downloaded.<p/>
+  </li>
+  
   <li>Ensure the above configurations have been made and <tt>get-deps</tt> has
   been run.<p/>
   </li>
@@ -253,6 +265,42 @@ The Click framework has the following runtime dependencies.
 The standard <tt>click-xx.jar</tt> includes all of the listed dependencies.<br/> 
 Alternatively use the <tt>click-nodeps-xx.jar</tt> which includes none of these
 dependencies.
+<p/>
+
+<a name="extras-dependencies"><h2>Extras Dependencies</h2></a>
+The Click Extras has the following runtime dependencies in addition to the
+Framework dependencies.
+
+<table style="border: 1px solid black; margin: 1em 0em;" cellspacing="0" cellpadding="6">
+<tr style="background-color: navy; color: white;">
+  <th>Library</th>
+  <th>Version</th>
+  <th>JAR / Source</th>
+  <th>Author</th>
+  <th>Description</th>
+</tr>
+<tr>
+  <td>Cayenne</td>  
+  <td>1.2</td>
+  <td>cayenne-nodeps-1.2B2.jar</td>
+  <td><a target="blank" href="http://www.objectstyle.org/cayenne/index.html/">ObjectStyle</a></td>
+  <td>ORM Framework</td>
+</tr>
+<tr>
+  <td>Hibernate</td>
+  <td>3.0</td>
+  <td>hibernate-3.0.5.jar</td>  
+  <td><a target="blank" href="http://www.hibernate.org/">Hibernate</a></td>
+  <td>ORM Framework</td>
+</tr>
+<tr>
+  <td>Spring</td>
+  <td>1.2.6</td>
+  <td >spring-1.2.6.jar</td>  
+  <td><a target="blank" href="http://www.springframework.org/">Spring Framework</a></td>
+  <td>IoC Framework</td>
+</tr>
+</table>
 
 
 </body>

@@ -11,6 +11,11 @@ a:visited {
   color: blue;
 }
 
+a.external {
+  background: url(images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
 body, table, td, p	{
   font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
   font-size: 12px;

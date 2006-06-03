@@ -243,6 +243,15 @@ changePassword.htm   =>  ChangePassword
 ChangePassword.htm   =>  ChangePassword
 </pre>
 
+When automapping pages, if a class cannot be found Click will attempt to add the
+'Page' suffix to the classname if not already present and map this.  
+For example:
+
+<pre class="codeConfig" style="background-color: white;">
+customer.htm         =>  CustomerPage
+change-password.htm  =>  ChangePasswordPage
+</pre>
+
 <a name="application-excludes" class="heading"><h4>Automapping Excludes</h4></a>
 
 With Page automapping there can be resources where you don't want automapping 
