@@ -33,7 +33,7 @@ up to a 1.0 release in the Q3 2006.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 0.20 - 21st May 2006</dt>
+  <dt>Version 0.20 - 3rd June 2006</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -45,25 +45,58 @@ up to a 1.0 release in the Q3 2006.
        Added new Click extras controls
        <a href="extras-api/net/sf/click/extras/control/CheckList.html">CheckList</a> and
        <a href="extras-api/net/sf/click/extras/control/ColorPicker.html">ColorPicker</a>.
-       These controls were developed by Christian Essel
+       These controls were added by Christian Essel
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-81">81</a>].        
       </li>
+      <li clas="change">
+       Added support for a global page message bundle, see Page 
+       <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
+       for details. This issue raised by Claudio Rossetto 
+       [<a href="http://www.sunvolt.com/jira/browse/CLK-72">72</a>].
       <li class="change">
-       Added Control parent property 
+       Added <a href="click-api/net/sf/click/Control.html">Control</a>
+       <tt>parent</tt> property 
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-88">88</a>].
+      </li>
+      <li class="change">
+       Added support table Column support for <tt>java.util.Map</tt> row objects.
+       This issue raised by J.F. Zarama  
+       [<a href="http://www.sunvolt.com/jira/browse/CLK-91">91</a>].
+      </li>
+      <li class="change">
+       Added option to place Table banner on top. 
+       See Table
+       <a href="click-api/net/sf/click/control/Table.html#bannerPosition">bannerPosition</a>
+       Javadoc for details. This issue raised by J.F. Zarama  
+       [<a href="http://www.sunvolt.com/jira/browse/CLK-92">92</a>].
+      </li>
+      <li class="change">
+       Added support for 'Page' suffix when automapping path -> classname.
+       See <a href="configuration.html#application-automapping">automapping</a>
+       topic for details. This issue raised by Stephen Haberman.
+      </li>
+      <li class="change">
+       Added Format <a href="click-api/net/sf/click/util/Format.html#currentDate()">currentDate()</a>
+       methods.
       </li>
       <li class="change">
        Added request parameter to ClickServlet   
        <a href="click-api/net/sf/click/ClickServlet.html#newPageInstance(java.lang.String, java.lang.Class, javax.servlet.http.HttpServletRequest)">newPageInstance()</a>
        method.
       </li>
-      <li clas="change">
-       Added a default page resource bundle <tt>/click-page.properties</tt>. This issue raised by
-       Claudio Rossetto [<a href="http://www.sunvolt.com/jira/browse/CLK-72">72</a>].
-      </li>
-      <li clas="change">
+      <li class="change">
        Added Brazilian properties files provided by 
        Ricardo Lecheta [<a href="http://www.sunvolt.com/jira/browse/CLK-86">86</a>].
+      </li>
+      <li class="change">
+       Added <a target="blank" class="external" href="www.objectstyle.org/cayenne/">Cayenne</a> 
+       integration example to Examples.
+      </li>
+      <li class="change">
+       Added <a target="blank" class="external" href="www.springframework.org">Spring</a> 
+       integration example to Examples and improved 
+       <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
+       documentation.
       </li>
       <li class="change">
        Improved Velocity rendering performance. This issue was identified and 
@@ -84,6 +117,15 @@ up to a 1.0 release in the Q3 2006.
        Fixed <tt>UnsupportedEncodingException</tt> in ClickUtils.encodeUrl() when
        application charset is undefined
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-87">87</a>].
+      </li>
+      <li class="change">
+       Fixed file deployment issue on servers with restricted permissions.
+       This issue was raised by David Felis
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-95">95</a>].
+      </li>
+      <li>
+       Removed Control <tt>parentMessages</tt> property which was effectively
+       replaced by new <tt>parent</tt> and <tt>messages</tt> properties.
       </li>
       <li class="change">
        Removed Form support for Struts style error message rendering.
@@ -155,6 +197,11 @@ up to a 1.0 release in the Q3 2006.
         <a href="configuration.html#application-excludes">excludes</a>.
         This issue was identified by Ahmed Mohombe
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-52">52</a>].
+      </li>
+      <li class="change">
+        Added Table control mouseover row highlight.
+        This issue was identified by Ahmed Mohombe and resolved by Christian Essl
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-57">57</a>].
       </li>
       <li clas="change">
        Added French and Italian properties files provided by 

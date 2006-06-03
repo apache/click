@@ -27,6 +27,8 @@ and covers to following topics:
   </li>
   <li><a href="#page-not-found">Page Not Found</a> - page not found handling
   </li>
+  <li><a href="#page-messages">Message Properties</a> - pages message properties
+  </li> 
 </ul>
 
 <p>&nbsp;</p>
@@ -683,6 +685,39 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 <p/>
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
 has access to the usual Click objects.
+
+<a name="page-messages" class="heading"><h2>Message Properties</h2></a>
+
+The Page class provides a 
+<a href="click-api/net/sf/click/Page.html#messages">messages</a> property which
+is a <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>
+of localized messages for the page. These messages are made available
+in the VelocityContext when the page is rendered under the key <tt>messages</tt>.
+So for example if you had a page title message you would access it in your page template as:
+
+<pre class="codeHtml">
+    &lt;h1&gt; $messages.title &lt;/h1&gt; </pre>
+
+This messages map is loaded from the page classes property bundle. For example
+if you had a page class <tt>com.mycorp.page.CustomerList</tt> you could have
+an associated property file containing the pages localized messages:
+
+<pre class="codeConfig">
+/com/mycorp/page/CustomerList.properties </pre>
+
+You can also defined a application global page messages properties file:
+
+<pre class="codeConfig">
+/click-page.properties </pre>
+
+Messages defined in this file will be available to all pages through out your
+application. Note messages defined in your page class properties file will 
+override any messages defined in the application global page properties file.
+<p/>
+Page messages can also be used to override Control messages, see the Controls
+<a href="controls.html#message-properties">Message Properties</a> topic for
+more details.
+
 
 </body>
 </html>
