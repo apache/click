@@ -5,18 +5,17 @@
     <topic label="Pages" href="documentation/docs/pages.html"/>
     <topic label="Controls" href="documentation/docs/controls.html"/>
     <topic label="Configuration" href="documentation/docs/configuration.html"/>
-    <topic label="Control API" href="documentation/docs/click-api/net/sf/click/control/package-summary.html"/>
-    <topic label="Click API" href="documentation/docs/click-api/overview-summary.html"/>
+    <topic label="Click API" href="http://click.sourceforge.net/docs/click-api/overview-summary.html"/>
+    <topic label="Control API" href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/package-summary.html"/>
+    <topic label="Extras API" href="http://click.sourceforge.net/docs/extras-api/overview-summary.html"/>
     <topic label="Click DTD" href="documentation/docs/click-dtd.html"/>
+    <topic label="Extras" href="documentation/docs/extras.html"/>
+    <topic label="Examples" href="documentation/docs/examples.html"/>
     <topic label="Building" href="documentation/docs/building.html"/>
-    <topic label="RoadMap &amp; Changes" href="documentation/docs/roadmap-changes.html"/>
     <topic label="Click Online" href="documentation/docs/click-online.html"/>
+    <topic label="RoadMap &amp; Changes" href="documentation/docs/roadmap-changes.html"/>
     <topic label="FAQ" href="documentation/docs/faq.html"/>
     <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095"/>
-  </topic>
-  <topic label="Click Extras" href="documentation/docs/extras.html">
-    <topic label="Extras API" href="documentation/docs/extras-api/overview-summary.html"/>
-    <topic label="Examples" href="documentation/docs/examples.html"/>
   </topic>
   <topic label="Velocity" href="documentation/docs/velocity/velocity.html">
     <topic label="Users Guide" href="documentation/docs/velocity/user-guide.html"/>
