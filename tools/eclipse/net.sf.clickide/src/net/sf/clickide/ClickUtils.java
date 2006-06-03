@@ -41,6 +41,8 @@ import org.w3c.dom.NodeList;
 
 /**
  * Provides utility methods about Click.
+ * 
+ * @author Naoki Takezoe
  */
 public class ClickUtils {
 	

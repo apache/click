@@ -29,6 +29,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
+ * The IHyperlinkDetector implementation which provides hyperlink
+ * for classes and page path.
  * 
  * @author Naoki Takezoe
  */

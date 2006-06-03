@@ -7,6 +7,13 @@ import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.wst.xml.ui.StructuredTextViewerConfigurationXML;
 
+/**
+ * Extended StructuredTextViewerConfigurationXML
+ * which provides the hyperlink support for click.xml.
+ * 
+ * @author Naoki Takezoe
+ * @see net.sf.clickide.ui.editor.ClickXMLHyperlinkDetector
+ */
 public class ClickXMLTextViewerConfiguration extends StructuredTextViewerConfigurationXML {
 	
 	public IHyperlinkDetector[] getHyperlinkDetectors(ISourceViewer sourceViewer) {
