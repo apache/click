@@ -8,6 +8,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.Element;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class ElementAppendAction extends Action {
 	
 	private IDOMElement parentElement;

@@ -6,6 +6,10 @@ import java.util.List;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.ui.internal.contentoutline.JFaceNodeContentProvider;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class ClickTreeContentProvider extends JFaceNodeContentProvider {
 	
 	private List accept;

@@ -7,6 +7,10 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.internal.ui.wizards.NewClassCreationWizard;
 import org.eclipse.jdt.ui.wizards.NewClassWizardPage;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class NewClassWizard extends NewClassCreationWizard {
 
 	private String superClass;

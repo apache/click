@@ -18,6 +18,11 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.w3c.dom.NodeList;
 
+/**
+ * The form editor to editing Click general informations.
+ * 
+ * @author Naoki Takezoe
+ */
 public class ClickGeneralEditor extends AbstractFormEditor {
 	
 	private Text textCharset;
