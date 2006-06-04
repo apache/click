@@ -110,7 +110,7 @@ A simple Click app config file is provided below:
 <pre class="codeConfig">
 &lt;click-app&gt; 
   &lt;pages&gt;
-    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
+    &lt;page path="<span class="navy">home.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
     &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
     &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
     &lt;page path="<span class="navy">search.htm</span>" classname="<span class="maroon">com.mycorp.page.Search</span>"/&gt;
@@ -124,9 +124,7 @@ Alternatively these pages can be automatically configured using page auto mappin
 
 <pre class="codeConfig">
 &lt;click-app&gt; 
-  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
-    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
-  &lt;/pages&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"/&gt;
 &lt;/click-app&gt; 
 </pre>
 
@@ -372,7 +370,8 @@ caching in the login page, note the value for a Date type should be a long numbe
 <pre class="codeConfig">
 &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
+  &lt;header name="<span class="blue">Cache-Control</span>" 
+          value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
 &lt;/page&gt; 
 </pre>
@@ -386,7 +385,8 @@ To apply header values globally define header values in the headers element. For
   &lt;/pages&gt;
   &lt;headers&gt;
     &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" 
+            value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
     &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
   &lt;/headers&gt;
 &lt;/click-app&gt; 
