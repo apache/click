@@ -149,6 +149,9 @@ class ClickApp implements EntityResolver {
     /** The Map of global page headers. */
     private Map commonHeaders;
 
+    /** The default application locale.*/
+    private Locale locale;
+
     /** The application logger. */
     private ClickLogger logger;
 
@@ -177,24 +180,6 @@ class ClickApp implements EntityResolver {
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Return the application character encoding.
-     *
-     * @return the application character encoding
-     */
-    public String getCharset() {
-        return charset;
-    }
-
-    /**
-     * Set the application character encoding.
-     *
-     * @param charset the application character encoding.
-     */
-    public void setCharset(String charset) {
-        this.charset = charset;
-    }
 
     /**
      * Return the Click Application servlet context.
@@ -259,6 +244,9 @@ class ClickApp implements EntityResolver {
             // Load the charset
             loadCharset(rootElm);
 
+            // Load the locale
+            loadLocale(rootElm);
+
             // Deploy the application files if not present
             deployFiles(rootElm);
 
@@ -309,6 +297,15 @@ class ClickApp implements EntityResolver {
     // -------------------------------------------------------- Package Methods
 
     /**
+     * Return the application character encoding.
+     *
+     * @return the application character encoding
+     */
+    String getCharset() {
+        return charset;
+    }
+
+    /**
      * Return a new format object for the given locale.
      *
      * @param locale the request locale
@@ -327,6 +324,15 @@ class ClickApp implements EntityResolver {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Return the application locale.
+     *
+     * @return the application locale
+     */
+    Locale getLocale() {
+        return locale;
     }
 
     /**
@@ -868,7 +874,22 @@ class ClickApp implements EntityResolver {
     private void loadCharset(Element rootElm) {
         String charset = rootElm.getAttribute("charset");
         if (charset != null && charset.length() > 0) {
-            setCharset(charset);
+            this.charset = charset;
+        }
+    }
+
+    private void loadLocale(Element rootElm) {
+        String value = rootElm.getAttribute("locale");
+        if (value != null && value.length() > 0) {
+            StringTokenizer tokenizer = new StringTokenizer(value, "_");
+            if (tokenizer.countTokens() == 1) {
+                String language = tokenizer.nextToken();
+                locale = new Locale(language);
+            } else if (tokenizer.countTokens() == 2) {
+                String language = tokenizer.nextToken();
+                String country = tokenizer.nextToken();
+                locale = new Locale(language, country);
+            }
         }
     }
 
@@ -921,7 +942,6 @@ class ClickApp implements EntityResolver {
         // Set the character encoding
         if (getCharset() != null) {
             velProps.put("input.encoding", getCharset());
-            velProps.put("output.encoding", getCharset());
         }
 
         // Load user velocity properties.

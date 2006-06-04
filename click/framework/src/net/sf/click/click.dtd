@@ -1,6 +1,7 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
 <!ELEMENT click-app (pages?, headers?, format?, mode?, controls?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
+  <!ATTLIST click-app locale CDATA #IMPLIED>
 
   <!-- Application pages. -->
   <!ELEMENT pages (page*, excludes*)>

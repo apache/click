@@ -40,7 +40,7 @@ public class Login extends BorderPage {
      */
     public boolean onSecurityCheck() {
         if (getContext().hasSessionAttribute("user")) {
-            setRedirect("/security/secure.htm");
+            setRedirect(Secure.class);
             return false;
 
         } else {

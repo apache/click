@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -1131,6 +1132,15 @@ public class ClickServlet extends HttpServlet {
          */
         String getCharset() {
             return clickApp.getCharset();
+        }
+
+        /**
+         * Return the Click application locale or null if not defined.
+         *
+         * @return the application locale value
+         */
+        Locale getLocale() {
+            return clickApp.getLocale();
         }
 
         /**

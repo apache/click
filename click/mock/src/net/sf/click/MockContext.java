@@ -43,6 +43,13 @@ public class MockContext extends Context {
     // --------------------------------------------------------- Public Methods
     
     /**
+     * @see Context#getLocale()
+     */
+    public Locale getLocale() {
+        return request.getLocale();
+    }
+    
+    /**
      * @see Context#getApplicationMode()
      */
     public String getApplicationMode() {
