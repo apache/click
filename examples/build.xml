@@ -4,7 +4,7 @@
     Project Properties 
     -->
    
-   <property file="build.properties"/>
+   <property file="../build/build.properties"/>
       
    <property name="version" value="0.20"/>
 

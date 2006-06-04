@@ -523,6 +523,18 @@ public class Page {
     }
 
     /**
+     * Set the request to redirect to the give page class.
+     *
+     * @param pageClass the class of the Page to redirect the request to
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
+    public void setRedirect(Class pageClass) {
+        String target = getContext().getPagePath(pageClass);
+        setRedirect(target);
+    }
+
+    /**
      * Return the path of the page template to render, by default this method
      * returns {@link #getPath()}.
      * <p/>

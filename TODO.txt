@@ -1,13 +1,14 @@
 Click 0.20 Release
 ------------------
-10. review form submit check
-15. fix ColorPicker rendering bug
 
 
 Click 0.21 Release
 ------------------
 9. add PageLink control
 16. document Cayenne in examples
+10. review form submit check
+15. fix ColorPicker rendering bug
+17. faq UTF-8 topic
 
 
 CODE

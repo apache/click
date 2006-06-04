@@ -5,6 +5,11 @@
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+  <style type="text/css">
+  .items {
+    margin-bottom: 0.25em;
+  }
+ </style>
 </head>
 <body>
   
@@ -115,10 +120,21 @@ A simple Click app config file is provided below:
 </pre>
 
 <p>
+Alternatively these pages can be automatically configured using page auto mapping:
+
+<pre class="codeConfig">
+&lt;click-app&gt; 
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
+    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
+  &lt;/pages&gt;
+&lt;/click-app&gt; 
+</pre>
+
+<p/>
 An example of a fully optioned up config file is:
 
 <pre class="codeConfig">
-&lt;click-app charset="UTF-8"&gt; 
+&lt;click-app charset="UTF-8" locale="de"&gt; 
   &lt;pages&gt;
     &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
     &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
@@ -135,19 +151,48 @@ An example of a fully optioned up config file is:
 &lt;/click-app&gt; 
 </pre>
 
-Alternatively these pages can be automatically configured using page auto mapping:
+<a name="application-click-app" class="heading"><h3>Click App</h3></a>
+
+The root <span class="red">click-app</span> element defines two application 
+localization attributes <span class="blue">charset</span> and
+<span class="blue">locale</span>.
+
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="red">click-app</span> (pages?, headers?, format?, mode?, controls?)&gt;
+  &lt;!ATTLIST click-app <span class="blue">charset</span> CDATA #IMPLIED&gt;
+  &lt;!ATTLIST click-app <span class="blue">locale</span> CDATA #IMPLIED&gt;
+</pre>
+
+The <span class="blue">charset</span> attribute defines the character encoding
+set for:
+<ul style="margin-top:0.5em">
+    <li class="items">Velocity templates</li>
+    <li class="items">HttpServletRequest character encoding</li>
+    <li class="items">Page Content-Type charset, see Page
+        <a href="click-api/net/sf/click/Page.html#getContentType()">getContentType()</a>
+    </li>
+</ul>
+
+The <span class="blue">locale</span> attribute defines the default application
+Locale. If this value is defined it will to override Locale returned by the request. 
+Please see the Context  
+<a href="click-api/net/sf/click/Context.html#getLocale()">getLocale()</a>
+for details.
+<p/>
+
+For example the folliwing configuration sets the application character set to
+UTF-8 and the default Locale as German (de):
 
 <pre class="codeConfig">
-&lt;click-app&gt; 
-  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
-    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
-  &lt;/pages&gt;
+&lt;click-app <span class="blue">charset</span>="<span class="red">UTF-8</span>" <span class="blue">locale</span>="<span class="red">de</span>"&gt; 
+  ..
 &lt;/click-app&gt; 
 </pre>
 
+
 <a name="application-pages" class="heading"><h3>Pages</h3></a>
 
-The first major element of the click-app is the mandatory <tt>pages</tt> element 
+The first child element of the click-app is the mandatory <tt>pages</tt> element 
 which defines the list of Click pages.
 
 <pre class="codeDtd">
@@ -603,8 +648,8 @@ if this file exists, and if it does it will use it instead of <tt>click/VM_globa
 <a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
 
 The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates. 
-This avoids issues associate with using the Velocity <tt>ClasspathResourceLoader</tt> and
-<tt>FileResourceLoader</tt> on J2EE application servers.
+This avoids issues associate with using the Velocity <tt>FileResourceLoader</tt> 
+on J2EE application servers.
 <p/>
 To make preconfigured resources (templates, stylesheets, etc.) available to web applications
 Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
@@ -619,6 +664,16 @@ You can modify these support files and Click will not overwrite them. These file
    <li>click/not-found.htm &nbsp; - &nbsp; the <a href="pages.html#page-not-found">Page Not Found</a> template</li>
    <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
 </ul>
+
+<p/>
+
+If Click cannot deploy these files because of restricted file system permissions
+warning messages will be logged. 
+<p/>
+If your application server has restricted permissions, you will need to package 
+up these auto deployed files in your web applications WAR file. To do this you
+should run you application on a development machine without these restricted 
+permissions and then package up the deployed files.
 
 <h3>Control Deployment</h3>
 

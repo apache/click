@@ -467,9 +467,14 @@ public class Context {
     }
 
     /**
-     * Return the users Locale stored in their session, or the request Locale
-     * if not available. To override the default request Locale set the users
-     * Locale using the {@link #setLocale(Locale)} method.
+     * Return the users Locale. 
+     * <p/>
+     * If the users Locale is stored in their session this will be returned.
+     * Else if the click-app configuration defines a default Locale this 
+     * value will be returned, otherwise the request's Locale will be returned.
+     * <p/>
+     * To override the default request Locale set the users Locale using the
+     * {@link #setLocale(Locale)} method.
      * <p/>
      * Pages and Controls obtain the users Locale using this method.
      *
@@ -477,9 +482,14 @@ public class Context {
      */
     public Locale getLocale() {
         Locale locale = (Locale) getSessionAttribute(LOCALE);
-        if (locale == null) {
+
+        if (locale == null && clickService.getLocale() != null) {
+            locale = clickService.getLocale();
+
+        } else {
             locale = getRequest().getLocale();
         }
+
         return locale;
     }
 

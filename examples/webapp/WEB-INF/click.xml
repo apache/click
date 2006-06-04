@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<click-app charset="UTF-8">
+<click-app charset="UTF-8" locale="de">
 
   <pages package="net.sf.click.examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>

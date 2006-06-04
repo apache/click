@@ -52,7 +52,7 @@ Compile and build the application using the Ant command:
 
 This will create a WAR file:
 
-    ../deploy/click-examples.war
+    deploy/click-examples.war
 
 Step 3.
 -------
