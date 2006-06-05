@@ -5,15 +5,13 @@
 #end
 
 
-<span id="${id}_c" style="border: 1px solid #333; background-color:${back_color}">
-    
-    <img id="${id}_c_i" title="${chooseColorMsg}" align="middle" style="cursor:pointer"
-        #if($value != "")
-         src="${path}/click/colorpicker/arrowdown.gif" width="30" height="12"
-        #else
-         src="${path}/click/colorpicker/nocolor.gif" width="30" height="12"
-        #end
-         onclick="new ColorPicker('${id}','${path}/click/colorpicker').toggle()"/>
+<span id="${id}_c" style="border: 1px solid #333; background-color:${back_color}"><img id="${id}_c_i" title="${chooseColorMsg}" align="middle" style="cursor:pointer"
+ #if($value != "") 
+  src="${path}/click/colorpicker/arrowdown.gif" width="30" height="12"
+ #else
+  src="${path}/click/colorpicker/nocolor.gif" width="30" height="12"
+ #end
+  onclick="new ColorPicker('${id}','${path}/click/colorpicker').toggle()"/>
 </span>
 <div id="${id}_p_d" style="border: 2px solid #333;position: absolute; display: none; cursor: crosshair; z-index: 1; background-color:#fff">
     <table cellspacing="0" cellpadding="0" width="100px">

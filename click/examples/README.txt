@@ -32,7 +32,7 @@ Download JAR dependencies using Ant command:
     ant get-deps
 
 If you are behind a firewall configure your proxy settings in
-the build.properties file: build.properties
+the build.properties file: ../build/build.properties
 
 Then use the Ant command:
 
@@ -52,7 +52,7 @@ Compile and build the application using the Ant command:
 
 This will create a WAR file:
 
-    deploy/click-examples.war
+    ../deploy/click-examples.war
 
 Step 3.
 -------
