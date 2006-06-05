@@ -24,6 +24,7 @@
    <property name="jar.spring-core" value="spring-core-1.2.6.jar"/>
    <property name="jar.spring-web" value="spring-web-1.2.6.jar"/>
      
+   <property name="dir.deploy" value="../dist"/>
    <property name="dir.webapp" value="webapp"/>
    <property name="dir.weblib" value="${dir.webapp}/WEB-INF/lib"/>
        
@@ -65,6 +66,7 @@
       <delete quiet="true" failonerror="false">
          <fileset dir="${dir.webapp}/javadoc" includes="**/*"/>
       </delete>
+      <delete dir="${dir.webapp}/click"/>
       <javadoc sourcepath="src"
                destdir="${dir.webapp}/javadoc"
                author="true"
@@ -80,9 +82,9 @@
          <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
-      <delete dir="deploy" quiet="false"/>
-      <mkdir dir="deploy"/>
-      <war destfile="deploy/${name}.war"
+      <delete file="${dir.deploy}/${name}.war"/>
+      <mkdir dir="${dir.deploy}"/>
+      <war destfile="${dir.deploy}/${name}.war"
            webxml="${dir.webapp}/WEB-INF/web.xml">
          <manifest>
            <attribute name="Built-By" value="${user.name}"/>
@@ -119,7 +121,7 @@
               
               
    <target name="deploy" description="copy WAR files to application server"> 
-      <copy file="deploy/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
    
     

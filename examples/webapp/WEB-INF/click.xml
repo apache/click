@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<click-app charset="UTF-8" locale="de">
+<click-app charset="UTF-8">
 
   <pages package="net.sf.click.examples.page" automapping="true">
     <page path="exception.htm" classname="ExceptionDemo"/>
@@ -12,6 +12,6 @@
     <header name="Expires" value="1" type="Date"/>
   </headers>
 
-  <mode value="debug"/>
+  <mode value="profile"/>
 
 </click-app>
