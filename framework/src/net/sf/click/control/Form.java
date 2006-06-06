@@ -501,6 +501,13 @@ public class Form implements Control {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/control.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
 
+    /** The Form set field focus JavaScript. */
+    protected static final String FOCUS_JAVASCRIPT =
+        "<script type=\"text/javascript\"><!--\n"
+        + "var field = document.getElementById('{$id}');\n"
+        + "if (field && field.focus && field.type != 'hidden') { field.focus(); };\n"
+        + "//--></script>\n";
+
     // -------------------------------------------------------- Class Variables
 
     /** The label-required-prefix resource property. */
@@ -1847,7 +1854,8 @@ public class Form implements Control {
             buffer.appendAttributes(getAttributes());
         }
         if (getJavaScriptValidation()) {
-            buffer.appendAttribute("onsubmit", "return onFormSubmit();");
+            String javaScript = "return on_" + getId() + "_submit();";
+            buffer.appendAttribute("onsubmit", javaScript);
         }
         buffer.closeTag();
         buffer.append("\n");
@@ -1901,12 +1909,11 @@ public class Form implements Control {
 
         // Set field focus
         if (fieldWithError != null) {
-            buffer.append("<script type=\"text/javascript\"><!--\n");
-            buffer.append("var field = document.getElementById('");
-            buffer.append(fieldWithError.getId());
-            buffer.append("');\n");
-            buffer.append("if (field && field.focus) { field.focus(); };\n");
-            buffer.append("//--></script>\n");
+            String focusJavaScript =
+                StringUtils.replace(FOCUS_JAVASCRIPT,
+                                    "$id",
+                                    fieldWithError.getId());
+            buffer.append(focusJavaScript);
 
         } else {
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
@@ -1922,13 +1929,11 @@ public class Form implements Control {
                             && !fieldSetField.isHidden()
                             && !fieldSetField.isDisabled()) {
 
-                            buffer.append("<script type=\"text/javascript\"><!--\n");
-                            buffer.append("document.forms['");
-                            buffer.append(getName());
-                            buffer.append("'].elements['");
-                            buffer.append(fieldSetField.getName());
-                            buffer.append("'].focus();\n");
-                            buffer.append("//--></script>\n");
+                            String focusJavaScript =
+                                StringUtils.replace(FOCUS_JAVASCRIPT,
+                                                    "$id",
+                                                    fieldSetField.getId());
+                            buffer.append(focusJavaScript);
                             break;
                         }
                     }
@@ -1937,13 +1942,11 @@ public class Form implements Control {
                            && !field.isHidden()
                            && !field.isDisabled()) {
 
-                    buffer.append("<script type=\"text/javascript\"><!--\n");
-                    buffer.append("document.forms['");
-                    buffer.append(getName());
-                    buffer.append("'].elements['");
-                    buffer.append(field.getName());
-                    buffer.append("'].focus();\n");
-                    buffer.append("//--></script>\n");
+                    String focusJavaScript =
+                        StringUtils.replace(FOCUS_JAVASCRIPT,
+                                            "$id",
+                                            field.getId());
+                    buffer.append(focusJavaScript);
                     break;
                 }
             }
@@ -2249,7 +2252,9 @@ public class Form implements Control {
             }
 
             if (!functionNames.isEmpty()) {
-                buffer.append("function onFormSubmit() {\n");
+                buffer.append("function on_");
+                buffer.append(getId());
+                buffer.append("_submit() {\n");
                 buffer.append("   var msgs = new Array(");
                 buffer.append(functionNames.size());
                 buffer.append(");\n");
@@ -2270,7 +2275,9 @@ public class Form implements Control {
                 buffer.append("}\n");
 
             } else {
-                buffer.append("function onFormSubmit() { return true; }\n");
+                buffer.append("function on_");
+                buffer.append(getId());
+                buffer.append("_submit() { return true; }\n");
             }
             buffer.append("//--></script>\n");
         }

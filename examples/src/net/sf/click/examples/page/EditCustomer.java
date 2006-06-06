@@ -47,7 +47,7 @@ public class EditCustomer extends BorderPage {
         form.add(new DateField("dateJoined"));
         form.add(new Checkbox("Active"));
 
-        form.add(new Submit("ok", this, "onOkClick"));
+        form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
 
         addControl(form);

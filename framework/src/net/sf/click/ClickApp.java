@@ -1051,7 +1051,7 @@ class ClickApp implements EntityResolver {
                 }
             }
         }
-        
+
         Collections.sort(fileList);
 
         return fileList;
