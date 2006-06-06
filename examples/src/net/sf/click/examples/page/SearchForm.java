@@ -1,5 +1,7 @@
 package net.sf.click.examples.page;
 
+import java.util.List;
+
 import net.sf.click.control.Form;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
@@ -45,10 +47,16 @@ public class SearchForm extends BorderPage {
             customer = getCustomerService().findCustomerByID(value);
         }
         else if (type.equals("name")) {
-            customer = getCustomerService().findCustomerByName(value);
+            List list = getCustomerService().findCustomersByName(value);
+            if (!list.isEmpty()) {
+                customer = (Customer) list.get(0);
+            }
         }
         else if (type.equals("age")) {
-            customer = getCustomerService().findCustomerByAge(value);
+            List list = getCustomerService().findCustomersByAge(value);
+            if (!list.isEmpty()) {
+                customer = (Customer) list.get(0);
+            }
         }
 
         if (customer != null) {

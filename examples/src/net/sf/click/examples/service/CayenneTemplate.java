@@ -125,6 +125,26 @@ public class CayenneTemplate {
         return performQuery(queryName, toMap(keys, values), refresh);
     }
 
+    protected List performQuery(Class dataObjectClass, String property,
+            Object value) {
+
+        if (dataObjectClass == null) {
+            String msg = "Null dataObjectClass parameter";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (property == null) {
+            throw new IllegalArgumentException("Null property parameter");
+        }
+
+        if (property == null) {
+            throw new IllegalArgumentException("Null value parameter");
+        }
+
+        Expression qual = ExpressionFactory.matchExp(property, value);
+        return performQuery(new SelectQuery(dataObjectClass, qual));
+    }
+
     protected int[] performNonSelectingQuery(String queryName, String[] keys,
             String[] values) {
 

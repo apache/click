@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.sf.click.examples.domain.Customer;
 
+import org.objectstyle.cayenne.exp.Expression;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
@@ -58,18 +59,18 @@ public class CustomerService extends CayenneTemplate {
         return (Customer) getCustomer(Integer.valueOf(value));
     }
 
-    public Customer findCustomerByName(String value) {
-        return (Customer) findObject(Customer.class, "name", value);
+    public List findCustomersByName(String value) {
+        Expression template = Expression.fromString("name likeIgnoreCase $name");
+        Expression e = template.expWithParameters(toMap("name", "%" + value + "%"));
+        return  performQuery(new SelectQuery(Customer.class, e));
     }
 
-    public Customer findCustomerByAge(String value) {
-        return (Customer) findObject(Customer.class, "age", Integer.valueOf(value));
+    public List findCustomersByAge(String value) {
+        return performQuery(Customer.class, "age", Integer.valueOf(value));
     }
 
     public List findCustomersByPage(int offset, int pageSize) {
-        // TODO: need to work out paging usage...
         SelectQuery query = new SelectQuery(Customer.class);
-//        query.addOrdering("name", true);
         query.setPageSize(pageSize);
         List list = performQuery(query);
 
