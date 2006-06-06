@@ -64,6 +64,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/html&gt; </pre>
  *
  * @author Christian Essl
+ * @author Malcolm Edgar
  */
 public class ColorPicker extends Field {
 
@@ -162,21 +163,16 @@ public class ColorPicker extends Field {
 
     // ------------------------------------------------------ Public Attributes
 
-    /**
-     * Return the Field focus JavaScript.
-     *
-     * @return the Field focus JavaScript
-     */
-    public String getFocusJavaScript() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+//  TODO: surround picker image with achor tag which is focusable
 
-        // TODO: surround picker image with achor tag which is focusable
-        buffer.append("setFocus('");
-        buffer.append(getName());
-        buffer.append("');");
-
-        return buffer.toString();
-    }
+//    /**
+//     * Return the Field focus JavaScript.
+//     *
+//     * @return the Field focus JavaScript
+//     */
+//    public String getFocusJavaScript() {
+//        return null;
+//    }
 
     /**
      * Return the HTML head import statements for the JavaScript files

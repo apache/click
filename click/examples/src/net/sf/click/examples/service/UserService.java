@@ -2,6 +2,13 @@ package net.sf.click.examples.service;
 
 import net.sf.click.examples.domain.User;
 
+/**
+ * Provides a User Service.
+ *
+ * @see User
+ *
+ * @author Malcolm Edgar
+ */
 public class UserService extends CayenneTemplate {
 
     public boolean isAuthenticatedUser(User user) {

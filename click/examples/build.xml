@@ -82,6 +82,9 @@
          <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
+      <copy file="../framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="${dir.webapp}/javadoc"/>
       <delete file="${dir.deploy}/${name}.war"/>
       <mkdir dir="${dir.deploy}"/>
       <war destfile="${dir.deploy}/${name}.war"

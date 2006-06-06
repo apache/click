@@ -4,6 +4,12 @@ import org.objectstyle.cayenne.CayenneDataObject;
 import org.objectstyle.cayenne.DataObjectUtils;
 import org.objectstyle.cayenne.PersistenceState;
 
+/**
+ * Provides an base entity CayenneDataObject class with id getter and isNew
+ * methods. This class should be extended by the auto package classes.
+ *
+ * @author Malcolm Edgar
+ */
 public class BaseEntity extends CayenneDataObject {
 
     private static final long serialVersionUID = 1L;

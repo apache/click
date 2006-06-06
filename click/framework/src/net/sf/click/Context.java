@@ -467,10 +467,10 @@ public class Context {
     }
 
     /**
-     * Return the users Locale. 
+     * Return the users Locale.
      * <p/>
      * If the users Locale is stored in their session this will be returned.
-     * Else if the click-app configuration defines a default Locale this 
+     * Else if the click-app configuration defines a default Locale this
      * value will be returned, otherwise the request's Locale will be returned.
      * <p/>
      * To override the default request Locale set the users Locale using the

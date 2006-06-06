@@ -3,13 +3,11 @@ package net.sf.click.examples.service;
 import java.util.Date;
 
 import net.sf.click.examples.domain.CourseBooking;
-import net.sf.click.examples.domain.Customer;
-
 
 /**
- * Provides a CourseBooking Service for the examples.
+ * Provides a CourseBooking Service.
  *
- * @see Customer
+ * @see CourseBooking
  *
  * @author Malcolm Edgar
  */

@@ -7,7 +7,13 @@ import net.sf.click.examples.domain.Customer;
 
 import org.objectstyle.cayenne.query.SelectQuery;
 
-
+/**
+ * Provides a Customer Service.
+ *
+ * @see Customer
+ *
+ * @author Malcolm Edgar
+ */
 public class CustomerService extends CayenneTemplate {
 
 
