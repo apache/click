@@ -2,6 +2,7 @@
     contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"
     import="java.util.List"
+    import="java.util.Map"
     import="net.sf.click.util.Format"
     import="net.sf.click.examples.domain.Customer"%>
 
@@ -14,23 +15,27 @@
 
 <h1><%=request.getAttribute("title")%></h1> 
 
-<div style="background-color: navy; color: white; padding: 0.5em;">
-&nbsp;
-<a class="menu" href="<%=request.getAttribute("context")%>/index.html" title="Examples Index">Examples</a>
-&nbsp; | &nbsp;
-<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/classes/<%=request.getAttribute("srcPath")%>" title="Page Java source">Page Java</a> 
-&nbsp; | &nbsp;
-<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=customer-table.jsp" title="Page Content source">Page JSP</a>
-&nbsp; | &nbsp;
-<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=border.htm" title="Page broder HTML template">Border HTML</a>
+<table width="100%" cellpadding="8" style="background-color: navy; color: white;">
+<tr>
+<td>
+<a class="menu" href="<%=request.getAttribute("context")%>/index.html" title="Examples Index">Home</a>
 &nbsp; | &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
 &nbsp; | &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>
 &nbsp; | &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/javadoc/index.html" title="Examples HTML Javadoc API">Javadoc API</a>
-</div>
-<br/>
+&nbsp; | &nbsp;
+<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/classes/<%=request.getAttribute("srcPath")%>" title="Page Java source">Page Java</a> 
+&nbsp; | &nbsp;
+<a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=customer-table.jsp" title="Page Content source">Page JSP</a>
+</td>
+<td width="100px" style="color:d0d0d0;text-align:right">
+<% Map messages = (Map) request.getAttribute("messages"); %>
+<%=messages.get("version")%>
+</td>
+</tr>
+</table>
 
 Example JSP customers table.
 <p/>

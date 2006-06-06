@@ -32,7 +32,7 @@
   <filter-name>compression-filter</filter-name>
   <filter-class>net.sf.click.extras.filter.CompressionFilter</filter-class>
  </filter>
-	
+ 	
  <filter-mapping>
   <filter-name>cayenne-filter</filter-name>
   <servlet-name>click-servlet</servlet-name>

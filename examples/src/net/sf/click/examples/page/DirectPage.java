@@ -19,15 +19,15 @@ import net.sf.click.util.ClickUtils;
  */
 public class DirectPage extends Page {
 
-    private static final String SRC_FILENAME =
-        "/WEB-INF/classes/examples/page/DirectPage.java";
-
     /**
      * Render the Java source file as "text/plain".
      *
      * @see Page#onGet()
      */
     public void onGet() {
+        String filename = getClass().getName().replace('.', '/');
+        filename = "/WEB-INF/classes/" + filename + ".java";
+
         HttpServletResponse response = getContext().getResponse();
 
         response.setContentType("text/plain");
@@ -37,7 +37,7 @@ public class DirectPage extends Page {
 
         InputStream inputStream = null;
         try {
-            inputStream = context.getResourceAsStream(SRC_FILENAME);
+            inputStream = context.getResourceAsStream(filename);
 
             PrintWriter writer = response.getWriter();
 

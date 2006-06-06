@@ -26,7 +26,7 @@ public class SpringPage extends Page implements ApplicationContextAware {
      * @return the course Booking Service object.
      */
     public BookingService getBookingService() {
-        return (BookingService) getBean("courseBookingService");
+        return (BookingService) getBean("bookingService");
     }
 
     /**
