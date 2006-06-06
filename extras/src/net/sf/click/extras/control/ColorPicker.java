@@ -64,7 +64,6 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/html&gt; </pre>
  *
  * @author Christian Essl
- * @author Malcolm Edgar
  */
 public class ColorPicker extends Field {
 
