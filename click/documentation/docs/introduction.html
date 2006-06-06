@@ -117,7 +117,7 @@ First we have a Login page class which setups up a login form in the constructor
 
     <span class="kw">public boolean</span> onOkClicked() {
         <span class="kw">if</span> (form.isValid()) {
-            User user = new User();
+            User user = <span class="kw">new</span> User();
             form.copyTo(user);
 
             <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
