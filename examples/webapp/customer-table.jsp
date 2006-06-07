@@ -75,7 +75,7 @@ for (int i = 0; i < customers.size(); i++) {
     <td align="right"> <%=format.currency(customer.getHoldings())%> </td>
     <td align="right"> <%=format.date(customer.getDateJoined())%> </td>
     <td align="center"> 
-  <% if (customer.getActive().booleanValue()) { %>
+  <% if (customer.getActive() != null && customer.getActive().booleanValue()) { %>
       <input type="checkbox" checked="checked"/>
   <% } else { %>
       <input type="checkbox"/>
