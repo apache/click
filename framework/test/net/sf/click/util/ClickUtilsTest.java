@@ -247,5 +247,11 @@ public class ClickUtilsTest extends TestCase {
         assertEquals(3, map3.size());
         assertFalse(map3 == Collections.EMPTY_MAP);        
     }
+    
+    public void testEncodeUrl() {
+        Context context = new MockContext(Locale.ENGLISH);
+        String value = ClickUtils.encodeUrl("1000", context);
+        assertEquals("1000", value);
+    }
 
 }
