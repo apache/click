@@ -37,6 +37,7 @@
 </tr>
 </table>
 
+<p/>
 Example JSP customers table.
 <p/>
 
