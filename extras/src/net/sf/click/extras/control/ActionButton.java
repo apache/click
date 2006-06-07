@@ -191,7 +191,7 @@ public class ActionButton extends Button {
 
         return "javascript:document.location.href='"
                + getContext().getResponse().encodeURL(buffer.toString())
-               + "'";
+               + "';";
     }
 
     /**
@@ -294,7 +294,7 @@ public class ActionButton extends Button {
         buffer.appendAttribute("value", getLabel());
         buffer.appendAttribute("title", getTitle());
 
-        String onClickAction = " \"onclick=\"" + getOnClick() + "\"";
+        String onClickAction = " onclick=\"" + getOnClick() + "\"";
         buffer.append(onClickAction);
 
         if (hasAttributes()) {
