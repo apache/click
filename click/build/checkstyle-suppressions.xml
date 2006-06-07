@@ -36,6 +36,6 @@
               lines="175"/>
     <suppress checks="LineLength"
               files="ColorPicker.java"
-              lines="87,88"/>    
+              lines="86,87"/>    
                                         
 </suppressions>
