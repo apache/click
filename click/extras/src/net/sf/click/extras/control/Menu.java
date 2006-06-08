@@ -82,7 +82,24 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CATA #IMPLIED&gt; </pre>
  *
+ * <h3>Security</h3>
+ * 
+ * Menus support J2EE role based security via the {@link #isUserInRoles()}
+ * method. When creating secure menus define the valid roles in the menu items.
+ * For example:
  *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;menu&gt;
+ *    &lt;menu label="Home" path="user/home.htm" roles="user,admin"&gt;
+ *       &lt;menu label="Home" path="user/home.htm" roles="user,admin"/&gt;
+ *       &lt;menu label="Search" path="user/search.htm" roles="user,admin"/&gt;
+ *    &lt;/menu&gt;
+ *    &lt;menu label="Admin" path="admin/admin.htm"&gt;
+ *       &lt;menu label="Home" path="admin/admin.htm" roles="admin"/&gt;
+ *    &lt;/menu&gt;
+ * &lt;/menu&gt; </pre>
+ * 
  * @author Malcolm Edgar
  */
 public class Menu implements Control {
@@ -388,6 +405,26 @@ public class Menu implements Control {
     public boolean isSelected() {
         return selected;
     }
+    
+    /**
+     * Return true if the user is in one of the menu roles.
+     * 
+     * @return true if the user is in one of the menu roles.
+     */
+    public boolean isUserInRoles() {
+    	if (!getRoles().isEmpty()) {
+    		for (Iterator i = getRoles().iterator(); i.hasNext();) {
+				String rolename = (String) i.next();
+				if (getContext().getRequest().isUserInRole(rolename)) {
+					return true;
+				}
+			}
+    		return false;
+    		
+    	} else {    	
+    		return true;
+    	}
+    }
 
     /**
      * Set the selected status of the Menu item.
@@ -631,6 +668,7 @@ public class Menu implements Control {
         for (int i = 0; i < getChildren().size(); i++) {
             Menu menu = (Menu) getChildren().get(i);
             menu.select(context);
+            menu.setContext(context);
             if (menu.isSelected()) {
                 selected = true;
             }
