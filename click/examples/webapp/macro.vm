@@ -73,15 +73,17 @@
   <td> 
    <table class="menu-demo" cellpadding="0" cellspacing="0"> 
     <tr>
-    #foreach ($menu in $rootMenu.children)
-     #if ($menu.selected)
-      <td class="menu-demo-selected">
-       &nbsp; $menu.label &nbsp;
-      </td>
-     #else
-      <td>
-       &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
-      </td>
+    #if ($menu.isUserInRoles())
+     #foreach ($menu in $rootMenu.children)
+      #if ($menu.selected)
+       <td class="menu-demo-selected">
+        &nbsp; $menu.label &nbsp;
+       </td>
+      #else
+       <td>
+        &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
+       </td>
+      #end
      #end
     #end
      <td>
@@ -96,20 +98,22 @@
   <td> 
    <table cellpadding="0" cellspacing="0" height="23px;"> 
     <tr>
-    #if ($rootMenu.selectedChild)
-     #foreach ($menu in $rootMenu.selectedChild.children)
-      #if ($menu.selected)
-       <td class="menu-demo-selected">
-        &nbsp; $menu.label &nbsp;
-       </td>
-      #else
-       <td class="menu-demo">
-        &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
-       </td>
+    #if ($menu.isUserInRoles())
+     #if ($rootMenu.selectedChild)
+      #foreach ($menu in $rootMenu.selectedChild.children)
+       #if ($menu.selected)
+        <td class="menu-demo-selected">
+         &nbsp; $menu.label &nbsp;
+        </td>
+       #else
+        <td class="menu-demo">
+         &nbsp; <a class="menu-demo" href="$context/$menu.path" title="$menu.title">$menu.label</a> &nbsp;
+        </td>
+       #end
       #end
-     #end
-    #else
+     #else
        <td>&nbsp;</td>
+     #end
     #end
     </tr>
    </table>
