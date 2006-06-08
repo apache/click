@@ -7,6 +7,7 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.ui.editor.actions.ElementAppendAction;
 import net.sf.clickide.ui.editor.actions.ElementRemoveAction;
+import net.sf.clickide.ui.editor.attrs.ExcludesAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.IAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.PageAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.PagesAttributeEditor;
@@ -67,6 +68,7 @@ public class ClickPagesEditor extends AbstractFormEditor {
 		List acceptElements = new ArrayList();
 		acceptElements.add(ClickPlugin.TAG_PAGES);
 		acceptElements.add(ClickPlugin.TAG_PAGE);
+		acceptElements.add(ClickPlugin.TAG_EXCLUDES);
 		
 		viewer = new TreeViewer(tree);
 		viewer.setContentProvider(new ClickTreeContentProvider(acceptElements));
@@ -81,6 +83,10 @@ public class ClickPagesEditor extends AbstractFormEditor {
 				if(obj!=null && obj instanceof IDOMElement){
 					if(((IDOMElement)obj).getNodeName().equals(ClickPlugin.TAG_PAGE)){
 						IAttributeEditor editor = new PageAttributeEditor();
+						currentEditor = editor.createForm(toolkit, right, (IDOMElement)obj);
+					}
+					if(((IDOMElement)obj).getNodeName().equals(ClickPlugin.TAG_EXCLUDES)){
+						IAttributeEditor editor = new ExcludesAttributeEditor();
 						currentEditor = editor.createForm(toolkit, right, (IDOMElement)obj);
 					}
 					if(((IDOMElement)obj).getNodeName().equals(ClickPlugin.TAG_PAGES)){
@@ -161,6 +167,7 @@ public class ClickPagesEditor extends AbstractFormEditor {
 			}
 			if(element.getNodeName().equals(ClickPlugin.TAG_PAGES)){
 				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_PAGE, element, null, this));
+				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_EXCLUDES, element, null, this));
 			}
 		}
 	}

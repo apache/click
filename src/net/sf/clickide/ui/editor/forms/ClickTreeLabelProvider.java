@@ -1,5 +1,9 @@
 package net.sf.clickide.ui.editor.forms;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import net.sf.clickide.ClickPlugin;
 
 import org.eclipse.swt.graphics.Image;
@@ -14,6 +18,35 @@ import org.w3c.dom.NamedNodeMap;
  * @author Naoki Takezoe
  */
 public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
+	
+	private Map images = new HashMap();
+	
+	public ClickTreeLabelProvider(){
+		images.put(ClickPlugin.TAG_CLICK_APP, 
+				ClickPlugin.getImageDescriptor("icons/click.gif").createImage());
+		images.put(ClickPlugin.TAG_HEADER, 
+				ClickPlugin.getImageDescriptor("icons/header.gif").createImage());
+		images.put(ClickPlugin.TAG_HEADERS, 
+				ClickPlugin.getImageDescriptor("icons/folder.gif").createImage());
+		images.put(ClickPlugin.TAG_PAGE, 
+				ClickPlugin.getImageDescriptor("icons/page.gif").createImage());
+		images.put(ClickPlugin.TAG_PAGES, 
+				ClickPlugin.getImageDescriptor("icons/folder.gif").createImage());
+		images.put(ClickPlugin.TAG_CONTROL, 
+				ClickPlugin.getImageDescriptor("icons/control.gif").createImage());
+		images.put(ClickPlugin.TAG_CONTROLS, 
+				ClickPlugin.getImageDescriptor("icons/folder.gif").createImage());
+		images.put(ClickPlugin.TAG_EXCLUDES, 
+				ClickPlugin.getImageDescriptor("icons/page.gif").createImage());
+	}
+	
+	public void dispose(){
+		for(Iterator ite = images.values().iterator(); ite.hasNext();){
+			Image image = (Image)ite.next();
+			image.dispose();
+		}
+		super.dispose();
+	}
 	
 	public String getText(Object object) {
 		if(object instanceof Element){
@@ -39,26 +72,9 @@ public class ClickTreeLabelProvider extends JFaceNodeLabelProvider {
 	public Image getImage(Object object) {
 		if(object instanceof IDOMElement){
 			String name = ((IDOMElement)object).getNodeName();
-			if(name.equals(ClickPlugin.TAG_CLICK_APP)){
-				return ClickPlugin.getImageDescriptor("icons/click.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_HEADER)){
-				return ClickPlugin.getImageDescriptor("icons/header.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_HEADERS)){
-				return ClickPlugin.getImageDescriptor("icons/folder.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_PAGE)){
-				return ClickPlugin.getImageDescriptor("icons/page.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_PAGES)){
-				return ClickPlugin.getImageDescriptor("icons/folder.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_CONTROL)){
-				return ClickPlugin.getImageDescriptor("icons/control.gif").createImage();
-			}
-			if(name.equals(ClickPlugin.TAG_CONTROLS)){
-				return ClickPlugin.getImageDescriptor("icons/folder.gif").createImage();
+			Image image = (Image)images.get(name);
+			if(image != null){
+				return image;
 			}
 		}
 		return super.getImage(object);
