@@ -32,22 +32,12 @@ Possibly the best way to see how Click works is to dive right in and look an
 examples.
 
 <h2>Click Example</h2>
-A Hello World example in Click would look something like this. You would have a
-<tt>click.xml</tt> configuration file which defines our Hello World page class
-and its Velocity page template:
-
-<pre class="codeConfig">
-&lt;click-app&gt;  
-  &lt;pages&gt; 
-    &lt;page path="<span class="blue">hello-world.htm</span>" classname="<span class="green">examples.page.HelloWorld</span>"/&gt; 
-  &lt;/pages&gt;
-&lt;/click-app&gt; 
-</pre>
-
-Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt></span>:
+A Hello World example in Click would look something like this. 
+<p/>
+First we would have a <tt>HelloWorld</tt> page class:
 
 <pre class="codeJava">
-<span class="kw">package</span> examples.page;
+<span class="kw">package</span> <span class="green">examples.page</span>;
 
 <span class="kw">import</span> java.util.Date;
 <span class="kw">import</span> net.sf.click.Page;
@@ -60,7 +50,7 @@ Next we have our page class <span class="green"><tt>examples.page.HelloWorld</tt
 } 
 </pre>
 
-And then we have the page template <span class="blue">hello-world.htm</span>:
+Next we would have a page template <span class="blue">hello-world.htm</span>:
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -74,8 +64,20 @@ And then we have the page template <span class="blue">hello-world.htm</span>:
 &lt;/html&gt; 
 </pre>
 
+And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
+application to map <span class="blue">hello-world.htm</span>
+requests to our <tt>HelloWorld</tt> page class.
+
+<pre class="codeConfig">
+&lt;click-app&gt;  
+  &lt;pages package="<span class="green">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
+&lt;/click-app&gt; 
+</pre>
+
+<p/>
+
 At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
-request to our page class <span class="green"><tt>example.page.HelloWorld</tt></span> and creates a new instance. 
+request to our page class <tt>example.page.HelloWorld</tt> and creates a new instance. 
 The HelloWorld page constructor creates a new <tt>Date</tt> object and adds it to its model as a value called 
 <span class="st">time</span>.
 <p/>
@@ -115,7 +117,7 @@ First we have a Login page class which setups up a login form in the constructor
 
     <span class="kw">public boolean</span> onOkClicked() {
         <span class="kw">if</span> (form.isValid()) {
-            User user = new User();
+            User user = <span class="kw">new</span> User();
             form.copyTo(user);
 
             <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
@@ -223,7 +225,7 @@ invoked and the request is redirected to the <span class="blue">index.htm</span>
 
 In this example we use the form control to automatically render the form and the fields
 HTML. This is a great feature for quickly building screens, and the form control 
-provides a number of layout options. See the Click <a href="index.html">Examples</a> for an
+provides a number of layout options. See the Click <a href="examples.html">Examples</a> for an
 interactive Form Properties demo.
 <p/>
 For fine grained page design you can specifically layout form and fields in 
