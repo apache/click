@@ -32,6 +32,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_CONTROL = "control";
 	public static final String TAG_FORMAT = "format";
 	public static final String TAG_MODE = "mode";
+	public static final String TAG_EXCLUDES = "excludes";
 	public static final String ATTR_CHARSET = "charset";
 	public static final String ATTR_CLASSNAME = "classname";
 	public static final String ATTR_TYPE = "type";
@@ -41,6 +42,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_AUTO_MAPPING = "automapping";
 	public static final String ATTR_PACKAGE = "package";
 	public static final String ATTR_LOGTO = "logto";
+	public static final String ATTR_PATTERN = "pattern";
 	
 	public static final String[] AUTO_MAPPING_VALUES = {"true", "false"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
