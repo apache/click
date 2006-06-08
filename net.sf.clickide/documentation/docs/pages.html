@@ -356,6 +356,16 @@ You can also obtain the redirect path via the target Page's class. For example:
 </pre>
 
 Note when using this redirect method, the target Page class must have a unique path.
+<p/>
+A short hand way of redirecting is to simply specify the target Page class in 
+the redirect method. For example:
+
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   setRedirect(Logout.<span class="kw">class</span>);
+   <span class="kw">return false</span>;
+} 
+</pre>
 
 <h4>Redirect Parameter Passing</h4>
 
