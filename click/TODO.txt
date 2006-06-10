@@ -3,8 +3,9 @@ Click 0.21 Release
 9. add PageLink control
 10. review form submit check
 15. fix ColorPicker rendering bug
-17. faq UTF-8 topic
+17. faq UTF-8 topic, & document Christians I18N meta header technique
 18. add Cayenne control examples
+19.
 
 
 CODE
@@ -15,9 +16,11 @@ CODE
 * JSP exception handling, on tomcat find work directory
 
 BUGS
-* tomcat jar locking
+* tomcat jar locking, probably resolve using 
 
 DOCUMENTATION
+* look at removing Frames from documentation set and creating single page 
+  documentation. Possibly using TexenTask or a derivative
 * update Velocity documentation
 * discuss redirecting to HTTPS
 
