@@ -303,7 +303,7 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the active IWorkbenchPage.
+	 * Returns the active <code>IWorkbenchPage</code>.
 	 * 
 	 * @return the active workbench page
 	 */
@@ -311,6 +311,12 @@ public class ClickUtils {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
 	
+	/**
+	 * Returns the <code>IFile</code> of click.xml in the specified project.
+	 * 
+	 * @param project the project
+	 * @return <code>IFile</code> of click.xml
+	 */
 	public static IFile getClickConfigFile(IProject project){
 		String webAppRoot = getWebAppRootFolder(project);
 		IFile file = project.getFile(new Path(webAppRoot).append("WEB-INF/click.xml"));
@@ -320,7 +326,13 @@ public class ClickUtils {
 		return null;
 	}
 	
-	public static String getPagePackageName(IProject project){
+	/**
+	 * Returns the <code>IStructuredModel</code> of click.xml in the specified project.
+	 * 
+	 * @param project the project
+	 * @return <code>IStructuredModel</code> for click.xml
+	 */
+	public static IStructuredModel getClickXMLModel(IProject project){
 		IStructuredModel model = null;
 		try {
 			IFile file = ClickUtils.getClickConfigFile(project);
@@ -328,6 +340,15 @@ public class ClickUtils {
 				return null;
 			}
 			model = StructuredModelManager.getModelManager().getModelForRead(file);
+		} catch(Exception ex){
+			ClickPlugin.log(ex);
+		}
+		return model;
+	}
+	
+	public static String getPagePackageName(IProject project){
+		IStructuredModel model = getClickXMLModel(project);
+		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
 			if(list.getLength()==1){
 				Element pages = (Element)list.item(0);
@@ -335,6 +356,52 @@ public class ClickUtils {
 					return pages.getAttribute(ClickPlugin.ATTR_PACKAGE);
 				}
 			}
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
+		}
+		return null;
+	}
+	
+	public static String getHTMLfromClass(IProject project, String className){
+		IStructuredModel model = getClickXMLModel(project);
+		try {
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
+			for(int i=0;i<list.getLength();i++){
+				Element element = (Element)list.item(i);
+				String clazz = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+				if(clazz!=null && clazz.equals(className)){
+					return element.getAttribute(ClickPlugin.ATTR_PATH);
+				}
+			}
+			
+			// TODO Handle AutoMapping
+
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
+		}
+		return null;
+	}
+	
+	public static String getClassfromHTML(IProject project, String htmlName){
+		IStructuredModel model = getClickXMLModel(project);
+		try {
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
+			for(int i=0;i<list.getLength();i++){
+				Element element = (Element)list.item(i);
+				String path = element.getAttribute(ClickPlugin.ATTR_PATH);
+				if(path!=null && path.equals(htmlName)){
+					return element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+				}
+			}
+			
+			// TODO Handle AutoMapping
+			
 		} catch(Exception ex){
 		} finally {
 			if(model!=null){
