@@ -128,19 +128,23 @@
            id="net.sf.clickide.ui.actionSet"
            label="Click Action Set"
            visible="true">
+        <!--
         <menu
               id="clickMenu"
               label="Click">
            <separator name="clickGroup"/>
         </menu>
+        -->
         <action
               class="net.sf.clickide.ui.actions.NewClickPageAction"
               icon="icons/page_add.gif"
               id="net.sf.clickide.ui.actions.SampleAction"
               label="New Click Page"
-              menubarPath="clickMenu/clickGroup"
               toolbarPath="clickGroup"
               tooltip="New Click page"/>
+              <!--
+              menubarPath="clickMenu/clickGroup"/>
+              -->
      </actionSet>
   </extension>
   <extension
@@ -159,5 +163,37 @@
         point="org.eclipse.core.runtime.preferences">
      <initializer class="net.sf.clickide.preferences.ClickPreferenceInitializer"/>
   </extension>
-
+  
+  <!--===============================================-->
+  <!-- Editor Actions -->
+  <!--===============================================-->
+　　<extension point="org.eclipse.ui.popupMenus">
+　　　　<viewerContribution 
+        id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+        targetID="#CompilationUnitEditorContext">
+　　　　　　<action
+         id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+         label="Switch to HTML"
+         menubarPath="additions"
+         class="net.sf.clickide.ui.actions.SwitchToHTMLAction">
+　　　　　　</action>
+　　　　</viewerContribution>
+　　</extension>
+<!--
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+           contextId="org.eclipse.ui.contexts.window"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="CTRL+ALT+C"/>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+     <command
+           defaultHandler="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+           id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+           name="Switch to HTML"/>
+  </extension>  
+-->
 </plugin>
