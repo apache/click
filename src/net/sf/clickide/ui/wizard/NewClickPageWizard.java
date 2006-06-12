@@ -77,6 +77,10 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 	
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		this.selection = selection;
+//		if(!ClickUtils.isClickProject(ClickUtils.getJavaProject(selection.getFirstElement()).getProject())){
+//			ClickUtils.openErrorDialog("Clickプロジェクトではありません。"); // TODO 外部化
+//			dispose();
+//		}
 	}
 	
 	public void setInitialClassName(String className){
