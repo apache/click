@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * Provides utility methods about Click.
+ * Provides utility methods for ClickIDE.
  * 
  * @author Naoki Takezoe
  */

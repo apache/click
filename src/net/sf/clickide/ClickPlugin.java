@@ -5,7 +5,9 @@ import java.util.ResourceBundle;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -106,5 +108,13 @@ public class ClickPlugin extends AbstractUIPlugin {
 				IStatus.ERROR, t.toString(), t);
 		
 		getDefault().getLog().log(status);
+		
+		try {
+			IWorkbenchPage page = ClickUtils.getActivePage();
+			MessageDialog.openError(page.getWorkbenchWindow().getShell(),
+					ClickPlugin.getString("message.error"), t.toString());
+		} catch(Exception ex){
+			// ignore
+		}
 	}
 }

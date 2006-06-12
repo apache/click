@@ -11,6 +11,8 @@ import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.ui.PlatformUI;
 
 /**
+ * Opens the New Click Page wizard.
+ * 
  * @author Naoki Takezoe
  */
 public class NewClickPageAction implements IWorkbenchWindowActionDelegate {
