@@ -128,23 +128,19 @@
            id="net.sf.clickide.ui.actionSet"
            label="Click Action Set"
            visible="true">
-        <!--
         <menu
               id="clickMenu"
               label="Click">
            <separator name="clickGroup"/>
         </menu>
-        -->
         <action
               class="net.sf.clickide.ui.actions.NewClickPageAction"
               icon="icons/page_add.gif"
               id="net.sf.clickide.ui.actions.SampleAction"
-              label="New Click Page"
+              label="%action.newClickPage"
               toolbarPath="clickGroup"
-              tooltip="New Click page"/>
-              <!--
+              tooltip="New Click page"
               menubarPath="clickMenu/clickGroup"/>
-              -->
      </actionSet>
   </extension>
   <extension
@@ -167,18 +163,43 @@
   <!--===============================================-->
   <!-- Editor Actions -->
   <!--===============================================-->
-　　<extension point="org.eclipse.ui.popupMenus">
-　　　　<viewerContribution 
-        id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
-        targetID="#CompilationUnitEditorContext">
-　　　　　　<action
-         id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
-         label="Switch to HTML"
-         menubarPath="additions"
-         class="net.sf.clickide.ui.actions.SwitchToHTMLAction">
-　　　　　　</action>
-　　　　</viewerContribution>
-　　</extension>
+  <extension
+        point="org.eclipse.ui.editorActions">
+     <editorContribution
+           id="net.sf.clickide.editorContribution1"
+           targetID="org.eclipse.jdt.ui.CompilationUnitEditor">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              accelerator="CTRL+ALT+S"
+              class="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+              icon="icons/switch.gif"
+              id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+              label="%action.switchToHTML"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+     <editorContribution
+           id="net.sf.clickide.editorContribution2"
+           targetID="org.eclipse.wst.html.core.htmlsource.source">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              accelerator="CTRL+ALT+S"
+              class="net.sf.clickide.ui.actions.SwitchToClassAction"
+              icon="icons/switch.gif"
+              id="net.sf.clickide.ui.actions.SwitchToClassAction"
+              label="%action.switchToClass"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+  </extension>
 <!--
   <extension
         point="org.eclipse.ui.bindings">
