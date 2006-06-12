@@ -188,6 +188,12 @@ public class ClickUtils {
 		return WebArtifactEdit.getWebArtifactEditForRead(project);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param webApp
+	 * @return
+	 */
 	public static Servlet findClickServlet(WebApp webApp) {
 		Servlet servlet = null;
 		Iterator it = webApp.getServlets().iterator();
@@ -232,6 +238,14 @@ public class ClickUtils {
 		}
 	}
 	
+	/**
+	 * Adds or updates the servlet information in the web.xml.
+	 * 
+	 * @param webApp
+	 * @param config
+	 * @param servlet
+	 * @return
+	 */
 	public static Servlet createOrUpdateServletRef(WebApp webApp, IDataModel config, Servlet servlet) {
 		//String displayName = config.getStringProperty(CLICK_SERVLET_NAME);
 
@@ -285,6 +299,13 @@ public class ClickUtils {
 		return result;
 	}
 	
+	/**
+	 * Returns the path string of the web application root folder.
+	 * 
+	 * @param project the project
+	 * @return the path string of the web application root folder.
+	 *    If any errors occurs, returns blank string.
+	 */
 	public static String getWebAppRootFolder(IProject project){
 		WebArtifactEdit edit = getWebArtifactEditForRead(project);
 		try {
@@ -346,6 +367,29 @@ public class ClickUtils {
 		return model;
 	}
 	
+	public static boolean getAutoMapping(IProject project){
+		IStructuredModel model = getClickXMLModel(project);
+		try {
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
+			if(list.getLength()==1){
+				Element pages = (Element)list.item(0);
+				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
+					String autoMapping = pages.getAttribute(ClickPlugin.ATTR_AUTO_MAPPING);
+					if("true".equals(autoMapping)){
+						return true;
+					}
+					return false;
+				}
+			}
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
+		}
+		return false;
+	}
+	
 	public static String getPagePackageName(IProject project){
 		IStructuredModel model = getClickXMLModel(project);
 		try {
@@ -365,15 +409,31 @@ public class ClickUtils {
 		return null;
 	}
 	
+	/**
+	 * Returns the the HTML file path which paired to the specified class.
+	 *  
+	 * @param project the project
+	 * @param className the classname
+	 * @return the HTML file path which registered in the click.xml.
+	 *     If unable to find the paired HTML, returns <code>null</code>.
+	 */
 	public static String getHTMLfromClass(IProject project, String className){
+		
+		String packageName = getPagePackageName(project);
+		
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
 			for(int i=0;i<list.getLength();i++){
 				Element element = (Element)list.item(i);
 				String clazz = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
-				if(clazz!=null && clazz.equals(className)){
-					return element.getAttribute(ClickPlugin.ATTR_PATH);
+				if(clazz!=null){
+					if(packageName!=null && packageName.length()>0){
+						clazz = packageName + "." + clazz;
+					}
+					if(clazz.equals(className)){
+						return element.getAttribute(ClickPlugin.ATTR_PATH);
+					}
 				}
 			}
 			
@@ -388,7 +448,19 @@ public class ClickUtils {
 		return null;
 	}
 	
+	/**
+	 * Returns the full qualified classname of the page class
+	 * which paired to the specified HTML file.
+	 * 
+	 * @param project the project
+	 * @param htmlName the HTML file path which registered to the click.xml 
+	 * @return the full qulified classname.
+	 *   If unable to find the paired class, returns <code>null</code>.
+	 */
 	public static String getClassfromHTML(IProject project, String htmlName){
+		
+		String packageName = getPagePackageName(project);
+		
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
@@ -396,7 +468,12 @@ public class ClickUtils {
 				Element element = (Element)list.item(i);
 				String path = element.getAttribute(ClickPlugin.ATTR_PATH);
 				if(path!=null && path.equals(htmlName)){
-					return element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+					String className = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+					if(className!=null && className.length()>0 && 
+							packageName!=null && packageName.length()>0){
+						className = packageName + "." + className;
+					}
+					return className;
 				}
 			}
 			
