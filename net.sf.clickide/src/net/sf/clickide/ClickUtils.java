@@ -1,6 +1,7 @@
 package net.sf.clickide;
 
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -437,9 +438,17 @@ public class ClickUtils {
 				}
 			}
 			
-			// TODO Handle AutoMapping
+			// TODO Handle AutoMapping (Excludes pages is not handled)
+			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
+				if(className.startsWith(packageName + ".")){
+					String path = className.substring(packageName.length() + 1);
+					path = path.replaceAll("\\.", "/");
+					return path;
+				}
+			}
 
 		} catch(Exception ex){
+			ClickPlugin.log(ex);
 		} finally {
 			if(model!=null){
 				model.releaseFromRead();
@@ -477,9 +486,40 @@ public class ClickUtils {
 				}
 			}
 			
-			// TODO Handle AutoMapping
+			// TODO Handle AutoMapping (Excludes pages is not handled)
+			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
+				
+				String className = "";
+				
+		        if (htmlName.indexOf("/") != -1) {
+		            StringTokenizer tokenizer = new StringTokenizer(htmlName, "/");
+		            while (tokenizer.hasMoreTokens()) {
+		                String token = tokenizer.nextToken();
+		                if (tokenizer.hasMoreTokens()) {
+		                    packageName = packageName + token + ".";
+		                } else {
+		                    className = token;
+		                }
+		            }
+		        } else {
+		            className = htmlName;
+		        }
+		        
+		        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
+		        className = "";
+		        while (tokenizer.hasMoreTokens()) {
+		            String token = tokenizer.nextToken();
+		            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+		            className += token;
+		        }
+
+		        className = packageName + className;
+		        
+		        return className;
+			}
 			
 		} catch(Exception ex){
+			ClickPlugin.log(ex);
 		} finally {
 			if(model!=null){
 				model.releaseFromRead();
