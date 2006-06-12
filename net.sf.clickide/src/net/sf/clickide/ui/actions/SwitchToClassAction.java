@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -20,7 +19,8 @@ import org.eclipse.ui.IFileEditorInput;
  * 
  * @author Naoki Takezoe
  */
-public class SwitchToClassAction implements IEditorActionDelegate {
+public class SwitchToClassAction extends AbstractClickActionDelegate 
+		implements IEditorActionDelegate {
 	
 	private IEditorPart editor;
 	
@@ -50,9 +50,6 @@ public class SwitchToClassAction implements IEditorActionDelegate {
 				}
 			}
 		}
-	}
-	
-	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
 }

@@ -3,7 +3,6 @@ package net.sf.clickide.ui.actions;
 import net.sf.clickide.ui.wizard.NewClickPageWizard;
 
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -15,7 +14,8 @@ import org.eclipse.ui.PlatformUI;
  * 
  * @author Naoki Takezoe
  */
-public class NewClickPageAction implements IWorkbenchWindowActionDelegate {
+public class NewClickPageAction extends AbstractClickActionDelegate 
+	implements IWorkbenchWindowActionDelegate {
 	
 	private IWorkbenchWindow window;
 	private IStructuredSelection selection;
@@ -33,11 +33,20 @@ public class NewClickPageAction implements IWorkbenchWindowActionDelegate {
 		dialog.open();
 	}
 
-	public void selectionChanged(IAction action, ISelection selection) {
-		if(selection instanceof IStructuredSelection){
-			this.selection = (IStructuredSelection)selection;
-		}
-	}
+//	public void selectionChanged(IAction action, ISelection selection) {
+//		if(selection instanceof IStructuredSelection){
+//			this.selection = (IStructuredSelection)selection;
+//			Object obj = this.selection.getFirstElement();
+//			if(obj != null){
+//				IJavaProject project = ClickUtils.getJavaProject(obj);
+//				if(project != null){
+//					action.setEnabled(ClickUtils.isClickProject(project.getProject()));
+//					return;
+//				}
+//			}
+//		}
+//		action.setEnabled(false);
+//	}
 
 	public void dispose() {
 	}
