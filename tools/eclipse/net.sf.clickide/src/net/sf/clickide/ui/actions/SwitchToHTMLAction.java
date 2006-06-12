@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -23,7 +22,8 @@ import org.eclipse.ui.ide.IDE;
  * 
  * @author Naoki Takezoe
  */
-public class SwitchToHTMLAction implements IEditorActionDelegate {
+public class SwitchToHTMLAction extends AbstractClickActionDelegate 
+		implements IEditorActionDelegate {
 	
 	private IEditorPart editor;
 	
@@ -53,9 +53,6 @@ public class SwitchToHTMLAction implements IEditorActionDelegate {
 				ClickPlugin.log(ex);
 			}
 		}
-	}
-
-	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
 }

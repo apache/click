@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jst.j2ee.internal.deployables.J2EEFlexProjDeployable;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
@@ -31,7 +32,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.eclipse.wst.common.project.facet.core.IFacetedProject;
+import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
@@ -108,6 +114,25 @@ public class ClickUtils {
 		value = value.replaceAll(">", "&gt;");
 		value = value.replaceAll("\"", "&quot;");
 		return value;
+	}
+	
+	public static boolean isClickProject(IProject project){
+		IVirtualComponent component = ComponentCore.createComponent(project);
+		try {
+			if(WebArtifactEdit.isValidWebModule(component)){
+				IFacetedProject facetedProject = ProjectFacetsManager.create(project);
+				Object facets[] = facetedProject.getProjectFacets().toArray();
+				for(int i=0;i<facets.length;i++){
+					IProjectFacetVersion facet = (IProjectFacetVersion)facets[i];
+					if(facet.getProjectFacet().getId().equals("click")){
+						return true;
+					}
+				}
+			}
+		} catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return false;
 	}
 	
 	/**
@@ -526,5 +551,11 @@ public class ClickUtils {
 			}
 		}
 		return null;
+	}
+	
+	public static void openErrorDialog(String message){
+		IWorkbenchPage page = ClickUtils.getActivePage();
+		MessageDialog.openError(page.getWorkbenchWindow().getShell(),
+				ClickPlugin.getString("message.error"), message);
 	}
 }
