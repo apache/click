@@ -131,7 +131,7 @@
         <menu
               id="clickMenu"
               label="Click">
-           <separator name="clickGroup_2"/>
+           <separator name="clickGroup"/>
         </menu>
         <action
               class="net.sf.clickide.ui.actions.NewClickPageAction"
@@ -140,7 +140,7 @@
               label="%action.newClickPage"
               toolbarPath="clickGroup"
               tooltip="New Click page"
-              menubarPath="clickMenu/clickGroup_2"/>
+              menubarPath="clickMenu/clickGroup"/>
      </actionSet>
   </extension>
   <extension
@@ -171,15 +171,15 @@
         <menu
               id="clickMenu"
               label="Click">
-           <separator name="clickGroup_1"/>
+           <separator name="clickGroup"/>
         </menu>
         <action
-              accelerator="CTRL+ALT+S"
               class="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+              definitionId="net.sf.clickide.ui.actions.SwitchToHTMLAction"
               icon="icons/switch.gif"
               id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
               label="%action.switchToHTML"
-              menubarPath="clickMenu/clickGroup_1"
+              menubarPath="clickMenu/clickGroup"
               style="push"/>
      </editorContribution>
      <editorContribution
@@ -188,33 +188,38 @@
         <menu
               id="clickMenu"
               label="Click">
-           <separator name="clickGroup_1"/>
+           <separator name="clickGroup"/>
         </menu>
         <action
-              accelerator="CTRL+ALT+S"
               class="net.sf.clickide.ui.actions.SwitchToClassAction"
+              definitionId="net.sf.clickide.ui.actions.SwitchToClassAction"
               icon="icons/switch.gif"
               id="net.sf.clickide.ui.actions.SwitchToClassAction"
               label="%action.switchToClass"
-              menubarPath="clickMenu/clickGroup_1"
+              menubarPath="clickMenu/clickGroup"
               style="push"/>
      </editorContribution>
-  </extension>
-<!--
-  <extension
-        point="org.eclipse.ui.bindings">
-     <key
-           commandId="net.sf.clickide.ui.actions.SwitchToHTMLAction"
-           contextId="org.eclipse.ui.contexts.window"
-           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-           sequence="CTRL+ALT+C"/>
   </extension>
   <extension
         point="org.eclipse.ui.commands">
      <command
-           defaultHandler="net.sf.clickide.ui.actions.SwitchToHTMLAction"
            id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
-           name="Switch to HTML"/>
+           name="%action.switchToHTML"/>
+     <command
+           id="net.sf.clickide.ui.actions.SwitchToClassAction"
+           name="%action.switchToClass"/>
   </extension>  
--->
+  <extension
+        point="org.eclipse.ui.bindings">
+     <key
+           commandId="net.sf.clickide.ui.actions.SwitchToHTMLAction"
+           contextId="org.eclipse.jdt.ui.javaEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="Ctrl+Alt+S"/>
+     <key
+           commandId="net.sf.clickide.ui.actions.SwitchToClassAction"
+           contextId="org.eclipse.wst.sse.ui.structuredTextEditorScope"
+           schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+           sequence="Ctrl+Alt+S"/>
+  </extension>
 </plugin>
