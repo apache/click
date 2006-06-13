@@ -15,7 +15,6 @@
  */
 package net.sf.click.util;
 
-import java.lang.reflect.Field;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,9 +56,6 @@ import net.sf.click.Context;
  * <p/>
  * The ClickServlet adds a MessagesMap instance to the Velocity Context before
  * it is merged with the page template.
- * <p/>
- * The MessagesMap will automatically cache loaded message properties when
- * the application is in <tt>"production"</tt> or <tt>"profile"</tt> mode.
  *
  * @author Malcolm.Edgar
  */
@@ -79,9 +75,6 @@ public class MessagesMap implements Map {
 
     /** The resource bundle base name. */
     protected final String baseName;
-
-    /** The cache resources flag. */
-    protected final boolean cache;
 
     /** The time the cache was lasted updated. */
     protected static long cacheLastUpdated;
@@ -119,9 +112,6 @@ public class MessagesMap implements Map {
         this.baseName = resource;
         this.locale = context.getLocale();
 
-        // Cache resources if application in "production" or "profile" mode
-        this.cache = context.getApplicationMode().startsWith("pro");
-
         this.globalBaseName = globalResource;
     }
 
@@ -146,9 +136,6 @@ public class MessagesMap implements Map {
         }
         this.baseName = object.getClass().getName();
         this.locale = context.getLocale();
-
-        // Cache resources if application in "production" or "profile" mode
-        this.cache = context.getApplicationMode().startsWith("pro");
 
         this.globalBaseName = globalResource;
     }
@@ -300,9 +287,7 @@ public class MessagesMap implements Map {
 
                 messages = Collections.unmodifiableMap(messages);
 
-                if (cache) {
-                    MESSAGES_CACHE.put(resourceKey, messages);
-                }
+                MESSAGES_CACHE.put(resourceKey, messages);
             }
         }
     }
@@ -333,40 +318,7 @@ public class MessagesMap implements Map {
     }
 
     private ResourceBundle getBundle(String baseName, Locale locale) {
-        if (!cache) {
-            clearResourceBundleCache(baseName, locale);
-        }
-
         return ResourceBundle.getBundle(baseName, locale);
-    }
-
-    private void clearResourceBundleCache(String baseName, Locale locale) {
-        if (cacheLastUpdated == 0) {
-            cacheLastUpdated = System.currentTimeMillis();
-        }
-
-        if (System.currentTimeMillis() - cacheLastUpdated < 1000) {
-            return;
-        }
-
-        cacheLastUpdated = System.currentTimeMillis();
-
-        try {
-            ResourceBundle rb = ResourceBundle.getBundle(baseName, locale);
-            Class aClass = rb.getClass().getSuperclass();
-
-            Field field = aClass.getDeclaredField("cacheList");
-            field.setAccessible(true);
-            Map cache = (Map) field.get(null);
-            cache.clear();
-            field.setAccessible(false);
-
-        } catch (MissingResourceException mre) {
-            throw mre;
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
