@@ -406,6 +406,15 @@ public class NewClickPageWizardPage extends WizardPage {
 			browseParent.setEnabled(false);
 			browseSource.setEnabled(false);
 			return;
+		} else if(!ClickUtils.isClickProject(getProject())){
+			setMessage(MessageFormat.format(
+					ClickPlugin.getString("wizard.newPage.error.notClickProject"), 
+					new String[]{ getProject().getName() }), ERROR);
+			setPageComplete(false);
+			browsePackage.setEnabled(false);
+			browseParent.setEnabled(false);
+			browseSource.setEnabled(false);
+			return;
 		} else {
 			browsePackage.setEnabled(createPageClass.getSelection());
 			browseParent.setEnabled(createPageClass.getSelection());
@@ -425,8 +434,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			if(!existsFolder(parentFolder.getText())){
 				setMessage(MessageFormat.format(
 						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"),
-						new String[]{ parentFolder.getText() }),
-						ERROR);
+						new String[]{ parentFolder.getText() }), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(pageName.getText().equals("")){
@@ -445,8 +453,7 @@ public class NewClickPageWizardPage extends WizardPage {
 			if(!existsFolder(sourceFolder.getText())){
 				setMessage(MessageFormat.format(
 						ClickPlugin.getString("wizard.newPage.error.folderDoesNotExist"),
-						new String[]{ sourceFolder.getText() }),
-						ERROR);
+						new String[]{ sourceFolder.getText() }), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(!isValidPackageName(packageName.getText())){
@@ -456,8 +463,7 @@ public class NewClickPageWizardPage extends WizardPage {
 				setPageComplete(false);
 				return;
 			} else if(packageName.getText().endsWith(".")){
-				setMessage(ClickPlugin.getString("wizard.newPage.error.packageIsInvalid2"), 
-						ERROR);
+				setMessage(ClickPlugin.getString("wizard.newPage.error.packageIsInvalid2"), ERROR);
 				setPageComplete(false);
 				return;
 			} else if(className.getText().equals("")){
