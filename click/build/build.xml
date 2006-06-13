@@ -107,6 +107,10 @@
       <pathelement location="dist/click-extras-${version}.jar"/>
    </path>
 
+   <path id="classpath.test"> 
+      <pathelement location="lib/${jar.junit}"/>
+   </path>
+
    <!-- 
     Target Definitions 
     -->
@@ -442,9 +446,12 @@
              debug="true">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">
          <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
          <formatter type="plain"/>
          <batchtest fork="yes" todir="framework/test">
             <fileset dir="framework/test">
@@ -479,9 +486,12 @@
              debug="true">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
       </javac>
       <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
          <formatter type="plain"/>
          <batchtest fork="yes" todir="extras/test">
             <fileset dir="extras/test">
