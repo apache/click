@@ -128,11 +128,11 @@ public class Page {
         getControls().add(control);
         addModel(control.getName(), control);
 
+        control.setParent(this);
+
         if (getContext() != null) {
             control.setContext(getContext());
         }
-
-        control.setParent(this);
     }
 
     /**
