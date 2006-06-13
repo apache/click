@@ -1,5 +1,7 @@
 package net.sf.clickide.ui.actions;
 
+import java.text.MessageFormat;
+
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 
@@ -11,6 +13,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -22,10 +25,13 @@ import org.eclipse.ui.ide.IDE;
  * 
  * @author Naoki Takezoe
  */
-public class SwitchToHTMLAction extends AbstractClickActionDelegate 
-		implements IEditorActionDelegate {
+public class SwitchToHTMLAction implements IEditorActionDelegate {
 	
 	private IEditorPart editor;
+	
+	public void selectionChanged(IAction action, ISelection selection) {
+		// Nothing to do
+	}
 	
 	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
 		this.editor = targetEditor;
@@ -35,6 +41,14 @@ public class SwitchToHTMLAction extends AbstractClickActionDelegate
 		IEditorInput input = this.editor.getEditorInput();
 		if(input instanceof IFileEditorInput){
 			IFile file = ((IFileEditorInput)input).getFile();
+			
+			if(!ClickUtils.isClickProject(file.getProject())){
+				ClickUtils.openErrorDialog(MessageFormat.format(
+					ClickPlugin.getString("wizard.newPage.error.notClickProject"), 
+					new String[]{ file.getProject().getName() }));
+				return;
+			}
+			
 			IJavaElement element = 
 				JavaPlugin.getDefault().getWorkingCopyManager().getWorkingCopy(input);
 			ICompilationUnit unit = (ICompilationUnit)element;
@@ -47,11 +61,14 @@ public class SwitchToHTMLAction extends AbstractClickActionDelegate
 					IResource resource = folder.findMember(html);
 					if(resource!=null && resource instanceof IFile && resource.exists()){
 						IDE.openEditor(ClickUtils.getActivePage(), (IFile)resource);
+						return;
 					}
 				}
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
 			}
+			ClickUtils.openErrorDialog(
+					ClickPlugin.getString("message.error.noHtml"));
 		}
 	}
 
