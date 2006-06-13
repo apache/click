@@ -504,7 +504,7 @@ public class Form implements Control {
     /** The Form set field focus JavaScript. */
     protected static final String FOCUS_JAVASCRIPT =
         "<script type=\"text/javascript\"><!--\n"
-        + "var field = document.getElementById('{$id}');\n"
+        + "var field = document.getElementById('$id');\n"
         + "if (field && field.focus && field.type != 'hidden') { field.focus(); };\n"
         + "//--></script>\n";
 
