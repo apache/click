@@ -335,8 +335,12 @@ public class NumberField extends TextField {
      * @param object the object value to set
      */
     public void setValueObject(Object object) {
-        if (object != null) {
-            value = object.toString();
+        if(object instanceof Number) {
+            setNumber((Number)object);
+        } else {
+            if (object != null) {
+                value = object.toString();
+            }
         }
     }
 
