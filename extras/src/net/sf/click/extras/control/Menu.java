@@ -83,7 +83,7 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CATA #IMPLIED&gt; </pre>
  *
  * <h3>Security</h3>
- * 
+ *
  * Menus support J2EE role based security via the {@link #isUserInRoles()}
  * method. When creating secure menus define the valid roles in the menu items.
  * For example:
@@ -99,7 +99,7 @@ import org.w3c.dom.NodeList;
  *       &lt;menu label="Home" path="admin/admin.htm" roles="admin"/&gt;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
- * 
+ *
  * @author Malcolm Edgar
  */
 public class Menu implements Control {
@@ -405,25 +405,25 @@ public class Menu implements Control {
     public boolean isSelected() {
         return selected;
     }
-    
+
     /**
      * Return true if the user is in one of the menu roles.
-     * 
+     *
      * @return true if the user is in one of the menu roles.
      */
     public boolean isUserInRoles() {
-    	if (!getRoles().isEmpty()) {
-    		for (Iterator i = getRoles().iterator(); i.hasNext();) {
-				String rolename = (String) i.next();
-				if (getContext().getRequest().isUserInRole(rolename)) {
-					return true;
-				}
-			}
-    		return false;
-    		
-    	} else {    	
-    		return true;
-    	}
+        if (!getRoles().isEmpty()) {
+            for (Iterator i = getRoles().iterator(); i.hasNext();) {
+                String rolename = (String) i.next();
+                if (getContext().getRequest().isUserInRole(rolename)) {
+                    return true;
+                }
+            }
+            return false;
+
+        } else {
+            return true;
+        }
     }
 
     /**
