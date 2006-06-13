@@ -1,6 +1,11 @@
 package net.sf.click.sandbox.chrisichris.prototype;
 
+import net.sf.click.Control;
+import net.sf.click.Page;
+import net.sf.click.control.ActionLink;
 import net.sf.click.control.Submit;
+import net.sf.click.sandbox.chrisichris.control.ControlUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -22,12 +27,11 @@ public class AjaxSubmit extends Submit {
     /**
      * builds JS.
      */
-    protected final PrototypeAjax ajaxReq = new PrototypeAjax();
+    protected final AjaxRequest ajaxReq = new AjaxRequest();
 
     /**
      * the ajaxAction.
      */
-    protected AjaxAction ajaxAction;
 
     /**
      * Create a AjaxSubmit button with the given name, listener object and
@@ -96,25 +100,8 @@ public class AjaxSubmit extends Submit {
      * The JS builder for the ajax call.
      * @return JS builder
      */
-    public PrototypeAjax getPrototypeAjax() {
+    public AjaxRequest getAjaxRequest() {
         return ajaxReq;
-    }
-
-    /**
-     * An AjaxAction where the request should
-     * be send to instead of the original Page.
-     * @param ac AjaxAction or null
-     */
-    public void setAjaxAction(AjaxAction ac) {
-        this.ajaxAction = ac;
-    }
-
-    /**
-     * The set AjaxAction default is null.
-     * @return can return null
-     */
-    public AjaxAction getAjaxAction() {
-        return this.ajaxAction;
     }
 
     /**
@@ -153,35 +140,58 @@ public class AjaxSubmit extends Submit {
         }
     }
 
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            String id = ControlUtils.getId(this);
+            if(id != null) {
+                setAttribute("id",id);
+            }
+            return id;
+        }
+    }
+    
+    public String getOnclick() {
+        // set the action
+        if (ajaxReq.getUrl() == null) {
+            ajaxReq.setUrl(getContext().getResponse().encodeURL(getContext().getRequest().getRequestURI()));
+
+        }
+        ajaxReq.addParameter(getName(), getLabel());
+        if (ajaxReq.getPostWith() == null && getForm() != null) {
+            ajaxReq.setPostWithCurrentForm();
+        } else {
+            ajaxReq.addParameter(ActionLink.ACTION_LINK,this.getId());
+        }
+
+        String onClick = getAttribute("onclick");
+        if (onClick != null) {
+            return ajaxReq.toJS() + ";" + onClick;
+        } else {
+            return ajaxReq.toJS()+";return false;";
+        }
+        
+    }
     /**
      * renders input html-tag.
      * @return input html-tag
      */
     public String toString() {
-        // set the action
-        if (ajaxReq.getUrl() == null) {
-            if (ajaxAction != null) {
-                ajaxReq.setUrl(ajaxAction.getUrl(getContext()));
-            } else {
-                ajaxReq.setUrl(getForm().getActionURL());
-            }
-        }
-        ajaxReq.setMethod(getForm().getMethod());
-        ajaxReq.addParameter(getName(), getLabel());
-        if (ajaxReq.getPostForm() == null && ajaxReq.getPostWith() == null) {
-            ajaxReq.setPostWithCurrentForm();
-        }
-
         String onClick = getAttribute("onclick");
-        if (onClick != null) {
-            setOnClick(ajaxReq.toJS() + ";" + onClick);
-        } else {
-            setOnClick(ajaxReq.onClickJS());
-        }
+        setOnClick(getOnclick());
         try {
             return super.toString();
         } finally {
             setOnClick(onClick);
+        }
+    }
+    
+    public boolean onProcess() {
+        if(Prototype.isAjax(getContext())) {
+            return super.onProcess();
+        } else {
+            return true;
         }
     }
 
@@ -191,82 +201,19 @@ public class AjaxSubmit extends Submit {
      * @see net.sf.click.control.Field#getHtmlImports()
      */
     public String getHtmlImports() {
-        String ret = DeployControl.getPrototypeImport(getContext());
-        String su = super.getHtmlImports();
-        if (su != null) {
-            ret = ret + su;
-        }
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        String path = getContext().getRequest().getContextPath();
+        buffer.append("<script type=\"text/javascript\" src=\"");
+        buffer.append(path);
+        buffer.append("/click/prototype/prototype.js\"></script>\n");
+
+        buffer.append("<script type=\"text/javascript\" src=\"");
+        buffer.append(path);
+        buffer.append("/click/prototype/scriptaculous.js\"></script>\n");
+        
+        String ret = buffer.toString();
         return ret;
     }
 
-    /**
-     * In case of update where to insert the request-result.
-     * @param str one of the {@link Prototype} INSERTION constants
-     */
-    public void setInsertion(String str) {
-        ajaxReq.setInsertion(str);
-    }
-
-    /**
-     * JS to execute when the AJAX request is complete.
-     * @param onComplete JS
-     */
-    public void setOnComplete(String onComplete) {
-        ajaxReq.setOnComplete(onComplete);
-    }
-
-    /**
-     * JS to execute when the AJAX request returned a failure.
-     * @param onFailure JS
-     */
-    public void setOnFailure(String onFailure) {
-        ajaxReq.setOnFailure(onFailure);
-    }
-
-    /**
-     * JS to execute when the AJAX request was successful.
-     * @param onSucess JS
-     */
-    public void setOnSuccess(String onSucess) {
-        ajaxReq.setOnSuccess(onSucess);
-    }
-
-    /**
-     * HTML-Element-Id where the result will be put. How
-     * the result is put in there depends on the
-     * {@link #setInsertion(String)} by default it
-     * is set as innerhtml.
-     * @param elementId of the element to update.
-     */
-    public void setUpdate(String elementId) {
-        ajaxReq.setUpdate(elementId);
-    }
-
-    /**
-     * HTML-Element-Id which should be updated in case of
-     * failur.
-     * @param elementId html-id
-     */
-    public void setUpdateFailure(String elementId) {
-        ajaxReq.setUpdateFailure(elementId);
-    }
-
-    /**
-     * HTML-Element-Id which should be updated in case of
-     * success.
-     * @param elementId element id
-     */
-    public void setUpdateSuccess(String elementId) {
-        ajaxReq.setUpdateSuccess(elementId);
-    }
-
-    /**
-     * An html tag which should be made visible during
-     * the request running.
-     * @param id HTML-Element-Id of the tag
-     */
-    public void setProgressImage(String id) {
-        ajaxReq.setProgressImage(id);
-    }
 
 }

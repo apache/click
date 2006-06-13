@@ -17,7 +17,7 @@
 
  <servlet>
   <servlet-name>click-servlet</servlet-name>
-  <servlet-class>net.sf.click.ClickServlet</servlet-class>
+  <servlet-class>net.sf.click.sandbox.chrisichris.servlet.CustomServlet</servlet-class>
   <load-on-startup>0</load-on-startup>
  </servlet>
 

@@ -61,7 +61,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @author Christian Essl
  */
-public class SubmitLink extends Submit {
+public class SubmitLink extends Field {
 
     private static final long serialVersionUID = 1L;
 
@@ -71,15 +71,18 @@ public class SubmitLink extends Submit {
     /** Name Suffix for the hidden-field fot the value. */
     public static final String VALUE_FIELD_NAME = "click_submitlink_value";
 
+    private boolean clicked;
+    
     // ----------------------------------------------------------- Constructors
 
+    
     /**
      * Create a SubmitLink button with the given name.
      *
      * @param name the button name
      */
-    public SubmitLink(String name) {
-        super(name);
+    public SubmitLink(Form form, String name) {
+        this(form,name,null);
     }
 
     /**
@@ -88,8 +91,8 @@ public class SubmitLink extends Submit {
      * @param name the button name
      * @param label the button display label
      */
-    public SubmitLink(String name, String label) {
-        super(name, label);
+    public SubmitLink(Form form, String name, String label) {
+        this(form,name,label,null,null);
     }
 
     /**
@@ -101,8 +104,8 @@ public class SubmitLink extends Submit {
      * @param method the listener method to call
      * @throws IllegalArgumentException if listener is null or if the method is blank
      */
-    public SubmitLink(String name, Object listener, String method) {
-        super(name, listener, method);
+    public SubmitLink(Form form, String name, Object listener, String method) {
+        this(form,name,null,listener,method);
     }
 
     /**
@@ -116,10 +119,12 @@ public class SubmitLink extends Submit {
      * @throws IllegalArgumentException if listener is null or if the method
      *      is blank
      */
-    public SubmitLink(String name, String label, Object listener,
+    public SubmitLink(Form form, String name, String label, Object listener,
             String method) {
 
-        super(name, label, listener, method);
+        super(name, label);
+        setForm(form);
+        setListener(listener,method);
     }
 
     /**
@@ -136,17 +141,11 @@ public class SubmitLink extends Submit {
 
     // ------------------------------------------------------ Public Attributes
 
-    /**
-     * Returns "hidden", because the field uses a hidden input type.
-     *
-     * @see net.sf.click.control.Submit#getType()
-     *
-     * @return "hidden"
-     */
-    public String getType() {
-        return "hidden";
-    }
 
+    public boolean isClicked() {
+        return clicked;
+    }
+    
     /**
      * Return the SubmitLink anchor &lt;a&gt; tag href attribute for the given
      * value. This method will create a JavaScript which stores the value to a
@@ -169,10 +168,22 @@ public class SubmitLink extends Submit {
         script += "';";
 
         script += formSrc + CLICK_FIELD_NAME + ".value = '"
-                + StringEscapeUtils.escapeJavaScript(getName()) + "';";
+                + StringEscapeUtils.escapeJavaScript(getId()) + "';";
 
         script += formSrc + "submit();";
         return script;
+    }
+    
+    public String getId() {
+        if (hasAttributes() && getAttributes().containsKey("id")) {
+            return getAttribute("id");
+        } else {
+            String id = ControlUtils.getId(this);
+            if(id != null) {
+                setAttribute("id",id);
+            }
+            return id;
+        }
     }
 
     /**
@@ -247,7 +258,7 @@ public class SubmitLink extends Submit {
         Field clickField = getForm().getField(CLICK_FIELD_NAME);
         if (clickField instanceof HiddenField) {
             String clickedName = clickField.getValue();
-            if (clickedName != null && clickedName.equals(this.getName())) {
+            if (clickedName != null && clickedName.equals(this.getId())) {
                 this.clicked = true;
                 Field valueField = getForm().getField(VALUE_FIELD_NAME);
                 if (valueField instanceof HiddenField) {

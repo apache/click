@@ -1,0 +1,24 @@
+<h5> Search Results:</h5>
+
+#if($customers)
+
+	<ul>
+	#foreach($cust  in $customers) 
+		<li>$cust.name $cust.email <a href="${link.getHref($cust.id)}">Show</a></li>
+	#end
+	</ul>
+	
+	#if($showCustomer)
+	
+	<h6>Selected Customer</h6>
+	Id: $showCustomer.id<br/>
+	Name: $showCustomer.name <br/>
+	E-mail: $showCustomer.email <br/>
+	Age: $showCustomer.age <br/>
+	Holdings: $showCustomer.holdings <br/>
+	Date-Joined: $showCustomer.dateJoined <br/>
+	Active: $showCustomer.active<br/>
+	
+	#end
+#end
+
