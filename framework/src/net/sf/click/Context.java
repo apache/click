@@ -318,61 +318,6 @@ public class Context {
     }
 
     /**
-     * Return a object stored in the session using the objects class name.
-     * If the object does not exist in the session, an new instance will be
-     * created. The specified class must be <tt>public</tt> visibility and
-     * provide an no-args public constructor.
-     *
-     * @deprecated - This method will be removed in release 0.21.
-     *
-     * @param aClass the class of the object to get from the session
-     * @return a object stored in the session using the objects class name, or
-     * a new object instance if it does not exist.
-     */
-    public Object getSessionObject(Class aClass) {
-        if (aClass == null) {
-            throw new IllegalArgumentException("Null class parameter.");
-        }
-        Object object = getSessionAttribute(aClass.getName());
-        if (object == null) {
-            try {
-                object = aClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return object;
-    }
-
-    /**
-     * Store the given object in the session using the object's class name as
-     * the key.
-     *
-     * @deprecated - This method will be removed in release 0.21.
-     *
-     * @param object the object to store in the session
-     */
-    public void setSessionObject(Object object) {
-        if (object != null) {
-            setSessionAttribute(object.getClass().getName(), object);
-        }
-    }
-
-    /**
-     * Remove the class object from the session. If the session does not exist
-     * or the class is null, this method does nothing.
-     *
-     * @deprecated - This method will be removed in release 0.21.
-     *
-     * @param aClass the class object to remove from the session
-     */
-    public void removeSessionObject(Class aClass) {
-        if (hasSession() && aClass != null) {
-            getSession().removeAttribute(aClass.getName());
-        }
-    }
-
-    /**
      * Return true if a HttpSession exists, or false otherwise.
      *
      * @return true if a HttpSession exists, or false otherwise

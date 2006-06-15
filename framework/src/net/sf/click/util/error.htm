@@ -13,6 +13,9 @@ td.header {
 .errorReport {
   display: none;
 }
+a {
+  color: blue;
+}
 </style>
 <script type='text/javascript'>
 function displayError() {
@@ -26,12 +29,17 @@ function displayError() {
  
  The application encountered an unexpected error.
  <p/>
+ To return to the application click <a href="$context">here</a>.
+ <p/>
  
  #if ($mode != "production")
    To view error details click <a href="#" onclick="displayError();">here</a>.
    <p/>
    $errorReport
+   <p/>
  #end
+ 
+ 
 
 </body>
 </html>

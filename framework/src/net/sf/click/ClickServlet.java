@@ -459,7 +459,7 @@ public class ClickServlet extends HttpServlet {
 
         if (continueProcessing && page.hasControls()) {
 
-            // Make sure dont processed forwarded request
+            // Make sure dont process a forwarded request
             if (!page.getContext().isForward()) {
 
                 List controls = page.getControls();
