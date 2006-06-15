@@ -445,7 +445,7 @@ public class DateField extends TextField {
         if (!isReadonly() && !isDisabled()) {
             Calendar calendar = new GregorianCalendar();
 
-            buffer.append("<img align=\"middle\" hspace=\"2\" ");
+            buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getForm().getContext().getRequest().getContextPath());
             buffer.append("/click/calendar/calendar.gif\" id=\"");

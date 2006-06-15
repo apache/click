@@ -336,8 +336,7 @@ public class ClickUtils {
                                     destination.substring(lastIndex + 1);
                             }
                             String msg =
-                                "deployed " + targetDir + File.separator
-                                + destination;
+                                "deployed " + targetDir + "/" + destination;
                             logger.trace(msg);
                         }
 
