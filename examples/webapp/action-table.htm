@@ -67,7 +67,8 @@ th { color: white; }
   <td><b>Date Joined</b></td><td>&nbsp;</td><td>$format.date($customerDetail.dateJoined, "dd MMM yyyy")</td>
  </tr>
  <tr>
-  <td><b>Active</b></td><td>&nbsp;</td><td>$customerDetail.active</td>
+  <td><b>Active</b></td><td>&nbsp;</td>
+  <td>#if ($customerDetail.active) $customerDetail.active #else false #end</td>
  </tr>
 </table>
 #end
