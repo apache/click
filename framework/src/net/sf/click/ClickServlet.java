@@ -482,6 +482,7 @@ public class ClickServlet extends HttpServlet {
             } else {
                 page.onGet();
             }
+            page.onRender();
         }
 
         if (page.getRedirect() != null) {
