@@ -1,0 +1,30 @@
+h1 {
+	background-color: black;
+	color: white;
+	padding-left: 4px;
+}
+
+h3 {
+	border-bottom: 1px dotted black;
+}
+
+.error {
+	color: red;
+}
+/*
+th {
+	text-align: left;
+}
+*/
+pre {
+	border: 1px solid gray;
+	background-color: #EEEEEE;
+}
+
+code {
+	font-style: italic;
+}
+
+.string {
+	color: blue;
+}

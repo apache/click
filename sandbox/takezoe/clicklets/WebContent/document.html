@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="style.css" />
+<title>Clicklets</title>
+</head>
+<body>
+
+<h1>Clicklets</h1>
+
+<a name="whatsnew"></a>
+<h2>What's this?</h2>
+
+<p>
+  Clicklets provides the plain HTML based view template solution for 
+  <a href="http://click.sourceforge.net/">Click</a>.
+</p>
+<p>
+  Click is very the simple and powerful framework for the web application development.
+  It uses <a href="http://jakarta.apache.org/velocity/">Velocity</a> as the default view 
+  template engine (of cource, we can use also JSP as view).
+  Velocity is also simple and powerful same as Click.
+  However, when we use Velocity, we can't preview templates with the web browser.
+</p>
+<p>
+  Clicklets solves this problem, and Clicklets provides auto control binding.
+  This feature removes tedious control definition codes from your Page classes.
+  For example. Here is a normal Page class:
+</p>
+<pre>
+public class SamplePage extends Page {
+  
+  private Form form;
+  private TextField text;
+  private Submit submit;
+  
+  public void onInit(){
+    form = new Form("form");
+    text = new TextField("text");
+    submit = new Submit("submit", this, "onClick");
+    
+    form.add(text);
+    form.add(submit);
+    addControl(form);
+  }
+  
+  public boolean onClick(){
+    ...
+  }
+} </pre>
+<p>
+  In Clicklets, you don't have to implement <code>onInit()</code> because controls 
+  are assembled from HTML. You would write only the following HTML.
+</p>
+<pre>
+&lt;form name="form"&gt;
+  &lt;input type="text" name="text" &gt;
+  &lt;input type="submit" value="Submit" action="onClick"&gt;
+&lt;/form&gt; </pre>
+<p>
+  If the Page class has a field which matches control declared in HTML, 
+  Clicklets injects it automatically using reflection. And there are no 
+  complex parts such as <code>$imports</code> in HTML header or 
+  <code>&lt;input type="hidden" name="form_name" value="$form.name"&gt;</code> in forms.
+  Details about auto binding, see <a href="#autobinding">Auto Binding</a> section.
+</p>
+<p>
+  <strong>Note:</strong> Clicklets is under development yet,
+  So it have performance and other problem, and specification might be modified.
+</p>
+
+<a name="installation"></a>
+<h2>Installation</h2>
+<ol>
+  <li>Put clicklets-x.x.jar into WEB-INF/lib</li>
+  <li>Modify servlet definition in WEB-INF/web.xml
+  <pre>
+&lt;servlet&gt;
+  &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;tk.click.html.ClickHTMLServlet&lt;/servlet-class&gt;
+  &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+&lt;/servlet&gt; </pre>
+  </li>
+</ol>
+
+
+<a name="reference"></a>
+<h2>Reference</h2>
+
+<a name="htmlimports"></a>
+<h3>&lt;html c:imports="true|false"&gt;</h3>
+<p>
+  If specify "true", Clicklets outputs <code>$imports</code> in HTML header as following:
+</p>
+<pre>
+&lt;html&gt;
+  &lt;head&gt;
+    $imports
+  &lt;/head&gt;
+  ...
+&lt;/html&gt; </pre>
+<p>
+   If "false" then <code>$imports</code> is omitted. the default valueis "true".
+</p>
+
+<a name="replace"></a>
+<h3>c:replace="..."</h3>
+<p>
+  Replaces the element with the specified value. For example:
+</p>
+<pre>
+&lt;span c:replace="$item.name"&gt;Name&lt;/span&gt; </pre>
+<p>
+  This HTML would be converted to the following Velocity template:
+</p>
+<pre>
+$name </pre>
+<p>
+  You can use this for many purpose.
+</p>
+
+<a name="rendered"></a>
+<h3>c:rendered="..."</h3>
+<p>
+  Controls visibility of the element. If specify "false", the element would not be rendered.
+  You can also specify any Velocity expression as the attribute value.
+</p>
+<p>
+  In fact, This attribute is converted to <code>#if()</code>. For example:
+</p>
+<pre>
+&lt;span class="error" c:rendered="$form.fields.text.error"&gt;
+  $form.fields.text.error
+&lt;/span&gt; </pre>
+This Clicklets would be converted to the following Velocity template.
+<pre>
+#if($form.fields.text.error)
+  &lt;span class="error"&gt;
+    $form.fields.text.error
+  &lt;/span&gt;
+#end </pre>
+
+<a name="foreach"></a>
+<h3>c:foreach="..."</h3>
+<p>
+  Makes loop.
+</p>
+<pre>
+&lt;ul c:foreach="$item in $items"&gt;
+  &lt;li&gt;$item.name&lt;/li&gt;
+&lt;/ul&gt; </pre>
+<p>
+  This Clicklets template would be converted to the following Velocity template.
+</p>
+<pre>
+&lt;ul&gt;
+#foreach($item in $items)
+  &lt;li&gt;$item.name&lt;/li&gt;
+#end
+&lt;/ul&gt; </pre>
+
+<a name="autobinding"></a>
+<h3>Auto Binding</h3>
+
+<p>
+  Clicklets provides auto binding for following controls.
+</p>
+
+<table border="1">
+  <tr>
+    <th>HTML</th>
+    <th>Control</th>
+  </tr>
+  <tr>
+    <td>&lt;form&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Form.html">net.sf.click.control.Form</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="text"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/TextField.html">net.sf.click.control.TextField</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="password"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/PasswordField.html">net.sf.click.control.PasswordField</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="hidden"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/HiddenField.html">net.sf.click.control.HiddenField</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="checkbox"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Checkbox.html">net.sf.click.control.Checkbox</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="radio"&gt;</td>
+    <td>
+      <a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Radio.html">net.sf.click.control.Radio</a> / 
+      <a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/RadioGroup.html">net.sf.click.control.RadioGroup</a>
+    </td>
+  </tr>
+  <tr>
+    <td>&lt;input type="file"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/FileField.html">net.sf.click.control.FileField</a></td>
+  </tr>
+  <tr>
+    <td>&lt;input type="submit"&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Submit.html">net.sf.click.control.Submit</a></td>
+  </tr>
+  <tr>
+    <td>&lt;select&gt; / &lt;option&gt;</td>
+    <td>
+      <a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Select.html">net.sf.click.control.Select</a> / 
+      <a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Option.html">net.sf.click.control.Option</a>
+    </td>
+  </tr>
+  <tr>
+    <td>&lt;textarea&gt;</td>
+    <td><a href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/TextArea.html">net.sf.click.control.TextArea</a></td>
+  </tr>
+</table>
+
+<a name="velocity"></a>
+<h3>Velocity Directives</h3>
+<p>
+  You can use all Velocity directives in Clicklets.
+  So you would be able to use existing Velocity templates with small modification.
+</p>
+
+</body>
+</html>

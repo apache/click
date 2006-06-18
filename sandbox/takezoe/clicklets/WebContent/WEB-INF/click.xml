@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app charset="UTF-8">
+  <pages>
+    <page path="welcome.htm"  classname="net.sf.click.Page"/>
+    <page path="sample1.htm"  classname="net.sf.click.clicklets.sample.SamplePage1"/>
+    <page path="sample2.htm"  classname="net.sf.click.clicklets.sample.SamplePage2"/>
+  </pages>
+  <headers>
+    <header name="Pragma" value="no-cache"/>
+    <header name="Cache-Control" value="no-cache"/>
+    <header name="Expires" value="1" type="Date"/>
+  </headers>
+  <mode value="development"/>
+</click-app>

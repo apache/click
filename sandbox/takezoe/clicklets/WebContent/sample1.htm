@@ -1,0 +1,78 @@
+<html xmlns:c="http://www.sf.net/click">
+<head>
+  <title>Click HTML Compiler Example</title>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+  <h1>Click HTML Compiler Example</h1>
+  
+  <a href="#" name="link" action="linkClick">ActionLink</a>
+  
+  <form name="form">
+    <table>
+    <tr>
+      <th>TextField:</th>
+      <td>
+        <input type="text" name="text" required="true" maxlength="10" size="20"/>
+        <span class="error" c:rendered="$form.fields.text.error">$form.fields.text.error</span>
+      </td>
+    </tr>
+    <tr>
+      <th>TextArea:</th>
+      <td>
+        <textarea cols="60" rows="4" name="textarea" required="true"></textarea>
+        <div class="error" c:rendered="$form.fields.textarea.error">
+          $form.fields.textarea.error
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>Check:</th>
+      <td>
+        <input type="checkbox" name="checkbox" action="onClick"/>
+      </td>
+    </tr>
+    <tr>
+      <th>Radio:</th>
+      <td>
+        <input type="radio" name="radio" value="None" label="None" checked="true"/>
+        <span c:rendered="false">None</span>
+        <input type="radio" name="radio" value="View" label="View"/>
+        <span c:rendered="false">View</span>
+        <input type="radio" name="radio" value="Logic" label="Logic"/>
+        <span c:rendered="false">Logic</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Select:</th>
+      <td>
+      	<select name="select">
+      		<option>Java</option>
+      		<option>Perl</option>
+      		<option>PHP</option>
+      		<option>Ruby</option>
+      	</select>
+      </td>
+    </tr>
+    <tr>
+      <th>Regex:</th>
+      <td>
+        <input type="text" c:replace="$form.fields.version">
+        <span class="error" c:rendered="$form.fields.version.error">$form.fields.version.error</span>
+      </td>
+    </tr>
+    <tr>
+      <th>Date:</th>
+      <td>
+        <input type="text" c:replace="$form.fields.date1">
+        -
+        <input type="text" c:replace="$form.fields.date2">
+      </td>
+    </tr>
+    </table>
+    <input type="submit" name="submit" value="Submit" c:replace="$form.fields.submit"/>
+  </form>
+  
+  <a href="welcome.htm">Back</a>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<html xmlns:c="http://www.sf.net/click/">
+<head>
+  <title>Sample</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta c:replace="$table.htmlImports" />
+  <link rel="stylesheet" type="text/css" href="tab.css" />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+	<h1>Example</h1>
+	<div c:replace="$table">Table is displayed here.</div>
+	
+	<br />
+	
+	<div c:replace="#parse($tab)">TabbedPanel is displayed here.</div>
+	<ul>
+	  <li c:foreach="$item in $items">
+	    <span c:replace="$format.html($item.id)">ID</span>
+	     - 
+	    <a href="mailto:$format.html($item.mail)">
+	      <span c:replace="$format.html($item.name)">Name</span>
+	    </a>
+	  </li>
+	</ul>
+	
+	<a href="welcome.htm">Back</a>
+</body>
+</html>

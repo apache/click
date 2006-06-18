@@ -1,0 +1,30 @@
+ table.tp_tab {
+   border-collapse: collapse;
+ }
+ tr.tp_tab {
+ }
+ td.tp_tab_on {
+   background: #336699;
+   color: #ffffff;
+   border-left: 1px solid #336699;
+   border-top: 1px solid #336699;
+   border-right: 1px solid #336699;
+   padding: 5px;
+ }
+ td.tp_tab_off {
+   background: #cccccc;
+   color: #000000;
+   border-left: 1px solid #336699;
+   border-top: 1px solid #336699;
+   border-right: 1px solid #336699;
+   padding: 5px;
+ }
+ table.tp_content {
+   border: 1px solid #336699;
+   width: 100%;
+ }
+ tr.tp_content {
+ }
+ td.tp_content {
+   background: #efefef;
+ }
