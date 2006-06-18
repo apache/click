@@ -535,9 +535,14 @@ class ClickApp implements EntityResolver {
         InputStream inputStream = url.openStream();
 
         if (inputStream != null) {
-            Document document = ClickUtils.buildDocument(inputStream, this);
+        	
+        	Document document = null;
+        	try {
+        		document = ClickUtils.buildDocument(inputStream, this);
 
-            ClickUtils.close(inputStream);
+        	} finally {
+        		ClickUtils.close(inputStream);
+        	}
 
             return document.getDocumentElement();
 
