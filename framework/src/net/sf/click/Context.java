@@ -428,11 +428,14 @@ public class Context {
     public Locale getLocale() {
         Locale locale = (Locale) getSessionAttribute(LOCALE);
 
-        if (locale == null && clickService.getLocale() != null) {
-            locale = clickService.getLocale();
+        if (locale == null) { 
+        	
+        	if (clickService.getLocale() != null) {
+        		locale = clickService.getLocale();
 
-        } else {
-            locale = getRequest().getLocale();
+        	} else {
+        		locale = getRequest().getLocale();
+        	}
         }
 
         return locale;
