@@ -2,8 +2,8 @@ package net.sf.click.examples.page;
 
 import java.util.Date;
 
+import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
-import net.sf.click.extras.control.ActionButton;
 
 /**
  * Provides an ActionLink and ActionButton demonstration Page.
