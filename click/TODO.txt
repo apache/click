@@ -5,7 +5,6 @@ fix ColorPicker rendering bug
 faq UTF-8 topic
 add Cayenne control examples
 
-
 CODE
 * get localizations for Telephone.properties, Japanese, Italian, French
 * review table.css
@@ -14,7 +13,6 @@ CODE
 * JSP exception handling, on tomcat find work directory
 
 BUGS
-* tomcat jar locking
 
 DOCUMENTATION
 * update Velocity documentation
