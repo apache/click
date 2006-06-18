@@ -37,17 +37,40 @@ up to a 1.0 release in the Q3 2006.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+       Added 
+       <a href="click-api/net/sf/click/control/PageLink.html">PageLink</a>
+       control. This addition was put forward by Stephen Haberman
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-106">106</a>].
+      </li>        
+      <li class="change">
+       Added Page 
+       <a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a>
+       method. This addition was put forward by Stephen Haberman
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-105">105</a>].
+      </li>        
+      <li class="change">
        Added Menu 
        <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
        method.
       </li>        
       <li class="change">
-       Fixed MessagesMap cache permissions issue .
+       Fixed Tomcat deployment bug. This issue was identified by Doychi
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-82">82</a>].
+      </li>
+      <li class="change">
+       Fixed MessagesMap cache permissions issue. This issue was identified by David Felis
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-99">99</a>].
       </li>
       <li class="change">
        Fixed Field setFocus() bug. This issue was identified by David Felis
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-102">102</a>].
+      </li>
+      <li class="change">
+       Fixed Context session Locale bug. This issue was identified by Steven Van Hoof
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-107">107</a>].
+      </li>
+      <li class="change">
+       Moved ActionButton control from Click Extras to core controls package.
       </li>
       <li class="change">
        Removed depreciated Context sessionObject methods.
