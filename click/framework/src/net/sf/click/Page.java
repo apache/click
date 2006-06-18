@@ -42,6 +42,7 @@ import org.apache.commons.lang.StringUtils;
  * <li>Call {@link #onSecurityCheck()} to check the users permissions.</li>
  * <li>Process any {@link #controls} calling their {@link Control#onProcess()} method.</li>
  * <li>Call {@link #onGet()} for any additional processing.</li>
+ * <li>Call {@link #onRender()} for any pre render processing.</li>
  * <li>Render the page merging the {@link #model} with the
  * Velocity template defined by the {@link #getTemplate()}.</li>
  * <li>Call {@link #onDestroy()} to clean up any resources.</li>
@@ -643,6 +644,16 @@ public class Page {
      * processing the <tt>onPost()</tt> method will not be invoked.
      */
     public void onPost() {
+    }
+
+    /**
+     * The on render event handler. This event handler is invoked prior to the
+     * page being rendered.
+     * <p/>
+     * This method will not be invoked if either the security check or one of
+     * the controls cancels continued event processing.
+     */
+    public void onRender() {
     }
 
     /**
