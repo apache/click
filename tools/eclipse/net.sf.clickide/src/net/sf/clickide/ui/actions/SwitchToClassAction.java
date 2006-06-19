@@ -6,7 +6,6 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
@@ -57,7 +56,7 @@ public class SwitchToClassAction implements IEditorActionDelegate {
 				if(className!=null){
 					try {
 						IType type = JavaCore.create(file.getProject()).findType(className);
-						JavaUI.revealInEditor(JavaUI.openInEditor(type), (IJavaElement)type);
+						JavaUI.openInEditor(type);
 					} catch(Exception ex){
 						ClickPlugin.log(ex);
 					}
