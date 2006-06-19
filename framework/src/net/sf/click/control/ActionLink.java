@@ -15,6 +15,10 @@
  */
 package net.sf.click.control;
 
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -49,7 +53,7 @@ import org.apache.commons.lang.StringUtils;
  *         <span class="kw">if</span> (getContext().hasSession()) {
  *            getContext().getSession().invalidate();
  *         }
- *         setForward(<span class="st">"logout"</span>);
+ *         setRedirect(LogoutPage.<span class="kw">class</span>);
  *
  *         <span class="kw">return false</span>;
  *     }
@@ -138,6 +142,8 @@ import org.apache.commons.lang.StringUtils;
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
  *
+ * @see AbstractLink
+ * @see PageLink
  * @see Submit
  *
  * @author Malcolm Edgar
@@ -164,9 +170,6 @@ public class ActionLink extends AbstractLink {
 
     /** The listener method name. */
     protected String listenerMethod;
-
-    /** The processed link value. */
-    protected String value;
 
     // ----------------------------------------------------------- Constructors
 
@@ -318,7 +321,11 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink value if the ActionLink was processed
      */
     public String getValue() {
-        return value;
+        if (hasParameters()) {
+            return (String) getParameters().get(VALUE);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -369,7 +376,7 @@ public class ActionLink extends AbstractLink {
      * @param value the ActionLink value
      */
     public void setValue(String value) {
-        this.value = value;
+        getParameters().put(VALUE, value);
     }
 
     /**
@@ -379,7 +386,7 @@ public class ActionLink extends AbstractLink {
      */
     public void setValueObject(Object object) {
         if (object != null) {
-            value = object.toString();
+            setValue(object.toString());
         }
     }
 
@@ -399,7 +406,15 @@ public class ActionLink extends AbstractLink {
             getName().equals(getContext().getRequestParameter(ACTION_LINK));
 
         if (clicked) {
-            setValue(getContext().getRequestParameter(VALUE));
+            HttpServletRequest request = getContext().getRequest();
+
+            Enumeration paramNames = request.getParameterNames();
+
+            while (paramNames.hasMoreElements()) {
+                String name = paramNames.nextElement().toString();
+                String value = request.getParameter(name);
+                getParameters().put(name, value);
+            }
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);

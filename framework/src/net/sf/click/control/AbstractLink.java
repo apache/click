@@ -17,7 +17,6 @@ package net.sf.click.control;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
@@ -27,6 +26,19 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 
+/**
+ * Provides a Abstract Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
+ * <p/>
+ * See also the W3C HTML reference:
+ * <a title="W3C HTML 4.01 Specification"
+ *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
+ *
+ * @see ActionLink
+ * @see PageLink
+ * @see Submit
+ *
+ * @author Malcolm Edgar
+ */
 public abstract class AbstractLink implements Control {
 
     private static final long serialVersionUID = 1L;
@@ -107,10 +119,10 @@ public abstract class AbstractLink implements Control {
      * generally use attributes if you were creating the entire AbstractLink
      * programatically and rendering it with the {@link #toString()} method.
      * <p/>
-     * For example given the AbstractLink:
+     * For example given the ActionLink:
      *
      * <pre class="codeJava">
-     * AbstractLink addLink = <span class="kw">new</span> AbstractLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
+     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
      * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
      *
      * And the page template:
@@ -119,7 +131,7 @@ public abstract class AbstractLink implements Control {
      *
      * Will render the HTML as:
      * <pre class="codeHtml">
-     * &lt;a href="..?AbstractLink=<span class="red">addLink</span>" <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     * &lt;a href=".." <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
      *
      * @param name the attribute name
      * @param value the attribute value
@@ -144,7 +156,7 @@ public abstract class AbstractLink implements Control {
      */
     public Map getAttributes() {
         if (attributes == null) {
-            attributes = new HashMap(5);
+            attributes = new HashMap(8);
         }
         return attributes;
     }
@@ -258,16 +270,16 @@ public abstract class AbstractLink implements Control {
      * <span class="st">checkout</span>.label=<span class="red">Checkout</span>
      * <span class="st">checkout</span>.title=<span class="red">Proceed to Checkout</span> </pre>
      *
-     * The page AbstractLink code:
+     * The page ActionLink code:
      * <pre class="codeJava">
      * <span class="kw">public class</span> OrderPage <span class="kw">extends</span> Page {
-     *     AbstractLink checkoutLink = <span class="kw">new</span> AbstractLink(<span class="st">"checkout"</span>);
+     *     ActionLink checkoutLink = <span class="kw">new</span> ActionLink(<span class="st">"checkout"</span>);
      *     ..
      * } </pre>
      *
      * Will render the AbstractLink label and title properties as:
      * <pre class="codeHtml">
-     * &lt;a href="order-page.htm?actionLink=<span class="st">checkout</span>" title="<span class="red">Proceed to Checkout</span>"&gt;<span class="red">Checkout</span>&lt;/a&gt; </pre>
+     * &lt;a href=".." title="<span class="red">Proceed to Checkout</span>"&gt;<span class="red">Checkout</span>&lt;/a&gt; </pre>
      *
      * When a label value is not set, or defined in any properties files, then
      * its value will be created from the Fields name.
@@ -279,7 +291,7 @@ public abstract class AbstractLink implements Control {
      *
      * Will render the ActionLink label as:
      * <pre class="codeHtml">
-     * &lt;a href="order-page.htm?actionLink=<span class="st">deleteItem</span>"&gt;<span class="red">Delete Item</span>&lt;/a&gt; </pre>
+     * &lt;a href=".."&gt;<span class="red">Delete Item</span>&lt;/a&gt; </pre>
      *
      * Note the ActionLink label can include raw HTML to render other elements.
      * <p/>
@@ -290,7 +302,7 @@ public abstract class AbstractLink implements Control {
      *
      * Will render the ActionLink label as:
      * <pre class="codeHtml">
-     * &lt;a href="..?actionLink=<span class="st">edit</span>"&gt;<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span>&lt;/a&gt; </pre>
+     * &lt;a href=".."&gt;<span class="red">&lt;img src="images/edit.png" title="Edit Item"/&gt;</span>&lt;/a&gt; </pre>
      *
      * @return the label for the ActionLink
      */
@@ -396,10 +408,12 @@ public abstract class AbstractLink implements Control {
      * generally use parameter if you were creating the entire AbstractLink
      * programatically and rendering it with the {@link #toString()} method.
      * <p/>
+     * TODO: update doco
+     * <p/>
      * For example given the AbstractLink:
      *
      * <pre class="codeJava">
-     * AbstractLink addLink = <span class="kw">new</span> AbstractLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
+     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
      * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
      *
      * And the page template:
@@ -433,7 +447,7 @@ public abstract class AbstractLink implements Control {
      */
     public Map getParameters() {
         if (parameters == null) {
-            parameters = new TreeMap();
+            parameters = new HashMap(4);
         }
         return parameters;
     }
@@ -497,7 +511,7 @@ public abstract class AbstractLink implements Control {
      *
      * Will render the ActionLink label and title properties as:
      * <pre class="codeHtml">
-     * &lt;a href="items-page.htm?actionLink=<span class="st">edit</span>" title="<span class="red">Edit Item</span>"&gt;<span class="red">Edit</span>&lt;/a&gt; </pre>
+     * &lt;a href=".." title="<span class="red">Edit Item</span>"&gt;<span class="red">Edit</span>&lt;/a&gt; </pre>
      *
      * @return the 'title' attribute tooltip message
      */
@@ -536,6 +550,8 @@ public abstract class AbstractLink implements Control {
      * will render the entire anchor link including the tags, the label and
      * any attributes, see {@link #setAttribute(String, String)} for an
      * example.
+     * <p/>
+     * This method invokes the abstract {@link #getHref()} method.
      *
      * @see Object#toString()
      *
