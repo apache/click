@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -446,7 +447,6 @@ public class ClickUtils {
 	public static String getHTMLfromClass(IProject project, String className){
 		
 		String packageName = getPagePackageName(project);
-		
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
@@ -463,12 +463,24 @@ public class ClickUtils {
 				}
 			}
 			
-			// TODO Handle AutoMapping (Excludes pages is not handled)
 			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
+				String root = getWebAppRootFolder(project);
 				if(className.startsWith(packageName + ".")){
 					String path = className.substring(packageName.length() + 1);
 					path = path.replaceAll("\\.", "/");
-					return path;
+					path = Character.toUpperCase(path.charAt(0)) + path.substring(1);
+					
+					// Login -> login.htm
+					IFolder folder = project.getFolder(root);
+					IResource resource = folder.findMember(path + ".htm");
+					if(resource!=null && resource.exists() && resource instanceof IFile){
+						return path + ".htm";
+					}
+					// Login -> loginPage.htm
+					resource = folder.findMember(path + "Page.htm");
+					if(resource!=null && resource.exists() && resource instanceof IFile){
+						return path + "Page.htm";
+					}
 				}
 			}
 
@@ -511,7 +523,6 @@ public class ClickUtils {
 				}
 			}
 			
-			// TODO Handle AutoMapping (Excludes pages is not handled)
 			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
 				
 				String className = "";
@@ -527,7 +538,7 @@ public class ClickUtils {
 		                }
 		            }
 		        } else {
-		            className = htmlName;
+		            className = htmlName.substring(0, htmlName.lastIndexOf('.'));
 		        }
 		        
 		        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
@@ -538,7 +549,7 @@ public class ClickUtils {
 		            className += token;
 		        }
 
-		        className = packageName + className;
+		        className = packageName + "." + className;
 		        
 		        return className;
 			}
