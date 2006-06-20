@@ -12,6 +12,13 @@ import jp.aonir.fuzzyxml.internal.FuzzyXMLAttributeImpl;
  */
 public class ClickHTMLUtil {
 	
+	/**
+	 * Returns the next node.
+	 * 
+	 * @param parent the parent element
+	 * @param node the node
+	 * @return the next node of the node which is specified by the argument
+	 */
 	public static FuzzyXMLNode getNextNode(FuzzyXMLElement parent, FuzzyXMLNode node){
 		FuzzyXMLNode[] children = parent.getChildren();
 		boolean flag = false;
@@ -26,6 +33,11 @@ public class ClickHTMLUtil {
 		return null;
 	}
 	
+	/**
+	 * Removes all attributes which start with <code>c:</code>.
+	 * 
+	 * @param element the element
+	 */
 	public static void removeAttributes(FuzzyXMLElement element){
 		FuzzyXMLAttribute[] attrs = element.getAttributes();
 		for(int i=0;i<attrs.length;i++){
@@ -35,6 +47,14 @@ public class ClickHTMLUtil {
 		}
 	}
 	
+	/**
+	 * Returns the attribute value.
+	 * 
+	 * @param element the element
+	 * @param name the attribute name
+	 * @return the attribute value.
+	 *   If element does not have specified attribute, returns <code>null</code>.
+	 */
 	public static String getAttributeValue(FuzzyXMLElement element, String name){
 		FuzzyXMLAttribute attr = element.getAttributeNode(name);
 		if(attr!=null){
@@ -43,6 +63,13 @@ public class ClickHTMLUtil {
 		return null;
 	}
 	
+	/**
+	 * Creates the new attribute.
+	 * 
+	 * @param name the new attribute name
+	 * @param value the new attribute value
+	 * @return the created attribute
+	 */
 	public static FuzzyXMLAttribute createAttribute(String name, String value){
 		FuzzyXMLAttribute attr = new FuzzyXMLAttributeImpl(name);
 		attr.setValue(value);
