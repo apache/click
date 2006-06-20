@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 public class ClickGeneralEditor extends AbstractFormEditor {
 	
 	private Text textCharset;
+	private Text textLocale;
 	private Text textFormat;
 	private Combo comboMode;
 	private Combo comboLogTo;
@@ -51,6 +52,20 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 					clickApp.removeAttribute(ClickPlugin.ATTR_CHARSET);
 				} else {
 					clickApp.setAttribute(ClickPlugin.ATTR_CHARSET, textCharset.getText());
+				}
+			}
+		});
+		
+		textLocale = AttributeEditorUtils.createText(
+				toolkit, form.getBody(), clickApp,
+				ClickPlugin.getString("editor.clickXML.general.locale"), 
+				ClickPlugin.ATTR_LOCALE);
+		textLocale.addModifyListener(new ModifyListener(){
+			public void modifyText(ModifyEvent e){
+				if(textLocale.getText().equals("")){
+					clickApp.removeAttribute(ClickPlugin.ATTR_LOCALE);
+				} else {
+					clickApp.setAttribute(ClickPlugin.ATTR_LOCALE, textLocale.getText());
 				}
 			}
 		});

@@ -36,6 +36,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_MODE = "mode";
 	public static final String TAG_EXCLUDES = "excludes";
 	public static final String ATTR_CHARSET = "charset";
+	public static final String ATTR_LOCALE = "locale";
 	public static final String ATTR_CLASSNAME = "classname";
 	public static final String ATTR_TYPE = "type";
 	public static final String ATTR_NAME = "name";
