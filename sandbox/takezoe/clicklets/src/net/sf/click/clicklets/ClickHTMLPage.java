@@ -8,6 +8,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
+import net.sf.click.util.Format;
 
 /**
  * A wrapper of a page class.
@@ -48,7 +49,7 @@ public class ClickHTMLPage extends Page {
 		return page.getControls();
 	}
 
-	public Object getFormat() {
+	public Format getFormat() {
 		return page.getFormat();
 	}
 
@@ -154,7 +155,7 @@ public class ClickHTMLPage extends Page {
 		page.setContext(context);
 	}
 
-	public void setFormat(Object value) {
+	public void setFormat(Format value) {
 		page.setFormat(value);
 	}
 
