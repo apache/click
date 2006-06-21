@@ -1,0 +1,108 @@
+<!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Best Practices</h1>
+
+This section discusses Best Practices for designing and building Click application.
+The following topics are covered:
+<ul>
+  <li><a href="#security">Security</a> - use J2EE role based security
+  </li>
+  <li><a href="#automapping">Page Auto Mapping</a> - use Convention over Configuration
+  </li>
+  <li><a href="#navigation">Navigation</a> - use Page classes to forward and redirect
+  </li>
+  <li><a href="#templating">Templating</a> - to standardize your web application
+  </li>
+  <li><a href="#menus">Menus</a> - templating common page content
+  </li>
+  <li><a href="#logging">Logging</a> - use Log4j in a base page
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+
+<a name="security" class="heading"><h2>Security</h2></a>
+
+<a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
+
+<a name="navigation" class="heading"><h2>Navigation</h2></a>
+
+<a name="templating" class="heading"><h2>Templating</h2></a>
+
+<a name="menus" class="heading"><h2>Menus</h2></a>
+
+<a name="logging" class="heading"><h2>Logging</h2></a>
+
+For page logging you should use <a href="http://logging.apache.org/log4j/docs/">Log4j</a>
+library. An alternative library is the 
+<a href="http://jakarta.apache.org/commons/logging/">Commons Logging</a>. 
+If you are using Commons Logging please be aware that there have been class loader 
+issues with this library on some application servers. If you are using 
+Commons Logging please make sure you have the latest version.
+<p/>
+The best place to define your logger is in a common base page, for example:
+
+<pre class="codeConfig">
+<span class="kw">public class</span> BasePage <span class="kw">extends</span> Page {
+	
+    <span class="kw">protected</span> Logger logger;
+	
+    <span class="kw">public</span> Logger getLogger() {
+        <span class="kw">if</span> (logger == <span class="kw">null</span>) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span class="kw">return</span> logger;
+    }
+} </pre>
+
+Using this pattern all your application bases should extend <tt>BasePage</tt>
+so they can use the <tt>getLogger()</tt> method.
+
+<pre class="codeConfig">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
+	
+    <span class="kw">public void</span> onGet() {
+        <span class="kw">try</span> {
+            ..
+        
+        } <span class="kw">catch</span> (Exception e) {
+            getLogger().error(e);
+        }
+    }
+} </pre>
+
+If you have some very heavy debug statement you should possibly use an 
+<tt>isDebugEnabled</tt> switch so it is not invoked if debug is not required.
+
+<pre class="codeConfig">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
+	
+    <span class="kw">public void</span> onGet() {
+        <span class="kw">if</span> (getLogger().isDebugEnabled()) {
+            String msg = ..
+            
+            getLogger().debug(msg);
+        }
+        
+        ..
+    }
+} </pre>
+
+<p/>
+
+
+Please note the Click logging facility is not designed for application use, and is 
+for Click internal use only. When Click is running in <tt>production</tt> mode
+it will not produce any logging output.
+
+
+
+
