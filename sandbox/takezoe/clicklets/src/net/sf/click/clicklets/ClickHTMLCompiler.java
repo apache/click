@@ -72,19 +72,7 @@ public class ClickHTMLCompiler {
 		
 		// output
 		if(out!=null){
-//			StringBuffer scripts = new StringBuffer();
-//			for(int j=0;j<forms.size();j++){
-//				ClickHTMLForm form = (ClickHTMLForm)forms.get(j);
-//				if(form.getJavaScriptValidation()){
-//					form.setContext(page.getContext());
-//					scripts.append(form.getValidationJavaScript());
-//				}
-//			}
 			String source = html.toXMLString();
-//			if(scripts.length() > 0){
-//				source = source.replaceFirst("</head>", scripts.toString() + "</head>");
-//			}
-			
 			source = source.replaceAll("\\$client-side-errors", ERROR_MESSAGES);
 			
 			out.write(source.getBytes("UTF-8")); // TODO charset
