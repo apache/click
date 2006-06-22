@@ -31,6 +31,97 @@ The following topics are covered:
 
 <a name="security" class="heading"><h2>Security</h2></a>
 
+For application security it is highly recommended that you use the J2EE Servlet 
+path role based security model. While Click pages provide an 
+<tt>onSecurityCheck()</tt> method for rolling your own security model, 
+the J2EE model provides numerous advantages.
+<p/>
+These advantages include:
+
+<ul>
+  <li>
+  Its an industry standard pattern making development and maintenance easier.
+  </li>
+  <li>
+  Application servers generally provide numerous ways of integration with an
+  organisations security infrastructure, including LDAP directories and 
+  relational databases.
+  </li>
+  <li>  
+  Servlet security model support users bookmarking pages. When users go to access
+  these pages later, the container will automatically authenticate them before
+  allowing them to access the resource.
+  </li>
+  <li>
+  Using this security model you can keep your Page code free of security 
+  concerns. This makes you code more reusable, or at least easier to write.
+  </li>
+</ul>
+
+The J2EE Servlet security model requires users to be authenticated and
+in the right roles before they can access secure resources. Relative to many of 
+the J2EE specifications the Servlet security model is surprisingly simple. 
+<p/>
+For example to secure admin pages, you add a security 
+constraint in your <tt>web.xml</tt> file. This requires users to be in the
+<span class="blue">admin</span> role before they can access to any resources 
+under the <span class="red">admin</span> directory:
+
+<pre class="codeConfig">
+&lt;security-constraint&gt;
+   &lt;web-resource-collection&gt;
+      &lt;url-pattern&gt;<span class="red">/admin/*</span>&lt;/url-pattern&gt;
+   &lt;/web-resource-collection&gt;
+   &lt;auth-constraint&gt;
+      &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
+   &lt;/auth-constraint&gt;
+&lt;/security-constraint&gt; 
+</pre>
+
+The application user roles are defined in the <tt>web.xml</tt> file as 
+<tt>security-role</tt> elements:
+
+<pre class="codeConfig">
+   &lt;security-role&gt;
+      &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
+   &lt;/security-role&gt;
+</pre>
+
+The Servlet security model supports three different authentication method:
+<ul>
+  <li>
+    <tt>BASIC</tt> - only recommended for internal applications where security 
+    is not important. This is the easiest authentication method, which simply
+    displays a dialog box to users requiring them to authenticate before
+    accessing secure resources. The BASIC method is relatively unsecure as the 
+    username and password are posted to the server as a Base64 encoded string.
+  </li>
+  <li>
+    <tt>DIGEST</tt> - TODO
+  </li>
+  <li>
+    <tt>FORM</tt> - TODO
+  </li>
+</ul>
+
+<h4>Resources</h4>
+
+For more information on using security see the resources below:
+<ul>
+  <li><a href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form Based Authentication</a> by Louis E. Mauget
+  </li>
+  <li><a href="http://java.sun.com/products/servlet/download.html">Servlet Specification</a> by Sun Microsystems
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Basic_authentication_scheme">Basic authentication scheme</a> 
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest authentication scheme</a>
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Https">Https URI scheme</a>
+  </li>
+</ul>
+
+
+
 <a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
 
 <a name="navigation" class="heading"><h2>Navigation</h2></a>
@@ -105,4 +196,5 @@ it will not produce any logging output.
 
 
 
-
+</body>
+</html>
