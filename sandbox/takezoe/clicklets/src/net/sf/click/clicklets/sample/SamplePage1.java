@@ -42,6 +42,7 @@ public class SamplePage1 extends Page {
 //			}
 //		};
 		
+		form.setJavaScriptValidation(true);
 		form.add(submit);
 		form.add(version);
 		form.add(date1);

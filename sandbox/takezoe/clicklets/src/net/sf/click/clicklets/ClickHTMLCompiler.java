@@ -59,7 +59,19 @@ public class ClickHTMLCompiler {
 		
 		// output
 		if(out!=null){
-			out.write(html.toXMLString().getBytes());
+			StringBuffer scripts = new StringBuffer();
+			for(int j=0;j<forms.size();j++){
+				ClickHTMLForm form = (ClickHTMLForm)forms.get(j);
+				if(form.getJavaScriptValidation()){
+					form.setContext(page.getContext());
+					scripts.append(form.getValidationJavaScript());
+				}
+			}
+			String source = html.toXMLString();
+			if(scripts.length() > 0){
+				source = source.replaceFirst("</head>", scripts.toString() + "</head>");
+			}
+			out.write(source.getBytes("UTF-8")); // TODO charset
 			out.close();
 		}
 		return forms;
@@ -86,17 +98,34 @@ public class ClickHTMLCompiler {
 			formName = ClickHTMLUtil.getAttributeValue(element, "name");
 			if(formName!=null){
 				FuzzyXMLElement hidden = new FuzzyXMLElementImpl("input");
-				hidden.setAttribute(ClickHTMLUtil.createAttribute("name", "form_name"));
-				hidden.setAttribute(ClickHTMLUtil.createAttribute("value", "$" + formName + ".name"));
-				hidden.setAttribute(ClickHTMLUtil.createAttribute("type", "hidden"));
+				hidden.setAttribute("name", "form_name");
+				hidden.setAttribute("value", "$" + formName + ".name");
+				hidden.setAttribute("type", "hidden");
 				element.appendChild(hidden);
 				
-				element.setAttribute(ClickHTMLUtil.createAttribute("method", "$" + formName + ".method"));
-				element.setAttribute(ClickHTMLUtil.createAttribute("name", "$" + formName + ".name"));
-				element.setAttribute(ClickHTMLUtil.createAttribute("action", "$" + formName + ".actionURL"));
+				element.setAttribute("method", "$" + formName + ".method");
+				element.setAttribute("name", "$" + formName + ".name");
+				element.setAttribute("action", "$" + formName + ".actionURL");
 				
-				Form form = new Form();
+				String id = element.getAttributeValue("id");
+				if(id==null){
+					id = formName;
+				}
+				element.setAttribute("id", id);
+				
+				ClickHTMLForm form = new ClickHTMLForm();
 				form.setName(formName);
+				form.setAttribute("id", id);
+				
+				String clientValidation = element.getAttributeValue("clientValidation");
+				if(clientValidation!=null){
+					element.removeAttribute("clientValidation");
+					if(clientValidation.equals("true")){
+						form.setJavaScriptValidation(true);
+			            element.setAttribute("onsubmit", "return on_" + id + "_submit();");
+					}
+		        }
+				
 				forms.add(form);
 			}
 		}
