@@ -8,7 +8,7 @@
   
   <a href="#" name="link" action="linkClick">ActionLink</a>
   
-  <form name="form">
+  <form name="form" clientValidation="true">
     <table>
     <tr>
       <th>TextField:</th>
@@ -72,6 +72,12 @@
     </table>
     <input type="submit" name="submit" value="Submit" c:replace="$form.fields.submit"/>
   </form>
+  
+  <table>
+  	<tr id="form-errorsTr" style="display:none">
+  		<td><div  class="errors" id="form-errorsDiv">Error Message</div></td>
+  	</tr>
+  </table>
   
   <a href="welcome.htm">Back</a>
 </body>
