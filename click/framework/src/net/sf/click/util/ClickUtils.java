@@ -777,7 +777,8 @@ public class ClickUtils {
                 if (i < name.length() - 1) {
                     char nextChar = name.charAt(i + 1);
                     if (Character.isLowerCase(aChar)
-                        && Character.isUpperCase(nextChar)) {
+                        && (Character.isUpperCase(nextChar)
+                            || Character.isDigit(nextChar))) {
                        buffer.append(" ");
                     }
                 }
