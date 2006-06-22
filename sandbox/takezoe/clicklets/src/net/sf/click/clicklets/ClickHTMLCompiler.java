@@ -24,6 +24,13 @@ import net.sf.click.control.Form;
  */
 public class ClickHTMLCompiler {
 	
+	private static String ERROR_MESSAGES =  
+		"<table>\n"+
+  	    "  <tr id=\"form-errorsTr\" style=\"display:none\">\n" + 
+		"    <td><div  class=\"errors\" id=\"form-errorsDiv\"></div></td>\n" +
+	    "  </tr>\n"+
+        "</table>\n";
+	
 	/**
 	 * handlers
 	 */
@@ -71,6 +78,9 @@ public class ClickHTMLCompiler {
 			if(scripts.length() > 0){
 				source = source.replaceFirst("</head>", scripts.toString() + "</head>");
 			}
+			
+			source = source.replaceAll("\\$client-side-errors", ERROR_MESSAGES);
+			
 			out.write(source.getBytes("UTF-8")); // TODO charset
 			out.close();
 		}

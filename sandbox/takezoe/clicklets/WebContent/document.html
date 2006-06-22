@@ -227,5 +227,21 @@ This Clicklets would be converted to the following Velocity template.
   So you would be able to use existing Velocity templates with small modification.
 </p>
 
+<a name="clientsidevalidation"></a>
+<h3>Client-Side Validation</h3>
+<p>
+  Click supports client-side validation since 0.20.
+  Here is an example to use client-side validation in Clicklets.
+</p>
+<pre>
+&lt;form name="form" clientValidation="true" ...&gt;
+  ...
+&lt;/form&gt;
+$client-side-errors
+</pre>
+<p>
+  Error messages would be displayed in $client-side-errors.
+</p>
+
 </body>
 </html>
