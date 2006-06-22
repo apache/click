@@ -25,11 +25,9 @@ import net.sf.click.control.Form;
 public class ClickHTMLCompiler {
 	
 	private static String ERROR_MESSAGES =  
-		"<table>\n"+
-  	    "  <tr id=\"form-errorsTr\" style=\"display:none\">\n" + 
-		"    <td><div  class=\"errors\" id=\"form-errorsDiv\"></div></td>\n" +
-	    "  </tr>\n"+
-        "</table>\n";
+		"<div id=\"form-errorsTr\" style=\"display:none\">\n"+
+		"  <div  class=\"errors\" id=\"form-errorsDiv\"></div>\n"+
+		"</div>\n";
 	
 	/**
 	 * handlers
