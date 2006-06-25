@@ -19,11 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -530,20 +528,21 @@ class ClickApp implements EntityResolver {
 
     // -------------------------------------------------------- Private Methods
 
-    private Element getResourceRootElement(URL url) throws Exception {
+    private Element getResourceRootElement(String path) throws IOException {
+        Document document = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = getClass().getResourceAsStream(path);
 
-        InputStream inputStream = url.openStream();
-
-        if (inputStream != null) {
-
-            Document document = null;
-            try {
+            if (inputStream != null) {
                 document = ClickUtils.buildDocument(inputStream, this);
-
-            } finally {
-                ClickUtils.close(inputStream);
             }
 
+        } finally {
+            ClickUtils.close(inputStream);
+        }
+
+        if (document != null) {
             return document.getDocumentElement();
 
         } else {
@@ -604,13 +603,8 @@ class ClickApp implements EntityResolver {
                               "/net/sf/click/control/VM_global_library.vm",
                               "click");
 
-        Enumeration e =
-            getClass().getClassLoader().getResources("click-controls.xml");
-        while (e.hasMoreElements()) {
-            URL url = (URL) e.nextElement();
-            deployControls(getResourceRootElement(url));
-        }
-
+        deployControls(getResourceRootElement("click-controls.xml"));
+        deployControls(getResourceRootElement("extras-controls.xml"));
         deployControls(rootElm);
     }
 
