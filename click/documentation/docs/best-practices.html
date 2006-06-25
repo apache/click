@@ -25,6 +25,8 @@ The following topics are covered:
   </li>
   <li><a href="#logging">Logging</a> - use Log4j in a base page
   </li>
+  <li><a href="#error-handling">Error Handling</a> - use custom error page
+  </li>
 </ul>
 
 <p>&nbsp;</p>
@@ -75,17 +77,15 @@ under the <span class="red">admin</span> directory:
    &lt;auth-constraint&gt;
       &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
    &lt;/auth-constraint&gt;
-&lt;/security-constraint&gt; 
-</pre>
+&lt;/security-constraint&gt; </pre>
 
 The application user roles are defined in the <tt>web.xml</tt> file as 
 <tt>security-role</tt> elements:
 
 <pre class="codeConfig">
-   &lt;security-role&gt;
-      &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
-   &lt;/security-role&gt;
-</pre>
+&lt;security-role&gt;
+   &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
+&lt;/security-role&gt;  </pre>
 
 The Servlet security model supports three different authentication method:
 <ul>
@@ -97,12 +97,77 @@ The Servlet security model supports three different authentication method:
     username and password are posted to the server as a Base64 encoded string.
   </li>
   <li>
-    <tt>DIGEST</tt> - TODO
+    <tt>DIGEST</tt> - recommended for internal applications with a moderate level
+    of security. As with BASIC authentication, this method simply displays a 
+    dialog box to users requiring them to authenticate before accessing 
+    secure resources. Not all application servers support DIGEST authentication,
+    with only more recent versions of Apache Tomcat supporting this method.
   </li>
   <li>
-    <tt>FORM</tt> - TODO
+    <tt>FORM</tt> - recommended applications for where you need a customised 
+    login page. For applications requiring a high level of security it is 
+    recommended that you use the FORM method over Http.
   </li>
 </ul>
+
+The authentication method is specified in the &lt;login-method&gt; element. For
+example to use the BASIC authentication method you would specify:
+
+<pre class="codeConfig">
+&lt;login-config&gt;
+   &lt;auth-method&gt;<span class="blue">BASIC</span>&lt;/auth-method&gt;
+   &lt;realm-name&gt;Admin Realm&lt;/realm-name&gt;
+&lt;/login-config&gt;  </pre>
+
+To use the FORM method you also need to specify the path to the login page and
+the login error page:
+
+<pre class="codeConfig">
+&lt;login-config&gt;
+   &lt;auth-method&gt;<span class="blue">FORM</span>&lt;/auth-method&gt;
+   &lt;realm-name&gt;Secure Realm&lt;/realm-name&gt;
+   &lt;form-login-config&gt;
+      &lt;form-login-page&gt;<span class="red">/login.htm</span>&lt;/form-login-page&gt;
+      &lt;form-error-page&gt;<span class="red">/login.htm?auth-error=true</span>&lt;/form-error-page&gt;
+   &lt;/form-login-config&gt;
+&lt;/login-config&gt; </pre>
+
+In your Click <tt>login.htm</tt> page you need to include a special 
+<span class="blue">j_security_check</span> form which includes the input
+fields <span class="blue">j_username</span> and <span class="blue">j_password</span>.
+For example:
+
+<pre class="codeHtml">
+<span class="kw">#if</span> ($request.getParameter(<span class="red">"auth-error"</span>))
+&lt;div style="margin-bottom:1em;margin-top:1em;color:red;"&gt;
+  Invalid User Name or Password, please try again.&lt;br/&gt;
+  Please ensure Caps Lock is off.
+&lt;/div&gt;
+<span class="kw">#end</span>
+
+&lt;form method="POST" action="<span class="blue">j_security_check</span>" name="form"&gt;
+&lt;table border="0" style="margin-left:0.25em;"&gt;
+ &lt;tr&gt;
+   &lt;td&gt;&lt;label&gt;User Name&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="text" name="<span class="blue">j_username</span>" maxlength="20" style="width:150px;"/&gt;&lt;/td&gt;
+   &lt;td&gt;&nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;&lt;label&gt;User Password&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="password" name="<span class="blue">j_password</span>" maxlength="20" style="width:150px;"/&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="image" src="$context/images/login.png" title="Click to Login"/&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+
+&lt;script type="text/javascript"&gt;
+  document.form.j_username.focus(); 
+&lt;/script&gt; </pre>
+
+When using FORM based authentication do <b>NOT</b> put application logic in a 
+Click Login Page class, as the role of this page is to simply render the login 
+form. If you attempt to put navigation logic in your Login Page class, the 
+J2EE Container may simply ignore it or throw errors.
 
 <h4>Resources</h4>
 
@@ -119,7 +184,6 @@ For more information on using security see the resources below:
   <li><a href="http://en.wikipedia.org/wiki/Https">Https URI scheme</a>
   </li>
 </ul>
-
 
 
 <a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
@@ -193,6 +257,8 @@ If you have some very heavy debug statement you should possibly use an
 Please note the Click logging facility is not designed for application use, and is 
 for Click internal use only. When Click is running in <tt>production</tt> mode
 it will not produce any logging output.
+
+<a name="error-handling" class="heading"><h2>Error Handling</h2></a>
 
 
 

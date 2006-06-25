@@ -543,13 +543,9 @@ Pages provide an
 event handler which application pages override to implement authentication or
 authorization capabilities. 
 <p/>
-Please note you generally don't need to use this capability. Where possible
-you should use the J2EE path based security model and the facilities proivded
-by your app server. For information of the J2EE Servlet security facilities see the Sun 
-<a target="topic" href="http://java.sun.com/products/servlet/reference/api/index.html">Servlet Specification</a>, 
-and Louis E. Mauget's 
-<a target="topic" href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form-Based Web Authentication</a>
-paper.
+Please note you generally don't need to use this capability, and where possible
+you should use the J2EE security model. See the Best Practices 
+<a href="best-practices.html#security">Security</a> topic for more details.
 
 <h4>Application Authentication</h4>
 Applications can use the <tt>onSecurityCheck()</tt> method to implement their own security model. The example 
