@@ -168,6 +168,60 @@ When using FORM based authentication do <b>NOT</b> put application logic in a
 Click Login Page class, as the role of this page is to simply render the login 
 form. If you attempt to put navigation logic in your Login Page class, the 
 J2EE Container may simply ignore it or throw errors.
+<p/>
+Putting this all together below is a <tt>web.xml</tt> snippet which features 
+security constraints for pages under the admin path and the user path. This 
+configuration uses the FORM method for authentication, and will also redirect
+unauthorized (403) requests to the <tt>/not-authorized.htm</tt> page.
+
+<pre class="codeConfig">
+&lt;web-app&gt;
+
+    ..
+
+    &lt;error-page&gt;
+        &lt;error-code&gt;403&lt;/error-code&gt;
+        &lt;location&gt;<span class="green">/not-authorized.htm</span>&lt;/location&gt;
+    &lt;/error-page&gt;	
+
+    &lt;security-constraint&gt;
+        &lt;web-resource-collection&gt;
+            &lt;url-pattern&gt;<span class="blue">/admin/*</span>&lt;/url-pattern&gt;
+        &lt;/web-resource-collection&gt;
+        &lt;auth-constraint&gt;
+            &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+        &lt;/auth-constraint&gt;
+    &lt;/security-constraint&gt;
+
+    &lt;security-constraint&gt;
+        &lt;web-resource-collection&gt;
+            &lt;url-pattern&gt;<span class="blue">/user/*</span>&lt;/url-pattern&gt;
+        &lt;/web-resource-collection&gt;
+        &lt;auth-constraint&gt;
+            &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+            &lt;role-name&gt;<span class="red">user</span>&lt;/role-name&gt;
+        &lt;/auth-constraint&gt;
+    &lt;/security-constraint&gt;
+
+    &lt;login-config&gt;
+        &lt;auth-method&gt;<span class="green">FORM</span>&lt;/auth-method&gt;
+        &lt;realm-name&gt;Secure Zone&lt;/realm-name&gt;
+        &lt;form-login-config&gt;
+            &lt;form-login-page&gt;<span class="green">/login.htm</span>&lt;/form-login-page&gt;
+            &lt;form-error-page&gt;<span class="green">/login.htm?auth-error=true</span>&lt;/form-error-page&gt;
+        &lt;/form-login-config&gt;
+    &lt;/login-config&gt;
+
+    &lt;security-role&gt;
+        &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+    &lt;/security-role&gt;
+
+    &lt;security-role&gt;
+        &lt;role-name&gt;<span class="red">user</span>&lt;/role-name&gt;
+    &lt;/security-role&gt;
+
+&lt;/web-app&gt;
+</pre>
 
 <h4>Resources</h4>
 
@@ -216,6 +270,71 @@ provided below:
 
 
 <a name="navigation" class="heading"><h2>Navigation</h2></a>
+
+When navigating between Pages using forwards and redirects, you should refer 
+to the target page using the Page class rather than using path. 
+This provides you compile time checking and will save you from having to update 
+path strings in Java code if you move pages about.
+<p/>
+To forward to another page using the Page class:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+
+    <span class="kw">private</span> ActionLink customerLink = 
+        <span class="kw">new</span> ActionLink(<span class="st">"customerLink"</span>, <span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    
+    ..
+    
+    <span class="kw">public boolean</span> onCustomerClick() {
+        Integer id = customerLink.getValueInteger();
+        Customer customer = getCustomerService().getCustomer(id); 
+   
+        CustomerDetailPage customerDetailPage = (CustomerDetailPage)
+            getContext().createPage(CustomerDetailPage.<span class="kw">class</span>);
+
+        customerDetailPage.setCustomer(customer);
+        setForward(customerDetailPage);
+   
+        <span class="kw">return false</span>;
+    }
+} </pre>
+
+To redirect to another page using the Page class you can obtain the pages path
+from the <tt>Context</tt>. In the example below we are passing through the 
+customer id as a request parameter to the target page.
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+
+    <span class="kw">private</span> ActionLink customerLink = 
+        <span class="kw">new</span> ActionLink(<span class="st">"customerLink"</span>, <span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    
+    ..
+    
+    <span class="kw">public boolean</span> onCustomerClick() {
+        String id = customerLink.getValueInteger();
+   
+        String path = getContext().getPagePath(CustomerDetailPage.<span class="kw">class</span>);		
+        setRedirect(path + <span class="st">"?id="</span> + id);
+   
+        <span class="kw">return false</span>;
+    }
+} </pre>
+
+A quick way of redirecting to another page is to simply refer to the target class. 
+The example below logs a user out, by invalidating their session, and then redirects
+them to the applications home page.
+
+<pre class="codeJava">
+    <span class="kw">public boolean</span> onLogoutClick() {
+        getContext().getSession().invalidate();
+        
+        setRedirect(HomePage.<span class="kw">class</span>);
+        
+        <span class="kw">return false</span>;
+    }
+</pre>
 
 <a name="templating" class="heading"><h2>Templating</h2></a>
 
