@@ -15,6 +15,7 @@ CODE
 BUGS
 
 DOCUMENTATION
+* update FAQ multiple parameters topic
 * update Velocity documentation
 * discuss redirecting to HTTPS
 
