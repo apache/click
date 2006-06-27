@@ -185,8 +185,35 @@ For more information on using security see the resources below:
   </li>
 </ul>
 
-
 <a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
+
+You should use the Click page automapping configuration feature. See
+the <a href="configuration.html#application-automapping">Page Automapping</a> 
+topic for details.
+<p/>
+Automapping will save manually configure URL path to Page class mappings in your 
+<tt>click.xml</tt> file. If you follow this convention it is very easy to maintain 
+applications and you can quickly determine what the corresponding Page class is 
+for a page HTML template and visa versa. 
+<p/>
+An example <tt>click.xml</tt> automapping configuration is provided below:
+
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages <span class="blue">package</span>="<span class="red">com.mycorp.dashboard.page</span>" <span class="blue">automapping</span>="<span class="blue">true</span>"/&gt;
+&lt;/click-app&gt; </pre>
+
+To see how the page templates are mapped to Page classes set the application 
+<a href="configuration.html#application-mode">mode</a> to <tt>debug</tt> and
+at startup the mappings will be listed out. An example Click startup listing is 
+provided below:
+
+<pre class="codeConfig">
+[Click] [debug] automapped pages:
+[Click] [debug] /category-tree.htm -&gt; com.mycorp.dashboard.page.CategoryTree
+[Click] [debug] /process-list.htm -&gt; com.mycorp.dashboard.page.ProcessList
+[Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList  </pre>
+
 
 <a name="navigation" class="heading"><h2>Navigation</h2></a>
 
