@@ -404,6 +404,21 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
+     * Return the link request parameter value for the given name, or null if
+     * the parameter value does not exist.
+     *
+     * @param name the name of request parameter
+     * @return the link request parameter value
+     */
+    public String getParameter(String name) {
+        if (hasParameters()) {
+            return (String) getParameters().get(name);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Set the link parameter with the given parameter name and value. You would
      * generally use parameter if you were creating the entire AbstractLink
      * programatically and rendering it with the {@link #toString()} method.

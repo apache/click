@@ -327,8 +327,9 @@
    parameter and pass this to the ActionLink. For example:
    
 <pre class="codeHtml">
-   <span class="red">#set</span> (<span class="red">$</span><span class="blue">id</span> = <span class="red">$</span><span class="blue">customer.id</span> + "-" + <span class="red">$</span><span class="blue">account.id</span>)
-   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.getHref(</span><span class="red">$</span><span class="blue">id</span>)" 
+   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"customerId"</span>, <span class="red">$</span><span class="blue">customer.id</span>)
+   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"accountId"</span>, <span class="red">$</span><span class="blue">account.id</span>)
+   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.href</span>" 
       onclick="return window.confirm('Please confirm to delete this account.');"&gt;
      &lt;img src="images/delete.gif" title="Delete" border="0" align="middle"&gt;
    &lt;/a&gt;
@@ -339,10 +340,8 @@
    
 <pre class="codeJava">
 <span class="kw">public boolean</span> onDeleteClick() {
-    String value = deleteLink.getValue();
-    <span class="kw">int</span> index = value.indexOf(<span class="st">"-"</span>); 
-    Long customerId = Long.valueOf(value.substring(0, index)); 
-    Long accountId = Long.valueOf(value.substring(index + 1)); 
+    Long customerId = Long.valueOf(deleteLink.getParameter(<span class="st">"customerId"</span>)); 
+    Long accountId = Long.valueOf(deleteLink.getParameter(<span class="st">"accountId"</span>)); 
     
     <span class="cm">// Delete customer account</span>
     ..
