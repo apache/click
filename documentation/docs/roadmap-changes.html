@@ -43,13 +43,20 @@ The first Click Release Candiate (RC) is scheduled for mid July.
       <li class="change">
        Added 
        <a href="click-api/net/sf/click/control/PageLink.html">PageLink</a>
-       control. This addition was put forward by Stephen Haberman
+       control. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-106">106</a>].
+      </li>        
+      <li class="change">
+       Added automatic registration public Page controls when pages are created.
+       See the ClickServlet 
+       <a href="click-api/net/sf/click/ClickServlet.html#createPage(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, boolean)">createPage()</a>
+       for details. This addition was raised by Stephen Haberman
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-??">??</a>].
       </li>        
       <li class="change">
        Added Page 
        <a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a>
-       method. This addition was put forward by Stephen Haberman
+       method. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-105">105</a>].
       </li>        
       <li class="change">
@@ -70,7 +77,8 @@ The first Click Release Candiate (RC) is scheduled for mid July.
       <li class="change">
        Fixed Tomcat deployment issue where Tomcat ClassLoader was locking Click
        JARs preventing application redeployment. Due locking on URL streams,
-       the deployment technique has reverted back to using uniquely named files (pre 0.19)
+       the deployment technique has reverted back to using uniquely named files (pre 0.19).
+       This issue was raised by ??
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-82">82</a>].
       </li>
       <li class="change">
