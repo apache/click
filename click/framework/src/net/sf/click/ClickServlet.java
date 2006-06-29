@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -638,6 +639,34 @@ public class ClickServlet extends HttpServlet {
      * Return a new Page instance for the given request. This method will
      * invoke {@link #initPage(String, Class, HttpServletRequest)} to create
      * the Page instance and then set the properties on the page.
+     * <p/>
+     * This method will also automatically register any public Page controls
+     * in the page's model. When the page is created any public visiblity
+     * page Control variables will be automatically added to the page using
+     * the method {@link Page#addControl(Control)} method. If the controls name
+     * is not defined it is set to the member variables name before it is added
+     * to the page.
+     * <p/>
+     * This feature saves you from having to mannually add the controls yourself.
+     * If you dont want the controls automatically added, simply declare them
+     * as non public variables.
+     * <p/>
+     * An example auto control registration is provided below. In this example
+     * the Table control is automatically added to the model using the name
+     * <tt>"table"</tt>, and the ActionLink controls are added using the names
+     * <tt>"editDetailsLink"</tt> and <tt>"viewDetailsLink"</tt>.
+     *
+     * <pre class="javaCode">
+     * <span class="kw">public class</span> OrderDetailsPage <span class="kw">extends</span> Page {
+     *
+     *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
+     *     <span class="kw">public</span> ActionLink editDetailsLink = <span class="kw">new</span> ActionLink();
+     *     <span class="kw">public</span>ActionLink viewDetailsLink = <span class="kw">new</span> ActionLink();
+     *
+     *     <span class="kw">public</span> OrderDetailsPage() {
+     *         ..
+     *     }
+     * } </pre>
      *
      * @param request the servlet request
      * @param response the servlet response
@@ -683,6 +712,27 @@ public class ClickServlet extends HttpServlet {
 
         if (page.getFormat() == null) {
             page.setFormat(clickApp.getFormat(context.getLocale()));
+        }
+
+        // Automatically register public Page controls
+        Field[] fields = page.getClass().getFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+
+            try {
+                Object value = field.get(page);
+
+                if (value != null && value instanceof Control) {
+                    Control control = (Control) value;
+                    if (control.getName() == null) {
+                        control.setName(field.getName());
+                    }
+                    page.addControl(control);
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return page;
