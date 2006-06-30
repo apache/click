@@ -196,6 +196,25 @@ public class ActionLink extends AbstractLink {
     }
 
     /**
+     * Create an ActionLink for the given listener object and listener
+     * method.
+     *
+     * @param listener the listener target object
+     * @param method the listener method to call
+     * @throws IllegalArgumentException if the name, listener or method is null
+     * or if the method is blank
+     */
+    public ActionLink(Object listener, String method) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Null listener parameter");
+        }
+        if (StringUtils.isBlank(method)) {
+            throw new IllegalArgumentException("Blank listener method");
+        }
+        setListener(listener, method);
+    }
+
+    /**
      * Create an ActionLink for the given name, listener object and listener
      * method.
      *
