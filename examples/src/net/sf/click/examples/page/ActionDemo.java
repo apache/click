@@ -7,20 +7,17 @@ import net.sf.click.control.ActionLink;
 
 /**
  * Provides an ActionLink and ActionButton demonstration Page.
+ * <p/>
+ * In this example the controls are automatically added to the Page model
+ * because they have public visiblity. The controls name is automatically set
+ * to their field name.
  *
  * @author Malcolm Edgar
  */
 public class ActionDemo extends BorderPage {
 
-    public ActionDemo() {
-        ActionLink actionLink = new ActionLink("link");
-        actionLink.setListener(this, "onLinkClick");
-        addControl(actionLink);
-
-        ActionButton actionButton = new ActionButton("button");
-        actionButton.setListener(this, "onButtonClick");
-        addControl(actionButton);
-    }
+    public ActionLink link = new ActionLink(this, "onLinkClick");
+    public ActionButton button = new ActionButton(this, "onButtonClick");
 
     public boolean onLinkClick() {
         String msg = getClass().getName() + ".onLinkClick invoked at " + (new Date());

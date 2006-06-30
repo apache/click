@@ -6,28 +6,18 @@ import net.sf.click.examples.domain.Customer;
 
 /**
  * Provides a dynamic ActionLink example in a HTML table.
+ * <p/>
+ * In this example the controls are automatically added to the Page model
+ * because they have public visiblity. The controls name is automatically set
+ * to their field name.
  *
  * @author Malcolm Edgar
  */
 public class ActionTable extends BorderPage {
 
-    private ActionLink viewLink;
-    private ActionLink editLink;
-    private ActionLink deleteLink;
-
-    public ActionTable() {
-        viewLink = new ActionLink("viewLink");
-        viewLink.setListener(this, "onViewClick");
-        addControl(viewLink);
-
-        editLink = new ActionLink("editLink");
-        editLink.setListener(this, "onEditClick");
-        addControl(editLink);
-
-        deleteLink = new ActionLink("deleteLink");
-        deleteLink.setListener(this, "onDeleteClick");
-        addControl(deleteLink);
-    }
+    public ActionLink viewLink = new ActionLink(this, "onViewClick");
+    public ActionLink editLink = new ActionLink(this, "onEditClick");
+    public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
