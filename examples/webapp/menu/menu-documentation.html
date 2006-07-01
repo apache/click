@@ -1,23 +1,21 @@
-Application menus can be defined in configuration file 
-<a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>
+Application menus is defined in the configuration file 
+<a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>.
 <p/>
-To access the root menu item of the applications configured menus simply create
-a root Menu item using the default construtor:
+The Menu is rendered using the Velocity Macro
+<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>, and is
+initialized using the JavaScript function <tt>initMenu()</tt>.
+<p/>
+The example menu pages all extend <tt>MenuPage</tt> which defines a <span class="st">"rootMenu"</span>
+control. This ensures all the example menu pages include the Menu control.
 
 <pre class="codeJava">
 <span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
-
+    
     <span class="kw">public</span> MenuPage() {
         addControl(<span class="kw">new</span> Menu(<span class="st">"rootMenu"</span>));
-    } 
+        
+        addModel(<span class="st">"head-include"</span>, <span class="st">"menu/menu.js"</span>);
+        addModel(<span class="st">"body-onload"</span>, <span class="st">"initMenu();"</span>);
+    }
+    
 }</pre>
-
-This Menu constructor will return copy of the menu tree, which can be
-accessed via the children property. In the menu tree, the Menu item for the 
-current page will be selected, and its parents will also be selected.
-
-<p/>
-
-In this example the applications menu is rendered as a 2 level menu using a 
-Velocity Macro 
-<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>

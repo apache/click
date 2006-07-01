@@ -150,6 +150,7 @@ td.tf_error {
 
 
 /* Tabbed Panel Colors */
+
 table.tp_tab { border-collapse: collapse; }
 tr.tp_tab { }
 td.tp_tab_on {  background: #336699; color: #ffffff; border-left: 1px solid #336699; border-top: 1px solid #336699; border-right: 1px solid #336699; padding: 5px; }
@@ -158,40 +159,84 @@ table.tp_content { border: 1px solid #336699; }
 tr.tp_content { }
 td.tp_content { background: #efefef; }
 
+
 /* Menu Demo */
 
-.menu-demo {
-	color: white;
-	background-color: #893E13;
-	font-family: arial;
-	font-size: 10pt;
-	font-weight: bold;
+#menuTable #searchbar #menu {
+    font: 11px verdana, arial, helvetica, lucida-sans, sans-serif;
+    line-height: 15px; 
+    height: 26px; 
+    background: #707070; 
+    color: #707070; 
+    padding: 0; 
+    margin: 0
+}
+.menubar {
+    list-style-type: none; 
+    margin: 0; 
+    padding: 0; 
+} 
+.topitem {
+    font-weight: normal; 
+    float: left; 
+    display: block; 
+    height: 24px;  
+} 
+.topitem a, .topitem a:visited {
+    font-weight: bold; 
+    color: white; 
+    padding-left:15px; 
+    padding-right:14px; 
+    padding-top:4px; 
+    padding-bottom:5px; 
+    display: block; 
+    text-decoration: none; 
+    border: 1px solid #707070; 
+}
+.topitem a:hover {
+    text-decoration: none; 
+    background: #fff; 
+    color: #000; 
+    border: 1px solid #3699dd; 
+}
+.selected {
+    font-weight: normal; 
+    background: #afaea9 repeat-x left; 
 }
 
-.menu-demo-selected {
-	color: yellow;
-	background-color: #B25318;
-	font-family: arial;
-	font-size: 10pt; 
-	font-weight: bold;
- 	padding: 0px 7px;
+ul.submenu {
+    list-style-type: none; 
+    position: absolute; 
+    margin: 0; 
+    padding: 0; 
+    display: none; 
+    width: 180px;  
+} 
+ul.submenu li {
+    padding: 0; 
+    margin: 0; 
+    font-size: 11px;
+} 
+ul.submenu li a, ul.submenu li a:visited {
+    padding: 3px 3px 3px 16px; 
+    color: #000; 
+    border: 1px solid #c0c0c0; 
+    text-decoration: none; 
+    margin: 0;
+} 
+ul.submenu li a:hover {
+    padding: 3px 3px 3px 16px; 
+    text-decoration: none; 
+    background: #fff; 
+    color: #000; 
+    border: 1px solid #3699dd; 
+} 
+li:hover ul, li.over ul {
+    margin: 0; 
+    padding: 4px; 
+    display: block; 
+    background: #c0c0c0;
+} 
+#dmenu li>ul {
+    top: auto; left: auto;
 }
-
-a.menu-demo {
-	color: white;
-	font-family: arial;
-	font-size: 10pt;
-	font-weight: bold;
-	padding-left: 0.5em;
-	padding-right: 0.5em;
-	text-decoration: none;
-}
-
-a.menu-demo:visited {
-	color: white;
-}
-
-a.menu-demo:hover {
-	color: #FFFF80;
-}
-
