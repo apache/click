@@ -70,7 +70,6 @@
 <table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
  <tr>
   <td>
-<div id="searchbar">
  <div id="menu">
   <ul class="menubar" id="dmenu">
     #foreach ($topMenu in $rootMenu.children)
@@ -87,10 +86,9 @@
 		  </li>
         #end
       #end
-	#end
+    #end
   </ul>
  </div>
-</div>
   </td>
  </tr>
 </table>

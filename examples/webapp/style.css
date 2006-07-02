@@ -162,7 +162,7 @@ td.tp_content { background: #efefef; }
 
 /* Menu Demo */
 
-#menuTable #searchbar #menu {
+#menuTable #menu {
     font: 11px verdana, arial, helvetica, lucida-sans, sans-serif;
     line-height: 15px; 
     height: 26px; 
