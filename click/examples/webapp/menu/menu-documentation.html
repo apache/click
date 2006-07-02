@@ -1,12 +1,18 @@
-Application menus are defined in the configuration file 
+In Click a applications menu is in the configuration file 
 <a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>.
 <p/>
-The Menu is rendered using the Velocity Macro
-<a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>, and is
-initialized using the JavaScript function <tt>initMenu()</tt>.
+This JavaScript drop down menu is rendered using the Velocity Macro <tt>writeMenu()</tt>,
+defined in <a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>.
+
+<pre class="codeHtml">
+&#35;writeMenu(&#36;rootMenu) </pre>
+
+When the page body loads the JavaScript <tt>initMenu()</tt> function is called to initialize the menus
+dynamic behaviour. See the JavaScript include 
+<a href="$context/source-viewer.htm?filename=menu/menu.js">menu/menu.js</a>
 <p/>
 The example menu pages all extend <tt>MenuPage</tt> which defines a <span class="st">"rootMenu"</span>
-control. This ensures all the example menu pages include the Menu control.
+control.
 
 <pre class="codeJava">
 <span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
@@ -17,5 +23,4 @@ control. This ensures all the example menu pages include the Menu control.
         addModel(<span class="st">"head-include"</span>, <span class="st">"menu/menu.js"</span>);
         addModel(<span class="st">"body-onload"</span>, <span class="st">"initMenu();"</span>);
     }
-    
 }</pre>
