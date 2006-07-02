@@ -352,7 +352,34 @@ advantages including:
 To see how to use templates see the <a href="pages.html#page-templating">Page Templating</a> topic.
 Also see the Click <a href="examples.html">Examples</a> use of page templating.
 
+
 <a name="menus" class="heading"><h2>Menus</h2></a>
+
+For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
+control to centralize application navigation menu is very useful.
+<p/>
+An menu is typically defined in the a page border template so they are available 
+through out the application. The Menu control does not support HTML rendering, 
+so you need to define a Velocity macro to render the menu. You would call the 
+macro in your border template with code like this:
+
+<pre class="codeHtml">
+<span class="red">#</span><span class="blue">writeMenu</span>(<span class="red">$</span>rootMenu) </pre>
+
+One good place to define your macros is in the webroot <tt>/macro.vm</tt> file 
+as it is automatically included by Click. 
+<p/>
+Using macros you can create dynamic menu behaviour such as only rendering menus items 
+a user is authorized to access with <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
+
+<pre class="codeHtml">
+<span class="kw">#if</span> (<span class="red">$</span>menu.isUserInRoles())
+   ..
+<span class="kw">#end</span> </pre>
+
+You can also use JavaScript to add dynamic behaviour such as drop down menus, 
+for example see the Menu page in Click <a href="examples.html">Examples</a>.
+
 
 <a name="logging" class="heading"><h2>Logging</h2></a>
 
