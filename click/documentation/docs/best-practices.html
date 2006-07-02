@@ -356,17 +356,21 @@ Also see the Click <a href="examples.html">Examples</a> use of page templating.
 <a name="menus" class="heading"><h2>Menus</h2></a>
 
 For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
-control to centralize application navigation menu is very useful.
+control to centralize application navigation is very useful. 
+Menus are defined in a <tt>WEB-INF/menu.xml</tt> file which changes very easy.
 <p/>
 An menu is typically defined in the a page border template so they are available 
 through out the application. The Menu control does not support HTML rendering, 
-so you need to define a Velocity macro to render the menu. You would call the 
-macro in your border template with code like this:
+so you need to define a Velocity macro to programattically render the menu. 
+You would call the macro in your border template with code like this:
 
 <pre class="codeHtml">
 <span class="red">#</span><span class="blue">writeMenu</span>(<span class="red">$</span>rootMenu) </pre>
 
-One good place to define your macros is in the webroot <tt>/macro.vm</tt> file 
+An advantage of using a macro to render you menu is that you can reuse the code
+across different applications, and to modify an applications menu you simply need
+to edit the <tt>WEB-INF/menu.xml</tt> file.
+A good place to define your macros is in the webroot <tt>/macro.vm</tt> file 
 as it is automatically included by Click. 
 <p/>
 Using macros you can create dynamic menu behaviour such as only rendering menus items 
