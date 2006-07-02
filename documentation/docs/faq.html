@@ -25,6 +25,8 @@
   </li> 
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
   </li>
+  <li><a href="#listener-returns">Why do control listeners methods have to return a boolean value?</a>
+  </li> 
   <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
   <li><a href="#localization">How do you internationalize Pages and Controls?</a>
@@ -191,6 +193,31 @@
 
 
     
+  <a name="listener-returns" class="heading"></a>
+  <dt><b>Why do control listeners methods have to return a boolean value?</b></dt>
+  <dd>
+  Control listener methods have to return a boolean value to state whether the
+  Pages controls and methods should continue to be processed. To continue
+  processing listener methods should return true, to abort they should return false.
+  <p/>
+  The reason you may want to abort further processing is so you can navigate 
+  directly to another page continuing to execute other control or page methods 
+  which may be time consuming. You can use this feature like a break or goto 
+  statement. For example:
+  
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   setRedirect(Logout.<span class="kw">class</span>);
+   <span class="kw">return false</span>;
+} 
+</pre>
+  
+  Please see the Page <a href="pages.html#page-navigation">Navigation</a> topic 
+  for more details.
+  </dd>
+
+
+
   <a name="exclude-fields" class="heading"></a>
   <dt><b>Can you exclude some fields from a Form?</b></dt>
   <dd>
@@ -413,10 +440,8 @@
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
    instead of the normal ClickServlet. The SpringClickServlet is contained in the 
    <a href="extras.html">Extras</a> library.
-
-   <h4>Spring Web MVC Framework</h4>
-
-   The Spring Web MVC Framework however, is not compatible with Click. The Spring framework
+   <p/>
+   The Spring MVC Framework however, is not compatible with Click. The Spring framework
    uses a low level command pattern design like Struts and WebWork.
    Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
    objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
