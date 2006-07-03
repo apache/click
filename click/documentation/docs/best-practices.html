@@ -396,7 +396,7 @@ Commons Logging please make sure you have the latest version.
 <p/>
 The best place to define your logger is in a common base page, for example:
 
-<pre class="codeConfig">
+<pre class="codeJava">
 <span class="kw">public class</span> BasePage <span class="kw">extends</span> Page {
 	
     <span class="kw">protected</span> Logger logger;
@@ -412,7 +412,7 @@ The best place to define your logger is in a common base page, for example:
 Using this pattern all your application bases should extend <tt>BasePage</tt>
 so they can use the <tt>getLogger()</tt> method.
 
-<pre class="codeConfig">
+<pre class="codeJava">
 <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
 	
     <span class="kw">public void</span> onGet() {
@@ -428,7 +428,7 @@ so they can use the <tt>getLogger()</tt> method.
 If you have some very heavy debug statement you should possibly use an 
 <tt>isDebugEnabled</tt> switch so it is not invoked if debug is not required.
 
-<pre class="codeConfig">
+<pre class="codeJava">
 <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
 	
     <span class="kw">public void</span> onGet() {
@@ -451,6 +451,28 @@ it will not produce any logging output.
 
 <a name="error-handling" class="heading"><h2>Error Handling</h2></a>
 
+If an application requires unhandled errors to be logged to an application log,
+other than System.out or the Servlet log, then a custom 
+<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> should be
+configured. An example AppErrorPage error logging page is provided 
+below:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page.AppErrorPage;
+..
+
+<span class="kw">public class</span> AppErrorPage <span class="kw">extends</span> ErrorPage {
+	
+    <span class="kw">public void</span> onDestory() {
+    	Logger.getLogger(getClass()).error(getError());
+    }
+} </pre>
+
+To configure this page you need to add the following entry to <tt>WEB-INF/click.xml</tt>:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.page.AppErrorPage</span>"/&gt; 
+</pre>
 
 
 </body>
