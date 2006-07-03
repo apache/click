@@ -451,6 +451,21 @@ it will not produce any logging output.
 
 <a name="error-handling" class="heading"><h2>Error Handling</h2></a>
 
+In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
+for display. If applications require additional error handling they can create and
+register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.page.AppErrorPage</span>"/&gt; 
+</pre>
+
+Generally application handle transactional errors using service layer code or via a
+servlet <a href="servlet-api/javax/servlet/Filter.html">Filter</a> and would not 
+need to include error handling logic in an error page.
+<p/>
+Potential uses for a custom error page include
+
+
 If an application requires unhandled errors to be logged to an application log,
 other than System.out or the Servlet log, then a custom 
 <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> should be
@@ -468,11 +483,6 @@ below:
     }
 } </pre>
 
-To configure this page you need to add the following entry to <tt>WEB-INF/click.xml</tt>:
-
-<pre class="codeConfig">
-&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.page.AppErrorPage</span>"/&gt; 
-</pre>
 
 
 </body>

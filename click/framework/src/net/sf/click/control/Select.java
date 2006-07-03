@@ -661,10 +661,21 @@ public class Select extends Field {
                 }
 
             } else {
-                Option firstOption = (Option) getOptionList().get(0);
-
-                if (firstOption.getValue().equals(getValue())) {
+                if (getValue().length() == 0) {
                     setErrorMessage("select-error");
+
+                } else {
+                    if (getOptionList().isEmpty()) {
+                        String msg = "Mandatory Select field " + getName()
+                        + " has no options to validate the request against";
+                        throw new RuntimeException(msg);
+                    }
+
+                    Option firstOption = (Option) getOptionList().get(0);
+
+                    if (firstOption.getValue().equals(getValue())) {
+                        setErrorMessage("select-error");
+                    }
                 }
             }
         }
