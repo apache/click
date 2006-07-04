@@ -61,10 +61,10 @@ public class DoubleField extends TextField {
     // ----------------------------------------------------- Instance Variables
 
     /** The maximum field value. */
-    protected double maxvalue = Double.MAX_VALUE;
+    protected double maxvalue = Double.POSITIVE_INFINITY;
 
     /** The minimum field value. */
-    protected double minvalue = Double.MIN_VALUE;
+    protected double minvalue = Double.NEGATIVE_INFINITY;
 
     // ----------------------------------------------------------- Constructors
 
@@ -262,6 +262,7 @@ public class DoubleField extends TextField {
                     setErrorMessage("number-maxvalue-error", maxvalue);
 
                 } else if (doubleValue < minvalue) {
+
                     setErrorMessage("number-minvalue-error", minvalue);
                 }
 

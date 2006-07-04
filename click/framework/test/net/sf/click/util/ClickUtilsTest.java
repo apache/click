@@ -230,7 +230,7 @@ public class ClickUtilsTest extends TestCase {
         
         Map map2 = ClickUtils.getParentMessages(textField);
         assertNotNull(map2);
-        assertEquals(3, map2.size());
+        assertEquals(1, map2.size());
         assertFalse(map2 == Collections.EMPTY_MAP);
         
         Page page2 = new Page();
@@ -244,7 +244,7 @@ public class ClickUtilsTest extends TestCase {
 
         Map map3 = ClickUtils.getParentMessages(textField2);
         assertNotNull(map3);
-        assertEquals(3, map3.size());
+        assertEquals(1, map3.size());
         assertFalse(map3 == Collections.EMPTY_MAP);        
     }
     

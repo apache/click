@@ -10,7 +10,8 @@ import net.sf.click.MockContext;
 
 public class MessagesMapTest extends TestCase {
     
-    private static final String TEST_MESSAGES = "click-page";
+    private static final String TEST_RESOURCE = "test-resource";
+    private static final String TEST_GLOBAL = "test-global";
     
     public void testMap() {
         Context context = new MockContext(Locale.ENGLISH);
@@ -18,7 +19,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(Control.CONTROL_MESSAGES, null, context);
         
         assertFalse(map.isEmpty());
-        assertEquals(27, map.size());
+        assertEquals(25, map.size());
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
@@ -83,31 +84,25 @@ public class MessagesMapTest extends TestCase {
     public void testGlobalResourses() {
         Context context = new MockContext(Locale.ENGLISH);
         
-        MessagesMap map = new MessagesMap(Control.CONTROL_MESSAGES, 
-                                          TEST_MESSAGES,
+        MessagesMap map = new MessagesMap(TEST_RESOURCE, 
+                                          TEST_GLOBAL,
                                           context);
         
         assertFalse(map.isEmpty());
-        assertEquals(27, map.size());
+        assertEquals(26, map.size());
 
-        assertTrue(map.containsKey("table-first-label"));
-        assertEquals("First", map.get("table-first-label")); 
+        assertTrue(map.containsKey("version"));
+        assertEquals("Version 0.21", map.get("version")); 
         
-        assertTrue(map.containsKey("test-key"));
-        assertEquals("Test Key Value", map.get("test-key"));
-        
-        MessagesMap map2 = new MessagesMap(TEST_MESSAGES,
+        MessagesMap map2 = new MessagesMap(TEST_GLOBAL,
                                            Control.CONTROL_MESSAGES,
                                            context);
-
+        
         assertFalse(map2.isEmpty());
-        assertEquals(27, map2.size());
-        
-        assertTrue(map2.containsKey("table-first-label"));
-        assertEquals("Test Value", map2.get("table-first-label")); 
-        
-        assertTrue(map2.containsKey("test-key"));
-        assertEquals("Test Key Value", map2.get("test-key")); 
+        assertEquals(26, map2.size());
+
+        assertTrue(map.containsKey("version"));
+        assertEquals("Version 0.21", map2.get("version")); 
 
     }
 
