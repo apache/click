@@ -533,7 +533,7 @@ class ClickApp implements EntityResolver {
         InputStream inputStream = null;
         try {
             inputStream = getClass().getResourceAsStream(path);
-
+System.out.println("path=" + path + ",stream=" + inputStream);
             if (inputStream != null) {
                 document = ClickUtils.buildDocument(inputStream, this);
             }
@@ -603,8 +603,8 @@ class ClickApp implements EntityResolver {
                               "/net/sf/click/control/VM_global_library.vm",
                               "click");
 
-        deployControls(getResourceRootElement("click-controls.xml"));
-        deployControls(getResourceRootElement("extras-controls.xml"));
+        deployControls(getResourceRootElement("/click-controls.xml"));
+        deployControls(getResourceRootElement("/extras-controls.xml"));
         deployControls(rootElm);
     }
 
