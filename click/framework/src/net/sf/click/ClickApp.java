@@ -533,7 +533,7 @@ class ClickApp implements EntityResolver {
         InputStream inputStream = null;
         try {
             inputStream = getClass().getResourceAsStream(path);
-System.out.println("path=" + path + ",stream=" + inputStream);
+
             if (inputStream != null) {
                 document = ClickUtils.buildDocument(inputStream, this);
             }
