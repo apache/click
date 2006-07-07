@@ -706,7 +706,7 @@ public class ClickServlet extends HttpServlet {
             path = ClickApp.NOT_FOUND_PATH;
         }
 
-        Page page = initPage(path, pageClass, request);
+        final Page page = initPage(path, pageClass, request);
 
         page.setContext(context);
 
@@ -714,26 +714,17 @@ public class ClickServlet extends HttpServlet {
             page.setFormat(clickApp.getFormat(context.getLocale()));
         }
 
-        // Automatically register public Page controls
-        Field[] fields = page.getClass().getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-
-            try {
-                Object value = field.get(page);
-
-                if (value != null && value instanceof Control) {
-                    Control control = (Control) value;
+        processPageFields(page, new FieldCallback() {
+            public void processField(String fieldName, Object fieldValue) {
+                if (fieldValue instanceof Control) {
+                    Control control = (Control) fieldValue;
                     if (control.getName() == null) {
-                        control.setName(field.getName());
+                        control.setName(fieldName);
                     }
                     page.addControl(control);
                 }
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
-        }
+        });
 
         return page;
     }
@@ -820,6 +811,19 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Return a new VelocityContext for the given pages model and Context.
+     * <p/>
+     * The following values automatically added to the VelocityContext:
+     * <ul>
+     * <li>any public Page fields using the fields name</li>
+     * <li>context - the Servlet context path, e.g. /mycorp</li>
+     * <li>format - the {@link Format} object for formatting the display of objects</li>
+     * <li>imports - the {@link PageImports} object</li>
+     * <li>messages - the page messages bundle</li>
+     * <li>path - the page of the page template to render</li>
+     * <li>request - the pages servlet request</li>
+     * <li>response - the pages servlet request</li>
+     * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
+     * </ul>
      *
      * @param page the page to create a VelocityContext for
      * @return a new VelocityContext
@@ -827,6 +831,14 @@ public class ClickServlet extends HttpServlet {
     protected VelocityContext createVelocityContext(Page page) {
 
         final VelocityContext context = new VelocityContext(page.getModel());
+
+        processPageFields(page, new FieldCallback() {
+            public void processField(String fieldName, Object fieldValue) {
+                if (fieldValue instanceof Control == false) {
+                    context.put(fieldName, fieldValue);
+                }
+            }
+        });
 
         final HttpServletRequest request = page.getContext().getRequest();
 
@@ -1023,7 +1035,15 @@ public class ClickServlet extends HttpServlet {
      * @param page the page to set the request attributes on
      */
     protected void setRequestAttributes(Page page) {
-        HttpServletRequest request = page.getContext().getRequest();
+        final HttpServletRequest request = page.getContext().getRequest();
+
+        processPageFields(page, new FieldCallback() {
+            public void processField(String fieldName, Object fieldValue) {
+                if (fieldValue instanceof Control == false) {
+                    request.setAttribute(fieldName, fieldValue);
+                }
+            }
+        });
 
         Map model = page.getModel();
         for (Iterator i = model.keySet().iterator(); i.hasNext();)  {
@@ -1116,6 +1136,31 @@ public class ClickServlet extends HttpServlet {
         }
 
         return requestParams;
+    }
+
+    /**
+     * Process all the Pages public fields using the given callback.
+     *
+     * @param page the page to obtain the fields from
+     * @param callback the fields iteractor callback
+     */
+    protected void processPageFields(Page page, FieldCallback callback) {
+
+        Field[] fields = page.getClass().getFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+
+            try {
+                Object fieldValue = field.get(page);
+
+                if (fieldValue != null) {
+                    callback.processField(field.getName(), fieldValue);
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     // ---------------------------------------------------------- Inner Classes
@@ -1316,4 +1361,14 @@ public class ClickServlet extends HttpServlet {
         }
 
     }
+
+    /**
+     * Field iterator callback.
+     */
+    static interface FieldCallback {
+
+        public void processField(String fieldName, Object fieldValue);
+
+    }
+
 }

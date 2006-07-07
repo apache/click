@@ -19,7 +19,7 @@ import net.sf.click.control.Select;
  */
 public class TitleSelect extends Select {
 
-    private static final long serialVersionUID = -3535229783883739808L;
+    private static final long serialVersionUID = 1L;
 
     static final Map OPTIONS = new LinkedHashMap();
 

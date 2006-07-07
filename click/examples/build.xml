@@ -18,11 +18,10 @@
    <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring" value="spring-1.2.6.jar"/>
-   <property name="jar.spring-beans" value="spring-beans-1.2.6.jar"/>
-   <property name="jar.spring-context" value="spring-context-1.2.6.jar"/>
-   <property name="jar.spring-core" value="spring-core-1.2.6.jar"/>
-   <property name="jar.spring-web" value="spring-web-1.2.6.jar"/>
+   <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
+   <property name="jar.spring-context" value="spring-context-1.2.8.jar"/>
+   <property name="jar.spring-core" value="spring-core-1.2.8.jar"/>
+   <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
      
    <property name="dir.deploy" value="../dist"/>
    <property name="dir.webapp" value="webapp"/>
@@ -137,10 +136,10 @@
       <webDownloadMacro name="${jar.logging}" path="commons-logging"/>
       <webDownloadMacro name="${jar.log4j}" path="log4j"/>
       <webDownloadMacro name="${jar.oro}" path="oro"/>
-      <webDownloadMacro name="${jar.spring-beans}" path="springframework"/>
-      <webDownloadMacro name="${jar.spring-context}" path="springframework"/>
-      <webDownloadMacro name="${jar.spring-core}" path="springframework"/>
-      <webDownloadMacro name="${jar.spring-web}" path="springframework"/>
+      <webDownloadMacro name="${jar.spring-beans}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-context}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-web}" path="org.springframework"/>
    </target>
    
 

@@ -36,7 +36,7 @@ import net.sf.click.control.TextArea;
  */
 public class RichTextArea extends TextArea {
 
-    private static final long serialVersionUID = 4955743445097747828L;
+    private static final long serialVersionUID = 1L;
 
     /** The TinyMCE JavaScript import. */
     protected static final String HTML_IMPORTS =

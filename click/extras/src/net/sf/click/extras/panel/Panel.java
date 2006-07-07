@@ -41,53 +41,6 @@ import net.sf.click.Page;
 public interface Panel extends Control {
 
     /**
-     * Sets the page associated with this panel.  This call is necessary to
-     * ensure any associated model or control elements that are added to the
-     * panel are ultimately added to the page, so that the rendering of the page
-     * has all available information necessary to render.
-     *
-     * @param page the page associated with this panel
-     */
-    public void setPage(Page page);
-
-    /**
-     * The path and name of the template to render.  This is the method that
-     * should be called via Velocity's #parse() directive (either directly or
-     * indirectly through toString())
-     *
-     * @return the path/name of the template to use when rendering this panel
-     */
-    public String getTemplate();
-
-    /**
-     * The "context name" that this Panel is associated with.  This name will be
-     * used to uniquely identify this panel in the Page's model context.
-     *
-     * @see Control#getName()
-     *
-     * @return the name of this panel, to be used to uniquely identify it in the
-     * model context
-     */
-    public String getName();
-
-    /**
-     * The "id" associated with this panel.  This id is typically used to
-     * uniquely identify this panel in the rendered HTML.
-     *
-     * For example:
-     * <pre class="codeHtml">
-     *  &lt;div id="$panel.id"&gt;
-     *      ## content here
-     *  &lt;/div&gt; </pre>
-     *
-     * @see Control#getId()
-     *
-     * @return the id of this panel, to be used to uniquely identify it in the
-     * HTML page
-     */
-    public String getId();
-
-    /**
      * Returns text label assocaited with this panel.  This should be an already
      * internationalized label set via setLabel().  Typically this is used as a
      * header for a particular panel.
@@ -110,4 +63,24 @@ public interface Panel extends Control {
      * @param label the internationalized label for this panel
      */
     public void setLabel(String label);
+
+    /**
+     * Sets the page associated with this panel.  This call is necessary to
+     * ensure any associated model or control elements that are added to the
+     * panel are ultimately added to the page, so that the rendering of the page
+     * has all available information necessary to render.
+     *
+     * @param page the page associated with this panel
+     */
+    public void setPage(Page page);
+
+    /**
+     * The path and name of the template to render.  This is the method that
+     * should be called via Velocity's #parse() directive (either directly or
+     * indirectly through toString())
+     *
+     * @return the path/name of the template to use when rendering this panel
+     */
+    public String getTemplate();
+
 }

@@ -41,7 +41,7 @@ import net.sf.click.util.MessagesMap;
  */
 public class BasicPanel implements Panel {
 
-    private static final long serialVersionUID = -90197062712407312L;
+    private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 

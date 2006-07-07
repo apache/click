@@ -22,7 +22,7 @@ import net.sf.click.control.Select;
  */
 public class InvestmentSelect extends Select {
 
-    private static final long serialVersionUID = -3979137152473806784L;
+    private static final long serialVersionUID = 1L;
 
     static final List INVESTMENT_OPTIONS = new ArrayList();
 

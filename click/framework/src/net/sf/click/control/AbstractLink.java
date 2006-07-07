@@ -125,10 +125,6 @@ public abstract class AbstractLink implements Control {
      * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
      * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
      *
-     * And the page template:
-     * <pre class="codeHtml">
-     * $<span class="red">addLink</span> </pre>
-     *
      * Will render the HTML as:
      * <pre class="codeHtml">
      * &lt;a href=".." <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
