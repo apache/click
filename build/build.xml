@@ -15,10 +15,10 @@
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
    <property name="jar.ognl" value="ognl-2.6.7.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring-beans" value="spring-beans-1.2.6.jar"/>
-   <property name="jar.spring-context" value="spring-context-1.2.6.jar"/>
-   <property name="jar.spring-core" value="spring-core-1.2.6.jar"/>
-   <property name="jar.spring-web" value="spring-web-1.2.6.jar"/>
+   <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
+   <property name="jar.spring-context" value="spring-context-1.2.8.jar"/>
+   <property name="jar.spring-core" value="spring-core-1.2.8.jar"/>
+   <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.1.jar"/>
    <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
 
@@ -331,10 +331,14 @@
       <downloadMacro name="${jar.hibernate}" path="hibernate"/>
       <downloadMacro name="${jar.junit}" path="junit"/>
       <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
-      <downloadMacro name="${jar.spring-beans}" path="springframework"/>
-      <downloadMacro name="${jar.spring-context}" path="springframework"/>
-      <downloadMacro name="${jar.spring-core}" path="springframework"/>
-      <downloadMacro name="${jar.spring-web}" path="springframework"/>
+      <downloadMacro name="${jar.spring-beans}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-context}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-core}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-web}" path="org.springframework"/>
+      <ant antfile="build.xml" 
+           dir="examples"
+           target="get-deps" 
+           inheritall="false"/>   	
    </target>
 
    

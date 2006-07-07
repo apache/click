@@ -44,33 +44,36 @@ The first Click Release Candiate (RC) is scheduled for mid July.
     Final new features release for Click 1.0.</div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-       Added 
-       <a href="click-api/net/sf/click/control/PageLink.html">PageLink</a>
-       control. This addition was raised by Stephen Haberman
-       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-106">106</a>].
-      </li>        
-      <li class="change">
-       Added automatic registration public Page controls when pages are created.
-       See the ClickServlet 
-       <a href="click-api/net/sf/click/ClickServlet.html#createPage(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, boolean)">createPage()</a>
-       for details. This addition was raised by Stephen Haberman
-       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-??">??</a>].
-      </li>        
-      <li class="change">
        Added Page 
        <a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a>
        method. This addition was raised by Stephen Haberman
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-105">105</a>].
       </li>        
       <li class="change">
-       Added Menu 
-       <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
-       method.
+       Auto add public Page fields to the model. 
+       See the ClickServlet methods
+       <a href="click-api/net/sf/click/ClickServlet.html#createPage(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, boolean)">createPage()</a>
+       and 
+       <a href="click-api/net/sf/click/ClickServlet.html#createVelocityContext(net.sf.click.Page)">createVelocityContext()</a>
+       for details. This addition was raised by Stephen Haberman
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-109">109</a>,
+       <a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-112">112</a>].
+      </li>        
+      <li class="change">
+       Added 
+       <a href="click-api/net/sf/click/control/PageLink.html">PageLink</a>
+       control. This addition was raised by Stephen Haberman
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-106">106</a>].
       </li>        
       <li class="change">
        Added support for multiple ActionLink parameters, see 
        <a href="click-api/net/sf/click/control/AbstractLink.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
        for details.
+      </li>        
+      <li class="change">
+       Added Menu 
+       <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>
+       method.
       </li>        
       <li class="change">
        Added 
@@ -98,14 +101,19 @@ The first Click Release Candiate (RC) is scheduled for mid July.
       </li>
       <li class="change">
        Fixed Select validation bug when no options are defined. This issue was identified by David Frizelle
-       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-101">101</a>].
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-110">110</a>].
       </li>
+      <li class="change">
+       Fixed DoubleField validation bug with "0" value. This issue was identified by David Frizelle
+       [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-111">111</a>].
+      </li>      
       <li class="change">
        Moved ActionButton control from Click Extras to core controls package.
       </li>
       <li class="change">
        Removed depreciated Context sessionObject methods.
       </li>
+      <li class="change">Updated documentation and examples.</li> 
     </ul>
   </dd>
   <p/>

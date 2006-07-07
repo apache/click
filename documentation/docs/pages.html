@@ -123,6 +123,9 @@ The next step is rendering the page template to generate the displayed HTML. The
 ClickServlet gets the model (<tt>Map</tt>) from the Page then adds the following 
 objects to the model:
 <ul>
+  <li>
+  any public Page fields using the fields name
+  </li>
   <li>context &nbsp; - &nbsp; 
    the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  

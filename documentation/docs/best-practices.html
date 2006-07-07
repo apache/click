@@ -463,12 +463,11 @@ Generally application handle transactional errors using service layer code or vi
 servlet <a href="servlet-api/javax/servlet/Filter.html">Filter</a> and would not 
 need to include error handling logic in an error page.
 <p/>
-Potential uses for a custom error page include
-
-
-If an application requires unhandled errors to be logged to an application log,
-other than System.out or the Servlet log, then a custom 
-<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> should be
+Potential uses for a custom error page include custom logging. 
+<p/>
+For example if an application requires unhandled errors to be logged to an 
+application log (rather than System.out) then a custom 
+<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> could be
 configured. An example AppErrorPage error logging page is provided 
 below:
 
