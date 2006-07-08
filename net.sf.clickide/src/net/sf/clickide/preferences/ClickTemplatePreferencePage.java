@@ -5,10 +5,10 @@ import java.util.List;
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 
-import org.eclipse.jdt.internal.ui.viewsupport.ListContentProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -79,7 +79,7 @@ public class ClickTemplatePreferencePage extends PreferencePage implements
 		column3.setText(ClickPlugin.getString("preferences.template.htmlTemplate"));
 		column3.setWidth(100);
 		
-		tableViewer.setContentProvider(new ListContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new ITableLabelProvider(){
 			public Image getColumnImage(Object element, int columnIndex) {
 				return null;
