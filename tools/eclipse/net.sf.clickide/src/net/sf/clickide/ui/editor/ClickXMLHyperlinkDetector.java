@@ -18,9 +18,9 @@ import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.IndexedRegion;
-import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.sse.core.utils.StringUtils;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -134,7 +134,7 @@ public class ClickXMLHyperlinkDetector implements IHyperlinkDetector {
 				int regLength = att.getValueRegionText().length();
 				String attValue = att.getValueRegionText();
 				if (StringUtils.isQuoted(attValue)) {
-					regOffset = ++regOffset;
+					regOffset = regOffset + 1;
 					regLength = regLength - 2;
 				}
 				hyperRegion = new Region(regOffset, regLength);
