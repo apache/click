@@ -62,7 +62,7 @@ public class ClickPagesEditor extends AbstractFormEditor {
 		headerSection.setText(ClickPlugin.getString("editor.clickXML.pages"));
 		headerSection.setLayoutData(ClickUtils.createGridData(1, GridData.FILL_HORIZONTAL));
 		
-		Tree tree = new Tree(left,SWT.NULL);
+		Tree tree = toolkit.createTree(left, SWT.NULL);
 		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		List acceptElements = new ArrayList();
