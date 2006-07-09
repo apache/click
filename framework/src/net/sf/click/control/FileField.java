@@ -116,6 +116,19 @@ public class FileField extends Field {
         super(name, label);
     }
 
+
+    /**
+     * Construct the FileField with the given name, label and required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the required status
+     */
+    public FileField(String name, String label, boolean required) {
+        super(name, label);
+        setRequired(required);
+    }
+
     /**
      * Construct the FileField with the given name, label and size.
      *
