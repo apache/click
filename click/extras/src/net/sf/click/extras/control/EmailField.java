@@ -74,7 +74,20 @@ public class EmailField extends TextField {
      */
     public EmailField(String name, boolean required) {
         this(name);
-        size = 30;
+        setRequired(required);
+    }
+
+    /**
+     * Construct an Email Field with the given name, label and required status.
+     * The default email field size is 30 characters.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public EmailField(String name, String label, boolean required) {
+        this(name, label);
+        setRequired(required);
     }
 
     /**

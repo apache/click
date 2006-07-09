@@ -101,6 +101,18 @@ public class DoubleField extends TextField {
     }
 
     /**
+     * Construct a DoubleField with the given name, label and required status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param required the field required status
+     */
+    public DoubleField(String name, String label, boolean required) {
+        this(name, label);
+        setRequired(required);
+    }
+
+    /**
      * Create a DoubleField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
      * <p/>
