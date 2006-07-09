@@ -61,9 +61,8 @@ public class TelephoneField extends TextField {
      * @param required the field required status
      */
     public TelephoneField(String name, boolean required) {
-        super(name);
+        this(name);
         setRequired(required);
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
     }
 
     /**
@@ -87,9 +86,8 @@ public class TelephoneField extends TextField {
      * @param required the field required status
      */
     public TelephoneField(String name, String label, boolean required) {
-        super(name, label);
+        this(name, label);
         setRequired(required);
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
     }
 
     /**
@@ -100,9 +98,8 @@ public class TelephoneField extends TextField {
      * @param size the size of the field
      */
     public TelephoneField(String name, String label, int size) {
-        super(name, label);
+        this(name, label);
         setSize(size);
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
     }
 
     /**

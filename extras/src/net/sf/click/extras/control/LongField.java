@@ -106,8 +106,7 @@ public class LongField extends TextField {
      * @param required the field required status
      */
     public LongField(String name, String label, boolean required) {
-        super(name, label);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        this(name, label);
         setRequired(required);
     }
 
