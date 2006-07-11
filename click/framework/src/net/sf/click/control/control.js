@@ -161,7 +161,7 @@ function validateForm(msgs, id, align, style) {
 	for (i = 0; i < msgs.length; i++) {
 		var value = msgs[i];
 		if (value != null) {
-			var index = value.indexOf('|');
+			var index = value.lastIndexOf('|');
 			var fieldMsg = value.substring(0, index);
 			var fieldId = value.substring(index + 1);
 			
