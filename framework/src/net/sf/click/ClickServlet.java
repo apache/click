@@ -639,35 +639,7 @@ public class ClickServlet extends HttpServlet {
      * Return a new Page instance for the given request. This method will
      * invoke {@link #initPage(String, Class, HttpServletRequest)} to create
      * the Page instance and then set the properties on the page.
-     * <p/>
-     * This method will also automatically register any public Page controls
-     * in the page's model. When the page is created any public visiblity
-     * page Control variables will be automatically added to the page using
-     * the method {@link Page#addControl(Control)} method. If the controls name
-     * is not defined it is set to the member variables name before it is added
-     * to the page.
-     * <p/>
-     * This feature saves you from having to mannually add the controls yourself.
-     * If you dont want the controls automatically added, simply declare them
-     * as non public variables.
-     * <p/>
-     * An example auto control registration is provided below. In this example
-     * the Table control is automatically added to the model using the name
-     * <tt>"table"</tt>, and the ActionLink controls are added using the names
-     * <tt>"editDetailsLink"</tt> and <tt>"viewDetailsLink"</tt>.
-     *
-     * <pre class="javaCode">
-     * <span class="kw">public class</span> OrderDetailsPage <span class="kw">extends</span> Page {
-     *
-     *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
-     *     <span class="kw">public</span> ActionLink editDetailsLink = <span class="kw">new</span> ActionLink();
-     *     <span class="kw">public</span>ActionLink viewDetailsLink = <span class="kw">new</span> ActionLink();
-     *
-     *     <span class="kw">public</span> OrderDetailsPage() {
-     *         ..
-     *     }
-     * } </pre>
-     *
+     * 
      * @param request the servlet request
      * @param response the servlet response
      * @param isPost determines whether the request is a POST
@@ -714,18 +686,6 @@ public class ClickServlet extends HttpServlet {
             page.setFormat(clickApp.getFormat(context.getLocale()));
         }
 
-        processPageFields(page, new FieldCallback() {
-            public void processField(String fieldName, Object fieldValue) {
-                if (fieldValue instanceof Control) {
-                    Control control = (Control) fieldValue;
-                    if (control.getName() == null) {
-                        control.setName(fieldName);
-                    }
-                    page.addControl(control);
-                }
-            }
-        });
-
         return page;
     }
 
@@ -733,6 +693,34 @@ public class ClickServlet extends HttpServlet {
      * Initialize a new page instance using
      * {@link #newPageInstance(String, Class, HttpServletRequest)} method and
      * setting format, headers and the forward if a JSP.
+     * <p/>
+     * This method will also automatically register any public Page controls
+     * in the page's model. When the page is created any public visiblity
+     * page Control variables will be automatically added to the page using
+     * the method {@link Page#addControl(Control)} method. If the controls name
+     * is not defined it is set to the member variables name before it is added
+     * to the page.
+     * <p/>
+     * This feature saves you from having to mannually add the controls yourself.
+     * If you dont want the controls automatically added, simply declare them
+     * as non public variables.
+     * <p/>
+     * An example auto control registration is provided below. In this example
+     * the Table control is automatically added to the model using the name
+     * <tt>"table"</tt>, and the ActionLink controls are added using the names
+     * <tt>"editDetailsLink"</tt> and <tt>"viewDetailsLink"</tt>.
+     *
+     * <pre class="javaCode">
+     * <span class="kw">public class</span> OrderDetailsPage <span class="kw">extends</span> Page {
+     *
+     *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
+     *     <span class="kw">public</span> ActionLink editDetailsLink = <span class="kw">new</span> ActionLink();
+     *     <span class="kw">public</span>ActionLink viewDetailsLink = <span class="kw">new</span> ActionLink();
+     *
+     *     <span class="kw">public</span> OrderDetailsPage() {
+     *         ..
+     *     }
+     * } </pre>
      *
      * @param path the page path
      * @param pageClass the page class
@@ -743,7 +731,7 @@ public class ClickServlet extends HttpServlet {
             HttpServletRequest request) {
 
         try {
-            Page newPage = newPageInstance(path, pageClass, request);
+            final Page newPage = newPageInstance(path, pageClass, request);
 
             if (newPage.getHeaders() == null) {
                 newPage.setHeaders(clickApp.getPageHeaders(path));
@@ -754,6 +742,18 @@ public class ClickServlet extends HttpServlet {
             if (clickApp.isJspPage(path)) {
                 newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             }
+
+            processPageFields(newPage, new FieldCallback() {
+                public void processField(String fieldName, Object fieldValue) {
+                    if (fieldValue instanceof Control) {
+                        Control control = (Control) fieldValue;
+                        if (control.getName() == null) {
+                            control.setName(fieldName);
+                        }
+                        newPage.addControl(control);
+                    }
+                }
+            });
 
             return newPage;
 
