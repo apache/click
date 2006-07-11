@@ -520,6 +520,12 @@ public abstract class Field implements Control {
             if (id.indexOf(' ') != -1) {
                 id = id.replace(' ', '_');
             }
+            if (id.indexOf('<') != -1) {
+                id = id.replace('<', '_');
+            }
+            if (id.indexOf('>') != -1) {
+                id = id.replace('>', '_');
+            }
 
             return id;
         }
