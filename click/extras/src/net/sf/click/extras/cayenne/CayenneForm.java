@@ -16,12 +16,14 @@
 package net.sf.click.extras.cayenne;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.DataObject;
@@ -297,7 +299,8 @@ public class CayenneForm extends Form {
 
     /**
      * Set the given <tt>DataObject</tt> in the form, copying the object's
-     * properties into the form field values.
+     * properties into the form field values. If the given data object is null
+     * any form field values will be cleared, excluding hidden fields.
      *
      * @param dataObject the <tt>DataObject</tt> to set
      */
@@ -317,6 +320,18 @@ public class CayenneForm extends Form {
                     + dataObject.getClass().getName() + " does not match form "
                     + " class " + classField.getValue();
                 throw new IllegalArgumentException(msg);
+            }
+
+        } else {
+            // Clear any form data
+            oidField.setValueObject(null);
+
+            List fields = ClickUtils.getFormFields(this);
+            for (int i = 0; i < fields.size(); i++) {
+                Field field = (Field) fields.get(i);
+                if (field instanceof HiddenField == false) {
+                    field.setValue("");
+                }
             }
         }
     }
