@@ -44,18 +44,20 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name. The default text field
-     * size is 20 characters.
+     * size is 20 characters and the minium valid length is 10 characters.
      *
      * @param name the name of the field
      */
     public TelephoneField(String name) {
         super(name);
         setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setMinLength(10);
     }
 
     /**
      * Construct the TelephoneField with the given name and required status.
-     * The default text field size is 20 characters.
+     * The default text field size is 20 characters and the minium valid length
+     * is 10 characters.
      *
      * @param name the name of the field
      * @param required the field required status
@@ -67,7 +69,8 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name and label. The default
-     * text field size is 20 characters.
+     * text field size is 20 characters and the minium valid length is 10
+     * characters.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -75,11 +78,13 @@ public class TelephoneField extends TextField {
     public TelephoneField(String name, String label) {
         super(name, label);
         setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setMinLength(10);
     }
 
     /**
      * Construct the TelephoneField with the given name, label and required
-     * status. The default text field size is 20 characters.
+     * status. The default text field size is 20 characters and the minium valid
+     * length is 10 characters.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -92,6 +97,7 @@ public class TelephoneField extends TextField {
 
     /**
      * Construct the TelephoneField with the given name, label and size.
+     * The default the minium valid length is 10 characters.
      *
      * @param name the name of the field
      * @param label the label of the field
@@ -105,6 +111,7 @@ public class TelephoneField extends TextField {
     /**
      * Create a TelephoneField with no name defined, <b>please note</b> the
      * control's name must be defined before it is valid.
+     * The default the minium valid length is 10 characters.
      * <p/>
      * <div style="border: 1px solid red;padding:0.5em;">
      * No-args constructors are provided for Java Bean tools support and are not
@@ -114,6 +121,7 @@ public class TelephoneField extends TextField {
      */
     public TelephoneField() {
         setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setMinLength(10);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -146,6 +154,7 @@ public class TelephoneField extends TextField {
         super.validate();
 
         if (isValid()) {
+            int digitCount = 0;
             String value = getValue();
             for (int i = 0; i < value.length(); i++) {
                 char aChar = value.charAt(i);
@@ -153,6 +162,17 @@ public class TelephoneField extends TextField {
                     setErrorMessage("telephone-format-error");
                     return;
                 }
+                if (Character.isDigit(aChar)) {
+                    digitCount++;
+                }
+            }
+
+            if (digitCount > 0 
+                && getMinLength() > 0 
+                && digitCount < getMinLength()) {
+                
+                setErrorMessage("field-minlength-error", getMinLength());
+                return;
             }
         }
     }
