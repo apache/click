@@ -350,7 +350,7 @@ public class PropertySelect extends Select {
     public String toString() {
 
         // Load property options if not already set
-        if (getOptionList().isEmpty()) {
+        if (getOptionList().size() <= 1) {
             loadOptionList();
         }
 
@@ -422,7 +422,7 @@ public class PropertySelect extends Select {
                 list = dataContext.performQuery(new SelectQuery(propertyClass));
             }
 
-            if (isRequired()) {
+            if (isRequired() && getOptionList().isEmpty()) {
                 getOptionList().add(Option.EMPTY_OPTION);
             }
 

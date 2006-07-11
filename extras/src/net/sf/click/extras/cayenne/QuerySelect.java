@@ -344,7 +344,7 @@ public class QuerySelect extends Select {
     public String toString() {
 
         // Load property options if not already set
-        if (getOptionList().isEmpty()) {
+        if (getOptionList().size() <= 1) {
             loadOptionList();
         }
 
@@ -377,7 +377,7 @@ public class QuerySelect extends Select {
             list = dataContext.performQuery(getQueryName(), getExpireCache());
         }
 
-        if (isRequired()) {
+        if (isRequired() && getOptionList().isEmpty()) {
             getOptionList().add(Option.EMPTY_OPTION);
         }
 
