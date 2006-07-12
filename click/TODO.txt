@@ -6,6 +6,7 @@ faq UTF-8 topic
 add Cayenne control examples
 
 CODE
+* have form submit check support multiple form in a page
 * get localizations for Telephone.properties, Japanese, Italian, French
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
