@@ -121,6 +121,7 @@ public class ActionButton extends Button {
      * or if the method is blank
      */
     public ActionButton(String name, Object listener, String method) {
+        setName(name);
         if (listener == null) {
             throw new IllegalArgumentException("Null listener parameter");
         }

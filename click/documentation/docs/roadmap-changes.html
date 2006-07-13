@@ -66,6 +66,10 @@ The first Click Release Candiate (RC) is scheduled for mid July.
        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-106">106</a>].
       </li>        
       <li class="change">
+       Added OGNL support for rendering <a href="click-api/net/sf/click/control/Column.html">Column</a>
+       values.
+      </li>        
+      <li class="change">
        Added support for multiple ActionLink parameters, see 
        <a href="click-api/net/sf/click/control/AbstractLink.html#setParameter(java.lang.String, java.lang.String)">setParameter()</a>
        for details.
@@ -79,6 +83,15 @@ The first Click Release Candiate (RC) is scheduled for mid July.
        Added 
        <a href="best-practices.html">Best Practices</a> topic to Click 
        documentation.
+      </li>        
+      <li class="change">
+       Refactored 
+       <a href="extras-api/net/sf/click/extras/panel/package-summary.html">Panel</a> 
+       package with BasicPanel being renamed Panel and the package inteface removed. 
+       <p/>
+       Panels are now rendered as <tt>$panel</tt> rather than <tt>#parse($panel)</tt> 
+       <p/>       
+       Panels can now define Velocity templates on the classpath as well as the web file system.
       </li>        
       <li class="change">
        Fixed Tomcat deployment issue where Tomcat ClassLoader was locking Click

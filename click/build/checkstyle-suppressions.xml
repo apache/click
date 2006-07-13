@@ -12,7 +12,7 @@
               files="SessionMap.java"/>
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="477,480,483,486,514,517"/>
+              lines="477,480,483,486,517,520"/>
     <suppress checks="FileLength"
               files="Form.java"/>
     <suppress checks="LineLength"
@@ -20,6 +20,9 @@
               lines="96,97,98"/>
     <suppress checks="LineLength"
               files="ErrorReport.java"/>  
+    <suppress checks="LineLength"
+              files="ClickServlet.java"
+              lines="754"/> 
     <suppress checks="LineLength"
               files="ClickUtils.java"
               lines="211,212"/> 

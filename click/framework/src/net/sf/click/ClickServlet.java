@@ -639,7 +639,7 @@ public class ClickServlet extends HttpServlet {
      * Return a new Page instance for the given request. This method will
      * invoke {@link #initPage(String, Class, HttpServletRequest)} to create
      * the Page instance and then set the properties on the page.
-     * 
+     *
      * @param request the servlet request
      * @param response the servlet response
      * @param isPost determines whether the request is a POST
@@ -750,7 +750,10 @@ public class ClickServlet extends HttpServlet {
                         if (control.getName() == null) {
                             control.setName(fieldName);
                         }
-                        newPage.addControl(control);
+
+                        if (!newPage.getModel().containsKey(control.getName())) {
+                            newPage.addControl(control);
+                        }
                     }
                 }
             });
@@ -1342,8 +1345,7 @@ public class ClickServlet extends HttpServlet {
 
                 if (template == null) {
                     String msg =
-                        "Template '" + templatePath + "' not found for class: "
-                        + templatePath;
+                        "Template not found for template path: " + templatePath;
                     throw new IllegalArgumentException(msg);
                 }
 

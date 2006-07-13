@@ -1,8 +1,8 @@
 <div id='$_tp_id'>
     <table class="tp_tab">
         <tr class="tp_tab">
-        #foreach( $panel in $_tp_panels )
-            #if( $panel.id == $_tp_activePanel.id )
+        #foreach ($panel in $_tp_panels)
+            #if ($panel.id == $_tp_activePanel.id)
             <td class="tp_tab_on">
                 $panel.label
             </td>
@@ -19,7 +19,7 @@
     <table class="tp_content">
         <tr class="tp_content">
             <td class="tp_content">
-                #parse($_tp_activePanel)
+                $_tp_activePanel
             </td>
         </tr>
     </table>
