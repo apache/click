@@ -432,6 +432,9 @@ import org.apache.commons.lang.StringUtils;
  *
  * The form submit check methods store a special token in the users session
  * and in a hidden field in the form to ensure a form post isn't replayed.
+ * <p/>
+ * <b>Please Note</b> the Form submit check currently only supports having
+ * one for per Page.
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
@@ -1768,6 +1771,53 @@ public class Form implements Control {
         }
     }
 
+
+    /**
+     * Perform a form submission check ensuring the user has not replayed the
+     * form submission by using the browser back button. If the form submit
+     * is valid this method will return true, otherwise set the page to
+     * redirect to the given Page class and return false.
+     * <p/>
+     * This method will add a token to the user's session and a hidden field
+     * to the form to validate future submits.
+     * <p/>
+     * Form submit checks should be performed before the pages controls are
+     * processed in the Page onSecurityCheck method. For example:
+     *
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
+     *     ..
+     *
+     *     <span class="kw">public boolean</span> onSecurityCheck() {
+     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, InvalidSubmitPage.<span class="kw">class</span>);
+     *     }
+     * } </pre>
+     *
+     * Form submit checks should generally be combined with the Post-Redirect
+     * pattern which provides a better user experience when pages are refreshed.
+     *
+     * @param page the page invoking the Form submit check
+     * @param pageClass the page class to redirect invalid submissions to
+     * @return true if the form submit is OK or false otherwise
+     */
+    public boolean onSubmitCheck(Page page, Class pageClass) {
+        if (page == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
+        if (pageClass == null) {
+            throw new IllegalArgumentException("Null pageClass parameter");
+        }
+
+        if (performSubmitCheck()) {
+            return true;
+
+        } else {
+            page.setRedirect(pageClass);
+
+            return false;
+        }
+    }
+
     /**
      * Perform a form submission check ensuring the user has not replayed the
      * form submission by using the browser back button. If the form submit
@@ -2104,6 +2154,11 @@ public class Form implements Control {
                 if (column == getColumns()) {
                     buffer.append("</tr>\n");
                     column = 1;
+
+                } else if (field instanceof FieldSet) {
+                    buffer.append("</tr>\n");
+                    column++;
+
                 } else {
                     column++;
                 }

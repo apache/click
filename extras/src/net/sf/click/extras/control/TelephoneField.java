@@ -167,10 +167,10 @@ public class TelephoneField extends TextField {
                 }
             }
 
-            if (digitCount > 0 
-                && getMinLength() > 0 
+            if (digitCount > 0
+                && getMinLength() > 0
                 && digitCount < getMinLength()) {
-                
+
                 setErrorMessage("field-minlength-error", getMinLength());
                 return;
             }

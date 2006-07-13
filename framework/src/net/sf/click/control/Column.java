@@ -16,15 +16,14 @@
 package net.sf.click.control;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import net.sf.click.Context;
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import ognl.Ognl;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -100,6 +99,9 @@ import org.apache.commons.lang.StringUtils;
  * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
  * dateColumn.setPattern(<span class="st">"{0,date,dd MM yyyy}"</span>);
  * table.addColumn(dateColumn); </pre>
+ *
+ * Column orderIdColumn = <span class="kw">new</span> Column(<span class="st">"order.id"</span>, <span class="st">"Order ID"</span>);
+ * table.addColumn(orderIdColumn);
  *
  * <h4>Column Decorators</h4>
  *
@@ -215,8 +217,8 @@ public class Column implements Serializable {
     /** The property name of the row object to render. */
     protected String name;
 
-    /** The cached column property method. */
-    protected Method propertyMethod;
+    /** The cached OGNL context for rendering column values. */
+    protected Map ognlContext = new HashMap();
 
     /** The parent Table. */
     protected Table table;
@@ -648,6 +650,9 @@ public class Column implements Serializable {
      * if a value is not found the property name in uppercase will be used,
      * if a value is still not found the property name in lowercase will be used.
      * If a map value is still not found then this method will return null.
+     * <p/>
+     * Object property values can also be specified using an OGNL path
+     * expression.
      *
      * @param row the row object to obtain the property from
      * @return the named row object property value
@@ -679,12 +684,7 @@ public class Column implements Serializable {
         } else {
 
             try {
-                if (propertyMethod == null) {
-                    String methodName = ClickUtils.toGetterName(name);
-                    propertyMethod = row.getClass().getMethod(methodName, null);
-                }
-
-                return propertyMethod.invoke(row, null);
+                return Ognl.getValue(name, ognlContext, row);
 
             } catch (Exception e) {
                 throw new RuntimeException(e);

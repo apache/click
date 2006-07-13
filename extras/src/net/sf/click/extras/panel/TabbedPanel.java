@@ -15,11 +15,8 @@
  */
 package net.sf.click.extras.panel;
 
-import javax.servlet.ServletContext;
-
 import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -106,15 +103,12 @@ import net.sf.click.util.ClickUtils;
  *
  * @author Phil Barnes
  */
-public class TabbedPanel extends BasicPanel {
+public class TabbedPanel extends Panel {
 
-    private static final long serialVersionUID = 8912519148498010558L;
+    private static final long serialVersionUID = 1L;
 
     /** The tab listener object. */
     protected Object listener;
-
-    /** The click application logger instance. */
-    protected ClickLogger logger = ClickLogger.getInstance();
 
     /** The tab listener method. */
     protected String method;
@@ -125,21 +119,19 @@ public class TabbedPanel extends BasicPanel {
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a new TabbedPanel with the given id.
+     * Create a new TabbedPanel with the given name.
      *
-     * @param id the tabbed panel id
+     * @param name the name of the tabbed panel
      */
-    public TabbedPanel(String id) {
-        super(id);
-        addModel("_tp_id", id);
+    public TabbedPanel(String name) {
+        super(name);
+        addModel("_tp_id", getId());
     }
 
     /**
-     * Default no-args constructor used to deploy panel resources.
+     * Create a TabbedPanel with no name.
      * <p/>
-     * <div style="border: 1px solid red;padding:0.5em;">
-     * No-args constructors are provided for resource deployment and are not
-     * intended for general use. </div>
+     * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public TabbedPanel() {
     }
@@ -147,6 +139,10 @@ public class TabbedPanel extends BasicPanel {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * TODO:
+     * Add the sub Panel and make non active.
+     * <p/>
+     *
      * <b>NOTE:</b> This method should <b>not</b> be called, in favor of
      * addPanel(Panel, boolean), to ensure the "active" panel is defined.  This
      * method will by default set the active panel to the current panel being
@@ -155,18 +151,7 @@ public class TabbedPanel extends BasicPanel {
      * @param panel the panel to add
      */
     public void addPanel(Panel panel) {
-        // TODO: this method is valid if we add logic to set the first panel as
-        // active
-
-        String msg =
-            "TabbedPanel should have panels added ONLY via "
-            + "addPanel(panel, boolean) to ensure the active panel "
-            + "is correctly set.  Setting active panel to *this* | "
-            + "panel ('" + panel.getName() + "') as a result";
-
-        logger.warn(msg);
-
-        this.addPanel(panel, true);
+        this.addPanel(panel, false);
     }
 
     /**
@@ -181,23 +166,18 @@ public class TabbedPanel extends BasicPanel {
      */
     public void addPanel(Panel panel, boolean isActivePanel) {
         super.addPanel(panel);
+
         if (isActivePanel) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Adding panel with id " + panel.getId()
-                             + " as the active panel");
-            }
             setActivePanel(panel);
         }
+
         if (getPanels().size() > 1 && tabActionLink == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("Two or more panels detected, enabling "
-                             + "tabActionLink. Current listener status = "
-                             + listener + "." + method + "()");
-            }
             tabActionLink = new ActionLink("_tp_tabLink");
             tabActionLink.setListener(this, "handleTabSwitch");
             addControl(tabActionLink);
         }
+
+        removeModel("_tp_panels");
         addModel("_tp_panels", getPanels());
     }
 
@@ -259,22 +239,14 @@ public class TabbedPanel extends BasicPanel {
             }
         }
 
-        // if a listener has been explicitely set to handle a tab switch,
+        // If a listener has been explicitely set to handle a tab switch,
         // then invoke it
         if (listener != null && method != null) {
-            if (logger.isTraceEnabled()) {
-                String msg =
-                    "Invoking listener " + listener + "." + method + "()";
-                logger.trace(msg);
-            }
             return ClickUtils.invokeListener(listener, method);
 
-        } else {
-            // this implies that everything needed to render the next tab has
-            // been added to the "model" context already
-            logger.trace("No listener method found, continuing processing");
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -284,37 +256,8 @@ public class TabbedPanel extends BasicPanel {
      * @param panel the active panel to set
      */
     protected void setActivePanel(Panel panel) {
-        // remove the existing 'active panel'
         removeModel("_tp_activePanel");
-        // add the passed in panel as the 'new' active panel
         addModel("_tp_activePanel", panel);
-    }
-
-    /**
-     * Deploy the <tt>TabbedPanel.htm</tt> template to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see net.sf.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/extras/panel/TabbedPanel.htm",
-                              "click");
-    }
-
-    /**
-     * Return the default template path.
-     * <p/>
-     * Overridden toString to add the path <tt>'/click/'</tt> to the beginning
-     * of the template name, as the template file will be copied to this
-     * directory upon first time start of ClickServlet.
-     *
-     * @return the default template path and name of '/click/ListPanel.htm'
-     */
-    public String toString() {
-        return "/click/" + super.toString();
     }
 
 }
