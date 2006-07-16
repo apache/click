@@ -88,16 +88,16 @@ import org.apache.commons.lang.StringUtils;
  * table.setStyle(<span class="st">"simple"</span>);
  *
  * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
- * idColumn.setPattern(<span class="st">"{0,number,#,###}"</span>);
+ * idColumn.setFormat(<span class="st">"{0,number,#,###}"</span>);
  * table.addColumn(idColumn);
  *
  * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>, <span class="st">"Price"</span>);
- * priceColumn.setPattern(<span class="st">"${0,currenty}"</span>);
+ * priceColumn.setFormat(<span class="st">"${0,currenty}"</span>);
  * priceColumn.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
  * table.addColumn(priceColumn);
  *
  * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
- * dateColumn.setPattern(<span class="st">"{0,date,dd MM yyyy}"</span>);
+ * dateColumn.setFormat(<span class="st">"{0,date,dd MM yyyy}"</span>);
  * table.addColumn(dateColumn); </pre>
  *
  * Column orderIdColumn = <span class="kw">new</span> Column(<span class="st">"order.id"</span>, <span class="st">"Order ID"</span>);
