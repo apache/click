@@ -30,7 +30,61 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.MessagesMap;
 
 /**
- * TODO:
+ * Provides a Panel class for creating customized layout sections within a page.
+ *
+ * <table style='margin-bottom: 1.25em'>
+ * <tr>
+ * <td>
+ * <fieldset>
+ * <legend>Panel</legend>
+ * <i>My panel content.</i>
+ * </fieldset>
+ * </td>
+ * </tr>
+ * </table>
+ *
+ * The Panel class uses a Velocity template for rendering any model data or
+ * controls you have added to the Page. For example to create a simple
+ * Panel we could have the following <tt>panel-template.htm</tt>
+ *
+ * <pre class="codeHtml">
+ * &lt;fieldset&gt;
+ *   &lt;legend class="title"&gt; <span class="st">$title</span> &lt;/legend&gt;
+ *   <span class="st">$content</span>
+ * &lt;/fieldset&gt; </pre>
+ *
+ * Then in our page class we would include the Panel and some model data.
+ *
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> WelcomePage <span class="kw">extends</span> Page {
+ *
+ *     <span class="kw">public</span> Panel panel = <span class="kw">new</span> Panel(<span class="st">"panel"</span>, <span class="st">"/panel-template.htm"</span>);
+ *
+ *     <span class="kw">public void</span> onInit() {
+ *         addModel(<span class="st">"title"</span>, getMessage(<span class="st">"title"</span>));
+ *         addModel(<span class="st">"content"</span>, getMessage(<span class="st">"content"</span>));
+ *     }
+ * } </pre>
+ *
+ * Note how this page uses {@link Page#onInit()} method rather than the pages
+ * constructor for adding the messages. This is because the page Context is
+ * available in the onInit() method, and is required to lookup the localized
+ * messages for the request's Locale.
+ * <p/>
+ * In our <tt>WelcomePage</tt> template <tt>welcome.htm</tt> would simply
+ * reference our panel control:
+ *
+ * <pre class="codeHtml"> <span class="st">$panel</span> </pre>
+ *
+ * The Panel template would then be rendered in in the page as:
+ *
+ * <fieldset style="margin:2em;width:550px;">
+ * <legend><b>Welcome</b></legend>
+ * Welcome to <a href="#">MyCorp</a>.
+ * <p/>
+ * MyCorp is your telecommuting office portal. Its just like being there at the
+ * office!
+ * </fieldset>
  *
  * Provides for a "Panel" which is simply a template and adds pass through
  * methods to the Page for adding Control and Model objects.
@@ -171,6 +225,41 @@ public class Panel implements Control {
      */
     public List getPanels() {
         return panels;
+    }
+
+    /**
+     * A 'pass-through' method to add the control to the page model. The control
+     * will be added to the pages model using the controls name as the key. The
+     * Controls context property will also be set, as per Page.addControl()
+     *
+     * @param control the control to add
+     * @throws IllegalArgumentException if the control is null
+     */
+    public void addControl(Control control) {
+        if (getPage() != null) {
+            getPage().addControl(control);
+
+        } else {
+            controls.add(control);
+        }
+    }
+
+    /**
+     * A 'pass-through' method to add the object to the page model. The object
+     * will be added to the pages model using the given name as the key.
+     *
+     * @param name  the key name of the object to add
+     * @param value the object to add
+     * @throws IllegalArgumentException if the name or value parameters are
+     *      null, or if there is already a named value in the model
+     */
+    public void addModel(String name, Object value) {
+        if (getPage() != null) {
+            getPage().addModel(name, value);
+
+        } else {
+            model.put(name, value);
+        }
     }
 
     /**
@@ -445,41 +534,6 @@ public class Panel implements Control {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * A 'pass-through' method to add the control to the page model. The control
-     * will be added to the pages model using the controls name as the key. The
-     * Controls context property will also be set, as per Page.addControl()
-     *
-     * @param control the control to add
-     * @throws IllegalArgumentException if the control is null
-     */
-    protected void addControl(Control control) {
-        if (getPage() != null) {
-            getPage().addControl(control);
-
-        } else {
-            controls.add(control);
-        }
-    }
-
-    /**
-     * A 'pass-through' method to add the object to the page model. The object
-     * will be added to the pages model using the given name as the key.
-     *
-     * @param name  the key name of the object to add
-     * @param value the object to add
-     * @throws IllegalArgumentException if the name or value parameters are
-     *      null, or if there is already a named value in the model
-     */
-    protected void addModel(String name, Object value) {
-        if (getPage() != null) {
-            getPage().addModel(name, value);
-
-        } else {
-            model.put(name, value);
-        }
-    }
 
     /**
      * Allows removal of a model object in the Pages or panel model map,
