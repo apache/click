@@ -149,7 +149,7 @@ td.tf_error {
 }
 
 
-/* Tabbed Panel Colors */
+/* Tabbed Panel Colors 
 
 table.tp_tab { border-collapse: collapse; }
 tr.tp_tab { }
@@ -159,6 +159,7 @@ table.tp_content { border: 1px solid #336699; }
 tr.tp_content { }
 td.tp_content { background: #efefef; }
 
+*/
 
 /* Menu Demo */
 

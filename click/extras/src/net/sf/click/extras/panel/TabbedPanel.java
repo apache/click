@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,41 @@
  */
 package net.sf.click.extras.panel;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
+import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
- * Provides a way to add multiple sub-panels in 'tabs'.  This panel comes with a
- * default template that will render the panels in CSS customizable table tags.
- * Additionally, a listener may be attached (similar to the control listeners)
- * that will be called on tab switch. This could be useful to load (or reload)
- * model related information for which ever panel is selected by the user.
+ * Provides a tabbed panel with multiple sub-panels in 'tabs'.
+ * <p/>
+ * This panel comes with a default template that will render the panels in CSS
+ * customizable table tags.
+ * <p/>
+ * A listener {@link #setTabListener(Object, String)} may be attached
+ * (similar to the control listeners) that will be called on tab switch.
+ * This could be useful to load (or reload) model related information for which
+ * ever panel is selected by the user.
+ * <p/>
+ * The classpath <tt>TabbedPanel.htm</tt> template is illustrated below:
  *
  * <pre class="codeHtml">
- * &lt;div id='<span class="blue">$_tp_id</span>'&gt;
+ * &lt;div id='<span class="blue">$this.id</span>'&gt;
  *  &lt;table class="<span class="green">tp_tab</span>"&gt;
  *   &lt;tr class="<span class="green">tp_tab</span>"&gt;
- *    <span class="red">#foreach</span> (<span class="blue">$panel</span> <span class="red">in</span> <span class="blue">$_tp_panels</span>)
- *     <span class="red">#if</span> (<span class="blue">$panel.id</span> == <span class="blue">$_tp_activePanel.id</span>)
+ *    <span class="red">#foreach</span> (<span class="blue">$panel</span> <span class="red">in</span> <span class="blue">$this.panels</span>)
+ *     <span class="red">#if</span> (<span class="blue">$panel.id</span> == <span class="blue">$this.activePanel.id</span>)
  *      &lt;td class="<span class="green">tp_tab_on</span>"&gt;
  *       <span class="blue">$panel.label</span>
  *      &lt;/td&gt;
  *      &lt;td class="<span class="green">tp_tab_space</span>"&gt;&lt;/td&gt;
  *     <span class="red">#else</span>
  *      &lt;td class="<span class="green">tp_tab_off</span>"&gt;
- *       &lt;a href="<span class="blue">$_tp_tabLink.getHref($panel.name)</span>"
+ *       &lt;a href="<span class="blue">$this.tabLink.getHref($panel.name)</span>"
  *          id="<span class="blue">$panel.id</span>"
  *          class="<span class="green">tp_tab_link</span>"&gt;<span class="blue">$panel.label</span>&lt;/a&gt;
  *      &lt;/td&gt;
@@ -50,25 +61,16 @@ import net.sf.click.util.ClickUtils;
  *  &lt;table class="<span class="green">tp_content</span>"&gt;
  *   &lt;tr class="<span class="green">tp_content</span>"&gt;
  *    &lt;td class="<span class="green">tp_content</span>"&gt;
- *     <span class="red">#parse</span>(<span class="blue">$_tp_activePanel</span>)
+ *     <span class="blue">$this.activePanel</span>
  *    &lt;/td&gt;
  *   &lt;/tr&gt;
  *  &lt;/table&gt;
  * &lt;/div&gt; </pre>
  *
- * As shown above, the the model context variables associated with a tabbed
- * panel are as follows:
- * <ul>
- * <li><tt>_tp_id</tt> &nbsp; - the id associated with this tabbed panel</li>
- * <li><tt>_tp_panels</tt> &nbsp; - the sub-panels added to this panel</li>
- * <li><tt>_tp_activePanel</tt> &nbsp; - the currently active panel (aka tab)</li>
- * <li><tt>_tp_tabLink</tt> &nbsp; - an {@link ActionLink} control that handles the switching
- * between the various panels.</li>
- * </ul>
- * <p/>
  * Also, as show above, there are a number of CSS attributes that allow some
- * customization of the output.  These are as follows (these are the exact
- * colors show in the example for tabbed panels):
+ * customization of the output. These CSS attributes are defined in the
+ * auto deployed <tt>TabbedPanel.css</tt>. The TabbedPanel CSS attributes
+ * are:
  *
  * <pre class="codeHtml">
  * <span class="green">table.tp_tab</span> {
@@ -102,87 +104,126 @@ import net.sf.click.util.ClickUtils;
  * } </pre>
  *
  * @author Phil Barnes
+ * @author Malcolm Edgar
  */
 public class TabbedPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    /** The tab listener object. */
+    /**
+     * The TabbedPanel.css style sheet import link.
+     */
+    public static final String PANEL_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/TabbedPanel.css\">\n";
+
+    // ----------------------------------------------------- Instance Variables
+
+    /** The currently active panel. */
+    protected Panel activePanel;
+
+    /** The tab switch listener object. */
     protected Object listener;
 
-    /** The tab listener method. */
+    /** The tab switch listener method. */
     protected String method;
 
-    /** The tab action link. */
-    protected ActionLink tabActionLink;
+    /** The tab switch action link. */
+    protected ActionLink tabLink =
+        new ActionLink("tabLink", this, "onTabSwitch");
 
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a new TabbedPanel with the given name.
+     * Create a TabbedPanel with the given name.
      *
-     * @param name the name of the tabbed panel
+     * @param name the name of the panel
      */
     public TabbedPanel(String name) {
         super(name);
-        addModel("_tp_id", getId());
+        addControl(tabLink);
     }
 
     /**
-     * Create a TabbedPanel with no name.
+     * Create a Panel with the given name and template path.
+     *
+     * @param name the name of the panel
+     * @param template the Velocity template
+     */
+    public TabbedPanel(String name, String template) {
+        super(name, template);
+        addControl(tabLink);
+    }
+
+    /**
+     * Create a TabbedPanel with the given name, id attribute and template path.
+     *
+     * @param name the name of the panel
+     * @param template the Velocity template path
+     * @param id the id HTML attribute value
+     */
+    public TabbedPanel(String name, String template, String id) {
+        super(name, template, id);
+        addControl(tabLink);
+    }
+
+    /**
+     * Create a TabbedPanel with no name or template defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public TabbedPanel() {
+        super();
+        addControl(tabLink);
     }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO:
-     * Add the sub Panel and make non active.
-     * <p/>
+     * Return the currently active panel.
      *
-     * <b>NOTE:</b> This method should <b>not</b> be called, in favor of
-     * addPanel(Panel, boolean), to ensure the "active" panel is defined.  This
-     * method will by default set the active panel to the current panel being
-     * passed, to ensure that at least one active panel has been set.
-     *
-     * @param panel the panel to add
+     * @return the currently active panel
      */
-    public void addPanel(Panel panel) {
-        this.addPanel(panel, false);
+    public Panel getActivePanel() {
+        return activePanel;
     }
 
     /**
-     * Add's a "sub-panel" that will be rendered in a tab if the passed boolean
-     * is true.  Otherwise, only the panel name and an associated link will be
-     * added.  For all panels, an actionLink will be added that has a listener
-     * (handleTabSwitch) noted in this class that will handle the cycling
-     * through the various panels according to the clicked link.
+     * Set the currently active panel to the given panel.
      *
-     * @param panel the panel to add
-     * @param isActivePanel make the added panel active
+     * @param panel the panel to set as the current active panel
      */
-    public void addPanel(Panel panel, boolean isActivePanel) {
-        super.addPanel(panel);
-
-        if (isActivePanel) {
-            setActivePanel(panel);
-        }
-
-        if (getPanels().size() > 1 && tabActionLink == null) {
-            tabActionLink = new ActionLink("_tp_tabLink");
-            tabActionLink.setListener(this, "handleTabSwitch");
-            addControl(tabActionLink);
-        }
-
-        removeModel("_tp_panels");
-        addModel("_tp_panels", getPanels());
+    public void setActivePanel(Panel panel) {
+        activePanel = panel;
     }
 
     /**
-     * Set the controls event listener.  If the listener <b>and</b> method are
+     * @see net.sf.click.Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     * @throws IllegalArgumentException if the Context is null
+     */
+    public void setContext(Context context) {
+        super.setContext(context);
+
+        if (tabLink != null) {
+            tabLink.setContext(context);
+        }
+    }
+
+    /**
+     * Return the HTML head import statements for the CSS stylesheet file:
+     * <tt>click/TabbedPanel.css</tt>.
+     *
+     * @return the HTML head import statements for the control stylesheet
+     */
+    public String getHtmlImports() {
+        String path = getContext().getRequest().getContextPath();
+
+        return StringUtils.replace(PANEL_IMPORTS, "$", path);
+    }
+
+    /**
+     * Set the tab switch listener.  If the listener <b>and</b> method are
      * non-null, then the listener will be called whenever a request to switch
      * tabs is placed by clicking the link associated with that tab.
      * <p/>
@@ -203,38 +244,49 @@ public class TabbedPanel extends Panel {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      */
-    public void setListener(Object listener, String method) {
+    public void setTabListener(Object listener, String method) {
         this.listener = listener;
         this.method = method;
     }
 
     /**
-     * @see net.sf.click.Control#setContext(Context)
+     * Return the tab switching action link.
      *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
+     * @return the tab switching action link
      */
-    public void setContext(Context context) {
-        super.setContext(context);
+    public ActionLink getTabLink() {
+        return tabLink;
+    }
 
-        if (tabActionLink != null) {
-            tabActionLink.setContext(context);
-        }
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Deploy the <tt>TabbedPanel.css</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/panel/TabbedPanel.css",
+                              "click");
     }
 
     /**
-     * Handle the switching between tabs.  This method will invoke the
-     * listener.method() as set by {@link #setListener(Object, String)} if
+     * The tab switch event handler.  This method will invoke the
+     * listener.method() as set by {@link #setTabListener(Object, String)} if
      * available, otherwise will just continue processing, therefore
      * assume that all the information needed to "switch tabs" is already
      * available to the model.
      *
      * @return true if processing should continue, false if it should halt
      */
-    public boolean handleTabSwitch() {
-        for (int i = 0; i < panels.size(); i++) {
-            Panel panel = (Panel) panels.get(i);
-            if (tabActionLink.getValue().equals(panel.getName())) {
+    public boolean onTabSwitch() {
+        for (int i = 0; i < getPanels().size(); i++) {
+            Panel panel = (Panel) getPanels().get(i);
+            if (tabLink.getValue().equals(panel.getName())) {
                 setActivePanel(panel);
             }
         }
@@ -243,21 +295,9 @@ public class TabbedPanel extends Panel {
         // then invoke it
         if (listener != null && method != null) {
             return ClickUtils.invokeListener(listener, method);
-
         }
 
         return true;
-    }
-
-    /**
-     * Removes the current 'active panel' from the model, and adds the passed
-     * panel as the new active panel.
-     *
-     * @param panel the active panel to set
-     */
-    protected void setActivePanel(Panel panel) {
-        removeModel("_tp_activePanel");
-        addModel("_tp_activePanel", panel);
     }
 
 }

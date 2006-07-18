@@ -21,8 +21,9 @@ import java.util.Set;
 
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.Field;
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
+import net.sf.click.control.Panel;
 import net.sf.click.control.Table;
 
 import org.apache.commons.lang.StringUtils;
@@ -96,24 +97,7 @@ public class PageImports {
         for (int i = 0; i < page.getControls().size(); i++) {
             Control control = (Control) page.getControls().get(i);
 
-            addImport(control.getHtmlImports(), buffer);
-
-            if (control instanceof Form) {
-                List list = ClickUtils.getFormFields((Form) control);
-
-                for (int j = 0, size = list.size(); j < size; j++) {
-                    Field field = (Field) list.get(j);
-                    addImport(field.getHtmlImports(), buffer);
-                }
-
-            } else if (control instanceof Table) {
-                List list = ((Table) control).getControls();
-
-                for (int j = 0, size = list.size(); j < size; j++) {
-                    Control tableControl = (Control) list.get(j);
-                    addImport(tableControl.getHtmlImports(), buffer);
-                }
-            }
+            processControl(control, buffer);
         }
 
         cachedPageImports = buffer.toString();
@@ -122,6 +106,50 @@ public class PageImports {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Process the given control adding its imports to the buffer and processing
+     * any child controls it may contain.
+     *
+     * @param control the control to add
+     * @param buffer the import lines buffer
+     */
+    protected void processControl(Control control, HtmlStringBuffer buffer) {
+        addImport(control.getHtmlImports(), buffer);
+
+        if (control instanceof Form) {
+            Form form = (Form) control;
+            List controls = form.getFieldList();
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                processControl((Control) controls.get(i), buffer);
+            }
+
+        } else if (control instanceof FieldSet) {
+            FieldSet fieldSet = (FieldSet) control;
+            List controls = fieldSet.getFieldList();
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                processControl((Control) controls.get(i), buffer);
+            }
+
+        } else if (control instanceof Panel) {
+            Panel panel = (Panel) control;
+            if (panel.hasControls()) {
+                List controls = panel.getControls();
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    processControl((Control) controls.get(i), buffer);
+                }
+            }
+
+        } else if (control instanceof Table) {
+            Table table = (Table) control;
+            if (table.hasControls()) {
+                List controls = table.getControls();
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    processControl((Control) controls.get(i), buffer);
+                }
+            }
+        }
+    }
 
     /**
      * Add the HTML imports value to the string buffer, ensuring the same import
