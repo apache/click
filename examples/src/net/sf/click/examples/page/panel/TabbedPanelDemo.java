@@ -2,8 +2,8 @@ package net.sf.click.examples.page.panel;
 
 import java.util.List;
 
+import net.sf.click.control.Panel;
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.panel.Panel;
 import net.sf.click.extras.panel.TabbedPanel;
 
 /**
@@ -13,22 +13,21 @@ import net.sf.click.extras.panel.TabbedPanel;
  */
 public class TabbedPanelDemo extends BorderPage {
 
-    public TabbedPanelDemo() {
-        TabbedPanel tabbedPanel = new TabbedPanel("tabbedPanel");
+    public TabbedPanel tabbedPanel = new TabbedPanel();
 
+    public TabbedPanelDemo() {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
         panel1.setLabel("The First Panel");
-        tabbedPanel.addPanel(panel1, true);
+        tabbedPanel.addControl(panel1);
+        tabbedPanel.setActivePanel(panel1);
 
         Panel panel2 = new Panel("panel2", "panel/customersPanel2.htm");
         panel2.setLabel("The Second Panel");
-        tabbedPanel.addPanel(panel2);
+        tabbedPanel.addControl(panel2);
 
         Panel panel3 = new Panel("panel3", "panel/customersPanel3.htm");
         panel3.setLabel("The Third Panel");
-        tabbedPanel.addPanel(panel3);
-
-        addControl(tabbedPanel);
+        tabbedPanel.addControl(panel3);
     }
 
     public void onRender() {

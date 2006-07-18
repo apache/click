@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.extras.panel;
+package net.sf.click.control;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.Format;
 import net.sf.click.util.MessagesMap;
+import net.sf.click.util.SessionMap;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Panel class for creating customized layout sections within a page.
@@ -49,34 +54,27 @@ import net.sf.click.util.MessagesMap;
  *
  * <pre class="codeHtml">
  * &lt;fieldset&gt;
- *   &lt;legend class="title"&gt; <span class="st">$title</span> &lt;/legend&gt;
- *   <span class="st">$content</span>
+ *   &lt;legend class="title"&gt; <span class="st">$messages.heading</span> &lt;/legend&gt;
+ *   <span class="st">$messages.content</span>
  * &lt;/fieldset&gt; </pre>
  *
- * Then in our page class we would include the Panel and some model data.
+ * Then in our page class we would include the Panel. The $messages heading
+ * and content values are defined in the Pages properties file.
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> WelcomePage <span class="kw">extends</span> Page {
  *
  *     <span class="kw">public</span> Panel panel = <span class="kw">new</span> Panel(<span class="st">"panel"</span>, <span class="st">"/panel-template.htm"</span>);
  *
- *     <span class="kw">public void</span> onInit() {
- *         addModel(<span class="st">"title"</span>, getMessage(<span class="st">"title"</span>));
- *         addModel(<span class="st">"content"</span>, getMessage(<span class="st">"content"</span>));
- *     }
  * } </pre>
  *
- * Note how this page uses {@link Page#onInit()} method rather than the pages
- * constructor for adding the messages. This is because the page Context is
- * available in the onInit() method, and is required to lookup the localized
- * messages for the request's Locale.
  * <p/>
  * In our <tt>WelcomePage</tt> template <tt>welcome.htm</tt> would simply
  * reference our panel control:
  *
  * <pre class="codeHtml"> <span class="st">$panel</span> </pre>
  *
- * The Panel template would then be rendered in in the page as:
+ * The Panel template would then be rendered in the page as:
  *
  * <fieldset style="margin:2em;width:550px;">
  * <legend><b>Welcome</b></legend>
@@ -85,33 +83,6 @@ import net.sf.click.util.MessagesMap;
  * MyCorp is your telecommuting office portal. Its just like being there at the
  * office!
  * </fieldset>
- *
- * Provides for a "Panel" which is simply a template and adds pass through
- * methods to the Page for adding Control and Model objects.
- * <p/>
- * The Panel class allows a Click applications to customize the output of
- * sections on a page, by providing a "template" to layout controls in multiple
- * locations on the page.
- * <p/>
- * The default template name will be the 'simple name' of the class (the class
- * name without the package information) plus the default template extension
- * (currently ".htm").  It is important to remember that since panels contain
- * their own templates, panels must be evaluated using Velocity's #parse()
- * directive.
- * <p/>
- * When a Panel is instantiated, it should automatically add all the information
- * required to render the Panel to the Model (via addModel) and pass controls
- * directly to the Page (via addControl).
- * <p/>
- *
- *
- * A simple implementation of a Panel, that will render a basic panel.  If
- * the template is provided, it will return that value via the toString()
- * method.  If none provided, it will attempt to locate and use the default name
- * of "Panel.htm".
- * <p/>
- * NOTE: If no template is provided, no output will be rendered, effectively
- * making this Panel a passthrough to the Page.
  *
  * @author Phil Barnes
  * @author Malcolm Edgar
@@ -122,11 +93,14 @@ public class Panel implements Control {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The Panel attributes Map. */
+    protected Map attributes;
+
     /** A request context. */
     protected transient Context context;
 
-    /** A temporary storage for control objects until the Page is set. */
-    protected List controls = new ArrayList();
+    /** The list of panel controls. */
+    protected List controls;
 
     /** The "identifier" for this panel (CSS id for rendering). */
     protected String id;
@@ -142,9 +116,6 @@ public class Panel implements Control {
 
     /** The name of the control. */
     protected String name;
-
-    /** The page this panel is associated with. */
-    protected Page page;
 
     /** The list of sub panels. */
     protected List panels = new ArrayList(5);
@@ -201,65 +172,124 @@ public class Panel implements Control {
     // ------------------------------------------------------------- Properties
 
     /**
-     * Adds a 'sub-panel' to this panel.  This is useful for 'panels of panels',
-     * in which each Panel will be rendered recursively, allowing advanced
-     * layout functionality.  See {@link ListPanel} and {@link TabbedPanel} for
-     * examples.
+     * Return the Panel HTML attribute with the given name, or null if the
+     * attribute does not exist.
      *
-     * @param panel the pannel to add
+     * @param name the name of panel HTML attribute
+     * @return the Panel HTML attribute
      */
-    public void addPanel(Panel panel) {
-        if (panel == null) {
-            throw new IllegalArgumentException("Null panel parameter");
+    public String getAttribute(String name) {
+        if (attributes != null) {
+            return (String) attributes.get(name);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the Panels with the given HTML attribute name and value. These
+     * attributes will be rendered as HTML attributes.
+     * <p/>
+     * If there is an existing named attribute in the Panel it will be replaced
+     * with the new value. If the given attribute value is null, any existing
+     * attribute will be removed.
+     *
+     * @param name the name of the field HTML attribute
+     * @param value the value of the field HTML attribute
+     * @throws IllegalArgumentException if attribute name is null
+     */
+    public void setAttribute(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
         }
 
-        getPanels().add(panel);
-        addControl(panel);
+        if (attributes == null) {
+            attributes = new HashMap(5);
+        }
+
+        if (value != null) {
+            attributes.put(name, value);
+        } else {
+            attributes.remove(name);
+        }
     }
 
     /**
-     * Return the list of sub panels associated with this panel. Do not
-     * add sub panels using this method, use {@link #addPanel(Panel)} instead.
+     * Return the Panel attributes Map.
      *
-     * @return the list of sub-panels, if any
+     * @return the panel attributes Map.
      */
-    public List getPanels() {
-        return panels;
+    public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap(5);
+        }
+        return attributes;
     }
 
     /**
-     * A 'pass-through' method to add the control to the page model. The control
-     * will be added to the pages model using the controls name as the key. The
-     * Controls context property will also be set, as per Page.addControl()
+     * Return true if the Panel has attributes or false otherwise.
+     *
+     * @return true if the Panel has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        if (attributes != null && !attributes.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Add the control to the panel. The control will be added to the panels model
+     * using the controls name as the key. The Controls context property will
+     * be set if the context is available. The Controls parent property will
+     * also be set to the page instance.
      *
      * @param control the control to add
-     * @throws IllegalArgumentException if the control is null
+     * @throws IllegalArgumentException if the control is null, or if the name
+     *      of the control is not defined
      */
     public void addControl(Control control) {
-        if (getPage() != null) {
-            getPage().addControl(control);
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        if (StringUtils.isBlank(control.getName())) {
+            throw new IllegalArgumentException("Control name not defined");
+        }
 
-        } else {
-            controls.add(control);
+        getControls().add(control);
+        addModel(control.getName(), control);
+
+        if (control instanceof Panel) {
+            getPanels().add(control);
+        }
+
+        control.setParent(this);
+
+        if (getContext() != null) {
+            control.setContext(getContext());
         }
     }
 
     /**
-     * A 'pass-through' method to add the object to the page model. The object
-     * will be added to the pages model using the given name as the key.
+     * Return the list of page Controls.
      *
-     * @param name  the key name of the object to add
-     * @param value the object to add
-     * @throws IllegalArgumentException if the name or value parameters are
-     *      null, or if there is already a named value in the model
+     * @return the list of page Controls
      */
-    public void addModel(String name, Object value) {
-        if (getPage() != null) {
-            getPage().addModel(name, value);
-
-        } else {
-            model.put(name, value);
+    public List getControls() {
+        if (controls == null) {
+            controls = new ArrayList();
         }
+        return controls;
+    }
+
+    /**
+     * Return true if the page has any controls defined.
+     *
+     * @return true if the page has any controls defined
+     */
+    public boolean hasControls() {
+        return (controls == null) ? false : !controls.isEmpty();
     }
 
     /**
@@ -282,38 +312,29 @@ public class Panel implements Control {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
+
+        if (hasControls()) {
+            for (int i = 0; i < getControls().size(); i++) {
+                Control control = (Control) getControls().get(i);
+                control.setContext(context);
+            }
+        }
     }
 
     /**
-     * @see Panel#getName()
+     * Return the panel id value. If no id attribute is defined then this method
+     * will return the panel name.
      *
-     * @return the name of this panel, to be used to uniquely identify it in the
-     * model context
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name for this panel.  This is used to uniquely identify the panel
-     * in the model context.
-     *
-     * @see Control#setName(String)
-     *
-     * @param name the name of this control
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * @see net.sf.click.Control#getId()
      *
-     * @return HTML element identifier attribute "id" value
+     * @return the panel HTML id attribute value
      */
     public String getId() {
-        if (id == null) {
-            id = getName();
+        if (id != null) {
+            return id;
+
+        } else {
+            String id = getName();
 
             if (id.indexOf('/') != -1) {
                 id = id.replace('/', '_');
@@ -327,8 +348,9 @@ public class Panel implements Control {
             if (id.indexOf('>') != -1) {
                 id = id.replace('>', '_');
             }
+
+            return id;
         }
-        return id;
     }
 
     /**
@@ -455,6 +477,93 @@ public class Panel implements Control {
     }
 
     /**
+     * Add the named object value to the Panels model map.
+     *
+     * @param name the key name of the object to add
+     * @param value the object to add
+     * @throws IllegalArgumentException if the name or value parameters are
+     * null, or if there is already a named value in the model
+     */
+    public void addModel(String name, Object value) {
+        if (name == null) {
+            String msg = "Cannot add null parameter name to "
+                         + getClass().getName() + " model";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "Cannot add null " + name + " parameter "
+                         + "to " + getClass().getName() + " model";
+            throw new IllegalArgumentException(msg);
+        }
+        if (getModel().containsKey(name)) {
+            String msg = getClass().getName() + " model already contains "
+                         + "value named " + name;
+            throw new IllegalArgumentException(msg);
+        } else {
+            getModel().put(name, value);
+        }
+    }
+
+    /**
+     * Return the panels model map. The model is used populate the
+     * Velocity Context with is merged with the panel template before rendering.
+     *
+     * @return the Page's model map
+     */
+    public Map getModel() {
+        return model;
+    }
+
+    /**
+     * Adds a 'sub-panel' to this panel.  This is useful for 'panels of panels',
+     * in which each Panel will be rendered recursively, allowing advanced
+     * layout functionality.
+     *
+     * @deprecated this method will be removed in Click RC1, please use
+     * addControl() instead
+     *
+     * @param panel the pannel to add
+     */
+    public void addPanel(Panel panel) {
+        addControl(panel);
+    }
+
+    /**
+     * Return the list of sub panels associated with this panel. Do not
+     * add sub panels using this method, use {@link #addPanel(Panel)} instead.
+     *
+     * @return the list of sub-panels, if any
+     */
+    public List getPanels() {
+        if (panels == null) {
+            panels = new ArrayList();
+        }
+        return panels;
+    }
+
+    /**
+     * @see Panel#getName()
+     *
+     * @return the name of this panel, to be used to uniquely identify it in the
+     * model context
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the name for this panel.  This is used to uniquely identify the panel
+     * in the model context.
+     *
+     * @see Control#setName(String)
+     *
+     * @param name the name of this control
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * @see Control#getParent()
      *
      * @return the Control's parent
@@ -470,10 +579,6 @@ public class Panel implements Control {
      */
     public void setParent(Object parent) {
         this.parent = parent;
-
-        if (parent instanceof Page) {
-            setPage((Page) parent);
-        }
     }
 
     /**
@@ -507,13 +612,23 @@ public class Panel implements Control {
     }
 
     /**
-     * This method returns true.
+     * Process the request and invoke the <tt>onProcess()</tt> method of any
+     * child controls.
      *
      * @see net.sf.click.Control#onProcess()
      *
-     * @return true
+     * @return true or false to abort further processing
      */
     public boolean onProcess() {
+        if (hasControls()) {
+            List controls = getControls();
+            for (int i = 0; i < controls.size(); i++) {
+                Control control = (Control) controls.get(i);
+                if (!control.onProcess()) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -526,82 +641,95 @@ public class Panel implements Control {
         Context context = getContext();
 
         if (getTemplate() != null) {
-            return context.renderTemplate(getTemplate(), getPage().getModel());
+            return context.renderTemplate(getTemplate(), createTemplateModel());
 
         } else {
-            return context.renderTemplate(getClass(), getPage().getModel());
+            return context.renderTemplate(getClass(), createTemplateModel());
         }
     }
 
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Allows removal of a model object in the Pages or panel model map,
-     * depending on whether the page has been set yet or not for this Panel.
+     * Get the parent page of the panel.
      *
-     * @param key the key of the page model value to remove
-     */
-    protected void removeModel(String key) {
-        if (getPage() != null) {
-            getPage().getModel().remove(key);
-
-        } else {
-            model.remove(key);
-        }
-    }
-
-    /**
-     * The page this panel is associated to.
-     *
-     * @return the page for this panel
+     * @return the parent page of the panel
      */
     protected Page getPage() {
-        return this.page;
+        Object parent = getParent();
+
+        while (parent != null) {
+            if (parent instanceof Control) {
+                Control control = (Control) parent;
+                parent = control.getParent();
+
+            } else if (parent instanceof Page) {
+                return (Page) parent;
+
+            } else if (parent != null) {
+                throw new RuntimeException("Invalid parent class");
+            }
+        }
+
+        return null;
     }
 
     /**
-     * TODO:
-     * Sets the page associated with this panel.  This call is necessary to
-     * ensure any associated model or control elements that are added to the
-     * panel are ultimately added to the page, so that the rendering of the page
-     * has all available information necessary to render.
+     * Create a model to merge with the Velocity template. The model will
+     * include the pages model values, plus any Panel defined model values, and
+     * a number of automatically added model values. Note panel model values
+     * will override any page defined model values.
+     * <p/>
+     * The following values automatically added to the Model:
+     * <ul>
+     * <li>attributes - the panel HTML attributes map</li>
+     * <li>context - the Servlet context path, e.g. /mycorp</li>
+     * <li>format - the page {@link Format} object for formatting the display of objects</li>
+     * <li>this - a reference to this panel</li>
+     * <li>messages - the panel messages bundle</li>
+     * <li>request - the servlet request</li>
+     * <li>response - the servlet request</li>
+     * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
+     * </ul>
      *
-     * Set the page this panel is associated to.  This method will set the
-     * sub-panels pages as well
-     *
-     * @param page the page associated with this panel
+     * @return a new model to merge with the Velocity template.
      */
-    protected void setPage(Page page) {
-        this.page = page;
+    protected Map createTemplateModel() {
 
-        if (!controls.isEmpty()) {
-            for (int i = 0; i < controls.size(); i++) {
-                Control control = (Control) controls.get(i);
+        final HttpServletRequest request = getContext().getRequest();
 
-                if (!page.getModel().containsKey(control.getName())) {
-                    page.addControl(control);
-                }
-            }
+        final Page page = getPage();
+
+        final Map renderModel = new HashMap(page.getModel());
+
+        renderModel.putAll(getModel());
+
+        if (hasAttributes()) {
+            renderModel.put("attributes", getAttributes());
+        } else {
+            renderModel.put("attributes", Collections.EMPTY_MAP);
         }
 
-        if (!model.isEmpty()) {
-            for (Iterator i = model.keySet().iterator(); i.hasNext();) {
-                String key = i.next().toString();
-                Object value = model.get(key);
+        renderModel.put("this", this);
 
-                if (!page.getModel().containsKey(key)) {
-                    page.getModel().put(key, value);
-                }
-            }
+        renderModel.put("context", request.getContextPath());
+
+        Format format = page.getFormat();
+        if (format != null) {
+            renderModel.put("format", format);
         }
 
-        if (!getPanels().isEmpty()) {
-            List panels = getPanels();
-            for (int i = 0; i < panels.size(); i++) {
-                Panel panel = (Panel) panels.get(i);
-                panel.setPage(page);
-            }
-        }
+        Map messages = new HashMap(getMessages());
+        messages.putAll(page.getMessages());
+        renderModel.put("messages", messages);
+
+        renderModel.put("request", request);
+
+        renderModel.put("response", getContext().getResponse());
+
+        renderModel.put("session", new SessionMap(request.getSession(false)));
+
+        return renderModel;
     }
 
 }

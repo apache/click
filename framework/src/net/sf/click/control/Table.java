@@ -156,7 +156,7 @@ public class Table implements Control {
     protected transient Context context;
 
     /** The list of table controls. */
-    protected final List controlList = new ArrayList();
+    protected List controlList;
 
     /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
@@ -438,7 +438,19 @@ public class Table implements Control {
      * @return the list of table controls
      */
     public List getControls() {
+        if (controlList == null) {
+            controlList = new ArrayList();
+        }
         return controlList;
+    }
+
+    /**
+     * Return true if the table has any controls defined.
+     *
+     * @return true if the table has any controls defined
+     */
+    public boolean hasControls() {
+        return (controlList == null) ? false : !controlList.isEmpty();
     }
 
     /**
@@ -473,11 +485,10 @@ public class Table implements Control {
      * Return the HTML head import statements for the CSS stylesheet file:
      * <tt>click/table.css</tt>.
      *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
+     * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(TABLE_IMPORTS, "$", path);
     }

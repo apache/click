@@ -40,5 +40,8 @@
     <suppress checks="LineLength"
               files="ColorPicker.java"
               lines="86,87"/>    
+    <suppress checks="LineLength"
+              files="TabbedPanel.java"
+              lines="117"/>    
                                         
 </suppressions>
