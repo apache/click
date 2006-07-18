@@ -428,7 +428,7 @@ public class Table implements Control {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
-        controlList.add(control);
+        getControls().add(control);
     }
 
     /**
