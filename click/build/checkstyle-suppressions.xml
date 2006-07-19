@@ -6,42 +6,55 @@
 
 <suppressions>
     
-    <suppress checks="JavadocMethod"
-              files="MessagesMap.java"/>
-    <suppress checks="JavadocMethod"
-              files="SessionMap.java"/>
-    <suppress checks="StaticVariableName"
-              files="Form.java"
-              lines="477,480,483,486,517,520"/>
     <suppress checks="FileLength"
               files="Form.java"/>
-    <suppress checks="LineLength"
-              files="DateField.java"
-              lines="96,97,98"/>
-    <suppress checks="LineLength"
-              files="ErrorReport.java"/>  
-    <suppress checks="LineLength"
-              files="ClickServlet.java"
-              lines="754"/> 
-    <suppress checks="LineLength"
-              files="ClickUtils.java"
-              lines="211,212"/> 
-    <suppress checks="LineLength"
-              files="Table.java"
-              lines="126"/>      
-    <suppress checks="LineLength"
-              files="Form.java"/> 
-    <suppress checks="LineLength"
-              files="FieldSet.java"
-              lines="560,572,600"/>  
-    <suppress checks="MethodLength"
-              files="ErrorReport.java"
-              lines="175"/>
+              
+    <suppress checks="JavadocMethod"
+              files="MessagesMap.java"/>
+              
+    <suppress checks="JavadocMethod"
+              files="SessionMap.java"/>
+              
     <suppress checks="LineLength"
               files="ColorPicker.java"
               lines="86,87"/>    
+              
+    <suppress checks="LineLength"
+              files="DateField.java"
+              lines="96,97,98"/>
+              
+    <suppress checks="LineLength"
+              files="ClickServlet.java"
+              lines="754"/> 
+              
+    <suppress checks="LineLength"
+              files="ClickUtils.java"
+              lines="211,212"/> 
+              
+    <suppress checks="LineLength"
+              files="ErrorReport.java"/>  
+              
+    <suppress checks="LineLength"
+              files="FieldSet.java"
+              lines="555,567,595"/>  
+              
+    <suppress checks="LineLength"
+              files="Form.java"/>
+               
     <suppress checks="LineLength"
               files="TabbedPanel.java"
               lines="117"/>    
                                         
+    <suppress checks="LineLength"
+              files="Table.java"
+              lines="126"/>      
+              
+    <suppress checks="MethodLength"
+              files="ErrorReport.java"
+              lines="175"/>
+
+    <suppress checks="StaticVariableName"
+              files="Form.java"
+              lines="477,480,483,486,517,520"/>
+                            
 </suppressions>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,7 +171,9 @@ public class TabbedForm extends Form {
     }
 
     /**
-     * Create a new tabbed form instance.
+     * Create a new tabbed form instance with no name defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public TabbedForm() {
         setErrorsStyle("");

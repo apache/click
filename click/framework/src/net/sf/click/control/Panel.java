@@ -35,7 +35,7 @@ import net.sf.click.util.SessionMap;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a Panel class for creating customized layout sections within a page.
+ * Provides a Panel control for creating customized layout sections within a page.
  *
  * <table style='margin-bottom: 1.25em'>
  * <tr>
@@ -58,14 +58,15 @@ import org.apache.commons.lang.StringUtils;
  *   <span class="st">$messages.content</span>
  * &lt;/fieldset&gt; </pre>
  *
- * Then in our page class we would include the Panel. The $messages heading
- * and content values are defined in the Pages properties file.
+ * Then in our page class we would include the Panel. With the
+ * <span class="st"><tt>$messages.heading</tt></span> and
+ * <span class="st"><tt>$messages.content</tt></span> values defined in the
+ * Pages properties file.
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> WelcomePage <span class="kw">extends</span> Page {
  *
  *     <span class="kw">public</span> Panel panel = <span class="kw">new</span> Panel(<span class="st">"panel"</span>, <span class="st">"/panel-template.htm"</span>);
- *
  * } </pre>
  *
  * <p/>
@@ -74,7 +75,8 @@ import org.apache.commons.lang.StringUtils;
  *
  * <pre class="codeHtml"> <span class="st">$panel</span> </pre>
  *
- * The Panel template would then be rendered in the page as:
+ * The Panel template would then be merged with the template model and rendered
+ * in the page as:
  *
  * <fieldset style="margin:2em;width:550px;">
  * <legend><b>Welcome</b></legend>
@@ -83,6 +85,27 @@ import org.apache.commons.lang.StringUtils;
  * MyCorp is your telecommuting office portal. Its just like being there at the
  * office!
  * </fieldset>
+ *
+ * Panel rendering is performed using the {@link #toString()} method, and the
+ * template model is created using {@link #createTemplateModel()}.
+ *
+ * <h3>Template Model</h3>
+ *
+ * To render the panel's template, a model is created which is merged with
+ * the Velocity template.  This model will include the pages model values,
+ * plus any Panel defined model values, with the Panels values overriding any
+ * Page defined values. In addition a number of values are automatically added
+ * model. These values include:
+ * <ul>
+ * <li>attributes - the panel HTML attributes map</li>
+ * <li>context - the Servlet context path, e.g. /mycorp</li>
+ * <li>format - the page {@link Format} object for formatting the display of objects</li>
+ * <li>this - a reference to this panel object</li>
+ * <li>messages - the panel messages bundle</li>
+ * <li>request - the servlet request</li>
+ * <li>response - the servlet request</li>
+ * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
+ * </ul>
  *
  * @author Phil Barnes
  * @author Malcolm Edgar
@@ -375,11 +398,21 @@ public class Panel implements Control {
     }
 
     /**
-     * Returns text label assocaited with this panel.  This should be an already
-     * internationalized label set via setLabel().  Typically this is used as a
-     * header for a particular panel.
-     *
+     * Return the panel display label.
+     * <p/>
+     * If the label value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".label"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value still cannot be found then the Panel name will be converted
+     * into a label using the method: {@link ClickUtils#toLabel(String)}
+     * <p/>
+     * Typically the label property is used as a header for a particular panel.
      * For example:
+     *
      * <pre class="codeHtml">
      *  &lt;div id="$panel.id"&gt;
      *      &lt;h1&gt;$panel.label&lt;/h1&gt;
@@ -399,12 +432,9 @@ public class Panel implements Control {
     }
 
     /**
-     * TODO:
+     * Set the Panel display caption.
      *
-     * Set the internationalized label associated with this panel.  This method
-     * is necessary to ensure proper internationalization of text for a panel.
-     *
-     * @param label the internationalized label for this panel
+     * @param label the display label of the Panel
      */
     public void setLabel(String label) {
         this.label = label;
@@ -633,7 +663,12 @@ public class Panel implements Control {
     }
 
     /**
-     * Return the HTML string representation of the Panel.
+     * Return the HTML string representation of the Panel. The panel will be
+     * rendered by merging the Velocity {@link #template} with the template
+     * model. The template model is created using {@link #createTemplateModel()}.
+     * <p/>
+     * If a Panel template is not defined, a template based on the classes
+     * name will be loaded. For more details please see {@link Context#renderTemplate(Class, Map)}.
      *
      * @return the HTML string representation of the form
      */

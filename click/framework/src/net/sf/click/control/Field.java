@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -591,7 +591,7 @@ public abstract class Field implements Control {
     /**
      * Set the Field display caption.
      *
-     * @param label the display label of the Field.
+     * @param label the display label of the Field
      */
     public void setLabel(String label) {
         this.label = label;

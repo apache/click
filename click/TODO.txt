@@ -1,6 +1,5 @@
 Click 0.21 Release
 ------------------
-add PageLink control
 fix ColorPicker rendering bug
 faq UTF-8 topic
 add Cayenne control examples
@@ -11,12 +10,10 @@ CODE
 * review table.css
 * Select can have multiple values and this need to be resolved with multpart request
 * improve exception handling for method not found, walk up stack and find class
-* JSP exception handling, on tomcat find work directory
 
 BUGS
 
 DOCUMENTATION
-* update FAQ multiple parameters topic
 * update Velocity documentation
 * discuss redirecting to HTTPS
 

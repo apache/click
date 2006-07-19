@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,15 +109,9 @@ public class HiddenField extends Field {
     }
 
     /**
-     * Create an HiddenField with no name or Class defined, <b>please note</b>
+     * Create an HiddenField with no name or Class defined. <b>Please note</b>
      * the HiddenField's name and value Class must be defined before it is
      * valid.
-     * <p/>
-     * <div style="border: 1px solid red;padding:0.5em;">
-     * No-args constructors are provided for Java Bean tools support and are not
-     * intended for general use. If you create a control instance using a
-     * no-args constructor you must define its name before adding it to its
-     * parent. </div>
      */
     public HiddenField() {
         super();
