@@ -1,5 +1,5 @@
 /*
- * Copyright 2005 Malcolm A. Edgar
+ * Copyright 2005-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,14 +66,9 @@ public class Label extends Field {
     }
 
     /**
-     * Create a Label with no label/name defined, <b>please note</b> the
-     * control's name must be defined before it is valid.
+     * Create a Label with no label/name defined.
      * <p/>
-     * <div style="border: 1px solid red;padding:0.5em;">
-     * No-args constructors are provided for Java Bean tools support and are not
-     * intended for general use. If you create a control instance using a
-     * no-args constructor you must define its name before adding it to its
-     * parent. </div>
+     * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public Label() {
         super();
