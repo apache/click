@@ -1,7 +1,9 @@
 <body>
 Provides renderable HTML controls. Controls implement the
 {@link net.sf.click.Control} interface to perform server side request
-processing. Controls are processed by the ClickServlet and by Forms.
+processing. At the top level a Pages controls are processed by the
+ClickServlet. Some controls can contain child controls which they will inturn
+process. These container controls include Form, FieldSet, Panel and Table.
 <p/>
 Using these controls is similar to traditional Swing GUI programming. While these 
 controls do not provide a full Swing style MVC implementation, they provided a
@@ -13,10 +15,10 @@ Click Controls provide an event callback mechanism similar the
 <pre class="codeJava">
 <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
 
+    <span class="kw">public</span> ActionLink actionLink = <span class="kw">new</span> ActionLink();
+
     <span class="kw">public</span> MyPage() {
-        ActionLink actionLink = <span class="kw">new</span> ActionLink(<span class="st">"link"</span>);
         actionLink.setListener(<span class="kw">this</span>, <span class="st">"onLinkClick"</span>);
-        addControl(actionLink);
     }
     
     <span class="kw">public boolean</span> onLinkClick() {
@@ -24,5 +26,11 @@ Click Controls provide an event callback mechanism similar the
         <span class="kw">return true</span>;
     }
 } </pre>
+
+All call back listener methods must return a boolean value. If they return true
+the the further processing of other controls and page methods should continue.
+Otherwise if they return false, then any further processing should be aborted.
+By returning false you can effectively exit at this point and redirect or forward 
+to another page.
 
 </body>
