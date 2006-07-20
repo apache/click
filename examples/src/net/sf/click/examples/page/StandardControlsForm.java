@@ -65,11 +65,6 @@ public class StandardControlsForm extends BorderPage {
         form.add(new Reset("reset"));
         form.add(new Submit("submit"));
 
-        Select select = new Select("test", "test", true);
-        select.add(Option.EMPTY_OPTION);
-        select.add(new Option("Test"));
-        form.add(select);
-
         // Settings FieldSet
         FieldSet settingsFieldSet = new FieldSet("Settings");
         settingsFieldSet.add(allFieldsRequired);
