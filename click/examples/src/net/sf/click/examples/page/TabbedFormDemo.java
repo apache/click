@@ -37,8 +37,8 @@ public class TabbedFormDemo extends BorderPage {
     private IntegerField expiry = new IntegerField("expiry");
 
     public TabbedFormDemo() {
-
-        form.setBackgroundColor("#F7FFAF");
+        
+        form.setBackgroundColor("#FFFBCF");
         form.setTabHeight("210px");
         form.setTabWidth("420px");
 

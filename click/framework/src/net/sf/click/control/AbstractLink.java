@@ -414,21 +414,20 @@ public abstract class AbstractLink implements Control {
      * generally use parameter if you were creating the entire AbstractLink
      * programatically and rendering it with the {@link #toString()} method.
      * <p/>
-     * TODO: update doco
-     * <p/>
-     * For example given the AbstractLink:
+     * For example given the ActionLink:
      *
      * <pre class="codeJava">
-     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
-     * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
+     * PageLink editLink = <span class="kw">new</span> PageLink(<span class="st">"editLink"</span>, EditCustomer.<span class="kw">class</span>);
+     * editLink.setLabel(<span class="st">"Edit Customer"</span>);
+     * editLink.setParameter(<span class="st">"customerId"</span>, customerId); </pre>
      *
      * And the page template:
      * <pre class="codeHtml">
-     * $<span class="red">addLink</span> </pre>
+     * $<span class="red">editLink</span> </pre>
      *
      * Will render the HTML as:
      * <pre class="codeHtml">
-     * &lt;a href="..?AbstractLink=<span class="red">addLink</span>" <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     * &lt;a href="/mycorp/edit-customer.htm?<span class="st">customerId</span>=<span class="red">13490</span>"&gt;<span class="st">Edit Customer</span>&lt;/a&gt; </pre>
      *
      * @param name the attribute name
      * @param value the attribute value
