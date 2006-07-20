@@ -126,7 +126,7 @@ public class CreditCardField extends TextField {
     protected static final List CARD_OPTIONS = new ArrayList();
 
     /** The card type Select name. */
-    protected static final String SELECT_NAME = "cardtype";
+    protected static final String SELECT_NAME = "cardType";
 
     static {
         // TODO: localize labels
@@ -322,7 +322,7 @@ public class CreditCardField extends TextField {
                 return;
             }
 
-            if (cardType != null) {
+            if (cardType == null) {
                 throw new IllegalArgumentException("cardType is null");
             }
             final char firstdig = value.charAt(0);
