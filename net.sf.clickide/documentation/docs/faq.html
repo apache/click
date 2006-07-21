@@ -4,6 +4,9 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <style type="text/css">
    dt { margin-top:2em; }
@@ -16,12 +19,16 @@
 <ul>
   <li><a href="#getting-help">How to get help?</a>
   </li>
+  <li><a href="#commercial-support">What about Commercial Support?</a>
+  </li>
   <li><a href="#tool-support">What development tools are there?</a>
   </li>
   <li><a href="#html-control">How can the GUI designer define the HTML if Click Controls generates everything?</a>
   </li> 
   <li><a href="#shared-template">How can I have many Pages using the same HTML template?</a>
   </li>
+  <li><a href="#listener-returns">Why do control listeners methods have to return a boolean value?</a>
+  </li> 
   <li><a href="#exclude-fields">Can you exclude some fields from a Form?</a>
   </li> 
   <li><a href="#localization">How do you internationalize Pages and Controls?</a>
@@ -56,19 +63,31 @@
   <a name="getting-help" class="heading"></a>
   <dt><b>How to get help?</b></dt>
   <dd>
-  OK you have read the documentation and reviewed the 
-  <a href="examples.html">Examples</a> application, but there is still something 
-  you still dont get. What do you do?
-  <p/>
-  You go to the click-development and click-user mail
-  <a target="blank" class="external" href="http://sourceforge.net/mail/?group_id=82095">news groups</a>.
-  <p/>
-  This is where you get support from in open source projects. Its free, friendly
-  and usually pretty responsive.
-  <p/>
-  These news groups are where other people ask questions, and where users
-  and developers discuss ideas. Its highly recommended, so don't be shy.
+    OK you have read the documentation and reviewed the 
+    <a href="examples.html">Examples</a> application, but there is still something 
+    you still dont get. What do you do?
+    <p/>
+    You go to the click-development and click-user mail
+    <a target="blank" class="external" href="http://sourceforge.net/mail/?group_id=82095">news groups</a>.
+    <p/>
+    This is where you get support from in open source projects. Its free, friendly
+    and usually pretty responsive.
+    <p/>
+    These news groups are where other people ask questions, and where users
+    and developers discuss ideas. Its highly recommended, so don't be shy.
   </dd>
+  
+
+  <a name="commercial-support" class="heading"></a>
+  <dt><b>What about Commercial Support?</b></dt>
+  <dd>
+  	If you want commercial support or training for Click, you can obtain this 
+  	from
+	<a target="_blank" href="http://www.avoka.com">Avoka Technologies</a>.
+	<p/>
+	For more details please email <a href="mailto:medgar@avoka.com">Malcolm Edgar</a>.	
+  </dd>
+
   
   <a name="tool-support" class="heading"></a>
   <dt><b>What development tools are there?</b></dt>
@@ -188,6 +207,31 @@
 
 
     
+  <a name="listener-returns" class="heading"></a>
+  <dt><b>Why do control listeners methods have to return a boolean value?</b></dt>
+  <dd>
+  Control listener methods have to return a boolean value to state whether the
+  Pages controls and methods should continue to be processed. To continue
+  processing listener methods should return true, to abort they should return false.
+  <p/>
+  The reason you may want to abort further processing is so you can navigate 
+  directly to another page continuing to execute other control or page methods 
+  which may be time consuming. You can use this feature like a break or goto 
+  statement. For example:
+  
+<pre class="codeJava">
+<span class="kw">public boolean</span> onLogoutClick() {
+   setRedirect(Logout.<span class="kw">class</span>);
+   <span class="kw">return false</span>;
+} 
+</pre>
+  
+  Please see the Page <a href="pages.html#page-navigation">Navigation</a> topic 
+  for more details.
+  </dd>
+
+
+
   <a name="exclude-fields" class="heading"></a>
   <dt><b>Can you exclude some fields from a Form?</b></dt>
   <dd>
@@ -327,8 +371,9 @@
    parameter and pass this to the ActionLink. For example:
    
 <pre class="codeHtml">
-   <span class="red">#set</span> (<span class="red">$</span><span class="blue">id</span> = <span class="red">$</span><span class="blue">customer.id</span> + "-" + <span class="red">$</span><span class="blue">account.id</span>)
-   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.getHref(</span><span class="red">$</span><span class="blue">id</span>)" 
+   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"customerId"</span>, <span class="red">$</span><span class="blue">customer.id</span>)
+   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"accountId"</span>, <span class="red">$</span><span class="blue">account.id</span>)
+   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.href</span>" 
       onclick="return window.confirm('Please confirm to delete this account.');"&gt;
      &lt;img src="images/delete.gif" title="Delete" border="0" align="middle"&gt;
    &lt;/a&gt;
@@ -339,10 +384,8 @@
    
 <pre class="codeJava">
 <span class="kw">public boolean</span> onDeleteClick() {
-    String value = deleteLink.getValue();
-    <span class="kw">int</span> index = value.indexOf(<span class="st">"-"</span>); 
-    Long customerId = Long.valueOf(value.substring(0, index)); 
-    Long accountId = Long.valueOf(value.substring(index + 1)); 
+    Long customerId = Long.valueOf(deleteLink.getParameter(<span class="st">"customerId"</span>)); 
+    Long accountId = Long.valueOf(deleteLink.getParameter(<span class="st">"accountId"</span>)); 
     
     <span class="cm">// Delete customer account</span>
     ..
@@ -409,14 +452,10 @@
   <dd>
    To integrate Spring with Click configure the
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
-   instead of the normal 
-   <a href="extras-api/net/sf/click/ClickServlet.html">ClickServlet</a>. 
+   instead of the normal ClickServlet. The SpringClickServlet is contained in the 
+   <a href="extras.html">Extras</a> library.
    <p/>
-   The SpringClickServlet is contained in the Click <a href="extras.html">Extras</a> package.
-
-   <h4>Spring Web MVC Framework</h4>
-
-   The Spring Web MVC Framework however, is not compatible with Click. The Spring framework
+   The Spring MVC Framework however, is not compatible with Click. The Spring framework
    uses a low level command pattern design like Struts and WebWork.
    Spring uses a <tt>DispatcherServlet</tt> to route requests to <tt>Controller</tt> 
    objects and then passes the <tt>ModelAndView</tt> results to the rendering layer.
