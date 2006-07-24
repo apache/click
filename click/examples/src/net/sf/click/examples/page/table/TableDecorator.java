@@ -115,7 +115,7 @@ public class TableDecorator extends BorderPage {
         return true;
     }
 
-    public void onGet() {
+    public void onRender() {
         List customers = getCustomerService().getCustomersSortedByName(12);
         table.setRowList(customers);
     }

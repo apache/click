@@ -8,6 +8,7 @@ import net.sf.click.control.Option;
 import net.sf.click.control.OptionGroup;
 import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides an Select example secure Page.
@@ -16,15 +17,14 @@ import net.sf.click.control.Submit;
  */
 public class SelectDemo extends BorderPage {
 
-    private Form form;
+    public Form form = new Form();
+
     private Select genderSelect;
     private Select investmentSelect;
     private Select locationSelect;
 
     public SelectDemo() {
-        form = new Form("form");
         form.setErrorsPosition(Form.POSITION_TOP);
-        addControl(form);
 
         // Gender Select
         genderSelect = new Select("gender");
@@ -67,12 +67,7 @@ public class SelectDemo extends BorderPage {
         form.add(locationSelect);
 
         form.add(new Submit("ok", "   OK   "));
-        form.add(new Submit("canel", this, "onCancelClick"));
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
+        form.add(new PageSubmit("canel", HomePage.class));
     }
 
     /**

@@ -8,6 +8,7 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Option;
 import net.sf.click.control.Submit;
 import net.sf.click.extras.control.CheckList;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides CheckList control example.
@@ -53,7 +54,7 @@ public class CheckListDemo extends BorderPage{
         form.add(sortableCheckList);
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
     }
@@ -70,11 +71,6 @@ public class CheckListDemo extends BorderPage{
         }
 
         return true;
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 
 }

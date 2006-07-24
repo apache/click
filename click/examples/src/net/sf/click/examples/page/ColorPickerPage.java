@@ -6,6 +6,7 @@ import java.util.List;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.extras.control.ColorPicker;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides ColorPicker control example.
@@ -41,14 +42,9 @@ public class ColorPickerPage extends BorderPage {
         form.add(cp4);
 
         form.add(new Submit("ok", "  OK  "));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 
     public void onPost() {

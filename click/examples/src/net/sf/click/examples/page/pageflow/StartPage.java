@@ -12,6 +12,7 @@ import net.sf.click.examples.control.InvestmentSelect;
 import net.sf.click.examples.domain.CourseBooking;
 import net.sf.click.examples.domain.Customer;
 import net.sf.click.examples.page.BorderPage;
+import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.DateField;
 
 /**
@@ -89,7 +90,7 @@ public class StartPage extends BorderPage {
     }
 
     public boolean onBackClick() {
-        setRedirect("/index.html");
+        setRedirect(HomePage.class);
         return false;
     }
 

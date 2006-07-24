@@ -5,6 +5,7 @@ import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.RichTextArea;
 import net.sf.click.extras.control.EmailField;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides an example page using the custom RichTextArea control.
@@ -39,14 +40,9 @@ public class EmailForm extends BorderPage {
         form.add(messageTextArea);
 
         form.add(new Submit("send", "  Send "));
-        form.add(new Submit("canel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 
 }

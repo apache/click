@@ -41,7 +41,7 @@ public class TablePaging extends BorderPage {
         addControl(table);
     }
 
-    public void onGet() {
+    public void onRender() {
         List customers = getCustomerService().getCustomers();
         table.setRowList(customers);
     }

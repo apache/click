@@ -17,6 +17,7 @@ import net.sf.click.extras.control.CreditCardField;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
+import net.sf.click.extras.control.PageSubmit;
 import net.sf.click.extras.control.TabbedForm;
 import net.sf.click.extras.control.TelephoneField;
 import net.sf.click.util.ClickUtils;
@@ -37,8 +38,8 @@ public class TabbedFormDemo extends BorderPage {
     private IntegerField expiry = new IntegerField("expiry");
 
     public TabbedFormDemo() {
-        
-        form.setBackgroundColor("#FFFBCF");
+
+        form.setBackgroundColor("#FFFABF");
         form.setTabHeight("210px");
         form.setTabWidth("420px");
 
@@ -96,7 +97,7 @@ public class TabbedFormDemo extends BorderPage {
         // Buttons
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
     }
@@ -106,11 +107,6 @@ public class TabbedFormDemo extends BorderPage {
             processDelivery();
         }
         return true;
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 
     /**
