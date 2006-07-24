@@ -127,7 +127,7 @@ public interface Control extends Serializable {
     public void setContext(Context context);
 
     /**
-     * Return the HTML head element import string. This method returns null.
+     * Return the HTML head element import string.
      * <p/>
      * Override this method to specify JavaScript and CSS includes for the
      * HTML head element. For example:

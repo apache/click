@@ -50,4 +50,12 @@ public class InvestmentSelect extends Select {
         super(name);
         setOptionList(INVESTMENT_OPTIONS);
     }
+
+    /**
+     * Create the Investment option Select control.
+     */
+    public InvestmentSelect() {
+        super();
+        setOptionList(INVESTMENT_OPTIONS);
+    }
 }

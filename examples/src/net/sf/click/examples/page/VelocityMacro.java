@@ -8,6 +8,7 @@ import net.sf.click.examples.control.InvestmentSelect;
 import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides a Velocity Macro example.
@@ -42,13 +43,8 @@ public class VelocityMacro extends BorderPage {
         form.add(new InvestmentSelect("investments"));
 
         form.add(new Submit("ok", "    OK    "));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
         form.add(new Reset("reset"));
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 }
 

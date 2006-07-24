@@ -5,6 +5,7 @@ import net.sf.click.examples.service.BookingService;
 import net.sf.click.examples.service.CustomerService;
 import net.sf.click.examples.service.UserService;
 
+import org.objectstyle.cayenne.access.DataContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -45,6 +46,15 @@ public class SpringPage extends Page implements ApplicationContextAware {
      */
     public UserService getUserService() {
         return (UserService) getBean("userService");
+    }
+
+    /**
+     * Return the thread local Cayenne DataContext.
+     *
+     * @return the thread local DataContext
+     */
+    public DataContext getDataContext() {
+        return DataContext.getThreadDataContext();
     }
 
     /**

@@ -17,6 +17,7 @@ import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.extras.control.LongField;
 import net.sf.click.extras.control.NumberField;
+import net.sf.click.extras.control.PageSubmit;
 import net.sf.click.extras.control.RegexField;
 import net.sf.click.extras.control.TelephoneField;
 
@@ -48,6 +49,7 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new TelephoneField("telephoneField"));
 
         form.add(new Submit("submit"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         // Settings FieldSet
         FieldSet settingsFieldSet = new FieldSet("Settings");

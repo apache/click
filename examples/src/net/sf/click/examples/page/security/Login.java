@@ -7,6 +7,8 @@ import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.domain.User;
 import net.sf.click.examples.page.BorderPage;
+import net.sf.click.examples.page.HomePage;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides a user authentication login Page.
@@ -15,7 +17,7 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class Login extends BorderPage {
 
-    private Form form = new Form("form");
+    public Form form = new Form();
 
     public Login() {
         TextField usernameField = new TextField("username", true);
@@ -30,9 +32,7 @@ public class Login extends BorderPage {
         form.add(passwordField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClicked"));
-        form.add(new Submit("cancel", this, "onCancelClicked"));
-
-        addControl(form);
+        form.add(new PageSubmit("cancel", HomePage.class));
     }
 
     /**
@@ -66,8 +66,4 @@ public class Login extends BorderPage {
         return true;
     }
 
-    public boolean onCancelClicked() {
-        setRedirect("/index.html");
-        return false;
-    }
 }

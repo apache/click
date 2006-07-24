@@ -12,9 +12,9 @@ import net.sf.click.Page;
 public class SimpleTable extends BorderPage {
 
     /**
-     * @see Page#onGet()
+     * @see Page#onRender()
      */
-    public void onGet() {
+    public void onRender() {
         addModel("properties", new TreeMap(System.getProperties()));
     }
 }

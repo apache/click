@@ -11,6 +11,7 @@ import net.sf.click.control.TextField;
 import net.sf.click.examples.control.InvestmentSelect;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides a example Page to demonstrate Form properties and layout options.
@@ -97,7 +98,7 @@ public class FormProperties extends BorderPage {
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
 
-        Submit cancel = new Submit("cancel", this, "onCancelClick");
+        Submit cancel = new PageSubmit("cancel", HomePage.class);
         cancel.setCancelJavaScriptValidation(true);
         form.add(cancel);
 
@@ -220,11 +221,6 @@ public class FormProperties extends BorderPage {
         setSessionObject(values);
 
         return true;
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 
     public boolean onApplyChanges() {

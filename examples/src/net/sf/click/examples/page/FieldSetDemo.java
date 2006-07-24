@@ -14,6 +14,7 @@ import net.sf.click.examples.control.PackagingRadioGroup;
 import net.sf.click.extras.control.CreditCardField;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.IntegerField;
+import net.sf.click.extras.control.PageSubmit;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -66,7 +67,7 @@ public class FieldSetDemo extends BorderPage {
         paymentFieldSet.add(expiryField);
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
     }
@@ -80,10 +81,5 @@ public class FieldSetDemo extends BorderPage {
             }
         }
         return true;
-    }
-
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
     }
 }

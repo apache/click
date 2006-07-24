@@ -1169,7 +1169,59 @@ public class Form implements Control {
             throw new IllegalStateException("Context has not been set");
         }
         String requestMethod = getContext().getRequest().getMethod();
-        return getMethod().equalsIgnoreCase(requestMethod);
+
+        if (!getMethod().equalsIgnoreCase(requestMethod)) {
+            return false;
+        }
+
+        // If "multipart/form-data" request and not already loaded then
+        // load form data FileItem into context
+        if (getContext().isMultipartRequest()
+            && getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
+
+            FileField fileField = null;
+            List fieldList = ClickUtils.getFormFields(this);
+            for (int i = 0, size = fieldList.size(); i < size; i++) {
+                Field field = (Field) fieldList.get(i);
+                if (!field.isHidden() && (field instanceof FileField)) {
+                    fileField = (FileField) field;
+                    break;
+                }
+            }
+
+            FileUploadBase fileUpload = null;
+            if (fileField != null) {
+                fileUpload = fileField.getFileUpload();
+                if (fileUpload.getFileItemFactory() == null) {
+                    FileItemFactory fif = new DiskFileItemFactory();
+                    fileUpload.setFileItemFactory(fif);
+                }
+            } else {
+                String msg = "No FileField defined for POST "
+                             + "Content-type 'multipart' request";
+                throw new RuntimeException(msg);
+            }
+
+            try {
+                List itemsList =
+                    fileUpload.parseRequest(getContext().getRequest());
+
+                Map itemsMap = new HashMap(itemsList.size());
+                for (int i = 0; i < itemsList.size(); i++) {
+                    FileItem fileItem = (FileItem) itemsList.get(i);
+                    itemsMap.put(fileItem.getFieldName(), fileItem);
+                }
+
+                getContext().setMultiPartFormData(itemsMap);
+
+            } catch (FileUploadException fue) {
+                throw new RuntimeException(fue);
+            }
+        }
+
+        String formName = getContext().getRequestParameter(FORM_NAME);
+
+        return getName().equals(formName);
     }
 
     /**
@@ -1641,58 +1693,6 @@ public class Form implements Control {
     public boolean onProcess() {
 
         if (isFormSubmission()) {
-
-            // If "multipart/form-data" request and not already loaded then
-            // load form data FileItem into context
-            if (getContext().isMultipartRequest()
-                && getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
-
-                FileField fileField = null;
-                List fieldList = ClickUtils.getFormFields(this);
-                for (int i = 0, size = fieldList.size(); i < size; i++) {
-                    Field field = (Field) fieldList.get(i);
-                    if (!field.isHidden() && (field instanceof FileField)) {
-                        fileField = (FileField) field;
-                        break;
-                    }
-                }
-
-                FileUploadBase fileUpload = null;
-                if (fileField != null) {
-                    fileUpload = fileField.getFileUpload();
-                    if (fileUpload.getFileItemFactory() == null) {
-                        FileItemFactory fif = new DiskFileItemFactory();
-                        fileUpload.setFileItemFactory(fif);
-                    }
-                } else {
-                    String msg = "No FileField defined for POST "
-                                 + "Content-type 'multipart' request";
-                    throw new RuntimeException(msg);
-                }
-
-                try {
-                    List itemsList =
-                        fileUpload.parseRequest(getContext().getRequest());
-
-                    Map itemsMap = new HashMap(itemsList.size());
-                    for (int i = 0; i < itemsList.size(); i++) {
-                        FileItem fileItem = (FileItem) itemsList.get(i);
-                        itemsMap.put(fileItem.getFieldName(), fileItem);
-                    }
-
-                    getContext().setMultiPartFormData(itemsMap);
-
-                } catch (FileUploadException fue) {
-                    throw new RuntimeException(fue);
-                }
-            }
-
-            // If a form name is defined, but does not match this form exit.
-            String formName = getContext().getRequestParameter(FORM_NAME);
-
-            if (formName == null || !formName.equals(getName())) {
-                return true;
-            }
 
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {

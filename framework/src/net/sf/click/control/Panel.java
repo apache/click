@@ -686,30 +686,6 @@ public class Panel implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Get the parent page of the panel.
-     *
-     * @return the parent page of the panel
-     */
-    protected Page getPage() {
-        Object parent = getParent();
-
-        while (parent != null) {
-            if (parent instanceof Control) {
-                Control control = (Control) parent;
-                parent = control.getParent();
-
-            } else if (parent instanceof Page) {
-                return (Page) parent;
-
-            } else if (parent != null) {
-                throw new RuntimeException("Invalid parent class");
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Create a model to merge with the Velocity template. The model will
      * include the pages model values, plus any Panel defined model values, and
      * a number of automatically added model values. Note panel model values
@@ -733,7 +709,7 @@ public class Panel implements Control {
 
         final HttpServletRequest request = getContext().getRequest();
 
-        final Page page = getPage();
+        final Page page = ClickUtils.getParentPage(this);
 
         final Map renderModel = new HashMap(page.getModel());
 

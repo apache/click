@@ -13,12 +13,12 @@
 </head>
 <body>
 
-<h1><%=request.getAttribute("title")%></h1> 
+<h1 class="appnameText"><%=request.getAttribute("title")%></h1> 
 
 <table width="100%" cellpadding="8" style="background-color: navy; color: white;">
 <tr>
 <td>
-&nbsp;<a class="menu" href="<%=request.getAttribute("context")%>/index.html" title="Examples Index">Home</a>
+&nbsp;<a class="menu" href="<%=request.getAttribute("context")%>/home.htm" title="Examples Home page">Home</a>
 &nbsp; | &nbsp;
 <a class="menu" href="<%=request.getAttribute("context")%>/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
 &nbsp; | &nbsp;

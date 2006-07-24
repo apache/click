@@ -5,6 +5,7 @@ import net.sf.click.control.FileField;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides File Upload example using the FileField control.
@@ -32,7 +33,7 @@ public class FileUpload extends BorderPage {
         fieldSet.add(descField);
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
     }
@@ -45,9 +46,5 @@ public class FileUpload extends BorderPage {
         return true;
     }
 
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
-    }
 }
  

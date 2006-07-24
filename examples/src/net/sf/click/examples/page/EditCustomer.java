@@ -12,6 +12,7 @@ import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
+import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides an edit Customer Form example. The Customer business object
@@ -48,7 +49,7 @@ public class EditCustomer extends BorderPage {
         form.add(new Checkbox("Active"));
 
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
-        form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new PageSubmit("cancel", HomePage.class));
 
         addControl(form);
     }
@@ -100,13 +101,4 @@ public class EditCustomer extends BorderPage {
         }
     }
 
-    /**
-     * On a POST Cancel button submit redirect to "action-table.htm"
-     *
-     * @return false to stop processing
-     */
-    public boolean onCancelClick() {
-        setRedirect("index.html");
-        return false;
-    }
 }

@@ -683,6 +683,32 @@ public class ClickUtils {
     }
 
     /**
+     * Get the parent page of the given control. This method will walk up
+     * the control's parent hierarchy to find its parent page.
+     *
+     * @param control the control to get the parent page from
+     * @return the parent page of the control
+     */
+    public static Page getParentPage(Control control) {
+        Object parent = control.getParent();
+
+        while (parent != null) {
+            if (parent instanceof Control) {
+                control = (Control) parent;
+                parent = control.getParent();
+
+            } else if (parent instanceof Page) {
+                return (Page) parent;
+
+            } else if (parent != null) {
+                throw new RuntimeException("Invalid parent class");
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Return the page resouce path from the request. For example:
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
