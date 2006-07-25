@@ -154,7 +154,12 @@ public class FieldColumn extends Column {
 
                 field.onProcess();
 
+                if (field.getError() != null) {
+                    field.setTitle(field.getError());
+                }
+
             } else {
+                field.setTitle(null);
                 field.setError(null);
                 field.setValueObject(columnValue);
             }

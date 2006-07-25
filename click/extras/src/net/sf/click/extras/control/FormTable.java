@@ -39,6 +39,36 @@ import ognl.Ognl;
  * </tr>
  * </table>
  *
+ * <p/>
+ * The FormTable is a composite control which includes a {@link #form} object
+ * and an array of {@link FieldColumn} objects.
+ * <p/>
+ * FieldColumn extends the {@link Column} class and includes a {@link Field}
+ * object which is uses to render its column value. Each table data cell
+ * <tt>&lg;td&gt;</tt> contains a uniquely named form field, which is rendered
+ * by the columns field.
+ * <p/>
+ * When the tables form field data is posted the submitted values are processed
+ * by the column field objects using a flyweight style visitor pattern, i.e.
+ * the column field instance is reused and processes all the posted values for
+ * its column.
+ * <p/>
+ * After FormTable changes have been submitted their values will be applied to
+ * the objects contained in the Tables rows list. If the posted values are
+ * invalid for the given field constraints, the field error will be highlited
+ * in the table. Field error messages will be rendered as 'title' attribute
+ * tooltip values.
+ * <p/>
+ * When using the FormTable control its rowList property must be populated
+ * before the control is processed so that any submitted data values can be
+ * applied to the rowList objects. This generally means that the FormTable
+ * rowList should be populated in the page <tt>onInit()</tt> method.
+ * Note this is different from the Table control where the rowlist is generally
+ * populated in the page <tt>onRender()</tt> method.
+ * <p/>
+ * An code example usage of the FormTable is provided below. This example will
+ * render the FormTable illustrated in the image above.
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> FormTablePage <span class="kw">extends</span> BorderPage {
  *
@@ -97,6 +127,10 @@ import ognl.Ognl;
  *         <span class="kw">return true</span>;
  *     }
  * } </pre>
+ *
+ * Note is this example the <tt>onCancelClick()</tt> button rolls back the
+ * changes made to the rowList objects, by reloading their values from the
+ * database and having the FormTable not render the submitted values.
  *
  * @see FieldColumn
  * @see Form
@@ -250,7 +284,13 @@ public class FormTable extends Table {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * TODO:
+     * Process the FormTable control. This method will process the submitted
+     * form data applying its values to the objects contained in the Tables
+     * rowList.
+     *
+     * @see Table#onProcess()
+     *
+     * @return true if further processing should continue or false otherwise
      */
     public boolean onProcess() {
 
