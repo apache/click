@@ -384,7 +384,7 @@
                author="true"
                version="true"
                verbose="false"
-               windowtitle="Click API"
+               windowtitle="Click Framework API"
                doctitle="Click API">
          <classpath refid="classpath.framework"/>
          <packageset dir="framework/src">
