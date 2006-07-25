@@ -1160,9 +1160,9 @@ public class Form implements Control {
     }
 
     /**
-     * Return true if the page request is a form submission.
+     * Return true if the page request is a submission from this form.
      *
-     * @return true if the page request is a form submission
+     * @return true if the page request is a submission from this form
      */
     public boolean isFormSubmission() {
         if (getContext() == null) {
