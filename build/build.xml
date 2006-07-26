@@ -301,6 +301,12 @@
    <target name="clean"> 
       <delete dir="dist" quiet="false"/>
       <mkdir dir="dist"/>
+      <delete>
+        <fileset dir="framework/test" includes="TEST-*.txt"/>
+      </delete>
+      <delete>
+        <fileset dir="extras/test" includes="TEST-*.txt"/>
+      </delete>
    </target>
 
 

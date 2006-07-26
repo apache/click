@@ -556,8 +556,6 @@ public class Select extends Field {
             // Load the selected items.
             this.multipleValues = new ArrayList();
 
-            // TODO: resolve multiple values when multipart/form-data
-
             String[] values =
                 getContext().getRequest().getParameterValues(getName());
 

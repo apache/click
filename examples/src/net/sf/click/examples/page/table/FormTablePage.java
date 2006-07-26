@@ -35,6 +35,7 @@ public class FormTablePage extends BorderPage {
 
         FieldColumn column = new FieldColumn("name", new TextField());
         column.getField().setRequired(true);
+        column.setAttribute("vertical-align", "baseline");
         table.addColumn(column);
 
         column = new FieldColumn("email", new EmailField());

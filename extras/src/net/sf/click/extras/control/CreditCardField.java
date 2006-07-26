@@ -129,7 +129,6 @@ public class CreditCardField extends TextField {
     protected static final String SELECT_NAME = "cardType";
 
     static {
-        // TODO: localize labels
         CARD_OPTIONS.add(new Option(VISA, "Visa"));
         CARD_OPTIONS.add(new Option(MASTER, "Master"));
         CARD_OPTIONS.add(new Option(AMEX, "AmEx"));

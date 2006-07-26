@@ -2,6 +2,7 @@ package net.sf.click.control;
 
 import junit.framework.TestCase;
 import net.sf.click.util.HtmlStringBuffer;
+import ognl.NoSuchPropertyException;
 
 public class ColumnTest extends TestCase {
     
@@ -25,13 +26,12 @@ public class ColumnTest extends TestCase {
         // Test rendering an invalid property
         try {
             Column column3 = new Column("missing");
-            
-            HtmlStringBuffer buffer3 = new HtmlStringBuffer();        
+            HtmlStringBuffer buffer3 = new HtmlStringBuffer(); 
             column3.renderTableData(row, buffer3, null, 0);
             assertTrue(false);
             
         } catch (RuntimeException re) {
-            assertTrue(re.getCause() instanceof NoSuchMethodException);
+            assertTrue(re.getCause() instanceof NoSuchPropertyException);
         }
     }
     

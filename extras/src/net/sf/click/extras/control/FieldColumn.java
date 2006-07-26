@@ -22,8 +22,30 @@ import net.sf.click.control.Form;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a FieldColumn for rendering table data cells.
  *
+ * <table cellspacing='10'>
+ * <tr>
+ * <td>
+ * <img align='middle' hspace='2'src='form-table.png' title='FormTable control'/>
+ * </td>
+ * </tr>
+ * </table>
+ * <p/>
  *
+ * The FieldColumn class is used to define the table cell data
+ * <tt>&lt;td&gt;</tt> editors. Each FieldColumn should include a {@link Field}
+ * instance.
+ * <p/>
+ * If the FieldColumn is contained in a standard Table it will render the all
+ * the table column data cells using its single field instance.
+ * <p/>
+ * If the FieldColumn is contained in a FormTable it will both render the column
+ * data cells and process any posted column data values using the field instance.
+ * Changes to the tables data objects will be available in the Table rowList
+ * property.
+ * <p/>
+ * Please see the {@link FormTable} Javadoc for usage examples.
  *
  * @see Column
  * @see FormTable
@@ -92,7 +114,7 @@ public class FieldColumn extends Column {
     }
 
     /**
-     * Create a FieldColumn with no name defined.
+     * Create a FieldColumn with no name or field defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
@@ -112,7 +134,7 @@ public class FieldColumn extends Column {
     }
 
     /**
-     * Set the column editor field
+     * Set the column editor field.
      *
      * @param field the column editor field
      */
@@ -123,7 +145,9 @@ public class FieldColumn extends Column {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Render the content within the column table data &lt;td&gt; element.
+     * Render the content within the column table data &lt;td&gt; element. If
+     * the FieldColumn has a decorator defined this will be used instead to
+     * render the table data cell.
      *
      * @param row the row object to render
      * @param buffer the string buffer to render to
@@ -141,30 +165,43 @@ public class FieldColumn extends Column {
 
         } else {
             Object columnValue = getProperty(row);
-            FormTable formTable = (FormTable) getTable();
-            Form form = formTable.getForm();
 
-            Field field = getField();
+            if (getTable() instanceof FormTable) {
+                FormTable formTable = (FormTable) getTable();
+                Form form = formTable.getForm();
 
-            field.setName(getName() + "_" + rowIndex);
-            field.setContext(context);
+                Field field = getField();
 
-            if (formTable.getRenderSubmittedValues()
-                && form.isFormSubmission()) {
+                field.setName(getName() + "_" + rowIndex);
+                field.setContext(context);
 
-                field.onProcess();
+                if (formTable.getRenderSubmittedValues()
+                        && form.isFormSubmission()) {
 
-                if (field.getError() != null) {
-                    field.setTitle(field.getError());
+                    field.onProcess();
+
+                    if (field.getError() != null) {
+                        field.setTitle(field.getError());
+                    }
+
+                } else {
+                    field.setTitle(null);
+                    field.setError(null);
+                    field.setValueObject(columnValue);
                 }
 
-            } else {
-                field.setTitle(null);
-                field.setError(null);
-                field.setValueObject(columnValue);
-            }
+                buffer.append(getField());
 
-            buffer.append(getField());
+            } else {
+                Field field = getField();
+
+                field.setName(getName() + "_" + rowIndex);
+                field.setContext(context);
+
+                field.setValueObject(columnValue);
+
+                buffer.append(getField());
+            }
         }
     }
 
