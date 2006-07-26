@@ -18,7 +18,7 @@ public class TableTest extends TestCase {
         table.addColumn(new Column("Foo"));
 
         String header = "<thead>\n<tr>\n<th>Foo</th></tr></thead>\n";
-        String body = "<tbody>\n<tr class=\"odd\"><td colspan=\"1\" class=\"error\">No rows found.</td></tr>\n</tbody>";
+        String body = "<tbody>\n<tr class=\"odd\"><td colspan=\"1\" class=\"error\">No records found.</td></tr>\n</tbody>";
         assertEquals("<table>\n" + header + body + "</table>\n", table.toString());
     }
 

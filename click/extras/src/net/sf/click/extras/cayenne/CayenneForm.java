@@ -240,9 +240,6 @@ public class CayenneForm extends Form {
      * Return a <tt>DataObject</tt> from the form, with the form field values
      * set on the object if the copyTo parameter is true.
      *
-     * TODO: copyTo will register object, while copyTo false will create a
-     * new instance!!!
-     *
      * @param copyTo option to copy the form properties to the returned data
      *  object
      * @return the data object from the form with the form field values applied

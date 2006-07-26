@@ -40,16 +40,15 @@ A Hello World example in Click would look something like this.
 First we would have a <tt>HelloWorld</tt> page class:
 
 <pre class="codeJava">
-<span class="kw">package</span> <span class="green">examples.page</span>;
+<span class="kw">package</span> <span class="red">examples.page</span>;
 
 <span class="kw">import</span> java.util.Date;
 <span class="kw">import</span> net.sf.click.Page;
 
 <span class="kw">public</span> HelloWorld <span class="kw">extends</span> Page {
 
-    <span class="kw">public</span> HelloWorld() {
-        addModel("<span class="st">time</span>", <span class="kw">new</span> Date());
-    }
+    <span class="kw">public</span> Date <span class="st">time</span> = <span class="kw">new</span> Date();
+
 } 
 </pre>
 
@@ -73,7 +72,7 @@ requests to our <tt>HelloWorld</tt> page class.
 
 <pre class="codeConfig">
 &lt;click-app&gt;  
-  &lt;pages package="<span class="green">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
+  &lt;pages package="<span class="red">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
 &lt;/click-app&gt; 
 </pre>
 
@@ -81,8 +80,8 @@ requests to our <tt>HelloWorld</tt> page class.
 
 At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
 request to our page class <tt>example.page.HelloWorld</tt> and creates a new instance. 
-The HelloWorld page constructor creates a new <tt>Date</tt> object and adds it to its model as a value called 
-<span class="st">time</span>.
+The HelloWorld page creates a new public <tt>Date</tt> object, which is automatically
+added to the pages model using the fields name <span class="st">time</span>.
 <p/>
 The page model is then merged with the template which substitutes the 
 <span class="st">$time</span> parameter with the <tt>Date</tt> object. 
@@ -103,19 +102,20 @@ Click also includes a library <a target="topic" href="controls.html">Controls</a
 provide user interface functionality. The example below provides a login 
 Page which demonstrate Click controls.
 <p/>
-First we have a Login page class which setups up a login form in the constructor.
+First we have a <tt>LoginPage</tt> class which setups up a login 
+<a href="click-api/net/sf/click/control/Form.html">Form</a>
+in the constructor.
 
 <pre class="codeJava">
-<span class="kw">public class</span> Login <span class="kw">extends</span> Page {
+<span class="kw">public class</span> LoginPage <span class="kw">extends</span> Page {
 
-    <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+    <span class="kw">public</span> Form <span class="st">form</span> = <span class="kw">new</span> Form();
 
-    <span class="kw">public</span> Login() { 
+    <span class="kw">public</span> LoginPage() { 
         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
-        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
-        addControl(form);
+        form.add(<span class="kw">new</span> PageSubmit(<span class="st">"cancel"</span>, HomePage.<span class="kw">class</span>));
     }
 
     <span class="kw">public boolean</span> onOkClicked() {
@@ -125,7 +125,8 @@ First we have a Login page class which setups up a login form in the constructor
 
             <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
-                setRedirect(<span class="st">"secure.htm"</span>);
+                setRedirect(SecurePage.<span class="kw">class</span>);
+                <span class="kw">return false</span>;
 
             } <span class="kw">else</span> {     
                 form.setError(getMessage(<span class="st">"authentication-error"</span>));           
@@ -133,15 +134,15 @@ First we have a Login page class which setups up a login form in the constructor
         }
         <span class="kw">return true</span>;
     }
-
-    <span class="kw">public boolean</span> onCancelClicked() {
-        setRedirect(<span class="st">"index.htm"</span>);
-        <span class="kw">return true</span>;
-    }
 } 
 </pre>
 
-Next we have the Login page template <span class="blue">login.htm</span>:
+Note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls.
+<p/>
+Next we have the LoginPage template <span class="blue">login.htm</span>. The
+Click application automatically associates the <tt>login.htm</tt> template with
+the <tt>LoginPage</tt> class.
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -149,13 +150,13 @@ Next we have the Login page template <span class="blue">login.htm</span>:
   
     &lt;h2&gt;Login&lt;/h2&gt;
     
-    <span class="red">$form</span>
+    <span class="blue">$form</span>
     
   &lt;/body&gt;
 &lt;/html&gt; 
 </pre>
 
-When the Login page is first requested the $<span class="red">form</span> object will 
+When the Login page is first requested the <span class="blue">$form</span> object will 
 automatically render itself as:
 
 <table class="htmlExample" cellspacing="12">
@@ -219,10 +220,10 @@ With all the event processing completed the form now renders the field validatio
 
 If the user enters a correct username and password the <tt>onOkClicked()</tt> 
 event handler will add a User object to the HttpSession and redirect the request 
-to the <span class="blue">secure.htm</span> page.
+to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
+processing in the page.
 <p/>
-If the user clicks on the Cancel button the <tt>onCancelClicked()</tt> event handler is
-invoked and the request is redirected to the <span class="blue">index.htm</span> page.
+If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
 
 <h4>Form Layout</h4>
 

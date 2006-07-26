@@ -143,9 +143,6 @@ public class FormTable extends Table {
     /** The table form. */
     protected Form form = new Form();
 
-    /** The render form buttons automatically flag, default value is true. */
-    protected boolean renderButtons = true;
-
     /** The render the posted form values flag, default value is true. */
     protected boolean renderSubmittedValues = true;
 
@@ -241,25 +238,6 @@ public class FormTable extends Table {
         buffer.append(getForm().getHtmlImports());
 
         return buffer.toString();
-    }
-
-    /**
-     * Return true if the form buttons should be rendered automatically. The
-     * default value is true.
-     *
-     * @return true if the form buttons shold be rendered automatically
-     */
-    public boolean getRenderButtons() {
-        return renderButtons;
-    }
-
-    /**
-     * Set whether the form buttons should be rendered automatically.
-     *
-     * @param render set whether the form buttons shold be rendered automatically
-     */
-    public void setRenderButtons(boolean render) {
-        renderButtons = render;
     }
 
     /**
@@ -367,9 +345,7 @@ public class FormTable extends Table {
 
         buffer.append(super.toString());
 
-        if (getRenderButtons()) {
-            renderButtons(buffer);
-        }
+        renderButtons(buffer);
 
         buffer.elementEnd("form");
         buffer.append("\n");
