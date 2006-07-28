@@ -15,15 +15,14 @@ import net.sf.click.extras.control.PageSubmit;
  */
 public class ColorPickerPage extends BorderPage {
 
-    private Form form;
+    public Form form = new Form("form");
+
     private ColorPicker cp1;
     private ColorPicker cp2;
     private ColorPicker cp3;
     private ColorPicker cp4;
 
     public ColorPickerPage() {
-        form = new Form("form");
-
         cp1 = new ColorPicker("cp1", "Color Picker 1");
         form.add(cp1);
 
@@ -43,8 +42,6 @@ public class ColorPickerPage extends BorderPage {
 
         form.add(new Submit("ok", "  OK  "));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
     public void onPost() {

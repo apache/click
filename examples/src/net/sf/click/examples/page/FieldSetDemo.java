@@ -24,7 +24,7 @@ import net.sf.click.util.ClickUtils;
  */
 public class FieldSetDemo extends BorderPage {
 
-    private Form form = new Form("form");
+    public Form form = new Form();
 
     public FieldSetDemo() {
         form.setLabelAlign(Form.ALIGN_RIGHT);
@@ -68,8 +68,6 @@ public class FieldSetDemo extends BorderPage {
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
     public boolean onOkClick() {

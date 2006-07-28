@@ -34,12 +34,12 @@ public class CheckListDemo extends BorderPage{
         }
     }
 
-    private Form form;
+    public  Form form = new Form();
+
     private CheckList standardCheckList;
     private CheckList sortableCheckList;
 
     public CheckListDemo() {
-        form = new Form("form");
         form.setFieldStyle("width:20em;");
 
         standardCheckList = new CheckList("standardList", "Standard List ", true);
@@ -55,8 +55,6 @@ public class CheckListDemo extends BorderPage{
 
         form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
     public boolean onOkClick() {
@@ -69,7 +67,6 @@ public class CheckListDemo extends BorderPage{
             List order = sortableCheckList.getSortorder();
             addModel("list2Order", order);
         }
-
         return true;
     }
 

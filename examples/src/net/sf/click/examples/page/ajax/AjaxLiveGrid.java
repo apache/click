@@ -11,12 +11,14 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class AjaxLiveGrid extends BorderPage {
 
-    public void onInit() {
-        addModel("body-onload", "javascript:bodyOnLoad();");
+    public String bodyOnload = "javascript:bodyOnLoad();";
 
+    public void onInit() {
         List customerList = getCustomerService().getCustomers();
         addModel("customers", customerList);
+
         addModel("totalRows", new Integer(customerList.size()));
+
         // Always start at a 0 offset
         addModel("offset", new Integer(0));
     }

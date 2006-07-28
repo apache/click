@@ -11,7 +11,7 @@ import net.sf.click.control.Submit;
 import net.sf.click.extras.control.PageSubmit;
 
 /**
- * Provides an Select example secure Page.
+ * Provides an Select example Page.
  *
  * @author Malcolm Edgar
  */
