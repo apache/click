@@ -12,13 +12,12 @@ import net.sf.click.control.Label;
 public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
+    
+    public Form buttonsForm = new Form();
+    public Form form = new Form();
 
     public ImageDemo() {
-
         // Buttons Form
-
-        Form buttonsForm = new Form("buttonsForm");
-
         ImageSubmit editSubmit = new ImageSubmit("edit", "images/edit.gif");
         editSubmit.setListener(this, "onEditClick");
         editSubmit.setTitle("Edit");
@@ -29,19 +28,12 @@ public class ImageDemo extends BorderPage {
         deleteSubmit.setTitle("Delete");
         buttonsForm.add(deleteSubmit);
 
-        addControl(buttonsForm);
-
         // Colors Form
-
-        Form form = new Form("form");
-
         form.add(new Label("label", "<b>Color Chooser</b>"));
 
         colorSubmit = new ImageSubmit("submit", "images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");
         form.add(colorSubmit);
-
-        addControl(form);
     }
 
     public boolean onEditClick() {

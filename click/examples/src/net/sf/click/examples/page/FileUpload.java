@@ -14,12 +14,12 @@ import net.sf.click.extras.control.PageSubmit;
  */
 public class FileUpload extends BorderPage {
 
-    private Form form;
+    public Form form = new Form();
+
     private FileField fileField;
     private TextField descField;
 
     public FileUpload() {
-        form = new Form("form");
         form.setLabelsPosition("top");
 
         FieldSet fieldSet = new FieldSet("upload", "<b>Upload File</b>");
@@ -34,8 +34,6 @@ public class FileUpload extends BorderPage {
 
         form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
     public boolean onOkClick() {

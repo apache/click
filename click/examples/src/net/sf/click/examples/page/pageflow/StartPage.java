@@ -22,7 +22,10 @@ import net.sf.click.extras.control.DateField;
  */
 public class StartPage extends BorderPage {
 
-    private Form form;
+    public String headInclude = "ajax/ajax-head.htm";
+    public String bodyOnload = "registerAjax();";
+    public Form form = new Form();
+
     private Select customerSelect;
     private DateField dateField;
     private Select courseSelect;
@@ -31,12 +34,7 @@ public class StartPage extends BorderPage {
     private CourseBooking courseBooking;
 
     public StartPage() {
-        addModel("head-include", "ajax/ajax-head.htm");
-        addModel("body-onload", "registerAjax();");
-
-        form = new Form("form");
         form.setLabelsPosition("top");
-        addControl(form);
 
         customerSelect = new Select("Customer");
         customerSelect.setRequired(true);

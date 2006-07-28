@@ -197,8 +197,8 @@ public class FormProperties extends BorderPage {
 
         // Setup showBorders checkbox Javascript using HTML head include and
         // setting the body onload function.
-        addModel("head-include", "form-head.htm");
-        addModel("body-onload", "toggleBorders(document.optionsForm.showBorders);");
+        addModel("headInclude", "form-head.htm");
+        addModel("bodyOnload", "toggleBorders(document.optionsForm.showBorders);");
     }
 
     /**

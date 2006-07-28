@@ -21,6 +21,8 @@ import net.sf.click.examples.page.SpringPage;
  */
 public class AjaxCustomer extends SpringPage {
 
+    public Customer customer;
+
     /**
      * Process the AJAX request and return XML customer table.
      *
@@ -29,11 +31,7 @@ public class AjaxCustomer extends SpringPage {
     public void onGet() {
         String customerId = getContext().getRequest().getParameter("customerId");
 
-        Customer customer = getCustomerService().findCustomerByID(customerId);
-
-        if (customer != null) {
-            addModel("customer", customer);
-        }
+        customer = getCustomerService().findCustomerByID(customerId);
     }
 
     /**
@@ -45,12 +43,4 @@ public class AjaxCustomer extends SpringPage {
         return "text/xml";
     }
 
-    /**
-     * Override border template to return page path.
-     *
-     * @see Page#getTemplate()
-     */
-    public String getTemplate() {
-        return getPath();
-    }
 }

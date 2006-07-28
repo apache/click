@@ -4,11 +4,9 @@
 <link type="text/css" rel="stylesheet" href="$context/style.css"/>
 $imports
 
-#if ($head-include) 
-  #parse($head-include) 
-#end
+#if ($headInclude) #parse($headInclude) #end
 </head>
-<body #if($body-onload) onload="$body-onload" #end>
+<body #if($bodyOnload) onload="$bodyOnload" #end>
  	
 <h1 class="appnameText">$title</h1> 
 

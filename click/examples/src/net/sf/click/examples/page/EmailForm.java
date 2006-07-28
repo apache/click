@@ -15,9 +15,10 @@ import net.sf.click.extras.control.PageSubmit;
  * @author Malcolm Edgar
  */
 public class EmailForm extends BorderPage {
+    
+    public Form form = new Form();
 
     public EmailForm() {
-        Form form = new Form("form");
         form.setLabelsPosition(Form.POSITION_TOP);
         form.setLabelRequiredPrefix("<b>");
         form.setLabelRequiredSuffix("</b>");
@@ -41,8 +42,6 @@ public class EmailForm extends BorderPage {
 
         form.add(new Submit("send", "  Send "));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
 }

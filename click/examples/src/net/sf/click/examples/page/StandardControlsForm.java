@@ -29,13 +29,15 @@ import net.sf.click.control.TextField;
  */
 public class StandardControlsForm extends BorderPage {
 
-    private Form form = new Form("form");
+    public  Form form = new Form();
+    
     private FieldSet fieldSet = new FieldSet("fieldSet");
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
 
     public StandardControlsForm() {
+        form.setErrorsPosition(Form.POSITION_TOP);
 
         // Controls FieldSet
         form.add(fieldSet);
@@ -70,12 +72,11 @@ public class StandardControlsForm extends BorderPage {
         settingsFieldSet.add(allFieldsRequired);
         settingsFieldSet.add(jsValidate);
         form.add(settingsFieldSet);
-
-        form.setErrorsPosition(Form.POSITION_TOP);
-
-        addControl(form);
     }
 
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         List customers = getCustomerService().getCustomersSortedByName();
         select.add(new Option("[Select]"));

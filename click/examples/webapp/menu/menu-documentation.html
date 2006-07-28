@@ -16,11 +16,10 @@ control.
 
 <pre class="codeJava">
 <span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
-    
-    <span class="kw">public</span> MenuPage() {
-        addControl(<span class="kw">new</span> Menu(<span class="st">"rootMenu"</span>));
+
+     <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
         
-        addModel(<span class="st">"head-include"</span>, <span class="st">"menu/menu.js"</span>);
-        addModel(<span class="st">"body-onload"</span>, <span class="st">"initMenu();"</span>);
-    }
+     <span class="kw">public</span> String headInclude = <span class="st">"menu/menu.js"</span>;
+     <span class="kw">public</span> String bodyOnload = <span class="st">"initMenu();"</span>;
+
 }</pre>

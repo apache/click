@@ -10,11 +10,9 @@ import net.sf.click.extras.control.Menu;
  */
 public class MenuPage extends BorderPage {
 
-    public MenuPage() {
-        addControl(new Menu("rootMenu"));
+    public Menu rootMenu = new Menu();
 
-        addModel("head-include", "menu/menu.js");
-        addModel("body-onload", "initMenu();");
-    }
+    public String headInclude = "menu/menu.js";
+    public String bodyOnload = "initMenu();";
 
 }

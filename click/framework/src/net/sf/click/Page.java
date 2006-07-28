@@ -306,6 +306,18 @@ public class Page {
     }
 
     /**
+     * Set the request to forward to the give page class.
+     *
+     * @param pageClass the class of the Page to forward the request to
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
+    public void setForward(Class pageClass) {
+        String target = getContext().getPagePath(pageClass);
+        setForward(target);
+    }
+
+    /**
      * Return the map of HTTP header to be set in the HttpServletResponse.
      * Note to edit header values use {@link #setHeader(String, Object)} as
      * headers Map is initially unmodifiable.

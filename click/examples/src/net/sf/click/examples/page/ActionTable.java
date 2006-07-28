@@ -1,5 +1,7 @@
 package net.sf.click.examples.page;
 
+import java.util.List;
+
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
 import net.sf.click.examples.domain.Customer;
@@ -15,6 +17,7 @@ import net.sf.click.examples.domain.Customer;
  */
 public class ActionTable extends BorderPage {
 
+    public List customers;
     public ActionLink viewLink = new ActionLink(this, "onViewClick");
     public ActionLink editLink = new ActionLink(this, "onEditClick");
     public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
@@ -38,7 +41,7 @@ public class ActionTable extends BorderPage {
 
         if (customer != null) {
             getContext().setRequestAttribute("customer", customer);
-            setForward("edit-customer.htm");
+            setForward(EditCustomer.class);
             return false;
 
         } else {
@@ -57,10 +60,10 @@ public class ActionTable extends BorderPage {
      * Load the list of customers to display.  This method is not invoked
      * when a customer is being edited.
      *
-     * @see Page#onGet()
+     * @see Page#onRender()
      */
-    public void onGet() {
-        addModel("customers", getCustomerService().getCustomersSortedByName(7));
+    public void onRender() {
+        customers = getCustomerService().getCustomersSortedByName(7);
     }
 
 }
