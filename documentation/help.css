@@ -93,7 +93,7 @@ span.sparx {
   text-decoration: none;
 }
 
-.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
 	font-family: Courier New, courier;
 	font-size: 10pt;
 	border: 1px solid #AAAAAA;
@@ -127,6 +127,12 @@ span.sparx {
 	background-color: white;
 }
 
+.codeLog {
+	color:white;
+	background-color: #808080;
+	border: 1px solid black;
+}
+
 .htmlExample 
 {
 	border: 1px solid gray;
@@ -135,6 +141,7 @@ span.sparx {
 	margin-bottom: 1.5em;
 	margin-left: 0em;
 }
+
 
 /* Java keyword. */
 .kw {
@@ -172,6 +179,8 @@ span.sparx {
 .maroon { color: maroon; }
 
 .navy { color: navy; }
+
+.yellow { color: yellow; }
 
 .html {
 	color: blue;
