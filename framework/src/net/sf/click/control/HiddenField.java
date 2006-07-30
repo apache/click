@@ -104,8 +104,32 @@ public class HiddenField extends Field {
      * @param valueClass the Class of the value Object
      */
     public HiddenField(String name, Class valueClass) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name paratemer");
+        }
+        if (valueClass == null) {
+            throw new IllegalArgumentException("Null valueClass paratemer");
+        }
         this.name = name;
         this.valueClass = valueClass;
+    }
+
+    /**
+     * Construct a HiddenField with the given name and value object.
+     *
+     * @param name the name of the hidden field
+     * @param value the value object
+     */
+    public HiddenField(String name, Object value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name paratemer");
+        }
+        if (value == null) {
+            throw new IllegalArgumentException("Null value paratemer");
+        }
+        this.name = name;
+        this.valueClass = value.getClass();
+        setValueObject(value);
     }
 
     /**
