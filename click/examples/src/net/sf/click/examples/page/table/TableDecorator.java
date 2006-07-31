@@ -17,10 +17,11 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class TableDecorator extends BorderPage {
 
-    Table table = new Table("table");
-    ActionLink viewLink = new ActionLink("view");
-    ActionLink editLink = new ActionLink("edit");
-    ActionLink deleteLink = new ActionLink("delete");
+    public Table table = new Table();
+
+    private ActionLink viewLink = new ActionLink("view");
+    private ActionLink editLink = new ActionLink("edit");
+    private ActionLink deleteLink = new ActionLink("delete");
 
     public TableDecorator() {
         // Setup customers table
@@ -82,15 +83,12 @@ public class TableDecorator extends BorderPage {
             }
         });
         table.addColumn(column);
-
-        addControl(table);
     }
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
         Customer customer = getCustomerService().getCustomer(id);
         addModel("customerDetail", customer);
-
         return true;
     }
 
@@ -111,10 +109,12 @@ public class TableDecorator extends BorderPage {
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
         getCustomerService().deleteCustomer(id);
-
         return true;
     }
 
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
     public void onRender() {
         List customers = getCustomerService().getCustomersSortedByName(12);
         table.setRowList(customers);

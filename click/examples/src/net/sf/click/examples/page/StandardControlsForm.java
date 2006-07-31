@@ -30,7 +30,7 @@ import net.sf.click.control.TextField;
 public class StandardControlsForm extends BorderPage {
 
     public  Form form = new Form();
-    
+
     private FieldSet fieldSet = new FieldSet("fieldSet");
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");

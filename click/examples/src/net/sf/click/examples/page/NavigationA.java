@@ -11,29 +11,10 @@ import net.sf.click.control.ActionLink;
  */
 public class NavigationA extends BorderPage {
 
-    private ActionLink forwardLink;
-    private ActionLink forwardParamLink;
-    private ActionLink redirectLink;
-    private ActionLink redirectParamLink;
-
-    public NavigationA() {
-        // Initialize action links
-        forwardLink = new ActionLink("forwardLink");
-        forwardLink.setListener(this, "onForwardClick");
-        addControl(forwardLink);
-
-        forwardParamLink = new ActionLink("forwardParamLink");
-        forwardParamLink.setListener(this, "onForwardParamClick");
-        addControl(forwardParamLink);
-
-        redirectLink = new ActionLink("redirectLink");
-        redirectLink.setListener(this, "onRedirectClick");
-        addControl(redirectLink);
-
-        redirectParamLink = new ActionLink("redirectParamLink");
-        redirectParamLink.setListener(this, "onRedirectParamClick");
-        addControl(redirectParamLink);
-    }
+    public ActionLink forwardLink = new ActionLink("forwardLink", this, "onForwardClick");
+    public ActionLink forwardParamLink = new ActionLink("forwardParamLink", this, "onForwardParamClick");
+    public ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
+    public ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
     /**
      * @see Page#onInit()

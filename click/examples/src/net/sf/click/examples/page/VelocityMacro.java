@@ -17,10 +17,9 @@ import net.sf.click.extras.control.PageSubmit;
  */
 public class VelocityMacro extends BorderPage {
 
-    public VelocityMacro() {
-        Form form = new Form("form");
-        addControl(form);
+    public Form form = new Form();
 
+    public VelocityMacro() {
         TextField nameField = new TextField("name", true);
         nameField.setMinLength(5);
         nameField.setTitle("Customer full name");
@@ -47,4 +46,3 @@ public class VelocityMacro extends BorderPage {
         form.add(new Reset("reset"));
     }
 }
-

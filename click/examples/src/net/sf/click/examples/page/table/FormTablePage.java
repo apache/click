@@ -60,6 +60,9 @@ public class FormTablePage extends BorderPage {
         table.getForm().add(new Submit("cancel", this, "onCancelClick"));
     }
 
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         List customers = getCustomerService().getCustomersSortedByName(NUM_ROWS);
         table.setRowList(customers);
