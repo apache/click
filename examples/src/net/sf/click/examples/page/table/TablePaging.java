@@ -13,11 +13,10 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class TablePaging extends BorderPage {
 
-    private Table table;
+    public Table table = new Table();
 
     public TablePaging() {
         // Setup customers table
-        table = new Table("table");
         table.setAttribute("class", "its");
         table.setAttribute("width", "550px");
         table.setPageSize(10);
@@ -37,10 +36,11 @@ public class TablePaging extends BorderPage {
         column.setFormat("${0,number,#,##0.00}");
         column.setAttribute("style", "{text-align:right;}");
         table.addColumn(column);
-
-        addControl(table);
     }
 
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
     public void onRender() {
         List customers = getCustomerService().getCustomers();
         table.setRowList(customers);

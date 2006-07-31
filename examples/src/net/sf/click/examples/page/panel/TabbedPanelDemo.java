@@ -14,6 +14,7 @@ import net.sf.click.extras.panel.TabbedPanel;
 public class TabbedPanelDemo extends BorderPage {
 
     public TabbedPanel tabbedPanel = new TabbedPanel();
+    public List customers;
 
     public TabbedPanelDemo() {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
@@ -30,9 +31,11 @@ public class TabbedPanelDemo extends BorderPage {
         tabbedPanel.addControl(panel3);
     }
 
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
-        addModel("customers", customers);
+        customers = getCustomerService().getCustomersSortedByName(12);
     }
 
 }

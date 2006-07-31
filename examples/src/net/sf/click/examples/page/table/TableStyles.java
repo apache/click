@@ -21,17 +21,17 @@ public class TableStyles extends BorderPage {
         "isi", "its", "mars", "simple", "report",
     };
 
-    private Table table = new Table("table");;
+    public Form form = new Form();
+    public Table table = new Table();
+
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
     public TableStyles() {
         // Setup table style select.
-        Form form = new Form("form");
         form.setColumns(3);
         form.setLabelAlign(Form.ALIGN_LEFT);
         form.setMethod("GET");
-        addControl(form);
 
         styleSelect.addAll(STYLES);
         styleSelect.setAttribute("onchange", "this.form.submit();");
@@ -62,19 +62,23 @@ public class TableStyles extends BorderPage {
         column.setFormat("${0,number,#,##0.00}");
         column.setAttribute("style", "{text-align:right;}");
         table.addColumn(column);
-
-        addControl(table);
     }
 
-    public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
-        table.setRowList(customers);
-    }
-
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
     public void onGet() {
         // Note the style form uses GET method.
         table.setAttribute("class", styleSelect.getValue());
         table.setHoverRows(hoverCheckbox.isChecked());
+    }
+
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
+    public void onRender() {
+        List customers = getCustomerService().getCustomersSortedByName(12);
+        table.setRowList(customers);
     }
 
 }

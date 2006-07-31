@@ -17,6 +17,7 @@ import net.sf.click.extras.panel.ListPanel;
 public class ListPanelDemo extends BorderPage {
 
     public ListPanel listPanel = new ListPanel();
+    public List customers;
 
     public ListPanelDemo() {
         listPanel.addControl(new Panel("panel1", "/panel/customersPanel1.htm"));
@@ -24,9 +25,11 @@ public class ListPanelDemo extends BorderPage {
         listPanel.addControl(new Panel("panel3", "/panel/customersPanel3.htm"));
     }
 
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
-        addModel("customers", customers);
+        customers = getCustomerService().getCustomersSortedByName(12);
     }
 
 }

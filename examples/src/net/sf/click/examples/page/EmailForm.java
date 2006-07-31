@@ -15,7 +15,7 @@ import net.sf.click.extras.control.PageSubmit;
  * @author Malcolm Edgar
  */
 public class EmailForm extends BorderPage {
-    
+
     public Form form = new Form();
 
     public EmailForm() {

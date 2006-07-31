@@ -12,7 +12,7 @@ import net.sf.click.control.Label;
 public class ImageDemo extends BorderPage {
 
     private ImageSubmit colorSubmit;
-    
+
     public Form buttonsForm = new Form();
     public Form form = new Form();
 
