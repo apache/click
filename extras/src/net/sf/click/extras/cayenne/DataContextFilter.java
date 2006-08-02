@@ -54,7 +54,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * &lt;web-app&gt;
  *   &lt;filter&gt;
  *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
- *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContext</span>&lt;/filter-class&gt;
+ *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
  *   &lt;/filter&gt;
  *
  *   &lt;filter-mapping&gt;
