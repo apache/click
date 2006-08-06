@@ -271,21 +271,33 @@ public class FormTable extends Table {
      * @return true if further processing should continue or false otherwise
      */
     public boolean onProcess() {
-
+        if (pagingLink != null) {
+            pagingLink.onProcess();
+        }
+        
         if (getForm().isFormSubmission()) {
 
-            Map ognlContext = new HashMap();
+            // Range sanity check
+            int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
+            pageNumber = Math.max(pageNumber, 0);
+            setPageNumber(pageNumber);
+            
+            int firstRow = getFirstRow();
+            int lastRow = getLastRow();
 
             List rowList = getRowList();
             List columnList = getColumnList();
-            for (int i = 0; i < rowList.size(); i++) {
+
+            Map ognlContext = new HashMap();
+
+            for (int i = firstRow; i < lastRow; i++) {
+                Object row = rowList.get(i);
 
                 for (int j = 0; j < columnList.size(); j++) {
 
                     Column column = (Column) columnList.get(j);
 
                     if (column instanceof FieldColumn) {
-                        Object row = rowList.get(i);
                         Field field = ((FieldColumn) column).getField();
 
                         field.setName(column.getName() + "_" + i);
