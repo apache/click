@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -271,13 +272,24 @@ public class Context {
      * <p/>
      * If the session is not defined this method will return null, and a
      * session will not be created.
+     * <p/>
+     * This method supports {@link FlashAttribute} which when accessed are then
+     * removed from the session.
      *
      * @param name the name of the session attribute
      * @return the named session attribute, or null if not defined
      */
     public Object getSessionAttribute(String name) {
         if (hasSession()) {
-            return getSession().getAttribute(name);
+            Object object = getSession().getAttribute(name);
+
+            if (object instanceof FlashAttribute) {
+                FlashAttribute flashObject = (FlashAttribute) object;
+                object = flashObject.getValue();
+                removeSessionAttribute(name);
+            }
+
+            return object;
         } else {
             return null;
         }
@@ -324,6 +336,20 @@ public class Context {
      */
     public boolean hasSession() {
         return (request.getSession(false) != null);
+    }
+
+    /**
+     * This method will set the named object as a flash HttpSession object.
+     * <p/>
+     * The flash object will exist in the session until it is accessed once,
+     * and then removed. Flash objects are typically used to display a message
+     * once.
+     *
+     * @param name the storage name for the object in the session
+     * @param value the object to store in the session
+     */
+    public void setFlashAttribute(String name, Object value) {
+        getSession().setAttribute(name, new FlashAttribute(value));
     }
 
     /**

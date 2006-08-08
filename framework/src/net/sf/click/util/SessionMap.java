@@ -42,6 +42,9 @@ import javax.servlet.http.HttpSession;
  *
  * The ClickServlet adds a SessionMap instance to the Velocity Context before
  * it is merged with the page template.
+ * <p/>
+ * The SessionMap supports {@link FlashAttribute} which when accessed via
+ * {@link #get(Object)} are removed from the session.
  *
  * @author Malcolm.Edgar
  */
@@ -105,11 +108,23 @@ public class SessionMap implements Map {
     }
 
     /**
+     * If the stored object is a FlashObject this method will return the
+     * FlashObject value and then remove it from the session.
+     *
      * @see java.util.Map#get(Object)
      */
     public Object get(Object key) {
         if (session != null && key != null) {
-            return session.getAttribute(key.toString());
+            Object object = session.getAttribute(key.toString());
+
+            if (object instanceof FlashAttribute) {
+                FlashAttribute flashObject = (FlashAttribute) object;
+                object = flashObject.getValue();
+                session.removeAttribute(key.toString());
+            }
+
+            return object;
+
         } else {
             return null;
         }

@@ -36,6 +36,12 @@ a:visited {
   color: yellow;
 }
 
+.flash {
+  color: blue;
+  font-style: italic;
+  margin-left:1em;
+}
+
 h1  { 
   font-size: 24px;
   font-weight: bold;
