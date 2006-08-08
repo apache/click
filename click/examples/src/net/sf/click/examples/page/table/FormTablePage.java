@@ -21,7 +21,7 @@ import net.sf.click.extras.control.NumberField;
  */
 public class FormTablePage extends BorderPage {
 
-    private static final int NUM_ROWS = 8;
+    private static final int NUM_ROWS = 20;
 
     public FormTable table = new FormTable();
 
@@ -30,6 +30,8 @@ public class FormTablePage extends BorderPage {
         table.setAttribute("class", "simple");
         table.setAttribute("width", "700px");
         table.getForm().setButtonAlign(Form.ALIGN_RIGHT);
+        table.setPageSize(10);
+        table.setShowBanner(true);
 
         table.addColumn(new Column("id"));
 
@@ -69,7 +71,9 @@ public class FormTablePage extends BorderPage {
     }
 
     public boolean onOkClick() {
+System.out.println("onOkClick error:" + table.getForm().getError());
         if (table.getForm().isValid()) {
+System.out.println("commit");
             getDataContext().commitChanges();
         }
         return true;

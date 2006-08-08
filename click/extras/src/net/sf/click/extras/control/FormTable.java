@@ -271,17 +271,18 @@ public class FormTable extends Table {
      * @return true if further processing should continue or false otherwise
      */
     public boolean onProcess() {
+        // Will handle GET, need to handle POST with hidden field
         if (pagingLink != null) {
             pagingLink.onProcess();
         }
-        
+
         if (getForm().isFormSubmission()) {
 
             // Range sanity check
             int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
             pageNumber = Math.max(pageNumber, 0);
             setPageNumber(pageNumber);
-            
+
             int firstRow = getFirstRow();
             int lastRow = getLastRow();
 
