@@ -1580,6 +1580,19 @@ public class Form implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Clear any form or field errors by setting them to null.
+     */
+    public void clearErrors() {
+        setError(null);
+        List fields = ClickUtils.getFormFields(this);
+        Field field = null;
+        for (int i = 0, size = fields.size(); i < size; i++) {
+            field = (Field) fields.get(i);
+            field.setError(null);
+        }
+    }
+
+    /**
      * Copy the given object's attributes into the Form's field values. In other
      * words automatically populate Forms field values with the given objects
      * attributes.
