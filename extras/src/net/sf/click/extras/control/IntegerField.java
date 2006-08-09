@@ -142,6 +142,19 @@ public class IntegerField extends TextField {
     }
 
     /**
+     * Set the Integer value of the field.
+     *
+     * @param integerValue the field integer value to set
+     */
+    public void setInteger(Integer integerValue) {
+        if (integerValue != null) {
+            setValue(integerValue.toString());
+        } else {
+            setValue(null);
+        }
+    }
+
+    /**
      * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
@@ -224,7 +237,10 @@ public class IntegerField extends TextField {
      */
     public void setValueObject(Object object) {
         if (object != null) {
-            value = object.toString();
+            setValue(object.toString());
+
+        } else {
+            setValue(null);
         }
     }
 

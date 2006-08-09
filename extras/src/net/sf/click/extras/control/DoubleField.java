@@ -149,6 +149,23 @@ public class DoubleField extends TextField {
     }
 
     /**
+     * Set the Double value of the field.
+     *
+     * @param doubleValue the double value to set
+     */
+    public void setDouble(Double doubleValue) {
+        if (doubleValue != null) {
+            Locale locale = getContext().getLocale();
+            NumberFormat format = NumberFormat.getNumberInstance(locale);
+
+            setValue(format.format(doubleValue.doubleValue()));
+
+        } else {
+            setValue(null);
+        }
+    }
+
+    /**
      * Return the field Float value, or null if value was empty or a parsing
      * error occured.
      *
@@ -225,7 +242,16 @@ public class DoubleField extends TextField {
      */
     public void setValueObject(Object object) {
         if (object != null) {
-            value = object.toString();
+            if (object instanceof Number) {
+                Number number = (Number) object;
+                Locale locale = getContext().getLocale();
+                NumberFormat format = NumberFormat.getNumberInstance(locale);
+
+                setValue(format.format(number.doubleValue()));
+
+            } else {
+                setValue(object.toString());
+            }
         }
     }
 
