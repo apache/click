@@ -119,6 +119,9 @@ public class Table implements Control {
 
     private static final long serialVersionUID = 1L;
 
+    /** The paging control name. */
+    protected static final String PAGING = "paging";
+
     /**
      * The table.css style sheet import link.
      */
@@ -658,7 +661,7 @@ public class Table implements Control {
         this.pageSize = pageSize;
 
         if (pageSize > 0) {
-            pagingLink = new ActionLink("paging");
+            pagingLink = new ActionLink(PAGING);
             pagingLink.setListener(this, "onPagingClick");
         }
     }

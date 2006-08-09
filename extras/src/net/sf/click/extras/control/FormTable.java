@@ -24,6 +24,7 @@ import net.sf.click.control.Button;
 import net.sf.click.control.Column;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
+import net.sf.click.control.HiddenField;
 import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
@@ -213,6 +214,8 @@ public class FormTable extends Table {
         addControl(getForm());
         getForm().setName(getName() + "_form");
         getForm().setContext(context);
+
+        form.add(new HiddenField(PAGING, String.class));
     }
 
     /**
@@ -271,12 +274,12 @@ public class FormTable extends Table {
      * @return true if further processing should continue or false otherwise
      */
     public boolean onProcess() {
-        // Will handle GET, need to handle POST with hidden field
-        if (pagingLink != null) {
-            pagingLink.onProcess();
-        }
-
         if (getForm().isFormSubmission()) {
+            if (pagingLink != null) {
+                Field pagingField = getForm().getField(PAGING);
+                pagingField.onProcess();
+                setPageNumber(Integer.parseInt(pagingField.getValue()));
+            }
 
             // Range sanity check
             int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
@@ -355,6 +358,13 @@ public class FormTable extends Table {
 
         buffer.append(form.getField(Form.FORM_NAME));
         buffer.append("\n");
+
+        if (pagingLink != null) {
+            Form form = getForm();
+            form.getField(PAGING).setValue(String.valueOf(getPageNumber()));
+            buffer.append(form.getField(PAGING));
+            buffer.append("\n");
+        }
 
         buffer.append(super.toString());
 

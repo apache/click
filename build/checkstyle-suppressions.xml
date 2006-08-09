@@ -47,7 +47,7 @@
                                         
     <suppress checks="LineLength"
               files="Table.java"
-              lines="126"/>      
+              lines="129"/>      
               
     <suppress checks="MethodLength"
               files="ErrorReport.java"
