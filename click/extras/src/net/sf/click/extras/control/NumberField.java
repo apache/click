@@ -240,13 +240,15 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Set the Number value.
+     * Set the Number value of the field.
      *
-     * @param number the number value
+     * @param number the field number value to set
      */
     public void setNumber(Number number) {
         if (number != null) {
             setValue(getNumberFormat().format(number));
+        } else {
+            setValue(null);
         }
     }
 
@@ -282,7 +284,8 @@ public class NumberField extends TextField {
      * @param format the number format
      */
     public void setNumberFormat(NumberFormat format) {
-        this.numberFormat = format;
+        numberFormat = format;
+
         if (format instanceof DecimalFormat
            && getPattern() != null) {
             ((DecimalFormat) format).applyPattern(getPattern());
@@ -347,7 +350,10 @@ public class NumberField extends TextField {
 
         } else {
             if (object != null) {
-                value = object.toString();
+                setValue(object.toString());
+
+            } else {
+                setValue(null);
             }
         }
     }
