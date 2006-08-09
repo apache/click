@@ -71,9 +71,7 @@ public class FormTablePage extends BorderPage {
     }
 
     public boolean onOkClick() {
-System.out.println("onOkClick error:" + table.getForm().getError());
         if (table.getForm().isValid()) {
-System.out.println("commit");
             getDataContext().commitChanges();
         }
         return true;
