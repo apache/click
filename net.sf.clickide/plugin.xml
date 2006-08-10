@@ -67,6 +67,15 @@
           id="net.sf.clickide.ui.editor.ClickEditor"
           name="%editor.clickXML">
     </editor>
+    <editor
+          class="net.sf.clickide.ui.editor.TamplateEditor"
+          contributorClass="net.sf.clickide.ui.editor.ClickActionBarContributor"
+          default="true"
+          extensions="htm"
+          icon="icons/click.gif"
+          id="net.sf.clickide.ui.editor.TamplateEditor"
+          name="%editor.template">
+    </editor>
   </extension>    
 
   <extension point="org.eclipse.core.runtime.contentTypes">
@@ -78,6 +87,15 @@
       name="%contentType.clickXML"
       priority="high">
     </content-type>
+    <!--
+    <content-type
+          base-type="org.eclipse.wst.html.core.htmlsource"
+          default-charset="UTF-8"
+          file-extensions="htm"
+          id="template"
+          name="%contentType.template"
+          priority="high"/>
+    -->
   </extension>
   
   <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
@@ -88,6 +106,11 @@
     <contentOutlineConfiguration
       class="org.springframework.ide.eclipse.beans.ui.editor.outline.BeansContentOutlineConfiguration"
       target="net.sf.clickide.click"/>
+    -->
+    <!--
+    <sourceViewerConfiguration
+      class="net.sf.clickide.ui.editor.TemplateEditorConfiguration"
+      target="net.sf.clickide.template"/>
     -->
   </extension>  
 
