@@ -69,7 +69,7 @@
     </editor>
     <editor
           class="net.sf.clickide.ui.editor.TamplateEditor"
-          contributorClass="net.sf.clickide.ui.editor.ClickActionBarContributor"
+          contributorClass="org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML"
           default="true"
           extensions="htm"
           icon="icons/click.gif"
@@ -208,6 +208,23 @@
      <editorContribution
            id="net.sf.clickide.editorContribution2"
            targetID="org.eclipse.wst.html.core.htmlsource.source">
+        <menu
+              id="clickMenu"
+              label="Click">
+           <separator name="clickGroup"/>
+        </menu>
+        <action
+              class="net.sf.clickide.ui.actions.SwitchToClassAction"
+              definitionId="net.sf.clickide.ui.actions.SwitchToClassAction"
+              icon="icons/switch.gif"
+              id="net.sf.clickide.ui.actions.SwitchToClassAction"
+              label="%action.switchToClass"
+              menubarPath="clickMenu/clickGroup"
+              style="push"/>
+     </editorContribution>
+     <editorContribution
+           id="net.sf.clickide.editorContribution3"
+           targetID="net.sf.clickide.ui.editor.TamplateEditor">
         <menu
               id="clickMenu"
               label="Click">

@@ -1,7 +1,10 @@
 package net.sf.clickide.ui.editor;
 
+import net.sf.clickide.ClickPlugin;
+
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
@@ -14,7 +17,9 @@ import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
  * @author Naoki Takezoe
  */
 public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
-
+	
+	private Image IMAGE_DIRECTIVE = ClickPlugin.getImageDescriptor("/icons/directive.gif").createImage();
+	
 	protected String getMatchString(IStructuredDocumentRegion parent, ITextRegion aRegion, int offset) {
 		if (aRegion == null || isCloseRegion(aRegion))
 			return ""; //$NON-NLS-1$
@@ -50,7 +55,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		return matchString;
 	}	
 	
-	private void registerProposal(ContentAssistRequest request, String replaceString){
+	private void registerProposal(ContentAssistRequest request, String replaceString, String displayString, Image image){
 		String matchString = request.getMatchString();
 		int position = replaceString.length();
 		if(replaceString.endsWith("}") || replaceString.endsWith(")")){
@@ -60,24 +65,31 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			request.addProposal(new CompletionProposal(
 			        replaceString, 
 			        request.getReplacementBeginPosition() - matchString.length(), 
-			        matchString.length(), position));
+			        matchString.length(), position, image, displayString, null, null));
 		}
 	}
 	
 	protected void addTagInsertionProposals(ContentAssistRequest request, int childPosition) {
 		super.addTagInsertionProposals(request, childPosition);
 		
-		registerProposal(request, "${}");
+		registerProposal(request, "${}", "${}", IMAGE_DIRECTIVE);
 //		registerProposal(request, "##");
-		registerProposal(request, "#if()");
-		registerProposal(request, "#set()");
-		registerProposal(request, "#foreach()");
-		registerProposal(request, "#else");
-		registerProposal(request, "#elsif()");
-		registerProposal(request, "#end");
-		registerProposal(request, "#include()");
-		registerProposal(request, "#parse()");
-		registerProposal(request, "#macro()");
+		registerProposal(request, "#if()", "if", IMAGE_DIRECTIVE);
+		registerProposal(request, "#set()", "set", IMAGE_DIRECTIVE);
+		registerProposal(request, "#foreach()", "foreach", IMAGE_DIRECTIVE);
+		registerProposal(request, "#else", "else", IMAGE_DIRECTIVE);
+		registerProposal(request, "#elsif()", "elsif", IMAGE_DIRECTIVE);
+		registerProposal(request, "#end", "end", IMAGE_DIRECTIVE);
+		registerProposal(request, "#include()", "include", IMAGE_DIRECTIVE);
+		registerProposal(request, "#parse()", "parse", IMAGE_DIRECTIVE);
+		registerProposal(request, "#macro()", "macro", IMAGE_DIRECTIVE);
 	}
 
+	public void release() {
+		IMAGE_DIRECTIVE.dispose();
+		super.release();
+	}
+	
+	
+	
 }
