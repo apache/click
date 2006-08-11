@@ -140,6 +140,25 @@
     </validator>
   </extension>
   <extension
+      id="clickTemplateValidator"
+      name="Click Template Validator"
+      point="org.eclipse.wst.validation.validator">
+    <validator>
+      <projectNature id="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+      <projectNature id="org.eclipse.jdt.core.javanature"/>
+      <filter
+            nameFilter="*.htm"
+            objectClass="org.eclipse.core.resources.IFile"/>
+      <helper
+            class="org.eclipse.wst.validation.internal.operations.WorkbenchContext">
+      </helper>
+      <run
+            enabled="true"
+            class="net.sf.clickide.core.validator.TemplateValidator">
+      </run>
+    </validator>
+  </extension>
+  <extension
         point="org.eclipse.help.toc">
      <toc
            file="toc.xml"
