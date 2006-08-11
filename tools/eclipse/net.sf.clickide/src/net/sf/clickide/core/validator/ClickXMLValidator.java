@@ -16,9 +16,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
-import org.eclipse.wst.validation.internal.core.Message;
 import org.eclipse.wst.validation.internal.core.ValidationException;
-import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
@@ -128,7 +126,8 @@ public class ClickXMLValidator implements IValidator {
 			}
 			if(attrName.equals(ClickPlugin.ATTR_CLASSNAME)){
 				if(!existsJavaClass(file, attrValue)){
-					createErrorMessage(reporter, file, "notExist", new String[]{attrValue}, start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "notExist", 
+							new String[]{attrValue}, start, length, -1);
 				}
 			}
 		}
@@ -136,7 +135,8 @@ public class ClickXMLValidator implements IValidator {
 		if(tagName.equals(ClickPlugin.TAG_PAGES)){
 			if(attrName.equals(ClickPlugin.ATTR_AUTO_MAPPING)){
 				if(!containsValue(ClickPlugin.AUTO_MAPPING_VALUES, attrValue)){
-					createErrorMessage(reporter, file, "autoMapping", new String[0], start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "autoMapping", 
+							new String[0], start, length, -1);
 				}
 			} if(attrName.equals(ClickPlugin.ATTR_PACKAGE)){
 				
@@ -152,7 +152,8 @@ public class ClickXMLValidator implements IValidator {
 		if(tagName.equals(ClickPlugin.TAG_HEADER)){
 			if(attrName.equals(ClickPlugin.ATTR_TYPE)){
 				if(!containsValue(ClickPlugin.HEADER_TYPE_VALUES, attrValue)){
-					createErrorMessage(reporter, file, "headerType", new String[0], start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "headerType", 
+							new String[0], start, length, -1);
 				}
 			}
 		}
@@ -160,11 +161,13 @@ public class ClickXMLValidator implements IValidator {
 		if(tagName.equals(ClickPlugin.TAG_MODE)){
 			if(attrName.equals(ClickPlugin.ATTR_VALUE)){
 				if(!containsValue(ClickPlugin.MODE_VALUES, attrValue)){
-					createErrorMessage(reporter, file, "modeValue", new String[0], start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "modeValue", 
+							new String[0], start, length, -1);
 				}
 			} else if(attrName.equals(ClickPlugin.ATTR_LOGTO)){
 				if(!containsValue(ClickPlugin.LOGTO_VALUES, attrValue)){
-					createErrorMessage(reporter, file, "modeLogTo", new String[0], start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "modeLogTo", 
+							new String[0], start, length, -1);
 				}
 			}
 		}
@@ -172,7 +175,8 @@ public class ClickXMLValidator implements IValidator {
 		if(tagName.equals(ClickPlugin.TAG_CLICK_APP)){
 			if(attrName.equals(ClickPlugin.ATTR_CHARSET)){
 				if(!isSupportedEncoding(attrValue)){
-					createErrorMessage(reporter, file, "unsupportedEncoding", new String[]{attrValue}, start, length);
+					ValidatorUtils.createWarningMessage(this, reporter, file, "unsupportedEncoding", 
+							new String[]{attrValue}, start, length, -1);
 				}
 			}
 		}
@@ -206,22 +210,6 @@ public class ClickXMLValidator implements IValidator {
 			return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * Creates the error message.
-	 */
-	private void createErrorMessage(IReporter reporter, IFile file, 
-			String id, String[] params, int start, int length){
-		Message message = new Message();
-		message.setSeverity(IMessage.NORMAL_SEVERITY);
-		message.setOffset(start);
-		message.setLength(length);
-		message.setBundleName("net.sf.clickide.core.validator.validation");
-		message.setId(id);
-		message.setParams(params);
-		message.setTargetObject(file);
-		reporter.addMessage(this, message);
 	}
 
 }
