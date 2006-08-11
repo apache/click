@@ -47,6 +47,10 @@ h1  {
   font-weight: bold;
 }
 
+td {
+  white-space: nowrap; 
+}
+
 tr.titleBar {
   background-color: black;
   color: white;
