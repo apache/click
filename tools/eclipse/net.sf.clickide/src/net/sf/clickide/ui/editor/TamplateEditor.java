@@ -1,5 +1,7 @@
 package net.sf.clickide.ui.editor;
 
+import net.sf.clickide.core.validator.TemplateValidator;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
@@ -11,7 +13,11 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
  * 
  * <ul>
  *   <li>Code completion for Velocity directives</li>
- *   <li>TODO Velocity syntax validation</li>
+ *   <li>Velocity syntax validation by {@link TemplateValidator}</li>
+ *   <li>TODO syntax hilighting for Velocity directives</li>
+ *   <li>TODO Code completion in the HTML attribute value</li>
+ *   <li>TODO Code completion for the Page public fields as variables</li>
+ *   <li>TODO Code completion for the variables which declared by the #set directive</li>
  * </ul>
  * 
  * @author Naoki Takezoe
