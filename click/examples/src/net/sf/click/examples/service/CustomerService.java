@@ -47,8 +47,10 @@ public class CustomerService extends CayenneTemplate {
 
     public void deleteCustomer(Integer id) {
         Customer customer = getCustomer(id);
-        deleteObject(customer);
-        commitChanges();
+        if (customer != null) {
+            deleteObject(customer);
+            commitChanges();
+        }
     }
 
     public Customer findCustomerByID(Integer id) {
