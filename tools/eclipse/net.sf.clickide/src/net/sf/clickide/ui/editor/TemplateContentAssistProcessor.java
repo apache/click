@@ -70,8 +70,10 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	}
 	
 	protected void addTagInsertionProposals(ContentAssistRequest request, int childPosition) {
-		super.addTagInsertionProposals(request, childPosition);
-		
+		String matchString = request.getMatchString();
+		if(!matchString.startsWith("#")){
+			super.addTagInsertionProposals(request, childPosition);
+		}
 		registerProposal(request, "${}", "${}", IMAGE_DIRECTIVE);
 //		registerProposal(request, "##");
 		registerProposal(request, "#if()", "if", IMAGE_DIRECTIVE);
@@ -89,7 +91,5 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		IMAGE_DIRECTIVE.dispose();
 		super.release();
 	}
-	
-	
 	
 }

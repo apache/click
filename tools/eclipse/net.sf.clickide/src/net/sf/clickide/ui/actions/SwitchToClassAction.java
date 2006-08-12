@@ -7,7 +7,6 @@ import net.sf.clickide.ClickUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,6 +19,7 @@ import org.eclipse.ui.IFileEditorInput;
  * Switches to the page class from the HTML file.
  * 
  * @author Naoki Takezoe
+ * @see ClickUtils#getPageClassFromTemplate(IFile)
  */
 public class SwitchToClassAction implements IEditorActionDelegate {
 	
@@ -45,23 +45,14 @@ public class SwitchToClassAction implements IEditorActionDelegate {
 				return;
 			}
 			
-			String fullpath = file.getProjectRelativePath().toString();
-			String root = ClickUtils.getWebAppRootFolder(file.getProject());
-			if(fullpath.startsWith(root)){
-				String path = fullpath.substring(root.length());
-				if(path.startsWith("/")){
-					path = path.substring(1);
-				}
-				String className = ClickUtils.getClassfromHTML(file.getProject(), path);
-				if(className!=null){
-					try {
-						IType type = JavaCore.create(file.getProject()).findType(className);
-						JavaUI.openInEditor(type);
-					} catch(Exception ex){
-						ClickPlugin.log(ex);
-					}
+			try {
+				IType type = ClickUtils.getPageClassFromTemplate(file);
+				if(type!=null){
+					JavaUI.openInEditor(type);
 					return;
 				}
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
 			}
 			ClickUtils.openErrorDialog(
 					ClickPlugin.getString("message.error.noPage"));

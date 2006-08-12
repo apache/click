@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
@@ -568,5 +569,58 @@ public class ClickUtils {
 		IWorkbenchPage page = ClickUtils.getActivePage();
 		MessageDialog.openError(page.getWorkbenchWindow().getShell(),
 				ClickPlugin.getString("message.error"), message);
+	}
+	
+	/**
+	 * Returns the IType object of the page class 
+	 * which corresponded to the specified HTML template.
+	 * If it can't find the page class, this method returns null.
+	 * 
+	 * @param file the IFile object of the HTML template
+	 * @return the IType object of the page class
+	 * @see ClickUtils#getTemplateFromPageClass(IType)
+	 */
+	public static IType getPageClassFromTemplate(IFile file){
+		String fullpath = file.getProjectRelativePath().toString();
+		String root = ClickUtils.getWebAppRootFolder(file.getProject());
+		if(fullpath.startsWith(root)){
+			String path = fullpath.substring(root.length());
+			if(path.startsWith("/")){
+				path = path.substring(1);
+			}
+			String className = ClickUtils.getClassfromHTML(file.getProject(), path);
+			if(className!=null){
+				try {
+					IType type = JavaCore.create(file.getProject()).findType(className);
+					return type;
+				} catch(Exception ex){
+					ClickPlugin.log(ex);
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the IFile object of the HTML template which
+	 * correnponded to the specified page class.
+	 * If it can't find the HTML template, this method returns null.
+	 * 
+	 * @param type the IType object of the page class
+	 * @return the IFile object of the HTML template
+	 * @see ClickUtils#getPageClassFromTemplate(IFile)
+	 */
+	public static IFile getTemplateFromPageClass(IType type){
+		IProject project = type.getResource().getProject();
+		String html = ClickUtils.getHTMLfromClass(project, type.getFullyQualifiedName());
+		if(html!=null){
+			String root = ClickUtils.getWebAppRootFolder(project);
+			IFolder folder = project.getFolder(root);
+			IResource resource = folder.findMember(html);
+			if(resource!=null && resource instanceof IFile && resource.exists()){
+				return (IFile)resource;
+			}
+		}
+		return null;
 	}
 }

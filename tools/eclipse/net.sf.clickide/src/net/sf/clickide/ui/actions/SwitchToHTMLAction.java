@@ -6,8 +6,6 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
@@ -24,6 +22,7 @@ import org.eclipse.ui.ide.IDE;
  * Switches to the HTML file from the page class.
  * 
  * @author Naoki Takezoe
+ * @see ClickUtils#getTemplateFromPageClass(IType)
  */
 public class SwitchToHTMLAction implements IEditorActionDelegate {
 	
@@ -54,15 +53,10 @@ public class SwitchToHTMLAction implements IEditorActionDelegate {
 			ICompilationUnit unit = (ICompilationUnit)element;
 			try {
 				IType type = unit.getAllTypes()[0];
-				String html = ClickUtils.getHTMLfromClass(file.getProject(), type.getFullyQualifiedName());
-				if(html!=null){
-					String root = ClickUtils.getWebAppRootFolder(file.getProject());
-					IFolder folder = file.getProject().getFolder(root);
-					IResource resource = folder.findMember(html);
-					if(resource!=null && resource instanceof IFile && resource.exists()){
-						IDE.openEditor(ClickUtils.getActivePage(), (IFile)resource);
-						return;
-					}
+				IFile resource = ClickUtils.getTemplateFromPageClass(type);
+				if(resource!=null){
+					IDE.openEditor(ClickUtils.getActivePage(), (IFile)resource);
+					return;
 				}
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
