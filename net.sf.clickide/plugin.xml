@@ -72,7 +72,7 @@
           contributorClass="org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML"
           default="true"
           extensions="htm"
-          icon="icons/click.gif"
+          icon="icons/velocity.gif"
           id="net.sf.clickide.ui.editor.TamplateEditor"
           name="%editor.template">
     </editor>
