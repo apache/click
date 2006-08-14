@@ -196,6 +196,9 @@ public class Column implements Serializable {
     /** The column row decorator. */
     protected Decorator decorator;
 
+    /** The escape HTML characters flag. The default value is true. */
+    protected boolean escapeHtml = true;
+
     /** The column message format pattern. */
     protected String format;
 
@@ -235,7 +238,7 @@ public class Column implements Serializable {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-        this.headerTitle = ClickUtils.escapeHtml(ClickUtils.toLabel(name));
+        this.headerTitle = ClickUtils.toLabel(name);
     }
 
     /**
@@ -391,6 +394,25 @@ public class Column implements Serializable {
      */
     public void setDecorator(Decorator decorator) {
         this.decorator = decorator;
+    }
+
+    /**
+     * Return true if the HTML characters will be escaped when rendering the
+     * column data. By default this method returns true.
+     *
+     * @return true if the HTML characters will be escaped when rendered
+     */
+    public boolean getEscapeHtml() {
+        return escapeHtml;
+    }
+
+    /**
+     * Set the escape HTML characters when rendering column data flag.
+     *
+     * @param escape the flag to escape HTML characters
+     */
+    public void setEscapeHtml(boolean escape) {
+        this.escapeHtml = escape;
     }
 
     /**
@@ -594,7 +616,13 @@ public class Column implements Serializable {
             buffer.appendAttributes(getAttributes());
         }
         buffer.closeTag();
-        buffer.append(getHeaderTitle());
+
+        if (getEscapeHtml()) {
+            buffer.appendEscaped(getHeaderTitle());
+        } else {
+            buffer.append(getHeaderTitle());
+        }
+
         buffer.elementEnd("th");
     }
 
@@ -625,10 +653,19 @@ public class Column implements Serializable {
 
                 } else if (getMessageFormat() != null) {
                     Object[] args = new Object[] { columnValue };
-                    buffer.appendEscaped(getMessageFormat().format(args));
+
+                    if (getEscapeHtml()) {
+                        buffer.appendEscaped(getMessageFormat().format(args));
+                    } else {
+                        buffer.append(getMessageFormat().format(args));
+                    }
 
                 } else {
-                    buffer.appendEscaped(columnValue);
+                    if (getEscapeHtml()) {
+                        buffer.appendEscaped(columnValue);
+                    } else {
+                        buffer.append(columnValue);
+                    }
                 }
             }
         }
