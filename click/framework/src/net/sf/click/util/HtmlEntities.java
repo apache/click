@@ -2,14 +2,17 @@ package net.sf.click.util;
 
 /**
  * Provides HTML escaped character entities.
- *  
+ * <p/>
+ * HTML entities values were derrived from Jakarta Commons Lang
+ * <tt>org.apache.commons.lang.Entities</tt> class.
+ *
  * @author Malcolm Edgar
  */
 public class HtmlEntities {
-    
-    // Array of HTML entties
-    protected static String[] HTML_ENTITIES = new String[9999];
-    
+
+    /** The array of escaped HTML character values, indexed on char value. */
+    private static final String[] HTML_ENTITIES = new String[9999];
+
     static {
         HTML_ENTITIES[34] = "&quot;"; // " - double-quote
         HTML_ENTITIES[38] = "&amp;"; // & - ampersand
@@ -293,16 +296,28 @@ public class HtmlEntities {
         // <!-- rsaquo is proposed but not yet ISO standardized -->
         HTML_ENTITIES[8364] = "&#euro;";   //  -- euro sign, U+20AC NEW -->
     };
-    
+
+    /**
+     * Return true if the given character requires HTML escaping.
+     *
+     * @param aChar the character value to test
+     * @return true if the given character requires HTML escaping
+     */
     public static boolean requiresEscape(char aChar) {
         int index = aChar;
-        
+
         return HTML_ENTITIES[index] != null;
     }
-    
+
+    /**
+     * Return the HTML escaped string for the given character value.
+     *
+     * @param aChar the character value to escape
+     * @return the HTML escaped string for the given character value
+     */
     public static String escape(char aChar) {
-        int index = aChar;        
+        int index = aChar;
         return HTML_ENTITIES[index];
-    }        
-    
+    }
+
 }
