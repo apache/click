@@ -138,7 +138,7 @@ public class SourceViewer extends BorderPage {
     private String getEncodedLine(String line) {
 
         if (isJava) {
-            line = StringEscapeUtils.escapeHtml(line);
+            line = ClickUtils.escapeHtml(line);
 
             for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
                 String keyword = JAVA_KEYWORDS[i];
@@ -146,7 +146,7 @@ public class SourceViewer extends BorderPage {
             }
 
         } else if (isHtml) {
-            line = StringEscapeUtils.escapeHtml(line);
+            line = ClickUtils.escapeHtml(line);
 
             for (int i = 0; i < HTML_KEYWORDS.length; i++) {
                 String keyword = HTML_KEYWORDS[i];
@@ -163,7 +163,7 @@ public class SourceViewer extends BorderPage {
             line = StringUtils.replace(line, "$", renderedDollar);
 
         } else if (isXml) {
-            line = StringEscapeUtils.escapeHtml(line);
+            line = ClickUtils.escapeHtml(line);
 
             for (int i = 0; i < XML_KEYWORDS.length; i++) {
                 String keyword = XML_KEYWORDS[i];
@@ -171,7 +171,7 @@ public class SourceViewer extends BorderPage {
             }
 
         } else {
-            line = StringEscapeUtils.escapeHtml(line);
+            line = ClickUtils.escapeHtml(line);
         }
 
         return line;

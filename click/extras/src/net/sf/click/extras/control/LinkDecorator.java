@@ -93,7 +93,7 @@ public class LinkDecorator implements Decorator {
         if (ognlContext == null) {
             ognlContext = new HashMap();
         }
-        
+
         if (linksArray.length == 1) {
             AbstractLink link = linksArray[0];
             link.setContext(context);
