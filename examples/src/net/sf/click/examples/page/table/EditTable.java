@@ -28,18 +28,18 @@ public class EditTable extends BorderPage {
     public Table table = new Table();
     public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
     public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
-    
+
     public EditTable() {
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
         fieldSet.add(new TextField("name"));
         fieldSet.add(new EmailField("email"));
-        fieldSet.add(new DoubleField("holdings"));        
+        fieldSet.add(new DoubleField("holdings"));
         fieldSet.add(new DateField("dateJoined"));
         form.add(fieldSet);
         form.add(new Submit("save", this, "onSaveClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
-        
+
         // Setup customers table
         table.setAttribute("class", "simple");
 
@@ -58,13 +58,13 @@ public class EditTable extends BorderPage {
         column = new Column("dateJoined");
         column.setFormat("{0,date,medium}");
         table.addColumn(column);
-        
+
         column = new Column("Action");
         ActionLink[] links = new ActionLink[]{editLink, deleteLink};
         column.setDecorator(new LinkDecorator(links, "id"));
         table.addColumn(column);
-        
-        deleteLink.setAttribute("onclick", "return window.confirm('Please confirm delete');");        
+
+        deleteLink.setAttribute("onclick", "return window.confirm('Please confirm delete');");
     }
 
     public boolean onEditClick() {

@@ -22,10 +22,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.sf.click.Context;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
@@ -236,7 +235,7 @@ public class Column implements Serializable {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-        this.headerTitle = StringUtils.capitalize(name);
+        this.headerTitle = ClickUtils.escapeHtml(ClickUtils.toLabel(name));
     }
 
     /**
@@ -626,10 +625,10 @@ public class Column implements Serializable {
 
                 } else if (getMessageFormat() != null) {
                     Object[] args = new Object[] { columnValue };
-                    buffer.append(getMessageFormat().format(args));
+                    buffer.appendEscaped(getMessageFormat().format(args));
 
                 } else {
-                    buffer.append(columnValue);
+                    buffer.appendEscaped(columnValue);
                 }
             }
         }

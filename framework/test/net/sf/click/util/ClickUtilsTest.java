@@ -254,4 +254,21 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("1000", value);
     }
 
+    public void testEscapeHtml() {
+        String value1 = "";
+        String value2 = ClickUtils.escapeHtml(value1);
+        assertEquals(value1, value2);
+        assertTrue(value1 == value2);
+
+        String value3 = "1234567890abcdefghijklmnopqrstuvwzyz";
+        String value4 = ClickUtils.escapeHtml(value3);
+        assertEquals(value3, value4);
+        assertTrue(value3 == value4);
+        
+        assertEquals("&quot;", ClickUtils.escapeHtml("\""));
+        assertEquals("&amp;", ClickUtils.escapeHtml("&"));
+        assertEquals("&lt;", ClickUtils.escapeHtml("<"));
+        assertEquals("&gt;", ClickUtils.escapeHtml(">"));
+    }
+    
 }

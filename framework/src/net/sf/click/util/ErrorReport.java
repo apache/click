@@ -37,7 +37,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.exception.ParseErrorException;
 
@@ -395,7 +394,7 @@ public class ErrorReport {
 
             String parseMsg = message.substring(startIndex + 1, endIndex);
 
-            parseMsg = StringEscapeUtils.escapeHtml(parseMsg);
+            parseMsg = ClickUtils.escapeHtml(parseMsg);
 
             parseMsg = StringUtils.replace(parseMsg, "...", ", &nbsp;");
 
@@ -407,7 +406,7 @@ public class ErrorReport {
             String value =
                 (cause.getMessage() != null) ? cause.getMessage() : "null";
 
-            return StringEscapeUtils.escapeHtml(value);
+            return ClickUtils.escapeHtml(value);
         }
     }
 
@@ -558,7 +557,7 @@ public class ErrorReport {
 
                 } else {
                     if (isParseError()) {
-                        buffer.append(StringEscapeUtils.escapeHtml(line));
+                        buffer.append(ClickUtils.escapeHtml(line));
                     } else {
                         buffer.append(getRenderJavaLine(line));
                     }
@@ -572,7 +571,7 @@ public class ErrorReport {
 
         } catch (IOException ioe) {
             buffer.append("Could not load page source: ");
-            buffer.append(StringEscapeUtils.escapeHtml(ioe.toString()));
+            buffer.append(ClickUtils.escapeHtml(ioe.toString()));
         } finally {
             try {
                 sourceReader.close();
@@ -600,7 +599,7 @@ public class ErrorReport {
         HtmlStringBuffer buffer
             = new HtmlStringBuffer(sw.toString().length() + 80);
         buffer.append("<pre><tt style='font-size:10pt;'>");
-        buffer.append(StringEscapeUtils.escapeHtml(sw.toString().trim()));
+        buffer.append(ClickUtils.escapeHtml(sw.toString().trim()));
         buffer.append("</tt></pre>");
 
         return buffer.toString();
@@ -620,7 +619,7 @@ public class ErrorReport {
             buffer.append("=");
             Object value = map.get(key);
             if (value != null) {
-                buffer.append(StringEscapeUtils.escapeHtml(value.toString()));
+                buffer.append(ClickUtils.escapeHtml(value.toString()));
             } else {
                 buffer.append("null");
             }
@@ -639,7 +638,7 @@ public class ErrorReport {
      * @return HTML rendred Java source line
      */
     protected String getRenderJavaLine(String line) {
-        line = StringEscapeUtils.escapeHtml(line);
+        line = ClickUtils.escapeHtml(line);
 
         for (int i = 0; i < JAVA_KEYWORDS.length; i++) {
             String keyword = JAVA_KEYWORDS[i];

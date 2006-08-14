@@ -51,7 +51,7 @@
               
     <suppress checks="MethodLength"
               files="ErrorReport.java"
-              lines="175"/>
+              lines="174"/>
 
     <suppress checks="StaticVariableName"
               files="Form.java"

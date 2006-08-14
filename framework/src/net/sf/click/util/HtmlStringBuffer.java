@@ -18,8 +18,6 @@ package net.sf.click.util;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 /**
  * Provides a HTML element StringBuffer for rendering, automatically
  * escaping string values. HtmlStringBuffer is used by Click controls
@@ -167,7 +165,20 @@ public class HtmlStringBuffer {
         if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
-        append(StringEscapeUtils.escapeHtml(value.toString()));
+
+        String string = value.toString();
+        int length = string.length();
+        char aChar;
+        for (int i = 0; i < length; i++) {
+            aChar = string.charAt(i);
+            
+            if (HtmlEntities.requiresEscape(aChar)) {
+                append(HtmlEntities.escape(aChar));
+                
+            } else {
+                append(aChar);
+            }
+        }
     }
 
     /**
@@ -196,7 +207,7 @@ public class HtmlStringBuffer {
             if (isJavaScriptAttribute(name)) {
                 append(value);
             } else {
-                append(StringEscapeUtils.escapeHtml(value.toString()));
+                appendEscaped(value.toString());
             }
             append("\"");
         }

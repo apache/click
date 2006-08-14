@@ -60,6 +60,17 @@ bug fixes and documentation updates.
         <a href="click-api/net/sf/click/control/Form.html#clearErrors()">clearErrors()</a> 
         method.
       </li>
+      <li class="change">
+        Added 
+        <a href="click-api/net/sf/click/util/HtmlEntities.html">HtmlEntities</a> 
+        class to improve HTML character escaping performance in HtmlStringBuffer,
+        replacing Apache Commons Lang's use.
+      </li>
+      <li class="change">
+      	Updated <a href="click-api/net/sf/click/control/Column.html">Column</a>
+        class to escape HTML characters. This issue was raised by Glen Stampoultzis 
+        [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-118">118</a>].
+      </li> 
       <li class="change">Updated documentation and examples.</li> 
     </ul>
   </dd>

@@ -511,12 +511,50 @@ public class ClickUtils {
     }
 
     /**
-     * Invoke the named method on the given object and return the boolean result.
+     * Return a HTML escaped string for the given char value.
+     *
+     * @param aChar the character value to escape
+     * @return the HTML escaped string value
+     */
+    public static String escapeHtml(char aChar) {
+        if (HtmlEntities.requiresEscape(aChar)) {
+            return HtmlEntities.escape(aChar);
+
+        } else {
+            return String.valueOf(aChar);
+        }
+    }
+    
+    /**
+     * Return a HTML escaped string for the given string value.
+     *
+     * @param value the string value to escape
+     * @return the HTML escaped string value
+     */
+    public static String escapeHtml(String value) {
+        if (requiresHtmlEscape(value)) {
+            
+            HtmlStringBuffer buffer = new HtmlStringBuffer(value.length() * 2);
+            
+            buffer.appendEscaped(value);
+
+            return buffer.toString();
+
+        } else {
+            return value;
+        }
+    }
+
+    /**
+     * Invoke the named method on the given object and return the boolean
+     * result.
      *
      * @see net.sf.click.Control#setListener(Object, String)
      *
-     * @param listener the object with the method to invoke
-     * @param method the name of the method to invoke
+     * @param listener
+     *            the object with the method to invoke
+     * @param method
+     *            the name of the method to invoke
      * @return true if the listener method returned true
      */
     public static boolean invokeListener(Object listener, String method) {
@@ -1027,6 +1065,27 @@ public class ClickUtils {
         } else {
             ClickLogger.getInstance().debug(msg);
         }
+    }
+
+    /**
+     * Return true if the given string requires HTML escaping of characters.
+     *
+     * @param value the string value to test
+     * @return true if the given string requires HTML escaping of characters
+     */
+    private static boolean requiresHtmlEscape(String value) {
+        if (value == null) {
+            return false;
+        }
+
+        int length = value.length();
+        for (int i = 0; i < length; i++) {
+            if (HtmlEntities.requiresEscape(value.charAt(i))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

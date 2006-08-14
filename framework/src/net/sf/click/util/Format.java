@@ -338,16 +338,13 @@ public class Format {
      * <p/>
      * If the value is null this method will return the
      * {@link #getEmptyString()} value.
-     * <p>
-     * Implementation is provided by Jakarta Commons Lang utility:
-     * <tt>StringEscapeUtils.escapeHtml(String)</tt>
      *
      * @param value unescaped HTML
      * @return the HTML escaped string
      */
     public String html(Object value) {
         if (value != null) {
-            return StringEscapeUtils.escapeHtml(value.toString());
+            return ClickUtils.escapeHtml(value.toString());
         } else {
             return getEmptyString();
         }
