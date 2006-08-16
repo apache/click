@@ -171,10 +171,10 @@ public class HtmlStringBuffer {
         char aChar;
         for (int i = 0; i < length; i++) {
             aChar = string.charAt(i);
-            
+
             if (HtmlEntities.requiresEscape(aChar)) {
                 append(HtmlEntities.escape(aChar));
-                
+
             } else {
                 append(aChar);
             }
