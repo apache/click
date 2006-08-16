@@ -524,7 +524,7 @@ public class ClickUtils {
             return String.valueOf(aChar);
         }
     }
-    
+
     /**
      * Return a HTML escaped string for the given string value.
      *
@@ -533,9 +533,9 @@ public class ClickUtils {
      */
     public static String escapeHtml(String value) {
         if (requiresHtmlEscape(value)) {
-            
+
             HtmlStringBuffer buffer = new HtmlStringBuffer(value.length() * 2);
-            
+
             buffer.appendEscaped(value);
 
             return buffer.toString();
