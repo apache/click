@@ -92,7 +92,11 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 	}
 	
 	public void addPages() {
-		page = new NewClickPageWizardPage("page1", selection.getFirstElement(), 
+		Object element = null;
+		if(selection != null){
+			element = selection.getFirstElement();
+		}
+		page = new NewClickPageWizardPage("page1", element, 
 				this.initialClassName, this.initialPageName);
 		addPage(page);
 	}

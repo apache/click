@@ -26,9 +26,8 @@ public class NewClickPageAction implements IWorkbenchWindowActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		if(selection instanceof IStructuredSelection){
 			this.selection = (IStructuredSelection)selection;
-			action.setEnabled(true);
 		} else {
-			action.setEnabled(false);
+			this.selection = null;
 		}
 	}
 
