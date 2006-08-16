@@ -42,6 +42,9 @@
               files="Form.java"/>
                
     <suppress checks="LineLength"
+              files="HtmlEntities.java"/>
+              
+    <suppress checks="LineLength"
               files="TabbedPanel.java"
               lines="117"/>    
                                         
