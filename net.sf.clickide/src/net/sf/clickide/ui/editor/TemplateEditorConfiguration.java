@@ -13,9 +13,14 @@ import org.eclipse.wst.html.ui.StructuredTextViewerConfigurationHTML;
  * @see TemplateContentAssistProcessor
  */
 public class TemplateEditorConfiguration extends StructuredTextViewerConfigurationHTML {
-
+	
+	private TemplateContentAssistProcessor processor = null;
+	
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer viewer, String partitionType) {
-		return new IContentAssistProcessor[]{new TemplateContentAssistProcessor()};
+		if(this.processor == null){
+			this.processor = new TemplateContentAssistProcessor();
+		}
+		return new IContentAssistProcessor[]{this.processor};
 	}
 	
 }
