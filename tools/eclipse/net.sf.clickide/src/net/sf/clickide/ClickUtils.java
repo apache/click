@@ -58,32 +58,6 @@ public class ClickUtils {
 	private static final String CLICK_SERVLET_NAME = "click-servlet";
 	private static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
 	
-//	public static Resource getClickAppType(IProject project){
-//		IFile file = project.getFile("WebContent/WEB-INF/click.xml");
-//		if(!file.exists()){
-//			return null;
-//		}
-//		
-//		try {
-//			URI uri = URI.createPlatformResourceURI(file.getFullPath().toString());
-//			ClickResourceFactoryImpl factory = new ClickResourceFactoryImpl();
-//			Resource resource = factory.createResource(uri);
-//			resource.load(file.getContents(), new HashMap());
-//			
-//			return resource;
-//			
-//		} catch(Exception ex){
-//			ex.printStackTrace();
-//		}
-//		
-//		return null;
-//	}
-//	
-//	public static ClickAppType getClickApp(Resource resource){
-//		DocumentRoot root = (DocumentRoot)resource.getContents().get(0);
-//		return root.getClickApp();
-//	}
-	
 	/**
 	 * Creates GridData.
 	 * 
@@ -393,6 +367,37 @@ public class ClickUtils {
 			ClickPlugin.log(ex);
 		}
 		return model;
+	}
+	
+	/**
+	 * Returns <code>IType</code> of the format object which is specified in click.xml.
+	 * If format element is not defined, this method returns <code>net.sf.click.util.Format</code>.
+	 * 
+	 * @param project the project
+	 * @return IType of the format object
+	 */
+	public static IType getFormat(IProject project){
+		IStructuredModel model = getClickXMLModel(project);
+		IJavaProject javaProject = JavaCore.create(project);
+		IType formatType = null;
+		try {
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_FORMAT);
+			String className = null;
+			if(list.getLength()==1){
+				Element format = (Element)list.item(0);
+				className = format.getAttribute(ClickPlugin.ATTR_CLASSNAME);
+			}
+			if(className==null){
+				className = "net.sf.click.util.Format";
+			}
+			formatType = javaProject.findType(className);
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
+		}
+		return formatType;
 	}
 	
 	public static boolean getAutoMapping(IProject project){
