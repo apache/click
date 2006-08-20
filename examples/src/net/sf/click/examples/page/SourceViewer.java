@@ -12,7 +12,6 @@ import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
