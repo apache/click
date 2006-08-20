@@ -172,8 +172,8 @@ public class HtmlStringBuffer {
         for (int i = 0; i < length; i++) {
             aChar = string.charAt(i);
 
-            if (HtmlEntities.requiresEscape(aChar)) {
-                append(HtmlEntities.escape(aChar));
+            if (ClickUtils.requiresEscape(aChar)) {
+                append(ClickUtils.escapeChar(aChar));
 
             } else {
                 append(aChar);

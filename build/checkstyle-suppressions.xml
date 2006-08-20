@@ -42,7 +42,7 @@
               files="Form.java"/>
                
     <suppress checks="LineLength"
-              files="HtmlEntities.java"/>
+              files="ClickUtils.java"/>
               
     <suppress checks="LineLength"
               files="TabbedPanel.java"
