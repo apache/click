@@ -1,7 +1,9 @@
-Click 1.0 RC1 Release
+Click 1.0 Release
 ---------------------
+fix Extra Controls JavaScript bug
 fix ColorPicker rendering bug
 add Cayenne control examples
+
 
 CODE
 * have form submit check support multiple form in a page
