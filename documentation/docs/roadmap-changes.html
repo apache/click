@@ -27,8 +27,8 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-The next scheduled release will include JavaScript validation improvements,
-bug fixes and documentation updates.
+The next scheduled release will include Table Column sorting, 
+JavaScript validation improvements, bug fixes and documentation updates.
 
 
 <p>&nbsp;</p>
@@ -61,17 +61,16 @@ bug fixes and documentation updates.
         method.
       </li>
       <li class="change">
-        Added 
-        <a href="click-api/net/sf/click/util/HtmlEntities.html">HtmlEntities</a> 
-        class to improve HTML character escaping performance in HtmlStringBuffer,
-        replacing Apache Commons Lang's use.
-      </li>
-      <li class="change">
       	Updated <a href="click-api/net/sf/click/control/Column.html">Column</a>
         class to escape HTML characters by default. This issue was raised by 
         Glen Stampoultzis 
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-118">118</a>].
       </li> 
+      <li class="change">
+        Updated 
+        <a href="click-api/net/sf/click/util/HtmlStringBuffer.html">HtmlStringBuffer</a>
+        to improve HTML character escaping performance, removing Apache Commons Lang's use.
+      </li>
       <li class="change">
         Updated <a target="blank" href="http://fisheye3.cenqua.com/browse/click/">FishEye</a> project view 
         provided by <a target="blank" href="http://www.cenqua.com">Cenqua</a>.      
