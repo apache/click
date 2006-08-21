@@ -16,6 +16,7 @@
 package net.sf.click.control;
 
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -302,6 +303,22 @@ public class ActionLink extends AbstractLink {
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(ClickUtils.encodeUrl(value, getContext()));
+        }
+
+        if (hasParameters()) {
+            Iterator i = getParameters().keySet().iterator();
+            while (i.hasNext()) {
+                String name = i.next().toString();
+                if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
+                    Object paramValue = getParameters().get(name);
+                    String encodedValue
+                        = ClickUtils.encodeUrl(paramValue, getContext());
+                    buffer.append("&");
+                    buffer.append(name);
+                    buffer.append("=");
+                    buffer.append(encodedValue);
+                }
+            }
         }
 
         return getContext().getResponse().encodeURL(buffer.toString());
