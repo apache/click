@@ -42,6 +42,8 @@ public class EditTable extends BorderPage {
 
         // Setup customers table
         table.setAttribute("class", "simple");
+        table.setPageSize(10);
+        table.setShowBanner(true);
 
         Column column = new Column("name");
         table.addColumn(column);
@@ -61,7 +63,7 @@ public class EditTable extends BorderPage {
 
         column = new Column("Action");
         ActionLink[] links = new ActionLink[]{editLink, deleteLink};
-        column.setDecorator(new LinkDecorator(links, "id"));
+        column.setDecorator(new LinkDecorator(table, links, "id"));
         table.addColumn(column);
 
         deleteLink.setAttribute("onclick", "return window.confirm('Please confirm delete');");
@@ -102,7 +104,7 @@ public class EditTable extends BorderPage {
      * @see net.sf.click.Page#onRender()
      */
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
+        List customers = getCustomerService().getCustomers();
         table.setRowList(customers);
     }
 
