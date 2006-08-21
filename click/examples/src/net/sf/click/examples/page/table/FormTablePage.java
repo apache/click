@@ -72,7 +72,19 @@ public class FormTablePage extends BorderPage {
 
     public boolean onOkClick() {
         if (table.getForm().isValid()) {
+            // Please note with Cayenne ORM this will persist any changes
+            // to data objects submitted by the form. 
             getDataContext().commitChanges();
+                        
+            // With other ORM frameworks like Hibernate you would retrieve
+            // rows for the table as persist those objects. For example:
+            /*
+            List rowList = table.getRowList();
+            for (Iterator i = rowList.iterator(); i.hasNext();) {
+                Object row = (Object) i.next();
+                getSession().save(row);
+            }    
+            */
         }
         return true;
     }
