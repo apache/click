@@ -18,11 +18,15 @@ package net.sf.click.extras.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.Context;
+import net.sf.click.Control;
 import net.sf.click.control.AbstractLink;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Decorator;
 import net.sf.click.control.PageLink;
+import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -56,7 +60,7 @@ import ognl.OgnlException;
  *
  *         Column column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
  *         ActionLink[] links = <span class="kw">new</span> ActionLink[]{editLink, deleteLink};
- *         column.setDecorator(<span class="kw">new</span> LinkDecorator(links, <span class="st">"id"</span>));
+ *         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, links, <span class="st">"id"</span>));
  *         table.addColumn(column);
  *
  *         deleteLink.setAttribute(<span class="st">"onclick"</span>, <span class="st">"return window.confirm('Please confirm delete');"</span>);
@@ -81,7 +85,8 @@ import ognl.OgnlException;
  *     }
  * } </pre>
  *
- *
+ * The LinkDecorator class automatically supports table paging.
+ * <p/>
  * This class was inspired by Richardo Lecheta's <tt>ViewDecorator</tt> design
  * pattern.
  *
@@ -92,6 +97,8 @@ import ognl.OgnlException;
  */
 public class LinkDecorator implements Decorator {
 
+    static final String PAGE_NUMBER = "pageNumber";
+
     /** The row object identifier property. */
     protected String idProperty;
 
@@ -101,6 +108,9 @@ public class LinkDecorator implements Decorator {
     /** The link separator string, default value is <tt>" | "</tt>. */
     protected String linkSeparator = " | ";
 
+    /** The table to render the links for. */
+    protected Table table;
+
     /** The OGNL context map. */
     protected Map ognlContext;
 
@@ -108,37 +118,51 @@ public class LinkDecorator implements Decorator {
      * Create a new AbstractLink table column Decorator with the given actionLink
      * and row object identifier property name.
      *
+     * @param table the table to render the links for
      * @param link the AbstractLink to render
      * @param idProperty the row object identifier property name
      */
-    public LinkDecorator(AbstractLink link, String idProperty) {
+    public LinkDecorator(Table table, AbstractLink link, String idProperty) {
+        if (table == null) {
+            throw new IllegalArgumentException("Null table parameter");
+        }
         if (link == null) {
             throw new IllegalArgumentException("Null actionLink parameter");
         }
         if (idProperty == null) {
             throw new IllegalArgumentException("Null idProperty parameter");
         }
+        this.table = table;
         this.linksArray = new AbstractLink[1];
         this.linksArray[0] = link;
         this.idProperty = idProperty;
+
+        table.addControl(new LinkDecorator.PageNumberControl(table));
     }
 
     /**
      * Create a new AbstractLink table column Decorator with the given
      * AbstractLinks array and row object identifier property name.
      *
+     * @param table the table to render the links for
      * @param links the array of AbstractLinks to render
      * @param idProperty the row object identifier property name
      */
-    public LinkDecorator(AbstractLink[] links, String idProperty) {
+    public LinkDecorator(Table table, AbstractLink[] links, String idProperty) {
+        if (table == null) {
+            throw new IllegalArgumentException("Null table parameter");
+        }
         if (links == null) {
             throw new IllegalArgumentException("Null links parameter");
         }
         if (idProperty == null) {
             throw new IllegalArgumentException("Null idProperty parameter");
         }
+        this.table = table;
         this.linksArray = links;
         this.idProperty = idProperty;
+
+        table.addControl(new LinkDecorator.PageNumberControl(table));
     }
 
     // ------------------------------------------------------ Public Properties
@@ -187,13 +211,16 @@ public class LinkDecorator implements Decorator {
                     ((ActionLink) link).setValueObject(value);
 
                 } else if (link instanceof PageLink) {
-                    ((PageLink) link).setParameter(idProperty.toString(),
-                                                  value.toString());
+                    link.setParameter(idProperty.toString(),
+                                      value.toString());
                 }
 
             } catch (OgnlException ognle) {
                 throw new RuntimeException(ognle);
             }
+
+            link.setParameter(PAGE_NUMBER,
+                              String.valueOf(table.getPageNumber()));
 
             return link.toString();
 
@@ -211,9 +238,12 @@ public class LinkDecorator implements Decorator {
                         ((ActionLink) link).setValueObject(value);
 
                     } else if (link instanceof PageLink) {
-                        ((PageLink) link).setParameter(idProperty.toString(),
-                                                      value.toString());
+                        link.setParameter(idProperty.toString(),
+                                          value.toString());
                     }
+
+                    link.setParameter(PAGE_NUMBER,
+                                      String.valueOf(table.getPageNumber()));
 
                     if (i > 0) {
                         buffer.append(getLinkSeparator());
@@ -228,6 +258,73 @@ public class LinkDecorator implements Decorator {
 
             return buffer.toString();
         }
+    }
+
+    /**
+     * Add page number control for setting the table page number.
+     *
+     * @author Malcolm Edgar
+     */
+    static class PageNumberControl implements Control {
+
+        private static final long serialVersionUID = 1L;
+
+        final Table table;
+
+        PageNumberControl(Table table) {
+            this.table = table;
+        }
+
+        public Context getContext() {
+            return null;
+        }
+
+        public void setContext(Context context) {
+        }
+
+        public String getHtmlImports() {
+            return null;
+        }
+
+        public String getId() {
+            return null;
+        }
+
+        public void setListener(Object listener, String method) {
+        }
+
+        public Map getMessages() {
+            return null;
+        }
+
+        public String getName() {
+            return null;
+        }
+
+        public void setName(String name) {
+        }
+
+        public Object getParent() {
+            return null;
+        }
+
+        public void setParent(Object parent) {
+        }
+
+        public void onDeploy(ServletContext servletContext) {
+        }
+
+        public boolean onProcess() {
+            String pageNumber =
+                table.getContext().getRequestParameter(PAGE_NUMBER);
+
+            if (pageNumber != null) {
+                table.setPageNumber(Integer.parseInt(pageNumber));
+            }
+
+            return true;
+        }
+
     }
 
 }
