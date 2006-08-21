@@ -88,6 +88,8 @@ public class EditTable extends BorderPage {
 
     public boolean onSaveClick() {
         if (form.isValid()) {
+            // Please note with Cayenne ORM this will persist any changes
+            // to data objects submitted by the form.
             form.getDataObject();
             getDataContext().commitChanges();
             form.setDataObject(null);
@@ -101,14 +103,14 @@ public class EditTable extends BorderPage {
         form.clearErrors();
         return true;
     }
-    
+
     /**
      * @see net.sf.click.Page#onGet()
      */
     public void onGet() {
         form.getField("pageNumber").setValue(""+table.getPageNumber());
     }
-    
+
     /**
      * @see net.sf.click.Page#onPost()
      */
