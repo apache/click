@@ -10,7 +10,7 @@
 
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2B2.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2.jar"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
