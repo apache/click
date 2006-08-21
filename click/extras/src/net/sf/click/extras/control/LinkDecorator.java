@@ -25,7 +25,6 @@ import net.sf.click.Control;
 import net.sf.click.control.AbstractLink;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Decorator;
-import net.sf.click.control.PageLink;
 import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
@@ -210,7 +209,7 @@ public class LinkDecorator implements Decorator {
                 if (link instanceof ActionLink) {
                     ((ActionLink) link).setValueObject(value);
 
-                } else if (link instanceof PageLink) {
+                } else {
                     link.setParameter(idProperty.toString(),
                                       value.toString());
                 }
@@ -237,7 +236,7 @@ public class LinkDecorator implements Decorator {
                     if (link instanceof ActionLink) {
                         ((ActionLink) link).setValueObject(value);
 
-                    } else if (link instanceof PageLink) {
+                    } else {
                         link.setParameter(idProperty.toString(),
                                           value.toString());
                     }
