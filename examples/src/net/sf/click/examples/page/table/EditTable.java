@@ -5,6 +5,7 @@ import java.util.List;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Column;
 import net.sf.click.control.FieldSet;
+import net.sf.click.control.HiddenField;
 import net.sf.click.control.Submit;
 import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
@@ -39,6 +40,7 @@ public class EditTable extends BorderPage {
         form.add(fieldSet);
         form.add(new Submit("save", this, "onSaveClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
+        form.add(new HiddenField("pageNumber", String.class));
 
         // Setup customers table
         table.setAttribute("class", "simple");
@@ -98,6 +100,21 @@ public class EditTable extends BorderPage {
         form.setDataObject(null);
         form.clearErrors();
         return true;
+    }
+    
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
+    public void onGet() {
+        form.getField("pageNumber").setValue(""+table.getPageNumber());
+    }
+    
+    /**
+     * @see net.sf.click.Page#onPost()
+     */
+    public void onPost() {
+        String pageNumber = form.getField("pageNumber").getValue();
+        table.setPageNumber(Integer.parseInt(pageNumber));
     }
 
     /**
