@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
  * content. The content will only be compressed if it is bigger than a
- * configurable threshold.
+ * configurable threshold. The default threshold is 1024 bytes.
  * <p/>
  * To configure your application to GZIP compress HTML content include the
  * click-extras.jar in you application and add the following filter elements to
@@ -66,10 +66,10 @@ public class CompressionFilter implements Filter {
      */
     private FilterConfig config = null;
 
-    /** Minimal reasonable threshold. */
-    private int minThreshold = 128;
+    /** Minimal reasonable threshold, 1024 bytes. */
+    protected int minThreshold = 1024;
 
-    /** The threshold number to compress. */
+    /** The threshold number to compress, default value is 1024 bytes. */
     protected int compressionThreshold;
 
     /**
@@ -91,13 +91,12 @@ public class CompressionFilter implements Filter {
                     compressionThreshold = minThreshold;
                 }
             } else {
-                compressionThreshold = 0;
+                compressionThreshold = minThreshold;
             }
 
         } else {
-            compressionThreshold = 0;
+            compressionThreshold = minThreshold;
         }
-
     }
 
     /**
@@ -162,6 +161,7 @@ public class CompressionFilter implements Filter {
             return;
         } else {
             if (response instanceof HttpServletResponse) {
+
                 HttpServletResponse hsr = (HttpServletResponse) response;
                 CompressionServletResponseWrapper wrappedResponse =
                     new CompressionServletResponseWrapper(hsr);
