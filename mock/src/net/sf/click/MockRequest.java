@@ -220,7 +220,8 @@ public class MockRequest implements HttpServletRequest {
 
     public String getParameter(String key) {
         if (parameters.containsKey(key)) {
-            return parameters.get(key).toString();
+            Object object = parameters.get(key);
+            return (object != null) ? object.toString() : null;
         } else {
             return null;
         }
