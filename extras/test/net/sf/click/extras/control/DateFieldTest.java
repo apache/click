@@ -15,6 +15,10 @@
  */
 package net.sf.click.extras.control;
 
+import java.util.Date;
+
+import net.sf.click.MockContext;
+import net.sf.click.MockRequest;
 import net.sf.click.extras.control.DateField;
 import junit.framework.TestCase;
 
@@ -49,6 +53,35 @@ public class DateFieldTest extends TestCase {
         dateField.setFormatPattern("dd.MM.yy");
         assertEquals(dateField.getFormatPattern(), "dd.MM.yy");
         assertEquals(dateField.getCalendarPattern(), "%e.%m.%y");
+    }
+    
+    public void testNullParameter() {
+        MockRequest request = new MockRequest();
+        MockContext context = new MockContext(request);
+        
+        DateField dateField = new DateField("dateField");
+        assertEquals("dateField", dateField.getName());
+        
+        dateField.setContext(context);
+
+        request.getParameterMap().put("dateField", "");        
+        dateField.onProcess();        
+        Date date = dateField.getDate();
+        assertNull(date);
+        
+        request.getParameterMap().put("dateField", " ");        
+        dateField.onProcess();        
+        date = dateField.getDate();
+        assertNull(date);
+
+        request.getParameterMap().put("dateField", null);        
+        dateField.onProcess();        
+        date = dateField.getDate();
+        assertNull(date);
+        
+        dateField.setValue(null);
+        date = dateField.getDate();
+        assertNull(date);
     }
 
 }

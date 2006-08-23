@@ -221,7 +221,7 @@ public class DateField extends TextField {
      * @return the field Date value
      */
     public Date getDate() {
-        if (value != null || value.length() > 0) {
+        if (value != null && value.length() > 0) {
             try {
                 Date date = getDateFormat().parse(value);
 
