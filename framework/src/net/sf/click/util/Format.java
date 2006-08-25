@@ -180,6 +180,111 @@ public class Format {
      * If the date is null this method will return the {@link #getEmptyString()}
      * value.
      *
+     * <h4>SimpleDateFormat Pattern Characters</h4>
+     *
+     *  <table border="0" cellspacing="3" cellpadding="3">
+     *  <tr bgcolor="#ccccff">
+     *           <th align=left>Letter
+     *           <th align=left>Date or Time Component
+     *           <th align=left>Presentation
+     *           <th align=left>Examples
+     *       <tr>
+     *           <td><code>G</code>
+     *           <td>Era designator
+     *           <td>Text
+     *           <td><code>AD</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>y</code>
+     *           <td>Year
+     *           <td>Year
+     *           <td><code>1996</code>; <code>96</code>
+     *       <tr>
+     *           <td><code>M</code>
+     *           <td>Month in year
+     *           <td>Month
+     *           <td><code>July</code>; <code>Jul</code>; <code>07</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>w</code>
+     *           <td>Week in year
+     *           <td>Number
+     *           <td><code>27</code>
+     *       <tr>
+     *           <td><code>W</code>
+     *           <td>Week in month
+     *           <td>Number
+     *           <td><code>2</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>D</code>
+     *           <td>Day in year
+     *           <td>Number
+     *           <td><code>189</code>
+     *       <tr>
+     *           <td><code>d</code>
+     *           <td>Day in month
+     *           <td>Number
+     *           <td><code>10</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>F</code>
+     *           <td>Day of week in month
+     *           <td>Number
+     *           <td><code>2</code>
+     *       <tr>
+     *           <td><code>E</code>
+     *           <td>Day in week
+     *           <td>Text
+     *           <td><code>Tuesday</code>; <code>Tue</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>a</code>
+     *           <td>Am/pm marker
+     *           <td>Text
+     *           <td><code>PM</code>
+     *       <tr>
+     *           <td><code>H</code>
+     *           <td>Hour in day (0-23)
+     *           <td>Number
+     *           <td><code>0</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>k</code>
+     *           <td>Hour in day (1-24)
+     *           <td>Number
+     *           <td><code>24</code>
+     *       <tr>
+     *           <td><code>K</code>
+     *           <td>Hour in am/pm (0-11)
+     *           <td>Number
+     *           <td><code>0</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>h</code>
+     *           <td>Hour in am/pm (1-12)
+     *           <td>Number
+     *           <td><code>12</code>
+     *       <tr>
+     *           <td><code>m</code>
+     *           <td>Minute in hour
+     *           <td>Number
+     *           <td><code>30</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>s</code>
+     *           <td>Second in minute
+     *           <td>Number
+     *           <td><code>55</code>
+     *       <tr>
+     *           <td><code>S</code>
+     *           <td>Millisecond
+     *           <td>Number
+     *           <td><code>978</code>
+     *       <tr bgcolor="#eeeeff">
+     *           <td><code>z</code>
+     *           <td>Time zone
+     *           <td>General time zone
+     *           <td><code>Pacific Standard Time</code>; <code>PST</code>; <code>GMT-08:00</code>
+     *       <tr>
+     *           <td><code>Z</code>
+     *           <td>Time zone
+     *           <td>RFC 822 time zone
+     *           <td><code>-0800</code>
+     *   </table>
+     *
      * @param date the date value to format
      * @param pattern the SimpleDateFormat formatting pattern
      * @return a formatted date string
@@ -229,6 +334,89 @@ public class Format {
      * <p/>
      * If the number is null this method will return the
      * {@link #getEmptyString()} value.
+     * <p/>
+     * <b>Please Note</b>: Velocity will not correctly parse the '#' decimal
+     * number pattern character and will throw a parsing exception. When using
+     * this method substitute the '#' decimal pattern character
+     * (Digit, zero shows as absent) with 'N'. Internally this method will
+     * reverse the subsitution before invoking <tt>DecimalFormat</tt>.
+     * For example:
+     *
+     * <pre class="codeHtml">
+     * $format.decimal($value, "N,NN0.00") -> "#,##0.00"
+     * </pre>
+     *
+     * <h4>DecimalFormat Pattern Characters</h4>
+     *
+     *  <table border='0' cellspacing='3' cellpadding='3'>
+     *      <tr bgcolor="#ccccff">
+     *           <th align=left>Symbol
+     *           <th align=left>Location
+     *           <th align=left>Localized?
+     *           <th align=left>Meaning
+     *      <tr valign=top>
+     *           <td><code>0</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Digit
+     *      <tr valign=top bgcolor="#eeeeff">
+     *           <td><code>#</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Digit, zero shows as absent
+     *      <tr valign=top>
+     *           <td><code>.</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Decimal separator or monetary decimal separator
+     *      <tr valign=top bgcolor="#eeeeff">
+     *           <td><code>-</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Minus sign
+     *      <tr valign=top>
+     *           <td><code>,</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Grouping separator
+     *      <tr valign=top bgcolor="#eeeeff">
+     *           <td><code>E</code>
+     *           <td>Number
+     *           <td>Yes
+     *           <td>Separates mantissa and exponent in scientific notation.
+     *               <em>Need not be quoted in prefix or suffix.</em>
+     *      <tr valign=top>
+     *           <td><code>;</code>
+     *           <td>Subpattern boundary
+     *           <td>Yes
+     *           <td>Separates positive and negative subpatterns
+     *      <tr valign=top bgcolor="#eeeeff">
+     *           <td><code>%</code>
+     *           <td>Prefix or suffix
+     *           <td>Yes
+     *           <td>Multiply by 100 and show as percentage
+     *      <tr valign=top>
+     *           <td><code>&#92;u2030</code>
+     *           <td>Prefix or suffix
+     *           <td>Yes
+     *           <td>Multiply by 1000 and show as per mille
+     *      <tr valign=top bgcolor="#eeeeff">
+     *           <td><code>&#164;</code> (<code>&#92;u00A4</code>)
+     *           <td>Prefix or suffix
+     *           <td>No
+     *           <td>Currency sign, replaced by currency symbol.  If
+     *               doubled, replaced by international currency symbol.
+     *               If present in a pattern, the monetary decimal separator
+     *               is used instead of the decimal separator.
+     *      <tr valign=top>
+     *           <td><code>'</code>
+     *           <td>Prefix or suffix
+     *           <td>No
+     *           <td>Used to quote special characters in a prefix or suffix,
+     *               for example, <code>"'#'#"</code> formats 123 to
+     *               <code>"#123"</code>.  To create a single quote
+     *               itself, use two in a row: <code>"# o''clock"</code>.
+     *  </table>
      *
      * @param number the number to format
      * @param pattern the decimal format pattern
@@ -239,6 +427,10 @@ public class Format {
         if (number != null) {
             if (pattern == null) {
                 throw new IllegalArgumentException("Null pattern parameter");
+            }
+
+            if (pattern.indexOf('N') != -1) {
+                pattern = pattern.replace('N', '#');
             }
 
             DecimalFormat format = new DecimalFormat(pattern);
