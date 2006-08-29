@@ -4,6 +4,9 @@ fix Extra Controls JavaScript bug
 fix ColorPicker rendering bug
 add Cayenne control examples
 
+Notes:
+* StandardControlsPage is probably assigning something to the form.submit method
+
 
 CODE
 * have form submit check support multiple form in a page
