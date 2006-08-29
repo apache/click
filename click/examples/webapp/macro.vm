@@ -4,13 +4,8 @@
  *********************#
 
 #macro( writeForm $form )
-
-<form method="$form.method" name="$form.name" action="$form.actionURL">
-
- ## Render hidden fields
- #foreach ($field in $form.fieldList)
-  #if ($field.hidden) $field #end
- #end
+	
+$form.startTag()	
 
  <table style="margin: 1em;">
   #if ($form.error) 
@@ -56,7 +51,7 @@
   </tr> 
  </table> 
  
-</form>
+$form.endTag()
 
 #end
 

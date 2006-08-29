@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2006 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -272,11 +272,13 @@ import org.apache.commons.lang.StringUtils;
  * The hidden field is used by Click to determine which form was posted on
  * a page which may contain multiple forms.
  * <p/>
+ * Alternatively you can use the Form {@link #startTag()} and {@link #endTag()}
+ * methods to render this information.
+ * <p/>
  * An example of a manually layed out Login form is provided below:
  *
  * <pre class="codeHtml">
- * &lt;form <span class="maroon">method</span>="<span class="blue">$form.method</span>" <span class="maroon">name</span>="<span class="blue">$form.name</span>" <span class="maroon">action</span>="<span class="blue">$form.actionURL</span>"&gt;
- *   &lt;input type="hidden" name="<span class="maroon">form_name</span>" value="<span class="blue">$form.name</span>"/&gt;
+ * <span class="blue">$form.startTag()</span>
  *
  *   &lt;table style="margin: 1em;"&gt;
  *
@@ -314,7 +316,7 @@ import org.apache.commons.lang.StringUtils;
  *
  *   &lt;/table&gt;
  *
- * &lt;form&gt; </pre>
+ * <span class="blue">$form.endTag()</span> </pre>
  *
  * As you can see in this example most of the code and markup is generic and
  * could be reused. This is where Velocity Macros come in.
@@ -335,11 +337,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeHtml"> <span class="red">#*</span> Custom Form Macro Code <span class="red">*#</span>
  * <span class="red">#macro</span>( <span class="green">writeForm</span>[<span class="blue">$form</span>] )
  *
- * &lt;form method="<span class="blue">$form.method</span>" name="<span class="blue">$form.name</span>" action="<span class="blue">$form.actionURL</span>"&gt;
- *
- *  <span class="red">#foreach</span> (<span class="blue">$field</span> <span class="red">in</span> <span class="blue">$form.fieldList</span>)
- *    <span class="red">#if</span> (<span class="blue">$field.hidden</span>) <span class="blue">$field</span> <span class="red">#end</span>
- *  <span class="red">#end</span>
+ * <span class="blue">$form.startTag()</span>
  *
  * &lt;table width="100%"&gt;
  *
@@ -372,7 +370,8 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;/tr&gt;
  *
  * &lt;/table&gt;
- * &lt;/form&gt;
+ *
+ * <span class="blue">$form.endTag()</span>
  *
  * <span class="red">#end</span> </pre>
  *
@@ -1780,7 +1779,6 @@ public class Form implements Control {
         }
     }
 
-
     /**
      * Perform a form submission check ensuring the user has not replayed the
      * form submission by using the browser back button. If the form submit
@@ -1884,6 +1882,32 @@ public class Form implements Control {
     }
 
     /**
+     * Return the rendered opening form tag and all the forms hidden fields.
+     *
+     * @return the rendered form start tag and the forms hidden fields
+     */
+    public String startTag() {
+        List formFields = ClickUtils.getFormFields(this);
+
+        int bufferSize = getFormSizeEst(formFields);
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+
+        renderHeader(buffer, formFields);
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return the rendered form end tag. This method will return: &nbsp; <tt>&lt;/form&gt;\n</tt>
+     *
+     * @return the rendered form end tag
+     */
+    public String endTag() {
+        return "</form>\n";
+    }
+
+    /**
      * Return the HTML string representation of the form.
      * <p/>
      * If the form contains errors after processing, these errors will be
@@ -1894,33 +1918,15 @@ public class Form implements Control {
     public String toString() {
 
         final boolean process =
-            context.getRequest().getMethod().equalsIgnoreCase(getMethod());
+            getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
 
-        // Estimate the size of the string buffer
-        int bufferSize =
-            400 + (getFieldList().size() * 350) + (getButtonList().size() * 50);
+        List formFields = ClickUtils.getFormFields(this);
+
+        int bufferSize = getFormSizeEst(formFields);
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        buffer.elementStart("form");
-
-        buffer.appendAttribute("method", getMethod());
-        buffer.appendAttribute("name", getName());
-        buffer.appendAttribute("id", getId());
-        buffer.appendAttribute("action", getActionURL());
-        buffer.appendAttribute("enctype", getEnctype());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        if (getJavaScriptValidation()) {
-            String javaScript = "return on_" + getId() + "_submit();";
-            buffer.appendAttribute("onsubmit", javaScript);
-        }
-        buffer.closeTag();
-        buffer.append("\n");
-
-        int hiddenCount = 0;
-        Field fieldWithError = null;
+        renderHeader(buffer, formFields);
 
         buffer.append("<table class=\"form\" id=\"");
         buffer.append(getId());
@@ -1928,90 +1934,32 @@ public class Form implements Control {
 
         // Render fields, errors and buttons
         if (POSITION_TOP.equals(getErrorsPosition())) {
-            fieldWithError = renderErrors(buffer, process);
-            hiddenCount = renderFields(buffer);
+            renderErrors(buffer, process);
+            renderFields(buffer);
             renderButtons(buffer);
 
         } else if (POSITION_MIDDLE.equals(getErrorsPosition())) {
-            hiddenCount = renderFields(buffer);
-            fieldWithError = renderErrors(buffer, process);
+            renderFields(buffer);
+            renderErrors(buffer, process);
             renderButtons(buffer);
 
         } else if (POSITION_BOTTOM.equals(getErrorsPosition())) {
-            hiddenCount = renderFields(buffer);
+            renderFields(buffer);
             renderButtons(buffer);
-            fieldWithError = renderErrors(buffer, process);
+            renderErrors(buffer, process);
 
         } else {
             String msg = "Invalid errorsPositon:" + getErrorsPosition();
             throw new IllegalArgumentException(msg);
         }
+
         buffer.append("</table>\n");
 
-        // Render hidden fields
-        if (hiddenCount > 0) {
-            for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                Field field = (Field) getFieldList().get(i);
-                if (field.isHidden()) {
-                    buffer.append(field);
-                    buffer.append("\n");
-                    hiddenCount--;
-                    if (hiddenCount == 0) {
-                        break;
-                    }
-                }
-            }
-        }
+        buffer.append(endTag());
 
-        buffer.elementEnd("form");
-        buffer.append("\n");
+        renderFocusJavaScript(buffer, formFields);
 
-        // Set field focus
-        if (fieldWithError != null) {
-            String focusJavaScript =
-                StringUtils.replace(FOCUS_JAVASCRIPT,
-                                    "$id",
-                                    fieldWithError.getId());
-            buffer.append(focusJavaScript);
-
-        } else {
-            for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                Field field = (Field) getFieldList().get(i);
-
-                if (field instanceof FieldSet) {
-                    FieldSet fieldSet = (FieldSet) field;
-                    for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                        Field fieldSetField =
-                            (Field) fieldSet.getFieldList().get(j);
-
-                        if (fieldSetField.getFocus()
-                            && !fieldSetField.isHidden()
-                            && !fieldSetField.isDisabled()) {
-
-                            String focusJavaScript =
-                                StringUtils.replace(FOCUS_JAVASCRIPT,
-                                                    "$id",
-                                                    fieldSetField.getId());
-                            buffer.append(focusJavaScript);
-                            break;
-                        }
-                    }
-
-                } else if (field.getFocus()
-                           && !field.isHidden()
-                           && !field.isDisabled()) {
-
-                    String focusJavaScript =
-                        StringUtils.replace(FOCUS_JAVASCRIPT,
-                                            "$id",
-                                            field.getId());
-                    buffer.append(focusJavaScript);
-                    break;
-                }
-            }
-        }
-
-        renderValidationJavaScript(buffer);
+        renderValidationJavaScript(buffer, formFields);
 
         return buffer.toString();
     }
@@ -2068,18 +2016,61 @@ public class Form implements Control {
     }
 
     /**
-     * Render the non hidden Form Fields to the string buffer and return a count
-     * of hidden fields.
+     * Return the estimated rendered form size in characters.
+     *
+     * @param formFields the list of form fields
+     * @return the estimated rendered form size in characters
+     */
+    protected int getFormSizeEst(List formFields) {
+        return 400 + (formFields.size() * 350) + (getButtonList().size() * 50);
+    }
+
+    /**
+     * Render the given form start tag and the form hidden fields to the given
+     * buffer.
+     *
+     * @param buffer the HTML string buffer to render to
+     * @param formFields the list of form fields
+     */
+    protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
+
+        buffer.elementStart("form");
+
+        buffer.appendAttribute("method", getMethod());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("action", getActionURL());
+        buffer.appendAttribute("enctype", getEnctype());
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (getJavaScriptValidation()) {
+            String javaScript = "return on_" + getId() + "_submit();";
+            buffer.appendAttribute("onsubmit", javaScript);
+        }
+        buffer.closeTag();
+        buffer.append("\n");
+
+        // Render hidden fields
+        for (int i = 0, size = formFields.size(); i < size; i++) {
+            Field field = (Field) formFields.get(i);
+            if (field.isHidden()) {
+                buffer.append(field);
+                buffer.append("\n");
+            }
+        }
+    }
+
+    /**
+     * Render the non hidden Form Fields to the string buffer.
      *
      * @param buffer the StringBuffer to render to
-     * @return the number of hidden Fields
      */
-    protected int renderFields(HtmlStringBuffer buffer) {
-        if (getFieldList().size() == 1 && getFields().containsKey("form_name")) {
-            return 1;
+    protected void renderFields(HtmlStringBuffer buffer) {
+        if (getFieldList().size() == 1
+            && getFields().containsKey("form_name")) {
+            return;
         }
-
-        int hiddenCount = 0;
 
         buffer.append("<tr><td>\n");
         buffer.append("<table class=\"fields\" id=\"");
@@ -2171,29 +2162,21 @@ public class Form implements Control {
                 } else {
                     column++;
                 }
-
-            } else {
-                hiddenCount++;
             }
 
         }
         buffer.append("</table>\n");
         buffer.append("</td></tr>\n");
-
-        return hiddenCount;
     }
 
     /**
-     * Render the form errors to the given buffer is form processed and return
-     * the first field with an error if processed.
+     * Render the form errors to the given buffer is form processed.
      *
      * @param buffer the string buffer to render the errors to
      * @param processed the flag indicating whether has been processed
-     * @return the first field with an error if the form is being processed
      */
-    protected Field renderErrors(HtmlStringBuffer buffer, boolean processed) {
+    protected void renderErrors(HtmlStringBuffer buffer, boolean processed) {
 
-        Field fieldWithError = null;
         if (processed && !isValid()) {
 
             buffer.append("<tr><td align=\"");
@@ -2219,10 +2202,6 @@ public class Form implements Control {
 
             for (int i = 0, size = errorFieldList.size(); i < size; i++) {
                 Field field = (Field) errorFieldList.get(i);
-
-                if (fieldWithError == null && !field.isDisabled()) {
-                    fieldWithError = field;
-                }
 
                 buffer.append("<tr class=\"errors\">");
                 buffer.append("<td class=\"errors\"");
@@ -2254,8 +2233,6 @@ public class Form implements Control {
             buffer.append("-errorsDiv\"/>\n");
             buffer.append("</td></tr>\n");
         }
-
-        return fieldWithError;
     }
 
     /**
@@ -2264,24 +2241,28 @@ public class Form implements Control {
      * @param buffer the StringBuffer to render to
      */
     protected void renderButtons(HtmlStringBuffer buffer) {
-        if (!buttonList.isEmpty()) {
+
+        if (!getButtonList().isEmpty()) {
             buffer.append("<tr><td");
             buffer.appendAttribute("align", getButtonAlign());
             buffer.append(">\n");
+
             buffer.append("<table class=\"buttons\" id=\"");
             buffer.append(getId());
             buffer.append("-buttons\">\n");
             buffer.append("<tr class=\"buttons\">");
-            for (int i = 0, size = buttonList.size(); i < size; i++) {
+
+            for (int i = 0, size = getButtonList().size(); i < size; i++) {
                 buffer.append("<td class=\"buttons\"");
                 buffer.appendAttribute("style", getButtonStyle());
                 buffer.closeTag();
 
-                Button button = (Button) buttonList.get(i);
+                Button button = (Button) getButtonList().get(i);
                 buffer.append(button);
 
                 buffer.append("</td>");
             }
+
             buffer.append("</tr>\n");
             buffer.append("</table>\n");
             buffer.append("</td></tr>\n");
@@ -2289,11 +2270,58 @@ public class Form implements Control {
     }
 
     /**
+     * Render the Form field focus JavaScript to the string buffer.
+     *
+     * @param buffer the StringBuffer to render to
+     * @param formFields the list of form fields
+     */
+    protected void renderFocusJavaScript(HtmlStringBuffer buffer, List formFields) {
+
+        // Set field focus
+        boolean errorFieldFound = false;
+        for (int i = 0, size = formFields.size(); i < size; i++) {
+            Field field = (Field) formFields.get(i);
+
+            if (field.getError() != null
+                && !field.isHidden()
+                && !field.isDisabled()) {
+
+                String focusJavaScript =
+                    StringUtils.replace(FOCUS_JAVASCRIPT,
+                                        "$id",
+                                        field.getId());
+                buffer.append(focusJavaScript);
+                errorFieldFound = true;
+                break;
+            }
+        }
+
+        if (!errorFieldFound) {
+            for (int i = 0, size = formFields.size(); i < size; i++) {
+                Field field = (Field) formFields.get(i);
+
+                if (field.getFocus()
+                    && !field.isHidden()
+                    && !field.isDisabled()) {
+
+                    String focusJavaScript =
+                        StringUtils.replace(FOCUS_JAVASCRIPT,
+                                            "$id",
+                                            field.getId());
+                    buffer.append(focusJavaScript);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
      * Render the Form validation JavaScript to the string buffer.
      *
      * @param buffer the StringBuffer to render to
+     * @param formFields the list of form fields
      */
-    protected void renderValidationJavaScript(HtmlStringBuffer buffer) {
+    protected void renderValidationJavaScript(HtmlStringBuffer buffer, List formFields) {
 
         // Render JavaScript form validation code
         if (getValidate() && getJavaScriptValidation()) {
@@ -2302,7 +2330,6 @@ public class Form implements Control {
             buffer.append("<script type=\"text/javascript\"><!--\n");
 
             // Render field validation functions & build list of function names
-            List formFields = ClickUtils.getFormFields(this);
             for (Iterator i = formFields.iterator(); i.hasNext();) {
                 Field field = (Field) i.next();
                 String fieldJS = field.getValidationJavaScript();

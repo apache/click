@@ -16,14 +16,12 @@ import net.sf.click.examples.domain.Customer;
  */
 public class SearchForm extends BorderPage {
 
-    private Form form;
+    public Form form = new Form();
+
     private TextField textField;
     private Select typeSelect;
 
     public SearchForm() {
-        form = new Form("form");
-        addControl(form);
-
         textField = new TextField("search");
         form.add(textField);
 
