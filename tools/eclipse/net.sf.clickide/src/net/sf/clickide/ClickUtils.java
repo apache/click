@@ -84,6 +84,12 @@ public class ClickUtils {
 		return label;
 	}
 	
+	/**
+	 * Escape XML special charactors.
+	 * 
+	 * @param value the string
+	 * @return the escaped string
+	 */
 	public static String escapeXML(String value){
 		value = value.replaceAll("&", "&amp;");
 		value = value.replaceAll("<", "&lt;");
@@ -145,6 +151,19 @@ public class ClickUtils {
 		return resource;
 	}
 	
+	/**
+	 * Returns <code>IJavaProject</code> from <code>Object</code>.
+	 * <p>
+	 * This method allows following types as input
+	 * <ul>
+	 *   <li><code>IJavaProject</code></li>
+	 *   <li><code>IJavaElement</code></li>
+	 *   <li><code>IResource</code></li>
+	 * </ul>
+	 * 
+	 * @param obj the input object
+	 * @return <code>IJavaProject</code> or <code>null</code>
+	 */
 	public static IJavaProject getJavaProject(Object obj){
 		if(obj instanceof IJavaProject){
 			return (IJavaProject)obj;
@@ -171,30 +190,31 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the WebArtifactEdit from the project for write.
+	 * Returns the <code>WebArtifactEdit</code> from the project for write.
 	 * 
 	 * @param project the project
-	 * @return the WebArtifactEdit for write
+	 * @return the <code>WebArtifactEdit</code> for write
 	 */
 	public static WebArtifactEdit getWebArtifactEditForWrite(IProject project) {
 		return WebArtifactEdit.getWebArtifactEditForWrite(project);
 	}
 	
 	/**
-	 * Returns the WebArtifactEdit from the project for read.
+	 * Returns the <code>WebArtifactEdit</code> from the project for read.
 	 * 
 	 * @param project the project
-	 * @return the WebArtifactEdit for read
+	 * @return the <code>WebArtifactEdit</code> for read
 	 */
 	public static WebArtifactEdit getWebArtifactEditForRead(IProject project) {
 		return WebArtifactEdit.getWebArtifactEditForRead(project);
 	}
 	
 	/**
+	 * Finds the ClickServlet from the given <code>WebApp</code>.
+	 * Returns <code>null</code> if this nethod couldn't find ClickServlet.
 	 * 
-	 * 
-	 * @param webApp
-	 * @return
+	 * @param webApp the <code>WebApp</code> object
+	 * @return the <code>Servlet</code> object of the ClickServlet or <code>null</code>
 	 */
 	public static Servlet findClickServlet(WebApp webApp) {
 		Servlet servlet = null;
@@ -400,6 +420,12 @@ public class ClickUtils {
 		return formatType;
 	}
 	
+	/**
+	 * Returns the status of the auto mapping in the specified project.
+	 * 
+	 * @param project the project
+	 * @return true if the auto mapping is enable; false otherwise
+	 */
 	public static boolean getAutoMapping(IProject project){
 		IStructuredModel model = getClickXMLModel(project);
 		try {
@@ -570,6 +596,12 @@ public class ClickUtils {
 		return null;
 	}
 	
+	/**
+	 * Opens the message dialog which shows the given message.
+	 * 
+	 * @param message the display message
+	 * @see MessageDialog
+	 */
 	public static void openErrorDialog(String message){
 		IWorkbenchPage page = ClickUtils.getActivePage();
 		MessageDialog.openError(page.getWorkbenchWindow().getShell(),
