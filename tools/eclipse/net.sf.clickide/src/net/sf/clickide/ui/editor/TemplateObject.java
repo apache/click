@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.sf.clickide.ClickUtils;
+
 import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
@@ -23,12 +26,53 @@ public class TemplateObject {
 	
 	private IType type;
 	
+	/**
+	 * The constructor.
+	 * 
+	 * @param type the <code>IType</code> object
+	 */
 	public TemplateObject(IType type){
 		this.type = type;
 	}
 	
 	/**
+	 * Returns the specified method.
+	 * If this object doesn't have the specified method, returns <code>null</code>.
+	 * 
+	 * @param name the method name
+	 * @return the specified method or <code>null</code>
+	 */
+	public TemplateObjectMethod getMethod(String name){
+		TemplateObjectMethod[] methods = getMethods();
+		for(int i=0;i<methods.length;i++){
+			if(methods[i].getName().equals(name)){
+				return methods[i];
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the specified property.
+	 * If this object doesn't have the specified property, returns <code>null</code>.
+	 * 
+	 * @param name the property name
+	 * @return the specified property or <code>null</code>
+	 */
+	public TemplateObjectProperty getProperty(String name){
+		TemplateObjectProperty[] properties = getProperties();
+		for(int i=0;i<properties.length;i++){
+			if(properties[i].getName().equals(name)){
+				return properties[i];
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Returns available methods in this object.
+	 * 
+	 * @return the array of methods
 	 */
 	public TemplateObjectMethod[] getMethods(){
 		try {
@@ -47,6 +91,8 @@ public class TemplateObject {
 	
 	/**
 	 * Returns available fields in this object.
+	 * 
+	 * @return the array of properties
 	 */
 	public TemplateObjectProperty[] getProperties(){
 		try {
@@ -69,6 +115,8 @@ public class TemplateObject {
 	
 	/**
 	 * Returns available methods and fields in this object.
+	 * 
+	 * @return the array of both methods and properties
 	 */
 	public TemplateObjectElement[] getChildren(){
 		TemplateObjectMethod[] methods = getMethods();
@@ -125,6 +173,23 @@ public class TemplateObject {
 			return sb.toString();
 		}
 		
+		public TemplateObject toTemplateObject(){
+			try {
+				String className = removeTypeParameter(Signature.toString(this.method.getReturnType()));
+				if(ClickUtils.isPrimitive(className)){
+					return null;
+				}
+				className = ClickUtils.resolveClassName(method.getDeclaringType(), className);
+				IJavaProject javaProject = method.getDeclaringType().getJavaProject();
+				IType type = javaProject.findType(className);
+				if(type!=null && type.exists()){
+					return new TemplateObject(type);
+				}
+			} catch(Exception ex){
+			}
+			return null;
+		}
+		
 		public String toString(){
 			return getDisplayName();
 		}
@@ -141,6 +206,10 @@ public class TemplateObject {
 		public String getName(){
 			return this.method.getElementName();
 		}
+		
+//		public int getArgumentCount(){
+//			return this.method.getParameterTypes().length;
+//		}
 		
 		public String getDisplayName(){
 			StringBuffer sb = new StringBuffer();
@@ -174,6 +243,24 @@ public class TemplateObject {
 			return sb.toString();
 		}
 		
+		public TemplateObject toTemplateObject(){
+			// TODO This implementation is same to TemplateObjectProperty.
+			try {
+				String className = removeTypeParameter(Signature.toString(this.method.getReturnType()));
+				if(ClickUtils.isPrimitive(className)){
+					return null;
+				}
+				className = ClickUtils.resolveClassName(method.getDeclaringType(), className);
+				IJavaProject javaProject = method.getDeclaringType().getJavaProject();
+				IType type = javaProject.findType(className);
+				if(type!=null && type.exists()){
+					return new TemplateObject(type);
+				}
+			} catch(Exception ex){
+			}
+			return null;
+		}
+		
 		public String toString(){
 			return getDisplayName();
 		}
@@ -182,6 +269,7 @@ public class TemplateObject {
 	public static interface TemplateObjectElement {
 		public String getName();
 		public String getDisplayName();
+		public TemplateObject toTemplateObject();
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////
@@ -197,12 +285,17 @@ public class TemplateObject {
 	 * @return the simple classname
 	 */
 	private static String getSimpleName(String name){
+		String simpleName = removeTypeParameter(name);
+		if(simpleName.indexOf('.')>=0){
+			simpleName = simpleName.substring(simpleName.lastIndexOf('.') + 1);
+		}
+		return simpleName;
+	}
+	
+	private static String removeTypeParameter(String name){
 		String simpleName = name;
 		if(simpleName.indexOf('<')>=0){
 			simpleName = simpleName.substring(0, simpleName.lastIndexOf('<'));
-		}
-		if(simpleName.indexOf('.')>=0){
-			simpleName = simpleName.substring(simpleName.lastIndexOf('.') + 1);
 		}
 		return simpleName;
 	}
@@ -228,78 +321,5 @@ public class TemplateObject {
 		}
 		return (IMethod[])list.toArray(new IMethod[list.size()]);
 	}
-
-	
-//	/**
-//	 * Creates a qualified class name from a class name which doesn't contain package name.
-//	 * 
-//	 * @param parent a full qualified class name of the class which uses this variable
-//	 * @param type a class name which doesn't contain package name
-//	 * @return full a created qualified class name
-//	 */
-//	private static String getFullQName(IType parent,String type){
-//		if(type.indexOf('.') >= 0){
-//			return type;
-//		}
-//		if(isPrimitive(type)){
-//			return type;
-//		}
-//		IJavaProject project = parent.getJavaProject();
-//		try {
-//			IType javaType = project.findType("java.lang." + type);
-//			if(javaType!=null && javaType.exists()){
-//				return javaType.getFullyQualifiedName();
-//			}
-//		} catch(Exception ex){
-//			ex.printStackTrace();
-//		}
-//		try {
-//			IType javaType = project.findType(parent.getPackageFragment().getElementName() + "." + type);
-//			if(javaType!=null && javaType.exists()){
-//				return javaType.getFullyQualifiedName();
-//			}
-//		} catch(Exception ex){
-//			ex.printStackTrace();
-//		}
-//		try {
-//			IImportDeclaration[] imports = parent.getCompilationUnit().getImports();
-//			for(int i=0;i<imports.length;i++){
-//				String importName = imports[i].getElementName();
-//				if(importName.endsWith("." + type)){
-//					return importName;
-//				}
-//				if(importName.endsWith(".*")){
-//					try {
-//						IType javaType = project.findType(importName.replaceFirst("\\*$",type));
-//						if(javaType!=null && javaType.exists()){
-//							return javaType.getFullyQualifiedName();
-//						}
-//					} catch(Exception ex){
-//					}
-//				}
-//			}
-//		} catch(Exception ex){
-//			ex.printStackTrace();
-//		}
-//		return type;
-//	}
-//	
-//	/**
-//	 * This method judges whether the type is a primitive type. 
-//	 * 
-//	 * @param type type (classname or primitive type)
-//	 * @return 
-//	 * <ul>
-//	 *   <li>true - primitive type</li>
-//	 *   <li>false - not primitive type</li>
-//	 * </ul>
-//	 */
-//	private static boolean isPrimitive(String type){
-//		if(type.equals("int") || type.equals("long") || type.equals("double") || type.equals("float") || 
-//				type.equals("char") || type.equals("boolean") || type.equals("byte")){
-//			return true;
-//		}
-//		return false;
-//	}
 	
 }

@@ -7,6 +7,7 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectElement;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectMethod;
+import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectProperty;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IType;
@@ -31,6 +32,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	private final Image IMAGE_METHOD = ClickPlugin.getImageDescriptor("/icons/method.gif").createImage();
 	private final Image IMAGE_FIELD = ClickPlugin.getImageDescriptor("/icons/field.gif").createImage();
 	
+	/**
+	 * Returns the word under the caret position.
+	 */
 	private String getLastWord(ITextViewer textViewer, int documentPosition){
 		String source = textViewer.getDocument().get();
 		StringBuffer sb = new StringBuffer();
@@ -48,6 +52,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		return sb.toString();
 	}
 	
+	/**
+	 * Appends the completion proposal to the <code>result</code>.
+	 */
 	private void registerProposal(List result, int offset, 
 			String matchString, String replaceString, String displayString, Image image){
 		int position = replaceString.length();
@@ -79,23 +86,11 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		IType format = null;
 		
 		if(this.file != null){
-			format = ClickUtils.getFormat(file.getProject());
-			
 			// for the format object
+			format = ClickUtils.getFormat(file.getProject());
 			if(matchString.startsWith("$format.")){
 				if(format != null){
-					TemplateObject obj = new TemplateObject(format);
-					TemplateObjectElement[] children = obj.getChildren();
-					for(int i=0;i<children.length;i++){
-						if(children[i] instanceof TemplateObjectMethod){
-							registerProposal(result, offset, matchString, 
-									"$format." + children[i].getName()+"()", children[i].getDisplayName(), IMAGE_METHOD);
-						} else {
-							registerProposal(result, offset, matchString, 
-									"$format." + children[i].getName(), children[i].getDisplayName(), IMAGE_FIELD);
-						}
-					}
-					return (ICompletionProposal[])result.toArray(new ICompletionProposal[result.size()]);
+					return processFormat(format, result, matchString, offset);
 				}
 			}
 		}
@@ -123,6 +118,72 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	}
 	
 	/**
+	 * Returns completion proposals for the format object.
+	 */
+	private ICompletionProposal[] processFormat(IType type, List result, String matchString, int offset){
+		String prefix = matchString;
+		int index = matchString.lastIndexOf('.');
+		if(index >= 0){
+			prefix = prefix.substring(0, index);
+		}
+		
+		TemplateObject obj = new TemplateObject(type);
+		obj = evaluate(obj, matchString);
+		if(obj != null){
+			TemplateObjectElement[] children = obj.getChildren();
+			for(int i=0;i<children.length;i++){
+				if(children[i] instanceof TemplateObjectMethod){
+					registerProposal(result, offset, matchString, 
+							prefix + "." + children[i].getName()+"()", children[i].getDisplayName(), IMAGE_METHOD);
+				} else {
+					registerProposal(result, offset, matchString, 
+							prefix + "." + children[i].getName(), children[i].getDisplayName(), IMAGE_FIELD);
+				}
+			}
+		}
+		return (ICompletionProposal[])result.toArray(new ICompletionProposal[result.size()]);
+	}
+	
+	/**
+	 * Evaluates the given expression and returns the return type.
+	 * 
+	 * @param obj the <code>TemplateObject</code> of the top level object
+	 * @param expression the Velocity expression
+	 * @return the return type of the given expression or <code>null</code>
+	 */
+	private TemplateObject evaluate(TemplateObject obj, String expression){
+		if(expression.endsWith(".")){
+			expression += "_";
+		}
+		String[] dim = expression.split("\\.");
+		for(int i=0; i < dim.length && obj != null; i++){
+			if(i == 0 || i == dim.length-1){
+				continue;
+			}
+			if(dim[i].endsWith(")")){
+				// method
+				String[] methodInfo = dim[i].split("\\(");
+				if(methodInfo.length > 0){
+					TemplateObjectMethod method = obj.getMethod(methodInfo[0]);
+					if(method != null){
+						obj = method.toTemplateObject();
+						continue;
+					}
+				}
+			} else {
+				// property
+				TemplateObjectProperty property = obj.getProperty(dim[i]);
+				if(property != null){
+					obj = property.toTemplateObject();
+					continue;
+				}
+			}
+			obj = null;
+		}
+		return obj;
+	}
+	
+	/**
 	 * Sets the editing filr in the editor.
 	 * 
 	 * @param file the editing file
@@ -130,7 +191,10 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	public void setFile(IFile file){
 		this.file = file;
 	}
-
+	
+	/**
+	 * Releases internal resources such as icons.
+	 */
 	public void release() {
 		IMAGE_DIRECTIVE.dispose();
 		IMAGE_CLASS.dispose();
