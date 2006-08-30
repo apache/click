@@ -299,30 +299,4 @@ public class FormProperties extends BorderPage {
         javaScriptValidateCheckbox.setChecked(options.javaScriptValidate);
     }
 
-    private Object getSessionObject(Class aClass) {
-        if (aClass == null) {
-            throw new IllegalArgumentException("Null class parameter.");
-        }
-        Object object = getContext().getSessionAttribute(aClass.getName());
-        if (object == null) {
-            try {
-                object = aClass.newInstance();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return object;
-    }
-
-    private void setSessionObject(Object object) {
-        if (object != null) {
-            getContext().setSessionAttribute(object.getClass().getName(), object);
-        }
-    }
-
-    public void removeSessionObject(Class aClass) {
-        if (getContext().hasSession() && aClass != null) {
-            getContext().getSession().removeAttribute(aClass.getName());
-        }
-    }
 }

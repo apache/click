@@ -1,5 +1,6 @@
 package net.sf.click.examples.page;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a form containing all the Standard Click Controls.
@@ -28,10 +30,17 @@ import net.sf.click.control.TextField;
  * @author Malcolm Edgar
  */
 public class StandardControlsForm extends BorderPage {
+    
+    /** Form options holder. */
+    public static class Options implements Serializable {
+        static final long serialVersionUID = 1L;
+        boolean allFieldsRequired = false;
+        boolean javaScriptValidate = false;
+    }
 
-    public  Form form = new Form();
+    public Form form = new Form();
+    public Form optionsForm = new Form(); 
 
-    private FieldSet fieldSet = new FieldSet("fieldSet");
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
@@ -40,6 +49,7 @@ public class StandardControlsForm extends BorderPage {
         form.setErrorsPosition(Form.POSITION_TOP);
 
         // Controls FieldSet
+        FieldSet fieldSet = new FieldSet("fieldSet");
         form.add(fieldSet);
 
         fieldSet.add(new Checkbox("checkbox"));
@@ -66,12 +76,15 @@ public class StandardControlsForm extends BorderPage {
         form.add(imageSubmit);
         form.add(new Reset("reset"));
         form.add(new Submit("submit"));
-
-        // Settings FieldSet
-        FieldSet settingsFieldSet = new FieldSet("Settings");
-        settingsFieldSet.add(allFieldsRequired);
-        settingsFieldSet.add(jsValidate);
-        form.add(settingsFieldSet);
+        
+        // Settings Form
+        fieldSet = new FieldSet("options", "Form Options");
+        allFieldsRequired.setAttribute("onChange", "optionsForm.submit();");
+        fieldSet.add(allFieldsRequired);
+        jsValidate.setAttribute("onChange", "optionsForm.submit();");
+        fieldSet.add(jsValidate);
+        optionsForm.add(fieldSet);
+        optionsForm.setListener(this, "onOptionsSubmit");
     }
 
     /**
@@ -81,24 +94,30 @@ public class StandardControlsForm extends BorderPage {
         List customers = getCustomerService().getCustomersSortedByName();
         select.add(new Option("[Select]"));
         select.addAll(customers, "id", "name");
-
-        applySettings();
+        applyOptions();
     }
-
-    /**
-     * Apply the settings to the form and its fields before it is processed.
-     */
-    private void applySettings() {
-        allFieldsRequired.setContext(getContext());
-        allFieldsRequired.onProcess();
-        for (Iterator i = fieldSet.getFieldList().iterator(); i.hasNext();) {
+    
+    public boolean onOptionsSubmit() {
+        Options options = new Options();
+        options.allFieldsRequired = allFieldsRequired.isChecked();
+        options.javaScriptValidate = jsValidate.isChecked();
+        setSessionObject(options);
+        applyOptions();
+        return true;
+    }
+    
+    private void applyOptions() {
+        Options options = (Options) getSessionObject(Options.class);
+        
+        form.setJavaScriptValidation(options.javaScriptValidate);
+        List formFiels = ClickUtils.getFormFields(form);
+        for (Iterator i = formFiels.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
-            field.setRequired(allFieldsRequired.isChecked());
+            field.setRequired(options.allFieldsRequired);
         }
-
-        jsValidate.setContext(getContext());
-        jsValidate.onProcess();
-        form.setJavaScriptValidation(jsValidate.isChecked());
+        
+        allFieldsRequired.setChecked(options.allFieldsRequired);
+        jsValidate.setChecked(options.javaScriptValidate);
     }
 
 }
