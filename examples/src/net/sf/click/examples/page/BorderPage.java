@@ -47,5 +47,33 @@ public class BorderPage extends SpringPage {
     public String getTemplate() {
         return "/border-template.htm";
     }
+    
+
+    protected Object getSessionObject(Class aClass) {
+        if (aClass == null) {
+            throw new IllegalArgumentException("Null class parameter.");
+        }
+        Object object = getContext().getSessionAttribute(aClass.getName());
+        if (object == null) {
+            try {
+                object = aClass.newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return object;
+    }
+
+    protected void setSessionObject(Object object) {
+        if (object != null) {
+            getContext().setSessionAttribute(object.getClass().getName(), object);
+        }
+    }
+
+    protected void removeSessionObject(Class aClass) {
+        if (getContext().hasSession() && aClass != null) {
+            getContext().getSession().removeAttribute(aClass.getName());
+        }
+    }
 
 }

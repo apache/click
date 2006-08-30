@@ -1,5 +1,6 @@
 package net.sf.click.examples.page;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import net.sf.click.extras.control.NumberField;
 import net.sf.click.extras.control.PageSubmit;
 import net.sf.click.extras.control.RegexField;
 import net.sf.click.extras.control.TelephoneField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a form containing all the Click Extras Controls.
@@ -27,8 +29,16 @@ import net.sf.click.extras.control.TelephoneField;
  * @author Malcolm Edgar
  */
 public class ExtraControlsForm extends BorderPage {
-
+    
+    /** Form options holder. */
+    public static class Options implements Serializable {
+        static final long serialVersionUID = 1L;
+        boolean allFieldsRequired = false;
+        boolean javaScriptValidate = false;
+    }
+    
     public Form form = new Form();
+    public Form optionsForm = new Form();
 
     private CheckList checkList = new CheckList("checkList");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
@@ -53,11 +63,14 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new Submit("submit"));
         form.add(new PageSubmit("cancel", HomePage.class));
 
-        // Settings FieldSet
-        FieldSet settingsFieldSet = new FieldSet("Settings");
-        settingsFieldSet.add(allFieldsRequired);
-        settingsFieldSet.add(jsValidate);
-        form.add(settingsFieldSet);
+        // Settings Form
+        FieldSet fieldSet = new FieldSet("options", "Form Options");
+        allFieldsRequired.setAttribute("onChange", "optionsForm.submit();");
+        fieldSet.add(allFieldsRequired);
+        jsValidate.setAttribute("onChange", "optionsForm.submit();");
+        fieldSet.add(jsValidate);
+        optionsForm.add(fieldSet);
+        optionsForm.setListener(this, "onOptionsSubmit");
     }
 
     /**
@@ -66,24 +79,30 @@ public class ExtraControlsForm extends BorderPage {
     public void onInit() {
         List customers = getCustomerService().getCustomersSortedByName();
         checkList.addAll(customers, "id", "name");
-
-        applySettings();
+        applyOptions();
     }
-
-    /**
-     * Apply the settings to the form and its fields before it is processed.
-     */
-    private void applySettings() {
-        allFieldsRequired.setContext(getContext());
-        allFieldsRequired.onProcess();
-        for (Iterator i = form.getFieldList().iterator(); i.hasNext();) {
+    
+    public boolean onOptionsSubmit() {
+        Options options = new Options();
+        options.allFieldsRequired = allFieldsRequired.isChecked();
+        options.javaScriptValidate = jsValidate.isChecked();
+        setSessionObject(options);
+        applyOptions();
+        return true;
+    }
+    
+    private void applyOptions() {
+        Options options = (Options) getSessionObject(Options.class);
+        
+        form.setJavaScriptValidation(options.javaScriptValidate);
+        List formFiels = ClickUtils.getFormFields(form);
+        for (Iterator i = formFiels.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
-            field.setRequired(allFieldsRequired.isChecked());
+            field.setRequired(options.allFieldsRequired);
         }
-
-        jsValidate.setContext(getContext());
-        jsValidate.onProcess();
-        form.setJavaScriptValidation(jsValidate.isChecked());
+        
+        allFieldsRequired.setChecked(options.allFieldsRequired);
+        jsValidate.setChecked(options.javaScriptValidate);
     }
 
 }
