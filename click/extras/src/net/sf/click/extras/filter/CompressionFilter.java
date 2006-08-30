@@ -16,21 +16,30 @@
 package net.sf.click.extras.filter;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.util.ClickLogger;
+import net.sf.click.util.ClickUtils;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
  * content. The content will only be compressed if it is bigger than a
- * configurable threshold. The default threshold is 1024 bytes.
+ * configurable threshold. The default threshold is 2048 bytes.
  * <p/>
  * To configure your application to GZIP compress HTML content include the
  * click-extras.jar in you application and add the following filter elements to
@@ -50,15 +59,24 @@ import javax.servlet.http.HttpServletResponse;
  *  &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
  * .. </pre>
  *
+ * This filter will automaitically set the configured click.xml charset as the
+ * requests character encoding.
+ * <p/>
  * This package is derived from the Jakarta
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>
  * examples compression filter and is distributed in Click Extras for convenience.
  *
  * @author Amy Roh
  * @author Dmitri Valdin
- * @version Revision: 1.2, Date: 2004/03/18 16:40:28
+ * @author Malcolm Edgar
  */
 public class CompressionFilter implements Filter {
+
+    /**
+     * The default Click configuration filename: &nbsp;
+     * "<tt>/WEB-INF/click.xml</tt>".
+     */
+    static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
     /**
      * The filter configuration object we are associated with.  If this value
@@ -66,11 +84,14 @@ public class CompressionFilter implements Filter {
      */
     private FilterConfig config = null;
 
-    /** Minimal reasonable threshold, 1024 bytes. */
-    protected int minThreshold = 1024;
+    /** Minimal reasonable threshold, 2048 bytes. */
+    protected int minThreshold = 2048;
 
-    /** The threshold number to compress, default value is 1024 bytes. */
+    /** The threshold number to compress, default value is 2048 bytes. */
     protected int compressionThreshold;
+
+    /** The configured click application request encoding character set. */
+    protected String charset;
 
     /**
      * Place this filter into service.
@@ -80,6 +101,7 @@ public class CompressionFilter implements Filter {
     public void init(FilterConfig filterConfig) {
 
         config = filterConfig;
+
         if (filterConfig != null) {
 
             String str = filterConfig.getInitParameter("compressionThreshold");
@@ -97,6 +119,8 @@ public class CompressionFilter implements Filter {
         } else {
             compressionThreshold = minThreshold;
         }
+
+        charset = getCharset(filterConfig.getServletContext());
     }
 
     /**
@@ -137,6 +161,18 @@ public class CompressionFilter implements Filter {
         }
 
         boolean supportCompression = false;
+
+        if (charset != null) {
+            try {
+                request.setCharacterEncoding(charset);
+
+            } catch (UnsupportedEncodingException ex) {
+                String msg =
+                    "The character encoding " + charset + " is invalid.";
+                ClickLogger.getInstance().warn(msg, ex);
+            }
+        }
+
         if (request instanceof HttpServletRequest) {
 
             // Are we allowed to compress ?
@@ -148,6 +184,7 @@ public class CompressionFilter implements Filter {
 
             Enumeration e =
                 ((HttpServletRequest) request).getHeaders("Accept-Encoding");
+
             while (e.hasMoreElements()) {
                 String name = (String) e.nextElement();
                 if (name.indexOf("gzip") != -1) {
@@ -158,7 +195,7 @@ public class CompressionFilter implements Filter {
 
         if (!supportCompression) {
             chain.doFilter(request, response);
-            return;
+
         } else {
             if (response instanceof HttpServletResponse) {
 
@@ -173,7 +210,6 @@ public class CompressionFilter implements Filter {
                 } finally {
                     wrappedResponse.finishResponse();
                 }
-                return;
             }
         }
     }
@@ -195,6 +231,44 @@ public class CompressionFilter implements Filter {
      */
     public FilterConfig getFilterConfig() {
         return config;
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the configured click application character set.
+     *
+     * @param servletContext the servlet context
+     * @return the configured click application character set
+     */
+    protected String getCharset(ServletContext servletContext) {
+        InputStream inputStream =
+            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+
+        if (inputStream == null) {
+            String msg =
+                "could not find click app configuration file: "
+                + DEFAULT_APP_CONFIG;
+            throw new RuntimeException(msg);
+        }
+
+        try {
+            Document document = ClickUtils.buildDocument(inputStream);
+
+            Element rootElm = document.getDocumentElement();
+
+            String charset = rootElm.getAttribute("charset");
+
+            if (charset != null && charset.length() > 0) {
+                return charset;
+
+            } else {
+                return null;
+            }
+
+        } finally {
+            ClickUtils.close(inputStream);
+        }
     }
 
 }
