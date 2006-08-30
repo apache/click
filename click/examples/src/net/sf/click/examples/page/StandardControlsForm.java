@@ -30,7 +30,7 @@ import net.sf.click.util.ClickUtils;
  * @author Malcolm Edgar
  */
 public class StandardControlsForm extends BorderPage {
-    
+
     /** Form options holder. */
     public static class Options implements Serializable {
         static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class StandardControlsForm extends BorderPage {
     }
 
     public Form form = new Form();
-    public Form optionsForm = new Form(); 
+    public Form optionsForm = new Form();
 
     private Select select = new Select("select");
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
@@ -76,7 +76,7 @@ public class StandardControlsForm extends BorderPage {
         form.add(imageSubmit);
         form.add(new Reset("reset"));
         form.add(new Submit("submit"));
-        
+
         // Settings Form
         fieldSet = new FieldSet("options", "Form Options");
         allFieldsRequired.setAttribute("onChange", "optionsForm.submit();");
@@ -96,7 +96,7 @@ public class StandardControlsForm extends BorderPage {
         select.addAll(customers, "id", "name");
         applyOptions();
     }
-    
+
     public boolean onOptionsSubmit() {
         Options options = new Options();
         options.allFieldsRequired = allFieldsRequired.isChecked();
@@ -105,17 +105,17 @@ public class StandardControlsForm extends BorderPage {
         applyOptions();
         return true;
     }
-    
+
     private void applyOptions() {
         Options options = (Options) getSessionObject(Options.class);
-        
+
         form.setJavaScriptValidation(options.javaScriptValidate);
         List formFiels = ClickUtils.getFormFields(form);
         for (Iterator i = formFiels.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             field.setRequired(options.allFieldsRequired);
         }
-        
+
         allFieldsRequired.setChecked(options.allFieldsRequired);
         jsValidate.setChecked(options.javaScriptValidate);
     }
