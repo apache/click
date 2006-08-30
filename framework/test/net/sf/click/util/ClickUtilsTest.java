@@ -272,6 +272,11 @@ public class ClickUtilsTest extends TestCase {
         assertEquals("&gt;", ClickUtils.escapeHtml(">"));
         assertEquals(" ", ClickUtils.escapeHtml(" "));
         assertEquals("&agrave;", ClickUtils.escapeHtml("à"));
+        
+        assertFalse(ClickUtils.requiresEscape((char) 0));
+        assertFalse(ClickUtils.requiresEscape((char) 127));
+        assertTrue(ClickUtils.requiresEscape((char) 128));
+        assertTrue(ClickUtils.requiresEscape((char) 999999));
     }
     
 }
