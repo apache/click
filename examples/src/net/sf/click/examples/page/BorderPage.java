@@ -47,7 +47,7 @@ public class BorderPage extends SpringPage {
     public String getTemplate() {
         return "/border-template.htm";
     }
-    
+
 
     protected Object getSessionObject(Class aClass) {
         if (aClass == null) {

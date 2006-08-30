@@ -29,14 +29,14 @@ import net.sf.click.util.ClickUtils;
  * @author Malcolm Edgar
  */
 public class ExtraControlsForm extends BorderPage {
-    
+
     /** Form options holder. */
     public static class Options implements Serializable {
         static final long serialVersionUID = 1L;
         boolean allFieldsRequired = false;
         boolean javaScriptValidate = false;
     }
-    
+
     public Form form = new Form();
     public Form optionsForm = new Form();
 
@@ -81,7 +81,7 @@ public class ExtraControlsForm extends BorderPage {
         checkList.addAll(customers, "id", "name");
         applyOptions();
     }
-    
+
     public boolean onOptionsSubmit() {
         Options options = new Options();
         options.allFieldsRequired = allFieldsRequired.isChecked();
@@ -90,17 +90,17 @@ public class ExtraControlsForm extends BorderPage {
         applyOptions();
         return true;
     }
-    
+
     private void applyOptions() {
         Options options = (Options) getSessionObject(Options.class);
-        
+
         form.setJavaScriptValidation(options.javaScriptValidate);
         List formFiels = ClickUtils.getFormFields(form);
         for (Iterator i = formFiels.iterator(); i.hasNext();) {
             Field field = (Field) i.next();
             field.setRequired(options.allFieldsRequired);
         }
-        
+
         allFieldsRequired.setChecked(options.allFieldsRequired);
         jsValidate.setChecked(options.javaScriptValidate);
     }
