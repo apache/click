@@ -1251,7 +1251,13 @@ public class ClickUtils {
 
         } else {
             int index = aChar;
-            return (HTML_ENTITIES[index] != null);
+
+            if (index < HTML_ENTITIES.length - 1) {
+                return HTML_ENTITIES[index] != null;
+
+            } else {
+                return false;
+            }
         }
     }
 
@@ -1264,8 +1270,13 @@ public class ClickUtils {
     static String escapeChar(char aChar) {
         int index = aChar;
 
-        if (HTML_ENTITIES[index] != null) {
-            return HTML_ENTITIES[index];
+        if (index < HTML_ENTITIES.length - 1) {
+            if (HTML_ENTITIES[index] != null) {
+                return HTML_ENTITIES[index];
+
+            } else {
+                return "&#" + index + ";";
+            }
 
         } else {
             return "&#" + index + ";";
