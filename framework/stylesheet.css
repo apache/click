@@ -10,6 +10,10 @@ body
   font-size: 12px;
 }
 
+li.spaced { 
+   margin-bottom: 0.75em;	
+}
+
 a:visited { color: blue; }
 
 .red { color: red; }
