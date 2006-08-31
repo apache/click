@@ -1247,7 +1247,7 @@ public class ClickUtils {
      */
     static boolean requiresEscape(char aChar) {
         int index = aChar;
-        
+
         if (index < HTML_ENTITIES.length - 1) {
             return HTML_ENTITIES[index] != null;
 
@@ -1263,14 +1263,14 @@ public class ClickUtils {
      * @return the HTML escaped string for the given character value
      */
     static String escapeChar(char aChar) {
-    	int index = aChar;
+        int index = aChar;
 
-    	if (index < HTML_ENTITIES.length - 1 && HTML_ENTITIES[index] != null) {
-    		return HTML_ENTITIES[index];
+        if (index < HTML_ENTITIES.length - 1 && HTML_ENTITIES[index] != null) {
+            return HTML_ENTITIES[index];
 
-    	} else {
-    		return String.valueOf(aChar);
-    	}
+        } else {
+            return String.valueOf(aChar);
+        }
     }
 
     // -------------------------------------------------------- Private Methods
