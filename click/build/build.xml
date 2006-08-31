@@ -424,6 +424,10 @@
          <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
+      <copy file="documentation/images/post-sequence-diagram.png"
+          todir="documentation/docs/click-api/net/sf/click/"/>
+      <copy file="documentation/images/control-post-sequence-diagram.png"
+            todir="documentation/docs/click-api/net/sf/click/"/>
       <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/form-table.png"

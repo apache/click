@@ -31,33 +31,85 @@ import org.apache.commons.lang.StringUtils;
  * The Page class plays a central role in Click applications defining how the
  * application's pages are processed and rendered. All application pages
  * must extend the base Page class, and provide a no arguments constructor.
- * <p/>
- * The default Page execution path for a GET request is:<blockquote><ol>
- * <li>Construct a new Page object.</li>
- * <li>Set {@link #context} property.</li>
- * <li>Set {@link #format} property.</li>
- * <li>Set {@link #headers} property.</li>
- * <li>Set {@link #path} property.</li>
- * <li>Call {@link #onInit()} to initialize the page.</li>
- * <li>Call {@link #onSecurityCheck()} to check the users permissions.</li>
- * <li>Process any {@link #controls} calling their {@link Control#onProcess()} method.</li>
- * <li>Call {@link #onGet()} for any additional processing.</li>
- * <li>Call {@link #onRender()} for any pre render processing.</li>
- * <li>Render the page merging the {@link #model} with the
- * Velocity template defined by the {@link #getTemplate()}.</li>
- * <li>Call {@link #onDestroy()} to clean up any resources.</li>
- * </ol></blockquote>
+ *
+ * <h4>Page Execution Sequence</h4>
+ *
+ * The default Page execution path for a GET request is:
+ * <ol>
+ * <li class="spaced">
+ *   no-args constructor invoked to create a new Page instance.
+ *   At this point no dependencies have been injected into the Page, and any
+ *   request information is not available. You should put any "static"
+ *   page initialization code, which doesn't depend upon request information,
+ *   in the constructor. This will enable subclasses to have this code
+ *   automatically initialized when they are created.
+ * </li>
+ * <li class="spaced">
+ *   {@link #context} property is set
+ * </li>
+ * <li class="spaced">
+ *   {@link #format} property is set
+ * </li>
+ * <li class="spaced">
+ *   {@link #headers} property is set
+ * </li>
+ * <li class="spaced">
+ *   {@link #path} property is set
+ * </li>
+ * <li class="spaced">
+ *   {@link #onInit()} method called to complete the initalization of the page
+ *   after all the dependencies have been set. This is where you should put
+ *   any "dynamic" page initialization code which depends upon the request or any
+ *   other dependencies.
+ * </li>
+ * <li class="spaced">
+ *   {@link #onSecurityCheck()} method called to check whether the page should
+ *   be processed. This method should return true if the Page should continue
+ *   to be processed, or false otherwise.
+ * </li>
+ * <li class="spaced">
+ *   ClickServlet processes all the page {@link #controls}
+ *   calling their {@link Control#onProcess()} method. If any of these
+ *   controls return false, continued control and page processing will be aborted.
+ * </li>
+ * <li class="spaced">
+ *   {@link #onGet()} method called for any additional GET related processing.
+ * </li>
+ * <li class="spaced">
+ *   {@link #onRender()} method called for any pre-render processing. This
+ *   method is often use to perform database queries to load information for
+ *   rendering tables.
+ * </li>
+ * <li class="spaced">
+ *   ClickServlet renders the page merging the {@link #model} with the
+ *   Velocity template defined by the {@link #getTemplate()} property.
+ * </li>
+ * <li class="spaced">
+ *   {@link #onDestroy()} method called to clean up any resources. This method
+ *   is guaranteed to be called, even if an exception occurs. You can use
+ *   this method to close resources like database connections or Hibernate
+ *   sessions.
+ * </li>
+ * </ol>
+ *
  * For POST requests the default execution path is identical, except the
- * {@link #onPost()} method is called instead of {@link #onGet()}.
+ * {@link #onPost()} method is called instead of {@link #onGet()}. The POST 
+ * request page execution sequence is illustrated below:
  * <p/>
- * When a Velocity template is rendered the ClickServlet uses Pages:<ul>
- * <li>the {@link #getTemplate()} to find the Velocity
- * template.</li>
- * <li>the {@link #model} to populate the Velocity Context</li>
- * <li>the {@link #format} to add to the Velocity Context</li>
- * <li>the {@link #getContentType()} to set as the HttpServletResponse content type</li>
- * <li>the {@link #headers} to set as the HttpServletResponse headers</li>
+ * <img src="post-sequence-diagram.png"/>
+ *
+ * <h4>Rendering Pages</h4>
+ *
+ * When a Velocity template is rendered the ClickServlet uses Pages:
+ * <ul>
+ * <li>{@link #getTemplate()} to find the Velocity template.</li>
+ * <li>{@link #model} to populate the Velocity Context</li>
+ * <li>{@link #format} to add to the Velocity Context</li>
+ * <li>{@link #getContentType()} to set as the HttpServletResponse content type</li>
+ * <li>{@link #headers} to set as the HttpServletResponse headers</li>
  * </ul>
+ *
+ * These Page properties are also used when rendering JSP pages.
  *
  * @author Malcolm Edgar
  */
