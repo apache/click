@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -107,7 +108,27 @@ public class CheckList extends Field {
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
-
+    
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the full path name to the checkbox</li>
+     * <li>2 - is the Field required status</li>
+     * <li>3 - is the localized error message for required validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_CHECKLIST_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateCheckList(\n"
+        + "         {1} ,{2}, [''{3}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";    
+    
     // ----------------------------------------------------- Instance Variables
 
     /** The height if null not scrollable. */
@@ -582,6 +603,28 @@ public class CheckList extends Field {
     public Class getValueClass() {
         return List.class;
     }
+    
+    /**
+     * Return the CheckList JavaScript client side validation function.
+     *
+     * @return the field JavaScript client side validation function
+     */
+	public String getValidationJavaScript() {
+        Object[] args = new Object[4];
+        args[0] = getId();
+        args[1] = "document." + getForm().getName() + "." + getName();
+        args[2] = String.valueOf(isRequired());
+        args[3] = getMessage("field-required-error", getErrorLabel());
+
+//        if (!getRadioList().isEmpty()) {
+//            Radio radio = (Radio) getRadioList().get(0);
+//            args[4] = radio.getId();
+//        } else {
+//            args[4] = "";
+//        }
+
+        return MessageFormat.format(VALIDATE_CHECKLIST_FUNCTION, args);
+	}
 
     // --------------------------------------------------------- Public Methods
 
