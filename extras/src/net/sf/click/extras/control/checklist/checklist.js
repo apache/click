@@ -44,4 +44,16 @@ function initChecklist(checklistid) {
 			}
 		}
 	}
-}   
+}
+
+function validateCheckList(pathName, required, msgs){
+	if(required){
+		for (i = 0; i < pathName.length; i++) {
+			if (pathName[i].checked) {
+				return null;
+			}
+		}
+		return msgs[0];
+	}
+}
+
