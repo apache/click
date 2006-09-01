@@ -15,12 +15,19 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.Control;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -136,6 +143,39 @@ public class CreditCardField extends TextField {
         CARD_OPTIONS.add(new Option(DISCOVER, "Discover"));
     }
 
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the card type id</li>
+     * <li>2 - is the Field required status</li>
+     * <li>3 - is the minimum length</li>
+     * <li>4 - is the maximum length</li>
+     * <li>5 - is the localized error message for required validation</li>
+     * <li>6 - is the localized error message for minimum length validation</li>
+     * <li>7 - is the localized error message for maximum length validation</li>
+     * <li>8 - is the localized error message for format validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_CREDITCARD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateCreditCardField(\n"
+        + "         ''{0}'', ''{1}'', {2}, {3}, {4}, [''{5}'',''{6}'',''{7}'', ''{8}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
+    /**
+     * The CreditCardField.js imports statement.
+     */
+    public static final String CREDITCARD_IMPORTS =
+        "<script type=\"text/javascript\" src=\"$/click/CreditCardField.js\"></script>\n";
+    
     // ----------------------------------------------------- Instance Variables
 
     /**
@@ -240,6 +280,17 @@ public class CreditCardField extends TextField {
         }
     }
 
+    /**
+     * Return the HTML head import statements for the CreditCardField.js.
+     *
+     * @return the HTML head import statements for the CreditCardField.js
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(CREDITCARD_IMPORTS, "$", path);
+    }
+
     // -------------------------------------------------------- Public Methods
 
     /**
@@ -272,6 +323,32 @@ public class CreditCardField extends TextField {
 
         return buffer.toString();
     }
+    
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[9];
+        args[0] = getId();
+        args[1] = getForm().getId() + "_" + SELECT_NAME;
+        args[2] = String.valueOf(isRequired());
+        args[3] = String.valueOf(getMinLength());
+        args[4] = String.valueOf(getMaxLength());
+        args[5] = getMessage("field-required-error", getErrorLabel());
+        args[6] = getMessage("field-minlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+        args[7] = getMessage("field-maxlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+        args[8] = getMessage("creditcard-number-error", getErrorLabel());
+        
+        return MessageFormat.format(VALIDATE_CREDITCARD_FUNCTION, args);
+    }    
 
     /**
      * Validate the CreditCardField request submission, using the card type to
@@ -358,6 +435,20 @@ public class CreditCardField extends TextField {
                 setErrorMessage("creditcard-number-error");
             }
         }
+    }
+    
+    /**
+     * Deploy the <tt>CreditCardField.js</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/CreditCardField.js",
+                              "click");
     }
 
 }

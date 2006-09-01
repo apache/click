@@ -10,6 +10,7 @@
     <control classname="net.sf.click.extras.control.ColorPicker"/>
     <control classname="net.sf.click.extras.control.IntegerField"/>
     <control classname="net.sf.click.extras.control.RegexField"/>
+    <control classname="net.sf.click.extras.control.CreditCardField"/>
   </controls>
 
 </click-app>
