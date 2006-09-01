@@ -15,9 +15,16 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.Control;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Regex Field control: &nbsp; &lt;input type='text'&gt;.
@@ -62,6 +69,39 @@ import net.sf.click.control.TextField;
 public class RegexField extends TextField {
 
     private static final long serialVersionUID = 1L;
+
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the minimum length</li>
+     * <li>3 - is the maximum length</li>
+     * <li>4 - is the field pattern (regular expression)</li>
+     * <li>5 - is the localized error message for required validation</li>
+     * <li>6 - is the localized error message for minimum length validation</li>
+     * <li>7 - is the localized error message for maximum length validation</li>
+     * <li>8 - is the localized error message for pattern validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_REGEXFIELD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateRegexField(\n"
+        + "         ''{0}'',{1}, {2}, {3}, ''{4}'', [''{5}'',''{6}'',''{7}'', ''{8}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
+    /**
+     * The RegexField.js imports statement.
+     */
+    public static final String REGEXFIELD_IMPORTS =
+        "<script type=\"text/javascript\" src=\"$/click/RegexField.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -133,6 +173,23 @@ public class RegexField extends TextField {
         super();
     }
 
+    // ------------------------------------------------------ Private Methods
+
+    /**
+     * Escape the JavaScript string.
+     * 
+     * @param message the raw message
+     * @return the escaped message
+     */
+    private String escapeMessage(String message){
+        if(message==null){
+            return "";
+        }
+        message = message.replaceAll("\\\\", "\\\\\\\\");
+        message = message.replaceAll("'", "\\\\'");
+        return message;
+    }
+
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -155,6 +212,44 @@ public class RegexField extends TextField {
      */
     public String getPattern() {
         return pattern;
+    }
+
+    /**
+     * Return the HTML head import statements for the RegexField.js.
+     *
+     * @return the HTML head import statements for the RegexField.js
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(REGEXFIELD_IMPORTS, "$", path);
+    }
+    
+
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[9];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = String.valueOf(getMinLength());
+        args[3] = String.valueOf(getMaxLength());
+        args[4] = escapeMessage(getPattern());
+        args[5] = getMessage("field-required-error", getErrorLabel());
+        args[6] = getMessage("field-minlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+        args[7] = getMessage("field-maxlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+        args[8] = escapeMessage(getMessage("field-pattern-error",
+                new Object[]{getErrorLabel(), getPattern()}));
+        return MessageFormat.format(VALIDATE_REGEXFIELD_FUNCTION, args);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -195,6 +290,20 @@ public class RegexField extends TextField {
                 setErrorMessage("field-pattern-error", pattern);
             }
         }
+    }
+
+    /**
+     * Deploy the <tt>RegexField.js</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/RegexField.js",
+                              "click");
     }
 
 }

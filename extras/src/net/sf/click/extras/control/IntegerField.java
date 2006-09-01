@@ -15,7 +15,16 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
+
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.Control;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
+
 
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
@@ -54,6 +63,37 @@ import net.sf.click.control.TextField;
 public class IntegerField extends TextField {
 
     private static final long serialVersionUID = 1L;
+
+    // ----------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the minimum value</li>
+     * <li>3 - is the maximum value</li>
+     * <li>4 - is the localized error message for required validation</li>
+     * <li>5 - is the localized error message for minimum value validation</li>
+     * <li>6 - is the localized error message for maximum value validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_NUMERICFIELD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateNumericField(\n"
+        + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
+    /**
+     * The IntegerField.js imports statement.
+     */
+    public static final String NUMERICFIELD_IMPORTS =
+        "<script type=\"text/javascript\" src=\"$/click/IntegerField.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -243,9 +283,58 @@ public class IntegerField extends TextField {
             setValue(null);
         }
     }
+    
+    /**
+     * Return the HTML head import statements for the IntegerField.js.
+     *
+     * @return the HTML head import statements for the IntegerField.js
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(NUMERICFIELD_IMPORTS, "$", path);
+    }
+    
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     * 
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[7];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = String.valueOf(getMinValue());
+        args[3] = String.valueOf(getMaxValue());
+        args[4] = getMessage("field-required-error", getErrorLabel());
+        args[5] = getMessage("number-minvalue-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
+        args[6] = getMessage("number-maxvalue-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
+        
+        return MessageFormat.format(VALIDATE_NUMERICFIELD_FUNCTION, args);
+    }
 
     // --------------------------------------------------------- Public Methods
 
+    /**
+     * Deploy the <tt>IntegerField.js</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/IntegerField.js",
+                              "click");
+    }
+    
     /**
      * Validate the IntegerField request submission.
      * <p/>

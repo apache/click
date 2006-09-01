@@ -147,3 +147,28 @@ image.onmousemove = onMove;
 image.onclick = onEnd;
 image.onmouseout = reset;
 }
+
+/*
+ * Validates the ColorPicker.
+ */
+function validateColorPicker(id, required, msgs){
+	var field = document.getElementById(id);
+	if(field){
+		var value = field.value;
+		if(value.length == 0){
+			if(required){
+				setFieldErrorColor(field);
+				return msgs[0];
+			}
+		} else if(!field.value.match(new RegExp("^#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?$"))){
+			setFieldErrorColor(field);
+			return msgs[1];
+		}
+		
+		setFieldValidColor(field);
+		return null;
+		
+	} else {
+		return 'Field ' + id + ' not found.';
+	}
+}

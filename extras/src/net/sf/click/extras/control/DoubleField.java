@@ -15,10 +15,14 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import net.sf.click.control.TextField;
 import java.util.Locale;
+
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.control.TextField;
 
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
@@ -255,6 +259,41 @@ public class DoubleField extends TextField {
         }
     }
 
+    /**
+     * Return the HTML head import statements for the NumberField.js.
+     *
+     * @return the HTML head import statements for the NumberField.js
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(IntegerField.NUMERICFIELD_IMPORTS, "$", path);
+    }
+    
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     * 
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[7];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = String.valueOf(getMinValue());
+        args[3] = String.valueOf(getMaxValue());
+        args[4] = getMessage("field-required-error", getErrorLabel());
+        args[5] = getMessage("number-minvalue-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
+        args[6] = getMessage("number-maxvalue-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
+        
+        return MessageFormat.format(IntegerField.VALIDATE_NUMERICFIELD_FUNCTION, args);
+    }
+    
     // --------------------------------------------------------- Public Methods
 
     /**

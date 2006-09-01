@@ -8,6 +8,8 @@
     <control classname="net.sf.click.extras.panel.TabbedPanel"/>
     <control classname="net.sf.click.extras.control.CheckList"/>
     <control classname="net.sf.click.extras.control.ColorPicker"/>
+    <control classname="net.sf.click.extras.control.IntegerField"/>
+    <control classname="net.sf.click.extras.control.RegexField"/>
   </controls>
 
 </click-app>
