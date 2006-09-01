@@ -42,6 +42,26 @@ public class Checkbox extends Field {
 
     private static final long serialVersionUID = 1L;
 
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the localized error message</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_CHECKBOX_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateCheckbox(''{0}'',{1}, [''{2}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
     /** The field checked value. */
     protected boolean checked;
 
@@ -186,10 +206,10 @@ public class Checkbox extends Field {
         if (isRequired()) {
             Object[] args = new Object[3];
             args[0] = getId();
-            args[1] = "validateCheckbox";
+            args[1] = String.valueOf(isRequired());
             args[2] = getMessage("field-required-error", getErrorLabel());
 
-            return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
+            return MessageFormat.format(VALIDATE_CHECKBOX_FUNCTION, args);
 
         } else {
             return null;

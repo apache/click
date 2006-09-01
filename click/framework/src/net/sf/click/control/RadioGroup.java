@@ -99,16 +99,17 @@ public class RadioGroup extends Field {
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
-     * <li>1 - is the name of the static JavaScript function to call</li>
-     * <li>2 - is the full path name to the radio button</li>
+     * <li>1 - is the full path name to the radio button</li>
+     * <li>2 - is the Field required status</li>
      * <li>3 - is the localized error message</li>
      * <li>4 - is the first radio id to select</li>
      * </ul>
      */
     protected final static String VALIDATE_RADIOGROUP_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   if (!{1}({2})) '{'\n"
-        + "      return ''{3}|{4}'';\n"
+        + "   var msg = validateRadioGroup({1}, {2}, [''{3}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{4}'';\n"
         + "   '}' else '{'\n"
         + "      return null;\n"
         + "   '}'\n"
@@ -399,25 +400,20 @@ public class RadioGroup extends Field {
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
-        if (isRequired()) {
-            Object[] args = new Object[5];
-            args[0] = getId();
-            args[1] = "validateRadioGroup";
-            args[2] = "document." + getForm().getName() + "." + getName();
-            args[3] = getMessage("field-required-error", getErrorLabel());
+        Object[] args = new Object[5];
+        args[0] = getId();
+        args[1] = "document." + getForm().getName() + "." + getName();
+        args[2] = String.valueOf(isRequired());
+        args[3] = getMessage("field-required-error", getErrorLabel());
 
-            if (!getRadioList().isEmpty()) {
-                Radio radio = (Radio) getRadioList().get(0);
-                args[4] = radio.getId();
-            } else {
-                args[4] = "";
-            }
-
-            return MessageFormat.format(VALIDATE_RADIOGROUP_FUNCTION, args);
-
+        if (!getRadioList().isEmpty()) {
+            Radio radio = (Radio) getRadioList().get(0);
+            args[4] = radio.getId();
         } else {
-            return null;
+            args[4] = "";
         }
+
+        return MessageFormat.format(VALIDATE_RADIOGROUP_FUNCTION, args);
     }
 
     // --------------------------------------------------------- Public Methods

@@ -178,15 +178,16 @@ public class Select extends Field {
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
      * <li>0 - is the field id</li>
-     * <li>1 - is the name of the static JavaScript function to call</li>
+     * <li>1 - is the Field required status</li>
      * <li>2 - is the localized error message</li>
      * <li>3 - is the default Select option value</li>
      * </ul>
      */
     protected final static String VALIDATE_SELECT_FUNCTION =
         "function validate_{0}() '{'\n"
-        + "   if (!{1}(''{0}'', ''{3}'')) '{'\n"
-        + "      return ''{2}|{0}'';\n"
+        + "   var msg = validateSelect(''{0}'', ''{3}'', {1}, [''{2}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
         + "   '}' else '{'\n"
         + "      return null;\n"
         + "   '}'\n"
@@ -512,24 +513,19 @@ public class Select extends Field {
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
-        if (isRequired()) {
-            Object[] args = new Object[4];
-            args[0] = getId();
-            args[1] = "validateSelect";
-            args[2] = getMessage("field-required-error", getErrorLabel());
+        Object[] args = new Object[4];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = getMessage("field-required-error", getErrorLabel());
 
-            if (!getOptionList().isEmpty()) {
-                Option option = (Option) getOptionList().get(0);
-                args[3] = option.getValue();
-            } else {
-                args[3] = "";
-            }
-
-            return MessageFormat.format(VALIDATE_SELECT_FUNCTION, args);
-
+        if (!getOptionList().isEmpty()) {
+            Option option = (Option) getOptionList().get(0);
+            args[3] = option.getValue();
         } else {
-            return null;
+            args[3] = "";
         }
+
+        return MessageFormat.format(VALIDATE_SELECT_FUNCTION, args);
     }
 
     // --------------------------------------------------------- Public Methods

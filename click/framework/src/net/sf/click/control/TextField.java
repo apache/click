@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
+
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -54,6 +56,31 @@ import net.sf.click.util.HtmlStringBuffer;
 public class TextField extends Field {
 
     private static final long serialVersionUID = 1L;
+
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the minimum length</li>
+     * <li>3 - is the maximum length</li>
+     * <li>4 - is the localized error message for required validation</li>
+     * <li>5 - is the localized error message for minimum length validation</li>
+     * <li>6 - is the localized error message for maximum length validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_TEXTFIELD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateTextField(\n"
+        + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -299,4 +326,28 @@ public class TextField extends Field {
             }
         }
     }
+
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[7];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = String.valueOf(getMinLength());
+        args[3] = String.valueOf(getMaxLength());
+        args[4] = getMessage("field-required-error", getErrorLabel());
+        args[5] = getMessage("field-minlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+        args[6] = getMessage("field-maxlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+        return MessageFormat.format(VALIDATE_TEXTFIELD_FUNCTION, args);
+    }
+
 }
