@@ -14,6 +14,7 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -89,6 +90,26 @@ public class ColorPicker extends Field {
     /** The color validation hexidecimal pattern. */
     protected static final Pattern HEX_PATTERN =
         Pattern.compile("#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?");
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the localized error message for required validation</li>
+     * <li>3 - is the localized error message for pattern validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_COLORPICKER_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateColorPicker(\n"
+        + "         ''{0}'',{1}, [''{2}'',''{3}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";    
 
     // ----------------------------------------------------- Instance Variables
 
@@ -222,6 +243,24 @@ public class ColorPicker extends Field {
         this.size = size;
     }
 
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[9];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = getMessage("field-required-error", getErrorLabel());
+        args[3] = getMessage("no-color-value", getErrorLabel());
+        return MessageFormat.format(VALIDATE_COLORPICKER_FUNCTION, args);
+    }
+    
     // --------------------------------------------------------- Public Methods
 
     /**
