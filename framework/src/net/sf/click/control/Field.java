@@ -171,25 +171,6 @@ import net.sf.click.util.MessagesMap;
  */
 public abstract class Field implements Control {
 
-    // -------------------------------------------------------------- Constants
-
-    /**
-     * The field validation JavaScript function template.
-     * The function template arguments are: <ul>
-     * <li>0 - is the field id</li>
-     * <li>1 - is the name of the static JavaScript function to call</li>
-     * <li>2 - is the localized error message</li>
-     * </ul>
-     */
-    protected final static String VALIDATE_JAVASCRIPT_FUNCTION =
-        "function validate_{0}() '{'\n"
-        + "   if (!{1}(''{0}'')) '{'\n"
-        + "      return ''{2}|{0}'';\n"
-        + "   '}' else '{'\n"
-        + "      return null;\n"
-        + "   '}'\n"
-        + "'}'\n";
-
     // ----------------------------------------------------- Instance Variables
 
     /** The Field attributes Map. */
@@ -872,17 +853,7 @@ public abstract class Field implements Control {
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
-        if (isRequired()) {
-            Object[] args = new Object[3];
-            args[0] = getId();
-            args[1] = "validateField";
-            args[2] = getMessage("field-required-error", getErrorLabel());
-
-            return MessageFormat.format(VALIDATE_JAVASCRIPT_FUNCTION, args);
-
-        } else {
-            return null;
-        }
+        return null;
     }
 
     /**

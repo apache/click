@@ -71,130 +71,146 @@ function noLetterFilter(event) {
 }
 
 function setFocus(id) {
-	var field = document.getElementById(id);
-	if (field && field.focus && field.type != "hidden") {
-		field.focus();
-	}
+    var field = document.getElementById(id);
+    if (field && field.focus && field.type != "hidden") {
+        field.focus();
+    }
 }
 
 function trim(str) {  
-	while (str.charAt(0) == (" ")) {  
-		str = str.substring(1);
-  	}
-  	while (str.charAt(str.length - 1) == " ") {  
-  		str = str.substring(0,str.length-1);
-  	}
-  	return str;
+    while (str.charAt(0) == (" ")) {  
+        str = str.substring(1);
+      }
+      while (str.charAt(str.length - 1) == " ") {  
+          str = str.substring(0,str.length-1);
+      }
+      return str;
 }
 
 
 function setFieldValidColor(field) {
-	field.style.background = 'white';
+    field.style.background = 'white';
 }
 
 function setFieldErrorColor(field) {
-	field.style.background = '#FFFF80';
+    field.style.background = '#FFFF80';
 }
 
-function validateField(id) {
+function validateTextField(id, required, minLength, maxLength, msgs) {
     var field = document.getElementById(id);
     if (field) {
-    	var value = trim(field.value);
-    	if (value.length > 0) {
-            setFieldValidColor(field);
-            return true;
-    	} else {
-            setFieldErrorColor(field);
-            return false;
-    	}
-    } else {
-        alert('Field ' + id + ' not found.');
-        return false;
-    }
-}
-
-function validateCheckbox(id) {
-    var field = document.getElementById(id);
-    if (field) {
-    	if (field.checked) {
-			return true;
-    	} else {
-			return false;
-    	}
-    } else {
-    	alert('Field ' + id + ' not found.');
-    	return false;
-    }
-}
-
-function validateSelect(id, defaultValue) {
-    var field = document.getElementById(id);
-    if (field) {
-    	var value = field.value;
-    	if (value != defaultValue) {
-            setFieldValidColor(field);
-            return true;
-    	} else {
-            setFieldErrorColor(field);
-            return false;
-    	}
-    } else {
-    	alert('Field ' + id + ' not found.');
-    	return false;
-    }
-}
-
-function validateRadioGroup(pathName) {
-    var value = pathName.value;
-    for (i = 0; i < pathName.length; i++) {
-        if (pathName[i].checked) {
-            return true;
+        var value = trim(field.value);
+        if (required) {
+            if (value.length == 0) {
+                setFieldErrorColor(field);
+                return msgs[0];
+            }
         }
+        if (minLength > 0) {
+            if (value.length < minLength) {
+                setFieldErrorColor(field);
+                return msgs[1];
+            }
+        }
+        if (maxLength > 0) {
+            if (value.length > maxLength) {
+                setFieldErrorColor(field);
+                return msgs[2];
+            }
+        }
+        setFieldValidColor(field);
+        return null;
+    } else {
+        return 'Field ' + id + ' not found.';
     }
-    return false;
+}
+
+function validateCheckbox(id, required, msgs) {
+    var field = document.getElementById(id);
+    if (field) {
+        if (required) {
+            if (field.checked) {
+                return null;
+            } else {
+                return msgs[0];
+            }
+        }
+    } else {
+        return 'Field ' + id + ' not found.';
+    }
+}
+
+function validateSelect(id, defaultValue, required, msgs) {
+    var field = document.getElementById(id);
+    if (field) {
+        if (required) {
+            var value = field.value;
+            if (value != defaultValue) {
+                setFieldValidColor(field);
+                return null;
+            } else {
+                setFieldErrorColor(field);
+                return msgs[0];
+            }
+        }
+    } else {
+        return 'Field ' + id + ' not found.';
+    }
+}
+
+function validateRadioGroup(pathName, required, msgs) {
+    if(required){
+        //var value = pathName.value;
+        for (i = 0; i < pathName.length; i++) {
+            if (pathName[i].checked) {
+                return null;
+            }
+        }
+        return msgs[0];
+    }
 }
 
 function validateForm(msgs, id, align, style) {
     var errorsHtml = '';
-	var focusFieldId = null;
+    var focusFieldId = null;
     
-	for (i = 0; i < msgs.length; i++) {
-		var value = msgs[i];
-		if (value != null) {
-			var index = value.lastIndexOf('|');
-			var fieldMsg = value.substring(0, index);
-			var fieldId = value.substring(index + 1);
-			
-			if (focusFieldId == null) {
-				focusFieldId = fieldId;
-			}
-			
-			errorsHtml += '<tr class="errors"><td class="errors" align="';
-			errorsHtml += align;
-			errorsHtml += '" style="';
-			errorsHtml += style;
-			errorsHtml += '">';
-			errorsHtml += '<a class="error" href="javascript:setFocus(\'';
-			errorsHtml += fieldId; 
-			errorsHtml += '\');">';
-			errorsHtml += fieldMsg;
-			errorsHtml += '</a>';
-			errorsHtml += '</td></tr>';
-		}
-	}
-	
-	if (errorsHtml.length > 0) {
-	    errorsHtml = '<table class="errors">' + errorsHtml + '</table>';	    
-	    //alert(errorsHtml);
-	    
-	    document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
-	    document.getElementById(id + '-errorsTr').style.display = 'inline';
-	    
-	    setFocus(focusFieldId);
-	    
-		return false;
-		
-	} else {	    
-		return true;
-	}
+    for (i = 0; i < msgs.length; i++) {
+        var value = msgs[i];
+        if (value != null) {
+            var index = value.lastIndexOf('|');
+            var fieldMsg = value.substring(0, index);
+            var fieldId = value.substring(index + 1);
+            
+            if (focusFieldId == null) {
+                focusFieldId = fieldId;
+            }
+            
+            errorsHtml += '<tr class="errors"><td class="errors" align="';
+            errorsHtml += align;
+            errorsHtml += '" style="';
+            errorsHtml += style;
+            errorsHtml += '">';
+            errorsHtml += '<a class="error" href="javascript:setFocus(\'';
+            errorsHtml += fieldId; 
+            errorsHtml += '\');">';
+            errorsHtml += fieldMsg;
+            errorsHtml += '</a>';
+            errorsHtml += '</td></tr>';
+        }
+    }
+    
+    if (errorsHtml.length > 0) {
+        errorsHtml = '<table class="errors">' + errorsHtml + '</table>';        
+        //alert(errorsHtml);
+        
+        document.getElementById(id + '-errorsDiv').innerHTML = errorsHtml;
+        document.getElementById(id + '-errorsTr').style.display = 'inline';
+        
+        setFocus(focusFieldId);
+        
+        return false;
+        
+    } else {        
+        return true;
+    }
 }
