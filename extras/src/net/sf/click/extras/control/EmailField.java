@@ -15,7 +15,15 @@
  */
 package net.sf.click.extras.control;
 
+import java.text.MessageFormat;
+
+import javax.servlet.ServletContext;
+
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.Control;
 import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Email Field control: &nbsp; &lt;input type='text'&gt;.
@@ -39,6 +47,38 @@ import net.sf.click.control.TextField;
 public class EmailField extends TextField {
 
     private static final long serialVersionUID = 1L;
+
+    // -------------------------------------------------------------- Constants
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the minimum length</li>
+     * <li>3 - is the maximum length</li>
+     * <li>4 - is the localized error message for required validation</li>
+     * <li>5 - is the localized error message for minimum length validation</li>
+     * <li>6 - is the localized error message for maximum length validation</li>
+     * <li>7 - is the localized error message for format validation</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_EMAILFIELD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateEmailField(\n"
+        + "         ''{0}'',{1}, {2}, {3}, [''{4}'',''{5}'',''{6}'', ''{7}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
+
+    /**
+     * The RegexField.js imports statement.
+     */
+    public static final String EMAILFIELD_IMPORTS =
+        "<script type=\"text/javascript\" src=\"$/click/EmailField.js\"></script>\n";
 
     // ----------------------------------------------------------- Constructors
 
@@ -100,6 +140,44 @@ public class EmailField extends TextField {
         setSize(30);
     }
 
+    // --------------------------------------------------------- Public Attributes
+
+    /**
+     * Return the HTML head import statements for the RegexField.js.
+     *
+     * @return the HTML head import statements for the RegexField.js
+     */
+    public String getHtmlImports() {
+        String path = context.getRequest().getContextPath();
+
+        return StringUtils.replace(EMAILFIELD_IMPORTS, "$", path);
+    }
+    
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[8];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = String.valueOf(getMinLength());
+        args[3] = String.valueOf(getMaxLength());
+        args[4] = getMessage("field-required-error", getErrorLabel());
+        args[5] = getMessage("field-minlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMinLength())});
+        args[6] = getMessage("field-maxlength-error",
+                new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
+        args[7] = getMessage("email-format-error", getErrorLabel());
+
+        return MessageFormat.format(VALIDATE_EMAILFIELD_FUNCTION, args);
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -151,4 +229,17 @@ public class EmailField extends TextField {
         }
     }
 
+    /**
+     * Deploy the <tt>EmailField.js</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/EmailField.js",
+                              "click");
+    }
 }
