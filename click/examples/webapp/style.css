@@ -1,12 +1,10 @@
 .appnameText {
   font-weight: bold;
-  font-size: 22pt;
-  padding-bottom: 0px;
-  padding-left: 2px;
+  font-size: 20pt;
+  padding-bottom: 4px;
+  padding-left: 0px;
   padding-right: 0px;
   padding-top: 0px;
-  height: 30px;
-  margin-bottom: 0.25em;
 }
 
 a.external {
