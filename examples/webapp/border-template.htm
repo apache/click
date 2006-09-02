@@ -8,7 +8,16 @@ $imports
 </head>
 <body #if($bodyOnload) onload="$bodyOnload" #end>
  	
-<h1 class="appnameText">$title</h1> 
+<table border="0" cellpadding="0" cellspacing="0">
+ <tr>
+  <td style="padding-left:4px;">
+   <a target="topic" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0"/></a>
+  </td>
+  <td class="appnameText" style="padding-left:4px;">
+  $title
+  </td>
+ </tr>
+</table>
 
 <table width="100%" cellpadding="8" style="background-color: navy; color: white;">
 <tr>
