@@ -21,16 +21,16 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 /**
- * Provides the interface for Page controls. 
+ * Provides the interface for Page controls.
  * <p/>
- * When a Page request event is processed Controls may perform server side event 
- * processing through their {@link #onProcess()} method. Controls are generally 
+ * When a Page request event is processed Controls may perform server side event
+ * processing through their {@link #onProcess()} method. Controls are generally
  * rendered in a Page by calling their <tt>toString()</tt> method.
  * <p/>
  * The Control execution sequence is illustrated below:
  * <p/>
  * <img src="control-post-sequence-diagram.png"/>
- * 
+ *
  * <h4>HTML Header Imports</h4>
  *
  * Control HTML header imports can be exposed by overriding the

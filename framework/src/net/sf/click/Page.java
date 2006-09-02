@@ -93,7 +93,7 @@ import org.apache.commons.lang.StringUtils;
  * </ol>
  *
  * For POST requests the default execution path is identical, except the
- * {@link #onPost()} method is called instead of {@link #onGet()}. The POST 
+ * {@link #onPost()} method is called instead of {@link #onGet()}. The POST
  * request page execution sequence is illustrated below:
  * <p/>
  * <img src="post-sequence-diagram.png"/>
