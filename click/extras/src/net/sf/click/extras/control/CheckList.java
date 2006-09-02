@@ -108,7 +108,7 @@ public class CheckList extends Field {
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
-    
+
     /**
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
@@ -127,8 +127,8 @@ public class CheckList extends Field {
         + "   '}' else '{'\n"
         + "      return null;\n"
         + "   '}'\n"
-        + "'}'\n";    
-    
+        + "'}'\n";
+
     // ----------------------------------------------------- Instance Variables
 
     /** The height if null not scrollable. */
@@ -603,13 +603,13 @@ public class CheckList extends Field {
     public Class getValueClass() {
         return List.class;
     }
-    
+
     /**
      * Return the CheckList JavaScript client side validation function.
      *
      * @return the field JavaScript client side validation function
      */
-	public String getValidationJavaScript() {
+    public String getValidationJavaScript() {
         Object[] args = new Object[4];
         args[0] = getId();
         args[1] = "document." + getForm().getName() + "." + getName();
@@ -624,7 +624,7 @@ public class CheckList extends Field {
 //        }
 
         return MessageFormat.format(VALIDATE_CHECKLIST_FUNCTION, args);
-	}
+    }
 
     // --------------------------------------------------------- Public Methods
 
