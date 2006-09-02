@@ -106,7 +106,7 @@ function validateTextField(id, required, minLength, maxLength, msgs) {
                 return msgs[0];
             }
         }
-        if (minLength > 0) {
+        if (required && minLength > 0) {
             if (value.length < minLength) {
                 setFieldErrorColor(field);
                 return msgs[1];
