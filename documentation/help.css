@@ -65,7 +65,7 @@ span.sparx {
   padding-bottom: 0px;
   padding-left: 2px;
   padding-right: 0px;
-  padding-top: 7px;
+  padding-top: 8px;
   text-decoration: none;
   vertical-align:top;
 }
@@ -79,8 +79,8 @@ span.sparx {
 }
 
 .appTitleBar {
-  background-color: black;
-  color: white;
+  background-color: #c8c8c8;
+  color: 000080;
 }
 
 .navLink {
