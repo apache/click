@@ -2090,9 +2090,7 @@ public class Form implements Control {
                 }
 
                 if (field instanceof FieldSet) {
-                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
-                    buffer.append(getLabelAlign());
-                    buffer.append("\">\n");
+                    buffer.append("<td class=\"fields\" colspan=\"2\">\n");
                     buffer.append(field);
                     buffer.append("</td>\n");
 
