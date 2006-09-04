@@ -97,10 +97,10 @@ import ognl.Ognl;
  *
  * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
  * dateColumn.setFormat(<span class="st">"{0,date,dd MMM yyyy}"</span>);
- * table.addColumn(dateColumn); </pre>
+ * table.addColumn(dateColumn);
  *
  * Column orderIdColumn = <span class="kw">new</span> Column(<span class="st">"order.id"</span>, <span class="st">"Order ID"</span>);
- * table.addColumn(orderIdColumn);
+ * table.addColumn(orderIdColumn);  </pre>
  *
  * <h4>Column Decorators</h4>
  *
