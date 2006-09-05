@@ -6,8 +6,12 @@
 
 <suppressions>
     
+	<!-- File Length -->                                          
+              
     <suppress checks="FileLength"
               files="Form.java"/>
+              
+	<!-- Javadoc Method -->                                          
               
     <suppress checks="JavadocMethod"
               files="MessagesMap.java"/>
@@ -15,21 +19,34 @@
     <suppress checks="JavadocMethod"
               files="SessionMap.java"/>
               
+	<!-- Line Lenght -->              
+
     <suppress checks="LineLength"
               files="ColorPicker.java"
-              lines="86,87"/>    
+              lines="87,88"/>    
+              
+    <suppress checks="LineLength"
+              files="ClickServlet.java"
+              lines="797"/> 
+              
+    <suppress checks="LineLength"
+              files="ClickUtils.java"/>
+              
+    <suppress checks="LineLength"
+              files="IntegerField.java"
+              lines="94"/> 
+              
+    <suppress checks="LineLength"
+              files="CreditCardField.java"
+              lines="164,176"/>    
+              
+    <suppress checks="LineLength"
+              files="EmailField.java"
+              lines="68,80"/>
               
     <suppress checks="LineLength"
               files="DateField.java"
               lines="96,97,98"/>
-              
-    <suppress checks="LineLength"
-              files="ClickServlet.java"
-              lines="754"/> 
-              
-    <suppress checks="LineLength"
-              files="ClickUtils.java"
-              lines="211,212"/> 
               
     <suppress checks="LineLength"
               files="ErrorReport.java"/>  
@@ -40,9 +57,10 @@
               
     <suppress checks="LineLength"
               files="Form.java"/>
-               
+              
     <suppress checks="LineLength"
-              files="ClickUtils.java"/>
+              files="RegexField.java"
+              lines="91,103"/>    
               
     <suppress checks="LineLength"
               files="TabbedPanel.java"
@@ -52,10 +70,14 @@
               files="Table.java"
               lines="129"/>      
               
+	<!-- Method Lenght -->              
+              
     <suppress checks="MethodLength"
               files="ErrorReport.java"
               lines="174"/>
 
+	<!-- Static Variable Name -->              
+              
     <suppress checks="StaticVariableName"
               files="Form.java"
               lines="477,480,483,486,516,519"/>
