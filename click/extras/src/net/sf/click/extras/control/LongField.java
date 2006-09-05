@@ -21,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.control.TextField;
 
-
 /**
  * Provides a Long Field control: &nbsp; &lt;input type='text'&gt;.
  *
@@ -241,16 +240,18 @@ public class LongField extends TextField {
     public String getHtmlImports() {
         String path = context.getRequest().getContextPath();
 
-        return StringUtils.replace(IntegerField.NUMERICFIELD_IMPORTS, "$", path);
+        return StringUtils.replace(IntegerField.NUMERICFIELD_IMPORTS,
+                                   "$",
+                                   path);
     }
-    
+
     /**
      * Return the field JavaScript client side validation function.
      * <p/>
      * The function name must follow the format <tt>validate_[id]</tt>, where
      * the id is the DOM element id of the fields focusable HTML element, to
      * ensure the function has a unique name.
-     * 
+     *
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
@@ -264,8 +265,9 @@ public class LongField extends TextField {
                 new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
         args[6] = getMessage("number-maxvalue-error",
                 new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
-        
-        return MessageFormat.format(IntegerField.VALIDATE_NUMERICFIELD_FUNCTION, args);
+
+        return MessageFormat.format(IntegerField.VALIDATE_NUMERICFIELD_FUNCTION,
+                                    args);
     }
 
     // --------------------------------------------------------- Public Methods

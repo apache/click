@@ -109,7 +109,7 @@ public class ColorPicker extends Field {
         + "   '}' else '{'\n"
         + "      return null;\n"
         + "   '}'\n"
-        + "'}'\n";    
+        + "'}'\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -260,7 +260,7 @@ public class ColorPicker extends Field {
         args[3] = getMessage("no-color-value", getErrorLabel());
         return MessageFormat.format(VALIDATE_COLORPICKER_FUNCTION, args);
     }
-    
+
     // --------------------------------------------------------- Public Methods
 
     /**

@@ -23,7 +23,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.Control;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.control.TextField;
@@ -175,7 +174,7 @@ public class CreditCardField extends TextField {
      */
     public static final String CREDITCARD_IMPORTS =
         "<script type=\"text/javascript\" src=\"$/click/CreditCardField.js\"></script>\n";
-    
+
     // ----------------------------------------------------- Instance Variables
 
     /**
@@ -323,7 +322,7 @@ public class CreditCardField extends TextField {
 
         return buffer.toString();
     }
-    
+
     /**
      * Return the field JavaScript client side validation function.
      * <p/>
@@ -346,9 +345,9 @@ public class CreditCardField extends TextField {
         args[7] = getMessage("field-maxlength-error",
                 new Object[]{getErrorLabel(), String.valueOf(getMaxLength())});
         args[8] = getMessage("creditcard-number-error", getErrorLabel());
-        
+
         return MessageFormat.format(VALIDATE_CREDITCARD_FUNCTION, args);
-    }    
+    }
 
     /**
      * Validate the CreditCardField request submission, using the card type to
@@ -436,12 +435,12 @@ public class CreditCardField extends TextField {
             }
         }
     }
-    
+
     /**
      * Deploy the <tt>CreditCardField.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
      */
