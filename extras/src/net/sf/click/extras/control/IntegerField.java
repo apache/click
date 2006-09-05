@@ -21,10 +21,8 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.Control;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
-
 
 /**
  * Provides a Integer Field control: &nbsp; &lt;input type='text'&gt;.
@@ -283,7 +281,7 @@ public class IntegerField extends TextField {
             setValue(null);
         }
     }
-    
+
     /**
      * Return the HTML head import statements for the IntegerField.js.
      *
@@ -294,14 +292,14 @@ public class IntegerField extends TextField {
 
         return StringUtils.replace(NUMERICFIELD_IMPORTS, "$", path);
     }
-    
+
     /**
      * Return the field JavaScript client side validation function.
      * <p/>
      * The function name must follow the format <tt>validate_[id]</tt>, where
      * the id is the DOM element id of the fields focusable HTML element, to
      * ensure the function has a unique name.
-     * 
+     *
      * @return the field JavaScript client side validation function
      */
     public String getValidationJavaScript() {
@@ -315,7 +313,7 @@ public class IntegerField extends TextField {
                 new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
         args[6] = getMessage("number-maxvalue-error",
                 new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
-        
+
         return MessageFormat.format(VALIDATE_NUMERICFIELD_FUNCTION, args);
     }
 
@@ -325,7 +323,7 @@ public class IntegerField extends TextField {
      * Deploy the <tt>IntegerField.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
      */
@@ -334,7 +332,7 @@ public class IntegerField extends TextField {
                               "/net/sf/click/extras/control/IntegerField.js",
                               "click");
     }
-    
+
     /**
      * Validate the IntegerField request submission.
      * <p/>

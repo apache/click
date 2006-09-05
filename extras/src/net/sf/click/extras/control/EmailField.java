@@ -21,7 +21,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.Control;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 
@@ -140,7 +139,7 @@ public class EmailField extends TextField {
         setSize(30);
     }
 
-    // --------------------------------------------------------- Public Attributes
+    // ------------------------------------------------------ Public Attributes
 
     /**
      * Return the HTML head import statements for the RegexField.js.
@@ -152,7 +151,7 @@ public class EmailField extends TextField {
 
         return StringUtils.replace(EMAILFIELD_IMPORTS, "$", path);
     }
-    
+
     /**
      * Return the field JavaScript client side validation function.
      * <p/>
@@ -179,6 +178,21 @@ public class EmailField extends TextField {
     }
 
     // --------------------------------------------------------- Public Methods
+
+
+    /**
+     * Deploy the <tt>EmailField.js</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/EmailField.js",
+                              "click");
+    }
 
     /**
      * Process the EmailField request submission.
@@ -229,17 +243,4 @@ public class EmailField extends TextField {
         }
     }
 
-    /**
-     * Deploy the <tt>EmailField.js</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
-     *
-     * @see Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/extras/control/EmailField.js",
-                              "click");
-    }
 }

@@ -22,7 +22,6 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.sf.click.Control;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 
@@ -173,23 +172,6 @@ public class RegexField extends TextField {
         super();
     }
 
-    // ------------------------------------------------------ Private Methods
-
-    /**
-     * Escape the JavaScript string.
-     * 
-     * @param message the raw message
-     * @return the escaped message
-     */
-    private String escapeMessage(String message){
-        if(message==null){
-            return "";
-        }
-        message = message.replaceAll("\\\\", "\\\\\\\\");
-        message = message.replaceAll("'", "\\\\'");
-        return message;
-    }
-
     // ------------------------------------------------------ Public Attributes
 
     /**
@@ -224,7 +206,7 @@ public class RegexField extends TextField {
 
         return StringUtils.replace(REGEXFIELD_IMPORTS, "$", path);
     }
-    
+
 
     /**
      * Return the field JavaScript client side validation function.
@@ -296,7 +278,7 @@ public class RegexField extends TextField {
      * Deploy the <tt>RegexField.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
      */
@@ -304,6 +286,23 @@ public class RegexField extends TextField {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/RegexField.js",
                               "click");
+    }
+
+    // ------------------------------------------------------ Private Methods
+
+    /**
+     * Escape the JavaScript string.
+     *
+     * @param message the raw message
+     * @return the escaped message
+     */
+    private String escapeMessage(String message) {
+        if (message == null) {
+            return "";
+        }
+        message = message.replaceAll("\\\\", "\\\\\\\\");
+        message = message.replaceAll("'", "\\\\'");
+        return message;
     }
 
 }
