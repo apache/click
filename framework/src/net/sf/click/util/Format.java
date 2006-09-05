@@ -182,7 +182,7 @@ public class Format {
      *
      * <h4>SimpleDateFormat Pattern Characters</h4>
      *
-     *  <table border="0" cellspacing="3" cellpadding="3">
+     *  <table border="1" cellspacing="0" cellpadding="3">
      *  <tr bgcolor="#ccccff">
      *           <th align=left>Letter
      *           <th align=left>Date or Time Component
