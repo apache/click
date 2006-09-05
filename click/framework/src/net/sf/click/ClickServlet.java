@@ -507,14 +507,16 @@ public class ClickServlet extends HttpServlet {
             if (logger.isDebugEnabled()) {
                 logger.debug("forward=" + page.getForward());
             }
-            RequestDispatcher dispatcher =
-                request.getRequestDispatcher(page.getForward());
 
             if (page.getForward().endsWith(".jsp")) {
-                setRequestAttributes(page);
-            }
+                renderJSP(request, response, page);
 
-            dispatcher.forward(request, response);
+            } else {
+                RequestDispatcher dispatcher =
+                    request.getRequestDispatcher(page.getForward());
+
+                dispatcher.forward(request, response);
+            }
 
         } else if (page.getPath() != null) {
             renderTemplate(page, request);
@@ -628,6 +630,47 @@ public class ClickServlet extends HttpServlet {
                 buffer.append(",");
             }
             buffer.append(page.getTemplate());
+            buffer.append(" - ");
+            buffer.append(System.currentTimeMillis() - startTime);
+            buffer.append(" ms");
+            logger.info(buffer);
+        }
+    }
+
+    /**
+     * Render the given page as a JSP to the response.
+     *
+     * @param request the page request
+     * @param response the servlet response
+     * @param page the page to render
+     * @throws Exception if an error occurs rendering the JSP
+     */
+    protected void renderJSP(HttpServletRequest request,
+            HttpServletResponse response, Page page) throws Exception {
+
+        long startTime = System.currentTimeMillis();
+
+           setRequestAttributes(page);
+
+        RequestDispatcher dispatcher = null;
+
+           if (page.getForward().equals(page.getTemplate())) {
+               dispatcher = request.getRequestDispatcher(page.getForward());
+
+        } else {
+               dispatcher = request.getRequestDispatcher(page.getTemplate());
+        }
+
+        dispatcher.forward(request, response);
+
+        if (!clickApp.isProductionMode()) {
+            HtmlStringBuffer buffer = new HtmlStringBuffer(50);
+            buffer.append("renderJSP: ");
+            if (!page.getTemplate().equals(page.getForward())) {
+                buffer.append(page.getTemplate());
+                buffer.append(",");
+            }
+            buffer.append(page.getForward());
             buffer.append(" - ");
             buffer.append(System.currentTimeMillis() - startTime);
             buffer.append(" ms");
@@ -1070,6 +1113,15 @@ public class ClickServlet extends HttpServlet {
                             + " model contains an object keyed with reserved "
                             + "name \"format\". The request attribute "
                             + "has been replaced with the format object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("forward", page.getForward());
+        if (model.containsKey("forward")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                            + " model contains an object keyed with reserved "
+                            + "name \"forward\". The request attribute "
+                            + "has been replaced with the page path";
             logger.warn(msg);
         }
 
