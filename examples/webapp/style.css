@@ -7,6 +7,12 @@
   padding-top: 0px;
 }
 
+.menuTable {
+	color: white;
+	background-color: #08108F; 
+	width: 100%;
+}
+
 a.external {
   background: url(images/external.png) center right no-repeat;
   padding-right: 14px;
