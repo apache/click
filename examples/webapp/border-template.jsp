@@ -24,6 +24,8 @@
 <td>
 &nbsp;<a class="menu" href="${context}/home.htm" title="Examples Home page">Home</a>
 &nbsp; | &nbsp;
+<a class="menu" href="${context}${path}" title="Refresh Page">Refresh</a>
+&nbsp; | &nbsp;
 <a class="menu" href="${context}/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
 &nbsp; | &nbsp;
 <a class="menu" href="${context}/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>
