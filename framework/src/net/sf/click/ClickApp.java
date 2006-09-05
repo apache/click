@@ -734,13 +734,15 @@ class ClickApp implements EntityResolver {
             for (Iterator i = pageByPathMap.keySet().iterator(); i.hasNext();) {
                 String path = i.next().toString();
 
-                try {
-                    getTemplate(path);
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("loaded page template " + path);
+                if (!path.endsWith(".jsp")) {
+                    try {
+                        getTemplate(path);
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("loaded page template " + path);
+                        }
+                    } catch (ParseErrorException pee) {
+                        logger.warn("Errors in page '" + path, pee);
                     }
-                } catch (ParseErrorException pee) {
-                    logger.warn("Errors in page '" + path, pee);
                 }
             }
         }
