@@ -40,7 +40,7 @@ public class BorderPage extends SpringPage {
     }
 
     /**
-     * Returns the name of the border template: &nbsp; <tt>"border-template.htm"</tt>
+     * Returns the name of the border template: &nbsp; <tt>"/border-template.htm"</tt>
      *
      * @see Page#getTemplate()
      */
@@ -48,6 +48,7 @@ public class BorderPage extends SpringPage {
         return "/border-template.htm";
     }
 
+    // ------------------------------------------------------ Protected Methods
 
     protected Object getSessionObject(Class aClass) {
         if (aClass == null) {

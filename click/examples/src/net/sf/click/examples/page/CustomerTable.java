@@ -5,17 +5,28 @@ import java.util.List;
 import net.sf.click.Page;
 
 /**
- * Provides JSP integration where a JSP page is used to render the results.
+ * Provides JSP Page example where a JSP page and JSP border template is used to 
+ * render a table.
  *
  * @author Malcolm Edgar
  */
 public class CustomerTable extends BorderPage {
 
+    public List customers = null;
+
     /**
-     * @see Page#onGet()
+     * @see Page#onRender()
      */
-    public void onGet() {
-        List customers = getCustomerService().getCustomersSortedByName(10);
-        addModel("customers", customers);
+    public void onRender() {
+        customers = getCustomerService().getCustomersSortedByName(10);
+    }
+
+    /**
+     * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
+     *
+     * @see Page#getTemplate()
+     */
+    public String getTemplate() {
+        return "/border-template.jsp";
     }
 }
