@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.click.Page;
 
 /**
- * Provides JSP Page example where a JSP page and JSP border template is used to 
+ * Provides JSP Page example where a JSP page and JSP border template is used to
  * render a table.
  *
  * @author Malcolm Edgar
