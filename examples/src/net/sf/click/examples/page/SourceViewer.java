@@ -33,8 +33,8 @@ public class SourceViewer extends BorderPage {
             "script", "title", "link", "body", "h1", "h2", "h3", "h4", "h5",
             "h6", "p", "hr", "br", "span", "table", "tr", "th", "td", "a", "b",
             "i", "u", "ul", "ol", "li", "form", "div", "input", "fieldset",
-            "pre", "tt", "ajax-response", "response", "%@", "%@taglib", 
-            "jsp:include", "c:forEach", "c:choose", "c:when", "c:otherwise", 
+            "pre", "tt", "ajax-response", "response", "%@", "%@taglib",
+            "jsp:include", "c:forEach", "c:choose", "c:when", "c:otherwise",
             "fmt:formatNumber", "fmt:formatDate" };
 
     private static final String[] XML_KEYWORDS = { "click-app", "pages",
