@@ -6,7 +6,6 @@ a {
 	text-decoration: none;
 }
 
-
 a:visited {
   color: blue;
 }
@@ -83,14 +82,29 @@ span.sparx {
   color: 000080;
 }
 
-.navLink {
+a.navLinkSection {
+  background: url(images/book.gif) center left no-repeat;
+  color: 000080;
   text-decoration: none;
+  padding-left: 22px;
+  padding-bottom: 1px;
 }
 
-.navLink-external {
-  background: url(images/external.png) center right no-repeat;
-  padding-right: 15px;
+a.navLinkSection:visited {
+  color: 000080;
+}
+
+a.navLinkTopic {
+  background: url(images/page.gif) center left no-repeat; 
+  color: 000080;
+  margin-left: 22px;
   text-decoration: none;
+  padding-left: 24px;
+  padding-bottom: 1px;
+}
+
+a.navLinkTopic:visited {
+  color: 000080;
 }
 
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
