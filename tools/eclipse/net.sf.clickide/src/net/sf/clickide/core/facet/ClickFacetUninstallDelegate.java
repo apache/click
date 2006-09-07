@@ -1,6 +1,7 @@
 package net.sf.clickide.core.facet;
 
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.core.builder.ClickProjectNature;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -22,10 +23,17 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 			Object config, IProgressMonitor monitor) throws CoreException {
 	
 		if (monitor != null) {
-			monitor.beginTask("", 1); //$NON-NLS-1$
+			monitor.beginTask("", 2); //$NON-NLS-1$
 		}
-
+		
+		// Removes the nature
+		ClickProjectNature.removeNature(project);
+		if (monitor != null) {
+			monitor.worked(1);
+		}
+		
 		try {
+			// Removes the facet
 			uninstallJSFReferencesFromWebApp(project, monitor);
 
 			if (monitor != null) {

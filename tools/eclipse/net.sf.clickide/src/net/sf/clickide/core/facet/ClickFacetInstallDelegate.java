@@ -8,6 +8,7 @@ import java.net.URL;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.core.builder.ClickProjectNature;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -26,6 +27,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  *   <li>Copies click-x.xx.jar and click-extras-x.xx.jar into WEB-INF/lib.</li>
  *   <li>Copies click.xml into WEB-INF.</li>
  *   <li>Adds servlet and servlet-mapping to web.xml.</li>
+ *   <li>Adds <code>ClickProjectNature</code> to the project.</li>
  * </ol>
  * @author Naoki Takezoe
  */
@@ -43,7 +45,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			Object cfg, IProgressMonitor monitor) throws CoreException {
 		
 		if (monitor != null) {
-			monitor.beginTask("", 1); //$NON-NLS-1$
+			monitor.beginTask("", 2); //$NON-NLS-1$
 		}
 
 		try {
@@ -63,6 +65,13 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			// Update web model
 			createServletAndModifyWebXML(project, config, monitor);
 
+			if (monitor != null) {
+				monitor.worked(1);
+			}
+			
+			// Add the nature
+			ClickProjectNature.addNatute(project);
+			
 			if (monitor != null) {
 				monitor.worked(1);
 			}
