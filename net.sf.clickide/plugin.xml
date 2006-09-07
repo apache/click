@@ -255,11 +255,17 @@
            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
            sequence="Ctrl+Alt+S"/>
   </extension>
+  <!--===============================================-->
+  <!-- Nature and Builders -->
+  <!--===============================================-->
   <extension
         id="ClickProjectNature"
         name="ClickProjectNature"
         point="org.eclipse.core.resources.natures">
      <requires-nature id="org.eclipse.jdt.core.javanature"/>
+     <requires-nature id="org.eclipse.wst.common.project.facet.core.nature"/>
+     <requires-nature id="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+     <requires-nature id="org.eclipse.jem.workbench.JavaEMFNature"/>
      <runtime>
         <run class="net.sf.clickide.core.builder.ClickProjectNature"/>
      </runtime>
