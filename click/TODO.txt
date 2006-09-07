@@ -1,22 +1,18 @@
 Click 1.0 Release
 ---------------------
-fix Extra Controls JavaScript bug
-fix ColorPicker rendering bug
-add Cayenne control examples
-
-Notes:
-* StandardControlsPage is probably assigning something to the form.submit method
-
+BUGS
+* ColorPicker rendering bug
+* Form rendering bug, with setting style, see FieldSet example probably due to
+  recent form rendering refactoring and removing align property from parent element
 
 CODE
+* pick up Velocity 1.5-Beta jar
 * have form submit check support multiple form in a page
 * get localizations for Telephone.properties, Japanese, Italian, French
 * Select can have multiple values and this need to be resolved with multpart request
 
-BUGS
-
 DOCUMENTATION
-* update Velocity documentation
+* update Velocity documentation, get latest PDF documents or build them
 
 VELOCITY
 
