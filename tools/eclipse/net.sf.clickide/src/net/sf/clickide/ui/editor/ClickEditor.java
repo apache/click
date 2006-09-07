@@ -42,6 +42,12 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
 	
+	private int generalEditorIndex;
+	private int headerEditorIndex;
+	private int pageEditorIndex;
+	private int controlEditorIndex;
+	private int sourceEditorIndex;
+	
 	private IModelStateListener listener = new IModelStateListener(){
 		public void modelAboutToBeChanged(IStructuredModel model) {
 			modelUpdated(model);
@@ -74,36 +80,36 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	public void createPages() {
 		try {
 			generalEditor = new ClickGeneralEditor();
-			int pageIndex = addPage(generalEditor, getEditorInput());
-			setPageText(pageIndex, ClickPlugin.getString("editor.clickXML.general"));
+			generalEditorIndex = addPage(generalEditor, getEditorInput());
+			setPageText(generalEditorIndex, ClickPlugin.getString("editor.clickXML.general"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
 		try {
 			headerEditor = new ClickHeadersEditor();
-			int pageIndex = addPage(headerEditor, getEditorInput());
-			setPageText(pageIndex, ClickPlugin.getString("editor.clickXML.headers"));
+			headerEditorIndex = addPage(headerEditor, getEditorInput());
+			setPageText(headerEditorIndex, ClickPlugin.getString("editor.clickXML.headers"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
 		try {
 			pageEditor = new ClickPagesEditor();
-			int pageIndex = addPage(pageEditor, getEditorInput());
-			setPageText(pageIndex, ClickPlugin.getString("editor.clickXML.pages"));
+			pageEditorIndex = addPage(pageEditor, getEditorInput());
+			setPageText(pageEditorIndex, ClickPlugin.getString("editor.clickXML.pages"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
 		try {
 			controlEditor = new ClickControlsEditor();
-			int pageIndex = addPage(controlEditor, getEditorInput());
-			setPageText(pageIndex, ClickPlugin.getString("editor.clickXML.controls"));
+			controlEditorIndex = addPage(controlEditor, getEditorInput());
+			setPageText(controlEditorIndex, ClickPlugin.getString("editor.clickXML.controls"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
 		try {
 			sourceEditor = new StructuredTextEditor();
-			int pageIndex = addPage(sourceEditor, getEditorInput());
-			setPageText(pageIndex, ClickPlugin.getString("editor.clickXML.source"));
+			sourceEditorIndex = addPage(sourceEditor, getEditorInput());
+			setPageText(sourceEditorIndex, ClickPlugin.getString("editor.clickXML.source"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
@@ -134,6 +140,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 		if (key.equals(IContentOutlinePage.class)) {
 			return sourceEditor.getAdapter(IContentOutlinePage.class);
 		} else if (key.equals(IGotoMarker.class)) {
+			setActivePage(sourceEditorIndex);
 			return sourceEditor.getAdapter(IGotoMarker.class);
 		} else {
 			return super.getAdapter(key);
