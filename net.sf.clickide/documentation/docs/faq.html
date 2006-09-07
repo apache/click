@@ -97,14 +97,25 @@
    <ul>
     <li>
      <a target="blank" class="external" href="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">ClickIDE</a> 
-     plugin for Eclipse <a target="blank" class="external" href="http://www.eclipse.org/webtools/">WTP</a>.
-     ClickIDE is developed by Naoki Takezoe.
+     <p/>
+     ClickIDE is an Eclipse Web Tools Project (<a target="blank" class="external" href="http://www.eclipse.org/webtools/">WTP</a>)
+     plugin developed by Naoki Takezoe.
+     <p/>
+     To use the ClickIDE plugin, create a "Dynamic Web Project" and select the
+     "Click" Project Faclet. 
      <p/>
      <img src="../images/clickide_2.png"/>
+     <br/>
     </li>
     <li>
-     <a target="blank" class="external" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a> &nbsp; - &nbsp;
-     Velocity and HTML Editor plugin for Eclipse
+     <a target="blank" class="external" href="https://nbclick.dev.java.net/">NBClick</a> 
+     <p/>
+     NetBeans plug-in for Click is under development by Geertjan Wielenga and Ahmed Mohombe.
+    </li>
+    <li>
+     <a target="blank" class="external" href="http://velocitywebedit.sourceforge.net">Velocitywebedit</a>
+     <p/>
+     Velocitywebedit is a Velocity and HTML Editor plugin for Eclipse.
      <p/>
      <img src="../images/velwebedit.png"/>
      <p/>
@@ -165,6 +176,15 @@
   This is a good approach for ensuring a common LAF across your web application, 
   but you will have to get your hands dirty and write some code.
   </li><li>
+  <u>Use Panel to class to create reusable HTML blocks.</u> 
+  <p/>
+  The 
+  <a href="click-api/net/sf/click/control/Panel.html">Panel</a> 
+  control support custom Velocity templates, which is an ideal way
+  to create reusable HTML sections which you can include in many pages.
+  Panels also support nested controls, enabling your sections to support 
+  control based behaviour.
+  </li><li>
   <u>Use Velocity macros for a generic HTML layout.</u>
   <p/>
   This is easy to do and gives you good reuse across your web application.
@@ -215,9 +235,9 @@
   processing listener methods should return true, to abort they should return false.
   <p/>
   The reason you may want to abort further processing is so you can navigate 
-  directly to another page continuing to execute other control or page methods 
-  which may be time consuming. You can use this feature like a break or goto 
-  statement. For example:
+  directly to another page, rather than continuing to execute other control or 
+  page methods which may be time consuming. You can use this feature like a break 
+  or goto statement. For example:
   
 <pre class="codeJava">
 <span class="kw">public boolean</span> onLogoutClick() {
@@ -354,11 +374,12 @@
  ..
 &lt;/click&gt; </pre>
 
-  This character set is used for Velocity input / output encoding, and response Content-Type. So if you specify the character set in 
-  <tt>WEB-INF/click.xml</tt>, you don't have to create <tt>WEB-INF/velocity.properties</tt>.
+  This character set is used for Velocity input encoding, and response Content-Type. 
+  So if you specify the character set in <tt>WEB-INF/click.xml</tt>, 
+  you don't have to create <tt>WEB-INF/velocity.properties</tt>.
   <p/>
   If you want to use the other character set in your Velocity templates, 
-  you can override input / output encoding by <tt>WEB-INF/velocity.properties</tt>. 
+  you can override input encoding by <tt>WEB-INF/velocity.properties</tt>. 
   See <a href="#utf8-encoding">the previous topic</a>.
 
   </dd>
@@ -433,10 +454,10 @@
    include the following JAR files in your WEB-INF/lib directory:
    <ul style="margin-top:1em;">
     <li>ashwood-1.1.jar</li>
-    <li>cayenne-nodeps-1.2xx.jar</li>
+    <li>cayenne-nodeps-1.2.jar</li>
     <li>click-xx.jar</li>
     <li>click-extras-xx.jar</li>
-    <li>log4j-1.2.9.jar</li>
+    <li>log4j-1.2.13.jar</li>
     <li>oro-2.0.8.jar</li>
    </ul>
    The default Cayenne JAR includes Velocity 1.3 which is not compatible with
@@ -498,6 +519,9 @@ public interface Controller {
    the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
     object for formatting the display of objects
   </li>
+  <li>forward &nbsp; - &nbsp; 
+   the page JSP resource (.jsp file)
+  </li>
   <li>messages &nbsp; - &nbsp; 
    the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
    for the Page <a href="click-api/net/sf/click/Page.html#getMessage(java.lang.String)">getMessage()</a>
@@ -557,15 +581,14 @@ public interface Controller {
   <a name="logging" class="heading"></a>
   <dt><b>Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
-   Click does not use Log4J with Velocity because of an appender closing
-   memory leak  associated with garbage collecting VelocityEngines. This issue is being
-   addressed with latest Velocity 1.5 development stream. 
+   Click initially did not use Log4J with Velocity because of an appender closing
+   memory leak  associated with garbage collecting VelocityEngines. This issue 
+   has been resolved with the latest Velocity 1.5 development stream. 
    <p/>
    Commons Logging is not used because of class loader issues which occur
    on versions of IBM's WebSphere application server.
   </dd>
     
-
 
   <a name="why-velocity" class="heading"></a>
   <dt><b>Why doesn't Click use FreeMarker instead of Velocity?</b></dt>

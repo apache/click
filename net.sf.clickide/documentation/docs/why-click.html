@@ -91,11 +91,7 @@ To see this concept in action take a simple Click page where we have an ActionLi
 <pre class="codeJava">
 <span class="kw">public class</span> ExamplePage <span class="kw">extends</span> Page {
 
-    <span class="kw">public</span> ExamplePage() {
-        ActionLink clickLink = <span class="kw">new</span> ActionLink("<span class="st">clickLink</span>");
-        clickLink.setListener(<span class="kw">this</span>, "<span class="st">onClick</span>");
-        addControl(clickLink);    
-    }
+    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, "<span class="st">onClick</span>");
     
     <span class="kw">public boolean</span> onClick() {
         System.out.println("<span class="st">onClick invoked</span>");
@@ -103,10 +99,20 @@ To see this concept in action take a simple Click page where we have an ActionLi
     }
 } 
 </pre>
-The ActionLink control renders the links <tt>href</tt> attribute in the HTML page.
+
+We include our <span class="st">myLink</span> ActionLink control in the
+HTML page template:
+
 <pre class="codeHtml">
-&lt;a href="<span class="st">$clickLink.href</span>"&gt;Click Me&lt;/a&gt;
+&lt;a href="<span class="st">$myLink.href</span>"&gt;Click Me&lt;/a&gt;
 </pre>
+
+At runtime the control <span class="st">href</span> attribute renders as:
+
+<pre class="codeHtml">
+&lt;a href="<span class="st">/mycorp/example-page.htm?actionLink=myLink</span>"&gt;Click Me&lt;/a&gt;
+</pre>
+
 If the user clicks the link, the ActionLink control then invokes the invokes the Page's <code>onClick()</code> method. 
 <p/>
 Conversely with the JSP MVC architecture a JSP can tell you something, but it can't understand what it has just 
@@ -169,7 +175,7 @@ documentation. Velocity's ease of use made it the ideal choice for Click.
 The one tricky part of Velocity, <i>configuration</i> is handled automatically by Click.
 <p/>
 Please note you can also use JSPs for rendering in Click. It should be said that 
-JSP 2.0 and the JSP Expression Language has greatly improved the usability of JSP 
+JSP 2.0 and the JSP Expression Language has improved the usability of JSP 
 in recent years.
 
 </table>
