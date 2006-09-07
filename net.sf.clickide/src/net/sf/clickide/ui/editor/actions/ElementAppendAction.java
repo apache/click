@@ -9,6 +9,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.Element;
 
 /**
+ * <code>IAction</code> which appends the <code>IDOMElement</code>
+ * to the specified element.
  * 
  * @author Naoki Takezoe
  */

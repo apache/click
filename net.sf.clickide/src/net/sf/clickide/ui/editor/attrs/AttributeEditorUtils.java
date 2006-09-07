@@ -37,7 +37,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.Element;
 
 /**
- * 
+ * Provides utility methods for attribute editors.
  * 
  * @author Naoki Takezoe
  */
