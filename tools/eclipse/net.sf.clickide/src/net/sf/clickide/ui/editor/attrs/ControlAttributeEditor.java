@@ -12,7 +12,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
- * The implementation of IElementEditor for &lt;control&gt;.
+ * The implementation of <code>IElementEditor</code> for &lt;control&gt;.
  * 
  * @author Naoki Takezoe
  */

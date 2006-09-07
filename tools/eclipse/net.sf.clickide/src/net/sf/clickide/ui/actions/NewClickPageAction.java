@@ -14,14 +14,12 @@ import org.eclipse.ui.PlatformUI;
  * Opens the New Click Page wizard.
  * 
  * @author Naoki Takezoe
+ * @see NewClickPageWizard
  */
 public class NewClickPageAction implements IWorkbenchWindowActionDelegate {
 	
 	private IWorkbenchWindow window;
 	private IStructuredSelection selection;
-	
-	public NewClickPageAction() {
-	}
 	
 	public void selectionChanged(IAction action, ISelection selection) {
 		if(selection instanceof IStructuredSelection){

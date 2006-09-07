@@ -6,6 +6,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
+ * <code>IAction</code> which removes the <code>IDOMElement</code> 
+ * from the parent element.
  * 
  * @author Naoki Takezoe
  */

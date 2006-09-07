@@ -6,6 +6,8 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
  * The interface of element editors in the {@link net.sf.clickide.ui.editor.ClickTreeEditor}.
+ * <p>
+ * Subclasses would provide the form editor to edit the element attributes.
  * 
  * @author Naoki Takezoe
  * @see net.sf.clickide.ui.editor.ClickTreeEditor

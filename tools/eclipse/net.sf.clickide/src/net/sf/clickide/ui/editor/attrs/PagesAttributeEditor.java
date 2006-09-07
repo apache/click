@@ -16,7 +16,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
- * The implementation of IElementEditor for &lt;pages&gt;.
+ * The implementation of <code>IElementEditor</code> for &lt;pages&gt;.
  * 
  * @author Naoki Takezoe
  */

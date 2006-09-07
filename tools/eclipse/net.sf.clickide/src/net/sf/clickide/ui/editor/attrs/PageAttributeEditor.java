@@ -25,7 +25,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
- * The implementation of IElementEditor for &lt;page&gt;.
+ * The implementation of <code>IElementEditor</code> for &lt;page&gt;.
  * 
  * @author Naoki Takezoe
  */
