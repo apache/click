@@ -145,7 +145,8 @@ An example of a fully optioned up config file is:
   &lt;/pages&gt;
   &lt;headers&gt;
     &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-    &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">no-store, no-cache, must-revalidate</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" 
+            value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
   &lt;/headers&gt;
   &lt;format classname="<span class="maroon">com.mycorp.util.Format</span>"/&gt;
   &lt;mode value="<span class="blue">debug</span>"/&gt;

@@ -6,7 +6,6 @@ a {
 	text-decoration: none;
 }
 
-
 a:visited {
   color: blue;
 }
@@ -59,41 +58,56 @@ span.sparx {
 }
 
 .appnameText {
-  font-weight: bold;
   font-size: 20pt;
+  font-weight: bold;
   letter-spacing: 0.2em; 
   padding-bottom: 0px;
   padding-left: 2px;
   padding-right: 0px;
-  padding-top: 0px;
+  padding-top: 8px;
   text-decoration: none;
+  vertical-align:top;
 }
 
 .versionText {
   font-size: 8pt;
+  padding: 1.5em;
   text-align: right;
-  padding-right: 0.5em;
-  padding-bottom: 0.75em;
   text-decoration: none;
   vertical-align: bottom;
 }
 
 .appTitleBar {
-  background-color: black;
-  color: white;
+  background-color: #d8d8d8;
+  color: 000080;
 }
 
-.navLink {
+a.navLinkSection {
+  background: url(images/book.gif) center left no-repeat;
+  color: 000080;
   text-decoration: none;
+  padding-left: 22px;
+  padding-bottom: 1px;
 }
 
-.navLink-external {
-  background: url(images/external.png) center right no-repeat;
-  padding-right: 15px;
+a.navLinkSection:visited {
+  color: 000080;
+}
+
+a.navLinkTopic {
+  background: url(images/page.gif) center left no-repeat; 
+  color: 000080;
+  margin-left: 22px;
   text-decoration: none;
+  padding-left: 24px;
+  padding-bottom: 1px;
 }
 
-.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
+a.navLinkTopic:visited {
+  color: 000080;
+}
+
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
 	font-family: Courier New, courier;
 	font-size: 10pt;
 	border: 1px solid #AAAAAA;
@@ -127,6 +141,12 @@ span.sparx {
 	background-color: white;
 }
 
+.codeLog {
+	color:white;
+	background-color: #808080;
+	border: 1px solid black;
+}
+
 .htmlExample 
 {
 	border: 1px solid gray;
@@ -135,6 +155,7 @@ span.sparx {
 	margin-bottom: 1.5em;
 	margin-left: 0em;
 }
+
 
 /* Java keyword. */
 .kw {
@@ -172,6 +193,8 @@ span.sparx {
 .maroon { color: maroon; }
 
 .navy { color: navy; }
+
+.yellow { color: yellow; }
 
 .html {
 	color: blue;

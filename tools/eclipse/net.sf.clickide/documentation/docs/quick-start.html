@@ -1,0 +1,413 @@
+<!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Quick Start Guide</h1>
+
+This section discusses how to get a Click web application up quickly. This section
+will not discuss how to configure your build system or IDE, but will focus on all 
+the basic pieces you need to get a Click application running.
+<p/>
+The following topics are covered:
+<ul>
+  <li><a href="#web">Web Application Structure</a>
+  </li>
+  <li><a href="#jars">JAR Files</a>
+  </li>
+  <li><a href="#welcome">Welcome File</a>
+  </li>
+  <li><a href="#home">Home Page</a>
+  </li>
+  <li><a href="#border">Border Template</a>
+  </li>
+  <li><a href="#logging">Logging</a>
+  </li>
+  <li><a href="#where">Whats Next ?</a>
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+
+<a name="web" class="heading"><h2>Web Application Structure</h2></a>
+
+First up add a <tt>click.xml</tt> and <tt>web.xml</tt> configuration file to 
+your applications <tt>WEB-INF</tt> directory:
+<table style="margin: 1em">
+<tr valign="top">
+  <td>
+    <img alt="Click application configuration files" src="../images/quick-start-1.png"/>  
+  </td>
+  <td>
+<ul>
+ <li>WEB-INF/<a target='topic' href="configuration.html#application-configuration">click.xml</a>
+ &nbsp; - &nbsp; Application Configuration
+ </li>
+ <li>WEB-INF/<a target='topic' href="configuration.html#servlet-configuration">web.xml</a>
+ &nbsp; - &nbsp; Servlet Configuration
+ </li>
+</ul>    
+  </td>
+</tr>
+</table>
+
+<blockquote>
+
+<h3>click.xml</h3>
+
+Your <tt>click.xml</tt> file should contain:
+
+<pre class="codeConfig">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+&lt;click-app&gt; 
+
+  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
+
+  &lt;headers&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Cache-Control" 
+            value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
+  &lt;/headers&gt;
+
+&lt;/click-app&gt;  </pre>
+
+<h3>web.xml</h3>
+
+Your <tt>web.xml</tt> file should contain:
+
+<pre class="codeConfig">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+  
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  
+  &lt;welcome-file-list&gt;
+    &lt;welcome-file&gt;<span class="blue">redirect.html</span>&lt;/welcome-file&gt;
+  &lt;/welcome-file-list&gt;
+  
+&lt;/web-app&gt;  </pre>
+
+</blockquote>
+
+
+<a name="jars" class="heading"><h2>JAR Files</h2></a>
+
+Add the following JAR files to your application <tt>WEB-INF/lib</tt>:
+
+<ul>
+<li>click-1.0.jar</li>
+<li>click-extras-1.0.jar</li>
+</ul>
+
+You can obtain these files from the Click distribution <tt>dist</tt> directory.
+
+<a name="welcome" class="heading"><h2>Welcome File</h2></a>
+
+To ensure default application requests 
+(e.g. <span class="blue">http://localhost/mycorp/</span>)
+are sent to your applications home page we will add a <tt>redirect.html</tt> file
+to the web root directory. This file should contain:
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;&lt;meta http-equiv="Refresh" content="0;URL=<span class="blue">home.htm</span>"&gt;&lt;/head&gt;
+&lt;/html&gt;  </pre>
+
+This <tt>redirect.html</tt> file is configured in our <tt>web.xml</tt>, and any
+default requests will be served this file:
+<p/>
+When the browser processes the <tt>redirect.html</tt> it will redirect to the
+applications <span class="blue">home.htm</span> page.
+
+
+<a name="home" class="heading"><h2>Home Page</h2></a>
+
+Now we are ready to add our first Click page which will be our applications home page.
+<p/>
+
+First we define a <tt>HomePage</tt> class, and ensure the class file is published
+to our web applications <tt>WEB-INF/classes</tt> directory:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">import</span> net.sf.click.Page;
+
+<span class="kw">public class</span> HomePage <span class="kw">extends</span> Page {
+
+} </pre>
+
+Next we add a corresponding Home page <span class="blue">home.htm</span> in the web root directory: 
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Home&lt;/title&gt;
+  &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+ 
+  &lt;h2 class="title"&gt;Home&lt;/h2&gt;
+ 
+  &lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point.
+ 
+&lt;/body&gt;
+&lt;/html&gt; </pre>
+
+Next add a <span class="blue">style.css</span> file to your web root directory:
+
+<pre class="codeHtml">
+body {
+  font-family: Arial;
+}
+h2.title {
+  color: white; 
+  background-color: navy; 
+  padding: 0.25em; 
+  margin-top: 0em;
+} </pre>
+
+You should now have the following web files:
+
+<blockquote>
+<table>
+<tr valign="top">
+  <td>
+    <img alt="Click application web files" src="../images/quick-start-2.png"/>  
+  </td>
+</tr>
+</table>
+</blockquote>
+
+Now if your web application is deployed to the context path <span class="blue">mycorp</span>
+you should now be able to make the request:
+
+<blockquote>
+ <span class="blue">http://localhost:8888/mycorp/</span>
+</blockquote>
+
+Your browser should be redirected to your <tt>HomePage</tt> and you should see your page
+rendered as:
+ 
+<table class="htmlExample" cellspacing="12" width="100%">
+<tr>
+ <td>
+ <h2 style="color: white; background-color: navy; padding: 0.25em; margin-top: 0em;">
+  Home
+ </h2>
+ <p>
+ <b>Welcome</b> to Home page your application starting point.
+ <p/>
+ </td>
+</tr>
+</table>
+
+In this example the Click automatically maps the <tt>home.htm</tt> request to
+our <tt>HomePage</tt> class and uses this class to process the request.
+
+
+<a name="border" class="heading"><h2>Border Template</h2></a>
+
+Now we want to create a page border template so application pages will have 
+a common look and feel.
+<p/>
+First create a <span class="blue">border-template.htm</span> file in the web
+root directory. In this file include the HTML content:
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;<span class="blue">$title</span>&lt;/title&gt;
+  &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+ 
+  &lt;h2 class="title"&gt;<span class="blue">$title</span>&lt;/h2&gt;
+ 
+  #parse(<span class="blue">$path</span>)
+ 
+&lt;/body&gt;
+&lt;/html&gt; </pre>
+
+Now we define a <tt>BorderPage</tt> class which specifies its template as the
+new <tt>border-template.htm</tt> file:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">import</span> net.sf.click.Page;
+
+<span class="kw">public class</span> BorderPage <span class="kw">extends</span> Page {
+
+   <span class="kw">public String</span> getTemplate() {
+      <span class="kw">return</span> <span class="st">"border-template.htm"</span>;
+   }
+
+} </pre>
+
+Note we named the template file <tt>border-template.htm</tt> so that it is not
+automatically mapped by Click to our <tt>BorderPage</tt> class. 
+
+<p/>
+
+Now we are going to modify our <tt>HomePage</tt> class to extend <tt>BorderPage</tt> 
+and define a <span class="blue">title</span> value.
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">public class</span> HomePage <span class="kw">extends</span> BorderPage {
+
+    <span class="kw">public</span> String <span class="blue">title</span> = <span class="st">"Home"</span>;
+
+} </pre>
+
+Next we modify our <span class="blue">home.htm</span> to remove the page border and
+only include the specific Home page content.
+
+<pre class="codeHtml">
+&lt;b&gt;Welcome&lt;/b&gt; to Home page your application starting point. </pre>
+
+You should now have the following web files:
+
+<blockquote>
+<table>
+<tr valign="top">
+  <td>
+    <img alt="Click application web files" src="../images/quick-start-3.png"/>  
+  </td>
+</tr>
+</table>
+</blockquote>
+
+Now if you make browser request to your updated home page you should see identical
+HTML content being rendered.
+
+<table class="htmlExample" cellspacing="12" width="100%">
+<tr>
+ <td>
+ <h2 style="color: white; background-color: navy; padding: 0.25em; margin-top: 0em;">
+  Home
+ </h2>
+ <p>
+ <b>Welcome</b> to Home page your application starting point.
+ <p/>
+ </td>
+</tr>
+</table>
+
+
+<a name="logging" class="heading"><h2>Logging</h2></a>
+
+Click has some handy logging features which will shows you how your page
+templates are being automatically mapped to you page classes. To enable debug
+logging add a mode value of "debug" to your <tt>click.xml</tt> file:
+
+<pre class="codeConfig">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+&lt;click-app&gt; 
+
+  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
+
+  &lt;headers&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Cache-Control" value="no-store, no-cache, must-revalidate"/&gt;
+  &lt;/headers&gt;
+  
+  &lt;mode value="<span class="blue">debug</span>"/&gt;
+
+&lt;/click-app&gt;  </pre>
+
+When the Click application starts up it will write out the following logging messages:
+
+<pre class="codeLog">
+[Click] [debug] automapped pages:
+[Click] [debug] /border-template.htm -> CLASS NOT FOUND
+[Click] [debug] /home.htm -> com.mycorp.page.HomePage
+[Click] [info ] initialized in debug mode  </pre>
+
+Click is telling us here that the <tt>border-template.htm</tt> template is not
+mapped to any Page class, while the <tt>home.htm</tt> template is mapped to
+our <tt>HomePage</tt> class. We are also informed that Click is running in 
+<tt>debug</tt> mode.
+<p/>
+
+When make a request to our home page we may get the following output:  
+
+<pre class="codeLog">
+[Click] [debug] GET http://localhost:8888/mycorp/home.htm
+[Click] [info ] renderTemplate: /home.htm,border-template.htm - 46 ms
+[Click] [info ] handleRequest:  /home.htm - 62 ms  </pre>
+
+This is telling us the HTTP request that the ClickServlet received. Then we
+can see that it is rendering the page path <tt>home.htm</tt> and template 
+<tt>border-template.htm</tt> files in 46 milliseconds. Finally we can see that the total
+time to handle this request was 62 milliseconds
+
+<p/>
+
+If you need more detailed debugging information change the application mode to
+<tt>trace</tt>. Now if we make the browser request:
+
+<blockquote>
+ <span class="blue">http://localhost:8888/mycorp/home.htm?user=malcolm&amp;password=secret</span>
+</blockquote>
+
+We will see the request parameters logged. This can be very handy for debugging
+form posts.
+
+<pre class="codeLog">
+[Click] [debug] GET http://localhost:8888/mycorp/home.htm
+[Click] [trace]    <span class="yellow">password=secret</span>
+[Click] [trace]    <span class="yellow">user=malcolm</span>
+[Click] [info ] renderTemplate: /home.htm,border-template.htm - 0 ms
+[Click] [info ] handleRequest:  /home.htm - 0 ms  </pre>
+
+
+<a name="where" class="heading"><h2>Whats Next ?</h2></a>
+
+After you have the Quick Start application up and running you might be wondering,
+where do I go from here? At this point you are recommended to:
+
+<ol>
+<li>
+ Read the Click <a href="best-practices.html">Best Practices</a> topic.  
+</li>
+<li>
+ Review the Click <a href="examples.html">Examples</a> application. 
+ <p/>
+ There is lot of good code examples and patterns you can lift into your application.
+<li>
+ Add a <a href="best-practices.html#menus">Menu</a> control 
+ to your <tt>border-template.htm</tt> to provide application wide navigation.
+</li>
+<li>
+ Integrate J2EE <a href="best-practices.html#security">Security</a> into your
+ application. 
+ <p/>
+ Use the Menu <tt>$menu.isUserInRoles()</tt> method in your menu 
+ rendering macro to only display a users authorized menu options.
+</li>
+</ol>
+
+</body>
+</html>
