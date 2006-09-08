@@ -46,7 +46,7 @@
      <wizard
            category="net.sf.clickide.category"
            class="net.sf.clickide.ui.wizard.NewClickPageWizard"
-           icon="icons/page_add.gif"
+           icon="icons/click-icon-16x16.png"
            id="net.sf.clickide.ui.wizard.NewClickPageWizard"
            name="%wizard.newPage"/>
      <category
@@ -151,7 +151,7 @@
         </menu>
         <action
               class="net.sf.clickide.ui.actions.NewClickPageAction"
-              icon="icons/page_add.gif"
+              icon="icons/click-icon-16x16.png"
               id="net.sf.clickide.ui.actions.NewClickPageAction"
               label="%action.newClickPage"
               toolbarPath="clickGroup"
