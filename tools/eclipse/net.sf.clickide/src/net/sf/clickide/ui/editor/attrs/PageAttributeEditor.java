@@ -7,6 +7,8 @@ import net.sf.clickide.ui.wizard.NewClickPageWizard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.events.ModifyEvent;
@@ -52,8 +54,11 @@ public class PageAttributeEditor implements IAttributeEditor {
 			}
 		});
 		
+		IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
+		IJavaProject project = JavaCore.create(file.getProject());
+		
 		final Text textClass = AttributeEditorUtils.createClassText(
-				toolkit, composite, element, 
+				project, toolkit, composite, element, 
 				ClickPlugin.getString("editor.clickXML.pages.class"), 
 				ClickPlugin.ATTR_CLASSNAME,
 				ClickPlugin.CLICK_PAGE_CLASS, textPath);

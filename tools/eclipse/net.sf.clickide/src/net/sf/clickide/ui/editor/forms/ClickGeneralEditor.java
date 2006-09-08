@@ -4,6 +4,9 @@ import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.ui.editor.attrs.AttributeEditorUtils;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -70,8 +73,11 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 			}
 		});
 		
+		IFile file = (IFile)ClickUtils.getResource(clickApp.getStructuredDocument());
+		IJavaProject project = JavaCore.create(file.getProject());
+		
 		textFormat = AttributeEditorUtils.createClassText(
-				toolkit, form.getBody(), format, 
+				project, toolkit, form.getBody(), format, 
 				ClickPlugin.getString("editor.clickXML.general.format"), 
 				ClickPlugin.ATTR_CLASSNAME, null, null);
 		textFormat.addModifyListener(new ModifyListener(){

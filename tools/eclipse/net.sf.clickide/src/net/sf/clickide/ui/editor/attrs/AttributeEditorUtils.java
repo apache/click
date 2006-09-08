@@ -63,7 +63,7 @@ public class AttributeEditorUtils {
 	/**
 	 * Creates the {@link Text} field editor.
 	 * 
-	 * @param toolkit FormToolkit
+	 * @param toolkit the <code>FormToolkit</code> instance
 	 * @param parent the parent composite
 	 * @param element the target element
 	 * @param label the field label
@@ -88,7 +88,7 @@ public class AttributeEditorUtils {
 	/**
 	 * Creates the {@Combo} field editor.
 	 * 
-	 * @param toolkit FormToolkit
+	 * @param toolkit the <code>FormToolkit</code>
 	 * @param parent the parent composite
 	 * @param element the target element
 	 * @param label the field label
@@ -116,16 +116,18 @@ public class AttributeEditorUtils {
 	/**
 	 * Creates the classname field editor.
 	 * 
-	 * @param toolkit FormToolkit
+	 * @param project the <code>IJavaProject</code> instance
+	 * @param toolkit the <code>FormToolkit</code> instance
 	 * @param parent the parent composite
 	 * @param element the target element
 	 * @param attrName the target attribute name
 	 * @param superClass the super class
 	 * @param textFileName null or the text control for the HTML filename
 	 */
-	public static Text createClassText(FormToolkit toolkit, final Composite parent,
-			final IDOMElement element, String label, final String attrName, final String superClass,
-			final Text textFileName){
+	public static Text createClassText(final IJavaProject project, 
+			FormToolkit toolkit, final Composite parent,
+			final IDOMElement element, String label, final String attrName,
+			final String superClass, final Text textFileName){
 		
 		final Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		link.addHyperlinkListener(new HyperlinkAdapter(){
@@ -213,9 +215,6 @@ public class AttributeEditorUtils {
 			public void widgetSelected(SelectionEvent evt){
 				Shell shell = text.getShell();
 				try {
-					IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
-					IJavaProject project = JavaCore.create(file.getProject());
-					
 					SelectionDialog dialog = JavaUI.createTypeDialog(
 							shell,new ProgressMonitorDialog(shell),
 							SearchEngine.createJavaSearchScope(new IJavaElement[]{project}),

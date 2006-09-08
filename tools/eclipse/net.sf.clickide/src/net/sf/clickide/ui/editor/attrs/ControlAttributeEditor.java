@@ -1,7 +1,11 @@
 package net.sf.clickide.ui.editor.attrs;
 
 import net.sf.clickide.ClickPlugin;
+import net.sf.clickide.ClickUtils;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -23,7 +27,10 @@ public class ControlAttributeEditor implements IAttributeEditor {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		final Text text = AttributeEditorUtils.createClassText(toolkit, composite, element, 
+		IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
+		IJavaProject project = JavaCore.create(file.getProject());
+		
+		final Text text = AttributeEditorUtils.createClassText(project, toolkit, composite, element, 
 				ClickPlugin.getString("editor.clickXML.controls.class"),
 				ClickPlugin.ATTR_CLASSNAME, ClickPlugin.CLICK_CONTROL_IF, null);
 		text.addModifyListener(new ModifyListener(){
