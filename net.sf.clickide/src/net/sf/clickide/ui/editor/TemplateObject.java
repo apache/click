@@ -136,6 +136,10 @@ public class TemplateObject {
 		return (TemplateObjectElement[])result.toArray(new TemplateObjectElement[result.size()]);
 	}
 	
+	public IType getType(){
+		return this.type;
+	}
+	
 	///////////////////////////////////////////////////////////////////////////////////////
 	//
 	// Inner Classes
@@ -175,7 +179,7 @@ public class TemplateObject {
 		
 		public TemplateObject toTemplateObject(){
 			try {
-				String className = removeTypeParameter(Signature.toString(this.method.getReturnType()));
+				String className = ClickUtils.removeTypeParameter(Signature.toString(this.method.getReturnType()));
 				if(ClickUtils.isPrimitive(className)){
 					return null;
 				}
@@ -246,7 +250,7 @@ public class TemplateObject {
 		public TemplateObject toTemplateObject(){
 			// TODO This implementation is same to TemplateObjectProperty.
 			try {
-				String className = removeTypeParameter(Signature.toString(this.method.getReturnType()));
+				String className = ClickUtils.removeTypeParameter(Signature.toString(this.method.getReturnType()));
 				if(ClickUtils.isPrimitive(className)){
 					return null;
 				}
@@ -285,17 +289,9 @@ public class TemplateObject {
 	 * @return the simple classname
 	 */
 	private static String getSimpleName(String name){
-		String simpleName = removeTypeParameter(name);
+		String simpleName = ClickUtils.removeTypeParameter(name);
 		if(simpleName.indexOf('.')>=0){
 			simpleName = simpleName.substring(simpleName.lastIndexOf('.') + 1);
-		}
-		return simpleName;
-	}
-	
-	private static String removeTypeParameter(String name){
-		String simpleName = name;
-		if(simpleName.indexOf('<')>=0){
-			simpleName = simpleName.substring(0, simpleName.lastIndexOf('<'));
 		}
 		return simpleName;
 	}

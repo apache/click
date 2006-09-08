@@ -1,7 +1,10 @@
 package net.sf.clickide.ui.editor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
@@ -10,7 +13,11 @@ import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectMethod;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectProperty;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.jdt.core.Flags;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -69,6 +76,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 	}
 	
+	/**
+	 * Returns completion proposals.
+	 */
 	public ICompletionProposal[] computeCompletionProposals(ITextViewer textViewer, int offset) {
 		
 		String matchString = getLastWord(textViewer, offset);
@@ -90,8 +100,18 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			format = ClickUtils.getFormat(file.getProject());
 			if(matchString.startsWith("$format.")){
 				if(format != null){
-					return processFormat(format, result, matchString, offset);
+					return processType(format, result, matchString, offset);
 				}
+			}
+		}
+		
+		Map fields = extractPageFields();
+		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
+			Map.Entry entry = (Map.Entry)ite.next();
+			String name = (String)entry.getKey();
+			if(matchString.startsWith("$" + name + ".")){
+				TemplateObject obj = (TemplateObject)entry.getValue();
+				return processType(obj.getType(), result, matchString, offset);
 			}
 		}
 		
@@ -101,6 +121,16 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		} else {
 			registerProposal(result, offset, matchString, 
 					"$format", "$format - " + format.getFullyQualifiedName(), IMAGE_CLASS);
+		}
+		
+		// for page class fields
+		// TODO Primitive Type Fields
+		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
+			Map.Entry entry = (Map.Entry)ite.next();
+			String name = (String)entry.getKey();
+			TemplateObject obj = (TemplateObject)entry.getValue();
+			registerProposal(result, offset, matchString, 
+				"$" + name, "$" + name + " - " + obj.getType().getFullyQualifiedName(), IMAGE_FIELD);
 		}
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
@@ -118,9 +148,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	}
 	
 	/**
-	 * Returns completion proposals for the format object.
+	 * Returns completion proposals for the java object.
 	 */
-	private ICompletionProposal[] processFormat(IType type, List result, String matchString, int offset){
+	private ICompletionProposal[] processType(IType type, List result, String matchString, int offset){
 		String prefix = matchString;
 		int index = matchString.lastIndexOf('.');
 		if(index >= 0){
@@ -181,6 +211,36 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			obj = null;
 		}
 		return obj;
+	}
+	
+	private Map extractPageFields(){
+		HashMap map = new HashMap();
+		if(this.file != null){
+			try {
+				IType type = ClickUtils.getPageClassFromTemplate(this.file);
+				IJavaProject javaProject = type.getJavaProject();
+				
+				IField[] fields = type.getFields();
+				for(int i=0;i<fields.length;i++){
+					if(!Flags.isPublic(fields[i].getFlags())){
+						continue;
+					}
+					String className = ClickUtils.removeTypeParameter(Signature.toString(fields[i].getTypeSignature()));
+					if(ClickUtils.isPrimitive(className)){
+						return null;
+					}
+					className = ClickUtils.resolveClassName(type, className);
+					IType fieldType = javaProject.findType(className);
+					if(fieldType != null){
+						TemplateObject obj = new TemplateObject(fieldType);
+						map.put(fields[i].getElementName(), obj);
+					}
+				}
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
+			}
+		}
+		return map;
 	}
 	
 	/**
