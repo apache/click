@@ -733,4 +733,14 @@ public class ClickUtils {
 		}
 		return false;
 	}
+	
+	public static String removeTypeParameter(String name){
+		String simpleName = name;
+		if(simpleName.indexOf('<')>=0){
+			simpleName = simpleName.substring(0, simpleName.lastIndexOf('<'));
+		}
+		return simpleName;
+	}
+	
+
 }
