@@ -96,6 +96,9 @@ public class PageLink extends AbstractLink {
         if (getPageClass() == null) {
             throw new IllegalStateException("target pageClass is not defined");
         }
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
