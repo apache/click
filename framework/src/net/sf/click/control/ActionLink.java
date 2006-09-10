@@ -288,6 +288,10 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink HTML href attribute
      */
     public String getHref(Object value) {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         String uri = getContext().getRequest().getRequestURI();
 
         HtmlStringBuffer buffer =

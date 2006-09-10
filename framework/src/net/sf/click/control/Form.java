@@ -1916,6 +1916,9 @@ public class Form implements Control {
      * @return the HTML string representation of the form
      */
     public String toString() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
 
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
