@@ -34,38 +34,57 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Provides a HTML Table control: &lt;table&gt;.
  *
- * <table id="table" class="simple">
- * <thead>
+ * <table class='htmlHeader' cellspacing='10'>
  * <tr>
- * <th>Id</th>
- * <th>Name</th>
- * <th>Category</th>
- * <th>Action</th></tr></thead>
- * <tbody>
- * <tr class="odd">
- * <td>834501</td>
- * <td>Alison Smart</td>
- * <td>Residential Property</td>
- * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr>
- * <tr class="even">
- * <td>238454</td>
- * <td>Angus Robins</td>
- * <td>Bonds</td>
- * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr>
- * <tr class="odd">
- * <td>784191</td>
- * <td>Ann Melan</td>
- * <td>Residential Property</td>
- * <td><a href="#">View</a> | <a href="#">Edit</a> | <a href="#">Delete</a></td></tr></tbody></table>
- *
- * <p/>
+ * <td>
+ * <img align='middle' hspace='2'src='table.png' title='Table'/>
+ * </td>
+ * </tr>
+ * </table>
  *
  * The Table control provides a HTML &lt;table&gt; control with
- * <a href="http://sourceforge.net/projects/dispaytag">DisplayTag</a>
+ * <a href="http://sourceforge.net/projects/displaytag">DisplayTag</a>
  * like functionality. The design of the Table control has been informed by
- * the excellent DisplayTag library, with the aim of making this control easy to
- * learn for DisplayTag users.
- * <p/>
+ * the excellent DisplayTag library.
+ * 
+ * <h4>Table Example</h4>
+ * 
+ * An example Table usage is provided below:
+ * 
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> CustomersPage <span class="kw">extends</span> BorderPage {
+ * 
+ *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
+ * 
+ *     <span class="kw">public</span> CustomersPage() {
+ *         table.setAttribute(<span class="st">"class"</span>, <span class="st">"its"</span>);
+ *         table.setPageSize(4); 
+ * 
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
+ * 
+ *         Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
+ *         column.setAutolink(<span class="kw">true</span>);
+ *         table.addColumn(column);
+ * 
+ *         column = <span class="kw">new</span> Column(<span class="st">"age"</span>);
+ *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:center;}"</span>);
+ *         table.addColumn(column);
+ * 
+ *         column = <span class="kw">new</span> Column(<span class="st">"holdings"</span>);
+ *         column.setFormat(<span class="st">"${0,number,#,##0.00}"</span>);
+ *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
+ *         table.addColumn(column);
+ *     }
+ * 
+ *     <span class="kw">public void</span> onRender() {
+ *         List customers = getCustomerService().getCustomersSortedByName();
+ *         table.setRowList(customers);
+ *     }
+ * } </pre>
+ * 
+ * <h4>Table Styles</h4>
+ * 
  * The Table control automatically deploys the table CSS style sheet
  * (<tt>table.css</tt>) to the application directory <tt>/click</tt>.
  * To import the style sheet simply reference the
@@ -95,7 +114,7 @@ import org.apache.commons.lang.StringUtils;
  * attribute. For examle:
  *
  * <pre class="codeJava">
- * <span class="kw">public</span> CustomersPage() {
+ * <span class="kw">public</span> LineItemsPage() {
  *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
  *     table.setAttribute(<span class="st">"class"</span>, <span class="st">"simple"</span>);
  *     ..
