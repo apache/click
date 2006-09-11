@@ -436,6 +436,8 @@
           todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/tabbed-form.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/table.png"
+            todir="documentation/docs/click-api/net/sf/click/control"/>
       <copy file="framework/stylesheet.css"  
       	    overwrite="true"
             todir="documentation/docs/click-api"/>
