@@ -650,6 +650,10 @@ public class Panel implements Control {
      * @return true or false to abort further processing
      */
     public boolean onProcess() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         if (hasControls()) {
             List controls = getControls();
             for (int i = 0; i < controls.size(); i++) {
@@ -673,6 +677,10 @@ public class Panel implements Control {
      * @return the HTML string representation of the form
      */
     public String toString() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         Context context = getContext();
 
         if (getTemplate() != null) {

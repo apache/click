@@ -185,6 +185,10 @@ public class ActionButton extends Button {
      * @return the ActionButton JavaScript href attribute
      */
     public String getOnClick(Object value) {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         String uri = getContext().getRequest().getRequestURI();
 
         HtmlStringBuffer buffer =
@@ -270,6 +274,10 @@ public class ActionButton extends Button {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         clicked =
             getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
 

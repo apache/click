@@ -427,6 +427,10 @@ public class RadioGroup extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         bindRequestValue();
 
         boolean continueProcessing = true;
