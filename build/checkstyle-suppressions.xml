@@ -53,7 +53,7 @@
               
     <suppress checks="LineLength"
               files="FieldSet.java"
-              lines="555,567,595"/>  
+              lines="559,571,599"/>  
               
     <suppress checks="LineLength"
               files="Form.java"/>
