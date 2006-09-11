@@ -786,6 +786,7 @@ public class Table implements Control {
      */
     public boolean onProcess() {
         if (pagingLink != null) {
+            pagingLink.setContext(getContext());
             pagingLink.onProcess();
         }
 
