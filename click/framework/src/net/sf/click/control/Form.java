@@ -1165,8 +1165,9 @@ public class Form implements Control {
      */
     public boolean isFormSubmission() {
         if (getContext() == null) {
-            throw new IllegalStateException("Context has not been set");
+            throw new IllegalStateException("context is not defined");
         }
+
         String requestMethod = getContext().getRequest().getMethod();
 
         if (!getMethod().equalsIgnoreCase(requestMethod)) {

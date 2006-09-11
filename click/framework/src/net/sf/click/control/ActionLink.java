@@ -436,6 +436,10 @@ public class ActionLink extends AbstractLink {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         clicked =
             getName().equals(getContext().getRequestParameter(ACTION_LINK));
 

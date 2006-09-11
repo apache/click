@@ -338,6 +338,10 @@ public class FormTable extends Table {
      * @return a HTML rendered FormTable string
      */
     public String toString() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         int bufferSize =
             (getColumnList().size() * 60) * (getRowList().size() + 1)
             + 256;

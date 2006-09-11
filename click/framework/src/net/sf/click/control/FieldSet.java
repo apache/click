@@ -455,6 +455,10 @@ public class FieldSet extends Field {
      *  false
      */
     public boolean onProcess() {
+        if (getContext() == null) {
+            throw new IllegalStateException("context is not defined");
+        }
+
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
             if (!field.getName().startsWith(Form.SUBMIT_CHECK)) {
