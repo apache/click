@@ -710,7 +710,11 @@ public class DateField extends TextField {
                         jsPattern.append("%b");
                     } else if ("MM".equals(token)) {
                         jsPattern.append("%m");
+                    } else if ("M".equals(token)) {
+                        jsPattern.append("%m");
                     } else if ("dd".equals(token)) {
+                        jsPattern.append("%e");
+                    } else if ("d".equals(token)) {
                         jsPattern.append("%e");
                     } else if ("EEEE".equals(token)) {
                         jsPattern.append("%A");

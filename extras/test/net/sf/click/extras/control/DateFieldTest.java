@@ -53,6 +53,11 @@ public class DateFieldTest extends TestCase {
         dateField.setFormatPattern("dd.MM.yy");
         assertEquals(dateField.getFormatPattern(), "dd.MM.yy");
         assertEquals(dateField.getCalendarPattern(), "%e.%m.%y");
+        
+        dateField = new DateField("Delivery date");
+        dateField.setFormatPattern("d/M/yy");
+        assertEquals(dateField.getFormatPattern(), "d/M/yy");
+        assertEquals(dateField.getCalendarPattern(), "%e/%m/%y");
     }
     
     public void testNullParameter() {
