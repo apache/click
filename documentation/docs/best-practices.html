@@ -75,6 +75,7 @@ under the <span class="red">admin</span> directory:
 <pre class="codeConfig">
 &lt;security-constraint&gt;
    &lt;web-resource-collection&gt;
+      &lt;web-resource-name&gt;admin&lt;/web-resource-name&gt;   
       &lt;url-pattern&gt;<span class="red">/admin/*</span>&lt;/url-pattern&gt;
    &lt;/web-resource-collection&gt;
    &lt;auth-constraint&gt;
@@ -189,6 +190,7 @@ unauthorized (403) requests to the <tt>/not-authorized.htm</tt> page.
 
     &lt;security-constraint&gt;
         &lt;web-resource-collection&gt;
+            &lt;web-resource-name&gt;admin&lt;/web-resource-name&gt;   
             &lt;url-pattern&gt;<span class="blue">/admin/*</span>&lt;/url-pattern&gt;
         &lt;/web-resource-collection&gt;
         &lt;auth-constraint&gt;
@@ -198,6 +200,7 @@ unauthorized (403) requests to the <tt>/not-authorized.htm</tt> page.
 
     &lt;security-constraint&gt;
         &lt;web-resource-collection&gt;
+            &lt;web-resource-name&gt;user&lt;/web-resource-name&gt;   
             &lt;url-pattern&gt;<span class="blue">/user/*</span>&lt;/url-pattern&gt;
         &lt;/web-resource-collection&gt;
         &lt;auth-constraint&gt;
