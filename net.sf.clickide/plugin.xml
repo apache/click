@@ -17,7 +17,7 @@
     <project-facet-version facet="click" version="0.21">
        <constraint>
         <and>
-          <requires facet="jst.web" version=">=2.3"/>
+          <requires facet="jst.web" version="[2.3"/>
         </and>
       </constraint>
     </project-facet-version> 
