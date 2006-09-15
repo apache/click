@@ -83,8 +83,8 @@ class ClickApp implements EntityResolver {
      */
     static final String VELOCITY_LOGGER = "org.apache.velocity";
 
-    /** The click deployment directory path: &nbsp; "click". */
-    static final String CLICK_PATH = "click";
+    /** The click deployment directory path: &nbsp; "/click". */
+    static final String CLICK_PATH = "/click";
 
     /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>". */
     static final String DTD_FILE_NAME = "click.dtd";
