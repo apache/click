@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.AbstractLink;
@@ -317,7 +319,7 @@ public class LinkDecorator implements Decorator {
             String pageNumber =
                 table.getContext().getRequestParameter(PAGE_NUMBER);
 
-            if (pageNumber != null) {
+            if (StringUtils.isNotBlank(pageNumber)) {
                 table.setPageNumber(Integer.parseInt(pageNumber));
             }
 
