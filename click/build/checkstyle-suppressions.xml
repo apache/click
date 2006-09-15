@@ -68,7 +68,7 @@
                                         
     <suppress checks="LineLength"
               files="Table.java"
-              lines="129"/>      
+              lines="148"/>      
               
 	<!-- Method Lenght -->              
               
