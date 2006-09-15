@@ -46,45 +46,45 @@ import org.apache.commons.lang.StringUtils;
  * <a href="http://sourceforge.net/projects/displaytag">DisplayTag</a>
  * like functionality. The design of the Table control has been informed by
  * the excellent DisplayTag library.
- * 
+ *
  * <h4>Table Example</h4>
- * 
+ *
  * An example Table usage is provided below:
- * 
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> CustomersPage <span class="kw">extends</span> BorderPage {
- * 
+ *
  *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
- * 
+ *
  *     <span class="kw">public</span> CustomersPage() {
  *         table.setAttribute(<span class="st">"class"</span>, <span class="st">"its"</span>);
- *         table.setPageSize(4); 
- * 
+ *         table.setPageSize(4);
+ *
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
- * 
+ *
  *         Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
  *         column.setAutolink(<span class="kw">true</span>);
  *         table.addColumn(column);
- * 
+ *
  *         column = <span class="kw">new</span> Column(<span class="st">"age"</span>);
  *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:center;}"</span>);
  *         table.addColumn(column);
- * 
+ *
  *         column = <span class="kw">new</span> Column(<span class="st">"holdings"</span>);
  *         column.setFormat(<span class="st">"${0,number,#,##0.00}"</span>);
  *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
  *         table.addColumn(column);
  *     }
- * 
+ *
  *     <span class="kw">public void</span> onRender() {
  *         List customers = getCustomerService().getCustomersSortedByName();
  *         table.setRowList(customers);
  *     }
  * } </pre>
- * 
+ *
  * <h4>Table Styles</h4>
- * 
+ *
  * The Table control automatically deploys the table CSS style sheet
  * (<tt>table.css</tt>) to the application directory <tt>/click</tt>.
  * To import the style sheet simply reference the
