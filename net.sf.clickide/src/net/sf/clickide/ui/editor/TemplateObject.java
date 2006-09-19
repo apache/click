@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.Signature;
 public class TemplateObject {
 	
 	private IType type;
+	private String primitiveType;
 	
 	/**
 	 * The constructor.
@@ -36,6 +37,15 @@ public class TemplateObject {
 	}
 	
 	/**
+	 * The constructor for primitive types.
+	 * 
+	 * @param primitiveType the primitive type name
+	 */
+	public TemplateObject(String primitiveType){
+		this.primitiveType = primitiveType;
+	}
+	
+	/**
 	 * Returns the specified method.
 	 * If this object doesn't have the specified method, returns <code>null</code>.
 	 * 
@@ -43,10 +53,12 @@ public class TemplateObject {
 	 * @return the specified method or <code>null</code>
 	 */
 	public TemplateObjectMethod getMethod(String name){
-		TemplateObjectMethod[] methods = getMethods();
-		for(int i=0;i<methods.length;i++){
-			if(methods[i].getName().equals(name)){
-				return methods[i];
+		if(this.type!=null){
+			TemplateObjectMethod[] methods = getMethods();
+			for(int i=0;i<methods.length;i++){
+				if(methods[i].getName().equals(name)){
+					return methods[i];
+				}
 			}
 		}
 		return null;
@@ -60,10 +72,12 @@ public class TemplateObject {
 	 * @return the specified property or <code>null</code>
 	 */
 	public TemplateObjectProperty getProperty(String name){
-		TemplateObjectProperty[] properties = getProperties();
-		for(int i=0;i<properties.length;i++){
-			if(properties[i].getName().equals(name)){
-				return properties[i];
+		if(this.type!=null){
+			TemplateObjectProperty[] properties = getProperties();
+			for(int i=0;i<properties.length;i++){
+				if(properties[i].getName().equals(name)){
+					return properties[i];
+				}
 			}
 		}
 		return null;
@@ -75,16 +89,18 @@ public class TemplateObject {
 	 * @return the array of methods
 	 */
 	public TemplateObjectMethod[] getMethods(){
-		try {
-			IMethod[] methods = getAllMethods(type);
-			List result = new ArrayList();
-			for(int i=0;i<methods.length;i++){
-				if(Flags.isPublic(methods[i].getFlags()) && !methods[i].isConstructor()){
-					result.add(new TemplateObjectMethod(methods[i]));
+		if(this.type!=null){
+			try {
+				IMethod[] methods = getAllMethods(type);
+				List result = new ArrayList();
+				for(int i=0;i<methods.length;i++){
+					if(Flags.isPublic(methods[i].getFlags()) && !methods[i].isConstructor()){
+						result.add(new TemplateObjectMethod(methods[i]));
+					}
 				}
+				return (TemplateObjectMethod[])result.toArray(new TemplateObjectMethod[result.size()]);
+			} catch (JavaModelException e) {
 			}
-			return (TemplateObjectMethod[])result.toArray(new TemplateObjectMethod[result.size()]);
-		} catch (JavaModelException e) {
 		}
 		return new TemplateObjectMethod[0];
 	}
@@ -95,20 +111,22 @@ public class TemplateObject {
 	 * @return the array of properties
 	 */
 	public TemplateObjectProperty[] getProperties(){
-		try {
-			IMethod[] methods = getAllMethods(type);
-			List result = new ArrayList();
-			for(int i=0;i<methods.length;i++){
-				if(Flags.isPublic(methods[i].getFlags()) && methods[i].getParameterTypes().length==0){
-					String name = methods[i].getElementName();
-					if((name.startsWith("get") && name.length() > 3) || 
-							(name.startsWith("is") && name.length() > 2)){
-						result.add(new TemplateObjectProperty(methods[i]));
+		if(this.type!=null){
+			try {
+				IMethod[] methods = getAllMethods(type);
+				List result = new ArrayList();
+				for(int i=0;i<methods.length;i++){
+					if(Flags.isPublic(methods[i].getFlags()) && methods[i].getParameterTypes().length==0){
+						String name = methods[i].getElementName();
+						if((name.startsWith("get") && name.length() > 3) || 
+								(name.startsWith("is") && name.length() > 2)){
+							result.add(new TemplateObjectProperty(methods[i]));
+						}
 					}
 				}
+				return (TemplateObjectProperty[])result.toArray(new TemplateObjectProperty[result.size()]);
+			} catch (JavaModelException e) {
 			}
-			return (TemplateObjectProperty[])result.toArray(new TemplateObjectProperty[result.size()]);
-		} catch (JavaModelException e) {
 		}
 		return new TemplateObjectProperty[0];
 	}
@@ -119,25 +137,56 @@ public class TemplateObject {
 	 * @return the array of both methods and properties
 	 */
 	public TemplateObjectElement[] getChildren(){
-		TemplateObjectMethod[] methods = getMethods();
-		TemplateObjectProperty[] properties = getProperties();
 		List result = new ArrayList();
-		for(int i=0;i<methods.length;i++){
-			result.add(methods[i]);
-		}
-		for(int i=0;i<properties.length;i++){
-			result.add(properties[i]);
-		}
-		Collections.sort(result, new Comparator(){
-			public int compare(Object arg0, Object arg1) {
-				return arg0.toString().compareTo(arg1.toString());
+		if(this.type!=null){
+			TemplateObjectMethod[] methods = getMethods();
+			TemplateObjectProperty[] properties = getProperties();
+			for(int i=0;i<methods.length;i++){
+				result.add(methods[i]);
 			}
-		});
+			for(int i=0;i<properties.length;i++){
+				result.add(properties[i]);
+			}
+			Collections.sort(result, new Comparator(){
+				public int compare(Object arg0, Object arg1) {
+					return arg0.toString().compareTo(arg1.toString());
+				}
+			});
+		}
 		return (TemplateObjectElement[])result.toArray(new TemplateObjectElement[result.size()]);
 	}
 	
+	/**
+	 * Tests whether this object is the primitive type.
+	 * 
+	 * @return <code>true</code> if this is the primitive type; 
+	 *   <code>false</code> otherwise
+	 */
+	public boolean isPrimitive(){
+		return this.type == null;
+	}
+	
+	/**
+	 * Returns the <code>IType</code> instance of this object.
+	 * 
+	 * @return the <code>IType</code> instance.
+	 *   If this object is the primitive type, returns null.
+	 */
 	public IType getType(){
 		return this.type;
+	}
+	
+	/**
+	 * Returns the type name of this object.
+	 * 
+	 * @return the full qualified class name or the primitive type name
+	 */
+	public String getTypeName(){
+		if(this.type!=null){
+			return this.type.getFullyQualifiedName();
+		} else {
+			return this.primitiveType;
+		}
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////

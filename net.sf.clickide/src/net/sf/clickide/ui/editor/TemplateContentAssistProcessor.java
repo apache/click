@@ -65,7 +65,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	private void registerProposal(List result, int offset, 
 			String matchString, String replaceString, String displayString, Image image){
 		int position = replaceString.length();
-		if(replaceString.endsWith("}") || replaceString.endsWith(")")){
+		if(replaceString.endsWith(")") && displayString.indexOf("()") < 0){
 			position--;
 		}
 		if(replaceString.startsWith(matchString)){
@@ -111,7 +111,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			String name = (String)entry.getKey();
 			if(matchString.startsWith("$" + name + ".")){
 				TemplateObject obj = (TemplateObject)entry.getValue();
-				return processType(obj.getType(), result, matchString, offset);
+				if(obj.getType()!=null){
+					return processType(obj.getType(), result, matchString, offset);
+				}
 			}
 		}
 		
@@ -124,13 +126,12 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 		
 		// for page class fields
-		// TODO Primitive Type Fields
 		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
 			Map.Entry entry = (Map.Entry)ite.next();
 			String name = (String)entry.getKey();
 			TemplateObject obj = (TemplateObject)entry.getValue();
 			registerProposal(result, offset, matchString, 
-				"$" + name, "$" + name + " - " + obj.getType().getFullyQualifiedName(), IMAGE_FIELD);
+				"$" + name, "$" + name + " - " + obj.getTypeName(), IMAGE_FIELD);
 		}
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
@@ -213,6 +214,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		return obj;
 	}
 	
+	/**
+	 * Extracts public fields from the page class.
+	 */
 	private Map extractPageFields(){
 		HashMap map = new HashMap();
 		if(this.file != null){
@@ -226,9 +230,13 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 						continue;
 					}
 					String className = ClickUtils.removeTypeParameter(Signature.toString(fields[i].getTypeSignature()));
+					// primitive types
 					if(ClickUtils.isPrimitive(className)){
-						return null;
+						TemplateObject obj = new TemplateObject(className);
+						map.put(fields[i].getElementName(), obj);
+						continue;
 					}
+					// object types
 					className = ClickUtils.resolveClassName(type, className);
 					IType fieldType = javaProject.findType(className);
 					if(fieldType != null){
