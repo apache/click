@@ -30,7 +30,7 @@ import ognl.Ognl;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  *
- * <table id="table" class="simple">
+ * <table id="table" class="isi">
  * <thead>
  * <tr>
  * <th>Id</th>
@@ -84,7 +84,7 @@ import ognl.Ognl;
  *
  * <pre class="codeJava">
  * Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
- * table.setStyle(<span class="st">"simple"</span>);
+ * table.setStyle(<span class="st">"isi"</span>);
  *
  * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
  * idColumn.setFormat(<span class="st">"{0,number,#,###}"</span>);
