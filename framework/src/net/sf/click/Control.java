@@ -95,7 +95,7 @@ import javax.servlet.ServletContext;
  *   &lt;/controls&gt;
  * &lt;/click-app&gt; </pre>
  *
- * When the Click applicatin starts up it will deploy any control elements
+ * When the Click application starts up it will deploy any control elements
  * defined in the following files in sequential order:
  * <ul>
  *  <li><tt>/click-controls.xml</tt>

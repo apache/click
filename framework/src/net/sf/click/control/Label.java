@@ -18,10 +18,14 @@ package net.sf.click.control;
 /**
  * Provides a Label display control. The Label control performs no server side
  * processing, and is used primarily to add descriptive labels or horizontal
- * rules to auto rendered forms. For example:
+ * rules to auto rendered forms.
+ *
+ * <h3>Label Example</h3>
+ *
+ * A Label example:
  *
  * <pre class="codeJava">
- * Form form = <span class="kw">new</span> Form(getContext(), <span class="st">"form"</span>);
+ * Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  * ..
  *
  * form.add(<span class="kw">new</span> Label(<span class="st">"hr"</span>, <span class="st">"&lt;hr/&gt;"</span>)); </pre>

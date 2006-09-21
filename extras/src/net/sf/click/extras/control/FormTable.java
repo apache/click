@@ -66,7 +66,9 @@ import ognl.Ognl;
  * rowList should be populated in the page <tt>onInit()</tt> method.
  * Note this is different from the Table control where the rowlist is generally
  * populated in the page <tt>onRender()</tt> method.
- * <p/>
+ *
+ * <h3>FormTable Example</h3>
+ *
  * An code example usage of the FormTable is provided below. This example will
  * render the FormTable illustrated in the image above.
  *

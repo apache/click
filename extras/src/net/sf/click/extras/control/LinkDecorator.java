@@ -43,9 +43,11 @@ import ognl.OgnlException;
  * </tr>
  * </table>
  *
- * <p/>
+ * <h3>LinkDecorator Example</h3>
+ *
  * The example below uses a LinkDecorator to render the row ActionLinks in the
  * tables "Action" column.
+ *
  * <pre class="codeJava">
  * <span class="kw">public class</span> EditTable <span class="kw">extends</span> BorderPage {
  *

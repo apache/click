@@ -49,7 +49,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * The CreditCardField uses a JavaScript onKeyPress() integerFilter() method to
  * prevent users from entering invalid characters. To enable number key filtering
  * reference the {@link net.sf.click.util.PageImports} object in the page template.
- * For example:
+ *
+ * <h3>CreditCardField Example</h3>
+ *
+ * A CreditCardField example is provided below:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;

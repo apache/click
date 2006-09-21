@@ -47,7 +47,7 @@ import org.apache.commons.lang.StringUtils;
  * like functionality. The design of the Table control has been informed by
  * the excellent DisplayTag library.
  *
- * <h4>Table Example</h4>
+ * <h3>Table Example</h3>
  *
  * An example Table usage is provided below:
  *

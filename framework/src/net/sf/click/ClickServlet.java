@@ -650,7 +650,7 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-           setRequestAttributes(page);
+        setRequestAttributes(page);
 
         RequestDispatcher dispatcher = null;
 
@@ -940,7 +940,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        Object path = page.getPath();
+        String path = page.getPath();
         if (path != null) {
            pop = context.put("path", path);
             if (pop != null) {
@@ -1076,7 +1076,16 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Set the page model, context, format, messages and path as request
-     * attributes to support JSP rendering.
+     * attributes to support JSP rendering. These request attributes include:
+     * <ul>
+     * <li>any public Page fields using the fields name</li>
+     * <li>context - the Servlet context path, e.g. /mycorp</li>
+     * <li>format - the {@link Format} object for formatting the display of objects</li>
+     * <li>forward - the page forward path, if defined</li>
+     * <li>imports - the {@link PageImports} object</li>
+     * <li>messages - the page messages bundle</li>
+     * <li>path - the page of the page template to render</li>
+     * </ul>
      *
      * @param page the page to set the request attributes on
      */

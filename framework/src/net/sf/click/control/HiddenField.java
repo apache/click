@@ -43,7 +43,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * Base64 encoded, using {@link net.sf.click.util.ClickUtils#encode(Object)}
  * method, and decoded using the corresponding
  * {@link net.sf.click.util.ClickUtils#decode(String)} method.
- * <p/>
+ *
+ * <h3>HiddenField Example</h3>
+ *
  * An example is provided below which uses a hidden field to count the number of
  * times a form is consecutively submitted. The count is displayed in the
  * page template using the model "count" value.
@@ -51,29 +53,25 @@ import net.sf.click.util.HtmlStringBuffer;
  * <pre class="codeJava">
  * <span class="kw">public class</span> CountPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *     <span class="kw">public</span> Integer count;
+ *
  *     <span class="kw">private</span> HiddenField counterField = <span class="kw">new</span> HiddenField(<span class="st">"counterField"</span>, Integer.<span class="kw">class</span>);
  *
  *     <span class="kw">public</span> CountPage() {
  *         form.add(counterField);
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
- *
- *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onGet() {
- *         Integer count = <span class="kw">new</span> Integer(0);
+ *         count = <span class="kw">new</span> Integer(0);
  *         counterField.setValueObject(count);
- *
- *         addModel(<span class="st">"count"</span>, count);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {
- *         Integer count = (Integer) counterField.getValueObject();
+ *         count = (Integer) counterField.getValueObject();
  *         count = <span class="kw">new</span> Integer(count.intValue() + 1);
- *
  *         counterField.setValueObject(count);
- *         addModel(<span class="st">"count"</span>, count);
  *     }
  * } </pre>
  *

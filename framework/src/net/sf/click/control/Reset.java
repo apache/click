@@ -27,7 +27,9 @@ package net.sf.click.control;
  * The Reset control provides input type reset field. The Reset button is
  * uses to reset the any changes a user may have made to a forms values. The
  * Reset button performs no server side processing.
- * <p/>
+ *
+ * <h3>Reset Example</h3>
+ *
  * The example below illustrates adding a Reset button to a Form, and shows
  * how it will be rendered as HTML.
  *

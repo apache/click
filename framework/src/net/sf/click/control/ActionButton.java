@@ -34,7 +34,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * action listeners to the button. When the button is clicked it will make a
  * JavaScript GET request. This request is then processed by the ActionButton
  * and its listener is invoked.
- * <p/>
+ *
+ * <h3>ActionButton Example</h3>
+ *
  * Example usage of the ActionButton:
  *
  * <pre class="codeJava">

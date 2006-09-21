@@ -45,7 +45,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * it is recommended that you add a separate DataContext to the session
  * for the unit of work.
  *
- * <h4>Example</h4>
+ * <h3>DataContextFilter Example</h3>
  *
  * An example data context filter configuration in the web application's
  * <tt>/WEB-INF/web.xml</tt> file is provided below

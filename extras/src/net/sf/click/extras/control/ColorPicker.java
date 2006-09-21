@@ -41,6 +41,7 @@ import org.apache.commons.lang.StringUtils;
  * </td>
  * </tr>
  * </table>
+ *
  * The ColorPicker control provides a popup DHTML color picker
  * &lt;div&gt; and a text input where users can enter the color in hex format. The text input
  * field can be turned off by setting {@link #setShowTextField(boolean)} to false (default is true).

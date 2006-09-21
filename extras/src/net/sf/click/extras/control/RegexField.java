@@ -37,7 +37,9 @@ import net.sf.click.util.ClickUtils;
  *
  * RegexField will validate the value using regular expression when the control
  * is processed and invoke the control listener if defined.
- * <p/>
+ *
+ * <h3>RegexField Example</h3>
+ *
  * Examples using RegexField for version number and URL input are provided below:
  *
  * <pre class="codeJava">

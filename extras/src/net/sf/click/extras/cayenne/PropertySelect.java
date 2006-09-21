@@ -59,7 +59,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * <p/>
  * Currently this control only supports selecting a single elements.
  *
- * <h4>Example</h4>
+ * <h3>PropertySelect Example</h3>
  *
  * For example given a Pet DataObject which has a PetType DataObject property.
  *

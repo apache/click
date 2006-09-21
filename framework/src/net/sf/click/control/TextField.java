@@ -29,6 +29,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * </table>
  *
+ * <h3>TextField Example</h3>
+ *
  * The example below shows how to a TextField to a Form, and how it will be
  * rendered as HTML.
  *
@@ -40,7 +42,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * usernameField.setMinLength(6);
  * form.add(usernameField); </pre>
  *
- * HTML output:
+ * The TextField control will rendered HTML output:
+ *
  * <pre class="codeHtml">
  * &lt;input type='text' name='username' value='' size='12' maxlength='12'&gt; </pre>
  *

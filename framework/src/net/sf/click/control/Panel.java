@@ -49,8 +49,12 @@ import org.apache.commons.lang.StringUtils;
  * </table>
  *
  * The Panel class uses a Velocity template for rendering any model data or
- * controls you have added to the Page. For example to create a simple
- * Panel we could have the following <tt>panel-template.htm</tt>
+ * controls you have added to the Page.
+ *
+ * <h3>Panel Example</h3>
+ *
+ * An simple example creating a Panel with the <tt>panel-template.htm</tt> is
+ * provided below:
  *
  * <pre class="codeHtml">
  * &lt;fieldset&gt;
