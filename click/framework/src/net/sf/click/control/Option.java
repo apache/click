@@ -26,7 +26,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * The Option class uses an immutable design so Option instances can be
  * shared by multiple Pages in the multi-threaded Servlet environment.
  * This enables Option instances to be cached as static variables.
- * <p/>
+ *
+ * <h3>Option Example</h3>
+ *
  * The example below caches Option and OptionGroup instances in a
  * static List to provide a reusable InvestmentSelect control.
  *
@@ -56,8 +58,9 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * <span class="kw">public class</span> InvestmentsPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> Form form = new Form(<span class="st">"form"</span>);
- *     <span class="kw">private</span> Select investmentsSelect  = <span class="kw">new</span> InvestmentsSelect(<span class="st">"investments"</span>);;
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *
+ *     <span class="kw">private</span> Select investmentsSelect = <span class="kw">new</span> InvestmentsSelect(<span class="st">"investments"</span>);;
  *
  *     <span class="kw">public</span> InvestmentsPage() {
  *         investmentsSelect.setMutliple(<span class="kw">true</span>);
@@ -65,8 +68,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *         form.add(investmentsSelect);
  *
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
- *
- *         addControl(form);
  *     }
  *
  *     ..

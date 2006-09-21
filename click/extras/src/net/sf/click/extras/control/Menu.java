@@ -56,6 +56,8 @@ import org.w3c.dom.NodeList;
  * <pre class="codeHtml">
  * <span class="red">#</span>writeMenu(<span class="red">$</span><span class="st">rootMenu</span>) </pre>
  *
+ * <h3>Menu Configuration Example</h3>
+ *
  * An example <tt>/WEB-INF/menu.xml</tt> configuration file is provided below:
  *
  * <pre class="codeConfig">

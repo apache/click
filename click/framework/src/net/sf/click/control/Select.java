@@ -46,20 +46,23 @@ import ognl.Ognl;
  * The Control listener will be invoked if the Select is valid and an item(s) is
  * selected by the user.
  *
+ * <h3>Select Examples</h3>
+ *
  * <h4>Single Item Select</h4>
  * A single item Select, will only allow users to select one item from the list.
  * By default the Select {@link #multiple} item property is false.
  * <p/>
  * If a Select is required, an item after the first in the list must be selected
  * for the Field to be valid. This forces the user to make an active selection.
- * <p/>
+ *
  * An example of a single item Select is provided below along with the
  * rendered HTML.
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> GenderPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *
  *     <span class="kw">private</span> Select genderSelect = <span class="kw">new</span> Select(<span class="st">"Gender"</span>);
  *
  *     <span class="kw">public</span> GenderPage() {
@@ -70,8 +73,6 @@ import ognl.Ognl;
  *         form.add(genderSelect);
  *
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
- *
- *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {
@@ -115,7 +116,8 @@ import ognl.Ognl;
  * <pre class="codeJava">
  * <span class="kw">public class</span> LocationPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *
  *     <span class="kw">private</span> Select locationSelect = <span class="kw">new</span> Select(<span class="st">"location"</span>);
  *
  *     <span class="kw">public</span> LocationPage() {
@@ -132,8 +134,6 @@ import ognl.Ognl;
  *         form.add(locationSelect);
  *
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>));
- *
- *         addControl(form);
  *     }
  *
  *     <span class="kw">public void</span> onPost() {

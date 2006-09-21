@@ -47,7 +47,7 @@ import org.apache.commons.lang.StringUtils;
  * The rendered field error messages are tab sheet aware so that clicking on
  * a error message link will open the appropriate tab sheet.
  *
- * <h4>Example</h4>
+ * <h3>TabbedForm Example</h3>
  *
  * A form delivery details editor example, with separate "Contact Detais", "Delivery Details"
  * and "Payment Details" tab sheets, is provided below. Note how tabsheets

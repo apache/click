@@ -361,6 +361,10 @@ public abstract class Field implements Control {
     /**
      * Return true if the Field is a disabled. The Field will also be disabled
      * if the parent Form is disabled.
+     * <p/>
+     * <b>Important Note</b>: disabled fields will not submit their values in
+     * a HTML form POST. This may cause validation issues in a form submission.
+     * Please note this is a HTML limitation and is not due to Click.
      *
      * @return true if the Field is a disabled
      */
@@ -374,6 +378,10 @@ public abstract class Field implements Control {
 
     /**
      * Set the Field disabled flag.
+     * <p/>
+     * <b>Important Note</b>: disabled fields will not submit their values in
+     * a HTML form POST. This may cause validation issues in a form submission.
+     * Please note this is a HTML limitation and is not due to Click.
      *
      * @param disabled the Field disabled flag
      */

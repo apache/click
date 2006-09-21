@@ -30,6 +30,9 @@ import ognl.Ognl;
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
  * renderer.
  *
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr><td>
+ *
  * <table id="table" class="isi">
  * <thead>
  * <tr>
@@ -53,6 +56,8 @@ import ognl.Ognl;
  * <td>Ann Melan</td>
  * <td>Residential Property</td>
  * <td><a href="#">View</a></td></tr></tbody></table>
+ *
+ * </td></tr></table>
  *
  * <p/>
  *

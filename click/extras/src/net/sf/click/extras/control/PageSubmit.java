@@ -32,9 +32,12 @@ import net.sf.click.util.ClickUtils;
  * The PageSubmit is a Submit button which enables you to redirect to another
  * page from a Form, without having to define a listener method.
  * <p/>
- * This control is typically used for Cancel buttons. For example the code below
- * will redirect the request to the <tt>HomePage</tt> if the cancel button is
- * pressed.
+ * This control is typically used for Cancel buttons.
+ *
+ * <h3>PageSubmit Example</h3>
+ *
+ * The example code below will redirect the request to the <tt>HomePage</tt> if
+ * the cancel button is pressed.
  *
  * <pre class="javaCode">
  *    form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">" OK "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));

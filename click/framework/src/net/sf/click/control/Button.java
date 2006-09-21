@@ -29,7 +29,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * The Button control is used to render a JavaScript enabled button which can
  * perform client side logic. The Button control provides no servier side
  * processing. If server side processing is required use {@link Submit} instead.
- * <p/>
+ *
+ * <h3>Button Example</h3>
+ *
  * The example below adds a back button to a form, which when clicked returns
  * to the previous page.
  *

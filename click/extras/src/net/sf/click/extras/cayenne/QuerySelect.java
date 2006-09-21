@@ -59,7 +59,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * QuerySelect has no dependency on {@link CayenneForm} and can be used
  * separately in other forms or controls.
  *
- * <h4>Examples</h4>
+ * <h3>QuerySelect Examples</h3>
  *
  * The QuerySelect below executes a Cayenne Modeller defined named query
  * called "system.titles". This pre configured query returns a list of {@link DataRow}

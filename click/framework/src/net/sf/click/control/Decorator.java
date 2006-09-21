@@ -19,7 +19,9 @@ import net.sf.click.Context;
 
 /**
  * Provides a decorator interface for delegating object rendering.
- * <p/>
+ *
+ * <h3>Decorator Example</h3>
+ *
  * The following example illustrates how to render a email hyperlink in a
  * email table column.
  *

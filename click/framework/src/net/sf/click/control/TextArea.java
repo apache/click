@@ -29,8 +29,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * </table>
  *
- * The example below shows how to a TextArea to a Form, and how it will be
- * rendered as HTML.
+ * <h3>TextArea Example</h3>
+ *
+ * The example below shows how to a TextArea to a Form:
  *
  * <pre class="codeJava">
  * TextArea commentsField = <span class="kw">new</span> TextArea(<span class="st">"comments"</span>);
@@ -38,9 +39,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * commentsField.setRows(6);
  * form.add(commentsField); </pre>
  *
- * HTML output:
+ * The TextArea control will rendered HTML output:
  * <pre class="codeHtml">
- * &lt;textarea name='comments' rows='6' cols='40'/&gt;&lt;/textarea&gt; </pre>
+ * &lt;textarea name="comments" rows="6" cols="40"/&gt;&lt;/textarea&gt; </pre>
  *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"

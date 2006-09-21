@@ -78,7 +78,7 @@ import org.objectstyle.cayenne.validation.ValidationResult;
  * <tt>DataContext.getThreadDataContext()</tt> for all object for persistence
  * operations.
  *
- * <h4>Examples</h4>
+ * <h3>CayenneForm Examples</h3>
  *
  * The example below provides a <tt>Department</tt> data object creation
  * and editing page. To edit an existing department object, the object is passed

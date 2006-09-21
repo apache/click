@@ -38,8 +38,11 @@ import org.apache.commons.lang.StringUtils;
  * {@link #getHref()}, or the entire ActionLink anchor tag using
  * {@link #toString()}.
  * <p/>
- * ActionLink support invoking control listeners. An example of using ActionLink
- * to call a logout method is illustrated below:
+ * ActionLink support invoking control listeners.
+ *
+ * <h3>ActionLink Example</h3>
+ *
+ * An example of using ActionLink to call a logout method is illustrated below:
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
@@ -97,25 +100,19 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public class</span> ProductsPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> ActionLink addLink;
- *     <span class="kw">private</span> ActionLink detailsLink;
- *
- *     <span class="kw">public</span> ProductsPage() {
- *         addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>, <span class="kw">this</span>, <span class="st">"onAddClick"</span>);
- *         addControl(addLink);
- *
- *         detailsLink = <span class="kw">new</span> ActionLink(<span class="st">"detailsLink"</span>, <span class="kw">this</span>, <span class="st">"onDetailsClick"</span>);
- *         addControl(detailsLink);
- *     }
+ *     <span class="kw">public</span> ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="st">"addLink"</span>, <span class="kw">this</span>, <span class="st">"onAddClick"</span>);
+ *     <span class="kw">public</span> ActionLink detailsLink  = <span class="kw">new</span> ActionLink(<span class="st">"detailsLink"</span>, <span class="kw">this</span>, <span class="st">"onDetailsClick"</span>);
+ *     <span class="kw">public</span> List productList;
  *
  *     <span class="kw">public boolean</span> onAddClick() {
  *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = addLink.getValueInteger();
- *         Product product = ProductDAO.getProduct(productId);
+ *         Product product = getProductService().getProduct(productId);
  *
  *         <span class="cm">// Add product to basket</span>
  *         List basket = (List) getContext().getSessionAttribute(<span class="st">"basket"</span>);
  *         basket.add(product);
+ *         getContext().setSessionAttribute(<span class="st">"basket"</span>, basket);
  *
  *         <span class="kw">return true</span>;
  *     }
@@ -123,19 +120,18 @@ import org.apache.commons.lang.StringUtils;
  *     <span class="kw">public boolean</span> onDetailsClick() {
  *         <span class="cm">// Get the product clicked on by the user</span>
  *         Integer productId = detailsLink.getValueInteger();
- *         Product product = ProductDAO.getProduct(productId);
+ *         Product product = getProductService().getProduct(productId);
  *
  *         <span class="cm">// Store the product in the request and display in the details page</span>
  *         getContext().setRequestAttribute(<span class="st">"product"</span>, product);
- *         setForward(<span class="st">"productDetails.html"</span>);
+ *         setForward(ProductDetailsPage.<span class="kw">class</span>);
  *
  *         <span class="kw">return false</span>;
  *     }
  *
- *     <span class="kw">public void</span> onGet() {
+ *     <span class="kw">public void</span> onRender() {
  *         <span class="cm">// Display the list of available products</span>
- *         List productList = ProductDAO.getProducts();
- *         addModel("<span class="blue">productList</span>", productList);
+ *         productList = getProductService().getProducts();
  *     }
  * } </pre>
  *

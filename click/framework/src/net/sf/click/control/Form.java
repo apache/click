@@ -75,21 +75,21 @@ import org.apache.commons.lang.StringUtils;
  * in the order they were added to the form, and then it will process the
  * {@link Button} controls in the added order. Once all the Fields have been
  * processed the form will invoke its action listener if defined.
- * <p/>
+ *
+ * <h3>Form Example</h3>
+ *
  * The example below illustrates a Form being used in a login Page.
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> Login <span class="kw">extends</span> Page {
  *
- *     <span class="kw">private</span> Form form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
  *
  *     <span class="kw">public</span> Login() {
  *         form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
  *         form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"  OK  "</span>, <span class="kw">this</span>, <span class="st">"onOkClick"</span>));
  *         form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClick"</span>));
- *
- *         addControl(form);
  *     }
  *
  *     <span class="kw">public boolean</span> onOkClick() {
@@ -97,9 +97,9 @@ import org.apache.commons.lang.StringUtils;
  *             User user = new User();
  *             form.copyTo(user);
  *
- *             <span class="kw">if</span> (UserDOA.isAuthenticatedUser(user)) {
+ *             <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
  *                 getContext().setSessionAttribute(<span class="st">"user"</span>, user);
- *                 setRedirect(<span class="st">"home.htm"</span>);
+ *                 setRedirect(HomePage.<span class="kw">class</span>);
  *             }
  *             <span class="kw">else</span> {
  *                 form.setError(getMessage(<span class="st">"authentication-error"</span>));
@@ -109,7 +109,7 @@ import org.apache.commons.lang.StringUtils;
  *     }
  *
  *     <span class="kw">public boolean</span> onCancelClick() {
- *         setRedirect(<span class="st">"index.htm"</span>);
+ *         setRedirect(WelcomePage.<span class="kw">class</span>);
  *         <span class="kw">return false</span>;
  *     }
  * } </pre>

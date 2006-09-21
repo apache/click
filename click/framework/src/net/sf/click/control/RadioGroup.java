@@ -47,13 +47,16 @@ import net.sf.click.util.HtmlStringBuffer;
  * Radio controls added to a RadioGroup will have their name set to that of
  * the RadioGroup. This will ensure the buttons will toggle together so that
  * only one button is selected at a time.
- * <p/>
+ *
+ * <h3>RadioGroup Example</h3>
+ *
  * The example below illustrates a RadioGroup being added to a form.
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
  *
- *     <span class="kw">privte</span> Form form  = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+ *
  *     <span class="kw">private</span> RadioGroup radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"packaging"</span>);
  *
  *     <span class="kw">public</span> Purchase() {
@@ -65,8 +68,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *         form.add(radioGroup);
  *
  *         ..
- *
- *         addControl(form);
  *     }
  * } </pre>
  *
