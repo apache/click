@@ -16,7 +16,7 @@
 This section discusses Best Practices for designing and building Click application.
 The following topics are covered:
 <ul>
-  <li><a href="#security">Security</a> - use J2EE role based security
+  <li><a href="#security">Security</a> - use JEE role based security
   </li>
   <li><a href="#automapping">Page Auto Mapping</a> - use Convention over Configuration
   </li>
@@ -36,10 +36,10 @@ The following topics are covered:
 
 <a name="security" class="heading"><h2>Security</h2></a>
 
-For application security it is highly recommended that you use the J2EE Servlet 
+For application security it is highly recommended that you use the JEE Servlet 
 path role based security model. While Click pages provide an 
 <tt>onSecurityCheck()</tt> method for rolling your own security model, 
-the J2EE model provides numerous advantages.
+the JEE model provides numerous advantages.
 <p/>
 These advantages include:
 
@@ -63,9 +63,9 @@ These advantages include:
   </li>
 </ul>
 
-The J2EE Servlet security model requires users to be authenticated and
+The JEE Servlet security model requires users to be authenticated and
 in the right roles before they can access secure resources. Relative to many of 
-the J2EE specifications the Servlet security model is surprisingly simple. 
+the JEE specifications the Servlet security model is surprisingly simple. 
 <p/>
 For example to secure admin pages, you add a security 
 constraint in your <tt>web.xml</tt> file. This requires users to be in the
@@ -171,7 +171,7 @@ For example:
 When using FORM based authentication do <b>NOT</b> put application logic in a 
 Click Login Page class, as the role of this page is to simply render the login 
 form. If you attempt to put navigation logic in your Login Page class, the 
-J2EE Container may simply ignore it or throw errors.
+JEE Container may simply ignore it or throw errors.
 <p/>
 Putting this all together below is a <tt>web.xml</tt> snippet which features 
 security constraints for pages under the admin path and the user path. This 
