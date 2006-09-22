@@ -214,8 +214,7 @@ public class LinkDecorator implements Decorator {
                     ((ActionLink) link).setValueObject(value);
 
                 } else {
-                    link.setParameter(idProperty.toString(),
-                                      value.toString());
+                    link.setParameter(idProperty, value.toString());
                 }
 
             } catch (OgnlException ognle) {
@@ -241,8 +240,7 @@ public class LinkDecorator implements Decorator {
                         ((ActionLink) link).setValueObject(value);
 
                     } else {
-                        link.setParameter(idProperty.toString(),
-                                          value.toString());
+                        link.setParameter(idProperty, value.toString());
                     }
 
                     link.setParameter(PAGE_NUMBER,

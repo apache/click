@@ -15,6 +15,8 @@
  */
 package net.sf.click.util;
 
+import java.io.Serializable;
+
 /**
  * Provides a flash session attribute. The flash attribute simply wraps an
  * existing session attribute providing a marker to the Context and SessionMap
@@ -56,7 +58,9 @@ package net.sf.click.util;
  *
  * @author Malcolm Edgar
  */
-public class FlashAttribute {
+public class FlashAttribute implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The session attribute value. */
     protected Object value;
