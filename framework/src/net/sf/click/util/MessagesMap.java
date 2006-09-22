@@ -76,9 +76,6 @@ public class MessagesMap implements Map {
     /** The resource bundle base name. */
     protected final String baseName;
 
-    /** The time the cache was lasted updated. */
-    protected static long cacheLastUpdated;
-
     /** The class global resource bundle base name. */
     protected final String globalBaseName;
 

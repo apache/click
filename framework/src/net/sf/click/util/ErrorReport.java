@@ -109,7 +109,7 @@ public class ErrorReport {
 
         isParseError = error instanceof ParseErrorException;
 
-        if (isParseError) {
+        if (error instanceof ParseErrorException) {
             ParseErrorException pee = (ParseErrorException) error;
             sourceName = pee.getTemplateName();
             lineNumber = pee.getLineNumber();
@@ -613,11 +613,13 @@ public class ErrorReport {
      * @param buffer the string buffer to write out the values to
      */
     protected void writeMap(Map map, HtmlStringBuffer buffer) {
-        for (Iterator i = map.keySet().iterator(); i.hasNext();) {
-            Object key = i.next();
+        for (Iterator i = map.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            String key = entry.getKey().toString();
+            Object value = entry.getValue();
+
             buffer.append(key);
             buffer.append("=");
-            Object value = map.get(key);
             if (value != null) {
                 buffer.append(ClickUtils.escapeHtml(value.toString()));
             } else {

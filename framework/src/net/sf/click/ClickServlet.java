@@ -328,10 +328,11 @@ public class ClickServlet extends HttpServlet {
 
         if (logger.isTraceEnabled()) {
             Map requestParams = getRequestParameters(request);
-            Iterator i = requestParams.keySet().iterator();
+            Iterator i = requestParams.entrySet().iterator();
             while (i.hasNext()) {
-                String name = i.next().toString();
-                String value = requestParams.get(name).toString();
+                Map.Entry entry = (Map.Entry) i.next();
+                String name = entry.getKey().toString();
+                String value = entry.getValue().toString();
                 logger.trace("   " + name + "=" + value);
             }
         }
@@ -593,33 +594,34 @@ public class ClickServlet extends HttpServlet {
                                 request,
                                 getServletContext());
 
+            if (velocityWriter == null) {
+                OutputStreamWriter outputStreamWriter =
+                    new OutputStreamWriter(output, encoding);
+
+                velocityWriter =
+                    new VelocityWriter(outputStreamWriter, 4 * 1024, true);
+            }
+
             velocityWriter.write(errorReport.getErrorReport());
 
             throw error;
 
         } finally {
-            try {
-                if (velocityWriter != null) {
-                    // flush and put back into the pool don't close to allow
-                    // us to play nicely with others.
-                    velocityWriter.flush();
+            if (velocityWriter != null) {
+                // flush and put back into the pool don't close to allow
+                // us to play nicely with others.
+                velocityWriter.flush();
 
-                    // Clear the VelocityWriter's reference to its
-                    // internal OutputStreamWriter to allow the latter
-                    // to be GC'd while vw is pooled.
-                    velocityWriter.recycle(null);
+                // Clear the VelocityWriter's reference to its
+                // internal OutputStreamWriter to allow the latter
+                // to be GC'd while vw is pooled.
+                velocityWriter.recycle(null);
 
-                    writerPool.put(velocityWriter);
-                }
-
-                if (output != null) {
-                    output.flush();
-                    output.close();
-                }
-
-            } catch (Exception e) {
-                // do nothing
+                writerPool.put(velocityWriter);
             }
+
+            output.flush();
+            output.close();
         }
 
         if (!clickApp.isProductionMode()) {
@@ -985,10 +987,10 @@ public class ClickServlet extends HttpServlet {
     protected void setPageResponseHeaders(HttpServletResponse response,
             Map headers) {
 
-        Iterator headerNames = headers.keySet().iterator();
-        while (headerNames.hasNext()) {
-            String name = headerNames.next().toString();
-            Object value = headers.get(name);
+        for (Iterator i = headers.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            String name = entry.getKey().toString();
+            Object value = entry.getValue();
 
             if (value instanceof String) {
                 String strValue = (String) value;
@@ -1101,9 +1103,12 @@ public class ClickServlet extends HttpServlet {
         });
 
         Map model = page.getModel();
-        for (Iterator i = model.keySet().iterator(); i.hasNext();)  {
-            String name = i.next().toString();
-            request.setAttribute(name, model.get(name));
+        for (Iterator i = model.entrySet().iterator(); i.hasNext();)  {
+            Map.Entry entry = (Map.Entry) i.next();
+            String name = entry.getKey().toString();
+            Object value = entry.getValue();
+
+            request.setAttribute(name, value);
         }
 
         request.setAttribute("context", request.getContextPath());

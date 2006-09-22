@@ -267,10 +267,12 @@ public class HtmlStringBuffer {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
-        for (Iterator i = attributes.keySet().iterator(); i.hasNext();) {
-            String name = i.next().toString();
+        for (Iterator i = attributes.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            String name = entry.getKey().toString();
+
             if (!name.equals("id")) {
-                Object value = attributes.get(name);
+                Object value = entry.getValue();
                 appendAttribute(name, value);
             }
         }

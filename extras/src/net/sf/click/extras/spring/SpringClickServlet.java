@@ -235,7 +235,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  */
 public class SpringClickServlet extends ClickServlet {
 
-    private static final long serialVersionUID = -8251140780990964857L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * The path to the Spring XML appliation context definition file:

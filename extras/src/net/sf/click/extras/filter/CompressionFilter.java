@@ -116,11 +116,11 @@ public class CompressionFilter implements Filter {
                 compressionThreshold = minThreshold;
             }
 
+            charset = getCharset(filterConfig.getServletContext());
+
         } else {
             compressionThreshold = minThreshold;
         }
-
-        charset = getCharset(filterConfig.getServletContext());
     }
 
     /**
