@@ -1997,7 +1997,7 @@ public class Form implements Control {
                 (Long) getContext().getSessionAttribute(submitTokenName);
 
             if (sessionTime != null) {
-                String value = request.getParameter(submitTokenName);
+                String value = getContext().getRequestParameter(submitTokenName);
                 Long formTime = Long.valueOf(value);
                 isValidSubmit = formTime.equals(sessionTime);
             }
