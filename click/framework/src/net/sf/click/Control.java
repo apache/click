@@ -76,7 +76,7 @@ import javax.servlet.ServletContext;
  * <span class="kw">public class</span> CustomField <span class="kw">extends</span> TextField {
  *     ..
  *
- *     <span class="kw">public void</span> onDeploy(ServletContext servletContext) <span class="kw">throws</span> IOException {
+ *     <span class="kw">public void</span> onDeploy(ServletContext servletContext) {
  *         ClickUtils.deployFile
  *             (servletContext, <span class="st">"/com/mycorp/control/custom.js"</span>, <span class="st">"click"</span>);
  *     }
