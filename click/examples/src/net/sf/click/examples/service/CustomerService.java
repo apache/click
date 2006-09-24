@@ -1,11 +1,13 @@
 package net.sf.click.examples.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import net.sf.click.examples.domain.Customer;
 
 import org.objectstyle.cayenne.exp.Expression;
+import org.objectstyle.cayenne.exp.ExpressionFactory;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
@@ -27,6 +29,26 @@ public class CustomerService extends CayenneTemplate {
     public List getCustomersSortedByName() {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering("name", true);
+        return performQuery(query);
+    }
+
+    public List getCustomers(Date from, Date to) {
+        Expression qual = null;
+
+        if (from != null) {
+            qual = ExpressionFactory.greaterOrEqualExp("dateJoined", from);
+        }
+        if (to != null) {
+            if (qual != null) {
+                qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
+            } else {
+                qual = ExpressionFactory.lessOrEqualExp("dateJoined", to);
+            }
+        }
+
+        SelectQuery query = new SelectQuery(Customer.class, qual);
+        query.addOrdering("dateJoined", true);
+
         return performQuery(query);
     }
 
