@@ -33,17 +33,13 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public List getCustomers(Date from, Date to) {
-        Expression qual = null;
+        Expression qual = ExpressionFactory.noMatchExp("dateJoined", null);
 
         if (from != null) {
-            qual = ExpressionFactory.greaterOrEqualExp("dateJoined", from);
+        	qual = qual.andExp(ExpressionFactory.greaterOrEqualExp("dateJoined", from));
         }
         if (to != null) {
-            if (qual != null) {
-                qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
-            } else {
-                qual = ExpressionFactory.lessOrEqualExp("dateJoined", to);
-            }
+        	qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
         }
 
         SelectQuery query = new SelectQuery(Customer.class, qual);

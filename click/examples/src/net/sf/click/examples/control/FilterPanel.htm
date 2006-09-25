@@ -1,9 +1,17 @@
 <div style="margin-bottom:12px;">
+#if ($this.selected)
+ <img id="filterImg" src="$context/images/twistie-down.png"/> 
+#else
  <img id="filterImg" src="$context/images/twistie-up.png"/> 
+#end
  <a id="filterLink" href="#" onclick="onFilterTwistieClick()" style="text-decoration:none;">Date Filter</a>
 </div>
 
+#if ($this.selected)
+<div id="filterDiv" style="display:block;">
+#else
 <div id="filterDiv" style="display:none;">
+#end
  $filterForm.startTag()
  <fieldset style="width:200px;">
   <legend>Date Range</legend>
@@ -37,6 +45,7 @@ function onFilterTwistieClick() {
 function onClearClick() {
 	document.getElementById("startDate_field").value = "";
 	document.getElementById("endDate_field").value = "";
+	document.getElementById("filterForm").submit();
 }
 </script>
 
