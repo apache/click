@@ -17,7 +17,7 @@ import net.sf.click.util.ClickUtils;
 public class FilterPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
-    
+
     private Form filterForm = new Form("filterForm");
     private DateField startDate = new DateField("startDate");
     private DateField endDate = new DateField("endDate");
@@ -34,7 +34,7 @@ public class FilterPanel extends Panel {
 
         addControl(filterForm);
     }
-    
+
     public Date getEndDate() {
         return endDate.getDate();
     }
