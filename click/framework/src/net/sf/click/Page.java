@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -449,7 +450,6 @@ public class Page {
      * <pre class="codeHtml">
      * <span class="blue">$messages.title</span> </pre>
      *
-     *
      * Please see the {@link net.sf.click.util.MessagesMap} adaptor for more details.
      *
      * @param key the message property key name
@@ -463,14 +463,44 @@ public class Page {
     }
 
     /**
-     * Return a Map of localized messages for the Page.
+     * Return the formatted page message for the given resource name
+     * and message format argument and for the context request locale.
      *
-     * @see #getMessage(String)
-     *
-     * @return a Map of localized messages for the Page
-     * @throws IllegalStateException if the context for the Page has not be set
+     * @param name resource name of the message
+     * @param arg the message argument to format
+     * @return the named localized message for the page
      */
-    public Map getMessages() {
+    public String getMessage(String name, Object arg) {
+        Object[] args = new Object[] { arg };
+        return getMessage(name, args);
+    }
+
+    /**
+     * Return the formatted page message for the given resource name and
+     * message format arguments and for the context request locale.
+     *
+     * @param name resource name of the message
+     * @param args the message arguments to format
+     * @return the named localized message for the page
+     */
+     public String getMessage(String name, Object[] args) {
+        if (args == null) {
+            throw new IllegalArgumentException("Null args parameter");
+        }
+        String value = getMessage(name);
+
+        return MessageFormat.format(value, args);
+     }
+
+     /**
+      * Return a Map of localized messages for the Page.
+      *
+      * @see #getMessage(String)
+      *
+      * @return a Map of localized messages for the Page
+      * @throws IllegalStateException if the context for the Page has not be set
+      */
+     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
                 String baseName = getClass().getName();
