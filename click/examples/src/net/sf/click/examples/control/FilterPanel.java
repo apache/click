@@ -42,9 +42,9 @@ public class FilterPanel extends Panel {
     public Date getStartDate() {
         return startDate.getDate();
     }
-    
+
     public boolean isSelected() {
-    	return startDate.getDate() != null || endDate.getDate() != null;
+        return startDate.getDate() != null || endDate.getDate() != null;
     }
 
     /**

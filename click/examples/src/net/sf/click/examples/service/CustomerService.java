@@ -36,10 +36,10 @@ public class CustomerService extends CayenneTemplate {
         Expression qual = ExpressionFactory.noMatchExp("dateJoined", null);
 
         if (from != null) {
-        	qual = qual.andExp(ExpressionFactory.greaterOrEqualExp("dateJoined", from));
+            qual = qual.andExp(ExpressionFactory.greaterOrEqualExp("dateJoined", from));
         }
         if (to != null) {
-        	qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
+            qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
         }
 
         SelectQuery query = new SelectQuery(Customer.class, qual);
