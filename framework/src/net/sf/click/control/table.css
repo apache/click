@@ -68,10 +68,15 @@ table.isi, table.isi td, table.isi th {
     border: 1px solid #666;
     border-collapse: collapse;
 }
-table.isi th, table.isi td {
+table.isi th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
+}
+table.isi td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 /* its style */
@@ -105,10 +110,15 @@ table.mars, table.mars td, table.mars th {
     border: 1px solid #666;
     border-collapse: collapse;
 }
-table.mars th, table.mars td {
+table.mars th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
+}
+table.mars td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 /* simple style */
@@ -125,10 +135,15 @@ table.simple, table.simple td, table.simple th {
 	border: 1px solid #ccc;
 	border-collapse: collapse;
 }
-table.simple th, table.simple td {
+table.simple th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
+}
+table.simple td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 /* nocol style */
@@ -136,10 +151,15 @@ table.nocol tbody td,table.nocol tbody th {
 	border-left: none;
 	border-right: none;
 }
-table.nocol th, table.nocol td {
+table.nocol th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
+}
+table.nocol td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
 }
 
 /* report style */
@@ -173,12 +193,18 @@ table.report {
 table.report tbody tr{
 	height: 10px;
 }
-table.report th, table.report td {
+table.report th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
 }
+table.report td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
+}
 
+/* Other styles */
 
 table.sublist {
 	margin: 0 0 0 0;
