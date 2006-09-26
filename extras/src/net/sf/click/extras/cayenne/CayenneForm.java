@@ -18,6 +18,7 @@ package net.sf.click.extras.cayenne;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sf.click.control.Checkbox;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
@@ -530,7 +531,9 @@ public class CayenneForm extends Form {
 
             if (field != null) {
                 if (!field.isRequired() && dbAttribute.isMandatory()) {
-                    field.setRequired(true);
+                    if (!(field instanceof Checkbox)) {
+                        field.setRequired(true);
+                    }
                 }
 
                 int maxlength = dbAttribute.getMaxLength();
