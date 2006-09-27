@@ -194,7 +194,10 @@ public class TemplateObject {
 	// Inner Classes
 	//
 	///////////////////////////////////////////////////////////////////////////////////////
-	
+	/**
+	 * The <code>TemplateObjectElement</code> implementation which expresses
+	 * the proprty of <code>TemplateObject</code>
+	 */
 	public static class TemplateObjectProperty implements TemplateObjectElement {
 		
 		private IMethod method;
@@ -226,6 +229,9 @@ public class TemplateObject {
 			return sb.toString();
 		}
 		
+		/**
+		 * Returns the <code>TemplateObject</code> by the property type.
+		 */
 		public TemplateObject toTemplateObject(){
 			try {
 				String className = ClickUtils.removeTypeParameter(Signature.toString(this.method.getReturnType()));
@@ -248,6 +254,10 @@ public class TemplateObject {
 		}
 	}
 	
+	/**
+	 * The <code>TemplateObjectElement</code> implementation which expresses
+	 * the method of <code>TemplateObject</code>
+	 */
 	public static class TemplateObjectMethod implements TemplateObjectElement {
 		
 		private IMethod method;
@@ -296,6 +306,9 @@ public class TemplateObject {
 			return sb.toString();
 		}
 		
+		/**
+		 * Returns the <code>TemplateObject</code> by the return type of the method.
+		 */
 		public TemplateObject toTemplateObject(){
 			// TODO This implementation is same to TemplateObjectProperty.
 			try {
@@ -319,9 +332,35 @@ public class TemplateObject {
 		}
 	}
 	
+	/**
+	 * The interface of <code>TemplateObject</code> elements,
+	 * expresses methods and properties.
+	 */
 	public static interface TemplateObjectElement {
+		
+		/**
+		 * Returns the element name.
+		 * 
+		 * @return the element name
+		 */
 		public String getName();
+		
+		/**
+		 * Returns the display string.
+		 * 
+		 * @return the display string which might contain type names or parameters
+		 */
 		public String getDisplayName();
+		
+		/**
+		 * Converts this object to the <code>TemplateObject</code>.
+		 * <p>
+		 * For example, if the instance corresponds a method,
+		 * this method would return the <code>TemplateObject</code> of 
+		 * the method return type.
+		 * 
+		 * @return the <code>TemplateObject</code> instance or <code>null</code>
+		 */
 		public TemplateObject toTemplateObject();
 	}
 	
@@ -345,6 +384,13 @@ public class TemplateObject {
 		return simpleName;
 	}
 	
+	/**
+	 * Returns all public methods of the given type.
+	 * 
+	 * @param type the <code>IType</code> instance
+	 * @return all methods of the given type, not contains main method and constructor
+	 * @throws JavaModelException
+	 */
 	private static IMethod[] getAllMethods(IType type) throws JavaModelException {
 		ArrayList list = new ArrayList();
 		IMethod[] methods = type.getMethods();

@@ -62,10 +62,24 @@ public class ClickPlugin extends AbstractUIPlugin {
 		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
 	}
 	
+	/**
+	 * Returns the localized message from <tt>ClickPlugin.properties</tt>.
+	 * 
+	 * @param key the message key
+	 * @return the localized message
+	 */
 	public static String getString(String key){
 		return getDefault().resource.getString(key);
 	}
 	
+	/**
+	 * Returns the localized message from <tt>ClickPlugin.properties</tt>.
+	 * The message would be formatted with given substitutions.
+	 * 
+	 * @param key the message key
+	 * @param substitutions the substitutions
+	 * @return the localized and formatted message
+	 */
 	public static String getString(String key, Object [] substitutions){
 		return MessageFormat.format(getString(key), substitutions);
 	}
@@ -103,6 +117,11 @@ public class ClickPlugin extends AbstractUIPlugin {
 		return AbstractUIPlugin.imageDescriptorFromPlugin("net.sf.clickide", path);
 	}
 	
+	/**
+	 * Logs the given <code>Throwable</code>.
+	 * 
+	 * @param t the <code>Throwable</code> instance which would be logged
+	 */
 	public static void log(Throwable t){
 		IStatus status = new Status(
 				IStatus.ERROR, getDefault().getBundle().getSymbolicName(),
