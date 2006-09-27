@@ -5,10 +5,20 @@ import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
 
+/**
+ * 
+ * @author Naoki Takezoe
+ */
 public class ValidationDocument {
 	
 	private String[] lines;
 	
+	/**
+	 * The constructor.
+	 * 
+	 * @param file the <code>IFile</code> instance
+	 * @throws Exception
+	 */
 	public ValidationDocument(IFile file) throws Exception {
 		InputStream in = file.getContents();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -29,6 +39,12 @@ public class ValidationDocument {
 		this.lines = source.split("\n");
 	}
 	
+	/**
+	 * Returns the start offset of the specified line.
+	 * 
+	 * @param line the line number
+	 * @return the start offset of the specified line
+	 */
 	public int getOffsetByLine(int line){
 		int offset = 0;
 		for(int i=0;i<line;i++){
@@ -37,6 +53,12 @@ public class ValidationDocument {
 		return offset;
 	}
 	
+	/**
+	 * Returns the length of the specified line.
+	 * 
+	 * @param line the line number
+	 * @return the length of the specified line 
+	 */
 	public int getLineLength(int line){
 		return this.lines[line].length();
 	}
