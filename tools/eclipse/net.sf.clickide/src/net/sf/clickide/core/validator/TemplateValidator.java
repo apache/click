@@ -17,7 +17,9 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidationContext;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 
 /**
- * The IValidator implementation for Click Page Templates.
+ * The <code>IValidator</code> implementation for Click Page Templates.
+ * <p>
+ * This class provides Velocity syntax checking.
  * 
  * @author Naoki Takezoe
  */

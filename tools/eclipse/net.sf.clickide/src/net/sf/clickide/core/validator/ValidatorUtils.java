@@ -6,6 +6,11 @@ import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 
+/**
+ * Provides utility methods for validation.
+ * 
+ * @author Naoki Takezoe
+ */
 public class ValidatorUtils {
 	
 	/**
