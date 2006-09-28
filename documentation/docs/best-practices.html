@@ -459,8 +459,9 @@ for display. If applications require additional error handling they can create a
 register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
 
 <pre class="codeConfig">
-&lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">com.mycorp.page.AppErrorPage</span>"/&gt; 
-</pre>
+&lt;pages package="<span class="red">com.mycorp.page</span>" automapping="true"/&gt;
+  &lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">ErrorPage</span>"/&gt; 
+&lt;/pages&gt; </pre>
 
 Generally application handle transactional errors using service layer code or via a
 servlet <a href="servlet-api/javax/servlet/Filter.html">Filter</a> and would not 
@@ -471,14 +472,14 @@ Potential uses for a custom error page include custom logging.
 For example if an application requires unhandled errors to be logged to an 
 application log (rather than System.out) then a custom 
 <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> could be
-configured. An example <tt>AppErrorPage</tt> error logging page is provided 
+configured. An example <tt>ErrorPage</tt> error logging page is provided 
 below:
 
 <pre class="codeJava">
-<span class="kw">package</span> com.mycorp.page.AppErrorPage;
+<span class="kw">package</span> com.mycorp.page.ErrorPage;
 ..
 
-<span class="kw">public class</span> AppErrorPage <span class="kw">extends</span> ErrorPage {
+<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> net.sf.click.util.ErrorPage {
 	
     <span class="kw">public void</span> onDestory() {
     	Logger.getLogger(getClass()).error(getError());
