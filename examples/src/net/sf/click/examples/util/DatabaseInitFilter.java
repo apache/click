@@ -17,7 +17,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import net.sf.click.examples.domain.Customer;
+import net.sf.click.examples.domain.SystemCode;
 import net.sf.click.examples.domain.User;
+import net.sf.click.util.ClickUtils;
 
 import org.objectstyle.cayenne.access.DataContext;
 import org.objectstyle.cayenne.access.DataDomain;
@@ -154,6 +156,21 @@ public class DatabaseInitFilter implements Filter {
                 dataContext.registerNewObject(customer);
             }
         });
+
+        // Load customers data file
+        loadFile("system-codes.txt", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                StringTokenizer tokenizer = new StringTokenizer(line, ",");
+
+                SystemCode systemCode = new SystemCode();
+                systemCode.setName(next(tokenizer));
+                systemCode.setValue(next(tokenizer));
+                systemCode.setLabel(next(tokenizer));
+                systemCode.setOrderBy(Integer.valueOf((next(tokenizer))));
+
+                dataContext.registerNewObject(systemCode);
+            }
+        });
  
         dataContext.commitChanges();
     }
@@ -167,18 +184,22 @@ public class DatabaseInitFilter implements Filter {
             throw new RuntimeException("classpath file not found: " + filename);
         }
 
-        BufferedReader reader =
-            new BufferedReader(new InputStreamReader(is));
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(is));
 
-        String line = reader.readLine();
-        while (line != null) {
-            line = line.trim();
+            String line = reader.readLine();
+            while (line != null) {
+                line = line.trim();
 
-            if (line.length() > 0 && !line.startsWith("#")) {
-                lineProcessor.processLine(line, dataContext);
+                if (line.length() > 0 && !line.startsWith("#")) {
+                    lineProcessor.processLine(line, dataContext);
+                }
+
+                line = reader.readLine();
             }
-
-            line = reader.readLine();
+        } finally {
+            ClickUtils.close(reader);
         }
     }
 

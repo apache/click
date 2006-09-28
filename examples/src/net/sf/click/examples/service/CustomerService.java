@@ -19,7 +19,6 @@ import org.objectstyle.cayenne.query.SelectQuery;
  */
 public class CustomerService extends CayenneTemplate {
 
-
     public List getCustomers() {
         SelectQuery query = new SelectQuery(Customer.class);
         query.addOrdering("name", true);
