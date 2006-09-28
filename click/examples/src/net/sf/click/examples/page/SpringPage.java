@@ -2,6 +2,7 @@ package net.sf.click.examples.page;
 
 import net.sf.click.Page;
 import net.sf.click.examples.service.BookingService;
+import net.sf.click.examples.service.ClientService;
 import net.sf.click.examples.service.CustomerService;
 import net.sf.click.examples.service.UserService;
 
@@ -28,6 +29,15 @@ public class SpringPage extends Page implements ApplicationContextAware {
      */
     public BookingService getBookingService() {
         return (BookingService) getBean("bookingService");
+    }
+
+    /**
+     * Return the Client Service object.
+     *
+     * @return the Client Service object.
+     */
+    public ClientService getClientService() {
+        return (ClientService) getBean("clientService");
     }
 
     /**

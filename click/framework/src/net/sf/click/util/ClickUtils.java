@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
@@ -405,6 +406,21 @@ public class ClickUtils {
     }
 
     /**
+     * Close the given input stream and ignore any exceptions thrown.
+     *
+     * @param stream the input stream to close.
+     */
+    public static void close(InputStream stream) {
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                // Ignore.
+            }
+        }
+    }
+
+    /**
      * Close the given output stream and ignore any exceptions thrown.
      *
      * @param stream the output stream to close.
@@ -420,16 +436,16 @@ public class ClickUtils {
     }
 
     /**
-     * Close the given input stream and ignore any exceptions thrown.
+     * Close the given reader and ignore any exceptions thrown.
      *
-     * @param stream the input stream to close.
+     * @param reader the reader to close.
      */
-    public static void close(InputStream stream) {
-        if (stream != null) {
+    public static void close(Reader reader) {
+        if (reader != null) {
             try {
-                stream.close();
-            } catch (IOException ex) {
-                // Ignore.
+                reader.close();
+            } catch (IOException ioe) {
+                // Ignore
             }
         }
     }

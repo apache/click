@@ -98,6 +98,9 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * <p/>
  * Note when using a named query ensure that it will return DataObjects and not
  * DataRows.
+ * <p/>
+ * Also note that the CayenneForm is not able to determine whether a property
+ * is required, so you must set the PropertySelect required status manually.
  *
  * @see CayenneForm
  * @see QuerySelect
