@@ -343,10 +343,7 @@ public class QuerySelect extends Select {
      */
     public String toString() {
 
-        // Load property options if not already set
-        if (getOptionList().size() <= 1) {
-            loadOptionList();
-        }
+        loadOptionList();
 
         return super.toString();
     }
@@ -364,6 +361,22 @@ public class QuerySelect extends Select {
             String msg = "either the optionLabel or decorator property must be"
                          + "defined to render the option labels";
             throw new IllegalStateException(msg);
+        }
+
+        // Determine whether option list should be loaded
+        if (getOptionList().size() == 1) {
+            Option option = (Option) getOptionList().get(0);
+            if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
+                // continue and load option list
+
+            } else {
+                // Don't load list
+                return;
+            }
+
+        } else if (getOptionList().size() > 1) {
+            // Don't load list
+            return;
         }
 
         DataContext dataContext = DataContext.getThreadDataContext();

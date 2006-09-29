@@ -352,16 +352,7 @@ public class PropertySelect extends Select {
      */
     public String toString() {
 
-        // Load property options if not already set
-        if (getOptionList().isEmpty()) {
-            loadOptionList();
-
-        } else if (getOptionList().size() == 1) {
-            Option option = (Option) getOptionList().get(0);
-            if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
-                loadOptionList();
-            }
-        }
+        loadOptionList();
 
         // Select option value if value defined and not form submission
         if (getValueObject() == null && !getForm().isFormSubmission()) {
@@ -409,6 +400,22 @@ public class PropertySelect extends Select {
      * </ol>
      */
     protected void loadOptionList() {
+
+        // Determine whether option list should be loaded
+        if (getOptionList().size() == 1) {
+            Option option = (Option) getOptionList().get(0);
+            if (option.getValue().equals(Option.EMPTY_OPTION.getValue())) {
+                // continue and load option list
+
+            } else {
+                // Don't load list
+                return;
+            }
+
+        } else if (getOptionList().size() > 1) {
+            // Don't load list
+            return;
+        }
 
         CayenneForm form = (CayenneForm) getForm();
         DataContext dataContext = form.getDataContext();
