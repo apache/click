@@ -207,22 +207,26 @@ public class CayenneForm extends Form {
      * class.
      *
      * @param name the form name
-     * @param dataClass the <tt>DataObject</tt> class
+     * @param dataObjectClass the <tt>DataObject</tt> class
      */
-    public CayenneForm(String name, Class dataClass) {
+    public CayenneForm(String name, Class dataObjectClass) {
         super(name);
+
         add(oidField);
         add(classField);
 
-        if (dataClass == null) {
-            throw new IllegalArgumentException("Null dataClass parameter");
-        }
-        if (!DataObject.class.isAssignableFrom(dataClass)) {
-            String msg = "Not a DataObject class: " + dataClass;
-            throw new IllegalArgumentException(msg);
-        }
+        setDataObjectClass(dataObjectClass);
+    }
 
-        classField.setValue(dataClass.getName());
+    /**
+     * Create an CayenneForm with no name or dataObjectClass.
+     * <p/>
+     * <b>Important Note</b> the forms's name and dataObjectClass must be defined
+     * before it is valid.
+     */
+    public CayenneForm() {
+        add(oidField);
+        add(classField);
     }
 
     // --------------------------------------------------------- Public Methods
@@ -354,6 +358,23 @@ public class CayenneForm extends Form {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Set the <tt>DataObject</tt> class.
+     *
+     * @param dataObjectClass the <tt>DataObject</tt> class
+     */
+    public void setDataObjectClass(Class dataObjectClass) {
+        if (dataObjectClass == null) {
+            throw new IllegalArgumentException("Null dataClass parameter");
+        }
+        if (!DataObject.class.isAssignableFrom(dataObjectClass)) {
+            String msg = "Not a DataObject class: " + dataObjectClass;
+            throw new IllegalArgumentException(msg);
+        }
+
+        classField.setValue(dataObjectClass.getName());
     }
 
     /**

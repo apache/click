@@ -88,6 +88,17 @@ public class TabbedCayenneForm extends CayenneForm {
         setButtonStyle("");
     }
 
+    /**
+     * Create a Tabbed Cayenne Form with no name or dataObjectClass.
+     * <p/>
+     * <b>Important Note</b> the forms's name and dataObjectClass must be defined
+     * before it is valid.
+     */
+    public TabbedCayenneForm() {
+        setErrorsStyle("");
+        setButtonStyle("");
+    }
+
     // ------------------------------------------------------------ Properities
 
     /**
