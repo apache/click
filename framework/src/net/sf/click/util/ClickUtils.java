@@ -933,6 +933,39 @@ public class ClickUtils {
     }
 
     /**
+     * Return the value string limited to maxlength characters. If the string
+     * gets curtailed, "..." is appended to it.
+     * <p/>
+     * Adapted from Velocity Tools Formatter.
+     *
+     * @param value the string value to limit the length of
+     * @param maxlength the maximum string length
+     * @return a length limited string
+     */
+    public static String limitLength(String value, int maxlength) {
+        return limitLength(value, maxlength, "...");
+    }
+
+    /**
+     * Return the value string limited to maxlength characters. If the string
+     * gets curtailed and the suffix parameter is appended to it.
+     * <p/>
+     * Adapted from Velocity Tools Formatter.
+     *
+     * @param value the string value to limit the length of
+     * @param maxlength the maximum string length
+     * @param suffix the suffix to append to the length limited string
+     * @return a length limited string
+     */
+    public static String limitLength(String value, int maxlength, String suffix) {
+        String ret = value;
+        if (value.length() > maxlength) {
+            ret = value.substring(0, maxlength - suffix.length()) + suffix;
+        }
+        return ret;
+    }
+
+    /**
      * Return the list of Field for the given Form, including the any Fields
      * contained in FieldSets. The list of returned fields will exclude any
      * <tt>FieldSet</tt> or <tt>Label</tt> fields.

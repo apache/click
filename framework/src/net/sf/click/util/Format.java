@@ -586,11 +586,7 @@ public class Format {
      * @return a length limited string
      */
     public String limitLength(String value, int maxlength, String suffix) {
-        String ret = value;
-        if (value.length() > maxlength) {
-            ret = value.substring(0, maxlength - suffix.length()) + suffix;
-        }
-        return ret;
+        return ClickUtils.limitLength(value, maxlength, suffix);
     }
 
     /**
