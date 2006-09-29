@@ -217,6 +217,17 @@ public class Column implements Serializable {
     protected String headerTitle;
 
     /**
+     * The maximum column length. If maxLength is greater than 0 and the column
+     * data string length is greater than maxLength, the rendered value will be
+     * truncated with an eclipse(...).
+     * <p/>
+     * Autolinked email or URL values will not be constrained.
+     * <p/>
+     * The default value is 0.
+     */
+    protected int maxLength;
+
+    /**
      * The optional MessageFormat used to render the column table cell value.
      */
     protected MessageFormat messageFormat;
@@ -683,6 +694,28 @@ public class Column implements Serializable {
     }
 
     /**
+     * The maximum column length. If maxLength is greater than 0 and the column
+     * data string length is greater than maxLength, the rendered value will be
+     * truncated with an eclipse(...).
+     *
+     * @return the maximum column length, or 0 if not defined
+     */
+    public int getMaxLength() {
+        return maxLength;
+    }
+
+    /**
+     * Set the maximum column length. If maxLength is greater than 0 and the
+     * column data string length is greater than maxLength, the rendered value
+     * will be truncated with an eclipse(...).
+     *
+     * @param value the maximum column length
+     */
+    public void setMaxLength(int value) {
+        maxLength = value;
+    }
+
+    /**
      * Return the MessageFormat instance used to format the table cell value.
      *
      * @return the MessageFormat instance used to format the table cell value
@@ -903,17 +936,29 @@ public class Column implements Serializable {
                 } else if (getMessageFormat() != null) {
                     Object[] args = new Object[] { columnValue };
 
+                    String value = getMessageFormat().format(args);
+
+                    if (getMaxLength() > 0) {
+                        value = ClickUtils.limitLength(value, getMaxLength());
+                    }
+
                     if (getEscapeHtml()) {
-                        buffer.appendEscaped(getMessageFormat().format(args));
+                        buffer.appendEscaped(value);
                     } else {
-                        buffer.append(getMessageFormat().format(args));
+                        buffer.append(value);
                     }
 
                 } else {
+                    String value = columnValue.toString();
+
+                    if (getMaxLength() > 0) {
+                        value = ClickUtils.limitLength(value, getMaxLength());
+                    }
+
                     if (getEscapeHtml()) {
-                        buffer.appendEscaped(columnValue);
+                        buffer.appendEscaped(value);
                     } else {
-                        buffer.append(columnValue);
+                        buffer.append(value);
                     }
                 }
             }
