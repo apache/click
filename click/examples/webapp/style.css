@@ -234,6 +234,7 @@ ul.submenu {
     padding: 0; 
     display: none; 
     width: 180px;  
+    z-index: 255;   
 } 
 ul.submenu li {
     padding: 0; 
