@@ -28,13 +28,14 @@ public class CayenneFormPage extends BorderPage {
 
     protected static final int MAX_TABLE_SIZE = 5;
 
-    public CayenneForm form = new CayenneForm("form", Client.class);
+    public CayenneForm form = new CayenneForm();
     public Table table = new Table();
     public ActionLink editLink = new ActionLink("edit", this, "onEditClick");
     public ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
     public String msg = null;
 
     public CayenneFormPage() {
+        form.setDataObjectClass(Client.class);
         form.setErrorsPosition(Form.POSITION_TOP);
 
         FieldSet clientFieldSet = new FieldSet("Client");
@@ -60,7 +61,10 @@ public class CayenneFormPage extends BorderPage {
         querySelect.setQueryValueLabel("states", "value", "label");
         addressFieldSet.add(querySelect);
 
-        addressFieldSet.add(new IntegerField("address.postCode", "Post Code"));
+        IntegerField postCodeField = new IntegerField("address.postCode", "Post Code");
+        postCodeField.setMaxLength(5);
+        postCodeField.setSize(5);
+        addressFieldSet.add(postCodeField);
 
         form.add(new Submit("New", this, "onCancelClick"));
         form.add(new Submit("Save", this, "onSaveClick"));
@@ -79,6 +83,8 @@ public class CayenneFormPage extends BorderPage {
         Column column = new Column("email");
         column.setAutolink(true);
         table.addColumn(column);
+
+        table.addColumn(new Column("address.state", "State"));
 
         column = new Column("dateJoined");
         column.setFormat("{0,date,dd MMM yyyy}");
