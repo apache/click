@@ -644,7 +644,7 @@ public class Form implements Control {
     }
 
     /**
-     * Create an form with no name or context defined.
+     * Create an form with no name.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
