@@ -11,7 +11,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-
 /**
  * Provides a Spring Services page for subclasses to extend.
  *
