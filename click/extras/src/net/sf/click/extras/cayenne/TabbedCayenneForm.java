@@ -20,9 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.extras.control.TabbedForm;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -245,6 +248,20 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
+     * directory when the application is initialized.
+     *
+     * @see net.sf.click.Control#onDeploy(ServletContext)
+     *
+     * @param servletContext the servlet context
+     */
+    public void onDeploy(ServletContext servletContext) {
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/control/TabbedForm.css",
+                              "click");
+    }
 
     /**
      * Process the Form request. In addition to the normal Form

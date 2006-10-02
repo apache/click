@@ -6,6 +6,13 @@ import net.sf.click.examples.domain.Client;
 
 import org.objectstyle.cayenne.query.SelectQuery;
 
+/**
+ * Provides a Client Service.
+ *
+ * @see Client
+ *
+ * @author Malcolm Edgar
+ */
 public class ClientService extends CayenneTemplate {
 
     public List getClients() {
@@ -14,15 +21,8 @@ public class ClientService extends CayenneTemplate {
         return performQuery(query);
     }
 
-    public Client getClient(Integer id) {
+    public Client getClient(Object id) {
         return (Client) objectForPK(Client.class, id);
-    }
-
-    public void deleteClient(Client client) {
-        if (client != null) {
-            deleteObject(client);
-            commitChanges();
-        }
     }
 
 }
