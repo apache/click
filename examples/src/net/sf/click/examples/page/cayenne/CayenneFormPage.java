@@ -6,7 +6,6 @@ import net.sf.click.control.Column;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.domain.Client;
-import net.sf.click.extras.cayenne.CayenneForm;
 import net.sf.click.extras.cayenne.QuerySelect;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
@@ -17,10 +16,15 @@ import org.objectstyle.cayenne.DataObject;
 /**
  * Provides a CayenneForm and QuerySelect control demonstration.
  *
+ * @see FormTablePage
+ *
  * @author Malcolm Edgar
  */
 public class CayenneFormPage extends FormTablePage {
 
+    /**
+     * Create a CayenneFormPage object.
+     */
     public CayenneFormPage() {
         FieldSet clientFieldSet = new FieldSet("Client");
         form.add(clientFieldSet);
@@ -65,22 +69,23 @@ public class CayenneFormPage extends FormTablePage {
         table.addColumn(column);
     }
 
-    public CayenneForm createForm() {
-        return new CayenneForm();
-    }
-
+    /**
+     * @see FormTablePage#getDataObject(Object)
+     */
     public DataObject getDataObject(Object id) {
         return getClientService().getClient(id);
     }
 
+    /**
+     * @see FormTablePage#getDataObjectClass()
+     */
     public Class getDataObjectClass() {
         return Client.class;
     }
 
-    public int getMaxTableSize() {
-        return 10;
-    }
-
+    /**
+     * @see FormTablePage#getRowList()
+     */
     public List getRowList() {
         return getClientService().getClients();
     }
