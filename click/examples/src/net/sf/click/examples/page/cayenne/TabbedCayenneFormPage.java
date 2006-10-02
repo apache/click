@@ -18,11 +18,20 @@ import org.objectstyle.cayenne.DataObject;
 /**
  * Provides a TabbedCayenneForm and QuerySelect control demonstration.
  *
+ * @see FormTablePage
+ *
  * @author Malcolm Edgar
  */
 public class TabbedCayenneFormPage extends FormTablePage {
 
+    /**
+     * Create a TabbedCayenneFormPage object.
+     */
     public TabbedCayenneFormPage() {
+        ((TabbedCayenneForm)form).setBackgroundColor("#eee");
+        ((TabbedCayenneForm)form).setTabHeight("155px");
+        ((TabbedCayenneForm)form).setTabWidth("305px");
+
         FieldSet clientFieldSet = new FieldSet("Client");
         ((TabbedCayenneForm)form).addTabSheet(clientFieldSet);
 
@@ -66,18 +75,30 @@ public class TabbedCayenneFormPage extends FormTablePage {
         table.addColumn(column);
     }
 
+    /**
+     * @see FormTablePage#createForm()
+     */
     public CayenneForm createForm() {
         return new TabbedCayenneForm();
     }
 
+    /**
+     * @see FormTablePage#getDataObject(Object)
+     */
     public DataObject getDataObject(Object id) {
         return getClientService().getClient(id);
     }
 
+    /**
+     * @see FormTablePage#getDataObjectClass()
+     */
     public Class getDataObjectClass() {
         return Client.class;
     }
 
+    /**
+     * @see FormTablePage#getRowList()
+     */
     public List getRowList() {
         return getClientService().getClients();
     }

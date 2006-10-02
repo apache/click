@@ -13,10 +13,17 @@ import net.sf.click.extras.cayenne.CayenneForm;
 import net.sf.click.extras.control.LinkDecorator;
 
 import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.access.DataContext;
 
 /**
- * Provides an abstract CayenneForm and Table Page.
+ * Provides an abstract CayenneForm and Table Page for creating and editing
+ * DataObjects.
+ * <p/>
+ * Subclasses must implement the abstract methods:
+ * <ul>
+ * <li>{@link #getDataObjectClass()} &nbsp; - to define the DataObject class to edit</li>
+ * <li>{@link #getDataObject(Object)} &nbsp; - to look up the DataObject for the given id</li>
+ * <li>{@link #getRowList()} &nbsp; - to provide the table the list of DataObject to display</li>
+ * </ul>
  *
  * @author Malcolm Edgar
  */
@@ -46,16 +53,8 @@ public abstract class FormTablePage extends BorderPage {
     // ------------------------------------------------------- Abstract Methods
 
     /**
-     * Return a new CayenneForm instance. This method is invoked in the 
-     * FormTablePage constructor.
-     * 
-     * @return a new CayenneForm instance
-     */
-    public abstract CayenneForm createForm();
-
-    /**
      * Return the DataObject for the given id.
-     * 
+     *
      * @param id the DataObject identifier
      * @return the DataObject for the given id
      */
@@ -63,19 +62,52 @@ public abstract class FormTablePage extends BorderPage {
 
     /**
      * Return the DataObject class to edit and display.
-     * 
+     *
      * @return the DataObject class to edit and display
      */
     public abstract Class getDataObjectClass();
 
     /**
      * Return the list of DataObjects to display in the table.
-     * 
-     * @return the 
+     *
+     * @return the
      */
     public abstract List getRowList();
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return a new CayenneForm instance. This method is invoked in the
+     * FormTablePage constructor.
+     *
+     * @return a new CayenneForm instance
+     */
+    public CayenneForm createForm() {
+        return new CayenneForm();
+    }
+
+    /**
+     * Save the given DataObject.
+     *
+     * @param dataObject the DataObject to save
+     */
+    public void saveDataObject(DataObject dataObject) {
+        if (dataObject != null) {
+            getDataContext().commitChanges();
+        }
+    }
+
+    /**
+     * Delete the given DataObject.
+     *
+     * @param dataObject the DataObject to delete
+     */
+    public void deleteDataObject(DataObject dataObject) {
+        if (dataObject != null) {
+            getDataContext().deleteObject(dataObject);
+            getDataContext().commitChanges();
+        }
+    }
 
     /**
      * Complete the initialization of the form and table controls.
@@ -100,6 +132,23 @@ public abstract class FormTablePage extends BorderPage {
     }
 
     /**
+     * Perform a form submission check to ensure the form was not double posted.
+     *
+     * @see net.sf.click.Page#onSecurityCheck()
+     */
+    public boolean onSecurityCheck() {
+        String path = getContext().getPagePath(getClass());
+
+        if  (form.onSubmitCheck(this, path) == false) {
+            onRender();
+            return false;
+
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Return the maximum number of rows to display in the table. Subclasses
      * should override this method to display a different number of rows.
      *
@@ -111,9 +160,9 @@ public abstract class FormTablePage extends BorderPage {
 
     public boolean onSaveClick() {
         if (form.isValid()) {
-            form.getDataObject();
+            DataObject dataObject = form.getDataObject();
 
-            getDataContext().commitChanges();
+            saveDataObject(dataObject);
 
             onCancelClick();
         }
@@ -140,11 +189,9 @@ public abstract class FormTablePage extends BorderPage {
         if (id != null) {
             DataObject dataObject = getDataObject(id);
 
-            if (dataObject != null) {
-                getDataContext().deleteObject(dataObject);
-                getDataContext().commitChanges();
-                onCancelClick();
-            }
+            deleteDataObject(dataObject);
+
+            onCancelClick();
         }
         return true;
     }
