@@ -30,7 +30,7 @@ public class SearchForm extends BorderPage {
         typeSelect.setValue("Name");
         form.add(typeSelect);
 
-        form.add(new Submit("go"));
+        form.add(new Submit("go", " Go "));
     }
 
     /**
