@@ -116,9 +116,9 @@ public abstract class FormTablePage extends BorderPage {
      */
     public void onInit() {
         // Complete form initialization
-        form.add(new Submit("New", this, "onCancelClick"));
-        form.add(new Submit("Save", this, "onSaveClick"));
-        form.add(new Submit("Cancel", this, "onCancelClick"));
+        form.add(new Submit("new", " New ", this, "onCancelClick"));
+        form.add(new Submit("save", " Save ", this, "onSaveClick"));
+        form.add(new Submit("cancel", "Cancel", this, "onCancelClick"));
         form.add(new HiddenField("pageNumber", String.class));
 
         // Complete table initialization
