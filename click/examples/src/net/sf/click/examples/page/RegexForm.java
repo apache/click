@@ -27,7 +27,7 @@ public class RegexForm extends BorderPage {
         urlField.setTitle("URL address, e.g. 'http://www.google.com'");
         form.add(urlField);
 
-        form.add(new Submit("submit", "   OK   "));
+        form.add(new Submit("submit", "  OK  "));
         form.add(new PageSubmit("cancel", HomePage.class));;
     }
 
