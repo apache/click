@@ -66,7 +66,7 @@ public class FieldSetDemo extends BorderPage {
         expiryField.setMaxLength(4);
         paymentFieldSet.add(expiryField);
 
-        form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
+        form.add(new Submit("ok", "  OK  ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
 

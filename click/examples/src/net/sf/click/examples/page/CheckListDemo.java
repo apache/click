@@ -53,7 +53,7 @@ public class CheckListDemo extends BorderPage{
         sortableCheckList.addStyle("width: 100%;");
         form.add(sortableCheckList);
 
-        form.add(new Submit("ok", "   OK   ",  this, "onOkClick"));
+        form.add(new Submit("ok", "  OK  ",  this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
 
