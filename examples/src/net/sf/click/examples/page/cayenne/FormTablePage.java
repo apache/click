@@ -137,15 +137,9 @@ public abstract class FormTablePage extends BorderPage {
      * @see net.sf.click.Page#onSecurityCheck()
      */
     public boolean onSecurityCheck() {
-        String path = getContext().getPagePath(getClass());
+        String pagePath = getContext().getPagePath(getClass());
 
-        if  (form.onSubmitCheck(this, path) == false) {
-            onRender();
-            return false;
-
-        } else {
-            return true;
-        }
+        return  form.onSubmitCheck(this, pagePath);
     }
 
     /**
