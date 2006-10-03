@@ -58,7 +58,7 @@ public class FormTablePage extends BorderPage {
         column.setAttribute("style", "{text-align:center;}");
         table.addColumn(column);
 
-        table.getForm().add(new Submit("ok", "   OK   ", this, "onOkClick"));
+        table.getForm().add(new Submit("ok", "  OK  ", this, "onOkClick"));
         table.getForm().add(new Submit("cancel", this, "onCancelClick"));
     }
 
