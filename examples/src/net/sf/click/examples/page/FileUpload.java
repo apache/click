@@ -32,7 +32,7 @@ public class FileUpload extends BorderPage {
         descField = new TextField("description", "File Description", 30);
         fieldSet.add(descField);
 
-        form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
+        form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
 
