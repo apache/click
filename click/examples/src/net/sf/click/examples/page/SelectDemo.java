@@ -66,7 +66,7 @@ public class SelectDemo extends BorderPage {
         locationSelect.add("WA");
         form.add(locationSelect);
 
-        form.add(new Submit("ok", "   OK   "));
+        form.add(new Submit("ok", "  OK  "));
         form.add(new PageSubmit("canel", HomePage.class));
     }
 

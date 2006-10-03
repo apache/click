@@ -96,7 +96,7 @@ public class FormProperties extends BorderPage {
         dateJoinedField = new DateField("dateJoined");
         fieldSet.add(dateJoinedField);
 
-        form.add(new Submit("ok", "    OK    ", this, "onOkClick"));
+        form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
 
         Submit cancel = new PageSubmit("cancel", HomePage.class);
         cancel.setCancelJavaScriptValidation(true);
