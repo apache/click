@@ -41,7 +41,7 @@ public class VelocityMacro extends BorderPage {
 
         form.add(new InvestmentSelect("investments"));
 
-        form.add(new Submit("ok", "    OK    "));
+        form.add(new Submit("ok", " OK "));
         form.add(new PageSubmit("cancel", HomePage.class));
         form.add(new Reset("reset"));
     }
