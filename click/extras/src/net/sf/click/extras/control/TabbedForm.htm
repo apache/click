@@ -41,7 +41,7 @@ function onShowTab(index) {
 	<tr>
     	<td style="${form.errorsStyle}" class="tf_error">
     		<a class="error" href="#" 
-			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));document.getElementById('$errorField.id').focus();"
+			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
 			  > $errorField.error </a>
     	</td>
 	</tr>		
