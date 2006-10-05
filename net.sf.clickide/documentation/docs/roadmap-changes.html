@@ -27,19 +27,16 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-Click is currently being developed using a short feature release cycle leading up 
-to a 1.0 release in Q3 2006.
-<p/>
-After the 1.0 release the scheduled features include Table Column sorting, 
-JavaScript validation improvements, bug fixes and documentation updates.
-
+The next scheduled Click Framework release (version 1.1) will include 
+the Velocity engine 1.5 release, table column sorting, bug fixes and 
+documentation updates.
 
 <p>&nbsp;</p>
 
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 1.0 - 26th September 2006</dt>
+  <dt>Version 1.0 - 3rd October 2006</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -47,7 +44,11 @@ JavaScript validation improvements, bug fixes and documentation updates.
       	This feature was raised by Ahmed Mohombe and Ricardo Lecheta.
       </li>
       <li class="change">
-      	Fixed NPE Table - ActionLink pagination. This issue was raised by Ricardo Lecheta
+      	Added Column <a href="click-api/net/sf/click/control/Column.html#maxLength">maxLength</a> property
+      	to limit the number characters displayed.
+      </li>
+      <li class="change">
+      	Fixed NPE in Table ActionLink pagination. This issue was raised by Ricardo Lecheta
         [<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-124">124</a>].
       </li>
       <li class="change">
@@ -57,6 +58,27 @@ JavaScript validation improvements, bug fixes and documentation updates.
       <li class="change">
       	Fixed NumberFormatException in LinkDecorator
       	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-127">127</a>].
+      </li>
+      <li class="change">
+      	Fixed NumberFormatException when using Form.onSubmitCheck() with a FileField.
+      	This issue was identified by Satoshi Takata
+      	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-127">128</a>].
+      </li>
+      <li class="change">
+      	Fixed CayenneForm bug with required property set on Checkbox.
+      	This issue was identified by David Frizelle
+      	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-129">129</a>].
+      </li>
+      <li class="change">
+      	Fixed PropertySelect bug where first item displays twice under certain conditions.
+      	This issue was identified by David Frizelle
+      	[<a target='blank' href="http://www.sunvolt.com/jira/browse/CLK-130">130</a>].
+      </li>
+      <li class="change">
+      	Updated and verified Click Framework and Extras codebase against <a target='blank' href="http://findbugs.sourceforge.net/index.html">FindBugs</a>.
+      </li>
+      <li class="change">
+        Updated Cayenne library to version 1.2.1.
       </li>
       <li class="change">Updated documentation and examples.</li> 
     </ul>
