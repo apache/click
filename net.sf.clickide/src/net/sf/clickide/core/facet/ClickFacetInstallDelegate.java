@@ -33,11 +33,11 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
  */
 public class ClickFacetInstallDelegate implements IDelegate {
 	
-	private static String CLICK_DIR = "click-0.21";
+	private static String CLICK_DIR = "click-1.0";
 	
 	private static final String[] COPY_FILES = {
-		"/lib/click-0.21.jar",
-		"/lib/click-extras-0.21.jar",
+		"/lib/click-1.0.jar",
+		"/lib/click-extras-1.0.jar",
 		"/click.xml",
 	};
 	
