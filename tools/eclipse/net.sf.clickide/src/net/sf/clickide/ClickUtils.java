@@ -1,5 +1,6 @@
 package net.sf.clickide;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -175,6 +176,13 @@ public class ClickUtils {
 		if(obj instanceof IResource){
 			return JavaCore.create(((IResource)obj).getProject());
 		}
+		try {
+			Method method = obj.getClass().getMethod("getProject", new Class[0]);
+			IJavaProject project = (IJavaProject)method.invoke(obj, new Object[0]);
+			return project;
+		} catch(Exception ex){
+		}
+		
 		return null;
 	}
 	

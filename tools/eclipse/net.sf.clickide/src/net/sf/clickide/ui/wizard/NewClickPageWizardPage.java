@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
@@ -43,6 +44,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -61,7 +64,9 @@ import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 /**
- * 
+ * <ul>
+ *   <li>TODO プロジェクト選択時にソースフォルダ等初期値の再読み込みを行う</li>
+ * </ul>
  * 
  * @author Naoki Takezoe
  */
@@ -88,6 +93,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	private Object selection;
 	private String initialClassName;
 	private String initialPageName;
+	private boolean insertClassName = true;
 	
 	public NewClickPageWizardPage(String pageName, Object selection, 
 			String initialClassName, String initialPageName) {
@@ -218,12 +224,33 @@ public class NewClickPageWizardPage extends WizardPage {
 		pageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(initPageName!=null){
 			pageName.setText(initPageName);
-		} else {
-			pageName.setText("newfile.htm");
 		}
 		pageName.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
+				if(className.getText().length()==0){
+					insertClassName = true;
+				}
+				if(insertClassName && createPageClass.getSelection()){
+					String page = pageName.getText(); //.replaceFirst("\\..*?$", "");
+					int index = page.lastIndexOf('.');
+					if(index >= 0){
+						page = page.substring(0, index);
+					}
+			        StringTokenizer tokenizer = new StringTokenizer(page, "_-");
+			        String name = "";
+			        while (tokenizer.hasMoreTokens()) {
+			            String token = tokenizer.nextToken();
+			            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+			            name += token;
+			        }
+					className.setText(name);
+				}
 				validate();
+			}
+		});
+		pageName.addFocusListener(new FocusAdapter(){
+			public void focusLost(FocusEvent e) {
+				insertClassName = className.getText().length()==0;
 			}
 		});
 		
@@ -374,6 +401,9 @@ public class NewClickPageWizardPage extends WizardPage {
 		
 		addToClickXML = new Button(composite, SWT.CHECK);
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
+		if(getProject()!=null){
+			addToClickXML.setSelection(!ClickUtils.getAutoMapping(getProject()));
+		}
 		addToClickXML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_ADD_TO_CLICK_XML));
 		
 		updateHTMLGroup();
@@ -528,7 +558,7 @@ public class NewClickPageWizardPage extends WizardPage {
 	
 	private boolean existsFolder(String folder){
 		if(folder.equals("")){
-			return true; // TODO ?
+			return true; // TODO ??
 		}
 		
 		IProject project = getProject();
