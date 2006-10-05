@@ -12,11 +12,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
@@ -42,11 +42,11 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
 	
-	private int generalEditorIndex;
-	private int headerEditorIndex;
-	private int pageEditorIndex;
-	private int controlEditorIndex;
-	private int sourceEditorIndex;
+//	private int generalEditorIndex;
+//	private int headerEditorIndex;
+//	private int pageEditorIndex;
+//	private int controlEditorIndex;
+	private int sourceEditorIndex = 0;
 	
 	private IModelStateListener listener = new IModelStateListener(){
 		public void modelAboutToBeChanged(IStructuredModel model) {
@@ -79,47 +79,51 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 
 	public void createPages() {
 		try {
-			generalEditor = new ClickGeneralEditor();
-			generalEditorIndex = addPage(generalEditor, getEditorInput());
-			setPageText(generalEditorIndex, ClickPlugin.getString("editor.clickXML.general"));
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		}
-		try {
-			headerEditor = new ClickHeadersEditor();
-			headerEditorIndex = addPage(headerEditor, getEditorInput());
-			setPageText(headerEditorIndex, ClickPlugin.getString("editor.clickXML.headers"));
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		}
-		try {
-			pageEditor = new ClickPagesEditor();
-			pageEditorIndex = addPage(pageEditor, getEditorInput());
-			setPageText(pageEditorIndex, ClickPlugin.getString("editor.clickXML.pages"));
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		}
-		try {
-			controlEditor = new ClickControlsEditor();
-			controlEditorIndex = addPage(controlEditor, getEditorInput());
-			setPageText(controlEditorIndex, ClickPlugin.getString("editor.clickXML.controls"));
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		}
-		try {
 			sourceEditor = new StructuredTextEditor();
-			sourceEditorIndex = addPage(sourceEditor, getEditorInput());
-			setPageText(sourceEditorIndex, ClickPlugin.getString("editor.clickXML.source"));
+			addPage(0, sourceEditor, getEditorInput());
+			setPageText(0, ClickPlugin.getString("editor.clickXML.source"));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
 		
 		IStructuredModel model = (IStructuredModel)sourceEditor.getAdapter(IStructuredModel.class);
 		
-		generalEditor.initModel(model);
-		headerEditor.initModel(model);
-		pageEditor.initModel(model);
-		controlEditor.initModel(model);
+		try {
+			controlEditor = new ClickControlsEditor();
+			addPage(0, controlEditor, getEditorInput());
+			controlEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.controls"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
+		try {
+			pageEditor = new ClickPagesEditor();
+			addPage(0, pageEditor, getEditorInput());
+			pageEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.pages"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
+		try {
+			headerEditor = new ClickHeadersEditor();
+			addPage(0, headerEditor, getEditorInput());
+			headerEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.headers"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
+		try {
+			generalEditor = new ClickGeneralEditor();
+			addPage(0, generalEditor, getEditorInput());
+			generalEditor.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.general"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}		
 		
 		model.addModelStateListener(listener);
 		
@@ -180,25 +184,14 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	}
 	
 	public void resourceChanged(final IResourceChangeEvent event){
-//		Display.getDefault().asyncExec(new Runnable(){
-//			public void run(){
-//				navigationEditor.updateIconStatus();
-//			}
-//		});
-		
-		if(event.getType() == IResourceChangeEvent.PRE_CLOSE){
-			Display.getDefault().asyncExec(new Runnable(){
-				public void run(){
-					IWorkbenchPage[] pages = getSite().getWorkbenchWindow().getPages();
-					for (int i = 0; i<pages.length; i++){
-						if(((FileEditorInput)sourceEditor.getEditorInput()).getFile().getProject().equals(event.getResource())){
-							IEditorPart editorPart = pages[i].findEditor(sourceEditor.getEditorInput());
-							pages[i].closeEditor(editorPart,true);
-						}
-					}
+		Display.getDefault().asyncExec(new Runnable(){
+			public void run(){
+				if(!((FileEditorInput)sourceEditor.getEditorInput()).getFile().exists()){
+					IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					page.closeEditor(ClickEditor.this, false);
 				}
-			});
-		}
+			}
+		});
 	}
 	
 	private void modelUpdated(IStructuredModel model){
