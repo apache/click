@@ -456,8 +456,15 @@ public class PropertySelect extends Select {
                 } else {
                     label = Ognl.getValue(optionLabel, ognlContext, dataObject);
                 }
-
-                Option option = new Option(value, label.toString());
+                
+                Option option = null;
+                
+                if (label != null) {
+                	option = new Option(value, label.toString());
+                	
+                } else {
+                	option = new Option(value);
+                }
 
                 add(option);
             }
