@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
@@ -35,9 +36,20 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	private IFile file;
 	
 	private final Image IMAGE_DIRECTIVE = ClickPlugin.getImageDescriptor("/icons/directive.gif").createImage();
-	private final Image IMAGE_CLASS = ClickPlugin.getImageDescriptor("/icons/class.gif").createImage();
 	private final Image IMAGE_METHOD = ClickPlugin.getImageDescriptor("/icons/method.gif").createImage();
 	private final Image IMAGE_FIELD = ClickPlugin.getImageDescriptor("/icons/field.gif").createImage();
+	private final Image IMAGE_VAR = ClickPlugin.getImageDescriptor("/icons/localvar.gif").createImage();
+	
+	private static final Map defaultObjects = new HashMap();
+	static {
+		defaultObjects.put("imports", "net.sf.click.util.PageImports");
+		defaultObjects.put("context", "java.lang.String");
+		defaultObjects.put("messages", "java.util.Map");
+		defaultObjects.put("path", "java.lang.String");
+		defaultObjects.put("request", "javax.servlet.http.HttpServletRequest");
+		defaultObjects.put("response", "javax.servlet.http.HttpServletResponse");
+		defaultObjects.put("session", "net.sf.click.util.SessionMap");
+	};
 	
 	/**
 	 * Returns the word under the caret position.
@@ -103,6 +115,16 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 					return processType(format, result, matchString, offset);
 				}
 			}
+			// other default objects
+			for(Iterator ite = defaultObjects.entrySet().iterator(); ite.hasNext(); ){
+				Map.Entry entry = (Map.Entry)ite.next();
+				if(matchString.startsWith("$" + entry.getKey() + ".")){
+					IType type = findType((String)entry.getValue());
+					if(type != null){
+						return processType(type, result, matchString, offset);
+					}
+				}
+			}
 		}
 		
 		Map fields = extractPageFields();
@@ -119,10 +141,10 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		
 		if(format==null){
 			registerProposal(result, offset, matchString, 
-					"$format", "$format", IMAGE_CLASS);
+					"$format", "$format", IMAGE_VAR);
 		} else {
 			registerProposal(result, offset, matchString, 
-					"$format", "$format - " + format.getFullyQualifiedName(), IMAGE_CLASS);
+					"$format", "$format - " + format.getFullyQualifiedName(), IMAGE_VAR);
 		}
 		
 		// for page class fields
@@ -133,6 +155,14 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			registerProposal(result, offset, matchString, 
 				"$" + name, "$" + name + " - " + obj.getTypeName(), IMAGE_FIELD);
 		}
+		
+		registerProposal(result, offset, matchString, "$imports", "$imports - PageImports", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$context", "$context - String", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$messages", "$messages - Map", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$path", "$path - String", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$request", "$request - HttpServletRequest", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$response", "$response - HttpServletResponse", IMAGE_VAR);
+		registerProposal(result, offset, matchString, "$session", "$session - SessionMap", IMAGE_VAR);
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#set()", "set", IMAGE_DIRECTIVE);
@@ -146,6 +176,18 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		
 		
 		return (ICompletionProposal[])result.toArray(new ICompletionProposal[result.size()]);
+	}
+	
+	private IType findType(String className){
+		try {
+			IJavaProject project = JavaCore.create(this.file.getProject());
+			if(project != null){
+				IType type = project.findType(className);
+				return type;
+			}
+		} catch(Exception ex){
+		}
+		return null;
 	}
 	
 	/**
@@ -265,9 +307,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	 */
 	public void release() {
 		IMAGE_DIRECTIVE.dispose();
-		IMAGE_CLASS.dispose();
 		IMAGE_METHOD.dispose();
 		IMAGE_FIELD.dispose();
+		IMAGE_VAR.dispose();
 		super.release();
 	}
 	
