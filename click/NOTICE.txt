@@ -2,6 +2,9 @@
 This product includes software developed by 
 The Apache Software Foundation (http://jakarta.apache.org/).
 
+This product includes the OGNL library, 
+developed by Drew Davidson (http://www.ognl.org/).
+
 This product includes the DHTML Calandar widget, developed by 
 Mihai Bazon (http://www.dynarch.com/).
 

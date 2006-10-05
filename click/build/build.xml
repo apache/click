@@ -13,7 +13,7 @@
    <property name="jar.io" value="commons-io-1.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
-   <property name="jar.ognl" value="ognl-2.6.7.jar"/>
+   <property name="jar.ognl" value="ognl-2.6.9.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
    <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
    <property name="jar.spring-context" value="spring-context-1.2.8.jar"/>
