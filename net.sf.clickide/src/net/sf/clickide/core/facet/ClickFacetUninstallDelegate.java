@@ -34,7 +34,7 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 		
 		try {
 			// Removes the facet
-			uninstallJSFReferencesFromWebApp(project, monitor);
+			uninstallClickReferencesFromWebApp(project, monitor);
 
 			if (monitor != null) {
 				monitor.worked(1);
@@ -46,7 +46,7 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 		}	
 	}
 	
-	private void uninstallJSFReferencesFromWebApp(IProject project, IProgressMonitor monitor) {
+	private void uninstallClickReferencesFromWebApp(IProject project, IProgressMonitor monitor) {
 		WebArtifactEdit artifactEdit = ClickUtils.getWebArtifactEditForWrite(project);
 		WebApp webApp = artifactEdit.getWebApp();
 
