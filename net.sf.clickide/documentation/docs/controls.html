@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<style type="text/css">
+dt {
+	margin-left: 2em;
+	margin-bottom: 0.25em;
+	margin-top: 0.5em;
+}
+</style>
+<body>
+  
+<h1>Controls</h1>
+<p/>
+Click provides a rich set of Controls which support client side rendering and
+server side processing. This section covers the following topics:
+<ul>
+  <li><a href="#control-interface">Control Interface</a> - describes the Control interface
+  </li> 
+  <li><a href="#control-callback">Control Callback</a> - control event callback pattern
+  </li> 
+  <li><a href="#control-class">Control Classes</a> - control Java classes
+  </li>
+  <li><a href="#message-properties">Message Properties</a> - control message properties
+  </li> 
+</ul>
+<p>&nbsp;</p>
+
+
+While this section provides an overview how Controls work please see the 
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>. 
+which provides extensive information and examples.
+Javadoc 
+
+<a name="control-interface" class="heading"><h2>Control Interface</h2></a>
+In Click Controls provide the server side components that process user input, and render their
+display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
+<p/>
+Controls handle the processing of user input with the 
+<a target="topic" href="click-api/net/sf/click/Control.html#onProcess()">onProcess</a>
+method and rendering their HTML display using the toString() method. The execution
+sequence for Control being processed and rendered is illustrated below in Figure 1.
+<p/>
+
+<img src="../images/control-post-sequence-diagram.png"/>
+<p class="diagram">
+<b>Figure 1. &nbsp; Post Sequence Diagram</b> 
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+
+In Click all control classes must implement the 
+<a target="topic" href="click-api/net/sf/click/Control.html">Control</a> interface.
+The Control interface is depicted below in Figure 2.
+<p>
+<img src="../images/control-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 2. &nbsp; Control Interface Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+Methods on the Control interface include:
+<ul>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getContext()">getContext()</a> /
+   <a href="click-api/net/sf/click/Control.html#setContext(net.sf.click.Context)">setContext()</a>
+   &nbsp; - &nbsp; provides access to the request <a href="click-api/net/sf/click/Context.html">Context</a>.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getHtmlImports()">getHtmlImports()</a>
+   &nbsp; - &nbsp; defines the controls HTML header imports.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getId()">getId()</a>
+   &nbsp; - &nbsp; defines the controls HTML id attribute.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">setListener()</a>
+   &nbsp; - &nbsp; set the control action callback listener.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getMessages()">getMessages()</a>
+   &nbsp; - &nbsp; defines the controls localized messages map.
+  </li>  
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getName()">getName()</a> /
+   <a href="click-api/net/sf/click/Control.html#setName(java.lang.String)">setName()</a>
+   &nbsp; - &nbsp; defines the controls name in the Page model or Form fields.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#getParent()">getParent()</a> /
+   <a href="click-api/net/sf/click/Control.html#setParent(java.lang.Object)">setParent()</a>
+   &nbsp; - &nbsp; defines the controls parent.
+  </li>  
+  <li>
+   <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+   &nbsp; - &nbsp; deploy resources on startup.
+  </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#onProcess()">onProcess()</a>
+   &nbsp; - &nbsp; process request event handler.
+  </li>
+</ul>
+
+<a name="control-callback" class="heading"><h2>Control Callback</h2></a>
+
+Click Controls provide an event callback mechanism similar the java.awt.ActionListener callback.
+<p/>
+To define a control listener, simply set the listener object instance and the name of the
+listener method to be invoked. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> SimpleCallback <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> SimpleCallback() {
+        ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
+        clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
+        addControl(clickLink);    
+    }
+    
+    <span class="kw">public boolean</span> onClick() {
+        System.out.println(<span class="st">"onClick invoked"</span>);
+        <span class="kw">return true</span>;
+    }
+} </pre>
+
+The listener method can have any name but it must have take no parameters and must return a boolean or 
+java.lang.Boolean value. 
+<p/>
+When a callback method returns true the processing of other Controls will continue and the Pages onGet() 
+or onPost() event handler will be called. If a controls returns false not further Control processing
+will be performed and neither of the Page onGet() or onPost() methods will be invoked. This execution
+logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
+<p/>
+Being able to stop further processing and do something else can be very handy. For example your 
+Pages onGet() or onPost() method may perform an expensive database operation. By using 
+returning false in a event handler you can skip this step and forward to the next page.
+
+<a name="control-class" class="heading"><h2>Control Classes</h2></a>
+
+Core control classes are defined in the package 
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>.
+This package includes controls for the essential HTML elements.
+<p/>
+Extended control classes are provided in the Click Extras package
+<a target="topic" href="extras-api/net/sf/click/extras/control/package-summary.html">net.sf.click.extras.control</a>.
+Click Extras classes can contain dependencies to 3rd party frameworks.
+<p/>
+A subset of these control classes are depicted below in Figure 3.
+
+<p/>
+
+<img src="../images/control-package-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 3. &nbsp; Package Class Diagram</b>
+- <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
+</p>
+
+The key control classes include:
+<ul>
+<li><a href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
+- provides a anchor link which can invoke callback listeners. 
+<p></li>
+<li><a href="click-api/net/sf/click/control/Field.html">Field</a>
+- provides the abstract form field control.
+<p></li>
+<li><a href="click-api/net/sf/click/control/Form.html">Form</a>
+- provides a form control for processing, validation and rendering.   
+<p></li>
+<li><a href="click-api/net/sf/click/control/Submit.html">Submit</a>
+- provides a input type submit control which can invoke callback listeners.  
+<p></li>
+<li><a href="click-api/net/sf/click/control/TextField.html">TextField</a>
+- provides a input type text control which can invoke callback listeners.  
+<p></li>
+</ul> 
+
+The control classes are designed to support subclassing for customized
+behaviour. All control fields have protected visibility and have public 
+accessor methods.
+<p/>
+You can also aggregate controls to build more complex controls. For example the 
+<a href="extras-api/net/sf/click/extras/control/CreditCardField.html">CreditCardField</a>
+uses a <a href="click-api/net/sf/click/control/Select.html">Select</a>
+control to render the different credit card types. 
+
+<a name="message-properties" class="heading"><h2>Message Properties</h2></a>
+
+Control strings for field validation messages and HTML formatting strings are
+externalized in the properties file. By using these properties files you can
+localize a Click application for your particular language and dialect.
+
+<h3>Message Resolution</h3>
+
+Messages are looked up in a particular order enabling taylor specific messages,
+for your controls, individual pages or across your entire application.
+The order in which localized messages are resolve is:
+<dl>
+ <dt style="font-weight:bold">Page scope messages</dt>
+ <dd>Message lookups are first resolved to the Page classes message bundle if it
+ exists. For example a <tt>Login</tt> page may define the message properties:
+ 
+ <pre class="codeConfig">
+ /com/mycorp/page/Login.properties </pre>
+ 
+ If you want to tailor messages for a particular page this is where to place
+ them.
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
+ <dd>Next message lookups are resolved to the global pages message bundle if it
+ exists.
+ 
+ <pre class="codeConfig">
+ /click-page.properties </pre>
+ 
+ If you want messages to be used across your entire application this is where
+ to place them.
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Control scope messages</dt>
+ <dd>Next message lookups are resolved to the Control classes message bundle if 
+ it exists. For example a <tt>CustomTextField</tt> control may define the 
+ message properties:
+ 
+ <pre class="codeConfig">
+ /com/mycorp/control/CustomTextField.properties </pre>
+ </dd>
+ 
+ <dt style="font-weight:bold;margin-top:1em;">Global control scope messages</dt>
+ <dd>Finally message lookups are resolved to the global application control 
+ message bundle if the message has not already found. The global control
+ properties file is:
+ 
+ <pre class="codeConfig">
+ /click-control.properties </pre>
+ </dd>
+ </dl>
+
+<h3>Control Properties</h3>
+
+To customize the <tt>click-control.properties</tt> simply add this file to your 
+classpath and tailor the specific values.
+<p/>
+Note when customizing the message properties you must include all the properties, 
+not just the ones you want to override.
+
+<pre class="codeConfig">
+# Click Control messages
+field-maxlength-error={0} must be no longer than {1} characers
+field-minlength-error={0} must be at least {1} characters
+field-required-error=You must enter a value for {0}
+
+file-required-error=You must enter a filename for {0}
+
+label-required-prefix=
+label-required-suffix=&lt;font color="red"&gt;*&lt;/font&gt;
+
+not-checked-error=You must select {0}
+
+number-maxvalue-error={0} must not be larger than {1}
+number-minvalue-error={0} must not be smaller than {1}
+
+select-error=You must select a value for {0}
+
+table-first-label=First
+table-first-title=Go to first page
+table-previous-label=Prev
+table-previous-title=Go to previous page
+table-next-label=Next
+table-next-title=Go to next page
+table-last-label=Last
+table-last-title=Go to last page
+table-goto-title=Go to page
+table-page-banner=&lt;span class="pagebanner"&gt;{0} items found, displaying {1} to {2}.&lt;/span&gt;
+table-page-banner-nolinks=
+  &lt;span class="pagebanner-nolinks"&gt;{0} items found, displaying {1} to {2}.&lt;/span&gt;
+table-page-links=&lt;span class="pagelinks"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
+table-page-links-nobanner=&lt;span class="pagelinks-nobanner"&gt;[{0}/{1}] {2} [{3}/{4}]&lt;/span&gt;
+
+# Message displayed when a error occurs when the application is in "production" mode
+production-error-message=
+  &lt;div id='errorReport' class='errorReport'&gt;The application encountered an unexpected error.
+  &lt;/div&gt; </pre>
+
+
+<h3>Accessing Messages</h3>
+
+Field classes support a hierarchy of resource bundles for displaying 
+validation error messages and display messages. These localized messages can be 
+accessed through the Field methods:
+
+<ul>
+ <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a></li>
+ <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a></li>
+ <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a></li>
+ <li><a href="click-api/net/sf/click/control/Field.html#getMessages()">getMessages()</a></li>
+ <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">setErrorMessage(String)</a></li>
+ <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String, java.lang.Object)">setErrorMessage(String, Object)</a></li>
+</ul>
+
+These methods use the <tt>Locale</tt> of the request to lookup the string resource 
+bundle, and use <tt>MessageFormat</tt> for any string formatting.
+
+</body>
+</html>

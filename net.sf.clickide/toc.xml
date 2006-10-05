@@ -1,0 +1,37 @@
+<toc label="Click Documentation">
+  <topic label="Click" href="documentation/docs/click.html">
+    <topic label="Introduction" href="documentation/docs/introduction.html"/>
+    <topic label="Why Click" href="documentation/docs/why-click.html"/>
+    <topic label="Pages" href="documentation/docs/pages.html"/>
+    <topic label="Controls" href="documentation/docs/controls.html"/>
+    <topic label="Configuration" href="documentation/docs/configuration.html"/>
+    <topic label="Click DTD" href="documentation/docs/click-dtd.html"/>
+    <topic label="Click API" href="http://click.sourceforge.net/docs/click-api/overview-summary.html"/>
+    <topic label="Control API" href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/package-summary.html"/>
+    <topic label="Extras API" href="http://click.sourceforge.net/docs/extras-api/overview-summary.html"/>
+    <topic label="Quick Start" href="documentation/docs/quick-start.html"/>
+    <topic label="Best Practices" href="documentation/docs/best-practices.html"/>
+    <topic label="FAQ" href="documentation/docs/faq.html"/>
+    <topic label="Extras" href="documentation/docs/extras.html"/>
+    <topic label="Examples" href="documentation/docs/examples.html"/>
+    <topic label="Building" href="documentation/docs/building.html"/>
+    <topic label="Click Online" href="documentation/docs/click-online.html"/>
+    <topic label="RoadMap &amp; Changes" href="documentation/docs/roadmap-changes.html"/>
+    <topic label="Cheat Sheet" href="documentation/docs/click-cheat-sheet.pdf"/>
+    <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095"/>
+  </topic>
+  <topic label="Velocity" href="documentation/docs/velocity/velocity.html">
+    <topic label="Users Guide PDF" href="documentation/docs/velocity/VelocityUsersGuide.pdf"/>
+    <topic label="Developers Guide" href="documentation/docs/velocity/developer-guide.html"/>
+    <topic label="VTL Reference" href="documentation/docs/velocity/vtl-reference-guide.html"/>
+  </topic>
+  <!--
+  <topic label="Reference">
+    <topic label="CSS 2.1" href="documentation/docs/css2/cover.html"/>
+    <topic label="DOM Reference" href="http://developer.mozilla.org/en/docs/Gecko_DOM_Reference"/>
+    <topic label="HTML 4.01" href="documentation/docs/html/cover.html"/>
+    <topic label="JavaScript 1.5" href="http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Guide"/>
+    <topic label="Servlet 2.3 API" href="documentation/docs/servlet-api/overview-summary.html"/>
+  </topic>
+  -->
+</toc>

@@ -1,0 +1,388 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="table.css"/>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+  li {
+    margin-bottom: 0.75em;
+  }
+ </style>
+</head>
+
+<body>
+<h1>Introduction</h1>
+Click is a simple JEE web application framework for commercial Java developers.
+<p>
+Click is an open source project, licensed using the 
+<a href="LICENSE.txt">Apache</a> license.
+<p>
+Click uses the event based programming model for processing Servlet requests and 
+<a target='topic' href='velocity/velocity.html'>Velocity</a> for rendering 
+the response.  
+<p>
+This framework uses a single servlet, called
+<a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>, to
+act as a request dispatcher. When a request arrives ClickServlet creates a 
+<a target="topic" href="click-api/net/sf/click/Page.html">Page</a> object to 
+processes the request and then uses the page's Velocity template to render the 
+results.
+<p>
+Page provide a simple thread safe programming environment, with a new
+page instance is created for each servlet request.
+<p>
+Possibly the best way to see how Click works is to dive right in and look at some 
+examples.
+
+<h2>Hello World Example</h2>
+A Hello World example in Click would look something like this. 
+<p/>
+First we would have a <tt>HelloWorld</tt> page class:
+
+<pre class="codeJava">
+<span class="kw">package</span> <span class="red">examples.page</span>;
+
+<span class="kw">import</span> java.util.Date;
+<span class="kw">import</span> net.sf.click.Page;
+
+<span class="kw">public</span> HelloWorld <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Date <span class="st">time</span> = <span class="kw">new</span> Date();
+
+} 
+</pre>
+
+Next we would have a page template <span class="blue">hello-world.htm</span>:
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;body&gt;
+  
+    &lt;h2&gt;Hello World&lt;/h2&gt;
+    
+    Hello world from Click at <span class="st">$time</span>
+    
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
+application to map <span class="blue">hello-world.htm</span>
+requests to our <tt>HelloWorld</tt> page class.
+
+<pre class="codeConfig">
+&lt;click-app&gt;  
+  &lt;pages package="<span class="red">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
+&lt;/click-app&gt; 
+</pre>
+
+<p/>
+
+At runtime the ClickSerlvet maps a GET <span class="blue">hello-world.htm</span> 
+request to our page class <tt>example.page.HelloWorld</tt> and creates a new instance. 
+The HelloWorld page creates a new public <tt>Date</tt> object, which is automatically
+added to the pages model using the fields name <span class="st">time</span>.
+<p/>
+The page model is then merged with the template which substitutes the 
+<span class="st">$time</span> parameter with the <tt>Date</tt> object. 
+Velocity then renders the merged template which looks something like 
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ <h2 style="color: navy; margin-top: 0em;">Hello World</h2>
+ Hello world from Click at Wed May 28 15:52:29 EST 2005
+ </td>
+</tr>
+</table>
+
+<h2>Form Example</h2>
+
+Click also includes a library <a target="topic" href="controls.html">Controls</a> which 
+provide user interface functionality. The example below provides a login 
+Page which demonstrate Click controls.
+<p/>
+First we have a <tt>LoginPage</tt> class which setups up a login 
+<a href="click-api/net/sf/click/control/Form.html">Form</a>
+in the constructor.
+
+<pre class="codeJava">
+<span class="kw">public class</span> LoginPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Form <span class="st">form</span> = <span class="kw">new</span> Form();
+
+    <span class="kw">public</span> LoginPage() { 
+        form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
+        form.add(<span class="kw">new</span> PageSubmit(<span class="st">"cancel"</span>, HomePage.<span class="kw">class</span>));
+    }
+
+    <span class="kw">public boolean</span> onOkClicked() {
+        <span class="kw">if</span> (form.isValid()) {
+            User user = <span class="kw">new</span> User();
+            form.copyTo(user);
+
+            <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
+                getContext().setSessionAttribute(<span class="st">"user"</span>, user);
+                setRedirect(SecurePage.<span class="kw">class</span>);
+                <span class="kw">return false</span>;
+
+            } <span class="kw">else</span> {     
+                form.setError(getMessage(<span class="st">"authentication-error"</span>));           
+            }
+        }
+        <span class="kw">return true</span>;
+    }
+} 
+</pre>
+
+Note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls.
+<p/>
+Next we have the LoginPage template <span class="blue">login.htm</span>. The
+Click application automatically associates the <tt>login.htm</tt> template with
+the <tt>LoginPage</tt> class.
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;body&gt;
+  
+    &lt;h3&gt;Login&lt;/h3&gt;
+    
+    <span class="blue">$form</span>
+    
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+When the Login page is first requested the <span class="blue">$form</span> object will 
+automatically render itself as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+  
+ <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+
+<table class='form'>
+<tr>
+<td align='left'><label >Username</label><span class="red">*</span></td>
+<td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
+</tr>
+<tr>
+<td align='left'><label >Password</label><span class="red">*</span></td>
+<td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
+</tr>
+</table>
+<table class="buttons">
+<tr align='left'>
+  <td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td>
+</tr>
+</table>
+
+ </td>
+</tr>
+</table>
+
+Now the user enters their username, but forgets their password and then presses the OK
+button. The ClickServlet creates a new Login page and processes the form control.
+The form control processes its fields and determines that it is invalid. 
+<p/>
+Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the form is 
+invalid this method it does nothing.
+<p/>
+With all the event processing completed the form now renders the field validation errors.
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+   
+ <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+ 
+<table class='fields'>
+<tr>
+<td align='left'><label >Username</label><span class="red">*</span></td>
+<td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
+</tr>
+<tr>
+<td align='left'><label >Password</label><span class="red">*</span></td>
+<td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
+</tr>
+<tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
+</table>
+<table class="buttons">
+<tr align='left'><td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td></tr>
+</table>
+
+ </td>
+</tr>
+</table>
+
+If the user enters a correct username and password the <tt>onOkClicked()</tt> 
+event handler will add a User object to the HttpSession and redirect the request 
+to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
+processing in the page.
+<p/>
+If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
+
+<h4>Form Layout</h4>
+
+In this example we use the form control to automatically render the form and the fields
+HTML. This is a great feature for quickly building screens, and the form control 
+provides a number of layout options. See the Click <a href="examples.html">Examples</a> for an
+interactive Form Properties demo.
+<p/>
+For fine grained page design you can specifically layout form and fields in 
+your page template. See the 
+<a target="topic" href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
+Javadoc for more details.
+
+<h2>Table Example</h2>
+
+One of the most useful Click controls is the 
+<a target="topic" href="click-api/net/sf/click/control/Table.html">Table</a>
+control. The Table control provides support for:
+<ul>
+<li>automatic rendering</li>
+<li>column formatting and custom rendering</li>
+<li>automatic pagination</li>
+<li>link control support</li>
+</ul> 
+
+<p/>
+
+An example usage of the Table control in a customers Page is provided below:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
+    <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"deleteLink"</span>, <span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
+
+    <span class="kw">public</span> CustomersPage() {
+        table.setPageSize(4);
+        table.setShowBanner(<span class="kw">true</span>);
+        table.setStyle(<span class="st">"its"</span>);
+    	
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
+        
+        Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
+        column.setAutolink(<span class="kw">true</span>);
+        table.addColumn(column);
+        
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"category"</span>));
+    	
+        column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
+        column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
+        table.addColumn(column);
+    }
+    
+    <span class="kw">public boolean</span> onDeleteClick() {
+        Long id = deleteLink.getValueLong();
+        getCustomerService().deleteCustomer(id);
+        <span class="kw">return true</span>;
+    }
+    
+    <span class="cm">/**
+     * @see Page#onRender()
+     */</span>
+    <span class="kw">public void</span> onRender() {
+    	List list = getCustomerService().getCustomersByName();
+    	table.setRowList(list);
+    }
+} </pre>
+
+In this Page code example a Table control is declared and a number of 
+<a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+objects are added. A deleteLink 
+<a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
+control is used a decorator for the "Action" column. This control will invoke the
+Page <tt>onDeleteClick()</tt> method when it is clicked. Finally we have the 
+Page <tt>onRender()</tt> method which is used to populate the Table control with
+rows before it is rendered.
+
+<p/>
+
+In our Page template we simply reference the <span class="blue">$table</span> object 
+which is rendered when its <tt>toString()</tt> method is called.
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;body&gt;
+  
+    &lt;h3&gt;Customers&lt;/h3&gt;
+    
+    <span class="blue">$table</span>
+    
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+At runtime the Table would be rendered in the page as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ 
+<h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Customers</h3>
+
+<table id="table" class="its">
+<thead>
+<tr>
+<th>Id</th>
+<th>Name</th>
+<th>Email</th>
+<th>Category</th>
+<th>Action</th></tr></thead>
+<tbody>
+<tr class="odd">
+<td>834501</td>
+<td>Alison Hanson</td>
+<td><a href="mailto:alison.hanson@gmail.com">alison.hanson@gmail.com</a></td>
+<td>Options</td>
+<td><a href="#">Delete</a></td></tr>
+<tr class="even">
+<td>238454</td>
+<td>Angus Mitchel</td>
+<td><a href="mailto:amitchel@gmail.com">amitchel@mitchel.com</a></td>
+<td>Stocks</td>
+<td><a href="#">Delete</a></td></tr>
+<tr class="odd">
+<td>1836512</td>
+<td>Peter Mitchel</td>
+<td><a href="mailto:pmitchel@gmail.com">pmitchel@mitchel.com</a></td>
+<td>Residential Property</td>
+<td><a href="#">Delete</a></td></tr>
+<tr class="even">
+<td>418056</td>
+<td>David Ofray</td>
+<td><a href="mailto:davido@gmail.com">davido@yahoo.com</a></td>
+<td>Bonds</td>
+<td><a href="#">Delete</a></td></tr>
+<tr class="odd">
+<td>445910</td>
+<td>Ann Robertson</td>
+<td><a href="mailto:ann_robinson@surf.net@gmail.com">ann_robinson@surf.net</a></td>
+<td>Commercial Property</td>
+<td><a href="#">Delete</a></td></tr></tbody></table>
+<span class="pagebanner">31 items found, displaying 1 to 4.</span><span class="pagelinks">[First/Prev] <strong>1</strong>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=1" id="paging" title="Go to page 2">2</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=2" id="paging" title="Go to page 3">3</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=3" id="paging" title="Go to page 4">4</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=4" id="paging" title="Go to page 5">5</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=5" id="paging" title="Go to page 6">6</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=6" id="paging" title="Go to page 7">7</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=7" id="paging" title="Go to page 8">8</a> [<a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=1" id="paging" title="Go to next page">Next</a>/<a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=7" id="paging" title="Go to last page">Last</a>]</span>
+
+
+
+  </td>
+ </tr>
+</table>
+
+In this example if a user click on the Delete link the <tt>onDeleteClick()</tt>
+method will be called on the Page deleting the customer record.
+
+</body>
+</html>

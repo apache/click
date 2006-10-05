@@ -1,0 +1,244 @@
+a {
+  text-decoration: underline;
+}
+
+.heading {
+	text-decoration: none;
+}
+
+a:visited {
+  color: blue;
+}
+
+a.external {
+  background: url(images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
+body, table, td, p	{
+  font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
+  font-size: 12px;
+}
+
+body {
+  background-color: white;
+}
+
+h1  { 
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h2  { 
+  font-size: 18px; 
+  font-weight: bold;
+}
+
+h3  { 
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h4  { 
+  font-size: 12px;
+  font-weight: bold;
+}
+
+li {
+  margin-bottom: 1em;
+}
+
+p.diagram {
+  margin-top: 0em;
+  margin-bottom: 2em;
+}
+
+span.sparx {
+  font-style: italic;
+}
+
+.appnameText {
+  font-size: 20pt;
+  font-weight: bold;
+  letter-spacing: 0.2em; 
+  padding-bottom: 0px;
+  padding-left: 2px;
+  padding-right: 0px;
+  padding-top: 8px;
+  text-decoration: none;
+  vertical-align:top;
+}
+
+.versionText {
+  font-size: 8pt;
+  padding: 1.5em;
+  text-align: right;
+  text-decoration: none;
+  vertical-align: bottom;
+}
+
+.appTitleBar {
+  background-color: #d8d8d8;
+  color: 000080;
+}
+
+a.navLinkSection {
+  background: url(images/book.gif) center left no-repeat;
+  color: 000080;
+  text-decoration: none;
+  padding-left: 22px;
+  padding-bottom: 1px;
+}
+
+a.navLinkSection:visited {
+  color: 000080;
+}
+
+a.navLinkTopic {
+  background: url(images/page.gif) center left no-repeat; 
+  color: 000080;
+  margin-left: 22px;
+  text-decoration: none;
+  padding-left: 24px;
+  padding-bottom: 1px;
+}
+
+a.navLinkTopic:visited {
+  color: 000080;
+}
+
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
+	font-family: Courier New, courier;
+	font-size: 10pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeConfig 
+{
+}
+
+.codeDtd 
+{
+	border: 1px solid #8f8ecf;
+	background-color: #fffcf7;
+}
+
+.codeJava 
+{
+	background-color: white;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+.codeLog {
+	color:white;
+	background-color: #808080;
+	border: 1px solid black;
+}
+
+.htmlExample 
+{
+	border: 1px solid gray;
+	border-spacing: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+}
+
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+
+/* Web resource */
+.wr {
+    font-family: Courier New, courier;
+	color: navy;
+}
+
+.red { color: red; }
+
+.green { color: green; }
+
+.blue { color: blue; }
+
+.maroon { color: maroon; }
+
+.navy { color: navy; }
+
+.yellow { color: yellow; }
+
+.html {
+	color: blue;
+	font-family: CourierNew, courier;
+}
+
+/* form.css */
+
+a.error {
+	color: red;
+}
+a:visited.error {
+	color: red;
+}
+input.disabled {
+	background: lightgray;
+}
+input.error {
+	background: #FFFF80;
+}
+label.error {
+    /* color: red; */
+}
+select.error {
+	background: #FFFF80;
+}
+span.error {
+	color: red;
+}
+table.fields {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.errors {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+}
+table.buttons {
+	border-width: 1px;
+	padding: 0;
+	vertical-align: baseline;
+	margin-top: 1em;
+}
+
+
