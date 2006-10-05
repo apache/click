@@ -28,6 +28,9 @@ import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
+import net.sf.click.util.OgnlNullHandler;
+
+import ognl.OgnlRuntime;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -741,11 +744,20 @@ public class Table implements Control {
     }
 
     /**
-     * Return the list of table rows.
+     * Set the list of table rows.
+     * <p/>
+     * This method will register a {@see net.sf.click.util.OgnlNullHandler}
+     * with the <tt>OgnlRuntime</tt> for the given row data class, to support
+     * null property path evaluations with null outer join table data.
      *
      * @param rowList the list of table rows to set
      */
     public void setRowList(List rowList) {
+        if (rowList != null && !rowList.isEmpty()) {
+            Object object = rowList.get(0);
+            OgnlRuntime.setNullHandler(object.getClass(), new OgnlNullHandler());
+        }
+
         this.rowList = rowList;
     }
 

@@ -1,5 +1,8 @@
 package net.sf.click.control;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.NoSuchPropertyException;
@@ -35,9 +38,45 @@ public class ColumnTest extends TestCase {
         }
     }
     
+    public void testOuterJoin() {
+    	// Test with null child object
+        TestObject row = new TestObject("name", "label");
+        row.setChild(new Child());
+        
+        List rowList = new ArrayList();
+        rowList.add(row);
+        Table table = new Table();
+        table.setRowList(rowList);
+        
+    	Column column = new Column("child.name");
+    	
+        HtmlStringBuffer buffer = new HtmlStringBuffer();        
+        column.renderTableData(row, buffer, null, 0);
+        assertTrue(buffer.length() > 0);        
+    }
+    
+    public void testNullOuterJoin() {
+    	// Test with null child object
+        TestObject row = new TestObject("name", "label");
+        
+        List rowList = new ArrayList();
+        rowList.add(row);
+        Table table = new Table();
+        table.setRowList(rowList);
+        
+    	Column column = new Column("child.name");
+    	
+        HtmlStringBuffer buffer = new HtmlStringBuffer();        
+        column.renderTableData(row, buffer, null, 0);
+        assertTrue(buffer.length() > 0);        
+    }
+    
+    // ---------------------------------------------------------- Inner Classes
+    
     public static class TestObject {
         private String name;
         private Object value;
+        private Child child; 
         
         public TestObject(String name, Object value) {
             this.name = name;
@@ -51,6 +90,26 @@ public class ColumnTest extends TestCase {
         public Object getValue() {
             return value;
         }
+        
+        public Child getChild() {
+        	return child;
+        }
+        
+        public void setChild(Child child) {
+        	this.child = child;
+        }
+    }
+    
+    public static class Child {
+    	private String name;
+    	
+    	public String getName() {
+    		return name;
+    	}
+    	
+    	public void setName(String name) {
+    		this.name = name;
+    	}
     }
 
 }
