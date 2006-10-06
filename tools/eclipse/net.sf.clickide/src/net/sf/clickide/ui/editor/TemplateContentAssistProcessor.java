@@ -287,7 +287,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 					}
 				}
 			} catch(Exception ex){
-				ClickPlugin.log(ex);
+				//ClickPlugin.log(ex);
 			}
 		}
 		return map;
