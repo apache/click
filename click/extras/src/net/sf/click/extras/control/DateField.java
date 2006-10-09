@@ -92,13 +92,13 @@ public class DateField extends TextField {
     private static final long serialVersionUID = 1L;
 
     /** The HTML import statements. */
-    protected static final String HTML_IMPORTS =
+    static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
 
     /** The Calendar resource file names. */
-    protected static final String[] CALENDAR_RESOURCES =
+    static final String[] CALENDAR_RESOURCES =
         { ".gif", ".js", "-al.js", "-bg.js", "-cs.js", "-da.js", "-de.js",
           "-el.js", "-en.js", "-es.js", "-fi.js", "-fr.js", "-he.js", "-it.js",
           "-ja.js", "-ko.js", "-lt.js", "-lv.js", "-no.js", "-pl.js", "-pt.js",
@@ -108,7 +108,7 @@ public class DateField extends TextField {
           "-win2k-cold-2.css", "-menuarrow.gif", "-menuarrow2.gif" };
 
     /** Supported locales. */
-    protected static final String[] SUPPORTTED_LANGUAGES =
+    static final String[] SUPPORTTED_LANGUAGES =
         {"al", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "it",
          "ja", "ko", "lt", "lv", "no", "pl", "pt", "ru", "sk", "sv", "zh"};
 
