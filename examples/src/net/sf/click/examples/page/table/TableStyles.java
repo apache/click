@@ -55,12 +55,12 @@ public class TableStyles extends BorderPage {
         table.addColumn(column);
 
         column = new Column("age");
-        column.setAttribute("style", "{text-align:center;}");
+        column.setDataStyle("text-align", "center");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setAttribute("style", "{text-align:right;}");
+        column.setDataStyle("text-align", "right");
         table.addColumn(column);
     }
 
