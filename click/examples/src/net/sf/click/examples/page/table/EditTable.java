@@ -56,7 +56,7 @@ public class EditTable extends BorderPage {
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setAttribute("style", "{text-align:right;}");
+        column.setDataStyle("text-align", "right");
         table.addColumn(column);
 
         column = new Column("dateJoined");

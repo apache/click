@@ -22,23 +22,23 @@ public class TablePaging extends BorderPage {
         table.setShowBanner(true);
 
         Column column = new Column("name");
-        column.setAttribute("width", "140px;");
+        column.setWidth("140px;");
         table.addColumn(column);
 
         column = new Column("email");
-        column.setAttribute("width", "230px;");
+        column.setWidth("230px;");
         column.setAutolink(true);
         table.addColumn(column);
 
         column = new Column("age");
-        column.setAttribute("width", "40px;");
-        column.setAttribute("style", "{text-align:center;}");
+        column.setWidth("40px;");
+        column.setDataStyle("text-align", "center");
         table.addColumn(column);
 
         column = new Column("holdings");
-        column.setAttribute("width", "100px;");
         column.setFormat("${0,number,#,##0.00}");
-        column.setAttribute("style", "{text-align:right;}");
+        column.setDataStyle("color", "red");
+        column.setWidth("100px;");
         table.addColumn(column);
     }
 
