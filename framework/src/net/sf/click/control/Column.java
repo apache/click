@@ -184,7 +184,7 @@ public class Column implements Serializable {
     // ----------------------------------------------------- Instance Variables
 
     /** The Column attributes Map. */
-    protected Map attributes = new HashMap();
+    protected Map attributes;
 
     /**
      * The automatically hyperlink column URL and email address values flag,
@@ -195,8 +195,8 @@ public class Column implements Serializable {
     /** The column table data &lt;td&gt; CSS class attribute. */
     protected String dataClass;
 
-    /** The column table data &lt;td&gt; CSS style attribute. */
-    protected String dataStyle;
+    /** The Map of column table data &lt;td&gt; CSS style attributes. */
+    protected Map dataStyles;
 
     /** The column row decorator. */
     protected Decorator decorator;
@@ -210,8 +210,8 @@ public class Column implements Serializable {
     /** The CSS class attribute of the column header. */
     protected String headerClass;
 
-    /** The CSS style attribute of the column header. */
-    protected String headerStyle;
+    /** The Map of column table header &lt;th&gt; CSS style attributes. */
+    protected Map headerStyles;
 
     /** The title of the column header. */
     protected String headerTitle;
@@ -240,6 +240,9 @@ public class Column implements Serializable {
 
     /** The parent Table. */
     protected Table table;
+
+    /** The column HTML &lt;td&gt; width attribute. */
+    protected String width;
 
     // ----------------------------------------------------------- Constructors
 
@@ -325,6 +328,9 @@ public class Column implements Serializable {
      * @return the column attributes Map.
      */
     public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
         return attributes;
     }
 
@@ -334,7 +340,7 @@ public class Column implements Serializable {
      * @return true if the column has attributes on false otherwise
      */
     public boolean hasAttributes() {
-        return !getAttributes().isEmpty();
+        return (attributes != null && !getAttributes().isEmpty());
     }
 
     /**
@@ -379,19 +385,55 @@ public class Column implements Serializable {
     /**
      * Return the table data &lt;td&gt; CSS style.
      *
-     * @return the table data CSS style
+     * @param name the CSS style name
+     * @return the table data CSS style for the given name
      */
-    public String getDataStyle() {
-        return dataStyle;
+    public String getDataStyle(String name) {
+        if (hasDataStyles()) {
+            return (String) getDataStyles().get(name);
+
+        } else {
+            return null;
+        }
     }
 
     /**
-     * Set the table data &lt;td&gt; CSS style.
+     * Set the table data &lt;td&gt; CSS style name and value pair.
      *
-     * @param style the table data CSS style
+     * @param name the CSS style name
+     * @param value the CSS style value
      */
-    public void setDataStyle(String style) {
-        dataStyle = style;
+    public void setDataStyle(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getDataStyles().put(name, value);
+        } else {
+            getDataStyles().remove(name);
+        }
+    }
+
+    /**
+     * Return true if table data &lt;td&gt; CSS styles are defined.
+     *
+     * @return true if table data &lt;td&gt; CSS styles are defined
+     */
+    public boolean hasDataStyles() {
+        return (dataStyles != null && !dataStyles.isEmpty());
+    }
+
+    /**
+     * Return the Map of table data &lt;td&gt; CSS styles.
+     *
+     * @return the Map of table data &lt;td&gt; CSS styles
+     */
+    public Map getDataStyles() {
+        if (dataStyles == null) {
+            dataStyles = new HashMap();
+        }
+        return dataStyles;
     }
 
     /**
@@ -773,19 +815,55 @@ public class Column implements Serializable {
     /**
      * Return the table header &lt;th&gt; CSS style.
      *
-     * @return the table header CSS style
+     * @param name the CSS style name
+     * @return the table header CSS style value for the given name
      */
-    public String getHeaderStyle() {
-        return headerStyle;
+    public String getHeaderStyle(String name) {
+        if (hasHeaderStyles()) {
+            return (String) getHeaderStyles().get(name);
+
+        } else {
+            return null;
+        }
     }
 
     /**
-     * Set the table header &lt;th&gt; CSS style.
+     * Set the table header &lt;th&gt; CSS style name and value pair.
      *
-     * @param style the table header CSS style
+     * @param name the CSS style name
+     * @param value the CSS style value
      */
-    public void setHeaderStyle(String style) {
-        headerStyle = style;
+    public void setHeaderStyle(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getHeaderStyles().put(name, value);
+        } else {
+            getHeaderStyles().remove(name);
+        }
+    }
+
+    /**
+     * Return true if table header &lt;th&gt; CSS styles are defined.
+     *
+     * @return true if table header &lt;th&gt; CSS styles are defined
+     */
+    public boolean hasHeaderStyles() {
+        return (headerStyles != null && !headerStyles.isEmpty());
+    }
+
+    /**
+     * Return the Map of table header &lt;th&gt; CSS styles.
+     *
+     * @return the Map of table header &lt;th&gt; CSS styles
+     */
+    public Map getHeaderStyles() {
+        if (headerStyles == null) {
+            headerStyles = new HashMap();
+        }
+        return headerStyles;
     }
 
     /**
@@ -804,24 +882,6 @@ public class Column implements Serializable {
      */
     public void setHeaderTitle(String title) {
         headerTitle = title;
-    }
-
-    /**
-     * Return the parent Table containing the Column.
-     *
-     * @return the parent Table containing the Column
-     */
-    public Table getTable() {
-        return table;
-    }
-
-    /**
-     * Set the Column's the parent <tt>Table</tt>.
-     *
-     * @param table Column's parent <tt>Table</tt>
-     */
-    public void setTable(Table table) {
-        this.table = table;
     }
 
     /**
@@ -851,6 +911,41 @@ public class Column implements Serializable {
         }
     }
 
+    /**
+     * Return the parent Table containing the Column.
+     *
+     * @return the parent Table containing the Column
+     */
+    public Table getTable() {
+        return table;
+    }
+
+    /**
+     * Set the Column's the parent <tt>Table</tt>.
+     *
+     * @param table Column's parent <tt>Table</tt>
+     */
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
+    /**
+     * Return the column HTML &lt;td&gt; width attribute.
+     *
+     * @return the column HTML &lt;td&gt; width attribute
+     */
+    public String getWidth() {
+        return width;
+    }
+    /**
+     * Set the column HTML &lt;td&gt; width attribute.
+     *
+     * @param value the column HTML &lt;td&gt; width attribute
+     */
+    public void setWidth(String value) {
+        width = value;
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -873,10 +968,13 @@ public class Column implements Serializable {
         buffer.elementStart("td");
         buffer.appendAttribute("id", getId() + "_" + rowIndex);
         buffer.appendAttribute("class", getDataClass());
-        buffer.appendAttribute("style", getDataStyle());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
+        if (hasDataStyles()) {
+            buffer.appendStyleAttributes(getDataStyles());
+        }
+           buffer.appendAttribute("width", getWidth());
         buffer.closeTag();
 
         renderTableDataContent(row, buffer, context, rowIndex);
@@ -893,9 +991,11 @@ public class Column implements Serializable {
     public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
         buffer.elementStart("th");
         buffer.appendAttribute("class", getHeaderClass());
-        buffer.appendAttribute("style", getHeaderStyle());
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
+        }
+        if (hasHeaderStyles()) {
+            buffer.appendStyleAttributes(getHeaderStyles());
         }
         buffer.closeTag();
 

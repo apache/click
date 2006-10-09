@@ -52,13 +52,17 @@ import java.util.Map;
  */
 public class HtmlStringBuffer {
 
+    // -------------------------------------------------------------- Constants
+
     /** JavaScript attribute names. */
-    public static final String[] JS_ATTRIBUTES = {
+    static final String[] JS_ATTRIBUTES = {
        "onload", "onunload", "onclick", "ondblclick", "onmousedown",
        "onmouseup", "onmouseover", "onmousemove", "onmouseout", "onfocus",
        "onblur", "onkeypress", "onkeydown", "onkeyup", "onsubmit", "onreset",
        "onselect", "onchange"
     };
+
+    // ----------------------------------------------------- Instance Variables
 
     /** The character storage array. */
     protected char[] characters;
@@ -275,6 +279,36 @@ public class HtmlStringBuffer {
                 Object value = entry.getValue();
                 appendAttribute(name, value);
             }
+        }
+    }
+
+    /**
+     * Append the given map of CSS style name and value pairs as a style
+     * attribute to the string buffer.
+     *
+     * @param attributes the map of CSS style names and values
+     * @throws IllegalArgumentException if attributes is null
+     */
+    public void appendStyleAttributes(Map attributes) {
+        if (attributes == null) {
+            throw new IllegalArgumentException("Null attributes parameter");
+        }
+
+        if (!attributes.isEmpty()) {
+            append(" style=\"{");
+
+            for (Iterator i = attributes.entrySet().iterator(); i.hasNext();) {
+                Map.Entry entry = (Map.Entry) i.next();
+                String name = entry.getKey().toString();
+                String value = entry.getValue().toString();
+
+                append(name);
+                append(":");
+                append(value);
+                append(";");
+            }
+
+            append("}\"");
         }
     }
 
