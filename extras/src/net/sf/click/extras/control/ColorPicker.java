@@ -74,7 +74,7 @@ public class ColorPicker extends Field {
     private static final long serialVersionUID = 1L;
 
     /** The Calendar resource file names. */
-    protected static final String[] COLOR_PICKER_RESOURCES = {
+    static final String[] COLOR_PICKER_RESOURCES = {
         "/net/sf/click/extras/control/colorpicker/colorpicker.js",
         "/net/sf/click/extras/control/colorpicker/colorscale.png",
         "/net/sf/click/extras/control/colorpicker/arrowdown.gif",
@@ -84,12 +84,12 @@ public class ColorPicker extends Field {
     };
 
     /** The HTML imports statements. */
-    protected static final String HTML_IMPORTS =
+    static final String HTML_IMPORTS =
         "<script type=\"text/javascript\" src=\"${path}/click/prototype/prototype.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"${path}/click/colorpicker/colorpicker.js\"></script>\n";
 
     /** The color validation hexidecimal pattern. */
-    protected static final Pattern HEX_PATTERN =
+    static final Pattern HEX_PATTERN =
         Pattern.compile("#[a-fA-F0-9]{3}([a-fA-F0-9]{3})?");
 
     /**
@@ -101,7 +101,7 @@ public class ColorPicker extends Field {
      * <li>3 - is the localized error message for pattern validation</li>
      * </ul>
      */
-    protected final static String VALIDATE_COLORPICKER_FUNCTION =
+    final static String VALIDATE_COLORPICKER_FUNCTION =
         "function validate_{0}() '{'\n"
         + "   var msg = validateColorPicker(\n"
         + "         ''{0}'',{1}, [''{2}'',''{3}'']);\n"

@@ -90,13 +90,13 @@ public class CheckList extends Field {
     private static final long serialVersionUID = 1L;
 
     /** The Checklist resource file names. */
-    protected static final String[] CHECKLIST_RESOURCES = {
+    static final String[] CHECKLIST_RESOURCES = {
         "/net/sf/click/extras/control/checklist/checklist.css",
         "/net/sf/click/extras/control/checklist/checklist.js"
     };
 
     /** The Prototype resource file names. */
-    protected static final String[] PROTOTYPE_RESOURCES = {
+    static final String[] PROTOTYPE_RESOURCES = {
         "/net/sf/click/extras/control/prototype/builder.js",
         "/net/sf/click/extras/control/prototype/controls.js",
         "/net/sf/click/extras/control/prototype/dragdrop.js",
