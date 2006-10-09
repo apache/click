@@ -87,7 +87,12 @@ public class OgnlNullHandler implements NullHandler {
                     target.getClass(),
                     property.toString());
 
-            return method.getReturnType().newInstance();
+            if (method.getReturnType().getName().startsWith("java.lang")) {
+                return null;
+
+            } else {
+                return method.getReturnType().newInstance();
+            }
 
         } catch (OgnlException oe) {
             throw new RuntimeException(oe);
