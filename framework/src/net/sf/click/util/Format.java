@@ -77,6 +77,9 @@ public class Format {
     /** The request context locale. */
     protected Locale locale;
 
+    /** The empty string value. */
+    protected String emptyString;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -116,7 +119,16 @@ public class Format {
      * @return the formatter methods empty string value
      */
     public String getEmptyString() {
-        return "";
+        return emptyString;
+    }
+
+    /**
+     * Set the format empty string value.
+     *
+     * @param value the format empty string value
+     */
+    public void setEmptyString(String value) {
+        emptyString = value;
     }
 
     /**
