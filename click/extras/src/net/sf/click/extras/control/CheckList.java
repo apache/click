@@ -634,7 +634,8 @@ public class CheckList extends Field {
      */
     public void bindRequestValue() {
 
-        // Page developer has not initialized options
+        // Page developer has not initialized options, which are required
+    	// to support sorting
         if (getOptionList().isEmpty()) {
             return;
         }
@@ -860,12 +861,14 @@ public class CheckList extends Field {
     }
 
     /**
-     * Validate the CheckList request submission. <p/> If a CheckList is
-     * {@link #required} then the user must select a value, otherwise the Select
-     * will have a validation error. If the Select is not required then no
-     * validation errors will occur. <p/> A field error message is displayed if
-     * a validation error occurs. These messages are defined in the resource
-     * bundle: <blockquote>
+     * Validate the CheckList request submission.
+     * <p/>
+     * If a CheckList is {@link #required} then the user must select a value,
+     * otherwise the Select will have a validation error. If the Select is not
+     * required then no validation errors will occur.
+     * <p/>
+     * A field error message is displayed if a validation error occurs. These
+     * messages are defined in the resource bundle: <blockquote>
      *
      * <pre class="codeConfig>
      *  /click-control.properties </pre>
