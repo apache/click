@@ -76,9 +76,23 @@ public class PageLink extends AbstractLink {
     }
 
     /**
+     * Create an PageLink for the given target Page class.
+     *e
+     * @param targetPage the target page class
+     * @throws IllegalArgumentException if the name is null
+     */
+    public PageLink(Class targetPage) {
+        if (targetPage == null) {
+            throw new IllegalArgumentException("Null targetPage parameter");
+        }
+        pageClass = targetPage;
+    }
+
+    /**
      * Create an PageLink with no name defined.
      * <p/>
-     * <b>Please note</b> the control's name must be defined before it is valid.
+     * <b>Please note</b> the control's name and target pageClass must be
+     * defined before it is valid.
      */
     public PageLink() {
     }
