@@ -58,7 +58,7 @@ public class CustomerService extends CayenneTemplate {
         commitChanges();
     }
 
-    public Customer getCustomer(Integer id) {
+    public Customer getCustomer(Object id) {
         return (Customer) objectForPK(Customer.class, id);
     }
 
