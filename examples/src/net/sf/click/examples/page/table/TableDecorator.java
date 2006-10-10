@@ -6,9 +6,11 @@ import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Column;
 import net.sf.click.control.Decorator;
+import net.sf.click.control.PageLink;
 import net.sf.click.control.Table;
 import net.sf.click.examples.domain.Customer;
 import net.sf.click.examples.page.BorderPage;
+import net.sf.click.examples.page.EditCustomer;
 
 /**
  * Provides an demonstration of Table control paging.
@@ -18,10 +20,11 @@ import net.sf.click.examples.page.BorderPage;
 public class TableDecorator extends BorderPage {
 
     public Table table = new Table();
+    public Customer customerDetail;
 
-    private ActionLink viewLink = new ActionLink("view");
-    private ActionLink editLink = new ActionLink("edit");
-    private ActionLink deleteLink = new ActionLink("delete");
+    private ActionLink viewLink = new ActionLink();
+    private PageLink editLink = new PageLink("edit", EditCustomer.class);
+    private ActionLink deleteLink = new ActionLink();
 
     public TableDecorator() {
         // Setup customers table
@@ -48,17 +51,16 @@ public class TableDecorator extends BorderPage {
         table.addColumn(column);
 
         viewLink.setListener(this, "onViewClick");
-        viewLink.setLabel("View");
         viewLink.setAttribute("title", "View customer details");
         table.addControl(viewLink);
 
         editLink.setListener(this, "onEditClick");
         editLink.setLabel("Edit");
         editLink.setAttribute("title", "Edit customer details");
+        editLink.setParameter("referrer", "/table/table-decorator.htm");
         table.addControl(editLink);
 
         deleteLink.setListener(this, "onDeleteClick");
-        deleteLink.setLabel("Delete");
         deleteLink.setAttribute("title", "Delete customer record");
         deleteLink.setAttribute
             ("onclick", "return window.confirm('Please confirm delete');");
@@ -72,8 +74,10 @@ public class TableDecorator extends BorderPage {
 
                 viewLink.setContext(context);
                 viewLink.setValue(customerId);
+
                 editLink.setContext(context);
-                editLink.setValue(customerId);
+                editLink.setParameter("customerId", customerId);
+
                 deleteLink.setContext(context);
                 deleteLink.setValue(customerId);
 
@@ -87,23 +91,8 @@ public class TableDecorator extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        Customer customer = getCustomerService().getCustomer(id);
-        addModel("customerDetail", customer);
+        customerDetail = getCustomerService().getCustomer(id);
         return true;
-    }
-
-    public boolean onEditClick() {
-        Integer id = editLink.getValueInteger();
-        Customer customer = getCustomerService().getCustomer(id);
-
-        if (customer != null) {
-            getContext().setRequestAttribute("customer", customer);
-            setForward("/edit-customer.htm?referrer=/table/table-decorator.htm");
-            return false;
-
-        } else {
-            return true;
-        }
     }
 
     public boolean onDeleteClick() {

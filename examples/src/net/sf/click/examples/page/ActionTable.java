@@ -64,6 +64,7 @@ public class ActionTable extends BorderPage {
      */
     public void onRender() {
         customers = getCustomerService().getCustomersSortedByName(7);
+        getFormat().setEmptyString("&nbsp;");
     }
 
 }

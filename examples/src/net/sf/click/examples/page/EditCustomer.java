@@ -64,6 +64,11 @@ public class EditCustomer extends BorderPage {
         Customer customer = (Customer)
             getContext().getRequestAttribute("customer");
 
+        if (customer == null) {
+            String customerId = getContext().getRequestParameter("customerId");
+            customer = getCustomerService().getCustomer(customerId);
+        }
+
         if (customer != null) {
             form.copyFrom(customer);
         }
