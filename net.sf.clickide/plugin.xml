@@ -143,7 +143,7 @@
      <actionSet
            id="net.sf.clickide.ui.actionSet"
            label="Click Action Set"
-           visible="true">
+           >
         <menu
               id="clickMenu"
               label="Click">
@@ -278,5 +278,11 @@
      <builder hasNature="true">
         <run class="net.sf.clickide.core.builder.ClickProjectBuilder"/>
      </builder>
+  </extension>
+  <extension
+        point="org.eclipse.ui.perspectiveExtensions">
+     <perspectiveExtension targetID="org.eclipse.jst.j2ee.J2EEPerspective">
+        <actionSet id="net.sf.clickide.ui.actionSet"/>
+     </perspectiveExtension>
   </extension>
 </plugin>
