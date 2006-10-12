@@ -79,10 +79,10 @@ import org.w3c.dom.NodeList;
  * &lt;!-- The Menu (menu.xml) Document Type Definition. --&gt;
  * &lt;!ELEMENT <span class="red">menu</span> (<span class="blue">menu</span>*)&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">label</span> CDATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">path</span> CATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">title</span> CATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CATA #IMPLIED&gt; </pre>
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">path</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">title</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CDATA #IMPLIED&gt; </pre>
  *
  * <h3>Security</h3>
  *
