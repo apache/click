@@ -245,7 +245,7 @@ span.pagebanner {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 350px;
+	width: 390px;
 	margin-top: 10px;
 	display: block;
 	border-bottom: none;
@@ -255,7 +255,7 @@ span.pagebanner-nolinks {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 350px;
+	width: 390px;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	display: block;
@@ -265,7 +265,7 @@ span.pagelinks {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 350px;
+	width: 390px;
 	display: block;
 	margin-bottom: 10px;
 	border-top: none;
@@ -275,7 +275,7 @@ span.pagelinks-nobanner {
 	background-color: #eee;
 	border: 1px dotted #999;
 	padding: 2px 4px 2px 4px;
-	width: 350px;
+	width: 390px;
 	display: block;
 	margin-top: 10px;
 	margin-bottom: 10px;

@@ -18,7 +18,7 @@ public class TablePaging extends BorderPage {
     public TablePaging() {
         // Setup customers table
         table.setAttribute("class", "its");
-        table.setPageSize(10);
+        table.setPageSize(4);
         table.setShowBanner(true);
 
         Column column = new Column("name");
@@ -37,7 +37,6 @@ public class TablePaging extends BorderPage {
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setDataStyle("color", "red");
         column.setWidth("100px;");
         table.addColumn(column);
     }
