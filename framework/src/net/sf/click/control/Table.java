@@ -1101,10 +1101,18 @@ public class Table implements Control {
             HtmlStringBuffer pagesBuffer =
                 new HtmlStringBuffer(getNumberPages() * 70);
 
-            for (int i = 0; i < getNumberPages(); i++) {
+            // Create sliding window of paging links
+            int lowerBound = Math.max(0, getPageNumber() - 5);
+            int upperBound = Math.min(lowerBound + 10, getNumberPages());
+            if (upperBound - lowerBound < 10) {
+                lowerBound = Math.max(upperBound - 10, 0);
+            }
+
+            for (int i = lowerBound; i < upperBound; i++) {
                 String pageNumber = String.valueOf(i + 1);
                 if (i == getPageNumber()) {
                     pagesBuffer.append("<strong>" + pageNumber + "</strong>");
+
                 } else {
                     pagingLink.setLabel(pageNumber);
                     pagingLink.setValue(String.valueOf(i));
@@ -1113,7 +1121,7 @@ public class Table implements Control {
                     pagesBuffer.append(pagingLink.toString());
                 }
 
-                if (i < getNumberPages() - 1) {
+                if (i < upperBound - 1) {
                     pagesBuffer.append(", ");
                 }
             }
