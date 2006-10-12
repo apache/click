@@ -20,7 +20,7 @@
   <!-- Application default page headers. -->
   <!ELEMENT headers (header*)>
   
-    <-- Header definition. -->
+    <!-- Header definition. -->
     <!ELEMENT header (#PCDATA)>
       <!ATTLIST header name CDATA #REQUIRED>
       <!ATTLIST header value CDATA #REQUIRED>
