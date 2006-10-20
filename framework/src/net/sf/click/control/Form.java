@@ -1593,6 +1593,21 @@ public class Form implements Control {
     }
 
     /**
+     * Clear all the form field values setting them to null.
+     */
+    public void clearValues() {
+        List fields = ClickUtils.getFormFields(this);
+        Field field = null;
+        for (int i = 0, size = fields.size(); i < size; i++) {
+            field = (Field) fields.get(i);
+
+            if (!field.getName().equals(FORM_NAME)) {
+                field.setValue(null);
+            }
+        }
+    }
+
+    /**
      * Copy the given object's attributes into the Form's field values. In other
      * words automatically populate Forms field values with the given objects
      * attributes.
