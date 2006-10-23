@@ -16,6 +16,7 @@
 package net.sf.click.control;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -237,6 +238,9 @@ public class Column implements Serializable {
 
     /** The cached OGNL context for rendering column values. */
     protected Map ognlContext = new HashMap();
+
+    /** The cached property method. */
+    protected Method propertyMethod;
 
     /** The column sortable status. The default value is true. */
     protected boolean sortable = true;
@@ -1139,7 +1143,18 @@ public class Column implements Serializable {
         } else {
 
             try {
-                return Ognl.getValue(name, ognlContext, row);
+                if (propertyMethod != null || name.indexOf(".") == -1) {
+
+                    if (propertyMethod == null) {
+                        String methodName = ClickUtils.toGetterName(name);
+                        propertyMethod = row.getClass().getMethod(methodName, null);
+                    }
+
+                    return propertyMethod.invoke(row, null);
+
+                } else {
+                    return Ognl.getValue(name, ognlContext, row);
+                }
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
