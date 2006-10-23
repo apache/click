@@ -46,14 +46,15 @@ public class TableSorting extends BorderPage {
     }
 
     /**
+     * Load the Table rowList to render using the selected sorting column, and
+     * then set the Table status to sorted.
+     *
      * @see net.sf.click.Page#onRender()
      */
     public void onRender() {
-long time = System.currentTimeMillis();
         List customers = getCustomerService().getCustomersSortedBy(table.getSortedColumn());
         table.setRowList(customers);
         table.setSorted(true);
-System.out.println("onRender: " + (System.currentTimeMillis() - time));
     }
 
 }
