@@ -31,6 +31,14 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
+    public List getCustomersSortedBy(String property) {
+        SelectQuery query = new SelectQuery(Customer.class);
+        if (property != null) {
+            query.addOrdering(property, true);
+        }
+        return performQuery(query);
+    }
+
     public List getCustomers(Date from, Date to) {
         Expression qual = ExpressionFactory.noMatchExp("dateJoined", null);
 
