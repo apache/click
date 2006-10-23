@@ -123,6 +123,7 @@ public abstract class FormTablePage extends BorderPage {
 
         // Complete table initialization
         Column column = new Column("Action");
+        column.setSortable(false);
         column.setAttribute("width", "100px;");
         ActionLink[] links = new ActionLink[]{editLink, removeLink};
         column.setDecorator(new LinkDecorator(table, links, "id"));

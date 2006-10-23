@@ -17,6 +17,8 @@ package net.sf.click.control;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,9 +144,6 @@ public class Table implements Control {
 
     private static final long serialVersionUID = 1L;
 
-    /** The paging control name. */
-    protected static final String PAGING = "paging";
-
     /**
      * The table.css style sheet import link.
      */
@@ -159,6 +158,12 @@ public class Table implements Control {
 
     /** The table top and bottom banner. */
     public static final int POSITION_BOTH = 3;
+
+    /** The control ActionLink page number parameter name: <tt>"page"</tt>. */
+    public static final String PAGE = "page";
+
+    /** The control ActionLink sorted column parameter name: <tt>"column"</tt>. */
+    public static final String COLUMN = "column";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -180,6 +185,9 @@ public class Table implements Control {
 
     /** The request context. */
     protected transient Context context;
+
+    /** The table paging and sorting control action link. */
+    protected ActionLink controlLink = new ActionLink("control");
 
     /** The list of table controls. */
     protected List controlList;
@@ -208,9 +216,6 @@ public class Table implements Control {
      */
     protected int pageSize;
 
-    /** The table paging action link. */
-    protected ActionLink pagingLink;
-
     /** The control's parent. */
     protected Object parent;
 
@@ -233,6 +238,15 @@ public class Table implements Control {
      * displayed.
      */
     protected boolean showBanner;
+
+    /** The row list is sorted status. */
+    protected boolean sorted;
+
+    /** The table sorting action link. */
+    protected ActionLink sortingLink = new ActionLink("sortingLink");
+
+    /** The name of the sorted column. */
+    protected String sortedColumn;
 
     // ----------------------------------------------------------- Constructors
 
@@ -434,9 +448,7 @@ public class Table implements Control {
      */
     public void setContext(Context context) {
         this.context = context;
-        if (pagingLink != null) {
-            pagingLink.setContext(context);
-        }
+        controlLink.setContext(context);
     }
 
     /**
@@ -472,6 +484,15 @@ public class Table implements Control {
      */
     public boolean hasControls() {
         return (controlList == null) ? false : !controlList.isEmpty();
+    }
+
+    /**
+     * Return the table paging and sorting control action link.
+     *
+     * @return the table paging and sorting control action link
+     */
+    protected ActionLink getControlLink() {
+        return controlLink;
     }
 
     /**
@@ -682,11 +703,6 @@ public class Table implements Control {
      */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-
-        if (pageSize > 0) {
-            pagingLink = new ActionLink(PAGING);
-            pagingLink.setListener(this, "onPagingClick");
-        }
     }
 
     /**
@@ -781,18 +797,44 @@ public class Table implements Control {
         this.showBanner = showBanner;
     }
 
-    // --------------------------------------------------------- Public Methods
 
     /**
-     * Handle the previous table page control click.
+     * Return the sorted status of the table row list.
      *
-     * @return true
+     * @return the sorted table row list status
      */
-    public boolean onPagingClick() {
-        setPageNumber(pagingLink.getValueInteger().intValue());
-
-        return true;
+    public boolean isSorted() {
+        return sorted;
     }
+
+    /**
+     * Set the sorted status of the table row list.
+     *
+     * @param value the sorted status to set
+     */
+    public void setSorted(boolean value) {
+        sorted = value;
+    }
+
+    /**
+     * Return the name of the sorted column, or null if not defined.
+     *
+     * @return the name of the sorted column, or null if not defined
+     */
+    public String getSortedColumn() {
+        return sortedColumn;
+    }
+
+    /**
+     * Set the name of the sorted column, or null if not defined.
+     *
+     * @param value the the name of the sorted column
+     */
+    public void setSortedColumn(String value) {
+        sortedColumn = value;
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
@@ -817,9 +859,16 @@ public class Table implements Control {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (pagingLink != null) {
-            pagingLink.setContext(getContext());
-            pagingLink.onProcess();
+        controlLink.onProcess();
+
+        String page = getContext().getRequestParameter(PAGE);
+        if (page != null) {
+            setPageNumber(Integer.parseInt(page));
+        }
+
+        String column = getContext().getRequestParameter(COLUMN);
+        if (column != null) {
+            setSortedColumn(column);
         }
 
         boolean continueProcessing = true;
@@ -868,6 +917,8 @@ public class Table implements Control {
         buffer.append("\n");
 
         renderHeaderRow(buffer);
+
+        sortRowList();
         renderBodyRows(buffer);
 
         // Render table end.
@@ -1086,16 +1137,22 @@ public class Table implements Control {
             String lastTitle = getMessage("table-last-title");
             String gotoTitle = getMessage("table-goto-title");
 
-            if (getPageNumber() > 0) {
-                pagingLink.setLabel(firstLabel);
-                pagingLink.setValue(String.valueOf(0));
-                pagingLink.setAttribute("title", firstTitle);
-                firstLabel = pagingLink.toString();
+            if (getSortedColumn() != null) {
+                controlLink.setParameter(COLUMN, getSortedColumn());
+            } else {
+                controlLink.setParameter(COLUMN, null);
+            }
 
-                pagingLink.setLabel(previousLabel);
-                pagingLink.setValue(String.valueOf(getPageNumber() - 1));
-                pagingLink.setAttribute("title", previousTitle);
-                previousLabel = pagingLink.toString();
+            if (getPageNumber() > 0) {
+                controlLink.setLabel(firstLabel);
+                controlLink.setParameter(PAGE, String.valueOf(0));
+                controlLink.setAttribute("title", firstTitle);
+                firstLabel = controlLink.toString();
+
+                controlLink.setLabel(previousLabel);
+                controlLink.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
+                controlLink.setAttribute("title", previousTitle);
+                previousLabel = controlLink.toString();
             }
 
             HtmlStringBuffer pagesBuffer =
@@ -1114,11 +1171,10 @@ public class Table implements Control {
                     pagesBuffer.append("<strong>" + pageNumber + "</strong>");
 
                 } else {
-                    pagingLink.setLabel(pageNumber);
-                    pagingLink.setValue(String.valueOf(i));
-                    pagingLink.setAttribute("title",
-                                            gotoTitle + " " + pageNumber);
-                    pagesBuffer.append(pagingLink.toString());
+                    controlLink.setLabel(pageNumber);
+                    controlLink.setParameter(PAGE, String.valueOf(i));
+                    controlLink.setAttribute("title", gotoTitle + " " + pageNumber);
+                    pagesBuffer.append(controlLink.toString());
                 }
 
                 if (i < upperBound - 1) {
@@ -1128,15 +1184,15 @@ public class Table implements Control {
             String pageLinks = pagesBuffer.toString();
 
             if (getPageNumber() < getNumberPages() - 1) {
-                pagingLink.setLabel(nextLabel);
-                pagingLink.setValue(String.valueOf(getPageNumber() + 1));
-                pagingLink.setAttribute("title", nextTitle);
-                nextLabel = pagingLink.toString();
+                controlLink.setLabel(nextLabel);
+                controlLink.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
+                controlLink.setAttribute("title", nextTitle);
+                nextLabel = controlLink.toString();
 
-                pagingLink.setLabel(lastLabel);
-                pagingLink.setValue(String.valueOf(getNumberPages() - 1));
-                pagingLink.setAttribute("title", lastTitle);
-                lastLabel = pagingLink.toString();
+                controlLink.setLabel(lastLabel);
+                controlLink.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
+                controlLink.setAttribute("title", lastTitle);
+                lastLabel = controlLink.toString();
             }
 
             String[] args =
@@ -1149,4 +1205,59 @@ public class Table implements Control {
             }
         }
     }
+
+    /**
+     * The default row list sorting method, which will sort the row list based
+     * on the selected column if the row list is not already sorted.
+     */
+    protected void sortRowList() {
+        if (!isSorted() && getSortedColumn() != null) {
+
+            final Column column = (Column) getColumns().get(getSortedColumn());
+
+            Collections.sort(getRowList(), new Comparator() {
+                public int compare(Object row1, Object row2) {
+
+                    Object obj1 = column.getProperty(row1);
+                    Object obj2 = column.getProperty(row2);
+
+                    if (obj1 instanceof Comparable
+                        && obj2 instanceof Comparable) {
+
+                        return ((Comparable) obj1).compareTo(obj2);
+
+                    } else if (obj1 instanceof Boolean
+                               && obj2 instanceof Boolean) {
+
+                        boolean bool1 = ((Boolean) obj1).booleanValue();
+                        boolean bool2 = ((Boolean) obj2).booleanValue();
+
+                        if (bool1 == bool2) {
+                            return 0;
+
+                        } else if (bool1 && !bool2) {
+                            return 1;
+
+                        } else {
+                            return -1;
+                        }
+
+                    } else if (obj1 != null && obj2 == null) {
+
+                        return +1;
+
+                    } else if (obj1 == null && obj2 != null) {
+
+                        return -1;
+
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            setSorted(true);
+        }
+    }
+
 }

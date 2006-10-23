@@ -22,15 +22,16 @@ public class TableDecorator extends BorderPage {
     public Table table = new Table();
     public Customer customerDetail;
 
-    private ActionLink viewLink = new ActionLink();
+    private ActionLink viewLink = new ActionLink("viewLink");
     private PageLink editLink = new PageLink("edit", EditCustomer.class);
-    private ActionLink deleteLink = new ActionLink();
+    private ActionLink deleteLink = new ActionLink("deleteLink");
 
     public TableDecorator() {
         // Setup customers table
         table.setAttribute("class", "simple");
 
         Column column = new Column("name");
+        column.setSortable(false);
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Customer customer = (Customer) row;
@@ -43,11 +44,13 @@ public class TableDecorator extends BorderPage {
 
         column = new Column("investments");
         column.setAutolink(true);
+        column.setSortable(false);
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setDataStyle("text-align", "right");
+        column.setSortable(false);
         table.addColumn(column);
 
         viewLink.setListener(this, "onViewClick");
@@ -67,6 +70,7 @@ public class TableDecorator extends BorderPage {
         table.addControl(deleteLink);
 
         column = new Column("Action");
+        column.setSortable(false);
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Customer customer = (Customer) row;

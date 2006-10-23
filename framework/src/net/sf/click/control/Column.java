@@ -238,6 +238,9 @@ public class Column implements Serializable {
     /** The cached OGNL context for rendering column values. */
     protected Map ognlContext = new HashMap();
 
+    /** The column sortable status. The default value is true. */
+    protected boolean sortable = true;
+
     /** The parent Table. */
     protected Table table;
 
@@ -912,6 +915,24 @@ public class Column implements Serializable {
     }
 
     /**
+     * Return the column sortable status. The default value is true.
+     *
+     * @return the column sortable status
+     */
+    public boolean getSortable() {
+        return sortable;
+    }
+
+    /**
+     * Set the column sortable status.
+     *
+     * @param value the column sortable status
+     */
+    public void setSortable(boolean value) {
+        sortable = value;
+    }
+
+    /**
      * Return the parent Table containing the Column.
      *
      * @return the parent Table containing the Column
@@ -999,10 +1020,19 @@ public class Column implements Serializable {
         }
         buffer.closeTag();
 
-        if (getEscapeHtml()) {
-            buffer.appendEscaped(getHeaderTitle());
+        if (getSortable()) {
+            ActionLink controlLink = getTable().getControlLink();
+            controlLink.setParameter(Table.COLUMN, getName());
+            controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
+            controlLink.setLabel(getHeaderTitle());
+            buffer.append(controlLink);
+
         } else {
-            buffer.append(getHeaderTitle());
+            if (getEscapeHtml()) {
+                buffer.appendEscaped(getHeaderTitle());
+            } else {
+                buffer.append(getHeaderTitle());
+            }
         }
 
         buffer.elementEnd("th");
