@@ -407,6 +407,8 @@ public class Select extends Field {
             return;
         }
  
+        // TODO: look at replacing OGNL for this work
+
         Map ognlContext = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
