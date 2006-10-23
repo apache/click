@@ -527,22 +527,26 @@ public class ClickUtils {
 				if(className.startsWith(packageName + ".")){
 					String path = className.substring(packageName.length() + 1);
 					path = path.replaceAll("\\.", "/");
-					path = Character.toLowerCase(path.charAt(0)) + path.substring(1);
-					path = path.replaceFirst("Page$", "");
+					int index = path.lastIndexOf('/');
+					if(index < 0){
+						path = Character.toLowerCase(path.charAt(0)) + path.substring(1);
+					} else {
+						String lastPart = path.substring(index + 1);
+						path = path.substring(0, index) + "/" + 
+							Character.toLowerCase(lastPart.charAt(0)) + lastPart.substring(1);
+					}
 					
-					System.out.println(path);
+					path = path.replaceFirst("Page$", "");
 					
 					// Login -> login.htm
 					IFolder folder = project.getFolder(root);
 					IResource resource = folder.findMember(path + ".htm");
 					if(resource!=null && resource.exists() && resource instanceof IFile){
-						System.out.println(path + ".htm");
 						return path + ".htm";
 					}
 					// Login -> loginPage.htm
 					resource = folder.findMember(path + "Page.htm");
 					if(resource!=null && resource.exists() && resource instanceof IFile){
-						System.out.println(path + "Page.htm");
 						return path + "Page.htm";
 					}
 				}
@@ -596,9 +600,12 @@ public class ClickUtils {
 		            while (tokenizer.hasMoreTokens()) {
 		                String token = tokenizer.nextToken();
 		                if (tokenizer.hasMoreTokens()) {
-		                    packageName = packageName + token + ".";
+		                	if(packageName.length()!=0){
+		                		packageName += ".";
+		                	}
+		                    packageName = packageName + token;
 		                } else {
-		                    className = token;
+		                    className = token.replaceFirst("\\.htm$", "");
 		                }
 		            }
 		        } else {
