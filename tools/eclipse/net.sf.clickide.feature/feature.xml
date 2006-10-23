@@ -2,7 +2,7 @@
 <feature
       id="net.sf.clickide.feature"
       label="%feature.name"
-      version="1.4.0"
+      version="1.4.1"
       provider-name="%feature.provider">
 
    <description url="http://www.sunvolt.com/confluence/display/CLKT/ClickIDE">
@@ -224,7 +224,7 @@
          id="net.sf.clickide"
          download-size="0"
          install-size="0"
-         version="1.4.0"
+         version="1.4.1"
          unpack="false"/>
 
 </feature>
