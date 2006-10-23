@@ -635,7 +635,7 @@ public class CheckList extends Field {
     public void bindRequestValue() {
 
         // Page developer has not initialized options, which are required
-    	// to support sorting
+        // to support sorting
         if (getOptionList().isEmpty()) {
             return;
         }
