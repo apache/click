@@ -100,8 +100,6 @@ import ognl.OgnlException;
  */
 public class LinkDecorator implements Decorator {
 
-    static final String PAGE_NUMBER = "pageNumber";
-
     /** The row object identifier property. */
     protected String idProperty;
 
@@ -221,8 +219,11 @@ public class LinkDecorator implements Decorator {
                 throw new RuntimeException(ognle);
             }
 
-            link.setParameter(PAGE_NUMBER,
-                              String.valueOf(table.getPageNumber()));
+            link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+            if (table.getSortedColumn() != null) {
+                link.setParameter(Table.COLUMN, table.getSortedColumn());
+            }
 
             return link.toString();
 
@@ -243,8 +244,11 @@ public class LinkDecorator implements Decorator {
                         link.setParameter(idProperty, value.toString());
                     }
 
-                    link.setParameter(PAGE_NUMBER,
-                                      String.valueOf(table.getPageNumber()));
+                    link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+                    if (table.getSortedColumn() != null) {
+                        link.setParameter(Table.COLUMN, table.getSortedColumn());
+                    }
 
                     if (i > 0) {
                         buffer.append(getLinkSeparator());
@@ -316,8 +320,7 @@ public class LinkDecorator implements Decorator {
         }
 
         public boolean onProcess() {
-            String pageNumber =
-                table.getContext().getRequestParameter(PAGE_NUMBER);
+            String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
 
             if (StringUtils.isNotBlank(pageNumber)) {
                 table.setPageNumber(Integer.parseInt(pageNumber));

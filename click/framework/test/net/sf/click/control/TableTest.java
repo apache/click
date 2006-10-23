@@ -15,7 +15,9 @@ public class TableTest extends TestCase {
 
         Table table = new Table();
         table.setContext(context);
-        table.addColumn(new Column("Foo"));
+        Column column = new Column("Foo");
+        column.setSortable(false);
+        table.addColumn(column);
 
         String header = "<thead>\n<tr>\n<th>Foo</th></tr></thead>\n";
         String body = "<tbody>\n<tr class=\"odd\"><td colspan=\"1\" class=\"error\">No records found.</td></tr>\n</tbody>";
@@ -34,7 +36,9 @@ public class TableTest extends TestCase {
         table.setName("Foos");
         table.setContext(context);
         table.setRowList(foos);
-        table.addColumn(new Column("Name"));
+        Column column = new Column("Name");
+        column.setSortable(false);
+        table.addColumn(column);
 
         String header = "<thead>\n<tr>\n<th>Name</th></tr></thead>\n";
         String row1 = "<tr class=\"odd\">\n<td id=\"Foos-Name_0\">foo1</td></tr>\n";

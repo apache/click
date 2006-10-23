@@ -40,7 +40,8 @@ public class EditTable extends BorderPage {
         form.add(fieldSet);
         form.add(new Submit("save", this, "onSaveClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
-        form.add(new HiddenField("pageNumber", String.class));
+        form.add(new HiddenField(Table.PAGE, String.class));
+        form.add(new HiddenField(Table.COLUMN, String.class));
 
         // Setup customers table
         table.setAttribute("class", "simple");
@@ -48,22 +49,28 @@ public class EditTable extends BorderPage {
         table.setShowBanner(true);
 
         Column column = new Column("name");
+        column.setWidth("140px");
         table.addColumn(column);
 
         column = new Column("email");
         column.setAutolink(true);
+        column.setWidth("220px");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setDataStyle("text-align", "right");
+        column.setHeaderStyle("text-align", "right");
+        column.setWidth("100px");
         table.addColumn(column);
 
         column = new Column("dateJoined");
         column.setFormat("{0,date,medium}");
+        column.setWidth("90px");
         table.addColumn(column);
 
         column = new Column("Action");
+        column.setSortable(false);
         ActionLink[] links = new ActionLink[]{editLink, deleteLink};
         column.setDecorator(new LinkDecorator(table, links, "id"));
         table.addColumn(column);
@@ -108,15 +115,17 @@ public class EditTable extends BorderPage {
      * @see net.sf.click.Page#onGet()
      */
     public void onGet() {
-        form.getField("pageNumber").setValue(""+table.getPageNumber());
+        form.getField(Table.PAGE).setValue("" + table.getPageNumber());
+        form.getField(Table.COLUMN).setValue(table.getSortedColumn());
     }
 
     /**
      * @see net.sf.click.Page#onPost()
      */
     public void onPost() {
-        String pageNumber = form.getField("pageNumber").getValue();
+        String pageNumber = form.getField(Table.PAGE).getValue();
         table.setPageNumber(Integer.parseInt(pageNumber));
+        table.setSortedColumn(form.getField(Table.COLUMN).getValue());
     }
 
     /**

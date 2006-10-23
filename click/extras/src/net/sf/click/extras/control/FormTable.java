@@ -217,7 +217,8 @@ public class FormTable extends Table {
         getForm().setName(getName() + "_form");
         getForm().setContext(context);
 
-        form.add(new HiddenField(PAGING, String.class));
+        form.add(new HiddenField(PAGE, String.class));
+        form.add(new HiddenField(COLUMN, String.class));
     }
 
     /**
@@ -277,11 +278,14 @@ public class FormTable extends Table {
      */
     public boolean onProcess() {
         if (getForm().isFormSubmission()) {
-            if (pagingLink != null) {
-                Field pagingField = getForm().getField(PAGING);
-                pagingField.onProcess();
-                setPageNumber(Integer.parseInt(pagingField.getValue()));
-            }
+            Field pageField = getForm().getField(PAGE);
+            pageField.onProcess();
+            setPageNumber(Integer.parseInt(pageField.getValue()));
+
+            Field columnField = getForm().getField(COLUMN);
+            columnField.onProcess();
+            setSortedColumn(columnField.getValue());
+
 
             // Range sanity check
             int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
@@ -365,12 +369,14 @@ public class FormTable extends Table {
         buffer.append(form.getField(Form.FORM_NAME));
         buffer.append("\n");
 
-        if (pagingLink != null) {
-            Form form = getForm();
-            form.getField(PAGING).setValue(String.valueOf(getPageNumber()));
-            buffer.append(form.getField(PAGING));
-            buffer.append("\n");
-        }
+        Form form = getForm();
+        form.getField(PAGE).setValue(String.valueOf(getPageNumber()));
+        buffer.append(form.getField(PAGE));
+        buffer.append("\n");
+
+        form.getField(COLUMN).setValue(getSortedColumn());
+        buffer.append(form.getField(COLUMN));
+        buffer.append("\n");
 
         buffer.append(super.toString());
 
