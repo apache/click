@@ -243,6 +243,12 @@ public class ClickUtils {
 		return servlet;
 	}
 	
+	/**
+	 * Removes the URL mapping from the given <code>WebApp</code>s.
+	 * 
+	 * @param webApp the <code>WebApp</code> object
+	 * @param servlet the <code>Servlet</code> object of the ClickServlet
+	 */
 	public static void removeURLMappings(WebApp webApp, Servlet servlet) {
 		String servletName = servlet.getServletName();
 		if (servletName != null) {
@@ -256,6 +262,11 @@ public class ClickUtils {
 		}
 	}
 	
+	/**
+	 * Creates the <code>welcome-file-list</code> which contains the <code>index.htm</code>.
+	 * 
+	 * @param webApp the <code>WebApp</code> object
+	 */
 	public static void createOrUpdateFilelist(WebApp webApp) {
 		WelcomeFileList filelist = webApp.getFileList();
 		
@@ -272,10 +283,10 @@ public class ClickUtils {
 	/**
 	 * Adds or updates the servlet information in the web.xml.
 	 * 
-	 * @param webApp
+	 * @param webApp  the <code>WebApp</code> object
 	 * @param config
-	 * @param servlet
-	 * @return
+	 * @param servlet the <code>Servlet</code> object of the ClickServlet
+	 * @return the <code>Servlet</code> object of the ClickServlet
 	 */
 	public static Servlet createOrUpdateServletRef(WebApp webApp, IDataModel config, Servlet servlet) {
 		//String displayName = config.getStringProperty(CLICK_SERVLET_NAME);
@@ -458,6 +469,13 @@ public class ClickUtils {
 		return false;
 	}
 	
+	/**
+	 * Returns the package name of page classes which is specified at click.xml.
+	 * If the package name is not specified, thie method returns <code>null</code>.
+	 * 
+	 * @param project the project
+	 * @return the package name of page classes or <code>null</code>
+	 */
 	public static String getPagePackageName(IProject project){
 		IStructuredModel model = getClickXMLModel(project);
 		try {
@@ -509,17 +527,22 @@ public class ClickUtils {
 				if(className.startsWith(packageName + ".")){
 					String path = className.substring(packageName.length() + 1);
 					path = path.replaceAll("\\.", "/");
-					path = Character.toUpperCase(path.charAt(0)) + path.substring(1);
+					path = Character.toLowerCase(path.charAt(0)) + path.substring(1);
+					path = path.replaceFirst("Page$", "");
+					
+					System.out.println(path);
 					
 					// Login -> login.htm
 					IFolder folder = project.getFolder(root);
 					IResource resource = folder.findMember(path + ".htm");
 					if(resource!=null && resource.exists() && resource instanceof IFile){
+						System.out.println(path + ".htm");
 						return path + ".htm";
 					}
 					// Login -> loginPage.htm
 					resource = folder.findMember(path + "Page.htm");
 					if(resource!=null && resource.exists() && resource instanceof IFile){
+						System.out.println(path + "Page.htm");
 						return path + "Page.htm";
 					}
 				}
@@ -618,12 +641,12 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the IType object of the page class 
+	 * Returns the <code>IType</code> object of the page class 
 	 * which corresponded to the specified HTML template.
-	 * If it can't find the page class, this method returns null.
+	 * If it can't find the page class, this method returns <code>null</code>.
 	 * 
-	 * @param file the IFile object of the HTML template
-	 * @return the IType object of the page class
+	 * @param file the <code>IFile</code> object of the HTML template
+	 * @return the <code>IType</code> object of the page class
 	 * @see ClickUtils#getTemplateFromPageClass(IType)
 	 */
 	public static IType getPageClassFromTemplate(IFile file){
@@ -636,9 +659,20 @@ public class ClickUtils {
 			}
 			String className = ClickUtils.getClassfromHTML(file.getProject(), path);
 			if(className!=null){
+				IJavaProject project = JavaCore.create(file.getProject());
 				try {
-					IType type = JavaCore.create(file.getProject()).findType(className);
-					return type;
+					IType type = project.findType(className);
+					if(type!=null){
+						return type;
+					}
+				} catch(Exception ex){
+					ClickPlugin.log(ex);
+				}
+				try {
+					IType type = project.findType(className + "Page");
+					if(type!=null){
+						return type;
+					}
 				} catch(Exception ex){
 					ClickPlugin.log(ex);
 				}
@@ -648,12 +682,12 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the IFile object of the HTML template which
+	 * Returns the <code>IFile</code> object of the HTML template which
 	 * correnponded to the specified page class.
-	 * If it can't find the HTML template, this method returns null.
+	 * If it can't find the HTML template, this method returns <code>null</code>.
 	 * 
-	 * @param type the IType object of the page class
-	 * @return the IFile object of the HTML template
+	 * @param type the <code>IType</code> object of the page class
+	 * @return the <code>IFile</code> object of the HTML template
 	 * @see ClickUtils#getPageClassFromTemplate(IFile)
 	 */
 	public static IFile getTemplateFromPageClass(IType type){
