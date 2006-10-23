@@ -404,13 +404,42 @@ public class TemplateObject {
 		IType[] superClass = hierarchy.getAllSuperclasses(type);
 		for(int i=0;i<superClass.length;i++){
 			IMethod[] superMethods = superClass[i].getMethods();
-			for(int j=0;j<superMethods.length;j++){
+			LOOP: for(int j=0;j<superMethods.length;j++){
 				if(!superMethods[j].isConstructor() && !superMethods[j].isMainMethod() && Flags.isPublic(superMethods[j].getFlags())){
+					for(int k=0;k<list.size();k++){
+						IMethod method = (IMethod)list.get(k);
+						if(equalsMethods(method, superMethods[j])){
+							break LOOP;
+						}
+					}
 					list.add(superMethods[j]);
 				}
 			}
 		}
 		return (IMethod[])list.toArray(new IMethod[list.size()]);
+	}
+	
+	/**
+	 * Tests whether given methods are same.
+	 * 
+	 * @param method1 the <code>IMethod</code>
+	 * @param method2 the <code>IMethod</code>
+	 * @return <code>true</code> if given methods are same: <code>false</code> otherwise 
+	 */
+	private static boolean equalsMethods(IMethod method1, IMethod method2){
+		if(method1.getElementName().equals(method2.getElementName())){
+			String[] params1 = method1.getParameterTypes();
+			String[] params2 = method2.getParameterTypes();
+			if(params1.length==params1.length){
+				for(int i=0;i<params1.length;i++){
+					if(!params1[i].equals(params2[i])){
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }
