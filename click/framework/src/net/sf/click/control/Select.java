@@ -409,35 +409,35 @@ public class Select extends Field {
  
         Map ognlContext = new HashMap();
         Map ognlExpressionCache = new HashMap();
-        
+
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-            	Object valueExpression = ognlExpressionCache.get(value);
-            	if (valueExpression == null) {
-            		valueExpression = Ognl.parseExpression(value);
-            		ognlExpressionCache.put(value, valueExpression);
-        		}            	            	
-            	
+                Object valueExpression = ognlExpressionCache.get(value);
+                if (valueExpression == null) {
+                    valueExpression = Ognl.parseExpression(value);
+                    ognlExpressionCache.put(value, valueExpression);
+                }
+
                 Object valueResult = Ognl.getValue(valueExpression, ognlContext, object);
-                
-            	Object labelExpression = ognlExpressionCache.get(label);
-            	if (labelExpression == null) {
-            		labelExpression = Ognl.parseExpression(label);
-            		ognlExpressionCache.put(label, labelExpression);
-        		}            	            	
-            	
+
+                Object labelExpression = ognlExpressionCache.get(label);
+                if (labelExpression == null) {
+                    labelExpression = Ognl.parseExpression(label);
+                    ognlExpressionCache.put(label, labelExpression);
+                }
+
                 Object labelResult = Ognl.getValue(labelExpression, ognlContext, object);
 
                 Option option = null;
-                
+
                 if (labelResult != null) {
-                	option = new Option(valueResult, labelResult.toString());
+                    option = new Option(valueResult, labelResult.toString());
                 } else {
-                	option = new Option(valueResult.toString());
+                    option = new Option(valueResult.toString());
                 }
-                
+
                 getOptionList().add(option);
 
             } catch (Exception e) {
