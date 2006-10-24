@@ -407,18 +407,37 @@ public class Select extends Field {
             return;
         }
  
-        // TODO: look at replacing OGNL for this work
-
         Map ognlContext = new HashMap();
-
+        Map ognlExpressionCache = new HashMap();
+        
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = Ognl.getValue(value, ognlContext, object);
-                Object labelResult = Ognl.getValue(label, ognlContext, object);
+            	Object valueExpression = ognlExpressionCache.get(value);
+            	if (valueExpression == null) {
+            		valueExpression = Ognl.parseExpression(value);
+            		ognlExpressionCache.put(value, valueExpression);
+        		}            	            	
+            	
+                Object valueResult = Ognl.getValue(valueExpression, ognlContext, object);
+                
+            	Object labelExpression = ognlExpressionCache.get(label);
+            	if (labelExpression == null) {
+            		labelExpression = Ognl.parseExpression(label);
+            		ognlExpressionCache.put(label, labelExpression);
+        		}            	            	
+            	
+                Object labelResult = Ognl.getValue(labelExpression, ognlContext, object);
 
-                Option option = new Option(valueResult, labelResult.toString());
+                Option option = null;
+                
+                if (labelResult != null) {
+                	option = new Option(valueResult, labelResult.toString());
+                } else {
+                	option = new Option(valueResult.toString());
+                }
+                
                 getOptionList().add(option);
 
             } catch (Exception e) {
