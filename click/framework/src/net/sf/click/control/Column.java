@@ -237,10 +237,10 @@ public class Column implements Serializable {
     protected String name;
 
     /** The cached OGNL context for rendering column values. */
-    protected Map ognlContext = new HashMap();
-
-    /** The cached property method. */
-    protected Method propertyMethod;
+    protected Map ognlContext;
+    
+    /** The cached OGNL expressions. */
+    protected Map ognlExpressionCache;    
 
     /** The column sortable status. The default value is true. */
     protected boolean sortable = true;
@@ -1141,24 +1141,27 @@ public class Column implements Serializable {
             return null;
 
         } else {
+        	
+        	if (ognlExpressionCache == null) {
+        		ognlExpressionCache = new HashMap();
+        	}
+        	if (ognlContext == null) {
+        		ognlContext = new HashMap();
+        	}
 
             try {
-                if (propertyMethod != null || name.indexOf(".") == -1) {
+            	// Cache the OGNL expression for performance
+            	Object expressionTree = ognlExpressionCache.get(name);
+            	if (expressionTree == null) {
+            		expressionTree = Ognl.parseExpression(name);
+            		ognlExpressionCache.put(name, expressionTree);
+            	}            	
 
-                    if (propertyMethod == null) {
-                        String methodName = ClickUtils.toGetterName(name);
-                        propertyMethod = row.getClass().getMethod(methodName, null);
-                    }
-
-                    return propertyMethod.invoke(row, null);
-
-                } else {
-                    return Ognl.getValue(name, ognlContext, row);
-                }
-
+            	return Ognl.getValue(expressionTree, ognlContext, row);
+            	
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            }
+            }                
         }
     }
 
