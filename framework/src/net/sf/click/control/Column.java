@@ -16,7 +16,6 @@
 package net.sf.click.control;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -238,9 +237,9 @@ public class Column implements Serializable {
 
     /** The cached OGNL context for rendering column values. */
     protected Map ognlContext;
-    
+
     /** The cached OGNL expressions. */
-    protected Map ognlExpressionCache;    
+    protected Map ognlExpressionCache;
 
     /** The column sortable status. The default value is true. */
     protected boolean sortable = true;
@@ -1141,27 +1140,27 @@ public class Column implements Serializable {
             return null;
 
         } else {
-        	
-        	if (ognlExpressionCache == null) {
-        		ognlExpressionCache = new HashMap();
-        	}
-        	if (ognlContext == null) {
-        		ognlContext = new HashMap();
-        	}
+
+            if (ognlExpressionCache == null) {
+                ognlExpressionCache = new HashMap();
+            }
+            if (ognlContext == null) {
+                ognlContext = new HashMap();
+            }
 
             try {
-            	// Cache the OGNL expression for performance
-            	Object expressionTree = ognlExpressionCache.get(name);
-            	if (expressionTree == null) {
-            		expressionTree = Ognl.parseExpression(name);
-            		ognlExpressionCache.put(name, expressionTree);
-            	}            	
+                // Cache the OGNL expression for performance
+                Object expressionTree = ognlExpressionCache.get(name);
+                if (expressionTree == null) {
+                    expressionTree = Ognl.parseExpression(name);
+                    ognlExpressionCache.put(name, expressionTree);
+                }
 
-            	return Ognl.getValue(expressionTree, ognlContext, row);
-            	
+                return Ognl.getValue(expressionTree, ognlContext, row);
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            }                
+            }
         }
     }
 
