@@ -33,11 +33,14 @@ public class TablePaging extends BorderPage {
         column = new Column("age");
         column.setWidth("40px;");
         column.setDataStyle("text-align", "center");
+        column.setHeaderStyle("text-align", "center");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setWidth("100px;");
+        column.setDataStyle("text-align", "right");
+        column.setHeaderStyle("text-align", "right");
         table.addColumn(column);
     }
 

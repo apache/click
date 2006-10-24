@@ -32,6 +32,7 @@ public class TableSorting extends BorderPage {
 
         column = new Column("age");
         column.setDataStyle("text-align", "center");
+        column.setHeaderStyle("text-align", "center");
         table.addColumn(column);
 
         column = new Column("holdings");

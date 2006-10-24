@@ -50,6 +50,7 @@ public class TableDecorator extends BorderPage {
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setDataStyle("text-align", "right");
+        column.setHeaderStyle("text-align", "right");
         column.setSortable(false);
         table.addColumn(column);
 
