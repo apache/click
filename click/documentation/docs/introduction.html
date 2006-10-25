@@ -267,9 +267,9 @@ An example usage of the Table control in a customers Page is provided below:
     <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"deleteLink"</span>, <span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
 
     <span class="kw">public</span> CustomersPage() {
+        table.setClass(<span class="st">"its"</span>);
         table.setPageSize(5);
         table.setShowBanner(<span class="kw">true</span>);
-        table.setStyle(<span class="st">"its"</span>);
     	
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
@@ -282,6 +282,7 @@ An example usage of the Table control in a customers Page is provided below:
     	
         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
+        column.setSortable(<span class="kw">false</span>);
         table.addColumn(column);
     }
     
@@ -337,10 +338,10 @@ At runtime the Table would be rendered in the page as:
 <table id="table" class="its">
 <thead>
 <tr>
-<th>Id</th>
-<th>Name</th>
-<th>Email</th>
-<th>Category</th>
+<th><a href="#" style="text-decoration: underline;">Id</a></th>
+<th><a href="#" style="text-decoration: underline;">Name</a></th>
+<th><a href="#" style="text-decoration: underline;">Email</a></th>
+<th><a href="#" style="text-decoration: underline;">Category</a></th>
 <th>Action</th></tr></thead>
 <tbody>
 <tr class="odd">
