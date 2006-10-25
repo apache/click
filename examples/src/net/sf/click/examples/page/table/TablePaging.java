@@ -17,7 +17,7 @@ public class TablePaging extends BorderPage {
 
     public TablePaging() {
         // Setup customers table
-        table.setAttribute("class", "its");
+        table.setClass("its");
         table.setPageSize(4);
         table.setShowBanner(true);
 
@@ -26,21 +26,19 @@ public class TablePaging extends BorderPage {
         table.addColumn(column);
 
         column = new Column("email");
-        column.setWidth("230px;");
         column.setAutolink(true);
+        column.setWidth("230px;");
         table.addColumn(column);
 
         column = new Column("age");
+        column.setTextAlign("center");
         column.setWidth("40px;");
-        column.setDataStyle("text-align", "center");
-        column.setHeaderStyle("text-align", "center");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
+        column.setTextAlign("right");
         column.setWidth("100px;");
-        column.setDataStyle("text-align", "right");
-        column.setHeaderStyle("text-align", "right");
         table.addColumn(column);
     }
 

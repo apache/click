@@ -44,7 +44,7 @@ public class EditTable extends BorderPage {
         form.add(new HiddenField(Table.COLUMN, String.class));
 
         // Setup customers table
-        table.setAttribute("class", "simple");
+        table.setClass("simple");
         table.setPageSize(10);
         table.setShowBanner(true);
 
@@ -59,8 +59,7 @@ public class EditTable extends BorderPage {
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setDataStyle("text-align", "right");
-        column.setHeaderStyle("text-align", "right");
+        column.setTextAlign("right");
         column.setWidth("100px");
         table.addColumn(column);
 

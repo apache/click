@@ -18,7 +18,7 @@ import net.sf.click.examples.page.BorderPage;
 public class TableStyles extends BorderPage {
 
     private static final String[] STYLES = {
-        "isi", "its", "mars", "nocol", "simple", "report",
+        "isi", "its", "mars", "nocol", "report", "simple"
     };
 
     public Form form = new Form();
@@ -43,7 +43,7 @@ public class TableStyles extends BorderPage {
         form.add(hoverCheckbox);
 
         // Setup customers table
-        table.setAttribute("class", styleSelect.getValue());
+        table.setClass(styleSelect.getValue());
         table.setHoverRows(true);
 
         table.addColumn(new Column("id"));
@@ -55,12 +55,12 @@ public class TableStyles extends BorderPage {
         table.addColumn(column);
 
         column = new Column("age");
-        column.setDataStyle("text-align", "center");
+        column.setTextAlign("center");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setDataStyle("text-align", "right");
+        column.setTextAlign("right");
         table.addColumn(column);
     }
 
@@ -69,7 +69,7 @@ public class TableStyles extends BorderPage {
      */
     public void onGet() {
         // Note the style form uses GET method.
-        table.setAttribute("class", styleSelect.getValue());
+        table.setClass(styleSelect.getValue());
         table.setHoverRows(hoverCheckbox.isChecked());
     }
 
