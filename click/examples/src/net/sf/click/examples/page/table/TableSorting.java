@@ -17,7 +17,7 @@ public class TableSorting extends BorderPage {
 
     public TableSorting() {
         // Setup customers table
-        table.setAttribute("class", "mars");
+        table.setClass("mars");
         table.setHoverRows(true);
 
         Column column = new Column("id");
@@ -31,18 +31,16 @@ public class TableSorting extends BorderPage {
         table.addColumn(column);
 
         column = new Column("age");
-        column.setDataStyle("text-align", "center");
-        column.setHeaderStyle("text-align", "center");
+        column.setTextAlign("center");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setDataStyle("text-align", "right");
-        column.setHeaderStyle("text-align", "right");
+        column.setTextAlign("right");
         table.addColumn(column);
 
         column = new Column("active");
-        column.setDataStyle("text-align", "center");
+        column.setTextAlign("center");
         table.addColumn(column);
     }
 

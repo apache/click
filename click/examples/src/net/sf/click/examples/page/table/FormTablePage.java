@@ -27,8 +27,8 @@ public class FormTablePage extends BorderPage {
 
     public FormTablePage() {
         // Setup customers table
-        table.setAttribute("class", "simple");
-        table.setAttribute("width", "700px");
+        table.setClass("simple");
+        table.setWidth("700px");
         table.getForm().setButtonAlign(Form.ALIGN_RIGHT);
         table.setPageSize(10);
         table.setShowBanner(true);
@@ -37,7 +37,7 @@ public class FormTablePage extends BorderPage {
 
         FieldColumn column = new FieldColumn("name", new TextField());
         column.getField().setRequired(true);
-        column.setAttribute("vertical-align", "baseline");
+        column.setVerticalAlign("baseline");
         table.addColumn(column);
 
         column = new FieldColumn("email", new EmailField());
@@ -51,11 +51,11 @@ public class FormTablePage extends BorderPage {
         NumberField numberField = new NumberField();
         numberField.setSize(10);
         column = new FieldColumn("holdings", numberField);
-        column.setAttribute("style", "{text-align:right;}");
+        column.setTextAlign("right");
         table.addColumn(column);
 
         column = new FieldColumn("active", new Checkbox());
-        column.setAttribute("style", "{text-align:center;}");
+        column.setTextAlign("center");
         table.addColumn(column);
 
         table.getForm().add(new Submit("ok", "  OK  ", this, "onOkClick"));

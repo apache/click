@@ -28,7 +28,7 @@ public class TableDecorator extends BorderPage {
 
     public TableDecorator() {
         // Setup customers table
-        table.setAttribute("class", "simple");
+        table.setClass("simple");
 
         Column column = new Column("name");
         column.setSortable(false);
@@ -49,8 +49,7 @@ public class TableDecorator extends BorderPage {
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setDataStyle("text-align", "right");
-        column.setHeaderStyle("text-align", "right");
+        column.setTextAlign("right");
         column.setSortable(false);
         table.addColumn(column);
 
