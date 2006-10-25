@@ -21,7 +21,7 @@ import java.util.Map;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Provides a Page Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
+ * Provides a Page Link control: &nbsp; &lt;a href="" &gt;&lt;/a&gt;.
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
@@ -77,7 +77,7 @@ public class PageLink extends AbstractLink {
 
     /**
      * Create an PageLink for the given target Page class.
-     *e
+     *
      * @param targetPage the target page class
      * @throws IllegalArgumentException if the name is null
      */
