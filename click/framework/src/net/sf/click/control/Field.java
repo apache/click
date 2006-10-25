@@ -521,6 +521,19 @@ public abstract class Field implements Control {
     }
 
     /**
+     * Set the field HTML id attribute with the given value.
+     *
+     * @param id the field HTML id attribute value to set
+     */
+    public void setId(String id) {
+        if (id != null) {
+            setAttribute("id", id);
+        } else {
+            getAttributes().remove("id");
+        }
+    }
+
+    /**
      * Return the field display label.
      * <p/>
      * If the label value is null, this method will attempt to find a
