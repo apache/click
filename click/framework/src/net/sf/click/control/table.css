@@ -183,15 +183,15 @@ table.report tr.even{
 	background-color: #C2EFEF;
 }
 table.report tbody {
-	height: 180px;
-	overflow: auto;
+/*	height: 180px; */
+/*	overflow: auto; */
 }
 table.report {
-	height: 200px;
-	overflow: auto;
+/*	height: 200px; */
+/*	overflow: auto; */
 }
 table.report tbody tr{
-	height: 10px;
+/*	height: 10px; */
 }
 table.report th {
 	padding: 2px 4px 2px 4px;
