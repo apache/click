@@ -62,7 +62,7 @@ import org.apache.commons.lang.StringUtils;
  *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
  *
  *     <span class="kw">public</span> CustomersPage() {
- *         table.setAttribute(<span class="st">"class"</span>, <span class="st">"its"</span>);
+ *         table.setClass(<span class="st">"its"</span>);
  *         table.setPageSize(4);
  *
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
@@ -73,12 +73,12 @@ import org.apache.commons.lang.StringUtils;
  *         table.addColumn(column);
  *
  *         column = <span class="kw">new</span> Column(<span class="st">"age"</span>);
- *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:center;}"</span>);
+ *         column.setTextAlign(<span class="st">"center"</span>);
  *         table.addColumn(column);
  *
  *         column = <span class="kw">new</span> Column(<span class="st">"holdings"</span>);
  *         column.setFormat(<span class="st">"${0,number,#,##0.00}"</span>);
- *         column.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
+ *         column.setTextAlign(<span class="st">"right"</span>);
  *         table.addColumn(column);
  *     }
  *
@@ -122,7 +122,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public</span> LineItemsPage() {
  *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
- *     table.setAttribute(<span class="st">"class"</span>, <span class="st">"simple"</span>);
+ *     table.setClass(<span class="st">"simple"</span>);
  *     ..
  * } </pre>
  *
@@ -192,6 +192,9 @@ public class Table implements Control {
     /** The list of table controls. */
     protected List controlList;
 
+    /** The table HTML &lt;td&gt; height attribute. */
+    protected String height;
+
     /**
      * The table rows set 'hover' CSS class on mouseover events flag. By default
      * hoverRows is false.
@@ -242,11 +245,11 @@ public class Table implements Control {
     /** The row list is sorted status. */
     protected boolean sorted;
 
-    /** The table sorting action link. */
-    protected ActionLink sortingLink = new ActionLink("sortingLink");
-
     /** The name of the sorted column. */
     protected String sortedColumn;
+
+    /** The table HTML &lt;td&gt; width attribute. */
+    protected String width;
 
     // ----------------------------------------------------------- Constructors
 
@@ -353,6 +356,15 @@ public class Table implements Control {
      */
     public void setBannerPosition(int value) {
         bannerPosition = value;
+    }
+
+    /**
+     * Set the HTML class attribute.
+     *
+     * @param value the HTML class attribute
+     */
+    public void setClass(String value) {
+        setAttribute("class", value);
     }
 
     /**
@@ -493,6 +505,23 @@ public class Table implements Control {
      */
     protected ActionLink getControlLink() {
         return controlLink;
+    }
+
+    /**
+     * Return the table HTML &lt;td&gt; height attribute.
+     *
+     * @return the table HTML &lt;td&gt; height attribute
+     */
+    public String getHeight() {
+        return height;
+    }
+    /**
+     * Set the table HTML &lt;td&gt; height attribute.
+     *
+     * @param value the table HTML &lt;td&gt; height attribute
+     */
+    public void setHeight(String value) {
+        height = value;
     }
 
     /**
@@ -762,7 +791,7 @@ public class Table implements Control {
     /**
      * Set the list of table rows.
      * <p/>
-     * This method will register a {@see net.sf.click.util.OgnlNullHandler}
+     * This method will register a {@link net.sf.click.util.OgnlNullHandler}
      * with the <tt>OgnlRuntime</tt> for the given row data class, to support
      * null property path evaluations with null outer join table data.
      *
@@ -832,6 +861,23 @@ public class Table implements Control {
      */
     public void setSortedColumn(String value) {
         sortedColumn = value;
+    }
+
+    /**
+     * Return the table HTML &lt;td&gt; width attribute.
+     *
+     * @return the table HTML &lt;td&gt; width attribute
+     */
+    public String getWidth() {
+        return width;
+    }
+    /**
+     * Set the table HTML &lt;td&gt; width attribute.
+     *
+     * @param value the table HTML &lt;td&gt; width attribute
+     */
+    public void setWidth(String value) {
+        width = value;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -913,6 +959,8 @@ public class Table implements Control {
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
+        buffer.appendAttribute("height", getHeight());
+        buffer.appendAttribute("width", getWidth());
         buffer.closeTag();
         buffer.append("\n");
 
@@ -1147,10 +1195,12 @@ public class Table implements Control {
                 controlLink.setLabel(firstLabel);
                 controlLink.setParameter(PAGE, String.valueOf(0));
                 controlLink.setAttribute("title", firstTitle);
+                controlLink.setId("control-first");
                 firstLabel = controlLink.toString();
 
                 controlLink.setLabel(previousLabel);
                 controlLink.setParameter(PAGE, String.valueOf(getPageNumber() - 1));
+                controlLink.setId("control-previous");
                 controlLink.setAttribute("title", previousTitle);
                 previousLabel = controlLink.toString();
             }
@@ -1174,6 +1224,7 @@ public class Table implements Control {
                     controlLink.setLabel(pageNumber);
                     controlLink.setParameter(PAGE, String.valueOf(i));
                     controlLink.setAttribute("title", gotoTitle + " " + pageNumber);
+                    controlLink.setId("control-" + pageNumber);
                     pagesBuffer.append(controlLink.toString());
                 }
 
@@ -1187,11 +1238,13 @@ public class Table implements Control {
                 controlLink.setLabel(nextLabel);
                 controlLink.setParameter(PAGE, String.valueOf(getPageNumber() + 1));
                 controlLink.setAttribute("title", nextTitle);
+                controlLink.setId("control-next");
                 nextLabel = controlLink.toString();
 
                 controlLink.setLabel(lastLabel);
                 controlLink.setParameter(PAGE, String.valueOf(getNumberPages() - 1));
                 controlLink.setAttribute("title", lastTitle);
+                controlLink.setId("control-last");
                 lastLabel = controlLink.toString();
             }
 
