@@ -26,7 +26,7 @@ import ognl.OgnlRuntime;
 
 /**
  * Provides a OGNL NullHandler to support null property path
- * evaluation. This class is used by the {@see net.sf.click.control.Table}
+ * evaluation. This class is used by the {@link net.sf.click.control.Table}
  * control to support rendering table data outer joins where property paths may
  * be null.
  * <p/>
