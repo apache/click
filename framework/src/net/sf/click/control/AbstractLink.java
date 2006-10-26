@@ -242,6 +242,19 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
+     * Set the HTML id attribute for the AbstractLink with the given value.
+     *
+     * @param id the field HTML id attribute value to set
+     */
+    public void setId(String id) {
+        if (id != null) {
+            setAttribute("id", id);
+        } else {
+            getAttributes().remove("id");
+        }
+    }
+
+    /**
      * Return the label for the AbstractLink.
      * <p/>
      * If the label value is null, this method will attempt to find a
