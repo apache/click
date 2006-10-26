@@ -63,22 +63,24 @@ import ognl.Ognl;
  *
  * The Column object provide column definitions for the {@link Table} object.
  *
- * <h3>Rendering Options</h3>
+ * <h3>Column Options</h3>
  *
  * The Column class supports a number of rendering options which include:
  *
  * <ul>
- * <li>{@link #dataClass} - the CSS class for the table data cell</li>
- * <li>{@link #dataStyle} - the CSS style for the table data cell</li>
- * <li>{@link #headerClass} - the CSS class for the table header cell</li>
- * <li>{@link #headerStyle} - the CSS style for the table header cell</li>
- * <li>{@link #headerTitle} - the table header cell value to render</li>
- * <li>{@link #format} - the <tt>MessageFormat</tt> pattern rendering
- *      the column value</li>
- * <li>{@link #attributes} - the CSS style attributes for the table data cell</li>
  * <li>{@link #autolink} - the option to automatically render href links
  *      for email and URL column values</li>
+ * <li>{@link #attributes} - the CSS style attributes for the table data cell</li>
+ * <li>{@link #dataClass} - the CSS class for the table data cell</li>
+ * <li>{@link #dataStyles} - the CSS styles for the table data cell</li>
  * <li>{@link #decorator} - the custom column value renderer</li>
+ * <li>{@link #format} - the <tt>MessageFormat</tt> pattern rendering
+ *      the column value</li>
+ * <li>{@link #headerClass} - the CSS class for the table header cell</li>
+ * <li>{@link #headerStyles} - the CSS styles for the table header cell</li>
+ * <li>{@link #headerTitle} - the table header cell value to render</li>
+ * <li>{@link #sortable} - the table column sortable property</li>
+ * <li>{@link #width} - the table cell width property</li>
  * </ul>
  *
  * <h4>Format Pattern</h4>
@@ -89,7 +91,7 @@ import ognl.Ognl;
  *
  * <pre class="codeJava">
  * Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
- * table.setStyle(<span class="st">"isi"</span>);
+ * table.setClass(<span class="st">"isi"</span>);
  *
  * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
  * idColumn.setFormat(<span class="st">"{0,number,#,###}"</span>);
@@ -97,7 +99,7 @@ import ognl.Ognl;
  *
  * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>, <span class="st">"Price"</span>);
  * priceColumn.setFormat(<span class="st">"{0,number,currency}"</span>);
- * priceColumn.setAttribute(<span class="st">"style"</span>, <span class="st">"{text-align:right;}"</span>);
+ * priceColumn.setTextAlign(<span class="st">"right"</span>);
  * table.addColumn(priceColumn);
  *
  * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
@@ -954,6 +956,28 @@ public class Column implements Serializable {
     }
 
     /**
+     * Set the column CSS "text-align" style for the header &lt;th&gt; and
+     * data &lt;td&gt; elements.
+     *
+     * @param align the CSS "text-align" value: <tt>["left", "right", "center"]</tt>
+     */
+    public void setTextAlign(String align) {
+        setHeaderStyle("text-align", align);
+        setDataStyle("text-align", align);
+    }
+
+    /**
+     * Set the column CSS "vertical-align" style for the header &lt;th&gt; and
+     * data &lt;td&gt; elements.
+     *
+     * @param align the CSS "vertical-align" value
+     */
+    public void setVerticalAlign(String align) {
+        setHeaderStyle("vertical-align", align);
+        setDataStyle("vertical-align", align);
+    }
+
+    /**
      * Return the column HTML &lt;td&gt; width attribute.
      *
      * @return the column HTML &lt;td&gt; width attribute
@@ -998,7 +1022,7 @@ public class Column implements Serializable {
         if (hasDataStyles()) {
             buffer.appendStyleAttributes(getDataStyles());
         }
-           buffer.appendAttribute("width", getWidth());
+        buffer.appendAttribute("width", getWidth());
         buffer.closeTag();
 
         renderTableDataContent(row, buffer, context, rowIndex);
@@ -1025,6 +1049,7 @@ public class Column implements Serializable {
 
         if (getSortable()) {
             ActionLink controlLink = getTable().getControlLink();
+            controlLink.setId("control-" + getName());
             controlLink.setParameter(Table.COLUMN, getName());
             controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
             controlLink.setLabel(getHeaderTitle());
