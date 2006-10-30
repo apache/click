@@ -1264,7 +1264,7 @@ public class Table implements Control {
      * on the selected column if the row list is not already sorted.
      */
     protected void sortRowList() {
-        if (!isSorted() && getSortedColumn() != null) {
+        if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
             final Column column = (Column) getColumns().get(getSortedColumn());
 
