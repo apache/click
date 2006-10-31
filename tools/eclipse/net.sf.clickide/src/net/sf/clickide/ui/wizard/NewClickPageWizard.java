@@ -1,7 +1,6 @@
 package net.sf.clickide.ui.wizard;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -182,8 +181,11 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 					file = folder.getFile(filename);
 				}
 				if(!file.exists()){
-					file.create(new ByteArrayInputStream(template.getHtmlTemplate().getBytes()), 
-							true, new NullProgressMonitor());
+					String charset = ClickUtils.getCharset(project);
+					if(charset==null){
+						charset = file.getCharset();
+					}
+					file.create(getTemplateInputStream(template, charset), true, new NullProgressMonitor());
 				}
 				files.add(file);
 			} finally {
@@ -302,8 +304,14 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 		return (IFile[])files.toArray(new IFile[files.size()]);
 	}
 	
+	private InputStream getTemplateInputStream(Template template, String charset){
+		String source = new String(template.getHtmlTemplate());
+		source = source.replaceAll("\\$\\{charset\\}", charset);
+		return new ByteArrayInputStream(source.getBytes());
+	}
+	
 	private InputStream getPageClassInputStream(Template template,
-			String packageName, String className, String superClass) throws IOException {
+			String packageName, String className, String superClass){
 		
 		String source = new String(template.getPageClass());
 		source = source.replaceAll("\\$\\{package\\}", packageName);

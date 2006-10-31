@@ -377,10 +377,10 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the <code>IFile</code> of click.xml in the specified project.
+	 * Returns the <code>IFile</code> of <tt>click.xml</tt> in the specified project.
 	 * 
 	 * @param project the project
-	 * @return <code>IFile</code> of click.xml
+	 * @return <code>IFile</code> of <tt>click.xml</tt>
 	 */
 	public static IFile getClickConfigFile(IProject project){
 		String webAppRoot = getWebAppRootFolder(project);
@@ -392,10 +392,10 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the <code>IStructuredModel</code> of click.xml in the specified project.
+	 * Returns the <code>IStructuredModel</code> of <tt>click.xml</tt> in the specified project.
 	 * 
 	 * @param project the project
-	 * @return <code>IStructuredModel</code> for click.xml
+	 * @return <code>IStructuredModel</code> for <tt>click.xml</tt>
 	 */
 	public static IStructuredModel getClickXMLModel(IProject project){
 		IStructuredModel model = null;
@@ -412,7 +412,32 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns <code>IType</code> of the format object which is specified in click.xml.
+	 * Returns the charset which is defined in <tt>click.xml</tt>.
+	 * If <tt>click.xml</tt> doesn't has the charset, returns <code>null</code>.
+	 * 
+	 * @param project the project
+	 * @return the charset
+	 */
+	public static String getCharset(IProject project){
+		IStructuredModel model = getClickXMLModel(project);
+		String charset = null;
+		try {
+			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_CLICK_APP);
+			if(list.getLength()==1){
+				Element format = (Element)list.item(0);
+				charset = format.getAttribute(ClickPlugin.ATTR_CHARSET);
+			}
+		} catch(Exception ex){
+		} finally {
+			if(model!=null){
+				model.releaseFromRead();
+			}
+		}
+		return charset;
+	}
+	
+	/**
+	 * Returns <code>IType</code> of the format object which is specified in <tt>click.xml</tt>.
 	 * If format element is not defined, this method returns <code>net.sf.click.util.Format</code>.
 	 * 
 	 * @param project the project
