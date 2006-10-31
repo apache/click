@@ -1,6 +1,7 @@
 <templates>
 	<template name="Blank">
 		<class>
+<![CDATA[
 package ${package};
 
 public class ${classname} extends ${superclass} {
@@ -9,19 +10,25 @@ public class ${classname} extends ${superclass} {
 	}
 
 }
+]]>
 		</class>
 		<html>
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Blank&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+<![CDATA[
+<html>
+  <head>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=${charset}">
+    <title>Blank</title>
+    $imports
+  </head>
+  <body>
+  </body>
+</html>
+]]>
 		</html>
 	</template>
 	<template name="Simple Form">
 		<class>
+<![CDATA[
 package ${package};
 
 import net.sf.click.control.Form;
@@ -35,17 +42,21 @@ public class ${classname} extends ${superclass} {
 	}
 
 }
+]]>
 		</class>
 		<html>
-&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;Simple Form&lt;/title&gt;
-$imports
-&lt;/head&gt;
-&lt;body&gt;
-$form
-&lt;/body&gt;
-&lt;/html&gt;
+<![CDATA[
+<html>
+  <head>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=${charset}">
+    <title>Simple Form</title>
+    $imports
+  </head>
+  <body>
+    $form
+  </body>
+</html>
+]]>
 		</html>
 	</template>
 </templates>

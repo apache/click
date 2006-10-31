@@ -237,17 +237,11 @@ public class ClickTemplatePreferencePage extends PreferencePage implements
 			TabFolder tabFolder = new TabFolder(composite,SWT.NULL);
 			tabFolder.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_BOTH));
 			
+			// Page Class Tab
 			TabItem item1 = new TabItem(tabFolder,SWT.NULL);
 			item1.setText(ClickPlugin.getString("preferences.template.pageClass"));
 			Composite composite1 = new Composite(tabFolder, SWT.NULL);
-			GridLayout layout = new GridLayout(1, false);
-			layout.marginTop = 0;
-			layout.marginBottom = 0;
-			layout.marginLeft = 0;
-			layout.marginRight = 0;
-			layout.marginWidth = 0;
-			layout.marginHeight = 0;
-			composite1.setLayout(layout);
+			composite1.setLayout(createPanelLayout());
 			
 			pageClass = new Text(composite1, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
 			pageClass.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -260,18 +254,36 @@ public class ClickTemplatePreferencePage extends PreferencePage implements
 					"${package}, ${classname}, ${superclass}");
 			item1.setControl(composite1);
 			
+			// HTML Template Tab
 			TabItem item2 = new TabItem(tabFolder,SWT.NULL);
 			item2.setText(ClickPlugin.getString("preferences.template.htmlTemplate"));
-			htmlTemplate = new Text(tabFolder, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
+			Composite composite2 = new Composite(tabFolder, SWT.NULL);
+			composite2.setLayout(createPanelLayout());
+			
+			htmlTemplate = new Text(composite2, SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
 			htmlTemplate.setLayoutData(new GridData(GridData.FILL_BOTH));
 			if(template!=null){
 				htmlTemplate.setText(template.getHtmlTemplate());
 			}
-			item2.setControl(htmlTemplate);
+			ClickUtils.createLabel(composite2, 
+					ClickPlugin.getString("preferences.template.dialog.variables"));
+			ClickUtils.createLabel(composite2, "${charset}");
+			item2.setControl(composite2);
 			
 			return composite;
 		}
-
+		
+		private GridLayout createPanelLayout(){
+			GridLayout layout = new GridLayout(1, false);
+			layout.marginTop = 0;
+			layout.marginBottom = 0;
+			layout.marginLeft = 0;
+			layout.marginRight = 0;
+			layout.marginWidth = 0;
+			layout.marginHeight = 0;
+			return layout;
+		}
+		
 		private void updateButtonStatus(){
 			getButton(IDialogConstants.OK_ID).setEnabled(name.getText().length()>0);
 		}
