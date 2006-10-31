@@ -1,7 +1,9 @@
 package net.sf.clickide;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IContainer;
@@ -525,29 +527,31 @@ public class ClickUtils {
 			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
 				String root = getWebAppRootFolder(project);
 				if(className.startsWith(packageName + ".")){
+					String dir = null;
 					String path = className.substring(packageName.length() + 1);
-					path = path.replaceAll("\\.", "/");
-					int index = path.lastIndexOf('/');
-					if(index < 0){
-						path = Character.toLowerCase(path.charAt(0)) + path.substring(1);
-					} else {
-						String lastPart = path.substring(index + 1);
-						path = path.substring(0, index) + "/" + 
-							Character.toLowerCase(lastPart.charAt(0)) + lastPart.substring(1);
-					}
 					
+					path = path.replaceAll("\\.", "/");
+					
+					int index = path.lastIndexOf('/');
+					if(index >= 0){
+						dir =  path.substring(0, index);
+						path = path.substring(index + 1);;
+					}
 					path = path.replaceFirst("Page$", "");
 					
-					// Login -> login.htm
+					String[] templateProposals = getTempleteProposals(path);
+					
 					IFolder folder = project.getFolder(root);
-					IResource resource = folder.findMember(path + ".htm");
-					if(resource!=null && resource.exists() && resource instanceof IFile){
-						return path + ".htm";
-					}
-					// Login -> loginPage.htm
-					resource = folder.findMember(path + "Page.htm");
-					if(resource!=null && resource.exists() && resource instanceof IFile){
-						return path + "Page.htm";
+					for(int i=0;i<templateProposals.length;i++){
+						IResource resource = null;
+						if(dir==null){
+							resource = folder.findMember(templateProposals[i]);
+						} else {
+							resource = folder.findMember(dir + "/" + templateProposals[i]);
+						}
+						if(resource!=null && resource.exists() && resource instanceof IFile){
+							return templateProposals[i];
+						}
 					}
 				}
 			}
@@ -560,6 +564,42 @@ public class ClickUtils {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns proposals of template filenames.
+	 * <p>
+	 * If &quot;UseInfo&quot; is given, this method would return:
+	 * <ul>
+	 *   <li>user-info.htm</li>
+	 *   <li>user-info-page.htm</li>
+	 *   <li>user_info.htm</li>
+	 *   <li>user_info_page.htm</li>
+	 *   <li>UserInfo.htm</li>
+	 *   <li>userInfo.htm</li>
+	 *   <li>userInfoPage.htm</li>
+	 * </ul>
+	 * 
+	 * @param path the page classname which shouldn't contain package name. 
+	 *   Also, &quot;Page&quot; postfix should be removed.
+	 * @return proposals of template filenames.
+	 */
+	private static String[] getTempleteProposals(String path){
+		String lower = path.substring(0, 1).toLowerCase() + path.substring(1);
+		String hifun = path.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase();
+		String under = path.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
+		
+		List list = new ArrayList();
+		
+		list.add(path + ".htm");
+		list.add(lower + ".htm");
+		list.add(lower + "Page.htm");
+		list.add(hifun + ".htm");
+		list.add(hifun + "-page.htm");
+		list.add(under + ".htm");
+		list.add(under + "_page.htm");
+		
+		return (String[])list.toArray(new String[list.size()]);
 	}
 	
 	/**
