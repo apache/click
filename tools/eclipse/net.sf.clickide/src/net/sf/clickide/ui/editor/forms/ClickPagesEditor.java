@@ -20,6 +20,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -108,6 +110,13 @@ public class ClickPagesEditor extends AbstractFormEditor {
 		menu.add(new Separator());
 		menu.add(deleteAction);
 		tree.setMenu(menu.createContextMenu(tree));
+		tree.addKeyListener(new KeyAdapter(){
+			public void keyReleased(KeyEvent e) {
+				if(e.keyCode == SWT.DEL && deleteAction.isEnabled()){
+					deleteAction.run();
+				}
+			}
+		});
 		tree.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				updateMenu();
