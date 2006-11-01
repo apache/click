@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<click-app> 
+
+  <pages package="" automapping="true"/>
+
+  <headers>
+    <header name="Pragma" value="no-cache"/>
+    <header name="Cache-Control" value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/>
+  </headers>
+  
+  <mode value="development"/>
+
+</click-app> 
