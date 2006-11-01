@@ -244,7 +244,7 @@ public class Column implements Serializable {
     protected Map ognlExpressionCache;
 
     /** The column sortable status. The default value is true. */
-    protected boolean sortable = true;
+    protected Boolean sortable;
 
     /** The parent Table. */
     protected Table table;
@@ -920,12 +920,23 @@ public class Column implements Serializable {
     }
 
     /**
-     * Return the column sortable status. The default value is true.
+     * Return the column sortable status. If the column sortable status is not
+     * defined the value will be inherited from the
+     * {@link Table#columnsSortable} property.
      *
      * @return the column sortable status
      */
     public boolean getSortable() {
-        return sortable;
+        if (sortable == null) {
+            if (getTable() != null) {
+                return getTable().getColumnsSortable();
+            } else {
+                return true;
+            }
+
+        } else {
+            return sortable.booleanValue();
+        }
     }
 
     /**
@@ -934,7 +945,7 @@ public class Column implements Serializable {
      * @param value the column sortable status
      */
     public void setSortable(boolean value) {
-        sortable = value;
+        sortable = Boolean.valueOf(value);
     }
 
     /**

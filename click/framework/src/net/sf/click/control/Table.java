@@ -183,6 +183,12 @@ public class Table implements Control {
     /** The list of table Columns. */
     protected List columnList = new ArrayList();
 
+    /**
+     * The default column are sortable status. By default columnsSortable is
+     * true.
+     */
+    protected boolean columnsSortable = true;
+
     /** The request context. */
     protected transient Context context;
 
@@ -442,6 +448,25 @@ public class Table implements Control {
      */
     public Map getColumns() {
         return columns;
+    }
+
+    /**
+     * Return the table default column are sortable status. By default table
+     * columns are sortable.
+     *
+     * @return the table default column are sortable status
+     */
+    public boolean getColumnsSortable() {
+        return columnsSortable;
+    }
+
+    /**
+     * Set the table default column are sortable status.
+     *
+     * @param sortable the table default column are sortable status
+     */
+    public void setColumnsSortable(boolean sortable) {
+        columnsSortable = sortable;
     }
 
     /**
