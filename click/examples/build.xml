@@ -6,8 +6,6 @@
    
    <property file="../build/build.properties"/>
       
-   <property name="version" value="0.20"/>
-
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
    <property name="jar.cayenne" value="cayenne-nodeps-1.2.1.jar"/>
@@ -125,7 +123,7 @@
               
               
    <target name="deploy" description="copy WAR files to application server"> 
-      <copy file="${dir.deploy}/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="${dir.deploy}/${name}.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
    
     
