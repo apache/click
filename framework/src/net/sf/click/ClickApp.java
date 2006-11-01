@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import net.sf.click.util.ClickLogger;
@@ -171,6 +172,9 @@ class ClickApp implements EntityResolver {
     /** The pages package prefix. */
     private String pagesPackage;
 
+    /** The ServletConfig instance. */
+    private ServletConfig servletConfig;
+
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
@@ -178,6 +182,24 @@ class ClickApp implements EntityResolver {
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the Click Application servlet config.
+     *
+     * @return the application servlet config
+     */
+    public ServletConfig getServletConfig() {
+        return servletConfig;
+    }
+
+    /**
+     * Set the Click Application servlet config.
+     *
+     * @param servletContext the application servlet config
+     */
+    public void setServletConfig(ServletConfig servletConfig) {
+        this.servletConfig = servletConfig;
+    }
 
     /**
      * Return the Click Application servlet context.
@@ -215,17 +237,19 @@ class ClickApp implements EntityResolver {
         InputStream inputStream =
             getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
 
-        if (inputStream == null) {
-            String msg =
-                "could not find click app configuration file: "
-                + DEFAULT_APP_CONFIG;
-            throw new RuntimeException(msg);
-        }
-
         try {
-            Document document = ClickUtils.buildDocument(inputStream, this);
+            Element rootElm = null;
 
-            Element rootElm = document.getDocumentElement();
+            if (inputStream != null) {
+                Document document = ClickUtils.buildDocument(inputStream, this);
+                rootElm = document.getDocumentElement();
+
+            } else {
+                inputStream = getClass().getResourceAsStream("/click.xml");
+                Document document = ClickUtils.buildDocument(inputStream, this);
+                rootElm = document.getDocumentElement();
+                loadInitParams(rootElm);
+            }
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
@@ -725,6 +749,22 @@ class ClickApp implements EntityResolver {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void loadInitParams(Element rootElm) {
+
+        String pagePackage = getServletConfig().getInitParameter("page-package");
+        if (pagePackage != null) {
+            Element pagesElm = getChild(rootElm, "pages");
+            pagesElm.setAttribute("package", pagePackage);
+        }
+
+        String mode = getServletConfig().getInitParameter("mode");
+        if (mode != null) {
+            Element modeElm = getChild(rootElm, "mode");
+            modeElm.setAttribute("value", mode);
+        }
+
     }
 
     private void loadTemplates() throws Exception {

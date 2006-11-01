@@ -213,6 +213,7 @@ public class ClickServlet extends HttpServlet {
             // Initialize the click application.
             ClickApp newClickApp = new ClickApp();
 
+            newClickApp.setServletConfig(getServletConfig());
             newClickApp.setServletContext(getServletContext());
 
             newClickApp.init();
