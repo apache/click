@@ -19,7 +19,7 @@ the basic pieces you need to get a Click application running.
 <p/>
 The following topics are covered:
 <ul>
-  <li><a href="#web">Web Application Structure</a>
+  <li><a href="#config">Web XML File</a>
   </li>
   <li><a href="#jars">JAR Files</a>
   </li>
@@ -37,9 +37,9 @@ The following topics are covered:
 
 <p>&nbsp;</p>
 
-<a name="web" class="heading"><h2>Web Application Structure</h2></a>
+<a name="config" class="heading"><h2>Web XML File</h2></a>
 
-First up add a <tt>click.xml</tt> and <tt>web.xml</tt> configuration file to 
+First up add a <tt>web.xml</tt> configuration file to 
 your applications <tt>WEB-INF</tt> directory:
 <table style="margin: 1em">
 <tr valign="top">
@@ -48,9 +48,6 @@ your applications <tt>WEB-INF</tt> directory:
   </td>
   <td>
 <ul>
- <li>WEB-INF/<a target='topic' href="configuration.html#application-configuration">click.xml</a>
- &nbsp; - &nbsp; Application Configuration
- </li>
  <li>WEB-INF/<a target='topic' href="configuration.html#servlet-configuration">web.xml</a>
  &nbsp; - &nbsp; Servlet Configuration
  </li>
@@ -61,46 +58,34 @@ your applications <tt>WEB-INF</tt> directory:
 
 <blockquote>
 
-<h3>click.xml</h3>
-
-Your <tt>click.xml</tt> file should contain:
-
-<pre class="codeConfig">
-&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
-&lt;click-app&gt; 
-
-  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
-
-  &lt;headers&gt;
-    &lt;header name="Pragma" value="no-cache"/&gt;
-    &lt;header name="Cache-Control" 
-            value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
-  &lt;/headers&gt;
-
-&lt;/click-app&gt;  </pre>
-
-<h3>web.xml</h3>
-
 Your <tt>web.xml</tt> file should contain:
 
 <pre class="codeConfig">
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4"&gt;
 &lt;web-app&gt;
 
-  &lt;servlet&gt;
-    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
-    &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
-  &lt;/servlet&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;<span class="blue">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="blue">page-package</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="blue">com.mycorp.page</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+        &lt;load-on-startup&gt;<span class="blue">0</span>&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
   
-  &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
-  &lt;/servlet-mapping&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;<span class="blue">*.htm</span>&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
   
-  &lt;welcome-file-list&gt;
-    &lt;welcome-file&gt;<span class="blue">redirect.html</span>&lt;/welcome-file&gt;
-  &lt;/welcome-file-list&gt;
+    &lt;welcome-file-list&gt;
+        &lt;welcome-file&gt;<span class="blue">redirect.html</span>&lt;/welcome-file&gt;
+    &lt;/welcome-file-list&gt;
   
 &lt;/web-app&gt;  </pre>
 
@@ -121,7 +106,7 @@ You can obtain these files from the Click distribution <tt>dist</tt> directory.
 <a name="welcome" class="heading"><h2>Welcome File</h2></a>
 
 To ensure default application requests 
-(e.g. <span class="blue">http://localhost/mycorp/</span>)
+(e.g. <span class="blue">http://localhost:8080/mycorp/</span>)
 are sent to your applications home page we will add a <tt>redirect.html</tt> file
 to the web root directory. This file should contain:
 
@@ -201,7 +186,7 @@ Now if your web application is deployed to the context path <span class="blue">m
 you should now be able to make the request:
 
 <blockquote>
- <span class="blue">http://localhost:8888/mycorp/</span>
+ <span class="blue">http://localhost:8080/mycorp/</span>
 </blockquote>
 
 Your browser should be redirected to your <tt>HomePage</tt> and you should see your page
@@ -320,22 +305,29 @@ HTML content being rendered.
 
 Click has some handy logging features which will shows you how your page
 templates are being automatically mapped to you page classes. To enable debug
-logging add a mode value of "debug" to your <tt>click.xml</tt> file:
+logging add a <span class="red">mode</span> <tt>init-param</tt> to your <tt>web.xml</tt> file with a 
+value of <span class="blue">debug</span>:
 
 <pre class="codeConfig">
-&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
-&lt;click-app&gt; 
+&lt;web-app&gt;
 
-  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
-
-  &lt;headers&gt;
-    &lt;header name="Pragma" value="no-cache"/&gt;
-    &lt;header name="Cache-Control" value="no-store, no-cache, must-revalidate"/&gt;
-  &lt;/headers&gt;
-  
-  &lt;mode value="<span class="blue">debug</span>"/&gt;
-
-&lt;/click-app&gt;  </pre>
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;<span class="black">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;<span class="black">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="black">page-package</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="black">com.mycorp.page</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="red">mode</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="blue">debug</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+        &lt;load-on-startup&gt;<span class="black">0</span>&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;  
+    
+    ..
+    
+&lt;/web-app&gt; </pre>
 
 When the Click application starts up it will write out the following logging messages:
 
@@ -369,7 +361,7 @@ If you need more detailed debugging information change the application mode to
 <tt>trace</tt>. Now if we make the browser request:
 
 <blockquote>
- <span class="blue">http://localhost:8888/mycorp/home.htm?user=malcolm&amp;password=secret</span>
+ <span class="blue">http://localhost:8080/mycorp/home.htm?user=malcolm&amp;password=secret</span>
 </blockquote>
 
 We will see the request parameters logged. This can be very handy for debugging

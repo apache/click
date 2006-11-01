@@ -41,6 +41,8 @@ page instance is created for each servlet request.
 Possibly the best way to see how Click works is to dive right in and look at some 
 examples.
 
+<p>&nbsp;</p>
+
 <h2>Hello World Example</h2>
 A Hello World example in Click would look something like this. 
 <p/>
@@ -73,15 +75,28 @@ Next we would have a page template <span class="blue">hello-world.htm</span>:
 &lt;/html&gt; 
 </pre>
 
-And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
+And finally we have a <tt>web.xml</tt> configuration file which tells our Click 
 application to map <span class="blue">hello-world.htm</span>
 requests to our <tt>HelloWorld</tt> page class.
 
 <pre class="codeConfig">
-&lt;click-app&gt;  
-  &lt;pages package="<span class="red">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
-&lt;/click-app&gt; 
-</pre>
+&lt;web-app&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;<span class="blue">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="blue">page-package</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="blue">examples.page</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+    &lt;/servlet&gt;  
+    
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;<span class="blue">*.htm</span>&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+    
+&lt;/web-app&gt; </pre>
 
 <p/>
 
@@ -103,149 +118,13 @@ Velocity then renders the merged template which looks something like
 </tr>
 </table>
 
-<h2>Form Example</h2>
-
-Click also includes a library <a target="topic" href="controls.html">Controls</a> which 
-provide user interface functionality. The example below provides a login 
-Page which demonstrate Click controls.
-<p/>
-First we have a <tt>LoginPage</tt> class which setups up a login 
-<a href="click-api/net/sf/click/control/Form.html">Form</a>
-in the constructor.
-
-<pre class="codeJava">
-<span class="kw">public class</span> LoginPage <span class="kw">extends</span> Page {
-
-    <span class="kw">public</span> Form <span class="st">form</span> = <span class="kw">new</span> Form();
-
-    <span class="kw">public</span> LoginPage() { 
-        form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
-        form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
-        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
-        form.add(<span class="kw">new</span> PageSubmit(<span class="st">"cancel"</span>, HomePage.<span class="kw">class</span>));
-    }
-
-    <span class="kw">public boolean</span> onOkClicked() {
-        <span class="kw">if</span> (form.isValid()) {
-            User user = <span class="kw">new</span> User();
-            form.copyTo(user);
-
-            <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
-                getContext().setSessionAttribute(<span class="st">"user"</span>, user);
-                setRedirect(SecurePage.<span class="kw">class</span>);
-                <span class="kw">return false</span>;
-
-            } <span class="kw">else</span> {     
-                form.setError(getMessage(<span class="st">"authentication-error"</span>));           
-            }
-        }
-        <span class="kw">return true</span>;
-    }
-} 
-</pre>
-
-Note in this example the page's public <span class="st">form</span> field is 
-automatically added to its list of controls.
-<p/>
-Next we have the LoginPage template <span class="blue">login.htm</span>. The
-Click application automatically associates the <tt>login.htm</tt> template with
-the <tt>LoginPage</tt> class.
-
-<pre class="codeHtml">
-&lt;html&gt;
-  &lt;body&gt;
-  
-    &lt;h3&gt;Login&lt;/h3&gt;
-    
-    <span class="blue">$form</span>
-    
-  &lt;/body&gt;
-&lt;/html&gt; 
-</pre>
-
-When the Login page is first requested the <span class="blue">$form</span> object will 
-automatically render itself as:
-
-<table class="htmlExample" cellspacing="12">
-<tr>
- <td>
-  
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
-
-<table class='form'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
-</tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
-</tr>
-</table>
-<table class="buttons">
-<tr align='left'>
-  <td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td>
-</tr>
-</table>
-
- </td>
-</tr>
-</table>
-
-Now the user enters their username, but forgets their password and then presses the OK
-button. The ClickServlet creates a new Login page and processes the form control.
-The form control processes its fields and determines that it is invalid. 
-<p/>
-Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the form is 
-invalid this method it does nothing.
-<p/>
-With all the event processing completed the form now renders the field validation errors.
-<table class="htmlExample" cellspacing="12">
-<tr>
- <td>
-   
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
- 
-<table class='fields'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
-</tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
-</tr>
-<tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
-</table>
-<table class="buttons">
-<tr align='left'><td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td></tr>
-</table>
-
- </td>
-</tr>
-</table>
-
-If the user enters a correct username and password the <tt>onOkClicked()</tt> 
-event handler will add a User object to the HttpSession and redirect the request 
-to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
-processing in the page.
-<p/>
-If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
-
-<h4>Form Layout</h4>
-
-In this example we use the form control to automatically render the form and the fields
-HTML. This is a great feature for quickly building screens, and the form control 
-provides a number of layout options. See the Click <a href="examples.html">Examples</a> for an
-interactive Form Properties demo.
-<p/>
-For fine grained page design you can specifically layout form and fields in 
-your page template. See the 
-<a target="topic" href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
-Javadoc for more details.
+<p>&nbsp;</p>
 
 <h2>Table Example</h2>
 
+Click also includes a library <a target="topic" href="controls.html">Controls</a> which 
+provide user interface functionality. 
+<p/>
 One of the most useful Click controls is the 
 <a target="topic" href="click-api/net/sf/click/control/Table.html">Table</a>
 control. The Table control provides support for:
@@ -384,6 +263,148 @@ At runtime the Table would be rendered in the page as:
 
 In this example if a user click on the Delete link the <tt>onDeleteClick()</tt>
 method will be called on the Page deleting the customer record.
+
+<p>&nbsp;</p>
+
+<h2>Form Example</h2>
+
+Forms and Fiels are also some of the most commonly used controls in the Click Framework.
+The login Page below provides a demonstration of using Form and Field controls.
+<p/>
+First we have a <tt>LoginPage</tt> class which setups up a login 
+<a href="click-api/net/sf/click/control/Form.html">Form</a>
+in the constructor.
+
+<pre class="codeJava">
+<span class="kw">public class</span> LoginPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Form <span class="st">form</span> = <span class="kw">new</span> Form();
+
+    <span class="kw">public</span> LoginPage() { 
+        form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
+        form.add(<span class="kw">new</span> PageSubmit(<span class="st">"cancel"</span>, HomePage.<span class="kw">class</span>));
+    }
+
+    <span class="kw">public boolean</span> onOkClicked() {
+        <span class="kw">if</span> (form.isValid()) {
+            User user = <span class="kw">new</span> User();
+            form.copyTo(user);
+
+            <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
+                getContext().setSessionAttribute(<span class="st">"user"</span>, user);
+                setRedirect(SecurePage.<span class="kw">class</span>);
+                <span class="kw">return false</span>;
+
+            } <span class="kw">else</span> {     
+                form.setError(getMessage(<span class="st">"authentication-error"</span>));           
+            }
+        }
+        <span class="kw">return true</span>;
+    }
+} 
+</pre>
+
+Note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls.
+<p/>
+Next we have the LoginPage template <span class="blue">login.htm</span>. The
+Click application automatically associates the <tt>login.htm</tt> template with
+the <tt>LoginPage</tt> class.
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;body&gt;
+  
+    &lt;h3&gt;Login&lt;/h3&gt;
+    
+    <span class="blue">$form</span>
+    
+  &lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+When the Login page is first requested the <span class="blue">$form</span> object will 
+automatically render itself as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+  
+ <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+
+<table class='form'>
+<tr>
+<td align='left'><label >Username</label><span class="red">*</span></td>
+<td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
+</tr>
+<tr>
+<td align='left'><label >Password</label><span class="red">*</span></td>
+<td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
+</tr>
+</table>
+<table class="buttons">
+<tr align='left'>
+  <td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td>
+</tr>
+</table>
+
+ </td>
+</tr>
+</table>
+
+Now the user enters their username, but forgets their password and then presses the OK
+button. The ClickServlet creates a new Login page and processes the form control.
+The form control processes its fields and determines that it is invalid. 
+<p/>
+Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the form is 
+invalid this method it does nothing.
+<p/>
+With all the event processing completed the form now renders the field validation errors.
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+   
+ <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+ 
+<table class='fields'>
+<tr>
+<td align='left'><label >Username</label><span class="red">*</span></td>
+<td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
+</tr>
+<tr>
+<td align='left'><label >Password</label><span class="red">*</span></td>
+<td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
+</tr>
+<tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
+</table>
+<table class="buttons">
+<tr align='left'><td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td></tr>
+</table>
+
+ </td>
+</tr>
+</table>
+
+If the user enters a correct username and password the <tt>onOkClicked()</tt> 
+event handler will add a User object to the HttpSession and redirect the request 
+to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
+processing in the page.
+<p/>
+If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
+
+<h4>Form Layout</h4>
+
+In this example we use the form control to automatically render the form and the fields
+HTML. This is a great feature for quickly building screens, and the form control 
+provides a number of layout options. See the Click <a href="examples.html">Examples</a> for an
+interactive Form Properties demo.
+<p/>
+For fine grained page design you can specifically layout form and fields in 
+your page template. See the 
+<a target="topic" href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
+Javadoc for more details.
 
 </body>
 </html>
