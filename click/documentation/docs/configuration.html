@@ -1,4 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
  "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -43,7 +42,7 @@ The Click configuration files include:
   <td>
 <ul>
  <li>WEB-INF/<a target='topic' href="#application-configuration">click.xml</a>
- &nbsp; - &nbsp; Application Configuration (<b>required</b>)
+ &nbsp; - &nbsp; Application Configuration (optional)
  </li>
  <li>WEB-INF/<a target='topic' href="#velocity-properties">velocity.properties</a>
  &nbsp; - &nbsp; Velocity Properties (optional)
@@ -66,20 +65,20 @@ is provided below.
 
 <pre class="codeConfig">
 &lt;web-app&gt;
+
   &lt;servlet&gt;
     &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;<span class="red">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
-    &lt;load-on-startup&gt;<span class="red">0</span>&lt;/load-on-startup&gt;
+    &lt;servlet-class&gt;<span class="blue">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;<span class="blue">0</span>&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
+  
   &lt;servlet-mapping&gt;
     &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;<span class="red">*.htm</span>&lt;/url-pattern&gt;
+    &lt;url-pattern&gt;<span class="blue">*.htm</span>&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
+  
 &lt;/web-app&gt;
 </pre>
-
-By default the <tt>ClickServlet</tt> will attempt to load an application
-configuration file using the path: &nbsp; <tt>/WEB-INF/click.xml</tt>
 
 <h3>Servlet Mapping</h3>
 By convention all Click page templates should have a .htm extension, and
@@ -97,6 +96,63 @@ improve performance later on. The Click start up and caching strategy is
 configured with the Click application mode element in the "<tt>click.xml</tt>"
 config file.
 
+<h3>Configuration Loading</h3>
+
+By default the <tt>ClickServlet</tt> will attempt to load an application
+<a href="#application-configuration">configuration</a> file using the path: 
+ <tt>/WEB-INF/click.xml</tt>.
+
+<h4>Default Configuration</h4>
+
+If the application configuration file is not found the application will load the 
+default configuration from the classpath. The default application configuration 
+is provided below:
+
+<pre class="codeConfig">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;click-app&gt; 
+
+  &lt;pages package="" automapping="true"/&gt;
+
+  &lt;headers&gt;
+    &lt;header name="Pragma" value="no-cache"/&gt;
+    &lt;header name="Cache-Control" value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
+  &lt;/headers&gt;
+  
+  &lt;mode value="development"/&gt;
+
+&lt;/click-app&gt; </pre>
+
+<h4>Configuration Init Parameters</h4>
+
+Some of the default configuration settings can be overridden using servlet init parameters. Supported
+init-param configuration settings include:
+
+<ul>
+<li>page-package - the default package name which is prepended to the classname of any pages</li>
+<li>mode - the application <a href="#application-mode">mode</a></li>
+</ul>
+
+An example click servlet definition with configuration <tt>ini-param</tt> settings is provided below:
+
+<pre class="codeConfig">
+&lt;web-app&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;<span class="black">click-servlet</span>&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;<span class="black">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="red">page-package</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="blue">com.mycorp.page</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+        &lt;init-param&gt;
+            &lt;param-name&gt;<span class="red">mode</span>&lt;/param-name&gt;
+            &lt;param-value&gt;<span class="blue">debug</span>&lt;/param-value&gt;
+        &lt;/init-param&gt;        
+        &lt;load-on-startup&gt;<span class="black">0</span>&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;  
+        
+&lt;/web-app&gt; </pre>
 
 <a name="application-configuration" class="heading"><h2>Application Configuration</h2></a>
 
