@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
@@ -20,6 +22,10 @@ import org.eclipse.jst.j2ee.webapplication.WebApp;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
+import org.eclipse.wst.html.internal.validation.HTMLValidator;
+import org.eclipse.wst.validation.internal.ConfigurationManager;
+import org.eclipse.wst.validation.internal.ProjectConfiguration;
+import org.eclipse.wst.validation.internal.ValidatorMetaData;
 
 /**
  * Installs the click facet.
@@ -45,7 +51,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			Object cfg, IProgressMonitor monitor) throws CoreException {
 		
 		if (monitor != null) {
-			monitor.beginTask("", 2); //$NON-NLS-1$
+			monitor.beginTask("", 3); //$NON-NLS-1$
 		}
 
 		try {
@@ -72,6 +78,31 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			// Add the nature
 			ClickProjectNature.addNatute(project);
 			
+			if (monitor != null) {
+				monitor.worked(1);
+			}
+			
+			// Disable HTML validator
+			try {
+				ProjectConfiguration projectConfig 
+					= ConfigurationManager.getManager().getProjectConfiguration(project);
+				ValidatorMetaData[] meta = projectConfig.getValidators();
+				List enables = new ArrayList();
+				for(int i=0;i<meta.length;i++){
+					if(!meta[i].getValidatorUniqueName().equals(HTMLValidator.class.getName())){
+						enables.add(meta[i]);
+					}
+				}
+				projectConfig.setDoesProjectOverride(true);
+				
+				projectConfig.setEnabledManualValidators(
+						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
+				projectConfig.setEnabledBuildValidators(
+						(ValidatorMetaData[])enables.toArray(new ValidatorMetaData[enables.size()]));
+				
+			} catch(Exception ex){
+				//ex.printStackTrace();
+			}
 			if (monitor != null) {
 				monitor.worked(1);
 			}
