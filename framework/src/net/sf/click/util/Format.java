@@ -78,7 +78,7 @@ public class Format {
     protected Locale locale;
 
     /** The empty string value. */
-    protected String emptyString;
+    protected String emptyString = "";
 
     // ----------------------------------------------------------- Constructors
 
