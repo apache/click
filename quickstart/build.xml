@@ -1,0 +1,95 @@
+<project name="quickstart" default="help" basedir=".">
+
+   <!-- 
+    Project Properties 
+    -->
+   
+   <property file="../build/build.properties"/>
+      
+   <property name="name" value="quickstart"/>
+   <property name="jar.click" value="click-${version}.jar"/>
+   <property name="jar.click-extras" value="click-extras-${version}.jar"/>
+   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
+     
+   <property name="dir.deploy" value="../dist"/>
+   <property name="dir.webapp" value="webapp"/>
+   <property name="dir.weblib" value="${dir.webapp}/WEB-INF/lib"/>
+       
+    
+   <!-- 
+    Path Definitions
+    -->
+   
+   <path id="classpath">
+      <pathelement location="../dist/${jar.click}"/>
+      <pathelement location="../dist/${jar.click-extras}"/>
+      <pathelement location="../lib/${jar.servlet}"/>
+   </path>
+	
+    
+   <!-- 
+    Task Definitions
+    -->
+
+   <target name="build" description="build web application WAR file" depends="compile">
+      <delete dir="${dir.webapp}/click"/>
+      <delete file="${dir.deploy}/${name}.war"/>
+      <mkdir dir="${dir.deploy}"/>
+      <war destfile="${dir.deploy}/${name}.war"
+           webxml="${dir.webapp}/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <lib file="../dist/${jar.click}"/>
+         <lib file="../dist/${jar.click-extras}"/>
+         <fileset dir="${dir.webapp}">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+   
+   
+   <target name="compile" description="compile Java source">
+      <available file="../dist/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <fail message="Build extras first with 'build-extras'">
+         <condition>
+  	        <or><isfalse value="${isExtrasAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="${dir.webapp}/WEB-INF/classes"/>
+      <copy todir="${dir.webapp}/WEB-INF/classes">
+         <fileset dir="src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="src" 
+           destdir="${dir.webapp}/WEB-INF/classes" 
+           debug="true">
+         <classpath refid="classpath"/>
+      </javac> 
+   </target>
+              
+              
+   <target name="deploy" description="copy WAR files to application server" depends="build"> 
+      <copy file="${dir.deploy}/${name}.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+ 
+	
+   <target name="help" description="display the Help message">
+      <echo message="Quick Start web application"/>
+      <echo message="==========================="/> 
+      <echo/>  
+      <echo message="Main targets:"/> 
+      <echo/>    
+      <echo message="build                 build web application WAR file"/> 
+      <echo message="compile               compile Java code"/>
+      <echo message="deploy                copy WAR file to application server"/>
+      <echo message="help                  display the Help message"/>  
+      <echo/>
+      <echo/>
+      <echo message="Please ensure you have configured build.properties"/> 
+      <echo/>  
+   </target>  
+	   
+</project>
