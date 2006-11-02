@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import ognl.Ognl;
 
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -407,28 +407,15 @@ public class Select extends Field {
             return;
         }
  
-        Map ognlContext = new HashMap();
-        Map ognlExpressionCache = new HashMap();
+        Map methodCache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueExpression = ognlExpressionCache.get(value);
-                if (valueExpression == null) {
-                    valueExpression = Ognl.parseExpression(value);
-                    ognlExpressionCache.put(value, valueExpression);
-                }
+                Object valueResult = ClickUtils.getPropertyValue(object, value, methodCache);
 
-                Object valueResult = Ognl.getValue(valueExpression, ognlContext, object);
-
-                Object labelExpression = ognlExpressionCache.get(label);
-                if (labelExpression == null) {
-                    labelExpression = Ognl.parseExpression(label);
-                    ognlExpressionCache.put(label, labelExpression);
-                }
-
-                Object labelResult = Ognl.getValue(labelExpression, ognlContext, object);
+                Object labelResult = ClickUtils.getPropertyValue(object, label, methodCache);
 
                 Option option = null;
 

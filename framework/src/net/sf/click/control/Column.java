@@ -24,7 +24,6 @@ import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import ognl.Ognl;
 
 /**
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
@@ -237,11 +236,8 @@ public class Column implements Serializable {
     /** The property name of the row object to render. */
     protected String name;
 
-    /** The cached OGNL context for rendering column values. */
-    protected Map ognlContext;
-
-    /** The cached OGNL expressions. */
-    protected Map ognlExpressionCache;
+    /** The method cached for rendering column values. */
+    protected Map methodCache;
 
     /** The column sortable status. The default value is true. */
     protected Boolean sortable;
@@ -1145,8 +1141,7 @@ public class Column implements Serializable {
      * if a value is still not found the property name in lowercase will be used.
      * If a map value is still not found then this method will return null.
      * <p/>
-     * Object property values can also be specified using an OGNL path
-     * expression.
+     * Object property values can also be specified using an path expression.
      *
      * @param row the row object to obtain the property from
      * @return the named row object property value
@@ -1176,27 +1171,11 @@ public class Column implements Serializable {
             return null;
 
         } else {
-
-            if (ognlExpressionCache == null) {
-                ognlExpressionCache = new HashMap();
-            }
-            if (ognlContext == null) {
-                ognlContext = new HashMap();
+            if (methodCache == null) {
+                methodCache = new HashMap();
             }
 
-            try {
-                // Cache the OGNL expression for performance
-                Object expressionTree = ognlExpressionCache.get(name);
-                if (expressionTree == null) {
-                    expressionTree = Ognl.parseExpression(name);
-                    ognlExpressionCache.put(name, expressionTree);
-                }
-
-                return Ognl.getValue(expressionTree, ognlContext, row);
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            return ClickUtils.getPropertyValue(row, name, methodCache);
         }
     }
 
