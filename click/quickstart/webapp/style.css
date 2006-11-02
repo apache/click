@@ -1,0 +1,9 @@
+body {
+  font-family: Arial;
+}
+h2.title {
+  color: white; 
+  background-color: navy; 
+  padding: 0.25em; 
+  margin-top: 0em;
+}
