@@ -18,6 +18,7 @@ package net.sf.click;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -68,7 +69,19 @@ class ClickApp implements EntityResolver {
      * The default Click configuration filename: &nbsp;
      * "<tt>/WEB-INF/click.xml</tt>".
      */
-    static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
+    static final String APP_CONFIG_FILENAME = "/WEB-INF/click.xml";
+
+    /** The default application configuration. */
+    static final String DEFAULT_APP_CONFIG =
+        "<?xml version='1.0' encoding='UTF-8'?>"
+        + "<click-app>"
+        + "<pages package='' automapping='true'/>"
+        + "<headers>"
+        + "<header name='Pragma' value='no-cache'/>"
+        + "<header name='Cache-Control' value='no-store, no-cache, must-revalidate, post-check=0, pre-check=0'/>"
+        + "</headers>"
+        + "<mode value='development'/>"
+        + "</click-app>";
 
     /**
      * The default velocity properties filename: &nbsp;
@@ -235,7 +248,7 @@ class ClickApp implements EntityResolver {
         ClickLogger.setInstance(logger);
 
         InputStream inputStream =
-            getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
+            getServletContext().getResourceAsStream(APP_CONFIG_FILENAME);
 
         try {
             Element rootElm = null;
@@ -245,8 +258,9 @@ class ClickApp implements EntityResolver {
                 rootElm = document.getDocumentElement();
 
             } else {
-                inputStream = getClass().getResourceAsStream("/click.xml");
-                Document document = ClickUtils.buildDocument(inputStream, this);
+                StringReader reader = new StringReader(DEFAULT_APP_CONFIG);
+                InputSource inputSource = new InputSource(reader);
+                Document document = ClickUtils.buildDocument(inputSource, this);
                 rootElm = document.getDocumentElement();
                 loadInitParams(rootElm);
             }
