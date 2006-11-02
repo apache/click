@@ -55,7 +55,8 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       	Improved Table paging across very large lists.
       </li>     
       <li class="change">
-      	Fixed OGNL degrading table rendering performance.
+      	Improved Table rendering performance. Java reflection is now used instead 
+      	of OGNL for evaluating property paths.
         [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-136">136</a>].
       </li>      
       <li class="change">
@@ -66,6 +67,11 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       	Fixed OgnlException in Column when evaluating null property paths. 
       	This issue was raised by David Frizelle
         [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-133">133</a>].
+      </li>
+      <li class="change">
+      	Fixed Ognl Null property evaluation bug when handling Date properties. 
+      	This issue was raised by David Frizelle
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-137">137</a>].
       </li>
       <li class="change">
         Update Velocity 1.5-dev library to SVN revision 467179.
