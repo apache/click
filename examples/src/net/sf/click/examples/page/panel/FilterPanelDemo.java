@@ -20,24 +20,25 @@ public class FilterPanelDemo extends BorderPage {
 
     public FilterPanelDemo() {
         // Setup customers table
-        table.setAttribute("class", "isi");
-        table.setAttribute("width", "550px");
+        table.setClass("isi");
+        table.setWidth("550px");
+        table.setColumnsSortable(false);
 
         table.addColumn(new Column("name"));
 
         Column column = new Column("age");
-        column.setAttribute("style", "{text-align:center;}");
+        column.setTextAlign("center");
         table.addColumn(column);
 
         table.addColumn(new Column("investments"));
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
-        column.setAttribute("style", "{text-align:right;}");
+        column.setTextAlign("right");
         table.addColumn(column);
 
         column = new Column("dateJoined");
-        column.setAttribute("style", "{text-align:right;}");
+        column.setTextAlign("right");
         column.setFormat("{0, date,dd MMM yyyy}");
         table.addColumn(column);
     }
