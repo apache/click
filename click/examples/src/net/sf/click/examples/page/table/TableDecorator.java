@@ -22,13 +22,14 @@ public class TableDecorator extends BorderPage {
     public Table table = new Table();
     public Customer customerDetail;
 
-    private ActionLink viewLink = new ActionLink("viewLink");
+    private ActionLink viewLink = new ActionLink("view", this, "onViewClick");
     private PageLink editLink = new PageLink("edit", EditCustomer.class);
-    private ActionLink deleteLink = new ActionLink("deleteLink");
+    private ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
 
     public TableDecorator() {
         // Setup customers table
         table.setClass("simple");
+        table.setColumnsSortable(false);
 
         Column column = new Column("name");
         column.setSortable(false);
@@ -44,33 +45,27 @@ public class TableDecorator extends BorderPage {
 
         column = new Column("investments");
         column.setAutolink(true);
-        column.setSortable(false);
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setTextAlign("right");
-        column.setSortable(false);
         table.addColumn(column);
 
-        viewLink.setListener(this, "onViewClick");
-        viewLink.setAttribute("title", "View customer details");
+        viewLink.setTitle("View customer details");
         table.addControl(viewLink);
 
         editLink.setListener(this, "onEditClick");
-        editLink.setLabel("Edit");
-        editLink.setAttribute("title", "Edit customer details");
+        editLink.setTitle("Edit customer details");
         editLink.setParameter("referrer", "/table/table-decorator.htm");
         table.addControl(editLink);
 
-        deleteLink.setListener(this, "onDeleteClick");
-        deleteLink.setAttribute("title", "Delete customer record");
+        deleteLink.setTitle("Delete customer record");
         deleteLink.setAttribute
-            ("onclick", "return window.confirm('Please confirm delete');");
+            ("onclick", "return window.confirm('Are you sure you want to delete this record?');");
         table.addControl(deleteLink);
 
         column = new Column("Action");
-        column.setSortable(false);
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Customer customer = (Customer) row;
