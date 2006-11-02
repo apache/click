@@ -60,6 +60,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 /**
  * Provides miscellaneous Form, String and Stream utility methods.
@@ -369,7 +370,7 @@ public class ClickUtils {
     /**
      * Return a new XML Document for the given input stream.
      *
-     * @param inputStream the file input stream
+     * @param inputStream the input stream
      * @return new XML Document
      * @throws RuntimeException if a parsing error occurs
      */
@@ -381,7 +382,7 @@ public class ClickUtils {
      * Return a new XML Document for the given input stream and XML entity
      * resolver.
      *
-     * @param inputStream the file input stream
+     * @param inputStream the input stream
      * @param entityResolver the XML entity resolver
      * @return new XML Document
      * @throws RuntimeException if a parsing error occurs
@@ -399,6 +400,35 @@ public class ClickUtils {
              }
 
              return builder.parse(inputStream);
+
+         } catch (Exception ex) {
+             throw new RuntimeException("Error parsing XML", ex);
+         }
+    }
+
+
+    /**
+     * Return a new XML Document for the given input source and XML entity
+     * resolver.
+     *
+     * @param inputSource the input stream
+     * @param entityResolver the XML entity resolver
+     * @return new XML Document
+     * @throws RuntimeException if a parsing error occurs
+     */
+    public static Document buildDocument(InputSource inputSource,
+                                         EntityResolver entityResolver) {
+         try {
+             DocumentBuilderFactory factory =
+                 DocumentBuilderFactory.newInstance();
+
+             DocumentBuilder builder = factory.newDocumentBuilder();
+
+             if (entityResolver != null) {
+                 builder.setEntityResolver(entityResolver);
+             }
+
+             return builder.parse(inputSource);
 
          } catch (Exception ex) {
              throw new RuntimeException("Error parsing XML", ex);
@@ -549,8 +579,7 @@ public class ClickUtils {
             }
 
             try {
-                Object result =
-                    Ognl.getValue(field.getName(), ognlContext, object);
+                Object result = getPropertyValue(object, field.getName(), ognlContext);
 
                 field.setValueObject(result);
 
@@ -1073,6 +1102,41 @@ public class ClickUtils {
     }
 
     /**
+     * Return the property value for the given object and property name.
+     *
+     * @param source the source object
+     * @param name the name of the property
+     * @param cache the reflection method and OGNL cache
+     * @return the property value fo the given source object and property name
+     */
+    public static Object getPropertyValue(Object source, String name, Map cache) {
+        if (name.startsWith(".")) {
+            throw new IllegalArgumentException("Invalid property name: " + name);
+        }
+        if (name.endsWith(".")) {
+            throw new IllegalArgumentException("Invalid property name: " + name);
+        }
+
+        String basePart = name;
+        String remainingPart = null;
+
+        int baseIndex = name.indexOf(".");
+        if (baseIndex != -1) {
+            basePart = name.substring(0, baseIndex);
+            remainingPart = name.substring(baseIndex + 1);
+        }
+
+        Object value = getObjectPropertyValue(source, basePart, cache);
+
+        if (remainingPart == null || value == null) {
+            return value;
+
+        } else {
+            return getPropertyValue(value, remainingPart, cache);
+        }
+    }
+
+    /**
      * Return the page resouce path from the request. For example:
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
@@ -1323,6 +1387,38 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
+
+    private static Object getObjectPropertyValue(Object source, String name, Map cache) {
+        String methodNameKey = source.getClass().getName() + "." + name;;
+
+        Method method = null;
+        try {
+            method = (Method) cache.get(methodNameKey);
+
+            if (method == null) {
+
+                method = source.getClass().getMethod(toGetterName(name), null);
+                cache.put(methodNameKey, method);
+            }
+
+            return method.invoke(source, null);
+
+        } catch (NoSuchMethodException nsme) {
+            try {
+                method = source.getClass().getMethod(toIsGetterName(name), null);
+                cache.put(methodNameKey, method);
+
+                return method.invoke(source, null);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     private static Set getObjectPropertyNames(Object object) {
         HashSet hashSet = new HashSet();
