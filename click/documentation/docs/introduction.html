@@ -75,28 +75,15 @@ Next we would have a page template <span class="blue">hello-world.htm</span>:
 &lt;/html&gt; 
 </pre>
 
-And finally we have a <tt>web.xml</tt> configuration file which tells our Click 
+And finally we have a <tt>click.xml</tt> configuration file which tells our Click 
 application to map <span class="blue">hello-world.htm</span>
 requests to our <tt>HelloWorld</tt> page class.
 
 <pre class="codeConfig">
-&lt;web-app&gt;
-
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;<span class="blue">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
-        &lt;init-param&gt;
-            &lt;param-name&gt;<span class="blue">page-package</span>&lt;/param-name&gt;
-            &lt;param-value&gt;<span class="blue">examples.page</span>&lt;/param-value&gt;
-        &lt;/init-param&gt;        
-    &lt;/servlet&gt;  
-    
-    &lt;servlet-mapping&gt;
-        &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
-        &lt;url-pattern&gt;<span class="blue">*.htm</span>&lt;/url-pattern&gt;
-    &lt;/servlet-mapping&gt;
-    
-&lt;/web-app&gt; </pre>
+&lt;click-app&gt;  
+  &lt;pages package="<span class="red">examples.page</span>" automapping="<span class="blue">true</span>"/&gt; 
+&lt;/click-app&gt; 
+</pre>
 
 <p/>
 
