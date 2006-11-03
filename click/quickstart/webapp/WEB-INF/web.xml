@@ -7,14 +7,6 @@
 	<servlet>
 		<servlet-name>click-servlet</servlet-name>
 		<servlet-class>net.sf.click.ClickServlet</servlet-class>
-		<init-param>
- 			<param-name>page-package</param-name>
- 			<param-value>com.quickstart.page</param-value>
-		</init-param>
-		<init-param>
-   			<param-name>mode</param-name>
-			<param-value>debug</param-value>
- 		</init-param>
   		<load-on-startup>0</load-on-startup>
 	</servlet>
 
