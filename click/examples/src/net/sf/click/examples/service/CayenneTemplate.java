@@ -72,7 +72,7 @@ public class CayenneTemplate {
             throw new IllegalArgumentException("Null property parameter");
         }
 
-        if (property == null) {
+        if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
 
@@ -137,7 +137,7 @@ public class CayenneTemplate {
             throw new IllegalArgumentException("Null property parameter");
         }
 
-        if (property == null) {
+        if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
 
