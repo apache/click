@@ -18,7 +18,6 @@ package net.sf.click;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +33,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 
 import net.sf.click.util.ClickLogger;
@@ -66,22 +64,10 @@ import org.xml.sax.SAXException;
 class ClickApp implements EntityResolver {
 
     /**
-     * The default Click configuration filename: &nbsp;
+     * The Click configuration filename: &nbsp;
      * "<tt>/WEB-INF/click.xml</tt>".
      */
     static final String APP_CONFIG_FILENAME = "/WEB-INF/click.xml";
-
-    /** The default application configuration. */
-    static final String DEFAULT_APP_CONFIG =
-        "<?xml version='1.0' encoding='UTF-8'?>"
-        + "<click-app>"
-        + "<pages package='' automapping='true'/>"
-        + "<headers>"
-        + "<header name='Pragma' value='no-cache'/>"
-        + "<header name='Cache-Control' value='no-store, no-cache, must-revalidate, post-check=0, pre-check=0'/>"
-        + "</headers>"
-        + "<mode value='development'/>"
-        + "</click-app>";
 
     /**
      * The default velocity properties filename: &nbsp;
@@ -185,9 +171,6 @@ class ClickApp implements EntityResolver {
     /** The pages package prefix. */
     private String pagesPackage;
 
-    /** The ServletConfig instance. */
-    private ServletConfig servletConfig;
-
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
@@ -195,24 +178,6 @@ class ClickApp implements EntityResolver {
     private final VelocityEngine velocityEngine = new VelocityEngine();
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Return the Click Application servlet config.
-     *
-     * @return the application servlet config
-     */
-    public ServletConfig getServletConfig() {
-        return servletConfig;
-    }
-
-    /**
-     * Set the Click Application servlet config.
-     *
-     * @param servletContext the application servlet config
-     */
-    public void setServletConfig(ServletConfig servletConfig) {
-        this.servletConfig = servletConfig;
-    }
 
     /**
      * Return the Click Application servlet context.
@@ -250,20 +215,17 @@ class ClickApp implements EntityResolver {
         InputStream inputStream =
             getServletContext().getResourceAsStream(APP_CONFIG_FILENAME);
 
+        if (inputStream == null) {
+            String msg =
+                "could not find click app configuration file: "
+                + APP_CONFIG_FILENAME;
+            throw new RuntimeException(msg);
+        }
+
         try {
-            Element rootElm = null;
+            Document document = ClickUtils.buildDocument(inputStream, this);
 
-            if (inputStream != null) {
-                Document document = ClickUtils.buildDocument(inputStream, this);
-                rootElm = document.getDocumentElement();
-
-            } else {
-                StringReader reader = new StringReader(DEFAULT_APP_CONFIG);
-                InputSource inputSource = new InputSource(reader);
-                Document document = ClickUtils.buildDocument(inputSource, this);
-                rootElm = document.getDocumentElement();
-                loadInitParams(rootElm);
-            }
+            Element rootElm = document.getDocumentElement();
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
@@ -763,22 +725,6 @@ class ClickApp implements EntityResolver {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private void loadInitParams(Element rootElm) {
-
-        String pagePackage = getServletConfig().getInitParameter("page-package");
-        if (pagePackage != null) {
-            Element pagesElm = getChild(rootElm, "pages");
-            pagesElm.setAttribute("package", pagePackage);
-        }
-
-        String mode = getServletConfig().getInitParameter("mode");
-        if (mode != null) {
-            Element modeElm = getChild(rootElm, "mode");
-            modeElm.setAttribute("value", mode);
-        }
-
     }
 
     private void loadTemplates() throws Exception {
