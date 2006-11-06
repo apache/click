@@ -6,7 +6,7 @@
    
    <property file="../build/build.properties"/>
       
-   <property name="name" value="quickstart"/>
+   <property name="name" value="click-quickstart"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
