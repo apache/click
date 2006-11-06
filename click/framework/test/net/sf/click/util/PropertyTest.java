@@ -75,6 +75,18 @@ public class PropertyTest extends TestCase {
 		}
 		
 		System.out.println("Reflection duration with cache: " + (System.currentTimeMillis() - time) + "ms");		
+		
+		time = System.currentTimeMillis();
+		
+		for (int i = 0; i < ITERATIONS; i++) {
+			assertNotNull(testObject.getName());
+			assertNull(testObject.getValue());
+			assertNotNull(testObject.getDate());
+			assertNotNull(testObject.isValid());
+			assertNotNull(testObject.getChild().getName());
+		}
+		
+		System.out.println("Direct access: " + (System.currentTimeMillis() - time) + "ms");		
 	}
 	
     public static class TestObject {
