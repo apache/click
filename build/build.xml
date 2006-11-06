@@ -165,6 +165,10 @@
            dir="examples"
            target="build" 
            inheritall="false"/>
+      <ant antfile="build.xml" 
+           dir="quickstart"
+           target="build" 
+           inheritall="false"/>
    </target>
 
    
@@ -310,11 +314,12 @@
    </target>
 
 
-   <target name="deploy-examples" description="copy click-examples WAR file to app server"> 
-     <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+   <target name="deploy-examples" description="copy example WAR files to app server"> 
+      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="dist/click-quickstart.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
-               
+
    <target name="format-java">
       <linetrim srcdir="framework/src" includes="**/*.java"/>
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
