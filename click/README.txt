@@ -26,6 +26,8 @@ Example pre-built web appliation include:
 
    dist/click-examples.war
 
+   dist/click-quickstart.war
+
 Click is built using the J2SE 1.4.2 and Ant 1.6.5. 
 
 The Ant build.xml and build.properties files are located in 
@@ -40,7 +42,7 @@ The main Ant targets include:
     build-framework       build click framework JAR file
     build-maven-bundles   build Maven repository upload bundles
     build-sources         build source ZIP files for use with IDEs
-    deploy-examples       copy click-examples WAR file to app server
+    deploy-examples       copy example WAR files to app server
     get-deps              download JAR dependencies
     get-deps-proxy        download JAR dependencies via proxy
     help                  display the Help message
