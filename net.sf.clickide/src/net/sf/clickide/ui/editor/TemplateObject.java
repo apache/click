@@ -401,22 +401,35 @@ public class TemplateObject {
 		}
 		// search super class
 		ITypeHierarchy hierarchy = type.newSupertypeHierarchy(null);
-		IType[] superClass = hierarchy.getAllSuperclasses(type);
-		for(int i=0;i<superClass.length;i++){
-			IMethod[] superMethods = superClass[i].getMethods();
-			LOOP: for(int j=0;j<superMethods.length;j++){
+		extractMethods(hierarchy.getAllSuperclasses(type), list);
+		extractMethods(hierarchy.getSuperInterfaces(type), list);
+		
+		if(type.isInterface()){
+			extractMethods(new IType[]{
+					type.getJavaProject().findType("java.lang.Object")}, list);
+		}
+		return (IMethod[])list.toArray(new IMethod[list.size()]);
+	}
+	
+	private static void extractMethods(IType[] types, List methods) throws JavaModelException {
+		for(int i=0;i<types.length;i++){
+			IMethod[] superMethods = types[i].getMethods();
+			for(int j=0;j<superMethods.length;j++){
+				boolean flag = true;
 				if(!superMethods[j].isConstructor() && !superMethods[j].isMainMethod() && Flags.isPublic(superMethods[j].getFlags())){
-					for(int k=0;k<list.size();k++){
-						IMethod method = (IMethod)list.get(k);
+					for(int k=0;k<methods.size();k++){
+						IMethod method = (IMethod)methods.get(k);
 						if(equalsMethods(method, superMethods[j])){
-							break LOOP;
+							flag = false;
+							break;
 						}
 					}
-					list.add(superMethods[j]);
+					if(flag){
+						methods.add(superMethods[j]);
+					}
 				}
 			}
 		}
-		return (IMethod[])list.toArray(new IMethod[list.size()]);
 	}
 	
 	/**
@@ -430,7 +443,7 @@ public class TemplateObject {
 		if(method1.getElementName().equals(method2.getElementName())){
 			String[] params1 = method1.getParameterTypes();
 			String[] params2 = method2.getParameterTypes();
-			if(params1.length==params1.length){
+			if(params1.length==params2.length){
 				for(int i=0;i<params1.length;i++){
 					if(!params1[i].equals(params2[i])){
 						return false;
