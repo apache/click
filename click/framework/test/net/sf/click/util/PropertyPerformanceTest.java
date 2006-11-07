@@ -239,7 +239,7 @@ public class PropertyPerformanceTest extends TestCase {
 	}
 	
 	public void testOgnl() throws Exception {
-		// this.runOnThreads(OgnlTest.class);
+		this.runOnThreads(OgnlTest.class);
 		logTime("OGNL cumulative time", cumulativeTime);
 	}
 
