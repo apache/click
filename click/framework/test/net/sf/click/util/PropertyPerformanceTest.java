@@ -2,6 +2,7 @@ package net.sf.click.util;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -10,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ognl.Ognl;
 import junit.framework.TestCase;
+import ognl.Ognl;
 
 public class PropertyPerformanceTest extends TestCase {
 	
@@ -178,117 +179,40 @@ public class PropertyPerformanceTest extends TestCase {
 	}
 	
 	public void testOgnl() throws Exception {
-		
-		final Map context = new HashMap();
-
-		for (int i = 0; i < threadCount; i++) {
-			OgnlTest ot = new OgnlTest(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Long time = (Long) e.getSource();
-						ognlTestComplete(time);
-					}
-				},
-				loopIterations,
-				parentObject,
-				context
-			);
-			
-			Thread thread = new Thread(ot);
-			thread.start();
-			threadList.add(thread);
-		}		
-		
-		while (threadCount > 1) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-		}
-		
+		this.runOnThreads(OgnlTest.class);
 		logTime("OGNL cumulative time", cumulativeTime);
 	}
 
 	public void testOgnlCaching() throws Exception {
-		
-		final Map cache = new HashMap();
-		final Map context = new HashMap();
-
-		for (int i = 0; i < threadCount; i++) {
-			OgnlCachingTest ot = new OgnlCachingTest(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Long time = (Long) e.getSource();
-						ognlTestComplete(time);
-					}
-				},
-				loopIterations,
-				parentObject,
-				cache,
-				context
-			);
-			
-			Thread thread = new Thread(ot);
-			thread.start();
-			threadList.add(thread);
-		}		
-		
-		while (threadCount > 1) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-		}
-		
+		this.runOnThreads(OgnlCachingTest.class);
 		logTime("OGNL with caching cumulative time", cumulativeTime);
 	}
 	
 	public void testReflection() throws Exception {
-		
-		for (int i = 0; i < threadCount; i++) {
-			ReflectionTest rt = new ReflectionTest(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Long time = (Long) e.getSource();
-						ognlTestComplete(time);
-					}
-				},
-				loopIterations,
-				parentObject
-			);
-			
-			Thread thread = new Thread(rt);
-			thread.start();
-			threadList.add(thread);
-		}		
-		
-		while (threadCount > 1) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ie) {
-				ie.printStackTrace();
-			}
-		}
-		
+		this.runOnThreads(ReflectionTest.class);
 		logTime("Reflection cumulative time", cumulativeTime);
 	}
 
 	public void testReflectionCaching() throws Exception {
+		this.runOnThreads(ReflectionCachingTest.class);
+		logTime("Reflection with caching cumulative time", cumulativeTime);
+	}
+	
+	private void runOnThreads(Class harness) throws Exception {
+		Constructor cstr = harness.getConstructor(new Class[] { ActionListener.class, int.class, ParentObject.class, Map.class });
 		
-		Map cache = new HashMap();
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Long time = (Long) e.getSource();
+				ognlTestComplete(time);
+			}
+		};
+		
+		final Map cache = new HashMap();
 		
 		for (int i = 0; i < threadCount; i++) {
-			ReflectionCachingTest rt = new ReflectionCachingTest(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Long time = (Long) e.getSource();
-						ognlTestComplete(time);
-					}
-				},
-				loopIterations,
-				parentObject,
-				cache
-			);
-			
-			Thread thread = new Thread(rt);
+			Runnable r = (Runnable) cstr.newInstance(new Object[] { listener, new Integer(loopIterations), parentObject, cache } );
+			Thread thread = new Thread(r);
 			thread.start();
 			threadList.add(thread);
 		}		
@@ -300,8 +224,6 @@ public class PropertyPerformanceTest extends TestCase {
 				ie.printStackTrace();
 			}
 		}
-		
-		logTime("Reflection with caching cumulative time", cumulativeTime);
 	}
 
 	private synchronized void ognlTestComplete(Long time) {		
@@ -319,18 +241,16 @@ public class PropertyPerformanceTest extends TestCase {
 		private final ActionListener listener;
 		private final int iterations;
 		private final ParentObject testObject;
-		private final Map context;
 		
-		public OgnlTest(ActionListener listener, int iterations, ParentObject testObject, Map context) {
+		public OgnlTest(ActionListener listener, int iterations, ParentObject testObject, Map ignoredCache) {
 			this.listener = listener;
 			this.iterations = iterations;
 			this.testObject = testObject;
-			this.context = context;
 		}
 		
 		public void run() {
 			long start = System.currentTimeMillis();
-
+			Map context = new HashMap();
 			for (int i = 0; i < iterations; i++) {
 				assertNotNull(getOgnlPropertyValue(testObject, "name", context));
 				assertNull(getOgnlPropertyValue(testObject, "value", context));
@@ -350,19 +270,17 @@ public class PropertyPerformanceTest extends TestCase {
 		private final int iterations;
 		private final ParentObject testObject;
 		private final Map cache;
-		private final Map context;
 		
-		public OgnlCachingTest(ActionListener listener, int iterations, ParentObject testObject, Map cache, Map context) {
+		public OgnlCachingTest(ActionListener listener, int iterations, ParentObject testObject, Map cache) {
 			this.listener = listener;
 			this.iterations = iterations;
 			this.testObject = testObject;
 			this.cache = cache;
-			this.context = context;
 		}
 		
 		public void run() {
 			long start = System.currentTimeMillis();
-
+			Map context = new HashMap();
 			for (int i = 0; i < iterations; i++) {
 				assertNotNull(getOgnlPropertyValueCaching(testObject, "name", cache, context));
 				assertNull(getOgnlPropertyValueCaching(testObject, "value", cache, context));
@@ -382,7 +300,7 @@ public class PropertyPerformanceTest extends TestCase {
 		private final int iterations;
 		private final ParentObject testObject;
 		
-		public ReflectionTest(ActionListener listener, int iterations, ParentObject testObject) {
+		public ReflectionTest(ActionListener listener, int iterations, ParentObject testObject, Map ignoredCache) {
 			this.listener = listener;
 			this.iterations = iterations;
 			this.testObject = testObject;
