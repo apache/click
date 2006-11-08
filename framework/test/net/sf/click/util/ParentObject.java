@@ -41,7 +41,7 @@ public class ParentObject {
     	this.child = child;
     }
     
-    public Boolean isValid() {
+    public Boolean getValid() {
     	return valid;
     }
 }

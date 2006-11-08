@@ -60,7 +60,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
 
 /**
  * Provides miscellaneous Form, String and Stream utility methods.
@@ -365,6 +364,9 @@ public class ClickUtils {
         HTML_ENTITIES[8364] = "&euro;";   //  -- euro sign, U+20AC NEW -->
     };
 
+    /** Provides a synchronized cache of OGNL expressions. */
+    private static final Map OGNL_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -400,35 +402,6 @@ public class ClickUtils {
              }
 
              return builder.parse(inputStream);
-
-         } catch (Exception ex) {
-             throw new RuntimeException("Error parsing XML", ex);
-         }
-    }
-
-
-    /**
-     * Return a new XML Document for the given input source and XML entity
-     * resolver.
-     *
-     * @param inputSource the input stream
-     * @param entityResolver the XML entity resolver
-     * @return new XML Document
-     * @throws RuntimeException if a parsing error occurs
-     */
-    public static Document buildDocument(InputSource inputSource,
-                                         EntityResolver entityResolver) {
-         try {
-             DocumentBuilderFactory factory =
-                 DocumentBuilderFactory.newInstance();
-
-             DocumentBuilder builder = factory.newDocumentBuilder();
-
-             if (entityResolver != null) {
-                 builder.setEntityResolver(entityResolver);
-             }
-
-             return builder.parse(inputSource);
 
          } catch (Exception ex) {
              throw new RuntimeException("Error parsing XML", ex);
@@ -520,7 +493,13 @@ public class ClickUtils {
             ensureObjectPathNotNull(object, field.getName());
 
             try {
-                Ognl.setValue(field.getName(),
+                Object expression = OGNL_EXPRESSION_CACHE.get(field.getName());
+                if (expression == null) {
+                    expression = Ognl.parseExpression(field.getName());
+                    OGNL_EXPRESSION_CACHE.put(field.getName(), expression);
+                }
+
+                Ognl.setValue(expression,
                               ognlContext,
                               object,
                               field.getValueObject());
@@ -579,7 +558,13 @@ public class ClickUtils {
             }
 
             try {
-                Object result = getPropertyValue(object, field.getName(), ognlContext);
+                Object expression = OGNL_EXPRESSION_CACHE.get(field.getName());
+                if (expression == null) {
+                    expression = Ognl.parseExpression(field.getName());
+                    OGNL_EXPRESSION_CACHE.put(field.getName(), expression);
+                }
+
+                Object result = Ognl.getValue(expression, ognlContext, object);
 
                 field.setValueObject(result);
 
