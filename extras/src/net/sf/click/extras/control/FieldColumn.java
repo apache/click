@@ -109,7 +109,7 @@ public class FieldColumn extends Column {
         super(name, title);
         if (field == null) {
             throw new IllegalArgumentException("Null field parameter");
-        };
+        }
         this.field = field;
     }
 
