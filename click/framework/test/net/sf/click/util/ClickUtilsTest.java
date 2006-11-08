@@ -313,5 +313,15 @@ public class ClickUtilsTest extends TestCase {
 		assertNotNull(ClickUtils.getPropertyValue(parentObject, "valid", cache));
 		assertEquals("edgar", ClickUtils.getPropertyValue(parentObject, "child.name", cache));
 	}
+	
+	public void testGetMimeType() {
+		assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("worksheet.xls"));
+		
+		try {
+			assertNull(ClickUtils.getMimeType("broken.xxx"));
+		} catch (Exception e) {
+			assertTrue(false);
+		}
+	}
     
 }
