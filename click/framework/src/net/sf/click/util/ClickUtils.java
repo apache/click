@@ -38,6 +38,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -1014,6 +1016,37 @@ public class ClickUtils {
         }
 
         return fieldList;
+    }
+
+    /**
+     * Return the mime-type or content-type for the given filename.
+     *
+     * @param filename the filename to obtain the mime-type for
+     * @return the mime-type for the given filename, or null if not found
+     */
+    public static String getMimeType(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException("null filename parameter");
+        }
+
+        int index = filename.lastIndexOf(".");
+
+        if (index != -1) {
+            String ext = filename.substring(index + 1);
+
+            try {
+                ResourceBundle bundle =
+                    ResourceBundle.getBundle("net/sf/click/util/mime-type");
+
+                return bundle.getString(ext);
+
+            } catch (MissingResourceException mre) {
+                return null;
+            }
+
+        } else {
+            return null;
+        }
     }
 
     /**
