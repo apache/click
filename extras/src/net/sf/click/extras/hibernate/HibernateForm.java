@@ -169,8 +169,11 @@ public class HibernateForm extends Form {
         classField.setValue(valueClass.getName());
         add(classField);
 
+        String classname = getClassname(valueClass);
+
         ClassMetadata classMetadata =
-            getSessionFactory().getClassMetadata(valueClass);
+            getSessionFactory().getClassMetadata(classname);
+
         Type identifierType = classMetadata.getIdentifierType();
         oidField = new HiddenField(FO_ID, identifierType.getReturnedClass());
         add(oidField);
@@ -272,8 +275,11 @@ public class HibernateForm extends Form {
      */
     public void setValueObject(Object valueObject) {
         if (valueObject != null) {
+
+            String classname = getClassname(valueObject.getClass());
+
             ClassMetadata classMetadata =
-                getSessionFactory().getClassMetadata(valueObject.getClass());
+                getSessionFactory().getClassMetadata(classname);
 
             Object identifier =
                 classMetadata.getIdentifier(valueObject, EntityMode.POJO);
@@ -377,8 +383,9 @@ public class HibernateForm extends Form {
         try {
             Class valueClass = Class.forName(classField.getValue());
 
-            ClassMetadata metadata =
-                getSessionFactory().getClassMetadata(valueClass);
+            String classname = getClassname(valueClass);
+
+            ClassMetadata metadata = getSessionFactory().getClassMetadata(classname);
 
             String[] propertyNames = metadata.getPropertyNames();
 
@@ -396,6 +403,23 @@ public class HibernateForm extends Form {
         }
 
         metaDataApplied = true;
+    }
+
+    /**
+     * Return the original classname for the given class removing any CGLib
+     * proxy information.
+     *
+     * @param aClass the class to obtain the original name from
+     * @return the orignial classname for the given class
+     */
+    protected String getClassname(Class aClass) {
+
+        String classname = aClass.getName();
+        if (classname.indexOf("$$") != -1) {
+            classname = classname.substring(0, classname.indexOf("$"));
+        }
+
+        return classname;
     }
 
 }
