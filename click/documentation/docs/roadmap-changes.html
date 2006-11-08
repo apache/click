@@ -55,9 +55,11 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       	Improved Table paging across very large lists.
       </li>     
       <li class="change">
-      	Improved Table rendering performance. Java reflection is now used instead 
-      	of OGNL for evaluating property paths.
+      	Improved Table rendering performance.
         [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-136">136</a>].
+      </li>      
+      <li class="change">
+      	Improved OGNL form binding performance.
       </li>      
       <li class="change">
       	Fixed NPE in PropertySelect when label is null. This issue was raised by David Frizelle
@@ -72,6 +74,11 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       	Fixed Ognl Null property evaluation bug when handling Date properties. 
       	This issue was raised by David Frizelle
         [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-137">137</a>].
+      </li>
+      <li class="change">
+      	Fixed HibernateForm not working for CGLib proxies. This issue was identified 
+      	and fixed by Caroline Briffa 
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-144">144</a>].
       </li>
       <li class="change">
         Update Velocity 1.5-dev library to SVN revision 467179.
