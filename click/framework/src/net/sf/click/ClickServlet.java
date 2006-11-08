@@ -1212,7 +1212,7 @@ public class ClickServlet extends HttpServlet {
         /**
          * Return a new Page instance for the page Class.
          *
-         * @param page the class of the Page to create
+         * @param pageClass the class of the Page to create
          * @return a new Page object
          * @throws IllegalArgumentException if the Page Class is not configured
          * with a unique path

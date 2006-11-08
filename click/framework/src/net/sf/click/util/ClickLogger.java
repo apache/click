@@ -111,7 +111,7 @@ public class ClickLogger implements LogChute {
         String logto = (String) rs.getApplicationAttribute(LOG_TO);
         if ("servlet".equals(logto)) {
             servletContext = (ServletContext)
-                rs.getApplicationAttribute(ServletContext.class.getName());;
+                rs.getApplicationAttribute(ServletContext.class.getName());
         }
 
         Integer level = (Integer) rs.getApplicationAttribute(LOG_LEVEL);
