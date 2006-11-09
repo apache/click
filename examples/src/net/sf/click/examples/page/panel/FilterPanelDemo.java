@@ -22,7 +22,7 @@ public class FilterPanelDemo extends BorderPage {
         // Setup customers table
         table.setClass("isi");
         table.setWidth("550px");
-        table.setColumnsSortable(false);
+        table.setSortable(false);
 
         table.addColumn(new Column("name"));
 
