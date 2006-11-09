@@ -165,7 +165,7 @@ public class Table implements Control {
     // ----------------------------------------------------- Instance Variables
 
     /** The table HTML attributes Map. */
-    protected Map attributes = new HashMap();
+    protected Map attributes;
 
     /**
      * The table pagination banner position:
@@ -179,12 +179,6 @@ public class Table implements Control {
 
     /** The list of table Columns. */
     protected List columnList = new ArrayList();
-
-    /**
-     * The default column are sortable status. By default columnsSortable is
-     * true.
-     */
-    protected boolean columnsSortable = true;
 
     /** The request context. */
     protected transient Context context;
@@ -244,6 +238,12 @@ public class Table implements Control {
      * displayed.
      */
     protected boolean showBanner;
+
+    /**
+     * The default column are sortable status. By default columnsSortable is
+     * false.
+     */
+    protected boolean sortable = false;
 
     /** The row list is sorted status. */
     protected boolean sorted;
@@ -328,6 +328,9 @@ public class Table implements Control {
      * @return the table attributes Map.
      */
     public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
         return attributes;
     }
 
@@ -337,7 +340,11 @@ public class Table implements Control {
      * @return true if the Table has attributes on false otherwise
      */
     public boolean hasAttributes() {
-        return !getAttributes().isEmpty();
+        if (attributes != null) {
+            return !getAttributes().isEmpty();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -445,25 +452,6 @@ public class Table implements Control {
      */
     public Map getColumns() {
         return columns;
-    }
-
-    /**
-     * Return the table default column are sortable status. By default table
-     * columns are sortable.
-     *
-     * @return the table default column are sortable status
-     */
-    public boolean getColumnsSortable() {
-        return columnsSortable;
-    }
-
-    /**
-     * Set the table default column are sortable status.
-     *
-     * @param sortable the table default column are sortable status
-     */
-    public void setColumnsSortable(boolean sortable) {
-        columnsSortable = sortable;
     }
 
     /**
@@ -839,6 +827,24 @@ public class Table implements Control {
         this.showBanner = showBanner;
     }
 
+    /**
+     * Return the table default column are sortable status. By default table
+     * columns are sortable.
+     *
+     * @return the table default column are sortable status
+     */
+    public boolean getSortable() {
+        return sortable;
+    }
+
+    /**
+     * Set the table default column are sortable status.
+     *
+     * @param sortable the table default column are sortable status
+     */
+    public void setSortable(boolean sortable) {
+        this.sortable = sortable;
+    }
 
     /**
      * Return the sorted status of the table row list.
