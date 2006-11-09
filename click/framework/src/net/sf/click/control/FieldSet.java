@@ -110,6 +110,9 @@ public class FieldSet extends Field {
     /** The map of fields keyed by field name. */
     protected final Map fields = new HashMap();
 
+    /** The map of field width values. */
+    protected Map fieldWidths = new HashMap();
+
     /** The FieldSet legend. */
     protected String legend;
 
@@ -197,6 +200,27 @@ public class FieldSet extends Field {
     }
 
     /**
+     * Add the field to the fieldset and specify the field's width in columns.
+     * <p/>
+     * Note Button or HiddenFields types are not valid for this method.
+     *
+     * @param field the field to add to the form
+     * @param width the width of the field in table columns
+     * @throws IllegalArgumentException if the form already contains a field or
+     *  a button is added, or if the field name is not defined
+     */
+    public void add(Field field, int width) {
+        if (field instanceof HiddenField) {
+            throw new IllegalArgumentException("not valid a valid field type");
+        }
+        if (width < 1) {
+            throw new IllegalArgumentException("invalid field width: " + width);
+        }
+        add(field);
+        getFieldWidths().put(field.getName(), new Integer(width));
+    }
+
+    /**
      * Remove the given field from the fieldset.
      *
      * @param field the field to remove from the fieldset
@@ -208,6 +232,7 @@ public class FieldSet extends Field {
                 field.setParent(null);
             }
             getFields().remove(field.getName());
+            getFieldWidths().remove(field.getName());
             getFieldList().remove(field);
         }
     }
@@ -280,6 +305,15 @@ public class FieldSet extends Field {
      */
     public Map getFields() {
         return fields;
+    }
+
+    /**
+     * Return the map of field width values, keyed on field name.
+     *
+     * @return the map of field width values, keyed on field name
+     */
+    public Map getFieldWidths() {
+        return fieldWidths;
     }
 
     /**
@@ -550,11 +584,15 @@ public class FieldSet extends Field {
 
             } else {
 
+                // Field width
+                Integer width = (Integer) getFieldWidths().get(field.getName());
+
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
                 }
 
                 if (field instanceof Label) {
+                    // TODO: handle specified width
                     buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getForm().getLabelAlign());
                     buffer.append("\"");
@@ -599,6 +637,12 @@ public class FieldSet extends Field {
                         buffer.append("</td>\n");
                         buffer.append("<td align=\"left\"");
                         buffer.appendAttribute("style", form.getFieldStyle());
+
+                        if (width != null) {
+                            int colspan = (width.intValue() * 2) + 1;
+                            buffer.appendAttribute("colspan", colspan);
+                        }
+
                         buffer.append(">");
                     } else {
                         buffer.append("<br/>");
@@ -609,7 +653,11 @@ public class FieldSet extends Field {
                     buffer.append("</td>\n");
                 }
 
-                if (column == getForm().getColumns()) {
+                if (width != null) {
+                    column += (width.intValue() - 1);
+                }
+
+                if (column >= getForm().getColumns()) {
                     buffer.append("</tr>\n");
                     column = 1;
                 } else {

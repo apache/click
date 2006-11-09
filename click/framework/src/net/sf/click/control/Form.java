@@ -580,6 +580,9 @@ public class Form implements Control {
     /** The field &lt;td&gt; "style" attribute value. */
     protected String fieldStyle;
 
+    /** The map of field width values. */
+    protected Map fieldWidths = new HashMap();
+
     /**
      * The JavaScript client side form fields validation flag. By default
      * JavaScript validation is not enabled.
@@ -696,6 +699,27 @@ public class Form implements Control {
     }
 
     /**
+     * Add the field to the form and specify the field's width in columns.
+     * <p/>
+     * Note Button or HiddenFields types are not valid for this method.
+     *
+     * @param field the field to add to the form
+     * @param width the width of the field in table columns
+     * @throws IllegalArgumentException if the form already contains a field or
+     *  a button is added, or if the field name is not defined
+     */
+    public void add(Field field, int width) {
+        if (field instanceof Button || field instanceof HiddenField) {
+            throw new IllegalArgumentException("not valid a valid field type");
+        }
+        if (width < 1) {
+            throw new IllegalArgumentException("invalid field width: " + width);
+        }
+        add(field);
+        getFieldWidths().put(field.getName(), new Integer(width));
+    }
+
+    /**
      * Remove the given field from the form.
      *
      * @param field the field to remove from the form
@@ -706,7 +730,10 @@ public class Form implements Control {
             if (field.getParent() == this) {
                 field.setParent(null);
             }
+
             getFields().remove(field.getName());
+            getFieldWidths().remove(field.getName());
+
             if (field instanceof Button) {
                 getButtonList().remove(field);
             } else {
@@ -746,8 +773,7 @@ public class Form implements Control {
     public String getActionURL() {
         HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
-        String actionURL = response.encodeURL(request.getRequestURI());
-        return actionURL;
+        return response.encodeURL(request.getRequestURI());
     }
 
     /**
@@ -1156,6 +1182,15 @@ public class Form implements Control {
      */
     public void setFieldStyle(String value) {
         this.fieldStyle = value;
+    }
+
+    /**
+     * Return the map of field width values, keyed on field name.
+     *
+     * @return the map of field width values, keyed on field name
+     */
+    public Map getFieldWidths() {
+        return fieldWidths;
     }
 
     /**
@@ -2104,16 +2139,21 @@ public class Form implements Control {
 
             if (!field.isHidden()) {
 
+                // Field width
+                Integer width = (Integer) getFieldWidths().get(field.getName());
+
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
                 }
 
                 if (field instanceof FieldSet) {
+                    // TODO: handle specified width
                     buffer.append("<td class=\"fields\" colspan=\"2\">\n");
                     buffer.append(field);
                     buffer.append("</td>\n");
 
                 } else if (field instanceof Label) {
+                    // TODO: handle specified width
                     buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
                     buffer.append(getLabelAlign());
                     buffer.append("\"");
@@ -2158,6 +2198,12 @@ public class Form implements Control {
                         buffer.append("</td>\n");
                         buffer.append("<td align=\"left\"");
                         buffer.appendAttribute("style", getFieldStyle());
+
+                        if (width != null) {
+                            int colspan = (width.intValue() * 2) + 1;
+                            buffer.appendAttribute("colspan", colspan);
+                        }
+
                         buffer.append(">");
                     } else {
                         buffer.append("<br>");
@@ -2168,7 +2214,11 @@ public class Form implements Control {
                     buffer.append("</td>\n");
                 }
 
-                if (column == getColumns()) {
+                if (width != null) {
+                    column += (width.intValue() - 1);
+                }
+
+                if (column >= getColumns()) {
                     buffer.append("</tr>\n");
                     column = 1;
 
