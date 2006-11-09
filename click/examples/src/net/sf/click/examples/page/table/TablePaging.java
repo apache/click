@@ -20,6 +20,7 @@ public class TablePaging extends BorderPage {
         table.setClass("its");
         table.setPageSize(4);
         table.setShowBanner(true);
+        table.setSortable(true);
 
         Column column = new Column("name");
         column.setWidth("140px;");
