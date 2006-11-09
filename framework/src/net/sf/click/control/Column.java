@@ -239,7 +239,7 @@ public class Column implements Serializable {
     /** The method cached for rendering column values. */
     protected Map methodCache;
 
-    /** The column sortable status. The default value is true. */
+    /** The column sortable status. The default value is false. */
     protected Boolean sortable;
 
     /** The parent Table. */
@@ -925,9 +925,9 @@ public class Column implements Serializable {
     public boolean getSortable() {
         if (sortable == null) {
             if (getTable() != null) {
-                return getTable().getColumnsSortable();
+                return getTable().getSortable();
             } else {
-                return true;
+                return false;
             }
 
         } else {
