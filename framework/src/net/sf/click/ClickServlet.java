@@ -93,6 +93,58 @@ import org.apache.velocity.util.SimplePool;
  * configured with the Click application mode in the "<tt>click.xml</tt>" file.
  * See the User Guide for information on how to configure the application mode.
  *
+ * <a name="app-reloading"><h4>Application Reloading</h4></a>
+ * The <tt>ClickServlet</tt> supports the ability to reload the click
+ * application "<tt>click.xml</tt>" without having to restart the entire web
+ * application.
+ * <p/>
+ * To reload the application simply make the GET request
+ * <font color="blue">/click/reload-app.htm</font> while in the role
+ * <font color="red">click-admin</font>.
+ * <p/>
+ * To enable application reloading you need to configure the servlet
+ * init parameter <tt>app-reloadable</tt> as true, and secure
+ * the path <tt>/click/reload-app.htm</tt> with the role <tt>click-admin</tt>.
+ * If the user making a GET request to this path is not in this role the
+ * ClickServlet will return the page not found template.
+ *
+ * <pre class="codeConfig">
+ * &lt;web-app&gt;
+ *    &lt;servlet&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
+ *       &lt;init-param&gt;
+ *         &lt;param-name&gt;<font color="blue">app-reloadable</font>&lt;/param-name&gt;
+ *         &lt;param-value&gt;<font color="red">true</font>&lt;/param-value&gt;
+ *       &lt;/init-param&gt;
+ *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
+ *    &lt;/servlet&gt;
+ *
+ *    &lt;servlet-mapping&gt;
+ *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+ *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
+ *    &lt;/servlet-mapping&gt;
+ *
+ *    &lt;security-constraint&gt;
+ *      &lt;web-resource-collection&gt;
+ *        &lt;web-resource-name&gt;click-admin&lt;/web-resource-name&gt;
+ *        &lt;url-pattern&gt;<font color="blue">/click/reload-app.htm</font>&lt;/url-pattern&gt;
+ *      &lt;/web-resource-collection&gt;
+ *      &lt;auth-constraint&gt;
+ *        &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
+ *      &lt;/auth-constraint&gt;
+ *    &lt;/security-constraint&gt;
+ *
+ *    &lt;login-config&gt;
+ *      &lt;auth-method&gt;DIGEST&lt;/auth-method&gt;
+ *      &lt;realm-name&gt;MyCorp&lt;/realm-name&gt;
+ *    &lt;/login-config&gt;
+ *
+ *    &lt;security-role&gt;
+ *      &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
+ *    &lt;/security-role&gt;
+ * &lt;/web-app&gt; </pre>
+ *
  * @author Malcolm Edgar
  */
 public class ClickServlet extends HttpServlet {
