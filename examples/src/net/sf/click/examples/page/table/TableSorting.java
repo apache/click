@@ -19,6 +19,7 @@ public class TableSorting extends BorderPage {
         // Setup customers table
         table.setClass("mars");
         table.setHoverRows(true);
+        table.setSortable(true);
 
         Column column = new Column("id");
         column.setSortable(false);

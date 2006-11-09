@@ -29,7 +29,6 @@ public class TableDecorator extends BorderPage {
     public TableDecorator() {
         // Setup customers table
         table.setClass("simple");
-        table.setColumnsSortable(false);
 
         Column column = new Column("name");
         column.setSortable(false);
