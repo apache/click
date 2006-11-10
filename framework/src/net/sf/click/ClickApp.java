@@ -1067,8 +1067,9 @@ class ClickApp implements EntityResolver {
         for (Iterator i = resources.iterator(); i.hasNext();) {
             String resource = (String) i.next();
 
-            if (resource.endsWith(".htm")) {
+            if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
                 fileList.add(resource);
+                
             } else if (resource.endsWith("/")) {
                 processDirectory(resource, fileList);
             }
