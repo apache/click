@@ -518,11 +518,19 @@ public class Form implements Control {
     /** The label-required-suffix resource property. */
     protected static String LABEL_REQUIRED_SUFFIX = "";
 
+    /** The label-not-required-prefix resource property. */
+    protected static String LABEL_NOT_REQUIRED_PREFIX = "";
+
+    /** The label-not-required-suffix resource property. */
+    protected static String LABEL_NOT_REQUIRED_SUFFIX = "";
+
     static {
         ResourceBundle bundle = ResourceBundle.getBundle(CONTROL_MESSAGES);
 
         LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
         LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
+        LABEL_NOT_REQUIRED_PREFIX = bundle.getString("label-not-required-prefix");
+        LABEL_NOT_REQUIRED_SUFFIX = bundle.getString("label-not-required-suffix");
     }
 
     // ----------------------------------------------------- Instance Variables
@@ -603,6 +611,12 @@ public class Form implements Control {
 
     /** The field required label suffix. */
     protected String labelRequiredSuffix;
+
+    /** The field not required label labelprefix. */
+    protected String labelNotRequiredPrefix;
+
+    /** The field not required label suffix. */
+    protected String labelNotRequiredSuffix;
 
     /** The label &lt;td&gt; "style" attribute value. */
     protected String labelStyle;
@@ -1409,6 +1423,29 @@ public class Form implements Control {
     }
 
     /**
+     * Return the field not required label prefix. If the value is null it will
+     * be initialized with the <tt>label-not-required-prefix</tt> resource
+     * property.
+     *
+     * @return the field not required label prefix
+     */
+    public String getLabelNotRequiredPrefix() {
+        if (labelNotRequiredPrefix == null) {
+            labelNotRequiredPrefix = LABEL_NOT_REQUIRED_PREFIX;
+        }
+        return labelNotRequiredPrefix;
+    }
+
+    /**
+     * Set the field not required label prefix.
+     *
+     * @param value the field not required label prefix
+     */
+    public void setLabelNotRequiredPrefix(String value) {
+        this.labelNotRequiredPrefix = value;
+    }
+
+    /**
      * Return the field required label suffix. If the value is null it will
      * be initialized with the <tt>label-required-suffix</tt> resource property.
      *
@@ -1428,6 +1465,29 @@ public class Form implements Control {
      */
     public void setLabelRequiredSuffix(String value) {
         this.labelRequiredSuffix = value;
+    }
+
+    /**
+     * Return the field not required label suffix. If the value is null it will
+     * be initialized with the <tt>label-not-required-suffix</tt> resource
+     * property.
+     *
+     * @return the field not required label suffix
+     */
+    public String getLabelNotRequiredSuffix() {
+        if (labelNotRequiredSuffix == null) {
+            labelNotRequiredSuffix = LABEL_NOT_REQUIRED_SUFFIX;
+        }
+        return labelNotRequiredSuffix;
+    }
+
+    /**
+     * Set the field not required label suffix.
+     *
+     * @param value the field not required label suffix
+     */
+    public void setLabelNotRequiredSuffix(String value) {
+        this.labelNotRequiredSuffix = value;
     }
 
     /**
@@ -2179,6 +2239,8 @@ public class Form implements Control {
 
                     if (field.isRequired()) {
                         buffer.append(getLabelRequiredPrefix());
+                    } else {
+                        buffer.append(getLabelNotRequiredPrefix());
                     }
                     buffer.append("<label");
                     if (field.isDisabled()) {
@@ -2192,6 +2254,8 @@ public class Form implements Control {
                     buffer.append("</label>");
                     if (field.isRequired()) {
                         buffer.append(getLabelRequiredSuffix());
+                    } else {
+                        buffer.append(getLabelNotRequiredSuffix());
                     }
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
