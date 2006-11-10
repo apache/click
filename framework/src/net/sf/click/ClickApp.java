@@ -1069,7 +1069,7 @@ class ClickApp implements EntityResolver {
 
             if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
                 fileList.add(resource);
-                
+
             } else if (resource.endsWith("/")) {
                 processDirectory(resource, fileList);
             }
