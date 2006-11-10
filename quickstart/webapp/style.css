@@ -1,9 +1,32 @@
 body {
-  font-family: Arial;
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
 }
+
 h2.title {
-  color: white; 
-  background-color: navy; 
-  padding: 0.25em; 
-  margin-top: 0em;
+	position: absolute;
+	top: 12px;
+	left: 15px;
+	color: white; 
+	font-size: 28px;
+	margin-top: 0px;
+}
+
+#header {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 100%;
+	background: #FDE3B5 url(/click-quickstart/banner.png) top left no-repeat;
+	height: 60px;
+}
+
+#container { 
+	position: absolute;
+	top: 65px;
+	left: 10px;
+	padding-top: 1em;
+	padding-left: 2em;
+	z-index: 0;
 }
