@@ -69,22 +69,20 @@ class ClickApp implements EntityResolver {
      */
     static final String APP_CONFIG_FILENAME = "/WEB-INF/click.xml";
 
+    /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>". */
+    static final String CLICK_LOGGER = "net.sf.click";
+
+    /** The click deployment directory path: &nbsp; "/click". */
+    static final String CLICK_PATH = "/click";
+
+    /** The default common page headers. */
+    static final Map DEFAULT_HEADERS;
+
     /**
      * The default velocity properties filename: &nbsp;
      * "<tt>/WEB-INF/velocity.properties</tt>".
      */
     static final String DEFAULT_VEL_PROPS = "/WEB-INF/velocity.properties";
-
-    /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>". */
-    static final String CLICK_LOGGER = "net.sf.click";
-
-    /**
-     * The name of the Velocity logger: &nbsp; "<tt>org.apache.velocity</tt>".
-     */
-    static final String VELOCITY_LOGGER = "org.apache.velocity";
-
-    /** The click deployment directory path: &nbsp; "/click". */
-    static final String CLICK_PATH = "/click";
 
     /** The click DTD file name: &nbsp; "<tt>click.dtd</tt>". */
     static final String DTD_FILE_NAME = "click.dtd";
@@ -104,12 +102,6 @@ class ClickApp implements EntityResolver {
     static final String NOT_FOUND_FILE_NAME = "not-found.htm";
 
     static final String NOT_FOUND_PATH = CLICK_PATH + "/" + NOT_FOUND_FILE_NAME;
-
-    /**
-     * The global Velocity macro file name: &nbsp;
-     * "<tt>VM_global_library.vm</tt>".
-     */
-    static final String VM_FILE_NAME = "VM_global_library.vm";
 
     /**
      * The user supplied macro file name: &nbsp; "<tt>macro.vm</tt>".
@@ -135,6 +127,25 @@ class ClickApp implements EntityResolver {
         { "production", "profile", "development", "debug", "trace" };
 
     private static final Object PAGE_LOAD_LOCK = new Object();
+
+    /**
+     * The name of the Velocity logger: &nbsp; "<tt>org.apache.velocity</tt>".
+     */
+    static final String VELOCITY_LOGGER = "org.apache.velocity";
+
+    /**
+     * The global Velocity macro file name: &nbsp;
+     * "<tt>VM_global_library.vm</tt>".
+     */
+    static final String VM_FILE_NAME = "VM_global_library.vm";
+
+    /** Initialize the default headers. */
+    static {
+        DEFAULT_HEADERS = new HashMap();
+        DEFAULT_HEADERS.put("Pragma", "no-cache");
+        DEFAULT_HEADERS.put("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+        DEFAULT_HEADERS.put("Expires", new Date(1L));
+    }
 
     // -------------------------------------------------------- Package Members
 
@@ -767,10 +778,10 @@ class ClickApp implements EntityResolver {
                 pagesPackage.substring(0, pagesPackage.length() - 2);
         }
 
-        boolean automap = false;
+        boolean automap = true;
         String automapStr = pagesElm.getAttribute("automapping");
         if (StringUtils.isBlank(automapStr)) {
-            automapStr = "false";
+            automapStr = "true";
         }
 
         if ("true".equalsIgnoreCase(automapStr)) {
@@ -787,7 +798,7 @@ class ClickApp implements EntityResolver {
             commonHeaders =
                 Collections.unmodifiableMap(loadHeadersMap(headersElm));
         } else {
-            commonHeaders = Collections.EMPTY_MAP;
+            commonHeaders = Collections.unmodifiableMap(DEFAULT_HEADERS);
         }
 
         List pageList = getChildren(pagesElm, "page");

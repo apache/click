@@ -6,7 +6,7 @@
   <!-- Application pages. -->
   <!ELEMENT pages (page*, excludes*)>
     <!ATTLIST pages package CDATA #IMPLIED>
-    <!ATTLIST pages automapping (true|false) "false">
+    <!ATTLIST pages automapping (true|false) "true">
 
     <!-- Page definition. -->
     <!ELEMENT page (header*)>
