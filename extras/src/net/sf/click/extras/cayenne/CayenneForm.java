@@ -200,6 +200,9 @@ public class CayenneForm extends Form {
      */
     protected boolean metaDataApplied = false;
 
+    /** A transient dataObject handle for detecting committed a object. */
+    protected transient DataObject dataObject;
+
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -275,6 +278,7 @@ public class CayenneForm extends Form {
 
                 if (copyTo) {
                     copyTo(dataObject);
+                    this.dataObject = dataObject;
                 }
 
                 return dataObject;
@@ -470,6 +474,16 @@ public class CayenneForm extends Form {
      */
     public String toString() {
         applyMetaData();
+
+        // Ensure OID hidden field is set if available after a commit
+        if (dataObject != null
+            && isPersistent(dataObject)
+            && oidField.getValueObject() == null) {
+
+            int pk = DataObjectUtils.intPKForObject(dataObject);
+            oidField.setValueObject(new Integer(pk));
+        }
+
         return super.toString();
     }
 
