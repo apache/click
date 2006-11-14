@@ -56,7 +56,6 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
-import ognl.Ognl;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -366,9 +365,6 @@ public class ClickUtils {
         HTML_ENTITIES[8364] = "&euro;";   //  -- euro sign, U+20AC NEW -->
     };
 
-    /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map OGNL_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -495,16 +491,7 @@ public class ClickUtils {
             ensureObjectPathNotNull(object, field.getName());
 
             try {
-                Object expression = OGNL_EXPRESSION_CACHE.get(field.getName());
-                if (expression == null) {
-                    expression = Ognl.parseExpression(field.getName());
-                    OGNL_EXPRESSION_CACHE.put(field.getName(), expression);
-                }
-
-                Ognl.setValue(expression,
-                              ognlContext,
-                              object,
-                              field.getValueObject());
+                PropertyUtils.setValueOgnl(object, field.getName(), field.getValueObject(), ognlContext);
 
                 String msg = "Form -> " + objectClassname + "."
                              + field.getName() + " : " + field.getValueObject();
@@ -560,13 +547,8 @@ public class ClickUtils {
             }
 
             try {
-                Object expression = OGNL_EXPRESSION_CACHE.get(field.getName());
-                if (expression == null) {
-                    expression = Ognl.parseExpression(field.getName());
-                    OGNL_EXPRESSION_CACHE.put(field.getName(), expression);
-                }
-
-                Object result = Ognl.getValue(expression, ognlContext, object);
+                Object result =
+                    PropertyUtils.getValueOgnl(object, field.getName(), ognlContext);
 
                 field.setValueObject(result);
 
@@ -1120,41 +1102,6 @@ public class ClickUtils {
     }
 
     /**
-     * Return the property value for the given object and property name.
-     *
-     * @param source the source object
-     * @param name the name of the property
-     * @param cache the reflection method and OGNL cache
-     * @return the property value fo the given source object and property name
-     */
-    public static Object getPropertyValue(Object source, String name, Map cache) {
-        if (name.startsWith(".")) {
-            throw new IllegalArgumentException("Invalid property name: " + name);
-        }
-        if (name.endsWith(".")) {
-            throw new IllegalArgumentException("Invalid property name: " + name);
-        }
-
-        String basePart = name;
-        String remainingPart = null;
-
-        int baseIndex = name.indexOf(".");
-        if (baseIndex != -1) {
-            basePart = name.substring(0, baseIndex);
-            remainingPart = name.substring(baseIndex + 1);
-        }
-
-        Object value = getObjectPropertyValue(source, basePart, cache);
-
-        if (remainingPart == null || value == null) {
-            return value;
-
-        } else {
-            return getPropertyValue(value, remainingPart, cache);
-        }
-    }
-
-    /**
      * Return the page resouce path from the request. For example:
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
@@ -1405,38 +1352,6 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
-
-    private static Object getObjectPropertyValue(Object source, String name, Map cache) {
-        String methodNameKey = source.getClass().getName() + "." + name;;
-
-        Method method = null;
-        try {
-            method = (Method) cache.get(methodNameKey);
-
-            if (method == null) {
-
-                method = source.getClass().getMethod(toGetterName(name), null);
-                cache.put(methodNameKey, method);
-            }
-
-            return method.invoke(source, null);
-
-        } catch (NoSuchMethodException nsme) {
-            try {
-                method = source.getClass().getMethod(toIsGetterName(name), null);
-                cache.put(methodNameKey, method);
-
-                return method.invoke(source, null);
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
 
     private static Set getObjectPropertyNames(Object object) {
         HashSet hashSet = new HashSet();

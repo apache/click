@@ -26,6 +26,7 @@ import java.util.Map;
 
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PropertyUtils;
 
 /**
  * Provides a Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -413,9 +414,9 @@ public class Select extends Field {
             Object object = i.next();
 
             try {
-                Object valueResult = ClickUtils.getPropertyValue(object, value, methodCache);
+                Object valueResult = PropertyUtils.getValue(object, value, methodCache);
 
-                Object labelResult = ClickUtils.getPropertyValue(object, label, methodCache);
+                Object labelResult = PropertyUtils.getValue(object, label, methodCache);
 
                 Option option = null;
 
