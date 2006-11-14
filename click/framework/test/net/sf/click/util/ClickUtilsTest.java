@@ -2,9 +2,7 @@ package net.sf.click.util;
 
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -281,39 +279,6 @@ public class ClickUtilsTest extends TestCase {
         assertFalse(ClickUtils.requiresEscape((char) 999999));
     }
     
-	public void testGetProperty() {
-		try {
-			ClickUtils.getPropertyValue(new Object(), "username", new HashMap());
-			assertTrue(false);
-		} catch (Exception e) {
-			assertTrue(true);
-		}
-		
-		try {
-			ClickUtils.getPropertyValue(new Object(), "class", new HashMap());
-			assertTrue(true);
-		} catch (Exception e) {
-			assertTrue(false);
-		}		
-		
-		ParentObject testObject = new ParentObject();
-		Map cache = new HashMap();
-			
-		assertNull(ClickUtils.getPropertyValue(testObject, "name", cache));
-		assertNull(ClickUtils.getPropertyValue(testObject, "value", cache));
-		assertNull(ClickUtils.getPropertyValue(testObject, "date", cache));
-		assertNull(ClickUtils.getPropertyValue(testObject, "child", cache));
-
-		ParentObject parentObject = 
-			new ParentObject("malcolm", null, new Date(), Boolean.TRUE, new ChildObject("edgar"));
-		
-		assertEquals("malcolm", ClickUtils.getPropertyValue(parentObject, "name", cache));
-		assertNull(ClickUtils.getPropertyValue(parentObject, "value", cache));
-		assertNotNull(ClickUtils.getPropertyValue(parentObject, "date", cache));
-		assertNotNull(ClickUtils.getPropertyValue(parentObject, "valid", cache));
-		assertEquals("edgar", ClickUtils.getPropertyValue(parentObject, "child.name", cache));
-	}
-	
 	public void testGetMimeType() {
 		assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("worksheet.xls"));
 		

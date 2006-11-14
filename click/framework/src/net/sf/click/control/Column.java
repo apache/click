@@ -24,6 +24,7 @@ import java.util.Map;
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PropertyUtils;
 
 /**
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
@@ -1175,7 +1176,7 @@ public class Column implements Serializable {
                 methodCache = new HashMap();
             }
 
-            return ClickUtils.getPropertyValue(row, name, methodCache);
+            return PropertyUtils.getValue(row, name, methodCache);
         }
     }
 
