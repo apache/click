@@ -30,47 +30,40 @@ import ognl.OgnlException;
  */
 public class PropertyUtils {
 
-    /** Provides a synchronized cache of OGNL get expressions. */
-    private static final Map OGNL_GET_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
-
-    /** Provides a synchronized cache of OGNL set expressions. */
-    private static final Map OGNL_SET_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
+    /** Provides a synchronized cache of OGNL expressions. */
+    private static final Map OGNL_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
 
     // -------------------------------------------------------- Public Methods
 
     /**
      * TODO: doco
      */
-    public static Object getValueOgnl(Object source, String name, Map ognlContext)
+    public static Object getValueOgnl(Object source, String name, Map context)
         throws OgnlException {
 
-        CacheKey cacheKey = new CacheKey(source, name);
-
-        Object expression = OGNL_GET_EXPRESSION_CACHE.get(cacheKey);
+        Object expression = OGNL_EXPRESSION_CACHE.get(name);
         if (expression == null) {
             expression = Ognl.parseExpression(name);
-            OGNL_GET_EXPRESSION_CACHE.put(cacheKey, expression);
+            OGNL_EXPRESSION_CACHE.put(name, expression);
         }
 
-        return Ognl.getValue(expression, ognlContext, source);
+        return Ognl.getValue(expression, context, source);
     }
 
     /**
      * TODO: doco
      */
-    public static void setValueOgnl(Object target, String name, Object value, Map ognlContext)
+    public static void setValueOgnl(Object target, String name, Object value, Map context)
         throws OgnlException {
 
-        CacheKey cacheKey = new CacheKey(target, name);
-
-        Object expression = OGNL_SET_EXPRESSION_CACHE.get(cacheKey);
+        Object expression = OGNL_EXPRESSION_CACHE.get(name);
         if (expression == null) {
             expression = Ognl.parseExpression(name);
-            OGNL_SET_EXPRESSION_CACHE.put(cacheKey, expression);
+            OGNL_EXPRESSION_CACHE.put(name, expression);
         }
 
         Ognl.setValue(expression,
-                      ognlContext,
+                      context,
                       target,
                       value);
     }
