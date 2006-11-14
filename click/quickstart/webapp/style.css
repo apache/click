@@ -5,28 +5,24 @@ body {
 }
 
 h2.title {
-	position: absolute;
-	top: 12px;
-	left: 15px;
 	color: white; 
 	font-size: 28px;
+	left: 15px;
 	margin-top: 0px;
+	position: absolute;
+	top: 12px;
 }
 
 #header {
-	margin: 0;
-	padding: 0;
-	position: relative;
-	width: 100%;
 	background: #FDE3B5 url(/click-quickstart/banner.png) top left no-repeat;
 	height: 60px;
+	position: relative;
+	width: 100%;
 }
 
 #container { 
-	position: absolute;
-	top: 65px;
-	left: 10px;
 	padding-top: 1em;
-	padding-left: 2em;
+	padding-left: 1.5em;
+	position: relative;
 	z-index: 0;
 }
