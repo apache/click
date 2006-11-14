@@ -311,6 +311,9 @@ public class CayenneForm extends Form {
      * @param dataObject the <tt>DataObject</tt> to set
      */
     public void setDataObject(DataObject dataObject) {
+
+        this.dataObject = dataObject;
+
         if (dataObject != null) {
 
             if (dataObject.getClass().getName().equals(classField.getValue())) {
