@@ -24,7 +24,7 @@ import ognl.Ognl;
 import ognl.OgnlException;
 
 /**
- * TODO: doco
+ * Provide property getter and setter utility methods.
  *
  * @author Malcolm Edgar
  */
@@ -36,45 +36,20 @@ public class PropertyUtils {
     // -------------------------------------------------------- Public Methods
 
     /**
-     * TODO: doco
-     */
-    public static Object getValueOgnl(Object source, String name, Map context)
-        throws OgnlException {
-
-        Object expression = OGNL_EXPRESSION_CACHE.get(name);
-        if (expression == null) {
-            expression = Ognl.parseExpression(name);
-            OGNL_EXPRESSION_CACHE.put(name, expression);
-        }
-
-        return Ognl.getValue(expression, context, source);
-    }
-
-    /**
-     * TODO: doco
-     */
-    public static void setValueOgnl(Object target, String name, Object value, Map context)
-        throws OgnlException {
-
-        Object expression = OGNL_EXPRESSION_CACHE.get(name);
-        if (expression == null) {
-            expression = Ognl.parseExpression(name);
-            OGNL_EXPRESSION_CACHE.put(name, expression);
-        }
-
-        Ognl.setValue(expression,
-                      context,
-                      target,
-                      value);
-    }
-
-    /**
-     * Return the property value for the given object and property name.
+     * Return the property value for the given object and property name. This
+     * method uses reflection internally to get the property value.
+     * <p/>
+     * This method caches the reflected property methods in the given Map cache.
+     * You must NOT modify the cache. Also note cache is ONLY valid for the
+     * current thread, as access to the cache is not synchronized. If you need
+     * multi-threaded access to shared cache use a thread-safe Map object, such
+     * as <tt>Collections.synchronizedMap(new HashMap())</tt>.
      *
      * @param source the source object
      * @param name the name of the property
-     * @param cache the reflection method and OGNL cache
-     * @return the property value fo the given source object and property name
+     * @param cache the cache of reflected property Method objects, do NOT modify
+     * this cache
+     * @return the property value for the given source object and property name
      */
     public static Object getValue(Object source, String name, Map cache) {
         String basePart = name;
@@ -94,6 +69,59 @@ public class PropertyUtils {
         } else {
             return getValue(value, remainingPart, cache);
         }
+    }
+
+    /**
+     * Return the property value for the given object and property name using
+     * the OGNL library.
+     * <p/>
+     * This method is thread-safe, and caches parsed OGNL expressions in an
+     * internal sychronized cache.
+     *
+     * @param source the source object
+     * @param name the name of the property
+     * @param context the OGNL context, do NOT modify this object
+     * @return the property value for the given source object and property name
+     * @throws OgnlException if an OGN error occurs
+     */
+    public static Object getValueOgnl(Object source, String name, Map context)
+        throws OgnlException {
+
+        Object expression = OGNL_EXPRESSION_CACHE.get(name);
+        if (expression == null) {
+            expression = Ognl.parseExpression(name);
+            OGNL_EXPRESSION_CACHE.put(name, expression);
+        }
+
+        return Ognl.getValue(expression, context, source);
+    }
+
+    /**
+     * Return the property value for the given object and property name using
+     * the OGNL library.
+     * <p/>
+     * This method is thread-safe, and caches parsed OGNL expressions in an
+     * internal sychronized cache.
+     *
+     * @param target the target object to set the property of
+     * @param name the name of the property to set
+     * @param value the property value to set
+     * @param context the OGNL context, do NOT modify this object
+     * @throws OgnlException if an OGN error occurs
+     */
+    public static void setValueOgnl(Object target, String name, Object value, Map context)
+        throws OgnlException {
+
+        Object expression = OGNL_EXPRESSION_CACHE.get(name);
+        if (expression == null) {
+            expression = Ognl.parseExpression(name);
+            OGNL_EXPRESSION_CACHE.put(name, expression);
+        }
+
+        Ognl.setValue(expression,
+                      context,
+                      target,
+                      value);
     }
 
     // -------------------------------------------------------- Private Methods
@@ -132,6 +160,11 @@ public class PropertyUtils {
 
     // ---------------------------------------------------------- Inner Classes
 
+    /**
+     * See DRY Performance article by Kirk Pepperdine.
+     * <p/>
+     * http://www.javaspecialists.co.za/archive/newsletter.do?issue=134
+     */
     private static class CacheKey {
 
         private final Class sourceClass;
