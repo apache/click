@@ -16,10 +16,9 @@
 package net.sf.click;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Enumeration;
@@ -152,6 +151,8 @@ public class ClickServlet extends HttpServlet {
     // --------------------------------------------------------------- Contants
 
     private static final long serialVersionUID = 1L;
+
+    private static final int WRITER_BUFFER_SIZE = 32 * 1024;
 
     private static final String APPLICAION_RELOADED_MSG  =
         "<html><head>"
@@ -558,28 +559,23 @@ public class ClickServlet extends HttpServlet {
 
         response.setContentType(page.getContentType());
 
-        OutputStream output = response.getOutputStream();
+        Writer writer = response.getWriter();
 
         if (page.getHeaders() != null) {
             setPageResponseHeaders(response, page.getHeaders());
         }
-
-        final String encoding = response.getCharacterEncoding();
 
         VelocityWriter velocityWriter = null;
 
         try {
             velocityWriter = (VelocityWriter) writerPool.get();
 
-            OutputStreamWriter outputStreamWriter =
-                new OutputStreamWriter(output, encoding);
-
             if (velocityWriter == null) {
                 velocityWriter =
-                    new VelocityWriter(outputStreamWriter, 4 * 1024, true);
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
 
             } else {
-                velocityWriter.recycle(outputStreamWriter);
+                velocityWriter.recycle(writer);
             }
 
             template.merge(context, velocityWriter);
@@ -596,11 +592,9 @@ public class ClickServlet extends HttpServlet {
                                 getServletContext());
 
             if (velocityWriter == null) {
-                OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(output, encoding);
 
                 velocityWriter =
-                    new VelocityWriter(outputStreamWriter, 4 * 1024, true);
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
             }
 
             velocityWriter.write(errorReport.getErrorReport());
@@ -614,15 +608,15 @@ public class ClickServlet extends HttpServlet {
                 velocityWriter.flush();
 
                 // Clear the VelocityWriter's reference to its
-                // internal OutputStreamWriter to allow the latter
+                // internal Writer to allow the latter
                 // to be GC'd while vw is pooled.
                 velocityWriter.recycle(null);
 
                 writerPool.put(velocityWriter);
             }
 
-            output.flush();
-            output.close();
+            writer.flush();
+            writer.close();
         }
 
         if (!clickApp.isProductionMode()) {
