@@ -16,9 +16,9 @@
 package net.sf.click.util;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+
+import EDU.oswego.cs.dl.util.concurrent.ConcurrentReaderHashMap;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -31,9 +31,43 @@ import ognl.OgnlException;
 public class PropertyUtils {
 
     /** Provides a synchronized cache of OGNL expressions. */
-    private static final Map OGNL_EXPRESSION_CACHE = Collections.synchronizedMap(new HashMap());
+    private static final Map OGNL_EXPRESSION_CACHE = new ConcurrentReaderHashMap();
+
+    /** Provides a synchronized cache of get value reflection methods. */
+    private static final Map GET_METHOD_CACHE = new ConcurrentReaderHashMap();
 
     // -------------------------------------------------------- Public Methods
+
+    /**
+     * Return the property value for the given object and property name. This
+     * method uses reflection internally to get the property value.
+     * <p/>
+     * This method is thread-safe, and caches reflected accessor methods in an
+     * internal sychronized cache.
+     *
+     * @param source the source object
+     * @param name the name of the property
+     * @return the property value for the given source object and property name
+     */
+    public static Object getValue(Object source, String name) {
+        String basePart = name;
+        String remainingPart = null;
+
+        int baseIndex = name.indexOf(".");
+        if (baseIndex != -1) {
+            basePart = name.substring(0, baseIndex);
+            remainingPart = name.substring(baseIndex + 1);
+        }
+
+        Object value = getObjectPropertyValue(source, basePart, GET_METHOD_CACHE);
+
+        if (remainingPart == null || value == null) {
+            return value;
+
+        } else {
+            return getValue(value, remainingPart, GET_METHOD_CACHE);
+        }
+    }
 
     /**
      * Return the property value for the given object and property name. This
@@ -142,18 +176,36 @@ public class PropertyUtils {
             return method.invoke(source, null);
 
         } catch (NoSuchMethodException nsme) {
+
             try {
                 method = source.getClass().getMethod(ClickUtils.toIsGetterName(name), null);
                 cache.put(methodNameKey, method);
 
                 return method.invoke(source, null);
 
+            } catch (NoSuchMethodException nsme2) {
+
+                try {
+                    method = source.getClass().getMethod(name, null);
+                    cache.put(methodNameKey, method);
+
+                    return method.invoke(source, null);
+
+                } catch (NoSuchMethodException nsme3) {
+                    String msg = "No matching getter method found for property "
+                        + name + " on class " + source.getClass().getName();
+
+                    throw new RuntimeException(msg);
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }

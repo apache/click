@@ -31,14 +31,28 @@ public class PropertyUtilsTest extends TestCase {
 		assertNull(PropertyUtils.getValue(testObject, "date", cache));
 		assertNull(PropertyUtils.getValue(testObject, "child", cache));
 
+        assertNull(PropertyUtils.getValue(testObject, "name"));
+        assertNull(PropertyUtils.getValue(testObject, "value"));
+        assertNull(PropertyUtils.getValue(testObject, "date"));
+        assertNull(PropertyUtils.getValue(testObject, "child"));
+        
 		ParentObject parentObject = 
-			new ParentObject("malcolm", null, new Date(), Boolean.TRUE, new ChildObject("edgar"));
+			new ParentObject("malcolm", null, new Date(), Boolean.TRUE, new ChildObject("edgar", "medgar@avoka.com"));
 		
 		assertEquals("malcolm", PropertyUtils.getValue(parentObject, "name", cache));
 		assertNull(PropertyUtils.getValue(parentObject, "value", cache));
 		assertNotNull(PropertyUtils.getValue(parentObject, "date", cache));
 		assertNotNull(PropertyUtils.getValue(parentObject, "valid", cache));
 		assertEquals("edgar", PropertyUtils.getValue(parentObject, "child.name", cache));
+        assertEquals("medgar@avoka.com", PropertyUtils.getValue(parentObject, "child.email", cache));
+        
+        
+        assertEquals("malcolm", PropertyUtils.getValue(parentObject, "name"));
+        assertNull(PropertyUtils.getValue(parentObject, "value"));
+        assertNotNull(PropertyUtils.getValue(parentObject, "date"));
+        assertNotNull(PropertyUtils.getValue(parentObject, "valid"));
+        assertEquals("edgar", PropertyUtils.getValue(parentObject, "child.name"));
+        assertEquals("medgar@avoka.com", PropertyUtils.getValue(parentObject, "child.email"));
 	}
     
 }

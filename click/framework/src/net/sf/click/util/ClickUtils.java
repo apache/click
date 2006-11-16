@@ -537,7 +537,6 @@ public class ClickUtils {
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
         Set properties = getObjectPropertyNames(object);
-        Map ognlContext = new HashMap();
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
@@ -547,8 +546,7 @@ public class ClickUtils {
             }
 
             try {
-                Object result =
-                    PropertyUtils.getValueOgnl(object, field.getName(), ognlContext);
+                Object result = PropertyUtils.getValue(object, field.getName());
 
                 field.setValueObject(result);
 
