@@ -899,6 +899,7 @@ public class Column implements Serializable {
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return getAttribute("id");
+            
         } else {
             String tableId = (getTable() != null)
                                 ? getTable().getId() + "-" : "";
@@ -919,7 +920,7 @@ public class Column implements Serializable {
     /**
      * Return the column sortable status. If the column sortable status is not
      * defined the value will be inherited from the
-     * {@link Table#columnsSortable} property.
+     * {@link Table#sortable} property.
      *
      * @return the column sortable status
      */
