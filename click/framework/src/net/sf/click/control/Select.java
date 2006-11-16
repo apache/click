@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
