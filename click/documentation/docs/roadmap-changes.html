@@ -35,7 +35,7 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 1.1 - ?? November 2006</dt>
+  <dt>Version 1.1 - 22 November 2006</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -51,6 +51,11 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       	vertical-align attributes, and setting data and header styles.
       </li>
       <li class="change">
+      	Added auto binding of request values to public Page fields. See the ClickServlet method 
+        <a href="click-api/net/sf/click/ClickServlet.html#processPageRequestParams(net.sf.click.Page, javax.servlet.http.HttpServletRequest)">processPageRequestParams()</a>
+        for details. This addition was raised by Stephen Haberman. 
+      </li>
+      <li class="change">
         Added Form
         <a href="click-api/net/sf/click/control/Form.html#clearValues()">clearValues()</a> 
         method.
@@ -59,6 +64,10 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
         Added ClickUtils 
         <a href="click-api/net/sf/click/util/ClickUtils.html#getMimeType(java.lang.String)">getMimeType()</a> 
         method.
+      </li>
+      <li class="change">
+        Added support for overriding Click Application mode by defining a System property <tt>click.mode</tt>. 
+        For example: <tt>-Dclick.mode=trace</tt>
       </li>
       <li class="change">
       	Improved Table paging across very large lists.
@@ -70,6 +79,13 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       <li class="change">
       	Improved OGNL form binding performance.
       </li>    
+      <li class="change">
+        Improved Click configuration defaults:
+        <ul style="margin-top:0.5em;">
+          <li class="change">page automapping is enabled by default</li>
+          <li class="change">global no cache headers are used if no headers defined</li>
+        </ul>
+      </li>
       <li class="change">
       	Updated ClickServlet to use response Writer to support the 
       	<a href="http://messadmin.sourceforge.net/">MessAdmin</a> session monitoring tool.
@@ -114,6 +130,10 @@ the Velocity engine 1.5 release, bug fixes and documentation updates.
       <li class="change">
         Updated OGNL library to version 2.6.9.
       </li>
+      <li class="change">
+        Updated documentation and examples. Click Quickstart has also been added 
+        as an example application.
+      </li> 
     </ul>
   </dd>
   <p/>

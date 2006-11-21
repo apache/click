@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -537,6 +538,36 @@ class ClickApp implements EntityResolver {
         return velocityEngine.getTemplate(path, charset);
     }
 
+    /**
+     * Return the public field of the given name for the pageClass,
+     * or null if not defined.
+     *
+     * @param pageClass the page class
+     * @param fieldName the name of the field
+     * @return the public field of the pageClass with the given name or null
+     */
+    Field getPageField(Class pageClass, String fieldName) {
+        return (Field) getPageFields(pageClass).get(fieldName);
+    }
+
+    /**
+     * Return Map of public fields for the given page class.
+     *
+     * @param pageClass the page class
+     * @return a Map of public fields for the given page class
+     */
+    Map getPageFields(Class pageClass) {
+        Object object = pageByClassMap.get(pageClass);
+
+        if (object != null) {
+            ClickApp.PageElm page = (ClickApp.PageElm) object;
+            return page.getFields();
+
+        } else {
+            return Collections.EMPTY_MAP;
+        }
+    }
+
     // -------------------------------------------------------- Private Methods
 
     private Element getResourceRootElement(String path) throws IOException {
@@ -622,24 +653,12 @@ class ClickApp implements EntityResolver {
     private void loadMode(Element rootElm) {
         Element modeElm = getChild(rootElm, "mode");
 
+        String modeValue = "development";
         String logto = "console";
 
         if (modeElm != null) {
-            String modeValue = modeElm.getAttribute("value");
-
-            if (modeValue.equalsIgnoreCase("production")) {
-                mode = PRODUCTION;
-            } else if (modeValue.equalsIgnoreCase("profile")) {
-                mode = PROFILE;
-            } else if (modeValue.equalsIgnoreCase("development")) {
-                mode = DEVELOPMENT;
-            } else if (modeValue.equalsIgnoreCase("debug")) {
-                mode = DEBUG;
-            } else if (modeValue.equalsIgnoreCase("trace")) {
-                mode = TRACE;
-            } else {
-                logger.error("invalid application mode: " + mode);
-                mode = DEBUG;
+            if (StringUtils.isNotBlank(modeElm.getAttribute("value"))) {
+                modeValue = modeElm.getAttribute("value");
             }
 
             // Configure loggig to console or servlet context.
@@ -647,9 +666,23 @@ class ClickApp implements EntityResolver {
             if (StringUtils.isBlank(logto)) {
                 logto = "console";
             }
+        }
 
-        } else {
+        modeValue = System.getProperty("click.mode", modeValue);
+
+        if (modeValue.equalsIgnoreCase("production")) {
+            mode = PRODUCTION;
+        } else if (modeValue.equalsIgnoreCase("profile")) {
+            mode = PROFILE;
+        } else if (modeValue.equalsIgnoreCase("development")) {
             mode = DEVELOPMENT;
+        } else if (modeValue.equalsIgnoreCase("debug")) {
+            mode = DEBUG;
+        } else if (modeValue.equalsIgnoreCase("trace")) {
+            mode = TRACE;
+        } else {
+            logger.error("invalid application mode: " + mode);
+            mode = DEBUG;
         }
 
         // Set Click and Velocity log levels
@@ -1211,6 +1244,8 @@ class ClickApp implements EntityResolver {
 
     private static class PageElm {
 
+        private final Map fields;
+
         private final Map headers;
 
         private final Class pageClass;
@@ -1252,6 +1287,14 @@ class ClickApp implements EntityResolver {
                              + " is not a subclass of net.sf.clic.Page";
                 throw new RuntimeException(msg);
             }
+
+            fields = new HashMap();
+
+            Field[] fieldArray = pageClass.getFields();
+            for (int i = 0; i < fieldArray.length; i++) {
+                Field field = fieldArray[i];
+                fields.put(field.getName(), field);
+            }
         }
 
         private PageElm(String path, Class pageClass, Map commonHeaders) {
@@ -1259,14 +1302,27 @@ class ClickApp implements EntityResolver {
             headers = Collections.unmodifiableMap(commonHeaders);
             this.pageClass = pageClass;
             this.path = path;
+
+            fields = new HashMap();
+
+            Field[] fieldArray = pageClass.getFields();
+            for (int i = 0; i < fieldArray.length; i++) {
+                Field field = fieldArray[i];
+                fields.put(field.getName(), field);
+            }
         }
 
         private PageElm(String classname, String path)
             throws ClassNotFoundException {
 
+            this.fields = Collections.EMPTY_MAP;
             this.headers = Collections.EMPTY_MAP;
             pageClass = Class.forName(classname);
             this.path = path;
+        }
+
+        private Map getFields() {
+            return fields;
         }
 
         private Map getHeaders() {

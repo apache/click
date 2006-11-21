@@ -198,15 +198,18 @@ public class PropertyUtils {
                     throw new RuntimeException(msg);
 
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    String msg = "Error getting property " + name + " from " + source.getClass();
+                    throw new RuntimeException(msg, e);
                 }
 
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                String msg = "Error getting property " + name + " from " + source.getClass();
+                throw new RuntimeException(msg, e);
             }
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            String msg = "Error getting property " + name + " from " + source.getClass();
+            throw new RuntimeException(msg, e);
         }
     }
 

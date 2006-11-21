@@ -68,16 +68,16 @@ public class TableDecorator extends BorderPage {
         column.setDecorator(new Decorator() {
             public String render(Object row, Context context) {
                 Customer customer = (Customer) row;
-                String customerId = String.valueOf(customer.getId());
+                String id = String.valueOf(customer.getId());
 
                 viewLink.setContext(context);
-                viewLink.setValue(customerId);
+                viewLink.setValue(id);
 
                 editLink.setContext(context);
-                editLink.setParameter("customerId", customerId);
+                editLink.setParameter("id", id);
 
                 deleteLink.setContext(context);
-                deleteLink.setValue(customerId);
+                deleteLink.setValue(id);
 
                 return viewLink.toString() + " | " +
                        editLink.toString() + " | " +
