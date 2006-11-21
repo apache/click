@@ -42,7 +42,11 @@ import net.sf.click.util.ErrorReport;
 import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
+import net.sf.click.util.PropertyUtils;
 import net.sf.click.util.SessionMap;
+import ognl.DefaultTypeConverter;
+import ognl.Ognl;
+import ognl.TypeConverter;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
@@ -189,6 +193,9 @@ public class ClickServlet extends HttpServlet {
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
 
+    /** The OGNL type converter. */
+    protected TypeConverter typeConverter;
+
     /** Cache of velocity writers. */
     protected SimplePool writerPool;
 
@@ -226,6 +233,8 @@ public class ClickServlet extends HttpServlet {
 
             // Set the new ClickApp and writer pool
             clickApp = newClickApp;
+
+            // Create the Velocity writer pool
             writerPool = newWriterPool;
 
             if (logger.isInfoEnabled()) {
@@ -798,10 +807,63 @@ public class ClickServlet extends HttpServlet {
                 }
             });
 
+            processPageRequestParams(newPage, request);
+
             return newPage;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Process the page binding any request parameters to any public Page
+     * fields with the same name which are "primitive" types. These types
+     * include string, numbers and booleans.
+     * <p/>
+     * Type conversion is performed using the <tt>TypeConverter</tt>
+     * returned by the {@link #getTypeConverter()} method.
+     *
+     * @param page the page whose fields are to be processed
+     * @param request the request parameter to use
+     * @throws Exception if an error occurs
+     */
+    protected void processPageRequestParams(Page page, HttpServletRequest request)
+        throws Exception {
+
+        if (clickApp.getPageFields(page.getClass()).isEmpty()) {
+            return;
+        }
+
+        Map context = null;
+
+        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+            String name = (String) e.nextElement();
+            String value = request.getParameter(name);
+
+            if (StringUtils.isNotBlank(value)) {
+
+                Field field = clickApp.getPageField(page.getClass(), name);
+
+                if (field != null) {
+                    Class type = field.getType();
+
+                    if (type.isPrimitive()
+                        || String.class.isAssignableFrom(type)
+                        || Number.class.isAssignableFrom(type)
+                        || Boolean.class.isAssignableFrom(type)) {
+
+                        if (context == null) {
+                            context = Ognl.createDefaultContext(page, null, getTypeConverter());
+                        }
+
+                        PropertyUtils.setValueOgnl(page, name, value, context);
+
+                        if (logger.isTraceEnabled()) {
+                            logger.trace("Auto bound variable " + name + "=" + value);                        }
+                    }
+                }
+            }
         }
     }
 
@@ -1225,6 +1287,19 @@ public class ClickServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * Return the OGNL <tt>TypeConverter</tt>.
+     *
+     * @return the OGNL <tt>TypeConverter</tt>
+     */
+    protected TypeConverter getTypeConverter() {
+        if (typeConverter == null) {
+            typeConverter = new DefaultTypeConverter();
+        }
+
+        return typeConverter;
     }
 
     // ---------------------------------------------------------- Inner Classes

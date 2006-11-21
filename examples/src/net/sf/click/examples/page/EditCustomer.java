@@ -17,13 +17,18 @@ import net.sf.click.extras.control.PageSubmit;
 /**
  * Provides an edit Customer Form example. The Customer business object
  * is initially passed to this Page as a request attribute.
+ * <p/>
+ * Note the public visibility "referrer" HiddenField and the "id" field
+ * have their value automatically set with any identically named request
+ * parameters after the page is created.
  *
  * @author Malcolm Edgar
  */
 public class EditCustomer extends BorderPage {
 
-    private Form form = new Form("form");
-    private HiddenField referrerField = new HiddenField("referrer", String.class);
+    public Form form = new Form("form");
+    public HiddenField referrerField = new HiddenField("referrer", String.class);
+    public Integer id;
     private HiddenField idField = new HiddenField("id", Integer.class);
 
     public EditCustomer() {
@@ -46,35 +51,25 @@ public class EditCustomer extends BorderPage {
         form.add(new DoubleField("holdings"));
         form.add(new InvestmentSelect("investments"));
         form.add(new DateField("dateJoined"));
-        form.add(new Checkbox("Active"));
+        form.add(new Checkbox("active"));
 
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
-
-        addControl(form);
     }
 
     /**
-     * When page is first displayed on the GET request load the customer
-     * details into the form fields.
+     * When page is first displayed on the GET request.
      *
      * @see Page#onGet()
      */
     public void onGet() {
-        Customer customer = (Customer)
-            getContext().getRequestAttribute("customer");
+        if (id != null) {
+            Customer customer = getCustomerService().getCustomer(id);
 
-        if (customer == null) {
-            String customerId = getContext().getRequestParameter("customerId");
-            customer = getCustomerService().getCustomer(customerId);
+            if (customer != null) {
+                form.copyFrom(customer);
+            }
         }
-
-        if (customer != null) {
-            form.copyFrom(customer);
-        }
-
-        String referrer = getContext().getRequestParameter("referrer");
-        referrerField.setValue(referrer);
     }
 
     /**
@@ -96,7 +91,7 @@ public class EditCustomer extends BorderPage {
             if (referrer != null) {
                 setRedirect(referrer);
             } else {
-                setRedirect("/index.htm");
+                setRedirect(HomePage.class);
             }
 
             return true;

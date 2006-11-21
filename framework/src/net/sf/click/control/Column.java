@@ -899,7 +899,7 @@ public class Column implements Serializable {
     public String getId() {
         if (hasAttributes() && getAttributes().containsKey("id")) {
             return getAttribute("id");
-            
+
         } else {
             String tableId = (getTable() != null)
                                 ? getTable().getId() + "-" : "";

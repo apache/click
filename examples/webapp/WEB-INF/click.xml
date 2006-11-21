@@ -7,7 +7,7 @@
   </pages>
 
   <mode value="profile"/>
-
+ 
   <controls>
     <control classname="net.sf.click.examples.control.FilterPanel"/>
   </controls>

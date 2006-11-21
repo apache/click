@@ -1,8 +1,8 @@
 package net.sf.click.examples.page.form;
 
-import net.sf.click.control.Button;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
+import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.page.BorderPage;
@@ -26,7 +26,7 @@ public class FormLayout extends BorderPage {
         form1.add(new TextArea("description", 70, 3), 3);
         form1.add(new EmailField("email"), 2);
 
-        form1.add(new Button("ok", " OK "));
+        form1.add(new Submit("ok", " OK "));
         form1.add(new PageSubmit("cancel", HomePage.class));
 
         // Form 2
@@ -41,7 +41,7 @@ public class FormLayout extends BorderPage {
         fieldSet.add(new EmailField("email"), 3);
         fieldSet.add(new TelephoneField("telephone"));
 
-        form2.add(new Button("ok", " OK "));
+        form2.add(new Submit("ok", " OK "));
         form2.add(new PageSubmit("cancel", HomePage.class));
     }
 

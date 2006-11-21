@@ -362,15 +362,26 @@ method.
 
 <h4>Browser Caching</h4>
 
-Headers are typically used to switch off browser caching. You can do this individually 
-in pages or for all application pages by setting header values. For example to switch off
+Headers are typically used to switch off browser caching. By default Click will
+use the following no caching header values if you don't define a <tt>headers</tt>
+element in your application:
+
+<pre class="codeConfig">
+  &lt;headers&gt;
+    &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" 
+            value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
+    &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
+  &lt;/headers&gt;
+</pre>
+
+Alternatively you can define you headers individually in pages or for all application 
+pages by setting headers values. For example to switch off
 caching in the login page, note the value for a Date type should be a long number value:
 
 <pre class="codeConfig">
 &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-  &lt;header name="<span class="blue">Cache-Control</span>" 
-          value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
 &lt;/page&gt; 
 </pre>
@@ -441,6 +452,15 @@ following mode element:
   ..
   &lt;<span class="blue">mode</span> value="<span class="red">production</span>"&gt;
 &lt;/click-app&gt; 
+</pre>
+
+The application mode configuration can be overridden by setting the system 
+property <tt>"click.mode"</tt>. This can be use in the scenario of debugging
+a problem on a production system, where you change the mode to <tt>trace</tt>
+by setting the following system property and restarting the application.
+
+<pre class="codeConfig">
+-Dclick.mode=trace
 </pre>
 
 The Click Application modes and their settings for Page auto loading, 
