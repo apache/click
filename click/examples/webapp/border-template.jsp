@@ -8,16 +8,11 @@
 </head>
 <body>
 
-<table border="0" cellpadding="0" cellspacing="0">
- <tr>
-  <td style="padding-left:4px;">
-   <a target="topic" href="http://click.sourceforge.net"><img src="${context}/images/click-icon-blue-32.png" border="0"/></a>
-  </td>
-  <td class="appnameText" style="padding-left:4px;">
-  ${title}
-  </td>
- </tr>
-</table>
+  <div id="header">
+    <a id="clickLink" target="blank" href="http://click.sourceforge.net"><img src="${context}/images/click-icon-blue-32.png" border="0"/></a>
+  	<span id="title">${title}</span>
+  	<a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
+  </div>
 
 <table cellpadding="8" class="menuTable">
 <tr>
@@ -46,7 +41,9 @@ ${messages.version}
 </tr>
 </table>
 
-<jsp:include page='${forward}'/>
+  <div id="container">
+    <jsp:include page='${forward}'/>
+  </div>
 
 </body>
 </html>

@@ -26,9 +26,13 @@ import net.sf.click.extras.control.PageSubmit;
  */
 public class EditCustomer extends BorderPage {
 
+    // Public controls are automatically added to the page
     public Form form = new Form("form");
     public HiddenField referrerField = new HiddenField("referrer", String.class);
+
+    // Public variables can automatically have their value set by request parameters
     public Integer id;
+
     private HiddenField idField = new HiddenField("id", Integer.class);
 
     public EditCustomer() {
