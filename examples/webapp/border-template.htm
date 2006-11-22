@@ -4,56 +4,21 @@
 <link type="text/css" rel="stylesheet" href="$context/style.css"></link>
 <link type="text/css" rel="stylesheet" href="$context/menu/menu.css"></link>
 $imports
-
 #if ($headInclude) #parse($headInclude) #end
 </head>
 <body #if($bodyOnload) onload="$bodyOnload" #end>
  	
-<table border="0" cellpadding="0" cellspacing="0">
- <tr>
-  <td style="padding-left:4px;">
-   <a target="topic" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0"/></a>
-  </td>
-  <td class="appnameText" style="padding-left:4px;">
-  $title
-  </td>
- </tr>
-</table>
+  <div id="header">
+    <a id="clickLink" target="blank" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0"/></a>
+  	<span id="title">$title</span>
+  	<a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
+  </div>
 
-<table cellpadding="8" class="menuTable">
-<tr>
-<td>
-&nbsp;<a class="menu" href="$context/home.htm" title="Examples Home page">Home</a>
-#if ($title != 'Source Viewer')
- &nbsp; | &nbsp;
- <a class="menu" href="$context$path" title="Refresh Page">Refresh</a>
-#end
-&nbsp; | &nbsp;
-<a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
-&nbsp; | &nbsp;
-<a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>
-&nbsp; | &nbsp;
-<a class="menu" href="$context/javadoc/index.html" title="Examples HTML Javadoc API">Javadoc API</a>
-#if ($title != 'Source Viewer')
- &nbsp; | &nbsp;
- <a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/BorderPage.java" title="BorderPage Java source">BorderPage</a> 
- &nbsp; | &nbsp;
- <a class="menu" href="$context/source-viewer.htm?filename=border-template.htm" title="Page border HTML template">Border Template</a>
- &nbsp; | &nbsp;
- <a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/classes/$srcPath" title="Page Java source">Page Java</a> 
- &nbsp; | &nbsp;
- <a class="menu" href="$context/source-viewer.htm?filename=$path" title="Page Content source">Page HTML</a>
-#end
-</td>
-<td width="100px" style="color:d0d0d0;text-align:right">
-$messages.version
-</td>
-</tr>
-</table>
+  #writeTemplateMenu()
 
-<br/>
-
-#parse($path)
+  <div id="container">
+    #parse($path)
+  </div>
 
 </body>
 </html>

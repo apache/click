@@ -46,6 +46,7 @@ import net.sf.click.util.PropertyUtils;
 import net.sf.click.util.SessionMap;
 import ognl.DefaultTypeConverter;
 import ognl.Ognl;
+import ognl.OgnlException;
 import ognl.TypeConverter;
 
 import org.apache.commons.lang.StringUtils;
@@ -826,16 +827,19 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page the page whose fields are to be processed
      * @param request the request parameter to use
-     * @throws Exception if an error occurs
+     * @throws OgnlException if an error occurs
      */
     protected void processPageRequestParams(Page page, HttpServletRequest request)
-        throws Exception {
+        throws OgnlException {
 
         if (clickApp.getPageFields(page.getClass()).isEmpty()) {
             return;
         }
 
         Map context = null;
+
+        boolean customConverter =
+            ! getTypeConverter().getClass().equals(DefaultTypeConverter.class);
 
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String name = (String) e.nextElement();
@@ -848,10 +852,11 @@ public class ClickServlet extends HttpServlet {
                 if (field != null) {
                     Class type = field.getType();
 
-                    if (type.isPrimitive()
-                        || String.class.isAssignableFrom(type)
-                        || Number.class.isAssignableFrom(type)
-                        || Boolean.class.isAssignableFrom(type)) {
+                    if (customConverter
+                        || (type.isPrimitive()
+                            || String.class.isAssignableFrom(type)
+                            || Number.class.isAssignableFrom(type)
+                            || Boolean.class.isAssignableFrom(type))) {
 
                         if (context == null) {
                             context = Ognl.createDefaultContext(page, null, getTypeConverter());
@@ -860,7 +865,8 @@ public class ClickServlet extends HttpServlet {
                         PropertyUtils.setValueOgnl(page, name, value, context);
 
                         if (logger.isTraceEnabled()) {
-                            logger.trace("Auto bound variable " + name + "=" + value);                        }
+                            logger.trace("Auto bound variable " + name + "=" + value);
+                        }
                     }
                 }
             }

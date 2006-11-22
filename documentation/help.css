@@ -1,3 +1,38 @@
+
+#clickLink {
+	margin-top: 0px;
+	position: absolute;
+	top: 3px;
+	left: 5px;
+}
+
+#title {
+	color: #000080;
+	font-weight: bold;
+	font-size: 20pt;
+    letter-spacing: 0.2em;
+	position: absolute;
+	top: 8px;
+	left: 51px;
+}
+
+#version {
+	color: white; 
+	font-size: 8pt;
+	text-decoration: none;
+	position: absolute;
+	top: 26px;
+	right: 15px;
+}
+
+#header {
+	background: #4A70BC url(images/banner.png) top left no-repeat;
+	height: 50px;
+	position: relative;
+	width: 100%;
+	border-bottom: 2px solid #1000B0;
+}
+
 a {
   text-decoration: underline;
 }
@@ -55,31 +90,6 @@ p.diagram {
 
 span.sparx {
   font-style: italic;
-}
-
-.appnameText {
-  font-size: 20pt;
-  font-weight: bold;
-  letter-spacing: 0.2em; 
-  padding-bottom: 0px;
-  padding-left: 2px;
-  padding-right: 0px;
-  padding-top: 8px;
-  text-decoration: none;
-  vertical-align:top;
-}
-
-.versionText {
-  font-size: 8pt;
-  padding: 1.5em;
-  text-align: right;
-  text-decoration: none;
-  vertical-align: bottom;
-}
-
-.appTitleBar {
-  background-color: #d8d8d8;
-  color: 000080;
 }
 
 a.navLinkSection {

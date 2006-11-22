@@ -1,11 +1,57 @@
-.appnameText {
+body {
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
+}
+
+#clickLink {
+	margin-top: 0px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
+
+#title {
+	color: black; 
 	font-weight: bold;
 	font-size: 20pt;
-	padding-bottom: 4px;
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-top: 0px;
+	position: absolute;
+	top: 8px;
+	left: 55px;
 }
+
+#homeTitle {
+	color: black; 
+	font-weight: bold;
+	font-size: 20pt;
+	position: absolute;
+	top: 8px;
+	left: 40px;
+}
+
+#hostedTitle {
+	color: #d0d0d0; 
+	font-size: 8pt;
+	text-decoration: none;
+	position: absolute;
+	top: 28px;
+	right: 10px;
+}
+
+#header {
+	background: #4A70BC url(/click-examples/images/banner.png) top left no-repeat;
+	height: 50px;
+	position: relative;
+	width: 100%;
+}
+
+#container { 
+	padding-top: 1.5em;
+	padding-left: 1.5em;
+	position: relative;
+	z-index: 0;
+}
+
 
 .menuTable {
 	color: white;
