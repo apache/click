@@ -1,0 +1,52 @@
+<style type="text/css">
+  td.fields { margin-top: 1em; line-height: 2; }
+</style> 
+
+$form
+
+<p>&nbsp;</p>
+
+The form demonstrates a custom 
+<a href="$context/javadoc/net/sf/click/examples/control/RichTextArea.html">RichTextArea</a>
+control using the 
+<a target="blank" href="http://sourceforge.net/projects/tinymce/">TinyMCE</a>
+JavaScript library. The control overrides the Field method <tt>getHtmlImports()</tt> to include its 
+JavaScript imports automatically:
+
+<pre class="codeJava">
+<span class="kw">protected static final</span> String HTML_IMPORTS =
+    <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"&gt;&lt;/script&gt;\n"</span>;
+
+<span class="kw">public</span> String getHtmlImports() {
+    String[] args = { getContext().getRequest().getContextPath() };
+    <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+} </pre>
+
+The control is rendered using a Velocity template 
+<tt>(/examples/control/RichTextArea.htm)</tt> which loaded from the classpath:
+
+<pre class="codeHtml">
+<span class="st">${textArea}</span>
+&lt;script type="text/javascript"&gt;
+tinyMCE.init({
+   theme : "<span class="st">${theme}</span>",
+   mode : "exact",
+   elements : "<span class="st">${id}</span>"
+});
+&lt;/script&gt;
+</pre>
+
+The control's <tt>toString()</tt> method merges the <tt>RichTextArea.htm</tt>
+template and the model returning rendred HTML.
+
+<pre class="codeJava">
+<span class="kw">public</span> String toString() {
+    Map model = <span class="kw">new</span> HashMap();
+    model.put(<span class="st">"textArea"</span>, super.toString());
+    model.put(<span class="st">"theme"</span>, getTheme());
+    model.put(<span class="st">"id"</span>, getId());
+
+    <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
+} </pre>
+
+

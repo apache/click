@@ -1,0 +1,132 @@
+
+#*********************
+ * Write generic form
+ *********************#
+
+#macro( writeForm $form )
+	
+$form.startTag()	
+
+ <table style="margin: 1em;">
+  #if ($form.error) 
+  <tr>
+   <td colspan="2" style="color: red;" align="left"> $form.error </td>
+  </tr>
+  #end
+  
+ ## Render visible fields
+ #foreach ($field in $form.fieldList)
+
+  #if (!$field.hidden)
+   #if (!$field.valid) 
+   <tr>
+    <td>&nbsp;</td>
+    <td style="color: red;" align="left"> $field.error </td>
+   </tr>
+   #end
+
+   <tr>
+    <td align="right"> 
+    #if ($field.required) 
+     <span style="font-weight: 700;">$field.label</span>:
+    #else
+     $field.label:
+    #end
+    </td> 
+    <td> $field </td>
+   </tr>
+  #end
+ #end
+
+  <tr><td>&nbsp;</td></tr>
+
+  ## Render buttons
+  <tr>
+   <td>&nbsp;</td>
+   <td align="left">
+   #foreach ($button in $form.buttonList)
+    $button 
+   #end
+   </td>
+  </tr> 
+ </table> 
+ 
+$form.endTag()
+
+#end
+
+
+#*********************************
+ * Write drop down JavaScrip menu
+ *********************************#
+
+#macro( writeMenu $rootMenu )
+
+<table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
+ <tr>
+  <td>
+ <div id="menu">
+  <ul class="menubar" id="dmenu">
+    #foreach ($topMenu in $rootMenu.children)
+      #if ($topMenu.isUserInRoles())
+        #if ($topMenu.children.empty)
+		  <li class="topitem"><a href="$context/$topMenu.path" title="$topMenu.title">$topMenu.label</a>
+        #else
+		  <li class="topitem"><a #if($topMenu.path != "") href="$context/$topMenu.path" #else href="#" #end title="$topMenu.title">$topMenu.label</a>
+		    <ul class="submenu"
+            #foreach ($subMenu in $topMenu.children)
+              ><li><a href="$context/$subMenu.path" title="$subMenu.title">$subMenu.label</a></li
+		    #end
+            ></ul>
+		  </li>
+        #end
+      #end
+    #end
+  </ul>
+ </div>
+  </td>
+ </tr>
+</table>
+
+#end
+
+
+#*********************************************
+ * Write drop down border template header menu
+ *********************************************#
+ 
+#macro( writeTemplateMenu )
+
+<table cellpadding="8" class="menuTable">
+<tr>
+<td>
+&nbsp;<a class="menu" href="$context/home.htm" title="Examples Home page">Home</a>
+#if ($title != 'Source Viewer')
+ &nbsp; | &nbsp;
+ <a class="menu" href="$context$path" title="Refresh Page">Refresh</a>
+#end
+&nbsp; | &nbsp;
+<a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
+&nbsp; | &nbsp;
+<a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor">web.xml</a>
+&nbsp; | &nbsp;
+<a class="menu" href="$context/javadoc/index.html" title="Examples HTML Javadoc API">Javadoc API</a>
+#if ($title != 'Source Viewer')
+ &nbsp; | &nbsp;
+ <a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/BorderPage.java" title="BorderPage Java source">BorderPage</a> 
+ &nbsp; | &nbsp;
+ <a class="menu" href="$context/source-viewer.htm?filename=border-template.htm" title="Page border HTML template">Border Template</a>
+ &nbsp; | &nbsp;
+ <a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/classes/$srcPath" title="Page Java source">Page Java</a> 
+ &nbsp; | &nbsp;
+ <a class="menu" href="$context/source-viewer.htm?filename=$path" title="Page Content source">Page HTML</a>
+#end
+</td>
+<td width="100px" style="color:d0d0d0;text-align:right">
+$messages.version
+</td>
+</tr>
+</table>
+
+#end
+

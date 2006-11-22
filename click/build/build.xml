@@ -1,0 +1,540 @@
+<project name="click" default="help" basedir="..">
+
+   <!-- 
+    Project Properties 
+    -->
+    
+   <property file="./build/build.properties"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2.1.jar"/>
+   <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
+   <property name="jar.codec" value="commons-codec-1.3.jar"/>
+   <property name="jar.collections" value="commons-collections-3.1.jar"/>  
+   <property name="jar.concurrent" value="concurrent-1.3.4.jar"/>
+   <property name="jar.hibernate" value="hibernate-3.1.3.jar"/>
+   <property name="jar.io" value="commons-io-1.1.jar"/>
+   <property name="jar.junit" value="junit-3.8.1.jar"/>
+   <property name="jar.lang" value="commons-lang-2.1.jar"/>
+   <property name="jar.ognl" value="ognl-2.6.9.jar"/>
+   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
+   <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
+   <property name="jar.spring-context" value="spring-context-1.2.8.jar"/>
+   <property name="jar.spring-core" value="spring-core-1.2.8.jar"/>
+   <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
+   <property name="jar.upload" value="commons-fileupload-1.1.jar"/>
+   <property name="jar.velocity" value="velocity-1.5-dev.jar"/>
+
+   
+   <!--
+    Task Definitions
+    -->
+	
+   <taskdef name="linetrim"
+   	        classname="dev.LineTrimTask" 
+   	        classpath="lib/dev.jar"/>
+							
+   <taskdef name="replacetabs" 
+   	        classname="dev.ReplaceTabsTask" 
+   	        classpath="lib/dev.jar"/>
+            
+   <taskdef resource="checkstyletask.properties"
+            classpath="lib/${jar.checkstyle}"/>
+
+
+    <!--
+     Macro Definitions
+     -->
+    
+    <macrodef name="downloadMacro">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <sequential>
+            <get src="${repository}/@{path}/jars/@{name}" 
+                 dest="lib/@{name}"
+                 verbose="true"
+                 usetimestamp="true"/>            
+        </sequential>
+    </macrodef> 
+    
+    <macrodef name="buildBundleMacro">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="upload-bundle"/>
+            <copy file="LICENSE.txt" todir="upload-bundle"/> 
+            <copy file="build/@{name}.pom" tofile="upload-bundle/project.xml"/> 
+            <replace file="upload-bundle/project.xml" 
+                     token="VERSION" 
+                     value="${version}"/>
+            <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
+            <jar basedir="upload-bundle" destfile="../@{name}-${version}-bundle.jar"/>
+            <delete dir="upload-bundle" quiet="false"/>
+        </sequential>
+    </macrodef>
+            
+   <!-- 
+    Path Definitions
+    -->
+   
+   <path id="classpath.framework">
+      <pathelement location="framework/classes"/>
+      <pathelement location="lib/${jar.codec}"/>
+      <pathelement location="lib/${jar.collections}"/>
+      <pathelement location="lib/${jar.concurrent}"/>
+      <pathelement location="lib/${jar.io}"/>
+      <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.ognl}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.upload}"/>
+      <pathelement location="lib/${jar.velocity}"/>
+   </path>
+   
+   <path id="classpath.extras">
+      <pathelement location="extras/classes"/> 
+      <pathelement location="lib/${jar.cayenne}"/>
+      <pathelement location="lib/${jar.hibernate}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.spring-beans}"/>
+      <pathelement location="lib/${jar.spring-context}"/>
+      <pathelement location="lib/${jar.spring-core}"/>
+      <pathelement location="lib/${jar.spring-web}"/>
+      <pathelement location="dist/click-${version}.jar"/>
+   </path>
+
+   <path id="classpath.examples"> 
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.spring-beans}"/>
+      <pathelement location="lib/${jar.spring-context}"/>
+      <pathelement location="lib/${jar.spring-core}"/>
+      <pathelement location="lib/${jar.spring-web}"/>
+      <pathelement location="dist/click-${version}.jar"/>
+      <pathelement location="dist/click-extras-${version}.jar"/>
+   </path>
+
+   <path id="classpath.test"> 
+      <pathelement location="lib/${jar.junit}"/>
+   </path>
+
+   <!-- 
+    Target Definitions 
+    -->
+   
+   <target name="build-all" 
+           depends="build-framework, build-extras, build-examples" 
+           description="build Click framework, extras, examples"/>
+
+
+   <target name="build-distribution" 
+           depends="clean, build-framework, build-extras, build-examples, javadoc" 
+           description="build distribution ZIP file">
+      <!-- create distribution zip file -->
+      <delete dir="click-${version}" quiet="false"/>
+      <mkdir dir="click-${version}"/>
+      <copy todir="click-${version}">
+         <fileset dir="." casesensitive="yes">
+            <exclude name=".**"/> 
+            <exclude name=".**/**"/> 
+            <exclude name="click-${version}"/> 
+            <exclude name="TODO.txt"/>   
+            <exclude name="bin/**"/>
+            <exclude name="design/**"/>
+            <exclude name="dist/*-src.zip"/>
+            <exclude name="lib/${jar.cayenne}"/>
+            <exclude name="lib/${jar.codec}"/>
+            <exclude name="lib/${jar.collections}"/>
+            <exclude name="lib/${jar.concurrent}"/>
+            <exclude name="lib/${jar.hibernate}"/>
+            <exclude name="lib/${jar.io}"/>
+            <exclude name="lib/${jar.lang}"/>
+            <exclude name="lib/${jar.junit}"/>
+            <exclude name="lib/${jar.ognl}"/>
+            <exclude name="lib/${jar.servlet}"/>
+            <exclude name="lib/spring-*.jar"/>
+            <exclude name="lib/${jar.upload}"/>
+            <exclude name="**/Thumbs.db"/>
+            <exclude name="**/classes/**"/>
+            <exclude name="**/WEB-INF/lib/**"/>
+            <exclude name="examples/webapp/javadoc/**"/>
+         </fileset>
+      </copy>
+      <delete file="../click-${version}.zip"/>
+      <zip basedir="."
+           destfile="../click-${version}.zip"
+           includes="click-${version}/**"/>
+      <delete dir="click-${version}" quiet="false"/>
+   </target>  
+
+
+   <target name="build-examples" description="build click-examples WAR file">
+      <ant antfile="build.xml" 
+           dir="examples"
+           target="build" 
+           inheritall="false"/>
+      <ant antfile="build.xml" 
+           dir="quickstart"
+           target="build" 
+           inheritall="false"/>
+   </target>
+
+   
+   <target name="build-extras" description="build extras JAR file">
+      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <fail message="Build framework first with 'build-framework'">
+         <condition>
+  	        <or><isfalse value="${isClickAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete file="dist/click-extras-${version}.jar" quiet="false"/>
+      <delete dir="extras/classes" quiet="false"/>
+      <mkdir dir="extras/classes"/>
+      <copy todir="extras/classes">
+         <fileset dir="extras/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
+         <classpath refid="classpath.extras"/>
+      </javac>  
+      <jar destfile="dist/click-extras-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click.extras"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="extras/classes">
+            <exclude name="org/apache/log4j/chainsaw/**"/>
+         </fileset>
+      </jar>  
+   </target>
+
+
+   <target name="build-framework" description="build framework JAR file">
+      <mkdir dir="dist"/>
+      <available file="lib/${jar.codec}" property="isJarAvail"/>
+      <fail message="Download JAR dependencies first with 'get-deps'">
+         <condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete file="dist/click-${version}.jar" quiet="false"/>
+      <delete file="dist/click-nodeps-${version}.jar" quiet="false"/>
+      <property name="dir.source" value="framework/src"/>
+      <property name="dir.classes" value="framework/classes"/>
+      <delete dir="${dir.classes}" quiet="false"/>
+      <mkdir dir="${dir.classes}"/>
+      <copy todir="${dir.classes}">
+         <fileset dir="${dir.source}">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <!-- No Dependencies -->
+      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true">
+         <classpath refid="classpath.framework"/>
+      </javac>  
+      <jar destfile="dist/click-nodeps-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="${dir.classes}"/>
+      </jar>
+      <!-- With Dependencies -->
+      <unzip src="lib/${jar.codec}" dest="${dir.classes}"/>
+      <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
+      <unzip src="lib/${jar.concurrent}" dest="${dir.classes}"/>
+      <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
+      <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
+      <unzip src="lib/${jar.ognl}" dest="${dir.classes}"/> 
+      <unzip src="lib/${jar.upload}" dest="${dir.classes}"/> 
+      <unzip src="lib/${jar.velocity}" dest="${dir.classes}"/> 
+      <jar destfile="dist/click-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="${dir.classes}">
+            <exclude name="org/apache/velocity/anakia/**"/>
+            <exclude name="org/apache/velocity/test/**"/>
+            <exclude name="org/apache/velocity/texen/**"/>
+         </fileset>
+      </jar>
+   </target>
+
+    
+   <target name="build-maven-bundles" 
+           depends="build-framework, build-extras"
+           description="build Maven repository upload bundles">
+      <buildBundleMacro name="click"/>
+      <buildBundleMacro name="click-nodeps"/>
+      <buildBundleMacro name="click-extras"/>
+   </target>
+
+   
+   <target name="build-sources"
+           description="build source ZIP files for use with IDEs">
+      <property name="dir.source" value="framework/src"/>
+      <!-- zip the framework without dependencies-->
+      <zip destfile="dist/click-nodeps-${version}-src.zip">
+         <fileset dir="${dir.source}">
+            <exclude name="**/.html"/>
+            <exclude name="**/.css"/>
+            <exclude name="**/.js"/>
+            <exclude name="**/.gif"/>
+         </fileset>
+      </zip>
+      <!-- zip the framework with dependencies:-->
+      <!-- this is not ready since the sources for the used jars are not available -->
+      <zip destfile="dist/click-${version}-src.zip">
+         <fileset dir="${dir.source}">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </zip>
+      <!-- zip extras -->
+      <zip destfile="dist/click-extras-${version}-src.zip" >
+         <fileset dir="extras/src">
+            <exclude name="**/*.html"/>
+         </fileset>
+      </zip>
+   </target>
+
+
+   <target name="checkstyle" description="run checkstyle report on Java soruce">
+      <checkstyle config="build/checkstyle-checks.xml">
+         <fileset dir="framework/src/net" includes="**/*.java"/>
+         <fileset dir="extras/src" includes="**/*.java"/>
+      </checkstyle>
+   </target>
+
+   
+   <target name="clean"> 
+      <delete dir="dist" quiet="false"/>
+      <mkdir dir="dist"/>
+      <delete>
+        <fileset dir="framework/test" includes="TEST-*.txt"/>
+      </delete>
+      <delete>
+        <fileset dir="extras/test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+
+   <target name="deploy-examples" description="copy example WAR files to app server"> 
+      <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
+      <copy file="dist/click-quickstart.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+
+
+   <target name="format-java">
+      <linetrim srcdir="framework/src" includes="**/*.java"/>
+      <replacetabs srcdir="framework/src" includes="**/*.java"/>
+      <linetrim srcdir="extras/src" includes="**/*.java"/>
+      <replacetabs srcdir="extras/src" includes="**/*.java"/>
+      <linetrim srcdir="examples/src" includes="**/*.java"/>
+      <replacetabs srcdir="examples/src" includes="**/*.java"/>
+   </target>
+
+ 
+   <target name="get-deps" description="download JAR dependencies">
+      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <downloadMacro name="${jar.cayenne}" path="org.objectstyle.cayenne"/>
+      <downloadMacro name="${jar.codec}" path="commons-codec"/>
+      <downloadMacro name="${jar.collections}" path="commons-collections"/>
+      <downloadMacro name="${jar.concurrent}" path="concurrent"/>
+      <downloadMacro name="${jar.io}" path="commons-io"/>
+      <downloadMacro name="${jar.lang}" path="commons-lang"/>
+      <downloadMacro name="${jar.ognl}" path="ognl"/>
+      <downloadMacro name="${jar.upload}" path="commons-fileupload"/>
+      <downloadMacro name="${jar.hibernate}" path="org.hibernate"/>
+      <downloadMacro name="${jar.junit}" path="junit"/>
+      <downloadMacro name="${jar.servlet}" path="javax.servlet"/>
+      <downloadMacro name="${jar.spring-beans}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-context}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-core}" path="org.springframework"/>
+      <downloadMacro name="${jar.spring-web}" path="org.springframework"/>
+      <ant antfile="build.xml" 
+           dir="examples"
+           target="get-deps" 
+           inheritall="false"/>   	
+   </target>
+
+   
+   <target name="get-deps-proxy" description="download JAR dependencies">
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+      <antcall target="get-deps"/>
+   </target>
+
+
+   <target name="help" description="display the Help message">
+      <echo message="Click ${version} web application framework"/>
+      <echo message="===================================="/> 
+      <echo/>  
+      <echo message="Main targets:"/> 
+      <echo/>    
+      <echo message="build-all             build framework, extras, examples"/>
+      <echo message="build-distribution    build distribution ZIP file"/>
+      <echo message="build-examples        build click-examples WAR file"/> 
+      <echo message="build-extras          build click-extras JAR file"/> 
+      <echo message="build-framework       build click framework JAR file"/> 
+      <echo message="build-maven-bundles   build Maven repository upload bundles"/>
+      <echo message="build-sources         build source ZIP files for use with IDEs"/>
+      <echo message="checkstyle            run checkstyle report on Java source"/>       
+      <echo message="deploy-examples       copy click-examples WAR file to app server"/>
+      <echo message="get-deps              download JAR dependencies"/>  
+      <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
+      <echo message="help                  display the Help message"/>  
+      <echo message="javadoc               create Javadoc HTML files"/>
+      <echo/>
+      <echo/>  
+      <echo message="Please ensure you have configured build.properties"/> 
+      <echo/>  
+   </target>  
+
+	
+   <target name="javadoc" description="create Javadoc HTML files">
+      <!-- Framework -->
+      <delete quiet="false" failonerror="false">
+         <fileset dir="documentation/docs/click-api" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="framework/src"
+               destdir="documentation/docs/click-api"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Framework API"
+               doctitle="Click API">
+         <classpath refid="classpath.framework"/>
+         <packageset dir="framework/src">
+           <include name="net/**"/>
+           <exclude name="org/**"/>
+         </packageset>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+         <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+      </javadoc>
+      <copy file="framework/src/net/sf/click/control/image-submit.gif"
+            todir="documentation/docs/click-api/net/sf/click/control"/>
+      <!-- Extras -->
+      <delete quiet="false" failonerror="false">
+          <fileset dir="documentation/docs/extras-api" includes="**/*"/>
+      </delete>
+      <javadoc sourcepath="extras/src"
+               destdir="documentation/docs/extras-api"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Extras API"
+               doctitle="Click Extras API">
+         <classpath refid="classpath.extras"/>
+         <packageset dir="extras/src">
+            <include name="net/**"/>
+         </packageset>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
+         <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
+         <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
+      </javadoc>
+      <copy file="documentation/images/post-sequence-diagram.png"
+          todir="documentation/docs/click-api/net/sf/click/"/>
+      <copy file="documentation/images/control-post-sequence-diagram.png"
+            todir="documentation/docs/click-api/net/sf/click/"/>
+      <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
+            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/form-table.png"
+            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/link-decorator.png"
+          todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/tabbed-form.png"
+            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/table.png"
+            todir="documentation/docs/click-api/net/sf/click/control"/>
+      <copy file="framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="documentation/docs/click-api"/>
+      <copy file="framework/stylesheet.css"  
+            overwrite="true"
+            todir="documentation/docs/extras-api"/>
+      <copy file="framework/stylesheet.css"
+      	    overwrite="true"
+            todir="documentation/docs/servlet-api"/>
+   </target>
+
+   
+   <target name="test-framework">
+      <copy todir="framework/classes">
+         <fileset dir="framework/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <copy todir="framework/classes">
+         <fileset dir="framework/test">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="framework/src;framework/test;extras/src;mock/src" 
+             destdir="framework/classes" 
+             debug="true">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes" todir="framework/test">
+            <fileset dir="framework/test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
+      <delete>
+        <fileset dir="framework/test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+   
+   <target name="test-extras">
+      <copy todir="extras/classes">
+         <fileset dir="framework/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <copy todir="extras/classes">
+         <fileset dir="extras/test">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <copy todir="extras/classes">
+         <fileset dir="extras/test">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="framework/src;extras/src;extras/test;mock/src" 
+             destdir="extras/classes" 
+             debug="true">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.extras"/>
+         <classpath refid="classpath.test"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes" todir="extras/test">
+            <fileset dir="extras/test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
+      <delete>
+        <fileset dir="extras/test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+   
+   <target name="test-all" depends="test-framework, test-extras"/>
+   
+</project>

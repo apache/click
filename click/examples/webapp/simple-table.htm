@@ -1,0 +1,29 @@
+Servlet Container System Properties:
+<p/>
+
+<style type="text/css">
+th { color: white; }
+</style>
+
+<table border="0" cellpadding="2" cellspacing="0">
+   
+  <tr valign="baseline" bgcolor="navy">
+   
+    <th class="left-column"> Name </th>
+    
+    <th class="right-column"> Value </th>
+    
+  </tr>
+
+#foreach( $key in $properties.keySet() )
+  <tr #if($velocityCount % 2 == 0) bgcolor="#f7f7e7" #end> 
+
+    <td class="left-column"> $key </td> 
+    
+    <td class="right-column"> $properties.get($key) </td>
+    
+  </tr>
+#end
+
+</table>
+

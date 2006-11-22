@@ -1,0 +1,24 @@
+<html>
+<head>	
+<title>Click Examples - $title</title>
+<link type="text/css" rel="stylesheet" href="$context/style.css"></link>
+<link type="text/css" rel="stylesheet" href="$context/menu/menu.css"></link>
+$imports
+#if ($headInclude) #parse($headInclude) #end
+</head>
+<body #if($bodyOnload) onload="$bodyOnload" #end>
+ 	
+  <div id="header">
+    <a id="clickLink" target="blank" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0"/></a>
+  	<span id="title">$title</span>
+  	<a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
+  </div>
+
+  #writeTemplateMenu()
+
+  <div id="container">
+    #parse($path)
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!-- The Menu (menu.xml) Document Type Definition. -->
+<!ELEMENT menu (menu*)>
+    <!ATTLIST menu label CDATA #IMPLIED>
+    <!ATTLIST menu path CDATA #IMPLIED>
+    <!ATTLIST menu title CDATA #IMPLIED>
+    <!ATTLIST menu roles CDATA #IMPLIED>
+    <!ATTLIST menu pages CDATA #IMPLIED>
+
+  
+  
+  

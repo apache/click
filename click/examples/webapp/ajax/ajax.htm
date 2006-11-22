@@ -1,0 +1,76 @@
+This <a target="blank" class="external" href="http://en.wikipedia.org/wiki/AJAX">AJAX</a> example pulls the customer details for the selected customer and shows the
+results without refreshing the page.
+
+Please select one of the customers:
+<p/>
+
+<table cellspacing="8" cellpadding="8">
+   <tr>
+      <td> $customerSelect </td>
+      <td> <div id="customerDetails"/> </td>
+   </tr>
+</table>
+
+<p>&nbsp;</p>
+
+The <a target="blank" class="external" href="http://openrico.org/home.page">Rico</a> JavaScript
+library is used in this example. Please also see the 
+<a target="blank" class="external" href="http://openrico.org/docs/RicoAjaxEngine.pdf">RicoAjaxEngine</a>
+for a good tutorial.
+<p/>
+This HTML page contains a customer Select control 
+and a &lt;div id='<span class="st">customerDetails</span>'/&gt; element:
+
+<pre class="codeHtml">
+&lt;table cellspacing="8" cellpadding="8">
+   &lt;tr>
+      &lt;td> &lt;select name="customerSelect" onclick="<span class="red">onCustomerChange</span>(this);"&gt;...&lt;/select&gt; &lt;/td>
+      &lt;td> &lt;div id="<span class="st">customerDetails</span>"/> &lt;/td>
+   &lt;/tr>
+&lt;/table>
+</pre>
+
+<p/>
+When you click on the select a HTTP request (e.g. <tt>GET ajax-customer.htm?customerId=4424</tt>)
+is made to the 
+<a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/ajax/AjaxCustomer.java">AjaxCustomer</a>
+page to get the customers details. These details are returned as XML/HTML with a content-type of 'text/xml':
+<pre class="codeHtml">
+&lt;ajax-response&gt;
+  &lt;response type="element" id="<span class="st">customerDetails</span>"&gt;
+    <i>HTML content...</i>
+  &lt;/response&gt;
+&lt;/ajax-response&gt;
+</pre>
+
+The Rico ajaxEngine then sets the inner text of the page's registered
+&lt;div id='<span class="st">customerDetails</span>'/&gt; element with the XML content of the 
+<span style="white-space:no-wrap;">&lt;response id="<span class="st">customerDetails</span>"&gt;</span> element. Note these element
+ids must match.
+<p/>
+The Rico ajaxEngine is initialised through the JavaScript page body onload function:
+
+<pre class="codeHtml">
+&lt;head&gt;
+...
+&lt;script type='text/javascript' src='<a href="prototype.js">prototype.js</a>'&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src='<a href="rico.js">rico.js</a>'&gt;&lt;/script&gt;
+&lt;script type='text/javascript'&gt;
+function <span class="maroon">registerAjax</span>() {
+   ajaxEngine.registerRequest('<span class="green">getCustomerInfo</span>', '<a href="$context/source-viewer.htm?filename=ajax/ajax-customer.htm">ajax-customer.htm</a>');
+   ajaxEngine.registerAjaxElement('<span class="st">customerDetails</span>');
+}
+
+function <span class="red">onCustomerChange</span>(select) {
+   ajaxEngine.sendRequest('<span class="green">getCustomerInfo</span>', 'customerId=' + select.value);
+}
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="<span class="maroon">registerAjax</span>();"&gt;
+...
+</pre>
+
+The initialization code above is contained in the 
+<a href="$context/source-viewer.htm?filename=ajax/ajax-head.htm">ajax-head.htm</a> file.
+Note when including the JavaScript prototype.js and rico.js files, ensure prototype.js is before rico.js
+as rico is dependent upon prototype. 

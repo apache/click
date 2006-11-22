@@ -1,0 +1,28 @@
+body {
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
+}
+
+h2.title {
+	color: white; 
+	font-size: 28px;
+	left: 15px;
+	margin-top: 0px;
+	position: absolute;
+	top: 12px;
+}
+
+#header {
+	background: #FDE3B5 url(/click-quickstart/banner.png) top left no-repeat;
+	height: 60px;
+	position: relative;
+	width: 100%;
+}
+
+#container { 
+	padding-top: 1em;
+	padding-left: 1.5em;
+	position: relative;
+	z-index: 0;
+}

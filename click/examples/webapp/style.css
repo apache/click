@@ -1,0 +1,231 @@
+body {
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
+}
+
+#clickLink {
+	margin-top: 0px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+}
+
+#title {
+	color: black; 
+	font-weight: bold;
+	font-size: 20pt;
+	position: absolute;
+	top: 8px;
+	left: 55px;
+}
+
+#homeTitle {
+	color: black; 
+	font-weight: bold;
+	font-size: 20pt;
+	position: absolute;
+	top: 8px;
+	left: 40px;
+}
+
+#hostedTitle {
+	color: #d0d0d0; 
+	font-size: 8pt;
+	text-decoration: none;
+	position: absolute;
+	top: 28px;
+	right: 10px;
+}
+
+#header {
+	background: #4A70BC url(/click-examples/images/banner.png) top left no-repeat;
+	height: 50px;
+	position: relative;
+	width: 100%;
+}
+
+#container { 
+	padding-top: 1.5em;
+	padding-left: 1.5em;
+	position: relative;
+	z-index: 0;
+}
+
+
+.menuTable {
+	color: white;
+	background-color: #08108F; 
+	width: 100%;
+}
+
+span.msg {
+	font-style: italic;
+	color: blue;
+	margin-left: 1em;
+}
+
+a.external {
+	background: url(images/external.png) center right no-repeat;
+	padding-right: 14px;
+}
+
+body, table, p {
+	font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
+	font-size: 12px;
+}
+
+a:visited {
+	color: blue;
+}
+
+.menu {
+	color: white;
+	text-decoration: none;
+}
+
+.menu:visited {
+	color: white;
+}
+
+.menu:hover {
+	color: yellow;
+}
+
+.flash {
+	color: blue;
+	font-style: italic;
+	margin-left:1em;
+}
+
+h1  { 
+	font-size: 24px;
+	font-weight: bold;
+}
+
+td {
+	white-space: nowrap; 
+}
+
+tr.titleBar {
+	background-color: black;
+	color: white;
+}
+
+td.titleText {
+	font-weight: bold;
+	letter-spacing: 0.2em; 
+	margin: 2px 2px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	text-decoration: none;
+}
+
+dt {
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+	margin-left: 1em;
+	margin-right: 1em;
+}
+
+.left-column {
+	text-align: right; 
+	padding-right: 0.5em;
+}
+
+.right-column {
+	text-align: left; 
+	padding-left: 0.5em;
+}
+
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
+	font-family: Courier New, courier;
+	font-size: 10pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeJava {
+	font-family: Courier New, courier;
+	border: 1px solid #AAAAAA;
+	background-color: white;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+.red { color: red; }
+
+.green { color: green; }
+
+.blue { color: blue; }
+
+.maroon { color: maroon; }
+
+.navy { color: navy; }
+
+/* Tabbed Form */
+table.tf_tab { 
+	border-collapse: collapse; 
+}
+td.tf_separator { 
+	border-bottom: 1px solid #336699; 
+}
+td.tf_tab { 
+	border-left: 1px solid #336699; 
+	border-top: 1px solid #336699; 
+	border-right: 1px solid #336699;  
+	border-bottom: 1px solid #336699; 
+	padding: 5px; 
+	white-space: nowrap;
+	text-decoration: none;
+}
+td.tf_sheet {
+	border-left: 1px solid #336699; 
+	border-right: 1px solid #336699;  
+	border-bottom: 1px solid #336699;
+	vertical-align: top;
+	padding: 0.75em; 
+}
+td.tf_error {
+    color: red;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    padding-left: 0.5em;
+}
