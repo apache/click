@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.AbstractLink;
+import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Decorator;
 import net.sf.click.control.Table;
@@ -106,6 +107,9 @@ public class LinkDecorator implements Decorator {
     /** The array of AbstractLinks to render. */
     protected AbstractLink[] linksArray;
 
+    /** The array of ActionButtons to render. */
+    protected ActionButton[] buttonsArray;
+
     /** The link separator string, default value is <tt>" | "</tt>. */
     protected String linkSeparator = " | ";
 
@@ -166,6 +170,61 @@ public class LinkDecorator implements Decorator {
         table.addControl(new LinkDecorator.PageNumberControl(table));
     }
 
+    /**
+     * Create a new AbstractLink table column Decorator with the given
+     * ActionButton and row object identifier property name.
+     * The default linkSeparator for buttons is <tt>" "</tt>.
+     *
+     * @param table the table to render the links for
+     * @param button the ActionButton to render
+     * @param idProperty the row object identifier property name
+     */
+    public LinkDecorator(Table table, ActionButton button, String idProperty) {
+        if (table == null) {
+            throw new IllegalArgumentException("Null table parameter");
+        }
+        if (button == null) {
+            throw new IllegalArgumentException("Null button parameter");
+        }
+        if (idProperty == null) {
+            throw new IllegalArgumentException("Null idProperty parameter");
+        }
+        this.table = table;
+        this.buttonsArray = new ActionButton[1];
+        this.buttonsArray[0] = button;
+        this.idProperty = idProperty;
+        this.linkSeparator = " ";
+
+        table.addControl(new LinkDecorator.PageNumberControl(table));
+    }
+
+    /**
+     * Create a new AbstractLink table column Decorator with the given
+     * ActionButtons array and row object identifier property name.
+     * The default linkSeparator for buttons is <tt>" "</tt>.
+     *
+     * @param table the table to render the links for
+     * @param buttons the array of ActionButtons to render
+     * @param idProperty the row object identifier property name
+     */
+    public LinkDecorator(Table table, ActionButton[] buttons, String idProperty) {
+        if (table == null) {
+            throw new IllegalArgumentException("Null table parameter");
+        }
+        if (buttons == null) {
+            throw new IllegalArgumentException("Null buttons parameter");
+        }
+        if (idProperty == null) {
+            throw new IllegalArgumentException("Null idProperty parameter");
+        }
+        this.table = table;
+        this.buttonsArray = buttons;
+        this.idProperty = idProperty;
+        this.linkSeparator = " ";
+
+        table.addControl(new LinkDecorator.PageNumberControl(table));
+    }
+
     // ------------------------------------------------------ Public Properties
 
     /**
@@ -189,7 +248,7 @@ public class LinkDecorator implements Decorator {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Render the given row object using the links.
+     * Render the given row object using the links or buttons.
      *
      * @see Decorator#render(java.lang.Object, net.sf.click.Context)
      *
@@ -198,6 +257,29 @@ public class LinkDecorator implements Decorator {
      * @return the rendered links for the given row object and request context
      */
     public String render(Object row, Context context) {
+
+        if (linksArray != null) {
+            return renderActionLinks(row, context);
+
+        } else if (buttonsArray != null) {
+            return renderActionButtons(row, context);
+
+        } else {
+            // Should never occur
+            throw new IllegalStateException("No ActionLinks or ActionButtons defined");
+        }
+    }
+
+    // ----------------------------------------------------- Protected Methods
+
+    /**
+     * Render the given row object using the actionLinks array.
+     *
+     * @param row the row object to render
+     * @param context the request context
+     * @return the rendered links for the given row object and request context
+     */
+    public String renderActionLinks(Object row, Context context) {
         if (ognlContext == null) {
             ognlContext = new HashMap();
         }
@@ -264,6 +346,73 @@ public class LinkDecorator implements Decorator {
             return buffer.toString();
         }
     }
+
+    /**
+     * Render the given row object using the actionButtons array.
+     *
+     * @param row the row object to render
+     * @param context the request context
+     * @return the rendered buttons for the given row object and request context
+     */
+    public String renderActionButtons(Object row, Context context) {
+        if (ognlContext == null) {
+            ognlContext = new HashMap();
+        }
+
+        if (buttonsArray.length == 1) {
+            ActionButton button = buttonsArray[0];
+            button.setContext(context);
+
+            try {
+                Object value = Ognl.getValue(idProperty, ognlContext, row);
+                button.setValueObject(value);
+
+            } catch (OgnlException ognle) {
+                throw new RuntimeException(ognle);
+            }
+
+            button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+            if (table.getSortedColumn() != null) {
+                button.setParameter(Table.COLUMN, table.getSortedColumn());
+            }
+
+            return button.toString();
+
+        } else {
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+            try {
+                Object value = Ognl.getValue(idProperty, ognlContext, row);
+
+                for (int i = 0; i < buttonsArray.length; i++) {
+                    ActionButton button = buttonsArray[i];
+                    button.setContext(context);
+
+                     button.setValueObject(value);
+
+                    button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+                    if (table.getSortedColumn() != null) {
+                        button.setParameter(Table.COLUMN, table.getSortedColumn());
+                    }
+
+                    if (i > 0) {
+                        buffer.append(getLinkSeparator());
+                    }
+
+                    buffer.append(button.toString());
+                }
+
+            } catch (OgnlException ognle) {
+                throw new RuntimeException(ognle);
+            }
+
+            return buffer.toString();
+        }
+    }
+
+    // --------------------------------------------------------- Inner Classes
 
     /**
      * Add page number control for setting the table page number.
