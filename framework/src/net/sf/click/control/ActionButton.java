@@ -15,6 +15,13 @@
  */
 package net.sf.click.control;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.ClickUtils;
@@ -68,6 +75,10 @@ public class ActionButton extends Button {
 
     /** The button is clicked. */
     protected boolean clicked;
+
+
+    /** The link parameters map. */
+    protected Map parameters;
 
     // ----------------------------------------------------------- Constructors
 
@@ -201,11 +212,28 @@ public class ActionButton extends Button {
         buffer.append(ACTION_BUTTON);
         buffer.append("=");
         buffer.append(getName());
+
         if (value != null) {
             buffer.append("&");
             buffer.append(VALUE);
             buffer.append("=");
             buffer.append(ClickUtils.encodeUrl(value, getContext()));
+        }
+
+        if (hasParameters()) {
+            Iterator i = getParameters().keySet().iterator();
+            while (i.hasNext()) {
+                String name = i.next().toString();
+                if (!name.equals(ACTION_BUTTON) && !name.equals(VALUE)) {
+                    Object paramValue = getParameters().get(name);
+                    String encodedValue
+                        = ClickUtils.encodeUrl(paramValue, getContext());
+                    buffer.append("&");
+                    buffer.append(name);
+                    buffer.append("=");
+                    buffer.append(encodedValue);
+                }
+            }
         }
 
         return "javascript:document.location.href='"
@@ -220,6 +248,80 @@ public class ActionButton extends Button {
      */
     public String getOnClick() {
         return getOnClick(getValueObject());
+    }
+
+
+    /**
+     * Return the button request parameter value for the given name, or null if
+     * the parameter value does not exist.
+     *
+     * @param name the name of request parameter
+     * @return the button request parameter value
+     */
+    public String getParameter(String name) {
+        if (hasParameters()) {
+            return (String) getParameters().get(name);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the button parameter with the given parameter name and value.
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     * @throws IllegalArgumentException if name parameter is null
+     */
+    public void setParameter(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getParameters().put(name, value);
+        } else {
+            getParameters().remove(name);
+        }
+    }
+
+    /**
+     * Return the ActionButton parameters Map.
+     *
+     * @return the ActionButton parameters Map
+     */
+    public Map getParameters() {
+        if (parameters == null) {
+            parameters = new HashMap(4);
+        }
+        return parameters;
+    }
+
+    /**
+     * Return true if the ActionButton has parameters or false otherwise.
+     *
+     * @return true if the ActionButton has parameters on false otherwise
+     */
+    public boolean hasParameters() {
+        if (parameters != null && !parameters.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns the ActionButton value if the action link was processed and has
+     * a value, or null otherwise.
+     *
+     * @return the ActionButton value if the ActionButton was processed
+     */
+    public String getValue() {
+        if (hasParameters()) {
+            return (String) getParameters().get(VALUE);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -264,6 +366,35 @@ public class ActionButton extends Button {
         }
     }
 
+    /**
+     * Set the ActionButton value.
+     *
+     * @param value the ActionButton value
+     */
+    public void setValue(String value) {
+        getParameters().put(VALUE, value);
+    }
+
+    /**
+     * Return the value of the ActionButton.
+     *
+     * @return the value of the ActionButton
+     */
+    public Object getValueObject() {
+        return getParameters().get(VALUE);
+    }
+
+    /**
+     * Set the value of the field using the given object.
+     *
+     * @param object the object value to set
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            setValue(object.toString());
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -284,7 +415,15 @@ public class ActionButton extends Button {
             getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
-            setValue(getContext().getRequestParameter(VALUE));
+            HttpServletRequest request = getContext().getRequest();
+
+            Enumeration paramNames = request.getParameterNames();
+
+            while (paramNames.hasMoreElements()) {
+                String name = paramNames.nextElement().toString();
+                String value = request.getParameter(name);
+                getParameters().put(name, value);
+            }
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
