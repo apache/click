@@ -9,7 +9,6 @@
    <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
-   <property name="jar.concurrent" value="concurrent-1.3.4.jar"/>
    <property name="jar.hibernate" value="hibernate-3.1.3.jar"/>
    <property name="jar.io" value="commons-io-1.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
@@ -78,7 +77,6 @@
       <pathelement location="framework/classes"/>
       <pathelement location="lib/${jar.codec}"/>
       <pathelement location="lib/${jar.collections}"/>
-      <pathelement location="lib/${jar.concurrent}"/>
       <pathelement location="lib/${jar.io}"/>
       <pathelement location="lib/${jar.lang}"/>
       <pathelement location="lib/${jar.ognl}"/>
@@ -140,7 +138,6 @@
             <exclude name="lib/${jar.cayenne}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
-            <exclude name="lib/${jar.concurrent}"/>
             <exclude name="lib/${jar.hibernate}"/>
             <exclude name="lib/${jar.io}"/>
             <exclude name="lib/${jar.lang}"/>
@@ -240,7 +237,6 @@
       <!-- With Dependencies -->
       <unzip src="lib/${jar.codec}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
-      <unzip src="lib/${jar.concurrent}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
       <unzip src="lib/${jar.ognl}" dest="${dir.classes}"/> 
@@ -339,7 +335,6 @@
       <downloadMacro name="${jar.cayenne}" path="org.objectstyle.cayenne"/>
       <downloadMacro name="${jar.codec}" path="commons-codec"/>
       <downloadMacro name="${jar.collections}" path="commons-collections"/>
-      <downloadMacro name="${jar.concurrent}" path="concurrent"/>
       <downloadMacro name="${jar.io}" path="commons-io"/>
       <downloadMacro name="${jar.lang}" path="commons-lang"/>
       <downloadMacro name="${jar.ognl}" path="ognl"/>
