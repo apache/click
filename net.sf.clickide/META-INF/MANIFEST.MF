@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %plugin.name
 Bundle-SymbolicName: net.sf.clickide; singleton:=true
-Bundle-Version: 1.4.1
+Bundle-Version: 1.5.0
 Bundle-Activator: net.sf.clickide.ClickPlugin
 Bundle-Vendor: %plugin.provider
 Bundle-Localization: plugin
