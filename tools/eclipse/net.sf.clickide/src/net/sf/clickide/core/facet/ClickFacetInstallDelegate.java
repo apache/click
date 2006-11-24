@@ -30,7 +30,7 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
 /**
  * Installs the click facet.
  * <ol>
- *   <li>Copies click-x.xx.jar and click-extras-x.xx.jar into WEB-INF/lib.</li>
+ *   <li>Copies click-x.x.jar and click-extras-x.x.jar into WEB-INF/lib.</li>
  *   <li>Copies click.xml into WEB-INF.</li>
  *   <li>Adds servlet and servlet-mapping to web.xml.</li>
  *   <li>Adds <code>ClickProjectNature</code> to the project.</li>
@@ -39,11 +39,11 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
  */
 public class ClickFacetInstallDelegate implements IDelegate {
 	
-	private static String CLICK_DIR = "click-1.0";
+	private static String CLICK_DIR = "click-1.1";
 	
 	private static final String[] COPY_FILES = {
-		"/lib/click-1.0.jar",
-		"/lib/click-extras-1.0.jar",
+		"/lib/click-1.1.jar",
+		"/lib/click-extras-1.1.jar",
 		"/click.xml",
 	};
 	

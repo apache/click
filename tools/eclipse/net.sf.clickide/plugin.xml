@@ -14,20 +14,20 @@
       <description>Click Description</description>
     </project-facet>
 
-    <project-facet-version facet="click" version="1.0">
+    <project-facet-version facet="click" version="1.1">
        <constraint>
         <and>
-          <requires facet="jst.web" version="[2.3"/>
+          <requires facet="jst.web" version="[2.4"/>
         </and>
       </constraint>
     </project-facet-version> 
     
-    <action type="install" facet="click" version="1.0">
+    <action type="install" facet="click" version="1.1">
       <delegate class="net.sf.clickide.core.facet.ClickFacetInstallDelegate"/>
       <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider"/>
     </action>
     
-	<action type="uninstall" facet="click" version="1.0">
+	<action type="uninstall" facet="click" version="1.1">
       <delegate class="net.sf.clickide.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
@@ -35,7 +35,7 @@
   <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
     <supported>
       <runtime-component any="true"/>
-      <facet id="click" version="1.0"/>
+      <facet id="click" version="1.1"/>
     </supported>
   </extension>
    
