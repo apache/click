@@ -5,7 +5,7 @@
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <meta name="description" lang="en" content="Click Java web application framework"/>
- <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source "/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
   <style type="text/css">
@@ -15,7 +15,7 @@
  </style>
 </head>
 <body>
-  
+
 <h1>Configuration</h1>
 <p/>
 This section discusses how to setup configure a Click web application and
@@ -112,7 +112,15 @@ A simple Click app config file is provided below:
 
 <pre class="codeConfig">
 &lt;click-app&gt; 
-  &lt;pages&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>"/&gt;
+&lt;/click-app&gt; 
+</pre>
+
+Alternatively Page classes can be mapped mannually to page paths:
+
+<pre class="codeConfig">
+&lt;click-app&gt; 
+  &lt;pages automapping="<span class="blue">false</span>"&gt;
     &lt;page path="<span class="navy">home.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
     &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
     &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
@@ -122,34 +130,21 @@ A simple Click app config file is provided below:
 &lt;/click-app&gt; 
 </pre>
 
-<p>
-Alternatively these pages can be automatically configured using page auto mapping:
 
-<pre class="codeConfig">
-&lt;click-app&gt; 
-  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"/&gt;
-&lt;/click-app&gt; 
-</pre>
 
 <p/>
 An example of a fully optioned up config file is:
 
 <pre class="codeConfig">
 &lt;click-app charset="UTF-8" locale="de"&gt; 
-  &lt;pages&gt;
-    &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
-    &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
-    &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
-    &lt;page path="<span class="navy">search.htm</span>" classname="<span class="maroon">com.mycorp.page.Search</span>"/&gt;
-    &lt;page path="<span class="navy">results.htm</span>" classname="<span class="maroon">com.mycorp.page.Results</span>"/&gt;
+  &lt;pages package="<span class="">com.mycorp.page</span>"&gt;
+    &lt;page path="<span class="">index.htm</span>" classname="<span class="">com.mycorp.page.Home</span>"/&gt;
   &lt;/pages&gt;
   &lt;headers&gt;
-    &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-    &lt;header name="<span class="blue">Cache-Control</span>" 
-            value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
+    &lt;header name="<span class="">Pragma</span>" value="<span class="">no-cache</span>"/&gt;
   &lt;/headers&gt;
-  &lt;format classname="<span class="maroon">com.mycorp.util.Format</span>"/&gt;
-  &lt;mode value="<span class="blue">debug</span>"/&gt;
+  &lt;format classname="<span class="">com.mycorp.util.Format</span>"/&gt;
+  &lt;mode value="<span class="">debug</span>"/&gt;
 &lt;/click-app&gt; 
 </pre>
 
@@ -200,7 +195,7 @@ which defines the list of Click pages.
 <pre class="codeDtd">
 &lt;!ELEMENT <span class="blue">pages</span> (<span class="red">page</span>*)&gt; 
    &lt;!ATTLIST pages <span class="blue">package</span> CDATA #IMPLIED&gt;
-   &lt;!ATTLIST pages <span class="blue">automapping</span> (true|false) "false"&gt; 
+   &lt;!ATTLIST pages <span class="blue">automapping</span> (true|false) "true"&gt; 
 </pre>
 
 The pages element can specify a default <span class="blue">package</span>
@@ -238,11 +233,11 @@ and the web app is restarted.
 
 <a name="application-automapping" class="heading"><h4>Page Automapping</h4></a>
 
-The pages automapping option will automatically configure application pages using a
+Page automapping will automatically configure application pages using a
 simple set of rules. This enables you to greatly streamline your configuration file
 as you only need to define pages which don't fit the automapping rules.
 <p/>
-Automapping will attempt to associate each page template (*.htm) file in the web
+Automapping will attempt to associate each page template (*.htm) and JSP file in the web
 application (excluding those under the WEB-INF and click directories) to a Page class.
 Automapped pages are loaded after the manually defined pages are loaded, and 
 manually defined pages taking preference. When automapping is enabled the Click 
@@ -261,7 +256,7 @@ For example given a page path to class mapping:
 This would be defined configured mannually using the package prefix as:
 <pre class="codeConfig">
 &lt;click-app&gt;
-  &lt;pages package="<span class="maroon">com.mycorp.page</span>"&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">false</span>"&gt;
     &lt;page path="<span class="navy">index.htm</span>"                    classname="<span class="maroon">Home</span>"/&gt;
     &lt;page path="<span class="navy">search.htm</span>"                   classname="<span class="maroon">Search</span>"/&gt;
     &lt;page path="<span class="navy">contacts/contacts.htm</span>"        classname="<span class="maroon">contacts.Contacts</span>"/&gt;
@@ -276,7 +271,7 @@ Using automapping you only need to define the Home page which doesn't automatica
 map to index.html.
 <pre class="codeConfig">
 &lt;click-app&gt;
-  &lt;pages package="<span class="maroon">com.mycorp.page</span>" automapping="<span class="blue">true</span>"&gt;
+  &lt;pages package="<span class="maroon">com.mycorp.page</span>"&gt;
     &lt;page path="<span class="navy">index.htm</span>" classname="<span class="maroon">Home</span>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt; 
@@ -319,7 +314,7 @@ configure our pages automapping to exclude all <tt>.htm</tt> files under the
 
 <pre class="codeConfig">
 &lt;click-app&gt;
-  &lt;pages package="com.mycorp.page" automapping="true"&gt;
+  &lt;pages package="com.mycorp.page"&gt;
     &lt;<span class="blue">excludes</span> pattern="<span class="red">/tiny_mce/*</span>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt; 
@@ -330,7 +325,7 @@ separated notation. For example:
 
 <pre class="codeConfig">
 &lt;click-app&gt;
-  &lt;pages package="com.mycorp.page" automapping="true"&gt;
+  &lt;pages package="com.mycorp.page"&gt;
     &lt;<span class="blue">excludes</span> pattern="<span class="red">/dhtml/*, /tiny_mce/*, banner.htm, about.htm</span>"/&gt;
   &lt;/pages&gt;
 &lt;/click-app&gt; 
@@ -367,15 +362,26 @@ method.
 
 <h4>Browser Caching</h4>
 
-Headers are typically used to switch off browser caching. You can do this individually 
-in pages or for all application pages by setting header values. For example to switch off
+Headers are typically used to switch off browser caching. By default Click will
+use the following no caching header values if you don't define a <tt>headers</tt>
+element in your application:
+
+<pre class="codeConfig">
+  &lt;headers&gt;
+    &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
+    &lt;header name="<span class="blue">Cache-Control</span>" 
+            value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
+    &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
+  &lt;/headers&gt;
+</pre>
+
+Alternatively you can define you headers individually in pages or for all application 
+pages by setting headers values. For example to switch off
 caching in the login page, note the value for a Date type should be a long number value:
 
 <pre class="codeConfig">
 &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
-  &lt;header name="<span class="blue">Cache-Control</span>" 
-          value="<span class="blue">no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
 &lt;/page&gt; 
 </pre>
@@ -448,6 +454,15 @@ following mode element:
 &lt;/click-app&gt; 
 </pre>
 
+The application mode configuration can be overridden by setting the system 
+property <tt>"click.mode"</tt>. This can be use in the scenario of debugging
+a problem on a production system, where you change the mode to <tt>trace</tt>
+by setting the following system property and restarting the application.
+
+<pre class="codeConfig">
+-Dclick.mode=trace
+</pre>
+
 The Click Application modes and their settings for Page auto loading, 
 Velocity caching, template loading on startup and logging levels are:
 <p>
@@ -456,7 +471,6 @@ Velocity caching, template loading on startup and logging levels are:
  <th align="center">Application mode</th>
  <th align="center">Page auto loading</th>
  <th align="center">Velocity caching</th>
- <th align="center">Message caching</th>
  <th align="center">Load templates on startup</th>
  <th align="center">Click logging level</th>
  <th align="center">Velocity logging level</th>
@@ -464,7 +478,6 @@ Velocity caching, template loading on startup and logging levels are:
 <tr>
  <td align="center"><tt><span class="blue">production</span></tt></td>
  <td align="center">No</td>
- <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">WARN</td>
@@ -475,14 +488,12 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center">No</td>
  <td align="center">Yes</td>
  <td align="center">Yes</td>
- <td align="center">Yes</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">development</span></tt></td>
  <td align="center">Yes</td>
- <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">INFO</td>
@@ -493,14 +504,12 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center">Yes</td>
  <td align="center">No</td>
  <td align="center">No</td>
- <td align="center">No</td>
  <td align="center">DEBUG</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">trace</span></tt></td>
  <td align="center">Yes</td>
- <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">TRACE</td>
@@ -543,12 +552,6 @@ Template reloading is useful for application development as you can edit page te
 a running application server and see the changes immediately. Note however, this 
 should <b>not</b> be used for production as Velocity can use a lot of memory when 
 introspecting templates and template reloading is significantly slower.
-
-<h4>Message Caching</h4>
-
-When Message Caching is enabled Page and Control messages will be lazy loaded
-and then cached. For more information about localized page and control messages 
-see <a href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a>.
 
 <a name="click-logging" class="heading"><h4>Click and Velocity Logging</h4></a>
 
@@ -678,14 +681,6 @@ If your application server has restricted permissions, you will need to package
 up these auto deployed files in your web applications WAR file. To do this you
 should run you application on a development machine without these restricted 
 permissions and then package up the deployed files.
-
-<h3>Control Deployment</h3>
-
-Controls can be registered to automatically deploy static resource on startup using
-their <a href="click-api/net/sf/click/Control.html#on-deploy">onDeploy()</a> method.
-<p/>
-Please see the <a href="#application-controls">Controls</a>
-topic for details on how to register controls for deployment.
 
 </body>
 </html>

@@ -69,13 +69,7 @@ Your <tt>click.xml</tt> file should contain:
 &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;click-app&gt; 
 
-  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
-
-  &lt;headers&gt;
-    &lt;header name="Pragma" value="no-cache"/&gt;
-    &lt;header name="Cache-Control" 
-            value="no-store, no-cache, must-revalidate, post-check=0, pre-check=0"/&gt;
-  &lt;/headers&gt;
+  &lt;pages package="com.quickstart.page"/&gt;
 
 &lt;/click-app&gt;  </pre>
 
@@ -121,7 +115,7 @@ You can obtain these files from the Click distribution <tt>dist</tt> directory.
 <a name="welcome" class="heading"><h2>Welcome File</h2></a>
 
 To ensure default application requests 
-(e.g. <span class="blue">http://localhost/mycorp/</span>)
+(e.g. <span class="blue">http://localhost/quickstart/</span>)
 are sent to your applications home page we will add a <tt>redirect.html</tt> file
 to the web root directory. This file should contain:
 
@@ -146,7 +140,7 @@ First we define a <tt>HomePage</tt> class, and ensure the class file is publishe
 to our web applications <tt>WEB-INF/classes</tt> directory:
 
 <pre class="codeJava">
-<span class="kw">package</span> com.mycorp.page;
+<span class="kw">package</span> com.quickstart.page;
 
 <span class="kw">import</span> net.sf.click.Page;
 
@@ -197,11 +191,11 @@ You should now have the following web files:
 </table>
 </blockquote>
 
-Now if your web application is deployed to the context path <span class="blue">mycorp</span>
+Now if your web application is deployed to the context path <span class="blue">quickstart</span>
 you should now be able to make the request:
 
 <blockquote>
- <span class="blue">http://localhost:8888/mycorp/</span>
+ <span class="blue">http://localhost:8080/quickstart/</span>
 </blockquote>
 
 Your browser should be redirected to your <tt>HomePage</tt> and you should see your page
@@ -252,7 +246,7 @@ Now we define a <tt>BorderPage</tt> class which specifies its template as the
 new <tt>border-template.htm</tt> file:
 
 <pre class="codeJava">
-<span class="kw">package</span> com.mycorp.page;
+<span class="kw">package</span> com.quickstart.page;
 
 <span class="kw">import</span> net.sf.click.Page;
 
@@ -273,7 +267,7 @@ Now we are going to modify our <tt>HomePage</tt> class to extend <tt>BorderPage<
 and define a <span class="blue">title</span> value.
 
 <pre class="codeJava">
-<span class="kw">package</span> com.mycorp.page;
+<span class="kw">package</span> com.quickstart.page;
 
 <span class="kw">public class</span> HomePage <span class="kw">extends</span> BorderPage {
 
@@ -326,7 +320,7 @@ logging add a mode value of "debug" to your <tt>click.xml</tt> file:
 &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;click-app&gt; 
 
-  &lt;pages package="com.mycorp.page" automapping="true"/&gt;
+  &lt;pages package="com.quickstart.page" automapping="true"/&gt;
 
   &lt;headers&gt;
     &lt;header name="Pragma" value="no-cache"/&gt;
@@ -342,7 +336,7 @@ When the Click application starts up it will write out the following logging mes
 <pre class="codeLog">
 [Click] [debug] automapped pages:
 [Click] [debug] /border-template.htm -> CLASS NOT FOUND
-[Click] [debug] /home.htm -> com.mycorp.page.HomePage
+[Click] [debug] /home.htm -> com.quickstart.page.HomePage
 [Click] [info ] initialized in debug mode  </pre>
 
 Click is telling us here that the <tt>border-template.htm</tt> template is not
@@ -354,7 +348,7 @@ our <tt>HomePage</tt> class. We are also informed that Click is running in
 When make a request to our home page we may get the following output:  
 
 <pre class="codeLog">
-[Click] [debug] GET http://localhost:8888/mycorp/home.htm
+[Click] [debug] GET http://localhost:8080/quickstart/home.htm
 [Click] [info ] renderTemplate: /home.htm,border-template.htm - 46 ms
 [Click] [info ] handleRequest:  /home.htm - 62 ms  </pre>
 
@@ -369,14 +363,14 @@ If you need more detailed debugging information change the application mode to
 <tt>trace</tt>. Now if we make the browser request:
 
 <blockquote>
- <span class="blue">http://localhost:8888/mycorp/home.htm?user=malcolm&amp;password=secret</span>
+ <span class="blue">http://localhost:8080/quickstart/home.htm?user=malcolm&amp;password=secret</span>
 </blockquote>
 
 We will see the request parameters logged. This can be very handy for debugging
 form posts.
 
 <pre class="codeLog">
-[Click] [debug] GET http://localhost:8888/mycorp/home.htm
+[Click] [debug] GET http://localhost:8080/quickstart/home.htm
 [Click] [trace]    <span class="yellow">password=secret</span>
 [Click] [trace]    <span class="yellow">user=malcolm</span>
 [Click] [info ] renderTemplate: /home.htm,border-template.htm - 0 ms
