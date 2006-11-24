@@ -17,6 +17,8 @@ This section discusses how to get a Click web application up quickly. This secti
 will not discuss how to configure your build system or IDE, but will focus on all 
 the basic pieces you need to get a Click application running.
 <p/>
+A Quick Start application is also included in the <a href="examples.html">Examples</a>.
+<p/>
 The following topics are covered:
 <ul>
   <li><a href="#web">Web Application Structure</a>
@@ -31,7 +33,7 @@ The following topics are covered:
   </li>
   <li><a href="#logging">Logging</a>
   </li>
-  <li><a href="#where">Whats Next ?</a>
+  <li><a href="#where">Whats Next</a>
   </li>
 </ul>
 
@@ -106,8 +108,8 @@ Your <tt>web.xml</tt> file should contain:
 Add the following JAR files to your application <tt>WEB-INF/lib</tt>:
 
 <ul>
-<li>click-1.0.jar</li>
-<li>click-extras-1.0.jar</li>
+<li>click-1.x.jar</li>
+<li>click-extras-1.x.jar</li>
 </ul>
 
 You can obtain these files from the Click distribution <tt>dist</tt> directory.
@@ -115,7 +117,7 @@ You can obtain these files from the Click distribution <tt>dist</tt> directory.
 <a name="welcome" class="heading"><h2>Welcome File</h2></a>
 
 To ensure default application requests 
-(e.g. <span class="blue">http://localhost/quickstart/</span>)
+(e.g. <span class="blue">http://localhost:8080/quickstart/</span>)
 are sent to your applications home page we will add a <tt>redirect.html</tt> file
 to the web root directory. This file should contain:
 
@@ -170,13 +172,31 @@ Next add a <span class="blue">style.css</span> file to your web root directory:
 
 <pre class="codeHtml">
 body {
-  font-family: Arial;
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
 }
-h2.title {
-  color: white; 
-  background-color: navy; 
-  padding: 0.25em; 
-  margin-top: 0em;
+
+#header {
+	background: #FDE3B5 url(/quickstart/banner.png) top left no-repeat;
+	height: 60px;
+	position: relative;
+	width: 100%;
+}
+
+#title {
+	color: white; 
+	font-size: 28px;
+	left: 15px;
+	position: absolute;
+	top: 12px;
+}
+
+#container { 
+	padding-top: 1em;
+	padding-left: 1.5em;
+	position: relative;
+	z-index: 0;
 } </pre>
 
 You should now have the following web files:
@@ -320,13 +340,8 @@ logging add a mode value of "debug" to your <tt>click.xml</tt> file:
 &lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;click-app&gt; 
 
-  &lt;pages package="com.quickstart.page" automapping="true"/&gt;
+  &lt;pages package="com.quickstart.page"/&gt;
 
-  &lt;headers&gt;
-    &lt;header name="Pragma" value="no-cache"/&gt;
-    &lt;header name="Cache-Control" value="no-store, no-cache, must-revalidate"/&gt;
-  &lt;/headers&gt;
-  
   &lt;mode value="<span class="blue">debug</span>"/&gt;
 
 &lt;/click-app&gt;  </pre>
