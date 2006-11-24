@@ -469,6 +469,9 @@ public class ClickUtils {
 	
 	/**
 	 * Returns the status of the auto mapping in the specified project.
+	 * <p>
+	 * <strong>Note:</strong> The auto-mapping mode has been available 
+	 * in default since Click 1.1.
 	 * 
 	 * @param project the project
 	 * @return true if the auto mapping is enable; false otherwise
@@ -481,10 +484,10 @@ public class ClickUtils {
 				Element pages = (Element)list.item(0);
 				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
 					String autoMapping = pages.getAttribute(ClickPlugin.ATTR_AUTO_MAPPING);
-					if("true".equals(autoMapping)){
-						return true;
+					if("false".equals(autoMapping)){
+						return false;
 					}
-					return false;
+					return true;
 				}
 			}
 		} catch(Exception ex){
@@ -493,7 +496,7 @@ public class ClickUtils {
 				model.releaseFromRead();
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	/**
