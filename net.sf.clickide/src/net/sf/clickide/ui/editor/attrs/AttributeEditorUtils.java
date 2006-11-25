@@ -14,6 +14,8 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.fieldassist.TextControlCreator;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -25,14 +27,18 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.fieldassist.ContentAssistField;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.w3c.dom.Element;
 
@@ -48,8 +54,12 @@ public class AttributeEditorUtils {
 		
 		Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		
-		final Text text = toolkit.createText(parent, "", SWT.BORDER);
+		Composite composite = createNullDecoratedPanel(parent);
+		final Text text = toolkit.createText(composite, "", SWT.BORDER);
+		
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
@@ -74,8 +84,12 @@ public class AttributeEditorUtils {
 		
 		toolkit.createLabel(parent, label);
 		
-		final Text text = toolkit.createText(parent, "", SWT.BORDER);
+		Composite composite = createNullDecoratedPanel(parent);
+		final Text text = toolkit.createText(composite, "", SWT.BORDER);
+		
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
 			if(initialValue!=null){
@@ -100,7 +114,9 @@ public class AttributeEditorUtils {
 		
 		toolkit.createLabel(parent, label);
 		
-		final Combo combo = new Combo(parent, SWT.READ_ONLY);
+		Composite composite = createNullDecoratedPanel(parent);
+		final Combo combo = new Combo(composite, SWT.READ_ONLY);
+		
 		for(int i=0;i<values.length;i++){
 			combo.add(values[i]);
 		}
@@ -110,6 +126,7 @@ public class AttributeEditorUtils {
 				combo.setText(initialValue);
 			}
 		}
+		
 		return combo;
 	}
 	
@@ -190,18 +207,18 @@ public class AttributeEditorUtils {
 		
 		
 		Composite composite = toolkit.createComposite(parent);
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginBottom = 0;
-		layout.marginTop = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		composite.setLayout(layout);
+		composite.setLayout(createGridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
-		final Text text = toolkit.createText(composite, "", SWT.BORDER);
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ContentAssistField field = new ContentAssistField(composite, SWT.BORDER,
+				new TextControlCreator(), new TextContentAdapter(), 
+				new TypeNameContentProposalProvider(project),
+				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS,
+				new char[0]);
+		
+		final Text text = (Text)field.getControl();
+		field.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		field.getLayoutControl().setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 		
 		if(element!=null){
 			String initialValue = element.getAttribute(attrName);
@@ -232,5 +249,38 @@ public class AttributeEditorUtils {
 		
 		return text;
 	}
-
+	
+	/**
+	 * Creates the <code>Composite</code> for the fields which don't need decoration.
+	 */
+	private static Composite createNullDecoratedPanel(Composite parent){
+		Composite composite = new Composite(parent, SWT.NULL);
+		GridLayout layout = createGridLayout();
+		layout.horizontalSpacing = 0;
+		layout.verticalSpacing = 0;
+		composite.setLayout(layout);
+		composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		Label space = new Label(composite, SWT.NULL);
+		GridData gd = new GridData();
+		gd.widthHint = 5;
+		space.setLayoutData(gd);
+		space.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		return composite;
+	}
+	
+	/**
+	 * Creates <code>GridLayout</code> that has no margin.
+	 */
+	private static GridLayout createGridLayout(){
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginBottom = 0;
+		layout.marginTop = 0;
+		layout.marginLeft = 0;
+		layout.marginRight = 0;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		return layout;
+	}
 }
