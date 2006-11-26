@@ -9,6 +9,9 @@ import java.util.StringTokenizer;
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.preferences.Template;
+import net.sf.clickide.ui.fieldassist.FieldAssistUtils;
+import net.sf.clickide.ui.fieldassist.PackageNameContentProposalProvider;
+import net.sf.clickide.ui.fieldassist.TypeNameContentProposalProvider;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -39,6 +42,8 @@ import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.fieldassist.TextControlCreator;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -60,8 +65,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.fieldassist.ContentAssistField;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 /**
  * <ul>
@@ -94,6 +101,8 @@ public class NewClickPageWizardPage extends WizardPage {
 	private String initialClassName;
 	private String initialPageName;
 	private boolean insertClassName = true;
+	private TypeNameContentProposalProvider typeAssistProvider = null;
+	private PackageNameContentProposalProvider packageAssistProvider = null;
 	
 	public NewClickPageWizardPage(String pageName, Object selection, 
 			String initialClassName, String initialPageName) {
@@ -135,8 +144,11 @@ public class NewClickPageWizardPage extends WizardPage {
 		
 		project = new Text(projectPanel, SWT.BORDER);
 		project.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
+		IJavaProject initProject = null;
+		
 		if(selection!=null){
-			IJavaProject initProject = ClickUtils.getJavaProject(selection);
+			initProject = ClickUtils.getJavaProject(selection);
 			try {
 				if(initProject!=null && initProject.getProject().hasNature(JavaCore.NATURE_ID)){
 					project.setText(initProject.getElementName());
@@ -156,6 +168,10 @@ public class NewClickPageWizardPage extends WizardPage {
 				validate();
 			}
 		});
+		
+		packageAssistProvider = new PackageNameContentProposalProvider(initProject);
+		typeAssistProvider = new TypeNameContentProposalProvider(initProject);
+		
 		ClickUtils.createLabel(projectPanel, ClickPlugin.getString("preferences.template") + ":");
 		template = new Combo(projectPanel, SWT.READ_ONLY);
 		for(int i=0;i<templates.size();i++){
@@ -271,7 +287,9 @@ public class NewClickPageWizardPage extends WizardPage {
 		});
 		
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.sourceFolder"));
-		sourceFolder = new Text(classGroup, SWT.BORDER);
+		Composite sourceField = FieldAssistUtils.createNullDecoratedPanel(classGroup, false);
+		sourceFolder = new Text(sourceField, SWT.BORDER);
+		sourceField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		sourceFolder.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		IPackageFragmentRoot root = ClickUtils.getSourceFolder(selection);
 		if(root!=null){
@@ -304,8 +322,12 @@ public class NewClickPageWizardPage extends WizardPage {
 		});
 		
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.package"));
-		packageName = new Text(classGroup, SWT.BORDER);
-		packageName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ContentAssistField packageField = new ContentAssistField(classGroup, SWT.BORDER,
+				new TextControlCreator(), new TextContentAdapter(), packageAssistProvider,
+				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS, new char[0]);
+		packageName = (Text)packageField.getControl();
+		packageField.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		
 		if(selection instanceof IPackageFragment){
 			packageName.setText(((IPackageFragment)selection).getElementName());
 		} else if(initPackage!=null && initPackage.length()!=0){
@@ -352,7 +374,9 @@ public class NewClickPageWizardPage extends WizardPage {
 		});
 		
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.classname"));
-		className = new Text(classGroup, SWT.BORDER);
+		Composite classField = FieldAssistUtils.createNullDecoratedPanel(classGroup, false);
+		className = new Text(classField, SWT.BORDER);
+		classField.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		className.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		if(initClassName!=null){
 			className.setText(initClassName);
@@ -366,8 +390,11 @@ public class NewClickPageWizardPage extends WizardPage {
 		ClickUtils.createLabel(classGroup, "");
 		
 		ClickUtils.createLabel(classGroup, ClickPlugin.getString("wizard.newPage.pageClassGroup.superclass"));
-		superClass = new Text(classGroup, SWT.BORDER);
-		superClass.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		ContentAssistField superClassField = new ContentAssistField(classGroup, SWT.BORDER,
+				new TextControlCreator(), new TextContentAdapter(), typeAssistProvider,
+				ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS, new char[0]);
+		superClass = (Text)superClassField.getControl();
+		superClassField.getLayoutControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		superClass.setText(settings.get(NewClickPageWizard.SUPERCLASS));
 		superClass.addModifyListener(new ModifyListener(){
 			public void modifyText(ModifyEvent e){
@@ -429,7 +456,11 @@ public class NewClickPageWizardPage extends WizardPage {
 	}
 	
 	private void validate(){
-		if(getProject()==null){
+		IProject project = getProject();
+		if(project!=null){
+			packageAssistProvider.setJavaProject(JavaCore.create(project));
+		}
+		if(project==null){
 			setMessage(ClickPlugin.getString("wizard.newPage.error.selectProject"), ERROR);
 			setPageComplete(false);
 			browsePackage.setEnabled(false);

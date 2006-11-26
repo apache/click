@@ -2,6 +2,8 @@ package net.sf.clickide.ui.editor.attrs;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.ui.fieldassist.FieldAssistUtils;
+import net.sf.clickide.ui.fieldassist.TypeNameContentProposalProvider;
 import net.sf.clickide.ui.wizard.NewClassWizard;
 import net.sf.clickide.ui.wizard.NewClickPageWizard;
 
@@ -22,13 +24,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
@@ -54,7 +54,7 @@ public class AttributeEditorUtils {
 		
 		Hyperlink link = toolkit.createHyperlink(parent, label, SWT.NULL);
 		
-		Composite composite = createNullDecoratedPanel(parent);
+		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Text text = toolkit.createText(composite, "", SWT.BORDER);
 		
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -84,7 +84,7 @@ public class AttributeEditorUtils {
 		
 		toolkit.createLabel(parent, label);
 		
-		Composite composite = createNullDecoratedPanel(parent);
+		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Text text = toolkit.createText(composite, "", SWT.BORDER);
 		
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -114,7 +114,7 @@ public class AttributeEditorUtils {
 		
 		toolkit.createLabel(parent, label);
 		
-		Composite composite = createNullDecoratedPanel(parent);
+		Composite composite = FieldAssistUtils.createNullDecoratedPanel(parent, true);
 		final Combo combo = new Combo(composite, SWT.READ_ONLY);
 		
 		for(int i=0;i<values.length;i++){
@@ -207,7 +207,7 @@ public class AttributeEditorUtils {
 		
 		
 		Composite composite = toolkit.createComposite(parent);
-		composite.setLayout(createGridLayout());
+		composite.setLayout(FieldAssistUtils.createGridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		ContentAssistField field = new ContentAssistField(composite, SWT.BORDER,
@@ -249,38 +249,5 @@ public class AttributeEditorUtils {
 		
 		return text;
 	}
-	
-	/**
-	 * Creates the <code>Composite</code> for the fields which don't need decoration.
-	 */
-	private static Composite createNullDecoratedPanel(Composite parent){
-		Composite composite = new Composite(parent, SWT.NULL);
-		GridLayout layout = createGridLayout();
-		layout.horizontalSpacing = 0;
-		layout.verticalSpacing = 0;
-		composite.setLayout(layout);
-		composite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		Label space = new Label(composite, SWT.NULL);
-		GridData gd = new GridData();
-		gd.widthHint = 5;
-		space.setLayoutData(gd);
-		space.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		return composite;
-	}
-	
-	/**
-	 * Creates <code>GridLayout</code> that has no margin.
-	 */
-	private static GridLayout createGridLayout(){
-		GridLayout layout = new GridLayout(2, false);
-		layout.marginBottom = 0;
-		layout.marginTop = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-		return layout;
-	}
+
 }
