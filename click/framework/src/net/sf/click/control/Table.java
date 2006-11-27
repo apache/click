@@ -369,8 +369,16 @@ public class Table implements Control {
     }
 
     /**
-     * Set the HTML class attribute.
-     *
+     * Set the HTML class attribute. Predefined table CSS classes include:
+     * <ul>
+     *  <li>isi</li>
+     *  <li>its</li>
+     *  <li>mars</li>
+     *  <li>nocol</li>
+     *  <li>report</li>
+     *  <li>simple</li>
+     * </ul>
+     * 
      * @param value the HTML class attribute
      */
     public void setClass(String value) {
