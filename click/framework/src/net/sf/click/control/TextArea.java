@@ -300,6 +300,10 @@ public class TextArea extends Field {
         } else if (isDisabled()) {
             buffer.appendAttribute("class", "disabled");
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
+
         buffer.closeTag();
 
         buffer.appendEscaped(getValue());
