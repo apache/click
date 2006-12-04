@@ -149,7 +149,7 @@ public class Menu implements Control {
     protected String path;
 
     /** The control's parent. */
-    protected Object parent;
+    protected transient Object parent;
 
     /** The list of valid role names. */
     protected List roles = new ArrayList();
