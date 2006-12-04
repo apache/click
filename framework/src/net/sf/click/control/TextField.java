@@ -282,6 +282,10 @@ public class TextField extends Field {
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
+
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
         } else if (isDisabled()) {
