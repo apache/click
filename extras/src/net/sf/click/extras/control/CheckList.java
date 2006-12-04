@@ -342,8 +342,9 @@ public class CheckList extends Field {
 
     /**
      * Adds the given style-value pair to the style attribute of the outer div.
-     * Does not check wheter the style is already set. <p/> Typically used for
-     * the width:
+     * Does not check wheter the style is already set.
+     * <p/>
+     * Typically used for the width:
      *
      * <pre class="codeJava">
      * list.addStyle(<span class="st">"&quot;width: 100%; height: 25em&quot;"</span>); </pre>
