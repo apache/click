@@ -207,13 +207,16 @@ public abstract class Field implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected Object parent;
+    protected transient Object parent;
 
     /** The Field is readonly flag. */
     protected boolean readonly;
 
     /** The Field is required flag. */
     protected boolean required;
+
+    /** The Map of CSS style attributes. */
+    protected Map styles;
 
     /** The Field 'title' attribute, which acts as a tooltip help message. */
     protected String title;
@@ -781,6 +784,78 @@ public abstract class Field implements Control {
     }
 
     /**
+     * Return the Field CSS style for the given name.
+     *
+     * @param name the CSS style name
+     * @return the CSS style for the given name
+     */
+    public String getStyle(String name) {
+        if (hasStyles()) {
+            return (String) getStyles().get(name);
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the Field CSS style name and value pair.
+     *
+     * @param name the CSS style name
+     * @param value the CSS style value
+     */
+    public void setStyle(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getStyles().put(name, value);
+        } else {
+            getStyles().remove(name);
+        }
+    }
+
+    /**
+     * Return true if CSS styles are defined.
+     *
+     * @return true if CSS styles are defined
+     */
+    public boolean hasStyles() {
+        return (styles != null && !styles.isEmpty());
+    }
+
+    /**
+     * Return the Map of field CSS styles.
+     *
+     * @return the Map of field CSS styles
+     */
+    public Map getStyles() {
+        if (styles == null) {
+            styles = new HashMap();
+        }
+        return styles;
+    }
+
+    /**
+     * Return the field CSS "text-align" style, or null if not defined.
+     *
+     * @return the field CSS "text-align" style, or null if not defined.
+     */
+    public String getTextAlign() {
+        return getStyle("text-align");
+    }
+
+    /**
+     * Set the field CSS "text-align" style.
+     *
+     * @param align the CSS "text-align" value: <tt>["left", "right", "center"]</tt>
+     */
+    public void setTextAlign(String align) {
+        setStyle("text-align", align);
+    }
+
+    /**
      * Return the 'title' attribute, or null if not defined. The title
      * attribute acts like tooltip message over the Field.
      * <p/>
@@ -947,7 +1022,25 @@ public abstract class Field implements Control {
         }
     }
 
-    // ---------------------------------------------------------- Public Methods
+    /**
+     * Return the width CSS "width" style, or null if not defined.
+     *
+     * @return the CSS "width" style attribute, or null if not defined
+     */
+    public String getWidth() {
+        return getStyle("width");
+    }
+
+    /**
+     * Set the the CSS "width" style attribute.
+     *
+     * @param value the CSS "width" style attribute
+     */
+    public void setWidth(String value) {
+        setStyle("width", value);
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * This method binds the submitted request value to the Field's value.
