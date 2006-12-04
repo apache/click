@@ -148,7 +148,7 @@ public class Panel implements Control {
     protected List panels = new ArrayList(5);
 
     /** The control's parent. */
-    protected Object parent;
+    protected transient Object parent;
 
     /** The path of the Velocity template to render. */
     protected String template;
