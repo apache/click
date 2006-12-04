@@ -20,8 +20,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.control.AbstractLink;
@@ -30,8 +28,9 @@ import net.sf.click.control.ActionLink;
 import net.sf.click.control.Decorator;
 import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
-import ognl.Ognl;
-import ognl.OgnlException;
+import net.sf.click.util.PropertyUtils;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a table column AbstractLink Decorator.
@@ -116,8 +115,8 @@ public class LinkDecorator implements Decorator {
     /** The table to render the links for. */
     protected Table table;
 
-    /** The OGNL context map. */
-    protected Map ognlContext;
+    /** The method cached for rendering column values. */
+    protected Map methodCache;
 
     /**
      * Create a new AbstractLink table column Decorator with the given actionLink
@@ -280,25 +279,23 @@ public class LinkDecorator implements Decorator {
      * @return the rendered links for the given row object and request context
      */
     public String renderActionLinks(Object row, Context context) {
-        if (ognlContext == null) {
-            ognlContext = new HashMap();
+        if (methodCache == null) {
+            methodCache = new HashMap();
         }
+
+        Object value = PropertyUtils.getValue(row, idProperty, methodCache);
 
         if (linksArray.length == 1) {
             AbstractLink link = linksArray[0];
             link.setContext(context);
 
-            try {
-                Object value = Ognl.getValue(idProperty, ognlContext, row);
-                if (link instanceof ActionLink) {
-                    ((ActionLink) link).setValueObject(value);
+            if (link instanceof ActionLink) {
+                ((ActionLink) link).setValueObject(value);
 
-                } else {
+            } else {
+                if (value != null) {
                     link.setParameter(idProperty, value.toString());
                 }
-
-            } catch (OgnlException ognle) {
-                throw new RuntimeException(ognle);
             }
 
             link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
@@ -312,35 +309,30 @@ public class LinkDecorator implements Decorator {
         } else {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-            try {
-                Object value = Ognl.getValue(idProperty, ognlContext, row);
+            for (int i = 0; i < linksArray.length; i++) {
+                AbstractLink link = linksArray[i];
+                link.setContext(context);
 
-                for (int i = 0; i < linksArray.length; i++) {
-                    AbstractLink link = linksArray[i];
-                    link.setContext(context);
+                if (link instanceof ActionLink) {
+                    ((ActionLink) link).setValueObject(value);
 
-                    if (link instanceof ActionLink) {
-                        ((ActionLink) link).setValueObject(value);
-
-                    } else {
+                } else {
+                    if (value != null) {
                         link.setParameter(idProperty, value.toString());
                     }
-
-                    link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-                    if (table.getSortedColumn() != null) {
-                        link.setParameter(Table.COLUMN, table.getSortedColumn());
-                    }
-
-                    if (i > 0) {
-                        buffer.append(getLinkSeparator());
-                    }
-
-                    buffer.append(link.toString());
                 }
 
-            } catch (OgnlException ognle) {
-                throw new RuntimeException(ognle);
+                link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+                if (table.getSortedColumn() != null) {
+                    link.setParameter(Table.COLUMN, table.getSortedColumn());
+                }
+
+                if (i > 0) {
+                    buffer.append(getLinkSeparator());
+                }
+
+                buffer.append(link.toString());
             }
 
             return buffer.toString();
@@ -355,21 +347,17 @@ public class LinkDecorator implements Decorator {
      * @return the rendered buttons for the given row object and request context
      */
     public String renderActionButtons(Object row, Context context) {
-        if (ognlContext == null) {
-            ognlContext = new HashMap();
+        if (methodCache == null) {
+            methodCache = new HashMap();
         }
+
+        Object value = PropertyUtils.getValue(row, idProperty, methodCache);
 
         if (buttonsArray.length == 1) {
             ActionButton button = buttonsArray[0];
             button.setContext(context);
 
-            try {
-                Object value = Ognl.getValue(idProperty, ognlContext, row);
-                button.setValueObject(value);
-
-            } catch (OgnlException ognle) {
-                throw new RuntimeException(ognle);
-            }
+            button.setValueObject(value);
 
             button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
 
@@ -382,30 +370,23 @@ public class LinkDecorator implements Decorator {
         } else {
             HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-            try {
-                Object value = Ognl.getValue(idProperty, ognlContext, row);
+            for (int i = 0; i < buttonsArray.length; i++) {
+                ActionButton button = buttonsArray[i];
+                button.setContext(context);
 
-                for (int i = 0; i < buttonsArray.length; i++) {
-                    ActionButton button = buttonsArray[i];
-                    button.setContext(context);
+                button.setValueObject(value);
 
-                     button.setValueObject(value);
+                button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
 
-                    button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-                    if (table.getSortedColumn() != null) {
-                        button.setParameter(Table.COLUMN, table.getSortedColumn());
-                    }
-
-                    if (i > 0) {
-                        buffer.append(getLinkSeparator());
-                    }
-
-                    buffer.append(button.toString());
+                if (table.getSortedColumn() != null) {
+                    button.setParameter(Table.COLUMN, table.getSortedColumn());
                 }
 
-            } catch (OgnlException ognle) {
-                throw new RuntimeException(ognle);
+                if (i > 0) {
+                    buffer.append(getLinkSeparator());
+                }
+
+                buffer.append(button.toString());
             }
 
             return buffer.toString();
