@@ -42,6 +42,7 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -1245,10 +1246,10 @@ public class Form implements Control {
                     FileItemFactory fif = new DiskFileItemFactory();
                     fileUpload.setFileItemFactory(fif);
                 }
+
             } else {
-                String msg = "No FileField defined for POST "
-                             + "Content-type 'multipart' request";
-                throw new RuntimeException(msg);
+                FileItemFactory factory = new DiskFileItemFactory();
+                fileUpload = new ServletFileUpload(factory);
             }
 
             try {
