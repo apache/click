@@ -406,7 +406,11 @@ public class ActionLink extends AbstractLink {
      * @param value the ActionLink value
      */
     public void setValue(String value) {
-        getParameters().put(VALUE, value);
+        if (value != null) {
+            getParameters().put(VALUE, value);
+        } else {
+            getParameters().remove(VALUE);
+        }
     }
 
     /**
@@ -417,6 +421,8 @@ public class ActionLink extends AbstractLink {
     public void setValueObject(Object object) {
         if (object != null) {
             setValue(object.toString());
+        } else {
+            setValue(null);
         }
     }
 
