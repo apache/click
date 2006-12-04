@@ -121,6 +121,34 @@ table.mars td {
 	vertical-align: baseline;
 }
 
+/* complex style */
+table.complex thead tr {
+    background-color: #ccc;
+}
+table.complex tr.even {
+    background-color: #ddd;
+}
+table.complex tr.odd {
+    background-color: #fff;
+}
+table.complex td.textRed {
+    color: #b11;
+}
+table.complex, table.complex td, table.complex th {
+	border: 1px solid #999;
+	border-collapse: collapse;
+}
+table.complex th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+table.complex td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
+}
+
 /* simple style */
 table.simple thead tr {
     background-color: #eee;
