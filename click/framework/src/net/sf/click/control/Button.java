@@ -162,6 +162,9 @@ public class Button extends Field {
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
 
         buffer.elementEnd();
 
