@@ -641,7 +641,7 @@ public class Form implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected Object parent;
+    protected transient Object parent;
 
     /** The form is readonly flag. */
     protected boolean readonly;
