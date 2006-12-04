@@ -527,6 +527,10 @@ public class FieldSet extends Field {
             if (isDisabled()) {
                 buffer.appendAttributeDisabled();
             }
+            if (hasStyles()) {
+                buffer.appendStyleAttributes(getStyles());
+            }
+
             buffer.closeTag();
             buffer.append("\n");
 
