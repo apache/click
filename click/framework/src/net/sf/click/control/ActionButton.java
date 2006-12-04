@@ -465,6 +465,9 @@ public class ActionButton extends Button {
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
 
         buffer.elementEnd();
 
