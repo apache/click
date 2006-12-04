@@ -76,6 +76,23 @@ public class PageLink extends AbstractLink {
     }
 
     /**
+     * Create an PageLink for the given name, label and target Page class.
+     *
+     * @param name the page link name
+     * @param label the page link label
+     * @param targetPage the target page class
+     * @throws IllegalArgumentException if the name is null
+     */
+    public PageLink(String name, String label, Class targetPage) {
+        setName(name);
+        setLabel(label);
+        if (targetPage == null) {
+            throw new IllegalArgumentException("Null targetPage parameter");
+        }
+        pageClass = targetPage;
+    }
+
+    /**
      * Create an PageLink for the given target Page class.
      *
      * @param targetPage the target page class
