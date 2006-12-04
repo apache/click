@@ -488,7 +488,17 @@ public class Column implements Serializable {
     }
 
     /**
-     * Set the row column message format pattern.
+     * Set the row column message format pattern. For example:
+     *
+     * <pre class="javaClass">
+     * Column idColumn = <span class="kw">new</span> Column(<span class="st">"purchaseId"</span>, <span class="st">"ID"</span>);
+     * idColumn.setFormat(<span class="st">"{0,number,#,###}"</span>);
+     *
+     * Column priceColumn = <span class="kw">new</span> Column(<span class="st">"purchasePrice"</span>, <span class="st">"Price"</span>);
+     * priceColumn.setFormat(<span class="st">"{0,number,currency}"</span>);
+     *
+     * Column dateColumn = <span class="kw">new</span> Column(<span class="st">"purchaseDate"</span>, <span class="st">"Date"</span>);
+     * dateColumn.setFormat(<span class="st">"{0,date,dd MMM yyyy}"</span>); </pre>
      *
      * <h4>MesssageFormat Patterns</h4>
      *
