@@ -233,6 +233,10 @@ public class Radio extends Field {
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
+
         buffer.closeTag();
 
         if (label != null) {
