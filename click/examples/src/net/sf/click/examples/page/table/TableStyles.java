@@ -18,7 +18,7 @@ import net.sf.click.examples.page.BorderPage;
 public class TableStyles extends BorderPage {
 
     private static final String[] STYLES = {
-        "isi", "its", "mars", "nocol", "report", "simple"
+        "complex", "isi", "its", "mars", "nocol", "report", "simple"
     };
 
     public Form form = new Form();

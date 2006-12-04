@@ -105,6 +105,7 @@ import org.apache.commons.lang.StringUtils;
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
  * <ul style="margin-top:0.5em;">
+ *  <li>complex</li>
  *  <li>isi</li>
  *  <li>its</li>
  *  <li>mars</li>
@@ -371,6 +372,7 @@ public class Table implements Control {
     /**
      * Set the HTML class attribute. Predefined table CSS classes include:
      * <ul>
+     *  <li>complex</li>
      *  <li>isi</li>
      *  <li>its</li>
      *  <li>mars</li>
@@ -378,7 +380,7 @@ public class Table implements Control {
      *  <li>report</li>
      *  <li>simple</li>
      * </ul>
-     * 
+     *
      * @param value the HTML class attribute
      */
     public void setClass(String value) {
