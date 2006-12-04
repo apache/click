@@ -50,9 +50,13 @@ public class EditCustomer extends BorderPage {
         IntegerField ageField = new IntegerField("age");
         ageField.setMinValue(1);
         ageField.setMaxValue(120);
+        ageField.setWidth("40px");
         form.add(ageField);
 
-        form.add(new DoubleField("holdings"));
+        DoubleField holdingsField = new DoubleField("holdings");
+        holdingsField.setTextAlign("right");
+        form.add(holdingsField);
+
         form.add(new InvestmentSelect("investments"));
         form.add(new DateField("dateJoined"));
         form.add(new Checkbox("active"));
