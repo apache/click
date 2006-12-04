@@ -64,10 +64,13 @@ public abstract class AbstractLink implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected Object parent;
+    protected transient Object parent;
 
     /** The link parameters map. */
     protected Map parameters;
+
+    /** The Map of CSS style attributes. */
+    protected Map styles;
 
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
@@ -502,6 +505,60 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
+     * Return the Field CSS style for the given name.
+     *
+     * @param name the CSS style name
+     * @return the CSS style for the given name
+     */
+    public String getStyle(String name) {
+        if (hasStyles()) {
+            return (String) getStyles().get(name);
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the Field CSS style name and value pair.
+     *
+     * @param name the CSS style name
+     * @param value the CSS style value
+     */
+    public void setStyle(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getStyles().put(name, value);
+        } else {
+            getStyles().remove(name);
+        }
+    }
+
+    /**
+     * Return true if CSS styles are defined.
+     *
+     * @return true if CSS styles are defined
+     */
+    public boolean hasStyles() {
+        return (styles != null && !styles.isEmpty());
+    }
+
+    /**
+     * Return the Map of field CSS styles.
+     *
+     * @return the Map of field CSS styles
+     */
+    public Map getStyles() {
+        if (styles == null) {
+            styles = new HashMap();
+        }
+        return styles;
+    }
+
+    /**
      * Return the 'title' attribute, or null if not defined. The title
      * attribute acts like tooltip message over the link.
      * <p/>
@@ -589,6 +646,10 @@ public abstract class AbstractLink implements Control {
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
+
         buffer.closeTag();
 
         buffer.append(getLabel());
