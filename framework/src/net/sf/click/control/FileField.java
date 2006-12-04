@@ -256,6 +256,9 @@ public class FileField extends Field {
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
         }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
 
         buffer.elementEnd();
 
