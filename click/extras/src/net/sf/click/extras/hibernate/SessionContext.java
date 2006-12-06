@@ -127,6 +127,8 @@ public class SessionContext {
      * This method provides a convenience wrapper around the corresponding
      * <tt>Session</tt> method.
      *
+     * @deprecated redundant Session method will be remove in version 1.3
+     *
      * @param clazz a persistent class
      * @param id an identifier
      * @return a persistent instance or null
@@ -148,6 +150,8 @@ public class SessionContext {
      * This method provides a convenience wrapper around the corresponding
      * <tt>Session</tt> method.
      *
+     * @deprecated redundant Session method will be remove in version 1.3
+     *
      * @param object the instance to be removed
      * @throws HibernateException if a Hibernate error occurs
      */
@@ -160,6 +164,8 @@ public class SessionContext {
      * <p/>
      * This method provides a convenience wrapper around the corresponding
      * <tt>Session</tt> method.
+     *
+     * @deprecated redundant Session method will be remove in version 1.3
      *
      * @param queryString a Hibernate query
      * @return a Hibernate query
@@ -177,6 +183,8 @@ public class SessionContext {
      * <p/>
      * This method provides a convenience wrapper around the corresponding
      * <tt>Session</tt> method.
+     *
+     * @deprecated redundant Session method will be remove in version 1.3
      *
      * @param queryName the name of a query defined externally
      * @return a Hibernate query
