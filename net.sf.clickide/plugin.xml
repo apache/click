@@ -168,8 +168,13 @@
      <page
            class="net.sf.clickide.preferences.ClickTemplatePreferencePage"
            id="net.sf.clickide.preferences.ClickTemplatePreferencePage"
-           name="%preference.template"
+           name="%preference.wizardTemplate"
            category="net.sf.clickide.preferences.ClickPreferencePage"/>
+     <page
+           category="net.sf.clickide.preferences.ClickPreferencePage"
+           class="net.sf.clickide.preferences.TemplateEditorPreferencePage"
+           id="net.sf.clickide.preferences.TemplateEditorPreferencePage"
+           name="%preference.templateEditor"/>
   </extension>
   <extension
         point="org.eclipse.core.runtime.preferences">

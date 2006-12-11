@@ -7,6 +7,8 @@ import net.sf.clickide.ClickPlugin;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.StringConverter;
+import org.eclipse.swt.graphics.RGB;
 
 /**
  * Initializes the preference store.
@@ -19,6 +21,9 @@ public class ClickPreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = ClickPlugin.getDefault().getPreferenceStore();
 		try {
 			store.setDefault(ClickPlugin.PREF_TEMPLATES, getResourceAsText("default_templates.xml"));
+			store.setDefault(ClickPlugin.PREF_COLOR_VAR, StringConverter.asString(new RGB(128,0,0)));
+			store.setDefault(ClickPlugin.PREF_COLOR_DIR, StringConverter.asString(new RGB(0,0,128)));
+			store.setDefault(ClickPlugin.PREF_COLOR_CMT, StringConverter.asString(new RGB(0,128,0)));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
 		}
