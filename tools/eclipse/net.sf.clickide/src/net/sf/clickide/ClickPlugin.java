@@ -21,6 +21,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	//The shared instance.
 	private static ClickPlugin plugin;
 	private ResourceBundle resource;
+	private ColorManager colorManager;
 	
 	public static final String CLICK_PAGE_CLASS = "net.sf.click.Page";
 	public static final String CLICK_CONTROL_IF = "net.sf.click.Control";
@@ -53,6 +54,9 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};
 	
 	public static final String PREF_TEMPLATES = "click.templates";
+	public static final String PREF_COLOR_VAR = "click.color.variable";
+	public static final String PREF_COLOR_DIR = "click.color.directive";
+	public static final String PREF_COLOR_CMT = "click.color.comment";
 	
 	/**
 	 * The constructor.
@@ -60,6 +64,13 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public ClickPlugin() {
 		plugin = this;
 		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
+	}
+	
+	public ColorManager getColorManager(){
+		if(this.colorManager==null){
+			this.colorManager = new ColorManager();
+		}
+		return this.colorManager;
 	}
 	
 	/**
@@ -96,6 +107,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		super.stop(context);
+		colorManager.dispose();
 		plugin = null;
 	}
 

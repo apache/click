@@ -4,11 +4,11 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.clickide.ClickPlugin;
+
 import org.eclipse.jface.text.ITypedRegion;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.wst.html.ui.internal.style.LineStyleProviderForHTML;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
@@ -32,9 +32,9 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
         boolean result = super.prepareRegions(currentRegion, start, length, styleRanges);
         
-		Color var = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
-		Color dir = Display.getDefault().getSystemColor(SWT.COLOR_DARK_BLUE);
-		Color comment = Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN);
+    	Color colorVariable = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_VAR);
+    	Color colorDirective = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_DIR);
+    	Color colorComment = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
         Object sr[] = styleRanges.toArray();
 		
         for(int i = 0; i < sr.length; i++)
@@ -60,12 +60,12 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
                 text = (new StringBuilder(String.valueOf(text))).append(chkRegion.getText()).toString();
             }
 
-            Pattern p = Pattern.compile("#.*|\\$((\\{.*?\\})|([a-zA-Z0-9\\-_]*))");
+            Pattern p = Pattern.compile("##.*|#[a-z]+|\\$((\\{.*?\\})|([a-zA-Z0-9\\-_]*))");
             Matcher m = p.matcher(text);
             int pos = 0;
             while(m.find()) {
-            	Color color = m.group().startsWith("##") ? comment : 
-            		          m.group().startsWith("#") ? dir : var;
+            	Color color = m.group().startsWith("##") ? colorComment : 
+            		          m.group().startsWith("#") ? colorDirective : colorVariable;
             	
                 if(m.start() < mStart){
                     if(m.end() < mStart){
