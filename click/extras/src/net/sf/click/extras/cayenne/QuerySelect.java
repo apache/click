@@ -23,7 +23,7 @@ import java.util.Map;
 import net.sf.click.control.Decorator;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
-import ognl.Ognl;
+import net.sf.click.util.PropertyUtils;
 
 import org.objectstyle.cayenne.DataRow;
 import org.objectstyle.cayenne.access.DataContext;
@@ -394,7 +394,7 @@ public class QuerySelect extends Select {
             getOptionList().add(Option.EMPTY_OPTION);
         }
 
-        Map ognlContext = new HashMap();
+        Map cache = new HashMap();
 
         for (int i = 0; i < list.size(); i++) {
             Object row = list.get(i);
@@ -433,12 +433,10 @@ public class QuerySelect extends Select {
 
                 try {
 
-                    value = Ognl.getValue(getOptionValue(), ognlContext, row);
+                    value = PropertyUtils.getValue(row, getOptionValue(), cache);
 
                     if (getOptionLabel() != null) {
-                        label = Ognl.getValue(getOptionLabel(),
-                                              ognlContext,
-                                              row);
+                        label = PropertyUtils.getValue(row, getOptionLabel(), cache);
 
                     } else {
                         label = getDecorator().render(row, getContext());

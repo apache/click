@@ -23,11 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ognl.Ognl;
-
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PropertyUtils;
 
 /**
  * Provides a RadioGroup control.
@@ -280,17 +279,24 @@ public class RadioGroup extends Field {
             return;
         }
  
-        Map ognlContext = new HashMap();
+        Map cache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = Ognl.getValue(value, ognlContext, object);
-                Object labelResult = Ognl.getValue(label, ognlContext, object);
+                Object valueResult = PropertyUtils.getValue(object, value, cache);
+                Object labelResult = PropertyUtils.getValue(object, label, cache);
 
-                Radio radio = new Radio(valueResult.toString(),
-                                        labelResult.toString());
+                Radio radio = null;
+
+                if (labelResult != null) {
+                    radio = new Radio(valueResult.toString(), labelResult.toString());
+
+                } else {
+                    radio = new Radio(valueResult.toString());
+                }
+
                 add(radio);
 
             } catch (Exception e) {
