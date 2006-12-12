@@ -134,6 +134,10 @@ public class ErrorReport {
             try {
                 tokenizer.nextToken();
                 String line = tokenizer.nextToken();
+                if (error instanceof IllegalArgumentException) {
+                    line = tokenizer.nextToken();
+                }
+
                 int nameStart = line.indexOf("at ");
                 int nameEnd = line.indexOf("(");
                 nameEnd = line.lastIndexOf(".", nameEnd);

@@ -10,33 +10,24 @@ import net.sf.click.control.ActionLink;
  */
 public class ExceptionDemo extends BorderPage {
 
+    public ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
+    public ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");
+    public ActionLink missingMethodLink = new ActionLink(this, "onMissingMethodClick");
+    public ActionLink brokenRendererLink = new ActionLink(this, "onBrokenRendererClick");
+    public ActionLink brokenBorderLink = new ActionLink(this, "onBrokenBorderClick");
+    public ActionLink brokenContentLink = new ActionLink(this, "onBrokenContentClick");
+
     private String template;
-
-    public ExceptionDemo() {
-        ActionLink nullPointerLink = new ActionLink("nullPointerLink");
-        nullPointerLink.setListener(this, "onNullPointerClick");
-        addControl(nullPointerLink);
-
-        ActionLink missingMethodLink = new ActionLink("missingMethodLink");
-        missingMethodLink.setListener(this, "onMissingMethodClick");
-        addControl(missingMethodLink);
-
-        ActionLink brokenRendererLink = new ActionLink("brokenRendererLink");
-        brokenRendererLink.setListener(this, "onBrokenRendererClick");
-        addControl(brokenRendererLink);
-
-        ActionLink brokenBorderLink = new ActionLink("brokenBorderLink");
-        brokenBorderLink.setListener(this, "onBrokenBorderClick");
-        addControl(brokenBorderLink);
-
-        ActionLink brokenContentLink = new ActionLink("brokenContentLink");
-        brokenContentLink.setListener(this, "onBrokenContentClick");
-        addControl(brokenContentLink);
-    }
 
     public boolean onNullPointerClick() {
         Object object = null;
         object.hashCode();
+        return true;
+    }
+
+    public boolean onIllegalArgumentExceptionClick() {
+        addModel("param-1", "First Parameter");
+        addModel("param-1", "Second Parameter");
         return true;
     }
 
