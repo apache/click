@@ -30,7 +30,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import ognl.Ognl;
+import net.sf.click.util.PropertyUtils;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -322,16 +322,23 @@ public class CheckList extends Field {
             return;
         }
 
-        Map ognlContext = new HashMap();
+        Map cache = new HashMap();
 
         for (Iterator i = objects.iterator(); i.hasNext();) {
             Object object = i.next();
 
             try {
-                Object valueResult = Ognl.getValue(value, ognlContext, object);
-                Object labelResult = Ognl.getValue(label, ognlContext, object);
+                Object valueResult = PropertyUtils.getValue(object, value, cache);
+                Object labelResult = PropertyUtils.getValue(object, label, cache);
 
-                Option option = new Option(valueResult, labelResult.toString());
+                Option option = null;
+
+                if (labelResult != null) {
+                    option = new Option(valueResult, labelResult.toString());
+                } else {
+                    option = new Option(valueResult.toString());
+                }
+
                 getOptionList().add(option);
 
             } catch (Exception e) {
