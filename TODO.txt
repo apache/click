@@ -1,4 +1,4 @@
-Click 1.0 Release
+Click 1.2 Release
 ---------------------
 BUGS
 * ColorPicker rendering bug
@@ -7,10 +7,7 @@ BUGS
 
 CODE
 
-* "java.lang.IllegalArgumentException: Form already contains field named", add support to walk up stack one item in error page
-
 * pick up Velocity 1.5-Beta 2 jar
-* have form submit check support multiple form in a page
 * get localizations for Telephone.properties, Japanese, Italian, French
 * Select can have multiple values and this need to be resolved with multpart request
 
