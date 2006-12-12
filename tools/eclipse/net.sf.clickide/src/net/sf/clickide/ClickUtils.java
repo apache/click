@@ -566,17 +566,15 @@ public class ClickUtils {
 						path = path.substring(index + 1);;
 					}
 					path = path.replaceFirst("Page$", "");
-					
 					String[] templateProposals = getTempleteProposals(path);
 					
 					IFolder folder = project.getFolder(root);
 					for(int i=0;i<templateProposals.length;i++){
 						IResource resource = null;
-						if(dir==null){
-							resource = folder.findMember(templateProposals[i]);
-						} else {
-							resource = folder.findMember(dir + "/" + templateProposals[i]);
+						if(dir!=null){
+							templateProposals[i] = dir + "/" + templateProposals[i];
 						}
+						resource = folder.findMember(templateProposals[i]);
 						if(resource!=null && resource.exists() && resource instanceof IFile){
 							return templateProposals[i];
 						}
