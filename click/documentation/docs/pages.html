@@ -32,6 +32,8 @@ and covers to following topics:
   </li>
   <li><a href="#page-messages">Message Properties</a> - pages message properties
   </li> 
+  <li><a href="#page-param-auto-binding">Request Param Auto Binding</a> - request parameter to page field auto binding
+  </li> 
 </ul>
 
 <p>&nbsp;</p>
@@ -104,8 +106,9 @@ The GET request execution sequence for Pages is summarized below in the Figure 2
 </p>
 
 Stepping through this GET request sequence, a new Page instance is created and the 
-attributes for the Page are set (context, format, headers, path). Next the <tt>onInit()</tt>
-method is invoked, this is where you place any initialization code which requires
+attributes for the Page are set (context, format, headers, path). Next request
+parameter values are then bound to any matching public Page fields. Then the 
+<tt>onInit()</tt> method is invoked, this is where you place any initialization code which requires
 access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
 <p/>
 The next method invoked is the <tt>onSecurityCheck()</tt> handler. This method can used to 
@@ -733,6 +736,122 @@ Page messages can also be used to override Control messages, see the Controls
 <a href="controls.html#message-properties">Message Properties</a> topic for
 more details.
 
+
+<a name="page-param-auto-binding" class="heading"><h2>Request Param Auto Binding</h2></a>
+
+Click will automatically bind any request parameter values to public Page fields 
+with the same name. When binding these values it will also attempt to convert them 
+to the correct type.
+<p/>
+The best understand this is to walk through an example, where our application 
+recieves a GET request:
+
+<pre class="codeConfig">
+ <span class="blue">http://localhost:8080/mycorp/customer-details.htm?</span><span class="red">customerId</span>=<span class="red">7203</span>
+</pre>
+
+This request is automatically handled by our <tt>CustomerDetails</tt> page:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">public class</span> CustomerDetails <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Integer <span class="blue">customerId</span>;
+
+} </pre>
+
+After the CustomerDetails page has been created the "customerId" request parameter 
+value "7023" will be converted into an Integer and assigned to the public page field
+<tt>customerId</tt>.
+<p/>
+Another feature of Click is that any public Page fields are automatically 
+added to the page's model before it is rendered. This will make these values avaible in 
+the page template for display. In our example the public <tt>customerId</tt> field
+will be added to the Page model and will be available for rendering in the 
+page template:
+<p/>
+Our customer-details.htm page template contains:
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;body&gt;
+ 
+  Customer ID: <span class="blue">$customerId</span>
+ 
+&lt;/body&gt;
+&lt;/html&gt; </pre>
+
+After processing the request our page would be rendered as:
+
+<table class="htmlExample" cellspacing="12" width="100%">
+<tr>
+ <td>Customer ID: 7203</td>
+</tr>
+</table>
+
+<h4>Customizing Auto Binding</h4>
+
+Auto binding supports the conversion of request string parameters into Java 
+classes: Integer, Double, Boolean, Byte, Character, Short, Long, Float, BigInteger, 
+BigDecimal, String and the various Date classes. 
+<p/>
+By default type conversion is performed by the 
+<a target="topic" href="click-api/net/sf/click/util/RequestTypeConverter.html">RequestTypeConverter</a> class
+which is used by the ClickServlet method
+<a target="topic" href="click-api/net/sf/click/ClickServlet.html#getTypeConverter()">getTypeConverter()</a>.
+<p/>
+If you need to add support for additional types, you would write your own type
+converter class and subclass the ClickSerlvet to use your custom converter.
+<p/>
+For example if we wanted to automatically load a <tt>Customer</tt> object from the database
+when a customer id request parameter is specified, you could write your own type converter:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomTypeConverter <span class="kw">extends</span> RequestTypeConverter {
+
+    <span class="kw">private</span> CustomerService customerService = <span class="kw">new</span> CustomerService();
+
+    <span class="kw">protected</span> Object convertValue(Object value, Class toType) {
+        <span class="kw">if</span> (toType == Customer.<span class="kw">class</span>) {
+            <span class="kw">return</span> customerService.getCustomerForId(value);
+            
+        } <span class="kw">else</span> {
+            <span class="kw">return super</span>.convertValue(value, toType);
+        }
+    }
+} </pre>
+
+This type converter would handle the following request:
+<pre class="codeConfig">
+ http://localhost:8080/mycorp/customer-details.htm?<span class="blue">customer</span>=<span class="red">7203</span>
+</pre>
+
+Loading the customer object from the database using given the "7203" customer id value. The ClickServlet would 
+then assign this customer object to the matching page field:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">public class</span> CustomerDetails <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Customer <span class="blue">customer</span>;
+
+} </pre>
+
+To make your custom type converter available you will need to subclass ClickServlet and override the 
+<tt>getTypeConverter()</tt> method. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomClickServlet <span class="kw">extends</span> ClickServlet {
+
+    <span class="kw">protected</span> TypeConverter getTypeConverter() {
+        <span class="kw">if</span> (typeConverter == <span class="kw">null</span>) {
+            typeConverter = <span class="kw">new</span> CustomTypeConverter();
+        }
+        <span class="kw">return</span> typeConverter;
+    }
+} </pre>
 
 </body>
 </html>
