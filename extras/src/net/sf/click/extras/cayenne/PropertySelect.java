@@ -24,12 +24,13 @@ import net.sf.click.control.Decorator;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.ClickUtils;
-import ognl.Ognl;
+import net.sf.click.util.PropertyUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.DataObject;
 import org.objectstyle.cayenne.DataObjectUtils;
 import org.objectstyle.cayenne.access.DataContext;
+import org.objectstyle.cayenne.query.Ordering;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
@@ -118,6 +119,12 @@ public class PropertySelect extends Select {
 
     /** The name of the configured select query. */
     protected String queryName;
+
+    /**
+     * The select query ordering. By default the property select will be ordered
+     * by the optionLabel property in ascending order.
+     */
+    protected Ordering ordering;
 
     /** The data object property to render as the option label. */
     protected String optionLabel;
@@ -249,6 +256,16 @@ public class PropertySelect extends Select {
     }
 
     /**
+     * Return the <tt>DataObject</tt> property to render as the option label.
+     *
+     * @return optionLabel the <tt>DataObject</tt> property to render as the
+     *  option label
+     */
+    public String getOptionLabel() {
+        return optionLabel;
+    }
+
+    /**
      * Set the <tt>DataObject</tt> property to render as the option label.
      *
      * @param optionLabel the <tt>DataObject</tt> property to render as the
@@ -265,6 +282,31 @@ public class PropertySelect extends Select {
      */
     public SelectQuery getSelectQuery() {
         return selectQuery;
+    }
+
+    /**
+     * Return the select query ordering. By default the property
+     * select will be ordered by the label property in ascending order.
+     * <p/>
+     * Note this ordering will not be applied by named queries, as named queries
+     * the ordering should be specified in the query definition.
+     *
+     * @return the select query ordering
+     */
+    public Ordering getOrdering() {
+        return ordering;
+    }
+
+    /**
+     * Set the select query ordering.
+     * <p/>
+     * Note this ordering will not be applied by named queries, as named queries
+     * the ordering should be specified in the query definition.
+     *
+     * @param ordering the select query ordering
+     */
+    public void setOrdering(Ordering ordering) {
+        this.ordering = ordering;
     }
 
     /**
@@ -328,7 +370,7 @@ public class PropertySelect extends Select {
 
                 Class propertyClass = method.getReturnType();
 
-                Integer propertyPk = new Integer(getValue());
+                String propertyPk = getValue();
 
                 valueObject = DataObjectUtils.objectForPK(dataContext,
                                                           propertyClass,
@@ -424,7 +466,16 @@ public class PropertySelect extends Select {
             List list = null;
 
             if (getSelectQuery() != null) {
-                list = dataContext.performQuery(getSelectQuery());
+                SelectQuery query = getSelectQuery();
+
+                if (getOrdering() != null) {
+                    query.addOrdering(getOrdering());
+
+                } else if (getOptionLabel() != null) {
+                    query.addOrdering(getOptionLabel(), true);
+                }
+
+                list = dataContext.performQuery(query);
 
             } else if (getQueryName() != null) {
                  list = dataContext.performQuery(getQueryName(), false);
@@ -435,14 +486,23 @@ public class PropertySelect extends Select {
                 Method method = doClass.getMethod(getterName, null);
                 Class propertyClass = method.getReturnType();
 
-                list = dataContext.performQuery(new SelectQuery(propertyClass));
+                SelectQuery query = new SelectQuery(propertyClass);
+
+                if (getOrdering() != null) {
+                    query.addOrdering(getOrdering());
+
+                } else if (getOptionLabel() != null) {
+                    query.addOrdering(getOptionLabel(), true);
+                }
+
+                list = dataContext.performQuery(query);
             }
 
             if (isRequired() && getOptionList().isEmpty()) {
                 getOptionList().add(Option.EMPTY_OPTION);
             }
 
-            Map ognlContext = new HashMap();
+            Map cache = new HashMap();
 
             for (int i = 0; i < list.size(); i++) {
                 DataObject dataObject = (DataObject) list.get(i);
@@ -453,8 +513,9 @@ public class PropertySelect extends Select {
 
                 if (getDecorator() != null) {
                     label = getDecorator().render(dataObject, getContext());
+
                 } else {
-                    label = Ognl.getValue(optionLabel, ognlContext, dataObject);
+                    label = PropertyUtils.getValue(dataObject, getOptionLabel(), cache);
                 }
 
                 Option option = null;
