@@ -43,6 +43,7 @@ import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
 import net.sf.click.util.PropertyUtils;
+import net.sf.click.util.RequestTypeConverter;
 import net.sf.click.util.SessionMap;
 import ognl.DefaultTypeConverter;
 import ognl.Ognl;
@@ -194,7 +195,7 @@ public class ClickServlet extends HttpServlet {
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
 
-    /** The OGNL type converter. */
+    /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
 
     /** Cache of velocity writers. */
@@ -1296,13 +1297,14 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return the OGNL <tt>TypeConverter</tt>.
+     * Return the request parameters OGNL <tt>TypeConverter</tt>. By default
+     * this method returns a {@link RequestTypeConverter} instance.
      *
-     * @return the OGNL <tt>TypeConverter</tt>
+     * @return the request parameters OGNL <tt>TypeConverter</tt>
      */
     protected TypeConverter getTypeConverter() {
         if (typeConverter == null) {
-            typeConverter = new DefaultTypeConverter();
+            typeConverter = new RequestTypeConverter();
         }
 
         return typeConverter;
