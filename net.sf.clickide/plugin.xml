@@ -241,11 +241,16 @@
   <extension
         point="org.eclipse.ui.commands">
      <command
+           categoryId="net.sf.clickide.category"
            id="net.sf.clickide.ui.actions.SwitchToHTMLAction"
            name="%action.switchToHTML"/>
      <command
+           categoryId="net.sf.clickide.category"
            id="net.sf.clickide.ui.actions.SwitchToClassAction"
            name="%action.switchToClass"/>
+     <category
+           id="net.sf.clickide.category"
+           name="Click"/>
   </extension>  
   <extension
         point="org.eclipse.ui.bindings">
