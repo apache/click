@@ -351,7 +351,6 @@ public class ClickUtils {
 	 *    If any errors occurs, returns blank string.
 	 */
 	public static String getWebAppRootFolder(IProject project){
-		WebArtifactEdit edit = getWebArtifactEditForRead(project);
 		try {
 			J2EEFlexProjDeployable deployable = new J2EEFlexProjDeployable(project);
 			IContainer[] containers = deployable.getResourceFolders();
@@ -359,10 +358,6 @@ public class ClickUtils {
 				return containers[0].getProjectRelativePath().toString();
 			}
 		} catch(Exception ex){
-		} finally {
-			if(edit!=null){
-				edit.dispose();
-			}
 		}
 		return "";
 	}
