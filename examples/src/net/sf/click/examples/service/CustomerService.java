@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import net.sf.click.examples.domain.Customer;
+import net.sf.click.extras.cayenne.CayenneTemplate;
 
 import org.objectstyle.cayenne.exp.Expression;
 import org.objectstyle.cayenne.exp.ExpressionFactory;
@@ -67,7 +68,7 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public Customer getCustomer(Object id) {
-        return (Customer) objectForPK(Customer.class, id);
+        return (Customer) getObjectForPK(Customer.class, id);
     }
 
     public void deleteCustomer(Integer id) {

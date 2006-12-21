@@ -3,6 +3,7 @@ package net.sf.click.examples.service;
 import java.util.List;
 
 import net.sf.click.examples.domain.Client;
+import net.sf.click.extras.cayenne.CayenneTemplate;
 
 import org.objectstyle.cayenne.query.SelectQuery;
 
@@ -22,7 +23,7 @@ public class ClientService extends CayenneTemplate {
     }
 
     public Client getClient(Object id) {
-        return (Client) objectForPK(Client.class, id);
+        return (Client) getObjectForPK(Client.class, id);
     }
 
 }
