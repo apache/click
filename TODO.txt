@@ -13,6 +13,4 @@ CODE
 
 DOCUMENTATION
 * update Velocity documentation, get latest PDF documents or build them
-* FAQ topic on unit testing
 * JSP forwarding
-* *.htm pages only
