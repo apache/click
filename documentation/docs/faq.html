@@ -37,9 +37,9 @@
   </li>
   <li><a href="#charset">How do you specify the character set which is used in your application?</a>
   </li>
-  <li><a href="#actionlink-parameters">How do you create an ActionLink with several parameters?</a>
-  </li>
   <li><a href="#multiple-posts">How can you prevent multiple form posts?</a>
+  </li>
+  <li><a href="#html-pages">How can I use *.html Click pages?</a>
   </li>
   <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
   </li>
@@ -49,6 +49,8 @@
   </li>
   <li><a href="#performance">What is the performance of Click?</a>
   </li>
+  <li><a href="#unit-testing">How do I unit test Click pages?</a>
+  </li>  
   <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
   </li>
   <li><a href="#why-velocity">Why doesn't Click use FreeMarker for rendering?</a>
@@ -383,37 +385,6 @@
   See <a href="#utf8-encoding">the previous topic</a>.
 
   </dd>
-
-
-  <a name="actionlink-parameters" class="heading"></a>
-  <dt><b>How do you create an ActionLink with several parameters?</b></dt>
-  <dd>
-   If you need to have an ActionLink with several parameters create a composite
-   parameter and pass this to the ActionLink. For example:
-   
-<pre class="codeHtml">
-   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"customerId"</span>, <span class="red">$</span><span class="blue">customer.id</span>)
-   <span class="red">$</span><span class="blue">deleteLink.setParameter</span>(<span class="blue">"accountId"</span>, <span class="red">$</span><span class="blue">account.id</span>)
-   &lt;a href="<span class="red">$</span><span class="blue">deleteLink.href</span>" 
-      onclick="return window.confirm('Please confirm to delete this account.');"&gt;
-     &lt;img src="images/delete.gif" title="Delete" border="0" align="middle"&gt;
-   &lt;/a&gt;
-</pre>
-   
-   In your ActionLink onClick handler method parse out the two parameter values. 
-   For example:
-   
-<pre class="codeJava">
-<span class="kw">public boolean</span> onDeleteClick() {
-    Long customerId = Long.valueOf(deleteLink.getParameter(<span class="st">"customerId"</span>)); 
-    Long accountId = Long.valueOf(deleteLink.getParameter(<span class="st">"accountId"</span>)); 
-    
-    <span class="cm">// Delete customer account</span>
-    ..
-    
-    <span class="kw">return true</span>;
-} </pre>
-  </dd>
   
       
   <a name="multiple-posts" class="heading"></a>
@@ -443,6 +414,15 @@
   <p/>
   Please see the Click Examples 'Page Flow' for a demonstration of the
   Post-Redirect and submit check patterns.
+  </dd>
+
+
+
+  <a name="html-pages"></a>
+  <dt><b>How can I use *.html Click pages?</b></dt>
+  <dd>
+  Click does not support *.html files as Click pages. These files are not
+  processed by the ClickServlet and are intended for use as static content.
   </dd>
 
 
@@ -575,6 +555,21 @@ public interface Controller {
   However, recent discussions on Velocity mail lists indicate that JSP 
   compilers have improved to the point where JSP has a small performance lead over
   Velocity. What ever the case, JSP is very fast and so is Velocity.
+  </dd>
+
+
+  <a name="unit-testing"></a>
+  <dt><b>How do I unit test Click pages?</b></dt>
+  <dd>
+  It is generally recommended that you don't write JUnit style automated unit 
+  tests for Click pages as the cost to benefit ratio is quite poor.
+  If you have complex business logic in an Click page you should refactor this
+  code into a business level service class which you can readily unit test and 
+  reuse in multiple places.
+  <p/>
+  If you still need to write unit test for your Click pages please use the
+  Click mock <tt>MockContext</tt> and <tt>MockRequest</tt> classes found in the
+  <tt>mock</tt> distribution directory.
   </dd>
 
 
