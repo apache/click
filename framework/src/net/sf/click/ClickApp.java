@@ -551,6 +551,24 @@ class ClickApp implements EntityResolver {
     }
 
     /**
+     * Return an array public fields for the given page class.
+     *
+     * @param pageClass the page class
+     * @return an array public fields for the given page class
+     */
+    Field[] getPageFieldArray(Class pageClass) {
+        Object object = pageByClassMap.get(pageClass);
+
+        if (object != null) {
+            ClickApp.PageElm page = (ClickApp.PageElm) object;
+            return page.getFieldArray();
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Return Map of public fields for the given page class.
      *
      * @param pageClass the page class
@@ -1246,6 +1264,8 @@ class ClickApp implements EntityResolver {
 
         private final Map fields;
 
+        private final Field[] fieldArray;
+
         private final Map headers;
 
         private final Class pageClass;
@@ -1288,9 +1308,10 @@ class ClickApp implements EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            fields = new HashMap();
 
-            Field[] fieldArray = pageClass.getFields();
+            fieldArray = pageClass.getFields();
+
+            fields = new HashMap();
             for (int i = 0; i < fieldArray.length; i++) {
                 Field field = fieldArray[i];
                 fields.put(field.getName(), field);
@@ -1303,9 +1324,9 @@ class ClickApp implements EntityResolver {
             this.pageClass = pageClass;
             this.path = path;
 
-            fields = new HashMap();
+            fieldArray = pageClass.getFields();
 
-            Field[] fieldArray = pageClass.getFields();
+            fields = new HashMap();
             for (int i = 0; i < fieldArray.length; i++) {
                 Field field = fieldArray[i];
                 fields.put(field.getName(), field);
@@ -1315,10 +1336,15 @@ class ClickApp implements EntityResolver {
         private PageElm(String classname, String path)
             throws ClassNotFoundException {
 
+            this.fieldArray = null;
             this.fields = Collections.EMPTY_MAP;
             this.headers = Collections.EMPTY_MAP;
             pageClass = Class.forName(classname);
             this.path = path;
+        }
+
+        private Field[] getFieldArray() {
+            return fieldArray;
         }
 
         private Map getFields() {
