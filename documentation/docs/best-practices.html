@@ -18,6 +18,8 @@ The following topics are covered:
 <ul>
   <li><a href="#security">Security</a> - use JEE role based security
   </li>
+  <li><a href="#packages-classes">Packages and Classes</a> - project package structures and page classes
+  </li>
   <li><a href="#automapping">Page Auto Mapping</a> - use Convention over Configuration
   </li>
   <li><a href="#navigation">Navigation</a> - use Page classes to forward and redirect
@@ -36,10 +38,10 @@ The following topics are covered:
 
 <a name="security" class="heading"><h2>Security</h2></a>
 
-For application security it is highly recommended that you use the JEE Servlet 
-path role based security model. While Click pages provide an 
-<tt>onSecurityCheck()</tt> method for rolling your own security model, 
-the JEE model provides numerous advantages.
+For application security it is highly recommended that you use the declarative 
+JEE Servlet path role based security model. While Click pages provide an 
+<tt>onSecurityCheck()</tt> method for rolling your own programatic security model, 
+the declarative JEE model provides numerous advantages.
 <p/>
 These advantages include:
 
@@ -63,7 +65,15 @@ These advantages include:
   </li>
 </ul>
 
-The JEE Servlet security model requires users to be authenticated and
+If your application has very fine grained or complex security requirements you 
+may need to combine both the JEE declarative security model and a programmatic 
+security model to meet your needs. In these cases its recommended you use declarative
+security for course grained access and programmatic security for finner grained
+access control.
+
+<h4>Declarative Security</h4>
+
+The declarative JEE Servlet security model requires users to be authenticated and
 in the right roles before they can access secure resources. Relative to many of 
 the JEE specifications the Servlet security model is surprisingly simple. 
 <p/>
@@ -110,7 +120,7 @@ The Servlet security model supports three different authentication method:
   <li>
     <tt>FORM</tt> - recommended applications for where you need a customised 
     login page. For applications requiring a high level of security it is 
-    recommended that you use the FORM method over Http.
+    recommended that you use the FORM method over HTTPS.
   </li>
 </ul>
 
@@ -154,7 +164,7 @@ For example:
  &lt;tr&gt;
    &lt;td&gt;&lt;label&gt;User Name&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
    &lt;td&gt;&lt;input type="text" name="<span class="blue">j_username</span>" maxlength="20" style="width:150px;"/&gt;&lt;/td&gt;
-   &lt;td&gt;&nbsp;&lt;/td&gt;
+   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td&gt;&lt;label&gt;User Password&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
@@ -245,22 +255,141 @@ For more information on using security see the resources below:
   </li>
 </ul>
 
+
+<a name="packages-classes" class="heading"><h2>Packages and Classes</h2></a>
+
+An excellent way to design your project package structure is the classify packages 
+initially by technology. So in a Click application all of our pages would be contained
+under a <tt>page</tt> package. This also works very well with the Page automapping feature.
+<p/>
+All the projects domain entity classes would be contained under a <tt>entity</tt> package,
+and service classes would be contained under a <tt>service</tt> directory. Note alternative
+names for the <tt>entity</tt> package include domain or model. We also typically have a
+<tt>util</tt> package for any stray classes which don't quite fit into the other packages.
+<p/>
+In Java package names are singular by convention, so we have a util package rather than
+an utils package.
+<p/>
+An example project structure for a MyCorp web application is illustrated below:
+<blockquote>
+<img alt="Example Project Structure" src="../images/packages-classes.png"/>  
+</blockquote>
+
+In this example application we use declarative role and path based security. 
+All the pages in the <tt>admin</tt> package and directory require the <tt>"admin"</tt>
+role to be access, while all the pages in the <tt>user</tt> package and directory
+require the <tt>"user"</tt> role to be accessed. 
+
+<h4>Page Classes</h4>
+
+A best practice when developing application Page classes is to place common
+methods in a base page class. This is typically used for providing access methods
+to application services and logger objects. 
+<p/>
+For example the BasePage below provides access to Spring configured service objects
+and a Log4J logger object:
+
+<pre class="codeJava">
+<span class="kw">public class</span> BasePage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
+	
+    <span class="cm">/** The Spring application context. */</span>
+    <span class="kw">protected</span> ApplicationContext applicationContext;
+    
+    <span class="cm">/** The page Logger instance. */</span>
+    <span class="kw">protected</span> Logger logger;
+	
+    <span class="cm">/**
+     * Return the Spring configured Customer service.
+     *
+     * @return the Spring configured Customer service
+     */</span>
+    <span class="kw">public</span> CustomerService getCustomerService() {
+        <span class="kw">return</span> (CustomerService) getBean(<span class="st">"customerService"</span>);
+    }
+	
+    <span class="cm">/**
+     * Return the Spring configured User service.
+     *
+     * @return the Spring configured User service
+     */</span>
+    <span class="kw">public</span> UserService getUserService() {
+        <span class="kw">return</span> (UserService) getBean(<span class="st">"userService"</span>);
+    }
+	
+    <span class="cm">/**
+     * Return the page Logger instance.
+     *
+     * @return the page Logger instance
+     */</span>
+    <span class="kw">public</span> Logger getLogger() {
+        <span class="kw">if</span> (logger == <span class="kw">null</span>) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span class="kw">return</span> logger;
+    }
+
+    <span class="cm">/**
+     * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
+     */</span>
+    <span class="kw">public void</span> setApplicationContext(ApplicationContext applicationContext)  {
+        this.applicationContext = applicationContext;
+    }
+
+    <span class="cm">/**
+     * Return the configured Spring Bean for the given name.
+     *
+     * @param beanName the configured name of the Java Bean
+     * @return the configured Spring Bean for the given name
+     */</span>
+    <span class="kw">public</span> Object getBean(String beanName) {
+        return applicationContext.getBean(beanName);
+    }
+
+} </pre> 
+
+Applications typically use a border template and have a <tt>BorderPage</tt> which
+extends <tt>BasePage</tt> and defines the template. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> BasePage <span class="kw">extends</span> BasePage {
+
+    <span class="cm">/** The root Menu item. */</span>
+    <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
+	
+    <span class="cm">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span class="kw">public</span> String getTemplate() {
+        <span class="kw">return</span> <span class="st">"/border-template.htm"</span>;
+    }
+} </pre> 
+
+Most application pages subclass <tt>BorderPage</tt>, except AJAX pages which
+have no need for a HTML border template and typically extend <tt>BasePage</tt>.
+The <tt>BorderPage</tt> class should not include common logic, other than that
+required for rendering the border template.  Common page logic should be defined
+in the <tt>BasePage</tt> class.
+
 <a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
 
 You should use the Click page automapping configuration feature. See
 the <a href="configuration.html#application-automapping">Page Automapping</a> 
 topic for details.
 <p/>
-Automapping will save manually configure URL path to Page class mappings in your 
-<tt>click.xml</tt> file. If you follow this convention it is very easy to maintain 
-applications and you can quickly determine what the corresponding Page class is 
-for a page HTML template and visa versa. 
+Automapping will save you from having to manually configure URL path to Page class 
+mappings in your <tt>click.xml</tt> file. If you follow this convention it is very 
+easy to maintain and refactor applications. 
 <p/>
-An example <tt>click.xml</tt> automapping configuration is provided below:
+You can also quickly determine what the corresponding Page class is for a page 
+HTML template and visa versa, and if you use the ClickIDE Eclipse plugin you can 
+switch between a page's class and template by pressing Ctrl+Alt+S. 
+<p/>
+An example <tt>click.xml</tt> automapping configuration is provided below 
+(automapping is enabled by default):
 
 <pre class="codeConfig">
 &lt;click-app&gt;
-  &lt;pages <span class="blue">package</span>="<span class="red">com.mycorp.dashboard.page</span>" <span class="blue">automapping</span>="<span class="blue">true</span>"/&gt;
+  &lt;pages <span class="blue">package</span>="<span class="red">com.mycorp.dashboard.page</span>"/&gt;
 &lt;/click-app&gt; </pre>
 
 To see how the page templates are mapped to Page classes set the application 
@@ -287,8 +416,7 @@ To forward to another page using the Page class:
 <pre class="codeJava">
 <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
 
-    <span class="kw">private</span> ActionLink customerLink = 
-        <span class="kw">new</span> ActionLink(<span class="st">"customerLink"</span>, <span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    <span class="kw">public</span> ActionLink customerLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
     
     ..
     
@@ -313,8 +441,7 @@ customer id as a request parameter to the target page.
 <pre class="codeJava">
 <span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
 
-    <span class="kw">private</span> ActionLink customerLink = 
-        <span class="kw">new</span> ActionLink(<span class="st">"customerLink"</span>, <span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    <span class="kw">public</span> ActionLink customerLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
     
     ..
     
