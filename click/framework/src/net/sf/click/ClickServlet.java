@@ -1279,7 +1279,9 @@ public class ClickServlet extends HttpServlet {
      */
     protected void processPageFields(Page page, FieldCallback callback) {
 
-        Field[] fields = page.getClass().getFields();
+        Field[] fields = clickApp.getPageFieldArray(page.getClass());
+
+        //Field[] fields = page.getClass().getFields();
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
 
