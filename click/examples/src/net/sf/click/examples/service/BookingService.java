@@ -3,6 +3,7 @@ package net.sf.click.examples.service;
 import java.util.Date;
 
 import net.sf.click.examples.domain.CourseBooking;
+import net.sf.click.extras.cayenne.CayenneTemplate;
 
 /**
  * Provides a CourseBooking Service.
@@ -14,7 +15,7 @@ import net.sf.click.examples.domain.CourseBooking;
 public class BookingService extends CayenneTemplate {
 
     public CourseBooking findCourseBookingByID(Integer id) {
-        return (CourseBooking) objectForPK(CourseBooking.class, id);
+        return (CourseBooking) getObjectForPK(CourseBooking.class, id);
     }
 
     public Integer insertCourseBooking(CourseBooking courseBooking) {

@@ -1,6 +1,7 @@
 package net.sf.click.examples.service;
 
 import net.sf.click.examples.domain.User;
+import net.sf.click.extras.cayenne.CayenneTemplate;
 
 /**
  * Provides a User Service.
