@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.wst.html.ui.internal.style.LineStyleProviderForHTML;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
-import org.eclipse.wst.sse.ui.internal.provisional.style.Highlighter;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
 /**
@@ -22,23 +21,17 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
  */
 public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 
-	private IStructuredDocument document;
-	
-	public void init(IStructuredDocument document, Highlighter highlighter) {
-		super.init(document, highlighter);
-		this.document = document;
-	}
-	
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
         boolean result = super.prepareRegions(currentRegion, start, length, styleRanges);
         
-    	Color colorVariable = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_VAR);
+    	Color colorVariable  = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_VAR);
     	Color colorDirective = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_DIR);
-    	Color colorComment = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
+    	Color colorComment   = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
         Object sr[] = styleRanges.toArray();
 		
-        for(int i = 0; i < sr.length; i++)
-        {
+        IStructuredDocument document = getDocument();
+        
+        for(int i = 0; i < sr.length; i++){
             StyleRange styleRange = (StyleRange)sr[i];
             IStructuredDocumentRegion region = document.getRegionAtCharacterOffset(styleRange.start);
             String text = region.getText();
@@ -46,8 +39,9 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
             int mEnd = mStart + styleRange.length;
             for(IStructuredDocumentRegion chkRegion = region.getPrevious(); chkRegion != null; chkRegion = chkRegion.getPrevious()){
                 String type = chkRegion.getType();
-                if(!type.equals(DOMRegionContext.XML_CONTENT) && !type.equals(DOMRegionContext.UNDEFINED))
+                if(!type.equals(DOMRegionContext.XML_CONTENT) && !type.equals(DOMRegionContext.UNDEFINED)){
                     break;
+                }
                 text = chkRegion.getText() + text;
                 mStart += chkRegion.getLength();
                 mEnd += chkRegion.getLength();
@@ -55,8 +49,9 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 
             for(IStructuredDocumentRegion chkRegion = region.getNext(); chkRegion != null; chkRegion = chkRegion.getNext()){
                 String type = chkRegion.getType();
-                if(!type.equals(DOMRegionContext.XML_CONTENT) && !type.equals(DOMRegionContext.UNDEFINED))
+                if(!type.equals(DOMRegionContext.XML_CONTENT) && !type.equals(DOMRegionContext.UNDEFINED)){
                     break;
+                }
                 text = (new StringBuilder(String.valueOf(text))).append(chkRegion.getText()).toString();
             }
 
@@ -123,11 +118,6 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
         }
 
         return result;
-	}
-	
-	public void release() {
-		this.document = null;
-		super.release();
 	}
 	
 }
