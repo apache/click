@@ -88,7 +88,7 @@ public class DoubleFieldTest extends TestCase {
         doubleField.setMinValue(10);
         assertEquals(new Double(10), new Double(doubleField.getMinValue()));
         assertTrue(doubleField.onProcess());
-        assertTrue(doubleField.isValid());
+        assertTrue(doubleField.getError(), doubleField.isValid());
         assertEquals("10", doubleField.getValue());
         assertEquals(new Double(10), doubleField.getValueObject());
 
@@ -126,7 +126,6 @@ public class DoubleFieldTest extends TestCase {
 
         assertEquals(new Double(20), doubleField.getDouble());
         assertEquals(new Float(20), doubleField.getFloat());
-        assertEquals(Double.class, doubleField.getValueClass());
 
         request.getParameterMap().put("id", "-20.1");
 

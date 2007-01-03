@@ -48,8 +48,6 @@ public class EmailFieldTest extends TestCase {
         assertEquals("", emailField.getValue());
         assertEquals(null, emailField.getValueObject());
         
-        assertEquals(String.class, emailField.getValueClass());
-        
         request.getParameterMap().put("email", "username@server");
         
         emailField.setMinLength(10);
