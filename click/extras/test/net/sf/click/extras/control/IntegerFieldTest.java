@@ -96,7 +96,6 @@ public class IntegerFieldTest extends TestCase {
         
         assertEquals(new Integer(20), intField.getInteger());
         assertEquals(new Long(20), intField.getLong());
-        assertEquals(Integer.class, intField.getValueClass());
         
         request.getParameterMap().put("id", "-20");
         

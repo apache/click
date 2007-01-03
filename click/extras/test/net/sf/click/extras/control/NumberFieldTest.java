@@ -28,7 +28,6 @@ public class NumberFieldTest extends TestCase{
         Number decNum = new Float(2.56f);
         
         NumberField engF = new NumberField("en");
-        assertTrue(engF.getValueClass() == Number.class);
 
         try{
             engF.getNumberFormat();
@@ -143,13 +142,13 @@ public class NumberFieldTest extends TestCase{
         
         assertTrue(engF.onProcess());
         assertEquals("12.30",engF.getValue());
-        assertEquals("12.3",engF.getRequestValue());
+        assertEquals("12.3", engF.getRequestValue());
         
         params.put("en", "some value");
         assertTrue(engF.onProcess());
         assertEquals("some value",engF.getValue());
         assertNull(engF.getNumber());
-        assertEquals("some value",engF.getRequestValue());
+        assertEquals("some value", engF.getRequestValue());
     }
     
     public void testValidate() {

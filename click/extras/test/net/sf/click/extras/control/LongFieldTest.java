@@ -78,7 +78,6 @@ public class LongFieldTest extends TestCase {
         
         assertEquals(new Long(20), longField.getLong());
         assertEquals(new Integer(20), longField.getInteger());
-        assertEquals(Long.class, longField.getValueClass());
         
         request.getParameterMap().put("id", "-20");
         

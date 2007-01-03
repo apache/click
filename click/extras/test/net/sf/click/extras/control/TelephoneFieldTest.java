@@ -48,8 +48,6 @@ public class TelephoneFieldTest extends TestCase {
         assertEquals("", telephoneField.getValue());
         assertEquals(null, telephoneField.getValueObject());
         
-        assertEquals(String.class, telephoneField.getValueClass());
-        
         request.getParameterMap().put("telephone", "(01) 2345 3654");
         
         telephoneField.setMinLength(10);
