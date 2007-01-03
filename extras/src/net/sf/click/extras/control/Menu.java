@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -324,7 +324,7 @@ public class Menu implements Control {
         if (messages == null) {
             if (getContext() != null) {
                 messages =
-                    new MessagesMap(this, CONTROL_MESSAGES, getContext());
+                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
             } else {
                 String msg = "Cannot initialize messages as context not set";

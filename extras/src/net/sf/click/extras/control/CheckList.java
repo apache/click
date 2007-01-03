@@ -602,17 +602,6 @@ public class CheckList extends Field {
     }
 
     /**
-     * Returns List.class.
-     *
-     * @see net.sf.click.control.Field#getValueClass()
-     *
-     * @return class
-     */
-    public Class getValueClass() {
-        return List.class;
-    }
-
-    /**
      * Return the CheckList JavaScript client side validation function.
      *
      * @return the field JavaScript client side validation function
