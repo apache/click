@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 package net.sf.click.extras.control;
-
-import java.text.MessageFormat;
-
-import org.apache.commons.lang.StringUtils;
-
-import net.sf.click.control.TextField;
 
 /**
  * Provides a Long Field control: &nbsp; &lt;input type='text'&gt;.
@@ -55,17 +49,9 @@ import net.sf.click.control.TextField;
  *
  * @author Malcolm Edgar
  */
-public class LongField extends TextField {
+public class LongField extends NumberField {
 
     private static final long serialVersionUID = 1L;
-
-    // ----------------------------------------------------- Instance Variables
-
-    /** The maximum field value. */
-    protected long maxvalue = Long.MAX_VALUE;
-
-    /** The minimum field value. */
-    protected long minvalue = Long.MIN_VALUE;
 
     // ----------------------------------------------------------- Constructors
 
@@ -161,53 +147,6 @@ public class LongField extends TextField {
     }
 
     /**
-     * Return the maximum valid long field value.
-     *
-     * @return the maximum valid long field value
-     */
-    public long getMaxValue() {
-        return maxvalue;
-    }
-
-    /**
-     * Set the maximum valid long field value.
-     *
-     * @param value the maximum valid long field value
-     */
-    public void setMaxValue(int value) {
-        maxvalue = value;
-    }
-
-    /**
-     * Return the minimum valid long field value.
-     *
-     * @return the minimum valid long field value
-     */
-    public long getMinValue() {
-        return minvalue;
-    }
-
-    /**
-     * Set the miminum valid long field value.
-     *
-     * @param value the miminum valid long field value
-     */
-    public void setMinValue(long value) {
-        minvalue = value;
-    }
-
-    /**
-     * Return the <tt>Long.class</tt>.
-     *
-     * @see net.sf.click.control.Field#getValueClass()
-     *
-     * @return the <tt>Long.class</tt>
-     */
-    public Class getValueClass() {
-        return Long.class;
-    }
-
-    /**
      * Return the field Long value, or null if value was empty or a parsing
      * error occured.
      *
@@ -232,44 +171,6 @@ public class LongField extends TextField {
         }
     }
 
-    /**
-     * Return the HTML head import statements for the NumberField.js.
-     *
-     * @return the HTML head import statements for the NumberField.js
-     */
-    public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
-
-        return StringUtils.replace(IntegerField.NUMERICFIELD_IMPORTS,
-                                   "$",
-                                   path);
-    }
-
-    /**
-     * Return the field JavaScript client side validation function.
-     * <p/>
-     * The function name must follow the format <tt>validate_[id]</tt>, where
-     * the id is the DOM element id of the fields focusable HTML element, to
-     * ensure the function has a unique name.
-     *
-     * @return the field JavaScript client side validation function
-     */
-    public String getValidationJavaScript() {
-        Object[] args = new Object[7];
-        args[0] = getId();
-        args[1] = String.valueOf(isRequired());
-        args[2] = String.valueOf(getMinValue());
-        args[3] = String.valueOf(getMaxValue());
-        args[4] = getMessage("field-required-error", getErrorLabel());
-        args[5] = getMessage("number-minvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
-        args[6] = getMessage("number-maxvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
-
-        return MessageFormat.format(IntegerField.VALIDATE_NUMERICFIELD_FUNCTION,
-                                    args);
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -282,13 +183,9 @@ public class LongField extends TextField {
      *   <li>/click-control.properties
      *     <ul>
      *       <li>field-required-error</li>
+     *       <li>number-format-error</li>
      *       <li>number-maxvalue-error</li>
      *       <li>number-minvalue-error</li>
-     *     </ul>
-     *   </li>
-     *   <li>/net/sf/click/extras/control/LongField.properties
-     *     <ul>
-     *       <li>long-format-error</li>
      *     </ul>
      *   </li>
      * </ul>
@@ -312,7 +209,7 @@ public class LongField extends TextField {
                 }
 
             } catch (NumberFormatException nfe) {
-                setError(getMessage("long-format-error", getErrorLabel()));
+                setError(getMessage("number-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {

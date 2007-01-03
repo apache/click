@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,8 @@
  */
 package net.sf.click.extras.control;
 
-import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Locale;
-
-import org.apache.commons.lang.StringUtils;
-
-import net.sf.click.control.TextField;
 
 /**
  * Provides a Double Field control: &nbsp; &lt;input type='text'&gt;.
@@ -58,17 +52,9 @@ import net.sf.click.control.TextField;
  *
  * @author Malcolm Edgar
  */
-public class DoubleField extends TextField {
+public class DoubleField extends NumberField {
 
     private static final long serialVersionUID = 1L;
-
-    // ----------------------------------------------------- Instance Variables
-
-    /** The maximum field value. */
-    protected double maxvalue = Double.POSITIVE_INFINITY;
-
-    /** The minimum field value. */
-    protected double minvalue = Double.NEGATIVE_INFINITY;
 
     // ----------------------------------------------------------- Constructors
 
@@ -135,18 +121,11 @@ public class DoubleField extends TextField {
      * @return the field Double value
      */
     public Double getDouble() {
-        String value = getValue();
-        if (value != null && value.length() > 0) {
-            try {
-                Locale locale = getContext().getLocale();
-                NumberFormat format = NumberFormat.getNumberInstance(locale);
-                double doubleValue = format.parse(value).doubleValue();
+        Number number = getNumber();
 
-                return new Double(doubleValue);
+        if (number != null) {
+            return new Double(number.doubleValue());
 
-            } catch (ParseException nfe) {
-                return null;
-            }
         } else {
             return null;
         }
@@ -158,15 +137,7 @@ public class DoubleField extends TextField {
      * @param doubleValue the double value to set
      */
     public void setDouble(Double doubleValue) {
-        if (doubleValue != null) {
-            Locale locale = getContext().getLocale();
-            NumberFormat format = NumberFormat.getNumberInstance(locale);
-
-            setValue(format.format(doubleValue.doubleValue()));
-
-        } else {
-            setValue(null);
-        }
+        setValueObject(doubleValue);
     }
 
     /**
@@ -185,51 +156,6 @@ public class DoubleField extends TextField {
     }
 
     /**
-     * Return the maximum valid double field value.
-     *
-     * @return the maximum valid double field value
-     */
-    public double getMaxValue() {
-        return maxvalue;
-    }
-
-    /**
-     * Set the maximum valid double field value.
-     *
-     * @param value the maximum valid double field value
-     */
-    public void setMaxValue(double value) {
-        maxvalue = value;
-    }
-
-    /**
-     * Set the miminum valid double field value.
-     *
-     * @param value the miminum valid double field value
-     */
-    public void setMinValue(double value) {
-        minvalue = value;
-    }
-
-    /**
-     * Return the minimum valid double field value.
-     *
-     * @return the minimum valid double field value.
-     */
-    public double getMinValue() {
-        return minvalue;
-    }
-
-    /**
-     * Return the <tt>Double.class</tt>.
-     *
-     * @return the <tt>Double.class</tt>
-     */
-    public Class getValueClass() {
-        return Double.class;
-    }
-
-    /**
      * Return the field Double value, or null if value was empty or a parsing
      * error occured.
      *
@@ -240,67 +166,10 @@ public class DoubleField extends TextField {
     }
 
     /**
-     * Set the double value of the field using the given object.
-     *
-     * @param object the object value to set
-     */
-    public void setValueObject(Object object) {
-        if (object != null) {
-            if (object instanceof Number) {
-                Number number = (Number) object;
-                Locale locale = getContext().getLocale();
-                NumberFormat format = NumberFormat.getNumberInstance(locale);
-
-                setValue(format.format(number.doubleValue()));
-
-            } else {
-                setValue(object.toString());
-            }
-        }
-    }
-
-    /**
-     * Return the HTML head import statements for the NumberField.js.
-     *
-     * @return the HTML head import statements for the NumberField.js
-     */
-    public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
-
-        return StringUtils.replace(IntegerField.NUMERICFIELD_IMPORTS,
-                                   "$",
-                                   path);
-    }
-
-    /**
-     * Return the field JavaScript client side validation function.
-     * <p/>
-     * The function name must follow the format <tt>validate_[id]</tt>, where
-     * the id is the DOM element id of the fields focusable HTML element, to
-     * ensure the function has a unique name.
-     *
-     * @return the field JavaScript client side validation function
-     */
-    public String getValidationJavaScript() {
-        Object[] args = new Object[7];
-        args[0] = getId();
-        args[1] = String.valueOf(isRequired());
-        args[2] = String.valueOf(getMinValue());
-        args[3] = String.valueOf(getMaxValue());
-        args[4] = getMessage("field-required-error", getErrorLabel());
-        args[5] = getMessage("number-minvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMinValue())});
-        args[6] = getMessage("number-maxvalue-error",
-                new Object[]{getErrorLabel(), String.valueOf(getMaxValue())});
-
-        return MessageFormat.format(IntegerField.VALIDATE_NUMERICFIELD_FUNCTION,
-                                    args);
-    }
-
-    // --------------------------------------------------------- Public Methods
-
-    /**
-     * Process the DoubleField request submission.
+     * Validates the NumberField request submission. If the value entered
+     * by the user can be parsed by the NumberFormat the string value
+     * of this Field ({@link net.sf.click.control.Field#getValue()}) is
+     * set to the formatted value of the user input.
      * <p/>
      * A field error message is displayed if a validation error occurs.
      * These messages are defined in the resource bundle:
@@ -309,13 +178,9 @@ public class DoubleField extends TextField {
      *   <li>/click-control.properties
      *     <ul>
      *       <li>field-required-error</li>
+     *       <li>number-format-error</li>
      *       <li>number-maxvalue-error</li>
      *       <li>number-minvalue-error</li>
-     *     </ul>
-     *   </li>
-     *   <li>/net/sf/click/extras/control/DoubleField.properties
-     *     <ul>
-     *       <li>double-format-error</li>
      *     </ul>
      *   </li>
      * </ul>
@@ -329,20 +194,22 @@ public class DoubleField extends TextField {
         int length = value.length();
         if (length > 0) {
             try {
-                Locale locale = getContext().getLocale();
-                NumberFormat format = NumberFormat.getNumberInstance(locale);
-                double doubleValue = format.parse(value).doubleValue();
+                NumberFormat format = getNumberFormat();
+                Number number = format.parse(value);
+
+                double doubleValue = number.doubleValue();
 
                 if (doubleValue > maxvalue) {
-                    setErrorMessage("number-maxvalue-error", maxvalue);
+                    setErrorMessage("number-maxvalue-error",
+                                    getNumberFormat().format(maxvalue));
 
                 } else if (doubleValue < minvalue) {
-
-                    setErrorMessage("number-minvalue-error", minvalue);
+                    setErrorMessage("number-minvalue-error",
+                                    getNumberFormat().format(minvalue));
                 }
 
             } catch (ParseException pe) {
-                setError(getMessage("double-format-error", getErrorLabel()));
+                setError(getMessage("number-format-error", getErrorLabel()));
             }
         } else {
             if (isRequired()) {
@@ -350,4 +217,5 @@ public class DoubleField extends TextField {
             }
         }
     }
+
 }

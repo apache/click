@@ -474,15 +474,6 @@ public class DateField extends TextField {
     }
 
     /**
-     * Return the <tt>java.util.Date.class</tt>.
-     *
-     * @return the <tt>java.util.Date.class</tt>
-     */
-    public Class getValueClass() {
-        return Date.class;
-    }
-
-    /**
      * Return the field Date value, or null if value was empty or a parsing
      * error occured.
      *
@@ -499,7 +490,7 @@ public class DateField extends TextField {
      */
     public void setValueObject(Object object) {
         if (object != null) {
-            if (getValueClass().isAssignableFrom(object.getClass())) {
+            if (Date.class.isAssignableFrom(object.getClass())) {
                 setDate((Date) object);
 
             } else {
