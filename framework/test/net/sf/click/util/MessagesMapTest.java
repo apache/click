@@ -10,20 +10,17 @@ import net.sf.click.MockContext;
 
 public class MessagesMapTest extends TestCase {
     
-    private static final String TEST_RESOURCE = "test-resource";
-    private static final String TEST_GLOBAL = "test-global";
-    
-    public void testMap() {
+    public void testEnglishLocale() {
         Context context = new MockContext(Locale.ENGLISH);
-        
-        MessagesMap map = new MessagesMap(Control.CONTROL_MESSAGES, null, context);
-        
+
+        MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES, context);
+
         assertFalse(map.isEmpty());
-        assertEquals(27, map.size());
+        assertEquals(28, map.size());
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
-        
+
         assertFalse(map.containsKey("First"));
         try {
             assertNull(map.get("First"));
@@ -31,16 +28,19 @@ public class MessagesMapTest extends TestCase {
         } catch (MissingResourceException mre) {
             assertTrue(true);
         }
-        
-        context = new MockContext(Locale.CANADA);
-        map = new MessagesMap(Control.CONTROL_MESSAGES, null, context);
+    }
+
+    public void testCanadianLocale() {
+        Context context = new MockContext(Locale.CANADA);
+
+        MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES, context);
 
         assertFalse(map.isEmpty());
-        assertEquals(27, map.size());
+        assertEquals(28, map.size());
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
-        
+
         assertFalse(map.containsKey("First"));
         try {
             assertNull(map.get("First"));
@@ -50,9 +50,9 @@ public class MessagesMapTest extends TestCase {
         }
     }
     
-    public void testCaching() {
+    public void testMissingResourceCaching() {
         Context context = new MockContext(Locale.ENGLISH);
-        MessagesMap map = new MessagesMap("missingResource", null, context);
+        MessagesMap map = new MessagesMap(Object.class, "missingResource", context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
@@ -66,7 +66,7 @@ public class MessagesMapTest extends TestCase {
             assertTrue(true);
         }
         
-        map = new MessagesMap("missingResource", null, context);
+        map = new MessagesMap(Object.class, "missingResource", context);
         
         assertTrue(map.isEmpty());
         assertEquals(0, map.size());
@@ -81,29 +81,26 @@ public class MessagesMapTest extends TestCase {
         }
     }
     
-    public void testGlobalResourses() {
+    public void testPageResources() {
         Context context = new MockContext(Locale.ENGLISH);
-        
-        MessagesMap map = new MessagesMap(TEST_RESOURCE, 
-                                          TEST_GLOBAL,
-                                          context);
-        
+
+        MessagesMap map = new MessagesMap(TestPage.class, "click-page", context);
+
         assertFalse(map.isEmpty());
-        assertEquals(26, map.size());
-
-        assertTrue(map.containsKey("version"));
-        assertEquals("Version 0.21", map.get("version")); 
-        
-        MessagesMap map2 = new MessagesMap(TEST_GLOBAL,
-                                           Control.CONTROL_MESSAGES,
-                                           context);
-        
-        assertFalse(map2.isEmpty());
-        assertEquals(28, map2.size());
-
-        assertTrue(map.containsKey("version"));
-        assertEquals("Version 0.21", map2.get("version")); 
-
+        assertEquals(2, map.size());
     }
 
+    public void testMessageInheritance() {
+        Context context = new MockContext(Locale.ENGLISH);
+
+        MessagesMap map = new MessagesMap(Test2TextField.class, Control.CONTROL_MESSAGES, context);
+
+        assertFalse(map.isEmpty());
+        assertEquals(30, map.size());
+        
+        assertTrue(map.containsKey("name"));
+        assertEquals("Test1TextField", map.get("name"));
+        assertEquals("Test2TextField", map.get("classname"));
+    }
+    
 }

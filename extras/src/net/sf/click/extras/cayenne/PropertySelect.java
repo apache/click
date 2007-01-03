@@ -320,17 +320,6 @@ public class PropertySelect extends Select {
     }
 
     /**
-     * Return the <tt>DataObject</tt> property class.
-     *
-     * @see net.sf.click.control.Field#getValueClass()
-     *
-     * @return the <tt>DataObject</tt> property class
-     */
-    public Class getValueClass() {
-        return valueObject.getClass();
-    }
-
-    /**
      * Return the property <tt>DataObject</tt> value, or null if value was not
      * defined.
      *

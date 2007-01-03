@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -503,9 +503,8 @@ public class Page {
      public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                String baseName = getClass().getName();
                 messages =
-                    new MessagesMap(baseName, PAGE_MESSAGES, getContext());
+                    new MessagesMap(getClass(), PAGE_MESSAGES, getContext());
 
             } else {
                 String msg = "Context not set cannot initialize messages";

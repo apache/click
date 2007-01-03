@@ -158,17 +158,6 @@ public class Checkbox extends Field {
      }
 
     /**
-     * Return the <tt>Boolean.class</tt>.
-     *
-     * @see Field#getValueClass()
-     *
-     * @return the <tt>Boolean.class</tt>
-     */
-    public Class getValueClass() {
-        return Boolean.class;
-    }
-
-    /**
      * Return the field Boolean value.
      *
      * @see Field#getValueObject()

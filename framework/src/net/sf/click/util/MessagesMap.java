@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,20 @@
 package net.sf.click.util;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import org.apache.commons.lang.Validate;
 
 import net.sf.click.Context;
 
@@ -73,8 +77,8 @@ public class MessagesMap implements Map {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The resource bundle base name. */
-    protected final String baseName;
+    /** The base class. */
+    protected final Class baseClass;
 
     /** The class global resource bundle base name. */
     protected final String globalBaseName;
@@ -89,49 +93,21 @@ public class MessagesMap implements Map {
 
     /**
      * Create a resource bundle messages <tt>Map</tt> adaptor for the given
-     * resource bundle name, global resource bundle name and <tt>Context</tt>.
-     * <p/>
-     * Messages located in the resource bundle will override any messages
-     * defined in the global resource bundle.
-     *
-     * @param resource the resource bundle name
-     * @param globalResource the global resource bundle name
-     * @param context the request context
-     */
-    public MessagesMap(String resource, String globalResource, Context context)
-    {
-        if (resource == null) {
-            throw new IllegalArgumentException("Null baseName parameter");
-        }
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.baseName = resource;
-        this.locale = context.getLocale();
-
-        this.globalBaseName = globalResource;
-    }
-
-    /**
-     * Create a resource bundle messages <tt>Map</tt> adaptor for the given
      * object's class resource bundle, the global resource bundle and
      * <tt>Context</tt>.
      * <p/>
      * Messages located in the object's resource bundle will override any
      * messages defined in the global resource bundle.
      *
-     * @param object the target objects class resource bundle
+     * @param baseClass the target class
      * @param globalResource the global resource bundle name
      * @param context the request context
      */
-    public MessagesMap(Object object, String globalResource, Context context) {
-        if (object == null) {
-            throw new IllegalArgumentException("Null object parameter");
-        }
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.baseName = object.getClass().getName();
+    public MessagesMap(Class baseClass, String globalResource, Context context) {
+        Validate.notNull(baseClass, "Null object parameter");
+        Validate.notNull(context, "Null context parameter");
+
+        this.baseClass = baseClass;
         this.locale = context.getLocale();
 
         this.globalBaseName = globalResource;
@@ -191,9 +167,9 @@ public class MessagesMap implements Map {
                 "Message \"{0}\" not found in bundle \"{1}\" "
                 + "for locale \"{2}\"";
             String keyStr = (key != null) ? key.toString() : null;
-            Object[] args = { keyStr, baseName, locale };
+            Object[] args = { keyStr, baseClass.getName(), locale };
             msg = MessageFormat.format(msg, args);
-            throw new MissingResourceException(msg, baseName, keyStr);
+            throw new MissingResourceException(msg, baseClass.getName(), keyStr);
         }
     }
 
@@ -261,12 +237,20 @@ public class MessagesMap implements Map {
         return messages.entrySet();
     }
 
+    /**
+     * @see #toString()
+     */
+    public String toString() {
+        ensureInitialized();
+        return messages.toString();
+    }
+
     // ------------------------------------------------------ Protected Methods
 
     private void ensureInitialized() {
         if (messages == null) {
 
-            String resourceKey = baseName + locale.toString();
+            String resourceKey = baseClass.getName() + locale.toString();
 
             messages = (Map) MESSAGES_CACHE.get(resourceKey);
 
@@ -280,7 +264,21 @@ public class MessagesMap implements Map {
 
                 loadResourceValuesIntoMap(globalBaseName, messages);
 
-                loadResourceValuesIntoMap(baseName, messages);
+                List classnameList = new ArrayList();
+
+                // Build class list
+                Class aClass = baseClass;
+                while (!aClass.getName().equals("java.lang.Object")) {
+                    classnameList.add(aClass.getName());
+                    aClass = aClass.getSuperclass();
+                }
+
+                // Load messages from parent to child order, so that child
+                // class messages override parent messages.
+                for (int i = classnameList.size() - 1; i >= 0; i--) {
+                    String className = (String) classnameList.get(i);
+                    loadResourceValuesIntoMap(className, messages);
+                }
 
                 messages = Collections.unmodifiableMap(messages);
 
