@@ -692,7 +692,7 @@ public abstract class Field implements Control {
          if (messages == null) {
              if (getContext() != null) {
                  messages =
-                     new MessagesMap(this, CONTROL_MESSAGES, getContext());
+                     new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
              } else {
                  String msg = "Cannot initialize messages as context not set";
@@ -980,16 +980,6 @@ public abstract class Field implements Control {
      */
     public void setValue(String value) {
         this.value = value;
-    }
-
-    /**
-     * Return the value object class of the Field. This method returns
-     * <tt>String.class</tt>.
-     *
-     * @return the value object class of the field
-     */
-    public Class getValueClass() {
-        return String.class;
     }
 
     /**

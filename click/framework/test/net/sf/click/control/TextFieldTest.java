@@ -36,8 +36,6 @@ public class TextFieldTest extends TestCase {
         assertEquals("", textField.getValue());
         assertEquals(null, textField.getValueObject());
         
-        assertEquals(String.class, textField.getValueClass());
-        
         request.getParameterMap().put("text", "ratherlongtextvalue");
         
         textField.setMinLength(10);

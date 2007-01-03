@@ -36,8 +36,6 @@ public class TextAreaTest extends TestCase {
         assertEquals("", textArea.getValue());
         assertEquals(null, textArea.getValueObject());
         
-        assertEquals(String.class, textArea.getValueClass());
-        
         request.getParameterMap().put("text", "ratherlongtextvalue");
         
         textArea.setMinLength(10);
