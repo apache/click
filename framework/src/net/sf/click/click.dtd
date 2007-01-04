@@ -34,7 +34,6 @@
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
    <!ATTLIST mode value (production|profile|development|debug|trace) "development">
-   <!ATTLIST mode logto (console|servlet) "console">
 
   <!-- Application control objects. -->
   <!ELEMENT controls (control*)>

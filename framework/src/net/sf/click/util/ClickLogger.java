@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,21 @@
  */
 package net.sf.click.util;
 
-import javax.servlet.ServletContext;
-
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.log.LogChute;
 
 /**
- * Provides the internal loggers for the Click and Velocity runtime. By default
- * the runtime loggers will send messages to the console [System.out].
- * <p/>
- * To configure the runtime loggers to send their messages to
- * <a href="../../../../../servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext.log</a>
- * set the config application <b>mode</b> <span class="blue">logto</span> attribute,
- * for example:
- *
- * <pre class="codeConfig">
- * &lt;mode< value="production" <span class="blue">logto</span>="<span class="red">servlet</span>"&gt; </pre>
- *
+ * Provides the internal loggers for the Click and Velocity runtime. The runtime
+ * loggers will send messages to the console [System.out].
  * <p/>
  * The ClickLogger is designed to avoid the logging configuration, classpath
- * and appender issues that plague existing logging frameworks.
+ * and appender issues that plague existing logging frameworks on JEE
+ * application servers.
+ * <p/>
+ * This class is intended for internal Click and Velocity use only and should
+ * not be used by application code. For application logging please use the
+ * Log4J or Commons Logging libraries.
  *
  * @author Malcolm Edgar
  */
@@ -70,12 +64,6 @@ public class ClickLogger implements LogChute {
     /** The logger name. */
     protected final String name;
 
-    /**
-     * The servlet context to log messages to. If the servlet context is null
-     * message will be logged to the console [System.out].
-     */
-    protected ServletContext servletContext = null;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -108,11 +96,6 @@ public class ClickLogger implements LogChute {
      * @throws Exception if an initialization error occurs
      */
     public void init(RuntimeServices rs) throws Exception {
-        String logto = (String) rs.getApplicationAttribute(LOG_TO);
-        if ("servlet".equals(logto)) {
-            servletContext = (ServletContext)
-                rs.getApplicationAttribute(ServletContext.class.getName());
-        }
 
         Integer level = (Integer) rs.getApplicationAttribute(LOG_LEVEL);
         if (level instanceof Integer) {
@@ -192,19 +175,11 @@ public class ClickLogger implements LogChute {
         buffer.append(LEVELS[level + 1]);
         buffer.append(message);
 
-        if (servletContext != null) {
-            if (error != null) {
-                servletContext.log(buffer.toString(), error);
-            } else {
-                servletContext.log(buffer.toString());
-            }
+        if (error != null) {
+            System.out.print(buffer.toString());
+            error.printStackTrace(System.out);
         } else {
-            if (error != null) {
-                System.out.print(buffer.toString());
-                error.printStackTrace(System.out);
-            } else {
-                System.out.println(buffer.toString());
-            }
+            System.out.println(buffer.toString());
         }
     }
 
@@ -228,16 +203,6 @@ public class ClickLogger implements LogChute {
      */
     public void setLevel(int level) {
         logLevel = level;
-    }
-
-    /**
-     * Set the servlet context to log messages to. If the servlet context is
-     * null messages will be logged to the console [System.out].
-     *
-     * @param servletContext to log message to
-     */
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
     }
 
     /**
