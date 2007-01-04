@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -672,17 +672,10 @@ class ClickApp implements EntityResolver {
         Element modeElm = getChild(rootElm, "mode");
 
         String modeValue = "development";
-        String logto = "console";
 
         if (modeElm != null) {
             if (StringUtils.isNotBlank(modeElm.getAttribute("value"))) {
                 modeValue = modeElm.getAttribute("value");
-            }
-
-            // Configure loggig to console or servlet context.
-            logto = modeElm.getAttribute("logto");
-            if (StringUtils.isBlank(logto)) {
-                logto = "console";
             }
         }
 
@@ -725,20 +718,6 @@ class ClickApp implements EntityResolver {
         logger.setLevel(clickLogLevel);
         velocityEngine.setApplicationAttribute(ClickLogger.LOG_LEVEL,
                                                velocityLogLevel);
-
-        if (logto.equalsIgnoreCase("servlet")) {
-            logger.setServletContext(servletContext);
-            velocityEngine.setApplicationAttribute(ClickLogger.LOG_TO,
-                                                   "servlet");
-
-        } else if (logto.equalsIgnoreCase("console")) {
-            // Do nothing
-
-        } else {
-            String msg = "Invalid mode logto attribute '" + logto
-                         + "' logging to console instead.";
-            logger.warn(msg);
-        }
     }
 
     private void loadDefaultPages() throws ClassNotFoundException {
