@@ -7,7 +7,10 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,18 +31,25 @@ import org.objectstyle.cayenne.access.DbGenerator;
 import org.objectstyle.cayenne.conf.Configuration;
 import org.objectstyle.cayenne.conf.ServletUtil;
 import org.objectstyle.cayenne.map.DataMap;
+import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
  * Provides a database initialization filter. This servlet filter creates a
  * examples database schema using the Cayenne {@link DbGenerator} utility class,
  * and loads data files into the database.
+ * <p/>
+ * This filter also provides a customer reloading task which runs every 15 
+ * minutes.
  *
  * @author Malcolm Edgar
  */
 public class DatabaseInitFilter implements Filter {
+    
+    private static final long RELOAD_TIMER_INTERVAL = 1000 * 60 * 15;
 
-    private static final SimpleDateFormat FORMAT
-        = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    
+    private Timer reloadTimer = new Timer(true);
 
     // --------------------------------------------------------- Public Methods
 
@@ -58,6 +68,8 @@ public class DatabaseInitFilter implements Filter {
             initDatabaseSchema(dataNode, dataMap);
 
             loadDatabase();
+            
+            reloadTimer.schedule(new ReloadTask(), 10000, RELOAD_TIMER_INTERVAL);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,9 +87,16 @@ public class DatabaseInitFilter implements Filter {
     }
 
     /**
+     * Cancel the reload timer.
+     * 
      * @see Filter#destroy()
      */
     public void destroy() {
+        reloadTimer.cancel();
+    }
+    
+    protected void finalize() {
+        System.out.println(getClass().getName() + ".finalize");
     }
 
     // -------------------------------------------------------- Private Methods
@@ -112,6 +131,46 @@ public class DatabaseInitFilter implements Filter {
         final DataContext dataContext = DataContext.createDataContext();
 
         // Load users data file
+        loadUsers(dataContext);
+        
+        // Load customers data file
+        loadCustomers(dataContext);
+
+        // Load customers data file
+        loadSystemCodes(dataContext);
+        
+        dataContext.commitChanges();
+    }
+
+    private static void loadFile(String filename, DataContext dataContext,
+            LineProcessor lineProcessor) throws IOException {
+
+        InputStream is = DatabaseInitFilter.class.getResourceAsStream(filename);
+
+        if (is == null) {
+            throw new RuntimeException("classpath file not found: " + filename);
+        }
+
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(is));
+
+            String line = reader.readLine();
+            while (line != null) {
+                line = line.trim();
+
+                if (line.length() > 0 && !line.startsWith("#")) {
+                    lineProcessor.processLine(line, dataContext);
+                }
+
+                line = reader.readLine();
+            }
+        } finally {
+            ClickUtils.close(reader);
+        }
+    }
+    
+    private void loadUsers(final DataContext dataContext) throws IOException {
         loadFile("users.txt", dataContext, new LineProcessor() {
             public void processLine(String line, DataContext context) {
                 StringTokenizer tokenizer = new StringTokenizer(line, ",");
@@ -126,7 +185,9 @@ public class DatabaseInitFilter implements Filter {
                 context.registerNewObject(user);
             }
         });
-
+    }
+    
+    private static void loadCustomers(final DataContext dataContext) throws IOException {
         // Load customers data file
         loadFile("customers.txt", dataContext, new LineProcessor() {
             public void processLine(String line, DataContext context) {
@@ -156,8 +217,9 @@ public class DatabaseInitFilter implements Filter {
                 dataContext.registerNewObject(customer);
             }
         });
-
-        // Load customers data file
+    }
+    
+    private void loadSystemCodes(final DataContext dataContext) throws IOException {
         loadFile("system-codes.txt", dataContext, new LineProcessor() {
             public void processLine(String line, DataContext context) {
                 StringTokenizer tokenizer = new StringTokenizer(line, ",");
@@ -171,51 +233,50 @@ public class DatabaseInitFilter implements Filter {
                 dataContext.registerNewObject(systemCode);
             }
         });
- 
-        dataContext.commitChanges();
-    }
-
-    private void loadFile(String filename, DataContext dataContext,
-            LineProcessor lineProcessor) throws IOException {
-
-        InputStream is = DatabaseInitFilter.class.getResourceAsStream(filename);
-
-        if (is == null) {
-            throw new RuntimeException("classpath file not found: " + filename);
-        }
-
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(is));
-
-            String line = reader.readLine();
-            while (line != null) {
-                line = line.trim();
-
-                if (line.length() > 0 && !line.startsWith("#")) {
-                    lineProcessor.processLine(line, dataContext);
-                }
-
-                line = reader.readLine();
-            }
-        } finally {
-            ClickUtils.close(reader);
-        }
     }
 
     private static interface LineProcessor {
         public void processLine(String line, DataContext dataContext);
     }
 
-    private String next(StringTokenizer tokenizer) {
+    private static String next(StringTokenizer tokenizer) {
         return tokenizer.nextToken().trim();
     }
 
-    private Date createDate(String pattern) {
+    private static Date createDate(String pattern) {
         try {
             return FORMAT.parse(pattern);
         } catch (ParseException pe) {
             return null;
         }
+    }
+    
+    private static class ReloadTask extends TimerTask {
+
+        public void run() {
+            DataContext dataContext = null;
+            try {
+                dataContext = DataContext.createDataContext();
+                
+                SelectQuery query = new SelectQuery(Customer.class);
+                List list = dataContext.performQuery(query);
+                
+                if (list.size() < 60) {
+                    dataContext.deleteObjects(list);
+                    
+                    loadCustomers(dataContext);
+                    
+                    dataContext.commitChanges();
+                }
+
+            } catch (Throwable t) {
+                t.printStackTrace();
+                
+                if (dataContext != null) {
+                    dataContext.rollbackChanges();
+                }
+            }
+        }
+        
     }
 }
