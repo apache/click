@@ -43,6 +43,10 @@ package net.sf.click.extras.control;
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
+ * The LongField has left justified horizontal text alignment,
+ * {@link #setTextAlign(String)}.
+ * <p/>
+ *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -63,6 +67,7 @@ public class LongField extends NumberField {
     public LongField(String name) {
         super(name);
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setTextAlign("left");
     }
 
     /**
@@ -74,6 +79,7 @@ public class LongField extends NumberField {
     public LongField(String name, boolean required) {
         super(name, required);
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setTextAlign("left");
     }
 
     /**
@@ -85,6 +91,7 @@ public class LongField extends NumberField {
     public LongField(String name, String label) {
         super(name, label);
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setTextAlign("left");
     }
 
     /**
@@ -107,6 +114,7 @@ public class LongField extends NumberField {
      */
     public LongField() {
         setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setTextAlign("left");
     }
 
     // ------------------------------------------------------ Public Attributes
