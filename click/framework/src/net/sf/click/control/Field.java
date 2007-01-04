@@ -847,7 +847,7 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Set the field CSS "text-align" style.
+     * Set the field CSS horizontal "text-align" style.
      *
      * @param align the CSS "text-align" value: <tt>["left", "right", "center"]</tt>
      */
