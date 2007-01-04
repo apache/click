@@ -62,9 +62,6 @@ import org.apache.commons.lang.StringUtils;
  * {@link #getNumber()} is then the formatted number. It is not the orginal Number
  * passed in. To circumvent formatting use setValue().
  * <p/>
- * To alter the field text alignment use the method {@link #setTextAlign(String)}.
- * By default text alignment is left justified.
- * <p/>
  * The NumberField uses a JavaScript onKeyPress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
  * reference the {@link net.sf.click.util.PageImports} object in your page
@@ -79,6 +76,10 @@ import org.apache.commons.lang.StringUtils;
  *   <span class="red">$form</span>
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
+ *
+ * The NumberField has right justified horizontal text alignment,
+ * {@link #setTextAlign(String)}.
+ * <p/>
  *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
@@ -146,6 +147,7 @@ public class NumberField extends TextField {
     public NumberField(String name) {
         super(name);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("right");
     }
 
     /**
@@ -157,6 +159,7 @@ public class NumberField extends TextField {
     public NumberField(String name, String label) {
         super(name, label);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("right");
     }
 
     /**
@@ -188,8 +191,8 @@ public class NumberField extends TextField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public NumberField() {
-        super();
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("right");
     }
 
     // ------------------------------------------------------ Public Attributes

@@ -46,6 +46,10 @@ import java.text.ParseException;
  *  &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
+ * The DoubleField has left justified horizontal text alignment,
+ * {@link #setTextAlign(String)}.
+ * <p/>
+ *
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
@@ -66,6 +70,7 @@ public class DoubleField extends NumberField {
     public DoubleField(String name) {
         super(name);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("left");
     }
 
     /**
@@ -77,6 +82,7 @@ public class DoubleField extends NumberField {
     public DoubleField(String name, String label) {
         super(name, label);
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("left");
     }
 
     /**
@@ -108,8 +114,8 @@ public class DoubleField extends NumberField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public DoubleField() {
-        super();
         setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setTextAlign("left");
     }
 
     // ------------------------------------------------------ Public Attributes
