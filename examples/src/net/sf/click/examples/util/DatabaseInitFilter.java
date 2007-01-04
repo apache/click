@@ -38,17 +38,17 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * examples database schema using the Cayenne {@link DbGenerator} utility class,
  * and loads data files into the database.
  * <p/>
- * This filter also provides a customer reloading task which runs every 15 
+ * This filter also provides a customer reloading task which runs every 15
  * minutes.
  *
  * @author Malcolm Edgar
  */
 public class DatabaseInitFilter implements Filter {
-    
+
     private static final long RELOAD_TIMER_INTERVAL = 1000 * 60 * 15;
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     private Timer reloadTimer = new Timer(true);
 
     // --------------------------------------------------------- Public Methods
@@ -68,7 +68,7 @@ public class DatabaseInitFilter implements Filter {
             initDatabaseSchema(dataNode, dataMap);
 
             loadDatabase();
-            
+
             reloadTimer.schedule(new ReloadTask(), 10000, RELOAD_TIMER_INTERVAL);
 
         } catch (Exception e) {
@@ -88,13 +88,13 @@ public class DatabaseInitFilter implements Filter {
 
     /**
      * Cancel the reload timer.
-     * 
+     *
      * @see Filter#destroy()
      */
     public void destroy() {
         reloadTimer.cancel();
     }
-    
+
     protected void finalize() {
         System.out.println(getClass().getName() + ".finalize");
     }
@@ -132,13 +132,13 @@ public class DatabaseInitFilter implements Filter {
 
         // Load users data file
         loadUsers(dataContext);
-        
+
         // Load customers data file
         loadCustomers(dataContext);
 
         // Load customers data file
         loadSystemCodes(dataContext);
-        
+
         dataContext.commitChanges();
     }
 
@@ -169,7 +169,7 @@ public class DatabaseInitFilter implements Filter {
             ClickUtils.close(reader);
         }
     }
-    
+
     private void loadUsers(final DataContext dataContext) throws IOException {
         loadFile("users.txt", dataContext, new LineProcessor() {
             public void processLine(String line, DataContext context) {
@@ -186,7 +186,7 @@ public class DatabaseInitFilter implements Filter {
             }
         });
     }
-    
+
     private static void loadCustomers(final DataContext dataContext) throws IOException {
         // Load customers data file
         loadFile("customers.txt", dataContext, new LineProcessor() {
@@ -218,7 +218,7 @@ public class DatabaseInitFilter implements Filter {
             }
         });
     }
-    
+
     private void loadSystemCodes(final DataContext dataContext) throws IOException {
         loadFile("system-codes.txt", dataContext, new LineProcessor() {
             public void processLine(String line, DataContext context) {
@@ -250,33 +250,33 @@ public class DatabaseInitFilter implements Filter {
             return null;
         }
     }
-    
+
     private static class ReloadTask extends TimerTask {
 
         public void run() {
             DataContext dataContext = null;
             try {
                 dataContext = DataContext.createDataContext();
-                
+
                 SelectQuery query = new SelectQuery(Customer.class);
                 List list = dataContext.performQuery(query);
-                
+
                 if (list.size() < 60) {
                     dataContext.deleteObjects(list);
-                    
+
                     loadCustomers(dataContext);
-                    
+
                     dataContext.commitChanges();
                 }
 
             } catch (Throwable t) {
                 t.printStackTrace();
-                
+
                 if (dataContext != null) {
                     dataContext.rollbackChanges();
                 }
             }
         }
-        
+
     }
 }
