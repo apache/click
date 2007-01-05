@@ -32,7 +32,6 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 	private Text textLocale;
 	private Text textFormat;
 	private Combo comboMode;
-	private Combo comboLogTo;
 	
 	public void initModel(IStructuredModel model){
 		Section generic = toolkit.createSection(form.getBody(), Section.DESCRIPTION|Section.TITLE_BAR);
@@ -138,36 +137,6 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 			}
 		});
 		
-		
-		comboLogTo = AttributeEditorUtils.createCombo(
-				toolkit, form.getBody(), mode, 
-				ClickPlugin.getString("editor.clickXML.general.logTo"), 
-				ClickPlugin.ATTR_LOGTO, ClickUtils.createComboValues(ClickPlugin.LOGTO_VALUES));
-		comboLogTo.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent evt){
-				IDOMElement mode = ClickUtils.getElement(clickApp, ClickPlugin.TAG_MODE);
-				if(comboLogTo.getText().equals("")){
-					if(mode!=null){
-						mode.removeAttribute(ClickPlugin.ATTR_LOGTO);
-						if(mode.getAttributes().getLength()==0){
-							clickApp.removeChild(mode);
-						}
-					}
-				} else {
-					if(mode==null){
-						mode = (IDOMElement)clickApp.getOwnerDocument().createElement(ClickPlugin.TAG_MODE);
-						IDOMElement control = ClickUtils.getElement(clickApp, ClickPlugin.TAG_CONTROLS);
-						if(control!=null){
-							clickApp.insertBefore(mode, control);
-						} else {
-							clickApp.appendChild(mode);
-						}
-					}
-					mode.setAttribute(ClickPlugin.ATTR_LOGTO, comboLogTo.getText());
-				}
-			}
-		});
-		
 		form.getBody().layout();
 	}
 
@@ -181,7 +150,7 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 		updateText(textCharset, clickApp, ClickPlugin.ATTR_CHARSET);
 		updateText(textFormat, format, ClickPlugin.ATTR_CLASSNAME);
 		updateCombo(comboMode, mode, ClickPlugin.ATTR_VALUE);
-		updateCombo(comboLogTo, mode, ClickPlugin.ATTR_LOGTO);
+//		updateCombo(comboLogTo, mode, ClickPlugin.ATTR_LOGTO);
 	}
 	
 	private void updateText(Text text, IDOMElement element, String attrName){
