@@ -158,10 +158,6 @@ public class ClickXMLValidator {
 				if(!containsValue(ClickPlugin.MODE_VALUES, attrValue)){
 					createWarningMarker(file, "modeValue", new String[0], start, length);
 				}
-			} else if(attrName.equals(ClickPlugin.ATTR_LOGTO)){
-				if(!containsValue(ClickPlugin.LOGTO_VALUES, attrValue)){
-					createWarningMarker(file, "modeLogTo", new String[0], start, length);
-				}
 			}
 		}
 		// charset of <click-app>

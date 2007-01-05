@@ -45,7 +45,6 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_PATH = "path";
 	public static final String ATTR_AUTO_MAPPING = "automapping";
 	public static final String ATTR_PACKAGE = "package";
-	public static final String ATTR_LOGTO = "logto";
 	public static final String ATTR_PATTERN = "pattern";
 	
 	public static final String[] AUTO_MAPPING_VALUES = {"true", "false"};
