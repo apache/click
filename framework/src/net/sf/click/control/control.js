@@ -72,8 +72,11 @@ function noLetterFilter(event) {
 
 function setFocus(id) {
     var field = document.getElementById(id);
-    if (field && field.focus && field.type != "hidden") {
-        field.focus();
+    if (field && field.focus && field.type != "hidden" && field.disabled != true) {
+    	try {
+			field.focus();
+		} catch (err) {
+		}
     }
 }
 
