@@ -1,15 +1,21 @@
 <html>
 <head>
-  <title>$title</title>
-  <link rel="stylesheet" type="text/css" href="style.css" title="Style"/>
-  $imports
+<title>Click Quick Start - $title</title>
+<link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"/>
+<link rel="stylesheet" type="text/css" href="$context/assets/menu.css" title="Style"/>
+<script type="text/javascript" src="$context/assets/menu.js"></script>
+$imports
 </head>
 
 <body>
  
   <div id="header">
-  	<h2 id="title">$title</h2>
+  	<span id="title">Quick Start :: $title</span>
   </div>
+  
+#if ($rootMenu) 
+  #writeMenu($rootMenu) 
+#end
 
   <div id="container">
     #parse($path)
