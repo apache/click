@@ -176,31 +176,39 @@ Next add a <span class="blue">style.css</span> file to your web root directory:
 
 <pre class="codeHtml">
 body {
-    font-family: Arial;
-    margin: 0;
-    padding: 0;
+	font-family: Arial;
+	font-size: 11pt;
+	margin: 0;
+	padding: 0;
 }
 
 #header {
-    background: #FDE3B5 url(/quickstart/banner.png) top left no-repeat;
-    height: 60px;
-    position: relative;
-    width: 100%;
+	background: #FDE3B5 url(/click-quickstart/assets/banner.png) top left no-repeat;
+	border-bottom: 1px solid black;
+	height: 51px;
+	position: relative;
+	width: 100%;
 }
 
 #title {
-    color: white; 
-    font-size: 28px;
-    left: 15px;
-    position: absolute;
-    top: 12px;
+	color: white; 
+	font-size: 24px;
+	font-weight: bolder;
+	position: absolute;
+	left: 15px;
+	top: 10px;
 }
 
 #container { 
-    padding-top: 1em;
-    padding-left: 1.5em;
-    position: relative;
-    z-index: 0;
+	padding-top: 1em;
+	padding-left: 1.5em;
+	position: relative;
+	z-index: 0;
+}
+
+h3.title {
+	margin-top: 0em;
+	margin-bottom: 1em;
 } </pre>
 
 You should now have the following web files:
@@ -253,14 +261,14 @@ root directory. In this file include the HTML content:
 <pre class="codeHtml">
 &lt;html&gt;
 &lt;head&gt;
-  &lt;title&gt;<span class="blue">$title</span>&lt;/title&gt;
-  &lt;link rel="stylesheet" type="text/css" href="style.css" title="Style"/&gt;
+&lt;title&gt;<span class="blue">Click Quickstart - $title</span>&lt;/title&gt;
+&lt;link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"/&gt;
 &lt;/head&gt;
 
 &lt;body&gt;
  
   &lt;div id="header"&gt;
-    &lt;span class="title"&gt;<span class="blue">$title</span>&lt;/span&gt;
+    &lt;span class="title"&gt;<span class="blue">Quick Start :: $title</span>&lt;/span&gt;
   &lt;/div&gt;
   
   &lt;div id="container"&gt;
