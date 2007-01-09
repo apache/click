@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<menu>
+
+	<menu label="Home" path="user/home.htm" roles="tomcat, role1"/>
+
+  	<menu label="User" path="user/home.htm" roles="tomcat, role1">
+  		<menu label="User Page 1" path="user/user-1.htm" roles="tomcat, role1"/>
+  		<menu label="User Page 2" path="user/user-2.htm" roles="tomcat, role1"/>
+  	</menu>
+
+  	<menu label="Admin" path="admin/admin-1.htm" roles="role1">
+  		<menu label="Admin Page 1" path="admin/admin-1.htm" roles="tomcat, role1"/>
+  		<menu label="Admin Page 2" path="admin/admin-2.htm" roles="tomcat, role1"/>
+  	</menu>
+
+</menu>
