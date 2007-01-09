@@ -23,7 +23,8 @@ function onShowTab(index) {
 $form.startTag()
 <table border="0" cellpadding="0" cellspacing="0">
 
-	#* Render form error *#
+	#* Render form errors at the top position *#
+#if ($form.errorsPosition == "top")
 	#if ($form.error)
 	<tr style="${form.errorsStyle}">
     	<td class="tf_error"> $form.error </td>
@@ -40,6 +41,7 @@ $form.startTag()
     	</td>
 	</tr>		
 	#end
+#end	
 	
 	<tr><td style="height:0.5em;">&nbsp;</td></tr>
 
@@ -84,7 +86,27 @@ $form.startTag()
 			#end
 		</td>
    	</tr>
+
+	#* Render form errors at the middle position *#
+#if ($form.errorsPosition == "middle")
+	#if ($form.error)
+	<tr style="${form.errorsStyle}">
+    	<td class="tf_error"> $form.error </td>
+	</tr>
+	#end
 	
+	#* Render field errors *#
+	#foreach ($errorField in $form.errorFields)
+	<tr>
+    	<td style="${form.errorsStyle}" class="tf_error">
+    		<a class="error" href="#" 
+			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
+			  > $errorField.error </a>
+    	</td>
+	</tr>		
+	#end
+#end
+
 	<tr><td style="height:0.5em;">&nbsp;</td></tr>
 
 	#* Render buttons *#
@@ -95,6 +117,29 @@ $form.startTag()
     	#end
     	</td>
  	</tr>
+
+	#* Render form errors at the bottom position *#
+#if ($form.errorsPosition == "bottom")
+
+	<tr><td style="height:0.5em;">&nbsp;</td></tr>
+
+	#if ($form.error)
+	<tr style="${form.errorsStyle}">
+    	<td class="tf_error"> $form.error </td>
+	</tr>
+	#end
+	
+	#* Render field errors *#
+	#foreach ($errorField in $form.errorFields)
+	<tr>
+    	<td style="${form.errorsStyle}" class="tf_error">
+    		<a class="error" href="#" 
+			  onclick="onShowTab($form.getTabSheetNumber($errorField.name));setFocus('$errorField.id');"
+			  > $errorField.error </a>
+    	</td>
+	</tr>		
+	#end
+#end	
 
 </table>
 $form.endTag()

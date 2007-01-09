@@ -6,6 +6,7 @@ import java.util.List;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
+import net.sf.click.control.Form;
 import net.sf.click.control.Radio;
 import net.sf.click.control.RadioGroup;
 import net.sf.click.control.Submit;
@@ -44,6 +45,7 @@ public class TabbedFormDemo extends BorderPage {
         form.setBackgroundColor("#FFFABF");
         form.setTabHeight("210px");
         form.setTabWidth("420px");
+        form.setErrorsPosition(Form.POSITION_TOP);
 
         // Contact tab sheet
 
