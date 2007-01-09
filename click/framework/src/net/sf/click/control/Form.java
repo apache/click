@@ -508,7 +508,7 @@ public class Form implements Control {
     protected static final String FOCUS_JAVASCRIPT =
         "<script type=\"text/javascript\"><!--\n"
         + "var field = document.getElementById('$id');\n"
-        + "if (field && field.focus && field.type != 'hidden') { field.focus(); };\n"
+        + "if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };\n"
         + "//--></script>\n";
 
     // -------------------------------------------------------- Class Variables
@@ -552,7 +552,7 @@ public class Form implements Control {
      * The number of form layout table columns, default value: <tt>1</tt>.
      * <p/>
      * This property is used to layout the number of table columns the form
-     * is rendered in using a flow layout style.
+     * is rendered with using a flow layout style.
      */
     protected int columns = 1;
 
@@ -904,7 +904,7 @@ public class Form implements Control {
 
     /**
      * Return the number of form layout table columns. This property is used to
-     * layout the number of table columns the form is rendered in.
+     * layout the number of table columns the form is rendered with.
      *
      * @return the number of form layout table columns
      */
@@ -914,7 +914,7 @@ public class Form implements Control {
 
     /**
      * Set the number of form layout table columns. This property is used to
-     * layout the number of table columns the form is rendered in.
+     * layout the number of table columns the form is rendered with.
      *
      * @param columns the number of form layout table columns
      */

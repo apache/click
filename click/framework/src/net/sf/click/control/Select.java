@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +159,14 @@ import net.sf.click.util.PropertyUtils;
  *
  * Note is this example the {@link #add(String)} method is used to an an Option
  * item to the Select.
+ *
+ * <h3>Readonly Behaviour</h3>
+ *
+ * Note the &lt;select&gt; HTML element does not support the "readonly" attribute.
+ * So to provide readonly style behaviour, the Select control it will render the
+ * "disabled" attribute when it is readonly to give it the appearance of a
+ * readonly field, and will render a hidden field of the same name so that its
+ * value will be submitted with the form.
  *
  * <p/>
  * See also the W3C HTML reference:
@@ -596,11 +604,8 @@ public class Select extends Field {
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
-        if (isDisabled()) {
+        if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
-        }
-        if (isReadonly()) {
-            buffer.appendAttributeReadonly();
         }
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
@@ -632,6 +637,16 @@ public class Select extends Field {
         }
 
         buffer.elementEnd("select");
+
+        // select element does not support "readonly" element, so as a work around
+        // we make the field "disabled" and render a hidden field to submit its value
+        if (isReadonly()) {
+            buffer.elementStart("input");
+            buffer.appendAttribute("type", "hidden");
+            buffer.appendAttribute("name", getName());
+            buffer.appendAttribute("value", getValue());
+            buffer.elementEnd();
+        }
 
         return buffer.toString();
     }
