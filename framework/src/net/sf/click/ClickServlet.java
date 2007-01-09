@@ -1281,7 +1281,7 @@ e.printStackTrace();
     protected void processPageFields(Page page, FieldCallback callback) {
 
         Field[] fields = clickApp.getPageFieldArray(page.getClass());
-        
+
         if (fields != null) {
             for (int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
