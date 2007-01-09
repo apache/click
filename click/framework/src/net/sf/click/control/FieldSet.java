@@ -104,6 +104,16 @@ public class FieldSet extends Field {
 
     // ----------------------------------------------------- Instance Variables
 
+    /**
+     * The number of fieldset layout table columns. By default this property
+     * inherits its value from the parent form, but can be overridden to specify
+     * the fieldsets number of layout columns.
+     * <p/>
+     * This property is used to layout the number of table columns the fieldset
+     * is rendered with using a flow layout style.
+     */
+    protected Integer columns;
+
     /** The ordered list of field values, excluding buttons. */
     protected final List fieldList = new ArrayList();
 
@@ -257,6 +267,33 @@ public class FieldSet extends Field {
                 removeField(fieldNames.get(i).toString());
             }
         }
+    }
+
+    /**
+     * Return the number of fieldset layout table columns. This property is used
+     * to layout the number of table columns the fieldset is rendered with.
+     * <p/>
+     * By default this property inherits its value from the parent form, but
+     * can be specified to override the form value.
+     *
+     * @return the number of fieldset layout table columns
+     */
+    public int getColumns() {
+        if (columns != null) {
+            return columns.intValue();
+        } else {
+            return getForm().getColumns();
+        }
+    }
+
+    /**
+     * Set the number of fieldset layout table columns. This property is used to
+     * layout the number of table columns the fieldset is rendered with.
+     *
+     * @param columns the number of fieldset layout table columns
+     */
+    public void setColumns(int columns) {
+        this.columns = new Integer(columns);
     }
 
     /**
@@ -665,7 +702,7 @@ public class FieldSet extends Field {
                     column += (width.intValue() - 1);
                 }
 
-                if (column >= getForm().getColumns()) {
+                if (column >= getColumns()) {
                     buffer.append("</tr>\n");
                     column = 1;
                 } else {
