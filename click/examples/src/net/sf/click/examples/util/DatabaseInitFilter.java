@@ -95,10 +95,6 @@ public class DatabaseInitFilter implements Filter {
         reloadTimer.cancel();
     }
 
-    protected void finalize() {
-        System.out.println(getClass().getName() + ".finalize");
-    }
-
     // -------------------------------------------------------- Private Methods
 
     /**
