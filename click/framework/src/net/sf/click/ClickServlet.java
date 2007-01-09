@@ -814,6 +814,7 @@ public class ClickServlet extends HttpServlet {
             return newPage;
 
         } catch (Exception e) {
+e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
@@ -1280,20 +1281,21 @@ public class ClickServlet extends HttpServlet {
     protected void processPageFields(Page page, FieldCallback callback) {
 
         Field[] fields = clickApp.getPageFieldArray(page.getClass());
+        
+        if (fields != null) {
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i];
 
-        //Field[] fields = page.getClass().getFields();
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
+                try {
+                    Object fieldValue = field.get(page);
 
-            try {
-                Object fieldValue = field.get(page);
+                    if (fieldValue != null) {
+                        callback.processField(field.getName(), fieldValue);
+                    }
 
-                if (fieldValue != null) {
-                    callback.processField(field.getName(), fieldValue);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
-
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
         }
     }
