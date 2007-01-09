@@ -8,13 +8,23 @@ The structure of this web application is detailed below:
  |
  +---[webapp]               Web application root directory
  |    |
- |    +---[images]          Web Images directory 
+ |    +---[admin]           Admin role pages directory 
+ |    |
+ |    +---[assets]          Web static assets directory 
  |    |    
  |    +---[META-INF]        Tomcat context.xml directory
+ |    |
+ |    +---[user]            User role pages directory 
  |    |
  |    +---[WEB-INF]         Protected Web Inf directory
  |         |
  |         +---[classes]    Compile classes output directory
+ |         |
+ |         +---click.xml    Click configuration file
+ |         |
+ |         +---menu.xml     Menu configuration file
+ |         |
+ |         +---web.xml      Web configuration file
  |
  +---build.xml
 
