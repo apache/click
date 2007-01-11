@@ -699,7 +699,7 @@ the user has a session, otherwise the request is redirected to the login page.
         <span class="kw">if</span> (getContext().hasSession()) {
             <span class="kw">return true</span>;
             
-        } <span class="kw">else</span> (
+        } <span class="kw">else</span> {
             setRedirect(LoginPage.<span class="kw">class</span>);
             <span class="kw">return false</span>;
         }
@@ -723,7 +723,7 @@ you could use a Secure page of:
         <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
             <span class="kw">return true</span>;
             
-        } <span class="kw">else</span> (
+        } <span class="kw">else</span> {
             setRedirect(LoginPage.<span class="kw">class</span>);
             <span class="kw">return false</span>;
         }
@@ -748,7 +748,7 @@ Application Admin pages would extend this secure page to provide their functiona
         <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
             <span class="kw">return true</span>;
 
-        } <span class="kw">else</span> (
+        } <span class="kw">else</span> {
             setRedirect(LoginPage.<span class="kw">class</span>);
             <span class="kw">return false</span>;
         }
