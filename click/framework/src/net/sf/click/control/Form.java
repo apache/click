@@ -684,10 +684,11 @@ public class Form implements Control {
      */
     public void add(Field field) {
         if (field == null) {
-            throw new IllegalArgumentException("field parameter cannot be null");
+            throw new IllegalArgumentException("Field parameter cannot be null");
         }
         if (StringUtils.isBlank(field.getName())) {
-            throw new IllegalArgumentException("Field name not defined");
+            String msg = "Field name not defined: " + field.getClass().getName();
+            throw new IllegalArgumentException(msg);
         }
         if (getFields().containsKey(field.getName())
             && !(field instanceof Label)) {
@@ -724,12 +725,17 @@ public class Form implements Control {
      *  a button is added, or if the field name is not defined
      */
     public void add(Field field, int width) {
+        if (field == null) {
+            throw new IllegalArgumentException("Field parameter cannot be null");
+        }
         if (field instanceof Button || field instanceof HiddenField) {
-            throw new IllegalArgumentException("not valid a valid field type");
+            String msg = "Not valid a valid field type: " + field.getClass().getName();
+            throw new IllegalArgumentException(msg);
         }
         if (width < 1) {
-            throw new IllegalArgumentException("invalid field width: " + width);
+            throw new IllegalArgumentException("Invalid field width: " + width);
         }
+
         add(field);
         getFieldWidths().put(field.getName(), new Integer(width));
     }
