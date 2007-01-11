@@ -500,7 +500,7 @@ public class ClickServlet extends HttpServlet {
             page.onRender();
         }
 
-        if (page.getRedirect() != null) {
+        if (StringUtils.isNotBlank(page.getRedirect())) {
             String url = page.getRedirect();
 
             if (url.charAt(0) == '/') {
@@ -515,7 +515,7 @@ public class ClickServlet extends HttpServlet {
 
             response.sendRedirect(url);
 
-        } else if (page.getForward() != null) {
+        } else if (StringUtils.isNotBlank(page.getForward())) {
             request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
 
             if (logger.isDebugEnabled()) {
