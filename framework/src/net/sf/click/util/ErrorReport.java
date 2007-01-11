@@ -134,8 +134,12 @@ public class ErrorReport {
             try {
                 tokenizer.nextToken();
                 String line = tokenizer.nextToken();
-                if (error instanceof IllegalArgumentException) {
+                if (getCause() instanceof IllegalArgumentException) {
                     line = tokenizer.nextToken();
+
+                    if (line.indexOf("org.apache.commons.lang.Validate") != -1) {
+                        line = tokenizer.nextToken();
+                    }
                 }
 
                 int nameStart = line.indexOf("at ");
