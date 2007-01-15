@@ -2498,9 +2498,13 @@ public class Form implements Control {
                 buffer.append(getId());
                 buffer.append("', '");
                 buffer.append(getErrorsAlign());
-                buffer.append("', '");
-                buffer.append(getErrorsStyle());
-                buffer.append("');\n");
+                buffer.append("', ");
+                if (getErrorsStyle() == null) {
+                    buffer.append("null");
+                } else {
+                    buffer.append("'" + getErrorsStyle() + "'");
+                }
+                buffer.append(");\n");
                 buffer.append("}\n");
 
             } else {
