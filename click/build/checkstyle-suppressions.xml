@@ -74,7 +74,7 @@
               
     <suppress checks="MethodLength"
               files="ErrorReport.java"
-              lines="178"/>
+              lines="182"/>
 
 	<!-- Static Variable Name -->              
               
