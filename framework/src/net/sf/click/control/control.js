@@ -190,8 +190,10 @@ function validateForm(msgs, id, align, style) {
             
             errorsHtml += '<tr class="errors"><td class="errors" align="';
             errorsHtml += align;
-            errorsHtml += '" style="';
-            errorsHtml += style;
+			if (style != null) {
+            	errorsHtml += '" style="';
+				errorsHtml += style;
+            }
             errorsHtml += '">';
             errorsHtml += '<a class="error" href="javascript:setFocus(\'';
             errorsHtml += fieldId; 
