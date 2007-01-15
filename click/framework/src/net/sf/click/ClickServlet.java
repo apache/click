@@ -468,6 +468,12 @@ public class ClickServlet extends HttpServlet {
         final HttpServletResponse response = page.getContext().getResponse();
         final boolean isPost = page.getContext().isPost();
 
+        // Support direct access of click-error.htm
+        if (page instanceof ErrorPage) {
+            ErrorPage errorPage = (ErrorPage) page;
+            errorPage.setMode(clickApp.getModeValue());
+        }
+
         page.onInit();
 
         boolean continueProcessing = page.onSecurityCheck();

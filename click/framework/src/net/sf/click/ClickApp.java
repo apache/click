@@ -1090,8 +1090,7 @@ class ClickApp implements EntityResolver {
                 fileList.add(resource);
 
             } else if (resource.endsWith("/")) {
-                if (!resource.equals("/click/")
-                    && !resource.equalsIgnoreCase("/WEB-INF/")) {
+                if (!resource.equalsIgnoreCase("/WEB-INF/")) {
                     processDirectory(resource, fileList);
                 }
             }
