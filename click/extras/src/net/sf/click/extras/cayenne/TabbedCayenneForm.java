@@ -92,6 +92,17 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     /**
+     * Create a Tabbed Cayenne Form with the given <tt>DataObject</tt> class.
+     *
+     * @param dataClass the <tt>DataObject</tt> class
+     */
+    public TabbedCayenneForm(Class dataClass) {
+        super(dataClass);
+        setErrorsStyle("");
+        setButtonStyle("");
+    }
+
+    /**
      * Create a Tabbed Cayenne Form with no name or dataObjectClass.
      * <p/>
      * <b>Important Note</b> the forms's name and dataObjectClass must be defined
