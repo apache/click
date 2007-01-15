@@ -7,7 +7,7 @@ BUGS
 
 CODE
 * add an error page to quick start
-* pick up Velocity 1.5-Beta 2 jar
+* pick up Velocity 1.5-rc jar
 * get localizations for Telephone.properties, Japanese, Italian, French
 * Select can have multiple values and this need to be resolved with multpart request
 
