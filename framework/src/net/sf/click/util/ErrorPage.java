@@ -175,13 +175,15 @@ public class ErrorPage extends Page {
     public void onInit() {
         addModel("mode", getMode());
 
-        ErrorReport errorReport =
-            new ErrorReport(error,
-                            getPageClass(),
-                            false,
-                            getContext().getRequest(),
-                            getContext().getServletContext());
+        if (getError() != null) {
+            ErrorReport errorReport =
+                new ErrorReport(error,
+                                getPageClass(),
+                                false,
+                                getContext().getRequest(),
+                                getContext().getServletContext());
 
-        addModel("errorReport", errorReport.getErrorReport());
+            addModel("errorReport", errorReport.getErrorReport());
+        }
     }
 }
