@@ -196,7 +196,7 @@ public class Checkbox extends Field {
             Object[] args = new Object[3];
             args[0] = getId();
             args[1] = String.valueOf(isRequired());
-            args[2] = getMessage("field-required-error", getErrorLabel());
+            args[2] = getMessage("not-checked-error", getErrorLabel());
 
             return MessageFormat.format(VALIDATE_CHECKBOX_FUNCTION, args);
 
