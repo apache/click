@@ -411,7 +411,7 @@ public class RadioGroup extends Field {
         args[0] = getId();
         args[1] = "document." + getForm().getName() + "." + getName();
         args[2] = String.valueOf(isRequired());
-        args[3] = getMessage("field-required-error", getErrorLabel());
+        args[3] = getMessage("select-error", getErrorLabel());
 
         if (!getRadioList().isEmpty()) {
             Radio radio = (Radio) getRadioList().get(0);

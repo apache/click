@@ -532,7 +532,7 @@ public class Select extends Field {
         Object[] args = new Object[4];
         args[0] = getId();
         args[1] = String.valueOf(isRequired());
-        args[2] = getMessage("field-required-error", getErrorLabel());
+        args[2] = getMessage("select-error", getErrorLabel());
 
         if (!getOptionList().isEmpty()) {
             Option option = (Option) getOptionList().get(0);
