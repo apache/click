@@ -222,6 +222,20 @@ public class CayenneForm extends Form {
     }
 
     /**
+     * Create a new CayenneForm with the given <tt>DataObject</tt> class.
+     *
+     * @param dataObjectClass the <tt>DataObject</tt> class
+     */
+    public CayenneForm(Class dataObjectClass) {
+        super();
+
+        add(oidField);
+        add(classField);
+
+        setDataObjectClass(dataObjectClass);
+    }
+
+    /**
      * Create an CayenneForm with no name or dataObjectClass.
      * <p/>
      * <b>Important Note</b> the forms's name and dataObjectClass must be defined
