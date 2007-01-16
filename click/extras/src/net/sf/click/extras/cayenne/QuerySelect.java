@@ -114,6 +114,12 @@ public class QuerySelect extends Select {
     /** The name of the configured select query. */
     protected String queryName;
 
+    /**
+     * The flag indicating whether the option list includes an empty option
+     * value. By default the list does not include an empty option value.
+     */
+    protected boolean optional;
+
     /** The query result property to render as the option label. */
     protected String optionLabel;
 
@@ -255,6 +261,24 @@ public class QuerySelect extends Select {
     }
 
     /**
+     * Return true if the option list includes an empty option value.
+     *
+     * @return true if the option list includes an empty option value
+     */
+    public boolean isOptional() {
+        return optional;
+    }
+
+    /**
+     * Set whether the option list includes an empty option value.
+     *
+     * @param value set whether the option list includes an empty option value
+     */
+    public void setOptional(boolean value) {
+        optional = value;
+    }
+
+    /**
      * Return the query result property to render as the option label.
      * <p/>
      * If the query returns <tt>DataRow</tt> this property will be accessed
@@ -390,7 +414,7 @@ public class QuerySelect extends Select {
             list = dataContext.performQuery(getQueryName(), getExpireCache());
         }
 
-        if (isRequired() && getOptionList().isEmpty()) {
+        if (isRequired() && getOptionList().isEmpty() || isOptional()) {
             getOptionList().add(Option.EMPTY_OPTION);
         }
 
