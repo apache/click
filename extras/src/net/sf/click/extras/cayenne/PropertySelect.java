@@ -121,6 +121,12 @@ public class PropertySelect extends Select {
     protected String queryName;
 
     /**
+     * The flag indicating whether the option list includes an empty option
+     * value. By default the list does not include an empty option value.
+     */
+    protected boolean optional;
+
+    /**
      * The select query ordering. By default the property select will be ordered
      * by the optionLabel property in ascending order.
      */
@@ -253,6 +259,24 @@ public class PropertySelect extends Select {
     public void setMultiple(boolean value) {
         String msg = "PropertySelect does not support multiple property values";
         throw new UnsupportedOperationException(msg);
+    }
+
+    /**
+     * Return true if the option list includes an empty option value.
+     *
+     * @return true if the option list includes an empty option value
+     */
+    public boolean isOptional() {
+        return optional;
+    }
+
+    /**
+     * Set whether the option list includes an empty option value.
+     *
+     * @param value set whether the option list includes an empty option value
+     */
+    public void setOptional(boolean value) {
+        optional = value;
     }
 
     /**
@@ -487,7 +511,7 @@ public class PropertySelect extends Select {
                 list = dataContext.performQuery(query);
             }
 
-            if (isRequired() && getOptionList().isEmpty()) {
+            if (isRequired() && getOptionList().isEmpty() || isOptional()) {
                 getOptionList().add(Option.EMPTY_OPTION);
             }
 
