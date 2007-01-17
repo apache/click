@@ -421,9 +421,12 @@ public class ClickServlet extends HttpServlet {
                                       isPost,
                                       pageMaker);
 
-        ErrorPage errorPage = null;
+        ErrorPage finalizeRef = null;
         try {
-            errorPage = (ErrorPage) clickApp.getErrorPageClass().newInstance();
+            final ErrorPage errorPage =
+                (ErrorPage) clickApp.getErrorPageClass().newInstance();
+
+            finalizeRef = errorPage;
 
             errorPage.setContext(context);
             errorPage.setError(exception);
@@ -434,6 +437,21 @@ public class ClickServlet extends HttpServlet {
             errorPage.setMode(clickApp.getModeValue());
             errorPage.setPageClass(pageClass);
             errorPage.setPath(ClickApp.ERROR_PATH);
+
+            processPageFields(errorPage, new FieldCallback() {
+                public void processField(String fieldName, Object fieldValue) {
+                    if (fieldValue instanceof Control) {
+                        Control control = (Control) fieldValue;
+                        if (control.getName() == null) {
+                            control.setName(fieldName);
+                        }
+
+                        if (!errorPage.getModel().containsKey(control.getName())) {
+                            errorPage.addControl(control);
+                        }
+                    }
+                }
+            });
 
             processPage(errorPage);
 
@@ -448,8 +466,8 @@ public class ClickServlet extends HttpServlet {
             throw new RuntimeException(ex);
 
         } finally {
-            if (errorPage != null) {
-                errorPage.onDestroy();
+            if (finalizeRef != null) {
+                finalizeRef.onDestroy();
             }
         }
     }
@@ -820,7 +838,6 @@ public class ClickServlet extends HttpServlet {
             return newPage;
 
         } catch (Exception e) {
-e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
