@@ -24,6 +24,7 @@ import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -350,6 +351,57 @@ public class Context {
      */
     public void setFlashAttribute(String name, Object value) {
         getSession().setAttribute(name, new FlashAttribute(value));
+    }
+
+    /**
+     * Return the cookie for the given name or null if not found.
+     *
+     * @param name the name of the cookie
+     * @return the cookie for the given name or null if not found
+     */
+    public Cookie getCookie(String name) {
+        return ClickUtils.getCookie(getRequest(), name);
+    }
+
+    /**
+     * Return the cookie value for the given name or null if not found.
+     *
+     * @param name the name of the cookie
+     * @return the cookie value for the given name or null if not found
+     */
+    public String getCookieValue(String name) {
+        return ClickUtils.getCookieValue(getRequest(), name);
+    }
+
+    /**
+     * Sets the given cookie value in the servlet response with the path "/".
+     * <p/>
+     * @see ClickUtils#setCookie(HttpServletRequest, HttpServletResponse, String, String, int, String)
+     *
+     * @param name the cookie name
+     * @param value the cookie value
+     * @param maxAge the maximum age of the cookie in seconds
+     * @return the Cookie object created and set in the response
+     */
+    public Cookie setCookie(String name, String value, int maxAge) {
+        return ClickUtils.setCookie(getRequest(),
+                getResponse(),
+                name,
+                value,
+                maxAge,
+                "/");
+    }
+
+    /**
+     * Invalidate the specified cookie and delete it from the response object.
+     * Deletes only cookies mapped against the root "/" path.
+     *
+     * @see ClickUtils#invalidateCookie(HttpServletRequest, HttpServletResponse, String)
+     *
+     * @param name the name of the cookie you want to delete.
+     */
+    public void invalidateCookie(String name) {
+        ClickUtils.invalidateCookie(getRequest(), getResponse(), name);
     }
 
     /**
