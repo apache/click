@@ -45,7 +45,9 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -449,6 +451,123 @@ public class ClickUtils {
                 // Ignore
             }
         }
+    }
+
+    /**
+     * Invalidate the specified cookie and delete it from the response object.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param cookieName The name of the cookie you want to delete
+     * @param path of the path the cookie you want to delete
+     */
+    public static void invalidateCookie(HttpServletRequest request,
+            HttpServletResponse response, String cookieName, String path) {
+
+        setCookie(request, response, cookieName, null, 0, path);
+    }
+
+    /**
+     * Invalidate the specified cookie and delete it from the response object. Deletes only cookies mapped
+     * against the root "/" path. Otherwise use
+     * {@link #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)}
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @see #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param cookieName The name of the cookie you want to delete.
+     */
+    public static void invalidateCookie(HttpServletRequest request,
+            HttpServletResponse response, String cookieName) {
+
+        invalidateCookie(request, response, cookieName, "/");
+    }
+
+    /**
+     * Returns the specified Cookie object, or null if the cookie does not exist.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param request the servlet request
+     * @param name the name of the cookie
+     * @return the Cookie object if it exists, otherwise null
+     */
+    public static Cookie getCookie(HttpServletRequest request, String name) {
+        Cookie cookies[] = request.getCookies();
+
+        if (cookies == null || name == null || name.length() == 0) {
+            return null;
+        }
+
+        //Otherwise, we have to do a linear scan for the cookie.
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals(name)) {
+                return cookies[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets the given cookie values in the servlet response.
+     * <p/>
+     * This will also put the cookie in a list of cookies to send with this request's response
+     * (so that in case of a redirect occurring down the chain, the first filter
+     * will always try to set this cookie again)
+     * <p/>
+     * The cookie secure flag is set if the request is secure.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param name the cookie name
+     * @param value the cookie value
+     * @param maxAge the maximum age of the cookie in seconds
+     * @param path the cookie path
+     * @return the Cookie object created and set in the response
+     */
+    public static Cookie setCookie(HttpServletRequest request, HttpServletResponse response,
+            String name, String value, int maxAge, String path) {
+
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath(path);
+        cookie.setSecure(request.isSecure());
+        response.addCookie(cookie);
+
+        return cookie;
+    }
+
+    /**
+     * Returns the value of the specified cookie as a String. If the cookie
+     * does not exist, the method returns null.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param request the servlet request
+     * @param name the name of the cookie
+     * @return the value of the cookie, or null if the cookie does not exist.
+     */
+    public static String getCookieValue(HttpServletRequest request, String name) {
+        Cookie cookie = getCookie(request, name);
+
+        if (cookie != null) {
+            return cookie.getValue();
+        }
+
+        return null;
     }
 
     /**
