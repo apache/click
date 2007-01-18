@@ -54,7 +54,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Returns the word under the caret position.
 	 */
-	private String getLastWord(ITextViewer textViewer, int documentPosition){
+	private static String getLastWord(ITextViewer textViewer, int documentPosition){
 		String source = textViewer.getDocument().get();
 		StringBuffer sb = new StringBuffer();
 		for(int i=0;i<documentPosition;i++){
@@ -74,17 +74,24 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	/**
 	 * Appends the completion proposal to the <code>result</code>.
 	 */
-	private void registerProposal(List result, int offset, 
+	private static void registerProposal(List result, int offset, 
 			String matchString, String replaceString, String displayString, Image image){
 		int position = replaceString.length();
 		if(replaceString.endsWith(")") && displayString.indexOf("()") < 0){
 			position--;
 		}
+		if(replaceString.endsWith("}") && displayString.indexOf("{}") < 0){
+			position--;
+		}
 		if(replaceString.startsWith(matchString)){
 			result.add(new CompletionProposal(
-			        replaceString, 
-			        offset - matchString.length(), 
+			        replaceString, offset - matchString.length(), 
 			        matchString.length(), position, image, displayString, null, null));
+		}
+		if(matchString.startsWith("${") && replaceString.startsWith("$") &&
+				!replaceString.startsWith("${")){
+			registerProposal(result, offset, matchString, 
+					"${" + replaceString.substring(1), displayString, image);
 		}
 	}
 	
@@ -110,7 +117,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		if(this.file != null){
 			// for the format object
 			format = ClickUtils.getFormat(file.getProject());
-			if(matchString.startsWith("$format.")){
+			if(matchString.startsWith("$format.") || matchString.startsWith("${format.")){
 				if(format != null){
 					return processType(format, result, matchString, offset);
 				}
@@ -118,7 +125,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 			// other default objects
 			for(Iterator ite = defaultObjects.entrySet().iterator(); ite.hasNext(); ){
 				Map.Entry entry = (Map.Entry)ite.next();
-				if(matchString.startsWith("$" + entry.getKey() + ".")){
+				if(matchString.startsWith("$" + entry.getKey() + ".") || matchString.startsWith("${" + entry.getKey() + ".")){
 					IType type = findType((String)entry.getValue());
 					if(type != null){
 						return processType(type, result, matchString, offset);
@@ -131,7 +138,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		for(Iterator ite = fields.entrySet().iterator(); ite.hasNext();){
 			Map.Entry entry = (Map.Entry)ite.next();
 			String name = (String)entry.getKey();
-			if(matchString.startsWith("$" + name + ".")){
+			if(matchString.startsWith("$" + name + ".") || matchString.startsWith("${" + name + ".")){
 				TemplateObject obj = (TemplateObject)entry.getValue();
 				if(obj.getType()!=null){
 					return processType(obj.getType(), result, matchString, offset);
@@ -140,8 +147,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 		
 		if(format==null){
-			registerProposal(result, offset, matchString, 
-					"$format", "$format", IMAGE_VAR);
+			registerProposal(result, offset, matchString, "$format", "$format", IMAGE_VAR);
 		} else {
 			registerProposal(result, offset, matchString, 
 					"$format", "$format - " + format.getFullyQualifiedName(), IMAGE_VAR);
@@ -163,6 +169,8 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		registerProposal(result, offset, matchString, "$request", "$request - HttpServletRequest", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$response", "$response - HttpServletResponse", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$session", "$session - SessionMap", IMAGE_VAR);
+		// TODO It should be provided as the auto editing?
+		registerProposal(result, offset, matchString, "${}", "${}", IMAGE_VAR);
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#set()", "set", IMAGE_DIRECTIVE);
