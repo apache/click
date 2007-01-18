@@ -1,5 +1,9 @@
 package net.sf.clickide.ui.editor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
@@ -18,6 +22,9 @@ public class TemplateEditorConfiguration extends StructuredTextViewerConfigurati
 	
 	private TemplateContentAssistProcessor processor = null;
 	
+	/**
+	 * @see TemplateContentAssistProcessor
+	 */
 	protected IContentAssistProcessor[] getContentAssistProcessors(ISourceViewer viewer, String partitionType) {
 		if(this.processor == null){
 			this.processor = new TemplateContentAssistProcessor();
@@ -25,6 +32,25 @@ public class TemplateEditorConfiguration extends StructuredTextViewerConfigurati
 		return new IContentAssistProcessor[]{this.processor};
 	}
 
+	/**
+	 * @see TemplateAutoEditStrategy
+	 */
+	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
+		List allStrategies = new ArrayList(0);
+		
+		IAutoEditStrategy[] superStrategies = super.getAutoEditStrategies(sourceViewer, contentType);
+		for (int i = 0; i < superStrategies.length; i++) {
+			allStrategies.add(superStrategies[i]);
+		}
+		
+		allStrategies.add(new TemplateAutoEditStrategy());
+
+		return (IAutoEditStrategy[]) allStrategies.toArray(new IAutoEditStrategy[allStrategies.size()]);
+	}
+	
+	/**
+	 * @see LineStyleProviderForVelocity
+	 */
 	public LineStyleProvider[] getLineStyleProviders(ISourceViewer sourceViewer, String partitionType) {
 		LineStyleProvider[] providers = null;
 
