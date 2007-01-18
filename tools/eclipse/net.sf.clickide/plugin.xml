@@ -68,12 +68,12 @@
           name="%editor.clickXML">
     </editor>
     <editor
-          class="net.sf.clickide.ui.editor.TamplateEditor"
+          class="net.sf.clickide.ui.editor.TemplateEditor"
           contributorClass="org.eclipse.wst.html.ui.internal.edit.ui.ActionContributorHTML"
           default="true"
           extensions="htm"
           icon="icons/velocity.gif"
-          id="net.sf.clickide.ui.editor.TamplateEditor"
+          id="net.sf.clickide.ui.editor.TemplateEditor"
           name="%editor.template">
     </editor>
   </extension>    

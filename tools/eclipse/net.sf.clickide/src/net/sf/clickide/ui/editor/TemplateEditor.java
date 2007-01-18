@@ -25,7 +25,7 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
  * 
  * @author Naoki Takezoe
  */
-public class TamplateEditor extends StructuredTextEditor {
+public class TemplateEditor extends StructuredTextEditor {
 
 	public void createPartControl(Composite parent) {
 //		setSourceViewerConfiguration(new TemplateEditorConfiguration());
