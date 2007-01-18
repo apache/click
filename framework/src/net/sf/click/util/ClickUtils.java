@@ -76,6 +76,20 @@ public class ClickUtils {
         '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
     /**
+     * Character used to separate username and password in persistent cookies.
+     * 0x13 == "Device Control 3" non-printing ASCII char. Unlikely to appear
+     * in a username
+     */
+    private static final char DELIMITER = 0x13;
+
+    /*
+     * "Tweakable" parameters for the cookie encoding. NOTE: changing these
+     *and recompiling this class will essentially invalidate old cookies.
+     */
+    private final static char ENCODE_CHAR_OFFSET1 = 'C';
+    private final static char ENCODE_CHAR_OFFSET2 = 'i';
+
+    /**
      * The array of escaped HTML character values, indexed on char value.
      * <p/>
      * HTML entities values were derrived from Jakarta Commons Lang
@@ -898,6 +912,140 @@ public class ClickUtils {
             close(gis);
             close(bis);
         }
+    }
+
+    /**
+     * Builds a cookie string containing a username and password.
+     * <p/>
+     * Note: with open source this is not really secure, but it prevents users
+     * from snooping the cookie file of others and by changing the XOR mask and
+     * character offsets, you can easily tweak results.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param username the username
+     * @param password the password
+     * @param xorMask the XOR mask to encrypt the value with, must be same as
+     *      as the value used to decrypt the cookie password
+     * @return String encoding the input parameters, an empty string if one of
+     *      the arguments equals <code>null</code>
+     */
+    public static String encodePasswordCookie(String username, String password, int xorMask) {
+        String encoding = new String(new char[]{DELIMITER, ENCODE_CHAR_OFFSET1, ENCODE_CHAR_OFFSET2});
+
+        return encodePasswordCookie(username, password, encoding, xorMask);
+    }
+
+    /**
+     * Builds a cookie string containing a username and password, using offsets
+     * to customise the encoding.
+     * <p/>
+     * Note: with open source this is not really secure, but it prevents users
+     * from snooping the cookie file of others and by changing the XOR mask and
+     * character offsets, you can easily tweak results.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param username the username
+     * @param password the password
+     * @param encoding a String used to customise cookie encoding (only the first 3 characters are used)
+     * @param xorMask the XOR mask to encrypt the value with, must be same as
+     *      as the value used to decrypt the cookie password
+     * @return String encoding the input parameters, an empty string if one of
+     *      the arguments equals <code>null</code>.
+     */
+    public static String encodePasswordCookie(String username, String password, String encoding, int xorMask) {
+        StringBuffer buf = new StringBuffer();
+
+        if (username != null && password != null) {
+
+            char offset1 = (encoding != null && encoding.length() > 1)
+                ? encoding.charAt(1) : ENCODE_CHAR_OFFSET1;
+
+            char offset2 = (encoding != null && encoding.length() > 2)
+                ? encoding.charAt(2) : ENCODE_CHAR_OFFSET2;
+
+            byte[] bytes = (username + DELIMITER + password).getBytes();
+            int b;
+
+            for (int n = 0; n < bytes.length; n++) {
+                b = bytes[n] ^ (xorMask + n);
+                buf.append((char) (offset1 + (b & 0x0F)));
+                buf.append((char) (offset2 + ((b >> 4) & 0x0F)));
+            }
+        }
+
+        return buf.toString();
+    }
+
+    /**
+     * Decodes a cookie string containing a username and password.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param cookieVal the encoded cookie username and password value
+     * @param xorMask the XOR mask to decrypt the value with, must be same as
+     *      as the value used to encrypt the cookie password
+     * @return String[] containing the username at index 0 and the password at
+     *      index 1, or <code>{ null, null }</code> if cookieVal equals
+     *      <code>null</code> or the empty string.
+     */
+    public static String[] decodePasswordCookie(String cookieVal, int xorMask) {
+        String encoding = new String(new char[]{DELIMITER, ENCODE_CHAR_OFFSET1, ENCODE_CHAR_OFFSET2});
+
+        return decodePasswordCookie(cookieVal, encoding, xorMask);
+    }
+
+    /**
+     * Decodes a cookie string containing a username and password.
+     * <p/>
+     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * the same name, release under the Apache License.
+     *
+     * @param cookieVal the encoded cookie username and password value
+     * @param encoding  a String used to customise cookie encoding (only the first 3 characters are used)
+     *      - should be the same string you used to encode the cookie!
+     * @param xorMask the XOR mask to decrypt the value with, must be same as
+     *      as the value used to encrypt the cookie password
+     * @return String[] containing the username at index 0 and the password at
+     *      index 1, or <code>{ null, null }</code> if cookieVal equals
+     *      <code>null</code> or the empty string.
+     */
+    public static String[] decodePasswordCookie(String cookieVal, String encoding,
+            int xorMask) {
+
+        // Check that the cookie value isn't null or zero-length
+        if (cookieVal == null || cookieVal.length() <= 0) {
+            return null;
+        }
+
+        char offset1 = (encoding != null && encoding.length() > 1)
+            ? encoding.charAt(1) : ENCODE_CHAR_OFFSET1;
+
+        char offset2 = (encoding != null && encoding.length() > 2)
+            ? encoding.charAt(2) : ENCODE_CHAR_OFFSET2;
+
+        // Decode the cookie value
+        char[] chars = cookieVal.toCharArray();
+        byte[] bytes = new byte[chars.length / 2];
+        int b;
+
+        for (int n = 0, m = 0; n < bytes.length; n++) {
+            b = chars[m++] - offset1;
+            b |= (chars[m++] - offset2) << 4;
+            bytes[n] = (byte) (b ^ (xorMask + n));
+        }
+
+        cookieVal = new String(bytes);
+        int pos = cookieVal.indexOf(DELIMITER);
+
+        String username = (pos < 0) ? "" : cookieVal.substring(0, pos);
+        String password = (pos < 0) ? "" : cookieVal.substring(pos + 1);
+
+        return new String[]{username, password};
     }
 
     /**

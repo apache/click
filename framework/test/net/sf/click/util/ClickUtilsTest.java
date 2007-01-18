@@ -289,4 +289,21 @@ public class ClickUtilsTest extends TestCase {
 		}
 	}
     
+    public void testCookiePassword() {
+        String username = "username";
+        String password = "password";
+        
+        String cookie = ClickUtils.encodePasswordCookie(username, password, 12);
+        
+        String[] result = ClickUtils.decodePasswordCookie(cookie, 12);
+        
+        assertEquals(username, result[0]);
+        assertEquals(password, result[1]);
+        
+        result = ClickUtils.decodePasswordCookie(cookie, 21);
+        
+        assertFalse(username.equals(result[0]));
+        assertFalse(password.equals(result[1]));        
+    }
+    
 }
