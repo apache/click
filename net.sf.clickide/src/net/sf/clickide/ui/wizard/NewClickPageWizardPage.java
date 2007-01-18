@@ -72,7 +72,7 @@ import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 
 /**
  * <ul>
- *   <li>TODO プロジェクト選択時にソースフォルダ等初期値の再読み込みを行う</li>
+ *   <li>TODO Reload initial values when the project is selected.</li>
  * </ul>
  * 
  * @author Naoki Takezoe
