@@ -15,6 +15,10 @@
  */
 package net.sf.click.control;
 
+import org.apache.commons.lang.StringUtils;
+
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides an ImageSubmit control: &nbsp; &lt;input type='image' src='edit.gif'&gt;.
  *
@@ -47,6 +51,13 @@ public class ImageSubmit extends Submit {
     // ----------------------------------------------------- Instance Variables
 
     /**
+     * The image path src attribute. If the src value is prefixed with
+     * '/' then the request context path will be prefixed to the src value when
+     * rendered by the control.
+     */
+    protected String src;
+
+    /**
      * The image pixel x coordinate clicked on by the user, the default value
      * is -1. A value of -1 which means the value has not been set.
      */
@@ -71,6 +82,8 @@ public class ImageSubmit extends Submit {
 
     /**
      * Create a ImageSubmit button with the given name and image src path.
+     * If the src path value is prefixed with "/" the request context path will
+     * be prefixed to the src value when rendered in the control.
      *
      * @param name the button name
      * @param src the image src path attribute
@@ -101,21 +114,25 @@ public class ImageSubmit extends Submit {
     }
 
     /**
-     * Return the image src path attribute.
+     * Return the image src path attribute.  If the src value is prefixed with
+     * '/' then the request context path will be prefixed to the src value when
+     * rendered by the control.
      *
      * @return the image src attribute
      */
     public String getSrc() {
-        return getAttribute("src");
+        return src;
     }
 
     /**
-     * Set the image src path attribute.
+     * Set the image src path attribute. If the src value is prefixed with
+     * '/' then the request context path will be prefixed to the src value when
+     * rendered by the control.
      *
      * @param src the image src attribute
      */
     public void setSrc(String src) {
-        setAttribute("src", src);
+        this.src = src;
     }
 
     /**
@@ -167,5 +184,47 @@ public class ImageSubmit extends Submit {
                 nfe.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * Return a HTML rendered ImageButton string.
+     *
+     * @see Object#toString()
+     *
+     * @return a HTML rendered Button string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
+
+        buffer.elementStart("input");
+
+        buffer.appendAttribute("type", getType());
+        buffer.appendAttribute("name", getName());
+        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("value", getLabel());
+        buffer.appendAttribute("title", getTitle());
+
+        String src = getSrc();
+        if (StringUtils.isNotBlank(src)) {
+            if (src.charAt(0) == '/') {
+                src = getContext().getRequest().getContextPath() + src;
+            }
+            buffer.appendAttribute("src", src);
+        }
+
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+        if (isDisabled()) {
+            buffer.appendAttributeDisabled();
+        }
+        if (hasStyles()) {
+            buffer.appendStyleAttributes(getStyles());
+        }
+
+        buffer.elementEnd();
+
+        return buffer.toString();
     }
 }
