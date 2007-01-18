@@ -6,6 +6,8 @@ BUGS
   recent form rendering refactoring and removing align property from parent element
 
 CODE
+* update Cayenne jars to 1.2.2
+* add redirect and cookie code to Examples Page Security
 * add an error page to quick start
 * pick up Velocity 1.5-rc jar
 * get localizations for Telephone.properties, Japanese, Italian, French
