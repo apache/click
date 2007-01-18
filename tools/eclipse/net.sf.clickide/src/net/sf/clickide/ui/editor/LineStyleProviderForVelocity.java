@@ -16,6 +16,8 @@ import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
 /**
  * The <code>LineStyleProvider</code> implementation for the Velocity template.
+ * <p>
+ * TODO multi-line comment (#* ... *#)
  * 
  * @author Naoki Takezoe
  */
@@ -24,12 +26,26 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
 	public boolean prepareRegions(ITypedRegion currentRegion, int start, int length, Collection styleRanges) {
         boolean result = super.prepareRegions(currentRegion, start, length, styleRanges);
         
+        // TODO Is it possible to update colors when preferences changed...?
     	Color colorVariable  = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_VAR);
     	Color colorDirective = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_DIR);
     	Color colorComment   = ClickPlugin.getDefault().getColorManager().get(ClickPlugin.PREF_COLOR_CMT);
         Object sr[] = styleRanges.toArray();
 		
         IStructuredDocument document = getDocument();
+        
+//        String allText = document.get();
+//        int commentStart = allText.substring(0, start).lastIndexOf("#*");
+//        if(commentStart >= 0){
+//        	int commentEnd = allText.indexOf("*#", commentStart);
+//        	if(commentEnd > start){
+//                for(int i = 0; i < sr.length; i++){
+//                	styleRanges.remove(sr[i]);
+//                }
+//                styleRanges.add(new StyleRange(start, length, colorComment, colorDirective));
+//        		return result;
+//        	}
+//        }
         
         for(int i = 0; i < sr.length; i++){
             StyleRange styleRange = (StyleRange)sr[i];
@@ -44,7 +60,7 @@ public class LineStyleProviderForVelocity extends LineStyleProviderForHTML {
                 }
                 text = chkRegion.getText() + text;
                 mStart += chkRegion.getLength();
-                mEnd += chkRegion.getLength();
+                mEnd   += chkRegion.getLength();
             }
 
             for(IStructuredDocumentRegion chkRegion = region.getNext(); chkRegion != null; chkRegion = chkRegion.getNext()){
