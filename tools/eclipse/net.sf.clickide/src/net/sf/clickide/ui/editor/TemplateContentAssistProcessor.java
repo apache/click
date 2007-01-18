@@ -1,10 +1,13 @@
 package net.sf.clickide.ui.editor;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
@@ -13,6 +16,8 @@ import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectMethod;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectProperty;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
@@ -39,6 +44,9 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 	private final Image IMAGE_METHOD = ClickPlugin.getImageDescriptor("/icons/method.gif").createImage();
 	private final Image IMAGE_FIELD = ClickPlugin.getImageDescriptor("/icons/field.gif").createImage();
 	private final Image IMAGE_VAR = ClickPlugin.getImageDescriptor("/icons/localvar.gif").createImage();
+	
+	private final Pattern PATTERN_SET = Pattern.compile("#set\\s*\\(\\s*\\$(.+?)\\s*=");
+	private final Pattern PATTERN_MACRO = Pattern.compile("#macro\\s*\\(\\s*(.+?)[\\s\\)]");
 	
 	private static final Map defaultObjects = new HashMap();
 	static {
@@ -162,6 +170,22 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 				"$" + name, "$" + name + " - " + obj.getTypeName(), IMAGE_FIELD);
 		}
 		
+		// #set($xxxx)
+		String source = textViewer.getDocument().get().substring(0, offset);
+		Matcher matcher = PATTERN_SET.matcher(source);
+		while(matcher.find()){
+			String name = matcher.group(1);
+			registerProposal(result, offset, matchString, "$" + name, "$" + name, IMAGE_VAR);
+		}
+		
+		// #macro(xxxx)
+		matcher = PATTERN_MACRO.matcher(source);
+		while(matcher.find()){
+			String name = matcher.group(1);
+			registerProposal(result, offset, matchString, "#" + name + "()", name, IMAGE_DIRECTIVE);
+		}
+		readMacroVM(result, offset, matchString);
+		
 		registerProposal(result, offset, matchString, "$imports", "$imports - PageImports", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$context", "$context - String", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$messages", "$messages - Map", IMAGE_VAR);
@@ -169,8 +193,6 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		registerProposal(result, offset, matchString, "$request", "$request - HttpServletRequest", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$response", "$response - HttpServletResponse", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$session", "$session - SessionMap", IMAGE_VAR);
-		// TODO It should be provided as the auto editing?
-		registerProposal(result, offset, matchString, "${}", "${}", IMAGE_VAR);
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#set()", "set", IMAGE_DIRECTIVE);
@@ -196,6 +218,35 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		} catch(Exception ex){
 		}
 		return null;
+	}
+	
+	/**
+	 * Read macro.vm and add macros to completion proposals.
+	 */
+	private void readMacroVM(List result, int offset, String matchString){
+		IProject project = this.file.getProject();
+		String folderName = ClickUtils.getWebAppRootFolder(project);
+		IFolder folder = project.getFolder(folderName);
+		IFile macroFile = folder.getFile("macro.vm");
+		if(macroFile!=null && macroFile.exists()){
+			try {
+				InputStream in = macroFile.getContents();
+				byte[] buf = new byte[in.available()];
+				in.read(buf);
+				in.close();
+				
+				String source = new String(buf, macroFile.getCharset());
+				Matcher matcher = PATTERN_MACRO.matcher(source);
+				while(matcher.find()){
+					String name = matcher.group(1);
+					registerProposal(result, offset, matchString, "#" + name + "()", 
+							name + " - macro.vm", IMAGE_DIRECTIVE);
+				}
+				
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
+			}
+		}
 	}
 	
 	/**
