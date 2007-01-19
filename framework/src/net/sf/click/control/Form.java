@@ -2017,12 +2017,23 @@ public class Form implements Control {
     }
 
     /**
-     * Return the rendered form end tag. This method will return: &nbsp; <tt>&lt;/form&gt;\n</tt>
+     * Return the rendered form end tag and JavaScript for field focus
+     * and validation.
      *
      * @return the rendered form end tag
      */
     public String endTag() {
-        return "</form>\n";
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        List formFields = ClickUtils.getFormFields(this);
+
+        buffer.append("</form>\n");
+
+        renderFocusJavaScript(buffer, formFields);
+
+        renderValidationJavaScript(buffer, formFields);
+
+        return buffer.toString();
     }
 
     /**
@@ -2077,10 +2088,6 @@ public class Form implements Control {
         buffer.append("</table>\n");
 
         buffer.append(endTag());
-
-        renderFocusJavaScript(buffer, formFields);
-
-        renderValidationJavaScript(buffer, formFields);
 
         return buffer.toString();
     }
