@@ -27,6 +27,7 @@ import net.sf.click.util.PropertyUtils;
 
 import org.objectstyle.cayenne.DataRow;
 import org.objectstyle.cayenne.access.DataContext;
+import org.objectstyle.cayenne.query.NamedQuery;
 import org.objectstyle.cayenne.query.SelectQuery;
 
 /**
@@ -50,7 +51,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * The QuerySelect provides a Select control with the options automatically
  * populated from a Cayenne query. This control supports both named queries,
  * which are configured in the Cayenne Modeller, and <tt>SelectQuery</tt>
- * which can be defined in code.
+ * and <tt>NamedQuery</tt> objects which can be defined in code.
  * <p/>
  * All Cayenne queries are executed using the thread local {@link DataContext}
  * obtained via <tt>DataContext.getThreadDataContext()</tt>, and are executed
@@ -110,6 +111,9 @@ public class QuerySelect extends Select {
 
     /** The flag specifing whether the cache should be ignored. */
     protected boolean expireCache;
+
+    /** The option list Cayenne <tt>NamedQuery</tt>. */
+    protected NamedQuery namedQuery;
 
     /** The name of the configured select query. */
     protected String queryName;
@@ -222,6 +226,24 @@ public class QuerySelect extends Select {
      */
     public void setExpireCache(boolean expireCache) {
         this.expireCache = expireCache;
+    }
+
+    /**
+     * Return the <tt>NamedQuery</tt> to populate the options list with.
+     *
+     * @return the <tt>NamedQuery</tt> to populate the options list with
+     */
+    public NamedQuery getNamedQuery() {
+        return namedQuery;
+    }
+
+    /**
+     * Set the <tt>NamedQuery</tt> to populate the options list with.
+     *
+     * @param namedQuery to populate the options list with
+     */
+    public void setNamedQuery(NamedQuery namedQuery) {
+        this.namedQuery = namedQuery;
     }
 
     /**
@@ -409,6 +431,9 @@ public class QuerySelect extends Select {
 
         if (getSelectQuery() != null) {
             list = dataContext.performQuery(getSelectQuery());
+
+        } else if (getNamedQuery() != null) {
+            list = dataContext.performQuery(getNamedQuery());
 
         } else if (getQueryName() != null) {
             list = dataContext.performQuery(getQueryName(), getExpireCache());
