@@ -30,6 +30,7 @@ import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.DataObject;
 import org.objectstyle.cayenne.DataObjectUtils;
 import org.objectstyle.cayenne.access.DataContext;
+import org.objectstyle.cayenne.query.NamedQuery;
 import org.objectstyle.cayenne.query.Ordering;
 import org.objectstyle.cayenne.query.SelectQuery;
 
@@ -119,6 +120,9 @@ public class PropertySelect extends Select {
 
     /** The name of the configured select query. */
     protected String queryName;
+
+    /** The option list Cayenne <tt>NamedQuery</tt>. */
+    protected NamedQuery namedQuery;
 
     /**
      * The flag indicating whether the option list includes an empty option
@@ -259,6 +263,23 @@ public class PropertySelect extends Select {
     public void setMultiple(boolean value) {
         String msg = "PropertySelect does not support multiple property values";
         throw new UnsupportedOperationException(msg);
+    }
+    /**
+     * Return the <tt>NamedQuery</tt> to populate the options list with.
+     *
+     * @return the <tt>NamedQuery</tt> to populate the options list with
+     */
+    public NamedQuery getNamedQuery() {
+        return namedQuery;
+    }
+
+    /**
+     * Set the <tt>NamedQuery</tt> to populate the options list with.
+     *
+     * @param namedQuery to populate the options list with
+     */
+    public void setNamedQuery(NamedQuery namedQuery) {
+        this.namedQuery = namedQuery;
     }
 
     /**
@@ -489,6 +510,9 @@ public class PropertySelect extends Select {
                 }
 
                 list = dataContext.performQuery(query);
+
+            } else if (getNamedQuery() != null) {
+                list = dataContext.performQuery(getNamedQuery());
 
             } else if (getQueryName() != null) {
                  list = dataContext.performQuery(getQueryName(), false);
