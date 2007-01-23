@@ -19,7 +19,9 @@ public class Secure extends BorderPage {
             return true;
 
         } else {
-            setRedirect("/security/login.htm");
+            String path = getContext().getPagePath(Login.class);
+            path += "?redirect=" + getPath();
+            setRedirect(path);
             return false;
         }
     }
