@@ -633,10 +633,17 @@ public class FieldSet extends Field {
                 }
 
                 if (field instanceof Label) {
-                    // TODO: handle specified width
-                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
+                    buffer.append("<td class=\"fields\" align=\"");
                     buffer.append(getForm().getLabelAlign());
                     buffer.append("\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+
                     if (field.hasAttributes()) {
                         buffer.appendAttributes(field.getAttributes());
                     }
@@ -699,7 +706,12 @@ public class FieldSet extends Field {
                 }
 
                 if (width != null) {
-                    column += (width.intValue() - 1);
+                    if (field instanceof Label) {
+                        column += width.intValue();
+
+                    } else {
+                        column += (width.intValue() - 1);
+                    }
                 }
 
                 if (column >= getColumns()) {
