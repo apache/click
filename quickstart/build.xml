@@ -32,7 +32,6 @@
     -->
 
    <target name="build" description="build web application WAR file" depends="compile">
-      <delete dir="${dir.webapp}/click"/>
       <delete file="${dir.deploy}/${name}.war"/>
       <mkdir dir="${dir.deploy}"/>
       <war destfile="${dir.deploy}/${name}.war"
