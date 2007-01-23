@@ -2221,16 +2221,31 @@ public class Form implements Control {
                 }
 
                 if (field instanceof FieldSet) {
-                    // TODO: handle specified width
-                    buffer.append("<td class=\"fields\" colspan=\"2\">\n");
+                    buffer.append("<td class=\"fields\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+
+                    buffer.append(">\n");
                     buffer.append(field);
                     buffer.append("</td>\n");
 
                 } else if (field instanceof Label) {
-                    // TODO: handle specified width
-                    buffer.append("<td class=\"fields\" colspan=\"2\" align=\"");
+                    buffer.append("<td class=\"fields\" align=\"");
                     buffer.append(getLabelAlign());
                     buffer.append("\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+
                     if (field.hasAttributes()) {
                         buffer.appendAttributes(field.getAttributes());
                     }
@@ -2293,7 +2308,12 @@ public class Form implements Control {
                 }
 
                 if (width != null) {
-                    column += (width.intValue() - 1);
+                    if (field instanceof Label || field instanceof FieldSet) {
+                        column += width.intValue();
+
+                    } else {
+                        column += (width.intValue() - 1);
+                    }
                 }
 
                 if (column >= getColumns()) {
