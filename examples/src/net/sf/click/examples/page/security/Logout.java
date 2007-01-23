@@ -11,13 +11,14 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class Logout extends BorderPage {
 
+    public User user;
+
     /**
      * @see Page#onInit()
      */
     public void onInit() {
-        User user = (User) getContext().getSessionAttribute("user");
+        user = (User) getContext().getSessionAttribute("user");
         if (user != null) {
-            addModel("user", user);
             getContext().removeSessionAttribute("user");
         }
     }
