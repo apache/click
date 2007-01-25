@@ -187,7 +187,12 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <javac srcdir="extras/src" destdir="extras/classes" debug="true" excludes="**/Test*">
+      <javac srcdir="extras/src"
+             destdir="extras/classes"
+             debug="true"
+             excludes="**/Test*"
+             encoding="ISO-8859-1"
+             source="1.4">
          <classpath refid="classpath.extras"/>
       </javac>  
       <jar destfile="dist/click-extras-${version}.jar">
@@ -223,7 +228,11 @@
          </fileset>
       </copy>
       <!-- No Dependencies -->
-      <javac srcdir="${dir.source}" destdir="${dir.classes}" debug="true">
+      <javac srcdir="${dir.source}"
+             destdir="${dir.classes}"
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
          <classpath refid="classpath.framework"/>
       </javac>  
       <jar destfile="dist/click-nodeps-${version}.jar">
@@ -469,7 +478,9 @@
       </copy>
       <javac srcdir="framework/src;framework/test;extras/src;mock/src" 
              destdir="framework/classes" 
-             debug="true">
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
          <classpath refid="classpath.test"/>
@@ -509,7 +520,9 @@
       </copy>
       <javac srcdir="framework/src;extras/src;extras/test;mock/src" 
              destdir="extras/classes" 
-             debug="true">
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
          <classpath refid="classpath.test"/>
