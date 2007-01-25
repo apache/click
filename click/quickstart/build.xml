@@ -63,8 +63,10 @@
          </fileset>
       </copy>
       <javac srcdir="src" 
-           destdir="${dir.webapp}/WEB-INF/classes" 
-           debug="true">
+             destdir="${dir.webapp}/WEB-INF/classes" 
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
          <classpath refid="classpath"/>
       </javac> 
    </target>
