@@ -235,11 +235,8 @@ public class Checkbox extends Field {
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
-        if (isDisabled()) {
+        if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
-        }
-        if (isReadonly()) {
-            buffer.appendAttributeReadonly();
         }
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
@@ -249,6 +246,16 @@ public class Checkbox extends Field {
         }
 
         buffer.elementEnd();
+
+        // checkbox element does not support "readonly" element, so as a work around
+        // we make the field "disabled" and render a hidden field to submit its value
+        if (isReadonly() && isChecked()) {
+            buffer.elementStart("input");
+            buffer.appendAttribute("type", "hidden");
+            buffer.appendAttribute("name", getName());
+            buffer.appendAttribute("value", getValue());
+            buffer.elementEnd();
+        }
 
         return buffer.toString();
     }

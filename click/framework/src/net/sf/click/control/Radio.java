@@ -170,6 +170,19 @@ public class Radio extends Field {
         return "radio";
     }
 
+    /**
+     * Set the radio value, setting the checked status if given value is the
+     * same as the radio field value.
+     *
+     * @see Field#setValue(String)
+     *
+     * @param value the Field value
+     */
+    public void setValue(String value) {
+        setChecked(getValue().equals(value));
+        super.setValue(value);
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -224,7 +237,7 @@ public class Radio extends Field {
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
-        if (isDisabled()) {
+        if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
         }
         if (isReadonly()) {
@@ -246,6 +259,16 @@ public class Radio extends Field {
         }
 
         buffer.elementEnd("input");
+
+        // radio element does not support "readonly" element, so as a work around
+        // we make the field "disabled" and render a hidden field to submit its value
+        if (isReadonly() && isChecked()) {
+            buffer.elementStart("input");
+            buffer.appendAttribute("type", "hidden");
+            buffer.appendAttribute("name", getName());
+            buffer.appendAttribute("value", getValue());
+            buffer.elementEnd();
+        }
 
         return buffer.toString();
     }
