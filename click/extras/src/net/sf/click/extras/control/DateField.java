@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
@@ -534,7 +533,7 @@ public class DateField extends TextField {
         buffer.append(textField);
 
         if (!isReadonly() && !isDisabled()) {
-            Calendar calendar = new GregorianCalendar();
+            Calendar calendar = Calendar.getInstance(getLocale());
 
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
@@ -565,7 +564,7 @@ public class DateField extends TextField {
             buffer.append(" align :       'cr', \n");
             buffer.append(" singleClick : true, \n");
             buffer.append(" firstDay :    ");
-            buffer.append(calendar.getFirstDayOfWeek());
+            buffer.append(calendar.getFirstDayOfWeek() - 1);
             buffer.append("\n});\n");
             buffer.append("</script> \n");
         }
