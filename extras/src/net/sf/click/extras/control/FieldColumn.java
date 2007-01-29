@@ -206,6 +206,8 @@ public class FieldColumn extends Column {
                 buffer.append(getField());
             }
         }
+
+        field.setValue(null);
     }
 
 }
