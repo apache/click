@@ -994,7 +994,7 @@ public class Table implements Control {
         controlLink.onProcess();
 
         String page = getContext().getRequestParameter(PAGE);
-        if (page != null) {
+        if (StringUtils.isNotBlank(page)) {
             setPageNumber(Integer.parseInt(page));
         }
 
