@@ -712,6 +712,30 @@ public class Select extends Field {
             } else if (object instanceof Option) {
                 Option option = (Option) object;
                 setValue(option.getValue());
+
+            } else if (object instanceof OptionGroup) {
+                OptionGroup optionGroup = (OptionGroup) object;
+
+                if (!optionGroup.getChildren().isEmpty()) {
+                    Object child = optionGroup.getChildren().get(0);
+
+                    if (child instanceof Option) {
+                        Option option = (Option) child;
+                        setValue(option.getValue());
+
+                    } else if (child instanceof OptionGroup) {
+                        OptionGroup childOptionGroup = (OptionGroup) child;
+
+                        if (!childOptionGroup.getChildren().isEmpty()) {
+                            Object cogChild = childOptionGroup.getChildren().get(0);
+
+                            if (cogChild instanceof Option) {
+                                Option option = (Option) cogChild;
+                                setValue(option.getValue());
+                            }
+                        }
+                    }
+                }
             }
         }
     }
