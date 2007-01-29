@@ -157,49 +157,52 @@ public class FieldColumn extends Column {
     protected void renderTableDataContent(Object row, HtmlStringBuffer buffer,
             Context context, int rowIndex) {
 
-        if (getDecorator() != null) {
-            Object value = getDecorator().render(row, context);
-            if (value != null) {
-                buffer.append(value);
+        Object columnValue = getProperty(row);
+
+        Field field = getField();
+
+        field.setName(getName() + "_" + rowIndex);
+        field.setContext(context);
+
+        if (getTable() instanceof FormTable) {
+            FormTable formTable = (FormTable) getTable();
+            Form form = formTable.getForm();
+
+            if (formTable.getRenderSubmittedValues()
+                && form.isFormSubmission()) {
+
+                field.onProcess();
+
+                if (field.getError() != null) {
+                    field.setTitle(field.getError());
+                }
+
+            } else {
+                field.setTitle(null);
+                field.setError(null);
+                field.setValueObject(columnValue);
+            }
+
+            if (getDecorator() != null) {
+                Object value = getDecorator().render(row, context);
+                if (value != null) {
+                    buffer.append(value);
+                }
+
+            } else {
+                buffer.append(getField());
             }
 
         } else {
-            Object columnValue = getProperty(row);
+            field.setValueObject(columnValue);
 
-            if (getTable() instanceof FormTable) {
-                FormTable formTable = (FormTable) getTable();
-                Form form = formTable.getForm();
-
-                Field field = getField();
-
-                field.setName(getName() + "_" + rowIndex);
-                field.setContext(context);
-
-                if (formTable.getRenderSubmittedValues()
-                        && form.isFormSubmission()) {
-
-                    field.onProcess();
-
-                    if (field.getError() != null) {
-                        field.setTitle(field.getError());
-                    }
-
-                } else {
-                    field.setTitle(null);
-                    field.setError(null);
-                    field.setValueObject(columnValue);
+            if (getDecorator() != null) {
+                Object value = getDecorator().render(row, context);
+                if (value != null) {
+                    buffer.append(value);
                 }
 
-                buffer.append(getField());
-
             } else {
-                Field field = getField();
-
-                field.setName(getName() + "_" + rowIndex);
-                field.setContext(context);
-
-                field.setValueObject(columnValue);
-
                 buffer.append(getField());
             }
         }
