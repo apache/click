@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.Context;
 import net.sf.click.control.Button;
 import net.sf.click.control.Column;
@@ -280,7 +282,7 @@ public class FormTable extends Table {
         if (getForm().isFormSubmission()) {
             Field pageField = getForm().getField(PAGE);
             pageField.onProcess();
-            if (pageField.getValue().length() > 0) {
+            if (StringUtils.isNotBlank(pageField.getValue())) {
                 setPageNumber(Integer.parseInt(pageField.getValue()));
             }
 
