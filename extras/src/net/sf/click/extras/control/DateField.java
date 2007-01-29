@@ -537,7 +537,7 @@ public class DateField extends TextField {
 
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
-            buffer.append(getForm().getContext().getRequest().getContextPath());
+            buffer.append(getContext().getRequest().getContextPath());
             buffer.append("/click/calendar/calendar.gif\" id=\"");
             buffer.append(getId());
             buffer.append("-button\" ");
