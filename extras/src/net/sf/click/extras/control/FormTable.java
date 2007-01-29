@@ -280,7 +280,9 @@ public class FormTable extends Table {
         if (getForm().isFormSubmission()) {
             Field pageField = getForm().getField(PAGE);
             pageField.onProcess();
-            setPageNumber(Integer.parseInt(pageField.getValue()));
+            if (pageField.getValue().length() > 0) {
+                setPageNumber(Integer.parseInt(pageField.getValue()));
+            }
 
             Field columnField = getForm().getField(COLUMN);
             columnField.onProcess();
@@ -354,36 +356,13 @@ public class FormTable extends Table {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        buffer.elementStart("form");
-        buffer.appendAttribute("method", getForm().getMethod());
-        buffer.appendAttribute("name", getForm().getName());
-        buffer.appendAttribute("id", getForm().getId());
-        buffer.appendAttribute("action", getForm().getActionURL());
-        buffer.appendAttribute("enctype", getForm().getEnctype());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        buffer.closeTag();
-        buffer.append("\n");
-
-        buffer.append(form.getField(Form.FORM_NAME));
-        buffer.append("\n");
-
-        Form form = getForm();
-        form.getField(PAGE).setValue(String.valueOf(getPageNumber()));
-        buffer.append(form.getField(PAGE));
-        buffer.append("\n");
-
-        form.getField(COLUMN).setValue(getSortedColumn());
-        buffer.append(form.getField(COLUMN));
-        buffer.append("\n");
+        buffer.append(getForm().startTag());
 
         buffer.append(super.toString());
 
         renderButtons(buffer);
 
-        buffer.elementEnd("form");
-        buffer.append("\n");
+        buffer.append(getForm().endTag());
 
         return buffer.toString();
     }
