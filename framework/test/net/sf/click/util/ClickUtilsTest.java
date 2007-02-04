@@ -3,6 +3,7 @@ package net.sf.click.util;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -166,6 +167,15 @@ public class ClickUtilsTest extends TestCase {
         form.add(codeField);
         form.copyFrom(user, true);
         assertEquals("NSW", codeField.getValueObject());
+        
+        Map map = new HashMap();
+        map.put("name", "malcolm");
+        form = new Form();
+        form.setContext(new MockContext());
+        TextField nameField2 = new TextField("name");
+        form.add(nameField2);
+        form.copyFrom(map, true);
+        assertEquals("malcolm", nameField2.getValue());
     }
     
     public void testCopyToNullNestedObject() {

@@ -44,6 +44,9 @@ public class PropertyUtils {
      * <p/>
      * This method is thread-safe, and caches reflected accessor methods in an
      * internal sychronized cache.
+     * <p/>
+     * If the given source object is a <tt>Map</tt> this method will simply
+     * return the value for the given key name.
      *
      * @param source the source object
      * @param name the name of the property
@@ -52,6 +55,10 @@ public class PropertyUtils {
     public static Object getValue(Object source, String name) {
         String basePart = name;
         String remainingPart = null;
+
+        if (source instanceof Map) {
+            return ((Map) source).get(name);
+        }
 
         int baseIndex = name.indexOf(".");
         if (baseIndex != -1) {
@@ -78,6 +85,9 @@ public class PropertyUtils {
      * current thread, as access to the cache is not synchronized. If you need
      * multi-threaded access to shared cache use a thread-safe Map object, such
      * as <tt>Collections.synchronizedMap(new HashMap())</tt>.
+     * <p/>
+     * If the given source object is a <tt>Map</tt> this method will simply
+     * return the value for the given key name.
      *
      * @param source the source object
      * @param name the name of the property
@@ -88,6 +98,10 @@ public class PropertyUtils {
     public static Object getValue(Object source, String name, Map cache) {
         String basePart = name;
         String remainingPart = null;
+
+        if (source instanceof Map) {
+            return ((Map) source).get(name);
+        }
 
         int baseIndex = name.indexOf(".");
         if (baseIndex != -1) {

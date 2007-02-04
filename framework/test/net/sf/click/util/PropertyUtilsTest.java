@@ -55,4 +55,11 @@ public class PropertyUtilsTest extends TestCase {
         assertEquals("medgar@avoka.com", PropertyUtils.getValue(parentObject, "child.email"));
 	}
     
+    public void testMap() {
+        Map map = new HashMap();
+        map.put("name", "malcolm");
+        
+        assertEquals("malcolm", PropertyUtils.getValue(map, "name"));
+    }
+    
 }
