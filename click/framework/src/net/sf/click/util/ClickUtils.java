@@ -1619,6 +1619,10 @@ public class ClickUtils {
     // -------------------------------------------------------- Private Methods
 
     private static Set getObjectPropertyNames(Object object) {
+        if (object instanceof Map) {
+            return ((Map) object).keySet();
+        }
+
         HashSet hashSet = new HashSet();
 
         Method[] methods = object.getClass().getMethods();
