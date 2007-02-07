@@ -1,7 +1,7 @@
 /* 
- * The Form and Field CSS styles. 
+ * The Control CSS styles. 
  */
- 
+
 a.error {
 	color: red;
 }
@@ -19,6 +19,9 @@ label.error {
 }
 select.error {
 	background: #FFFF80;
+}
+span.disabled {
+	color: #808080;
 }
 span.error {
 	color: red;

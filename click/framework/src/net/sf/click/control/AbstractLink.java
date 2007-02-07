@@ -52,6 +52,7 @@ public abstract class AbstractLink implements Control {
     protected transient Context context;
 
     /** The Field disabled value. */
+    // TODO: need to render as grey span tag
     protected boolean disabled;
 
     /** The link display label. */
@@ -191,7 +192,9 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
-     * Return true if the AbstractLink is a disabled.
+     * Return true if the AbstractLink is a disabled.  If the link is disabled 
+     * it will be rendered as &lt;span&gt; element with a HTML class attribute 
+     * of "disabled".
      *
      * @return true if the AbstractLink is a disabled
      */
@@ -200,7 +203,8 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
-     * Set the disabled flag.
+     * Set the disabled flag. If the link is disabled it will be rendered as
+     * &lt;span&gt; element with a HTML class attribute of "disabled".
      *
      * @param disabled the disabled flag
      */
@@ -635,26 +639,44 @@ public abstract class AbstractLink implements Control {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.elementStart("a");
-
-        buffer.appendAttribute("href", getHref());
-        buffer.appendAttribute("id", getId());
-        buffer.appendAttribute("title", getTitle());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
         if (isDisabled()) {
-            buffer.appendAttributeDisabled();
+            
+            buffer.elementStart("span");
+
+            buffer.appendAttribute("class", "disabled");
+            
+            if (hasStyles()) {
+                buffer.appendStyleAttributes(getStyles());
+            }
+
+            buffer.closeTag();
+
+            buffer.append(getLabel());
+
+            buffer.elementEnd("span");
+            
+        } else {
+            buffer.elementStart("a");
+
+            buffer.appendAttribute("href", getHref());
+            buffer.appendAttribute("id", getId());
+            buffer.appendAttribute("title", getTitle());
+            if (hasAttributes()) {
+                buffer.appendAttributes(getAttributes());
+            }
+            if (isDisabled()) {
+                buffer.appendAttributeDisabled();
+            }
+            if (hasStyles()) {
+                buffer.appendStyleAttributes(getStyles());
+            }
+
+            buffer.closeTag();
+
+            buffer.append(getLabel());
+
+            buffer.elementEnd("a");
         }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
-        }
-
-        buffer.closeTag();
-
-        buffer.append(getLabel());
-
-        buffer.elementEnd("a");
 
         return buffer.toString();
     }

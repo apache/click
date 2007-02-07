@@ -5,6 +5,10 @@
  * http://displaytag.sourceforge.net
  */
 
+span.disabled {
+	color: #808080;
+}
+
 /** Global styles **/
 
 td a, td a:visited, td a:hover {
