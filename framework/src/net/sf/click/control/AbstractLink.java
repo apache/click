@@ -192,8 +192,8 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
-     * Return true if the AbstractLink is a disabled.  If the link is disabled 
-     * it will be rendered as &lt;span&gt; element with a HTML class attribute 
+     * Return true if the AbstractLink is a disabled.  If the link is disabled
+     * it will be rendered as &lt;span&gt; element with a HTML class attribute
      * of "disabled".
      *
      * @return true if the AbstractLink is a disabled
@@ -640,11 +640,11 @@ public abstract class AbstractLink implements Control {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         if (isDisabled()) {
-            
+
             buffer.elementStart("span");
 
             buffer.appendAttribute("class", "disabled");
-            
+
             if (hasStyles()) {
                 buffer.appendStyleAttributes(getStyles());
             }
@@ -654,7 +654,7 @@ public abstract class AbstractLink implements Control {
             buffer.append(getLabel());
 
             buffer.elementEnd("span");
-            
+
         } else {
             buffer.elementStart("a");
 
