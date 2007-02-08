@@ -77,8 +77,6 @@
          <packageset dir="src"/>
          <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
          <link href="http://click.sourceforge.net/docs/click-api/"/>
-         <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
-         <link href="http://www.objectstyle.org/cayenne/api/cayenne/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
       <copy file="../framework/stylesheet.css"  
