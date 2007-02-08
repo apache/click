@@ -262,7 +262,6 @@ public class Column implements Serializable {
             throw new IllegalArgumentException("Null name parameter");
         }
         this.name = name;
-        this.headerTitle = ClickUtils.toLabel(name);
     }
 
     /**
@@ -883,10 +882,27 @@ public class Column implements Serializable {
 
     /**
      * Return the table header &lt;th&gt; title.
+     * <p/>
+     * If the header title value is null, this method will attempt to find a
+     * localized message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".headerTitle"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value still cannot be found then the Column name will be converted
+     * into a header title using the method: {@link ClickUtils#toLabel(String)}
+     * <p/>
      *
      * @return the table header title
      */
     public String getHeaderTitle() {
+        if (headerTitle == null) {
+            headerTitle = getTable().getMessage(getName() + ".headerTitle");
+        }
+        if (headerTitle == null) {
+            headerTitle = ClickUtils.toLabel(getName());
+        }
         return headerTitle;
     }
 
