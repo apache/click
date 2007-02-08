@@ -45,7 +45,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  */
 public class DatabaseInitFilter implements Filter {
 
-    private static final long RELOAD_TIMER_INTERVAL = 1000 * 60 * 15;
+    private static final long RELOAD_TIMER_INTERVAL = 1000 * 60 * 5;
 
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
