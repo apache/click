@@ -14,12 +14,14 @@
     #foreach ($topMenu in $rootMenu.children)
       #if ($topMenu.isUserInRoles())
         #if ($topMenu.children.empty)
-		  <li class="topitem"><a href="$context/$topMenu.path" title="$topMenu.title">$topMenu.label</a>
+		  <li class="topitem">$topMenu
         #else
-		  <li class="topitem"><a #if($topMenu.path != "") href="$context/$topMenu.path" #else href="#" #end title="$topMenu.title">$topMenu.label</a>
+		  <li class="topitem">$topMenu
 		    <ul class="submenu"
             #foreach ($subMenu in $topMenu.children)
-              ><li><a href="$context/$subMenu.path" title="$subMenu.title">$subMenu.label</a></li
+              #if ($subMenu.isUserInRoles())
+                ><li>$subMenu</li
+              #end
 		    #end
             ></ul>
 		  </li>
@@ -27,7 +29,7 @@
       #end
 	#end
 	#if ($request.remoteUser)
-		<li class="topitem"><a href="$logoutLink.href">Logout</a></li>
+	      <li class="topitem"><a href="$logoutLink.href">Logout</a></li>
 	#end
 	</ul>
   </div>

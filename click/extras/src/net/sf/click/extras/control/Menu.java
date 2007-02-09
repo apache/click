@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,53 +37,99 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Provides a hierarchical Menu control. Application menus can be defined
- * using a <tt>/WEB-INF/menu.xml</tt> configuration file.
- * <p/>
- * To access the root Menu item of the configured menus simply use the
- * constructor:
- * <pre class="codeJava">
- * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
+ * Provides a hierarchical Menu control.
  *
- *     <span class="kw">public</span> MenuPage() {
- *         addControl(<span class="kw">new</span> Menu(<span class="st">"rootMenu"</span>);
- *     }
- * } </pre>
+ * <table class='htmlHeader' cellspacing='10'>
+ * <tr>
+ * <td>
+ * <img align='middle' hspace='2'src='menu.png' title='Menu'/>
+ * </td>
+ * </tr>
+ * </table>
  *
- * The Menu control does not render itself, as the potential variations are
- * endless. You will need use a Velocity macro or Velocity code in your page to
- * render the Menu hierarchy.
- *
- * <pre class="codeHtml">
- * <span class="red">#</span>writeMenu(<span class="red">$</span><span class="st">rootMenu</span>) </pre>
- *
- * <h3>Menu Configuration Example</h3>
- *
- * An example <tt>/WEB-INF/menu.xml</tt> configuration file is provided below:
+ * Application menus can be defined using a <tt>/WEB-INF/menu.xml</tt> configuration file:
  *
  * <pre class="codeConfig">
  * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
  * &lt;menu&gt;
- *    &lt;menu label="A Menu" path="menu/menu-a1.htm"&gt;
- *       &lt;menu label="A 1 Menu" path="menu/menu-a1.htm" title="Menu item A1"/&gt;
- *       &lt;menu label="A 2 Menu" path="menu/menu-a2.htm" title="Menu item A2"/&gt;
+ *    &lt;menu label="Home" path="user/home.htm" roles="tomcat, role1"/&gt;
+ *    &lt;menu label="User" path="user/home.htm" roles="tomcat, role1"&gt;
+ *        &lt;menu label="User Page 1" path="user/user-1.htm" roles="tomcat, role1"/&gt;
+ *        &lt;menu label="User Page 2" path="user/user-2.htm" roles="tomcat, role1"/&gt;
  *    &lt;/menu&gt;
- *    &lt;menu label="B Menu" path="menu/menu-b1.htm"&gt;
- *       &lt;menu label="B 1 Menu" path="menu/menu-b1.htm" title="Menu item B1"/&gt;
- *       &lt;menu label="B 2 Menu" path="menu/menu-b2.htm" title="Menu item B2"/&gt;
+ *    &lt;menu label="Admin" path="admin/admin-1.htm" roles="role1"&gt;
+ *        &lt;menu label="Admin Page 1" path="admin/admin-1.htm" roles="tomcat, role1"/&gt;
+ *        &lt;menu label="Admin Page 2" path="admin/admin-2.htm" roles="tomcat, role1"/&gt;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
  *
- * The Menu config file DTD is provided below:
+ * To include the root menu item in your page, simply use the default Menu constructor:
  *
- * <pre class="codeConfig">
- * &lt;!-- The Menu (menu.xml) Document Type Definition. --&gt;
- * &lt;!ELEMENT <span class="red">menu</span> (<span class="blue">menu</span>*)&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">label</span> CDATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">path</span> CDATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">title</span> CDATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">roles</span> CDATA #IMPLIED&gt;
- *     &lt;!ATTLIST <span class="red">menu</span> <span class="blue">pages</span> CDATA #IMPLIED&gt; </pre>
+ * <pre class="codeJava">
+ * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
+ *
+ *     <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
+ *
+ *     <span class="kw">public</span> ActionLink logoutLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onLogoutClick"</span>);
+ *
+ * } </pre>
+ *
+ * To render the configured Menu hierarchy you will need to use a Velocity
+ * #macro or Velocity code in your page. For example:
+ *
+ * <pre class="codeHtml">
+ * <span class="red">#</span>writeMenu(<span class="st">$rootMenu</span>) </pre>
+ *
+ * An example menu Velocity macro is provided below:
+ *
+ * <pre class="codeHtml">
+ * <span class="red">#macro</span>( writeMenu <span class="st">$rootMenu</span> )
+ *
+ * &lt;table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;"&gt;
+ *  &lt;tr&gt;
+ *   &lt;td&gt;
+ *
+ * &lt;div id="searchbar"&gt;
+ * &lt;div id="menu"&gt;
+ *   &lt;ul class="menubar" id="dmenu"&gt;
+ *     <span class="red">#foreach</span> (<span class="st">$topMenu</span> <span class="red">in</span> <span class="st">$rootMenu.children</span>)
+ *       <span class="red">#if</span> (<span class="st">$topMenu.isUserInRoles</span>())
+ *         <span class="red">#if</span> (<span class="st">$topMenu.children.empty</span>)
+ *           &lt;li class="topitem"&gt;<span class="st">$topMenu</span>
+ *         <span class="red">#else</span>
+ *           &lt;li class="topitem"&gt;<span class="st">$topMenu</span>
+ *             &lt;ul class="submenu"
+ *             <span class="red">#foreach</span> (<span class="st">$subMenu</span> <span class="red">in</span> <span class="st">$topMenu.children</span>)
+ *               <span class="red">#if</span> (<span class="st">$subMenu.isUserInRoles</span>())
+ *                 &gt;&lt;li&gt;<span class="st">$subMenu</span>&lt;/li
+ *               <span class="red">#end</span>
+ *             <span class="red">#end</span>
+ *             &gt;&lt;/ul&gt;
+ *           &lt;/li&gt;
+ *         <span class="red">#end</span>
+ *       <span class="red">#end</span>
+ *     <span class="red">#end</span>
+ *     <span class="red">#if</span> (<span class="st">$request.remoteUser</span>)
+ *         &lt;li class="topitem"&gt;&lt;a href="<span class="st">$logoutLink.href</span>"&gt;Logout&lt;/a&gt;&lt;/li&gt;
+ *     <span class="red">#end</span>
+ *   &lt;/ul&gt;
+ *  &lt;/div&gt;
+ * &lt;/div&gt;
+ *
+ *   &lt;/td&gt;
+ *  &lt;/tr&gt;
+ * &lt;/table&gt;
+ *
+ * <span class="red">#end</span> </pre>
+ *
+ * This example uses J2EE role path based security to only display the menu items
+ * the user is authorized to see. If you not using this security feature in your
+ * application you should remove the macro {@link #isUserInRoles()} checks so
+ * the menu items will be rendered.
+ * <p/>
+ * Note individual menu items will render themselves as simple anchor tags using
+ * their {@link #toString()} method. For more fine grain control you should
+ * extend your Velocity macro to render individual menu items.
  *
  * <h3>Security</h3>
  *
@@ -101,6 +148,21 @@ import org.w3c.dom.NodeList;
  *       &lt;menu label="Home" path="admin/admin.htm" roles="admin"/&gt;
  *    &lt;/menu&gt;
  * &lt;/menu&gt; </pre>
+ *
+ * <h3>Menu Configuration DTD</h3>
+ *
+ * The Menu config file DTD is provided below:
+ *
+ * <pre class="codeConfig">
+ * &lt;!-- The Menu (menu.xml) Document Type Definition. --&gt;
+ * &lt;!ELEMENT <span class="red">menu</span> (<span class="st">menu</span>*)&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">label</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">path</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">target</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">title</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">external</span> (true|false) "false"&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">pages</span> CDATA #IMPLIED&gt; </pre>
  *
  * @author Malcolm Edgar
  */
@@ -130,6 +192,11 @@ public class Menu implements Control {
     /** The request context. */
     protected transient Context context;
 
+    /**
+     * The menu path is to an external page flag, by default this value is false.
+     */
+    protected boolean external;
+
     /** The menu display label. */
     protected String label;
 
@@ -156,6 +223,9 @@ public class Menu implements Control {
 
     /** The menu is selected flag. */
     protected boolean selected;
+
+    /** The target attribute. */
+    protected String target = "";
 
     /** The tooltip title attribute. */
     protected String title = "";
@@ -193,10 +263,22 @@ public class Menu implements Control {
         }
 
         setLabel(menuElement.getAttribute("label"));
+
         setPath(menuElement.getAttribute("path"));
+
         String titleAtr = menuElement.getAttribute("title");
         if (StringUtils.isNotBlank(titleAtr)) {
             setTitle(titleAtr);
+        }
+
+        String targetAtr = menuElement.getAttribute("target");
+        if (StringUtils.isNotBlank(targetAtr)) {
+            setTarget(targetAtr);
+        }
+
+        String externalAtr = menuElement.getAttribute("external");
+        if ("true".equalsIgnoreCase(externalAtr)) {
+            setExternal(true);
         }
 
         String pagesValue = menuElement.getAttribute("pages");
@@ -238,6 +320,8 @@ public class Menu implements Control {
         setLabel(menu.getLabel());
         setName(menu.getName());
         setPath(menu.getPath());
+        setExternal(menu.isExternal());
+        setTarget(menu.getTarget());
         setTitle(menu.getTitle());
         setRoles(menu.getRoles());
         setPages(menu.getPages());
@@ -294,6 +378,24 @@ public class Menu implements Control {
             setSelected(rootMenu.isSelected());
             children.addAll(rootMenu.getChildren());
         }
+    }
+
+    /**
+     * Return true if the menu path referers to an external resource.
+     *
+     * @return true if the menu path referers to an external resource
+     */
+    public boolean isExternal() {
+        return external;
+    }
+
+    /**
+     * Set whether the menu path referers to an external resource.
+     *
+     * @param value the flag as to whether the menu path referers to an external resource
+     */
+    public void setExternal(boolean value) {
+        external = value;
     }
 
     /**
@@ -409,23 +511,31 @@ public class Menu implements Control {
     }
 
     /**
-     * Return true if the user is in one of the menu roles.
+     * Return true if the user is in one of the menu roles, or if any child
+     * menus have the user in one of their menu roles. Otherwise the method will
+     * return false.
+     * <p/>
+     * This method internally uses the <tt>HttpServletRequest</tt> function <tt>isUserInRole(rolename)</tt>,
+     * where the rolenames are derrived from the {@link #getRoles()} property.
      *
-     * @return true if the user is in one of the menu roles.
+     * @return true if the user is in one of the menu roles, or false otherwise
      */
     public boolean isUserInRoles() {
-        if (!getRoles().isEmpty()) {
-            for (Iterator i = getRoles().iterator(); i.hasNext();) {
-                String rolename = (String) i.next();
-                if (getContext().getRequest().isUserInRole(rolename)) {
-                    return true;
-                }
+        for (Iterator i = getRoles().iterator(); i.hasNext();) {
+            String rolename = (String) i.next();
+            if (getContext().getRequest().isUserInRole(rolename)) {
+                return true;
             }
-            return false;
-
-        } else {
-            return true;
         }
+
+        for (Iterator i = getChildren().iterator(); i.hasNext();) {
+            Menu child = (Menu) i.next();
+            if (child.isUserInRoles()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -435,6 +545,24 @@ public class Menu implements Control {
      */
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    /**
+     * Return the target attribute of the Menu item.
+     *
+     * @return the target attribute of the Menu item
+     */
+    public String getTarget() {
+        return target;
+    }
+
+    /**
+     * Set the target attribute of the Menu item.
+     *
+     * @param target the target attribute of the Menu item
+     */
+    public void setTarget(String target) {
+        this.target = target;
     }
 
     /**
@@ -464,6 +592,22 @@ public class Menu implements Control {
      */
     public String getHtmlImports() {
         return null;
+    }
+
+    /**
+     * Return the menu anchor HREF attribute. If the menu is referers to an
+     * external path this method will simply return the path, otherwise it will
+     * return menu path prefixed with the request context path.
+     *
+     * @return the menu anchor HREF attribute
+     */
+    public String getHref() {
+        if (isExternal()) {
+            return path;
+
+        } else {
+            return getContext().getRequest().getContextPath() + "/" + path;
+        }
     }
 
     /**
@@ -548,24 +692,35 @@ public class Menu implements Control {
     }
 
     /**
-     * Return a debug string representation of the menu.
+     * Return an HTML anchor tag representation of the menu item. Note for more
+     * fine grained rendering control you should use a Velocity #macro to render
+     * the menu item.
      *
      * @see Object#toString()
      *
-     * @return a debug string representation of the menu
+     * @return an HTML anchor tag representation of the menu item
      */
     public String toString() {
-        return getClass().getName()
-            + "[label=" + getLabel()
-            + ",name=" + name
-            + ",path=" + getPath()
-            + ",title=" + getTitle()
-            + ",isRootMenu=" + isRootMenu
-            + ",selected=" + isSelected()
-            + ",pages=" + pages
-            + ",roles=" + roles
-            + ",children=" + children
-            + "]";
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        buffer.elementStart("a");
+        buffer.appendAttribute("href", getHref());
+
+        if (getTarget() != null && getTarget().length() > 0) {
+            buffer.appendAttribute("target", getTarget());
+        }
+
+        if (getTitle() != null && getTitle().length() > 0) {
+            buffer.appendAttribute("title", getTitle());
+        }
+
+        buffer.closeTag();
+
+        buffer.append(getLabel());
+
+        buffer.elementEnd("a");
+
+        return buffer.toString();
     }
 
     // --------------------------------------------------------- Public Methods
