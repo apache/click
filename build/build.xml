@@ -446,6 +446,8 @@
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/form-table.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
+      <copy file="documentation/images/menu.png"
+            todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/link-decorator.png"
           todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/tabbed-form.png"
