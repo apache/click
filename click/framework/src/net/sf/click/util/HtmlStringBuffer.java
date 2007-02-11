@@ -127,7 +127,6 @@ public class HtmlStringBuffer {
      * Append the raw object value of the given object to the buffer.
      *
      * @param value the object value to append
-     * @throws IllegalArgumentException if the value is null
      */
     public void append(Object value) {
         String string = String.valueOf(value);
@@ -145,7 +144,6 @@ public class HtmlStringBuffer {
      * Append the raw string value of the given object to the buffer.
      *
      * @param value the string value to append
-     * @throws IllegalArgumentException if the value is null
      */
     public void append(String value) {
         String string = (value != null) ? value : "null";
