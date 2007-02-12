@@ -385,7 +385,8 @@ public abstract class AbstractLink implements Control {
                     new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
             } else {
-                String msg = "Cannot initialize messages as context not set";
+                String msg = "Cannot initialize messages as context not set "
+                    + "for link: " + getName();
                 throw new IllegalStateException(msg);
             }
         }

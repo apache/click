@@ -596,7 +596,8 @@ public class DateField extends TextField {
      */
     public void validate() {
         if (formatPattern == null) {
-            throw new IllegalStateException("dateFormat attribute is null");
+            String msg = "dateFormat attribute is null for field: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         super.validate();

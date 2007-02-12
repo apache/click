@@ -526,7 +526,8 @@ public class FieldSet extends Field {
      */
     public boolean onProcess() {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined for field: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         for (int i = 0, size = getFieldList().size(); i < size; i++) {

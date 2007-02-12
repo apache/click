@@ -1221,7 +1221,8 @@ public class Form implements Control {
      */
     public boolean isFormSubmission() {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined for form: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         String requestMethod = getContext().getRequest().getMethod();
@@ -1543,7 +1544,8 @@ public class Form implements Control {
                     new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
             } else {
-                String msg = "Cannot initialize messages as context not set";
+                String msg = "Cannot initialize messages as context not set, "
+                    + "for form: " + getName();
                 throw new IllegalStateException(msg);
             }
         }

@@ -349,7 +349,8 @@ public class FormTable extends Table {
      */
     public String toString() {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined for field: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         int bufferSize =

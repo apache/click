@@ -199,7 +199,8 @@ public class ActionButton extends Button {
      */
     public String getOnClick(Object value) {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined for field: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         String uri = getContext().getRequest().getRequestURI();
