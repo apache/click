@@ -285,7 +285,8 @@ public class ActionLink extends AbstractLink {
      */
     public String getHref(Object value) {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined for field: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         String uri = getContext().getRequest().getRequestURI();
@@ -439,7 +440,8 @@ public class ActionLink extends AbstractLink {
      */
     public boolean onProcess() {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined, for link: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         clicked =

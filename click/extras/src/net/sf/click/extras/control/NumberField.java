@@ -282,7 +282,9 @@ public class NumberField extends TextField {
         if (numberFormat == null) {
 
             if (getContext() == null) {
-                throw new IllegalStateException("No context to get Locale from");
+                String msg =
+                    "No context to get Locale from for field: " + getName();
+                throw new IllegalStateException(msg);
             }
 
             Locale locale = getContext().getLocale();

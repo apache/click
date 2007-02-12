@@ -468,7 +468,8 @@ public class Panel implements Control {
                     new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
             } else {
-                String msg = "Cannot initialize messages as context not set";
+                String msg = "Cannot initialize messages as context not set "
+                    + "for panel: " + getName();
                 throw new IllegalStateException(msg);
             }
         }
@@ -655,7 +656,8 @@ public class Panel implements Control {
      */
     public boolean onProcess() {
         if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
+            String msg = "context is not defined, for panel: " + getName();
+            throw new IllegalStateException(msg);
         }
 
         if (hasControls()) {
