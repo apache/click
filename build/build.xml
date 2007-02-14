@@ -370,30 +370,32 @@
 
 
    <target name="help" description="display the Help message">
-      <echo message="Click ${version} web application framework"/>
-      <echo message="===================================="/> 
-      <echo/>  
-      <echo message="Main targets:"/> 
-      <echo/>    
-      <echo message="build-all             build framework, extras, examples"/>
-      <echo message="build-distribution    build distribution ZIP file"/>
-      <echo message="build-examples        build click-examples WAR file"/> 
-      <echo message="build-extras          build click-extras JAR file"/> 
-      <echo message="build-framework       build click framework JAR file"/> 
-      <echo message="build-maven-bundles   build Maven repository upload bundles"/>
-      <echo message="build-sources         build source ZIP files for use with IDEs"/>
-      <echo message="checkstyle            run checkstyle report on Java source"/>       
-      <echo message="deploy-examples       copy click-examples WAR file to app server"/>
-      <echo message="get-deps              download JAR dependencies"/>  
-      <echo message="get-deps-proxy        download JAR dependencies via proxy"/>  
-      <echo message="help                  display the Help message"/>  
-      <echo message="javadoc               create Javadoc HTML files"/>
-      <echo/>
-      <echo/>  
-      <echo message="Please ensure you have configured build.properties"/> 
-      <echo/>  
-   </target>  
+      <echo>Click ${version} web application framework
+===================================
 
+Main targets:
+
+	build-all             build framework, extras, examples
+	build-distribution    build distribution ZIP file
+	build-examples        build click-examples WAR file
+	build-extras          build click-extras JAR file 
+	build-framework       build click framework JAR file
+	build-maven-bundles   build Maven repository upload bundles
+	build-sources         build source ZIP files for use with IDEs
+	checkstyle            run checkstyle report on Java source
+	deploy-examples       copy click-examples WAR file to app server
+	get-deps              download JAR dependencies
+	get-deps-proxy        download JAR dependencies via proxy
+	help                  display the Help message
+	javadoc               create Javadoc HTML files
+      	
+Environment:
+
+	java.home = ${java.home}
+	ant.home  = ${ant.home}
+
+Please ensure you have configured build.properties</echo>
+   </target> 
 	
    <target name="javadoc" description="create Javadoc HTML files">
       <!-- Framework -->
