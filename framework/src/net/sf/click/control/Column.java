@@ -997,7 +997,7 @@ public class Column implements Serializable {
      * @param align the CSS "text-align" value: <tt>["left", "right", "center"]</tt>
      */
     public void setTextAlign(String align) {
-        setHeaderStyle("text-align", align);
+        //setHeaderStyle("text-align", align);
         setDataStyle("text-align", align);
     }
 
@@ -1073,21 +1073,40 @@ public class Column implements Serializable {
      */
     public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
         buffer.elementStart("th");
-        buffer.appendAttribute("class", getHeaderClass());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
+
+        if (getSortable()) {
+            boolean sortedColumn = getName().equals(getTable().getSortedColumn());
+
+            String classValue = (getHeaderClass() != null) ? getHeaderClass() : "";
+            classValue += (sortedColumn) ? " sorted" : "sortable";
+            buffer.appendAttribute("class", classValue);
+
+        } else {
+            buffer.appendAttribute("class", getHeaderClass());
         }
+
         if (hasHeaderStyles()) {
             buffer.appendStyleAttributes(getHeaderStyles());
         }
+
+        if (hasAttributes()) {
+            buffer.appendAttributes(getAttributes());
+        }
+
         buffer.closeTag();
 
         if (getSortable()) {
             ActionLink controlLink = getTable().getControlLink();
+
+            if (controlLink.getContext() == null) {
+                controlLink.setContext(getTable().getContext());
+            }
+
             controlLink.setId("control-" + getName());
             controlLink.setParameter(Table.COLUMN, getName());
             controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
             controlLink.setLabel(getHeaderTitle());
+
             buffer.append(controlLink);
 
         } else {

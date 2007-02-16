@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -142,11 +144,35 @@ public class Table implements Control {
 
     private static final long serialVersionUID = 1L;
 
+    private static final Set DARK_STYLES;
+
+    static {
+        DARK_STYLES = new HashSet();
+        DARK_STYLES.add("isi");
+        DARK_STYLES.add("nocol");
+        DARK_STYLES.add("report");
+        DARK_STYLES.add("simple");
+    }
+
     /**
-     * The table.css style sheet import link.
+     * The table.css style sheet import link with a light contract sortable icon.
      */
-    public static final String TABLE_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n";
+    public static final String TABLE_IMPORTS_LIGHT =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n"
+        + "<style text=\text/css\">\n"
+        + " th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;}\n"
+        + " th.sorted a {background: url($/click/column-sorted-light.gif) center right no-repeat;}\n"
+        + "</style>\n";
+
+    /**
+     * The table.css style sheet import link with a dark contract sortable icon.
+     */
+    public static final String TABLE_IMPORTS_DARK =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n"
+        + "<style text=\text/css\">\n"
+        + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
+        + " th.sorted a {background: url($/click/column-sorted-dark.gif) center right no-repeat;}\n"
+        + "</style>\n";
 
     /** The table top banner position. */
     public static final int POSITION_TOP = 1;
@@ -482,6 +508,9 @@ public class Table implements Control {
      * @param context the Page request Context
      */
     public void setContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
         this.context = context;
         controlLink.setContext(context);
     }
@@ -584,7 +613,12 @@ public class Table implements Control {
     public String getHtmlImports() {
         String path = getContext().getRequest().getContextPath();
 
-        return StringUtils.replace(TABLE_IMPORTS, "$", path);
+        if (DARK_STYLES.contains(getAttribute("class"))) {
+            return StringUtils.replace(TABLE_IMPORTS_DARK, "$", path);
+
+        } else {
+            return StringUtils.replace(TABLE_IMPORTS_LIGHT, "$", path);
+        }
     }
 
     /**
@@ -843,7 +877,7 @@ public class Table implements Control {
 
     /**
      * Return the table default column are sortable status. By default table
-     * columns are sortable.
+     * columns are not sortable.
      *
      * @return the table default column are sortable status
      */
@@ -978,9 +1012,15 @@ public class Table implements Control {
      * @param servletContext the servlet context
      */
     public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/control/table.css",
-                              "click");
+        String[] files = new String[] {
+                "/net/sf/click/control/column-sortable-dark.gif",
+                "/net/sf/click/control/column-sortable-light.gif",
+                "/net/sf/click/control/column-sorted-dark.gif",
+                "/net/sf/click/control/column-sorted-light.gif",
+                "/net/sf/click/control/table.css"
+            };
+
+        ClickUtils.deployFiles(servletContext, files, "click");
     }
 
     /**

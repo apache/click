@@ -46,7 +46,9 @@ public class TableStyles extends BorderPage {
         table.setClass(styleSelect.getValue());
         table.setHoverRows(true);
 
-        table.addColumn(new Column("id"));
+        Column id = new Column("id");
+        id.setWidth("50px");
+        table.addColumn(id);
 
         table.addColumn(new Column("name"));
 

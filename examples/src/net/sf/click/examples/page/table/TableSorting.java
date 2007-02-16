@@ -17,7 +17,7 @@ public class TableSorting extends BorderPage {
 
     public TableSorting() {
         // Setup customers table
-        table.setClass("mars");
+        table.setClass("complex");
         table.setHoverRows(true);
         table.setSortable(true);
 
@@ -32,6 +32,7 @@ public class TableSorting extends BorderPage {
         table.addColumn(column);
 
         column = new Column("age");
+        column.setWidth("40px");
         column.setTextAlign("center");
         table.addColumn(column);
 
@@ -41,6 +42,7 @@ public class TableSorting extends BorderPage {
         table.addColumn(column);
 
         column = new Column("active");
+        column.setWidth("55px");
         column.setTextAlign("center");
         table.addColumn(column);
     }
