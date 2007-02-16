@@ -5,67 +5,73 @@
  * http://displaytag.sourceforge.net
  */
 
-span.disabled {
-	color: #808080;
+th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+	vertical-align: top;
 }
 
-/** Global styles **/
-
-td a, td a:visited, td a:hover {
-    text-decoration: none; 
-}
-td a:hover {
-    text-decoration: underline;
-}
-thead tr {
-    background-color: #fc0;
-}
 th.sorted {
-    background-color: orange;
+	background-color: orange;
 }
+
 th a, th a:visited {
-    color: black;
+	color: black;
 }
+
 th a:hover {
-    text-decoration: underline;
-    color: black;
+	text-decoration: underline;
+	color: black;
 }
+
 th.sorted a, th.sortable a {
 	background-position: right;
 	display: block;
+	text-decoration: none;
 	width: 100%;
 }
-th.sortable a {
-	background-image: url(../img/arrow_off.png);
-}
-th.order1 a {
-	background-image: url(../img/arrow_down.png);
-}
-th.order2 a {
-	background-image: url(../img/arrow_up.png);
-}
+
 tr.odd {
-    background-color: #fff
+	background-color: #fff
 }
+
 tr.tableRowEven, tr.even {
-    background-color: #fea
+	background-color: #fea
 }
 
-tr.hover {
-	background: #777; color: #fff;
-}
-
-ul#showsource {
-	float: right;
-	background-color: #eee;
-	border: 1px dotted #999;
-	padding: 2px 4px 2px 4px;
-	margin: 5px;
-	width:100px;
-	list-style-type: none;
-}
+/*
+complex, isi, its, mars, nocol, simple, report
+*/
 
 /** Individual Styles **/
+
+/* complex style */
+table.complex thead tr {
+    background-color: #ccc;
+}
+table.complex tr.even {
+    background-color: #ddd;
+}
+table.complex tr.odd {
+    background-color: #fff;
+}
+table.complex td.textRed {
+    color: #b11;
+}
+table.complex, table.complex td, table.complex th {
+	border: 1px solid #999;
+	border-collapse: collapse;
+}
+table.complex th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+table.complex td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: baseline;
+}
 
 /* isi style */
 table.isi, table.isi td, table.isi th {
@@ -125,29 +131,17 @@ table.mars td {
 	vertical-align: baseline;
 }
 
-/* complex style */
-table.complex thead tr {
-    background-color: #ccc;
+/* nocol style */
+table.nocol tbody td,table.nocol tbody th {
+	border-left: none;
+	border-right: none;
 }
-table.complex tr.even {
-    background-color: #ddd;
-}
-table.complex tr.odd {
-    background-color: #fff;
-}
-table.complex td.textRed {
-    color: #b11;
-}
-table.complex, table.complex td, table.complex th {
-	border: 1px solid #999;
-	border-collapse: collapse;
-}
-table.complex th {
+table.nocol th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: top;
 }
-table.complex td {
+table.nocol td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: baseline;
@@ -173,22 +167,6 @@ table.simple th {
 	vertical-align: top;
 }
 table.simple td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-	vertical-align: baseline;
-}
-
-/* nocol style */
-table.nocol tbody td,table.nocol tbody th {
-	border-left: none;
-	border-right: none;
-}
-table.nocol th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-	vertical-align: top;
-}
-table.nocol td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
 	vertical-align: baseline;
@@ -236,43 +214,7 @@ table.report td {
 	vertical-align: baseline;
 }
 
-/* Other styles */
-
-table.sublist {
-	margin: 0 0 0 0;
-	width: 100%;
-}
-table.sublist td, table.sublist th {
-	width: 50%;
-}
-
-div.exportlinks {
-	background-color: #eee;
-	border: 1px dotted #999;
-	padding: 2px 4px 2px 4px;
-	margin: -10px 0 10px 0;
-	width: 79%;
-}
-
-span.export {
-	padding: 0 4px 1px 20px;
-	display:inline; display:inline-block;
-	cursor: pointer;
-}
-
-span.excel {
-	background-image: url(../img/ico_file_excel.png);
-}
-span.csv {
-	background-image: url(../img/ico_file_csv.png);
-}
-span.xml {
-	background-image: url(../img/ico_file_xml.png);
-}
-span.pdf {
-	background-image: url(../img/ico_file_pdf.png);
-}
-
+/* table pagination styles */
 span.pagebanner {
 	background-color: #eee;
 	border: 1px dotted #999;
