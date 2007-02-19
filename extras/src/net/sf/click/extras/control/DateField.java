@@ -533,8 +533,6 @@ public class DateField extends TextField {
         buffer.append(textField);
 
         if (!isReadonly() && !isDisabled()) {
-            Calendar calendar = Calendar.getInstance(getLocale());
-
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getContext().getRequest().getContextPath());
@@ -564,7 +562,7 @@ public class DateField extends TextField {
             buffer.append(" align :       'cr', \n");
             buffer.append(" singleClick : true, \n");
             buffer.append(" firstDay :    ");
-            buffer.append(calendar.getFirstDayOfWeek() - 1);
+            buffer.append(getFirstDayOfWeek() - 1);
             buffer.append("\n});\n");
             buffer.append("</script> \n");
         }
@@ -619,6 +617,26 @@ public class DateField extends TextField {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the first day of the week. For example e.g., Sunday in US,
+     * Monday in France and Australia.
+     *
+     * @return the first day of the week
+     */
+    protected int getFirstDayOfWeek() {
+        Locale locale = getLocale();
+
+        Calendar calendar = Calendar.getInstance(getLocale());
+
+        int dayOfWeek = calendar.getFirstDayOfWeek();
+
+        if ("AU".equals(locale.getCountry())) {
+            dayOfWeek += 1;
+        }
+
+        return dayOfWeek;
+    }
 
     /**
      * Returns the <tt>Locale</tt> that should be used in this control.
