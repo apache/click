@@ -1074,7 +1074,9 @@ public class Column implements Serializable {
     public void renderTableHeader(HtmlStringBuffer buffer, Context context) {
         buffer.elementStart("th");
 
-        if (getSortable()) {
+        boolean isSortable = getSortable() && !getTable().getRowList().isEmpty();
+
+        if (isSortable) {
             boolean sortedColumn = getName().equals(getTable().getSortedColumn());
 
             String classValue = (getHeaderClass() != null) ? getHeaderClass() : "";
@@ -1095,7 +1097,7 @@ public class Column implements Serializable {
 
         buffer.closeTag();
 
-        if (getSortable()) {
+        if (isSortable) {
             ActionLink controlLink = getTable().getControlLink();
 
             if (controlLink.getContext() == null) {
