@@ -1158,7 +1158,7 @@ class ClickApp implements EntityResolver {
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Automapped page class " + className
-                             + " is not a subclass of net.sf.clic.Page";
+                             + " is not a subclass of net.sf.click.Page";
                 throw new RuntimeException(msg);
             }
 
@@ -1173,7 +1173,7 @@ class ClickApp implements EntityResolver {
 
                     if (!Page.class.isAssignableFrom(pageClass)) {
                         String msg = "Automapped page class " + className
-                                     + " is not a subclass of net.sf.clic.Page";
+                                     + " is not a subclass of net.sf.click.Page";
                         throw new RuntimeException(msg);
                     }
 
@@ -1282,7 +1282,7 @@ class ClickApp implements EntityResolver {
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Page class " + value
-                             + " is not a subclass of net.sf.clic.Page";
+                             + " is not a subclass of net.sf.click.Page";
                 throw new RuntimeException(msg);
             }
 
