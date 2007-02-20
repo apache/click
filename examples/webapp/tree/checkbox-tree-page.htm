@@ -1,0 +1,26 @@
+This page provides a demonstration of the CheckboxTree component.
+
+$form.startTag()
+
+<table style="margin: 1em;">
+    
+    #if ($form.error)
+    <tr>
+        <td colspan="2" style="color: red;"> $form.error </td>
+    </tr>
+    #end
+    <tr>
+        <td>
+            $checkboxTree
+        </td>
+    </tr>     
+    <tr>
+        <td>
+            $form.fields.okSubmit
+            $form.fields.cancelSubmit
+        </td>
+    </tr>
+    
+</table>
+
+$form.endTag() 
