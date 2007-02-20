@@ -1,0 +1,95 @@
+#tree {
+   white-space: nowrap;	
+   border: 1px solid #ccc;
+   width: 20em;
+   overflow: auto;
+   line-height: 1.5em;         
+   padding-top: 2px;
+}
+#tree ul {
+   /* remove the bullets*/
+   list-style-type: none;
+            
+   /*draw vertical line down the side of the list*/
+   background-image: url(images/vertical-line.png);
+   background-repeat: repeat-y;
+   background-position: 10px;
+
+   margin: 0;
+   padding-left: 0px;
+   margin-left: 10px;
+}
+#tree table tr td {
+ border: 0;
+ margin: 0;
+ padding: 0;
+ width: 0; 
+}
+#tree ul.menu1 {
+   margin-left: 0px;
+}
+#tree li {
+   /* li is not needed*/
+   margin: 0;
+   padding: 0;
+   padding-left: 10px;
+   line-height: 1.5em;
+}
+#tree span.leaf {
+   background-image: url(images/tjunction.png);
+   background-repeat: no-repeat;
+}
+#tree span.expanded {
+   background-image: url(images/minus.png);
+   background-repeat: no-repeat;
+}
+#tree span.collapsed {
+   background-image: url(images/plus.png);
+   background-repeat: no-repeat;
+}  
+#tree span.leafLastNode {
+   background-image: url(images/corner.png);
+   background-repeat: no-repeat;
+   background-color: #fff;
+}                       
+#tree span.expandedLastNode {
+   background-image: url(images/minus-corner.png);
+   background-color: #fff;
+   background-repeat: no-repeat;
+}
+#tree span.collapsedLastNode {
+   background-image: url(images/plus-corner.png);
+   background-color: #fff;
+   background-repeat: no-repeat;
+}
+#tree span.leafIcon{
+    background: url(images/item.png) 0 50% no-repeat;
+    padding-left: 18px;
+}
+#tree span.expandedIcon {
+    background: url(images/folder-open.png) 0 50% no-repeat;
+    padding-left: 1.1em;
+}
+#tree span.collapsedIcon {
+    background: url(images/folder-closed.png) 0 50% no-repeat;
+    padding-left: 1.1em;
+}
+#tree .spacer {
+   padding-left: 15px;
+}
+#tree .selected a,
+#tree .selected {
+    background-color: #0A246A;
+    color: white;
+    border:1px solid #000000;
+}
+#tree .unselected {   
+    
+}
+ 
+/*needed for client side */
+#tree .hide { 
+   display : none;
+}
+#tree .show { 
+}
