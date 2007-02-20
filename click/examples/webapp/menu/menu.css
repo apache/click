@@ -20,7 +20,7 @@
     display: block; 
     height: 24px;  
 } 
-#menu .topitem a, .topitem a:visited {
+#menu .topitem a, #menu .topitem a:visited {
     font-weight: bold; 
     color: white; 
     padding-left:15px; 
@@ -56,7 +56,7 @@
     margin: 0; 
     font-size: 11px;
 } 
-#menu ul.submenu li a, ul.submenu li a:visited {
+#menu ul.submenu li a, #menu ul.submenu li a:visited {
     padding: 3px 3px 3px 16px; 
     color: #000; 
     border: 1px solid #c0c0c0; 
@@ -70,7 +70,7 @@
     color: #000; 
     border: 1px solid #3699dd; 
 } 
-#menu li:hover ul, li.over ul {
+#menu li:hover ul, #menu li.over ul {
     margin: 0; 
     padding: 4px; 
     display: block; 
