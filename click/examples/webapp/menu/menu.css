@@ -9,18 +9,18 @@
     padding: 0; 
     margin: 0
 }
-.menubar {
+#menu .menubar {
     list-style-type: none; 
     margin: 0; 
     padding: 0; 
 } 
-.topitem {
+#menu .topitem {
     font-weight: normal; 
     float: left; 
     display: block; 
     height: 24px;  
 } 
-.topitem a, .topitem a:visited {
+#menu .topitem a, .topitem a:visited {
     font-weight: bold; 
     color: white; 
     padding-left:15px; 
@@ -31,18 +31,18 @@
     text-decoration: none; 
     border: 1px solid #707070; 
 }
-.topitem a:hover {
+#menu .topitem a:hover {
     text-decoration: none; 
     background: #fff; 
     color: #000; 
     border: 1px solid #3699dd; 
 }
-.selected {
+#menu .selected {
     font-weight: normal; 
     background: #afaea9 repeat-x left; 
 }
 
-ul.submenu {
+#menu ul.submenu {
     list-style-type: none; 
     position: absolute; 
     margin: 0; 
@@ -51,26 +51,26 @@ ul.submenu {
     width: 180px;  
     z-index: 255;   
 } 
-ul.submenu li {
+#menu ul.submenu li {
     padding: 0; 
     margin: 0; 
     font-size: 11px;
 } 
-ul.submenu li a, ul.submenu li a:visited {
+#menu ul.submenu li a, ul.submenu li a:visited {
     padding: 3px 3px 3px 16px; 
     color: #000; 
     border: 1px solid #c0c0c0; 
     text-decoration: none; 
     margin: 0;
 } 
-ul.submenu li a:hover {
+#menu ul.submenu li a:hover {
     padding: 3px 3px 3px 16px; 
     text-decoration: none; 
     background: #fff; 
     color: #000; 
     border: 1px solid #3699dd; 
 } 
-li:hover ul, li.over ul {
+#menu li:hover ul, li.over ul {
     margin: 0; 
     padding: 4px; 
     display: block; 
