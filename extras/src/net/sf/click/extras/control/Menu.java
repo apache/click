@@ -161,6 +161,7 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">target</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">title</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">external</span> (true|false) "false"&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">separator</span> (true|false) "false"&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">pages</span> CDATA #IMPLIED&gt; </pre>
  *
@@ -224,6 +225,9 @@ public class Menu implements Control {
     /** The menu is selected flag. */
     protected boolean selected;
 
+    /** The menu separator flag. */
+    protected boolean separator;
+
     /** The target attribute. */
     protected String target = "";
 
@@ -281,6 +285,11 @@ public class Menu implements Control {
             setExternal(true);
         }
 
+        String separatorAtr = menuElement.getAttribute("separator");
+        if ("true".equalsIgnoreCase(separatorAtr)) {
+            setSeparator(true);
+        }
+
         String pagesValue = menuElement.getAttribute("pages");
         if (!StringUtils.isBlank(pagesValue)) {
             StringTokenizer tokenizer = new StringTokenizer(pagesValue, ",");
@@ -321,6 +330,7 @@ public class Menu implements Control {
         setName(menu.getName());
         setPath(menu.getPath());
         setExternal(menu.isExternal());
+        setSeparator(menu.isSeparator());
         setTarget(menu.getTarget());
         setTitle(menu.getTitle());
         setRoles(menu.getRoles());
@@ -512,6 +522,24 @@ public class Menu implements Control {
     }
 
     /**
+     * Return true if the Menu item is a separator.
+     *
+     * @return true if the Menu item is a separator
+     */
+    public boolean isSeparator() {
+        return separator;
+    }
+
+    /**
+     * Set whether the Menu item is a separator.
+     *
+     * @param separator the flag indicating whether the Menu item is a separator
+     */
+    public void setSeparator(boolean separator) {
+        this.separator = separator;
+    }
+
+    /**
      * Return true if the user is in one of the menu roles, or if any child
      * menus have the user in one of their menu roles. Otherwise the method will
      * return false.
@@ -693,9 +721,11 @@ public class Menu implements Control {
     }
 
     /**
-     * Return an HTML anchor tag representation of the menu item. Note for more
-     * fine grained rendering control you should use a Velocity #macro to render
-     * the menu item.
+     * Return an HTML anchor tag representation of the menu item. If the menu is
+     * a separator this method will return a HR tag &lt;hr/&gt;.
+     * <p/>
+     * Note for more fine grained rendering control you should use a Velocity
+     * #macro to render the menu item.
      *
      * @see Object#toString()
      *
@@ -704,24 +734,29 @@ public class Menu implements Control {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.elementStart("a");
-        buffer.appendAttribute("href", getHref());
+        if (isSeparator()) {
+            return "<hr/>";
 
-        if (getTarget() != null && getTarget().length() > 0) {
-            buffer.appendAttribute("target", getTarget());
+        } else {
+            buffer.elementStart("a");
+            buffer.appendAttribute("href", getHref());
+
+            if (getTarget() != null && getTarget().length() > 0) {
+                buffer.appendAttribute("target", getTarget());
+            }
+
+            if (getTitle() != null && getTitle().length() > 0) {
+                buffer.appendAttribute("title", getTitle());
+            }
+
+            buffer.closeTag();
+
+            buffer.append(getLabel());
+
+            buffer.elementEnd("a");
+
+            return buffer.toString();
         }
-
-        if (getTitle() != null && getTitle().length() > 0) {
-            buffer.appendAttribute("title", getTitle());
-        }
-
-        buffer.closeTag();
-
-        buffer.append(getLabel());
-
-        buffer.elementEnd("a");
-
-        return buffer.toString();
     }
 
     // --------------------------------------------------------- Public Methods
