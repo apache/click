@@ -12,6 +12,7 @@
     <control classname="net.sf.click.extras.control.RegexField"/>
     <control classname="net.sf.click.extras.control.CreditCardField"/>
     <control classname="net.sf.click.extras.control.EmailField"/>
+    <control classname="net.sf.click.extras.control.tree.Tree"/>
   </controls>
 
 </click-app>
