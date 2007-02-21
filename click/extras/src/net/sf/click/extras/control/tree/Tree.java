@@ -16,17 +16,11 @@
 
 package net.sf.click.extras.control.tree;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.Stack;
 import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
@@ -152,7 +146,7 @@ public class Tree extends AbstractControl {
         "/net/sf/click/extras/control/tree/images/vertical-line.png"
     };
 
-    /** default serial version id */
+    /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
 
@@ -216,10 +210,10 @@ public class Tree extends AbstractControl {
         //Calculate the root node dynamically by finding the node where parent == null.
         //If user creates a new root node by adding the current root node as a child,
         //this method will return wrong results
-        if(rootNode == null) {
+        if (rootNode == null) {
             return null;
         }
-        while((rootNode.getParent()) != null) {
+        while ((rootNode.getParent()) != null) {
             rootNode = rootNode.getParent();
         }
         return rootNode;
@@ -261,15 +255,17 @@ public class Tree extends AbstractControl {
      * @param rootNode node will be set as the root
      */
     public void setRootNode(TreeNode rootNode) {
-        if(rootNode == null)
+        if (rootNode == null) {
             return;
+        }
         this.rootNode = rootNode;
 
         //if root node should not be displayed, it is expanded
         //by default. sensible default otherwise user must explicitly set the root
         //node to expanded each time.
-        if(!isRootNodeDisplayed())
+        if (!isRootNodeDisplayed()) {
             this.rootNode.setExpanded(true);
+        }
     }
 
     /**
@@ -314,8 +310,9 @@ public class Tree extends AbstractControl {
      */
     public void bindExpandOrCollapseValues() {
         String[] nodeIds = getRequestValues(EXPAND_TREE_NODE_PARAM);
-        if(nodeIds == null || nodeIds.length <= 0)
+        if (nodeIds == null || nodeIds.length <= 0) {
             return;
+        }
         expandOrCollapse(nodeIds);
     }
 
@@ -327,8 +324,9 @@ public class Tree extends AbstractControl {
      */
     public void bindSelectOrDeselectValues() {
         String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
-        if(nodeIds == null || nodeIds.length <= 0)
+        if (nodeIds == null || nodeIds.length <= 0) {
             return;
+        }
         selectOrDeselect(nodeIds);
     }
 
@@ -338,8 +336,9 @@ public class Tree extends AbstractControl {
      * @param id identifier of the node to be expanded.
      */
     public void expand(String id) {
-        if(id == null)
+        if (id == null) {
             return;
+        }
         setExpandState(id, true);
     }
 
@@ -349,8 +348,9 @@ public class Tree extends AbstractControl {
      * @param id identifier of node to be expanded.
      */
     public void collapse(String id) {
-        if(id == null)
+        if (id == null) {
             return;
+        }
         setExpandState(id, false);
     }
 
@@ -358,7 +358,7 @@ public class Tree extends AbstractControl {
      * Expand all the nodes of the tree and inform any listeners of the change.
      */
     public void expandAll() {
-        for(Iterator it = iterator(); it.hasNext();) {
+        for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(true);
@@ -367,10 +367,10 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Collapse all the nodes of the tree and inform any listeners of the change
+     * Collapse all the nodes of the tree and inform any listeners of the change.
      */
     public void collapseAll() {
-        for(Iterator it = iterator(); it.hasNext();) {
+        for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(false);
@@ -384,8 +384,9 @@ public class Tree extends AbstractControl {
      * @param id identifier of node to be selected.
      */
     public void select(String id) {
-        if(id == null)
+        if (id == null) {
             return;
+        }
         setSelectState(id, true);
     }
 
@@ -395,8 +396,9 @@ public class Tree extends AbstractControl {
      * @param id id of node to be deselected.
      */
     public void deselect(String id) {
-        if(id == null)
+        if (id == null) {
             return;
+        }
         setSelectState(id, false);
     }
 
@@ -404,7 +406,7 @@ public class Tree extends AbstractControl {
      * Select all the nodes of the tree and inform any listeners of the change.
      */
     public void selectAll() {
-        for(Iterator it = iterator(); it.hasNext();) {
+        for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(true);
@@ -416,7 +418,7 @@ public class Tree extends AbstractControl {
      * Deselect all the nodes of the tree and inform any listeners of the change.
      */
     public void deselectAll() {
-        for(Iterator it = iterator(); it.hasNext();) {
+        for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(false);
@@ -432,11 +434,13 @@ public class Tree extends AbstractControl {
      */
     public List getExpandedNodes(boolean includeInvisibleNodes) {
         List currentlyExpanded = new ArrayList();
-        for(Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode)it.next();
-            if(node.isExpanded())
-                if (includeInvisibleNodes || isVisible(node))
+        for (Iterator it = iterator(); it.hasNext();) {
+            TreeNode node = (TreeNode) it.next();
+            if (node.isExpanded())  {
+                if (includeInvisibleNodes || isVisible(node)) {
                     currentlyExpanded.add(node);
+                }
+            }
         }
         return currentlyExpanded;
     }
@@ -449,11 +453,13 @@ public class Tree extends AbstractControl {
      */
     public List getSelectedNodes(boolean includeInvisibleNodes) {
         List currentlySelected = new ArrayList();
-        for(Iterator it = iterator(); it.hasNext();) {
-            TreeNode node = (TreeNode)it.next();
-            if(node.isSelected())
-                if (includeInvisibleNodes || isVisible(node))
+        for (Iterator it = iterator(); it.hasNext();) {
+            TreeNode node = (TreeNode) it.next();
+            if (node.isSelected()) {
+                if (includeInvisibleNodes || isVisible(node)) {
                     currentlySelected.add(node);
+                }
+            }
         }
         return currentlySelected;
     }
@@ -499,8 +505,9 @@ public class Tree extends AbstractControl {
      * @return iterator over all nodes starting form the specified node
      */
     public Iterator iterator(TreeNode node) {
-        if(node == null)
+        if (node == null) {
             node = getRootNode();
+        }
         return new BreadthTreeIterator(node);
     }
 
@@ -512,8 +519,9 @@ public class Tree extends AbstractControl {
      * @throws IllegalArgumentException if argument is null.
      */
     public TreeNode find(String id) {
-        if( id == null)
+        if (id == null) {
             throw new IllegalArgumentException("Argument cannot be null.");
+        }
         return find(getRootNode(), id);
     }
 
@@ -548,7 +556,7 @@ public class Tree extends AbstractControl {
      *
      * @param listener to be removed to stop receiving tree events.
      */
-    public void removeListener(TreeListener listener){
+    public void removeListener(TreeListener listener) {
         listeners.remove(listener);
     }
 
@@ -571,7 +579,7 @@ public class Tree extends AbstractControl {
         buffer.append(getId());
         buffer.append("\">\n");
 
-        if(isRootNodeDisplayed()){
+        if (isRootNodeDisplayed()) {
             TreeNode temp = new TreeNode();
 
             //careful not to use the method temp.add(), because that will
@@ -610,11 +618,11 @@ public class Tree extends AbstractControl {
         buffer.append("\">\n");
 
         Iterator it = treeNode.getChildren().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             TreeNode child = (TreeNode) it.next();
             renderTreeNodeStart(buffer, child, indentation);
-            renderTreeNode(buffer,child,indentation);
-            if(child.getChildren().size() > 0 && child.isExpanded()) {
+            renderTreeNode(buffer, child, indentation);
+            if (child.getChildren().size() > 0 && child.isExpanded()) {
                 renderTree(buffer, child, indentation);
             }
             renderTreeRowEnd(buffer, child, indentation);
@@ -640,7 +648,7 @@ public class Tree extends AbstractControl {
         //Render the node's expand/collapse functionality.
         //This includes adding a css class for the current expand/collapse state.
         //In the tree.css file, the css classes are mapped to icons by default.
-        if(treeNode.getChildren().size() > 0) {
+        if (treeNode.getChildren().size() > 0) {
             renderExpandAndCollapseAction(buffer, treeNode);
         } else {
             buffer.append("<span class=\"spacer\"></span>");
@@ -673,7 +681,7 @@ public class Tree extends AbstractControl {
         StringBuffer tmpBuf = new StringBuffer(getContext().getRequest().getRequestURI());
         tmpBuf.append("?").append(EXPAND_TREE_NODE_PARAM).append("=").append(treeNode.getId());
         buffer.appendAttribute("href", tmpBuf.toString());
-        buffer.appendAttribute("class","spacer");
+        buffer.appendAttribute("class", "spacer");
         buffer.closeTag();
         buffer.elementEnd("a");
         buffer.append("\n");
@@ -690,7 +698,7 @@ public class Tree extends AbstractControl {
      * @param indentation current level of the treeNode
      */
     protected void renderTreeNode(HtmlStringBuffer buffer, TreeNode treeNode, int indentation) {
-        if(getDecorator() != null) {
+        if (getDecorator() != null) {
             Object value = getDecorator().render(treeNode, getContext());
             if (value != null) {
                 buffer.append(value);
@@ -701,10 +709,11 @@ public class Tree extends AbstractControl {
         //TODO IE HACK. IE7 displays the tree nodes properly alligned when rendered inside a table.  Without the code below
         //the icons and node values does not align correctly.
         //Firefox and Opera displays nicely without this hack. There might be a better way to fix this ;-)
-        boolean isIE= isIE(context);
-        if(isIE)
-            buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" " +
-                    "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
+        boolean isIE = isIE(context);
+        if (isIE) {
+            buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" "
+                    + "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
+        }
 
         //render the icon to display
         buffer.append("<span class=\"");
@@ -716,22 +725,25 @@ public class Tree extends AbstractControl {
         buffer.append("&nbsp;");
         buffer.append("</span>");
 
-        if(isIE)
+        if (isIE) {
             buffer.append("</td><td>");
+        }
 
         buffer.elementStart("span");
-        if(treeNode.isSelected())
-            buffer.appendAttribute("class","selected");
-        else
-            buffer.appendAttribute("class","unselected");
+        if (treeNode.isSelected()) {
+            buffer.appendAttribute("class", "selected");
+        } else {
+            buffer.appendAttribute("class", "unselected");
+        }
         buffer.closeTag();
 
         //renders the node value
         renderValue(buffer, treeNode);
         buffer.elementEnd("span");
 
-        if(isIE)
+        if (isIE) {
             buffer.append("</td></tr></table>");
+        }
     }
 
     /**
@@ -749,8 +761,9 @@ public class Tree extends AbstractControl {
         tmpBuf.append("?").append(SELECT_TREE_NODE_PARAM).append("=").append(treeNode.getId());
         buffer.appendAttribute("href", tmpBuf.toString());
         buffer.closeTag();
-        if(treeNode.getValue() != null)
+        if (treeNode.getValue() != null) {
             buffer.append(treeNode.getValue());
+        }
         buffer.elementEnd("a");
         buffer.append("\n");
     }
@@ -766,15 +779,16 @@ public class Tree extends AbstractControl {
      */
     protected String getExpandClass(TreeNode treeNode) {
         StringBuffer buffer = new StringBuffer();
-        if(treeNode.getChildren().size() > 0 && treeNode.isExpanded()) {
-                buffer.append("expanded");
+        if (treeNode.getChildren().size() > 0 && treeNode.isExpanded()) {
+            buffer.append("expanded");
         } else if (treeNode.getChildren().size() > 0) {
             buffer.append("collapsed");
         } else {
             buffer.append("leaf");
         }
-        if(treeNode.isLastChild())
+        if (treeNode.isLastChild()) {
             buffer.append("LastNode");
+        }
         return buffer.toString();
     }
 
@@ -788,26 +802,28 @@ public class Tree extends AbstractControl {
      */
     protected String getIconClass(TreeNode treeNode) {
         StringBuffer buffer = new StringBuffer();
-        if(treeNode.isExpanded() && treeNode.hasChildren())
-                return "expandedIcon";
-        else if(!treeNode.isExpanded() && treeNode.hasChildren() || treeNode.isChildrenSupported())
+        if (treeNode.isExpanded() && treeNode.hasChildren()) {
+            return "expandedIcon";
+        } else if (!treeNode.isExpanded() && treeNode.hasChildren() || treeNode.isChildrenSupported()) {
             return "collapsedIcon";
-        else
+        } else {
             return "leafIcon";
+        }
     }
 
     /**
-     * Queries specified context if the user is using Internet Explorer
+     * Queries specified context if the user is using Internet Explorer.
      *
      * @param context the Page request Context
      * @return true if the request came from IE, false otherwise
      */
     protected boolean isIE(Context context) {
         String useragent = context.getRequest().getHeader("User-Agent");
-        if(useragent == null)
+        if (useragent == null) {
             return false;
+        }
         String user = useragent.toLowerCase();
-        if(user.indexOf("msie") != -1) {
+        if (user.indexOf("msie") != -1) {
             return true;
         }
         return false;
@@ -819,10 +835,11 @@ public class Tree extends AbstractControl {
     /**
      * Notifies all listeners currently registered with the tree, about any expand events.
      *
-     * @param node specific the TreeNode that was expanded
+     * @param node specify the TreeNode that was expanded
+     * @param oldValue previous expanded value of the specified node
      */
     protected void fireNodeExpanded(TreeNode node, boolean oldValue) {
-        for(Iterator it = listeners.iterator(); it.hasNext();) {
+        for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener listener = (TreeListener) it.next();
             listener.nodeExpanded(this, node, getContext(), oldValue);
         }
@@ -832,9 +849,10 @@ public class Tree extends AbstractControl {
      * Notifies all listeners currently registered with the tree, about any collapse events.
      *
      * @param node specific the TreeNode that was collapsed
+     * @param oldValue previous collapsed value of the specified node
      */
     protected void fireNodeCollapsed(TreeNode node, boolean oldValue) {
-        for(Iterator it = listeners.iterator(); it.hasNext();) {
+        for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener listener = (TreeListener) it.next();
             listener.nodeCollapsed(this, node, getContext(), oldValue);
         }
@@ -844,9 +862,10 @@ public class Tree extends AbstractControl {
      * Notifies all listeners currently registered with the tree, about any selection events.
      *
      * @param node specific the TreeNode that was selected
+     * @param oldValue previous selected value of the specified node
      */
     protected void fireNodeSelected(TreeNode node, boolean oldValue) {
-        for(Iterator it = listeners.iterator(); it.hasNext();) {
+        for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener listener = (TreeListener) it.next();
             listener.nodeSelected(this, node, getContext(), oldValue);
         }
@@ -856,9 +875,10 @@ public class Tree extends AbstractControl {
      * Notifies all listeners currently registered with the tree, about any deselection events.
      *
      * @param node specific the TreeNode that was deselected
+     * @param oldValue previous deselected value of the specified node
      */
     protected void fireNodeDeselected(TreeNode node, boolean oldValue) {
-        for(Iterator it = listeners.iterator(); it.hasNext();) {
+        for (Iterator it = listeners.iterator(); it.hasNext();) {
             TreeListener listener = (TreeListener) it.next();
             listener.nodeDeselected(this, node, getContext(), oldValue);
         }
@@ -876,10 +896,11 @@ public class Tree extends AbstractControl {
     protected void setExpandState(TreeNode node, boolean newValue) {
         boolean oldValue = node.isExpanded();
         node.setExpanded(newValue);
-        if(newValue)
+        if (newValue) {
             fireNodeExpanded(node, oldValue);
-        else
+        } else {
             fireNodeCollapsed(node, oldValue);
+        }
     }
 
     /**
@@ -890,7 +911,7 @@ public class Tree extends AbstractControl {
      * @param ids array of node ids
      */
     protected void expandOrCollapse(String[] ids) {
-        processNodes(ids,new Callback() {
+        processNodes(ids, new Callback() {
             public void callback(TreeNode node) {
                 setExpandState(node, !node.isExpanded());
             }
@@ -905,8 +926,9 @@ public class Tree extends AbstractControl {
      */
     protected void setExpandState(final String id, final boolean newValue) {
         TreeNode node = find(id);
-        if(node == null)
+        if (node == null) {
             return;
+        }
         setExpandState(node, newValue);
     }
 
@@ -917,7 +939,7 @@ public class Tree extends AbstractControl {
      * @param newValue specifies the new expand state
      */
     protected void setExpandState(final Collection nodes, final boolean newValue) {
-        processNodes(nodes,new Callback() {
+        processNodes(nodes, new Callback() {
             public void callback(TreeNode node) {
                 setExpandState(node, newValue);
             }
@@ -933,10 +955,11 @@ public class Tree extends AbstractControl {
     protected void setSelectState(TreeNode node, boolean newValue) {
         boolean oldValue = node.isSelected();
         node.setSelected(newValue);
-        if(newValue)
+        if (newValue) {
             fireNodeSelected(node, oldValue);
-        else
+        } else {
             fireNodeDeselected(node, oldValue);
+        }
     }
 
     /**
@@ -947,7 +970,7 @@ public class Tree extends AbstractControl {
      * @param ids array of node ids
      */
     protected void selectOrDeselect(String[] ids) {
-        processNodes(ids,new Callback() {
+        processNodes(ids, new Callback() {
             public void callback(TreeNode node) {
                 setSelectState(node, !node.isSelected());
             }
@@ -962,8 +985,9 @@ public class Tree extends AbstractControl {
      */
     protected void setSelectState(final String id, final boolean newValue) {
         TreeNode node = find(id);
-        if(node == null)
+        if (node == null) {
             return;
+        }
         setSelectState(node, newValue);
     }
 
@@ -974,7 +998,7 @@ public class Tree extends AbstractControl {
      * @param newValue specifies the new select state
      */
     protected void setSelectState(final Collection nodes, final boolean newValue) {
-        processNodes(nodes,new Callback() {
+        processNodes(nodes, new Callback() {
             public void callback(TreeNode node) {
                 setSelectState(node, newValue);
             }
@@ -988,15 +1012,18 @@ public class Tree extends AbstractControl {
      * @param callback object on which callbacks are made
      */
     protected void processNodes(String[] ids, Callback callback) {
-        if(ids == null)
+        if (ids == null) {
             return;
-        for(int i = 0, n = ids.length; i < n; i++) {
+        }
+        for (int i = 0, n = ids.length; i < n; i++) {
             String id = ids[i];
-            if(id == null || id.trim().equals(""))
+            if (id == null || id.trim().equals("")) {
                 continue;
+            }
             TreeNode node = find(id);
-            if(node == null)
+            if (node == null) {
                 continue;
+            }
             callback.callback(node);
         }
     }
@@ -1008,9 +1035,10 @@ public class Tree extends AbstractControl {
      * @param callback object on which callbacks are made
      */
     protected void processNodes(Collection nodes, Callback callback) {
-        if(nodes == null)
+        if (nodes == null) {
             return;
-        for(Iterator it = nodes.iterator(); it.hasNext(); ) {
+        }
+        for (Iterator it = nodes.iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             callback.callback(node);
         }
@@ -1025,10 +1053,11 @@ public class Tree extends AbstractControl {
      * @return TreeNode the first node matching the id or null if no match was found.
      */
     protected TreeNode find(TreeNode node, String id) {
-        for(Iterator it = iterator(node);it.hasNext();) {
+        for (Iterator it = iterator(node); it.hasNext();) {
             TreeNode result = (TreeNode) it.next();
-            if(result.getId().equals(id))
+            if (result.getId().equals(id)) {
                 return result;
+            }
         }
         return null;
     }
@@ -1052,7 +1081,8 @@ public class Tree extends AbstractControl {
     /**
      * Returns all parameters in {@link javax.servlet.http.HttpServletRequest} for the specified param.
      *
-     * @return param all matching parameters or null if no parameter was found
+     * @param param name of the specified parameters to return
+     * @return all matching parameters or null if no parameter was found
      */
     protected String[] getRequestValues(String param) {
         String[] resultArray = getContext().getRequest().getParameterValues(param);
@@ -1072,7 +1102,7 @@ public class Tree extends AbstractControl {
      *node1.1  node1.2          node2.1  node2.2
      * </pre>
      *
-     * </p>the iterator will return the nodes in the following order:
+     * <p/>the iterator will return the nodes in the following order:
      * <pre class="codeHtml">
      *      <span class="red">root</span>
      *      <span class="blue">node1</span>
@@ -1085,10 +1115,10 @@ public class Tree extends AbstractControl {
      */
     static class BreadthTreeIterator implements Iterator {
 
-        /**queue for storing node's */
+        /**queue for storing node's. */
         private List queue = new ArrayList();
 
-        /** indicator to iterate collapsed node's */
+        /** indicator to iterate collapsed node's. */
         private boolean iterateCollapsedNodes = true;
 
         /**
@@ -1098,8 +1128,9 @@ public class Tree extends AbstractControl {
          * @param node node will be set as the root of the traversal.
          */
         public BreadthTreeIterator(TreeNode node) {
-            if(node == null)
+            if (node == null) {
                 throw new IllegalArgumentException("Node cannot be null");
+            }
             queue.add(node);
         }
 
@@ -1111,8 +1142,9 @@ public class Tree extends AbstractControl {
          * @param iterateCollapsedNodes indicator to iteratte collapsed node's
          */
         public BreadthTreeIterator(TreeNode node, boolean iterateCollapsedNodes) {
-            if(node == null)
+            if (node == null) {
                 throw new IllegalArgumentException("Node cannot be null");
+            }
             queue.add(node);
             this.iterateCollapsedNodes = iterateCollapsedNodes;
         }
@@ -1134,14 +1166,14 @@ public class Tree extends AbstractControl {
          */
         public Object next() {
             try {
-                TreeNode node = (TreeNode) queue.remove(queue.size() -1); //remove from the end of queue
-                if(node.hasChildren()) {
-                    if(iterateCollapsedNodes || node.isExpanded()) {
+                TreeNode node = (TreeNode) queue.remove(queue.size() - 1); //remove from the end of queue
+                if (node.hasChildren()) {
+                    if (iterateCollapsedNodes || node.isExpanded()) {
                         push(node.getChildren());
                     }
                 }
                 return node;
-            } catch(IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 throw new NoSuchElementException("There is  no more node's to iterate");
             }
         }
@@ -1161,7 +1193,7 @@ public class Tree extends AbstractControl {
          * @param children list of node's to push on the beginning of the queue
          */
         private void push(List children) {
-            for(Iterator it = children.iterator(); it.hasNext();) {
+            for (Iterator it = children.iterator(); it.hasNext();) {
                 queue.add(0, it.next()); //add to the beginning of queue
             }
         }
@@ -1179,9 +1211,10 @@ public class Tree extends AbstractControl {
      * @return boolean true if the node's parent is visible, false otherwise
      */
     private boolean isVisible(TreeNode node) {
-        while(!node.isRoot()) {
-            if(!node.getParent().isExpanded())
+        while (!node.isRoot()) {
+            if (!node.getParent().isExpanded()) {
                 return false;
+            }
             node = node.getParent();
         }
         return true;
@@ -1198,7 +1231,7 @@ public class Tree extends AbstractControl {
      */
     private TreeNode[] getPathToRoot(TreeNode treeNode) {
         TreeNode[] nodes = new TreeNode[] {treeNode};
-        while(treeNode.getParent() != null) {
+        while (treeNode.getParent() != null) {
             int length = nodes.length;
             System.arraycopy(nodes, 0, nodes = new TreeNode[length + 1], 0, length);
             nodes[length] = treeNode = treeNode.getParent();

@@ -22,16 +22,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.StringUtils;
-
 
 /**
- * Provides a tree control but uses checkboxes to enable selection of nodes. This implementation
+ * Implementation of a tree control that provides checkboxes to enable selection of nodes. This implementation
  * assumes the tree is wrapped inside a html form. Each time the form is submitted, all checkbox
  * values are processed by this control.
  *
@@ -162,7 +158,7 @@ public class CheckboxTree extends Tree {
         Collection currentlySelected = getSelectedNodes(false);
 
         //is there any new selected node's
-        if(nodeIds == null || nodeIds.length == 0) {
+        if (nodeIds == null || nodeIds.length == 0) {
             //deselect all the current selected nodes
             setSelectState(currentlySelected, false);
             return;
@@ -170,16 +166,17 @@ public class CheckboxTree extends Tree {
         //build hashes of id's for fast lookup
         Set hashes = new HashSet();
         List newSelectedNodes = new ArrayList();
-        for(int i = 0; i < nodeIds.length; i++) {
+        for (int i = 0; i < nodeIds.length; i++) {
             hashes.add(nodeIds[i]);
         }
         nodeIds = null;
 
         //build list of newSelectedNodes
-        for(Iterator it = iterator(getRootNode());it.hasNext();) {
+        for (Iterator it = iterator(getRootNode()); it.hasNext();) {
             TreeNode result = (TreeNode) it.next();
-            if(hashes.contains(result.getId()))
+            if (hashes.contains(result.getId())) {
                 newSelectedNodes.add(result);
+            }
         }
 
         //calculate nodes for deselection by removing from currentlySelected nodes
@@ -229,9 +226,10 @@ public class CheckboxTree extends Tree {
                     //A second IE7 issue solved by the code is when using the new zooming feature, the node value is hidden behind the checkbox.
 
                     boolean isIE = isIE(context);
-                    if(isIE)
-                        buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" " +
-                                "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
+                    if (isIE) {
+                        buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" "
+                                + "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
+                    }
 
                     //render the icon to display
                     buffer.append("<span class=\"");
@@ -244,8 +242,9 @@ public class CheckboxTree extends Tree {
 
                     buffer.append("</span>");
 
-                    if(isIE)
+                    if (isIE) {
                         buffer.append("</td><td>");
+                    }
 
                     buffer.append("<input onclick=\"checkboxClicked(this, event);\" style=\"margin:0\" type=\"checkbox\"");
                     buffer.appendAttribute("name", SELECT_TREE_NODE_PARAM);
@@ -256,22 +255,24 @@ public class CheckboxTree extends Tree {
 
                     buffer.elementEnd();
 
-                    if(isIE)
+                    if (isIE) {
                         buffer.append("</td><td>");
+                    }
 
                     buffer.elementStart("span");
-                    if(treeNode.isSelected())
-                        buffer.appendAttribute("class","selected");
-                    else
-                        buffer.appendAttribute("class","unselected");
+                    if (treeNode.isSelected()) {
+                        buffer.appendAttribute("class", "selected");
+                    } else {
+                        buffer.appendAttribute("class", "unselected");
+                    }
                     buffer.closeTag();
 
                     renderValue(buffer, treeNode);
                     buffer.elementEnd("span");
 
-                    if(isIE)
+                    if (isIE) {
                         buffer.append("</td></tr></table>");
-
+                    }
                     return buffer.toString();
                 }
 
@@ -282,8 +283,9 @@ public class CheckboxTree extends Tree {
                  * @param treeNode treeNode to render
                  */
                 protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
-                    if(treeNode.getValue() != null)
+                    if (treeNode.getValue() != null) {
                         buffer.append(treeNode.getValue());
+                    }
                     buffer.append("\n");
                 }
             };
