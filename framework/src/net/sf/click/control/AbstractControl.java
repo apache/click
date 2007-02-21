@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.sf.click.control;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.ServletContext;
+
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.MessagesMap;
 
 /**
- * This class provides a default implementation of the {@link Control} interface, to make it easier
- * for developers to implement their own controls.
- *
- * <p/>Subclasses are expected to at least override {@link java.lang.Object#toString()}
+ * Provides a default implementation of the {@link Control} interface,
+ * to make it easier for developers to implement their own controls.
+ * <p/>
+ * Subclasses are expected to at least override {@link java.lang.Object#toString()}
  * to render the control.
  *
  * @author Malcolm Edgar
@@ -40,6 +39,9 @@ public abstract class AbstractControl implements Control {
     /** The Field attributes Map. */
     protected Map attributes;
 
+    /** The request context. */
+    protected transient Context context;
+
     /** The Field localized messages Map. */
     protected Map messages;
 
@@ -49,16 +51,76 @@ public abstract class AbstractControl implements Control {
     /** The control's parent. */
     protected transient Object parent;
 
-    /** The request context. */
-    protected transient Context context;
+    /** The Map of CSS style attributes. */
+    protected Map styles;
+
+    // ------------------------------------------------------ Public Attributes
 
     /**
-     * @see net.sf.click.Control#onProcess()
+     * Return the control HTML attribute with the given name, or null if the
+     * attribute does not exist.
      *
-     * @return true
+     * @param name the name of link HTML attribute
+     * @return the link HTML attribute
      */
-    public boolean onProcess() {
-        return true;
+    public String getAttribute(String name) {
+        return (String) getAttributes().get(name);
+    }
+
+    /**
+     * Set the control attribute with the given attribute name and value. You would
+     * generally use attributes if you were creating the entire Control
+     * programatically and rendering it with the {@link #toString()} method.
+     * <p/>
+     * For example given the ActionLink:
+     *
+     * <pre class="codeJava">
+     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
+     * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
+     *
+     * Will render the HTML as:
+     * <pre class="codeHtml">
+     * &lt;a href=".." <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     * @throws IllegalArgumentException if name parameter is null
+     */
+    public void setAttribute(String name, String value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            getAttributes().put(name, value);
+        } else {
+            getAttributes().remove(name);
+        }
+    }
+
+    /**
+     * Return the control's attributes Map.
+     *
+     * @return the control's attributes Map.
+     */
+    public Map getAttributes() {
+        if (attributes == null) {
+            attributes = new HashMap();
+        }
+        return attributes;
+    }
+
+    /**
+     * Return true if the control has attributes or false otherwise.
+     *
+     * @return true if the control has attributes on false otherwise
+     */
+    public boolean hasAttributes() {
+        if (attributes != null) {
+            return !getAttributes().isEmpty();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -101,24 +163,6 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
-    }
-
-    /**
      * Return the "id" attribute value if defined, or the tree name otherwise.
      *
      * @see Control#getId()
@@ -134,21 +178,31 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Deploy the <tt>tree.css</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
+     * Set the HTML id attribute for the control with the given value.
      *
-     * @see Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
+     * @param id the element HTML id attribute value to set
      */
-    public void onDeploy(ServletContext servletContext) { }
+    public void setId(String id) {
+        if (id != null) {
+            setAttribute("id", id);
+        } else {
+            getAttributes().remove("id");
+        }
+    }
 
     /**
-     * Return the package resource bundle message for the named resource key
-     * and the context's request locale.
+     * Return the localized message for the given key, or null if not found.
+     * <p/>
+     * This method will attempt to lookup the localized message in the
+     * parent's messages, which by resolves to the Page's resource bundle.
+     * <p/>
+     * If the message was not found, the this method will attempt to look up the
+     * value in the <tt>/click-control.properties</tt> message properties file.
+     * <p/>
+     * If still not found, this method will return null.
      *
-     * @param name resource name of the message
-     * @return the named localized message for the package
+     * @param name the name of the message resource
+     * @return the named localized message, or null if not found
      */
     public String getMessage(String name) {
         if (name == null) {
@@ -171,6 +225,19 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
+     * Return the formatted message for the given resource name
+     * and message format argument and for the context request locale.
+     *
+     * @param name resource name of the message
+     * @param arg the message argument to format
+     * @return the named localized message for the field
+     */
+    public String getMessage(String name, Object arg) {
+        Object[] args = new Object[] { arg };
+        return getMessage(name, args);
+    }
+
+    /**
      * Return the formatted package message for the given resource name and
      * message format arguments and for the context request locale.
      *
@@ -188,19 +255,20 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return a Map of localized messages for the ActionLink.
+     * Return a Map of localized messages for the control.
      *
-     * @return a Map of localized messages for the ActionLink
-     * @throws IllegalStateException if the context for the link has not be set
+     * @return a Map of localized messages for the control
+     * @throws IllegalStateException if the context for the control has not be set
      */
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
                 messages =
-                        new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
+                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
 
             } else {
-                String msg = "Cannot initialize messages as context not set";
+                String msg = "Cannot initialize messages as context not set "
+                    + "for link: " + getName();
                 throw new IllegalStateException(msg);
             }
         }
@@ -208,90 +276,75 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * This method returns null.
+     * @see Control#getParent()
      *
-     * @see net.sf.click.Control#getHtmlImports()
-     *
-     * @return null
+     * @return the Control's parent
      */
-    public String getHtmlImports() {
-        return null;
+    public Object getParent() {
+        return parent;
     }
 
     /**
-     * Return the control HTML attribute with the given name, or null if the
-     * attribute does not exist.
+     * @see Control#setParent(Object)
      *
-     * @param name the name of link HTML attribute
-     * @return the link HTML attribute
+     * @param parent the parent of the Control
      */
-    public String getAttribute(String name) {
-        return (String) getAttributes().get(name);
+    public void setParent(Object parent) {
+        this.parent = parent;
     }
 
     /**
-     * Set the link attribute with the given attribute name and value. You would
-     * generally use attributes if you were creating the entire Control
-     * programatically and rendering it with the {@link #toString()} method.
-     * <p/>
-     * For example given the ActionLink:
+     * Return the control CSS style for the given name.
      *
-     * <pre class="codeJava">
-     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
-     * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
-     *
-     * Will render the HTML as:
-     * <pre class="codeHtml">
-     * &lt;a href=".." <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
-     *
-     * @param name the attribute name
-     * @param value the attribute value
-     * @throws IllegalArgumentException if name parameter is null
+     * @param name the CSS style name
+     * @return the CSS style for the given name
      */
-    public void setAttribute(String name, String value) {
+    public String getStyle(String name) {
+        if (hasStyles()) {
+            return (String) getStyles().get(name);
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Set the control CSS style name and value pair.
+     *
+     * @param name the CSS style name
+     * @param value the CSS style value
+     */
+    public void setStyle(String name, String value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
 
         if (value != null) {
-            getAttributes().put(name, value);
+            getStyles().put(name, value);
         } else {
-            getAttributes().remove(name);
+            getStyles().remove(name);
         }
     }
 
     /**
-     * Return the Control's attributes Map.
+     * Return true if CSS styles are defined.
      *
-     * @return the control's attributes Map.
+     * @return true if CSS styles are defined
      */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap();
-        }
-        return attributes;
+    public boolean hasStyles() {
+        return (styles != null && !styles.isEmpty());
     }
 
     /**
-     * Return true if the Control has attributes or false otherwise.
+     * Return the Map of control CSS styles.
      *
-     * @return true if the Control has attributes on false otherwise
+     * @return the Map of control CSS styles
      */
-    public boolean hasAttributes() {
-        if (attributes != null) {
-            return !getAttributes().isEmpty();
-        } else {
-            return false;
+    public Map getStyles() {
+        if (styles == null) {
+            styles = new HashMap();
         }
+        return styles;
     }
 
-    /**
-     * @see Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-        // Does nothing
-    }
 }

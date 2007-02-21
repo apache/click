@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,10 @@
  */
 package net.sf.click.control;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.MessagesMap;
 
 /**
  * Provides an abstract form Field control. Field controls are contained by
@@ -169,15 +162,9 @@ import net.sf.click.util.MessagesMap;
  *
  * @author Malcolm Edgar
  */
-public abstract class Field implements Control {
+public abstract class Field extends AbstractControl {
 
     // ----------------------------------------------------- Instance Variables
-
-    /** The Field attributes Map. */
-    protected Map attributes;
-
-    /** The Page request Context. */
-    protected transient Context context;
 
     /** The Field disabled value. */
     protected boolean disabled;
@@ -200,23 +187,11 @@ public abstract class Field implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
-    /** The Field localized messages Map. */
-    protected Map messages;
-
-    /** The Field name. */
-    protected String name;
-
-    /** The control's parent. */
-    protected transient Object parent;
-
     /** The Field is readonly flag. */
     protected boolean readonly;
 
     /** The Field is required flag. */
     protected boolean required;
-
-    /** The Map of CSS style attributes. */
-    protected Map styles;
 
     /** The Field 'title' attribute, which acts as a tooltip help message. */
     protected String title;
@@ -258,108 +233,6 @@ public abstract class Field implements Control {
     }
 
     // ------------------------------------------------------ Public Attributes
-
-    /**
-     * Return the Field HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of field HTML attribute
-     * @return the Field HTML attribute
-     */
-    public String getAttribute(String name) {
-        if (attributes != null) {
-            return (String) attributes.get(name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the Fields with the given HTML attribute name and value. These
-     * attributes will be rendered as HTML attributes.
-     * <p/>
-     * For example the TextField code:
-     *
-     * <pre class="codeJava">
-     * TextField textField = <span class="kw">new</span> TextField("username");
-     * textField.setAttribute("<span class="blue">class</span>", "<span class="red">login</span>"); </pre>
-     *
-     * Will render the HTML:
-     * <pre class="codeHtml">
-     * &lt;input type="text" name="username" size="20" <span class="blue">class</span>="<span class="red">login</span>"/&gt; </pre>
-     *
-     * If there is an existing named attribute in the Field it will be replaced
-     * with the new value. If the given attribute value is null, any existing
-     * attribute will be removed.
-     *
-     * @param name the name of the field HTML attribute
-     * @param value the value of the field HTML attribute
-     * @throws IllegalArgumentException if attribute name is null
-     */
-    public void setAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-
-        if (value != null) {
-            attributes.put(name, value);
-        } else {
-            attributes.remove(name);
-        }
-    }
-
-    /**
-     * Return the Field attributes Map.
-     *
-     * @return the field attributes Map.
-     */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-        return attributes;
-    }
-
-    /**
-     * Return true if the Field has attributes or false otherwise.
-     *
-     * @return true if the Field has attributes on false otherwise
-     */
-    public boolean hasAttributes() {
-        if (attributes != null && !attributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @see Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * Set the Field context value.
-     *
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-    }
 
     /**
      * Return true if the Field is a disabled. The Field will also be disabled
@@ -470,7 +343,7 @@ public abstract class Field implements Control {
      * HTML head element. This value will rendered by the Form
      * {@link Form#getHtmlImports()} method.
      *
-     * @see Control#getHtmlImports()
+     * @see net.sf.click.Control#getHtmlImports()
      *
      * @return null value
      */
@@ -520,19 +393,6 @@ public abstract class Field implements Control {
             }
 
             return id;
-        }
-    }
-
-    /**
-     * Set the field HTML id attribute with the given value.
-     *
-     * @param id the field HTML id attribute value to set
-     */
-    public void setId(String id) {
-        if (id != null) {
-            setAttribute("id", id);
-        } else {
-            getAttributes().remove("id");
         }
     }
 
@@ -618,132 +478,6 @@ public abstract class Field implements Control {
     }
 
     /**
-     * Return the localized message for the given key, or null if not found.
-     * <p/>
-     * This method will attempt to lookup for the localized message in the
-     * parent, which by default represents the Page's resource bundle.
-     * <p/>
-     * If the message was not found, the this method will attempt to look up the
-     * value in the fields class properties file and then finally in the global
-     * controls <tt>/click-control.properties</tt> message properties file.
-     * <p/>
-     * If still not found, this method will return null.
-     *
-     * @param name the name of the message resource
-     * @return the named localized message, or null if not found
-     */
-    public String getMessage(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        String message = null;
-
-        Map parentMessages = ClickUtils.getParentMessages(this);
-        if (parentMessages.containsKey(name)) {
-
-            message = (String) parentMessages.get(name);
-        }
-
-        if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
-        }
-
-        return message;
-    }
-
-    /**
-     * Return the formatted message for the given resource name
-     * and message format argument and for the context request locale.
-     *
-     * @param name resource name of the message
-     * @param arg the message argument to format
-     * @return the named localized message for the field
-     */
-    public String getMessage(String name, Object arg) {
-        Object[] args = new Object[] { arg };
-        return getMessage(name, args);
-    }
-
-    /**
-     * Return the formatted message for the given resource name and
-     * message format arguments and for the context request locale.
-     *
-     * @param name resource name of the message
-     * @param args the message arguments to format
-     * @return the named localized message for the field
-     */
-     public String getMessage(String name, Object[] args) {
-        if (args == null) {
-            throw new IllegalArgumentException("Null args parameter");
-        }
-        String value = getMessage(name);
-
-        return MessageFormat.format(value, args);
-     }
-
-     /**
-      * Return a Map of localized messages for the Field.
-      *
-      * @return a Map of localized messages for the Field
-      * @throws IllegalStateException if the context for the Field has not be set
-      */
-     public Map getMessages() {
-         if (messages == null) {
-             if (getContext() != null) {
-                 messages =
-                     new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
-
-             } else {
-                 String msg = "Cannot initialize messages as context not set "
-                     + "for field: " + getName();
-                 throw new IllegalStateException(msg);
-             }
-         }
-         return messages;
-     }
-
-    /**
-     * @see net.sf.click.Control#getName()
-     *
-     * @return the name of the control
-     */
-    public String getName() {
-        return name;
-    }
- 
-    /**
-     * @see net.sf.click.Control#setName(String)
-     *
-     * @param name of the control
-     * @throws IllegalArgumentException if the name is null
-     */
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-        this.name = name;
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
-    }
-
-    /**
      * Return true if the Field is a readonly. The Field will also be readonly
      * if the parent Form is readonly.
      *
@@ -782,60 +516,6 @@ public abstract class Field implements Control {
      */
     public void setRequired(boolean required) {
         this.required = required;
-    }
-
-    /**
-     * Return the Field CSS style for the given name.
-     *
-     * @param name the CSS style name
-     * @return the CSS style for the given name
-     */
-    public String getStyle(String name) {
-        if (hasStyles()) {
-            return (String) getStyles().get(name);
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the Field CSS style name and value pair.
-     *
-     * @param name the CSS style name
-     * @param value the CSS style value
-     */
-    public void setStyle(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (value != null) {
-            getStyles().put(name, value);
-        } else {
-            getStyles().remove(name);
-        }
-    }
-
-    /**
-     * Return true if CSS styles are defined.
-     *
-     * @return true if CSS styles are defined
-     */
-    public boolean hasStyles() {
-        return (styles != null && !styles.isEmpty());
-    }
-
-    /**
-     * Return the Map of field CSS styles.
-     *
-     * @return the Map of field CSS styles
-     */
-    public Map getStyles() {
-        if (styles == null) {
-            styles = new HashMap();
-        }
-        return styles;
     }
 
     /**
@@ -956,7 +636,7 @@ public abstract class Field implements Control {
     /**
      * Return true if the Field is valid after being processed, or false
      * otherwise. If the Field has no error message after
-     * {@link Control#onProcess()} has been invoked it is considered to be
+     * {@link net.sf.click.Control#onProcess()} has been invoked it is considered to be
      * valid.
      *
      * @return true if the Field is valid after being processed
