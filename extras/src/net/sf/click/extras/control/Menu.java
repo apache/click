@@ -180,6 +180,10 @@ public class Menu implements Control {
      */
     protected static final String CONFIG_FILE = "/WEB-INF/menu.xml";
 
+    /** The HTML imports statements. */
+    protected static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>";
+
     // -------------------------------------------------------- Class Variables
 
     /** The cached root Menu as defined in <tt>menu.xml</tt>. */
@@ -613,14 +617,18 @@ public class Menu implements Control {
     }
 
     /**
-     * This method returns null.
+     * Return the HTML head import statements for the CSS stylesheet
+     * (<tt>click/menu.css</tt>) and JavaScript (<tt>click/menu.js</tt>) files.
      *
      * @see Control#getHtmlImports()
      *
-     * @return null
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
      */
     public String getHtmlImports() {
-        return null;
+        String path = getContext().getRequest().getContextPath();
+
+        return StringUtils.replace(HTML_IMPORTS, "$", path);
     }
 
     /**
@@ -700,13 +708,20 @@ public class Menu implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * This method does nothing.
+     * Deploy the <tt>menue.css</tt> and <tt>menu.js</tt> files to the
+     * <tt>click</tt> web directory when the application is initialized.
      *
      * @see Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
      */
     public void onDeploy(ServletContext servletContext) {
+        String[] files = new String[] {
+                "/net/sf/click/extras/control/menu.css",
+                "/net/sf/click/extras/control/menu.js"
+            };
+
+        ClickUtils.deployFiles(servletContext, files, "click");
     }
 
     /**
