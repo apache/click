@@ -9,6 +9,7 @@
     <control classname="net.sf.click.extras.control.CheckList"/>
     <control classname="net.sf.click.extras.control.ColorPicker"/>
     <control classname="net.sf.click.extras.control.IntegerField"/>
+    <control classname="net.sf.click.extras.control.Menu"/>
     <control classname="net.sf.click.extras.control.RegexField"/>
     <control classname="net.sf.click.extras.control.CreditCardField"/>
     <control classname="net.sf.click.extras.control.EmailField"/>
