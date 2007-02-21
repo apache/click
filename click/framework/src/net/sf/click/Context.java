@@ -269,6 +269,15 @@ public class Context {
     }
 
     /**
+     * Return an ordered map of request parameters.
+     *
+     * @return the ordered map of request parameters
+     */
+    public Map getRequestParameters() {
+        return ClickUtils.getRequestParameters(getRequest());
+    }
+
+    /**
      * Return the named session attribute, or null if not defined.
      * <p/>
      * If the session is not defined this method will return null, and a

@@ -34,6 +34,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -1364,6 +1366,45 @@ public class ClickUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Return an ordered map of request parameters from the given request.
+     *
+     * @param request the servlet request to obtain request parameters from
+     * @return the ordered map of request parameters
+     */
+    public static Map getRequestParameters(HttpServletRequest request) {
+
+        TreeMap requestParams = new TreeMap();
+
+        Enumeration paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String name = paramNames.nextElement().toString();
+
+            String[] values = request.getParameterValues(name);
+            HtmlStringBuffer valsBuffer = new HtmlStringBuffer(32);
+
+            if (values.length == 1) {
+                valsBuffer.append(values[0]);
+
+            } else {
+                for (int i = 0; i < values.length; i++) {
+                    if (i == 0) {
+                        valsBuffer.append("[");
+                    }
+                    valsBuffer.append(values[i]);
+                    if (i == values.length - 1) {
+                        valsBuffer.append("]");
+                    } else {
+                        valsBuffer.append(",");
+                    }
+                }
+            }
+            requestParams.put(name, valsBuffer.toString());
+        }
+
+        return requestParams;
     }
 
     /**

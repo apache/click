@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -340,7 +339,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         if (logger.isTraceEnabled()) {
-            Map requestParams = getRequestParameters(request);
+            Map requestParams = ClickUtils.getRequestParameters(request);
             Iterator i = requestParams.entrySet().iterator();
             while (i.hasNext()) {
                 Map.Entry entry = (Map.Entry) i.next();
@@ -1254,45 +1253,6 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-    }
-
-    /**
-     * Return an ordered map of request parameters from the given request.
-     *
-     * @param request the servlet request to obtain request parameters from
-     * @return the ordered map of request parameters
-     */
-    protected Map getRequestParameters(HttpServletRequest request) {
-
-        TreeMap requestParams = new TreeMap();
-
-        Enumeration paramNames = request.getParameterNames();
-        while (paramNames.hasMoreElements()) {
-            String name = paramNames.nextElement().toString();
-
-            String[] values = request.getParameterValues(name);
-            HtmlStringBuffer valsBuffer = new HtmlStringBuffer(32);
-
-            if (values.length == 1) {
-                valsBuffer.append(values[0]);
-
-            } else {
-                for (int i = 0; i < values.length; i++) {
-                    if (i == 0) {
-                        valsBuffer.append("[");
-                    }
-                    valsBuffer.append(values[i]);
-                    if (i == values.length - 1) {
-                        valsBuffer.append("]");
-                    } else {
-                        valsBuffer.append(",");
-                    }
-                }
-            }
-            requestParams.put(name, valsBuffer.toString());
-        }
-
-        return requestParams;
     }
 
     /**
