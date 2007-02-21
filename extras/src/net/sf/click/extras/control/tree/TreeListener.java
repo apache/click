@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.sf.click.extras.control.tree;
 
 import net.sf.click.Context;
@@ -36,7 +35,7 @@ public interface TreeListener {
      * @param context provides access to {@link net.sf.click.Context}
      * @param oldValue contains the previous value of selected state
      */
-    void nodeSelected(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeSelected(Tree tree, TreeNode node, Context context, boolean oldValue);
 
     /**
      * Invoked when user deselected the specified node.
@@ -46,7 +45,7 @@ public interface TreeListener {
      * @param context provides access to {@link net.sf.click.Context}
      * @param oldValue contains the previous value of selected state
      */
-    void nodeDeselected(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeDeselected(Tree tree, TreeNode node, Context context, boolean oldValue);
 
     /**
      * Invoked when user expanded the specified node.
@@ -56,7 +55,7 @@ public interface TreeListener {
      * @param context provides access to {@link net.sf.click.Context}
      * @param oldValue contains the previous value of expanded state
      */
-    void nodeExpanded(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeExpanded(Tree tree, TreeNode node, Context context, boolean oldValue);
 
     /**
      * Invoked when user collapsed the specified node.
@@ -66,5 +65,5 @@ public interface TreeListener {
      * @param context provides access to {@link net.sf.click.Context}
      * @param oldValue contains the previous value of selected state
      */
-    void nodeCollapsed(Tree tree, TreeNode node, Context context, boolean oldValue);
+    public void nodeCollapsed(Tree tree, TreeNode node, Context context, boolean oldValue);
 }

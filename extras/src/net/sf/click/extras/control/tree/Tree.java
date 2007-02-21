@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.sf.click.extras.control.tree;
 
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a tree control  for displaying hierarchical data.
- *
- * <p/>Below is screenshot of how the tree will render in a browser.
+ * <p/>
+ * Below is screenshot of how the tree will render in a browser.
  *
  * <table cellspacing='10'>
  * <tr>
@@ -85,7 +84,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <h4>Tree Style</h4>
  *
- * <p/>The Tree control automatically deploys the tree CSS style sheet
+ * The Tree control automatically deploys the tree CSS style sheet
  * (<tt>tree.css</tt>) to the application directory <tt>/click/tree</tt>.
  * To import the style sheet simply reference the
  * {@link net.sf.click.util.PageImports} object. For example:
@@ -100,7 +99,7 @@ import org.apache.commons.lang.StringUtils;
  *    &lt;/body&gt;
  * &lt;/html&gt; </pre>
  *
- * <p/><strong>Credit</strong> goes to <a href="http://wicket.sourceforge.net">Wicket</a> for the following:
+ * <strong>Credit</strong> goes to <a href="http://wicket.sourceforge.net">Wicket</a> for the following:
  * <ul>
  *      <li>images/folder-closed.png</li>
  *      <li>images/folder-open.png</li>
@@ -123,16 +122,12 @@ public class Tree extends AbstractControl {
     public static final String TREE_IMPORTS =
             "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/tree/tree.css\"></link>\n";
 
-    /**
-     * The Tree resource file names.
-     */
+    /** The Tree resource file names. */
     protected static final String[] TREE_RESOURCES = {
         "/net/sf/click/extras/control/tree/tree.css"
     };
 
-    /**
-     * The Tree image file names.
-     */
+    /** The Tree image file names. */
     protected static final String[] TREE_IMAGES = {
         "/net/sf/click/extras/control/tree/images/folder-open.png",
         "/net/sf/click/extras/control/tree/images/folder-closed.png",
@@ -150,7 +145,7 @@ public class Tree extends AbstractControl {
     private static final long serialVersionUID = 1L;
 
 
-    // ----------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The list of tree controls. */
     protected List controls;
@@ -161,14 +156,17 @@ public class Tree extends AbstractControl {
     /** Callback provider for users to decorate tree nodes. */
     private transient Decorator decorator;
 
-    /** Specifies if the root node should be displayed, or only its children. By default this value is false.*/
+    /** 
+     * Specifies if the root node should be displayed, or only its children. 
+     * By default this value is false.
+     */
     private boolean rootNodeDisplayed = false;
 
     /** List of subscribed listeners to tree events.*/
     private List listeners = new ArrayList();
 
 
-    // ----------------------------------------------------------- Public Constructors
+    // ---------------------------------------------------- Public Constructors
 
     /**
      * Create an Tree control for the given name.
@@ -186,10 +184,9 @@ public class Tree extends AbstractControl {
 
     /**
      * Create a Tree with no name defined.
-     *
-     **<p/>Also sets a id attribute of <tt>"tree"</tt> to qualify the
-     * tree control with the <tt>tree.css.</tt>
-     *
+     * <p/>
+     * Also sets a id attribute of <tt>"tree"</tt> to qualify the tree control 
+     * with the <tt>tree.css.</tt>
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
@@ -198,8 +195,7 @@ public class Tree extends AbstractControl {
         setAttribute("id", "tree");
     }
 
-
-    // ----------------------------------------------------------- Public Getters and Setters
+    // --------------------------------------------- Public Getters and Setters
 
     /**
      * Return the tree's root TreeNode.
@@ -248,8 +244,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Set the tree's root TreeNode.
-     *
-     * <p/>As a side effect this method will also set the root node to expanded,
+     * <p/>
+     * As a side effect this method will also set the root node to expanded,
      * because that is the most sensible default value.
      *
      * @param rootNode node will be set as the root
@@ -300,8 +296,7 @@ public class Tree extends AbstractControl {
         return buffer.toString();
     }
 
-
-    // ----------------------------------------------------------- Public Behavior
+    // --------------------------------------------------------- Public Methods
 
     /**
      * This method binds the users request of expanded and collapsed nodes to the tree's nodes.
@@ -331,7 +326,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Expands all nodes with matching id's in the specified collection and inform any listeners of the change.
+     * Expands all nodes with matching id's in the specified collection and 
+     * inform any listeners of the change.
      *
      * @param id identifier of the node to be expanded.
      */
@@ -343,7 +339,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Collapses all nodes with matching id's in the specified collection and inform any listeners of the change.
+     * Collapses all nodes with matching id's in the specified collection and 
+     * inform any listeners of the change.
      *
      * @param id identifier of node to be expanded.
      */
@@ -379,7 +376,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Select all nodes with matching id's in the specified collection and inform any listeners of the change.
+     * Select all nodes with matching id's in the specified collection and 
+     * inform any listeners of the change.
      *
      * @param id identifier of node to be selected.
      */
@@ -391,7 +389,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Deselect all nodes with matching id's in the specified collection and inform any listeners of the change.
+     * Deselect all nodes with matching id's in the specified collection and 
+     * inform any listeners of the change.
      *
      * @param id id of node to be deselected.
      */
@@ -465,20 +464,16 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Deploy all files defined in the constants <tt>{@link #TREE_RESOURCES}</tt> and
-     * <tt>{@link #TREE_IMAGES}</tt> to the <tt>click/tree</tt> web
+     * Deploy all files defined in the constants <tt>{@link #TREE_RESOURCES}</tt> 
+     * and <tt>{@link #TREE_IMAGES}</tt> to the <tt>click/tree</tt> web
      * directory when the application is initialized.
      *
      * @param servletContext the servlet context
      * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext,
-                TREE_RESOURCES,
-                "click/tree");
-        ClickUtils.deployFiles(servletContext,
-                TREE_IMAGES,
-                "click/tree/images");
+        ClickUtils.deployFiles(servletContext, TREE_RESOURCES, "click/tree");
+        ClickUtils.deployFiles(servletContext, TREE_IMAGES, "click/tree/images");
     }
 
     /**
@@ -498,8 +493,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns an iterator over all nodes starting from the specified node. If null
-     * is specified, root node is used instead.
+     * Returns an iterator over all nodes starting from the specified node. 
+     * If null is specified, root node is used instead.
      *
      * @param node starting point of nodes to iterator over
      * @return iterator over all nodes starting form the specified node
@@ -543,6 +538,20 @@ public class Tree extends AbstractControl {
     }
 
     /**
+     * This method does nothing.
+     * <p/>
+     * Please use the {@link #addListener(TreeListener)} method instead.
+     *
+     * @see net.sf.click.Control#setListener(Object, String)
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param method the name of the method to invoke
+     */
+    public void setListener(Object listener, String method) {
+        // Does nothing
+    }
+
+    /**
      * Adds the listener to start receiving tree events.
      *
      * @param listener to add to start receiving tree events.
@@ -560,15 +569,14 @@ public class Tree extends AbstractControl {
         listeners.remove(listener);
     }
 
-
-    // ----------------------------------------------------------- Default Rendering
+    // ------------------------------------------------------ Default Rendering
 
     /**
      * Return a HTML rendered Tree string of all the tree's nodes.
      *
      * <p/>Note: by default the tree's root node will not be rendered.
-     * However this behavior can be changed by calling {@link #setRootNodeDisplayed(boolean) }
-     * with true.
+     * However this behavior can be changed by calling 
+     * {@link #setRootNodeDisplayed(boolean)} with true.
      *
      * @see java.lang.Object#toString()
      * @return a HTML rendered Tree string
@@ -596,10 +604,12 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Render the children of the specified tree node as html markup and append the output to the specified buffer.
-     *
-     * <p/><strong>Note:</strong> only the children of the specified  tree node will be renderered not the
-     * treeNode itself. This method is recursive, so the node's children and their children will be rendered and so on.
+     * Render the children of the specified tree node as html markup and append 
+     * the output to the specified buffer.
+     * <p/>
+     * <strong>Note:</strong> only the children of the specified  tree node will 
+     * be renderered not the treeNode itself. This method is recursive, so the 
+     * node's children and their children will be rendered and so on.
      *
      * @param buffer string buffer containing the markup
      * @param treeNode specified node who's children will be rendered
@@ -748,9 +758,10 @@ public class Tree extends AbstractControl {
 
     /**
      * Render the node's value.
-     *
-     * <p/>Subclasses should override this method to change the rendering of the node's value.
-     * By default the value will be rendered as a hyperlink, passing its <em>id</em> to the server.
+     * <p/>
+     * Subclasses should override this method to change the rendering of the 
+     * node's value. By default the value will be rendered as a hyperlink, 
+     * passing its <em>id</em> to the server.
      *
      * @param buffer string buffer containing the markup
      * @param treeNode treeNode to render
@@ -794,14 +805,13 @@ public class Tree extends AbstractControl {
 
     /**
      * Query the specified treeNode and check which css class to apply for the icons.
-     *
-     * <p/>Possible classes are expandedIcon, collapsedIcon and leafIcon.
+     * <p/>
+     * Possible classes are expandedIcon, collapsedIcon and leafIcon.
      *
      * @param treeNode the tree node to check for css class
      * @return string specific css class to apply
      */
     protected String getIconClass(TreeNode treeNode) {
-        StringBuffer buffer = new StringBuffer();
         if (treeNode.isExpanded() && treeNode.hasChildren()) {
             return "expandedIcon";
         } else if (!treeNode.isExpanded() && treeNode.hasChildren() || treeNode.isChildrenSupported()) {
@@ -830,10 +840,11 @@ public class Tree extends AbstractControl {
     }
 
 
-    // ----------------------------------------------------------- Protected observer behavior
+    // -------------------------------------------- Protected observer behavior
 
     /**
-     * Notifies all listeners currently registered with the tree, about any expand events.
+     * Notifies all listeners currently registered with the tree, about any 
+     * expand events.
      *
      * @param node specify the TreeNode that was expanded
      * @param oldValue previous expanded value of the specified node
@@ -846,7 +857,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any collapse events.
+     * Notifies all listeners currently registered with the tree, about any 
+     * collapse events.
      *
      * @param node specific the TreeNode that was collapsed
      * @param oldValue previous collapsed value of the specified node
@@ -859,7 +871,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any selection events.
+     * Notifies all listeners currently registered with the tree, about any 
+     * selection events.
      *
      * @param node specific the TreeNode that was selected
      * @param oldValue previous selected value of the specified node
@@ -872,7 +885,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any deselection events.
+     * Notifies all listeners currently registered with the tree, about any 
+     * deselection events.
      *
      * @param node specific the TreeNode that was deselected
      * @param oldValue previous deselected value of the specified node
@@ -884,8 +898,7 @@ public class Tree extends AbstractControl {
         }
     }
 
-
-    // ----------------------------------------------------------- Protected behavior
+    // ----------------------------------------------------- Protected behavior
 
     /**
      * Sets the TreeNode expand state to the new value.
@@ -905,8 +918,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Swaps the expand state of all TreeNodes with specified ids.
-     * Thus if a node's expand state is currently 'true', calling expandOrCollapse
-     * will set the expand state to 'false' and vice versa.
+     * Thus if a node's expand state is currently 'true', calling 
+     * expandOrCollapse will set the expand state to 'false' and vice versa.
      *
      * @param ids array of node ids
      */
@@ -933,7 +946,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Sets the TreeNode expand state of each node in the specified collection to the new value.
+     * Sets the TreeNode expand state of each node in the specified collection 
+     * to the new value.
      *
      * @param nodes specifies the collection of a TreeNodes which expand states will be set
      * @param newValue specifies the new expand state
@@ -992,7 +1006,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Sets the TreeNode select state of each node in the specified collection to the new value.
+     * Sets the TreeNode select state of each node in the specified collection 
+     * to the new value.
      *
      * @param nodes specifies the collection of a TreeNodes which select states will be set
      * @param newValue specifies the new select state
@@ -1063,7 +1078,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns the parameter in {@link javax.servlet.http.HttpServletRequest} for the specified param.
+     * Returns the parameter in {@link javax.servlet.http.HttpServletRequest} 
+     * for the specified param.
      *
      * @param param specifies the parameter to return
      * @return param the specified parameter or a empty string <span class="st">""</span> if not found
@@ -1079,7 +1095,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns all parameters in {@link javax.servlet.http.HttpServletRequest} for the specified param.
+     * Returns all parameters in {@link javax.servlet.http.HttpServletRequest} 
+     * for the specified param.
      *
      * @param param name of the specified parameters to return
      * @return all matching parameters or null if no parameter was found
@@ -1089,8 +1106,7 @@ public class Tree extends AbstractControl {
         return resultArray;
     }
 
-
-    //------------------------------------------------------------Inner classes
+    //----------------------------------------------------------- Inner classes
 
     /**
      * Iterate over all the nodes in the tree in a breadth first manner.
@@ -1199,13 +1215,13 @@ public class Tree extends AbstractControl {
         }
     }
 
-
-    // ----------------------------------------------------------- Private behavior
+    // ------------------------------------------------------- Private behavior
 
     /**
-     * Returns whether the specified node is visible. The semantics of visible in this
-     * context indicates whether the node is currently displayed on the screen.
-     * This means all parent nodes must be expanded for the node to be visible.
+     * Returns whether the specified node is visible. The semantics of visible 
+     * in this context indicates whether the node is currently displayed on the 
+     * screen. This means all parent nodes must be expanded for the node to be 
+     * visible.
      *
      * @param node TreeNode's visibility to check
      * @return boolean true if the node's parent is visible, false otherwise
@@ -1220,22 +1236,23 @@ public class Tree extends AbstractControl {
         return true;
     }
 
-    /**
-     * Returns an array of all the nodes in the hierarchy, starting from the specified node up to and including the root node.
-     *
-     * <p/>The specified node will be at the start of the array and the root node will be at the end of the array.
-     * Thus array[0] will return the specified node, while array[n - 1] where n is the size of the array, will return
-     * the root node.
-     *
-     * @return list of all nodes from the specified node to the root node
-     */
-    private TreeNode[] getPathToRoot(TreeNode treeNode) {
-        TreeNode[] nodes = new TreeNode[] {treeNode};
-        while (treeNode.getParent() != null) {
-            int length = nodes.length;
-            System.arraycopy(nodes, 0, nodes = new TreeNode[length + 1], 0, length);
-            nodes[length] = treeNode = treeNode.getParent();
-        }
-        return nodes;
-    }
+//    /**
+//     * Returns an array of all the nodes in the hierarchy, starting from the specified node up to and including the root node.
+//     *
+//     * <p/>The specified node will be at the start of the array and the root node will be at the end of the array.
+//     * Thus array[0] will return the specified node, while array[n - 1] where n is the size of the array, will return
+//     * the root node.
+//     *
+//     * @return list of all nodes from the specified node to the root node
+//     */
+//    private TreeNode[] getPathToRoot(TreeNode treeNode) {
+//        TreeNode[] nodes = new TreeNode[] {treeNode};
+//        while (treeNode.getParent() != null) {
+//            int length = nodes.length;
+//            System.arraycopy(nodes, 0, nodes = new TreeNode[length + 1], 0, length);
+//            nodes[length] = treeNode = treeNode.getParent();
+//        }
+//        return nodes;
+//    }
+
 }

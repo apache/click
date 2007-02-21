@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.sf.click.extras.control.tree;
 
 import java.util.ArrayList;
@@ -113,7 +112,9 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class CheckboxTree extends Tree {
 
-    // ----------------------------------------------------------- Public Constructors
+    private static final long serialVersionUID = 1L;
+
+    // ---------------------------------------------------- Public Constructors
 
     /**
      * Create an Tree control for the given name.
@@ -135,8 +136,7 @@ public class CheckboxTree extends Tree {
         setDecorator(new DecoratorFactory().createDecorator());
     }
 
-
-    // ----------------------------------------------------------- Public Behavior
+    // --------------------------------------------------------- Public Methods
 
     /**
      * This method binds the users request of selected nodes to the tree's nodes.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package net.sf.click.extras.control.tree;
 
 import java.io.Serializable;
@@ -41,7 +40,7 @@ import java.util.Random;
  */
 public class TreeNode implements Serializable {
 
-    // ----------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
@@ -51,7 +50,7 @@ public class TreeNode implements Serializable {
     private final static Random RANDOM = new Random();
 
 
-    // ----------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** Each node must have a unique id in the tree. If a node is not provided
      * an id, one is generated using the java.util.Random class.*/
@@ -80,7 +79,7 @@ public class TreeNode implements Serializable {
     private List children = new ArrayList();
 
 
-    // ----------------------------------------------------------- Public Constructors
+    // ---------------------------------------------------- Public Constructors
 
     /**
      * Creates a default node with no value or id.
@@ -130,7 +129,7 @@ public class TreeNode implements Serializable {
     }
 
 
-    // ----------------------------------------------------------- Public Getters and Setters
+    // --------------------------------------------- Public Getters and Setters
 
     /**
      * Returns this node's parent object or null if parent is not specified.
@@ -214,7 +213,7 @@ public class TreeNode implements Serializable {
     }
 
 
-    // ----------------------------------------------------------- Public Behavior
+    // -------------------------------------------------------- Public Behavior
 
     /**
      * Adds the specified node as a child of this node and sets the childs parent
@@ -407,7 +406,7 @@ public class TreeNode implements Serializable {
     }
 
 
-    // ----------------------------------------------------------- Protected Behavior
+    // ----------------------------------------------------- Protected Behavior
 
     /**
      * Returns the list of mutable children of this node.
@@ -419,7 +418,7 @@ public class TreeNode implements Serializable {
     }
 
 
-    // ----------------------------------------------------------- Package-private Behavior
+    // ----------------------------------------------- Package-private Behavior
 
     /**
      * Returns true if this node is currently in the selected state, false otherwise.
@@ -457,8 +456,7 @@ public class TreeNode implements Serializable {
         this.expanded = expanded;
     }
 
-
-    // ----------------------------------------------------------- Private Behavior
+    // ------------------------------------------------------- Private Behavior
 
     /**
      * Checks if the specified node is the last child of this node. If this
