@@ -20,11 +20,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.MessagesMap;
 
 /**
  * Provides a Abstract Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
@@ -39,39 +36,20 @@ import net.sf.click.util.MessagesMap;
  *
  * @author Malcolm Edgar
  */
-public abstract class AbstractLink implements Control {
+public abstract class AbstractLink extends AbstractControl {
 
     private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The link attributes map. */
-    protected Map attributes;
-
-    /** The context. */
-    protected transient Context context;
-
     /** The Field disabled value. */
-    // TODO: need to render as grey span tag
     protected boolean disabled;
 
     /** The link display label. */
     protected String label;
 
-    /** The link localized messages Map. */
-    protected Map messages;
-
-    /** The link name. */
-    protected String name;
-
-    /** The control's parent. */
-    protected transient Object parent;
-
     /** The link parameters map. */
     protected Map parameters;
-
-    /** The Map of CSS style attributes. */
-    protected Map styles;
 
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
@@ -97,99 +75,6 @@ public abstract class AbstractLink implements Control {
     }
 
     // ------------------------------------------------------ Public Attributes
-
-    /**
-     * Return the link HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of link HTML attribute
-     * @return the link HTML attribute
-     */
-    public String getAttribute(String name) {
-        if (hasAttributes()) {
-            return (String) getAttributes().get(name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the link attribute with the given attribute name and value. You would
-     * generally use attributes if you were creating the entire AbstractLink
-     * programatically and rendering it with the {@link #toString()} method.
-     * <p/>
-     * For example given the ActionLink:
-     *
-     * <pre class="codeJava">
-     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
-     * addLink.setAttribute(<span class="st">"class"</span>, <span class="st">"table"</span>); </pre>
-     *
-     * Will render the HTML as:
-     * <pre class="codeHtml">
-     * &lt;a href=".." <span class="st">class</span>=<span class="st">"table"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
-     *
-     * @param name the attribute name
-     * @param value the attribute value
-     * @throws IllegalArgumentException if name parameter is null
-     */
-    public void setAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (value != null) {
-            getAttributes().put(name, value);
-        } else {
-            getAttributes().remove(name);
-        }
-    }
-
-    /**
-     * Return the AbstractLink attributes Map.
-     *
-     * @return the AbstractLink attributes Map
-     */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap(8);
-        }
-        return attributes;
-    }
-
-    /**
-     * Return true if the AbstractLink has attributes or false otherwise.
-     *
-     * @return true if the AbstractLink has attributes on false otherwise
-     */
-    public boolean hasAttributes() {
-        if (attributes != null && !attributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @see Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-    }
 
     /**
      * Return true if the AbstractLink is a disabled.  If the link is disabled
@@ -230,35 +115,6 @@ public abstract class AbstractLink implements Control {
      */
     public String getHtmlImports() {
         return null;
-    }
-
-    /**
-     * Return the "id" attribute value if defined, or the AbstractLink name
-     * otherwise.
-     *
-     * @see net.sf.click.Control#getId()
-     *
-     * @return HTML element identifier attribute "id" value
-     */
-    public String getId() {
-        if (hasAttributes() && getAttributes().containsKey("id")) {
-            return getAttribute("id");
-        } else {
-            return getName();
-        }
-    }
-
-    /**
-     * Set the HTML id attribute for the AbstractLink with the given value.
-     *
-     * @param id the field HTML id attribute value to set
-     */
-    public void setId(String id) {
-        if (id != null) {
-            setAttribute("id", id);
-        } else {
-            getAttributes().remove("id");
-        }
     }
 
     /**
@@ -339,83 +195,6 @@ public abstract class AbstractLink implements Control {
     }
 
     /**
-     * Return the localized message for the given key, or null if not found.
-     * <p/>
-     * This method will attempt to lookup the localized message in the
-     * parent's messages, which by resolves to the Page's resource bundle.
-     * <p/>
-     * If the message was not found, the this method will attempt to look up the
-     * value in the <tt>/click-control.properties</tt> message properties file.
-     * <p/>
-     * If still not found, this method will return null.
-     *
-     * @param name the name of the message resource
-     * @return the named localized message, or null if not found
-     */
-    public String getMessage(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        String message = null;
-
-        Map parentMessages = ClickUtils.getParentMessages(this);
-        if (parentMessages.containsKey(name)) {
-
-            message = (String) parentMessages.get(name);
-        }
-
-        if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
-        }
-
-        return message;
-    }
-
-    /**
-     * Return a Map of localized messages for the ActionLink.
-     *
-     * @return a Map of localized messages for the ActionLink
-     * @throws IllegalStateException if the context for the link has not be set
-     */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
-
-            } else {
-                String msg = "Cannot initialize messages as context not set "
-                    + "for link: " + getName();
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
-    }
-
-    /**
-     * @see net.sf.click.Control#getName()
-     *
-     * @return the name of the control
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @see net.sf.click.Control#setName(String)
-     *
-     * @param name of the control
-     * @throws IllegalArgumentException if the name is null
-     */
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-        this.name = name;
-    }
-
-    /**
      * Return the link request parameter value for the given name, or null if
      * the parameter value does not exist.
      *
@@ -489,78 +268,6 @@ public abstract class AbstractLink implements Control {
         } else {
             return false;
         }
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
-    }
-
-    /**
-     * Return the Field CSS style for the given name.
-     *
-     * @param name the CSS style name
-     * @return the CSS style for the given name
-     */
-    public String getStyle(String name) {
-        if (hasStyles()) {
-            return (String) getStyles().get(name);
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the Field CSS style name and value pair.
-     *
-     * @param name the CSS style name
-     * @param value the CSS style value
-     */
-    public void setStyle(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (value != null) {
-            getStyles().put(name, value);
-        } else {
-            getStyles().remove(name);
-        }
-    }
-
-    /**
-     * Return true if CSS styles are defined.
-     *
-     * @return true if CSS styles are defined
-     */
-    public boolean hasStyles() {
-        return (styles != null && !styles.isEmpty());
-    }
-
-    /**
-     * Return the Map of field CSS styles.
-     *
-     * @return the Map of field CSS styles
-     */
-    public Map getStyles() {
-        if (styles == null) {
-            styles = new HashMap();
-        }
-        return styles;
     }
 
     /**
