@@ -136,6 +136,9 @@ public class PropertySelect extends Select {
      */
     protected Ordering ordering;
 
+    /** The flag indicating whether the ordering has been applied. */
+    protected boolean orderingApplied;
+
     /** The data object property to render as the option label. */
     protected String optionLabel;
 
@@ -502,11 +505,13 @@ public class PropertySelect extends Select {
             if (getSelectQuery() != null) {
                 SelectQuery query = getSelectQuery();
 
-                if (getOrdering() != null) {
+                if (getOrdering() != null && !orderingApplied) {
                     query.addOrdering(getOrdering());
+                    orderingApplied = true;
 
-                } else if (getOptionLabel() != null) {
+                } else if (getOptionLabel() != null && !orderingApplied) {
                     query.addOrdering(getOptionLabel(), true);
+                    orderingApplied = true;
                 }
 
                 list = dataContext.performQuery(query);
@@ -525,11 +530,13 @@ public class PropertySelect extends Select {
 
                 SelectQuery query = new SelectQuery(propertyClass);
 
-                if (getOrdering() != null) {
+                if (getOrdering() != null && !orderingApplied) {
                     query.addOrdering(getOrdering());
+                    orderingApplied = true;
 
-                } else if (getOptionLabel() != null) {
+                } else if (getOptionLabel() != null && !orderingApplied) {
                     query.addOrdering(getOptionLabel(), true);
+                    orderingApplied = true;
                 }
 
                 list = dataContext.performQuery(query);
