@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,11 +26,9 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -138,7 +135,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Table implements Control {
+public class Table extends AbstractControl {
 
     // -------------------------------------------------------------- Constants
 
@@ -158,8 +155,8 @@ public class Table implements Control {
      * The table.css style sheet import link with a light contract sortable icon.
      */
     public static final String TABLE_IMPORTS_LIGHT =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n"
-        + "<style text=\text/css\">\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
+        + "<style text=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;}\n"
         + " th.sorted a {background: url($/click/column-sorted-light.gif) center right no-repeat;}\n"
         + "</style>\n";
@@ -168,8 +165,8 @@ public class Table implements Control {
      * The table.css style sheet import link with a dark contract sortable icon.
      */
     public static final String TABLE_IMPORTS_DARK =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\">\n"
-        + "<style text=\text/css\">\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
+        + "<style text=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
         + " th.sorted a {background: url($/click/column-sorted-dark.gif) center right no-repeat;}\n"
         + "</style>\n";
@@ -191,9 +188,6 @@ public class Table implements Control {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The table HTML attributes Map. */
-    protected Map attributes;
-
     /**
      * The table pagination banner position:
      * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
@@ -206,9 +200,6 @@ public class Table implements Control {
 
     /** The list of table Columns. */
     protected List columnList = new ArrayList();
-
-    /** The request context. */
-    protected transient Context context;
 
     /** The table paging and sorting control action link. */
     protected ActionLink controlLink = new ActionLink("control");
@@ -225,12 +216,6 @@ public class Table implements Control {
      */
     protected boolean hoverRows;
 
-    /** The table localized messages Map. */
-    protected Map messages;
-
-    /** The control name. */
-    protected String name;
-
     /**
      * The currently displayed page number. The page number is zero indexed,
      * i.e. the page number of the first page is 0.
@@ -242,9 +227,6 @@ public class Table implements Control {
      * page size.
      */
     protected int pageSize;
-
-    /** The control's parent. */
-    protected transient Object parent;
 
     /**
      * The total number of rows in the query, if 0 rowCount is undefined. Row
@@ -278,9 +260,6 @@ public class Table implements Control {
     /** The name of the sorted column. */
     protected String sortedColumn;
 
-    /** The Map of CSS style attributes. */
-    protected Map styles;
-
     /** The table HTML &lt;td&gt; width attribute. */
     protected String width;
 
@@ -306,76 +285,6 @@ public class Table implements Control {
     }
 
     // ------------------------------------------------------ Public Attributes
-
-    /**
-     * Return the Table HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of table HTML attribute
-     * @return the Table HTML attribute
-     */
-    public String getAttribute(String name) {
-        return (String) getAttributes().get(name);
-    }
-
-    /**
-     * Set the Table with the given HTML attribute name and value. These
-     * attributes will be rendered as HTML attributes, for example:
-     *
-     * <pre class="codeJava">
-     * Table table = new Table("customer");
-     * table.setAttribute("<span class="blue">class</span>", "<span class="red">simple</span>"); </pre>
-     *
-     * HTML output:
-     * <pre class="codeHtml">
-     * &lt;table id='customer-table' <span class="blue">class</span>='<span class="red">simple</span>'&gt;
-     *   ..
-     * &lt;/table&gt; </pre>
-     *
-     * If there is an existing named attribute in the Table it will be replaced
-     * with the new value. If the given attribute value is null, any existing
-     * attribute will be removed.
-     *
-     * @param name the name of the table HTML attribute
-     * @param value the value of the table HTML attribute
-     * @throws IllegalArgumentException if attribute name is null
-     */
-    public void setAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (value != null) {
-            getAttributes().put(name, value);
-        } else {
-            getAttributes().remove(name);
-        }
-    }
-
-    /**
-     * Return the Table attributes Map.
-     *
-     * @return the table attributes Map.
-     */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap();
-        }
-        return attributes;
-    }
-
-    /**
-     * Return true if the Table has attributes or false otherwise.
-     *
-     * @return true if the Table has attributes on false otherwise
-     */
-    public boolean hasAttributes() {
-        if (attributes != null) {
-            return !getAttributes().isEmpty();
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Return the Table pagination banner position. Banner position values:
@@ -494,28 +403,6 @@ public class Table implements Control {
     }
 
     /**
-     * @see Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-        controlLink.setContext(context);
-    }
-
-    /**
      * Add the given Control to the table. The control will be processed when
      * the Table is processed.
      *
@@ -622,21 +509,6 @@ public class Table implements Control {
     }
 
     /**
-     * Return the "id" attribute value if defined, or the table name otherwise.
-     *
-     * @see Control#getId()
-     *
-     * @return HTML element identifier attribute "id" value
-     */
-    public String getId() {
-        if (hasAttributes() && getAttributes().containsKey("id")) {
-            return getAttribute("id");
-        } else {
-            return getName();
-        }
-    }
-
-    /**
      * @see Control#setListener(Object, String)
      *
      * @param listener the listener object with the named method to invoke
@@ -644,93 +516,6 @@ public class Table implements Control {
      */
     public void setListener(Object listener, String method) {
         // Does nothing
-    }
-
-    /**
-     * Return the package resource bundle message for the named resource key
-     * and the context's request locale.
-     *
-     * @param name resource name of the message
-     * @return the named localized message for the package
-     */
-    public String getMessage(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        String message = null;
-
-        Map parentMessages = ClickUtils.getParentMessages(this);
-        if (parentMessages.containsKey(name)) {
-
-            message = (String) parentMessages.get(name);
-        }
-
-        if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
-        }
-
-        return message;
-    }
-
-    /**
-     * Return the formatted package message for the given resource name and
-     * message format arguments and for the context request locale.
-     *
-     * @param name resource name of the message
-     * @param args the message arguments to format
-     * @return the named localized message for the package
-     */
-    public String getMessage(String name, Object[] args) {
-        if (args == null) {
-            throw new IllegalArgumentException("Null args parameter");
-        }
-        String value = getMessage(name);
-
-        return MessageFormat.format(value, args);
-    }
-
-    /**
-     * Return a Map of localized messages for the Control.
-     * The returned message-bundle is {@link Field#CONTROL_MESSAGES}.
-     *
-     * @return a Map of localized messages for the Control
-     * @throws IllegalStateException if the context for the Field has not been set
-     */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
-
-            } else {
-                String msg = "Cannot initialize messages as context not set "
-                    + "for table: " + getName();
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
-    }
-
-    /**
-     * @see Control#getName()
-     *
-     * @return the name of the control
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @see Control#setName(String)
-     *
-     * @param name of the control
-     */
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-        this.name = name;
     }
 
     /**
@@ -790,24 +575,6 @@ public class Table implements Control {
      */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
     }
 
     /**
@@ -931,60 +698,6 @@ public class Table implements Control {
     }
 
     /**
-     * Return the tavle CSS style for the given name.
-     *
-     * @param name the CSS style name
-     * @return the CSS style for the given name
-     */
-    public String getStyle(String name) {
-        if (hasStyles()) {
-            return (String) getStyles().get(name);
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the table CSS style name and value pair.
-     *
-     * @param name the CSS style name
-     * @param value the CSS style value
-     */
-    public void setStyle(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (value != null) {
-            getStyles().put(name, value);
-        } else {
-            getStyles().remove(name);
-        }
-    }
-
-    /**
-     * Return true if CSS styles are defined.
-     *
-     * @return true if CSS styles are defined
-     */
-    public boolean hasStyles() {
-        return (styles != null && !styles.isEmpty());
-    }
-
-    /**
-     * Return the Map of field CSS styles.
-     *
-     * @return the Map of field CSS styles
-     */
-    public Map getStyles() {
-        if (styles == null) {
-            styles = new HashMap();
-        }
-        return styles;
-    }
-
-    /**
      * Return the table HTML &lt;td&gt; width attribute.
      *
      * @return the table HTML &lt;td&gt; width attribute
@@ -1004,8 +717,8 @@ public class Table implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Deploy the <tt>table.css</tt> file to the <tt>click</tt> web
-     * directory when the application is initialized.
+     * Deploy the <tt>table.css</tt> and column sorting icon files to the
+     * <tt>click</tt> web directory when the application is initialized.
      *
      * @see Control#onDeploy(ServletContext)
      *

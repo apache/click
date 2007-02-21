@@ -1107,7 +1107,8 @@ public class Column implements Serializable {
             controlLink.setId("control-" + getName());
             controlLink.setParameter(Table.COLUMN, getName());
             controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
-            controlLink.setLabel(getHeaderTitle());
+            // Provide spacer for sorting icon
+            controlLink.setLabel(getHeaderTitle() + "&nbsp;&nbsp;&nbsp;");
 
             buffer.append(controlLink);
 
