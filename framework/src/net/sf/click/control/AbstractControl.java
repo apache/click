@@ -17,16 +17,13 @@
 package net.sf.click.control;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.MessagesMap;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * This class provides a default implementation of the {@link Control} interface, to make it easier
@@ -144,7 +141,7 @@ public abstract class AbstractControl implements Control {
      *
      * @param servletContext the servlet context
      */
-    public void onDeploy(ServletContext servletContext) {}
+    public void onDeploy(ServletContext servletContext) { }
 
     /**
      * Return the package resource bundle message for the named resource key

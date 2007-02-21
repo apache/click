@@ -43,7 +43,7 @@ public class TreeNode implements Serializable {
 
     // ----------------------------------------------------------- Constants
 
-    /** default serial version id */
+    /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
     /** Used internally to generate unique id's for tree nodes where id's are
@@ -67,10 +67,10 @@ public class TreeNode implements Serializable {
      * differentiate between files and directories with no children. */
     private boolean childrenSupported = false;
 
-    /** User provided value of this node */
+    /** User provided value of this node. */
     private Object value;
 
-    /** Specifies the depth of this tree */
+    /** Specifies the depth of this tree. */
     private int treeDepth = -1;
 
     /** Each node except the top level node will have a parent. */
@@ -224,8 +224,9 @@ public class TreeNode implements Serializable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void add(TreeNode child) {
-        if(child == null)
+        if (child == null) {
             throw new IllegalArgumentException("null child specified");
+        }
         getMutableChildren().add(child);
         child.setParent(this);
     }
@@ -238,8 +239,9 @@ public class TreeNode implements Serializable {
      * @throws IllegalArgumentException if the argument is null
      */
     public void remove(TreeNode child) {
-        if(child == null)
+        if (child == null) {
             throw new IllegalArgumentException("null child specified");
+        }
         getMutableChildren().remove(child);
         child.setParent(null);
     }
@@ -271,8 +273,9 @@ public class TreeNode implements Serializable {
      * root node, false otherwise.
      */
     public boolean isLastChild() {
-        if(isRoot())
+        if (isRoot()) {
             return true;
+        }
         return getParent().isLastChild(this);
     }
 
@@ -312,14 +315,14 @@ public class TreeNode implements Serializable {
     public int calcTreeDepth(boolean useCacheIfSet) {
         //lookup from cache. this will only be true if user explicitly sets the tree's
         //depth using cacheTreeDepth(int)
-        if(useCacheIfSet && treeDepth > -1) {
+        if (useCacheIfSet && treeDepth > -1) {
             return treeDepth;
         }
 
-        //Iterate over entire tree using a breadth first iterator. The level of the
+        //Iterate over the tree using a breadth first iterator. The level of the
         //last node found will indicate the depth of the tree.
         Object o = null;
-        for(Iterator it = new Tree.BreadthTreeIterator(this); it.hasNext(); ) {
+        for (Iterator it = new Tree.BreadthTreeIterator(this); it.hasNext();) {
             o = it.next();
         }
         TreeNode node = (TreeNode) o;
@@ -332,6 +335,7 @@ public class TreeNode implements Serializable {
      * The cached depth can be retrieved by calling {@link #calcTreeDepth(boolean)}
      * with 'true'.
      *
+     * @param depth this node's depth to cache
      * @see #calcTreeDepth(boolean)
      */
     public void cacheTreeDepth(int depth) {
@@ -346,7 +350,7 @@ public class TreeNode implements Serializable {
     public int getLevel() {
         int level = 0;
         TreeNode parent = this;
-        while((parent = parent.getParent()) != null){
+        while ((parent = parent.getParent()) != null) {
             level++;
         }
         return level;
@@ -362,11 +366,13 @@ public class TreeNode implements Serializable {
      * @see Object#equals(Object)
      */
     public boolean equals(Object thatObject) {
-        if (thatObject == this)
+        if (thatObject == this) {
             return true;
+        }
 
-        if (!(thatObject instanceof TreeNode))
+        if (!(thatObject instanceof TreeNode)) {
             return false;
+        }
 
         TreeNode that = (TreeNode) thatObject;
 
@@ -467,8 +473,9 @@ public class TreeNode implements Serializable {
      */
     private boolean isLastChild(TreeNode child) {
         int size = getChildren().size();
-        if(size == 0)
+        if (size == 0) {
             return false;
+        }
         Object lastChild = getChildren().get(size - 1);
         return lastChild == child;
     }
