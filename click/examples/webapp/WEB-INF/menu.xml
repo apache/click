@@ -4,14 +4,17 @@
       <menu label="A 1 Menu" path="menu/menu-a1.htm" title="Menu item A1"/>
       <menu label="A 2 Menu" path="menu/menu-a2.htm" title="Menu item A2"/>
       <menu label="A 3 Menu" path="menu/menu-a3.htm" title="Menu item A3"/>
+      <menu separator="true"/>
       <menu label="A 4 Menu" path="menu/menu-a4.htm" title="Menu item A4"/>
       <menu label="A 5 Menu" path="menu/menu-a5.htm" title="Menu item A5"/>
    </menu>
    <menu label="B Menu" path="#">
       <menu label="B 1 Menu" path="menu/menu-b1.htm" title="Menu item B1"/>
       <menu label="B 2 Menu" path="menu/menu-b2.htm" title="Menu item B2"/>
+      <menu separator="true"/>
       <menu label="B 3 Menu" path="menu/menu-b3.htm" title="Menu item B3"/>
       <menu label="B 4 Menu" path="menu/menu-b4.htm" title="Menu item B4"/>
+      <menu separator="true"/>
       <menu label="B 5 Menu" path="menu/menu-b5.htm" title="Menu item B5"/>
       <menu label="B 6 Menu" path="menu/menu-b6.htm" title="Menu item B6"/>
    </menu>
