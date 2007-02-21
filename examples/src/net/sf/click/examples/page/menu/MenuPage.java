@@ -12,7 +12,6 @@ public class MenuPage extends BorderPage {
 
     public Menu rootMenu = new Menu();
 
-    public String headInclude = "menu/menu.js";
+    public String headInclude = "click/menu.js";
     public String bodyOnload = "initMenu();";
-
 }

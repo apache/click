@@ -2,12 +2,11 @@
 <head>
 <title>Click Quick Start - $title</title>
 <link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"/>
-<link rel="stylesheet" type="text/css" href="$context/assets/menu.css" title="Style"/>
-<script type="text/javascript" src="$context/assets/menu.js"></script>
 $imports
+#parse($headInclude)
 </head>
 
-<body>
+<body onload="initMenu();">
  
   <div id="header">
   	<span id="title">Quick Start :: $title</span>
