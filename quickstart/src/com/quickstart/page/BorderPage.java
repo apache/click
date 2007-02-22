@@ -18,7 +18,7 @@ public class BorderPage extends Page {
 	public String getTemplate() {
 		return "border-template.htm";
 	}
-    
+
     /**
      * Handle the logout click event, invalidating the users session and
      * redirect them to the application home page.
