@@ -440,7 +440,7 @@ public class ActionLink extends AbstractLink {
      */
     public boolean onProcess() {
         if (getContext() == null) {
-            String msg = "context is not defined, for link: " + getName();
+            String msg = "context is not defined for link: " + getName();
             throw new IllegalStateException(msg);
         }
 
