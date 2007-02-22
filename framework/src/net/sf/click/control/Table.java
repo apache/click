@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -403,6 +404,19 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * @see Control#setContext(Context)
+     *
+     * @param context the Page request Context
+     */
+    public void setContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Null context parameter");
+        }
+        this.context = context;
+        controlLink.setContext(context);
+    }
+
+    /**
      * Add the given Control to the table. The control will be processed when
      * the Table is processed.
      *
@@ -413,6 +427,11 @@ public class Table extends AbstractControl {
             throw new IllegalArgumentException("Null control parameter");
         }
         getControls().add(control);
+
+        if (getContext() != null) {
+            control.setContext(context);
+        }
+        control.setParent(this);
     }
 
     /**
