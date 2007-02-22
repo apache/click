@@ -156,8 +156,8 @@ public class Tree extends AbstractControl {
     /** Callback provider for users to decorate tree nodes. */
     private transient Decorator decorator;
 
-    /** 
-     * Specifies if the root node should be displayed, or only its children. 
+    /**
+     * Specifies if the root node should be displayed, or only its children.
      * By default this value is false.
      */
     private boolean rootNodeDisplayed = false;
@@ -185,7 +185,7 @@ public class Tree extends AbstractControl {
     /**
      * Create a Tree with no name defined.
      * <p/>
-     * Also sets a id attribute of <tt>"tree"</tt> to qualify the tree control 
+     * Also sets a id attribute of <tt>"tree"</tt> to qualify the tree control
      * with the <tt>tree.css.</tt>
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
@@ -326,7 +326,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Expands all nodes with matching id's in the specified collection and 
+     * Expands all nodes with matching id's in the specified collection and
      * inform any listeners of the change.
      *
      * @param id identifier of the node to be expanded.
@@ -339,7 +339,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Collapses all nodes with matching id's in the specified collection and 
+     * Collapses all nodes with matching id's in the specified collection and
      * inform any listeners of the change.
      *
      * @param id identifier of node to be expanded.
@@ -376,7 +376,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Select all nodes with matching id's in the specified collection and 
+     * Select all nodes with matching id's in the specified collection and
      * inform any listeners of the change.
      *
      * @param id identifier of node to be selected.
@@ -389,7 +389,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Deselect all nodes with matching id's in the specified collection and 
+     * Deselect all nodes with matching id's in the specified collection and
      * inform any listeners of the change.
      *
      * @param id id of node to be deselected.
@@ -464,7 +464,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Deploy all files defined in the constants <tt>{@link #TREE_RESOURCES}</tt> 
+     * Deploy all files defined in the constants <tt>{@link #TREE_RESOURCES}</tt>
      * and <tt>{@link #TREE_IMAGES}</tt> to the <tt>click/tree</tt> web
      * directory when the application is initialized.
      *
@@ -493,7 +493,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns an iterator over all nodes starting from the specified node. 
+     * Returns an iterator over all nodes starting from the specified node.
      * If null is specified, root node is used instead.
      *
      * @param node starting point of nodes to iterator over
@@ -575,7 +575,7 @@ public class Tree extends AbstractControl {
      * Return a HTML rendered Tree string of all the tree's nodes.
      *
      * <p/>Note: by default the tree's root node will not be rendered.
-     * However this behavior can be changed by calling 
+     * However this behavior can be changed by calling
      * {@link #setRootNodeDisplayed(boolean)} with true.
      *
      * @see java.lang.Object#toString()
@@ -604,11 +604,11 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Render the children of the specified tree node as html markup and append 
+     * Render the children of the specified tree node as html markup and append
      * the output to the specified buffer.
      * <p/>
-     * <strong>Note:</strong> only the children of the specified  tree node will 
-     * be renderered not the treeNode itself. This method is recursive, so the 
+     * <strong>Note:</strong> only the children of the specified  tree node will
+     * be renderered not the treeNode itself. This method is recursive, so the
      * node's children and their children will be rendered and so on.
      *
      * @param buffer string buffer containing the markup
@@ -759,8 +759,8 @@ public class Tree extends AbstractControl {
     /**
      * Render the node's value.
      * <p/>
-     * Subclasses should override this method to change the rendering of the 
-     * node's value. By default the value will be rendered as a hyperlink, 
+     * Subclasses should override this method to change the rendering of the
+     * node's value. By default the value will be rendered as a hyperlink,
      * passing its <em>id</em> to the server.
      *
      * @param buffer string buffer containing the markup
@@ -843,7 +843,7 @@ public class Tree extends AbstractControl {
     // -------------------------------------------- Protected observer behavior
 
     /**
-     * Notifies all listeners currently registered with the tree, about any 
+     * Notifies all listeners currently registered with the tree, about any
      * expand events.
      *
      * @param node specify the TreeNode that was expanded
@@ -857,7 +857,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any 
+     * Notifies all listeners currently registered with the tree, about any
      * collapse events.
      *
      * @param node specific the TreeNode that was collapsed
@@ -871,7 +871,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any 
+     * Notifies all listeners currently registered with the tree, about any
      * selection events.
      *
      * @param node specific the TreeNode that was selected
@@ -885,7 +885,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Notifies all listeners currently registered with the tree, about any 
+     * Notifies all listeners currently registered with the tree, about any
      * deselection events.
      *
      * @param node specific the TreeNode that was deselected
@@ -918,7 +918,7 @@ public class Tree extends AbstractControl {
 
     /**
      * Swaps the expand state of all TreeNodes with specified ids.
-     * Thus if a node's expand state is currently 'true', calling 
+     * Thus if a node's expand state is currently 'true', calling
      * expandOrCollapse will set the expand state to 'false' and vice versa.
      *
      * @param ids array of node ids
@@ -946,7 +946,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Sets the TreeNode expand state of each node in the specified collection 
+     * Sets the TreeNode expand state of each node in the specified collection
      * to the new value.
      *
      * @param nodes specifies the collection of a TreeNodes which expand states will be set
@@ -1006,7 +1006,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Sets the TreeNode select state of each node in the specified collection 
+     * Sets the TreeNode select state of each node in the specified collection
      * to the new value.
      *
      * @param nodes specifies the collection of a TreeNodes which select states will be set
@@ -1078,7 +1078,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns the parameter in {@link javax.servlet.http.HttpServletRequest} 
+     * Returns the parameter in {@link javax.servlet.http.HttpServletRequest}
      * for the specified param.
      *
      * @param param specifies the parameter to return
@@ -1095,7 +1095,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns all parameters in {@link javax.servlet.http.HttpServletRequest} 
+     * Returns all parameters in {@link javax.servlet.http.HttpServletRequest}
      * for the specified param.
      *
      * @param param name of the specified parameters to return
@@ -1218,9 +1218,9 @@ public class Tree extends AbstractControl {
     // ------------------------------------------------------- Private behavior
 
     /**
-     * Returns whether the specified node is visible. The semantics of visible 
-     * in this context indicates whether the node is currently displayed on the 
-     * screen. This means all parent nodes must be expanded for the node to be 
+     * Returns whether the specified node is visible. The semantics of visible
+     * in this context indicates whether the node is currently displayed on the
+     * screen. This means all parent nodes must be expanded for the node to be
      * visible.
      *
      * @param node TreeNode's visibility to check
