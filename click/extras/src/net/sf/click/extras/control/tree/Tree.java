@@ -56,8 +56,8 @@ import org.apache.commons.lang.StringUtils;
  *     <span class="kw">public Tree</span> buildTree() {
  *         Tree tree = <span class="kw">new</span> Tree(<span class="st">"tree"</span>);
  *
- *         <span class="cm">//build the tree model.</span>
- *         <span class="cm">//by default the root node is not rendered. This can be changed by calling setRootNodeDisplayed(true);</span>
+ *         <span class="cm">// Build the tree model, by default the root node is not rendered.</span>
+ *         <span class="cm">// This can be changed by calling setRootNodeDisplayed(true);</span>
  *         TreeNode root = new TreeNode("c:");
  *         TreeNode dev = <span class="kw">new</span> TreeNode(<span class="st">"dev"</span>,<span class="st">"1"</span>, root);
  *         <span class="kw">new</span> TreeNode(<span class="st">"java.pdf"</span>, <span class="st">"2"</span>, dev);
@@ -65,7 +65,8 @@ import org.apache.commons.lang.StringUtils;
  *
  *         TreeNode programFiles = <span class="kw">new</span> TreeNode(<span class="st">"program files"</span>, <span class="st">"4"</span>, root);
  *         TreeNode adobe = <span class="kw">new</span> TreeNode(<span class="st">"Adobe"</span>, <span class="st">"5"</span>, programFiles);
- *         adobe.setChildrenSupported(<span class="kw">true</span>); <span class="cm">//this node is a directory not a file, so setChildrenSupported to true</span>
+ *         <span class="cm">// This node is a directory not a file, so setChildrenSupported to true.</span>
+ *         adobe.setChildrenSupported(<span class="kw">true</span>);
  *
  *         TreeNode download = <span class="kw">new</span> TreeNode(<span class="st">"downloads"</span>,<span class="st">"6"</span>, root);
  *         TreeNode web = <span class="kw">new</span> TreeNode(<span class="st">"web"</span>, <span class="st">"7"</span>, download);
