@@ -157,7 +157,7 @@ public class Table extends AbstractControl {
      */
     public static final String TABLE_IMPORTS_LIGHT =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style text=\"text/css\">\n"
+        + "<style type=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;}\n"
         + " th.sorted a {background: url($/click/column-sorted-light.gif) center right no-repeat;}\n"
         + "</style>\n";
@@ -461,7 +461,7 @@ public class Table extends AbstractControl {
      *
      * @return the table paging and sorting control action link
      */
-    protected ActionLink getControlLink() {
+    public ActionLink getControlLink() {
         return controlLink;
     }
 
@@ -829,7 +829,8 @@ public class Table extends AbstractControl {
 
         renderHeaderRow(buffer);
 
-        sortRowList();
+        sortRowList(true);
+
         renderBodyRows(buffer);
 
         // Render table end.
@@ -1125,11 +1126,15 @@ public class Table extends AbstractControl {
     /**
      * The default row list sorting method, which will sort the row list based
      * on the selected column if the row list is not already sorted.
+     *
+     * @param ascending the ascending sort flag
      */
-    protected void sortRowList() {
+    protected void sortRowList(boolean ascending) {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
             final Column column = (Column) getColumns().get(getSortedColumn());
+
+            final int ascendingSort = (ascending) ? 1 : -1;
 
             Collections.sort(getRowList(), new Comparator() {
                 public int compare(Object row1, Object row2) {
@@ -1140,7 +1145,7 @@ public class Table extends AbstractControl {
                     if (obj1 instanceof Comparable
                         && obj2 instanceof Comparable) {
 
-                        return ((Comparable) obj1).compareTo(obj2);
+                        return ((Comparable) obj1).compareTo(obj2) * ascendingSort;
 
                     } else if (obj1 instanceof Boolean
                                && obj2 instanceof Boolean) {
@@ -1152,19 +1157,19 @@ public class Table extends AbstractControl {
                             return 0;
 
                         } else if (bool1 && !bool2) {
-                            return 1;
+                            return 1 * ascendingSort;
 
                         } else {
-                            return -1;
+                            return -1 * ascendingSort;
                         }
 
                     } else if (obj1 != null && obj2 == null) {
 
-                        return +1;
+                        return +1 * ascendingSort;
 
                     } else if (obj1 == null && obj2 != null) {
 
-                        return -1;
+                        return -1 * ascendingSort;
 
                     } else {
                         return 0;
