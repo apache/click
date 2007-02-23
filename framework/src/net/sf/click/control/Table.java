@@ -167,7 +167,7 @@ public class Table extends AbstractControl {
      */
     public static final String TABLE_IMPORTS_DARK =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style text=\"text/css\">\n"
+        + "<style type=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
         + " th.sorted a {background: url($/click/column-sorted-dark.gif) center right no-repeat;}\n"
         + "</style>\n";
