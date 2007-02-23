@@ -14,7 +14,7 @@
     #foreach ($topMenu in $rootMenu.children)
       #if ($topMenu.isUserInRoles())
         #if ($topMenu.children.empty)
-		  <li class="topitem">$topMenu
+		  <li class="topitem">$topMenu</li>
         #else
 		  <li class="topitem">$topMenu
 		    <ul class="submenu"
