@@ -46,7 +46,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a Form control: &nbsp; &lt;form method='POST'&gt;.
+ * Provides a Form control: &nbsp; &lt;form method='post'&gt;.
  *
  * <table class='htmlHeader' cellspacing='12'>
  * <tr>
@@ -262,7 +262,7 @@ import org.apache.commons.lang.StringUtils;
  * always specify:
  * <ul style="margin-top: 0.5em;">
  *  <li><span class="maroon">method</span>
- *      - the form submission method <tt>["POST" | "GET"]</tt></li>
+ *      - the form submission method <tt>["post" | "get"]</tt></li>
  *  <li><span class="maroon">name</span>
  *      - the name of your form, important when using JavaScript</li>
  *  <li><span class="maroon">action</span>
@@ -632,10 +632,10 @@ public class Form implements Control {
     protected Map messages;
 
     /**
-     * The form method <tt>["POST, "GET"]</tt>, default value: &nbsp;
-     * <tt>POST</tt>.
+     * The form method <tt>["post, "get"]</tt>, default value: &nbsp;
+     * <tt>post</tt>.
      */
-    protected String method = "POST";
+    protected String method = "post";
 
     /** The form name. */
     protected String name;
@@ -1553,7 +1553,7 @@ public class Form implements Control {
     }
 
     /**
-     * Return the form method <tt>["POST" | "GET"]</tt>.
+     * Return the form method <tt>["post" | "get"]</tt>.
      *
      * @return the form method
      */
@@ -1562,7 +1562,7 @@ public class Form implements Control {
     }
 
     /**
-     * Set the form method <tt>["POST" | "GET"]</tt>.
+     * Set the form method <tt>["post" | "get"]</tt>.
      *
      * @param value the form method
      */
@@ -1800,7 +1800,7 @@ public class Form implements Control {
 
     /**
      * Process the Form when the request method is the same as the Form's
-     * method. The default Form method is "POST".
+     * method. The default Form method is "post".
      * <p/>
      * The Forms processing order is:
      * <ol>
