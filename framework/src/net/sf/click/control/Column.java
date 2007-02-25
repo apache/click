@@ -1075,12 +1075,18 @@ public class Column implements Serializable {
         buffer.elementStart("th");
 
         boolean isSortable = getSortable() && !getTable().getRowList().isEmpty();
+        boolean sortedColumn = getName().equals(getTable().getSortedColumn());
+        boolean ascending = getTable().isSortedAscending();
 
         if (isSortable) {
-            boolean sortedColumn = getName().equals(getTable().getSortedColumn());
+            String classValue =
+                (getHeaderClass() != null) ? getHeaderClass() + " " : "";
 
-            String classValue = (getHeaderClass() != null) ? getHeaderClass() : "";
-            classValue += (sortedColumn) ? " sorted" : "sortable";
+            if (sortedColumn) {
+                classValue += (ascending) ? "ascending" : "descending";
+            } else {
+                classValue += "sortable";
+            }
             buffer.appendAttribute("class", classValue);
 
         } else {
@@ -1107,6 +1113,16 @@ public class Column implements Serializable {
             controlLink.setId("control-" + getName());
             controlLink.setParameter(Table.COLUMN, getName());
             controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
+
+            if (sortedColumn) {
+                controlLink.setParameter(Table.ASCENDING, String.valueOf(ascending));
+                controlLink.setParameter(Table.SORT, "true");
+
+            } else {
+                controlLink.setParameter(Table.ASCENDING, null);
+                controlLink.setParameter(Table.SORT, null);
+            }
+
             // Provide spacer for sorting icon
             controlLink.setLabel(getHeaderTitle() + "&nbsp;&nbsp;&nbsp;");
 

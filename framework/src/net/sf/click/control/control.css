@@ -26,6 +26,9 @@ span.disabled {
 span.error {
 	color: red;
 }
+span.required {
+	color: red;
+}
 textarea.error {
 	background: #FFFF80;
 }
