@@ -57,10 +57,13 @@ import org.apache.commons.lang.StringUtils;
  * <span class="kw">public class</span> CustomersPage <span class="kw">extends</span> BorderPage {
  *
  *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
+ *     <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
  *
  *     <span class="kw">public</span> CustomersPage() {
- *         table.setClass(<span class="st">"its"</span>);
+ *         table.setClass(Table.CLASS_ITS);
  *         table.setPageSize(4);
+ *         table.setShowBanner(<span class="kw">true</span>);
+ *         table.setSortable(<span class="kw">true</span>);
  *
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
@@ -69,14 +72,18 @@ import org.apache.commons.lang.StringUtils;
  *         column.setAutolink(<span class="kw">true</span>);
  *         table.addColumn(column);
  *
- *         column = <span class="kw">new</span> Column(<span class="st">"age"</span>);
- *         column.setTextAlign(<span class="st">"center"</span>);
- *         table.addColumn(column);
+ *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
  *
- *         column = <span class="kw">new</span> Column(<span class="st">"holdings"</span>);
- *         column.setFormat(<span class="st">"${0,number,#,##0.00}"</span>);
- *         column.setTextAlign(<span class="st">"right"</span>);
- *         table.addColumn(column);
+ *         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
+ *         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
+ *         column.setSortable(<span class="kw">false</span>);
+ *         table.addColumn(column)
+ *     }
+ *
+ *     public boolean onDeleteClick() {
+ *         Integer id = deleteLink.getValueInteger();
+ *         getCustomerService().deleteCustomer(id);
+ *         return <span class="kw">true</span>;
  *     }
  *
  *     <span class="kw">public void</span> onRender() {
@@ -120,7 +127,7 @@ import org.apache.commons.lang.StringUtils;
  * <pre class="codeJava">
  * <span class="kw">public</span> LineItemsPage() {
  *     Table table = <span class="kw">new</span> Table(<span class="st">"table"</span>);
- *     table.setClass(<span class="st">"simple"</span>);
+ *     table.setClass(Table.CLASS_SIMPLE);
  *     ..
  * } </pre>
  *
@@ -159,7 +166,8 @@ public class Table extends AbstractControl {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
         + "<style type=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;}\n"
-        + " th.sorted a {background: url($/click/column-sorted-light.gif) center right no-repeat;}\n"
+        + " th.ascending a {background: url($/click/column-ascending-light.gif) center right no-repeat;}\n"
+        + " th.descending a {background: url($/click/column-descending-light.gif) center right no-repeat;}\n"
         + "</style>\n";
 
     /**
@@ -169,7 +177,8 @@ public class Table extends AbstractControl {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
         + "<style type=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
-        + " th.sorted a {background: url($/click/column-sorted-dark.gif) center right no-repeat;}\n"
+        + " th.ascending a {background: url($/click/column-acending-dark.gif) center right no-repeat;}\n"
+        + " th.descending a {background: url($/click/column-descending-dark.gif) center right no-repeat;}\n"
         + "</style>\n";
 
     /** The table top banner position. */
@@ -181,11 +190,38 @@ public class Table extends AbstractControl {
     /** The table top and bottom banner. */
     public static final int POSITION_BOTH = 3;
 
-    /** The control ActionLink page number parameter name: <tt>"page"</tt>. */
-    public static final String PAGE = "page";
+    /** The control ActionLink page number parameter name: <tt>"ascending"</tt>. */
+    public static final String ASCENDING = "ascending";
 
     /** The control ActionLink sorted column parameter name: <tt>"column"</tt>. */
     public static final String COLUMN = "column";
+
+    /** The control ActionLink page number parameter name: <tt>"page"</tt>. */
+    public static final String PAGE = "page";
+
+    /** The control ActionLink sort number parameter name: <tt>"sort"</tt>. */
+    public static final String SORT = "sort";
+
+    /** The table CSS style: <tt>"complex"</tt>. */
+    public static final String CLASS_COMPLEX = "complex";
+
+    /** The table CSS style: <tt>"isi"</tt>. */
+    public static final String CLASS_ISI = "isi";
+
+    /** The table CSS style: <tt>"its"</tt>. */
+    public static final String CLASS_ITS = "its";
+
+    /** The table CSS style: <tt>"mars"</tt>. */
+    public static final String CLASS_MARS = "mars";
+
+    /** The table CSS style: <tt>"nocol"</tt>. */
+    public static final String CLASS_NOCOL = "nocol";
+
+    /** The table CSS style: <tt>"report"</tt>. */
+    public static final String CLASS_REPORT = "report";
+
+    /** The table CSS style: <tt>"simple"</tt>. */
+    public static final String CLASS_SIMPLE = "simple";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -257,6 +293,9 @@ public class Table extends AbstractControl {
 
     /** The row list is sorted status. */
     protected boolean sorted;
+
+    /** The rows list is sorted in ascending order. */
+    protected boolean sortedAscending = true;
 
     /** The name of the sorted column. */
     protected String sortedColumn;
@@ -699,6 +738,24 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return true if the sort order is ascending.
+     *
+     * @return true if the sort order is ascending
+     */
+    public boolean isSortedAscending() {
+        return sortedAscending;
+    }
+
+    /**
+     * Set the ascending sort order status.
+     *
+     * @param value the ascending sort order status
+     */
+    public void setSortedAscending(boolean value) {
+        sortedAscending = value;
+    }
+
+    /**
      * Return the name of the sorted column, or null if not defined.
      *
      * @return the name of the sorted column, or null if not defined
@@ -747,8 +804,10 @@ public class Table extends AbstractControl {
         String[] files = new String[] {
                 "/net/sf/click/control/column-sortable-dark.gif",
                 "/net/sf/click/control/column-sortable-light.gif",
-                "/net/sf/click/control/column-sorted-dark.gif",
-                "/net/sf/click/control/column-sorted-light.gif",
+                "/net/sf/click/control/column-ascending-dark.gif",
+                "/net/sf/click/control/column-ascending-light.gif",
+                "/net/sf/click/control/column-descending-dark.gif",
+                "/net/sf/click/control/column-descending-light.gif",
                 "/net/sf/click/control/table.css"
             };
 
@@ -774,6 +833,16 @@ public class Table extends AbstractControl {
         String column = getContext().getRequestParameter(COLUMN);
         if (column != null) {
             setSortedColumn(column);
+        }
+
+        String ascending = getContext().getRequestParameter(ASCENDING);
+        if (ascending != null) {
+            setSortedAscending("true".equals(ascending));
+        }
+
+        // Flip sorting order
+        if ("true".equals(getContext().getRequestParameter(SORT))) {
+            setSortedAscending(!isSortedAscending());
         }
 
         boolean continueProcessing = true;
@@ -829,7 +898,7 @@ public class Table extends AbstractControl {
 
         renderHeaderRow(buffer);
 
-        sortRowList(true);
+        sortRowList();
 
         renderBodyRows(buffer);
 
@@ -1051,8 +1120,11 @@ public class Table extends AbstractControl {
 
             if (getSortedColumn() != null) {
                 controlLink.setParameter(COLUMN, getSortedColumn());
+                controlLink.setParameter(ASCENDING, String.valueOf(isSortedAscending()));
             } else {
+                controlLink.setParameter(SORT, null);
                 controlLink.setParameter(COLUMN, null);
+                controlLink.setParameter(ASCENDING, null);
             }
 
             if (getPageNumber() > 0) {
@@ -1126,15 +1198,13 @@ public class Table extends AbstractControl {
     /**
      * The default row list sorting method, which will sort the row list based
      * on the selected column if the row list is not already sorted.
-     *
-     * @param ascending the ascending sort flag
      */
-    protected void sortRowList(boolean ascending) {
+    protected void sortRowList() {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
             final Column column = (Column) getColumns().get(getSortedColumn());
 
-            final int ascendingSort = (ascending) ? 1 : -1;
+            final int ascendingSort = (isSortedAscending()) ? 1 : -1;
 
             Collections.sort(getRowList(), new Comparator() {
                 public int compare(Object row1, Object row2) {

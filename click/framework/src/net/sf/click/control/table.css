@@ -11,7 +11,7 @@ th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex,
 	vertical-align: top;
 }
 
-th.sorted {
+th.ascending, th.descending {
 	background-color: orange;
 }
 
@@ -24,7 +24,7 @@ th a:hover {
 	text-decoration: none;
 }
 
-th.sorted a, th.sortable a {
+th.ascending a, th.descending a, th.sortable a {
 	background-position: right;
 	display: block;
 	text-decoration: none;
