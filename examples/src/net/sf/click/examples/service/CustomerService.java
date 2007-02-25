@@ -32,10 +32,10 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
-    public List getCustomersSortedBy(String property) {
+    public List getCustomersSortedBy(String property, boolean ascending) {
         SelectQuery query = new SelectQuery(Customer.class);
         if (property != null) {
-            query.addOrdering(property, true);
+            query.addOrdering(property, ascending);
         }
         return performQuery(query);
     }

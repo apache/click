@@ -44,7 +44,7 @@ public class EditTable extends BorderPage {
         form.add(new HiddenField(Table.COLUMN, String.class));
 
         // Setup customers table
-        table.setClass("simple");
+        table.setClass(Table.CLASS_SIMPLE);
         table.setPageSize(10);
         table.setShowBanner(true);
 
