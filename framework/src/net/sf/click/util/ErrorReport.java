@@ -346,6 +346,9 @@ public class ErrorReport {
         } else {
             cause = error.getCause();
         }
+        if (cause != null && cause.getCause() != null) {
+            cause = cause.getCause();
+        }
         if (cause == null) {
             cause = error;
         }
