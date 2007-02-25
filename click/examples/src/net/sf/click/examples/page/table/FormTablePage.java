@@ -6,6 +6,7 @@ import net.sf.click.control.Checkbox;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
+import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.InvestmentSelect;
 import net.sf.click.examples.page.BorderPage;
@@ -27,7 +28,7 @@ public class FormTablePage extends BorderPage {
 
     public FormTablePage() {
         // Setup customers table
-        table.setClass("simple");
+        table.setClass(Table.CLASS_SIMPLE);
         table.setWidth("700px");
         table.getForm().setButtonAlign(Form.ALIGN_RIGHT);
         table.setPageSize(10);

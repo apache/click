@@ -52,7 +52,10 @@ public class TableSorting extends BorderPage {
      * @see net.sf.click.Page#onRender()
      */
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedBy(table.getSortedColumn());
+        List customers =
+            getCustomerService().getCustomersSortedBy(table.getSortedColumn(),
+                                                      table.isSortedAscending());
+
         table.setRowList(customers);
         table.setSorted(true);
     }
