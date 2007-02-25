@@ -206,23 +206,23 @@ public class PropertyUtils {
                     return method.invoke(source, null);
 
                 } catch (NoSuchMethodException nsme3) {
-                    String msg = "No matching getter method found for property "
-                        + name + " on class " + source.getClass().getName();
+                    String msg = "No matching getter method found for property '"
+                        + name + "' on class " + source.getClass().getName();
 
                     throw new RuntimeException(msg);
 
                 } catch (Exception e) {
-                    String msg = "Error getting property " + name + " from " + source.getClass();
+                    String msg = "Error getting property '" + name + "' from " + source.getClass();
                     throw new RuntimeException(msg, e);
                 }
 
             } catch (Exception e) {
-                String msg = "Error getting property " + name + " from " + source.getClass();
+                String msg = "Error getting property '" + name + "' from " + source.getClass();
                 throw new RuntimeException(msg, e);
             }
 
         } catch (Exception e) {
-            String msg = "Error getting property " + name + " from " + source.getClass();
+            String msg = "Error getting property '" + name + "' from " + source.getClass();
             throw new RuntimeException(msg, e);
         }
     }
