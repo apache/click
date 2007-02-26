@@ -182,7 +182,8 @@ public class Menu implements Control {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>\n" +
+        "<script type=\"text/javascript\" src=\"$/click/menu.js\"></script>\n";
 
     // -------------------------------------------------------- Class Variables
 
@@ -395,18 +396,18 @@ public class Menu implements Control {
     }
 
     /**
-     * Return true if the menu path referers to an external resource.
+     * Return true if the menu path refers to an external resource.
      *
-     * @return true if the menu path referers to an external resource
+     * @return true if the menu path refers to an external resource
      */
     public boolean isExternal() {
         return external;
     }
 
     /**
-     * Set whether the menu path referers to an external resource.
+     * Set whether the menu path refers to an external resource.
      *
-     * @param value the flag as to whether the menu path referers to an external resource
+     * @param value the flag as to whether the menu path refers to an external resource
      */
     public void setExternal(boolean value) {
         external = value;
@@ -549,7 +550,7 @@ public class Menu implements Control {
      * return false.
      * <p/>
      * This method internally uses the <tt>HttpServletRequest</tt> function <tt>isUserInRole(rolename)</tt>,
-     * where the rolenames are derrived from the {@link #getRoles()} property.
+     * where the rolenames are derived from the {@link #getRoles()} property.
      *
      * @return true if the user is in one of the menu roles, or false otherwise
      */
@@ -632,18 +633,23 @@ public class Menu implements Control {
     }
 
     /**
-     * Return the menu anchor HREF attribute. If the menu is referers to an
-     * external path this method will simply return the path, otherwise it will
-     * return menu path prefixed with the request context path.
-     *
+     * Return the menu anchor HREF attribute. If the menu is referring 
+     * to an external path, this method will simply return the path, 
+     * otherwise it will return the menu path prefixed with the
+     * request context path.
+     * <p/>
+     * If the path refers to a  hash "#" symbol, this method will return 
+     * a "#". It is useful to assign a "#" to the path of a menu item 
+     * containing children, because most modern browsers will not submit
+     * the page if clicked on.
+     * 
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
-        if (isExternal()) {
+        if (isExternal() || path.equals("#")) {
             return path;
-
         } else {
-            return getContext().getRequest().getContextPath() + "/" + path;
+                return getContext().getRequest().getContextPath() + "/" + path;
         }
     }
 
@@ -708,7 +714,7 @@ public class Menu implements Control {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Deploy the <tt>menue.css</tt> and <tt>menu.js</tt> files to the
+     * Deploy the <tt>menu.css</tt> and <tt>menu.js</tt> files to the
      * <tt>click</tt> web directory when the application is initialized.
      *
      * @see Control#onDeploy(ServletContext)
@@ -754,8 +760,16 @@ public class Menu implements Control {
 
         } else {
             buffer.elementStart("a");
-            buffer.appendAttribute("href", getHref());
-
+            
+            String href = getHref();
+            buffer.appendAttribute("href", href);
+            
+            if(href.equals("#")) {
+                //If hyperlink does not return false here, clicking on it will scroll 
+                //to the top of the page.
+                buffer.appendAttribute("onclick", "return false;");
+            }
+            
             if (getTarget() != null && getTarget().length() > 0) {
                 buffer.appendAttribute("target", getTarget());
             }
@@ -794,7 +808,7 @@ public class Menu implements Control {
     }
 
     /**
-     * Return a copy of the Appliations root Menu as defined in the
+     * Return a copy of the Applications root Menu as defined in the
      * configuration file "<tt>/WEB-INF/menu.xml</tt>", with the Control
      * name <tt>"rootMenu"</tt>.
      * <p/>
