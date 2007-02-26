@@ -59,7 +59,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  * The PropertySelect control will only work inside a CayenneForm
  * as it obtains meta data about DataObject property from the parent form.
  * <p/>
- * Currently this control only supports selecting a single elements.
+ * Currently this control only supports selecting a single element.
  *
  * <h3>PropertySelect Example</h3>
  *
@@ -95,8 +95,8 @@ import org.objectstyle.cayenne.query.SelectQuery;
  *
  * In this example no query is specified and the control will create a
  * simple {@link SelectQuery} based on the property class. However,
- * generally you should a named query (configured in the Cayenne Modeller)
- * or a explicity set a <tt>SelectQuery</tt>.
+ * generally you should use a named query (configured in the Cayenne Modeler)
+ * or an explicity set <tt>SelectQuery</tt>.
  * <p/>
  * Note when using a named query ensure that it will return DataObjects and not
  * DataRows.

@@ -50,7 +50,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  *
  * The QuerySelect provides a Select control with the options automatically
  * populated from a Cayenne query. This control supports both named queries,
- * which are configured in the Cayenne Modeller, and <tt>SelectQuery</tt>
+ * which are configured in the Cayenne Modeler, and <tt>SelectQuery</tt>
  * and <tt>NamedQuery</tt> objects which can be defined in code.
  * <p/>
  * All Cayenne queries are executed using the thread local {@link DataContext}
@@ -62,7 +62,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  *
  * <h3>QuerySelect Examples</h3>
  *
- * The QuerySelect below executes a Cayenne Modeller defined named query
+ * The QuerySelect below executes a Cayenne Modeler defined named query
  * called "system.titles". This pre configured query returns a list of {@link DataRow}
  * objects containing "VALUE" and "LABEL" values, which are rendered as the
  * option values and labels.
@@ -78,7 +78,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  *
  * <pre class="codeJava">
  * QuerySelect delivery = <span class="kw">new</span> QuerySelect(<span class="st">"delivery"</span>, <span class="kw">true</span>);
- * delivery.setQuery(<span class="kw">new</span> SelectQuery(Delivery.<span class="kw">class</span>));
+ * delivery.setSelectQuery(<span class="kw">new</span> SelectQuery(Delivery.<span class="kw">class</span>));
  * delivery.setOptionValue(<span class="st">"type"</span>);
  * delivery.setOptionLabel(<span class="st">"description"</span>);
  * form.add(delivery); </pre>
@@ -87,7 +87,7 @@ import org.objectstyle.cayenne.query.SelectQuery;
  *
  * <pre class="codeJava">
  * QuerySelect userSelect = <span class="kw">new</span> QuerySelect(<span class="st">"user"</span>, <span class="kw">true</span>);
- * userSelect.setQuery(<span class="kw">new</span> SelectQuery(User.<span class="kw">class</span>));
+ * userSelect.setSelectQuery(<span class="kw">new</span> SelectQuery(User.<span class="kw">class</span>));
  * userSelect.setOptionValue(<span class="st">"username"</span>);
  * userSelect.setDecorator(<span class="kw">new</span> Decorator() {
  *     <span class="kw">public</span> String render(Object object, Context context) {
@@ -109,7 +109,7 @@ public class QuerySelect extends Select {
     /** The option label rendering decorator. */
     protected Decorator decorator;
 
-    /** The flag specifing whether the cache should be ignored. */
+    /** The flag specifying whether the cache should be ignored. */
     protected boolean expireCache;
 
     /** The option list Cayenne <tt>NamedQuery</tt>. */

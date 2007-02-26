@@ -423,8 +423,8 @@ public class CayenneForm extends Form {
      * Save the object to the database committing all changes in the
      * <tt>DataContext</tt> and return true.
      * If a <tt>ValidationException</tt>
-     * occured then all <tt>DataContext</tt> changes will be rolled back,
-     * the valiation error will be set as the Form's error and the method will
+     * occurred then all <tt>DataContext</tt> changes will be rolled back,
+     * the validation error will be set as the Form's error and the method will
      * return false.
      * <p/>
      * If no <tt>DataObject</tt> is added to the form using <tt>setDataObject()</tt>
