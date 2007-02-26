@@ -42,7 +42,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * When the click application is in <tt>debug</tt> or <tt>trace</tt> mode this
  * filter will log any uncommitted data objects at the end of each request.
  * <p/>
- * For units of work spanning mutiple requests, such as a multi-page work flow,
+ * For units of work spanning multiple requests, such as a multi-page work flow,
  * it is recommended that you add a separate DataContext to the session
  * for the unit of work.
  *
@@ -58,7 +58,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *
  * An example data context filter configuration in the web application's
  * <tt>/WEB-INF/web.xml</tt> file is provided below. This example does not
- * use the Cayennne shared cache when creating DataContext objects.
+ * use the Cayenne shared cache when creating DataContext objects.
  *
  * <pre class="codeConfig">
  * &lt;web-app&gt;
