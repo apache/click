@@ -620,11 +620,7 @@ public class FieldSet extends Field {
 
             Field field = (Field) fieldList.get(i);
 
-            if (field.isHidden()) {
-                buffer.append(field.toString());
-                buffer.append("\n");
-
-            } else {
+            if (!field.isHidden()) {
 
                 // Field width
                 Integer width = (Integer) getFieldWidths().get(field.getName());
