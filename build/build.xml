@@ -460,7 +460,13 @@ Please ensure you have configured build.properties</echo>
             todir="documentation/docs/extras-api/net/sf/click/extras/control/tree"/>
       <copy file="documentation/images/checkbox-tree.png"
             todir="documentation/docs/extras-api/net/sf/click/extras/control/tree"/>
-      <copy file="framework/stylesheet.css"  
+      <copy file="documentation/images/line-chart.png"
+             todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
+      <copy file="documentation/images/bar-chart.png"
+             todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
+      <copy file="documentation/images/pie-chart.png"
+             todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
+      <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="documentation/docs/click-api"/>
       <copy file="framework/stylesheet.css"  
