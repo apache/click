@@ -84,7 +84,7 @@ function pie()
  this.fillArc = function(x, y, r, st_a, en_a, jg)
   {
     //var number_of_steps = Math.round(2.1 * Math.PI * r );
-    var number_of_steps = en_a - st_a ;
+    var number_of_steps = 100; //en_a - st_a ;
     var angle_increment = 2 * Math.PI / number_of_steps;
 
     var xc = new Array();
@@ -121,6 +121,7 @@ function pie()
    var sx = 200;
    var sy = 200;
    var hyp = 100;
+
    var fnt    = 12;
 
    // shadow
@@ -151,6 +152,10 @@ function pie()
     
    jg.setColor("black");
    jg.drawEllipse(sx-r, sy-r, 2*r, 2*r);
+
+   jg.setFont("Verdana", fnt,  Font.BOLD);
+   jg.drawStringRect(title, 0, sx+r+fnt+14, sx+2*r, "right");
+
    jg.paint();
   }
 
