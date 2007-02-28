@@ -182,8 +182,9 @@ public class Menu implements Control {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>\n" +
-        "<script type=\"text/javascript\" src=\"$/click/menu.js\"></script>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>\n"
+        + "<script type=\"text/javascript\" src=\"$/click/menu.js\"/>\n"
+        + "<script type=\"text/javascript\">addLoadEvent( function() { initMenu } );</script>\n";
 
     // -------------------------------------------------------- Class Variables
 
@@ -633,23 +634,24 @@ public class Menu implements Control {
     }
 
     /**
-     * Return the menu anchor HREF attribute. If the menu is referring 
-     * to an external path, this method will simply return the path, 
+     * Return the menu anchor HREF attribute. If the menu is referring
+     * to an external path, this method will simply return the path,
      * otherwise it will return the menu path prefixed with the
      * request context path.
      * <p/>
-     * If the path refers to a  hash "#" symbol, this method will return 
-     * a "#". It is useful to assign a "#" to the path of a menu item 
+     * If the path refers to a  hash "#" symbol, this method will return
+     * a "#". It is useful to assign a "#" to the path of a menu item
      * containing children, because most modern browsers will not submit
      * the page if clicked on.
-     * 
+     *
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
         if (isExternal() || path.equals("#")) {
             return path;
+
         } else {
-                return getContext().getRequest().getContextPath() + "/" + path;
+            return getContext().getRequest().getContextPath() + "/" + path;
         }
     }
 
@@ -760,16 +762,16 @@ public class Menu implements Control {
 
         } else {
             buffer.elementStart("a");
-            
+
             String href = getHref();
             buffer.appendAttribute("href", href);
-            
-            if(href.equals("#")) {
-                //If hyperlink does not return false here, clicking on it will scroll 
+
+            if (href.equals("#")) {
+                //If hyperlink does not return false here, clicking on it will scroll
                 //to the top of the page.
                 buffer.appendAttribute("onclick", "return false;");
             }
-            
+
             if (getTarget() != null && getTarget().length() > 0) {
                 buffer.appendAttribute("target", getTarget());
             }
