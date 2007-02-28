@@ -23,5 +23,6 @@
 	<classpathentry sourcepath="D:/java/ognl-2.7.6/java" path="lib/ognl-2.6.9.jar" kind="lib"/>
 	<classpathentry sourcepath="D:/workspace/velocity/src/java" path="lib/velocity-1.5-beta2.jar" kind="lib"/>
 	<classpathentry sourcepath="D:/java/cayenne-1.2.2/src/cayenne" path="lib/cayenne-nodeps-1.2.2.jar" kind="lib"/>
+	<classpathentry path="lib/log4j-1.2.14.jar" kind="lib"/>
 	<classpathentry path="bin" kind="output"/>
 </classpath>
