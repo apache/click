@@ -5,14 +5,16 @@ import net.sf.click.extras.graph.JSLineChart;
 
 /**
  * Example usage of the JSLineChart.
- * <p/>  
  *
  * @author Ahmed Mohombe
  */
 public class LineChart extends BorderPage {
-    public JSLineChart chart = new JSLineChart("chart","Line Graph");
 
+    public JSLineChart chart = new JSLineChart("chart", "Line Graph");
 
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         chart.setChartHeight(300);
         chart.setChartWidth(400);
@@ -28,6 +30,5 @@ public class LineChart extends BorderPage {
         chart.addPoint("9", new Integer(125));
         chart.addPoint("10", new Integer(135));
         chart.addPoint("11", new Integer(125));
-
     }
 }

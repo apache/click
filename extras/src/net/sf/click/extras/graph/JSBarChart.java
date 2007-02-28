@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.graph;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,7 +26,8 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.control.AbstractControl;
 
 /**
- * Control that displays a Bar Chart based on JavaScript only.
+ * Provides a Bar Chart control based on JavaScript only.
+ *
  * <p/>
  * <table class='htmlHeader' cellspacing='10'>
  * <tr>
@@ -21,9 +37,14 @@ import net.sf.click.control.AbstractControl;
  * </tr>
  * </table>
  *
+ * This control uses the <a href="http://www.walterzorn.com/jsgraphics">JSGraphics</a>
+ * library.
+ *
  * @author Ahmed Mohombe
  */
 public class JSBarChart extends AbstractControl {
+
+    private static final long serialVersionUID = 1L;
 
     /** The HTML imports statements. */
     protected static final String CHART_IMPORTS =
@@ -36,6 +57,7 @@ public class JSBarChart extends AbstractControl {
             "/net/sf/click/extras/graph/jsgraph/bar.js"
     };
 
+    // ----------------------------------------------------- Instance Variables
 
     /** Width of the DIV element that encloses this chart. */
     private int chartWidth = 400; // default value for width
@@ -49,11 +71,13 @@ public class JSBarChart extends AbstractControl {
     /** The chart display label. */
     private String label = "Bar Chart"; // default label
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a bar chart with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
-     */    
+     */
     public JSBarChart() {
     }
 
@@ -61,7 +85,7 @@ public class JSBarChart extends AbstractControl {
      * Create a bar chart with the given name.
      *
      * @param name the button name
-     */    
+     */
     public JSBarChart(String name) {
         super.setName(name);
     }
@@ -71,11 +95,13 @@ public class JSBarChart extends AbstractControl {
      *
      * @param name the name of the chart control
      * @param label the label of the chart that will be displayed
-     */    
+     */
     public JSBarChart(String name, String label) {
         super.setName(name);
         setLabel(label);
     }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Adds a "point" to the grapic/chart at the end of the list.
@@ -94,7 +120,7 @@ public class JSBarChart extends AbstractControl {
      * @param index index at which the specified point is to be inserted
      * @param pointLabel the displayed label of the "point"
      * @param pointValue the value of the "point".
-     */    
+     */
     public void addPoint(int index, String pointLabel, Integer pointValue) {
         xLabels.add(index, pointLabel);
         yValues.add(index, pointValue);
@@ -114,7 +140,7 @@ public class JSBarChart extends AbstractControl {
      * pixel value.
      *
      * @param chartWidth the chart width in pixels.
-     */    
+     */
     public void setChartWidth(int chartWidth) {
         this.chartWidth = chartWidth;
     }
@@ -133,14 +159,14 @@ public class JSBarChart extends AbstractControl {
      * pixel value.
      *
      * @param chartHeight the chart height in pixels.
-     */    
+     */
     public void setChartHeight(int chartHeight) {
         this.chartHeight = chartHeight;
     }
 
     /**
      * Return the label of the chart.
-     * 
+     *
      * @return the label of the chart
      */
     public String getLabel() {
@@ -151,7 +177,7 @@ public class JSBarChart extends AbstractControl {
      * Set the chart display caption.
      *
      * @param label the display label of the chart
-     */    
+     */
     public void setLabel(String label) {
         this.label = label;
     }
@@ -164,7 +190,7 @@ public class JSBarChart extends AbstractControl {
      *
      * @return the HTML head import statements for the javascript files
      * used by this control.
-     */    
+     */
     public String getHtmlImports() {
         String path = getContext().getRequest().getContextPath();
         StringBuffer buffer = new StringBuffer(100);
@@ -188,7 +214,7 @@ public class JSBarChart extends AbstractControl {
      * Deploys the javascript files of this control to the <code>[click/graph/jsgraph]</code> directory.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
-     * 
+     *
      * @param servletContext the webapplication's servlet context
      */
     public void onDeploy(ServletContext servletContext) {
@@ -199,7 +225,7 @@ public class JSBarChart extends AbstractControl {
      * Returns true, as javascript charts perform no server side logic.
      *
      * @return true
-     */    
+     */
     public boolean onProcess() {
         return true;
     }
@@ -211,6 +237,7 @@ public class JSBarChart extends AbstractControl {
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
+
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("style", "overflow: auto; position:relative;height:" + getChartHeight() + "px;width:" + getChartWidth() + "px;");
@@ -227,6 +254,7 @@ public class JSBarChart extends AbstractControl {
         }
         buffer.append(var + ".render('" + getId() + "','" + getLabel() + "');\n");
         buffer.append("</script> \n");
+
         return buffer.toString();
     }
 

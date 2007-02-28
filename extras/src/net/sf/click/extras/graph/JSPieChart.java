@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.graph;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,7 +26,7 @@ import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.control.AbstractControl;
 
 /**
- * Control that displays a Pie Chart based on JavaScript only.
+ * Provides a Pie Chart control based on JavaScript only.
  * <p/>
  * <table class='htmlHeader' cellspacing='10'>
  * <tr>
@@ -21,9 +36,14 @@ import net.sf.click.control.AbstractControl;
  * </tr>
  * </table>
  *
+ * This control uses the <a href="http://www.walterzorn.com/jsgraphics">JSGraphics</a>
+ * library.
+ *
  * @author Ahmed Mohombe
  */
 public class JSPieChart extends AbstractControl {
+
+    private static final long serialVersionUID = 1L;
 
     /** The HTML imports statements. */
     protected static final String CHART_IMPORTS =
@@ -35,6 +55,8 @@ public class JSPieChart extends AbstractControl {
             "/net/sf/click/extras/graph/jsgraph/wz_jsgraphics.js",
             "/net/sf/click/extras/graph/jsgraph/pie.js"
     };
+
+    // ----------------------------------------------------- Instance Variables
 
     /** Width of the DIV element that encloses this chart. */
     private int chartWidth = 380; // default value for width
@@ -48,6 +70,8 @@ public class JSPieChart extends AbstractControl {
     /** The chart display label. */
     private String label = "Pie Chart"; // default label
 
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a PieChart Control with no name defined.
      * <p/>
@@ -60,7 +84,7 @@ public class JSPieChart extends AbstractControl {
      * Create a pie chart with the given name.
      *
      * @param name the button name
-     */    
+     */
     public JSPieChart(String name) {
         super.setName(name);
     }
@@ -76,12 +100,14 @@ public class JSPieChart extends AbstractControl {
         setLabel(label);
     }
 
+    // --------------------------------------------------------- Public Methods
+
     /**
      * Adds a "point" to the grapic/chart at the end of the list.
      *
      * @param pointLabel the displayed label of the "point"
      * @param pointValue the value of the "point".
-     */    
+     */
     public void addPoint(String pointLabel, Integer pointValue) {
         xLabels.add(pointLabel);
         yValues.add(pointValue);
@@ -93,7 +119,7 @@ public class JSPieChart extends AbstractControl {
      * @param index index at which the specified point is to be inserted
      * @param pointLabel the displayed label of the "point"
      * @param pointValue the value of the "point".
-     */        
+     */
     public void addPoint(int index, String pointLabel, Integer pointValue) {
         xLabels.add(index, pointLabel);
         yValues.add(index, pointValue);
@@ -132,7 +158,7 @@ public class JSPieChart extends AbstractControl {
      * pixel value.
      *
      * @param chartHeight the chart height in pixels.
-     */    
+     */
     public void setChartHeight(int chartHeight) {
         this.chartHeight = chartHeight;
     }
@@ -141,7 +167,7 @@ public class JSPieChart extends AbstractControl {
      * Return the label of the chart.
      *
      * @return the label of the chart
-     */    
+     */
     public String getLabel() {
         return label;
     }
@@ -150,7 +176,7 @@ public class JSPieChart extends AbstractControl {
      * Set the chart display caption.
      *
      * @param label the display label of the chart
-     */        
+     */
     public void setLabel(String label) {
         this.label = label;
     }
@@ -163,7 +189,7 @@ public class JSPieChart extends AbstractControl {
      *
      * @return the HTML head import statements for the javascript files
      * used by this control.
-     */    
+     */
     public String getHtmlImports() {
         String path = getContext().getRequest().getContextPath();
         StringBuffer buffer = new StringBuffer(100);
@@ -189,7 +215,7 @@ public class JSPieChart extends AbstractControl {
      * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the webapplication's servlet context
-     */    
+     */
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext, CHART_RESOURCES, "click/graph/jsgraph");
     }
@@ -210,6 +236,7 @@ public class JSPieChart extends AbstractControl {
      */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
+
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("style", "overflow: auto; position:relative;height:" + getChartHeight() + "px;width:" + getChartWidth() + "px;");
@@ -226,6 +253,7 @@ public class JSPieChart extends AbstractControl {
         }
         buffer.append(var + ".render('" + getId() + "','" + getLabel() + "');\n");
         buffer.append("</script> \n");
+
         return buffer.toString();
     }
 
