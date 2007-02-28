@@ -12,6 +12,9 @@ developed by Doug Lea
 This product includes the DHTML Calandar widget, developed by 
 Mihai Bazon (http://www.dynarch.com/).
 
+This product includes the JSGraphics library, developed by 
+Walter Zorn (http://www.walterzorn.com/).
+
 This product includes software developed by Atlassian
 (http://www.atlassian.com/), released under the Apache Software License.
 
