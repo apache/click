@@ -251,15 +251,13 @@ public class Radio extends Field {
             buffer.appendStyleAttributes(getStyles());
         }
 
-        buffer.closeTag();
+        buffer.elementEnd();
 
         if (label != null) {
             buffer.appendEscaped(label);
         } else {
             buffer.appendEscaped(getValue());
         }
-
-        buffer.elementEnd("input");
 
         // radio element does not support "readonly" element, so as a work around
         // we make the field "disabled" and render a hidden field to submit its value
