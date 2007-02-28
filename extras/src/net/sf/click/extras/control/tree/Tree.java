@@ -101,7 +101,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;/html&gt; </pre>
  * <p/>
  * <h4>Tree customization</h4>
- * The following list of stylesheet classes are used to render the tree 
+ * The following list of stylesheet classes are used to render the tree
  * icons. One can easily change the tree.css to use a different set of
  * icons. Note: all classes are set in a &lt;span&gt; element.
  * <dl>
