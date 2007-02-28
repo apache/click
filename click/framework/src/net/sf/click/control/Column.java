@@ -132,7 +132,7 @@ import net.sf.click.util.PropertyUtils;
  * table.addColumn(column); </pre>
 
  * The <tt>Context</tt> parameter of the decorator <tt>render()</tt> method enables you to
- * render controls to provid additional functionality. For example:
+ * render controls to provide additional functionality. For example:
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> CustomerList <span class="kw">extends</span> BorderedPage {
@@ -1211,7 +1211,7 @@ public class Column implements Serializable {
      *
      * @param row the row object to obtain the property from
      * @return the named row object property value
-     * @throws RuntimeException if an error occured obtaining the property
+     * @throws RuntimeException if an error occurred obtaining the property
      */
     protected Object getProperty(Object row) {
         if (row instanceof Map) {
