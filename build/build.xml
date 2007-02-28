@@ -13,6 +13,7 @@
    <property name="jar.io" value="commons-io-1.1.jar"/>
    <property name="jar.junit" value="junit-3.8.1.jar"/>
    <property name="jar.lang" value="commons-lang-2.1.jar"/>
+   <property name="jar.log4j" value="log4j-1.2.14.jar"/>
    <property name="jar.ognl" value="ognl-2.6.9.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
    <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
@@ -21,7 +22,6 @@
    <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.1.jar"/>
    <property name="jar.velocity" value="velocity-1.5-beta2.jar"/>
-
    
    <!--
     Task Definitions
@@ -89,6 +89,7 @@
       <pathelement location="extras/classes"/> 
       <pathelement location="lib/${jar.cayenne}"/>
       <pathelement location="lib/${jar.hibernate}"/>
+      <pathelement location="lib/${jar.log4j}"/>
       <pathelement location="lib/${jar.servlet}"/>
       <pathelement location="lib/${jar.spring-beans}"/>
       <pathelement location="lib/${jar.spring-context}"/>
@@ -346,6 +347,7 @@
       <downloadMacro name="${jar.collections}" path="commons-collections"/>
       <downloadMacro name="${jar.io}" path="commons-io"/>
       <downloadMacro name="${jar.lang}" path="commons-lang"/>
+      <downloadMacro name="${jar.log4j}" path="log4j"/>
       <downloadMacro name="${jar.ognl}" path="ognl"/>
       <downloadMacro name="${jar.upload}" path="commons-fileupload"/>
       <downloadMacro name="${jar.hibernate}" path="org.hibernate"/>
