@@ -288,6 +288,7 @@ public class LinkDecorator implements Decorator {
         if (linksArray.length == 1) {
             AbstractLink link = linksArray[0];
             link.setContext(context);
+            link.setId(null);
 
             if (link instanceof ActionLink) {
                 ((ActionLink) link).setValueObject(value);
@@ -312,6 +313,7 @@ public class LinkDecorator implements Decorator {
             for (int i = 0; i < linksArray.length; i++) {
                 AbstractLink link = linksArray[i];
                 link.setContext(context);
+                link.setId(null);
 
                 if (link instanceof ActionLink) {
                     ((ActionLink) link).setValueObject(value);
