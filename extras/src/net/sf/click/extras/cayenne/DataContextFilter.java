@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,16 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.util.ClickLogger;
-
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.objectstyle.cayenne.access.DataContext;
 import org.objectstyle.cayenne.conf.ServletUtil;
 
 /**
- * Provides a servlet filter which binds the user's session scope DataContext to the
+ * Provides a servlet filter which binds DataContext objects to the request.
+ * This filter will automatically rollback any uncommitted changes at
+ *
+ * which binds the user's session scope DataContext to the
  * current thread. This filter will automatically rollback any uncommitted
  * changes at the end of each request.
  * <p/>
@@ -46,19 +48,60 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * it is recommended that you add a separate DataContext to the session
  * for the unit of work.
  *
- * <h3>Cayenne Shared Cache</h3>
+ * <h3>Session vs Request Scope</h3>
+ *
+ * By default DataContext objects will be associated with the users HttpSession
+ * allowing objects to be cached in the users DataContext. Alternatively the
+ * filter can be configured to create a new DataContext object for each request.
+ * <p/>
+ * Using session scope DataObjects is a good option for web applications which
+ * have exclusive access to the underlying database. However when web applications
+ * share a database you should probably disable this option by setting the
+ * <tt>session-scope</tt> init parameter to false.
+ *
+ * <h3>Shared Cache</h3>
  *
  * By default DataContext objects will be created which use the Cayenne shared
  * cache. This is a good option for web applications which have exclusive
- * access to the underlying database. However when web applications share a
- * database you should probably disable this option by setting the
- * <tt>use-shared-cache</tt> init parameter to false.
+ * access to the underlying database.
+ * <p/>
+ * However when web applications which share a database you should probably
+ * disable this option by setting the <tt>shared-cache</tt> init parameter to false.
  *
- * <h3>Configuration Example</h3>
+ * <h3>Configuration Examples</h3>
  *
  * An example data context filter configuration in the web application's
- * <tt>/WEB-INF/web.xml</tt> file is provided below. This example does not
- * use the Cayenne shared cache when creating DataContext objects.
+ * <tt>/WEB-INF/web.xml</tt> file is provided below. This example stores the
+ * DataContext in the users session and uses the Cayenne shared cache when
+ * creating DataContext objects.
+ * <p/>
+ * This configuration is particularly useful when the web application is the
+ * only application making changes to the database.
+ *
+ * <pre class="codeConfig">
+ * &lt;web-app&gt;
+ *   &lt;filter&gt;
+ *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
+ *   &lt;/filter&gt;
+ *
+ *   &lt;filter-mapping&gt;
+ *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
+ *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *   &lt;/filter-mapping&gt;
+ *
+ *   &lt;servlet&gt;
+ *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
+ *   ..
+ * &lt;/web-app&gt; </pre>
+ *
+ * An example data context filter configuration in the web application's
+ * <tt>/WEB-INF/web.xml</tt> file is provided below. This example creates
+ * a new DataContext object for each request and does <b>not</b> use the
+ * Cayenne shared cache when creating DataContext objects.
+ * <p/>
+ * This configuration is useful when multiple applications are making changes to
+ * the database.
  *
  * <pre class="codeConfig">
  * &lt;web-app&gt;
@@ -66,7 +109,11 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
  *     &lt;init-param&gt;
- *       &lt;param-name&gt;<font color="blue">use-shared-cache</font>&lt;/param-name&gt;
+ *       &lt;param-name&gt;<font color="blue">session-scope</font>&lt;/param-name&gt;
+ *       &lt;param-value&gt;<font color="red">false</font>&lt;/param-value&gt;
+ *     &lt;/init-param&gt;
+ *     &lt;init-param&gt;
+ *       &lt;param-name&gt;<font color="blue">shared-cache</font>&lt;/param-name&gt;
  *       &lt;param-value&gt;<font color="red">false</font>&lt;/param-value&gt;
  *     &lt;/init-param&gt;
  *   &lt;/filter&gt;
@@ -92,8 +139,26 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  */
 public class DataContextFilter implements Filter {
 
+    /**
+     * Automatically rollback any changes to the DataContext at the end of
+     * each request, the default value is true.
+     * <p/>
+     * This option is only useful for sessionScope DataObjects.
+     */
+    protected boolean autoRollback = true;
+
+    /**
+     * Maintain user HttpSession scope DataContext object, the default value is
+     * true. If sessionScope is false then a new DataContext object will be
+     * created for each request.
+     */
+    protected boolean sessionScope = true;
+
     /** Create DataContext objects using the shared cache. */
-    protected boolean useSharedCache;
+    protected boolean sharedCache = true;
+
+    /** The DataContextFilter logger. */
+    protected Logger logger = Logger.getLogger(getClass());
 
     /**
      * Initialize the shared Cayenne configuration. If the
@@ -105,12 +170,31 @@ public class DataContextFilter implements Filter {
      * @throws ServletException if an initialization error occurs
      */
     public synchronized void init(FilterConfig config) throws ServletException {
+
         ServletUtil.initializeSharedConfiguration(config.getServletContext());
 
-        String value = config.getInitParameter("use-shared-cache");
+        String value = null;
+
+        value = config.getInitParameter("auto-rollback");
         if (StringUtils.isNotBlank(value)) {
-            useSharedCache = "true".equalsIgnoreCase(value);
+            autoRollback = "true".equalsIgnoreCase(value);
         }
+
+        value = config.getInitParameter("session-scope");
+        if (StringUtils.isNotBlank(value)) {
+            sessionScope = "true".equalsIgnoreCase(value);
+        }
+
+        value = config.getInitParameter("shared-cache");
+        if (StringUtils.isNotBlank(value)) {
+            sharedCache = "true".equalsIgnoreCase(value);
+        }
+
+        String msg = "DataContextFilter initialized with: auto-rollback="
+            + autoRollback + ", session-scope=" + sessionScope
+            + ", shared-cache=" + sharedCache;
+
+        logger.info(msg);
     }
 
     /**
@@ -135,7 +219,7 @@ public class DataContextFilter implements Filter {
 
         // Obtain the users DataContext from their session
         HttpSession session = ((HttpServletRequest) request).getSession(true);
-        DataContext dataContext = getSessionContext(session);
+        DataContext dataContext = getDataContext(session);
 
         if (dataContext == null) {
             throw new RuntimeException("dataContex could not be obtained");
@@ -148,56 +232,63 @@ public class DataContextFilter implements Filter {
             chain.doFilter(request, response);
 
         } finally {
-            logUncommittedChanges(dataContext);
+            if (logger.isDebugEnabled() && dataContext.hasChanges()) {
+                logger.debug("Uncommitted data objects:");
 
-            dataContext.rollbackChanges();
+                Collection uncommitted = dataContext.uncommittedObjects();
+                for (Iterator i = uncommitted.iterator(); i.hasNext();) {
+                    logger.debug("   " + i.next());
+                }
+            }
+
+            if (autoRollback) {
+                dataContext.rollbackChanges();
+            }
 
             DataContext.bindThreadDataContext(null);
         }
     }
 
     /**
-     * Returns default Cayenne DataContext associated with the HttpSession,
-     * creating it on the fly and storing in the session if needed.
+     * Return a DataContext instance. If the DataContextFilter is configured
+     * to associate the DataContext with the session (which is the default
+     * behaviour), the DataContext will be bound to the users session. If
+     * the DataContext is already available, the existing DataContext will be
+     * used otherwise a new DataContex object will be created.
      * <p/>
-     * This method will create DataContext objects using the Cayenne shared cache
-     * unless the filter init param <tt>use-shared-cache</tt> is set to false.
+     * If this filter is configured with <tt>create-each-request</tt> to be true
+     * then a new DataContext will be created for each request and the DataContext
+     * will not be bound to the session.
+     * <p/>
+     * If this filter is configured with <tt>use-shared-cache</tt> to be true
+     * (which is the default behaviour) this method will create DataContext objects
+     * using the Cayenne shared cache, otherwise they will not use the shared cache.
      *
      * @param session the users session
      * @return the session DataContext object
      */
-    protected synchronized DataContext getSessionContext(HttpSession session) {
-        DataContext context =
-            (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
+    protected synchronized DataContext getDataContext(HttpSession session) {
+
+        DataContext context = null;
+
+        if (sessionScope) {
+            context = (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
+        }
 
         if (context == null) {
-            context = DataContext.createDataContext(useSharedCache);
+            context = DataContext.createDataContext(sharedCache);
 
-            session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, context);
+            if (logger.isDebugEnabled()) {
+                String msg = "created DataContex with shared-cache=" + sharedCache;
+                logger.debug(msg);
+            }
+
+            if (sessionScope) {
+                session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, context);
+            }
         }
 
         return context;
-    }
-
-    /**
-     * Log modified and uncommitted data objects in the given data context.
-     *
-     * @param dataContext the data context to log uncommitted objects
-     */
-    protected void logUncommittedChanges(DataContext dataContext) {
-        if (!dataContext.hasChanges()) {
-            return;
-        }
-
-        ClickLogger logger = ClickLogger.getInstance();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Uncommitted data objects:");
-
-            Collection uncommitted = dataContext.uncommittedObjects();
-            for (Iterator i = uncommitted.iterator(); i.hasNext();) {
-                logger.debug("   " + i.next());
-            }
-        }
     }
 
 }
