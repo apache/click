@@ -43,7 +43,7 @@ public class PropertyUtils {
      * method uses reflection internally to get the property value.
      * <p/>
      * This method is thread-safe, and caches reflected accessor methods in an
-     * internal sychronized cache.
+     * internal synchronized cache.
      * <p/>
      * If the given source object is a <tt>Map</tt> this method will simply
      * return the value for the given key name.
@@ -124,7 +124,7 @@ public class PropertyUtils {
      * the OGNL library.
      * <p/>
      * This method is thread-safe, and caches parsed OGNL expressions in an
-     * internal sychronized cache.
+     * internal synchronized cache.
      *
      * @param source the source object
      * @param name the name of the property
@@ -149,7 +149,7 @@ public class PropertyUtils {
      * the OGNL library.
      * <p/>
      * This method is thread-safe, and caches parsed OGNL expressions in an
-     * internal sychronized cache.
+     * internal synchronized cache.
      *
      * @param target the target object to set the property of
      * @param name the name of the property to set

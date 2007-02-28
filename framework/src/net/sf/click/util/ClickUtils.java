@@ -73,7 +73,7 @@ import org.xml.sax.EntityResolver;
  */
 public class ClickUtils {
 
-    /** Hexidecimal characters for MD5 encoding. */
+    /** Hexadecimal characters for MD5 encoding. */
     private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
         '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
@@ -94,7 +94,7 @@ public class ClickUtils {
     /**
      * The array of escaped HTML character values, indexed on char value.
      * <p/>
-     * HTML entities values were derrived from Jakarta Commons Lang
+     * HTML entities values were derived from Jakarta Commons Lang
      * <tt>org.apache.commons.lang.Entities</tt> class.
      */
     private static final String[] HTML_ENTITIES = new String[9999];
@@ -472,7 +472,7 @@ public class ClickUtils {
     /**
      * Invalidate the specified cookie and delete it from the response object.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param request the servlet request
@@ -491,7 +491,7 @@ public class ClickUtils {
      * against the root "/" path. Otherwise use
      * {@link #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)}
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @see #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)
@@ -509,7 +509,7 @@ public class ClickUtils {
     /**
      * Returns the specified Cookie object, or null if the cookie does not exist.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param request the servlet request
@@ -542,7 +542,7 @@ public class ClickUtils {
      * <p/>
      * The cookie secure flag is set if the request is secure.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param request the servlet request
@@ -569,7 +569,7 @@ public class ClickUtils {
      * Returns the value of the specified cookie as a String. If the cookie
      * does not exist, the method returns null.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param request the servlet request
@@ -587,7 +587,7 @@ public class ClickUtils {
     }
 
     /**
-     * Popuplate the given object's attributes with the Form's field values.
+     * Populate the given object's attributes with the Form's field values.
      *
      * @param form the Form to obtain field values from
      * @param object the object to populate with field values
@@ -645,7 +645,7 @@ public class ClickUtils {
     }
 
     /**
-     * Popuplate the given Form field values with the object's attributes.
+     * Populate the given Form field values with the object's attributes.
      *
      * @param object the object to obtain attribute values from
      * @param form the Form to populate
@@ -923,7 +923,7 @@ public class ClickUtils {
      * from snooping the cookie file of others and by changing the XOR mask and
      * character offsets, you can easily tweak results.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param username the username
@@ -941,18 +941,18 @@ public class ClickUtils {
 
     /**
      * Builds a cookie string containing a username and password, using offsets
-     * to customise the encoding.
+     * to customize the encoding.
      * <p/>
      * Note: with open source this is not really secure, but it prevents users
      * from snooping the cookie file of others and by changing the XOR mask and
      * character offsets, you can easily tweak results.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param username the username
      * @param password the password
-     * @param encoding a String used to customise cookie encoding (only the first 3 characters are used)
+     * @param encoding a String used to customize cookie encoding (only the first 3 characters are used)
      * @param xorMask the XOR mask to encrypt the value with, must be same as
      *      as the value used to decrypt the cookie password
      * @return String encoding the input parameters, an empty string if one of
@@ -985,7 +985,7 @@ public class ClickUtils {
     /**
      * Decodes a cookie string containing a username and password.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param cookieVal the encoded cookie username and password value
@@ -1004,11 +1004,11 @@ public class ClickUtils {
     /**
      * Decodes a cookie string containing a username and password.
      * <p/>
-     * This method was derrived from Atlassian <tt>CookieUtils</tt> method of
+     * This method was derived from Atlassian <tt>CookieUtils</tt> method of
      * the same name, release under the Apache License.
      *
      * @param cookieVal the encoded cookie username and password value
-     * @param encoding  a String used to customise cookie encoding (only the first 3 characters are used)
+     * @param encoding  a String used to customize cookie encoding (only the first 3 characters are used)
      *      - should be the same string you used to encode the cookie!
      * @param xorMask the XOR mask to decrypt the value with, must be same as
      *      as the value used to encrypt the cookie password
@@ -1408,7 +1408,7 @@ public class ClickUtils {
     }
 
     /**
-     * Return the page resouce path from the request. For example:
+     * Return the page resource path from the request. For example:
      * <pre class="codeHtml">
      * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/secure/login.htm</span> </pre>
      *
@@ -1476,7 +1476,7 @@ public class ClickUtils {
     }
 
     /**
-     * Return a field label string from the given field name. For exampe:
+     * Return a field label string from the given field name. For example:
      * <pre class="codeHtml">
      * <span class="blue">faxNumber</span> &nbsp; -&gt; &nbsp; <span class="red">Fax Number</span> </pre>
      *
@@ -1519,7 +1519,7 @@ public class ClickUtils {
      * <p/>
      * Adapted from <tt>org.apache.catalina.util.MD5Encoder</tt>
      *
-     * @param plaintext the plain text value to encodet
+     * @param plaintext the plain text value to encode
      * @return encoded MD5 string
      */
     public static String toMD5Hash(String plaintext) {
