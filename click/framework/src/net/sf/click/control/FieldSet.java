@@ -41,11 +41,11 @@ import org.apache.commons.lang.StringUtils;
  * </tr>
  * <tr class='fields'>
  * <td class='fields' align='left'><label>Card Number</label><font color="red">*</font></td>
- * <td align='left'><input type='text' name='cardNumber' id='form-cardNumber' value='' size='19' onKeyPress='javascript:return integerFilter(event);' maxlength='19'/><select name='cardtype' id='form-cardtype' size='1'><option selected='selected' value='VISA'>Visa</option><option value='MASTER'>Master</option><option value='AMEX'>AmEx</option><option value='DINERS'>Diners</option><option value='DISCOVER'>Discover</option></select></td>
+ * <td align='left'><input type='text' name='cardNumber' id='form-cardNumber' value='' size='19' onkeypress='javascript:return integerFilter(event);' maxlength='19'/><select name='cardtype' id='form-cardtype' size='1'><option selected='selected' value='VISA'>Visa</option><option value='MASTER'>Master</option><option value='AMEX'>AmEx</option><option value='DINERS'>Diners</option><option value='DISCOVER'>Discover</option></select></td>
  * </tr>
  * <tr class='fields'>
  * <td class='fields' align='left'><label>Expiry</label><font color="red">*</font></td>
- * <td align='left'><input type='text' name='expiry' id='form-expiry' value='' size='4' onKeyPress='javascript:return integerFilter(event);' maxlength='4'/></td>
+ * <td align='left'><input type='text' name='expiry' id='form-expiry' value='' size='4' onkeypress='javascript:return integerFilter(event);' maxlength='4'/></td>
  * </tr>
  * </table>
  * </fieldset>
