@@ -122,7 +122,7 @@ import org.apache.commons.lang.StringUtils;
  * <span class="blue">$form</span> </pre>
  *
  * If a Form has been posted and processed, if it has an {@link #error} defined or
- * any of its Fields hava validation errors they will be automatically
+ * any of its Fields have validation errors they will be automatically
  * rendered, and the {@link #isValid()} method will return false.
  *
  * <a name="data-binding"><h3>Data Binding</h3></a>
@@ -199,7 +199,7 @@ import org.apache.commons.lang.StringUtils;
  * The Form control automatically deploys the control CSS style sheet
  * (<tt>control.css</tt>) and JavaScript file (<tt>control.js</tt>) to
  * the application directory <tt>/click</tt>.
- * To import these files and any form control imports simpley reference the
+ * To import these files and any form control imports simply reference the
  * {@link net.sf.click.util.PageImports} object. For example:
  *
  * <pre class="codeHtml">
@@ -408,7 +408,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <h3>Preventing Accidental Form Posts</h3>
  *
- * Users may accidentially make multiple form submissions by refreshing a page
+ * Users may accidentally make multiple form submissions by refreshing a page
  * or by pressing the back button.
  * <p/>
  * To prevent multiple form posts from page refreshes use the Post
@@ -452,13 +452,13 @@ public class Form implements Control {
 
     private static final long serialVersionUID = 1L;
 
-    /** The align left, form layout contant: &nbsp; <tt>"left"</tt>. */
+    /** The align left, form layout constant: &nbsp; <tt>"left"</tt>. */
     public static final String ALIGN_LEFT = "left";
 
-    /** The align center, form layout contant: &nbsp; <tt>"center"</tt>. */
+    /** The align center, form layout constant: &nbsp; <tt>"center"</tt>. */
     public static final String ALIGN_CENTER = "center";
 
-    /** The align right, form layout contant: &nbsp; <tt>"right"</tt>. */
+    /** The align right, form layout constant: &nbsp; <tt>"right"</tt>. */
     public static final String ALIGN_RIGHT = "right";
 
     /**
@@ -488,7 +488,7 @@ public class Form implements Control {
     public static final String POSITION_BOTTOM = "bottom";
 
     /**
-     * The position left, labels of left form layout contant: &nbsp;
+     * The position left, labels of left form layout constant: &nbsp;
      * <tt>"left"</tt>.
      */
     public static final String POSITION_LEFT = "left";
@@ -1753,7 +1753,7 @@ public class Form implements Control {
      * words automatically populate Object attributes with the Forms field
      * values.
      * <p/>
-     * The following example populates the Customer object atributes with the
+     * The following example populates the Customer object attributes with the
      * Form's field values:
      *
      * <pre class="codeJava">
