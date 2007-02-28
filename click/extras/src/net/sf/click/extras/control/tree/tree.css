@@ -25,7 +25,7 @@
  padding: 0;
  width: 0; 
 }
-#tree ul.menu1 {
+#tree ul.level1{
    margin-left: 0px;
 }
 #tree li {
@@ -62,7 +62,7 @@
    background-color: #fff;
    background-repeat: no-repeat;
 }
-#tree span.leafIcon{
+#tree span.leafIcon {
     background: url(images/item.png) 0 50% no-repeat;
     padding-left: 18px;
 }

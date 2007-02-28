@@ -92,22 +92,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *     }
  * } </pre>
  *
- * <h4>Tree Style</h4>
- *
- * <p/>The Tree control automatically deploys the tree CSS style sheet
- * (<tt>tree.css</tt>) to the application directory <tt>/click/tree</tt>.
- * To import the style sheet simply reference the
- * {@link net.sf.click.util.PageImports} object. For example:
- *
- * <pre class="codeHtml">
- * &lt;html&gt;
- *    &lt;head&gt;
- *       <span class="blue">$imports</span>
- *    &lt;/head&gt;
- *    &lt;body&gt;
- *       <span class="red">$tree</span>
- *    &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * @see Tree
  *
  * @author Bob Schellink
  */
@@ -189,7 +174,7 @@ public class CheckboxTree extends Tree {
     }
 
     /**
-     * Overiden onProcess() to remove call to {@link #bindSelectOrDeselectValues()}.
+     * Overridden onProcess() to remove call to {@link #bindSelectOrDeselectValues()}.
      *
      * <p/>For this tree implementation {@link #bindSelectOrDeselectValues()} should only be called once the
      * user submits the form and not on each request.
