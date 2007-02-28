@@ -96,7 +96,7 @@ public class CayenneTemplate {
      * @param property the name of the property
      * @param value the value of the property
      * @return the data object for the specified class, property name and property value
-     * @throws RuntimeException if more than one data object was identifed for the
+     * @throws RuntimeException if more than one data object was identified for the
      * given property name and value
      */
     protected DataObject findObject(Class dataObjectClass, String property,

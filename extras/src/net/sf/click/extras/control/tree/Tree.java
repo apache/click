@@ -99,8 +99,22 @@ import org.apache.commons.lang.StringUtils;
  *       <span class="red">$tree</span>
  *    &lt;/body&gt;
  * &lt;/html&gt; </pre>
+ * <p/>
+ * <h4>Tree customization</h4>
+ * The following list of stylesheet classes are used to render the tree 
+ * icons. One can easily change the tree.css to use a different set of
+ * icons. Note: all classes are set in a &lt;span&gt; element.
+ * <dl>
+ *      <dt>&lt;span class=<span class="blue">"leafIcon"</span>&gt;</dt>
+ *      <dd>renders the leaf node of the tree</dd>
+ *      <dt>&lt;span class=<span class="blue">"expandedIcon"</span>&gt;</dt>
+ *      <dd>renders the expanded state of a node</dd>
+ *      <dt>&lt;span class=<span class="blue">"collapsedIcon"</span>&gt;</dt>
+ *      <dd>renders the collapsed state of a node</dd>
+ * </dl>
  *
- * <strong>Credit</strong> goes to <a href="http://wicket.sourceforge.net">Wicket</a> for the following:
+ * <strong>Credit</strong> goes to <a href="http://wicket.sourceforge.net">Wicket</a>
+ * for the following:
  * <ul>
  *      <li>images/folder-closed.png</li>
  *      <li>images/folder-open.png</li>
@@ -429,7 +443,7 @@ public class Tree extends AbstractControl {
     /**
      * Returns all the nodes that were expanded.
      *
-     * @param includeInvisibleNodes indicator if only invisibile nodes should be included.
+     * @param includeInvisibleNodes indicator if only invisible nodes should be included.
      * @return list of currently expanded nodes.
      */
     public List getExpandedNodes(boolean includeInvisibleNodes) {
@@ -448,7 +462,7 @@ public class Tree extends AbstractControl {
     /**
      * Returns all the nodes that were selected.
      *
-     * @param includeInvisibleNodes indicates if invisibile nodes should be included.
+     * @param includeInvisibleNodes indicates if invisible nodes should be included.
      * @return list of currently selected nodes.
      */
     public List getSelectedNodes(boolean includeInvisibleNodes) {
@@ -609,7 +623,7 @@ public class Tree extends AbstractControl {
      * the output to the specified buffer.
      * <p/>
      * <strong>Note:</strong> only the children of the specified  tree node will
-     * be renderered not the treeNode itself. This method is recursive, so the
+     * be rendered not the treeNode itself. This method is recursive, so the
      * node's children and their children will be rendered and so on.
      *
      * @param buffer string buffer containing the markup
@@ -624,7 +638,7 @@ public class Tree extends AbstractControl {
 
         buffer.elementStart("ul");
 
-        buffer.append(" class=\"menu");
+        buffer.append(" class=\"level");
         buffer.append(Integer.toString(indentation));
         buffer.append("\">\n");
 
@@ -918,11 +932,11 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Swaps the expand state of all TreeNodes with specified ids.
+     * Swaps the expand state of all TreeNodes with specified id's.
      * Thus if a node's expand state is currently 'true', calling
      * expandOrCollapse will set the expand state to 'false' and vice versa.
      *
-     * @param ids array of node ids
+     * @param ids array of node id's
      */
     protected void expandOrCollapse(String[] ids) {
         processNodes(ids, new Callback() {
@@ -978,11 +992,11 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Swaps the select state of all TreeNodes with specified ids to the new value.
+     * Swaps the select state of all TreeNodes with specified id's to the new value.
      * Thus if a node's select state is currently 'true', calling selectOrDeselect
      * will set the select state to 'false' and vice versa.
      *
-     * @param ids array of node ids
+     * @param ids array of node id's
      */
     protected void selectOrDeselect(String[] ids) {
         processNodes(ids, new Callback() {
@@ -1079,14 +1093,14 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns the parameter in {@link javax.servlet.http.HttpServletRequest}
-     * for the specified param.
+     * Returns the value of the specified named parameter or a empty string
+     * <span class="st">""</span> if not found.
      *
-     * @param param specifies the parameter to return
-     * @return param the specified parameter or a empty string <span class="st">""</span> if not found
+     * @param name specifies the parameter to return
+     * @return the specified parameter or a empty string <span class="st">""</span> if not found
      */
-    protected String getRequestValue(String param) {
-        String result = getContext().getRequestParameter(param);
+    protected String getRequestValue(String name) {
+        String result = getContext().getRequestParameter(name);
 
         if (result != null) {
             return result.trim();
@@ -1096,14 +1110,14 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Returns all parameters in {@link javax.servlet.http.HttpServletRequest}
-     * for the specified param.
+     * Returns an array of all values of the specified named parameter or null
+     * if the parameter does not exist.
      *
-     * @param param name of the specified parameters to return
+     * @param name specifies the parameter to return
      * @return all matching parameters or null if no parameter was found
      */
-    protected String[] getRequestValues(String param) {
-        String[] resultArray = getContext().getRequest().getParameterValues(param);
+    protected String[] getRequestValues(String name) {
+        String[] resultArray = getContext().getRequest().getParameterValues(name);
         return resultArray;
     }
 

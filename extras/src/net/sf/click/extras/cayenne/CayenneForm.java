@@ -200,7 +200,7 @@ public class CayenneForm extends Form {
      */
     protected boolean metaDataApplied = false;
 
-    /** A transient dataObject handle for detecting committed a object. */
+    /** A transient dataObject handle for detecting a committed object. */
     protected transient DataObject dataObject;
 
     // ----------------------------------------------------------- Constructors
