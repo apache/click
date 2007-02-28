@@ -5,12 +5,16 @@ import net.sf.click.extras.graph.JSPieChart;
 
 /**
  * Example usage of the JSPieChart.
- * <p/>
  *
  * @author Ahmed Mohombe
  */
 public class PieChart extends BorderPage {
-    public JSPieChart chart = new JSPieChart("chart","Pie Graph");
+
+    public JSPieChart chart = new JSPieChart("chart", "Pie Graph");
+
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         chart.setChartHeight(350);
         chart.setChartWidth(380);
