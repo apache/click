@@ -164,7 +164,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return the "id" attribute value if defined, or the tree name otherwise.
+     * Return the "id" attribute value if defined, or the control name otherwise.
      *
      * @see Control#getId()
      *
