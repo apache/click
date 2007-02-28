@@ -28,7 +28,7 @@ package net.sf.click.extras.control;
  * IntegerField will validate the number when the control is processed and invoke
  * the control listener if defined.
  * <p/>
- * The IntegerField uses a JavaScript onKeyPress() integerFilter() method to prevent
+ * The IntegerField uses a JavaScript onkeypress() integerFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
  * reference the {@link net.sf.click.util.PageImports} object in your page
  * header section. For example:
@@ -66,7 +66,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name) {
         super(name);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -78,7 +78,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name, boolean required) {
         super(name, required);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -90,7 +90,7 @@ public class IntegerField extends NumberField {
      */
     public IntegerField(String name, String label) {
         super(name, label);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         setTextAlign("left");
     }
 
@@ -113,7 +113,7 @@ public class IntegerField extends NumberField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public IntegerField() {
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         setTextAlign("left");
     }
 

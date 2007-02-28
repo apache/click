@@ -50,7 +50,7 @@ public class TelephoneField extends TextField {
      */
     public TelephoneField(String name) {
         super(name);
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setAttribute("onkeypress", "javascript:return noLetterFilter(event);");
         setMinLength(10);
     }
 
@@ -77,7 +77,7 @@ public class TelephoneField extends TextField {
      */
     public TelephoneField(String name, String label) {
         super(name, label);
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setAttribute("onkeypress", "javascript:return noLetterFilter(event);");
         setMinLength(10);
     }
 
@@ -115,7 +115,7 @@ public class TelephoneField extends TextField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public TelephoneField() {
-        setAttribute("onKeyPress", "javascript:return noLetterFilter(event);");
+        setAttribute("onkeypress", "javascript:return noLetterFilter(event);");
         setMinLength(10);
     }
 

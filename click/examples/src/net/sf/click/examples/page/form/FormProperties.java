@@ -120,52 +120,52 @@ public class FormProperties extends BorderPage {
         buttonAlignSelect = new Select("buttonAlign");
         buttonAlignSelect.addAll(new String[] { "left", "center", "right" });
         buttonAlignSelect.setTitle("Buttons horizontal alignment");
-        buttonAlignSelect.setAttribute("onChange", "optionsForm.submit();");
+        buttonAlignSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(buttonAlignSelect);
 
         columnsSelect = new Select("columns");
         columnsSelect.addAll(new String[] { "1", "2", "3", "4" });
         columnsSelect.setTitle("Number of Form table columns");
-        columnsSelect.setAttribute("onChange", "optionsForm.submit();");
+        columnsSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(columnsSelect);
 
         buttonStyle = new TextField("buttonStyle");
         buttonStyle.setTitle("Button td style attribute");
-        buttonStyle.setAttribute("onChange", "optionsForm.submit();");
+        buttonStyle.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(buttonStyle);
 
         errorsAlignSelect = new Select("errorsAlign");
         errorsAlignSelect.addAll(new String[] { "left", "center", "right" });
         errorsAlignSelect.setTitle("Errors block horizontal alignment");
-        errorsAlignSelect.setAttribute("onChange", "optionsForm.submit();");
+        errorsAlignSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(errorsAlignSelect);
 
         errorsPositionSelect = new Select("errorsPosition");
         errorsPositionSelect.addAll(new String[] { "top", "middle", "bottom" });
         errorsPositionSelect.setTitle("Form errors position");
-        errorsPositionSelect.setAttribute("onChange", "optionsForm.submit();");
+        errorsPositionSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(errorsPositionSelect);
 
         errorsStyle = new TextField("errorsStyle");
         errorsStyle.setTitle("Errors td style attribute");
-        errorsStyle.setAttribute("onChange", "optionsForm.submit();");
+        errorsStyle.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(errorsStyle);
 
         labelAlignSelect = new Select("labelAlign");
         labelAlignSelect.addAll(new String[] { "left", "center", "right" });
         labelAlignSelect.setTitle("Field label alignment");
-        labelAlignSelect.setAttribute("onChange", "optionsForm.submit();");
+        labelAlignSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(labelAlignSelect);
 
         labelsPositionSelect = new Select("labelsPosition");
         labelsPositionSelect.addAll(new String[] {"left", "top"});
         labelsPositionSelect.setTitle("Form labels position");
-        labelsPositionSelect.setAttribute("onChange", "optionsForm.submit();");
+        labelsPositionSelect.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(labelsPositionSelect);
 
         labelStyle = new TextField("labelStyle");
         labelStyle.setTitle("Label td style attribute");
-        labelStyle.setAttribute("onChange", "optionsForm.submit();");
+        labelStyle.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(labelStyle);
 
         disabledCheckbox = new Checkbox("disabled");
@@ -178,7 +178,7 @@ public class FormProperties extends BorderPage {
 
         fieldStyle = new TextField("fieldStyle");
         fieldStyle.setTitle("Field td style attribute");
-        fieldStyle.setAttribute("onChange", "optionsForm.submit();");
+        fieldStyle.setAttribute("onchange", "optionsForm.submit();");
         fieldSet.add(fieldStyle);
 
         validateCheckbox = new Checkbox("validate");
