@@ -46,7 +46,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * Supported card include VISA, MASTER, AMEX, DINERS and DISCOVER.
  * <p/>
- * The CreditCardField uses a JavaScript onKeyPress() integerFilter() method to
+ * The CreditCardField uses a JavaScript onkeypress() integerFilter() method to
  * prevent users from entering invalid characters. To enable number key filtering
  * reference the {@link net.sf.click.util.PageImports} object in the page template.
  *
@@ -200,7 +200,7 @@ public class CreditCardField extends TextField {
         super(name);
         setMaxLength(19);
         setSize(19);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
@@ -214,7 +214,7 @@ public class CreditCardField extends TextField {
         super(name, label);
         setMaxLength(19);
         setSize(19);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 
@@ -252,7 +252,7 @@ public class CreditCardField extends TextField {
         super();
         setMaxLength(19);
         setSize(19);
-        setAttribute("onKeyPress", "javascript:return integerFilter(event);");
+        setAttribute("onkeypress", "javascript:return integerFilter(event);");
         cardTypeSelect.addAll(CARD_OPTIONS);
     }
 

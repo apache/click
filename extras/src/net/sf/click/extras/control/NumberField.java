@@ -62,7 +62,7 @@ import org.apache.commons.lang.StringUtils;
  * {@link #getNumber()} is then the formatted number. It is not the orginal Number
  * passed in. To circumvent formatting use setValue().
  * <p/>
- * The NumberField uses a JavaScript onKeyPress() doubleFilter() method to prevent
+ * The NumberField uses a JavaScript onkeypress() doubleFilter() method to prevent
  * users from entering invalid characters. To enable number key filtering
  * reference the {@link net.sf.click.util.PageImports} object in your page
  * header section. For example:
@@ -146,7 +146,7 @@ public class NumberField extends TextField {
      */
     public NumberField(String name) {
         super(name);
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
         setTextAlign("right");
     }
 
@@ -158,7 +158,7 @@ public class NumberField extends TextField {
      */
     public NumberField(String name, String label) {
         super(name, label);
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
         setTextAlign("right");
     }
 
@@ -191,7 +191,7 @@ public class NumberField extends TextField {
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
     public NumberField() {
-        setAttribute("onKeyPress", "javascript:return doubleFilter(event);");
+        setAttribute("onkeypress", "javascript:return doubleFilter(event);");
         setTextAlign("right");
     }
 
