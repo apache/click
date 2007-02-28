@@ -13,3 +13,6 @@ DOCUMENTATION
 * update Velocity documentation, get latest PDF documents or build them
 * JSP forwarding
 * add page topic writing directly to response
+
+BUILD
+* update to Checkstyle 4.3
