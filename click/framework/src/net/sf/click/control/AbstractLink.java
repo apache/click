@@ -118,6 +118,21 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
+     * Return the "id" attribute value if defined, or null otherwise.
+     *
+     * @see net.sf.click.Control#getId()
+     *
+     * @return HTML element identifier attribute "id" value
+     */
+    public String getId() {
+        if (hasAttributes()) {
+            return getAttribute("id");
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Return the label for the AbstractLink.
      * <p/>
      * If the label value is null, this method will attempt to find a
