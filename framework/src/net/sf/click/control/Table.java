@@ -122,7 +122,7 @@ import org.apache.commons.lang.StringUtils;
  * </ul>
  *
  * To use one of these CSS styles set the table <span class="st">"class"</span>
- * attribute. For examle:
+ * attribute. For example:
  *
  * <pre class="codeJava">
  * <span class="kw">public</span> LineItemsPage() {
@@ -177,7 +177,7 @@ public class Table extends AbstractControl {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
         + "<style type=\"text/css\">\n"
         + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
-        + " th.ascending a {background: url($/click/column-acending-dark.gif) center right no-repeat;}\n"
+        + " th.ascending a {background: url($/click/column-ascending-dark.gif) center right no-repeat;}\n"
         + " th.descending a {background: url($/click/column-descending-dark.gif) center right no-repeat;}\n"
         + "</style>\n";
 
