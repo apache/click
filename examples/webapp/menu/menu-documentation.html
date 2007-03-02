@@ -7,10 +7,6 @@ defined in <a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>.
 <pre class="codeHtml">
 &#35;writeMenu(&#36;rootMenu) </pre>
 
-When the page body loads the JavaScript <tt>initMenu()</tt> function is called to initialize the menus
-dynamic behaviour. See the JavaScript include 
-<a href="$context/source-viewer.htm?filename=menu/menu.js">menu/menu.js</a>
-<p/>
 The example menu pages all extend <tt>MenuPage</tt> which defines a <span class="st">"rootMenu"</span>
 control.
 
@@ -18,8 +14,5 @@ control.
 <span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
 
      <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
-        
-     <span class="kw">public</span> String headInclude = <span class="st">"click/menu.js"</span>;
-     <span class="kw">public</span> String bodyOnload = <span class="st">"initMenu();"</span>;
 
 }</pre>
