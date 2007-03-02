@@ -9,7 +9,6 @@ import net.sf.click.extras.control.Menu;
 public class BorderPage extends Page {
 
     public ActionLink logoutLink = new ActionLink(this, "onLogoutClick");
-    public String headInclude = "click/menu.js";
     public Menu rootMenu = new Menu();
 
 	/**
