@@ -19,7 +19,7 @@ public class LineChart extends BorderPage {
         chart.setChartHeight(300);
         chart.setChartWidth(400);
 
-        chart.addPoint("1",new Integer(145));
+        chart.addPoint("1", new Integer(145));
         chart.addPoint("2", new Integer(0));
         chart.addPoint("3", new Integer(175));
         chart.addPoint("4", new Integer(130));
