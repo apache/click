@@ -389,7 +389,7 @@ public class ClickServlet extends HttpServlet {
      * will be delegated to the configured error page. The default error page
      * is {@link ErrorPage} and the page template is "click/error.htm"
      * <p/>
-     * Applications which wish to provide their own customised error handling
+     * Applications which wish to provide their own customized error handling
      * must subclass ErrorPage and specify their page in the "/WEB-INF/click.xml"
      * application configuration file. For example:
      *
@@ -769,14 +769,14 @@ public class ClickServlet extends HttpServlet {
      * setting format, headers and the forward if a JSP.
      * <p/>
      * This method will also automatically register any public Page controls
-     * in the page's model. When the page is created any public visiblity
+     * in the page's model. When the page is created any public visible
      * page Control variables will be automatically added to the page using
      * the method {@link Page#addControl(Control)} method. If the controls name
      * is not defined it is set to the member variables name before it is added
      * to the page.
      * <p/>
-     * This feature saves you from having to mannually add the controls yourself.
-     * If you dont want the controls automatically added, simply declare them
+     * This feature saves you from having to manually add the controls yourself.
+     * If you don't want the controls automatically added, simply declare them
      * as non public variables.
      * <p/>
      * An example auto control registration is provided below. In this example
@@ -1100,8 +1100,8 @@ public class ClickServlet extends HttpServlet {
      * Ensure the ClickApp and the Velocity WriterPool have been initialized
      * otherwise throw a UnavailableException.
      * <p/>
-     * If the <tt>click-reloadable</tt> a temporarily UnavailableException is
-     * thrown, otherwise if not reloadable then a permantantly
+     * If <tt>app-reloadable</tt> is true a temporarily UnavailableException
+     * is thrown, otherwise if not reloadable then a permanent
      * UnavailableException is thrown.
      *
      * @throws UnavailableException if the application has not been initialized
@@ -1259,7 +1259,7 @@ public class ClickServlet extends HttpServlet {
      * Process all the Pages public fields using the given callback.
      *
      * @param page the page to obtain the fields from
-     * @param callback the fields iteractor callback
+     * @param callback the fields iterator callback
      */
     protected void processPageFields(Page page, FieldCallback callback) {
 
@@ -1300,7 +1300,7 @@ public class ClickServlet extends HttpServlet {
     // ---------------------------------------------------------- Inner Classes
 
     /**
-     * Provdes a package visibility interface for the Context class for
+     * Provides a package visibility interface for the Context class for
      * accessing ClickApp and ClickServlet services.
      *
      * @author Malcolm Edgar
