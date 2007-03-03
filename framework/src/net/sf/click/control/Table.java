@@ -425,6 +425,16 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Return the Column for the given name.
+     *
+     * @param name the name of the column to return
+     * @return the Column for the given name
+     */
+    public Column getColumn(String name) {
+        return (Column) columns.get(name);
+    }
+
+    /**
      * Return the list of table columns.
      *
      * @return the list of table columns
