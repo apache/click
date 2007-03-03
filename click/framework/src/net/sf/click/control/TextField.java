@@ -88,7 +88,7 @@ public class TextField extends Field {
     // ----------------------------------------------------- Instance Variables
 
     /**
-     * The maximum field length validation contraint. If the value is zero this
+     * The maximum field length validation constraint. If the value is zero this
      * validation constraint is not applied. The default value is zero.
      * <p/>
      * If maxLenth is greater than zero, then maxLength is rendered as the
@@ -183,7 +183,7 @@ public class TextField extends Field {
      * If maxLenth is greater than zero, it is rendered as the field
      * attribute 'maxlength'
      *
-     * @return the maximum field length validation contraint
+     * @return the maximum field length validation constraint
      */
     public int getMaxLength() {
         return maxLength;
@@ -208,7 +208,7 @@ public class TextField extends Field {
      * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
-     * @return the minimum field length validation contraint
+     * @return the minimum field length validation constraint
      */
     public int getMinLength() {
         return minLength;
