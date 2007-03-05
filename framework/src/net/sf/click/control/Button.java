@@ -95,9 +95,9 @@ public class Button extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Returns the button onClick attribute value, or null if not defined.
+     * Returns the button onclick attribute value, or null if not defined.
      *
-     * @return the button onClick attribute value, or null if not defined.
+     * @return the button onclick attribute value, or null if not defined.
      */
     public String getOnClick() {
         if (attributes != null) {
@@ -108,9 +108,9 @@ public class Button extends Field {
     }
 
     /**
-     * Sets the button onClick attribute value.
+     * Sets the button onclick attribute value.
      *
-     * @param value the onClick attribute value.
+     * @param value the onclick attribute value.
      */
     public void setOnClick(String value) {
         setAttribute("onclick", value);
