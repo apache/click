@@ -615,6 +615,7 @@ public class FieldSet extends Field {
         buffer.append("\n");
 
         int column = 1;
+        boolean openTableRow = false;
 
         for (int i = 0, size = fieldList.size(); i < size; i++) {
 
@@ -627,6 +628,7 @@ public class FieldSet extends Field {
 
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
+                    openTableRow = true;
                 }
 
                 if (field instanceof Label) {
@@ -713,12 +715,17 @@ public class FieldSet extends Field {
 
                 if (column >= getColumns()) {
                     buffer.append("</tr>\n");
+                    openTableRow = false;
                     column = 1;
                 } else {
                     column++;
                 }
 
             }
+        }
+
+        if (openTableRow) {
+            buffer.append("</tr>\n");
         }
 
         buffer.elementEnd("table");
