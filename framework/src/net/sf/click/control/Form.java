@@ -2208,6 +2208,7 @@ public class Form implements Control {
         buffer.append("-fields\">\n");
 
         int column = 1;
+        boolean openTableRow = false;
 
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
 
@@ -2220,6 +2221,7 @@ public class Form implements Control {
 
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
+                    openTableRow = true;
                 }
 
                 if (field instanceof FieldSet) {
@@ -2320,10 +2322,10 @@ public class Form implements Control {
 
                 if (column >= getColumns()) {
                     buffer.append("</tr>\n");
+                    openTableRow = false;
                     column = 1;
 
                 } else if (field instanceof FieldSet) {
-                    buffer.append("</tr>\n");
                     column++;
 
                 } else {
@@ -2332,6 +2334,11 @@ public class Form implements Control {
             }
 
         }
+
+        if (openTableRow) {
+            buffer.append("</tr>\n");
+        }
+
         buffer.append("</table>\n");
         buffer.append("</td></tr>\n");
     }
