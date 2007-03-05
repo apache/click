@@ -169,11 +169,11 @@ public class FormProperties extends BorderPage {
         fieldSet.add(labelStyle);
 
         disabledCheckbox = new Checkbox("disabled");
-        disabledCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        disabledCheckbox.setAttribute("onclick", "optionsForm.submit();");
         fieldSet.add(disabledCheckbox);
 
         readonlyCheckbox = new Checkbox("readonly");
-        readonlyCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        readonlyCheckbox.setAttribute("onclick", "optionsForm.submit();");
         fieldSet.add(readonlyCheckbox);
 
         fieldStyle = new TextField("fieldStyle");
@@ -182,15 +182,15 @@ public class FormProperties extends BorderPage {
         fieldSet.add(fieldStyle);
 
         validateCheckbox = new Checkbox("validate");
-        validateCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        validateCheckbox.setAttribute("onclick", "optionsForm.submit();");
         fieldSet.add(validateCheckbox);
 
         javaScriptValidateCheckbox = new Checkbox("javaScriptValidate", "JavaScript Validate");
-        javaScriptValidateCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        javaScriptValidateCheckbox.setAttribute("onclick", "optionsForm.submit();");
         fieldSet.add(javaScriptValidateCheckbox);
 
         showBordersCheckbox = new Checkbox("showBorders");
-        showBordersCheckbox.setAttribute("onClick", "optionsForm.submit();");
+        showBordersCheckbox.setAttribute("onclick", "optionsForm.submit();");
         fieldSet.add(showBordersCheckbox);
 
         optionsForm.add(new Submit("restoreDefaults", this, "onRestoreDefaults"));
