@@ -212,15 +212,20 @@ class ClickApp implements EntityResolver {
     /**
      * Initialize the click application.
      *
+     * @param clickLogger the Click runtime logger instance
      * @throws Exception if an error occurs initializing the application
      */
-    public void init() throws Exception {
+    public void init(ClickLogger clickLogger) throws Exception {
+
+        if (clickLogger == null) {
+            throw new IllegalArgumentException("Null clickLogger parameter");
+        }
 
         if (getServletContext() == null) {
             throw new IllegalStateException("servlet context not defined");
         }
 
-        logger = new ClickLogger("Click");
+        logger = clickLogger;
 
         ClickLogger.setInstance(logger);
 
@@ -272,8 +277,8 @@ class ClickApp implements EntityResolver {
 
             // Turn down the Velocity logging level
             if (mode == DEBUG || mode == TRACE) {
-                ClickLogger logger = ClickLogger.getInstance(velocityEngine);
-                logger.setLevel(ClickLogger.WARN_ID);
+                ClickLogger velocityLogger = ClickLogger.getInstance(velocityEngine);
+                velocityLogger.setLevel(ClickLogger.WARN_ID);
             }
 
             // Cache page templates.
