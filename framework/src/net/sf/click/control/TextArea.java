@@ -86,7 +86,7 @@ public class TextArea extends Field {
     protected int cols = 20;
 
     /**
-     * The maximum field length validation contraint. If the value is zero this
+     * The maximum field length validation constraint. If the value is zero this
      * validation constraint is not applied. The default value is zero.
      */
     protected int maxLength = 0;
@@ -212,7 +212,7 @@ public class TextArea extends Field {
      * {@link #maxLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
-     * @return the maximum field length validation contraint
+     * @return the maximum field length validation constraint
      */
     public int getMaxLength() {
         return maxLength;
@@ -234,7 +234,7 @@ public class TextArea extends Field {
      * {@link #minLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
      *
-     * @return the minimum field length validation contraint
+     * @return the minimum field length validation constraint
      */
     public int getMinLength() {
         return minLength;
