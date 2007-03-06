@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -225,7 +225,7 @@ public class ClickServlet extends HttpServlet {
 
             newClickApp.setServletContext(getServletContext());
 
-            newClickApp.init();
+            newClickApp.init(createClickLogger());
 
             logger = newClickApp.getLogger();
 
@@ -1295,6 +1295,18 @@ public class ClickServlet extends HttpServlet {
         }
 
         return typeConverter;
+    }
+
+    /**
+     * Return a new ClickLogger instance to be used for logging output for the
+     * Click runtime. This logger should have the name <tt>"Click"</tt>.
+     * <p/>
+     * You can subclass this method to provide your own logging behaviour.
+     *
+     * @return a new ClickLogger instance to be used for Click runtime logging output
+     */
+    protected ClickLogger createClickLogger() {
+        return new ClickLogger("Click");
     }
 
     // ---------------------------------------------------------- Inner Classes

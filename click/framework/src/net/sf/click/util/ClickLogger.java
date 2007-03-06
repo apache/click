@@ -26,10 +26,16 @@ import org.apache.velocity.runtime.log.LogChute;
  * The ClickLogger is designed to avoid the logging configuration, classpath
  * and appender issues that plague existing logging frameworks on JEE
  * application servers.
- * <p/>
+ *
+ * <h4>Important Note</h4>
+ *
  * This class is intended for internal Click and Velocity use only and should
  * not be used by application code. For application logging please use the
  * Log4J or Commons Logging libraries.
+ * <p/>
+ * If you need to customize the Click runtime logging output, please override
+ * the {@link net.sf.click.ClickServlet#createClickLogger()} method and return
+ * a subclassed ClickLogger.
  *
  * @author Malcolm Edgar
  */
