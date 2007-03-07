@@ -16,15 +16,15 @@ public class CustomersPage extends BorderPage {
 
     public CustomersPage() {
         table.setClass(Table.CLASS_ITS);
-        table.setPageSize(5);
+        table.setPageSize(10);
         table.setShowBanner(true);
         table.setSortable(true);
 
         table.addColumn(new Column("id"));
-        table.addColumn(new Column("name"));
 
         Column column = new Column("email");
         column.setAutolink(true);
+        column.setTitleProperty("name");
         table.addColumn(column);
 
         table.addColumn(new Column("investments"));

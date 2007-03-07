@@ -246,6 +246,12 @@ public class Column implements Serializable {
     /** The parent Table. */
     protected Table table;
 
+    /**
+     * The property name used to populate the &lt;td&gt; "title" attribute.
+     * The default value is null.
+     */
+    protected String titleProperty;
+
     /** The column HTML &lt;td&gt; width attribute. */
     protected String width;
 
@@ -1002,6 +1008,24 @@ public class Column implements Serializable {
     }
 
     /**
+     * Return the property name used to populate the &lt;td&gt; "title" attribute.
+     *
+     * @return the property name used to populate the &lt;td&gt; "title" attribute
+     */
+    public String getTitleProperty() {
+       return titleProperty;
+    }
+
+    /**
+     * Set the property name used to populate the &lt;td&gt; "title" attribute.
+     *
+     * @param property the property name used to populate the &lt;td&gt; "title" attribute
+     */
+    public void setTitleProperty(String property) {
+       titleProperty = property;
+    }
+
+    /**
      * Set the column CSS "vertical-align" style for the header &lt;th&gt; and
      * data &lt;td&gt; elements.
      *
@@ -1051,6 +1075,14 @@ public class Column implements Serializable {
         buffer.elementStart("td");
         buffer.appendAttribute("id", getId() + "_" + rowIndex);
         buffer.appendAttribute("class", getDataClass());
+
+        if (getTitleProperty() != null) {
+            Object titleValue = getProperty(getTitleProperty(), row);
+            if (titleValue != null) {
+                String title = ClickUtils.escapeHtml(titleValue.toString());
+                buffer.appendAttribute("title", title);
+            }
+        }
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
@@ -1197,10 +1229,10 @@ public class Column implements Serializable {
     }
 
     /**
-     * Return the named column property value from the given row object.
+     * Return the column name property value from the given row object.
      * <p/>
      * If the row object is a <tt>Map</tt> this method will attempt to return
-     * the map value for the column {@link #name}.
+     * the map value for the column name.
      * <p/>
      * The row map lookup will be performed using the property name,
      * if a value is not found the property name in uppercase will be used,
@@ -1214,6 +1246,28 @@ public class Column implements Serializable {
      * @throws RuntimeException if an error occurred obtaining the property
      */
     protected Object getProperty(Object row) {
+        return getProperty(getName(), row);
+    }
+
+    /**
+     * Return the column property value from the given row object and property name.
+     * <p/>
+     * If the row object is a <tt>Map</tt> this method will attempt to return
+     * the map value for the column.
+     * <p/>
+     * The row map lookup will be performed using the property name,
+     * if a value is not found the property name in uppercase will be used,
+     * if a value is still not found the property name in lowercase will be used.
+     * If a map value is still not found then this method will return null.
+     * <p/>
+     * Object property values can also be specified using an path expression.
+     *
+     * @param name the name of the property
+     * @param row the row object to obtain the property from
+     * @return the named row object property value
+     * @throws RuntimeException if an error occurred obtaining the property
+     */
+    protected Object getProperty(String name, Object row) {
         if (row instanceof Map) {
             Map map = (Map) row;
 
