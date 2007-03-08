@@ -58,7 +58,7 @@ import org.apache.commons.lang.StringUtils;
  *   {@link #path} property is set
  * </li>
  * <li class="spaced">
- *   {@link #onInit()} method called to complete the initalization of the page
+ *   {@link #onInit()} method called to complete the initialization of the page
  *   after all the dependencies have been set. This is where you should put
  *   any "dynamic" page initialization code which depends upon the request or any
  *   other dependencies.
@@ -79,7 +79,7 @@ import org.apache.commons.lang.StringUtils;
  * <li class="spaced">
  *   {@link #onGet()} method called for any additional GET related processing.
  *   <p/>
- *   Form and field controls should <b>NOT</b> be created or initalized at this
+ *   Form and field controls should <b>NOT</b> be created or initialized at this
  *   point as the control processing stage has already been completed.
  * </li>
  * <li class="spaced">
@@ -87,7 +87,7 @@ import org.apache.commons.lang.StringUtils;
  *   method is often use to perform database queries to load information for
  *   rendering tables.
  *   <p/>
- *   Form and field controls should <b>NOT</b> be created or initalized at this
+ *   Form and field controls should <b>NOT</b> be created or initialized at this
  *   point as the control processing stage has already been completed.
  * </li>
  * <li class="spaced">
@@ -243,8 +243,8 @@ public class Page {
 
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
-               Control control = (Control) getControls().get(i);
-               control.setContext(context);
+                Control control = (Control) getControls().get(i);
+                control.setContext(context);
             }
         }
     }
@@ -321,7 +321,7 @@ public class Page {
      * If forward paths start with a <span class="wr">"/"</span>
      * character the forward path is
      * relative to web applications root context, otherwise the path is
-     * relative to the request's current location.
+     * relative to the requests current location.
      * <p/>
      * For example given a web application deployed to context <tt>mycorp</tt>
      * with the pages:
@@ -492,28 +492,28 @@ public class Page {
      * @param args the message arguments to format
      * @return the named localized message for the page
      */
-     public String getMessage(String name, Object[] args) {
+    public String getMessage(String name, Object[] args) {
         if (args == null) {
             throw new IllegalArgumentException("Null args parameter");
         }
         String value = getMessage(name);
 
         return MessageFormat.format(value, args);
-     }
+    }
 
-     /**
-      * Return a Map of localized messages for the Page.
-      *
-      * @see #getMessage(String)
-      *
-      * @return a Map of localized messages for the Page
-      * @throws IllegalStateException if the context for the Page has not be set
-      */
-     public Map getMessages() {
+    /**
+     * Return a Map of localized messages for the Page.
+     *
+     * @see #getMessage(String)
+     *
+     * @return a Map of localized messages for the Page
+     * @throws IllegalStateException if the context for the Page has not be set
+     */
+    public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
                 messages =
-                    new MessagesMap(getClass(), PAGE_MESSAGES, getContext());
+                        new MessagesMap(getClass(), PAGE_MESSAGES, getContext());
 
             } else {
                 String msg = "Context not set cannot initialize messages";
@@ -534,17 +534,17 @@ public class Page {
     public void addModel(String name, Object value) {
         if (name == null) {
             String msg = "Cannot add null parameter name to "
-                         + getClass().getName() + " model";
+                    + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
         if (value == null) {
             String msg = "Cannot add null " + name + " parameter "
-                         + "to " + getClass().getName() + " model";
+                    + "to " + getClass().getName() + " model";
             throw new IllegalArgumentException(msg);
         }
         if (getModel().containsKey(name)) {
             String msg = getClass().getName() + " model already contains "
-                         + "value named " + name;
+                    + "value named " + name;
             throw new IllegalArgumentException(msg);
         } else {
             getModel().put(name, value);
@@ -686,7 +686,7 @@ public class Page {
 
     /**
      * The on Initialization event handler. This event handler is invoked after
-     * the pages constructor has been called and all the page poperties have
+     * the pages constructor has been called and all the page properties have
      * been set.
      * <p/>
      * Subclasses should place their control initialization code in this method
@@ -733,7 +733,7 @@ public class Page {
      * set to send the request to another Page.
      * <p/>
      * By default this method returns true, subclass may override this method
-     * to provide their security authorisation/authentication mechanism.
+     * to provide their security authorization/authentication mechanism.
      *
      * @return true by default, subclasses may override this method
      */
@@ -753,14 +753,14 @@ public class Page {
      * <h4>Important Note</h4>
      *
      * Form and field controls should <b>NOT</b> be created
-     * or initalized at this point as the control processing stage has already
+     * or initialized at this point as the control processing stage has already
      * been completed. Select option list values should also be populated
      * before the control processing stage is performed so that they can
      * validate the submitted values.
      */
     public void onGet() {
     }
- 
+
     /**
      * The on Post request event handler. This event handler is invoked if the
      * HTTP request method is "POST".
@@ -773,7 +773,7 @@ public class Page {
      * <h4>Important Note</h4>
      *
      * Form and field controls should <b>NOT</b> be created
-     * or initalized at this point as the control processing stage has already
+     * or initialized at this point as the control processing stage has already
      * been completed. Select option list values should also be populated
      * before the control processing stage is performed so that they can
      * validate the submitted values.
@@ -799,7 +799,7 @@ public class Page {
      * <h4>Important Note</h4>
      *
      * Form and field controls should <b>NOT</b> be created
-     * or initalized at this point as the control processing stage has already
+     * or initialized at this point as the control processing stage has already
      * been completed. Select option list values should also be populated
      * before the control processing stage is performed so that they can
      * validate the submitted values.
@@ -816,5 +816,4 @@ public class Page {
      */
     public void onDestroy() {
     }
-
 }
