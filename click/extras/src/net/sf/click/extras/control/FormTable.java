@@ -210,7 +210,7 @@ public class FormTable extends Table {
      *
      * @see net.sf.click.Control#setContext(net.sf.click.Context)
      *
-     * @param context the contex to set
+     * @param context the context to set
      */
     public void setContext(Context context) {
         super.setContext(context);
