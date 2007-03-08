@@ -497,13 +497,13 @@ You would call the macro in your border template with code like this:
 <pre class="codeHtml">
 <span class="red">#</span><span class="blue">writeMenu</span>(<span class="red">$</span>rootMenu) </pre>
 
-An advantage of using a macro to render you menu is that you can reuse the code
+An advantage of using a macro to render your menu is that you can reuse the code
 across different applications, and to modify an applications menu you simply need
 to edit the <tt>WEB-INF/menu.xml</tt> file.
 A good place to define your macros is in the webroot <tt>/macro.vm</tt> file 
 as it is automatically included by Click. 
 <p/>
-Using macros you can create dynamic menu behaviour such as only rendering menus items 
+Using macros you can create dynamic menu behaviour such as only rendering menu items 
 a user is authorized to access with <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
 
 <pre class="codeHtml">
