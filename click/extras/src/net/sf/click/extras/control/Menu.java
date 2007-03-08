@@ -90,7 +90,7 @@ import org.w3c.dom.NodeList;
  *   &lt;td&gt;
  *
  * &lt;div id="searchbar"&gt;
- * &lt;div id="menu"&gt;
+ * &lt;div class="menustyle" id="menu"&gt;
  *   &lt;ul class="menubar" id="dmenu"&gt;
  *     <span class="red">#foreach</span> (<span class="st">$topMenu</span> <span class="red">in</span> <span class="st">$rootMenu.children</span>)
  *       <span class="red">#if</span> (<span class="st">$topMenu.isUserInRoles</span>())
@@ -563,6 +563,19 @@ public class Menu implements Control {
             }
         }
 
+        return false;
+    }
+
+    /**
+     * Return true if any child menus have the user in one of their menu roles.
+     * Otherwise the method will return false.
+     * <p/>
+     * This method internally uses the <tt>HttpServletRequest</tt> function <tt>isUserInRole(rolename)</tt>,
+     * where the rolenames are derived from the {@link #getRoles()} property.
+     *
+     * @return true if the user is in one of the child menu roles, or false otherwise
+     */
+    public boolean isUserInChildMenuRoles() {
         for (Iterator i = getChildren().iterator(); i.hasNext();) {
             Menu child = (Menu) i.next();
             if (child.isUserInRoles()) {
