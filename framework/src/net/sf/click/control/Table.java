@@ -122,7 +122,7 @@ import org.apache.commons.lang.StringUtils;
  * </ul>
  *
  * To use one of these CSS styles set the table <span class="st">"class"</span>
- * attribute. For example:
+ * attribute. For example in a page constructor:
  *
  * <pre class="codeJava">
  * <span class="kw">public</span> LineItemsPage() {
