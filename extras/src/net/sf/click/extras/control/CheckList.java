@@ -36,19 +36,19 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides scrollable check list. This is an implementation of the Checklist
+ * Provides a scrollable check list. This is an implementation of the Checklist
  * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
  * <p/>
  * A scrollable check list is a more userfriendly substitution for
- * multiple-select-boxes. It is a scrollabel div which has many select-boxes.
+ * multiple-select-boxes. It is a scrollabe div which has many select-boxes.
  * <p/>
  * To make the CheckList scrollable set the height of the CheckList through
  * {@link #setHeight(String)}. <b>Note when setting the height it is recommended
- * that the CheckList should not be sortable, because of browser incompaitbilities</b>
+ * that the CheckList should not be sortable, because of browser incompatibilities</b>
  * <p/>
  * The CheckList is also sortable by drag-drop if the
  * {@link #setSortable(boolean)} property is set to true. In this case the
- * method {@link #getSortorder()} returns the keys of all the options wheter
+ * method {@link #getSortorder()} returns the keys of all the options whether
  * they where selected or not in the order provided by the user. Sortable is
  * provided by scriptaculous which only supports on IE6, FF and Safari1.2 and higher. This
  * control is only tested on IE6 and FF on windows. With IE the text of the dragged element
@@ -60,7 +60,7 @@ import org.apache.commons.lang.StringUtils;
  * If a select is required at least one item must be
  * selected so that the input is valid. Other validations are not done.
  * <p/>
- * The Control listener will be invoked in any case wheter the CheckList is valid or not.
+ * The Control listener will be invoked in any case whether the CheckList is valid or not.
  * <p/>
  * The values of the CheckList are provided by {@link net.sf.click.control.Option} objects
  * like for a Select. To populate the CheckList with Options use the add methods.
@@ -72,7 +72,7 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * The select uses the /click/checklist.css style. By providing a style which
  * extends this style the appearance of the list can be changed.
- * To set the additonal style class use setAttribute("class","additionalClass").
+ * To set the additional style class use setAttribute("class","additionalClass").
  * This will append the given class to the default class of this control.
  * Alternatively {@link #addStyle(String)} can be used to set the style of the
  * outer div.
@@ -218,7 +218,7 @@ public class CheckList extends Field {
     }
 
     /**
-     * Add the given option value. This covenience method will create a new
+     * Add the given option value. This convenience method will create a new
      * {@link Option} with the given value and add it to the CheckList. The new
      * Option display label will be the same as its value.
      *
@@ -349,7 +349,7 @@ public class CheckList extends Field {
 
     /**
      * Adds the given style-value pair to the style attribute of the outer div.
-     * Does not check wheter the style is already set.
+     * Does not check whether the style is already set.
      * <p/>
      * Typically used for the width:
      *
@@ -514,7 +514,7 @@ public class CheckList extends Field {
     /**
      * Set the Option list. Note: if the CheckList is sortable
      * than the List <b>must be fully modifiable</b>, because
-     * it will be sorted according to the order choosen by the
+     * it will be sorted according to the order chosen by the
      * user.
      *
      * @param options a list of Option objects
@@ -543,7 +543,7 @@ public class CheckList extends Field {
     }
 
     /**
-     * A list of the values transmitted in the order they are present int the
+     * A list of the values transmitted in the order they are present in the
      * list. This is only available if the list is sortable
      *
      * @return Returns list of strings of the option values.
@@ -568,8 +568,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the list of selected values. The values must be matche the values of
-     * the Options
+     * Set the list of selected values. The specified values must match 
+     * the values of the Options
      *
      * @param values a list of strings or null
      */
@@ -582,7 +582,7 @@ public class CheckList extends Field {
      *
      * @see net.sf.click.control.Field#getValueObject()
      *
-     * @return List of seclecte values (Strings)
+     * @return List of selected values (Strings)
      */
     public Object getValueObject() {
         return getValues();
