@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -44,6 +46,16 @@ public abstract class AbstractLink extends AbstractControl {
 
     /** The Field disabled value. */
     protected boolean disabled;
+
+    /**
+     * The image src path attribute.  If the image src is defined then a
+     * <tt>&lt;img/&gt;</tt> element will rendered inside the anchor link when
+     * using the AbstractLink {@link #toString()} method.
+     * <p/>
+     * If the image src value is prefixed with '/' then the request context path
+     * will be prefixed to the src value when rendered by the control.
+     */
+    protected String imageSrc;
 
     /** The link display label. */
     protected String label;
@@ -115,6 +127,31 @@ public abstract class AbstractLink extends AbstractControl {
      */
     public String getHtmlImports() {
         return null;
+    }
+
+    /**
+     * Return the image src path attribute. If the image src is defined then a
+     * <tt>&lt;img/&gt;</tt> element will rendered inside the anchor link when
+     * using the AbstractLink {@link #toString()} method.
+     * <p/>
+     * If the src value is prefixed with '/' then the request context path will
+     * be prefixed to the src value when rendered by the control.
+     *
+     * @return the image src path attribute
+     */
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    /**
+     * Set the image src path attribute. If the src value is prefixed with
+     * '/' then the request context path will be prefixed to the src value when
+     * rendered by the control.
+     *
+     * @param src the image src path attribute
+     */
+    public void setImageSrc(String src) {
+        this.imageSrc = src;
     }
 
     /**
@@ -353,6 +390,9 @@ public abstract class AbstractLink extends AbstractControl {
      * any attributes, see {@link #setAttribute(String, String)} for an
      * example.
      * <p/>
+     * If the image src is defined then a <tt>&lt;img/&gt;</tt> element will
+     * rendered inside the anchor link instead of the label property.
+     * <p/>
      * This method invokes the abstract {@link #getHref()} method.
      *
      * @see Object#toString()
@@ -396,7 +436,24 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.closeTag();
 
-            buffer.append(getLabel());
+            if (StringUtils.isBlank(getImageSrc())) {
+                buffer.append(getLabel());
+
+            } else {
+                buffer.elementStart("img");
+                buffer.appendAttribute("border", "0");
+                buffer.appendAttribute("alt", getLabel());
+
+                String src = getImageSrc();
+                if (StringUtils.isNotBlank(src)) {
+                    if (src.charAt(0) == '/') {
+                        src = getContext().getRequest().getContextPath() + src;
+                    }
+                    buffer.appendAttribute("src", src);
+                }
+
+                buffer.elementEnd();
+            }
 
             buffer.elementEnd("a");
         }
