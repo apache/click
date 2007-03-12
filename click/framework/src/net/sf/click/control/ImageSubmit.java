@@ -118,7 +118,7 @@ public class ImageSubmit extends Submit {
      * '/' then the request context path will be prefixed to the src value when
      * rendered by the control.
      *
-     * @return the image src attribute
+     * @return the image src path attribute
      */
     public String getSrc() {
         return src;
@@ -129,7 +129,7 @@ public class ImageSubmit extends Submit {
      * '/' then the request context path will be prefixed to the src value when
      * rendered by the control.
      *
-     * @param src the image src attribute
+     * @param src the image src path attribute
      */
     public void setSrc(String src) {
         this.src = src;
