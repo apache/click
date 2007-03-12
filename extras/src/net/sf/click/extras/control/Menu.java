@@ -93,7 +93,7 @@ import org.w3c.dom.NodeList;
  * &lt;div class="menustyle" id="menu"&gt;
  *   &lt;ul class="menubar" id="dmenu"&gt;
  *     <span class="red">#foreach</span> (<span class="st">$topMenu</span> <span class="red">in</span> <span class="st">$rootMenu.children</span>)
- *       <span class="red">#if</span> (<span class="st">$topMenu.isUserInRoles</span>())
+ *       <span class="red">#if</span> (<span class="st">$topMenu.isUserInRoles</span>() || <span class="st">$topMenu.isUserInChildMenuRoles</span>())
  *         <span class="red">#if</span> (<span class="st">$topMenu.children.empty</span>)
  *           &lt;li class="topitem"&gt;<span class="st">$topMenu</span>&lt;/li&gt;
  *         <span class="red">#else</span>
