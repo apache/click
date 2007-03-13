@@ -568,7 +568,7 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the list of selected values. The specified values must match 
+     * Set the list of selected values. The specified values must match
      * the values of the Options
      *
      * @param values a list of strings or null
