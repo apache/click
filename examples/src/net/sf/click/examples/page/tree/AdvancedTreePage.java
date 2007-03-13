@@ -11,18 +11,15 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.extras.control.tree.TreeNode;
 
 /**
- * Example usage of the {@link CheckboxTree} control.
+ * Example usage of some extra functionality of the {@link Tree} control.
  *
  * @author Bob Schellink
  */
-public class CheckboxTreePage extends BorderPage {
+public class AdvancedTreePage extends BorderPage {
     
-    public static final String TREE_NODES_SESSION_KEY = "checkboxTreeNodes";
+    public static final String TREE_NODES_SESSION_KEY = "advancedTreeNodes";
     
     private Tree tree;
-    private Form form;
-    private Submit okSubmit;
-    private Submit resetBtn;
     
     public void onInit() {
         super.onInit();
@@ -30,17 +27,6 @@ public class CheckboxTreePage extends BorderPage {
         //Create the tree and tree model and add it to the page
         tree = buildTree();
         addControl(tree);
-        
-        //The checkbox tree needs to be placed inside a form so all the
-        //checkbox values can be submitted to the server when we submit
-        //the form
-        form = new Form("form");
-        addControl(form);
-        
-        okSubmit = new Submit("select", "Select", this, "onSelectClick");
-        resetBtn = new Submit("reset", "Reset");
-        form.add(okSubmit);
-        form.add(resetBtn);
         
         //Build the options user interface for users to interactively
         //change the tree values.
@@ -51,7 +37,7 @@ public class CheckboxTreePage extends BorderPage {
      * Creates and return a new tree instance.
      */
     public Tree createTree() {
-        return new CheckboxTree("checkboxTree" );
+        return new Tree("advancedTree" );
     }
     
     /**
@@ -70,9 +56,9 @@ public class CheckboxTreePage extends BorderPage {
             //OK we had already nodes stored in the session, so no need
             //to rebuild them. We attach the root node and return.
             tree.setRootNode(existingRootNode);
-
+            
             return tree;
-        }        
+        }
         
         //Create a node representing the root directory with the specified 
         //parameter as the value. Because an id is not specified, a random 
@@ -134,7 +120,6 @@ public class CheckboxTreePage extends BorderPage {
         return true;
     }
     
-    
     //--------------------------------------------------------------------------- NOTE
     //The code below is not specific to the tree control. It was moved here
     //so as not to distract the user from the use of the tree control.
@@ -170,7 +155,7 @@ public class CheckboxTreePage extends BorderPage {
         resetTree();
         
         //Store the users options in the session
-        CheckboxTreeOptions options = new CheckboxTreeOptions();
+        TreeOptions options = new TreeOptions();
         options.javascriptEnabled = jsEnabled.isChecked();
         options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
         setSessionObject(options);
@@ -182,7 +167,7 @@ public class CheckboxTreePage extends BorderPage {
     }
     
     /** Form options holder. */
-    public static class CheckboxTreeOptions implements Serializable {
+    public static class TreeOptions implements Serializable {
         private static final long serialVersionUID = 1L;
         boolean javascriptEnabled= false;
         boolean rootNodeDisplayed = false;
@@ -250,7 +235,7 @@ public class CheckboxTreePage extends BorderPage {
     private void applyOptions() {
         
         //We retrieve our stored options from the session and set the controls state
-        CheckboxTreeOptions options = (CheckboxTreeOptions) getSessionObject(CheckboxTreeOptions.class);
+        TreeOptions options = (TreeOptions) getSessionObject(TreeOptions.class);
         jsEnabled.setChecked(options.javascriptEnabled);
         rootNodeDisplayed.setChecked(options.rootNodeDisplayed);
         

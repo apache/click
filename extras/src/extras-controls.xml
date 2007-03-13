@@ -14,6 +14,7 @@
     <control classname="net.sf.click.extras.control.CreditCardField"/>
     <control classname="net.sf.click.extras.control.EmailField"/>
     <control classname="net.sf.click.extras.control.tree.Tree"/>
+    <control classname="net.sf.click.extras.control.tree.CheckboxTree"/>
     <control classname="net.sf.click.extras.graph.JSLineChart"/>
     <control classname="net.sf.click.extras.graph.JSBarChart"/>
     <control classname="net.sf.click.extras.graph.JSPieChart"/>

@@ -1,4 +1,4 @@
-#tree {
+.treestyle {
    white-space: nowrap;	
    border: 1px solid #ccc;
    width: 20em;
@@ -6,10 +6,10 @@
    line-height: 1.5em;         
    padding-top: 2px;
 }
-#tree ul {
+.treestyle ul {
    /* remove the bullets*/
    list-style-type: none;
-            
+
    /*draw vertical line down the side of the list*/
    background-image: url(images/vertical-line.png);
    background-repeat: repeat-y;
@@ -19,77 +19,77 @@
    padding-left: 0px;
    margin-left: 10px;
 }
-#tree table tr td {
+.treestyle table tr td {
  border: 0;
  margin: 0;
  padding: 0;
  width: 0; 
 }
-#tree ul.level1{
+.treestyle ul.level1{
    margin-left: 0px;
 }
-#tree li {
+.treestyle li {
    /* li is not needed*/
    margin: 0;
    padding: 0;
    padding-left: 10px;
    line-height: 1.5em;
 }
-#tree span.leaf {
+.treestyle span.leaf {
    background-image: url(images/tjunction.png);
    background-repeat: no-repeat;
 }
-#tree span.expanded {
+.treestyle span.expanded {
    background-image: url(images/minus.png);
    background-repeat: no-repeat;
 }
-#tree span.collapsed {
+.treestyle span.collapsed {
    background-image: url(images/plus.png);
    background-repeat: no-repeat;
 }  
-#tree span.leafLastNode {
+.treestyle span.leafLastNode {
    background-image: url(images/corner.png);
    background-repeat: no-repeat;
    background-color: #fff;
 }                       
-#tree span.expandedLastNode {
+.treestyle span.expandedLastNode {
    background-image: url(images/minus-corner.png);
    background-color: #fff;
    background-repeat: no-repeat;
 }
-#tree span.collapsedLastNode {
+.treestyle span.collapsedLastNode {
    background-image: url(images/plus-corner.png);
    background-color: #fff;
    background-repeat: no-repeat;
 }
-#tree span.leafIcon {
+.treestyle span.leafIcon {
     background: url(images/item.png) 0 50% no-repeat;
     padding-left: 18px;
 }
-#tree span.expandedIcon {
+.treestyle span.expandedIcon {
     background: url(images/folder-open.png) 0 50% no-repeat;
     padding-left: 1.1em;
 }
-#tree span.collapsedIcon {
+.treestyle span.collapsedIcon {
     background: url(images/folder-closed.png) 0 50% no-repeat;
     padding-left: 1.1em;
 }
-#tree .spacer {
+.treestyle .spacer {
    padding-left: 15px;
 }
-#tree .selected a,
-#tree .selected {
+.treestyle .selected a,
+.treestyle .selected {
     background-color: #0A246A;
     color: white;
     border:1px solid #000000;
 }
-#tree .unselected {   
+.treestyle .unselected {   
     
 }
  
 /*needed for client side */
-#tree .hide { 
+.treestyle .hide { 
    display : none;
 }
-#tree .show { 
+.treestyle .show { 
 }

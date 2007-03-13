@@ -1,5 +1,7 @@
 This page provides a demonstration of the CheckboxTree component.
 
+<br><br>
+
 $form.startTag()
 
 <table style="margin: 1em;">
@@ -14,13 +16,39 @@ $form.startTag()
             $checkboxTree
         </td>
     </tr>     
+     #foreach ($field in $form.fieldList)
+   #if (!$field.hidden)
+     #if (!$field.valid)
+     <tr>
+       <td colspan="2"> $field.error </td>
+     </tr>
+     #end
+
+   <tr>
+     <td> $field.label: </td><td> $field </td>
+   </tr>
+   #end
+ #end
     <tr>
         <td>
-            $form.fields.okSubmit
-            $form.fields.cancelSubmit
+            $form.fields.select
+            $form.fields.reset
         </td>
     </tr>
     
 </table>
 
 $form.endTag() 
+
+<br>
+
+$optionForm
+
+#if ($isJavascriptEnabled)
+    <br>
+    <p/>When you enable javascript, the tree expand and collapse dynamically without
+    having to round trip to the server. Clicking on a checkbox or node value
+    will highlight the row as if it was selected.
+    <p/>However the selected row is not persisted to the server. You still need
+    to submit the selected rows to the server for that.
+#end

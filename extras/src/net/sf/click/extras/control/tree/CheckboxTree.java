@@ -21,16 +21,19 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
- * Implementation of a tree control that provides checkboxes to enable selection of nodes. This implementation
- * assumes the tree is wrapped inside a html form. Each time the form is submitted, all checkbox
- * values are processed by this control.
- *
- * <p/>Below is screenshot of how the tree will render in a browser.
+ * Implementation of a tree control that provides checkboxes to enable selection
+ * of nodes. This implementation assumes the tree is wrapped inside a html form.
+ * Each time the form is submitted, all checkbox values are processed by this control.
+ * <p/>
+ * Below is screenshot of how the tree will render in a browser.
  *
  * <table cellspacing='10'>
  * <tr>
@@ -98,6 +101,18 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class CheckboxTree extends Tree {
 
+    // -------------------------------------------------------------- Constants
+
+    /** Client side javascript import. This extends on the functions available in {@link Tree} */
+    public static final String JAVASCRIPT_IMPORTS =
+            "<script type=\"text/javascript\" src=\"$/click/tree/checkbox-tree.js\"></script>\n";
+
+    /** The Tree resource file names. */
+    protected static final String[] TREE_RESOURCES = {
+        "/net/sf/click/extras/control/tree/checkbox-tree.js"
+    };
+
+    /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
     // ---------------------------------------------------- Public Constructors
@@ -125,13 +140,49 @@ public class CheckboxTree extends Tree {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Return the HTML head import statements for the CSS stylesheet file:
+     * <tt>click/tree/checkbox-tree.js</tt>.
+     *
+     * <p/>This method calls super.getHtmlImports() to retrieve any imports defined in the
+     * super class.
+     *
+     * @return the HTML head import statements for the control stylesheet
+     */
+    public String getHtmlImports() {
+        String path = getContext().getRequest().getContextPath();
+        StringBuffer buffer = new StringBuffer(100);
+        if (isJavascriptEnabled()) {
+            buffer.append(StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path));
+        }
+        buffer.append(super.getHtmlImports());
+        return buffer.toString();
+    }
+
+    /**
+     * Deploy all files defined in the constant <tt>{@link #TREE_RESOURCES}</tt>
+     * to the <tt>click/tree</tt> web directory when the application is initialized.
+     *
+     * <p/>This method calls super.onDeploy() to copy any files defined in the
+     * super class.
+     *
+     * @param servletContext the servlet context
+     * @see net.sf.click.Control#onDeploy(ServletContext)
+     */
+    public void onDeploy(ServletContext servletContext) {
+        super.onDeploy(servletContext);
+        ClickUtils.deployFiles(servletContext,
+                TREE_RESOURCES,
+                "click/tree");
+    }
+
+    /**
      * This method binds the users request of selected nodes to the tree's nodes.
      *
      * <p>With html forms, only "checked" checkbox values are submitted
      * to the server. So the request does not supply us the information needed to calculate
      * the nodes to be deselected. To find the nodes to deselect,
-     * the newly selected nodes are subtracted from the currently selected nodes. This implies
-     * that the tree's model is stored between http requests.
+     * the newly selected nodes are subtracted from the currently selected nodes. This
+     * implies that the tree's model is stored between http requests.
      *
      * <p>Note: to find the collection of selected nodes, the HttpServletRequest is
      * checked against the value of the field {@link #SELECT_TREE_NODE_PARAM}.
@@ -139,6 +190,14 @@ public class CheckboxTree extends Tree {
     public void bindSelectOrDeselectValues() {
         //find id's of all the new selected node's'
         String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
+
+        //If root node should not be displayed, and user forgot to set
+        //the root node to expanded, we set it here. Otherwise if rootNode is not
+        //expanded the call to getSelectedNodes(false) below will NOT be able to
+        //find visible selected nodes, because root will indicate that all nodes are collapsed.
+        //if (!isRootNodeDisplayed()) {
+        //   this.rootNode.setExpanded(true);
+        //}
 
         //find currently selected nodes
         Collection currentlySelected = getSelectedNodes(false);
@@ -175,9 +234,9 @@ public class CheckboxTree extends Tree {
 
     /**
      * Overridden onProcess() to remove call to {@link #bindSelectOrDeselectValues()}.
-     *
-     * <p/>For this tree implementation {@link #bindSelectOrDeselectValues()} should only be called once the
-     * user submits the form and not on each request.
+     * <p/>
+     * For this tree implementation {@link #bindSelectOrDeselectValues()} should
+     * only be called once the user submits the form and not on each request.
      *
      * @return true if processing of the page should continue, false otherwise
      */
@@ -186,44 +245,42 @@ public class CheckboxTree extends Tree {
         return true;
     }
 
-
     //------------------------------------------------------------Inner classes
 
     /**
      * Demonstrates the usage of a decorator to provide custom tree node
      * rendering.
      */
-    private class DecoratorFactory {
+    protected class DecoratorFactory {
 
         /**
          * Creates and returns a custom created {@link Decorator}.
          *
          * @return custom defined rendering of the tree node
          */
-        private Decorator createDecorator() {
+        protected Decorator createDecorator() {
             return new Decorator() {
                 public String render(Object object, Context context) {
                     TreeNode treeNode = (TreeNode) object;
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-                    //TODO IE HACK. IE7 displays the tree nodes properly alligned when rendered inside a table.  Without the code below
-                    //the icons and node values does not align correctly.
-                    //Firefox and Opera displays nicely without this hack. There might be a better way to fix this ;-)
-                    //A second IE7 issue solved by the code is when using the new zooming feature, the node value is hidden behind the checkbox.
-
+                    //TODO IE HACK. IE7 displays the tree nodes properly alligned when rendered
+                    //inside a table.  Without the code below the icons and node values does
+                    //not align correctly. Firefox and Opera displays nicely without this hack.
+                    //There might be a better way to fix this ;-)
+                    //A second IE7 issue solved by the code is when using the new zooming
+                    //feature, the node value is hidden behind the checkbox.
                     boolean isIE = isIE(context);
                     if (isIE) {
                         buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" "
                                 + "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
                     }
 
-                    //render the icon to display
-                    buffer.append("<span class=\"");
-                    buffer.append(getIconClass(treeNode));
-                    buffer.append("\">");
+                    renderIcon(buffer, treeNode);
 
-                    //TODO IE HACK. Witht a empty span <span></span> IE does not render the icons. Putting a '&nbsp;' in the span
-                    //seemed to work. Perhaps there is a better workaround.
+                    //TODO IE HACK. Witht a empty span <span></span> IE does not render the
+                    //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
+                    //better workaround.
                     buffer.append("&nbsp;");
 
                     buffer.append("</span>");
@@ -232,9 +289,15 @@ public class CheckboxTree extends Tree {
                         buffer.append("</td><td>");
                     }
 
-                    buffer.append("<input onclick=\"checkboxClicked(this, event);\" style=\"margin:0\" type=\"checkbox\"");
+                    buffer.append("<input ");
+                    if (isJavascriptEnabled()) {
+                        buffer.append(((JavascriptStringBuilder2) jsBuilder).checkboxOnClickString);
+                        buffer.appendAttribute("id", ((JavascriptStringBuilder2) jsBuilder).checkboxId);
+                    }
+                    buffer.append(" style=\"margin:0\" type=\"checkbox\"");
                     buffer.appendAttribute("name", SELECT_TREE_NODE_PARAM);
                     buffer.appendAttribute("value", treeNode.getId());
+
                     if (treeNode.isSelected()) {
                         buffer.appendAttribute("checked", "checked");
                     }
@@ -250,6 +313,9 @@ public class CheckboxTree extends Tree {
                         buffer.appendAttribute("class", "selected");
                     } else {
                         buffer.appendAttribute("class", "unselected");
+                    }
+                    if (isJavascriptEnabled()) {
+                        buffer.appendAttribute("id", ((JavascriptStringBuilder2) jsBuilder).selectId);
                     }
                     buffer.closeTag();
 
@@ -269,12 +335,81 @@ public class CheckboxTree extends Tree {
                  * @param treeNode treeNode to render
                  */
                 protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
-                    if (treeNode.getValue() != null) {
-                        buffer.append(treeNode.getValue());
+
+                    if (isJavascriptEnabled()) {
+                        //create a href to interact with the checkbox on browser
+                        buffer.elementStart("a");
+                        StringBuffer tmpBuf = new StringBuffer(getContext().getRequest().getRequestURI());
+                        tmpBuf.append("?").append(SELECT_TREE_NODE_PARAM).append("=").
+                                append(treeNode.getId());
+                        buffer.appendAttribute("href", tmpBuf.toString());
+
+                        //buffer.appendAttribute("onclick", "handleNodeSelection(this, event);return false;");
+                        buffer.append(((JavascriptStringBuilder2) jsBuilder).nodeSelectionString);
+                        buffer.closeTag();
+                        if (treeNode.getValue() != null) {
+                            buffer.append(treeNode.getValue());
+                        }
+                        buffer.elementEnd("a");
+                        buffer.append("\n");
+                    } else {
+                        //just print normal value
+                        if (treeNode.getValue() != null) {
+                            buffer.append(treeNode.getValue());
+                        }
+                        buffer.append("\n");
                     }
-                    buffer.append("\n");
                 }
             };
         }
+    }
+
+    /**
+     * Creates and holds javascript specific strings needed
+     * at rendering time.
+     */
+    protected class JavascriptStringBuilder2 extends JavascriptStringBuilder {
+
+        /** holds the id of the select html element. */
+        protected String selectId;
+
+        /** holds the javascript call to select the node. */
+        protected String nodeSelectionString;
+
+        /** holds the id of the checkbox html element. */
+        protected String checkboxId;
+
+        /** holds the javascript call when user clicks on checkbox. */
+        protected String checkboxOnClickString;
+
+        /**
+         * Constructs a builder instance that generates javascript for the
+         * specified tree node.
+         *
+         * @param treeNode the specific tree node to generate javascript
+         * for
+         */
+        protected JavascriptStringBuilder2(TreeNode treeNode) {
+            super(treeNode);
+            selectId = buildString("s_", treeNode.getId(), "");
+            checkboxId = buildString("c_", treeNode.getId(), "");
+
+            String tmp = buildString(" onclick=\"handleNodeSelection(this,event,'", selectId, "','");
+            nodeSelectionString = buildString(tmp, checkboxId, "'); return false;\"");
+
+            checkboxOnClickString = buildString(" onclick=\"checkboxClicked(this,event,'", selectId, "');\"");
+        }
+    }
+
+    /**
+     * Creates and return a new JavascriptBuilder for the specified tree node.
+     * This implementation overrides the super class method, to
+     * return its own custom JavascriptStringBuilder.
+     *
+     * @param treeNode the specific tree node for the builder
+     * @return newly created JavascriptStringBuilder
+     */
+    protected JavascriptStringBuilder createJavascriptBuilder(TreeNode treeNode) {
+        return new JavascriptStringBuilder2(treeNode);
     }
 }
