@@ -21,8 +21,9 @@
    <property name="jar.spring-core" value="spring-core-1.2.8.jar"/>
    <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.1.jar"/>
-   <property name="jar.velocity" value="velocity-1.5-beta2.jar"/>
+   <property name="jar.velocity" value="velocity-1.5.jar"/>
    
+
    <!--
     Task Definitions
     -->
@@ -357,7 +358,10 @@
       <downloadMacro name="${jar.spring-context}" path="org.springframework"/>
       <downloadMacro name="${jar.spring-core}" path="org.springframework"/>
       <downloadMacro name="${jar.spring-web}" path="org.springframework"/>
-    <downloadMacro name="${jar.velocity}" path="velocity"/>
+      <get src="http://repo1.maven.org/maven/velocity/jars/${jar.velocity}" 
+   	       dest="lib/${jar.velocity}"
+   	       verbose="true"
+   	       usetimestamp="true"/> 
       <ant antfile="build.xml" 
            dir="examples"
            target="get-deps" 
