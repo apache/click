@@ -1705,50 +1705,6 @@ public class Tree extends AbstractControl {
             }
         }
 
-//        public void nodeDeselected(Tree tree, TreeNode node, Context context,
-//                boolean oldValue) {
-//            TreeNode[] nodes = getPathToRoot(node);
-//
-//            //TODO merge back
-//            boolean hasChildren = false;
-//            String id = ((TreeNode) nodes[0]).getId();
-//            Entry entry = (Entry) pathTracker.get(id);
-//            if (entry == null) {
-//                return;
-//            }
-//            hasChildren = entry.count > 1;
-//
-//            //entry can be null???
-//            if (entry.count > 1) {
-//                entry.count--;
-//            } else {
-//                pathTracker.remove(id);
-//            }
-//
-//            for (int i = 1; i < nodes.length; i++) {
-//                TreeNode currentNode = (TreeNode) nodes[i];
-//                id = currentNode.getId();
-//                entry = (Entry) pathTracker.get(id);
-//                if (entry != null) {
-//                    if (entry.count > 1) { //if count > 1 then there are definitely children
-//                        entry.count--;
-//
-//                        //If currentNode.isSelected == false, there is another sibling
-//                        //(or one of its children recursively) of the currentNode that
-//                        //are the lastNode.
-//                        if (entry.count == 1 && currentNode.isSelected()) {
-//                            if (!hasChildren) {
-//                                hasChildren = true;
-//                                entry.lastNodeInPath = true;
-//                            }
-//                        }
-//                    } else {
-//                        pathTracker.remove(id);
-//                    }
-//                }
-//            }
-//        }
-
         /**
          * @see TreeListener#nodeExpanded(Tree, TreeNode, Context, boolean)
          *
