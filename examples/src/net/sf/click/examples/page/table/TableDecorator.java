@@ -22,9 +22,9 @@ public class TableDecorator extends BorderPage {
     public Table table = new Table();
     public Customer customerDetail;
 
-    private ActionLink viewLink = new ActionLink("view", this, "onViewClick");
-    private PageLink editLink = new PageLink("edit", EditCustomer.class);
-    private ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
+    public ActionLink viewLink = new ActionLink("view", this, "onViewClick");
+    public PageLink editLink = new PageLink("edit", EditCustomer.class);
+    public ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
 
     public TableDecorator() {
         // Setup customers table
@@ -52,17 +52,13 @@ public class TableDecorator extends BorderPage {
         table.addColumn(column);
 
         viewLink.setTitle("View customer details");
-        table.addControl(viewLink);
 
         editLink.setListener(this, "onEditClick");
         editLink.setTitle("Edit customer details");
         editLink.setParameter("referrer", "/table/table-decorator.htm");
-        table.addControl(editLink);
 
         deleteLink.setTitle("Delete customer record");
-        deleteLink.setAttribute
-            ("onclick", "return window.confirm('Are you sure you want to delete this record?');");
-        table.addControl(deleteLink);
+        deleteLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
 
         column = new Column("Action");
         column.setDecorator(new Decorator() {
@@ -70,13 +66,8 @@ public class TableDecorator extends BorderPage {
                 Customer customer = (Customer) row;
                 String id = String.valueOf(customer.getId());
 
-                viewLink.setContext(context);
                 viewLink.setValue(id);
-
-                editLink.setContext(context);
                 editLink.setParameter("id", id);
-
-                deleteLink.setContext(context);
                 deleteLink.setValue(id);
 
                 return viewLink.toString() + " | " +

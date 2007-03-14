@@ -29,7 +29,11 @@ public class CustomersPage extends BorderPage {
 
         table.addColumn(new Column("investments"));
 
+        deleteLink.setImageSrc("/images/delete-16px.gif");
+        deleteLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
+
         column = new Column("Action");
+        column.setTextAlign("center");
         column.setDecorator(new LinkDecorator(table, deleteLink, "id"));
         column.setSortable(false);
         table.addColumn(column);
