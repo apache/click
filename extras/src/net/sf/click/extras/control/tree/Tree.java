@@ -1611,7 +1611,6 @@ public class Tree extends AbstractControl {
          * @return true if the specified node is part of the users selected
          * path, false otherwise
          */
-        //TODO rename this method
         public boolean tracked(TreeNode treeNode) {
             Entry entry = (Entry) pathTracker.get(treeNode.getId());
             if (entry == null || entry.lastNodeInPath) {
