@@ -293,7 +293,7 @@ public class HtmlStringBuffer {
         }
 
         if (!attributes.isEmpty()) {
-            append(" style=\"{");
+            append(" style=\"");
 
             for (Iterator i = attributes.entrySet().iterator(); i.hasNext();) {
                 Map.Entry entry = (Map.Entry) i.next();
@@ -306,7 +306,7 @@ public class HtmlStringBuffer {
                 append(";");
             }
 
-            append("}\"");
+            append("\"");
         }
     }
 
