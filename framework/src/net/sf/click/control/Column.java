@@ -998,11 +998,18 @@ public class Column implements Serializable {
 
     /**
      * Set the column CSS "text-align" style for the header &lt;th&gt; and
-     * data &lt;td&gt; elements.
+     * data &lt;td&gt; elements.  Valid values include:
+     * <tt>[left, right, center]</tt>
      *
-     * @param align the CSS "text-align" value: <tt>["left", "right", "center"]</tt>
+     * @param align the CSS "text-align" value: <tt>[left, right, center]</tt>
      */
     public void setTextAlign(String align) {
+        if (align != null && "middle".equalsIgnoreCase(align)) {
+            String msg =
+                "\"middle\" is not a valid CSS \"text-align\" "
+                + "value, use \"center\" instead";
+            throw new IllegalArgumentException(msg);
+        }
         //setHeaderStyle("text-align", align);
         setDataStyle("text-align", align);
     }
@@ -1027,11 +1034,19 @@ public class Column implements Serializable {
 
     /**
      * Set the column CSS "vertical-align" style for the header &lt;th&gt; and
-     * data &lt;td&gt; elements.
+     * data &lt;td&gt; elements. Valid values include:
+     * <tt>[baseline | sub | super | top | text-top | middle | bottom |
+     * text-bottom | &lt;percentage&gt; | &lt;length&gt; | inherit]</tt>
      *
      * @param align the CSS "vertical-align" value
      */
     public void setVerticalAlign(String align) {
+        if (align != null && "center".equalsIgnoreCase(align)) {
+            String msg =
+                "\"center\" is not a valid CSS \"vertical-align\" "
+                + "value, use \"middle\" instead";
+            throw new IllegalArgumentException(msg);
+        }
         setHeaderStyle("vertical-align", align);
         setDataStyle("vertical-align", align);
     }
