@@ -389,7 +389,9 @@ public class Context {
      *
      * @param name the cookie name
      * @param value the cookie value
-     * @param maxAge the maximum age of the cookie in seconds
+     * @param maxAge the maximum age of the cookie in seconds. A negative
+     * value will expire the cookie at the end of the session, while 0 will delete
+     * the cookie.
      * @return the Cookie object created and set in the response
      */
     public Cookie setCookie(String name, String value, int maxAge) {
