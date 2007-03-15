@@ -442,7 +442,12 @@ public abstract class AbstractLink extends AbstractControl {
             } else {
                 buffer.elementStart("img");
                 buffer.appendAttribute("border", "0");
-                buffer.appendAttribute("alt", getLabel());
+
+                if (getTitle() != null) {
+                    buffer.appendAttribute("alt", getTitle());
+                } else {
+                    buffer.appendAttribute("alt", getLabel());
+                }
 
                 String src = getImageSrc();
                 if (StringUtils.isNotBlank(src)) {
