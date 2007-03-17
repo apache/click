@@ -1466,7 +1466,8 @@ public class Tree extends AbstractControl {
     protected transient JavascriptPathTracker javascriptTracker;
 
     /**
-     * <strong>This class is only meant for developers of this control, not users.</strong>
+     * <strong>Please Note</strong> this class is only meant for developers of
+     * this control, not users.
      * <p/>
      * Manages the client side javascript behavior by tracking the client's
      * selected tree paths.
