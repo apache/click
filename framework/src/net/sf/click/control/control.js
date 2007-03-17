@@ -1,3 +1,30 @@
+/*
+ * Add a function to the window.onload event
+ * without removing the old event functions.
+ * 
+ * Example usage:
+ * addLoadEvent(function () {
+ *	initChecklist();
+ * });
+ * 
+ * See Simon Willison's blog 
+ * http://simon.incutio.com/archive/2004/05/26/addLoadEvent
+ */
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	
+	if (typeof window.onload != "function") {
+		window.onload = func;
+	} else {
+		window.onload = function () {
+			if (oldonload) {
+				oldonload();
+			}
+			func();
+		}
+	}
+}
+
 function doubleFilter(event) {
     var keyCode;
     if (document.all) {
@@ -170,6 +197,21 @@ function validateRadioGroup(pathName, required, msgs) {
             }
         }
         return msgs[0];
+    }
+}
+ 
+function validateFileField(id, required, msgs) {
+    var field = document.getElementById(id);
+    if (field) {
+        var value = trim(field.value);
+        if (required) {
+            if (value.length == 0) {
+                setFieldErrorColor(field);
+                return msgs[0];
+            }
+        }
+    } else {
+        return 'Field ' + id + ' not found.';
     }
 }
 
