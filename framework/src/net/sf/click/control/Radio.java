@@ -139,6 +139,75 @@ public class Radio extends Field {
     }
 
     /**
+     * Return the field display label.
+     * <p/>
+     * If the label value is null, this method will attempt to find a
+     * localized label message in the parent messages using the key:
+     * <p/>
+     * If the Radio name attribute is not null:
+     * <blockquote>
+     * <tt>super.getName() + ".label"</tt>
+     * </blockquote>
+     * If the Radio name attribute is null and the parent of the Radio is the RadioGroup:
+     * <blockquote>
+     * <tt>parent.getName() + "." + getValue() + ".label"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
+     * If a value still cannot be found then the Field name will be
+     * the radio value.
+     * <p/>
+     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * <tt>CustomerPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">gender.M</span>.label=<span class="red">Male</span>
+     * <span class="st">gender.F</span>.label=<span class="red">Female</span> </pre>
+     *
+     * The page Radio code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+     *
+     *     <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+     *
+     *     <span class="kw">private</span> RadioGroup radioGroup = <span class="kw">new</span> RadioGroup(<span class="st">"gender"</span>);
+     *
+     *     <span class="kw">public</span> CustomerPage() {
+     *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"M"</span>));
+     *         radioGroup.add(<span class="kw">new</span> Radio(<span class="st">"F"</span>));
+     *         form.add(radioGroup);
+     *
+     *         ..
+     *     }
+     * } </pre>
+     *
+     * Will render the Radio label properties as:
+     * <pre class="codeHtml">
+     * &lt;input type="radio" name="<span class="st">gender</span>" value="<span class="st">M</span>"&gt;&lt;label&gt;<span class="red">Male</span>&lt;/label&gt;&lt;/label&gt;&lt;br/&gt;
+     * &lt;input type="radio" name="<span class="st">gender</span>" value="<span class="st">F</span>"&gt;&lt;label&gt;<span class="red">Female</span>&lt;/label&gt;&lt;/label&gt; </pre>
+     *
+     * @return the display label of the Field
+     */
+    public String getLabel() {
+        if (label == null) {
+            if (super.getName() != null) {
+                label = getMessage(super.getName() + ".label");
+            } else {
+                Object parent = getParent();
+                if (parent instanceof RadioGroup) {
+                    RadioGroup radioGroup = (RadioGroup) parent;
+                   label = getMessage(
+                        radioGroup.getName() + "." + getValue() + ".label");
+                }
+            }
+        }
+        if (label == null) {
+            label = getValue();
+        }
+        return label;
+    }
+
+    /**
      * Return the name of the Radio field. If the Radio name attribute has not
      * been explicitly set, this method will return its parent RadioGroup's
      * name if defined.
@@ -223,6 +292,7 @@ public class Radio extends Field {
      * @return the HTML rendered Radio string
      */
     public String toString() {
+        String id = getId();
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         buffer.elementStart("input");
@@ -230,7 +300,7 @@ public class Radio extends Field {
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("value", getValue());
-        buffer.appendAttribute("id", getId());
+        buffer.appendAttribute("id", id);
         buffer.appendAttribute("title", getTitle());
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
@@ -253,11 +323,11 @@ public class Radio extends Field {
 
         buffer.elementEnd();
 
-        if (label != null) {
-            buffer.appendEscaped(label);
-        } else {
-            buffer.appendEscaped(getValue());
-        }
+        buffer.elementStart("label");
+        buffer.appendAttribute("for", id);
+        buffer.closeTag();
+        buffer.appendEscaped(getLabel());
+        buffer.elementEnd("label");
 
         // radio element does not support "readonly" element, so as a work around
         // we make the field "disabled" and render a hidden field to submit its value

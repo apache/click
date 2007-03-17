@@ -669,6 +669,7 @@ public class FieldSet extends Field {
                         buffer.append(form.getLabelNotRequiredPrefix());
                     }
                     buffer.elementStart("label");
+                    buffer.appendAttribute("for", field.getId());
                     if (field.isDisabled()) {
                         buffer.appendAttributeDisabled();
                     }
