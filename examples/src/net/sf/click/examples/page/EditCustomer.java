@@ -2,6 +2,7 @@ package net.sf.click.examples.page;
 
 import net.sf.click.Page;
 import net.sf.click.control.Checkbox;
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.control.Submit;
@@ -39,26 +40,29 @@ public class EditCustomer extends BorderPage {
 
         form.add(idField);
 
+        FieldSet fieldSet = new FieldSet("customer");
+        form.add(fieldSet);
+
         TextField nameField = new TextField("name", true);
         nameField.setMinLength(5);
         nameField.setFocus(true);
-        form.add(nameField);
+        fieldSet.add(nameField);
 
-        form.add(new EmailField("email"));
+        fieldSet.add(new EmailField("email"));
 
         IntegerField ageField = new IntegerField("age");
         ageField.setMinValue(1);
         ageField.setMaxValue(120);
         ageField.setWidth("40px");
-        form.add(ageField);
+        fieldSet.add(ageField);
 
         DoubleField holdingsField = new DoubleField("holdings");
         holdingsField.setTextAlign("right");
-        form.add(holdingsField);
+        fieldSet.add(holdingsField);
 
-        form.add(new InvestmentSelect("investments"));
-        form.add(new DateField("dateJoined"));
-        form.add(new Checkbox("active"));
+        fieldSet.add(new InvestmentSelect("investments"));
+        fieldSet.add(new DateField("dateJoined"));
+        fieldSet.add(new Checkbox("active"));
 
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new Submit("cancel", this, "onCancelClick"));
