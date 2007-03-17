@@ -161,6 +161,12 @@ public class FieldColumn extends Column {
 
         Field field = getField();
 
+        //fallback to super implementation
+        if (field == null) {
+            super.renderTableDataContent(row, buffer, context, rowIndex);
+            return;
+        }
+        
         field.setName(getName() + "_" + rowIndex);
         field.setContext(context);
 
