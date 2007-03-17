@@ -201,7 +201,9 @@ public class FormTable extends Table {
         super.addColumn(column);
         if (column instanceof FieldColumn) {
             FieldColumn fieldColumn = (FieldColumn) column;
-            fieldColumn.getField().setForm(getForm());
+            if (fieldColumn.getField() != null) {
+                fieldColumn.getField().setForm(getForm());
+            }
         }
     }
 
@@ -221,6 +223,7 @@ public class FormTable extends Table {
 
         form.add(new HiddenField(PAGE, String.class));
         form.add(new HiddenField(COLUMN, String.class));
+        form.add(new HiddenField(ASCENDING, String.class));
     }
 
     /**
@@ -290,11 +293,19 @@ public class FormTable extends Table {
             columnField.onProcess();
             setSortedColumn(columnField.getValue());
 
+            Field ascendingField = getForm().getField(ASCENDING);
+            ascendingField.onProcess();
+            setSortedAscending("true".equals(ascendingField.getValue()));
 
             // Range sanity check
             int pageNumber = Math.min(getPageNumber(), getRowList().size() - 1);
             pageNumber = Math.max(pageNumber, 0);
             setPageNumber(pageNumber);
+
+            //Have to sort list here before we process each field. Otherwise if
+            //sortRowList() is only called in Table.toString(), the fields values set here
+            //will not correspond to their rows in the rowList.
+            sortRowList();
 
             int firstRow = getFirstRow();
             int lastRow = getLastRow();
@@ -335,6 +346,23 @@ public class FormTable extends Table {
                     }
                 }
             }
+        } else {
+            String page = getContext().getRequestParameter(PAGE);
+            form.getField(PAGE).setValue(page);
+
+            String column = getContext().getRequestParameter(COLUMN);
+            form.getField(COLUMN).setValue(column);
+
+            String ascending = getContext().getRequestParameter(ASCENDING);
+            form.getField(ASCENDING).setValue(ascending);
+
+            //Flip sorting order
+            //Table.onProcess() flips the sort order, so we apply a flip here as well so that
+            //the value of ASCENDING field in the form is in sync with the table.
+            String sort = getContext().getRequestParameter(SORT);
+            if ("true".equals(sort) || ascending == null) {
+                form.getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
+            }
         }
 
         return super.onProcess();
@@ -354,8 +382,8 @@ public class FormTable extends Table {
         }
 
         int bufferSize =
-            (getColumnList().size() * 60) * (getRowList().size() + 1)
-            + 256;
+                (getColumnList().size() * 60) * (getRowList().size() + 1)
+                + 256;
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
