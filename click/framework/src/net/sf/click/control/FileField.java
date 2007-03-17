@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import java.text.MessageFormat;
+
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.fileupload.FileItem;
@@ -63,7 +65,27 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class FileField extends Field {
 
+    // -------------------------------------------------------------- Constants
+
     private static final long serialVersionUID = 1L;
+
+    /**
+     * The field validation JavaScript function template.
+     * The function template arguments are: <ul>
+     * <li>0 - is the field id</li>
+     * <li>1 - is the Field required status</li>
+     * <li>2 - is the localized error message</li>
+     * </ul>
+     */
+    protected final static String VALIDATE_FILEFIELD_FUNCTION =
+        "function validate_{0}() '{'\n"
+        + "   var msg = validateFileField(''{0}'',{1}, [''{2}'']);\n"
+        + "   if (msg) '{'\n"
+        + "      return msg + ''|{0}'';\n"
+        + "   '}' else '{'\n"
+        + "      return null;\n"
+        + "   '}'\n"
+        + "'}'\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -215,6 +237,25 @@ public class FileField extends Field {
      */
     public String getType() {
         return "file";
+    }
+
+    /**
+     * Return the FileField JavaScript client side validation function.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        if (isRequired()) {
+            Object[] args = new Object[3];
+            args[0] = getId();
+            args[1] = String.valueOf(isRequired());
+            args[2] = getMessage("file-required-error", getErrorLabel());
+
+            return MessageFormat.format(VALIDATE_FILEFIELD_FUNCTION, args);
+
+        } else {
+            return null;
+        }
     }
 
     // --------------------------------------------------------- Public Methods
