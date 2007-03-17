@@ -8,7 +8,14 @@
 th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
+}
+
+th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report {
 	vertical-align: top;
+}
+
+td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+	vertical-align: baseline;
 }
 
 th.ascending, th.descending {
@@ -65,12 +72,10 @@ table.complex, table.complex td, table.complex th {
 table.complex th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.complex td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* isi style */
@@ -81,12 +86,10 @@ table.isi, table.isi td, table.isi th {
 table.isi th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.isi td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* its style */
@@ -103,7 +106,6 @@ table.its, table.its td, table.its th {
 table.its th, table.its td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 
 /* mars style */
@@ -123,12 +125,10 @@ table.mars, table.mars td, table.mars th {
 table.mars th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.mars td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* nocol style */
@@ -139,12 +139,10 @@ table.nocol tbody td,table.nocol tbody th {
 table.nocol th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.nocol td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* simple style */
@@ -164,12 +162,10 @@ table.simple, table.simple td, table.simple th {
 table.simple th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.simple td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* report style */
@@ -206,12 +202,10 @@ table.report tbody tr{
 table.report th {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: top;
 }
 table.report td {
 	padding: 2px 4px 2px 4px;
 	text-align: left;
-	vertical-align: baseline;
 }
 
 /* table pagination styles */
