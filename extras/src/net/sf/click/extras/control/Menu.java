@@ -183,6 +183,7 @@ public class Menu implements Control {
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>\n"
+        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"$/click/menu.js\"></script>\n"
         + "<script type=\"text/javascript\">addLoadEvent( function() { initMenu() } );</script>\n";
 
