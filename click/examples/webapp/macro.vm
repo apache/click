@@ -1,3 +1,35 @@
+#*********************************
+ * Write drop down JavaScrip menu
+ *********************************#
+
+#macro( writeMenu $rootMenu )
+
+<table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
+ <tr>
+  <td>
+ <div class="menustyle" id="menu">
+  <ul class="menubar" id="dmenu">
+    #foreach ($topMenu in $rootMenu.children)
+      #if ($topMenu.children.empty)
+        <li class="topitem">$topMenu</li>
+      #else
+		<li class="topitem">$topMenu
+		  <ul class="submenu"
+          #foreach ($subMenu in $topMenu.children)
+            ><li>$subMenu</li
+		  #end
+          ></ul>
+		</li>
+      #end
+    #end
+  </ul>
+ </div>
+  </td>
+ </tr>
+</table>
+
+#end
+
 
 #*********************
  * Write generic form
@@ -52,39 +84,6 @@ $form.startTag()
  </table> 
  
 $form.endTag()
-
-#end
-
-
-#*********************************
- * Write drop down JavaScrip menu
- *********************************#
-
-#macro( writeMenu $rootMenu )
-
-<table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
- <tr>
-  <td>
- <div class="menustyle" id="menu">
-  <ul class="menubar" id="dmenu">
-    #foreach ($topMenu in $rootMenu.children)
-      #if ($topMenu.children.empty)
-        <li class="topitem">$topMenu</li>
-      #else
-		<li class="topitem">$topMenu
-		  <ul class="submenu"
-          #foreach ($subMenu in $topMenu.children)
-            ><li>$subMenu</li
-		  #end
-          ></ul>
-		</li>
-      #end
-    #end
-  </ul>
- </div>
-  </td>
- </tr>
-</table>
 
 #end
 
