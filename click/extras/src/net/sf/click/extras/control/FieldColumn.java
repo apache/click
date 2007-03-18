@@ -166,7 +166,7 @@ public class FieldColumn extends Column {
             super.renderTableDataContent(row, buffer, context, rowIndex);
             return;
         }
-        
+
         field.setName(getName() + "_" + rowIndex);
         field.setContext(context);
 
