@@ -334,7 +334,7 @@ public class LinkDecorator implements Decorator {
                     if (StringUtils.isBlank(link.getImageSrc())) {
                         buffer.append(getLinkSeparator());
                     } else {
-                        buffer.append(" ");                        
+                        buffer.append(" ");
                     }
                 }
 
