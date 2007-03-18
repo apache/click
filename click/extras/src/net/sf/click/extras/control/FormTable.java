@@ -356,9 +356,9 @@ public class FormTable extends Table {
             String ascending = getContext().getRequestParameter(ASCENDING);
             form.getField(ASCENDING).setValue(ascending);
 
-            //Flip sorting order
-            //Table.onProcess() flips the sort order, so we apply a flip here as well so that
-            //the value of ASCENDING field in the form is in sync with the table.
+            // Flip sorting order
+            // Table.onProcess() flips the sort order, so we apply a flip here as well so that
+            // the value of ASCENDING field in the form is in sync with the table.
             String sort = getContext().getRequestParameter(SORT);
             if ("true".equals(sort) || ascending == null) {
                 form.getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
