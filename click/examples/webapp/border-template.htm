@@ -1,4 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>	
 <title>Click Examples - $title</title>
@@ -8,17 +7,17 @@ $imports
 </head>
 <body #if($bodyOnload) onload="$bodyOnload" #end>
  	
-  <div id="header">
-    <a id="clickLink" target="blank" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
-  	<span id="title">$title</span>
-  	<a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
-  </div>
+<div id="header">
+  <a id="clickLink" target="blank" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+  <span id="title">$title</span>
+  <a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
+</div>
 
 #writeTemplateMenu()
 
-  <div id="container">
-    #parse($path)
-  </div>
+<div id="container">
+#parse($path)
+</div>
 
 </body>
 </html>
