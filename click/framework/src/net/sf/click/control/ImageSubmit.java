@@ -94,6 +94,22 @@ public class ImageSubmit extends Submit {
     }
 
     /**
+     * Create a ImageSubmit button with the given name, image src path, listener
+     * object and listener method. If the src path value is prefixed with "/"
+     * the request context path will be prefixed to the src value when rendered
+     * in the control.
+     *
+     * @param name the button name
+     * @param src the image src path attribute
+     * @param listener the listener target object
+     * @param method the listener method to call
+     */
+    public ImageSubmit(String name, String src, Object listener, String method) {
+        super(name, listener, method);
+        setSrc(src);
+    }
+
+    /**
      * Create an ImageSubmit button with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
