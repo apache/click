@@ -1,8 +1,8 @@
 package net.sf.click.examples.page.tree;
 
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.control.tree.Tree;
-import net.sf.click.extras.control.tree.TreeNode;
+import net.sf.click.extras.tree.Tree;
+import net.sf.click.extras.tree.TreeNode;
 
 /**
  * Example usage of the {@link Tree} control.

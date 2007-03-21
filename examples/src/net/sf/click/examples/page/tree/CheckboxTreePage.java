@@ -3,12 +3,12 @@ package net.sf.click.examples.page.tree;
 import java.io.Serializable;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
-import net.sf.click.extras.control.tree.CheckboxTree;
-import net.sf.click.extras.control.tree.Tree;
+import net.sf.click.extras.tree.CheckboxTree;
+import net.sf.click.extras.tree.Tree;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.control.tree.TreeNode;
+import net.sf.click.extras.tree.TreeNode;
 
 /**
  * Example usage of the {@link CheckboxTree} control.
