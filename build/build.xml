@@ -463,9 +463,9 @@ Please ensure you have configured build.properties</echo>
       <copy file="documentation/images/table.png"
             todir="documentation/docs/click-api/net/sf/click/control"/>
       <copy file="documentation/images/tree.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control/tree"/>
+            todir="documentation/docs/extras-api/net/sf/click/extras/tree"/>
       <copy file="documentation/images/checkbox-tree.png"
-            todir="documentation/docs/extras-api/net/sf/click/extras/control/tree"/>
+            todir="documentation/docs/extras-api/net/sf/click/extras/tree"/>
       <copy file="documentation/images/line-chart.png"
              todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
       <copy file="documentation/images/bar-chart.png"
