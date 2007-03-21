@@ -661,11 +661,11 @@ public class Menu implements Control {
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
-        if (isExternal() || path.equals("#")) {
-            return path;
+        if (isExternal() || "#".equals(getPath())) {
+            return getPath();
 
         } else {
-            return getContext().getRequest().getContextPath() + "/" + path;
+            return getContext().getRequest().getContextPath() + "/" + getPath();
         }
     }
 
@@ -780,7 +780,7 @@ public class Menu implements Control {
             String href = getHref();
             buffer.appendAttribute("href", href);
 
-            if (href.equals("#")) {
+            if ("#".equals(href)) {
                 //If hyperlink does not return false here, clicking on it will scroll
                 //to the top of the page.
                 buffer.appendAttribute("onclick", "return false;");
