@@ -80,6 +80,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *
  * <pre class="codeConfig">
  * &lt;web-app&gt;
+ *
  *   &lt;filter&gt;
  *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
@@ -92,7 +93,8 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *
  *   &lt;servlet&gt;
  *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
- *   ..
+ *     ..
+ *
  * &lt;/web-app&gt; </pre>
  *
  * An example data context filter configuration in the web application's
@@ -104,7 +106,9 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * the database.
  *
  * <pre class="codeConfig">
+ *
  * &lt;web-app&gt;
+ *
  *   &lt;filter&gt;
  *     &lt;filter-name&gt;<span class="blue">data-context-filter</span>&lt;/filter-name&gt;
  *     &lt;filter-class&gt;<span class="red">net.sf.click.extras.cayenne.DataContextFilter</span>&lt;/filter-class&gt;
@@ -125,7 +129,8 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  *
  *   &lt;servlet&gt;
  *     &lt;servlet-name&gt;<span class="green">click-servlet</span>&lt;/servlet-name&gt;
- *   ..
+ *     ..
+ *
  * &lt;/web-app&gt; </pre>
  *
  * <h3>Examples</h3>
