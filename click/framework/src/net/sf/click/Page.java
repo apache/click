@@ -134,7 +134,13 @@ public class Page {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The request context. */
+    /**
+     * The request context.
+     * <p/>
+     * Please not the context will not be available when pages constructor is
+     * invoked. The context will be first available when the {@link #onInit()}
+     * method is called.
+     */
     protected transient Context context;
 
     /** The list of page controls. */
@@ -221,6 +227,10 @@ public class Page {
 
     /**
      * Return the request context of the page.
+     * <p/>
+     * Please not the context will not be available when pages constructor is
+     * invoked. The context will be first available when the {@link #onInit()}
+     * method is called.
      *
      * @return the request context of the page
      */

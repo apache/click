@@ -66,28 +66,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *
  * The SpringClickServlet support Spring Page injection in two ways.
  *
- * <h4>Spring Instantiated Pages</h4>
- *
- * With Spring instantiated pages you define your Pages as beans in a Spring
- * appliction context XML file. For example in this file the Page bean id maps
- * to the page class name:
- *
- * <pre class="codeConfig">
- * &lt;beans&gt;
- *
- *    &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
- *         singleton="false"&gt;
- *       &lt;property name="userService" ref="userService"/&gt;
- *    &lt;/bean&gt;
- *
- * &lt;/beans&gt; </pre>
- *
- * <b>Please Note</b> ensure that your Page bean is not a singleton, otherwise
- * the page instance will not be thread safe.
- *<p/>
- * Using this technique the SpringClickServlet will look up the Page bean and
- * have Spring create the page instance and inject all its dependencies.
- *
  * <h4>Click Instantiated Pages</h4>
  *
  * With Click instantiated pages you have your Page classes implement the Spring
@@ -116,6 +94,35 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *         <span class="kw">return</span> (UserService) getBean(<span class="st">"userService"</span>);
  *     }
  * } </pre>
+ *
+ * <h4>Spring Instantiated Pages</h4>
+ *
+ * With Spring instantiated pages you define your Pages as beans in a Spring
+ * appliction context XML file. For example in this file the Page bean id maps
+ * to the page class name:
+ *
+ * <pre class="codeConfig">
+ * &lt;beans&gt;
+ *
+ *    &lt;bean id="com.mycorp.pages.CustomerEdit" class="com.mycorp.pages.CustomerEdit"
+ *         singleton="false"&gt;
+ *       &lt;property name="userService" ref="userService"/&gt;
+ *    &lt;/bean&gt;
+ *
+ * &lt;/beans&gt; </pre>
+ *
+ * <b>Please Note</b> ensure that your Page bean is not a singleton, otherwise
+ * the page instance will not be thread safe.
+ *<p/>
+ * Using this technique the SpringClickServlet will look up the Page bean and
+ * have Spring create the page instance and inject all its dependencies.
+ *
+ * <h4>Developing Page Classes</h4>
+ *
+ * When developing Click page classes please ensure you place any code which
+ * relies upon Spring or Click injected dependencies in the pages
+ * <tt>onInit()</tt> method and not in the pages constructor. Any dependencies
+ * will not be available in when the pages no-args constructor is invoked.
  *
  * <h3>Application Context Configuration</h3>
  *
