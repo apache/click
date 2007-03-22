@@ -11,7 +11,7 @@
    </appender>
 
    <category name="net.sf.click">
-      <priority value="TRACE"/>
+      <priority value="INFO"/>
    </category>
    
    <category name="org">
