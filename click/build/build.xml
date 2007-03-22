@@ -143,9 +143,11 @@
             <exclude name="lib/${jar.hibernate}"/>
             <exclude name="lib/${jar.io}"/>
             <exclude name="lib/${jar.lang}"/>
+            <exclude name="lib/${jar.log4j}"/>
             <exclude name="lib/${jar.junit}"/>
             <exclude name="lib/${jar.ognl}"/>
             <exclude name="lib/${jar.servlet}"/>
+            <exclude name="lib/${jar.velocity}"/>
             <exclude name="lib/spring-*.jar"/>
             <exclude name="lib/${jar.upload}"/>
             <exclude name="**/Thumbs.db"/>
