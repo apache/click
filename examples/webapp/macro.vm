@@ -13,13 +13,13 @@
       #if ($topMenu.children.empty)
         <li class="topitem">$topMenu</li>
       #else
-		<li class="topitem">$topMenu
-		  <ul class="submenu"
+        <li class="topitem">$topMenu
+          <ul class="submenu"
           #foreach ($subMenu in $topMenu.children)
             ><li>$subMenu</li
-		  #end
+          #end
           ></ul>
-		</li>
+        </li>
       #end
     #end
   </ul>
