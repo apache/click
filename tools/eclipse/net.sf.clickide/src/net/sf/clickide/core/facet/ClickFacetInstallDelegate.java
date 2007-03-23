@@ -39,11 +39,11 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
  */
 public class ClickFacetInstallDelegate implements IDelegate {
 	
-	private static String CLICK_DIR = "click-1.1";
+	private static String CLICK_DIR = "click-1.2";
 	
 	private static final String[] COPY_FILES = {
-		"/lib/click-1.1.jar",
-		"/lib/click-extras-1.1.jar",
+		"/lib/click-1.2.jar",
+		"/lib/click-extras-1.2.jar",
 		"/click.xml",
 	};
 	
