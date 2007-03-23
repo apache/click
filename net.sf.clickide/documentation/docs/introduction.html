@@ -130,11 +130,10 @@ An example usage of the Table control in a customers Page is provided below:
 <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
 
     <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
-    <span class="kw">public</span> ActionLink deleteLink = 
-        <span class="kw">new</span> ActionLink(<span class="st">"deleteLink"</span>, <span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
+    <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
 
     <span class="kw">public</span> CustomersPage() {
-        table.setClass(<span class="st">"its"</span>);
+        table.setClass(Table.CLASS_ITS);
         table.setPageSize(5);
         table.setShowBanner(<span class="kw">true</span>);
         table.setSortable(<span class="kw">true</span>);
@@ -146,7 +145,7 @@ An example usage of the Table control in a customers Page is provided below:
         column.setAutolink(<span class="kw">true</span>);
         table.addColumn(column);
         
-        table.addColumn(<span class="kw">new</span> Column(<span class="st">"category"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investment"</span>));
     	
         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
@@ -155,7 +154,7 @@ An example usage of the Table control in a customers Page is provided below:
     }
     
     <span class="kw">public boolean</span> onDeleteClick() {
-        Long id = deleteLink.getValueLong();
+        Integer id = deleteLink.getValueInteger();
         getCustomerService().deleteCustomer(id);
         <span class="kw">return true</span>;
     }
@@ -185,13 +184,14 @@ which is rendered when its <tt>toString()</tt> method is called.
 
 <pre class="codeHtml">
 &lt;html&gt;
-  &lt;body&gt;
+&lt;head&gt;
+  <span class="blue">$imports</span>
+&lt;/head&gt;
+&lt;body&gt;
   
-    &lt;h3&gt;Customers&lt;/h3&gt;
+  <span class="blue">$table</span>
     
-    <span class="blue">$table</span>
-    
-  &lt;/body&gt;
+&lt;/body&gt;
 &lt;/html&gt; 
 </pre>
 
@@ -200,54 +200,9 @@ At runtime the Table would be rendered in the page as:
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
- 
-<h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Customers</h3>
-
-<table id="table" class="its">
-<thead>
-<tr>
-<th><a href="#" style="text-decoration: underline;">Id</a></th>
-<th><a href="#" style="text-decoration: underline;">Name</a></th>
-<th><a href="#" style="text-decoration: underline;">Email</a></th>
-<th><a href="#" style="text-decoration: underline;">Category</a></th>
-<th>Action</th></tr></thead>
-<tbody>
-<tr class="odd">
-<td>834501</td>
-<td>Alison Hanson</td>
-<td><a href="mailto:alison.hanson@gmail.com">alison.hanson@gmail.com</a></td>
-<td>Options</td>
-<td><a href="#">Delete</a></td></tr>
-<tr class="even">
-<td>238454</td>
-<td>Angus Mitchel</td>
-<td><a href="mailto:amitchel@gmail.com">amitchel@mitchel.com</a></td>
-<td>Stocks</td>
-<td><a href="#">Delete</a></td></tr>
-<tr class="odd">
-<td>1836512</td>
-<td>Peter Mitchel</td>
-<td><a href="mailto:pmitchel@gmail.com">pmitchel@mitchel.com</a></td>
-<td>Residential Property</td>
-<td><a href="#">Delete</a></td></tr>
-<tr class="even">
-<td>418056</td>
-<td>David Ofray</td>
-<td><a href="mailto:davido@gmail.com">davido@yahoo.com</a></td>
-<td>Bonds</td>
-<td><a href="#">Delete</a></td></tr>
-<tr class="odd">
-<td>445910</td>
-<td>Ann Robertson</td>
-<td><a href="mailto:ann_robinson@surf.net@gmail.com">ann_robinson@surf.net</a></td>
-<td>Commercial Property</td>
-<td><a href="#">Delete</a></td></tr></tbody></table>
-<span class="pagebanner">31 items found, displaying 1 to 4.</span><span class="pagelinks">[First/Prev] <strong>1</strong>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=1" id="paging" title="Go to page 2">2</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=2" id="paging" title="Go to page 3">3</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=3" id="paging" title="Go to page 4">4</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=4" id="paging" title="Go to page 5">5</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=5" id="paging" title="Go to page 6">6</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=6" id="paging" title="Go to page 7">7</a>, <a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=7" id="paging" title="Go to page 8">8</a> [<a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=1" id="paging" title="Go to next page">Next</a>/<a href="/click-examples/table/table-paging.htm?actionLink=paging&amp;value=7" id="paging" title="Go to last page">Last</a>]</span>
-
-
-
+   <img src="../images/table.png" border="0"/> 
   </td>
- </tr>
+</tr>
 </table>
 
 In this example if a user click on the Delete link the <tt>onDeleteClick()</tt>
@@ -304,13 +259,16 @@ the <tt>LoginPage</tt> class.
 
 <pre class="codeHtml">
 &lt;html&gt;
-  &lt;body&gt;
+&lt;head&gt;
+   <span class="blue">$imports</span>
+&lt;/head&gt;
+&lt;body&gt;
   
-    &lt;h3&gt;Login&lt;/h3&gt;
+   &lt;h3&gt;Login&lt;/h3&gt;
     
-    <span class="blue">$form</span>
+   <span class="blue">$form</span>
     
-  &lt;/body&gt;
+&lt;/body&gt;
 &lt;/html&gt; 
 </pre>
 

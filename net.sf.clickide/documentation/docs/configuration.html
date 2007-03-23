@@ -436,12 +436,10 @@ The optional <tt>mode</tt> element defines the application logging and caching m
 <pre class="codeDtd">
 &lt;!ELEMENT mode (#PCDATA)&gt;
     &lt;ATTLIST mode value (<span class="blue">production</span>|<span class="blue">profile</span>|<span class="blue">development</span>|<span class="blue">debug</span>|<span class="blue">trace</span>) "development"&gt;
-    &lt;ATTLIST mode logto (<span class="blue">console</span>|<span class="blue">servlet</span>) "console"&gt;
 </pre>
 
 By default Click applications run in <tt>development</tt> mode, which switches off page
-template caching, and the logging level is set to <tt>INFO</tt>. Also by default 
-log messages are sent to the console [System.out]. 
+template caching, and the logging level is set to <tt>INFO</tt>.
 <p/>
 To change the default application mode configure a mode element in the click-app 
 descriptor. For example to specify <tt>production</tt> mode you would add the 
@@ -557,25 +555,15 @@ introspecting templates and template reloading is significantly slower.
 
 The Click and Velocity runtimes use 
 <a target="topic" href="click-api/net/sf/click/util/ClickLogger.html">ClickLogger</a>  
-for logging messages. 
+for logging messages. The runtime loggers will send messages to the console [System.out]. 
 <p/>
-By default the runtime loggers will send messages to the console [System.out]. 
-To configure the loggers to send their logging messages to the 
-<a href="servlet-api/javax/servlet/ServletContext.html#log(java.lang.String)">ServletContext.log</a>
-set the mode <span class="blue">logto</span> attribute. For example:
-
-<pre class="codeConfig">
-&lt;mode value="production" <span class="blue">logto</span>="<span class="red">servlet</span>"&gt;
-</pre>
-
 Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays
 detailed debugging information. When the application mode is <tt>production</tt>
 no debug information is displayed to prevent sensitive information being revealed.
-This behaviour can be changed by modifying the 
-
-<span class="blue"><tt>error.htm</tt></span> page template.
+This behaviour can be changed by modifying the deployed
+<span class="blue"><tt>click/error.htm</tt></span> page template.
 
 
 <a name="application-controls" class="heading"><h3>Controls</h3></a>
