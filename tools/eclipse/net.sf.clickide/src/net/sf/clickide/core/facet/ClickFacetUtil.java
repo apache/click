@@ -5,6 +5,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
 
 /**
+ * Provides constants and utility methods about the project facet.
  * 
  * @author Naoki Takezoe
  * @since 1.6.0
