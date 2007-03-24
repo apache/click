@@ -39,14 +39,6 @@ import org.eclipse.wst.validation.internal.ValidatorMetaData;
  */
 public class ClickFacetInstallDelegate implements IDelegate {
 	
-	private static String CLICK_DIR = "click-1.2";
-	
-	private static final String[] COPY_FILES = {
-		"/lib/click-1.2.jar",
-		"/lib/click-extras-1.2.jar",
-		"/click.xml",
-	};
-	
 	public void execute(IProject project, IProjectFacetVersion fv,
 			Object cfg, IProgressMonitor monitor) throws CoreException {
 		
@@ -117,14 +109,14 @@ public class ClickFacetInstallDelegate implements IDelegate {
 	}
 	
 	private void deployClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
-		IPath destPath = project.getLocation().append(getWebContentPath(project));
+		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		
 		File webInf = destPath.append("WEB-INF").toFile();
-		for(int i=0;i<COPY_FILES.length;i++){
+		for(int i=0;i<ClickFacetUtil.COPY_FILES.length;i++){
 			InputStream in = null;
 			OutputStream out = null;
 			try {
-				File file = new File(webInf, COPY_FILES[i]);
+				File file = new File(webInf, ClickFacetUtil.COPY_FILES[i]);
 			
 				if(!file.exists()){
 					file.createNewFile();
@@ -132,7 +124,8 @@ public class ClickFacetInstallDelegate implements IDelegate {
 					continue;
 				}
 				
-				URL url = ClickPlugin.getDefault().getBundle().getEntry(CLICK_DIR + COPY_FILES[i]);
+				URL url = ClickPlugin.getDefault().getBundle().getEntry(
+						ClickFacetUtil.CLICK_DIR + ClickFacetUtil.COPY_FILES[i]);
 				in = url.openStream();
 				out = new FileOutputStream(file);
 				
@@ -187,21 +180,6 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				// save and dispose
 				artifactEdit.saveIfNecessary(monitor);
 				artifactEdit.dispose();
-			}
-		}
-	}
-
-	private IPath getWebContentPath(IProject project) {
-		WebArtifactEdit web = null;
-		try {
-			web = WebArtifactEdit.getWebArtifactEditForRead(project);
-			IPath webxml = web.getDeploymentDescriptorPath();
-			//remove project name, WEB-INF an web.xml from path
-			IPath webContentPath = webxml.removeLastSegments(2).removeFirstSegments(1);
-			return webContentPath;
-		} finally {
-			if (web != null) {
-				web.dispose();
 			}
 		}
 	}
