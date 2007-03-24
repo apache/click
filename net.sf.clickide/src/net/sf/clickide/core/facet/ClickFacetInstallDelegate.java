@@ -118,7 +118,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			try {
 				File file = new File(webInf, ClickFacetUtil.COPY_FILES[i]);
 			
-				if(!file.exists()){
+				if(!file.exists() && checkOldFile(file)){
 					file.createNewFile();
 				} else {
 					continue;
@@ -149,6 +149,28 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Checkes whether the old version of the given file exists. 
+	 */
+	private boolean checkOldFile(File file){
+		String name = file.getName();
+		if(name.startsWith("click-") && name.endsWith(".jar")){
+			int index = name.lastIndexOf('-');
+			if(index > 0){
+				String begin = name.substring(0, index+1);
+				File parent = file.getParentFile();
+				File[] files = parent.listFiles();
+				for(int i=0;i<files.length;i++){
+					String fileName = files[i].getName();
+					if(files[i].isFile() && fileName.startsWith(begin) && fileName.endsWith(".jar")){
+						return false;
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	private void createServletAndModifyWebXML(IProject project, final IDataModel config, IProgressMonitor monitor) {

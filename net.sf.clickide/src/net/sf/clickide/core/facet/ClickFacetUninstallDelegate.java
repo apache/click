@@ -52,7 +52,7 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 		}	
 	}
 	
-	private void removeClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
+	protected void removeClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		
 		File webInf = destPath.append("WEB-INF").toFile();
