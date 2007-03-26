@@ -20,6 +20,10 @@
     <topic label="Cheat Sheet" href="documentation/docs/click-cheat-sheet.pdf"/>
     <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095"/>
   </topic>
+  <topic label="ClickIDE" href="documentation/docs/click-ide.html">
+    <topic label="RoadMap &amp; Changes" href="documentation/docs/click-ide-roadmap-changes.html"/>
+    <topic label="Download" href="https://sourceforge.net/project/showfiles.php?group_id=82095&amp;package_id=181305"/>
+  </topic>
   <topic label="Velocity" href="documentation/docs/velocity/velocity.html">
     <topic label="Users Guide PDF" href="documentation/docs/velocity/VelocityUsersGuide.pdf"/>
     <topic label="Developers Guide" href="documentation/docs/velocity/developer-guide.html"/>
