@@ -1,3 +1,18 @@
+/*
+ * Copyright 2007 Malcolm A. Edgar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package net.sf.click.extras.control;
 
 import java.text.MessageFormat;
@@ -18,8 +33,8 @@ import net.sf.click.util.Format;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a couple of the multiple select box to pick up items.
- * 
+ * Provides a twin multiple Select box control to select items.
+ *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
  * <table width="400" class="picklist">
@@ -49,40 +64,40 @@ import org.apache.commons.lang.StringUtils;
  * </tr>
  * </table>
  * </td></tr></table>
- * 
- * The values of the <code>PickList</code> are provided by <code>Option</code> 
- * objects like for a <code>Select</code>. 
- * 
- * <p/>
- * 
+ *
+ * The values of the <code>PickList</code> are provided by <code>Option</code>
+ * objects like for a <code>Select</code>.
+ *
+ * <h3>PickList Examples</h3>
+ *
  * The following code shows the previous rendering example:
- * 
+ *
  * <pre class="codeJava">
  * PickList pickList = <span class="kw">new</span> PickList(<span class="st">"languages"</span>);
  * pickList.setHeaderLabel(<span class="st">"Languages"</span>, <span class="st">"Selected"</span>);
- * 
+ *
  * pickList.add(<span class="kw">new</span> Option(<span class="st">"001"</span>, <span class="st">"Java"</span>));
  * pickList.add(<span class="kw">new</span> Option(<span class="st">"002"</span>, <span class="st">"Ruby"</span>));
  * pickList.add(<span class="kw">new</span> Option(<span class="st">"003"</span>, <span class="st">"Perl"</span>));
- * 
- * pickList.setSelectedValue(<span class="st">"001"</span>); </pre>
- * 
- * The selected values can be retrieved from {@link getSelectedValues()}.
- * 
+ *
+ * pickList.addSelectedValue(<span class="st">"001"</span>); </pre>
+ *
+ * The selected values can be retrieved from {@link #getSelectedValues()}.
+ *
  * <pre class="codeJava">
  * Set selectedValues = pickList.getSelectedValues();
- * 
- * <span class="kw">for</span>(Iterator ite = set.iterator(); ite.hasNext();){
- *   String value = (String) ite.next();
- *   ...
+ *
+ * <span class="kw">for</span> (Iterator i = selectedValues.iterator(); i.hasNext();){
+ *     String value = (String) i.next();
+ *     ...
  * } </pre>
- * 
+ *
  * @author Naoki Takezoe
  */
 public class PickList extends Field {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     // -------------------------------------------------------------- Constants
 
     /**
@@ -90,7 +105,7 @@ public class PickList extends Field {
      */
     public static final String PICKLIST_IMPORTS =
         "<script type=\"text/javascript\" src=\"$/click/PickList.js\"></script>\n";
-    
+
     /**
      * The field validation JavaScript function template.
      * The function template arguments are: <ul>
@@ -109,49 +124,41 @@ public class PickList extends Field {
         + "      return null;\n"
         + "   '}'\n"
         + "'}'\n";
-    
+
     // ----------------------------------------------------- Instance Variables
-    
-    /**
-     * The label text for the unselected list.
-     */
-    protected String unselectedLabel;
-    
-    /**
-     * The label text for the selected list.
-     */
-    protected String selectedLabel;
-    
-    /**
-     * The selected values.
-     */
-    protected Set selectedValues;
-    
-    /**
-     * The Option list.
-     */
-    protected List optionList;
-    
-    /**
-     * The component size. The default size is 400px.
-     */
-    protected int size = 400;
-    
+
     /**
      * The list height. The default height is 8.
      */
     protected int height = 8;
-    
-    // ----------------------------------------------------------- Constructors
-    
+
     /**
-     * Create a PickList with no name defined.
-     * <p/>
-     * <b>Please note</b> the control's name must be defined before it is valid.
+     * The Option list.
      */
-    public PickList() {
-    }
-    
+    protected List optionList;
+
+    /**
+     * The label text for the selected list.
+     */
+    protected String selectedLabel;
+
+    /**
+     * The selected values.
+     */
+    protected Set selectedValues;
+
+    /**
+     * The component size (width) in pixels. The default size is 400px.
+     */
+    protected int size = 400;
+
+    /**
+     * The label text for the unselected list.
+     */
+    protected String unselectedLabel;
+
+    // ----------------------------------------------------------- Constructors
+
     /**
      * Create a PickList field with the given name.
      *
@@ -160,27 +167,64 @@ public class PickList extends Field {
     public PickList(String name) {
         super(name);
     }
-    
-    // --------------------------------------------------------- Public Methods
-    
+
     /**
-     * Set the component size.
-     *
-     * @param  size the component size
+     * Create a PickList with no name defined.
+     * <p/>
+     * <b>Please note</b> the control's name must be defined before it is valid.
      */
-    public void setSize(int size) {
-        this.size = size;
+    public PickList() {
     }
-    
+
+    // ------------------------------------------------------ Public Attributes
+
     /**
-     * Return the component size.
+     * Add the given Option to the PickList.
      *
-     * @return the component size
+     * @param option the Option value to add
+     * @throws IllegalArgumentException if option is null
      */
-    public int getSize() {
-        return this.size;
+    public void add(Option option) {
+        if (option == null) {
+            String msg = "option parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getOptionList().add(option);
     }
-    
+
+    /**
+     * Set the header label text for the selected list and the unselected list.
+     * The specified text is displayed at the top of the list.
+     *
+     * @param unselectedLabel the label text for the unselected list
+     * @param selectedLabel the label text for the selected list
+     */
+    public void setHeaderLabel(String unselectedLabel, String selectedLabel) {
+        this.unselectedLabel = unselectedLabel;
+        this.selectedLabel = selectedLabel;
+    }
+
+    /**
+     * Return the Option list.
+     *
+     * @return the Option list
+     */
+    public List getOptionList() {
+        if (optionList == null) {
+            optionList = new ArrayList();
+        }
+        return optionList;
+    }
+
+    /**
+     * Return the list height.
+     *
+     * @return the list height
+     */
+    public int getHeight() {
+        return height;
+    }
+
     /**
      * Set the list height.
      *
@@ -189,29 +233,83 @@ public class PickList extends Field {
     public void setHeight(int height) {
         this.height = height;
     }
-    
-    /**
-     * Return the list height.
-     * 
-     * @return the list height
-     */
-    public int getHeight() {
-        return this.height;
-    }
-    
+
     /**
      * Return the HTML head import statements for the PickList.js.
      *
      * @return the HTML head import statements for the PickList.js
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(PICKLIST_IMPORTS, "$", path);
     }
-    
+
     /**
-     * Bind the request submission, setting the {@link #selectedValues} 
+     * Add the selected value.
+     *
+     * @param value the selected value
+     * @throws IllegalArgumentException if the value is null
+     */
+    public void addSelectedValue(String value) {
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getSelectedValues().add(value);
+    }
+
+    /**
+     * Return selected values.
+     *
+     * @return selected values
+     */
+    public Set getSelectedValues() {
+        if (selectedValues == null) {
+            selectedValues = new HashSet();
+        }
+        return selectedValues;
+    }
+
+    /**
+     * Set the component size.
+     *
+     * @param  size the component size
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * Return the component size (width) in pixels.
+     *
+     * @return the component size
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * Return the field JavaScript client side validation function.
+     * <p/>
+     * The function name must follow the format <tt>validate_[id]</tt>, where
+     * the id is the DOM element id of the fields focusable HTML element, to
+     * ensure the function has a unique name.
+     *
+     * @return the field JavaScript client side validation function
+     */
+    public String getValidationJavaScript() {
+        Object[] args = new Object[3];
+        args[0] = getId();
+        args[1] = String.valueOf(isRequired());
+        args[2] = getMessage("field-required-error", getErrorLabel());
+        return MessageFormat.format(VALIDATE_PICKLIST_FUNCTION, args);
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    /**
+     * Bind the request submission, setting the {@link #selectedValues}
      * property if defined in the request.
      */
     public void bindRequestValue() {
@@ -233,7 +331,7 @@ public class PickList extends Field {
             }
         }
     }
-    
+
     /**
      * Deploy the <tt>PickList.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
@@ -247,88 +345,7 @@ public class PickList extends Field {
                               "/net/sf/click/extras/control/PickList.js",
                               "click");
     }
-    
-    /**
-     * Add the given Option to the PickList.
-     *
-     * @param option the Option value to add
-     * @throws IllegalArgumentException if option is null
-     */
-    public void add(Option option) {
-        if (option == null) {
-            String msg = "option parameter cannot be null";
-            throw new IllegalArgumentException(msg);
-        }
-        getOptionList().add(option);
-    }
-    
-    /**
-     * Return the Option list.
-     *
-     * @return the Option list
-     */
-    public List getOptionList() {
-        if (optionList == null) {
-            optionList = new ArrayList();
-        }
-        return optionList;
-    }
-    
-    /**
-     * Return selected values.
-     * 
-     * @return selected values
-     */
-    public Set getSelectedValues() {
-        if (selectedValues == null) {
-            selectedValues = new HashSet();
-        }
-        return selectedValues;
-    }
-    
-    /**
-     * Add the selected value.
-     * 
-     * @param value the selected value
-     * @throws IllegalArgumentException if the value is null
-     */
-    public void addSelectedValue(String value) {
-        if (value == null) {
-            String msg = "value parameter cannot be null";
-            throw new IllegalArgumentException(msg);
-        }
-        getSelectedValues().add(value);
-    }
-    
-    /**
-     * Set the header label text for the selected list and the unselected list.
-     * The specified text is displayed at the top of the list.
-     * 
-     * @param unselectedLabel the label text for the unselected list
-     * @param selectedLabel the label text for the selected list
-     */
-    public void setHeaderLabel(String unselectedLabel, String selectedLabel) {
-        this.unselectedLabel = unselectedLabel;
-        this.selectedLabel = selectedLabel;
-    }
-    
-    /**
-     * Return the field JavaScript client side validation function.
-     * <p/>
-     * The function name must follow the format <tt>validate_[id]</tt>, where
-     * the id is the DOM element id of the fields focusable HTML element, to
-     * ensure the function has a unique name.
-     *
-     * @return the field JavaScript client side validation function
-     */
-    public String getValidationJavaScript() {
-        Object[] args = new Object[7];
-        args[0] = getId();
-        args[1] = String.valueOf(isRequired());
-        args[2] = getMessage("field-required-error", getErrorLabel());
-        return MessageFormat.format(VALIDATE_PICKLIST_FUNCTION, args);
-    }
-    
+
     /**
      * Validate the PickList request submission.
      * <p/>
@@ -353,20 +370,19 @@ public class PickList extends Field {
             }
         }
     }
-    
+
     /**
      * Return a HTML rendered PickList string.
      *
      * @return a HTML rendered PickList string
      */
     public String toString() {
-        Map model = new HashMap();
-        
+
         List optionList      = getOptionList();
         Set  selectedValues  = getSelectedValues();
         List selectedItems   = new ArrayList();
         List unselectedItems = new ArrayList();
-        
+
         for (int i = 0; i < optionList.size(); i++) {
             Option option = (Option) optionList.get(i);
             if (selectedValues.contains(option.getValue())) {
@@ -375,7 +391,9 @@ public class PickList extends Field {
                 unselectedItems.add(option);
             }
         }
-        
+
+        Map model = new HashMap();
+
         model.put("id", getId());
         model.put("name", getName());
         model.put("selectedItems", selectedItems);
@@ -388,9 +406,8 @@ public class PickList extends Field {
         model.put("valid", new Boolean(isValid()));
         model.put("disabled", new Boolean(isDisabled()));
         model.put("readOnly", new Boolean(isReadonly()));
-        
-        return getContext().renderTemplate(
-                "/net/sf/click/extras/control/PickList.htm", model);
+
+        return getContext().renderTemplate(getClass(), model);
     }
-    
+
 }

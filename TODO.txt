@@ -1,13 +1,11 @@
-Click 1.2 Release
+Click 1.3 Release
 ---------------------
 BUGS
-* Menu bug in IE 6.0
 * ColorPicker rendering bug
 * Form rendering bug, with setting style, see FieldSet example probably due to
   recent form rendering refactoring and removing align property from parent element
 
 CODE
-* pick up Velocity 1.5 jar
 * Select can have multiple values and this need to be resolved with multpart request
 
 DOCUMENTATION
