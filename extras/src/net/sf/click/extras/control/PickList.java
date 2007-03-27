@@ -17,8 +17,10 @@ package net.sf.click.extras.control;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +31,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
+import net.sf.click.util.PropertyUtils;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -160,6 +163,16 @@ public class PickList extends Field {
     // ----------------------------------------------------------- Constructors
 
     /**
+     * Create a PickList field with the given name and label.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     */
+    public PickList(String name, String label) {
+        super(name, label);
+    }
+
+    /**
      * Create a PickList field with the given name.
      *
      * @param name the name of the field
@@ -190,6 +203,120 @@ public class PickList extends Field {
             throw new IllegalArgumentException(msg);
         }
         getOptionList().add(option);
+    }
+
+    /**
+     * Add the given Option collection to the PickList.
+     *
+     * @param options the collection of Option objects to add
+     * @throws IllegalArgumentException if options is null
+     */
+    public void addAll(Collection options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        getOptionList().addAll(options);
+    }
+
+    /**
+     * Add the given Map of option values and labels to the PickList. The Map
+     * entry key will be used as the option value and the Map entry value will
+     * be used as the option label.
+     * <p/>
+     * It is recommended that <tt>LinkedHashMap</tt> is used as the Map
+     * parameter to maintain the order of the option vales.
+     *
+     * @param options the Map of option values and labels to add
+     * @throws IllegalArgumentException if options is null
+     */
+    public void addAll(Map options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (Iterator i = options.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            Option option = new Option(entry.getKey().toString(), entry
+                    .getValue().toString());
+            getOptionList().add(option);
+        }
+    }
+
+    /**
+     * Add the given array of string options to the PickList. <p/> The
+     * options array string value will be used for the {@link Option#value} and
+     * {@link Option#label}.
+     *
+     * @param options the array of option values to add
+     * @throws IllegalArgumentException if options is null
+     */
+    public void addAll(String[] options) {
+        if (options == null) {
+            String msg = "options parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        for (int i = 0; i < options.length; i++) {
+            String value = options[i];
+            getOptionList().add(new Option(value, value));
+        }
+    }
+
+    /**
+     * Add the given collection of objects to the PickList, creating new Option
+     * instances based on the object properties specified by value and label.
+     *
+     * <pre class="codeJava">
+     *   PickList list = <span class="kw">new</span> PickList(<span class="st">&quot;type&quot;</span>, <span class="st">&quot;Type:&quot;</span>);
+     *   list.addAll(getCustomerService().getCustomerTypes(), <span class"st">&quot;id&quot;</span>, <span class="st">&quot;name&quot;</span>);
+     *   form.add(list); </pre>
+     *
+     * @param objects the collection of objects to render as options
+     * @param value the name of the object property to render as the Option value
+     * @param label the name of the object property to render as the Option label
+     * @throws IllegalArgumentException if options, value or label parameter is null
+     */
+    public void addAll(Collection objects, String value, String label) {
+        if (objects == null) {
+            String msg = "objects parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (value == null) {
+            String msg = "value parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+        if (label == null) {
+            String msg = "label parameter cannot be null";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (objects.isEmpty()) {
+            return;
+        }
+
+        Map cache = new HashMap();
+
+        for (Iterator i = objects.iterator(); i.hasNext();) {
+            Object object = i.next();
+
+            try {
+                Object valueResult = PropertyUtils.getValue(object, value, cache);
+                Object labelResult = PropertyUtils.getValue(object, label, cache);
+
+                Option option = null;
+
+                if (labelResult != null) {
+                    option = new Option(valueResult, labelResult.toString());
+                } else {
+                    option = new Option(valueResult.toString());
+                }
+
+                getOptionList().add(option);
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     /**
