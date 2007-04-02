@@ -10,7 +10,10 @@
               
     <suppress checks="FileLength"
               files="Form.java"/>
-              
+
+    <suppress checks="FileLength"
+              files="Tree.java"/>
+
 	<!-- Javadoc Method -->                                          
               
     <suppress checks="JavadocMethod"
@@ -57,7 +60,10 @@
               
     <suppress checks="LineLength"
               files="Form.java"/>
-              
+
+    <suppress checks="LineLength"
+              files="Tree.java"/>
+
     <suppress checks="LineLength"
               files="RegexField.java"
               lines="91,103"/>    
