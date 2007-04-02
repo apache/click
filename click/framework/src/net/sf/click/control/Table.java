@@ -164,22 +164,14 @@ public class Table extends AbstractControl {
      */
     public static final String TABLE_IMPORTS_LIGHT =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style type=\"text/css\">\n"
-        + " th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;}\n"
-        + " th.ascending a {background: url($/click/column-ascending-light.gif) center right no-repeat;}\n"
-        + " th.descending a {background: url($/click/column-descending-light.gif) center right no-repeat;}\n"
-        + "</style>\n";
+        + "<style type=\"text/css\"> th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;} th.ascending a {background: url($/click/column-ascending-light.gif) center right no-repeat;} th.descending a {background: url($/click/column-descending-light.gif) center right no-repeat;} </style>\n";
 
     /**
      * The table.css style sheet import link with a dark contract sortable icon.
      */
     public static final String TABLE_IMPORTS_DARK =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style type=\"text/css\">\n"
-        + " th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;}\n"
-        + " th.ascending a {background: url($/click/column-ascending-dark.gif) center right no-repeat;}\n"
-        + " th.descending a {background: url($/click/column-descending-dark.gif) center right no-repeat;}\n"
-        + "</style>\n";
+        + "<style type=\"text/css\"> th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;} th.ascending a {background: url($/click/column-ascending-dark.gif) center right no-repeat;} th.descending a {background: url($/click/column-descending-dark.gif) center right no-repeat;} </style>\n";
 
     /** The table top banner position. */
     public static final int POSITION_TOP = 1;
@@ -239,7 +231,7 @@ public class Table extends AbstractControl {
     protected List columnList = new ArrayList();
 
     /** The table paging and sorting control action link. */
-    protected ActionLink controlLink = new ActionLink("control");
+    protected ActionLink controlLink = new ActionLink();
 
     /** The list of table controls. */
     protected List controlList;
@@ -462,6 +454,7 @@ public class Table extends AbstractControl {
             throw new IllegalArgumentException("Null context parameter");
         }
         this.context = context;
+        controlLink.setName(getName() + "-controlLink");
         controlLink.setContext(context);
     }
 
@@ -835,24 +828,28 @@ public class Table extends AbstractControl {
     public boolean onProcess() {
         controlLink.onProcess();
 
-        String page = getContext().getRequestParameter(PAGE);
-        if (StringUtils.isNotBlank(page)) {
-            setPageNumber(Integer.parseInt(page));
-        }
+        System.out.println(controlLink.getName() + ".isClicked()=" + controlLink.isClicked());
 
-        String column = getContext().getRequestParameter(COLUMN);
-        if (column != null) {
-            setSortedColumn(column);
-        }
+        if (controlLink.isClicked()) {
+            String page = getContext().getRequestParameter(PAGE);
+            if (StringUtils.isNotBlank(page)) {
+                setPageNumber(Integer.parseInt(page));
+            }
 
-        String ascending = getContext().getRequestParameter(ASCENDING);
-        if (ascending != null) {
-            setSortedAscending("true".equals(ascending));
-        }
+            String column = getContext().getRequestParameter(COLUMN);
+            if (column != null) {
+                setSortedColumn(column);
+            }
 
-        // Flip sorting order
-        if ("true".equals(getContext().getRequestParameter(SORT))) {
-            setSortedAscending(!isSortedAscending());
+            String ascending = getContext().getRequestParameter(ASCENDING);
+            if (ascending != null) {
+                setSortedAscending("true".equals(ascending));
+            }
+
+            // Flip sorting order
+            if ("true".equals(getContext().getRequestParameter(SORT))) {
+                setSortedAscending(!isSortedAscending());
+            }
         }
 
         boolean continueProcessing = true;
