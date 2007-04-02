@@ -292,7 +292,7 @@ public class ActionLink extends AbstractLink {
         String uri = getContext().getRequest().getRequestURI();
 
         HtmlStringBuffer buffer =
-            new HtmlStringBuffer(uri.length() + getName().length() + 40);
+                new HtmlStringBuffer(uri.length() + getName().length() + 40);
 
         buffer.append(uri);
         buffer.append("?");
@@ -313,7 +313,7 @@ public class ActionLink extends AbstractLink {
                 if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
-                        = ClickUtils.encodeUrl(paramValue, getContext());
+                            = ClickUtils.encodeUrl(paramValue, getContext());
                     buffer.append("&");
                     buffer.append(name);
                     buffer.append("=");
@@ -427,6 +427,26 @@ public class ActionLink extends AbstractLink {
         }
     }
 
+    /**
+     * This method binds the submitted request value to the ActionLink's
+     * value.
+     */
+    public void bindRequestValue() {
+        clicked =
+                getName().equals(getContext().getRequestParameter(ACTION_LINK));
+
+        if (clicked) {
+            HttpServletRequest request = getContext().getRequest();
+            Enumeration paramNames = request.getParameterNames();
+
+            while (paramNames.hasMoreElements()) {
+                String name = paramNames.nextElement().toString();
+                String value = request.getParameter(name);
+                getParameters().put(name, value);
+            }
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -444,19 +464,9 @@ public class ActionLink extends AbstractLink {
             throw new IllegalStateException(msg);
         }
 
-        clicked =
-            getName().equals(getContext().getRequestParameter(ACTION_LINK));
+        bindRequestValue();
 
         if (clicked) {
-            HttpServletRequest request = getContext().getRequest();
-
-            Enumeration paramNames = request.getParameterNames();
-
-            while (paramNames.hasMoreElements()) {
-                String name = paramNames.nextElement().toString();
-                String value = request.getParameter(name);
-                getParameters().put(name, value);
-            }
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
