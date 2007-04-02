@@ -349,7 +349,6 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-
         Page page = null;
         try {
             page = createPage(request, response, isPost);
@@ -817,22 +816,27 @@ public class ClickServlet extends HttpServlet {
                 newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             }
 
-            processPageFields(newPage, new FieldCallback() {
-                public void processField(String fieldName, Object fieldValue) {
-                    if (fieldValue instanceof Control) {
-                        Control control = (Control) fieldValue;
-                        if (control.getName() == null) {
-                            control.setName(fieldName);
-                        }
+            if (clickApp.isPagesAutoBinding()) {
+                // Automatically add public controls to the page
+                processPageFields(newPage, new FieldCallback() {
+                    public void processField(String fieldName, Object fieldValue) {
+                        if (fieldValue instanceof Control) {
+                            Control control = (Control) fieldValue;
+                            if (control.getName() == null) {
+                                control.setName(fieldName);
+                            }
 
-                        if (!newPage.getModel().containsKey(control.getName())) {
-                            newPage.addControl(control);
+                            if (!newPage.getModel().containsKey(control.getName())) {
+                                newPage.addControl(control);
+                            }
+
+                            // TODO: if a Field log a warning message
                         }
                     }
-                }
-            });
+                });
 
-            processPageRequestParams(newPage, request);
+                processPageRequestParams(newPage, request);
+            }
 
             return newPage;
 
@@ -967,13 +971,15 @@ public class ClickServlet extends HttpServlet {
 
         final VelocityContext context = new VelocityContext(page.getModel());
 
-        processPageFields(page, new FieldCallback() {
-            public void processField(String fieldName, Object fieldValue) {
-                if (fieldValue instanceof Control == false) {
-                    context.put(fieldName, fieldValue);
+        if (clickApp.isPagesAutoBinding()) {
+            processPageFields(page, new FieldCallback() {
+                public void processField(String fieldName, Object fieldValue) {
+                    if (fieldValue instanceof Control == false) {
+                        context.put(fieldName, fieldValue);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         final HttpServletRequest request = page.getContext().getRequest();
 
