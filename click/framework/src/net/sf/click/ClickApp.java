@@ -148,7 +148,10 @@ class ClickApp implements EntityResolver {
         DEFAULT_HEADERS.put("Expires", new Date(1L));
     }
 
-    // -------------------------------------------------------- Package Members
+    // -------------------------------------------------------- Private Members
+
+    /** The automatically bind controls, request parameters and models flag. */
+    private boolean autobinding = true;
 
     /** The format constructor. */
     private Constructor formatConstructor;
@@ -357,6 +360,18 @@ class ClickApp implements EntityResolver {
      */
     ClickLogger getLogger() {
         return logger;
+    }
+
+    /**
+     * Return true if auto binding is enabled. Autobinding will automatically
+     * bind any request parameters to public fields, add any public controls to
+     * the page and add public fields to the page model.
+     *
+     * @return true if request parameters should be automatically bound to public
+     * page fields
+     */
+    boolean isPagesAutoBinding() {
+        return autobinding;
     }
 
     /**
@@ -824,9 +839,27 @@ class ClickApp implements EntityResolver {
         } else if ("false".equalsIgnoreCase(automapStr)) {
             automap = false;
         } else {
-            String msg = "Invalid pages automap attribute: " + automapStr;
+            String msg = "Invalid pages automapping attribute: " + automapStr;
             throw new RuntimeException(msg);
         }
+
+
+        String autobindingStr = pagesElm.getAttribute("autobinding");
+        if (StringUtils.isBlank(autobindingStr)) {
+            autobindingStr = "true";
+        }
+
+        if ("true".equalsIgnoreCase(autobindingStr)) {
+            autobinding = true;
+        } else if ("false".equalsIgnoreCase(autobindingStr)) {
+            autobinding = false;
+        } else {
+            String msg = "Invalid pages autobinding attribute: " + autobindingStr;
+            throw new RuntimeException(msg);
+        }
+
+
+
 
         Element headersElm = getChild(rootElm, "headers");
         if (headersElm != null) {
