@@ -61,6 +61,9 @@
 </table>
 
 <select id="${id}_hidden" name="$name" style="display: none;" multiple>
+  #foreach($item in $unselectedItems)
+    <option value="$format.html($item.value)">$format.html($item.label)</option>
+  #end
   #foreach($item in $selectedItems)
     <option value="$format.html($item.value)" selected>$format.html($item.name)</option>
   #end
