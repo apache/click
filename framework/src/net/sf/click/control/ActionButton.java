@@ -178,7 +178,7 @@ public class ActionButton extends Button {
         super();
     }
 
-    // --------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Attributes
 
     /**
      * Returns true if the ActionButton was clicked, otherwise returns false.
@@ -399,6 +399,27 @@ public class ActionButton extends Button {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * This method binds the submitted request value to the ActionLink's
+     * value.
+     */
+    public void bindRequestValue() {
+        clicked =
+                getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
+
+        if (clicked) {
+            HttpServletRequest request = getContext().getRequest();
+
+            Enumeration paramNames = request.getParameterNames();
+
+            while (paramNames.hasMoreElements()) {
+                String name = paramNames.nextElement().toString();
+                String value = request.getParameter(name);
+                getParameters().put(name, value);
+            }
+        }
+    }
+
+    /**
      * This method will set the {@link #isClicked()} property to true if the
      * ActionButton was clicked, and if an action callback listener was set
      * this will be invoked.
@@ -412,19 +433,9 @@ public class ActionButton extends Button {
             throw new IllegalStateException("context is not defined");
         }
 
-        clicked =
-            getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
+        bindRequestValue();
 
         if (clicked) {
-            HttpServletRequest request = getContext().getRequest();
-
-            Enumeration paramNames = request.getParameterNames();
-
-            while (paramNames.hasMoreElements()) {
-                String name = paramNames.nextElement().toString();
-                String value = request.getParameter(name);
-                getParameters().put(name, value);
-            }
 
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
