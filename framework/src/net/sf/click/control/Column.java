@@ -1059,6 +1059,7 @@ public class Column implements Serializable {
     public String getWidth() {
         return width;
     }
+
     /**
      * Set the column HTML &lt;td&gt; width attribute.
      *
@@ -1186,6 +1187,77 @@ public class Column implements Serializable {
         buffer.elementEnd("th");
     }
 
+    /**
+     * Return the column name property value from the given row object.
+     * <p/>
+     * If the row object is a <tt>Map</tt> this method will attempt to return
+     * the map value for the column name.
+     * <p/>
+     * The row map lookup will be performed using the property name,
+     * if a value is not found the property name in uppercase will be used,
+     * if a value is still not found the property name in lowercase will be used.
+     * If a map value is still not found then this method will return null.
+     * <p/>
+     * Object property values can also be specified using an path expression.
+     *
+     * @param row the row object to obtain the property from
+     * @return the named row object property value
+     * @throws RuntimeException if an error occurred obtaining the property
+     */
+    public Object getProperty(Object row) {
+        return getProperty(getName(), row);
+    }
+
+    /**
+     * Return the column property value from the given row object and property name.
+     * <p/>
+     * If the row object is a <tt>Map</tt> this method will attempt to return
+     * the map value for the column.
+     * <p/>
+     * The row map lookup will be performed using the property name,
+     * if a value is not found the property name in uppercase will be used,
+     * if a value is still not found the property name in lowercase will be used.
+     * If a map value is still not found then this method will return null.
+     * <p/>
+     * Object property values can also be specified using an path expression.
+     *
+     * @param name the name of the property
+     * @param row the row object to obtain the property from
+     * @return the named row object property value
+     * @throws RuntimeException if an error occurred obtaining the property
+     */
+    public Object getProperty(String name, Object row) {
+        if (row instanceof Map) {
+            Map map = (Map) row;
+
+            Object object = map.get(name);
+            if (object != null) {
+                return object;
+            }
+
+            String upperCaseName = name.toUpperCase();
+            object = map.get(upperCaseName);
+            if (object != null) {
+                return object;
+            }
+
+            String lowerCaseName = name.toLowerCase();
+            object = map.get(lowerCaseName);
+            if (object != null) {
+                return object;
+            }
+
+            return null;
+
+        } else {
+            if (methodCache == null) {
+                methodCache = new HashMap();
+            }
+
+            return PropertyUtils.getValue(row, name, methodCache);
+        }
+    }
+
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -1240,77 +1312,6 @@ public class Column implements Serializable {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Return the column name property value from the given row object.
-     * <p/>
-     * If the row object is a <tt>Map</tt> this method will attempt to return
-     * the map value for the column name.
-     * <p/>
-     * The row map lookup will be performed using the property name,
-     * if a value is not found the property name in uppercase will be used,
-     * if a value is still not found the property name in lowercase will be used.
-     * If a map value is still not found then this method will return null.
-     * <p/>
-     * Object property values can also be specified using an path expression.
-     *
-     * @param row the row object to obtain the property from
-     * @return the named row object property value
-     * @throws RuntimeException if an error occurred obtaining the property
-     */
-    protected Object getProperty(Object row) {
-        return getProperty(getName(), row);
-    }
-
-    /**
-     * Return the column property value from the given row object and property name.
-     * <p/>
-     * If the row object is a <tt>Map</tt> this method will attempt to return
-     * the map value for the column.
-     * <p/>
-     * The row map lookup will be performed using the property name,
-     * if a value is not found the property name in uppercase will be used,
-     * if a value is still not found the property name in lowercase will be used.
-     * If a map value is still not found then this method will return null.
-     * <p/>
-     * Object property values can also be specified using an path expression.
-     *
-     * @param name the name of the property
-     * @param row the row object to obtain the property from
-     * @return the named row object property value
-     * @throws RuntimeException if an error occurred obtaining the property
-     */
-    protected Object getProperty(String name, Object row) {
-        if (row instanceof Map) {
-            Map map = (Map) row;
-
-            Object object = map.get(name);
-            if (object != null) {
-                return object;
-            }
-
-            String upperCaseName = name.toUpperCase();
-            object = map.get(upperCaseName);
-            if (object != null) {
-                return object;
-            }
-
-            String lowerCaseName = name.toLowerCase();
-            object = map.get(lowerCaseName);
-            if (object != null) {
-                return object;
-            }
-
-            return null;
-
-        } else {
-            if (methodCache == null) {
-                methodCache = new HashMap();
-            }
-
-            return PropertyUtils.getValue(row, name, methodCache);
         }
     }
 
