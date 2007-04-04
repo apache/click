@@ -407,6 +407,15 @@ caching in the login page, note the value for a Date type should be a long numbe
 &lt;/page&gt; 
 </pre>
 
+If you wanted to enable caching for a particular page you could set the following page cache control header. This will mark the page
+as cachable for a period of 1 hour after which it should be reloaded.
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">home.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
+  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">max-age=3600, public, must-revalidate</span>"/&gt;
+&lt;/page&gt; 
+</pre>
+
 To apply header values globally define header values in the headers element. For example:
 
 <pre class="codeConfig">
