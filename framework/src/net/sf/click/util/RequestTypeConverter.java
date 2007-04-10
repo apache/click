@@ -97,7 +97,7 @@ public class RequestTypeConverter implements TypeConverter {
                     result = new Double(OgnlOps.doubleValue(value));
 
                 } else if ((toType == Boolean.class) || (toType == Boolean.TYPE)) {
-                    result = OgnlOps.booleanValue(value) ? Boolean.TRUE : Boolean.FALSE;
+                    result = Boolean.valueOf(value.toString()); 
 
                 } else if ((toType == Byte.class) || (toType == Byte.TYPE)) {
                     result = new Byte((byte) OgnlOps.longValue(value));
