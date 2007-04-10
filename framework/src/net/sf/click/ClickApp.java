@@ -441,7 +441,8 @@ class ClickApp implements EntityResolver {
                 }
 
                 Class pageClass = null;
-                if (servletContext.getResourcePaths(path) != null) {
+                Set resourcePaths = servletContext.getResourcePaths(path);
+                if (resourcePaths != null && resourcePaths.size() > 0) {
                     pageClass = getPageClass(path, pagesPackage);
 
                     if (pageClass != null) {
