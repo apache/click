@@ -287,23 +287,7 @@ public class LinkDecorator implements Decorator {
 
         if (linksArray.length == 1) {
             AbstractLink link = linksArray[0];
-            link.setContext(context);
-            link.setId(null);
-
-            if (link instanceof ActionLink) {
-                ((ActionLink) link).setValueObject(value);
-
-            } else {
-                if (value != null) {
-                    link.setParameter(idProperty, value.toString());
-                }
-            }
-
-            link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-            if (table.getSortedColumn() != null) {
-                link.setParameter(Table.COLUMN, table.getSortedColumn());
-            }
+            initLink(link, context, value);
 
             return link.toString();
 
@@ -312,23 +296,7 @@ public class LinkDecorator implements Decorator {
 
             for (int i = 0; i < linksArray.length; i++) {
                 AbstractLink link = linksArray[i];
-                link.setContext(context);
-                link.setId(null);
-
-                if (link instanceof ActionLink) {
-                    ((ActionLink) link).setValueObject(value);
-
-                } else {
-                    if (value != null) {
-                        link.setParameter(idProperty, value.toString());
-                    }
-                }
-
-                link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-                if (table.getSortedColumn() != null) {
-                    link.setParameter(Table.COLUMN, table.getSortedColumn());
-                }
+                initLink(link, context, value);
 
                 if (i > 0) {
                     if (StringUtils.isBlank(link.getImageSrc())) {
@@ -361,15 +329,7 @@ public class LinkDecorator implements Decorator {
 
         if (buttonsArray.length == 1) {
             ActionButton button = buttonsArray[0];
-            button.setContext(context);
-
-            button.setValueObject(value);
-
-            button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-            if (table.getSortedColumn() != null) {
-                button.setParameter(Table.COLUMN, table.getSortedColumn());
-            }
+            initButton(button, context, value);
 
             return button.toString();
 
@@ -378,15 +338,7 @@ public class LinkDecorator implements Decorator {
 
             for (int i = 0; i < buttonsArray.length; i++) {
                 ActionButton button = buttonsArray[i];
-                button.setContext(context);
-
-                button.setValueObject(value);
-
-                button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
-
-                if (table.getSortedColumn() != null) {
-                    button.setParameter(Table.COLUMN, table.getSortedColumn());
-                }
+                initButton(button, context, value);
 
                 if (i > 0) {
                     buffer.append(getLinkSeparator());
@@ -399,6 +351,58 @@ public class LinkDecorator implements Decorator {
         }
     }
 
+    // --------------------------------------------------------- Protected methods
+
+    /**
+     * Initialize the link value and parameters.
+     *
+     * @param link the link to initialize
+     * @param context the request context
+     * @param value the value of the link
+     */
+    protected void initLink(AbstractLink link, Context context, Object value) {
+        link.setContext(context);
+        link.setId(null);
+
+        if (link instanceof ActionLink) {
+            ((ActionLink) link).setValueObject(value);
+
+        } else {
+            if (value != null) {
+                link.setParameter(idProperty, value.toString());
+            }
+        }
+
+        link.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+        if (table.getSortedColumn() != null) {
+            link.setParameter(Table.COLUMN, table.getSortedColumn());
+            link.setParameter(Table.ASCENDING, Boolean.toString(!table.isSortedAscending()));
+            link.setParameter(Table.SORT, Boolean.toString(table.isSorted()));
+        }
+    }
+
+    /**
+     * Initialize the button value and parameters.
+     *
+     * @param button the button to initialize
+     * @param context the request context
+     * @param value the value of the button
+     */
+    protected void initButton(ActionButton button, Context context, Object value) {
+        button.setContext(context);
+
+        button.setValueObject(value);
+
+        button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
+
+        if (table.getSortedColumn() != null) {
+            button.setParameter(Table.COLUMN, table.getSortedColumn());
+            button.setParameter(Table.ASCENDING, Boolean.toString(!table.isSortedAscending()));
+            button.setParameter(Table.SORT, Boolean.toString(table.isSorted()));
+        }
+    }
+
     // --------------------------------------------------------- Inner Classes
 
     /**
@@ -406,7 +410,7 @@ public class LinkDecorator implements Decorator {
      *
      * @author Malcolm Edgar
      */
-    static class PageNumberControl implements Control {
+    class PageNumberControl implements Control {
 
         private static final long serialVersionUID = 1L;
 
@@ -456,15 +460,69 @@ public class LinkDecorator implements Decorator {
         }
 
         public boolean onProcess() {
-            String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
+            if (anyLinkOrButtonClicked()) {
+                String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
 
-            if (StringUtils.isNotBlank(pageNumber)) {
-                table.setPageNumber(Integer.parseInt(pageNumber));
+                if (StringUtils.isNotBlank(pageNumber)) {
+                    table.setPageNumber(Integer.parseInt(pageNumber));
+                }
+
+                String column = table.getContext().getRequestParameter(table.COLUMN);
+                if (column != null) {
+                    table.setSortedColumn(column);
+                }
+
+                String ascending = table.getContext().getRequestParameter(table.ASCENDING);
+                if (ascending != null) {
+                    table.setSortedAscending("true".equals(ascending));
+                }
+
+                // Flip sorting order
+                if ("true".equals(table.getContext().getRequestParameter(table.SORT))) {
+                    table.setSortedAscending(!table.isSortedAscending());
+                }
             }
-
             return true;
         }
 
-    }
+        /**
+         * Query if the user clicked on a button or button contained
+         * in LinkDecorator. As soon as either a button or link if found
+         * that was clicked this method returns.
+         *
+         * @return true if a button or button of LinkDecorator was clicked,
+         * false otherwise
+         */
+        protected boolean anyLinkOrButtonClicked() {
+            boolean clicked = false;
 
+            //Loop over all links and check if any was clicked
+            if (linksArray != null) {
+                for (int i = 0; i < linksArray.length; i++) {
+                    AbstractLink link = linksArray[i];
+                    if (link instanceof ActionLink) {
+                        ActionLink actionLink = (ActionLink) link;
+                        clicked =
+                                actionLink.getName().equals(table.getContext().getRequestParameter(actionLink.ACTION_LINK));
+                        if (clicked) {
+                            return clicked;
+                        }
+                    }
+                }
+            }
+
+            //Loop over all buttons and check if any was clicked
+            if (buttonsArray != null) {
+                for (int i = 0; i < buttonsArray.length; i++) {
+                    ActionButton button = buttonsArray[i];
+                    clicked =
+                            button.getName().equals(table.getContext().getRequestParameter(button.ACTION_BUTTON));
+                    if (clicked) {
+                        return clicked;
+                    }
+                }
+            }
+            return clicked;
+        }
+    }
 }
