@@ -16,13 +16,18 @@
 package net.sf.click.extras.tree;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.StringTokenizer;
 import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
@@ -32,7 +37,9 @@ import net.sf.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a tree control  for displaying hierarchical data.
+ * Provides a tree control  for displaying hierarchical data. The tree operates
+ * on a hierarchy of {@link TreeNode}'s. Each TreeNode must provide a
+ * uniquely identified node in the hierarchy.
  * <p/>
  * Below is screenshot of how the tree will render in a browser.
  *
@@ -91,7 +98,7 @@ import org.apache.commons.lang.StringUtils;
  *         <span class="kw">new</span> TreeNode(<span class="st">"oracle.pdf"</span>,<span class="st">"12"</span>,databases);
  *         <span class="kw">new</span> TreeNode(<span class="st">"postgres"</span>,<span class="st">"13"</span>,databases);
  *
- *         tree.setRootNode(node);
+ *         tree.setRootNode(root);
  *         <span class="kw">return</span> tree;
  *     }
  * } </pre>
@@ -146,6 +153,9 @@ public class Tree extends AbstractControl {
     /** The tree's select/deselect parameter name: <tt>"selectTreeNode"</tt>. */
     public static final String SELECT_TREE_NODE_PARAM = "selectTreeNode";
 
+    /** The tree's bookmark for scrolling to the last expanded/collapsed node. */
+    public static final String TREE_BOOKMARK = "tbm";
+
     /** The tree.css style sheet import link. */
     public static final String TREE_IMPORTS =
             "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/tree/tree.css\"></link>\n";
@@ -154,11 +164,22 @@ public class Tree extends AbstractControl {
     public static final String JAVASCRIPT_IMPORTS =
             "<script type=\"text/javascript\" src=\"$/click/tree/tree.js\"></script>\n";
 
+    /** Client side javascript cookie import link. */
+    public static final String JAVASCRIPT_COOKIE_IMPORTS =
+            "<script type=\"text/javascript\" src=\"$/click/tree/cookie-helper.js\"></script>\n";
+
     /** The Tree resource file names. */
     public static final String[] TREE_RESOURCES = {
         "/net/sf/click/extras/tree/tree.css",
-        "/net/sf/click/extras/tree/tree.js"
+        "/net/sf/click/extras/tree/tree.js",
+        "/net/sf/click/extras/tree/cookie-helper.js"
     };
+
+    /** Indicator for using cookies to implement client side behavior. */
+    public final static int JAVASCRIPT_COOKIE_POLICY = 1;
+
+    /** Indicator for using the session to implement client side behavior. */
+    public final static int JAVASCRIPT_SESSION_POLICY = 2;
 
     /** The Tree image file names. */
     protected static final String[] TREE_IMAGES = {
@@ -174,6 +195,15 @@ public class Tree extends AbstractControl {
         "/net/sf/click/extras/tree/images/vertical-line.png"
     };
 
+    /** The tree's expand icon name: <tt>"expandedIcon"</tt>. */
+    protected static final String EXPAND_ICON = "expandedIcon";
+
+    /** The tree's collapsed icon name: <tt>"collapsedIcon"</tt>. */
+    protected static final String COLLAPSE_ICON = "collapsedIcon";
+
+    /** The tree's leaf icon name: <tt>"leafIcon"</tt>. */
+    protected static final String LEAF_ICON = "leafIcon";
+
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
@@ -184,9 +214,6 @@ public class Tree extends AbstractControl {
 
     /** The tree's hierarchical data model. */
     protected TreeNode rootNode;
-
-    /** Javascript string builder. */
-    protected JavascriptStringBuilder jsBuilder;
 
     /** Callback provider for users to decorate tree nodes. */
     private transient Decorator decorator;
@@ -202,6 +229,12 @@ public class Tree extends AbstractControl {
 
     /** List of subscribed listeners to tree events.*/
     private List listeners = new ArrayList();
+
+    /** Current javascript policy in effect. */
+    private int javascriptPolicy = 0;
+
+    /** Flag indicates if listeners should be notified of any state changes. */
+    private boolean notifyListeners = true;
 
     // ---------------------------------------------------- Public Constructors
 
@@ -335,33 +368,68 @@ public class Tree extends AbstractControl {
      * tree will be navigatable in the browser using javascript, instead
      * of doing round trips to the server on each operation.
      * <p/>
-     * This Tree implementation only supports javscript functionionality for
-     * expand/collapse. Subclasses could add more functionality
-     * as needed.
+     * With javascript enabled you need to store the values from the
+     * browser between requests. The tree currently supports the
+     * following policies:
+     * <ul>
+     *     <li>{@link #JAVASCRIPT_COOKIE_POLICY}
+     *     <li>{@link #JAVASCRIPT_SESSION_POLICY}
+     * </ul>
+     * This method will try and determine which policy should be applied
+     * to the current request using
+     * {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}. If
+     * {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}
+     * returns true the policy selected will be
+     * {@link #JAVASCRIPT_COOKIE_POLICY} otherwise
+     *{@link #JAVASCRIPT_SESSION_POLICY}.
      * <p/>
-     * <strong>Note:</strong> enabling javascript implies the that the
-     * entire tree will be available on the users browser, so there are
-     * no round trips to server when expand/collapse operations are done.
-     * This usually means that you must call {@link #expandAll()} at some
-     * stage before the tree is rendered. Reason is that collapsed nodes
-     * are not rendered and failure to call {@link #expandAll()} will send
-     * only part of the tree to the browser.
-     * <p/>
-     * <strong>Note:</strong> if javascript is enabled, then at rendering
-     * time, the expanded node's will be hidden using the css
-     * <tt>"display:none"</tt> idiom. Thus the tree will be rendered in a
-     * collapsed state on the browser.
+     * <strong>Note:</strong> if javascript is enabled, then the entire
+     * tree is rendered even if some nodes are in a collapsed state. This
+     * enables the tree to still be fully navigatable in the browser. However
+     * nodes that are in a collapsed state are still displayed as collapsed
+     * using the <tt>"display:none"</tt> idiom.
      *
      * @param newValue the value to set the javascriptEnabled property to
      * @throws IllegalArgumentException if the context is null
+     * @see #setJavascriptEnabled(boolean, int)
      */
     public void setJavascriptEnabled(boolean newValue) {
+        if (getContext() == null) {
+            throw new IllegalStateException("Context is mandatory when enabling javascript support");
+        }
+        if (getContext().getRequest().isRequestedSessionIdFromCookie()) {
+            setJavascriptEnabled(newValue, JAVASCRIPT_COOKIE_POLICY);
+        } else {
+            setJavascriptEnabled(newValue, JAVASCRIPT_SESSION_POLICY);
+        }
+    }
+
+    /**
+     * Overloads {@link #setJavascriptEnabled(boolean)}. Enables one
+     * to select the javascript policy to apply.
+     *
+     * @param newValue the value to set the javascriptEnabled property to
+     * @param javascriptPolicy the current javascript policy
+     * @throws IllegalArgumentException if the context is null
+     * @see #setJavascriptEnabled(boolean)
+     */
+    public void setJavascriptEnabled(boolean newValue, int javascriptPolicy) {
+        if (getContext() == null) {
+            throw new IllegalStateException("Context is mandatory when enabling javascript support");
+        }
+
         this.javascriptEnabled = newValue;
         if (javascriptEnabled) {
-            javascriptTracker = new JavascriptPathTracker(getContext());
-            addListener(javascriptTracker);
+            javascriptHandler = createJavascriptHandler(javascriptPolicy);
+            addListener(javascriptHandler);
+            this.javascriptPolicy = javascriptPolicy;
+
+            //Populate the javascript handler with its state. This call will notify
+            //any tree listeners about new values.
+            javascriptHandler.init(getContext());
         } else {
-            removeListener(javascriptTracker);
+            removeListener(javascriptHandler);
+            this.javascriptPolicy = 0;
         }
     }
 
@@ -379,6 +447,9 @@ public class Tree extends AbstractControl {
         StringBuffer buffer = new StringBuffer(100);
         if (isJavascriptEnabled()) {
             buffer.append(StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path));
+            if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
+                buffer.append(StringUtils.replace(JAVASCRIPT_COOKIE_IMPORTS, "$", path));
+            }
         }
         buffer.append(StringUtils.replace(TREE_IMPORTS, "$", path));
         return buffer.toString();
@@ -397,6 +468,7 @@ public class Tree extends AbstractControl {
         if (nodeIds == null || nodeIds.length <= 0) {
             return;
         }
+
         expandOrCollapse(nodeIds);
     }
 
@@ -411,11 +483,35 @@ public class Tree extends AbstractControl {
         if (nodeIds == null || nodeIds.length <= 0) {
             return;
         }
+
         selectOrDeselect(nodeIds);
     }
 
     /**
+     * Query if the tree will notify its tree listeners of any change
+     * to the tree's model.
+     *
+     * @return true if listeners should be notified of any changes.
+     */
+    public boolean isNotifyListeners() {
+        return notifyListeners;
+    }
+
+    /**
+     * Enable or disable if the tree will notify its tree listeners of any change
+     * to the tree's model.
+     *
+     * @param notifyListeners true if the tree will notify its listeners ,
+     * false otherwise
+     */
+    public void setNotifyListeners(boolean notifyListeners) {
+        this.notifyListeners = notifyListeners;
+    }
+
+    /**
      * Expand the node with matching id and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param id identifier of the node to be expanded.
      */
@@ -428,6 +524,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Expand the node and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param node the node to be expanded.
      */
@@ -440,6 +538,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Collapse the node with matching id and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param id identifier of node to be collapsed.
      */
@@ -452,6 +552,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Collapse the node and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param node the node to be collapsed.
      */
@@ -464,30 +566,40 @@ public class Tree extends AbstractControl {
 
     /**
      * Expand all the nodes of the tree and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      */
     public void expandAll() {
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(true);
-            fireNodeExpanded(node, oldValue);
+            if (isNotifyListeners()) {
+                fireNodeExpanded(node, oldValue);
+            }
         }
     }
 
     /**
      * Collapse all the nodes of the tree and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      */
     public void collapseAll() {
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isExpanded();
             node.setExpanded(false);
-            fireNodeCollapsed(node, oldValue);
+            if (isNotifyListeners()) {
+                fireNodeCollapsed(node, oldValue);
+            }
         }
     }
 
     /**
      * Select the node with matching id and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param id identifier of node to be selected.
      */
@@ -500,6 +612,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Select the node and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param node the node to be selected.
      */
@@ -512,6 +626,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Deselect the node with matching id and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      *
      * @param id id of node to be deselected.
      */
@@ -524,7 +640,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Deselect the node and inform any listeners of the change.
-     *
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      * @param node the node to be deselected.
      */
     public void deselect(TreeNode node) {
@@ -536,25 +653,33 @@ public class Tree extends AbstractControl {
 
     /**
      * Select all the nodes of the tree and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      */
     public void selectAll() {
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(true);
-            fireNodeSelected(node, oldValue);
+            if (isNotifyListeners()) {
+                fireNodeSelected(node, oldValue);
+            }
         }
     }
 
     /**
      * Deselect all the nodes of the tree and inform any listeners of the change.
+     * If {@link #isNotifyListeners()} returns false, this method will not
+     * notify its listeners of any change.
      */
     public void deselectAll() {
         for (Iterator it = iterator(); it.hasNext();) {
             TreeNode node = (TreeNode) it.next();
             boolean oldValue = node.isSelected();
             node.setSelected(false);
-            fireNodeDeselected(node, oldValue);
+            if (isNotifyListeners()) {
+                fireNodeDeselected(node, oldValue);
+            }
         }
     }
 
@@ -667,6 +792,12 @@ public class Tree extends AbstractControl {
     public boolean onProcess() {
         bindExpandOrCollapseValues();
         bindSelectOrDeselectValues();
+
+        if (isJavascriptEnabled()) {
+            //Populate the javascript handler with its state. This call will notify
+            //any tree listeners about new values.
+            //javascriptHandler.init();
+        }
         return true;
     }
 
@@ -719,6 +850,7 @@ public class Tree extends AbstractControl {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
 
+
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
@@ -730,9 +862,9 @@ public class Tree extends AbstractControl {
         if (isRootNodeDisplayed()) {
             TreeNode temp = new TreeNode();
 
-            //careful not to use the method temp.add(), because that will
-            //set temp as the parent of the current root node, which will
-            //then become the new root node of the tree
+            //Do not use the method temp.add(), because that will
+            //set temp as the parent of the current root node. Temp
+            //will then become the new root node of the tree.
             temp.addChildOnly(getRootNode());
             renderTree(buffer, temp, 0);
         } else {
@@ -741,6 +873,11 @@ public class Tree extends AbstractControl {
 
         buffer.elementEnd("div");
         buffer.append("\n");
+
+        if (isJavascriptEnabled()) {
+            //Complete the lifecycle of the javascript handler.
+            javascriptHandler.destroy();
+        }
         return buffer.toString();
     }
 
@@ -764,12 +901,13 @@ public class Tree extends AbstractControl {
 
         buffer.elementStart("ul");
 
-        //If javascript is enabled and this is not the first level of <ul> elements,
-        //the css class 'hide' is appended to the <ul> element to ensure the tree
-        //is in a collapsed state on the browser. However, node's who's ids are
-        //tracked by the PathTracker should not be hidden.
         buffer.append(" class=\"level");
         buffer.append(Integer.toString(indentation));
+
+        //If javascript is enabled and this is not the first level of <ul> elements,
+        //the css class 'hide' is appended to the <ul> element to ensure the tree
+        //is in a collapsed state on the browser. However, we must query the
+        //javascript handler if it does not perhaps veto the collapsed state.
         if (indentation > 1 && shouldHideNode(treeNode)) {
             buffer.append(" hide");
         }
@@ -779,18 +917,45 @@ public class Tree extends AbstractControl {
         while (it.hasNext()) {
             TreeNode child = (TreeNode) it.next();
 
-            //prebuild some javascript specific strings
             if (isJavascriptEnabled()) {
-                jsBuilder = createJavascriptBuilder(child);
+                javascriptHandler.getJavascriptRenderer().init(child);
             }
             renderTreeNodeStart(buffer, child, indentation);
             renderTreeNode(buffer, child, indentation);
-            if (child.getChildren().size() > 0 && child.isExpanded()) {
+
+            //check if the child node should be renderered
+            if (shouldRenderChildren(child)) {
                 renderTree(buffer, child, indentation);
             }
             renderTreeNodeEnd(buffer, child, indentation);
         }
         buffer.append("</ul>\n");
+    }
+
+    /**
+     * Check the state of the specified node if its children
+     * should be rendered or not.
+     *
+     * @param treeNode specified node to check
+     * @return true if the child nodes should be rendered,
+     * false otherwise
+     */
+    protected boolean shouldRenderChildren(TreeNode treeNode) {
+        if (treeNode.isLeaf()) {
+            return false;
+        }
+        if (treeNode.isExpanded()) {
+            return true;
+        } else {
+
+            //If javascript is enabled, the entire tree has to be rendered
+            //and sent to the browser. So even if the node is not
+            //expanded, we still render the node's children.
+            if (isJavascriptEnabled()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -807,9 +972,8 @@ public class Tree extends AbstractControl {
         sb.append(getExpandClass(treeNode));
         buffer.appendAttribute("class", sb.toString());
         if (isJavascriptEnabled()) {
-            //An id is needed on the element to do quick lookup using javascript
-            //document.getElementById(id)
-            buffer.appendAttribute("id", jsBuilder.expandId);
+            //hook to insert javascript specific code
+            javascriptHandler.getJavascriptRenderer().renderTreeNodeStart(buffer);
         }
         buffer.appendAttribute("style", "display:block;");
         buffer.closeTag();
@@ -817,7 +981,7 @@ public class Tree extends AbstractControl {
         //Render the node's expand/collapse functionality.
         //This includes adding a css class for the current expand/collapse state.
         //In the tree.css file, the css classes are mapped to icons by default.
-        if (treeNode.getChildren().size() > 0) {
+        if (treeNode.hasChildren()) {
             renderExpandAndCollapseAction(buffer, treeNode);
         } else {
             buffer.append("<span class=\"spacer\"></span>");
@@ -839,8 +1003,8 @@ public class Tree extends AbstractControl {
 
     /**
      * Render the expand and collapse action of the tree.
-     *
-     * <p/>Default implementation creates a hyperlink that users can click on
+     * <p/>
+     * Default implementation creates a hyperlink that users can click on
      * to expand or collapse the nodes.
      *
      * @param buffer string buffer containing the markup
@@ -848,12 +1012,18 @@ public class Tree extends AbstractControl {
      */
     protected void renderExpandAndCollapseAction(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-        StringBuffer tmpBuf = new StringBuffer(getContext().getRequest().getRequestURI());
-        tmpBuf.append("?").append(EXPAND_TREE_NODE_PARAM).append("=").append(treeNode.getId());
-        buffer.appendAttribute("href", tmpBuf.toString());
+
+        buffer.append(" href=");
+        buffer.append(getContext().getRequest().getRequestURI());
+        buffer.append("?");
+        buffer.append(EXPAND_TREE_NODE_PARAM);
+        buffer.append("=");
+        buffer.append(treeNode.getId());
+
         buffer.appendAttribute("class", "spacer");
         if (isJavascriptEnabled()) {
-            buffer.append(jsBuilder.nodeExpansionString);
+            //hook to insert javascript specific code
+            javascriptHandler.getJavascriptRenderer().renderExpandAndCollapseAction(buffer);
         }
         buffer.closeTag();
         buffer.elementEnd("a");
@@ -863,8 +1033,8 @@ public class Tree extends AbstractControl {
     /**
      * Render the specified treeNode.
      * <p/>
-     * If a decorator was specified using {@link #setDecorator(Decorator) }, this method will
-     * render using the decorator instead.
+     * If a decorator was specified using {@link #setDecorator(Decorator) },
+     * this method will render using the decorator instead.
      *
      * @param buffer string buffer containing the markup
      * @param treeNode treeNode to render
@@ -879,16 +1049,6 @@ public class Tree extends AbstractControl {
             return;
         }
 
-        //TODO IE HACK. IE7 displays the tree nodes properly alligned when rendered
-        //inside a table.  Without the code below the icons and node values does not
-        //align correctly. Firefox and Opera displays nicely without this hack. There
-        //might be a better way to fix this ;-)
-        boolean isIE = isIE(context);
-        if (isIE) {
-            buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" "
-                    + "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
-        }
-
         renderIcon(buffer, treeNode);
 
         //TODO IE HACK. With a empty span <span></span> IE does not render the
@@ -896,10 +1056,6 @@ public class Tree extends AbstractControl {
         //better workaround.
         buffer.append("&nbsp;");
         buffer.append("</span>");
-
-        if (isIE) {
-            buffer.append("</td><td>");
-        }
 
         buffer.elementStart("span");
         if (treeNode.isSelected()) {
@@ -912,10 +1068,6 @@ public class Tree extends AbstractControl {
         //renders the node value
         renderValue(buffer, treeNode);
         buffer.elementEnd("span");
-
-        if (isIE) {
-            buffer.append("</td></tr></table>");
-        }
     }
 
     /**
@@ -932,7 +1084,7 @@ public class Tree extends AbstractControl {
         if (isJavascriptEnabled()) {
             //An id is needed on the element to do quick lookup using javascript
             //document.getElementById(id)
-            buffer.appendAttribute("id", jsBuilder.iconId);
+            javascriptHandler.getJavascriptRenderer().renderIcon(buffer);
         }
         buffer.append(">");
     }
@@ -949,9 +1101,13 @@ public class Tree extends AbstractControl {
      */
     protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-        StringBuffer tmpBuf = new StringBuffer(getContext().getRequest().getRequestURI());
-        tmpBuf.append("?").append(SELECT_TREE_NODE_PARAM).append("=").append(treeNode.getId());
-        buffer.appendAttribute("href", tmpBuf.toString());
+        buffer.append(" href=");
+        buffer.append(getContext().getRequest().getRequestURI());
+        buffer.append("?");
+        buffer.append(SELECT_TREE_NODE_PARAM);
+        buffer.append("=");
+        buffer.append(treeNode.getId());
+
         buffer.closeTag();
         if (treeNode.getValue() != null) {
             buffer.append(treeNode.getValue());
@@ -965,22 +1121,14 @@ public class Tree extends AbstractControl {
      * <p/>
      * Possible classes are expanded, collapsed, leaf, expandedLastNode,
      * collapsedLastNode and leafLastNode.
-     * <p/>
-     * If javascript is enabled this method will instead of <tt>collapsed</tt>
-     * return <tt>expanded</tt>, so that the tree is in a collapsed state on the
-     * browser.
      *
      * @param treeNode the tree node to check for css class
      * @return string specific css class to apply
      */
     protected String getExpandClass(TreeNode treeNode) {
         StringBuffer buffer = new StringBuffer();
-        if (treeNode.getChildren().size() > 0 && treeNode.isExpanded()) {
-            if (shouldHideNode(treeNode)) {
-                buffer.append("collapsed");
-            } else {
-                buffer.append("expanded");
-            }
+        if (isExpandedParent(treeNode)) {
+            buffer.append("expanded");
         } else if (treeNode.getChildren().size() > 0) {
             buffer.append("collapsed");
         } else {
@@ -998,46 +1146,31 @@ public class Tree extends AbstractControl {
      * the icons.
      * <p/>
      * Possible classes are expandedIcon, collapsedIcon and leafIcon.
-     * <p/>
-     * If javascript is enabled this method will instead of <tt>collapsed</tt>
-     * return <tt>expanded</tt>, so that the tree displays the correct icon on the
-     * browser.
      *
      * @param treeNode the tree node to check for css class
      * @return string specific css class to apply
      */
     protected String getIconClass(TreeNode treeNode) {
-        if (treeNode.isExpanded() && treeNode.hasChildren()) {
-            if (shouldHideNode(treeNode)) {
-                return "collapsedIcon";
-            } else {
-                return "expandedIcon";
-            }
+        if (isExpandedParent(treeNode)) {
+            return EXPAND_ICON;
         } else if (!treeNode.isExpanded() && treeNode.hasChildren() || treeNode.isChildrenSupported()) {
-            return "collapsedIcon";
+            return COLLAPSE_ICON;
         } else {
-            return "leafIcon";
+            return LEAF_ICON;
         }
     }
 
     /**
-     * Queries specified context if the user is using Internet Explorer.
+     * Helper method indicating if the specified node is both
+     * expanded and has at least 1 child node.
      *
-     * @param context the Page request Context
-     * @return true if the request came from IE, false otherwise
+     * @param treeNode specified node to check
+     * @return true if the specified node is both expanded and
+     * contains at least 1 child node
      */
-    protected boolean isIE(Context context) {
-        String useragent = context.getRequest().getHeader("User-Agent");
-        if (useragent == null) {
-            return false;
-        }
-        String user = useragent.toLowerCase();
-        if (user.indexOf("msie") != -1) {
-            return true;
-        }
-        return false;
+    protected boolean isExpandedParent(TreeNode treeNode) {
+        return (treeNode.isExpanded() && treeNode.hasChildren());
     }
-
 
     // -------------------------------------------- Protected observer behavior
 
@@ -1108,10 +1241,12 @@ public class Tree extends AbstractControl {
     protected void setExpandState(TreeNode node, boolean newValue) {
         boolean oldValue = node.isExpanded();
         node.setExpanded(newValue);
-        if (newValue) {
-            fireNodeExpanded(node, oldValue);
-        } else {
-            fireNodeCollapsed(node, oldValue);
+        if (isNotifyListeners()) {
+            if (newValue) {
+                fireNodeExpanded(node, oldValue);
+            } else {
+                fireNodeCollapsed(node, oldValue);
+            }
         }
     }
 
@@ -1168,10 +1303,12 @@ public class Tree extends AbstractControl {
     protected void setSelectState(TreeNode node, boolean newValue) {
         boolean oldValue = node.isSelected();
         node.setSelected(newValue);
-        if (newValue) {
-            fireNodeSelected(node, oldValue);
-        } else {
-            fireNodeDeselected(node, oldValue);
+        if (isNotifyListeners()) {
+            if (newValue) {
+                fireNodeSelected(node, oldValue);
+            } else {
+                fireNodeDeselected(node, oldValue);
+            }
         }
     }
 
@@ -1354,7 +1491,7 @@ public class Tree extends AbstractControl {
          * The specified node will be set as the root of the traversal.
          *
          * @param node node will be set as the root of the traversal.
-         * @param iterateCollapsedNodes indicator to iteratte collapsed node's
+         * @param iterateCollapsedNodes indicator to iterate collapsed node's
          */
         public BreadthTreeIterator(TreeNode node, boolean iterateCollapsedNodes) {
             if (node == null) {
@@ -1460,17 +1597,567 @@ public class Tree extends AbstractControl {
     // ------------------------------------------- Javascript specific behavior
 
     /**
-     * Keep track of node id's, that are on the <tt>selected path</tt>.
-     * @see JavascriptPathTracker
+     * Creates a new JavascriptHandler based on the specified policy.
+     *
+     * @param javascriptPolicy the current javascript policy
+     * @return newly created JavascriptHandler
      */
-    protected transient JavascriptPathTracker javascriptTracker;
+    protected JavascriptHandler createJavascriptHandler(int javascriptPolicy) {
+        if (javascriptPolicy == JAVASCRIPT_SESSION_POLICY) {
+            return new SessionHandler(getContext());
+        } else {
+            return new CookieHandler(getContext());
+        }
+    }
+
+    /**
+     * Keep track of node id's, as they are selected, deselected,
+     * expanded and collapsed.
+     *
+     * @see JavascriptHandler
+     */
+    protected transient JavascriptHandler javascriptHandler;
+
+    /**
+     * <strong>Please note</strong> this interface is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the contract for pluggable javascript renderers for
+     * the Tree.
+     */
+    interface JavascriptRenderer {
+
+        /**
+         * Called to initialize the renderer.
+         *
+         * @param node the current node rendered
+         */
+        void init(TreeNode node);
+
+        /**
+         * Called before a tree node is rendered. Enables the renderer
+         * to add attributes needed by javascript functionality for example
+         * something like:
+         * <pre class="codeJava">
+         *      buffer.appendAttribute(<span class="st">"id"</span>,expandId);
+         * </pre>
+         * The code above adds a id attribute to the element, to enable
+         * the javascript code to lookup the html element by its id.
+         * <p/>
+         * The above attribute is appended to whichever element the
+         * tree is currently rendering at the time renderTreeNodeStart
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderTreeNodeStart(HtmlStringBuffer buffer);
+
+        /**
+         * Called when the expand and collapse action is rendered. Enables
+         * the renderer to add attributes needed by javascript functionality
+         * for example something like:
+         * <pre class="codeJava">
+         *      buffer.append(<span class="st">"onclick=\"handleNodeExpansion(this,event)\""</span>);
+         * </pre>
+         * The code above adds a javascript function call to the element.
+         * <p/>
+         * The code above is appended to whichever element the
+         * tree is currently rendering at the time renderTreeNodeStart
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderExpandAndCollapseAction(HtmlStringBuffer buffer);
+
+        /**
+         * Called when the tree icon is rendered. Enables the renderer
+         * to add attributes needed by javascript functionality for example
+         * something like:
+         * <pre class="codeJava">
+         *      buffer.appendAttribute(<span class="st">"id"</span>,iconId);
+         * </pre>
+         * The code above adds a id attribute to the element, to enable
+         * the javascript code to lookup the html element by its id.
+         * <p/>
+         * The above attribute is appended to whichever element the
+         * tree is currently rendering at the time renderTreeNodeStart
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderIcon(HtmlStringBuffer buffer);
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides a abstract implementation of JavascriptRenderer that
+     * subclasses can extend from.
+     */
+    protected abstract class AbstractJavascriptRenderer implements JavascriptRenderer {
+
+        /** holds the id of the expand html element. */
+        protected String expandId;
+
+        /** holds the id of the icon html element. */
+        protected String iconId;
+
+        /** holds the javascript call to expand the node. */
+        protected String nodeExpansionString;
+
+        /**
+         * @see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         * @see JavascriptRenderer#init(TreeNode)
+         */
+        public void init(TreeNode treeNode) {
+            expandId = buildString("e_", treeNode.getId(), "");
+            iconId = buildString("i_", treeNode.getId(), "");
+        }
+
+        /**
+         * @see JavascriptRenderer#renderTreeNodeStart(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderTreeNodeStart(HtmlStringBuffer buffer) {
+            //An id is needed on the element to do quick lookup using javascript
+            //document.getElementById(id)
+            buffer.appendAttribute("id", expandId);
+        }
+
+        /**
+         * @see JavascriptRenderer#renderExpandAndCollapseAction(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderExpandAndCollapseAction(HtmlStringBuffer buffer) {
+            buffer.append(nodeExpansionString);
+        }
+
+        /**
+         * @see JavascriptRenderer#renderIcon(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderIcon(HtmlStringBuffer buffer) {
+            //An id is needed on the element to do quick lookup using javascript
+            //document.getElementById(id)
+            buffer.appendAttribute("id", iconId);
+        }
+
+        /**
+         * Builds a new string consisting of a prefix, infix and postfix.
+         *
+         * @param prefix the string to append at the start of new string
+         * @param infix the string to append in the middle of the new string
+         * @param postfix the string to append at the end of the new string
+         * @return the newly create string
+         */
+        protected String buildString(String prefix, String infix, String postfix) {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(prefix).append(infix).append(postfix);
+            return buffer.toString();
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the rendering needed when a {@link #JAVASCRIPT_COOKIE_POLICY}
+     * is in effect.
+     */
+    protected class CookieRenderer extends AbstractJavascriptRenderer {
+
+        /** Name of the cookie holding the expanded nodes id's. */
+        private String expandedCookieName;
+
+        /** Name of the cookie holding the collapsed nodes id's. */
+        private String collapsedCookieName;
+
+        /**
+         * Default constructor.
+         *
+         * @param expandedCookieName name of the cookie holding expanded id's
+         * @param collapsedCookieName name of the cookie holding collapsed id's
+         */
+        public CookieRenderer(String expandedCookieName, String collapsedCookieName) {
+            this.collapsedCookieName = collapsedCookieName;
+            this.expandedCookieName = expandedCookieName;
+        }
+
+        /**
+         *@see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         * @see JavascriptRenderer#init(TreeNode)
+         */
+        public void init(TreeNode treeNode) {
+            super.init(treeNode);
+            StringBuffer tmp = new StringBuffer();
+            tmp.append(" onclick=\"handleNodeExpansion(this,event,'").append(expandId).append("','");
+            tmp.append(iconId).append("'); handleCookie(this,event,'").append(expandId).append("','");
+            tmp.append(treeNode.getId()).append("','");
+            tmp.append(expandedCookieName).append("','");
+            tmp.append(collapsedCookieName).append("'); return false;\"");
+            nodeExpansionString = tmp.toString();
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the rendering needed when a {@link #JAVASCRIPT_SESSION_POLICY}
+     * is in effect.
+     */
+    protected class SessionRenderer extends AbstractJavascriptRenderer {
+
+        /**
+         * @see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         * @see JavascriptRenderer#init(TreeNode)
+         */
+        public void init(TreeNode treeNode) {
+            super.init(treeNode);
+            String tmp = buildString(" onclick=\"handleNodeExpansion(this,event,'", expandId, "','");
+            nodeExpansionString = buildString(tmp, iconId, "'); return false;\"");
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the contract for pluggable javascript handlers.
+     * <p/>
+     * One of the main tasks the handler must perform is keeping track
+     * of which nodes changed state after the user interacted with the
+     * tree in the browser. This is also the reason why the handler
+     * extends {@link TreeListener} to be informed  of any changes
+     * to node state via other means.
+     */
+    protected interface JavascriptHandler extends TreeListener {
+
+        /**
+         * Initialize the handler state.
+         *
+         * @param context provides information for initializing
+         * the handler.
+         */
+        void init(Context context);
+
+        /**
+         * Queries the handler if the specified node should be rendered
+         * as a expanded node.
+         * <p/>
+         * The reason for this is that the handler might be keeping track
+         * of state that the node is not aware of. For example certain state
+         * could be stored in the session or cookies.
+         *
+         * @param treeNode the specified node to query for
+         * @return true if the node should be rendered as if it was
+         * expanded, false otherwise
+         */
+        boolean renderAsExpanded(TreeNode treeNode);
+
+        /**
+         * Called to indicate the user request cycle is complete.
+         * Any last minute tasks can be performed here.
+         */
+        void destroy();
+
+        /**
+         * Returns the javascript renderer associated with
+         * this handler.
+         *
+         * @return renderer associated with this handler
+         */
+        JavascriptRenderer getJavascriptRenderer();
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * This class implements a cookie based javascript handler.
+     * Cookies in the browser tracks the expand and collapse state
+     * of the nodes. When a request is made to the server the cookies
+     * is processed and the state of the nodes are modified accordingly.
+     * <p/>
+     * There are two cookies used to track the state:
+     * <ul>
+     *     <li>a cookie tracking the expanded node id's
+     *     <li>a cookie tracking the collapsed node id's
+     * </ul>
+     * The cookies are removed between requests. New requests
+     * issue new cookies and update the state of the nodes
+     * accordingly.
+     * <p/>
+     * Note: This class is used in conjuction with cookie-helper.js
+     * which manipulates the cookie values in the browser as the
+     * user navigates the tree.
+     */
+    protected class CookieHandler implements JavascriptHandler {
+
+        /** Cookie value delimiter. */
+        private final static String DELIM = ",";
+
+        /** Name of cookie responsible for tracking the expanded node id's. */
+        protected final String expandedCookieName = "expanded_" + getName();
+
+        /** Name of cookie responsible for tracking the expanded node id's. */
+        protected final String collapsedCookieName = "collapsed_" + getName();
+
+        /** Variable holding a javascript renderer. */
+        protected JavascriptRenderer javascriptRenderer;
+
+        /** Tracker for the expanded node id's. */
+        private Set expandTracker;
+
+        /** Tracker for the collapsed node id's. */
+        private Set collapsedTracker;
+
+        /** Value of the cookie responsible for tracking the expanded node id's. */
+        private String expandedNodeCookieValue = null;
+
+        /** Value of the cookie responsible for tracking the collapsed node id's. */
+        private String collapsedNodeCookieValue = null;
+
+        /**
+         * Creates and initializes a new CookieHandler.
+         *
+         * @param context provides access to the http request, and session
+         */
+        protected CookieHandler(Context context) {
+            expandedNodeCookieValue = context.getCookieValue(expandedCookieName);
+            collapsedNodeCookieValue = context.getCookieValue(collapsedCookieName);
+            expandedNodeCookieValue = prepareCookieValue(expandedNodeCookieValue);
+            collapsedNodeCookieValue = prepareCookieValue(collapsedNodeCookieValue);
+        }
+
+        /**
+         * Initialize the handler state from the current cookies.
+         *
+         * @param context provides access to the http request, and session
+         */
+        public void init(Context context) {
+            //If already initialized
+            if (expandTracker != null || collapsedTracker != null) {
+                return;
+            }
+            expandTracker = new HashSet();
+            collapsedTracker = new HashSet();
+
+            if (context == null) {
+                throw new IllegalArgumentException("context cannot be null");
+            }
+
+            //No cookie values to digest
+            if (expandedNodeCookieValue == null
+                    && collapsedNodeCookieValue == null) {
+                return;
+            }
+
+            //build hashes of id's for fast lookup
+            Set expandHash = asSet(expandedNodeCookieValue, DELIM);
+            Set collapsedHash = asSet(collapsedNodeCookieValue, DELIM);
+
+            for (Iterator it = iterator(getRootNode()); it.hasNext();) {
+                TreeNode currentNode = (TreeNode) it.next();
+
+                //If currentNode was expanded by user in browser
+                if (expandHash.contains(currentNode.getId())) {
+
+                    //If currentNode's state is collapsed
+                    if (!currentNode.isExpanded()) {
+                        //Calling expand(currentNode) will update the expandTracker
+                        //because the CookieHandler is a TreeListener as well.
+                        expand(currentNode);
+                    } else {
+                        //If the currentNode is already expanded we should not update the
+                        //expandTracker via a call to expand(currentNode), because
+                        //other listeners of the tree will receive the event as well.
+                        //Instead we update the expandTracker directly.
+                        expandTracker.add(currentNode.getId());
+                    }
+                } else if (collapsedHash.contains(currentNode.getId())) {
+                    //If currentNode was collapsed by user in browser
+
+                    if (currentNode.isExpanded()) {
+                        //Calling collapse(currentNode) will update the expandTracker
+                        //because the CookieHandler is a TreeListener as well.
+                        collapse(currentNode);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Currently this implementation just calls
+         * {@link #isExpandedParent(TreeNode)}.
+         * <p/>
+         * CookieHandler uses cookies to sync any state change on
+         * the browser with the server, so the handler will not
+         * contain any state outside of the treeNode.
+         *
+         * @param treeNode the specified treeNode to check if it is part of the
+         * users selected paths
+         * @return true if the specified treeNode is part of the users selected
+         * path, false otherwise
+         * @see JavascriptHandler#renderAsExpanded(TreeNode)
+         */
+        public boolean renderAsExpanded(TreeNode treeNode) {
+            return isExpandedParent(treeNode);
+        }
+
+        /**
+         *
+         *
+         * @see JavascriptHandler#destroy()
+         */
+        public void destroy() {
+            //Remove expanded cookies. If the tree is changed
+            //new cookies will be generated.
+            setCookie(null, expandedCookieName);
+
+            //Remove  collapsed cookie.
+            setCookie(null, collapsedCookieName);
+        }
+
+        /**
+         * @see JavascriptHandler#getJavascriptRenderer()
+         *
+         * @return currently installed javascript renderer
+         */
+        public JavascriptRenderer getJavascriptRenderer() {
+            if (javascriptRenderer == null) {
+                javascriptRenderer = new CookieRenderer(expandedCookieName, collapsedCookieName);
+            }
+            return javascriptRenderer;
+        }
+
+        /**
+         * Adds the specified node to the cookie handler tracker.
+         *
+         * @see TreeListener#nodeExpanded(Tree, TreeNode, Context, boolean)
+         *
+         * @param tree tree the operation was made on
+         * @param node node that was expanded
+         * @param context provides access to {@link net.sf.click.Context}
+         * @param oldValue contains the previous value of expanded state
+         */
+        public void nodeExpanded(Tree tree, TreeNode node, Context context, boolean oldValue) {
+            expandTracker.add(node.getId());
+        }
+
+        /**
+         * Removes the specified node from the cookie handler tracker.
+         *
+         * @see TreeListener#nodeCollapsed(Tree, TreeNode, Context, boolean)
+         *
+         * @param tree tree the operation was made on
+         * @param node node that was collapsed
+         * @param context provides access to {@link net.sf.click.Context}
+         * @param oldValue contains the previous value of selected state
+         */
+        public void nodeCollapsed(Tree tree, TreeNode node, Context context, boolean oldValue) {
+            expandTracker.remove(node.getId());
+        }
+
+        /**
+         * @see TreeListener#nodeSelected(Tree, TreeNode, Context, boolean)
+         *
+         * @param tree tree the operation was made on
+         * @param node node that was selected
+         * @param context provides access to {@link net.sf.click.Context}
+         * @param oldValue contains the previous value of selected state
+         */
+        public void nodeSelected(Tree tree, TreeNode node, Context context, boolean oldValue) {
+            /* noop */
+        }
+
+        /**
+         * @see TreeListener#nodeDeselected(Tree, TreeNode, Context, boolean)
+         *
+         * @param tree tree the operation was made on
+         * @param node node that was selected
+         * @param context provides access to {@link net.sf.click.Context}
+         * @param oldValue contains the previous value of selected state
+         */
+        public void nodeDeselected(Tree tree, TreeNode node, Context context, boolean oldValue) {
+            /* noop */
+        }
+
+        /**
+         * Sets a cookie with the specified name and value to the
+         * http response.
+         *
+         * @param value the cookie's value
+         * @param name the cookie's name
+         */
+        protected void setCookie(String value, String name) {
+            if (value == null) {
+                ClickUtils.setCookie(getContext().getRequest(), getContext().getResponse(),
+                        name, value, 0, "/");
+            } else {
+                ClickUtils.setCookie(getContext().getRequest(), getContext().getResponse(),
+                        name, value, -1, "/");
+            }
+        }
+
+        /**
+         * Does some preparation on the cookie value like
+         * decoding and stripping of unneeded characters.
+         *
+         * @param value the cookie's value to prepare
+         * @return the prepared value
+         */
+        protected String prepareCookieValue(String value) {
+            try {
+                if (StringUtils.isNotBlank(value)) {
+                    value = URLDecoder.decode(value, "UTF-8");
+                    value = trimStr(value, "\"");
+                }
+            } catch (UnsupportedEncodingException ignore) {
+                //ignore
+            }
+            return value;
+        }
+
+        /**
+         * Returns the specified string value as a set, tokenizing the
+         * string based on the specified delimiter.
+         *
+         * @param value value to return as set
+         * @param delim delimiter used to tokenize the value
+         * @return set of tokens
+         */
+        protected Set asSet(String value, String delim) {
+            Set set = new HashSet();
+            if (value  == null) {
+                return set;
+            }
+
+            StringTokenizer tokenizer = new StringTokenizer(value, delim);
+            while (tokenizer.hasMoreTokens()) {
+                String id = tokenizer.nextToken();
+                set.add(id);
+            }
+            return set;
+        }
+    }
 
     /**
      * <strong>Please note</strong> this class is only meant for developers of
      * this control, not users.
      * <p/>
-     * Manages the client side javascript behavior by tracking the client's
-     * selected tree paths.
+     * This class implements a session based javascript handler. It manages the
+     * client side javascript behavior by tracking the client's selected tree paths.
      * <p/>
      * <strong>The problem</strong>: when javascript is enabled, the entire
      * tree must be sent to the browser to be navigatable without round trips
@@ -1488,13 +2175,13 @@ public class Tree extends AbstractControl {
      * the entire tree again, to keep those tree paths that lead to selected nodes
      * in a expanded state.
      * <p/>
-     * <strong>The solution</strong>: JavascriptPathTracker keeps track of the
+     * <strong>The solution</strong>: SessionHandler keeps track of the
      * <em>selected paths</em> and is queried at rendering time which nodes
      * should be hidden and which nodes should be displayed. The
      * <em>selected path</em> are all the node's from the selected node up to the
      * root node.
      * <p/>
-     * JavascriptPathTracker also keeps track of the <em>overlaid paths</em>.
+     * SessionHandler also keeps track of the <em>overlaid paths</em>.
      * <em>Overlaid paths</em> comes from two or more selected paths that share
      * certain common nodes. Overlaid paths are used in determining when a
      * selected path can be removed from the tracker.
@@ -1503,7 +2190,7 @@ public class Tree extends AbstractControl {
      * <pre class="codeHtml">
      *                           <span class="red">root</span>
      *       <span class="blue">node1</span>                            <span class="blue">node2</span>
-     *node1.1  node1.2          node2.1  node2.2
+     * node1.1  node1.2          node2.1  node2.2
      * </pre>
      * IF node1 is selected, the <em>selected path</em> would include the nodes
      * "root and node1". If node1.1 is then selected, the <em>selected path</em> would
@@ -1563,17 +2250,20 @@ public class Tree extends AbstractControl {
      * <p/>
      * <strong>Note:</strong> this class stores information between requests
      * in the javax.servlet.http.HttpSession as a attribute. The attributes prefix
-     * is <tt>jsPathTracker_</tt> followed by the name of the tree
+     * is <tt>js_path_handler_</tt> followed by the name of the tree
      * {@link Tree#name}. If two tree's in the same session have the same name they
      * will <strong>overwrite</strong> each others session attribute!
      */
-    protected final class JavascriptPathTracker implements TreeListener {
+    protected class SessionHandler implements JavascriptHandler {
 
         /**
          * The reserved session key prefix for the selected paths
-         * <tt>jsPathTracker_</tt>.
+         * <tt>js_path_handler_</tt>.
          */
-        private static final String JS_PATH_TRACKER_SESSION_KEY = "jsPathTracker_";
+        private static final String JS_HANDLER_SESSION_KEY = "js_path_handler_";
+
+        /** Renders the needed javascript for this handler. */
+        protected JavascriptRenderer javascriptRenderer;
 
         /**
          * Map of id's of all nodes that are on route to a selected node in the tree.
@@ -1581,43 +2271,81 @@ public class Tree extends AbstractControl {
          * have been added to the map. This helps keep track of the number of
          * parallel paths.
          */
-        private Map pathTracker = null;
+        private Map selectTracker = null;
 
         /**
          * This class is dependant on {@link net.sf.click.Context}, so this
-         * constructor enforces a valid context before the tracker can be
+         * constructor enforces a valid context before the handler can be
          * used.
+         *
+         * @param context provides access to the http request, and session
          */
-        private JavascriptPathTracker(Context context) {
+        protected SessionHandler(Context context) {
             if (context == null) {
                 throw new IllegalArgumentException("Context cannot be null");
             }
-            ensurePathTrackerInitialized(context);
+            init(context);
         }
 
         /**
-         * Provides behavior to clients where they can query if the specified
-         * node is tracked or not.
-         * <p/>
-         * If a node is <tt>"tracked"</tt> it means the node forms part
-         * of the <tt>selected path</tt>, where <tt>selected path</tt> is
-         * all the node's, from a specific selected node to the root node.
-         * <p/>
-         * <strong>Note:</strong> if the specified node is the last
-         * selected node is the <tt>selected path</tt>, this method will
-         * return false. So the last selected node is excluded by this method.
+         * Retrieves the tracker from the http session if it exists. Otherwise
+         * it creates a new tracker and stores it in the http session.
          *
-         * @param treeNode the specified node to check if it is part of the
-         * users selected paths
-         * @return true if the specified node is part of the users selected
-         * path, false otherwise
+         * @param context provides access to the http request, and session
          */
-        public boolean tracked(TreeNode treeNode) {
-            Entry entry = (Entry) pathTracker.get(treeNode.getId());
+        public void init(Context context) {
+            //If already initialized
+            if (selectTracker != null) {
+                return;
+            }
+            if (context == null) {
+                throw new IllegalArgumentException("context cannot be null");
+            }
+            StringBuffer buffer = new StringBuffer(JS_HANDLER_SESSION_KEY).
+                    append(getName());
+            String key = buffer.toString();
+            selectTracker = (Map) context.getSessionAttribute(key);
+            if (selectTracker == null) {
+                selectTracker = new HashMap();
+                context.setSessionAttribute(key, selectTracker);
+            }
+        }
+
+        /**
+         * Queries the handler if the specified node should be rendered
+         * as expanded or not.
+         *
+         * @param treeNode the specified node to check if it is expanded
+         * or not
+         * @return true if the specified node should be expanded, false
+         * otherwise
+         * @see JavascriptHandler#renderAsExpanded(TreeNode)
+         */
+        public boolean renderAsExpanded(TreeNode treeNode) {
+            Entry entry = (Entry) selectTracker.get(treeNode.getId());
             if (entry == null || entry.lastNodeInPath) {
                 return false;
             }
             return true;
+        }
+
+        /**
+         *
+         *
+         * @see JavascriptHandler#destroy()
+         */
+        public void destroy() { /*noop*/ }
+
+        /**
+         * @see JavascriptHandler#getJavascriptRenderer()
+         *
+         * @return currently installed javascript renderer
+         */
+        public JavascriptRenderer getJavascriptRenderer() {
+            if (javascriptRenderer == null) {
+                javascriptRenderer = new SessionRenderer();
+            }
+            return javascriptRenderer;
         }
 
         /**
@@ -1634,12 +2362,12 @@ public class Tree extends AbstractControl {
         public void nodeSelected(Tree tree, TreeNode node, Context context,
                 boolean oldValue) {
             //Check for duplicate path's. A duplicate path means that the user
-            //selected a node that is already stored in the tracker map. This only
-            //really happen when the tree is representated with checkboxes.
-            //Each time the form is submitted all the "checked" checkboxes are
-            //submitted but these node's might already have been submitted in
-            //a previous request. So here is a check against the previous value
-            //of the node to ensure it is newly selected.
+            //selected a node that is already stored in the handler's tracker map.
+            //This can only really happen when the tree is representated with
+            //checkboxes. Each time the form is submitted all the "checked"
+            //checkboxes are submitted but these node's might already have been
+            //submitted in a previous request. So here is a check against the
+            //previous value of the node to ensure it is newly selected.
             if (oldValue) {
                 return;
             }
@@ -1648,15 +2376,19 @@ public class Tree extends AbstractControl {
 
             //Loop all nodes and check if they should be added or incremented
             for (int i = 0; i < nodes.length; i++) {
-                String id = ((TreeNode) nodes[i]).getId();
-                Entry entry = (Entry) pathTracker.get(id);
+                TreeNode currentNode = nodes[i];
+                if (i > 0 && !currentNode.isExpanded()) {
+                    expand(currentNode);
+                }
+                String id = currentNode.getId();
+                Entry entry = (Entry) selectTracker.get(id);
 
                 //If node is not yet tracked, add it to the selected path tracker,
                 //otherwise increment the overlaid path count
                 if (entry == null) {
                     Entry newEntry = new Entry();
                     newEntry.lastNodeInPath = i == 0;
-                    pathTracker.put(id, newEntry);
+                    selectTracker.put(id, newEntry);
                 } else {
                     entry.lastNodeInPath = false;
                     entry.count++;
@@ -1677,13 +2409,17 @@ public class Tree extends AbstractControl {
          */
         public void nodeDeselected(Tree tree, TreeNode node, Context context,
                 boolean oldValue) {
+            if (!oldValue) {
+                return;
+            }
+
             TreeNode[] nodes = getPathToRoot(node);
 
             //Loop all nodes and check if they should be removed or decremented
             for (int i = 0; i < nodes.length; i++) {
-                TreeNode currentNode = (TreeNode) nodes[i];
+                TreeNode currentNode = nodes[i];
                 String id = currentNode.getId();
-                Entry entry = (Entry) pathTracker.get(id);
+                Entry entry = (Entry) selectTracker.get(id);
 
                 //This node is not tracked, so we continue looping.
                 if (entry == null) {
@@ -1700,7 +2436,10 @@ public class Tree extends AbstractControl {
                         entry.lastNodeInPath = true;
                     }
                 } else {
-                    pathTracker.remove(id);
+                    if (currentNode.isExpanded()) {
+                        collapse(currentNode);
+                    }
+                    selectTracker.remove(id);
                 }
             }
         }
@@ -1728,36 +2467,19 @@ public class Tree extends AbstractControl {
                 boolean oldValue) { /*noop*/ }
 
         /**
-         * Retrieves the path tracker from the http session if it exists. Otherwise
-         * it creates a new path tracker and stores it in the http session.
-         *
-         * @param context provides access to the http request, and session
-         */
-        private void ensurePathTrackerInitialized(Context context) {
-            StringBuffer buffer = new StringBuffer(JS_PATH_TRACKER_SESSION_KEY).
-                    append(getName());
-            String key = buffer.toString();
-            pathTracker = (Map) context.getSessionAttribute(key);
-            if (pathTracker == null) {
-                pathTracker = new HashMap();
-                context.setSessionAttribute(key, pathTracker);
-            }
-        }
-
-        /**
          * Provides debug information about the map storing the tracked paths.
          */
         private void dumpPathTracker() {
             System.out.println("--------------------------------------Printing Path Tracker map\n");
-            if (pathTracker == null) {
+            if (selectTracker == null) {
                 System.out.println("Path tracker is null");
                 return;
             }
-            for (Iterator it = pathTracker.keySet().iterator(); it.hasNext();) {
+            for (Iterator it = selectTracker.keySet().iterator(); it.hasNext();) {
                 String key = (String) it.next();
                 System.out.println("ids -> [" + key + "]  value count -> ["
-                        + ((Entry) pathTracker.get(key)).count + "] : last node -> ["
-                        + ((Entry) pathTracker.get(key)).lastNodeInPath + "]");
+                        + ((Entry) selectTracker.get(key)).count + "] : last node -> ["
+                        + ((Entry) selectTracker.get(key)).lastNodeInPath + "]");
             }
             System.out.println("--------------------------------------Done");
         }
@@ -1797,60 +2519,6 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Creates and holds javascript specific strings needed
-     * at rendering time.
-     */
-    protected class JavascriptStringBuilder {
-
-        /** holds the id of the expand html element. */
-        protected String expandId;
-
-        /** holds the id of the icon html element. */
-        protected String iconId;
-
-        /** holds the javascript call to expand the node. */
-        protected String nodeExpansionString;
-
-        /**
-         * Constructs a builder instance that generates javascript for the
-         * specified tree node.
-         *
-         * @param treeNode the specific tree node to generate javascript
-         * for
-         */
-        protected JavascriptStringBuilder(TreeNode treeNode) {
-            expandId = buildString("e_", treeNode.getId(), "");
-            iconId = buildString("i_", treeNode.getId(), "");
-            String tmp = buildString(" onclick=\"handleNodeExpansion(this,event,'", expandId, "','");
-            nodeExpansionString = buildString(tmp, iconId, "'); return false;\"");
-        }
-
-        /**
-         * Builds a new string consisting of a prefix, infix and postfix.
-         *
-         * @param prefix the string to append at the start of new string
-         * @param infix the string to append in the middle of the new string
-         * @param postfix the string to append at the end of the new string
-         * @return the newly create string
-         */
-        protected String buildString(String prefix, String infix, String postfix) {
-            StringBuffer buffer = new StringBuffer();
-            buffer.append(prefix).append(infix).append(postfix);
-            return buffer.toString();
-        }
-    }
-
-    /**
-     * Creates and return a new JavascriptBuilder for the specified tree node.
-     *
-     * @param treeNode the specific tree node for the builder
-     * @return newly created JavascriptStringBuilder
-     */
-    protected JavascriptStringBuilder createJavascriptBuilder(TreeNode treeNode) {
-        return new JavascriptStringBuilder(treeNode);
-    }
-
-    /**
      * Javascript helper method that checks if the specified tree
      * node should be hidden or not.
      *
@@ -1858,9 +2526,30 @@ public class Tree extends AbstractControl {
      * @return true if the node should be hidden, false otherwise
      */
     private boolean shouldHideNode(TreeNode treeNode) {
-        if (isJavascriptEnabled() && !javascriptTracker.tracked(treeNode)) {
+        if (isJavascriptEnabled() && !javascriptHandler.renderAsExpanded(treeNode)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Remove the specified toTrim string from the front and back
+     * of the specified str argument.
+     *
+     * @param str to trim
+     * @param toTrim the specified string to remove
+     * @return trimmed string
+     */
+    private String trimStr(String str, String toTrim) {
+        if (StringUtils.isBlank(toTrim)) {
+            return str;
+        }
+        if (str.startsWith(toTrim)) {
+            str = str.substring(toTrim.length());
+        }
+        if (str.endsWith(toTrim)) {
+            str = str.substring(0, str.indexOf(toTrim));
+        }
+        return str;
     }
 }

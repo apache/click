@@ -75,6 +75,19 @@ function stopPropagation(event) {
     }
 }
 
+function isClassExpanded(object) {
+
+    currentClassName = object.className;
+    isLastNode = currentClassName.indexOf(lastNodeString) > 0 ? true : false;
+    if(isLastNode) {
+        currentClassName = removeString(currentClassName, lastNodeString);
+    }
+    if(currentClassName == expansionArray[1]) {
+        return false;
+    }
+    return true;
+}
+
 /*
  * Invoked when user performs expand or collapse operation.
  */
@@ -87,16 +100,9 @@ function handleNodeExpansion(objectArg, event, expandId, iconId) {
     if(isLeaf(span)) {
         return;
     }
+    
+    var index = isClassExpanded(span) == false ? 1 : 0;
 
-    currentClassName = span.className;
-    isLastNode = currentClassName.indexOf(lastNodeString) > 0 ? true : false;
-    if(isLastNode) {
-        currentClassName = removeString(currentClassName, lastNodeString);
-    }
-    index = 0;
-    if(currentClassName == expansionArray[1]) {
-        index = 1;
-    }
     newClassName = expansionArray[1 - index];
 
     handleIcons(iconId, newClassName);

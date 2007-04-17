@@ -90,7 +90,7 @@ import org.apache.commons.lang.StringUtils;
  *         <span class="kw">new</span> TreeNode(<span class="st">"oracle.pdf"</span>,<span class="st">"12"</span>,databases);
  *         <span class="kw">new</span> TreeNode(<span class="st">"postgres"</span>,<span class="st">"13"</span>,databases);
  *
- *         tree.setRootNode(node);
+ *         tree.setRootNode(root);
  *         <span class="kw">return</span> tree;
  *     }
  * } </pre>
@@ -142,8 +142,8 @@ public class CheckboxTree extends Tree {
     /**
      * Return the HTML head import statements for the CSS stylesheet file:
      * <tt>click/tree/checkbox-tree.js</tt>.
-     *
-     * <p/>This method calls super.getHtmlImports() to retrieve any imports defined in the
+     * <p/>
+     * This method calls super.getHtmlImports() to retrieve any imports defined in the
      * super class.
      *
      * @return the HTML head import statements for the control stylesheet
@@ -161,8 +161,8 @@ public class CheckboxTree extends Tree {
     /**
      * Deploy all files defined in the constant <tt>{@link #TREE_RESOURCES}</tt>
      * to the <tt>click/tree</tt> web directory when the application is initialized.
-     *
-     * <p/>This method calls super.onDeploy() to copy any files defined in the
+     * <p/>
+     * This method calls super.onDeploy() to copy any files defined in the
      * super class.
      *
      * @param servletContext the servlet context
@@ -177,27 +177,19 @@ public class CheckboxTree extends Tree {
 
     /**
      * This method binds the users request of selected nodes to the tree's nodes.
-     *
-     * <p>With html forms, only "checked" checkbox values are submitted
+     * <p>
+     * With html forms, only "checked" checkbox values are submitted
      * to the server. So the request does not supply us the information needed to calculate
      * the nodes to be deselected. To find the nodes to deselect,
      * the newly selected nodes are subtracted from the currently selected nodes. This
      * implies that the tree's model is stored between http requests.
-     *
-     * <p>Note: to find the collection of selected nodes, the HttpServletRequest is
+     * <p>
+     * Note: to find the collection of selected nodes, the HttpServletRequest is
      * checked against the value of the field {@link #SELECT_TREE_NODE_PARAM}.
      */
     public void bindSelectOrDeselectValues() {
         //find id's of all the new selected node's'
         String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
-
-        //If root node should not be displayed, and user forgot to set
-        //the root node to expanded, we set it here. Otherwise if rootNode is not
-        //expanded the call to getSelectedNodes(false) below will NOT be able to
-        //find visible selected nodes, because root will indicate that all nodes are collapsed.
-        //if (!isRootNodeDisplayed()) {
-        //   this.rootNode.setExpanded(true);
-        //}
 
         //find currently selected nodes
         Collection currentlySelected = getSelectedNodes(false);
@@ -264,18 +256,6 @@ public class CheckboxTree extends Tree {
                     TreeNode treeNode = (TreeNode) object;
                     HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-                    //TODO IE HACK. IE7 displays the tree nodes properly alligned when rendered
-                    //inside a table.  Without the code below the icons and node values does
-                    //not align correctly. Firefox and Opera displays nicely without this hack.
-                    //There might be a better way to fix this ;-)
-                    //A second IE7 issue solved by the code is when using the new zooming
-                    //feature, the node value is hidden behind the checkbox.
-                    boolean isIE = isIE(context);
-                    if (isIE) {
-                        buffer.append("<table style=\"line-height:1.3em;margin:0;padding:0;display:inline\" "
-                                + "border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr><td>");
-                    }
-
                     renderIcon(buffer, treeNode);
 
                     //TODO IE HACK. Witht a empty span <span></span> IE does not render the
@@ -285,14 +265,9 @@ public class CheckboxTree extends Tree {
 
                     buffer.append("</span>");
 
-                    if (isIE) {
-                        buffer.append("</td><td>");
-                    }
-
                     buffer.append("<input ");
                     if (isJavascriptEnabled()) {
-                        buffer.append(((JavascriptStringBuilder2) jsBuilder).checkboxOnClickString);
-                        buffer.appendAttribute("id", ((JavascriptStringBuilder2) jsBuilder).checkboxId);
+                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderCheckbox(buffer);
                     }
                     buffer.append(" style=\"margin:0\" type=\"checkbox\"");
                     buffer.appendAttribute("name", SELECT_TREE_NODE_PARAM);
@@ -304,10 +279,6 @@ public class CheckboxTree extends Tree {
 
                     buffer.elementEnd();
 
-                    if (isIE) {
-                        buffer.append("</td><td>");
-                    }
-
                     buffer.elementStart("span");
                     if (treeNode.isSelected()) {
                         buffer.appendAttribute("class", "selected");
@@ -315,16 +286,13 @@ public class CheckboxTree extends Tree {
                         buffer.appendAttribute("class", "unselected");
                     }
                     if (isJavascriptEnabled()) {
-                        buffer.appendAttribute("id", ((JavascriptStringBuilder2) jsBuilder).selectId);
+                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderSelect(buffer);
                     }
                     buffer.closeTag();
 
                     renderValue(buffer, treeNode);
                     buffer.elementEnd("span");
 
-                    if (isIE) {
-                        buffer.append("</td></tr></table>");
-                    }
                     return buffer.toString();
                 }
 
@@ -339,13 +307,14 @@ public class CheckboxTree extends Tree {
                     if (isJavascriptEnabled()) {
                         //create a href to interact with the checkbox on browser
                         buffer.elementStart("a");
-                        StringBuffer tmpBuf = new StringBuffer(getContext().getRequest().getRequestURI());
-                        tmpBuf.append("?").append(SELECT_TREE_NODE_PARAM).append("=").
-                                append(treeNode.getId());
-                        buffer.appendAttribute("href", tmpBuf.toString());
+                        buffer.append(" href=");
+                        buffer.append(getContext().getRequest().getRequestURI());
+                        buffer.append("?");
+                        buffer.append(SELECT_TREE_NODE_PARAM);
+                        buffer.append("=");
+                        buffer.append(treeNode.getId());
 
-                        //buffer.appendAttribute("onclick", "handleNodeSelection(this, event);return false;");
-                        buffer.append(((JavascriptStringBuilder2) jsBuilder).nodeSelectionString);
+                        ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderValue(buffer);
                         buffer.closeTag();
                         if (treeNode.getValue() != null) {
                             buffer.append(treeNode.getValue());
@@ -365,10 +334,75 @@ public class CheckboxTree extends Tree {
     }
 
     /**
-     * Creates and holds javascript specific strings needed
-     * at rendering time.
+     * <strong>Please note</strong> this interface is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the contract for pluggable javascript renderers, for
+     * the CheckboxTree.
      */
-    protected class JavascriptStringBuilder2 extends JavascriptStringBuilder {
+    interface CheckboxJavascriptRenderer {
+
+        /**
+         * Called when a tree node's value is rendered. Enables the renderer
+         * to add attributes needed by javascript functionality for example
+         * something like:
+         * <pre class="codeJava">
+         *      buffer.append(<span class="st">"onclick=\"handleNodeSelection(this,event);\""</span>);
+         * </pre>
+         * The code above adds a javascript function call to the element.
+         * <p/>
+         * The code above is appended to whichever element the
+         * tree is currently rendering at the time renderValue
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderValue(HtmlStringBuffer buffer);
+
+        /**
+         * Called when a tree node's checkbox is rendered. Enables the
+         * renderer to add attributes needed by javascript functionality
+         * for example something like:
+         * <pre class="codeJava">
+         *     buffer.append(<span class="st">" onclick=\"checkboxClicked(this,event);\""</span>);
+         * </pre>
+         * The code above adds a javascript function call to the element.
+         * <p/>
+         * The code above is appended to whichever element the
+         * tree is currently rendering at the time renderValue
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderCheckbox(HtmlStringBuffer buffer);
+
+        /**
+         * Called when a tree node's selected state is rendered. Enables
+         * the renderer to add attributes needed by javascript functionality
+         * for example something like:
+         * <pre class="codeJava">
+         *     buffer.appendAttribute(<span class="st">"id"</span>, selectId);
+         * </pre>
+         * The code above adds a javascript function call to the element.
+         * <p/>
+         * The code above is appended to whichever element the
+         * tree is currently rendering at the time renderSelect
+         * is called.
+         *
+         * @param buffer string buffer containing the markup
+         */
+        void renderSelect(HtmlStringBuffer buffer);
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides a base implementation of a CheckboxJavascriptRenderer
+     * that subclasses can extend from.
+     */
+    protected class BaseCheckboxJavascriptRenderer extends AbstractJavascriptRenderer
+            implements CheckboxJavascriptRenderer {
 
         /** holds the id of the select html element. */
         protected String selectId;
@@ -383,14 +417,40 @@ public class CheckboxTree extends Tree {
         protected String checkboxOnClickString;
 
         /**
-         * Constructs a builder instance that generates javascript for the
-         * specified tree node.
+         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
          *
-         * @param treeNode the specific tree node to generate javascript
-         * for
+         * @param buffer string buffer containing the markup
          */
-        protected JavascriptStringBuilder2(TreeNode treeNode) {
-            super(treeNode);
+        public void renderValue(HtmlStringBuffer buffer) {
+            buffer.append(nodeSelectionString);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderSelect(HtmlStringBuffer buffer) {
+            buffer.appendAttribute("id", selectId);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderCheckbox(HtmlStringBuffer buffer) {
+            buffer.append(checkboxOnClickString);
+            buffer.appendAttribute("id", checkboxId);
+        }
+
+        /**
+         * @see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         */
+        public void init(TreeNode treeNode) {
+            super.init(treeNode);
             selectId = buildString("s_", treeNode.getId(), "");
             checkboxId = buildString("c_", treeNode.getId(), "");
 
@@ -402,14 +462,190 @@ public class CheckboxTree extends Tree {
     }
 
     /**
-     * Creates and return a new JavascriptBuilder for the specified tree node.
-     * This implementation overrides the super class method, to
-     * return its own custom JavascriptStringBuilder.
-     *
-     * @param treeNode the specific tree node for the builder
-     * @return newly created JavascriptStringBuilder
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the rendering needed when a {@link #JAVASCRIPT_SESSION_POLICY}
+     * is in effect.
      */
-    protected JavascriptStringBuilder createJavascriptBuilder(TreeNode treeNode) {
-        return new JavascriptStringBuilder2(treeNode);
+    protected class CheckboxSessionJavascriptRenderer extends SessionRenderer
+            implements CheckboxJavascriptRenderer {
+
+        /** A delegate for javascript rendering. */
+        protected BaseCheckboxJavascriptRenderer checkboxRenderer = new BaseCheckboxJavascriptRenderer();
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderValue(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderValue(buffer);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderSelect(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderSelect(buffer);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderCheckbox(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderCheckbox(buffer);
+        }
+
+        /**
+         * @see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         */
+        public void init(TreeNode treeNode) {
+            super.init(treeNode);
+            checkboxRenderer.init(treeNode);
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * Provides the rendering needed when a {@link #JAVASCRIPT_COOKIE_POLICY}
+     * is in effect.
+     */
+    protected class CheckboxCookieJavascriptRenderer extends CookieRenderer
+            implements CheckboxJavascriptRenderer {
+
+        /** A delegate for javascript rendering. */
+        protected BaseCheckboxJavascriptRenderer checkboxRenderer = new BaseCheckboxJavascriptRenderer();
+
+        /**
+         * Default constructor.
+         *
+         * @param expandedCookieName name of the cookie holding expanded id's
+         * @param collapsedCookieName name of the cookie holding collapsed id's
+         */
+        protected CheckboxCookieJavascriptRenderer(String expandedCookieName, String collapsedCookieName) {
+            super(expandedCookieName, collapsedCookieName);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderValue(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderValue(buffer);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderSelect(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderSelect(buffer);
+        }
+
+        /**
+         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         *
+         * @param buffer string buffer containing the markup
+         */
+        public void renderCheckbox(HtmlStringBuffer buffer) {
+            checkboxRenderer.renderCheckbox(buffer);
+        }
+
+        /**
+         * @see JavascriptRenderer#init(TreeNode)
+         *
+         * @param treeNode the current node rendered
+         */
+        public void init(TreeNode treeNode) {
+            super.init(treeNode);
+            checkboxRenderer.init(treeNode);
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * This class implements a session based javascript handler.
+     */
+    protected class CheckboxSessionHandler extends SessionHandler {
+
+        /**
+         * Creates and initializes a new CheckboxSessionHandler.
+         *
+         * @param context provides access to the http request, and session
+         */
+        protected CheckboxSessionHandler(Context context) {
+            super(context);
+        }
+
+        /**
+         * @see Tree.JavascriptHandler#getJavascriptRenderer()
+         *
+         * @return currently installed javascript renderer
+         */
+        public JavascriptRenderer getJavascriptRenderer() {
+            if (javascriptRenderer == null) {
+                javascriptRenderer = new CheckboxSessionJavascriptRenderer();
+            }
+            return javascriptRenderer;
+        }
+    }
+
+    /**
+     * <strong>Please note</strong> this class is only meant for
+     * developers of this control, not users.
+     * <p/>
+     * This class implements a session based javascript handler.
+     */
+    protected class CheckboxCookieHandler extends CookieHandler {
+
+        /**
+         * Creates and initializes a new CookieHandler.
+         *
+         * @param context provides access to the http request, and session
+         */
+        protected CheckboxCookieHandler(Context context) {
+            super(context);
+        }
+
+        /**
+         * @see Tree.JavascriptHandler#getJavascriptRenderer()
+         *
+         * @return currently installed javascript renderer
+         */
+        public JavascriptRenderer getJavascriptRenderer() {
+            if (javascriptRenderer == null) {
+                javascriptRenderer = new CheckboxCookieJavascriptRenderer(expandedCookieName, collapsedCookieName);
+            }
+            return javascriptRenderer;
+        }
+    }
+
+    /**
+     * Creates and return a new JavascriptHandler for the specified
+     * tree node. This implementation overrides the super class, to
+     * return its own custom JavascriptHandlers.
+     *
+     * @param javascriptPolicy the current javascript policy
+     * @return newly created JavascriptHandler
+     */
+    protected JavascriptHandler createJavascriptHandler(int javascriptPolicy) {
+        if (javascriptPolicy == JAVASCRIPT_SESSION_POLICY) {
+            return new CheckboxSessionHandler(getContext());
+        } else {
+            return new CheckboxCookieHandler(getContext());
+        }
     }
 }
