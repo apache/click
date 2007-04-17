@@ -1,6 +1,16 @@
+<!--A velocity macro which prints all nodes in specified list-->
+#macro (printState $list)    
+    #if($list)
+        #foreach ($node in $list)
+            $node<br>
+        #end
+    #end    
+#end
+
 This page provides a demonstration of the CheckboxTree component.
 
-<br><br>
+<p/>
+In this example the Page is a TreeListener. The section below will display any events triggered by the tree:
 
 $form.startTag()
 
@@ -38,17 +48,24 @@ $form.startTag()
     
 </table>
 
-$form.endTag() 
+$form.endTag()
+
+<div style="width:55em; border:1px solid #CCCCCC">
+    <dl>
+        <dt><strong>Selected</strong></dt>
+        <dd>#printState($selected)</dd>
+
+        <dt><strong>Deselected</strong></dt>
+        <dd>#printState($deselected)</dd>
+
+        <dt><strong>Expanded</strong></dt>
+        <dd>#printState($expanded)</dd>
+
+        <dt><strong>Collapsed</strong></dt>    
+        <dd>#printState($collapsed)</dd>
+    </dl>            
+</div>
 
 <br>
 
 $optionForm
-
-#if ($isJavascriptEnabled)
-    <br>
-    <p/>When you enable javascript, the tree expand and collapse dynamically without
-    having to round trip to the server. Clicking on a checkbox or node value
-    will highlight the row as if it was selected.
-    <p/>However the selected row is not persisted to the server. You still need
-    to submit the selected rows to the server for that.
-#end
