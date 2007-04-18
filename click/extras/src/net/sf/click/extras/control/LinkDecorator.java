@@ -467,18 +467,18 @@ public class LinkDecorator implements Decorator {
                     table.setPageNumber(Integer.parseInt(pageNumber));
                 }
 
-                String column = table.getContext().getRequestParameter(table.COLUMN);
+                String column = table.getContext().getRequestParameter(Table.COLUMN);
                 if (column != null) {
                     table.setSortedColumn(column);
                 }
 
-                String ascending = table.getContext().getRequestParameter(table.ASCENDING);
+                String ascending = table.getContext().getRequestParameter(Table.ASCENDING);
                 if (ascending != null) {
                     table.setSortedAscending("true".equals(ascending));
                 }
 
                 // Flip sorting order
-                if ("true".equals(table.getContext().getRequestParameter(table.SORT))) {
+                if ("true".equals(table.getContext().getRequestParameter(Table.SORT))) {
                     table.setSortedAscending(!table.isSortedAscending());
                 }
             }
@@ -503,7 +503,7 @@ public class LinkDecorator implements Decorator {
                     if (link instanceof ActionLink) {
                         ActionLink actionLink = (ActionLink) link;
                         clicked =
-                                actionLink.getName().equals(table.getContext().getRequestParameter(actionLink.ACTION_LINK));
+                                actionLink.getName().equals(table.getContext().getRequestParameter(ActionLink.ACTION_LINK));
                         if (clicked) {
                             return clicked;
                         }
@@ -516,7 +516,7 @@ public class LinkDecorator implements Decorator {
                 for (int i = 0; i < buttonsArray.length; i++) {
                     ActionButton button = buttonsArray[i];
                     clicked =
-                            button.getName().equals(table.getContext().getRequestParameter(button.ACTION_BUTTON));
+                            button.getName().equals(table.getContext().getRequestParameter(ActionButton.ACTION_BUTTON));
                     if (clicked) {
                         return clicked;
                     }
