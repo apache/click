@@ -5,7 +5,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.sf.click.util.HtmlStringBuffer;
-import ognl.NoSuchPropertyException;
 
 public class ColumnTest extends TestCase {
     
