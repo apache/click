@@ -172,6 +172,9 @@ public class ActionLink extends AbstractLink {
 
     /**
      * Create an ActionLink for the given name.
+     * <p/>
+     * Please note the name 'actionLink' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action link name
      * @throws IllegalArgumentException if the name is null
@@ -182,6 +185,9 @@ public class ActionLink extends AbstractLink {
 
     /**
      * Create an ActionLink for the given name and label.
+     * <p/>
+     * Please note the name 'actionLink' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action link name
      * @param label the action link label
@@ -214,6 +220,9 @@ public class ActionLink extends AbstractLink {
     /**
      * Create an ActionLink for the given name, listener object and listener
      * method.
+     * <p/>
+     * Please note the name 'actionLink' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action link name
      * @param listener the listener target object
@@ -235,6 +244,9 @@ public class ActionLink extends AbstractLink {
     /**
      * Create an ActionLink for the given name, label, listener object and
      * listener method.
+     * <p/>
+     * Please note the name 'actionLink' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action link name
      * @param label the action link label
@@ -332,6 +344,27 @@ public class ActionLink extends AbstractLink {
      */
     public String getHref() {
         return getHref(getValue());
+    }
+
+    /**
+     * Set the name of the Control. Each control name must be unique in the
+     * containing Page model or the containing Form.
+     * <p/>
+     * Please note the name 'actionLink' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
+     *
+     * @see net.sf.click.Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    public void setName(String name) {
+        if (ACTION_LINK.equals(name)) {
+            String msg = "Invalid name '" + ACTION_LINK + "'. This name is "
+                + "reserved for use as a control request parameter name";
+            throw new IllegalArgumentException(msg);
+        }
+        super.setName(name);
     }
 
     /**

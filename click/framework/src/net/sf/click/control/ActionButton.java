@@ -22,10 +22,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a ActionButton control: &nbsp; &lt;input type="button"/&gt;.
@@ -84,17 +84,22 @@ public class ActionButton extends Button {
 
     /**
      * Create an ActionButton for the given name.
+     * <p/>
+     * Please note the name 'actionButton' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action button name
      * @throws IllegalArgumentException if the name is null
      */
-
     public ActionButton(String name) {
         super(name);
     }
 
     /**
      * Create an ActionButton for the given name and label.
+     * <p/>
+     * Please note the name 'actionButton' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action button name
      * @param label the action button label
@@ -103,7 +108,6 @@ public class ActionButton extends Button {
     public ActionButton(String name, String label) {
         super(name, label);
     }
-
 
     /**
      * Create an ActionButton for the given listener object and listener method.
@@ -126,6 +130,9 @@ public class ActionButton extends Button {
     /**
      * Create an ActionButton for the given name, listener object and listener
      * method.
+     * <p/>
+     * Please note the name 'actionButton' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action button name
      * @param listener the listener target object
@@ -147,6 +154,9 @@ public class ActionButton extends Button {
     /**
      * Create an ActionButton for the given name, label, listener object and
      * listener method.
+     * <p/>
+     * Please note the name 'actionButton' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
      *
      * @param name the action button name
      * @param label the action button label
@@ -188,6 +198,28 @@ public class ActionButton extends Button {
     public boolean isClicked() {
         return clicked;
     }
+
+    /**
+     * Set the name of the Control. Each control name must be unique in the
+     * containing Page model or the containing Form.
+     * <p/>
+     * Please note the name 'actionButton' is reserved as a control request
+     * parameter name and cannot be used as the name of the control.
+     *
+     * @see net.sf.click.Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    public void setName(String name) {
+        if (ACTION_BUTTON.equals(name)) {
+            String msg = "Invalid name '" + ACTION_BUTTON + "'. This name is "
+                + "reserved for use as a control request parameter name";
+            throw new IllegalArgumentException(msg);
+        }
+        super.setName(name);
+    }
+
 
     /**
      * Return the ActionButton onclick attribute for the given value.
