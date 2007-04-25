@@ -21,6 +21,8 @@ import org.objectstyle.cayenne.DataObject;
  * @author Malcolm Edgar
  */
 public class CayenneFormPage extends FormTablePage {
+    
+    // ------------------------------------------------------------ Constructor
 
     /**
      * Create a CayenneFormPage object.
@@ -68,6 +70,8 @@ public class CayenneFormPage extends FormTablePage {
         column.setFormat("{0,date,dd MMM yyyy}");
         table.addColumn(column);
     }
+
+    // -------------------------------------------------------- Public Methods
 
     /**
      * @see FormTablePage#getDataObject(Object)

@@ -15,6 +15,11 @@ public class PlainTreePage extends BorderPage {
 
     protected Tree tree;
 
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         super.onInit();
 
@@ -22,6 +27,27 @@ public class PlainTreePage extends BorderPage {
         tree = buildTree();
         addControl(tree);
     }
+
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
+    public void onGet() {
+        String selectId = getContext().getRequestParameter(Tree.SELECT_TREE_NODE_PARAM);
+        String expandId = getContext().getRequestParameter(Tree.EXPAND_TREE_NODE_PARAM);
+        if(selectId == null && expandId == null) {
+            return;
+        }
+
+        TreeNode node = null;
+        if(selectId != null) {
+            node = tree.find(selectId);
+        } else {
+            node = tree.find(expandId);
+        }
+        addModel("treeNode", node);
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Creates and return a new tree instance.
@@ -109,22 +135,6 @@ public class PlainTreePage extends BorderPage {
         storeNodesInSession(root);
 
         return tree;
-    }
-
-    public void onGet() {
-        String selectId = getContext().getRequestParameter(Tree.SELECT_TREE_NODE_PARAM);
-        String expandId = getContext().getRequestParameter(Tree.EXPAND_TREE_NODE_PARAM);
-        if(selectId == null && expandId == null) {
-            return;
-        }
-
-        TreeNode node = null;
-        if(selectId != null) {
-            node = tree.find(selectId);
-        } else {
-            node = tree.find(expandId);
-        }
-        addModel("treeNode", node);
     }
 
     /**

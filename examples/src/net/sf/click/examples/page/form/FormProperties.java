@@ -74,6 +74,8 @@ public class FormProperties extends BorderPage {
     private Checkbox validateCheckbox;
     private Checkbox javaScriptValidateCheckbox;
 
+    // ------------------------------------------------------------ Constructor
+
     public FormProperties() {
 
         // Setup demonstration form
@@ -203,6 +205,8 @@ public class FormProperties extends BorderPage {
         addModel("bodyOnload", "toggleBorders(document.optionsForm.showBorders);");
     }
 
+    // ---------------------------------------------------------- Event Handlers
+
     /**
      * @see net.sf.click.Page#onInit()
      */
@@ -267,6 +271,8 @@ public class FormProperties extends BorderPage {
 
         return true;
     }
+
+    // -------------------------------------------------------- Private Methods
 
     private void applyOptions(Options options) {
         form.setButtonAlign(options.buttonAlign);

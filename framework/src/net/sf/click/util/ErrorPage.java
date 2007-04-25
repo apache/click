@@ -93,6 +93,38 @@ public class ErrorPage extends Page {
     /** The page class in error. */
     protected Class pageClass;
 
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * This method initializes the ErrorPage, populating the model with error
+     * diagnostic information.
+     * <p/>
+     * The following values are added to ErrorPage model for rendering by the
+     * error page template:
+     *
+     * <ul style="margin-top: 0.5em;">
+     * <li><tt>errorReport</tt> &nbsp; - &nbsp; the detailed error report
+     * &lt;div&gt; element, with an id of 'errorReport'</li>
+     * <li><tt>mode</tt> &nbsp; - &nbsp; the application mode</li>
+     * </ul>
+     *
+     * @see Page#onInit()
+     */
+    public void onInit() {
+        addModel("mode", getMode());
+
+        if (getError() != null) {
+            ErrorReport errorReport =
+                new ErrorReport(error,
+                                getPageClass(),
+                                false,
+                                getContext().getRequest(),
+                                getContext().getServletContext());
+
+            addModel("errorReport", errorReport.getErrorReport());
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -155,35 +187,5 @@ public class ErrorPage extends Page {
      */
     public void setPageClass(Class pageClass) {
         this.pageClass = pageClass;
-    }
-
-    /**
-     * This method initializes the ErrorPage, populating the model with error
-     * diagnostic information.
-     * <p/>
-     * The following values are added to ErrorPage model for rendering by the
-     * error page template:
-     *
-     * <ul style="margin-top: 0.5em;">
-     * <li><tt>errorReport</tt> &nbsp; - &nbsp; the detailed error report
-     * &lt;div&gt; element, with an id of 'errorReport'</li>
-     * <li><tt>mode</tt> &nbsp; - &nbsp; the application mode</li>
-     * </ul>
-     *
-     * @see Page#onInit()
-     */
-    public void onInit() {
-        addModel("mode", getMode());
-
-        if (getError() != null) {
-            ErrorReport errorReport =
-                new ErrorReport(error,
-                                getPageClass(),
-                                false,
-                                getContext().getRequest(),
-                                getContext().getServletContext());
-
-            addModel("errorReport", errorReport.getErrorReport());
-        }
     }
 }

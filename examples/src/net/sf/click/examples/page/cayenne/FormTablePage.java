@@ -34,6 +34,8 @@ public abstract class FormTablePage extends BorderPage {
     public ActionLink editLink = new ActionLink("edit", this, "onEditClick");
     public ActionLink removeLink = new ActionLink("remove", this, "onRemoveClick");
 
+    // ------------------------------------------------------------ Constructor
+
     /**
      * Create a FormTablePage instance and initialize the form and table
      * properties.
@@ -48,6 +50,108 @@ public abstract class FormTablePage extends BorderPage {
         table.setAttribute("width", "500px;");
         table.setShowBanner(true);
         table.setPageSize(getMaxTableSize());
+
+        editLink.setImageSrc("/images/edit.gif");
+        removeLink.setImageSrc("/images/delete.gif");
+    }
+
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * Perform a form submission check to ensure the form was not double posted.
+     *
+     * @see net.sf.click.Page#onSecurityCheck()
+     */
+    public boolean onSecurityCheck() {
+        String pagePath = getContext().getPagePath(getClass());
+
+        if (form.onSubmitCheck(this, pagePath)) {
+            return true;
+        } else {
+            getContext().setFlashAttribute("error", getMessage("invalid.form.submit"));
+            return false;
+        }
+    }
+
+    /**
+     * Complete the initialization of the form and table controls.
+     *
+     * @see net.sf.click.Page#onInit()
+     */
+    public void onInit() {
+        // Complete form initialization
+        form.add(new Submit("new", " New ", this, "onCancelClick"));
+        form.add(new Submit("save", " Save ", this, "onSaveClick"));
+        form.add(new Submit("cancel", "Cancel", this, "onCancelClick"));
+        form.add(new HiddenField("pageNumber", String.class));
+
+        // Complete table initialization
+        Column column = new Column("Action");
+        column.setSortable(false);
+        column.setAttribute("width", "100px;");
+        ActionLink[] links = new ActionLink[]{editLink, removeLink};
+        column.setDecorator(new LinkDecorator(table, links, "id"));
+        table.addColumn(column);
+
+        removeLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
+    }
+
+    public boolean onSaveClick() {
+        if (form.isValid()) {
+            DataObject dataObject = form.getDataObject();
+
+            saveDataObject(dataObject);
+
+            onCancelClick();
+        }
+        return true;
+    }
+
+    public boolean onCancelClick() {
+        form.setDataObject(null);
+        form.clearErrors();
+        return true;
+    }
+
+    public boolean onEditClick() {
+        Integer id = editLink.getValueInteger();
+        if (id != null) {
+            DataObject dataObject = getDataObject(id);
+            form.setDataObject(dataObject);
+        }
+        return true;
+    }
+
+    public boolean onRemoveClick() {
+        Integer id = removeLink.getValueInteger();
+        if (id != null) {
+            DataObject dataObject = getDataObject(id);
+
+            deleteDataObject(dataObject);
+
+            onCancelClick();
+        }
+        return true;
+    }
+
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
+    public void onGet() {
+        form.getField("pageNumber").setValue("" + table.getPageNumber());
+    }
+
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
+    public void onRender() {
+        List list = getRowList();
+        table.setRowList(list);
+
+        if (list.size() <= getMaxTableSize()) {
+            table.setShowBanner(false);
+            table.setPageSize(0);
+        }
     }
 
     // ------------------------------------------------------- Abstract Methods
@@ -110,40 +214,6 @@ public abstract class FormTablePage extends BorderPage {
     }
 
     /**
-     * Complete the initialization of the form and table controls.
-     *
-     * @see net.sf.click.Page
-     */
-    public void onInit() {
-        // Complete form initialization
-        form.add(new Submit("new", " New ", this, "onCancelClick"));
-        form.add(new Submit("save", " Save ", this, "onSaveClick"));
-        form.add(new Submit("cancel", "Cancel", this, "onCancelClick"));
-        form.add(new HiddenField("pageNumber", String.class));
-
-        // Complete table initialization
-        Column column = new Column("Action");
-        column.setSortable(false);
-        column.setAttribute("width", "100px;");
-        ActionLink[] links = new ActionLink[]{editLink, removeLink};
-        column.setDecorator(new LinkDecorator(table, links, "id"));
-        table.addColumn(column);
-
-        removeLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
-    }
-
-    /**
-     * Perform a form submission check to ensure the form was not double posted.
-     *
-     * @see net.sf.click.Page#onSecurityCheck()
-     */
-    public boolean onSecurityCheck() {
-        String pagePath = getContext().getPagePath(getClass());
-
-        return  form.onSubmitCheck(this, pagePath);
-    }
-
-    /**
      * Return the maximum number of rows to display in the table. Subclasses
      * should override this method to display a different number of rows.
      *
@@ -151,64 +221,6 @@ public abstract class FormTablePage extends BorderPage {
      */
     public int getMaxTableSize() {
         return 10;
-    }
-
-    public boolean onSaveClick() {
-        if (form.isValid()) {
-            DataObject dataObject = form.getDataObject();
-
-            saveDataObject(dataObject);
-
-            onCancelClick();
-        }
-        return true;
-    }
-
-    public boolean onCancelClick() {
-        form.setDataObject(null);
-        form.clearErrors();
-        return true;
-    }
-
-    public boolean onEditClick() {
-        Integer id = editLink.getValueInteger();
-        if (id != null) {
-            DataObject dataObject = getDataObject(id);
-            form.setDataObject(dataObject);
-        }
-        return true;
-    }
-
-    public boolean onRemoveClick() {
-        Integer id = removeLink.getValueInteger();
-        if (id != null) {
-            DataObject dataObject = getDataObject(id);
-
-            deleteDataObject(dataObject);
-
-            onCancelClick();
-        }
-        return true;
-    }
-
-    /**
-     * @see net.sf.click.Page#onGet()
-     */
-    public void onGet() {
-        form.getField("pageNumber").setValue("" + table.getPageNumber());
-    }
-
-    /**
-     * @see net.sf.click.Page#onRender()
-     */
-    public void onRender() {
-        List list = getClientService().getClients();
-        table.setRowList(list);
-
-        if (list.size() <= getMaxTableSize()) {
-            table.setShowBanner(false);
-            table.setPageSize(0);
-        }
     }
 
 }

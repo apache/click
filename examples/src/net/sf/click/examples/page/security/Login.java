@@ -25,6 +25,8 @@ public class Login extends BorderPage {
     private TextField usernameField = new TextField("username", true);
     private PasswordField passwordField = new PasswordField("password", true);
 
+    // ------------------------------------------------------------ Constructor
+
     public Login() {
         usernameField.setMaxLength(20);
         usernameField.setMinLength(5);
@@ -38,6 +40,8 @@ public class Login extends BorderPage {
         form.add(new Submit("ok", " OK ", this, "onOkClicked"));
         form.add(new PageSubmit("cancel", HomePage.class));
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     public void onInit() {
         String username = null;

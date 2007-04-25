@@ -26,6 +26,8 @@ public class FormTablePage extends BorderPage {
 
     public FormTable table = new FormTable();
 
+    // ------------------------------------------------------------ Constructor
+
     public FormTablePage() {
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
@@ -62,6 +64,8 @@ public class FormTablePage extends BorderPage {
         table.getForm().add(new Submit("ok", "  OK  ", this, "onOkClick"));
         table.getForm().add(new Submit("cancel", this, "onCancelClick"));
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     /**
      * @see net.sf.click.Page#onInit()
