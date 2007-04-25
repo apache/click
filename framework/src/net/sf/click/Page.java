@@ -58,6 +58,11 @@ import org.apache.commons.lang.StringUtils;
  *   {@link #path} property is set
  * </li>
  * <li class="spaced">
+ *   {@link #onSecurityCheck()} method called to check whether the page should
+ *   be processed. This method should return true if the Page should continue
+ *   to be processed, or false otherwise.
+ * </li>
+ * <li class="spaced">
  *   {@link #onInit()} method called to complete the initialization of the page
  *   after all the dependencies have been set. This is where you should put
  *   any "dynamic" page initialization code which depends upon the request or any
@@ -65,11 +70,6 @@ import org.apache.commons.lang.StringUtils;
  *   <p/>
  *   Form and field controls must be fully initialized by the time this method
  *   has completed.
- * </li>
- * <li class="spaced">
- *   {@link #onSecurityCheck()} method called to check whether the page should
- *   be processed. This method should return true if the Page should continue
- *   to be processed, or false otherwise.
  * </li>
  * <li class="spaced">
  *   ClickServlet processes all the page {@link #controls}
@@ -173,6 +173,152 @@ public class Page {
 
     /** The redirect path. */
     protected String redirect;
+
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * The on Security Check event handler. This event handler is invoked after
+     * the pages constructor has been called and all the page properties have
+     * been set.
+     * <p/>
+     * Security check provides the Page an opportunity to check the users
+     * security credentials before processing the Page.
+     * <p/>
+     * If security check returns true the Page is processed as
+     * normal. If the method returns then no other event handlers are invoked
+     * (except <tt>onDestroy()</tt> and no page controls are processed.
+     * <p/>
+     * If the method returns false, the forward or redirect property should be
+     * set to send the request to another Page.
+     * <p/>
+     * By default this method returns true, subclass may override this method
+     * to provide their security authorization/authentication mechanism.
+     *
+     * @return true by default, subclasses may override this method
+     */
+    public boolean onSecurityCheck() {
+        return true;
+    }
+
+    /**
+     * The on Initialization event handler. This event handler is invoked after
+     * the {@link #onInit()} method has been called.
+     * <p/>
+     * Subclasses should place any initialization code which has dependencies
+     * on the context or other properties in this method. Generally light
+     * weight initialization code should be placed in the Pages constructor.
+     * <p/>
+     * Time consuming operations such as fetching the results of a database
+     * query should not be placed in this method. These operations should be
+     * performed in the {@link #onRender()}, {@link #onGet()} or
+     * {@link #onPost()} methods so that other event handlers may take
+     * alternative execution paths without performing these expensive operations.
+     * <p/>
+     * <b>Please Note</b> however the qualifier for the previous statement is
+     * that all form and field controls must be fully initialized before they
+     * are processed, which is after the <tt>onInit()</tt> method has
+     * completed. After this point their <tt>onProcess()</tt> methods will be
+     * invoked by the <tt>ClickServlet</tt>.
+     * <p/>
+     * Select controls in particular must have their option list values populated
+     * before the form is processed otherwise field validations cannot be performed.
+     * <p/>
+     * For initializing page controls the best practice is to place all the
+     * control creation code in the pages constructor, and only place any
+     * initialization code in the <tt>onInit()</tt> method which has an external
+     * dependency to the context or some other object. By following this practice
+     * it is easy to see what code is "design time" initialization code and what
+     * is "runtime initialization code".
+     * <p/>
+     * When subclassing pages which also use the <tt>onInit()</tt> method is
+     * is critical you call the <tt>super.onInit()</tt> method first, for
+     * example:
+     * <pre class="javaCode">
+     * <span class="kw">public void</span> onInit() {
+     *     <span class="kw">super</span>.onInit();
+     *
+     *     // Initialization code
+     *     ..
+     * } </pre>
+     */
+    public void onInit() {
+    }
+
+    /**
+     * The on Get request event handler. This event handler is invoked if the
+     * HTTP request method is "GET".
+     * <p/>
+     * The event handler is invoked after {@link #onSecurityCheck()} has been
+     * called and all the Page {@link #controls} have been processed. If either
+     * the security check or one of the controls cancels continued event
+     * processing the <tt>onGet()</tt> method will not be invoked.
+     *
+     * <h4>Important Note</h4>
+     *
+     * Form and field controls should <b>NOT</b> be created
+     * or initialized at this point as the control processing stage has already
+     * been completed. Select option list values should also be populated
+     * before the control processing stage is performed so that they can
+     * validate the submitted values.
+     */
+    public void onGet() {
+    }
+
+    /**
+     * The on Post request event handler. This event handler is invoked if the
+     * HTTP request method is "POST".
+     * <p/>
+     * The event handler is invoked after {@link #onSecurityCheck()} has been
+     * called and all the Page {@link #controls} have been processed. If either
+     * the security check or one of the controls cancels continued event
+     * processing the <tt>onPost()</tt> method will not be invoked.
+     *
+     * <h4>Important Note</h4>
+     *
+     * Form and field controls should <b>NOT</b> be created
+     * or initialized at this point as the control processing stage has already
+     * been completed. Select option list values should also be populated
+     * before the control processing stage is performed so that they can
+     * validate the submitted values.
+     */
+    public void onPost() {
+    }
+
+    /**
+     * The on render event handler. This event handler is invoked prior to the
+     * page being rendered.
+     * <p/>
+     * This method will not be invoked if either the security check or one of
+     * the controls cancels continued event processing.
+     * <p/>
+     * The on render method is typically used to populate tables performing some
+     * database intensive operation. By putting the intensive operations in the
+     * on render method they will not be performed if the user navigates away
+     * to a different page.
+     * <p/>
+     * If you have code which you are using in both the <tt>onGet()</tt> and
+     * <tt>onPost()</tt> methods, use the <tt>onRender()</tt> method instead.
+     *
+     * <h4>Important Note</h4>
+     *
+     * Form and field controls should <b>NOT</b> be created
+     * or initialized at this point as the control processing stage has already
+     * been completed. Select option list values should also be populated
+     * before the control processing stage is performed so that they can
+     * validate the submitted values.
+     */
+    public void onRender() {
+    }
+
+    /**
+     * The on Destroy request event handler. Subclasses may override this method
+     * to add any resource clean up code.
+     * <p/>
+     * This method is guaranteed to be called before the Page object reference
+     * goes out of scope and is available for garbage collection.
+     */
+    public void onDestroy() {
+    }
 
     // --------------------------------------------------------- Public Methods
 
@@ -694,136 +840,4 @@ public class Page {
         return getPath();
     }
 
-    /**
-     * The on Initialization event handler. This event handler is invoked after
-     * the pages constructor has been called and all the page properties have
-     * been set.
-     * <p/>
-     * Subclasses should place their control initialization code in this method
-     * or in the Pages constructor.
-     * <p/>
-     * Time consuming operations such as fetching the results of a database
-     * query should not be placed in this method. These operations should be
-     * performed in the {@link #onRender()}, {@link #onGet()} or
-     * {@link #onPost()} methods so that other event handlers may take
-     * alternative execution paths without performing these expensive operations.
-     * <p/>
-     * <b>Please Note</b> however the qualifier for the previous statement is
-     * that all form and field controls must be fully initialized before they
-     * are processed, which is after the <tt>onSecurityCheck()</tt> method has
-     * completed. After this point their <tt>onProcess()</tt> methods will be
-     * invoked by the <tt>ClickServlet</tt>.
-     * <p/>
-     * Select controls in particular must have their option list values populated
-     * before the form is processed otherwise field validations cannot be performed.
-     * <p/>
-     * For initializing page controls the best practice is to place all the
-     * control creation code in the pages constructor, and only place any
-     * initialization code in the <tt>onInit()</tt> method which has an external
-     * dependency to the context or some other object. By following this practice
-     * it is easy to see what code is "design time" initialization code and what
-     * is "runtime initialization code".
-     */
-    public void onInit() {
-    }
-
-    /**
-     * The on Security Check event handler.
-     * <p/>
-     * Security check provides the Page an opportunity to check the users
-     * security credentials before processing the Page. This method is called
-     * immediately after the <tt>onInit</tt> method.
-     * <p/>
-     * If security check returns true the Page is processed as
-     * normal. If the method returns false then the no Page controls are
-     * processed and the <tt>onGet()</tt> or <tt>onPost()</tt> methods
-     * are not invoked.
-     * <p/>
-     * If the method returns false, the forward or redirect property should be
-     * set to send the request to another Page.
-     * <p/>
-     * By default this method returns true, subclass may override this method
-     * to provide their security authorization/authentication mechanism.
-     *
-     * @return true by default, subclasses may override this method
-     */
-    public boolean onSecurityCheck() {
-        return true;
-    }
-
-    /**
-     * The on Get request event handler. This event handler is invoked if the
-     * HTTP request method is "GET".
-     * <p/>
-     * The event handler is invoked after {@link #onSecurityCheck()} has been
-     * called and all the Page {@link #controls} have been processed. If either
-     * the security check or one of the controls cancels continued event
-     * processing the <tt>onGet()</tt> method will not be invoked.
-     *
-     * <h4>Important Note</h4>
-     *
-     * Form and field controls should <b>NOT</b> be created
-     * or initialized at this point as the control processing stage has already
-     * been completed. Select option list values should also be populated
-     * before the control processing stage is performed so that they can
-     * validate the submitted values.
-     */
-    public void onGet() {
-    }
-
-    /**
-     * The on Post request event handler. This event handler is invoked if the
-     * HTTP request method is "POST".
-     * <p/>
-     * The event handler is invoked after {@link #onSecurityCheck()} has been
-     * called and all the Page {@link #controls} have been processed. If either
-     * the security check or one of the controls cancels continued event
-     * processing the <tt>onPost()</tt> method will not be invoked.
-     *
-     * <h4>Important Note</h4>
-     *
-     * Form and field controls should <b>NOT</b> be created
-     * or initialized at this point as the control processing stage has already
-     * been completed. Select option list values should also be populated
-     * before the control processing stage is performed so that they can
-     * validate the submitted values.
-     */
-    public void onPost() {
-    }
-
-    /**
-     * The on render event handler. This event handler is invoked prior to the
-     * page being rendered.
-     * <p/>
-     * This method will not be invoked if either the security check or one of
-     * the controls cancels continued event processing.
-     * <p/>
-     * The on render method is typically used to populate tables performing some
-     * database intensive operation. By putting the intensive operations in the
-     * on render method they will not be performed if the user navigates away
-     * to a different page.
-     * <p/>
-     * If you have code which you are using in both the <tt>onGet()</tt> and
-     * <tt>onPost()</tt> methods, use the <tt>onRender()</tt> method instead.
-     *
-     * <h4>Important Note</h4>
-     *
-     * Form and field controls should <b>NOT</b> be created
-     * or initialized at this point as the control processing stage has already
-     * been completed. Select option list values should also be populated
-     * before the control processing stage is performed so that they can
-     * validate the submitted values.
-     */
-    public void onRender() {
-    }
-
-    /**
-     * The on Destroy request event handler. Subclasses may override this method
-     * to add any resource clean up code.
-     * <p/>
-     * This method is guaranteed to be called before the Page object reference
-     * goes out of scope and is available for garbage collection.
-     */
-    public void onDestroy() {
-    }
 }
