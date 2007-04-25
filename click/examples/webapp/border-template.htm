@@ -13,9 +13,17 @@ $imports
   <a id="hostedTitle" target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>  
 </div>
 
+## Display the main menu
 #writeTemplateMenu()
 
 <div id="container">
+## Display Flash info or error messages if present
+#set ($info = $session.info) 
+#if ($info) <p class="info">$info</p> #end
+#set ($error = $session.error) 
+#if ($error) <p class="error">$error</p> #end
+
+## Render the page template content inside this border template.
 #parse($path)
 </div>
 
