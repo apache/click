@@ -18,6 +18,8 @@ public class NextPage extends BorderPage {
     private HiddenField courseField;
     private CourseBooking courseBooking;
 
+    // ------------------------------------------------------------ Constructor
+
     public NextPage() {
         courseField = new HiddenField("courseField", CourseBooking.class);
         form.add(courseField);
@@ -28,9 +30,7 @@ public class NextPage extends BorderPage {
         addControl(form);
     }
 
-    public void setCourseBooking(CourseBooking courseBooking) {
-        this.courseBooking = courseBooking;
-    }
+    // --------------------------------------------------------- Event Handlers
 
     /**
      * @see net.sf.click.Page#onInit()
@@ -67,6 +67,12 @@ public class NextPage extends BorderPage {
         setRedirect(path + "?bookingId=" + bookingId);
 
         return true;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    public void setCourseBooking(CourseBooking courseBooking) {
+        this.courseBooking = courseBooking;
     }
 
 }

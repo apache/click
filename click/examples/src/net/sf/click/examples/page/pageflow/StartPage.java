@@ -33,6 +33,8 @@ public class StartPage extends BorderPage {
 
     private CourseBooking courseBooking;
 
+    // ------------------------------------------------------------ Constructor
+
     public StartPage() {
         form.setLabelsPosition("top");
 
@@ -57,8 +59,13 @@ public class StartPage extends BorderPage {
         form.add(new Submit(" Next > ", this, "onNextClick"));
     }
 
-    public void setCourseBooking(CourseBooking courseBooking) {
-        this.courseBooking = courseBooking;
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * @see net.sf.click.Page#onSecurityCheck()
+     */
+    public boolean onSecurityCheck() {
+        return form.onSubmitCheck(this, "/pageflow/invalid-submit.html");
     }
 
     /**
@@ -78,13 +85,6 @@ public class StartPage extends BorderPage {
             courseSelect.setValue(courseBooking.getCourseType());
             notesField.setValue(courseBooking.getBookingNotes());
         }
-    }
-
-    /**
-     * @see net.sf.click.Page#onSecurityCheck()
-     */
-    public boolean onSecurityCheck() {
-        return form.onSubmitCheck(this, "/pageflow/invalid-submit.html");
     }
 
     public boolean onBackClick() {
@@ -109,6 +109,12 @@ public class StartPage extends BorderPage {
             return false;
         }
         return true;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    public void setCourseBooking(CourseBooking courseBooking) {
+        this.courseBooking = courseBooking;
     }
 
 }

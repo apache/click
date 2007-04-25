@@ -3,13 +3,13 @@ package net.sf.click.examples.page.tree;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.sf.click.Context;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.examples.page.BorderPage;
-
 import net.sf.click.extras.tree.Tree;
 import net.sf.click.extras.tree.TreeListener;
 import net.sf.click.extras.tree.TreeNode;
@@ -25,6 +25,11 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
 
     private Tree tree;
 
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * @see net.sf.click.Page#onInit();
+     */
     public void onInit() {
         super.onInit();
 
@@ -37,6 +42,35 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         //change the tree values.
         buildOptionsUI();
     }
+
+    /**
+     * Called when user clicks on submit
+     */
+    public boolean onSelectClick() {
+        tree.bindSelectOrDeselectValues();
+        return true;
+    }
+
+    /**
+     * Called when user submits the options form.
+     */
+    public boolean onApplyOptionsClick() {
+        //Reset the tree and nodes to default values
+        resetTree();
+
+        //Store the users options in the session
+        TreeOptions options = new TreeOptions();
+        options.javascriptEnabled = jsEnabled.isChecked();
+        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
+        setSessionObject(options);
+
+        //Apply users new options
+        applyOptions();
+
+        return true;
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Creates and return a new tree instance.
@@ -117,15 +151,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         return tree;
     }
 
-    /**
-     * Called when user clicks on submit
-     */
-    public boolean onSelectClick() {
-        tree.bindSelectOrDeselectValues();
-        return true;
-    }
-
-    //-------------------------------------------------------------------TreeListener support
+    // --------------------------------------------------- TreeListener Support
 
     /**
      * This method, which implements TreeListener, is called when a node is selected
@@ -172,7 +198,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
         return list;
     }
 
-    //--------------------------------------------------------------------------- NOTE
+    // ------------------------------------------------------------------- NOTE
     //The code below is not specific to the tree control. It was moved here
     //so as not to distract the user from the use of the tree control.
 
@@ -197,25 +223,6 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
 
         //Apply users existing options
         applyOptions();
-    }
-
-    /**
-     * Called when user submits the options form.
-     */
-    public boolean onApplyOptionsClick() {
-        //Reset the tree and nodes to default values
-        resetTree();
-
-        //Store the users options in the session
-        TreeOptions options = new TreeOptions();
-        options.javascriptEnabled = jsEnabled.isChecked();
-        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
-        setSessionObject(options);
-
-        //Apply users new options
-        applyOptions();
-
-        return true;
     }
 
     /** Form options holder. */

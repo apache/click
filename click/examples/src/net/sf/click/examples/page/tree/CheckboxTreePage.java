@@ -3,6 +3,7 @@ package net.sf.click.examples.page.tree;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import net.sf.click.Context;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
@@ -11,7 +12,6 @@ import net.sf.click.control.Reset;
 import net.sf.click.control.Submit;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.extras.tree.CheckboxTree;
-
 import net.sf.click.extras.tree.Tree;
 import net.sf.click.extras.tree.TreeListener;
 import net.sf.click.extras.tree.TreeNode;
@@ -30,6 +30,11 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     private Submit okSubmit;
     private Reset resetBtn;
 
+    // --------------------------------------------------------- Event Handlers
+
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         super.onInit();
 
@@ -53,6 +58,50 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         //change the tree values.
         buildOptionsUI();
     }
+
+    /**
+     * Called when user submits the options form.
+     */
+    public boolean onApplyOptionsClick() {
+        //Reset the tree and nodes to default values
+        resetTree();
+
+        //Store the users options in the session
+        CheckboxTreeOptions options = new CheckboxTreeOptions();
+        options.javascriptEnabled = jsEnabled.isChecked();
+        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
+        setSessionObject(options);
+
+        //Apply users new options
+        applyOptions();
+
+        return true;
+    }
+
+    /**
+     * Called when user clicks on submit
+     */
+    public boolean onSelectClick() {
+        tree.bindSelectOrDeselectValues();
+        return true;
+    }
+
+    /**
+     * @see net.sf.click.Page#onRender()
+     */
+    public void onRender() {
+        if(tree.isJavascriptEnabled()) {
+            //TODO remove
+            //Expand all nodes so that the entire tree is available on browser.
+            //The argument is false, because we do not want to notify the
+            //listeners of the expansion.
+            //The expandAll call should be made as late as possible because
+            //it is a dummy call with no value.
+            //tree.expandAll(false);
+        }
+    }
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Creates and return a new tree instance.
@@ -133,15 +182,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return tree;
     }
 
-    /**
-     * Called when user clicks on submit
-     */
-    public boolean onSelectClick() {
-        tree.bindSelectOrDeselectValues();
-        return true;
-    }
-
-     //-------------------------------------------------------------------TreeListener support
+     // -------------------------------------------------- TreeListener Support
 
     /**
      * This method, which implements TreeListener, is called when a node is selected
@@ -188,7 +229,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return list;
     }
 
-    //--------------------------------------------------------------------------- NOTE
+    // ------------------------------------------------------------------- NOTE
     //The code below is not specific to the tree control. It was moved here
     //so as not to distract the user from the use of the tree control.
 
@@ -215,42 +256,11 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         applyOptions();
     }
 
-    /**
-     * Called when user submits the options form.
-     */
-    public boolean onApplyOptionsClick() {
-        //Reset the tree and nodes to default values
-        resetTree();
-
-        //Store the users options in the session
-        CheckboxTreeOptions options = new CheckboxTreeOptions();
-        options.javascriptEnabled = jsEnabled.isChecked();
-        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
-        setSessionObject(options);
-
-        //Apply users new options
-        applyOptions();
-
-        return true;
-    }
-
     /** Form options holder. */
     public static class CheckboxTreeOptions implements Serializable {
         private static final long serialVersionUID = 1L;
         boolean javascriptEnabled= false;
         boolean rootNodeDisplayed = false;
-    }
-
-    public void onRender() {
-        if(tree.isJavascriptEnabled()) {
-            //TODO remove
-            //Expand all nodes so that the entire tree is available on browser.
-            //The argument is false, because we do not want to notify the
-            //listeners of the expansion.
-            //The expandAll call should be made as late as possible because
-            //it is a dummy call with no value.
-            //tree.expandAll(false);
-        }
     }
 
     /**

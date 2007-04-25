@@ -46,6 +46,8 @@ public class StandardControlsForm extends BorderPage {
     private Checkbox allFieldsRequired = new Checkbox("allFieldsRequired");
     private Checkbox jsValidate = new Checkbox("jsValidate", "JavaScript Validate");
 
+    // ------------------------------------------------------------ Constructor
+
     public StandardControlsForm() {
         form.setErrorsPosition(Form.POSITION_TOP);
 
@@ -88,6 +90,8 @@ public class StandardControlsForm extends BorderPage {
         optionsForm.setListener(this, "onOptionsSubmit");
     }
 
+    // --------------------------------------------------------- Event Handlers
+
     /**
      * @see net.sf.click.Page#onInit()
      */
@@ -106,6 +110,8 @@ public class StandardControlsForm extends BorderPage {
         applyOptions();
         return true;
     }
+
+    // -------------------------------------------------------- Private Methods
 
     private void applyOptions() {
         Options options = (Options) getSessionObject(Options.class);
