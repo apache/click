@@ -9,7 +9,7 @@ CODE
 * Select can have multiple values and this need to be resolved with multpart request
 
 DOCUMENTATION
-* Update Page method order, use Event Handler & page doco
+* Complete introduction page examples
 * FAQ topic on rendering PDF, Excel documents
 * JSP forwarding
 * add page topic writing directly to response
