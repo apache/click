@@ -16,6 +16,8 @@ public class NavigationA extends BorderPage {
     public ActionLink redirectLink = new ActionLink("redirectLink", this, "onRedirectClick");
     public ActionLink redirectParamLink = new ActionLink("redirectParamLink", this, "onRedirectParamClick");
 
+    // --------------------------------------------------------- Event Handlers
+
     /**
      * @see Page#onInit()
      */
@@ -44,10 +46,6 @@ public class NavigationA extends BorderPage {
         redirectParamLink.setValue(number.toString());
     }
 
-    public String getTarget() {
-        return "/navigation-b.htm";
-    }
-
     public boolean onForwardClick() {
         setForward(getTarget());
         return false;
@@ -68,5 +66,11 @@ public class NavigationA extends BorderPage {
     public boolean onRedirectParamClick() {
         setRedirect(getTarget() + "?param=" + redirectParamLink.getValue());
         return false;
+    }
+
+    // --------------------------------------------------------- Public Methods
+
+    public String getTarget() {
+        return "/navigation-b.htm";
     }
 }
