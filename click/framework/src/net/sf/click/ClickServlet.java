@@ -490,14 +490,14 @@ public class ClickServlet extends HttpServlet {
             errorPage.setMode(clickApp.getModeValue());
         }
 
-        page.onInit();
-
         boolean continueProcessing = page.onSecurityCheck();
 
-        if (continueProcessing && page.hasControls()) {
+        if (continueProcessing) {
+
+            page.onInit();
 
             // Make sure dont process a forwarded request
-            if (!page.getContext().isForward()) {
+            if (page.hasControls() && !page.getContext().isForward()) {
 
                 List controls = page.getControls();
 
