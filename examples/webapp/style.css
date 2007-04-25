@@ -75,6 +75,23 @@ body, table, p {
 	font-size: 12px;
 }
 
+p.info, p.error {
+	border: 1px solid #c0c0e0;
+	background-color: #ffffc0;
+	margin-top: 0.5em;
+	margin-bottom: 1em;
+	margin-right: 1.5em;
+	padding: 0.5em;
+}
+
+p.info {
+	color: navy;
+}
+
+p.error {
+	color: red;
+}
+
 a:visited {
 	color: blue;
 }
