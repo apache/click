@@ -860,8 +860,6 @@ class ClickApp implements EntityResolver {
         }
 
 
-
-
         Element headersElm = getChild(rootElm, "headers");
         if (headersElm != null) {
             commonHeaders =

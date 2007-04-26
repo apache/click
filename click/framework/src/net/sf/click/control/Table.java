@@ -828,8 +828,6 @@ public class Table extends AbstractControl {
     public boolean onProcess() {
         controlLink.onProcess();
 
-        System.out.println(controlLink.getName() + ".isClicked()=" + controlLink.isClicked());
-
         if (controlLink.isClicked()) {
             String page = getContext().getRequestParameter(PAGE);
             if (StringUtils.isNotBlank(page)) {
