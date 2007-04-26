@@ -21,7 +21,7 @@ import org.objectstyle.cayenne.DataObject;
  * @author Malcolm Edgar
  */
 public class CayenneFormPage extends FormTablePage {
-    
+
     // ------------------------------------------------------------ Constructor
 
     /**
