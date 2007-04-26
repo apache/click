@@ -39,6 +39,13 @@ and documentation updates.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+		<span style="font-weight:bold;background-color:#ffffc0;color:#0808ff;border: 1px solid red;padding: 1px 2px;">Important Change</span> 
+		the <a href="pages.html#activity-diagram">Pages</a> event execution order 
+		has changed with the <tt>onSecurityCheck()</tt> method now invoked before 
+		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt> 
+		is only invoked if the request has passed the <tt>onSecurityCheck()</tt>.
+      </li>
+      <li class="change">
       	Added 
       	<a href="extras-api/net/sf/click/extras/control/PickList.html">PickList</a> control.
       	This control was created by Naoki Takezoe 
