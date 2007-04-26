@@ -120,26 +120,26 @@ control.
 An example usage of the Table control in a customers Page is provided below:
 
 <pre class="codeJava">
-<span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+<span class="kw">public class</span> SimpleTablePage <span class="kw">extends</span> Page {
 
     <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
 
-    <span class="cm">// ------------------------------------- Constructor</span>
+    <span class="cm">// ------------------------------------------------------------ Constructor</span>
      
-    <span class="kw">public</span> CustomersPage() {
+    <span class="kw">public</span> SimpleTablePage() {
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"email"</span>));
-        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investment"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
     }
     
-    <span class="cm">// ---------------------------------- Event Handlers</span>
+    <span class="cm">// --------------------------------------------------------- Event Handlers</span>
      
     <span class="cm">/**
      * @see Page#onRender()
      */</span>
     <span class="kw">public void</span> onRender() {
-    	List list = getCustomerService().getCustomersByName();
+    	List list = getCustomerService().getCustomersSortedByName(10);
     	table.setRowList(list);
     }
 } </pre>
@@ -181,7 +181,7 @@ A more advanced Table example is provided below:
         column.setAutolink(<span class="kw">true</span>);
         table.addColumn(column);
         
-        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investment"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
     	
         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
         column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
