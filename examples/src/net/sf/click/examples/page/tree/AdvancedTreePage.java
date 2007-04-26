@@ -28,7 +28,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
     // --------------------------------------------------------- Event Handlers
 
     /**
-     * @see net.sf.click.Page#onInit();
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         super.onInit();
@@ -123,7 +123,7 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
 
         //We continue constructing the rest of the tree
         TreeNode programFiles = new TreeNode("program files", "4", root);
-        TreeNode adobe = new TreeNode("Adobe", "5", programFiles);
+        new TreeNode("Adobe", "5", programFiles);
 
         TreeNode download = new TreeNode("downloads","6", root);
 
