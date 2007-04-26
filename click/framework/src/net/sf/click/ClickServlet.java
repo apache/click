@@ -345,7 +345,7 @@ public class ClickServlet extends HttpServlet {
                 Map.Entry entry = (Map.Entry) i.next();
                 String name = entry.getKey().toString();
                 String value = entry.getValue().toString();
-                logger.trace("   " + name + "=" + value);
+                logger.trace("   request param: " + name + "=" + value);
             }
         }
 
@@ -373,6 +373,13 @@ public class ClickServlet extends HttpServlet {
         } finally {
             if (page != null) {
                 page.onDestroy();
+
+                if (logger.isTraceEnabled()) {
+                    String shortClassName = page.getClass().getName();
+                    shortClassName =
+                        shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                    logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+                }
 
                 if (!clickApp.isProductionMode()) {
                     logger.info("handleRequest:  " + page.getPath() + " - "
@@ -466,6 +473,13 @@ public class ClickServlet extends HttpServlet {
         } finally {
             if (finalizeRef != null) {
                 finalizeRef.onDestroy();
+
+                if (logger.isTraceEnabled()) {
+                    String shortClassName = finalizeRef.getClass().getName();
+                    shortClassName =
+                        shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                    logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+                }
             }
         }
     }
@@ -492,9 +506,23 @@ public class ClickServlet extends HttpServlet {
 
         boolean continueProcessing = page.onSecurityCheck();
 
+        String tracePrefix = null;
+
+        if (logger.isTraceEnabled()) {
+            tracePrefix = page.getClass().getName();
+            tracePrefix = tracePrefix.substring(tracePrefix.lastIndexOf('.') + 1);
+            tracePrefix = "   invoked: " + tracePrefix;
+
+            logger.trace(tracePrefix + ".onSecurityCheck() : " + continueProcessing);
+        }
+
         if (continueProcessing) {
 
             page.onInit();
+
+            if (logger.isTraceEnabled()) {
+                logger.trace(tracePrefix + ".onInit()");
+            }
 
             // Make sure dont process a forwarded request
             if (page.hasControls() && !page.getContext().isForward()) {
@@ -506,6 +534,15 @@ public class ClickServlet extends HttpServlet {
 
                     continueProcessing = control.onProcess();
 
+                    if (logger.isTraceEnabled()) {
+                        String controlClassName = control.getClass().getName();
+                        controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+
+                        String msg =  "   invoked: " + controlClassName
+                            + ".onProcess() : " + continueProcessing;
+                        logger.trace(msg);
+                    }
+
                     if (!continueProcessing) {
                         break;
                     }
@@ -516,10 +553,24 @@ public class ClickServlet extends HttpServlet {
         if (continueProcessing) {
             if (isPost) {
                 page.onPost();
+
+                if (logger.isTraceEnabled()) {
+                    logger.trace(tracePrefix + ".onPost()");
+                }
+
             } else {
                 page.onGet();
+
+                if (logger.isTraceEnabled()) {
+                    logger.trace(tracePrefix + ".onGet()");
+                }
             }
+
             page.onRender();
+
+            if (logger.isTraceEnabled()) {
+                logger.trace(tracePrefix + ".onRender()");
+            }
         }
 
         if (StringUtils.isNotBlank(page.getRedirect())) {
@@ -654,6 +705,9 @@ public class ClickServlet extends HttpServlet {
 
         if (!clickApp.isProductionMode()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(50);
+            if (logger.isTraceEnabled()) {
+                buffer.append("   ");
+            }
             buffer.append("renderTemplate: ");
             if (!page.getTemplate().equals(page.getPath())) {
                 buffer.append(page.getPath());
@@ -805,6 +859,13 @@ public class ClickServlet extends HttpServlet {
 
         try {
             final Page newPage = newPageInstance(path, pageClass, request);
+
+            if (logger.isTraceEnabled()) {
+                String shortClassName = pageClass.getName();
+                shortClassName =
+                    shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                logger.trace("   invoked: " + shortClassName + ".<<init>>");
+            }
 
             if (newPage.getHeaders() == null) {
                 newPage.setHeaders(clickApp.getPageHeaders(path));
