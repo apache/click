@@ -1010,7 +1010,9 @@ public class Column implements Serializable {
                 + "value, use \"center\" instead";
             throw new IllegalArgumentException(msg);
         }
-        //setHeaderStyle("text-align", align);
+        if (!getSortable()) {
+        	setHeaderStyle("text-align", align);
+        }
         setDataStyle("text-align", align);
     }
 
