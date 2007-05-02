@@ -1124,6 +1124,7 @@ public class Table extends AbstractControl {
             String gotoTitle = getMessage("table-goto-title");
 
             if (getSortedColumn() != null) {
+                controlLink.setParameter(SORT, null);
                 controlLink.setParameter(COLUMN, getSortedColumn());
                 controlLink.setParameter(ASCENDING, String.valueOf(isSortedAscending()));
             } else {
