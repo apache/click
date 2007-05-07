@@ -1011,7 +1011,7 @@ public class Column implements Serializable {
             throw new IllegalArgumentException(msg);
         }
         if (!getSortable()) {
-        	setHeaderStyle("text-align", align);
+            setHeaderStyle("text-align", align);
         }
         setDataStyle("text-align", align);
     }
