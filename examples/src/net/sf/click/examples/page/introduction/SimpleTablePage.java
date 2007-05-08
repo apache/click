@@ -1,4 +1,4 @@
-package net.sf.click.examples.page.table;
+package net.sf.click.examples.page.introduction;
 
 import java.util.List;
 
