@@ -1,4 +1,4 @@
-package net.sf.click.examples.page.table;
+package net.sf.click.examples.page.introduction;
 
 import java.util.List;
 
@@ -12,19 +12,23 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.EditCustomer;
 import net.sf.click.extras.control.LinkDecorator;
 
-public class CustomersPage extends BorderPage {
+public class AdvancedTable extends BorderPage {
 
     public Table table = new Table();
     public PageLink editLink = new PageLink("Edit", EditCustomer.class);
     public ActionLink deleteLink = new ActionLink("Delete", this, "onDeleteClick");
 
-    public CustomersPage() {
+    // ------------------------------------------------------------ Constructor
+
+    public AdvancedTable() {
         table.setClass(Table.CLASS_ITS);
         table.setPageSize(10);
         table.setShowBanner(true);
         table.setSortable(true);
 
         table.addColumn(new Column("id"));
+
+        table.addColumn(new Column("name"));
 
         Column column = new Column("email");
         column.setAutolink(true);
@@ -35,7 +39,7 @@ public class CustomersPage extends BorderPage {
 
         editLink.setImageSrc("/images/edit-16px.gif");
         editLink.setTitle("Edit customer details");
-        editLink.setParameter("referrer", "/table/customers.htm");
+        editLink.setParameter("referrer", "/introduction/advanced-table.htm");
 
         deleteLink.setImageSrc("/images/delete-16px.gif");
         deleteLink.setTitle("Delete customer record");
@@ -48,6 +52,8 @@ public class CustomersPage extends BorderPage {
         column.setSortable(false);
         table.addColumn(column);
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     public boolean onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
