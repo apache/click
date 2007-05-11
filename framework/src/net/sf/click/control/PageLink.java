@@ -18,6 +18,7 @@ package net.sf.click.control;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -151,7 +152,7 @@ public class PageLink extends AbstractLink {
 
                 buffer.append(name);
                 buffer.append("=");
-                buffer.append(value);
+                buffer.append(ClickUtils.encodeUrl(value, getContext()));
                 if (i.hasNext()) {
                     buffer.append("&");
                 }
