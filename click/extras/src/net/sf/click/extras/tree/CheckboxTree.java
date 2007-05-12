@@ -307,12 +307,13 @@ public class CheckboxTree extends Tree {
                     if (isJavascriptEnabled()) {
                         //create a href to interact with the checkbox on browser
                         buffer.elementStart("a");
-                        buffer.append(" href=");
+                        buffer.append(" href=\"");
                         buffer.append(getContext().getRequest().getRequestURI());
                         buffer.append("?");
                         buffer.append(SELECT_TREE_NODE_PARAM);
                         buffer.append("=");
                         buffer.append(treeNode.getId());
+                        buffer.append("\"");
 
                         ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderValue(buffer);
                         buffer.closeTag();
