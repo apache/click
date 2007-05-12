@@ -582,8 +582,11 @@ public class ClickServlet extends HttpServlet {
 
             url = response.encodeRedirectURL(url);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("redirect=" + url);
+            if (logger.isTraceEnabled()) {
+                logger.debug("    redirect: " + url);
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("redirect: " + url);
             }
 
             response.sendRedirect(url);
@@ -591,8 +594,11 @@ public class ClickServlet extends HttpServlet {
         } else if (StringUtils.isNotBlank(page.getForward())) {
             request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("forward=" + page.getForward());
+            if (logger.isTraceEnabled()) {
+                logger.debug("    forward: " + page.getForward());
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("forward: " + page.getForward());
             }
 
             if (page.getForward().endsWith(".jsp")) {
@@ -609,9 +615,11 @@ public class ClickServlet extends HttpServlet {
             renderTemplate(page, request);
 
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Page path not defined for "
-                             + page.getClass().getName());
+            if (logger.isTraceEnabled()) {
+                logger.debug("    path not defined for " + page.getClass().getName());
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("path not defined for " + page.getClass().getName());
             }
         }
     }
@@ -954,7 +962,7 @@ public class ClickServlet extends HttpServlet {
                         PropertyUtils.setValueOgnl(page, name, value, context);
 
                         if (logger.isTraceEnabled()) {
-                            logger.trace("Auto bound variable " + name + "=" + value);
+                            logger.trace("   auto bound variable: " + name + "=" + value);
                         }
                     }
                 }
