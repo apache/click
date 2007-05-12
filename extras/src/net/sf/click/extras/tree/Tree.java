@@ -1013,18 +1013,20 @@ public class Tree extends AbstractControl {
     protected void renderExpandAndCollapseAction(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
 
-        buffer.append(" href=");
+        buffer.append(" href=\"");
         buffer.append(getContext().getRequest().getRequestURI());
         buffer.append("?");
         buffer.append(EXPAND_TREE_NODE_PARAM);
         buffer.append("=");
         buffer.append(treeNode.getId());
+        buffer.append("\"");
 
         buffer.appendAttribute("class", "spacer");
         if (isJavascriptEnabled()) {
             //hook to insert javascript specific code
             javascriptHandler.getJavascriptRenderer().renderExpandAndCollapseAction(buffer);
         }
+
         buffer.closeTag();
         buffer.elementEnd("a");
         buffer.append("\n");
@@ -1101,12 +1103,13 @@ public class Tree extends AbstractControl {
      */
     protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-        buffer.append(" href=");
+        buffer.append(" href=\"");
         buffer.append(getContext().getRequest().getRequestURI());
         buffer.append("?");
         buffer.append(SELECT_TREE_NODE_PARAM);
         buffer.append("=");
         buffer.append(treeNode.getId());
+        buffer.append("\"");
 
         buffer.closeTag();
         if (treeNode.getValue() != null) {
