@@ -573,9 +573,9 @@ public class Form implements Control {
 
     /**
      * The form errors position <tt>["top", "middle", "bottom"]</tt> default
-     * value: &nbsp; <tt>"middle"</tt>.
+     * value: &nbsp; <tt>"top"</tt>.
      */
-    protected String errorsPosition = POSITION_MIDDLE;
+    protected String errorsPosition = POSITION_TOP;
 
     /** The error &lt;td&gt; "style" attribute value. */
     protected String errorsStyle;
@@ -2365,6 +2365,7 @@ public class Form implements Control {
                 buffer.append("<tr class=\"errors\">");
                 buffer.append("<td class=\"errors\"");
                 buffer.appendAttribute("align", getErrorsAlign());
+                buffer.appendAttribute("colspan", getColumns() * 2);
                 buffer.appendAttribute("style", getErrorsStyle());
                 buffer.append(">\n");
                 buffer.append("<span class=\"error\">");
@@ -2381,6 +2382,7 @@ public class Form implements Control {
                 buffer.append("<tr class=\"errors\">");
                 buffer.append("<td class=\"errors\"");
                 buffer.appendAttribute("align", getErrorsAlign());
+                buffer.appendAttribute("colspan", getColumns() * 2);
                 buffer.appendAttribute("style", getErrorsStyle());
                 buffer.append(">");
 
