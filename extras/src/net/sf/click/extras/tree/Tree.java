@@ -1371,7 +1371,7 @@ public class Tree extends AbstractControl {
         }
         for (int i = 0, n = ids.length; i < n; i++) {
             String id = ids[i];
-            if (id == null || id.trim().equals("")) {
+            if (id == null || id.length() == 0) {
                 continue;
             }
             TreeNode node = find(id);
