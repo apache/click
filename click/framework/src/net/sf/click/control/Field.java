@@ -193,6 +193,9 @@ public abstract class Field extends AbstractControl {
     /** The Field is required flag. */
     protected boolean required;
 
+    /** The Field 'tabindex' attribute. */
+    protected int tabindex;
+
     /** The Field 'title' attribute, which acts as a tooltip help message. */
     protected String title;
 
@@ -516,6 +519,24 @@ public abstract class Field extends AbstractControl {
      */
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    /**
+     * Return the field "tabindex" attribute value.
+     *
+     * @return the field "tabindex" attribute value
+     */
+    public int getTabIndex() {
+        return tabindex;
+    }
+
+    /**
+     * Set the field "tabindex" attribute value.
+     *
+     * @param tabindex the field "tabindex" attribute value
+     */
+    public void setTabIndex(int tabindex) {
+        this.tabindex = tabindex;
     }
 
     /**

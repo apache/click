@@ -499,6 +499,9 @@ public class ActionButton extends Button {
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("value", getLabel());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
 
         String onClickAction = " onclick=\"" + getOnClick() + "\"";
         buffer.append(onClickAction);

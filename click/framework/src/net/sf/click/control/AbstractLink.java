@@ -63,6 +63,9 @@ public abstract class AbstractLink extends AbstractControl {
     /** The link parameters map. */
     protected Map parameters;
 
+    /** The link 'tabindex' attribute. */
+    protected int tabindex;
+
     /** The link title attribute, which acts as a tooltip help message. */
     protected String title;
 
@@ -323,6 +326,24 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
+     * Return the link "tabindex" attribute value.
+     *
+     * @return the link "tabindex" attribute value
+     */
+    public int getTabIndex() {
+        return tabindex;
+    }
+
+    /**
+     * Set the link "tabindex" attribute value.
+     *
+     * @param tabindex the link "tabindex" attribute value
+     */
+    public void setTabIndex(int tabindex) {
+        this.tabindex = tabindex;
+    }
+
+    /**
      * Return the 'title' attribute, or null if not defined. The title
      * attribute acts like tooltip message over the link.
      * <p/>
@@ -424,6 +445,9 @@ public abstract class AbstractLink extends AbstractControl {
             buffer.appendAttribute("href", getHref());
             buffer.appendAttribute("id", getId());
             buffer.appendAttribute("title", getTitle());
+            if (getTabIndex() > 0) {
+                buffer.appendAttribute("tabindex", getTabIndex());
+            }
             if (hasAttributes()) {
                 buffer.appendAttributes(getAttributes());
             }

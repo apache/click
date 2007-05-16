@@ -598,6 +598,9 @@ public class Select extends Field {
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (isMultiple()) {
             buffer.appendAttribute("multiple", "multiple");
         }
