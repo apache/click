@@ -270,6 +270,9 @@ public class TextField extends Field {
         buffer.appendAttribute("value", getValue());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (getMaxLength() > 0) {
             buffer.appendAttribute("maxlength", getMaxLength());
         }

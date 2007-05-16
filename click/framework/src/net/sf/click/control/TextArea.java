@@ -286,6 +286,9 @@ public class TextArea extends Field {
         buffer.appendAttribute("rows", getRows());
         buffer.appendAttribute("cols", getCols());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }
