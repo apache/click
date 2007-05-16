@@ -220,6 +220,9 @@ public class ImageSubmit extends Submit {
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("value", getLabel());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
 
         String src = getSrc();
         if (StringUtils.isNotBlank(src)) {

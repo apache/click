@@ -285,6 +285,9 @@ public class FileField extends Field {
         buffer.appendAttribute("value", getValue());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
         }

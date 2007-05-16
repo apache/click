@@ -229,6 +229,9 @@ public class Checkbox extends Field {
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("title", getTitle());
+        if (getTabIndex() > 0) {
+            buffer.appendAttribute("tabindex", getTabIndex());
+        }
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
         }
