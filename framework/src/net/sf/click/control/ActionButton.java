@@ -435,8 +435,11 @@ public class ActionButton extends Button {
      * value.
      */
     public void bindRequestValue() {
-        clicked =
-                getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
+        if (getContext().isMultipartRequest()) {
+            return;
+        }
+
+        clicked = getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
             HttpServletRequest request = getContext().getRequest();
