@@ -207,6 +207,15 @@ public class FieldSet extends Field {
             field.setContext(getContext());
         }
         field.setParent(this);
+
+        if (getForm() != null && getForm().getDefaultFieldSize() > 0) {
+            if (field instanceof TextField) {
+                ((TextField) field).setSize(getForm().getDefaultFieldSize());
+
+            } else if (field instanceof TextArea) {
+                ((TextArea) field).setCols(getForm().getDefaultFieldSize());
+            }
+        }
     }
 
     /**
