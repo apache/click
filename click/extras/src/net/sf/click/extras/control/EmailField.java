@@ -225,8 +225,16 @@ public class EmailField extends TextField {
             String value = getValue();
             int length = value.length();
 
-            int index = value.indexOf("@");
-            if (index < 1 || index == length - 1) {
+            int atIndex = value.indexOf("@");
+            if (atIndex < 1 || atIndex == length - 1) {
+                setErrorMessage("email-format-error");
+                return;
+            }
+
+            int dotIndex = value.lastIndexOf(".");
+            if (dotIndex == -1
+                || dotIndex < atIndex
+                || dotIndex == length -1) {
                 setErrorMessage("email-format-error");
                 return;
             }
