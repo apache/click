@@ -465,8 +465,11 @@ public class ActionLink extends AbstractLink {
      * value.
      */
     public void bindRequestValue() {
-        clicked =
-                getName().equals(getContext().getRequestParameter(ACTION_LINK));
+        if (getContext().isMultipartRequest()) {
+            return;
+        }
+
+        clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
 
         if (clicked) {
             HttpServletRequest request = getContext().getRequest();
