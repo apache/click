@@ -22,7 +22,7 @@
     <suppress checks="JavadocMethod"
               files="SessionMap.java"/>
               
-	<!-- Line Lenght -->              
+	<!-- Line Length -->              
 
     <suppress checks="LineLength"
               files="ColorPicker.java"
@@ -76,7 +76,7 @@
               files="Table.java"
               lines="148"/>      
               
-	<!-- Method Lenght -->              
+	<!-- Method Length -->              
               
     <suppress checks="MethodLength"
               files="ErrorReport.java"
