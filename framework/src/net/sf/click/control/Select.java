@@ -323,9 +323,10 @@ public class Select extends Field {
     }
 
     /**
-     * Add the given Option/OptionGroup collection to the Select.
+     * Add the given Option/OptionGroup/String/Number collection to the Select.
      *
-     * @param options the collection of Option/OptionGroup objects to add
+     * @param options the collection of Option/OptionGroup/String/Number objects
+     *         to add
      * @throws IllegalArgumentException if options is null
      */
     public void addAll(Collection options) {
@@ -333,8 +334,25 @@ public class Select extends Field {
             String msg = "options parameter cannot be null";
             throw new IllegalArgumentException(msg);
         }
-        getOptionList().addAll(options);
-        setInitialValue();
+
+        if (!options.isEmpty()) {
+            for (Iterator i = options.iterator(); i.hasNext();) {
+                Object value = i.next();
+                if (value instanceof Option) {
+                    getOptionList().add(value);
+
+                } else if (value instanceof OptionGroup) {
+                    getOptionList().add(value);
+
+                } else if (value instanceof String) {
+                    getOptionList().add(new Option(value.toString()));
+
+                } else if (value instanceof Number) {
+                    getOptionList().add(new Option(value.toString()));
+                }
+            }
+            setInitialValue();
+        }
     }
 
     /**
