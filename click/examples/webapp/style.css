@@ -52,7 +52,7 @@ body {
 	z-index: 0;
 }
 
-#controlListenerDiv {
+#msgDiv {
 	background-color: #f0f0f0;
 	border: thin solid navy;
 	margin: 1em;
