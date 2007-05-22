@@ -559,6 +559,14 @@ public class Form implements Control {
     /** The form context. */
     protected transient Context context;
 
+    /**
+     * The default field size, default value: <tt>0</tt>.
+     * <p/>
+     * If the form default field size is greater than 0, when fields are added
+     * to the form the field's size will be set to the default value.
+     */
+    protected int defaultFieldSize;
+
     /** The form disabled value. */
     protected boolean disabled;
 
@@ -677,6 +685,8 @@ public class Form implements Control {
      * <p/>
      * Button instances will also be added to the {@link #buttonList} while all
      * others field types will also be added to the {@link #fieldList}.
+     * <p/>
+     * If the form has a
      *
      * @param field the field to add to the form
      * @throws IllegalArgumentException if the form already contains a field or
@@ -712,6 +722,15 @@ public class Form implements Control {
         }
 
         field.setParent(this);
+
+        if (getDefaultFieldSize() > 0) {
+            if (field instanceof TextField) {
+                ((TextField) field).setSize(getDefaultFieldSize());
+
+            } else if (field instanceof TextArea) {
+                ((TextArea) field).setCols(getDefaultFieldSize());
+            }
+        }
     }
 
     /**
@@ -953,6 +972,28 @@ public class Form implements Control {
             Field field = (Field) i.next();
             field.setContext(context);
         }
+    }
+
+    /**
+     * Return the form default field size. If the form default field size is
+     * greater than 0, when fields are added to the form the field's size will
+     * be set to the default value.
+     *
+     * @return the form default field size
+     */
+    public int getDefaultFieldSize() {
+        return defaultFieldSize;
+    }
+
+    /**
+     * Return the form default field size. If the form default field size is
+     * greater than 0, when fields are added to the form the field's size will
+     * be set to the default value.
+     *
+     * @param size the default field size
+     */
+    public void setDefaultFieldSize(int size) {
+        this.defaultFieldSize = size;
     }
 
     /**
