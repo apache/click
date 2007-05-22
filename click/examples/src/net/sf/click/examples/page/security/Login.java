@@ -39,6 +39,8 @@ public class Login extends BorderPage {
 
         form.add(new Submit("ok", " OK ", this, "onOkClicked"));
         form.add(new PageSubmit("cancel", HomePage.class));
+
+        form.add(redirectField);
     }
 
     // --------------------------------------------------------- Event Handlers

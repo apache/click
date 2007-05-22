@@ -90,7 +90,7 @@ public class EditCustomer extends BorderPage {
 
             form.copyTo(customer);
 
-            getCustomerService().setCustomer(customer);
+            getCustomerService().saveCustomer(customer);
 
             String referrer = referrerField.getValue();
             if (referrer != null) {
