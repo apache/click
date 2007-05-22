@@ -63,7 +63,10 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
-    public void setCustomer(Customer customer) {
+    public void saveCustomer(Customer customer) {
+        if (customer.getObjectContext() == null) {
+            registerNewObject(customer);
+        }
         commitChanges();
     }
 
@@ -108,6 +111,18 @@ public class CustomerService extends CayenneTemplate {
         }
 
         return pageList;
+    }
+
+    public List getInvestmentCatetories() {
+        List categories = new ArrayList();
+
+        categories.add("Bonds");
+        categories.add("Commerical Property");
+        categories.add("Options");
+        categories.add("Residential Property");
+        categories.add("Stocks");
+
+        return categories;
     }
 
 }
