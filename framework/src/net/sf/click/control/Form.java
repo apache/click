@@ -15,8 +15,8 @@
  */
 package net.sf.click.control;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1266,16 +1266,17 @@ public class Form implements Control {
             throw new IllegalStateException(msg);
         }
 
-        String requestMethod = getContext().getRequest().getMethod();
+        final HttpServletRequest request = getContext().getRequest();
+
+        String requestMethod = request.getMethod();
 
         if (!getMethod().equalsIgnoreCase(requestMethod)) {
             return false;
         }
 
-        // If "multipart/form-data" request and not already loaded then
-        // load form data FileItem into context
-        if (getContext().isMultipartRequest()
-            && getContext().getMultiPartFormData() == Collections.EMPTY_MAP) {
+
+        // If "multipart/form-data" request
+        if (getContext().isMultipartRequest()) {
 
             FileField fileField = null;
             List fieldList = ClickUtils.getFormFields(this);
@@ -1300,26 +1301,47 @@ public class Form implements Control {
                 fileUpload = new ServletFileUpload(factory);
             }
 
-            try {
-                List itemsList =
-                    fileUpload.parseRequest(getContext().getRequest());
+            Map itemsMap = new HashMap();
 
-                Map itemsMap = new HashMap(itemsList.size());
+            try {
+                List itemsList = fileUpload.parseRequest(request);
+
                 for (int i = 0; i < itemsList.size(); i++) {
                     FileItem fileItem = (FileItem) itemsList.get(i);
                     itemsMap.put(fileItem.getFieldName(), fileItem);
                 }
 
-                getContext().setMultiPartFormData(itemsMap);
-
             } catch (FileUploadException fue) {
                 throw new RuntimeException(fue);
             }
+
+            FileItem fileItem = (FileItem) itemsMap.get(FORM_NAME);
+            String formName = null;
+
+            if (fileItem != null) {
+                if (request.getCharacterEncoding() == null) {
+                    formName = fileItem.getString();
+                }
+                try {
+                    formName = fileItem.getString(request.getCharacterEncoding());
+
+                } catch (UnsupportedEncodingException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+
+            if (getName().equals(formName)) {
+                getContext().setMultiPartFormData(itemsMap);
+                return true;
+
+            } else {
+                return false;
+            }
+
+        } else {
+            return getName().equals(request.getParameter(FORM_NAME));
         }
 
-        String formName = getContext().getRequestParameter(FORM_NAME);
-
-        return getName().equals(formName);
     }
 
     /**
