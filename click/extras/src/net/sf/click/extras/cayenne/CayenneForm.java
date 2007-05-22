@@ -261,6 +261,10 @@ public class CayenneForm extends Form {
     /**
      * Return a <tt>DataObject</tt> from the form, with the form field values
      * set on the object if the copyTo parameter is true.
+     * <p/>
+     * Once the data object has been obtained it will be cached for the duration
+     * of the request so that subsequent calls to this method will return the
+     * same instance rather than creating new data object instances.
      *
      * @param copyTo option to copy the form properties to the returned data
      *  object
@@ -268,12 +272,13 @@ public class CayenneForm extends Form {
      *  to the data object properties.
      */
     public DataObject getDataObject(boolean copyTo) {
+        if (dataObject != null) {
+            return dataObject;
+        }
 
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
                 Class dataClass = getDataObjectClass();
-
-                DataObject dataObject = null;
 
                 Integer id = (Integer) oidField.getValueObject();
                 if (id != null) {
@@ -292,7 +297,6 @@ public class CayenneForm extends Form {
 
                 if (copyTo) {
                     copyTo(dataObject);
-                    this.dataObject = dataObject;
                 }
 
                 return dataObject;
@@ -309,6 +313,10 @@ public class CayenneForm extends Form {
     /**
      * Return a <tt>DataObject</tt> from the form with the form field values
      * set on the object's properties.
+     * <p/>
+     * Once the data object has been obtained it will be cached for the duration
+     * of the request so that subsequent calls to this method will return the
+     * same instance rather than creating new data object instances.
      *
      * @return the <tt>DataObject</tt> with the Form field values applied to
      *      the object

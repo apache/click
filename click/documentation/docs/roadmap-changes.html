@@ -39,7 +39,7 @@ and documentation updates.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-		<span style="font-weight:bold;background-color:#ffffc0;color:#0808ff;border: 1px solid red;padding: 1px 2px;">Important Change</span> 
+		<span style="font-weight:bold;background-color:#ffffc0;border: 1px solid red;padding: 1px 2px;">Important Change</span> 
 		the <a href="pages.html#activity-diagram">Pages</a> event execution order 
 		has changed with the <tt>onSecurityCheck()</tt> method now invoked before 
 		the <tt>onInit()</tt> method. The benefit of this is that the <tt>onInit()</tt> 
@@ -67,10 +67,22 @@ and documentation updates.
 		<a href="click-api/net/sf/click/control/Field.html">Field</a> controls.
       </li>
       <li class="change">
+		Added Form  
+		<a href="click-api/net/sf/click/control/Form.html#defaultFieldSize">defaultFieldSize</a> property.
+      </li>
+      <li class="change">
 		Improved <tt>trace</tt> level logging to detail <a href="click-api/net/sf/click/Page.html">Page</a> event execution order. 
       </li>
       <li class="change">
+		Improved <a href="extras-api/net/sf/click/extras/control/EmailField.html">EmailField</a> validation. 
+      </li>
+      <li class="change">
 		Changed default <a href="click-api/net/sf/click/control/Form.html">Form</a> errorPostion from <tt>"middle"</tt> to <tt>"top"</tt>. 
+      </li>
+      <li class="change">
+		Fixed <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+		handling of new objects bug. This issue was raised by Andrus Adamchik 
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-73">73</a>].
       </li>
       <li class="change">
 		Fixed <a href="extras-api/net/sf/click/extras/control/LinkDecorator.html">LinkDecorator</a> table sorting support. 
