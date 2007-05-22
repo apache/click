@@ -39,11 +39,26 @@ Page provide a simple thread safe programming environment, with a new
 page instance is created for each servlet request.
 <p>
 Possibly the best way to see how Click works is to dive right in and look at some 
-examples.
+examples:
+
+<ul>
+  <li><a href="#hello-world">Hello World</a> - the Hello World classic
+  </li>
+  <li><a href="#control-listener">Control Listener</a> - a ActionLink control listener example
+  </li>
+  <li><a href="#simple-table">Simple Table</a> - a simple Table control example
+  </li> 
+  <li><a href="#advanced-table">Advanced Table</a> - a more advanced Table example
+  </li>
+  <li><a href="#simple-form">Simple Form</a> - a simple Form example
+  </li>
+  <li><a href="#advanced-form">Advanced Form</a> - a more advanced Form example
+  </li>
+</ul>
 
 <p>&nbsp;</p>
 
-<h2>Hello World Example</h2>
+<a name="hello-world" class="heading"><h2>Hello World Example</h2></a>
 A Hello World example in Click would look something like this. 
 <p/>
 First we would have a <tt>HelloWorld</tt> page class:
@@ -107,11 +122,18 @@ Velocity then renders the merged template which looks something like
 
 <p>&nbsp;</p>
 
-<h2>Simple Table Example</h2>
 
-Click also includes a library <a target="topic" href="controls.html">Controls</a> which 
+<a name="control-listener" class="heading"><h2>Control Listener Example</h2></a>
+
+Click includes a library <a target="topic" href="controls.html">Controls</a> which 
 provide user interface functionality. 
 <p/>
+
+<p>&nbsp;</p>
+
+
+<a name="simple-table" class="heading"><h2>Simple Table Example</h2></a>
+
 One of the most useful Click controls is the 
 <a target="topic" href="click-api/net/sf/click/control/Table.html">Table</a>
 control.
@@ -148,7 +170,9 @@ TODO: provide example
 
 <p>&nbsp;</p>
 
-<h2>Advanced Table Example</h2>
+
+
+<a name="advanced-table" class="heading"><h2>Advanced Table Example</h2></a>
 
 The Table control also provides support for:
 <ul>
@@ -249,9 +273,9 @@ At runtime the Table would be rendered in the page as:
 In this example if a user click on the Delete link the <tt>onDeleteClick()</tt>
 method will be called on the Page deleting the customer record.
 
-<p>&nbsp;</p>
 
-<h2>Simple Form Example</h2>
+
+<a name="simple-form" class="heading"><h2>Simple Form Example</h2>
 
 Forms and Fiels are also some of the most commonly used controls in the Click Framework.
 
@@ -259,7 +283,9 @@ TODO: ...
 
 <p>&nbsp;</p>
 
-<h2>Advanced Form Example</h2>
+
+
+<a name="advanced-form" class="heading"><h2>Advanced Form Example</h2></a>
 
 The login Page below provides a demonstration of using Form and Field controls.
 <p/>
