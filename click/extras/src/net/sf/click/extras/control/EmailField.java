@@ -234,7 +234,7 @@ public class EmailField extends TextField {
             int dotIndex = value.lastIndexOf(".");
             if (dotIndex == -1
                 || dotIndex < atIndex
-                || dotIndex == length -1) {
+                || dotIndex == length - 1) {
                 setErrorMessage("email-format-error");
                 return;
             }
