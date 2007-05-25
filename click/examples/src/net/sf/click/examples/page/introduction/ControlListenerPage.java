@@ -20,8 +20,6 @@ public class ControlListenerPage extends BorderPage {
 
     /**
      * Handle the myLink control click event.
-     *
-     * @return true
      */
     public boolean onMyLinkClick() {
         msg = "ControlListenerPage#" + hashCode()
