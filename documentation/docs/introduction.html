@@ -128,6 +128,84 @@ Velocity then renders the merged template which looks something like
 Click includes a library <a target="topic" href="controls.html">Controls</a> which 
 provide user interface functionality. 
 <p/>
+One of the commonly used controls is the 
+<a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>,
+which you can use to have a HTML link call a method on a Page object. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> ControlListenerPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onMyLinkClick"</span>);
+
+    <span class="kw">public</span> String msg;
+
+    <span class="cm">// --------------------------------------------------------- Event Handlers</span>
+
+    <span class="cm">/**
+     * Handle the myLink control click event.
+     */</span>
+    <span class="kw">public boolean</span> onMyLinkClick() {
+        msg = <span class="st">"ControlListenerPage#"</span> + hashCode()
+            + <span class="st">" object method &lt;tt&gt;onMyLinkClick()&lt;/tt&gt; invoked."</span>;
+
+        <span class="kw">return true</span>;
+    }
+} </pre>
+
+In the Page class we create an ActionLink called <span class="blue">myLink</span> 
+and define the control's listener to be the page method <tt>onMyLinkClick()</tt>. 
+When a user clicks on <span class="blue">myLink</span> control it will invoke the 
+listener method <tt>onMyLinkClick()</tt>.
+<p/>
+In Click a control listener method can have any name but it must return a boolean value. 
+The boolean return value specifies whether processing of page events should continue.
+This control listener pattern provides a short hand way wiring up action listener methods
+without having to define anonymous inner classes.
+
+<p/>
+Back to our example, in the page template we define a HTML link and have the 
+<span class="blue">myLink</span> control render the link's href attribute:
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link type="text/css" rel="stylesheet" href="style.css"&gt;&lt;/link&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  
+  Click myLink control &lt;a href="<span class="blue">$myLink.href</span>"&gt;here&lt;/a&gt;.
+
+  <span class="red">#if</span> (<span class="blue">$msg</span>)
+    &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
+  <span class="red">#end</span>
+
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+At runtime this page would be rendered as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ Click myLink control <a href="/click-examples/introduction/control-listener.htm?actionLink=myLink">here</a>.
+ </td>
+</tr>
+</table>
+
+When a user clicks on the link the <tt>onMyLinkClick()</tt> method is invoked. This
+method then creates <span class="blue">msg</span> model value, which is rendered in the page as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ Click myLink control <a href="/click-examples/introduction/control-listener.htm?actionLink=myLink">here</a>.
+ 
+ <div class="msgDiv"> ControlListenerPage#12767107 object method <tt>onMyLinkClick()</tt> invoked. </div>
+ </td>
+</tr>
+</table>
+
 
 <p>&nbsp;</p>
 
@@ -149,6 +227,8 @@ An example usage of the Table control in a customers Page is provided below:
     <span class="cm">// ------------------------------------------------------------ Constructor</span>
      
     <span class="kw">public</span> SimpleTablePage() {
+        table.setClass(Table.CLASS_ITS);
+        
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"email"</span>));
@@ -166,7 +246,45 @@ An example usage of the Table control in a customers Page is provided below:
     }
 } </pre>
 
-TODO: provide example
+In this Page code example a Table control is declared, we set the table's HTML class,
+and then define number of table <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+objects. In the column definitions we specify the name of the column in the constructor,
+which is used for the table column header and also to specify the row object property 
+to render.
+<p/>
+The last thing we need to do is populate the table with data. To do this we override the 
+Page <tt>onRender()</tt> method and set the table row list before it is rendered.
+
+<p/>
+
+In our Page template we simply reference the <span class="blue">$table</span> object 
+which is rendered when its <tt>toString()</tt> method is called. 
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;
+  <span class="blue">$imports</span>
+&lt;/head&gt;
+&lt;body&gt;
+  
+  <span class="blue">$table</span>
+    
+&lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+Note above we also specify the <span class="blue">$imports</span> reference so the table can include any
+header imports such as style sheets in the page.
+<p/>
+At runtime the Table would be rendered in the page as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+   <img src="../images/simple-table.png" border="0"/> 
+  </td>
+</tr>
+</table>
 
 <p>&nbsp;</p>
 
