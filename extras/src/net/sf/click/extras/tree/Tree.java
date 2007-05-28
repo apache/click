@@ -1710,10 +1710,10 @@ public class Tree extends AbstractControl {
         protected String nodeExpansionString;
 
         /**
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          *
          * @param treeNode the current node rendered
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          */
         public void init(TreeNode treeNode) {
             expandId = buildString("e_", treeNode.getId(), "");
@@ -1721,7 +1721,7 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         * @see JavascriptRenderer#renderTreeNodeStart(HtmlStringBuffer)
+         * @see #renderTreeNodeStart(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -1732,7 +1732,7 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         * @see JavascriptRenderer#renderExpandAndCollapseAction(HtmlStringBuffer)
+         * @see #renderExpandAndCollapseAction(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -1741,7 +1741,7 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         * @see JavascriptRenderer#renderIcon(HtmlStringBuffer)
+         * @see #renderIcon(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -1793,10 +1793,10 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         *@see JavascriptRenderer#init(TreeNode)
+         *@see #init(TreeNode)
          *
          * @param treeNode the current node rendered
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          */
         public void init(TreeNode treeNode) {
             super.init(treeNode);
@@ -1820,10 +1820,10 @@ public class Tree extends AbstractControl {
     protected class SessionRenderer extends AbstractJavascriptRenderer {
 
         /**
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          *
          * @param treeNode the current node rendered
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          */
         public void init(TreeNode treeNode) {
             super.init(treeNode);
@@ -2012,16 +2012,14 @@ public class Tree extends AbstractControl {
          * users selected paths
          * @return true if the specified treeNode is part of the users selected
          * path, false otherwise
-         * @see JavascriptHandler#renderAsExpanded(TreeNode)
+         * @see #renderAsExpanded(TreeNode)
          */
         public boolean renderAsExpanded(TreeNode treeNode) {
             return isExpandedParent(treeNode);
         }
 
         /**
-         *
-         *
-         * @see JavascriptHandler#destroy()
+         * @see #destroy()
          */
         public void destroy() {
             //Remove expanded cookies. If the tree is changed
@@ -2033,7 +2031,7 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         * @see JavascriptHandler#getJavascriptRenderer()
+         * @see #getJavascriptRenderer()
          *
          * @return currently installed javascript renderer
          */
@@ -2322,7 +2320,7 @@ public class Tree extends AbstractControl {
          * or not
          * @return true if the specified node should be expanded, false
          * otherwise
-         * @see JavascriptHandler#renderAsExpanded(TreeNode)
+         * @see #renderAsExpanded(TreeNode)
          */
         public boolean renderAsExpanded(TreeNode treeNode) {
             Entry entry = (Entry) selectTracker.get(treeNode.getId());
@@ -2333,14 +2331,12 @@ public class Tree extends AbstractControl {
         }
 
         /**
-         *
-         *
-         * @see JavascriptHandler#destroy()
+         * @see #destroy()
          */
         public void destroy() { /*noop*/ }
 
         /**
-         * @see JavascriptHandler#getJavascriptRenderer()
+         * @see #getJavascriptRenderer()
          *
          * @return currently installed javascript renderer
          */

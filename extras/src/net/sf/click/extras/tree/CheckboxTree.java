@@ -418,7 +418,7 @@ public class CheckboxTree extends Tree {
         protected String checkboxOnClickString;
 
         /**
-         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
+         * @see #renderValue(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -427,7 +427,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         * @see #renderSelect(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -436,7 +436,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         * @see #renderCheckbox(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -446,7 +446,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          *
          * @param treeNode the current node rendered
          */
@@ -476,7 +476,7 @@ public class CheckboxTree extends Tree {
         protected BaseCheckboxJavascriptRenderer checkboxRenderer = new BaseCheckboxJavascriptRenderer();
 
         /**
-         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
+         * @see #renderValue(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -485,7 +485,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         * @see #renderSelect(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -494,7 +494,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         * @see #renderCheckbox(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -503,7 +503,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          *
          * @param treeNode the current node rendered
          */
@@ -537,7 +537,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderValue(HtmlStringBuffer)
+         * @see #renderValue(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -546,7 +546,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderSelect(HtmlStringBuffer)
+         * @see #renderSelect(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -555,7 +555,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see CheckboxJavascriptRenderer#renderCheckbox(HtmlStringBuffer)
+         * @see #renderCheckbox(HtmlStringBuffer)
          *
          * @param buffer string buffer containing the markup
          */
@@ -564,7 +564,7 @@ public class CheckboxTree extends Tree {
         }
 
         /**
-         * @see JavascriptRenderer#init(TreeNode)
+         * @see #init(TreeNode)
          *
          * @param treeNode the current node rendered
          */
