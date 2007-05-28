@@ -108,6 +108,21 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * <img src="post-sequence-diagram.png"/>
  *
+ * <p/>
+ * A good way to see the page event execution order is to view the log when
+ * the application mode is set to <tt>trace</tt>:
+ *
+ * <pre class="codeConfig" style="padding:1em;background-color:#f0f0f0;">
+ * [Click] [debug] GET http://localhost:8080/quickstart/home.htm
+ * [Click] [trace]    invoked: HomePage.&lt;&lt;init&gt;&gt;
+ * [Click] [trace]    invoked: HomePage.onSecurityCheck() : true
+ * [Click] [trace]    invoked: HomePage.onInit()
+ * [Click] [trace]    invoked: HomePage.onGet()
+ * [Click] [trace]    invoked: HomePage.onRender()
+ * [Click] [info ]    renderTemplate: /home.htm - 6 ms
+ * [Click] [trace]    invoked: HomePage.onDestroy()
+ * [Click] [info ] handleRequest:  /home.htm - 24 ms  </pre>
+ *
  * <h4>Rendering Pages</h4>
  *
  * When a Velocity template is rendered the ClickServlet uses Pages:
