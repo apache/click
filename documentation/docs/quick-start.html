@@ -402,10 +402,16 @@ form posts.
 
 <pre class="codeLog">
 [Click] [debug] GET http://localhost:8080/quickstart/home.htm
-[Click] [trace]    <span class="yellow">password=secret</span>
-[Click] [trace]    <span class="yellow">user=malcolm</span>
-[Click] [info ] renderTemplate: /home.htm,border-template.htm - 0 ms
-[Click] [info ] handleRequest:  /home.htm - 0 ms  </pre>
+[Click] [trace]    request param: <span class="yellow">password=secret</span>
+[Click] [trace]    request param: <span class="yellow">user=malcolm</span>
+[Click] [trace]    invoked: HomePage.&lt;&lt;init&gt;&gt;
+[Click] [trace]    invoked: HomePage.onSecurityCheck() : true
+[Click] [trace]    invoked: HomePage.onInit()
+[Click] [trace]    invoked: HomePage.onGet()
+[Click] [trace]    invoked: HomePage.onRender()
+[Click] [info ]    renderTemplate: /user/home.htm,border-template.htm - 6 ms
+[Click] [trace]    invoked: HomePage.onDestroy()
+[Click] [info ] handleRequest:  /home.htm - 24 ms  </pre>
 
 
 <a name="where" class="heading"><h2>Whats Next ?</h2></a>
