@@ -586,7 +586,20 @@ introspecting templates and template reloading is significantly slower.
 The Click and Velocity runtimes use 
 <a target="topic" href="click-api/net/sf/click/util/ClickLogger.html">ClickLogger</a>  
 for logging messages. The runtime loggers will send messages to the console [System.out]. 
-<p/>
+For example the following logging output is for a HomePage request when the application
+mode is <tt>trace</tt>: 
+
+<pre class="codeConfig" style="padding:1em;background-color:#f0f0f0;">
+[Click] [debug] GET http://localhost:8080/quickstart/home.htm
+[Click] [trace]    invoked: HomePage.&lt;&lt;init&gt;&gt;
+[Click] [trace]    invoked: HomePage.onSecurityCheck() : true
+[Click] [trace]    invoked: HomePage.onInit()
+[Click] [trace]    invoked: HomePage.onGet()
+[Click] [trace]    invoked: HomePage.onRender()
+[Click] [info ]    renderTemplate: /home.htm - 6 ms
+[Click] [trace]    invoked: HomePage.onDestroy()
+[Click] [info ] handleRequest:  /home.htm - 24 ms  </pre>
+
 Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays
