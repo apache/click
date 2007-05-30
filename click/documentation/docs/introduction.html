@@ -306,27 +306,40 @@ A more advanced Table example is provided below:
 <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
 
     <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
+    <span class="kw">public</span> PageLink editLink = <span class="kw">new</span> PageLink(<span class="st">"Edit"</span>, EditCustomer.<span class="kw">class</span>);
     <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
 
     <span class="cm">// ------------------------------------- Constructor</span>
      
     <span class="kw">public</span> CustomersPage() {
-        table.setClass(Table.CLASS_ITS);
+        table.setClass(Table.<span class="st">CLASS_ITS</span>);
         table.setPageSize(5);
         table.setShowBanner(<span class="kw">true</span>);
         table.setSortable(<span class="kw">true</span>);
     	
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
         
         Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
         column.setAutolink(<span class="kw">true</span>);
+        column.setTitleProperty(<span class="st">"name"</span>);
         table.addColumn(column);
         
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
+        
+        editLink.setImageSrc(<span class="st">"/images/edit-16px.gif"</span>);
+        editLink.setTitle(<span class="st">"Edit customer details"</span>);
+        editLink.setParameter(<span class="st">"referrer"</span>, <span class="st">"/introduction/advanced-table.htm"</span>);
+        
+        deleteLink.setImageSrc(<span class="st">"/images/delete-16px.gif"</span>);
+        deleteLink.setTitle(<span class="st">"Delete customer record"</span>);
+        deleteLink.setAttribute(<span class="st">"onclick"</span>, <span class="st">"return window.confirm('Are you sure you want to delete this record?');"</span>);
     	
         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
-        column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
+        column.setTextAlign(<span class="st">"center"</span>);
+        AbstractLink[] links = <span class="kw">new</span> AbstractLink[] { editLink, deleteLink };
+        column.setDecorator(<span class="kw">new</span> LinkDecorator(table, links, <span class="st">"id"</span>));
         column.setSortable(<span class="kw">false</span>);
         table.addColumn(column);
     }
@@ -383,13 +396,15 @@ At runtime the Table would be rendered in the page as:
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
-   <img src="../images/table.png" border="0"/> 
+   <img src="../images/advanced-table.png" border="0"/> 
   </td>
 </tr>
 </table>
 
 In this example if a user click on the Delete link the <tt>onDeleteClick()</tt>
 method will be called on the Page deleting the customer record.
+
+<p>&nbsp;</p>
 
 
 
