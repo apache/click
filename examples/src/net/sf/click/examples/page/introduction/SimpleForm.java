@@ -4,7 +4,6 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.control.DateField;
 
 /**
  * Provides a simple Form example Page.
@@ -27,7 +26,6 @@ public class SimpleForm extends BorderPage {
 
     public SimpleForm() {
         form.add(new TextField("name", true));
-        form.add(new DateField("birthDate", true));
         form.add(new Submit("OK"));
 
         form.setListener(this, "onSubmit");
@@ -40,8 +38,7 @@ public class SimpleForm extends BorderPage {
      */
     public boolean onSubmit() {
         if (form.isValid()) {
-            msg = "Your name is " + form.getFieldValue("name") +
-                  " and your birthdate is" + form.getFieldValue("birthDate");
+            msg = "Your name is " + form.getFieldValue("name");
         }
         return true;
     }
