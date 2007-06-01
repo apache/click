@@ -224,6 +224,7 @@ div.msgDiv {
 
 a.error {
 	color: red;
+	text-decoration: underline;
 }
 a:visited.error {
 	color: red;
@@ -241,6 +242,9 @@ select.error {
 	background: #FFFF80;
 }
 span.error {
+	color: red;
+}
+span.required {
 	color: red;
 }
 table.fields {
