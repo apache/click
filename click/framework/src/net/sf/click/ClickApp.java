@@ -1191,7 +1191,8 @@ class ClickApp implements EntityResolver {
 
         Class pageClass = null;
         try {
-            pageClass = Class.forName(className);
+            pageClass =
+                Thread.currentThread().getContextClassLoader().loadClass(className);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Automapped page class " + className
@@ -1206,7 +1207,8 @@ class ClickApp implements EntityResolver {
             if (!className.endsWith("Page")) {
                 String classNameWithPage = className + "Page";
                 try {
-                    pageClass = Class.forName(classNameWithPage);
+                    pageClass =
+                        Thread.currentThread().getContextClassLoader().loadClass(classNameWithPage);
 
                     if (!Page.class.isAssignableFrom(pageClass)) {
                         String msg = "Automapped page class " + className
