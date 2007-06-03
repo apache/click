@@ -122,7 +122,7 @@ Velocity then renders the merged template which looks something like
 <p>&nbsp;</p>
 
 
-<a name="control-listener" class="heading"><h2>Control Listener Example</h2></a>
+<a name="control-listener" class="heading"/><h2>Control Listener Example</h2>
 
 Click includes a library <a target="topic" href="controls.html">Controls</a> which 
 provide user interface functionality. 
@@ -134,10 +134,19 @@ which you can use to have a HTML link call a method on a Page object. For exampl
 <pre class="codeJava">
 <span class="kw">public class</span> ControlListenerPage <span class="kw">extends</span> Page {
 
-    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onMyLinkClick"</span>);
+    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink();
 
     <span class="kw">public</span> String msg;
+    
+    <span class="cm">// ----------------------------------------------------------- Constructors
 
+    /**
+     * Create a new Page instance.
+     */</span>
+    <span class="kw">public</span> ControlListenerPage() {
+        myLink.setListener(<span class="kw">this</span>, <span class="st">"onMyLinkClick"</span>);
+    }
+    
     <span class="cm">// --------------------------------------------------------- Event Handlers</span>
 
     <span class="cm">/**
@@ -537,10 +546,6 @@ valid this method simply returns true and the form renders the field validation 
 </td></tr>
 </table>
 </form>
-<script type="text/javascript"><!--
-var field = document.getElementById('form_name');
-if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };
-//--></script>   
 
  </td>
 </tr>
@@ -594,7 +599,15 @@ of using Form, Field and FielsSet controls.
 <p/>
 First we have a <tt>AdvancedForm</tt> class which setups up a 
 <a href="click-api/net/sf/click/control/Form.html">Form</a>
-in the constructor.
+in the constructor. 
+The form's investment 
+<a href="click-api/net/sf/click/control/Select.html">Select</a> list is populated
+in the page's <tt>onInit()</tt> method. At this point any page dependencies such
+as the CustomerService should be available.
+<p/>
+Note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls. The <span class="st">msg</span> field
+is added to the page's model.
 
 <pre class="codeJava">
 <span class="kw">public class</span> AdvancedForm <span class="kw">extends</span> Page {
@@ -668,9 +681,6 @@ in the constructor.
 }
 </pre>
 
-Note in this example the page's public <span class="st">form</span> field is 
-automatically added to its list of controls.
-<p/>
 Next we have the AdvancedForm template <span class="blue">advanced-form.htm</span>. The
 Click application automatically associates the <tt>advanced-form.htm</tt> template with
 the <tt>AdvancedForm</tt> class.
@@ -681,6 +691,10 @@ the <tt>AdvancedForm</tt> class.
    <span class="blue">$imports</span>
 &lt;/head&gt;
 &lt;body&gt;
+
+<span class="red">#if</span> (<span class="blue">$msg</span>)
+  &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
+<span class="red">#end</span>
   
    <span class="blue">$form</span>
     
@@ -688,74 +702,81 @@ the <tt>AdvancedForm</tt> class.
 &lt;/html&gt; 
 </pre>
 
-When the Login page is first requested the <span class="blue">$form</span> object will 
+When the AdvancedForm page is first requested the <span class="blue">$form</span> object will 
 automatically render itself as:
 
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
   
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+<form method="post" name="form" id="form" action="/click-examples/introduction/advanced-form.htm">
+<input type="hidden" name="form_name" id="form_form_name" value="form"/>
+<table class="form" id="form-form">
+<tr><td>
+<table class="fields" id="form-fields">
+<tr class="fields">
+<td class="fields" colspan="2">
 
-<table class='form'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
+<fieldset id="form_Customer">
+<legend id="form_Customer-legend">Customer</legend>
+<table class="fields" id="form_Customer-fields">
+<tr class="fields">
+<td class="fields" align="left"><label for="form_name">Name</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="name" id="form_name" value="" size="20"/></td>
 </tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_email">Email</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="email" id="form_email" value="" size="30"/></td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_investment">Investment</label>&nbsp;</td>
+<td align="left"><select name="investment" id="form_investment" size="1"><option selected="selected" value=""></option><option value="Bonds">Bonds</option><option value="Commerical Property">Commerical Property</option><option value="Options">Options</option><option value="Residential Property">Residential Property</option><option value="Stocks">Stocks</option></select></td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="dateJoined_field">Date Joined</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/><img align="top" style="cursor:hand" src="../images/calendar.gif" id="dateJoined_field-button"  alt="Calendar" title="Calendar"/><script type="text/javascript">
+Calendar.setup({ 
+ inputField :  'dateJoined_field', 
+ ifFormat :    '%e %b %Y', 
+ button :      'dateJoined_field-button', 
+ align :       'cr', 
+ singleClick : true, 
+ firstDay :    0
+});
+</script> 
+</td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_active">Active</label>&nbsp;</td>
+<td align="left"><input type="checkbox" name="active" id="form_active"/></td>
 </tr>
 </table>
-<table class="buttons">
-<tr align='left'>
-  <td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td>
+</fieldset>
+</td>
 </tr>
 </table>
+</td></tr>
+<tr><td align="left">
+<table class="buttons" id="form-buttons">
+<tr class="buttons"><td class="buttons"><input type="submit" name="ok" id="form_ok" value=" OK "/></td><td class="buttons"><input type="submit" name="cancel" id="form_cancel" value="Cancel"/></td></tr>
+</table>
+</td></tr>
+</table>
+</form>
 
  </td>
 </tr>
 </table>
 
-Now the user enters their username, but forgets their password and then presses the OK
-button. The ClickServlet creates a new Login page and processes the form control.
-The form control processes its fields and determines that it is invalid. 
+In this example when the OK button is clicked the <tt>onOkClicked()</tt> method is invoked.
+If the form is valid a new customer object is created and the forms field values are copied
+to the new object using the Form 
+<a href="click-api/net/sf/click/control/Form.html#copyTo(java.lang.Object)">copyTo()</a>
+method. The customer object is then saved, the form's field values are cleared and an
+info message is presented to the user.
 <p/>
-Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the form is 
-invalid this method it does nothing.
-<p/>
-With all the event processing completed the form now renders the field validation errors.
-<table class="htmlExample" cellspacing="12">
-<tr>
- <td>
-   
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
- 
-<table class='fields'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
-</tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
-</tr>
-<tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
-</table>
-<table class="buttons">
-<tr align='left'><td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td></tr>
-</table>
-
- </td>
-</tr>
-</table>
-
-If the user enters a correct username and password the <tt>onOkClicked()</tt> 
-event handler will add a User object to the HttpSession and redirect the request 
-to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
-processing in the page.
-<p/>
-If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
+If the user clicks on the Cancel button the request is redirected to the applications
+HopePage.
 
 <h4>Form Layout</h4>
 
