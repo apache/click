@@ -466,6 +466,7 @@ public abstract class AbstractLink extends AbstractControl {
             } else {
                 buffer.elementStart("img");
                 buffer.appendAttribute("border", "0");
+                buffer.appendAttribute("class", "link");
 
                 if (getTitle() != null) {
                     buffer.appendAttribute("alt", getTitle());

@@ -239,6 +239,10 @@ span.pagelinks {
 	border-top: none;
 }
 
+img.link {
+	vertical-align: middle;
+}
+
 span.pagelinks-nobanner {
 	background-color: #eee;
 	border: 1px dotted #999;
