@@ -11,10 +11,19 @@ import net.sf.click.examples.page.BorderPage;
 public class ControlListenerPage extends BorderPage {
 
     /* Public scope controls are automatically added to the page. */
-    public ActionLink myLink = new ActionLink(this, "onMyLinkClick");
+    public ActionLink myLink = new ActionLink();
 
     /* Public scope variable are automatically added to the model. */
     public String msg;
+
+    // ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new Page instance.
+     */
+    public ControlListenerPage() {
+        myLink.setListener(this, "onMyLinkClick");
+    }
 
     // --------------------------------------------------------- Event Handlers
 
