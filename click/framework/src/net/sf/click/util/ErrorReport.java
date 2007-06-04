@@ -111,12 +111,16 @@ public class ErrorReport {
 
         if (error instanceof ParseErrorException) {
             ParseErrorException pee = (ParseErrorException) error;
-            sourceName = pee.getTemplateName();
+            if (pee.getTemplateName().charAt(0) == '/') {
+                sourceName = pee.getTemplateName();
+            } else {
+                sourceName =  '/' + pee.getTemplateName();
+            }
             lineNumber = pee.getLineNumber();
             columnNumber = pee.getColumnNumber();
 
             InputStream is =
-                servletContext.getResourceAsStream(pee.getTemplateName());
+                servletContext.getResourceAsStream(sourceName);
 
             sourceReader = new LineNumberReader(new InputStreamReader(is));
 
