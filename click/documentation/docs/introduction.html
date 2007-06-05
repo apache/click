@@ -34,7 +34,7 @@ act as a request dispatcher. When a request arrives ClickServlet creates a
 processes the request and then uses the page's Velocity template to render the 
 results.
 <p>
-Page provide a simple thread safe programming environment, with a new
+Pages provide a simple thread safe programming environment, with a new
 page instance is created for each servlet request.
 <p>
 Possibly the best way to see how Click works is to dive right in and look at some 
@@ -321,7 +321,7 @@ A more advanced Table example is provided below:
      
     <span class="kw">public</span> CustomersPage() {
         table.setClass(Table.<span class="st">CLASS_ITS</span>);
-        table.setPageSize(5);
+        table.setPageSize(10);
         table.setShowBanner(<span class="kw">true</span>);
         table.setSortable(<span class="kw">true</span>);
     	
@@ -336,11 +336,11 @@ A more advanced Table example is provided below:
         
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
         
-        editLink.setImageSrc(<span class="st">"/images/edit-16px.gif"</span>);
+        editLink.setImageSrc(<span class="st">"/images/window-edit.png"</span>);
         editLink.setTitle(<span class="st">"Edit customer details"</span>);
         editLink.setParameter(<span class="st">"referrer"</span>, <span class="st">"/introduction/advanced-table.htm"</span>);
         
-        deleteLink.setImageSrc(<span class="st">"/images/delete-16px.gif"</span>);
+        deleteLink.setImageSrc(<span class="st">"/images/window-delete.png"</span>);
         deleteLink.setTitle(<span class="st">"Delete customer record"</span>);
         deleteLink.setAttribute(<span class="st">"onclick"</span>, <span class="st">"return window.confirm('Are you sure you want to delete this record?');"</span>);
     	
@@ -528,7 +528,7 @@ valid this method simply returns true and the form renders the field validation 
 <table class="form" id="form-form">
 <tr><td align="left">
 <table class="errors" id="form-errors">
-<tr class="errors"><td class="errors" align="left" colspan="2"><a class="error" href="javascript:setFocus('form_name');">You must enter a value for Name</a></td></tr>
+<tr class="errors"><td class="errors" align="left" colspan="2"><a class="error" href="#">You must enter a value for Name</a></td></tr>
 </table>
 </td></tr>
 <tr><td>
@@ -568,7 +568,7 @@ model. This will be rendered as:
 <table class="fields" id="form-fields">
 <tr class="fields">
 <td class="fields" align="left"><label for="form_name">Name</label><span class="required">*</span></td>
-<td align="left"><input type="text" name="name" id="form_name" value="Malcolm Edgar" size="20"/></td>
+<td align="left"><input type="text" name="name" id="form_name" value="John Masters" size="20"/></td>
 </tr>
 </table>
 </td></tr>
@@ -580,7 +580,7 @@ model. This will be rendered as:
 </table>
 </form>
 
-  <div class="msgDiv"> Your name is Malcolm Edgar </div>
+  <div class="msgDiv"> Your name is John Masters </div>
   
  </td>
 </tr>
@@ -734,8 +734,7 @@ automatically render itself as:
 </tr>
 <tr class="fields">
 <td class="fields" align="left"><label for="dateJoined_field">Date Joined</label><span class="required">*</span></td>
-<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/><img align="top" style="cursor:hand" src="../images/calendar.gif" id="dateJoined_field-button"  alt="Calendar" title="Calendar"/>
-</td>
+<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/><img align="top" style="cursor:hand" src="../images/calendar.gif" id="dateJoined_field-button"  alt="Calendar" title="Calendar"/></td>
 </tr>
 <tr class="fields">
 <td class="fields" align="left"><label for="form_active">Active</label>&nbsp;</td>
