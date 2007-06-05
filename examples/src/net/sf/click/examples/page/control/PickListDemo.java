@@ -23,11 +23,15 @@ public class PickListDemo extends BorderPage {
     public PickListDemo() {
         pickList.setHeaderLabel("Languages", "Selected");
 
-        pickList.add(new Option("001", "Java"));
-        pickList.add(new Option("002", "Ruby"));
-        pickList.add(new Option("003", "Perl"));
+        pickList.add(new Option("001", "Assembler"));
+        pickList.add(new Option("002", "C/C++"));
+        pickList.add(new Option("003", "C#"));
+        pickList.add(new Option("004", "Java"));
+        pickList.add(new Option("005", "Ruby"));
+        pickList.add(new Option("006", "Perl"));
+        pickList.add(new Option("007", "Visual Basic"));
 
-        pickList.addSelectedValue("001");
+        pickList.addSelectedValue("004");
 
         form.add(pickList);
 
