@@ -5,7 +5,6 @@ import java.util.List;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
-import net.sf.click.control.HiddenField;
 import net.sf.click.control.Submit;
 import net.sf.click.control.Table;
 import net.sf.click.examples.page.BorderPage;
@@ -80,10 +79,8 @@ public abstract class FormTablePage extends BorderPage {
      */
     public void onInit() {
         // Complete form initialization
-        form.add(new Submit("new", " New ", this, "onCancelClick"));
         form.add(new Submit("save", " Save ", this, "onSaveClick"));
         form.add(new Submit("cancel", "Cancel", this, "onCancelClick"));
-        form.add(new HiddenField("pageNumber", String.class));
 
         // Complete table initialization
         Column column = new Column("Action");
@@ -132,13 +129,6 @@ public abstract class FormTablePage extends BorderPage {
             onCancelClick();
         }
         return true;
-    }
-
-    /**
-     * @see net.sf.click.Page#onGet()
-     */
-    public void onGet() {
-        form.getField("pageNumber").setValue("" + table.getPageNumber());
     }
 
     /**
