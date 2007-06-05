@@ -21,6 +21,7 @@ import net.sf.click.examples.page.EditCustomer;
 public class ActionTable extends BorderPage {
 
     public List customers;
+    public Customer customerDetail;
     public ActionLink viewLink = new ActionLink(this, "onViewClick");
     public PageLink editLink = new PageLink(EditCustomer.class);
     public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
@@ -32,10 +33,7 @@ public class ActionTable extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        Customer customer = getCustomerService().getCustomer(id);
-        if (customer != null) {
-        	addModel("customerDetail", customer);
-        }
+        customerDetail = getCustomerService().getCustomer(id);
 
         return true;
     }
