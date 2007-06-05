@@ -11,8 +11,8 @@ import net.sf.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class BorderPage extends SpringPage {
-	
-	// ------------------------------------------------------------ Constructor
+    
+    // ------------------------------------------------------------ Constructor
 
     /**
      * Create a BorderedPage and set the model attributes <tt>$title</tt> and
@@ -40,7 +40,7 @@ public class BorderPage extends SpringPage {
         String srcPath = className.replace('.', '/') + ".java";
         addModel("srcPath", srcPath);
     }
-    
+
     // --------------------------------------------------------- Public Methods
 
     /**
