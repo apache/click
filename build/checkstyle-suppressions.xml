@@ -86,6 +86,6 @@
               
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="477,480,483,486,517,520,523,526"/>
+              lines="477,480,483,486,518,521,524,527"/>
                             
 </suppressions>
