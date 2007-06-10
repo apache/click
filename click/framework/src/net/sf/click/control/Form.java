@@ -1319,14 +1319,15 @@ public class Form implements Control {
             String formName = null;
 
             if (fileItem != null) {
-                if (request.getCharacterEncoding() == null) {
-                    formName = fileItem.getString();
-                }
-                try {
-                    formName = fileItem.getString(request.getCharacterEncoding());
+                if (request.getCharacterEncoding() != null) {
+                    try {
+                        formName = fileItem.getString(request.getCharacterEncoding());
 
-                } catch (UnsupportedEncodingException ex) {
-                    throw new RuntimeException(ex);
+                    } catch (UnsupportedEncodingException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    formName = fileItem.getString();
                 }
             }
 
