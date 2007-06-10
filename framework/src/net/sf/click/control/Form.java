@@ -43,6 +43,7 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -1304,7 +1305,10 @@ public class Form implements Control {
             Map itemsMap = new HashMap();
 
             try {
-                List itemsList = fileUpload.parseRequest(request);
+                ServletRequestContext srvContext =
+                    new ServletRequestContext(request);
+
+                List itemsList = fileUpload.parseRequest(srvContext);
 
                 for (int i = 0; i < itemsList.size(); i++) {
                     FileItem fileItem = (FileItem) itemsList.get(i);

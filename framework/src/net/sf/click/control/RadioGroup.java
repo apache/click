@@ -474,6 +474,13 @@ public class RadioGroup extends Field {
         for (int i = 0; i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
 
+            if (isReadonly() && !radio.isReadonly()) {
+                radio.setReadonly(true);
+            }
+            if (isDisabled() && !radio.isDisabled()) {
+                radio.setDisabled(true);
+            }
+
             if (value != null && value.length() > 0) {
                 if (radio.getValue().equals(value)) {
                     radio.setChecked(true);
