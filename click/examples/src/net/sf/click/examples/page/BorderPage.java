@@ -11,7 +11,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class BorderPage extends SpringPage {
-    
+
     // ------------------------------------------------------------ Constructor
 
     /**
