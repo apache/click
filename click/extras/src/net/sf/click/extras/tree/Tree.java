@@ -2468,20 +2468,20 @@ public class Tree extends AbstractControl {
         /**
          * Provides debug information about the map storing the tracked paths.
          */
-        private void dumpPathTracker() {
-            System.out.println("--------------------------------------Printing Path Tracker map\n");
-            if (selectTracker == null) {
-                System.out.println("Path tracker is null");
-                return;
-            }
-            for (Iterator it = selectTracker.keySet().iterator(); it.hasNext();) {
-                String key = (String) it.next();
-                System.out.println("ids -> [" + key + "]  value count -> ["
-                        + ((Entry) selectTracker.get(key)).count + "] : last node -> ["
-                        + ((Entry) selectTracker.get(key)).lastNodeInPath + "]");
-            }
-            System.out.println("--------------------------------------Done");
-        }
+//        private void dumpPathTracker() {
+//            System.out.println("--------------------------------------Printing Path Tracker map\n");
+//            if (selectTracker == null) {
+//                System.out.println("Path tracker is null");
+//                return;
+//            }
+//            for (Iterator it = selectTracker.keySet().iterator(); it.hasNext();) {
+//                String key = (String) it.next();
+//                System.out.println("ids -> [" + key + "]  value count -> ["
+//                        + ((Entry) selectTracker.get(key)).count + "] : last node -> ["
+//                        + ((Entry) selectTracker.get(key)).lastNodeInPath + "]");
+//            }
+//            System.out.println("--------------------------------------Done");
+//        }
     }
 
     /**
