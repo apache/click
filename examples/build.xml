@@ -8,19 +8,19 @@
       
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2.2.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-1.2.3.jar"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
    <property name="jar.jstl" value="jstl-1.1.2.jar"/>
-   <property name="jar.log4j" value="log4j-1.2.13.jar"/>
+   <property name="jar.log4j" value="log4j-1.2.14.jar"/>
    <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
-   <property name="jar.spring-beans" value="spring-beans-1.2.8.jar"/>
-   <property name="jar.spring-context" value="spring-context-1.2.8.jar"/>
-   <property name="jar.spring-core" value="spring-core-1.2.8.jar"/>
-   <property name="jar.spring-web" value="spring-web-1.2.8.jar"/>
+   <property name="jar.spring-beans" value="spring-beans-1.2.9.jar"/>
+   <property name="jar.spring-context" value="spring-context-1.2.9.jar"/>
+   <property name="jar.spring-core" value="spring-core-1.2.9.jar"/>
+   <property name="jar.spring-web" value="spring-web-1.2.9.jar"/>
    <property name="jar.standard" value="standard-1.1.2.jar"/>
      
    <property name="dir.deploy" value="../dist"/>
