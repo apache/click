@@ -34,7 +34,6 @@ import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -584,7 +583,7 @@ public class Context {
      * @return true if the request is a multi-part content type POST request
      */
     public boolean isMultipartRequest() {
-        return (isPost() && FileUploadBase.isMultipartContent(request));
+        return (isPost() && ServletFileUpload.isMultipartContent(request));
     }
 
     /**
