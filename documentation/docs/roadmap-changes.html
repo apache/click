@@ -39,6 +39,11 @@ and documentation updates.
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Updated <a href="extras-api/net/sf/click/extras/cayenne/CayenneForm.html">CayenneForm</a> 
+        to handle non integer primary key values. This issue was raised by Tore Halset
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-211">211</a>].
+      </li>
+      <li class="change">
         Fixed RadioGroup is still active when set it to disabled bug. 
         This issue was raised by Christophe FOIRET
       	[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-218">218</a>].
@@ -48,7 +53,8 @@ and documentation updates.
       	[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-220">220</a>].
       </li>
       <li class="change">
-        Updated Commons FileUpload library to version 1.2.
+        Updated Commons FileUpload library to version 1.2. Fixes bug where file 
+        names are being converted into lowercase.
       </li>
       <li class="change">
         Updated Commons IO library to version 1.3.

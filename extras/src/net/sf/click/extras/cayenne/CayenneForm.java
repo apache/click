@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -192,7 +192,7 @@ public class CayenneForm extends Form {
     protected HiddenField classField = new HiddenField(FO_CLASS, String.class);
 
     /** The data object id hidden field. */
-    protected HiddenField oidField = new HiddenField(FO_ID, Integer.class);
+    protected HiddenField oidField = new HiddenField(FO_ID, String.class);
 
     /**
      * The flag specifying that object validation meta data has been applied to
@@ -280,8 +280,8 @@ public class CayenneForm extends Form {
             try {
                 Class dataClass = getDataObjectClass();
 
-                Integer id = (Integer) oidField.getValueObject();
-                if (id != null) {
+                String id = oidField.getValue();
+                if (StringUtils.isNotBlank(id)) {
                     dataObject = DataObjectUtils.objectForPK(getDataContext(),
                                                              dataClass,
                                                              id);
@@ -340,8 +340,8 @@ public class CayenneForm extends Form {
 
             if (dataObject.getClass().getName().equals(classField.getValue())) {
                 if (isPersistent(dataObject)) {
-                    int pk = DataObjectUtils.intPKForObject(dataObject);
-                    oidField.setValueObject(new Integer(pk));
+                    Object pk = DataObjectUtils.pkForObject(dataObject);
+                    oidField.setValue(pk.toString());
                 }
 
                 copyFrom(dataObject, true);
@@ -413,7 +413,8 @@ public class CayenneForm extends Form {
      */
     public Integer getDataObjectPk() {
         if (oidField.getValueObject() != null) {
-            return (Integer) oidField.getValueObject();
+            String pk = oidField.getValue();
+            return new Integer(pk);
 
         } else  {
             String pk = getContext().getRequestParameter(FO_ID);
@@ -505,8 +506,8 @@ public class CayenneForm extends Form {
             && isPersistent(dataObject)
             && oidField.getValueObject() == null) {
 
-            int pk = DataObjectUtils.intPKForObject(dataObject);
-            oidField.setValueObject(new Integer(pk));
+            Object pk = DataObjectUtils.pkForObject(dataObject);
+            oidField.setValueObject(pk.toString());
         }
 
         return super.toString();
