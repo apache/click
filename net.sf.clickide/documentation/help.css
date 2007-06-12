@@ -211,10 +211,20 @@ a.navLinkTopic:visited {
 	font-family: CourierNew, courier;
 }
 
+div.msgDiv {
+	background-color: #f0f0f0;
+	border: thin solid navy;
+	margin: 1em;
+	margin-left: 0em;
+	margin-right: 2em;
+	padding: 1em;
+}
+
 /* form.css */
 
 a.error {
 	color: red;
+	text-decoration: underline;
 }
 a:visited.error {
 	color: red;
@@ -234,6 +244,9 @@ select.error {
 span.error {
 	color: red;
 }
+span.required {
+	color: red;
+}
 table.fields {
 	border-width: 1px;
 	padding: 0;
@@ -250,5 +263,6 @@ table.buttons {
 	vertical-align: baseline;
 	margin-top: 1em;
 }
+
 
 
