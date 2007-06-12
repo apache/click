@@ -98,7 +98,7 @@ configured with the Click application mode element in the "<tt>click.xml</tt>"
 config file.
 
 
-<a name="application-configuration" class="heading"><h2>Application Configuration</h2></a>
+<a name="application-configuration" class="heading"></a><h2>Application Configuration</h2>
 
 The heart of a Click application is the <tt>click.xml</tt> configuration file.
 This file specifies the application pages, headers, the format object and the 
@@ -148,7 +148,7 @@ An example of a fully optioned up config file is:
 &lt;/click-app&gt; 
 </pre>
 
-<a name="application-click-app" class="heading"><h3>Click App</h3></a>
+<a name="application-click-app" class="heading"></a><h3>Click App</h3>
 
 The root <span class="red">click-app</span> element defines two application 
 localization attributes <span class="blue">charset</span> and
@@ -187,7 +187,7 @@ UTF-8 and the default Locale as German (de):
 </pre>
 
 
-<a name="application-pages" class="heading"><h3>Pages</h3></a>
+<a name="application-pages" class="heading"></a><h3>Pages</h3>
 
 The first child element of the click-app is the mandatory <tt>pages</tt> element 
 which defines the list of Click pages.
@@ -196,6 +196,7 @@ which defines the list of Click pages.
 &lt;!ELEMENT <span class="blue">pages</span> (<span class="red">page</span>*)&gt; 
    &lt;!ATTLIST pages <span class="blue">package</span> CDATA #IMPLIED&gt;
    &lt;!ATTLIST pages <span class="blue">automapping</span> (true|false) "true"&gt; 
+   &lt;!ATTLIST pages <span class="blue">autobinding</span> (true|false) "true"&gt; 
 </pre>
 
 The pages element can specify a default <span class="blue">package</span>
@@ -231,7 +232,7 @@ is a critical configuration error the ClickSerlvet will log an <tt>ERROR</tt> me
 If this occurs the click application will be permanently unavailable until the error is fixed 
 and the web app is restarted.
 
-<a name="application-automapping" class="heading"><h4>Page Automapping</h4></a>
+<a name="application-automapping" class="heading"></a><h4>Page Automapping</h4>
 
 Page automapping will automatically configure application pages using a
 simple set of rules. This enables you to greatly streamline your configuration file
@@ -334,6 +335,26 @@ separated notation. For example:
 HTM files excluded from Page automapping are handled by an internal Page class
 with caching headers enabled.
 
+<a name="application-autobinding" class="heading"></a><h4>Page Autobinding</h4>
+
+By default all pages have autobinding enabled. With autobinding enabled the
+ClickServlet will automatically:
+<ul>
+<li class="items">add any public controls to the page, after the page constructor has been invoked</li>
+<li class="items">bind any request parameters to public fields, after page constructor has been invoked</li>
+<li class="items">add any public fields to the page model, before rendering</li>
+</ul>
+
+You can turn this behaviour off by setting the autobinding attribute to false, for example:
+
+<pre class="codeConfig">
+&lt;click-app&gt; 
+  &lt;pages package="com.mycorp.page" <span class="blue">autobinding</span>="<span class="red">false</span>"/&gt;
+&lt;/click-app&gt; 
+</pre>
+
+
+
 <a name="application-headers" class="heading"><h3>Headers</h3></a>
 
 The optional <tt>headers</tt> element defines a list of <tt>header</tt> elements
@@ -383,6 +404,15 @@ caching in the login page, note the value for a Date type should be a long numbe
 &lt;page path="<span class="blue">login.htm</span>" classname="<span class="blue">com.mycorp.page.Login</span>"/&gt;
   &lt;header name="<span class="blue">Pragma</span>" value="<span class="blue">no-cache</span>"/&gt;
   &lt;header name="<span class="blue">Expires</span>" value="<span class="blue">1</span>" type="<span class="blue">Date</span>"/&gt;
+&lt;/page&gt; 
+</pre>
+
+If you wanted to enable caching for a particular page you could set the following page cache control header. This will mark the page
+as cachable for a period of 1 hour after which it should be reloaded.
+
+<pre class="codeConfig">
+&lt;page path="<span class="blue">home.htm</span>" classname="<span class="blue">com.mycorp.page.Home</span>"/&gt;
+  &lt;header name="<span class="blue">Cache-Control</span>" value="<span class="blue">max-age=3600, public, must-revalidate</span>"/&gt;
 &lt;/page&gt; 
 </pre>
 
@@ -556,7 +586,20 @@ introspecting templates and template reloading is significantly slower.
 The Click and Velocity runtimes use 
 <a target="topic" href="click-api/net/sf/click/util/ClickLogger.html">ClickLogger</a>  
 for logging messages. The runtime loggers will send messages to the console [System.out]. 
-<p/>
+For example the following logging output is for a HomePage request when the application
+mode is <tt>trace</tt>: 
+
+<pre class="codeConfig" style="padding:1em;background-color:#f0f0f0;">
+[Click] [debug] GET http://localhost:8080/quickstart/home.htm
+[Click] [trace]    invoked: HomePage.&lt;&lt;init&gt;&gt;
+[Click] [trace]    invoked: HomePage.onSecurityCheck() : true
+[Click] [trace]    invoked: HomePage.onInit()
+[Click] [trace]    invoked: HomePage.onGet()
+[Click] [trace]    invoked: HomePage.onRender()
+[Click] [info ]    renderTemplate: /home.htm - 6 ms
+[Click] [trace]    invoked: HomePage.onDestroy()
+[Click] [info ] handleRequest:  /home.htm - 24 ms  </pre>
+
 Any unhandled <tt>Throwable</tt> errors are logged by the ClickServlet.
 <p/>
 When an application is not in <tt>production</tt> mode the error page displays

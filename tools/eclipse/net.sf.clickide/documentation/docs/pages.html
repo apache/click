@@ -83,8 +83,8 @@ parameters and the HttpSession object.
 The Page class provide a number of empty handler methods which subclasses can override to
 provide functionality:
 <ul>
-  <li><a href="click-api/net/sf/click/Page.html#onInit()">onInit()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck()</a></li>
+  <li><a href="click-api/net/sf/click/Page.html#onInit()">onInit()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onGet()">onGet()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onPost()">onPost()</a></li>
   <li><a href="click-api/net/sf/click/Page.html#onRender()">onRender()</a></li>
@@ -107,13 +107,14 @@ The GET request execution sequence for Pages is summarized below in the Figure 2
 
 Stepping through this GET request sequence, a new Page instance is created and the 
 attributes for the Page are set (context, format, headers, path). Next request
-parameter values are then bound to any matching public Page fields. Then the 
-<tt>onInit()</tt> method is invoked, this is where you place any initialization code which requires
-access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
+parameter values are then bound to any matching public Page fields. 
 <p/>
-The next method invoked is the <tt>onSecurityCheck()</tt> handler. This method can used to 
+Then the <tt>onSecurityCheck()</tt> handler. This method can used to 
 ensure the user is authorized to access the page, and if necessary can abort any 
 further processing.
+<p/>
+The next method invoked is the <tt>onInit()</tt>, this is where you place any initialization code which requires
+access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
 <p/>
 The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
 Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
@@ -177,7 +178,7 @@ method is invoked instead on <tt>onGet()</tt>. See the
 <p/>
 Another view on the execution flow of Pages is illustrated in the Activity diagram below.
 <p/>
-<a name="activity-diagram" class="heading"><img src="../images/activity-diagram.png"/></a>
+<a name="activity-diagram" class="heading"><img src="../images/activity-diagram-small.png" style="margin-left:4em;"/></a>
 <p class="diagram">
 <b>Figure 3. &nbsp; Page Execution Activity Diagram</b>
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>

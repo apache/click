@@ -9,7 +9,6 @@
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <link rel="stylesheet" type="text/css" href="table.css"/>
- <link rel="stylesheet" type="text/css" href="../help.css"/>
  <style type="text/css">
   li {
     margin-bottom: 0.75em;
@@ -35,15 +34,30 @@ act as a request dispatcher. When a request arrives ClickServlet creates a
 processes the request and then uses the page's Velocity template to render the 
 results.
 <p>
-Page provide a simple thread safe programming environment, with a new
+Pages provide a simple thread safe programming environment, with a new
 page instance is created for each servlet request.
 <p>
 Possibly the best way to see how Click works is to dive right in and look at some 
-examples.
+examples:
+
+<ul>
+  <li><a href="#hello-world">Hello World</a> - the Hello World classic
+  </li>
+  <li><a href="#control-listener">Control Listener</a> - a ActionLink control listener example
+  </li>
+  <li><a href="#simple-table">Simple Table</a> - a simple Table control example
+  </li> 
+  <li><a href="#advanced-table">Advanced Table</a> - a more advanced Table example
+  </li>
+  <li><a href="#simple-form">Simple Form</a> - a simple Form example
+  </li>
+  <li><a href="#advanced-form">Advanced Form</a> - a more advanced Form example
+  </li>
+</ul>
 
 <p>&nbsp;</p>
 
-<h2>Hello World Example</h2>
+<a name="hello-world" class="heading"><h2>Hello World Example</h2></a>
 A Hello World example in Click would look something like this. 
 <p/>
 First we would have a <tt>HelloWorld</tt> page class:
@@ -99,22 +113,194 @@ Velocity then renders the merged template which looks something like
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
- <h2 style="color: navy; margin-top: 0em;">Hello World</h2>
- Hello world from Click at Wed May 28 15:52:29 EST 2005
+ <h2 style="margin-top: 0em;">Hello World</h2>
+ Hello world from Click at Tue May 08 19:37:05 EST 2007
  </td>
 </tr>
 </table>
 
 <p>&nbsp;</p>
 
-<h2>Table Example</h2>
 
-Click also includes a library <a target="topic" href="controls.html">Controls</a> which 
+<a name="control-listener" class="heading"/><h2>Control Listener Example</h2>
+
+Click includes a library <a target="topic" href="controls.html">Controls</a> which 
 provide user interface functionality. 
 <p/>
+One of the commonly used controls is the 
+<a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>,
+which you can use to have a HTML link call a method on a Page object. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> ControlListenerPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> ActionLink myLink = <span class="kw">new</span> ActionLink();
+
+    <span class="kw">public</span> String msg;
+    
+    <span class="cm">// ----------------------------------------------------------- Constructors
+
+    /**
+     * Create a new Page instance.
+     */</span>
+    <span class="kw">public</span> ControlListenerPage() {
+        myLink.setListener(<span class="kw">this</span>, <span class="st">"onMyLinkClick"</span>);
+    }
+    
+    <span class="cm">// --------------------------------------------------------- Event Handlers</span>
+
+    <span class="cm">/**
+     * Handle the myLink control click event.
+     */</span>
+    <span class="kw">public boolean</span> onMyLinkClick() {
+        msg = <span class="st">"ControlListenerPage#"</span> + hashCode()
+            + <span class="st">" object method &lt;tt&gt;onMyLinkClick()&lt;/tt&gt; invoked."</span>;
+
+        <span class="kw">return true</span>;
+    }
+} </pre>
+
+In the Page class we create an ActionLink called <span class="blue">myLink</span> 
+and define the control's listener to be the page method <tt>onMyLinkClick()</tt>. 
+When a user clicks on <span class="blue">myLink</span> control it will invoke the 
+listener method <tt>onMyLinkClick()</tt>.
+<p/>
+In Click a control listener method can have any name but it must return a boolean value. 
+The boolean return value specifies whether processing of page events should continue.
+This control listener pattern provides a short hand way wiring up action listener methods
+without having to define anonymous inner classes.
+
+<p/>
+Back to our example, in the page template we define a HTML link and have the 
+<span class="blue">myLink</span> control render the link's href attribute:
+
+<pre class="codeHtml">
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link type="text/css" rel="stylesheet" href="style.css"&gt;&lt;/link&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+  
+  Click myLink control &lt;a href="<span class="blue">$myLink.href</span>"&gt;here&lt;/a&gt;.
+
+  <span class="red">#if</span> (<span class="blue">$msg</span>)
+    &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
+  <span class="red">#end</span>
+
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+At runtime this page would be rendered as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ Click myLink control <a href="/click-examples/introduction/control-listener.htm?actionLink=myLink">here</a>.
+ </td>
+</tr>
+</table>
+
+When a user clicks on the link the <tt>onMyLinkClick()</tt> method is invoked. This
+method then creates <span class="blue">msg</span> model value, which is rendered in the page as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+ Click myLink control <a href="/click-examples/introduction/control-listener.htm?actionLink=myLink">here</a>.
+ 
+ <div class="msgDiv"> ControlListenerPage#12767107 object method <tt>onMyLinkClick()</tt> invoked. </div>
+ </td>
+</tr>
+</table>
+
+
+<p>&nbsp;</p>
+
+
+<a name="simple-table" class="heading"><h2>Simple Table Example</h2></a>
+
 One of the most useful Click controls is the 
 <a target="topic" href="click-api/net/sf/click/control/Table.html">Table</a>
-control. The Table control provides support for:
+control.
+<p/>
+
+An example usage of the Table control in a customers Page is provided below:
+
+<pre class="codeJava">
+<span class="kw">public class</span> SimpleTablePage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
+
+    <span class="cm">// ------------------------------------------------------------ Constructor</span>
+     
+    <span class="kw">public</span> SimpleTablePage() {
+        table.setClass(Table.CLASS_ITS);
+        
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"email"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
+    }
+    
+    <span class="cm">// --------------------------------------------------------- Event Handlers</span>
+     
+    <span class="cm">/**
+     * @see Page#onRender()
+     */</span>
+    <span class="kw">public void</span> onRender() {
+    	List list = getCustomerService().getCustomersSortedByName(10);
+    	table.setRowList(list);
+    }
+} </pre>
+
+In this Page code example a Table control is declared, we set the table's HTML class,
+and then define number of table <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+objects. In the column definitions we specify the name of the column in the constructor,
+which is used for the table column header and also to specify the row object property 
+to render.
+<p/>
+The last thing we need to do is populate the table with data. To do this we override the 
+Page <tt>onRender()</tt> method and set the table row list before it is rendered.
+
+<p/>
+
+In our Page template we simply reference the <span class="blue">$table</span> object 
+which is rendered when its <tt>toString()</tt> method is called. 
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;
+  <span class="blue">$imports</span>
+&lt;/head&gt;
+&lt;body&gt;
+  
+  <span class="blue">$table</span>
+    
+&lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+Note above we also specify the <span class="blue">$imports</span> reference so the table can include any
+header imports such as style sheets in the page.
+<p/>
+At runtime the Table would be rendered in the page as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+   <img src="../images/simple-table.png" border="0"/> 
+  </td>
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+
+
+<a name="advanced-table" class="heading"><h2>Advanced Table Example</h2></a>
+
+The Table control also provides support for:
 <ul>
 <li>automatic rendering</li>
 <li>column formatting and custom rendering</li>
@@ -122,37 +308,55 @@ control. The Table control provides support for:
 <li>link control support</li>
 </ul> 
 
-<p/>
-
-An example usage of the Table control in a customers Page is provided below:
+A more advanced Table example is provided below:
 
 <pre class="codeJava">
 <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
 
     <span class="kw">public</span> Table <span class="st">table</span> = <span class="kw">new</span> Table();
+    <span class="kw">public</span> PageLink editLink = <span class="kw">new</span> PageLink(<span class="st">"Edit"</span>, EditCustomer.<span class="kw">class</span>);
     <span class="kw">public</span> ActionLink deleteLink = <span class="kw">new</span> ActionLink(<span class="st">"Delete"</span>, <span class="kw">this</span>, <span class="st">"onDeleteClick"</span>);
 
+    <span class="cm">// ------------------------------------- Constructor</span>
+     
     <span class="kw">public</span> CustomersPage() {
-        table.setClass(Table.CLASS_ITS);
-        table.setPageSize(5);
+        table.setClass(Table.<span class="st">CLASS_ITS</span>);
+        table.setPageSize(10);
         table.setShowBanner(<span class="kw">true</span>);
         table.setSortable(<span class="kw">true</span>);
     	
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
+
         table.addColumn(<span class="kw">new</span> Column(<span class="st">"name"</span>));
         
         Column column = <span class="kw">new</span> Column(<span class="st">"email"</span>);
         column.setAutolink(<span class="kw">true</span>);
+        column.setTitleProperty(<span class="st">"name"</span>);
         table.addColumn(column);
         
-        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investment"</span>));
+        table.addColumn(<span class="kw">new</span> Column(<span class="st">"investments"</span>));
+        
+        editLink.setImageSrc(<span class="st">"/images/window-edit.png"</span>);
+        editLink.setTitle(<span class="st">"Edit customer details"</span>);
+        editLink.setParameter(<span class="st">"referrer"</span>, <span class="st">"/introduction/advanced-table.htm"</span>);
+        
+        deleteLink.setImageSrc(<span class="st">"/images/window-delete.png"</span>);
+        deleteLink.setTitle(<span class="st">"Delete customer record"</span>);
+        deleteLink.setAttribute(<span class="st">"onclick"</span>, <span class="st">"return window.confirm('Are you sure you want to delete this record?');"</span>);
     	
         column = <span class="kw">new</span> Column(<span class="st">"Action"</span>);
-        column.setDecorator(<span class="kw">new</span> LinkDecorator(table, deleteLink, <span class="st">"id"</span>));
+        column.setTextAlign(<span class="st">"center"</span>);
+        AbstractLink[] links = <span class="kw">new</span> AbstractLink[] { editLink, deleteLink };
+        column.setDecorator(<span class="kw">new</span> LinkDecorator(table, links, <span class="st">"id"</span>));
         column.setSortable(<span class="kw">false</span>);
         table.addColumn(column);
     }
     
+    <span class="cm">// ---------------------------------- Event Handlers</span>
+         
+    <span class="cm">/**
+     * Handle the delete row click event.
+     */</span>    
     <span class="kw">public boolean</span> onDeleteClick() {
         Integer id = deleteLink.getValueInteger();
         getCustomerService().deleteCustomer(id);
@@ -200,7 +404,7 @@ At runtime the Table would be rendered in the page as:
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
-   <img src="../images/table.png" border="0"/> 
+   <img src="../images/advanced-table.png" border="0"/> 
   </td>
 </tr>
 </table>
@@ -210,52 +414,276 @@ method will be called on the Page deleting the customer record.
 
 <p>&nbsp;</p>
 
-<h2>Form Example</h2>
 
-Forms and Fiels are also some of the most commonly used controls in the Click Framework.
-The login Page below provides a demonstration of using Form and Field controls.
+
+<a name="simple-form" class="heading"><h2>Simple Form Example</h2>
+
+The <a target="topic" href="click-api/net/sf/click/control/Form.html">Form</a> and 
+<a target="topic" href="click-api/net/sf/click/control/Field.html">Field</a> controls
+are also some of the most commonly used controls in the Click Framework.
 <p/>
-First we have a <tt>LoginPage</tt> class which setups up a login 
-<a href="click-api/net/sf/click/control/Form.html">Form</a>
-in the constructor.
+The SimpleForm page below provides a demonstration of using these controls.
+<p/>
+In our example code we have the page's constructor adding a 
+<a target="topic" href="click-api/net/sf/click/control/TextField.html">TextField</a> field and a
+<a target="topic" href="click-api/net/sf/click/control/Submit.html">Submit</a> button to the form.
+A page method is also set as a control listener on the form.
+Also note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls.
 
 <pre class="codeJava">
-<span class="kw">public class</span> LoginPage <span class="kw">extends</span> Page {
+<span class="kw">public class</span> SimpleForm <span class="kw">extends</span> Page {
 
     <span class="kw">public</span> Form <span class="st">form</span> = <span class="kw">new</span> Form();
+    <span class="kw">public</span> String msg;
 
-    <span class="kw">public</span> LoginPage() { 
-        form.add(<span class="kw">new</span> TextField(<span class="st">"username"</span>, <span class="kw">true</span>));
-        form.add(<span class="kw">new</span> PasswordField(<span class="st">"password"</span>, <span class="kw">true</span>));
-        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">"   OK   "</span>, <span class="kw">this</span>, <span class="st">"onOkClicked"</span>));
-        form.add(<span class="kw">new</span> PageSubmit(<span class="st">"cancel"</span>, HomePage.<span class="kw">class</span>));
+    <span class="cm">// ------------------------------------------------------------ Constructor</span>
+
+    <span class="kw">public</span> SimpleForm() {
+        form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="kw">true</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"OK"</span>));
+
+        form.setListener(<span class="kw">this</span>, <span class="st">"onSubmit"</span>);
     }
 
-    <span class="kw">public boolean</span> onOkClicked() {
+    <span class="cm">// --------------------------------------------------------- Event Handlers</span>
+
+    <span class="cm">/**
+     * Handle the form submit event.
+     */</span>
+    <span class="kw">public boolean</span> onSubmit() {
         <span class="kw">if</span> (form.isValid()) {
-            User user = <span class="kw">new</span> User();
-            form.copyTo(user);
-
-            <span class="kw">if</span> (getUserService().isAuthenticatedUser(user)) {
-                getContext().setSessionAttribute(<span class="st">"user"</span>, user);
-                setRedirect(SecurePage.<span class="kw">class</span>);
-                <span class="kw">return false</span>;
-
-            } <span class="kw">else</span> {     
-                form.setError(getMessage(<span class="st">"authentication-error"</span>));           
-            }
+            msg = <span class="st">"Your name is "</span> + form.getFieldValue(<span class="st">"name"</span>);
         }
         <span class="kw">return true</span>;
     }
-} 
+}
 </pre>
 
-Note in this example the page's public <span class="st">form</span> field is 
-automatically added to its list of controls.
 <p/>
-Next we have the LoginPage template <span class="blue">login.htm</span>. The
-Click application automatically associates the <tt>login.htm</tt> template with
-the <tt>LoginPage</tt> class.
+Next we have the SimpleForm template <span class="blue">simple-form.htm</span>. The
+Click application automatically associates the <tt>simple-form.htm</tt> template with
+the <tt>SimpleForm</tt> class.
+
+<pre class="codeHtml">
+&lt;html&gt;
+&lt;head&gt;
+  <span class="blue">$imports</span>
+&lt;/head&gt;
+&lt;body&gt;
+  
+  <span class="blue">$form</span>
+  
+<span class="red">#if</span> (<span class="blue">$msg</span>)
+  &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
+<span class="red">#end</span>
+    
+&lt;/body&gt;
+&lt;/html&gt; 
+</pre>
+
+When the SimpleForm page is first requested the <span class="blue">$form</span> object will 
+automatically render itself as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+
+<form method="post" name="form" id="form" action="/click-examples/introduction/simple-form.htm">
+<input type="hidden" name="form_name" id="form_form_name" value="form"/>
+<table class="form" id="form-form">
+<tr><td>
+<table class="fields" id="form-fields">
+<tr class="fields">
+<td class="fields" align="left"><label for="form_name">Name</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="name" id="form_name" value="" size="20"/></td>
+</tr>
+</table>
+</td></tr>
+<tr><td align="left">
+<table class="buttons" id="form-buttons">
+<tr class="buttons"><td class="buttons"><input type="submit" name="OK" id="form_OK" value="OK"/></td></tr>
+</table>
+</td></tr>
+</table>
+</form>
+  
+ </td>
+</tr>
+</table>
+
+Now if the user does not enter their name and presses the OK button to submit the form. 
+The ClickServlet creates a new SimpleForm page and processes the form control. 
+<p/>
+The form control processes its fields and determines that it is invalid. The form
+then invokes the listener method <tt>onSubmit()</tt> method. As the form is not
+valid this method simply returns true and the form renders the field validation errors. 
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+
+<form method="post" name="form" id="form" action="/click-examples/introduction/simple-form.htm">
+<input type="hidden" name="form_name" id="form_form_name" value="form"/>
+<table class="form" id="form-form">
+<tr><td align="left">
+<table class="errors" id="form-errors">
+<tr class="errors"><td class="errors" align="left" colspan="2"><a class="error" href="#">You must enter a value for Name</a></td></tr>
+</table>
+</td></tr>
+<tr><td>
+<table class="fields" id="form-fields">
+<tr class="fields">
+<td class="fields" align="left"><label for="form_name" class="error">Name</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="name" id="form_name" value="" size="20" class="error"/></td>
+</tr>
+</table>
+</td></tr>
+<tr><td align="left">
+<table class="buttons" id="form-buttons">
+<tr class="buttons"><td class="buttons"><input type="submit" name="OK" id="form_OK" value="OK"/></td></tr>
+</table>
+</td></tr>
+</table>
+</form>
+
+ </td>
+</tr>
+</table>
+
+Note the form will automatically maintains the entered state during the 
+post and validate cycle.
+<p/>
+Now if the user enters their name and clicks the OK button, the form will be
+valid and the <tt>onSubmit()</tt> add a <span color="blue">msg</span> to the Pages
+model. This will be rendered as:
+
+<table class="htmlExample" cellspacing="12">
+<tr>
+ <td>
+<form method="post" name="form" id="form" action="/click-examples/introduction/simple-form.htm">
+<input type="hidden" name="form_name" id="form_form_name" value="form"/>
+<table class="form" id="form-form">
+<tr><td>
+<table class="fields" id="form-fields">
+<tr class="fields">
+<td class="fields" align="left"><label for="form_name">Name</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="name" id="form_name" value="John Masters" size="20"/></td>
+</tr>
+</table>
+</td></tr>
+<tr><td align="left">
+<table class="buttons" id="form-buttons">
+<tr class="buttons"><td class="buttons"><input type="submit" name="OK" id="form_OK" value="OK"/></td></tr>
+</table>
+</td></tr>
+</table>
+</form>
+
+  <div class="msgDiv"> Your name is John Masters </div>
+  
+ </td>
+</tr>
+</table>
+
+
+
+<p>&nbsp;</p>
+
+
+
+<a name="advanced-form" class="heading"><h2>Advanced Form Example</h2></a>
+
+The <tt>AdvancedForm</tt> page below provides a more advanced demonstration 
+of using Form, Field and FielsSet controls.
+<p/>
+First we have a <tt>AdvancedForm</tt> class which setups up a 
+<a href="click-api/net/sf/click/control/Form.html">Form</a>
+in the constructor. 
+The form's investment 
+<a href="click-api/net/sf/click/control/Select.html">Select</a> list is populated
+in the page's <tt>onInit()</tt> method. At this point any page dependencies such
+as the CustomerService should be available.
+<p/>
+Note in this example the page's public <span class="st">form</span> field is 
+automatically added to its list of controls. The <span class="st">msg</span> field
+is added to the page's model.
+
+<pre class="codeJava">
+<span class="kw">public class</span> AdvancedForm <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> Form form = <span class="kw">new</span> Form();
+    <span class="kw">public</span> String msg;
+
+    <span class="kw">private</span> Select investmentSelect = <span class="kw">new</span> Select(<span class="st">"investment"</span>);
+
+    <span class="cm">// ------------------------------------------------------------ Constructor</span>
+
+    <span class="kw">public</span> AdvancedForm() {
+        FieldSet fieldSet = <span class="kw">new</span> FieldSet(<span class="st">"Customer"</span>);
+        form.add(fieldSet);
+
+        TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>, <span class="kw">true</span>);
+        nameField.setMinLength(5);
+        nameField.setFocus(true);
+        fieldSet.add(nameField);
+
+        fieldSet.add(<span class="kw">new</span> EmailField(<span class="st">"email"</span>, <span class="kw">true</span>));
+
+        fieldSet.add(investmentSelect);
+
+        fieldSet.add(<span class="kw">new</span> DateField(<span class="st">"dateJoined"</span>, <span class="kw">true</span>));
+        fieldSet.add(<span class="kw">new</span> Checkbox(<span class="st">"active"</span>));
+
+        form.add(<span class="kw">new</span> Submit(<span class="st">"ok"</span>, <span class="st">" OK "</span>, <span class="kw">this</span>, <span class="kw">"onOkClicked"</span>));
+        form.add(<span class="kw">new</span> Submit(<span class="st">"cancel"</span>, <span class="kw">this</span>, <span class="st">"onCancelClicked"</span>));
+    }
+
+    <span class="cm">// --------------------------------------------------------- Event Handlers
+
+    /**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public void</span> onInit() {
+        CustomerService customerService = getCustomerService();
+        investmentSelect.add(Option.EMPTY_OPTION);
+        investmentSelect.addAll(customerService.getInvestmentCatetories());
+    }
+
+    <span class="cm">/**
+     * Handle the OK button click event.
+     *
+     * @return true
+     */</span>
+    <span class="kw">public boolean</span> onOkClicked() {
+        <span class="kw">if</span> (form.isValid()) {
+            Customer customer = <span class="kw">new</span> Customer();
+            form.copyTo(customer);
+
+            getCustomerService().saveCustomer(customer);
+
+            form.clearValues();
+
+            msg = <span class="st">"A new customer record has been created."</span>;
+        }
+        <span class="kw">return true</span>;
+    }
+
+    <span class="cm">/**
+     * Handle the Cancel button click event.
+     *
+     * @return false
+     */</span>
+    <span class="kw">public boolean</span> onCancelClicked() {
+        setRedirect(HomePage.<span class="kw">class</span>);
+        <span class="kw">return false</span>;
+    }
+}
+</pre>
+
+Next we have the AdvancedForm template <span class="blue">advanced-form.htm</span>. The
+Click application automatically associates the <tt>advanced-form.htm</tt> template with
+the <tt>AdvancedForm</tt> class.
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -263,83 +691,82 @@ the <tt>LoginPage</tt> class.
    <span class="blue">$imports</span>
 &lt;/head&gt;
 &lt;body&gt;
+
+<span class="red">#if</span> (<span class="blue">$msg</span>)
+  &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
+<span class="red">#end</span>
   
-   &lt;h3&gt;Login&lt;/h3&gt;
-    
    <span class="blue">$form</span>
     
 &lt;/body&gt;
 &lt;/html&gt; 
 </pre>
 
-When the Login page is first requested the <span class="blue">$form</span> object will 
+When the AdvancedForm page is first requested the <span class="blue">$form</span> object will 
 automatically render itself as:
 
 <table class="htmlExample" cellspacing="12">
 <tr>
  <td>
   
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
+<form method="post" name="form" id="form" action="/click-examples/introduction/advanced-form.htm">
+<input type="hidden" name="form_name" id="form_form_name" value="form"/>
+<table class="form" id="form-form">
+<tr><td>
+<table class="fields" id="form-fields">
+<tr class="fields">
+<td class="fields" colspan="2">
 
-<table class='form'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='' size='20' maxlength='20'/></td>
+<fieldset id="form_Customer">
+<legend id="form_Customer-legend">Customer</legend>
+<table class="fields" id="form_Customer-fields">
+<tr class="fields">
+<td class="fields" align="left"><label for="form_name">Name</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="name" id="form_name" value="" size="20"/></td>
 </tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' maxlength='20'/></td>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_email">Email</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="email" id="form_email" value="" size="30"/></td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_investment">Investment</label>&nbsp;</td>
+<td align="left"><select name="investment" id="form_investment" size="1"><option selected="selected" value=""></option><option value="Bonds">Bonds</option><option value="Commerical Property">Commerical Property</option><option value="Options">Options</option><option value="Residential Property">Residential Property</option><option value="Stocks">Stocks</option></select></td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="dateJoined_field">Date Joined</label><span class="required">*</span></td>
+<td align="left"><input type="text" name="dateJoined" id="dateJoined_field" value="" size="20"/><img align="top" style="cursor:hand" src="../images/calendar.gif" id="dateJoined_field-button"  alt="Calendar" title="Calendar"/></td>
+</tr>
+<tr class="fields">
+<td class="fields" align="left"><label for="form_active">Active</label>&nbsp;</td>
+<td align="left"><input type="checkbox" name="active" id="form_active"/></td>
 </tr>
 </table>
-<table class="buttons">
-<tr align='left'>
-  <td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td>
+</fieldset>
+</td>
 </tr>
 </table>
-
- </td>
-</tr>
+</td></tr>
+<tr><td align="left">
+<table class="buttons" id="form-buttons">
+<tr class="buttons"><td class="buttons"><input type="submit" name="ok" id="form_ok" value=" OK "/></td><td class="buttons"><input type="submit" name="cancel" id="form_cancel" value="Cancel"/></td></tr>
 </table>
-
-Now the user enters their username, but forgets their password and then presses the OK
-button. The ClickServlet creates a new Login page and processes the form control.
-The form control processes its fields and determines that it is invalid. 
-<p/>
-Next the OK button <tt>onOkClicked()</tt> event handler is invoked, but as the form is 
-invalid this method it does nothing.
-<p/>
-With all the event processing completed the form now renders the field validation errors.
-<table class="htmlExample" cellspacing="12">
-<tr>
- <td>
-   
- <h3 style="color: navy; margin-top: 0em; margin-bottom: 0.5em;">Login</h3>
- 
-<table class='fields'>
-<tr>
-<td align='left'><label >Username</label><span class="red">*</span></td>
-<td align='left'><input type='text' name='username' value='malcolm' size='20' maxlength='20'/></td>
-</tr>
-<tr>
-<td align='left'><label >Password</label><span class="red">*</span></td>
-<td align='left'><input type='password' name='password' value='' size='20' class='error' maxlength='20'/></td>
-</tr>
-<tr><td colspan='2'><a class='error' href='javascript:document.form.password.focus();'>You must enter a value for Password</a></td></tr>
+</td></tr>
 </table>
-<table class="buttons">
-<tr align='left'><td colspan='2'><input type='submit' name='ok' value='    OK    '/>&nbsp;<input type='submit' name='cancel' value='Cancel'/></td></tr>
-</table>
+</form>
 
  </td>
 </tr>
 </table>
 
-If the user enters a correct username and password the <tt>onOkClicked()</tt> 
-event handler will add a User object to the HttpSession and redirect the request 
-to the <tt>SecurePage</tt>. Note how this code returns false, to abort any further
-processing in the page.
+In this example when the OK button is clicked the <tt>onOkClicked()</tt> method is invoked.
+If the form is valid a new customer object is created and the forms field values are copied
+to the new object using the Form 
+<a href="click-api/net/sf/click/control/Form.html#copyTo(java.lang.Object)">copyTo()</a>
+method. The customer object is then saved, the form's field values are cleared and an
+info message is presented to the user.
 <p/>
-If the user clicks on the Cancel button the request is redirected to the <tt>HomePage</tt>.
+If the user clicks on the Cancel button the request is redirected to the applications
+HopePage.
 
 <h4>Form Layout</h4>
 
