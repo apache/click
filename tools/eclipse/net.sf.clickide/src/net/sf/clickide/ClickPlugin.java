@@ -44,10 +44,11 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String ATTR_VALUE = "value";
 	public static final String ATTR_PATH = "path";
 	public static final String ATTR_AUTO_MAPPING = "automapping";
+	public static final String ATTR_AUTO_BINDING = "autobinding";
 	public static final String ATTR_PACKAGE = "package";
 	public static final String ATTR_PATTERN = "pattern";
 	
-	public static final String[] AUTO_MAPPING_VALUES = {"true", "false"};
+	public static final String[] BOOLEAN_VALUES = {"true", "false"};
 	public static final String[] LOGTO_VALUES = {"console", "servlet"};
 	public static final String[] MODE_VALUES = {"production", "profile", "development", "debug", "trace"};
 	public static final String[] HEADER_TYPE_VALUES = {"String", "Integer", "Date"};

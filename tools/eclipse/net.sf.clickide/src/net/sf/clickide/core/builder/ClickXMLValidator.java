@@ -131,10 +131,14 @@ public class ClickXMLValidator {
 		// automapping and package of <pages>
 		if(tagName.equals(ClickPlugin.TAG_PAGES)){
 			if(attrName.equals(ClickPlugin.ATTR_AUTO_MAPPING)){
-				if(!containsValue(ClickPlugin.AUTO_MAPPING_VALUES, attrValue)){
+				if(!containsValue(ClickPlugin.BOOLEAN_VALUES, attrValue)){
 					createWarningMarker(file, "autoMapping", new String[0], start, length);
 				}
-			} if(attrName.equals(ClickPlugin.ATTR_PACKAGE)){
+			} else if(attrName.equals(ClickPlugin.ATTR_AUTO_BINDING)){
+				if(!containsValue(ClickPlugin.BOOLEAN_VALUES, attrValue)){
+					createWarningMarker(file, "autoBinding", new String[0], start, length);
+				}
+			} else if(attrName.equals(ClickPlugin.ATTR_PACKAGE)){
 				
 			}
 		}
