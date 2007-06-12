@@ -12,11 +12,11 @@ import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
  */
 public class ClickFacetUtil {
 	
-	public static String CLICK_DIR = "click-1.2";
+	public static String CLICK_DIR = "click-1.3.1";
 	
 	public static final String[] COPY_FILES = {
-		"/lib/click-1.2.jar",
-		"/lib/click-extras-1.2.jar",
+		"/lib/click-1.3.1.jar",
+		"/lib/click-extras-1.3.1.jar",
 		"/click.xml",
 	};
 	
