@@ -41,17 +41,32 @@ public class PagesAttributeEditor implements IAttributeEditor {
 			}
 		});
 		
-		final Combo combo = AttributeEditorUtils.createCombo(
+		final Combo autoMapping = AttributeEditorUtils.createCombo(
 				toolkit, composite, element, 
 				ClickPlugin.getString("editor.clickXML.pages.autoMapping"), 
 				ClickPlugin.ATTR_AUTO_MAPPING,
-				ClickUtils.createComboValues(ClickPlugin.AUTO_MAPPING_VALUES));
-		combo.addSelectionListener(new SelectionAdapter(){
+				ClickUtils.createComboValues(ClickPlugin.BOOLEAN_VALUES));
+		autoMapping.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
-				if(combo.getText().equals("")){
+				if(autoMapping.getText().equals("")){
 					element.removeAttribute(ClickPlugin.ATTR_AUTO_MAPPING);
 				} else {
-					element.setAttribute(ClickPlugin.ATTR_AUTO_MAPPING, combo.getText());
+					element.setAttribute(ClickPlugin.ATTR_AUTO_MAPPING, autoMapping.getText());
+				}
+			}
+		});
+		
+		final Combo autoBinding = AttributeEditorUtils.createCombo(
+				toolkit, composite, element, 
+				ClickPlugin.getString("editor.clickXML.pages.autoBinding"), 
+				ClickPlugin.ATTR_AUTO_BINDING,
+				ClickUtils.createComboValues(ClickPlugin.BOOLEAN_VALUES));
+		autoBinding.addSelectionListener(new SelectionAdapter(){
+			public void widgetSelected(SelectionEvent evt){
+				if(autoBinding.getText().equals("")){
+					element.removeAttribute(ClickPlugin.ATTR_AUTO_BINDING);
+				} else {
+					element.setAttribute(ClickPlugin.ATTR_AUTO_BINDING, autoBinding.getText());
 				}
 			}
 		});
