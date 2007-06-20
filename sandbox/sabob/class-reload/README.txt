@@ -46,11 +46,8 @@
         antiJARLocking="true">
     
     
-    As far as I know Jetty does not support this feature.
+    Jetty (at least 6.1) does not seem to support this feature.
 
     Some IDE's like Netbeans will also reload the entire web application when you 
-    click the "Run" button. If I recall Eclipse has the ability to reload the application
-    when you hit "Save". Eclipse does have a setting to disable this "automatic build
-    on save" feature although I do not currently recall what it is called.
-
-
+    click the "Run" button. So instead of hitting "Run" just refresh the browser
+    to reload classes.
