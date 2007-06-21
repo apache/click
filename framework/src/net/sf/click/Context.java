@@ -223,6 +223,8 @@ public class Context {
      * @return the value of the request parameter.
      */
     public String getRequestParameter(String name) {
+        String value = null;
+
         if (isMultipartRequest()) {
             // If form has not alreay initialized multipart form data, load it
             // now. Form will overwrite it later during the request processing
@@ -238,7 +240,6 @@ public class Context {
                         FileItem fileItem = (FileItem) itemsList.get(i);
                         itemsMap.put(fileItem.getFieldName(), fileItem);
                     }
-
                     multiPartFormData = itemsMap;
 
                 } catch (FileUploadException fue) {
@@ -249,22 +250,23 @@ public class Context {
             FileItem fileItem = (FileItem) multiPartFormData.get(name);
             if (fileItem != null) {
                 if (request.getCharacterEncoding() == null) {
-                    return fileItem.getString();
-                }
-                try {
-                    return fileItem.getString(request.getCharacterEncoding());
+                    value = fileItem.getString();
 
-                } catch (UnsupportedEncodingException ex) {
-                    throw new RuntimeException(ex);
-                }
+                } else {
+                    try {
+                        value = fileItem.getString(request.getCharacterEncoding());
 
-            } else {
-                return null;
+                    } catch (UnsupportedEncodingException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
             }
 
         } else {
-            return request.getParameter(name);
+            value = request.getParameter(name);
         }
+
+        return value;
     }
 
     /**
