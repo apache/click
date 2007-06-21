@@ -583,7 +583,7 @@ public class ClickServlet extends HttpServlet {
             url = response.encodeRedirectURL(url);
 
             if (logger.isTraceEnabled()) {
-                logger.debug("    redirect: " + url);
+                logger.debug("   redirect: " + url);
 
             } else if (logger.isDebugEnabled()) {
                 logger.debug("redirect: " + url);
