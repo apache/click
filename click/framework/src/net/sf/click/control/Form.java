@@ -1275,9 +1275,13 @@ public class Form implements Control {
             return false;
         }
 
-
         // If "multipart/form-data" request
         if (getContext().isMultipartRequest()) {
+
+            if (!getContext().getMultiPartFormData().isEmpty()) {
+                String formName = getContext().getRequestParameter(FORM_NAME);
+                return getName().equals(formName);
+            }
 
             FileField fileField = null;
             List fieldList = ClickUtils.getFormFields(this);
@@ -1346,7 +1350,6 @@ public class Form implements Control {
         } else {
             return getName().equals(request.getParameter(FORM_NAME));
         }
-
     }
 
     /**
