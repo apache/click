@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -441,20 +443,25 @@ class ClickApp implements EntityResolver {
                 }
 
                 Class pageClass = null;
-                Set resourcePaths = servletContext.getResourcePaths(path);
-                if (resourcePaths != null && resourcePaths.size() > 0) {
-                    pageClass = getPageClass(path, pagesPackage);
 
-                    if (pageClass != null) {
-                        page = new PageElm(path, pageClass, commonHeaders);
+                try {
+                    URL resource = servletContext.getResource(path);
+                    if (resource != null) {
+                        pageClass = getPageClass(path, pagesPackage);
 
-                        pageByPathMap.put(page.getPath(), page);
+                        if (pageClass != null) {
+                            page = new PageElm(path, pageClass, commonHeaders);
 
-                        if (logger.isDebugEnabled()) {
-                            String msg = path + " -> " + pageClass.getName();
-                            logger.debug(msg);
+                            pageByPathMap.put(page.getPath(), page);
+
+                            if (logger.isDebugEnabled()) {
+                                String msg = path + " -> " + pageClass.getName();
+                                logger.debug(msg);
+                            }
                         }
                     }
+                } catch (MalformedURLException e) {
+                    //ignore
                 }
                 return pageClass;
             }
@@ -1209,7 +1216,7 @@ class ClickApp implements EntityResolver {
                     pageClass = Class.forName(classNameWithPage);
 
                     if (!Page.class.isAssignableFrom(pageClass)) {
-                        String msg = "Automapped page class " + className
+                        String msg = "Automapped page class " + classNameWithPage
                                      + " is not a subclass of net.sf.click.Page";
                         throw new RuntimeException(msg);
                     }
