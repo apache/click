@@ -1305,7 +1305,7 @@ public class ClickApp implements EntityResolver {
                     //pageClass = Class.forName(classNameWithPage);
                     
                     if (!Page.class.isAssignableFrom(pageClass)) {
-                        String msg = "Automapped page class " + className
+                        String msg = "Automapped page class " + classNameWithPage
                                 + " is not a subclass of net.sf.click.Page";
                         throw new RuntimeException(msg);
                     }

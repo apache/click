@@ -47,6 +47,7 @@ public class ReloadClassFilter implements Filter, FileChangeListener {
     private URL[] classpath = null;
     private final Object lock = new Object();
     private List includedPackagesList = new ArrayList();
+    private List initialClasspath = new ArrayList();
     
     public ReloadClassFilter() {
         //This option will stop the scanning of other entries in the FileMonitor
@@ -85,19 +86,28 @@ public class ReloadClassFilter implements Filter, FileChangeListener {
     }
     
     private static final String INCLUDED_PACKAGES = "included-packages";
+    private static final String CLASSPATH = "classpath";
     
     public void init(FilterConfig filterConfig) throws ServletException {
         String includedPackages = filterConfig.getInitParameter(INCLUDED_PACKAGES);
-        if(includedPackages == null) {
-            return;
+        if(includedPackages != null) {
+            StringTokenizer tokens = new StringTokenizer(includedPackages, ", \n\t");
+            while(tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                includedPackagesList.add(token);
+            }
+            LOG.info("Packages that will be loadable -> " + includedPackagesList);
         }
         
-        StringTokenizer tokens = new StringTokenizer(includedPackages, ", ");
-        while(tokens.hasMoreTokens()) {
-            String token = tokens.nextToken();
-            includedPackagesList.add(token);
+        String classpathParams = filterConfig.getInitParameter(CLASSPATH);
+        if(classpathParams != null) {
+            StringTokenizer tokens = new StringTokenizer(classpathParams, ", \n\t");
+            while(tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                initialClasspath.add(token);
+            }
+            LOG.info("Initial classpath used -> " + initialClasspath);
         }
-        LOG.info("Packages that will be loadable -> " + includedPackagesList);
     }
     
     public void createDynamicClassLoader() {
@@ -112,10 +122,27 @@ public class ReloadClassFilter implements Filter, FileChangeListener {
     }
     
     public URL[] getClasspath() {
-        return extractUrlList(Thread.currentThread().getContextClassLoader());
+        List classpath = new ArrayList();
+        for(Iterator it = initialClasspath.iterator(); it.hasNext(); ) {
+            String path = (String) it.next();
+            addToClasspath(path, classpath);
+        }
+        classpath.addAll(extractUrlList(Thread.currentThread().getContextClassLoader()));
+        LOG.info("Classpath for the ReloadClassFilter (" + classpath + ")");
+        return (URL[]) classpath.toArray(new URL[] {null});
     }
     
-    public URL[] extractUrlList(ClassLoader cl) {
+    protected void addToClasspath(String path, List classpath) {
+        try {
+            File f = new File(path);
+            if(f.exists()) {
+                classpath.add(f.toURL());
+            }
+        } catch (MalformedURLException ex) {
+        }
+    }
+    
+    public List extractUrlList(ClassLoader cl) {
         List urlList = new ArrayList();
         try {
             Enumeration en = cl.getResources("");
@@ -126,7 +153,7 @@ public class ReloadClassFilter implements Filter, FileChangeListener {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return (URL[]) urlList.toArray(new URL[] {null});
+        return urlList;
     }
     
     public void fileChanged(File file) {

@@ -62,6 +62,10 @@ public class DynamicClassLoader extends URLClassLoader {
         includedPackages.add(packageName);
     }
     
+    public void addURL(URL url) {
+        super.addURL(url);
+    }
+    
     protected boolean shouldLoadClass(String name) {
         if(name == null || name.length() == 0) {
             return false;
