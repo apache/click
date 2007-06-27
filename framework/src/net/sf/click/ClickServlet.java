@@ -338,6 +338,9 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
+        // TODO: log multi-part requests
+
+        // TODO: will fail for multi-part requests
         if (logger.isTraceEnabled()) {
             Map requestParams = ClickUtils.getRequestParameters(request);
             Iterator i = requestParams.entrySet().iterator();
@@ -938,6 +941,7 @@ public class ClickServlet extends HttpServlet {
         boolean customConverter =
             ! getTypeConverter().getClass().equals(DefaultTypeConverter.class);
 
+        // TODO: will fail for multi-part requests
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String name = (String) e.nextElement();
             String value = request.getParameter(name);
