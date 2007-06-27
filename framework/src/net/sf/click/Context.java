@@ -179,6 +179,20 @@ public class Context {
     }
 
     /**
+     * Return true if the HTTP request method is "GET".
+     *
+     * @return true if the HTTP request method is "GET"
+     */
+    public boolean isGet() {
+        if (isPost) {
+            return false;
+
+        } else {
+            return getRequest().getMethod().equalsIgnoreCase("GET");
+        }
+    }
+
+    /**
      * Return the named request attribute, or null if not defined.
      *
      * @param name the name of the request attribute
