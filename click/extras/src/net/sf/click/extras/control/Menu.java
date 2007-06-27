@@ -160,6 +160,7 @@ import org.w3c.dom.NodeList;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">path</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">target</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">title</span> CDATA #IMPLIED&gt;
+ *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">imageSrc</span> CDATA #IMPLIED&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">external</span> (true|false) "false"&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">separator</span> (true|false) "false"&gt;
  *     &lt;!ATTLIST <span class="red">menu</span> <span class="st">roles</span> CDATA #IMPLIED&gt;
@@ -204,6 +205,16 @@ public class Menu implements Control {
      * The menu path is to an external page flag, by default this value is false.
      */
     protected boolean external;
+
+    /**
+     * The image src path attribute.  If the image src is defined then a
+     * <tt>&lt;img/&gt;</tt> element will rendered inside the link when
+     * using the Menu {@link #toString()} method.
+     * <p/>
+     * If the image src value is prefixed with '/' then the request context path
+     * will be prefixed to the src value when rendered by the control.
+     */
+    protected String imageSrc;
 
     /** The menu display label. */
     protected String label;
@@ -275,6 +286,8 @@ public class Menu implements Control {
 
         setLabel(menuElement.getAttribute("label"));
 
+        setImageSrc(menuElement.getAttribute("imageSrc"));
+
         setPath(menuElement.getAttribute("path"));
 
         String titleAtr = menuElement.getAttribute("title");
@@ -334,6 +347,7 @@ public class Menu implements Control {
             throw new IllegalArgumentException("Null menu parameter");
         }
         setLabel(menu.getLabel());
+        setImageSrc(menu.getImageSrc());
         setName(menu.getName());
         setPath(menu.getPath());
         setExternal(menu.isExternal());
@@ -413,6 +427,31 @@ public class Menu implements Control {
      */
     public void setExternal(boolean value) {
         external = value;
+    }
+
+    /**
+     * Return the image src path attribute. If the image src is defined then a
+     * <tt>&lt;img/&gt;</tt> element will rendered inside the link when
+     * using the Menu {@link #toString()} method.
+     * <p/>
+     * If the src value is prefixed with '/' then the request context path will
+     * be prefixed to the src value when rendered by the control.
+     *
+     * @return the image src path attribute
+     */
+    public String getImageSrc() {
+        return imageSrc;
+    }
+
+    /**
+     * Set the image src path attribute. If the src value is prefixed with
+     * '/' then the request context path will be prefixed to the src value when
+     * rendered by the control.
+     *
+     * @param src the image src path attribute
+     */
+    public void setImageSrc(String src) {
+        this.imageSrc = src;
     }
 
     /**
@@ -796,7 +835,34 @@ public class Menu implements Control {
 
             buffer.closeTag();
 
-            buffer.append(getLabel());
+            if (StringUtils.isNotBlank(getImageSrc())) {
+                buffer.elementStart("img");
+                buffer.appendAttribute("border", "0");
+                buffer.appendAttribute("class", "link");
+
+                if (getTitle() != null) {
+                    buffer.appendAttribute("alt", getTitle());
+                } else {
+                    buffer.appendAttribute("alt", getLabel());
+                }
+
+                String src = getImageSrc();
+                if (StringUtils.isNotBlank(src)) {
+                    if (src.charAt(0) == '/') {
+                        src = getContext().getRequest().getContextPath() + src;
+                    }
+                    buffer.appendAttribute("src", src);
+                }
+
+                buffer.elementEnd();
+
+                if (getLabel() != null) {
+                    buffer.append(getLabel());
+                }
+
+            } else {
+                buffer.append(getLabel());
+            }
 
             buffer.elementEnd("a");
 
