@@ -439,7 +439,7 @@ public class PropertySelect extends Select {
             CayenneForm form = (CayenneForm) getForm();
             DataContext dataContext = form.getDataContext();
             Class doClass = form.getDataObjectClass();
-            Integer doPk = form.getDataObjectPk();
+            Object doPk = form.getDataObjectPk();
 
             if (doPk != null) {
                 DataObject dataObject =
