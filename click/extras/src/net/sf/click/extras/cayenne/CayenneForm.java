@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.cayenne;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,11 +28,14 @@ import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
+import org.objectstyle.cayenne.CayenneRuntimeException;
 import org.objectstyle.cayenne.DataObject;
 import org.objectstyle.cayenne.DataObjectUtils;
 import org.objectstyle.cayenne.PersistenceState;
 import org.objectstyle.cayenne.access.DataContext;
+import org.objectstyle.cayenne.dba.TypesMapping;
 import org.objectstyle.cayenne.map.DbAttribute;
+import org.objectstyle.cayenne.map.DbEntity;
 import org.objectstyle.cayenne.map.ObjAttribute;
 import org.objectstyle.cayenne.map.ObjEntity;
 import org.objectstyle.cayenne.map.ObjRelationship;
@@ -344,7 +348,7 @@ public class CayenneForm extends Form {
                     oidField.setValue(pk.toString());
                 }
 
-                copyFrom(dataObject, true);
+                copyFrom(dataObject);
 
             } else {
                 String msg = "Given dataObject class "
@@ -411,20 +415,34 @@ public class CayenneForm extends Form {
      *
      * @return the <tt>DataObject</tt> primary key
      */
-    public Integer getDataObjectPk() {
-        if (oidField.getValueObject() != null) {
-            String pk = oidField.getValue();
-            return new Integer(pk);
+    public Object getDataObjectPk() {
+        String value = oidField.getValue();
 
-        } else  {
-            String pk = getContext().getRequestParameter(FO_ID);
+        if (StringUtils.isNotBlank(value)) {
 
-            if (StringUtils.isNotBlank(pk)) {
-                return new Integer(pk);
+            Class doClass = getDataObjectClass();
+
+            Class pkClass = getPkClass(doClass);
+
+            if (pkClass.isAssignableFrom(String.class)) {
+                return value;
+
+            } else if (pkClass.isAssignableFrom(Integer.class)) {
+                return new Integer(value);
+
+            } else if (pkClass.isAssignableFrom(Long.class)) {
+                return new Long(value);
+
+            } else if (pkClass.isAssignableFrom(BigDecimal.class)) {
+                return new BigDecimal(value);
 
             } else {
-                return null;
+                // TODO: extens support to other PK types
+                return value;
             }
+
+        } else {
+            return null;
         }
     }
 
@@ -612,6 +630,50 @@ public class CayenneForm extends Form {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Return the primary key class for the given DataObject class.
+     *
+     * @param dataObjectClass the DataObject class to get the primary key for
+     * @return the primary key class for the given DataObject class
+     */
+    protected Class getPkClass(Class dataObjectClass) {
+        if (dataObjectClass == null) {
+            throw new IllegalArgumentException("Null dataObjectClass parameter.");
+        }
+
+        ObjEntity objEntity =
+            getDataContext().getEntityResolver().lookupObjEntity(dataObjectClass);
+
+        if (objEntity == null) {
+            throw new CayenneRuntimeException("Unmapped DataObject Class: "
+                    + dataObjectClass.getName());
+        }
+
+        DbEntity dbEntity = objEntity.getDbEntity();
+        if (dbEntity == null) {
+            throw new CayenneRuntimeException("No DbEntity for ObjEntity: "
+                    + objEntity.getName());
+        }
+
+        List pkAttributes = dbEntity.getPrimaryKey();
+        if (pkAttributes.size() != 1) {
+            throw new CayenneRuntimeException("PK contains "
+                    + pkAttributes.size()
+                    + " columns, expected 1.");
+        }
+
+        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+
+        String className = TypesMapping.getJavaBySqlType(attr.getType());
+
+        try {
+            return Class.forName(className);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
