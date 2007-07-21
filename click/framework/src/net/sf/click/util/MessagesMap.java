@@ -46,7 +46,7 @@ import net.sf.click.Context;
  * <pre class="codeHtml">
  * <span class="blue">$messages.title</span> </pre>
  *
- * This is roughtly equivalent to making the call:
+ * This is roughly equivalent to making the call:
  *
  * <pre class="codeJava">
  * <span class="kw">public void</span> onInit() {
@@ -65,7 +65,7 @@ import net.sf.click.Context;
  */
 public class MessagesMap implements Map {
 
-    /** Cache of resource bundle and locales which werer not found. */
+    /** Cache of resource bundle and locales which were not found. */
     protected static final Set NOT_FOUND_CACHE =
         Collections.synchronizedSet(new HashSet());
 
