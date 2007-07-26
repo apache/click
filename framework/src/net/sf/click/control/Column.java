@@ -1156,10 +1156,6 @@ public class Column implements Serializable {
         if (isSortable) {
             ActionLink controlLink = getTable().getControlLink();
 
-            if (controlLink.getContext() == null) {
-                controlLink.setContext(getTable().getContext());
-            }
-
             controlLink.setId("control-" + getName());
             controlLink.setParameter(Table.COLUMN, getName());
             controlLink.setParameter(Table.PAGE, String.valueOf(getTable().getPageNumber()));
