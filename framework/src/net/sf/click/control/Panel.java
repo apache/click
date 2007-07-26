@@ -122,6 +122,9 @@ public class Panel extends AbstractControl {
     /** The list of panel controls. */
     protected List controls;
 
+    /** The panel disabled value. */
+    protected boolean disabled;
+
     /** The "identifier" for this panel (CSS id for rendering). */
     protected String id;
 
@@ -229,6 +232,24 @@ public class Panel extends AbstractControl {
      */
     public boolean hasControls() {
         return (controls == null) ? false : !controls.isEmpty();
+    }
+
+    /**
+     * Return true if the panel is disabled.
+     *
+     * @return true if the panel is disabled
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    /**
+     * Set whether the panel is disabled.
+     *
+     * @param disabled the flat indicating whether the panel is disabled
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     /**
