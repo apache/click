@@ -313,6 +313,10 @@ public class TextArea extends Field {
 
         buffer.elementEnd("textarea");
 
+        if (getHelp() != null) {
+            buffer.append(getHelp());
+        }
+
         return buffer.toString();
     }
 

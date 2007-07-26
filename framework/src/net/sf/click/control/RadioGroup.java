@@ -23,8 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
@@ -197,9 +195,6 @@ public class RadioGroup extends Field {
 
         radio.setParent(this);
         getRadioList().add(radio);
-        if (getContext() != null) {
-            radio.setContext(getContext());
-        }
         if (getForm() != null) {
             radio.setForm(getForm());
         }
@@ -301,27 +296,6 @@ public class RadioGroup extends Field {
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
-            }
-        }
-    }
-
-    /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-
-        if (hasRadios()) {
-            for (Iterator i = getRadioList().iterator(); i.hasNext();) {
-                Object object = i.next();
-                if (object instanceof Control) {
-                    ((Control) object).setContext(context);
-                }
             }
         }
     }
@@ -434,11 +408,6 @@ public class RadioGroup extends Field {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         bindRequestValue();
 
         boolean continueProcessing = true;

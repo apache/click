@@ -659,6 +659,10 @@ public class Select extends Field {
 
         buffer.elementEnd("select");
 
+        if (getHelp() != null) {
+            buffer.append(getHelp());
+        }
+
         // select element does not support "readonly" element, so as a work around
         // we make the field "disabled" and render a hidden field to submit its value
         if (isReadonly()) {
