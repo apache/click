@@ -17,7 +17,7 @@ package net.sf.click.extras.panel;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
+import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
@@ -179,6 +179,26 @@ public class TabbedPanel extends Panel {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Add the control to the panel. The control will be added to the panels model
+     * using the controls name as the key. The Controls context property will
+     * be set if the context is available. The Controls parent property will
+     * also be set to the page instance.
+     * <p/>
+     * If the control added is the first panel it will be made the active panel.
+     *
+     * @param control the control to add
+     * @throws IllegalArgumentException if the control is null, or if the name
+     *      of the control is not defined
+     */
+    public void addControl(Control control) {
+        super.addControl(control);
+
+        if (control instanceof Panel && getPanels().size() == 1) {
+            setActivePanel((Panel) control);
+        }
+    }
+
+    /**
      * Return the currently active panel.
      *
      * @return the currently active panel
@@ -194,20 +214,6 @@ public class TabbedPanel extends Panel {
      */
     public void setActivePanel(Panel panel) {
         activePanel = panel;
-    }
-
-    /**
-     * @see net.sf.click.Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        super.setContext(context);
-
-        if (tabLink != null) {
-            tabLink.setContext(context);
-        }
     }
 
     /**
