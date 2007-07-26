@@ -115,7 +115,6 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
      */
     public Tree buildTree() {
         tree = createTree();
-        tree.setContext(getContext());
 
         //Try and load the already stored nodes from the session.
         //If this is the first time we access the page, this method
@@ -289,10 +288,10 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
      * Store the tree nodes in the session
      */
     private void storeNodesInSession(TreeNode rootNode) {
-        if(getContext() == null)
+        if (tree.getRootNode() == null) {
             return;
-        if(tree.getRootNode() == null)
-            return;
+        }
+
         getContext().getSession().setAttribute(TREE_NODES_SESSION_KEY, rootNode);
     }
 
@@ -301,9 +300,6 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
      * null.
      */
     private TreeNode loadNodesFromSession() {
-        if(getContext() == null)
-            return null;
-
         return (TreeNode) getContext().getSession().getAttribute(TREE_NODES_SESSION_KEY);
     }
 

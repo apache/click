@@ -1,10 +1,12 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.velocity;
 
 import net.sf.click.control.Form;
 import net.sf.click.control.Reset;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.InvestmentSelect;
+import net.sf.click.examples.page.BorderPage;
+import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;

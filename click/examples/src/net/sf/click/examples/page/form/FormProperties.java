@@ -30,7 +30,7 @@ public class FormProperties extends BorderPage {
         int columns = 1;
         boolean disabled = false;
         String errorsAlign = Form.ALIGN_LEFT;
-        String errorsPosition = Form.POSITION_MIDDLE;
+        String errorsPosition = Form.POSITION_TOP;
         String errorsStyle = "";
         String fieldStyle = "";
         String labelAlign = Form.ALIGN_LEFT;

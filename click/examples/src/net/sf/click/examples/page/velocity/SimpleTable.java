@@ -1,8 +1,9 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.velocity;
 
 import java.util.TreeMap;
 
 import net.sf.click.Page;
+import net.sf.click.examples.page.BorderPage;
 
 /**
  * Provides simple Table example which demonstrates Velocity #foreach directive.

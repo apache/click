@@ -1,6 +1,7 @@
 package net.sf.click.examples.page;
 
 import net.sf.click.Page;
+import net.sf.click.extras.control.Menu;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -11,6 +12,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * @author Malcolm Edgar
  */
 public class BorderPage extends SpringPage {
+
+    /** The root menu. */
+    public Menu rootMenu = Menu.getRootMenu();
 
     // ------------------------------------------------------------ Constructor
 
