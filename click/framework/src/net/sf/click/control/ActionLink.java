@@ -296,11 +296,6 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink HTML href attribute
      */
     public String getHref(Object value) {
-        if (getContext() == null) {
-            String msg = "context is not defined for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         String uri = getContext().getRequest().getRequestURI();
 
         HtmlStringBuffer buffer =
@@ -324,8 +319,8 @@ public class ActionLink extends AbstractLink {
                 String name = i.next().toString();
                 if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
-                    String encodedValue
-                            = ClickUtils.encodeUrl(paramValue, getContext());
+                    String encodedValue =
+                        ClickUtils.encodeUrl(paramValue, getContext());
                     buffer.append("&");
                     buffer.append(name);
                     buffer.append("=");
@@ -495,11 +490,6 @@ public class ActionLink extends AbstractLink {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined for link: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         bindRequestValue();
 
         if (clicked) {

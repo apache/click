@@ -297,6 +297,10 @@ public class TextField extends Field {
 
         buffer.elementEnd();
 
+        if (getHelp() != null) {
+            buffer.append(getHelp());
+        }
+
         return buffer.toString();
     }
 
