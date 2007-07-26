@@ -1,5 +1,5 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages?, headers?, format?, mode?, controls?)>
+<!ELEMENT click-app (pages?, headers?, format?, file-item-factory?, mode?, controls?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -31,6 +31,10 @@
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
    <!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format">
+ 
+  <!-- Commons Upload FileItem Factory class. -->
+  <!ELEMENT file-item-factory (#PCDATA)>
+   <!ATTLIST file-item-factory classname CDATA #FIXED "org.apache.commons.fileupload.disk.DiskFileItem">
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
