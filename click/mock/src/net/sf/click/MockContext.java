@@ -28,19 +28,31 @@ public class MockContext extends Context {
     
     // ----------------------------------------------------------- Constructors
     
-    public MockContext() {
+    private MockContext() {
         super(null, null, new MockRequest(), null, true, null);
     }
 
-    public MockContext(Locale locale) {
+    private MockContext(Locale locale) {
         super(null, null, new MockRequest(locale), null, true, null);
     }
     
-    public MockContext(HttpServletRequest request) {
+    private MockContext(HttpServletRequest request) {
         super(null, null, request, null, true, null);
     }
     
     // --------------------------------------------------------- Public Methods
+    
+    public static void initContext() {
+    	Context.setThreadLocalContext(new MockContext());
+    }
+    
+    public static void initContext(Locale locale) {
+    	Context.setThreadLocalContext(new MockContext(locale));
+    }
+    
+    public static void initContext(HttpServletRequest request) {
+    	Context.setThreadLocalContext(new MockContext(request));
+    }
     
     /**
      * @see Context#getLocale()

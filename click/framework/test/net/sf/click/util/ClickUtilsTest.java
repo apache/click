@@ -35,11 +35,15 @@ public class ClickUtilsTest extends TestCase {
         Calendar calendar = new GregorianCalendar(2000, 01, 02);
         DATE_OF_BIRTH = calendar.getTime();
     }
+    
+    protected void setUp() {
+    	MockContext.initContext(Locale.ENGLISH);
+    }
 
     public void testCopyFormToObject() {
-        // set up the form
+
+    	// set up the form
         Form form = new Form("sample");
-        form.setContext(new MockContext());
         
         IntegerField idField = new IntegerField("id");
         form.add(idField);
@@ -97,7 +101,6 @@ public class ClickUtilsTest extends TestCase {
         user.getAddress().setState(new State());
         
         form = new Form();
-        form.setContext(new MockContext());
         TextField codeField = new TextField("address.state.code");
         codeField.setValue("NSW");
         form.add(codeField);
@@ -108,7 +111,6 @@ public class ClickUtilsTest extends TestCase {
     public void testCopyObjectToForm() {
         // set up the form
         Form form = new Form("sample");
-        form.setContext(new MockContext());
         
         IntegerField idField = new IntegerField("id");
         form.add(idField);
@@ -162,7 +164,6 @@ public class ClickUtilsTest extends TestCase {
         user.getAddress().getState().setCode("NSW");
         
         form = new Form();
-        form.setContext(new MockContext());
         TextField codeField = new TextField("address.state.code");
         form.add(codeField);
         form.copyFrom(user, true);
@@ -171,7 +172,6 @@ public class ClickUtilsTest extends TestCase {
         Map map = new HashMap();
         map.put("name", "malcolm");
         form = new Form();
-        form.setContext(new MockContext());
         TextField nameField2 = new TextField("name");
         form.add(nameField2);
         form.copyFrom(map, true);
@@ -185,7 +185,6 @@ public class ClickUtilsTest extends TestCase {
         final Boolean registered = Boolean.TRUE;
         
         Form form = new Form();
-        form.setContext(new MockContext());
         
         IntegerField idField = new IntegerField("address.id");
         form.add(idField);
@@ -224,10 +223,7 @@ public class ClickUtilsTest extends TestCase {
     }
     
     public void testGetParentMessages() {
-        Context context = new MockContext(Locale.ENGLISH);
-        
         TextField textField = new TextField("test");
-        textField.setContext(context);
         
         Map map = ClickUtils.getParentMessages(textField);
         assertNotNull(map);
@@ -235,7 +231,6 @@ public class ClickUtilsTest extends TestCase {
         assertTrue(map == Collections.EMPTY_MAP);
         
         Page page = new Page();
-        page.setContext(context);
         page.addControl(textField);
         
         Map map2 = ClickUtils.getParentMessages(textField);
@@ -244,7 +239,6 @@ public class ClickUtilsTest extends TestCase {
         assertFalse(map2 == Collections.EMPTY_MAP);
         
         Page page2 = new Page();
-        page2.setContext(context);
         
         Form form = new Form("form");
         page2.addControl(form);
@@ -259,8 +253,7 @@ public class ClickUtilsTest extends TestCase {
     }
     
     public void testEncodeUrl() {
-        Context context = new MockContext(Locale.ENGLISH);
-        String value = ClickUtils.encodeUrl("1000", context);
+        String value = ClickUtils.encodeUrl("1000", Context.getThreadLocalContext());
         assertEquals("1000", value);
     }
 
