@@ -8,12 +8,10 @@ public class LongFieldTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         LongField longField = new LongField("id");
         assertEquals("id", longField.getName());
-        
-        longField.setContext(context);
 
         request.getParameterMap().put("id", "1234");
         

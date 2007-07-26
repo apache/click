@@ -24,36 +24,17 @@ public class NumberFieldTest extends TestCase{
 
     public void testFormat() {
         MockRequest req = new MockRequest(Locale.US);
-        MockContext ctxt = new MockContext(req);
+        MockContext.initContext(req);
         Number decNum = new Float(2.56f);
         
         NumberField engF = new NumberField("en");
 
-        try{
-            engF.getNumberFormat();
-            fail();
-        }catch(IllegalStateException e){}
-        
-        try{
-            engF.setValue("12");
-            engF.getNumber();
-            fail();
-        }catch(Exception e){}
-        
-        try{
-            engF.setNumber(decNum);
-            fail();
-        }catch(Exception e){}
-        
         assertNull(engF.getPattern());
         engF.setPattern("#.00");
         assertEquals("#.00",engF.getPattern());
         engF.setPattern(null);
         assertNull(engF.getPattern());
 
-        engF.setContext(ctxt);
-
-        
         engF.setValue("some Text");
         assertEquals("some Text",engF.getValue());
         assertNull(engF.getNumber());
@@ -95,9 +76,8 @@ public class NumberFieldTest extends TestCase{
         assertEquals(3456.134f, engF.getNumber().floatValue(),0);
         
         req = new MockRequest(Locale.GERMANY);
-        ctxt = new MockContext(req);
+        MockContext.initContext(req);
         NumberField germanF = new NumberField("de");
-        germanF.setContext(ctxt);
         
         germanF.setNumber(decNum);
         assertEquals("2,56",germanF.getValue());
@@ -108,11 +88,10 @@ public class NumberFieldTest extends TestCase{
     public void testOnProcess() {
         MockRequest req = new MockRequest(Locale.US);
         Map params = req.getParameterMap();
-        MockContext ctxt = new MockContext(req);
+        MockContext.initContext(req);
         
         NumberField engF = new NumberField("en");
         engF.setPattern("#,##0.00");
-        engF.setContext(ctxt);
         
         engF.setValidate(false);
         params.put("en", "no number");
@@ -125,7 +104,6 @@ public class NumberFieldTest extends TestCase{
         
         engF = new NumberField("en");
         engF.setPattern("#,##0.00");
-        engF.setContext(ctxt);
         params.put("en", "12.3");
 
         engF.setValidate(false);
@@ -137,7 +115,6 @@ public class NumberFieldTest extends TestCase{
         
         engF = new NumberField("en");
         engF.setPattern("#,##0.00");
-        engF.setContext(ctxt);
         params.put("en", "12.3");
         
         assertTrue(engF.onProcess());
@@ -154,11 +131,10 @@ public class NumberFieldTest extends TestCase{
     public void testValidate() {
         MockRequest req = new MockRequest(Locale.US);
         Map params = req.getParameterMap();
-        MockContext ctxt = new MockContext(req);
+        MockContext.initContext(req);
         
         NumberField engF = new NumberField("en");
         engF.setPattern("0");
-        engF.setContext(ctxt);
         
         engF.setMaxValue(100);
         engF.setMinValue(1);
@@ -181,7 +157,6 @@ public class NumberFieldTest extends TestCase{
         
         engF = new NumberField("en");
         engF.setPattern("0");
-        engF.setContext(ctxt);
         
         engF.setRequired(true);
         params.remove("en");

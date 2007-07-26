@@ -3,10 +3,9 @@ package net.sf.click.extras.control;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import junit.framework.TestCase;
 import net.sf.click.MockContext;
 import net.sf.click.MockRequest;
-
-import junit.framework.TestCase;
 
 public class ColorPickerTest extends TestCase {
 
@@ -34,10 +33,9 @@ public class ColorPickerTest extends TestCase {
     public void testValidate() {
         MockRequest mr = new MockRequest();
         Map paras = mr.getParameterMap();
-        MockContext ctxt = new MockContext(mr);
+        MockContext.initContext(mr);
         
         ColorPicker cp = new ColorPicker("color");
-        cp.setContext(ctxt);
         
         paras.put("color","#fff");
         assertTrue(cp.onProcess());
@@ -54,7 +52,6 @@ public class ColorPickerTest extends TestCase {
         assertFalse(cp.isValid());
         
         cp = new ColorPicker("color");
-        cp.setContext(ctxt);
         
         paras.put("color", "invalid");
         assertTrue(cp.onProcess());

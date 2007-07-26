@@ -394,9 +394,6 @@ public class Tree extends AbstractControl {
      * @see #setJavascriptEnabled(boolean, int)
      */
     public void setJavascriptEnabled(boolean newValue) {
-        if (getContext() == null) {
-            throw new IllegalStateException("Context is mandatory when enabling javascript support");
-        }
         if (getContext().getRequest().isRequestedSessionIdFromCookie()) {
             setJavascriptEnabled(newValue, JAVASCRIPT_COOKIE_POLICY);
         } else {
@@ -414,9 +411,6 @@ public class Tree extends AbstractControl {
      * @see #setJavascriptEnabled(boolean)
      */
     public void setJavascriptEnabled(boolean newValue, int javascriptPolicy) {
-        if (getContext() == null) {
-            throw new IllegalStateException("Context is mandatory when enabling javascript support");
-        }
 
         this.javascriptEnabled = newValue;
         if (javascriptEnabled) {
@@ -776,6 +770,15 @@ public class Tree extends AbstractControl {
             throw new IllegalArgumentException("Argument cannot be null.");
         }
         return find(getRootNode(), id);
+    }
+
+    /**
+     * This method does nothing. Subclasses may override this method to perform
+     * additional initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
     }
 
     /**

@@ -62,13 +62,11 @@ public class DateFieldTest extends TestCase {
     
     public void testNullParameter() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         DateField dateField = new DateField("dateField");
         assertEquals("dateField", dateField.getName());
         
-        dateField.setContext(context);
-
         request.getParameterMap().put("dateField", "");        
         dateField.onProcess();        
         Date date = dateField.getDate();
