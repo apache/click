@@ -21,6 +21,7 @@ import java.util.Map;
 
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.MessagesMap;
 
@@ -40,7 +41,7 @@ public abstract class AbstractControl implements Control {
     protected Map attributes;
 
     /** The request context. */
-    protected transient Context context;
+    private transient Context context;
 
     /** The Field localized messages Map. */
     protected Map messages;
@@ -129,16 +130,10 @@ public abstract class AbstractControl implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
+        if (context == null) {
+            context = Context.getThreadLocalContext();
+        }
         return context;
-    }
-
-    /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     */
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     /**
@@ -264,8 +259,7 @@ public abstract class AbstractControl implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
+                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
 
             } else {
                 String msg = "Cannot initialize messages as context not set "
@@ -292,6 +286,15 @@ public abstract class AbstractControl implements Control {
      */
     public void setParent(Object parent) {
         this.parent = parent;
+    }
+
+    /**
+     * Return the parent page of this control, or null if not defined.
+     *
+     * @return the parent page of this control, or null if not defined
+     */
+    public Page getPage() {
+        return ClickUtils.getParentPage(this);
     }
 
     /**
