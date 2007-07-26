@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -203,9 +202,6 @@ public class FieldSet extends Field {
         getFields().put(field.getName(), field);
         field.setForm(getForm());
 
-        if (getContext() != null) {
-            field.setContext(getContext());
-        }
         field.setParent(this);
 
         if (getForm() != null && getForm().getDefaultFieldSize() > 0) {
@@ -303,24 +299,6 @@ public class FieldSet extends Field {
      */
     public void setColumns(int columns) {
         this.columns = new Integer(columns);
-    }
-
-    /**
-     * Set the fieldset's <tt>Context</tt> and also set the <tt>Context</tt>
-     * in any contained fields.
-     *
-     * @see net.sf.click.Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        super.setContext(context);
-
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.setContext(context);
-        }
     }
 
     /**
@@ -527,6 +505,18 @@ public class FieldSet extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Initialize the fields contained in the fieldset.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            field.onInit();
+        }
+    }
+
+    /**
      * Process the request invoking <tt>onProcess()</tt> on the contained
      * <tt>Field</tt> elements.
      *
@@ -534,11 +524,6 @@ public class FieldSet extends Field {
      *  false
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
             if (!field.getName().startsWith(Form.SUBMIT_CHECK)) {
