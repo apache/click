@@ -41,6 +41,8 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
 
+import ognl.Ognl;
+
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang.StringUtils;
@@ -810,9 +812,35 @@ class ClickApp implements EntityResolver {
 
             fileItemFactory = (FileItemFactory) fifClass.newInstance();
 
+            Map propertyMap = loadPropertyMap(fileItemFactoryElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, fileItemFactory, value);
+            }
+
         } else {
             fileItemFactory = new DiskFileItemFactory();
         }
+    }
+
+    private static Map loadPropertyMap(Element parentElm) {
+        Map propertyMap = new HashMap();
+
+        List propertyList = getChildren(parentElm, "property");
+
+        for (int i = 0, size = propertyList.size(); i < size; i++) {
+            Element property = (Element) propertyList.get(i);
+
+            String name = property.getAttribute("name");
+            String value = property.getAttribute("value");
+
+            propertyMap.put(name, value);
+        }
+
+        return propertyMap;
     }
 
     private void loadTemplates() throws Exception {
