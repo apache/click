@@ -122,14 +122,6 @@ public interface Control extends Serializable {
     public Context getContext();
 
     /**
-     * Set the Page request Context of the Control.
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context);
-
-    /**
      * Return the HTML head element import string.
      * <p/>
      * Override this method to specify JavaScript and CSS includes for the
@@ -236,6 +228,13 @@ public interface Control extends Serializable {
      * @param servletContext the servlet context
      */
     public void onDeploy(ServletContext servletContext);
+
+    /**
+     * The on initialize event handler. Each Page control will be initialized
+     * before its {@link #onInit()} method is called. Controls are initialized
+     * called.
+     */
+    public void onInit();
 
     /**
      * The on process event handler. Each Page control will be processed when
