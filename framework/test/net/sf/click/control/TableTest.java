@@ -11,10 +11,9 @@ public class TableTest extends TestCase {
 
     public void testNoRows() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
 
         Table table = new Table();
-        table.setContext(context);
         Column column = new Column("Foo");
         column.setSortable(false);
         table.addColumn(column);
@@ -26,15 +25,14 @@ public class TableTest extends TestCase {
 
     public void testTdId() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
-
+        MockContext.initContext(request);
+        
         List foos = new ArrayList();
         foos.add(new Foo("foo1"));
         foos.add(new Foo("foo2"));
 
         Table table = new Table();
         table.setName("Foos");
-        table.setContext(context);
         table.setRowList(foos);
         Column column = new Column("Name");
         column.setSortable(false);
