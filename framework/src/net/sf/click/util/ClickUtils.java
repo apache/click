@@ -62,6 +62,7 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
@@ -487,6 +488,16 @@ public class ClickUtils {
     }
 
     /**
+     * Return true if the request is a multi-part content type POST request.
+     *
+     * @param request the page servlet request
+     * @return true if the request is a multi-part content type POST request
+     */
+    public static boolean isMultipartRequest(HttpServletRequest request) {
+        return ServletFileUpload.isMultipartContent(request);
+    }
+
+    /**
      * Invalidate the specified cookie and delete it from the response object. Deletes only cookies mapped
      * against the root "/" path. Otherwise use
      * {@link #invalidateCookie(HttpServletRequest, HttpServletResponse, String, String)}
@@ -612,7 +623,7 @@ public class ClickUtils {
         final List fieldList = getFormFields(form);
 
         if (fieldList.isEmpty()) {
-            log("Form has no fields to copy from", debug);
+            log("   Form has no fields to copy from", debug);
         }
 
         Set properties = getObjectPropertyNames(object);
@@ -630,7 +641,7 @@ public class ClickUtils {
             try {
                 PropertyUtils.setValueOgnl(object, field.getName(), field.getValueObject(), ognlContext);
 
-                String msg = "Form -> " + objectClassname + "."
+                String msg = "   Form -> " + objectClassname + "."
                              + field.getName() + " : " + field.getValueObject();
 
                 log(msg, debug);
@@ -666,7 +677,7 @@ public class ClickUtils {
         final List fieldList = getFormFields(form);
 
         if (fieldList.isEmpty()) {
-            log("Form has no fields to copy to", debug);
+            log("   Form has no fields to copy to", debug);
         }
 
         String objectClassname = object.getClass().getName();
@@ -687,7 +698,7 @@ public class ClickUtils {
 
                 field.setValueObject(result);
 
-                String msg = "Form <- " + objectClassname + "."
+                String msg = "   Form <- " + objectClassname + "."
                              + field.getName() + " : " + result;
                 log(msg, debug);
 
@@ -1376,7 +1387,7 @@ public class ClickUtils {
      * @param request the servlet request to obtain request parameters from
      * @return the ordered map of request parameters
      */
-    public static Map getRequestParameters(HttpServletRequest request) {
+    public static Map getRequestParameterMap(HttpServletRequest request) {
 
         TreeMap requestParams = new TreeMap();
 
@@ -1385,25 +1396,13 @@ public class ClickUtils {
             String name = paramNames.nextElement().toString();
 
             String[] values = request.getParameterValues(name);
-            HtmlStringBuffer valsBuffer = new HtmlStringBuffer(32);
 
             if (values.length == 1) {
-                valsBuffer.append(values[0]);
+                requestParams.put(name, values[0]);
 
             } else {
-                for (int i = 0; i < values.length; i++) {
-                    if (i == 0) {
-                        valsBuffer.append("[");
-                    }
-                    valsBuffer.append(values[i]);
-                    if (i == values.length - 1) {
-                        valsBuffer.append("]");
-                    } else {
-                        valsBuffer.append(",");
-                    }
-                }
+                requestParams.put(name, values);
             }
-            requestParams.put(name, valsBuffer.toString());
         }
 
         return requestParams;
