@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Malcolm A. Edgar
+ * Copyright 2006-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
-import net.sf.click.Context;
 import net.sf.click.control.Button;
 import net.sf.click.control.Column;
 import net.sf.click.control.Field;
@@ -30,6 +27,8 @@ import net.sf.click.control.HiddenField;
 import net.sf.click.control.Table;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a FormTable data grid control.
@@ -208,25 +207,6 @@ public class FormTable extends Table {
     }
 
     /**
-     * Set the context object.
-     *
-     * @see net.sf.click.Control#setContext(net.sf.click.Context)
-     *
-     * @param context the context to set
-     */
-    public void setContext(Context context) {
-        super.setContext(context);
-
-        addControl(getForm());
-        getForm().setName(getName() + "_form");
-        getForm().setContext(context);
-
-        form.add(new HiddenField(PAGE, String.class));
-        form.add(new HiddenField(COLUMN, String.class));
-        form.add(new HiddenField(ASCENDING, String.class));
-    }
-
-    /**
      * Return the form object.
      *
      * @return the form object
@@ -249,6 +229,24 @@ public class FormTable extends Table {
         buffer.append(getForm().getHtmlImports());
 
         return buffer.toString();
+    }
+
+    /**
+     * @see Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    public void setName(String name) {
+        super.setName(name);
+
+        addControl(getForm());
+        getForm().setName(getName() + "_form");
+
+        // TODO: this wont work, as table control links have unique name
+        form.add(new HiddenField(PAGE, String.class));
+        form.add(new HiddenField(COLUMN, String.class));
+        form.add(new HiddenField(ASCENDING, String.class));
     }
 
     /**
@@ -326,16 +324,15 @@ public class FormTable extends Table {
                         Field field = ((FieldColumn) column).getField();
 
                         field.setName(column.getName() + "_" + i);
-                        field.setContext(context);
 
                         field.onProcess();
 
                         if (field.isValid()) {
                             try {
                                 Ognl.setValue(column.getName(),
-                                        ognlContext,
-                                        row,
-                                        field.getValueObject());
+                                              ognlContext,
+                                              row,
+                                              field.getValueObject());
 
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
@@ -376,11 +373,6 @@ public class FormTable extends Table {
      * @return a HTML rendered FormTable string
      */
     public String toString() {
-        if (getContext() == null) {
-            String msg = "context is not defined for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         int bufferSize =
                 (getColumnList().size() * 60) * (getRowList().size() + 1)
                 + 256;

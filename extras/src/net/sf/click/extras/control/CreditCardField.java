@@ -288,7 +288,7 @@ public class CreditCardField extends TextField {
      * @return the HTML head import statements for the CreditCardField.js
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(CREDITCARD_IMPORTS, "$", path);
     }
@@ -318,7 +318,6 @@ public class CreditCardField extends TextField {
         buffer.append(textField);
 
         // Render card type select
-        cardTypeSelect.setContext(getContext());
         cardTypeSelect.setValue(cardType);
         cardTypeSelect.setForm(getForm());
         buffer.append(cardTypeSelect);
