@@ -437,7 +437,7 @@ public class CayenneForm extends Form {
                 return new BigDecimal(value);
 
             } else {
-                // TODO: extens support to other PK types
+                // TODO: support to other PK types
                 return value;
             }
 
