@@ -21,7 +21,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +48,8 @@ import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.TypeConverter;
 
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -307,7 +308,8 @@ public class ClickServlet extends HttpServlet {
      * servlet response.
      * <p/>
      * If an exception occurs within this method the exception will be delegated
-     * to: <p/>
+     * to:
+     * <p/>
      * {@link #handleException(HttpServletRequest, HttpServletResponse, boolean, Throwable, Class)}
      *
      * @param request the servlet request to process
@@ -322,7 +324,11 @@ public class ClickServlet extends HttpServlet {
         if (logger.isDebugEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(200);
             buffer.append(request.getMethod());
-            buffer.append(" ");
+            if (ServletFileUpload.isMultipartContent(request)) {
+                buffer.append(" (multipart) ");
+            } else {
+                buffer.append(" ");
+            }
             buffer.append(request.getRequestURL());
             logger.debug(buffer);
         }
@@ -335,20 +341,6 @@ public class ClickServlet extends HttpServlet {
                 String msg = "The character encoding "
                              + clickApp.getCharset() + " is invalid.";
                 logger.warn(msg, ex);
-            }
-        }
-
-        // TODO: log multi-part requests
-
-        // TODO: will fail for multi-part requests
-        if (logger.isTraceEnabled()) {
-            Map requestParams = ClickUtils.getRequestParameters(request);
-            Iterator i = requestParams.entrySet().iterator();
-            while (i.hasNext()) {
-                Map.Entry entry = (Map.Entry) i.next();
-                String name = entry.getKey().toString();
-                String value = entry.getValue().toString();
-                logger.trace("   request param: " + name + "=" + value);
             }
         }
 
@@ -376,6 +368,8 @@ public class ClickServlet extends HttpServlet {
         } finally {
             if (page != null) {
                 page.onDestroy();
+
+                Context.setThreadLocalContext(null);
 
                 if (logger.isTraceEnabled()) {
                     String shortClassName = page.getClass().getName();
@@ -422,13 +416,6 @@ public class ClickServlet extends HttpServlet {
             logger.error("handleException: ", exception);
         }
 
-        Context context = new Context(getServletContext(),
-                                      getServletConfig(),
-                                      request,
-                                      response,
-                                      isPost,
-                                      pageMaker);
-
         ErrorPage finalizeRef = null;
         try {
             final ErrorPage errorPage =
@@ -436,10 +423,9 @@ public class ClickServlet extends HttpServlet {
 
             finalizeRef = errorPage;
 
-            errorPage.setContext(context);
             errorPage.setError(exception);
             if (errorPage.getFormat() == null) {
-                errorPage.setFormat(clickApp.getFormat(context.getLocale()));
+                errorPage.setFormat(clickApp.getFormat());
             }
             errorPage.setHeaders(clickApp.getPageHeaders(ClickApp.ERROR_PATH));
             errorPage.setMode(clickApp.getModeValue());
@@ -527,9 +513,24 @@ public class ClickServlet extends HttpServlet {
                 logger.trace(tracePrefix + ".onInit()");
             }
 
+            if (page.hasControls()) {
+                List controls = page.getControls();
+
+                for (int i = 0, size = controls.size(); i < size; i++) {
+                    Control control = (Control) controls.get(i);
+                    control.onInit();
+
+                    if (logger.isTraceEnabled()) {
+                        String controlClassName = control.getClass().getName();
+                        controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+                        String msg =  "   invoked: " + controlClassName + ".onInit()";
+                        logger.trace(msg);
+                    }
+                }
+            }
+
             // Make sure dont process a forwarded request
             if (page.hasControls() && !page.getContext().isForward()) {
-
                 List controls = page.getControls();
 
                 for (int i = 0, size = controls.size(); i < size; i++) {
@@ -551,28 +552,28 @@ public class ClickServlet extends HttpServlet {
                     }
                 }
             }
-        }
 
-        if (continueProcessing) {
-            if (isPost) {
-                page.onPost();
+            if (continueProcessing) {
+                if (isPost) {
+                    page.onPost();
 
-                if (logger.isTraceEnabled()) {
-                    logger.trace(tracePrefix + ".onPost()");
+                    if (logger.isTraceEnabled()) {
+                        logger.trace(tracePrefix + ".onPost()");
+                    }
+
+                } else {
+                    page.onGet();
+
+                    if (logger.isTraceEnabled()) {
+                        logger.trace(tracePrefix + ".onGet()");
+                    }
                 }
 
-            } else {
-                page.onGet();
+                page.onRender();
 
                 if (logger.isTraceEnabled()) {
-                    logger.trace(tracePrefix + ".onGet()");
+                    logger.trace(tracePrefix + ".onRender()");
                 }
-            }
-
-            page.onRender();
-
-            if (logger.isTraceEnabled()) {
-                logger.trace(tracePrefix + ".onRender()");
             }
         }
 
@@ -619,7 +620,7 @@ public class ClickServlet extends HttpServlet {
 
         } else {
             if (logger.isTraceEnabled()) {
-                logger.debug("    path not defined for " + page.getClass().getName());
+                logger.debug("   path not defined for " + page.getClass().getName());
 
             } else if (logger.isDebugEnabled()) {
                 logger.debug("path not defined for " + page.getClass().getName());
@@ -692,7 +693,7 @@ public class ClickServlet extends HttpServlet {
                     new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
             }
 
-            velocityWriter.write(errorReport.getErrorReport());
+            velocityWriter.write(errorReport.toString());
 
             throw error;
 
@@ -749,11 +750,11 @@ public class ClickServlet extends HttpServlet {
 
         RequestDispatcher dispatcher = null;
 
-           if (page.getForward().equals(page.getTemplate())) {
-               dispatcher = request.getRequestDispatcher(page.getForward());
+        if (page.getForward().equals(page.getTemplate())) {
+            dispatcher = request.getRequestDispatcher(page.getForward());
 
         } else {
-               dispatcher = request.getRequestDispatcher(page.getTemplate());
+            dispatcher = request.getRequestDispatcher(page.getTemplate());
         }
 
         dispatcher.forward(request, response);
@@ -793,15 +794,30 @@ public class ClickServlet extends HttpServlet {
                                       isPost,
                                       pageMaker);
 
+        Context.setThreadLocalContext(context);
+
+        if (logger.isTraceEnabled()) {
+            Map requestParams = context.getRequestParameterMap();
+            Iterator i = requestParams.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry entry = (Map.Entry) i.next();
+                String name = entry.getKey().toString();
+                String value = entry.getValue().toString();
+
+                String msg = "   request param: " + name + "="
+                    + ClickUtils.limitLength(value, 40);
+
+                logger.trace(msg);
+            }
+        }
+
         String path = context.getResourcePath();
 
         if (request.getAttribute(FORWARD_PAGE) != null) {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
 
-            forwardPage.setContext(context);
-
             if (forwardPage.getFormat() == null) {
-                forwardPage.setFormat(clickApp.getFormat(context.getLocale()));
+                forwardPage.setFormat(clickApp.getFormat());
             }
 
             request.removeAttribute(FORWARD_PAGE);
@@ -818,10 +834,8 @@ public class ClickServlet extends HttpServlet {
 
         final Page page = initPage(path, pageClass, request);
 
-        page.setContext(context);
-
         if (page.getFormat() == null) {
-            page.setFormat(clickApp.getFormat(context.getLocale()));
+            page.setFormat(clickApp.getFormat());
         }
 
         return page;
@@ -907,7 +921,7 @@ public class ClickServlet extends HttpServlet {
                     }
                 });
 
-                processPageRequestParams(newPage, request);
+                processPageRequestParams(newPage);
             }
 
             return newPage;
@@ -926,25 +940,26 @@ public class ClickServlet extends HttpServlet {
      * returned by the {@link #getTypeConverter()} method.
      *
      * @param page the page whose fields are to be processed
-     * @param request the request parameter to use
      * @throws OgnlException if an error occurs
      */
-    protected void processPageRequestParams(Page page, HttpServletRequest request)
+    protected void processPageRequestParams(Page page)
         throws OgnlException {
 
         if (clickApp.getPageFields(page.getClass()).isEmpty()) {
             return;
         }
 
-        Map context = null;
+        Map ognlContext = null;
 
         boolean customConverter =
             ! getTypeConverter().getClass().equals(DefaultTypeConverter.class);
 
-        // TODO: will fail for multi-part requests
-        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
-            String name = (String) e.nextElement();
-            String value = request.getParameter(name);
+        Map requestParameters = page.getContext().getRequestParameterMap();
+
+        for (Iterator i = requestParameters.entrySet().iterator(); i.hasNext();) {
+            Map.Entry entry = (Map.Entry) i.next();
+            String name = entry.getKey().toString();
+            String value = entry.getValue().toString();
 
             if (StringUtils.isNotBlank(value)) {
 
@@ -959,11 +974,11 @@ public class ClickServlet extends HttpServlet {
                             || Number.class.isAssignableFrom(type)
                             || Boolean.class.isAssignableFrom(type))) {
 
-                        if (context == null) {
-                            context = Ognl.createDefaultContext(page, null, getTypeConverter());
+                        if (ognlContext == null) {
+                            ognlContext = Ognl.createDefaultContext(page, null, getTypeConverter());
                         }
 
-                        PropertyUtils.setValueOgnl(page, name, value, context);
+                        PropertyUtils.setValueOgnl(page, name, value, ognlContext);
 
                         if (logger.isTraceEnabled()) {
                             logger.trace("   auto bound variable: " + name + "=" + value);
@@ -1453,6 +1468,15 @@ public class ClickServlet extends HttpServlet {
          */
         String getCharset() {
             return clickApp.getCharset();
+        }
+
+        /**
+         * Return the Click application FileItemFactory.
+         *
+         * @return the application FileItemFactory
+         */
+        FileItemFactory getFileItemFactory() {
+            return clickApp.getFileItemFactory();
         }
 
         /**
