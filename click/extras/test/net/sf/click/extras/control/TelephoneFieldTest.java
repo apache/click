@@ -8,13 +8,11 @@ public class TelephoneFieldTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         TelephoneField telephoneField = new TelephoneField("telephone");
         assertEquals("telephone", telephoneField.getName());
         
-        telephoneField.setContext(context);
-
         request.getParameterMap().put("telephone", "02 8734 7653");
         
         assertTrue(telephoneField.onProcess());

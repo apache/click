@@ -8,13 +8,11 @@ public class IntegerFieldTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         IntegerField intField = new IntegerField("id");
         assertEquals("id", intField.getName());
         
-        intField.setContext(context);
-
         request.getParameterMap().put("id", "1234");
         
         assertTrue(intField.onProcess());

@@ -21,15 +21,13 @@ public class DoubleFieldTest extends TestCase {
 
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
 
         DoubleField doubleField = new DoubleField("id");
         assertEquals("id", doubleField.getName());
         
         assertEquals(new Double(Double.POSITIVE_INFINITY), new Double(doubleField.getMaxValue()));
         assertEquals(new Double(Double.NEGATIVE_INFINITY), new Double(doubleField.getMinValue()));
-
-        doubleField.setContext(context);
 
         // Test not required, positive value
         request.getParameterMap().put("id", "1234");
@@ -139,10 +137,9 @@ public class DoubleFieldTest extends TestCase {
 
     public void testLocaleServerENClientDE() {
         MockRequest request = new MockRequest(Locale.GERMANY);
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
 
         DoubleField doubleField = new DoubleField("id");
-        doubleField.setContext(context);
 
         // German uses ',' as the decimal separator
         // German 123,4 => double 123.4

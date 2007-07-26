@@ -1,26 +1,24 @@
 package net.sf.click.extras.control;
 
+import junit.framework.TestCase;
 import net.sf.click.MockContext;
 import net.sf.click.MockRequest;
-import junit.framework.TestCase;
 
 public class EmailFieldTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         EmailField emailField = new EmailField("email");
         assertEquals("email", emailField.getName());
         
-        emailField.setContext(context);
-
-        request.getParameterMap().put("email", "username@server");
+        request.getParameterMap().put("email", "username@server.com");
         
         assertTrue(emailField.onProcess());
         assertTrue(emailField.isValid());
-        assertEquals("username@server", emailField.getValue());
-        assertEquals("username@server", emailField.getValueObject());
+        assertEquals("username@server.com", emailField.getValue());
+        assertEquals("username@server.com", emailField.getValueObject());
         
         request.getParameterMap().put("email", "username@");
         
@@ -48,33 +46,33 @@ public class EmailFieldTest extends TestCase {
         assertEquals("", emailField.getValue());
         assertEquals(null, emailField.getValueObject());
         
-        request.getParameterMap().put("email", "username@server");
+        request.getParameterMap().put("email", "username@server.com");
         
         emailField.setMinLength(10);
         assertTrue(emailField.onProcess());
         assertTrue(emailField.isValid());
-        assertEquals("username@server", emailField.getValue());
-        assertEquals("username@server", emailField.getValueObject());
+        assertEquals("username@server.com", emailField.getValue());
+        assertEquals("username@server.com", emailField.getValueObject());
                 
         emailField.setMinLength(20);
         assertTrue(emailField.onProcess());
         assertFalse(emailField.isValid());
-        assertEquals("username@server", emailField.getValue());
-        assertEquals("username@server", emailField.getValueObject());   
+        assertEquals("username@server.com", emailField.getValue());
+        assertEquals("username@server.com", emailField.getValueObject());   
         
         emailField.setMinLength(0);
         
         emailField.setMaxLength(20);
         assertTrue(emailField.onProcess());
         assertTrue(emailField.isValid());
-        assertEquals("username@server", emailField.getValue());
-        assertEquals("username@server", emailField.getValueObject());
+        assertEquals("username@server.com", emailField.getValue());
+        assertEquals("username@server.com", emailField.getValueObject());
                 
         emailField.setMaxLength(10);
         assertTrue(emailField.onProcess());
         assertFalse(emailField.isValid());
-        assertEquals("username@server", emailField.getValue());
-        assertEquals("username@server", emailField.getValueObject());   
+        assertEquals("username@server.com", emailField.getValue());
+        assertEquals("username@server.com", emailField.getValueObject());   
     }
 
 }
