@@ -1,27 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
 <menu>
-   <menu label="A Menu" path="#">
-      <menu label="A 1 Menu" path="menu/menu-a1.htm" title="Menu item A1"/>
-      <menu label="A 2 Menu" path="menu/menu-a2.htm" title="Menu item A2"/>
-      <menu label="A 3 Menu" path="menu/menu-a3.htm" title="Menu item A3"/>
-      <menu separator="true"/>
-      <menu label="A 4 Menu" path="menu/menu-a4.htm" title="Menu item A4"/>
-      <menu label="A 5 Menu" path="menu/menu-a5.htm" title="Menu item A5"/>
-   </menu>
-   <menu label="B Menu" path="#">
-      <menu label="B 1 Menu" path="menu/menu-b1.htm" title="Menu item B1"/>
-      <menu label="B 2 Menu" path="menu/menu-b2.htm" title="Menu item B2"/>
-      <menu separator="true"/>
-      <menu label="B 3 Menu" path="menu/menu-b3.htm" title="Menu item B3"/>
-      <menu label="B 4 Menu" path="menu/menu-b4.htm" title="Menu item B4"/>
-      <menu separator="true"/>
-      <menu label="B 5 Menu" path="menu/menu-b5.htm" title="Menu item B5"/>
-      <menu label="B 6 Menu" path="menu/menu-b6.htm" title="Menu item B6"/>
-   </menu>
-   <menu label="C Menu" path="#">
-      <menu label="C 1 Menu" path="menu/menu-c1.htm" title="Menu item C1"/>
-      <menu label="C 2 Menu" path="menu/menu-c2.htm" title="Menu item C2"/>
-      <menu label="C 3 Menu" path="menu/menu-c3.htm" title="Menu item C3"/>
-      <menu label="C 4 Menu" path="menu/menu-c4.htm" title="Menu item C4"/>
-   </menu>
+	<menu label=" Home" path="home.htm" imageSrc="/images/icons-16px/home.png"/>
+
+	<menu label="Intro Examples" path="#">
+    	<menu label="Hello World" path="introduction/hello-world.htm"/>
+		<menu label="Control Listener" path="introduction/control-listener.htm"/>
+		<menu separator="true"/>
+		<menu label="Simple Table" path="introduction/simple-table.htm"/>
+		<menu label="Advanced Table" path="introduction/advanced-table.htm"/>
+		<menu separator="true"/>
+		<menu label="Simple Form" path="introduction/simple-form.htm"/>
+		<menu label="Advanced Form" path="introduction/advanced-form.htm"/>
+	</menu>
+   
+	<menu label="General" path="#">
+		<menu label="Direct Page" path="direct-page.htm"/>
+		<menu label="Exception Demo" path="exception.htm"/>
+		<menu label="Flash Attribute" path="flash.htm"/>
+		<menu label="JSP Page" path="jsp/customer-table.htm"/>
+		<menu label="Page Security" path="security/secure.htm"/>
+		<menu separator="true"/>
+		<menu label="Page Navigation" path="page-navigation.htm"/>
+		<menu label="Page Flow" path="pageflow/start-page.htm"/>
+		<menu separator="true"/>
+		<menu label="AJAX Dynamic Select" path="ajax/ajax.htm"/>
+		<menu label="AJAX Live Grid" path="ajax/ajax-live-grid.htm"/>
+		<menu separator="true"/>
+      	<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
+      	<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
+		<menu label="Velocity Action Table" path="control/action-table.htm"/>
+	</menu>
+	
+   	<menu label="Forms" path="#">
+		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
+		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
+		<menu separator="true"/>
+		<menu label="Form Layout" path="form/form-layout.htm"/>
+		<menu label="Form Properties" path="form/form-properties.htm"/>
+		<menu label="Search Form" path="form/search-form.htm"/>
+		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
+   	</menu>
+   
+   	<menu label="Table" path="#">
+		<menu label="Edit Table" path="table/edit-table.htm"/>
+		<menu label="FormTable" path="table/form-table.htm"/>
+		<menu label="Table Decorator" path="table/table-decorator.htm"/>
+		<menu label="Table Paging" path="table/table-paging.htm"/>
+		<menu label="Table Sorting" path="table/table-sorting.htm"/>
+		<menu label="Table Styles" path="table/table-styles.htm"/>
+   	</menu>
+   
+	<menu label="Controls" path="#">
+     	<menu label="Action Controls" path="control/action-demo.htm"/>
+		<menu label="CheckList" path="control/check-list-demo.htm"/>
+		<menu label="FieldSet" path="control/field-set-demo.htm"/>
+		<menu label="FileField" path="control/file-upload.htm"/>
+		<menu label="ImageSubmit" path="control/image-demo.htm"/>
+		<menu label="Menu" path="menu/menu-a1.htm"/>
+		<menu label="PickList" path="control/pick-list-demo.htm"/>
+		<menu label="RegexField" path="control/regex-demo.htm"/>
+		<menu label="RichTextArea" path="control/email-form.htm"/>
+		<menu label="Select" path="control/select-demo.htm"/>
+   	</menu>
+
+   	<menu label="Tree" path="#">
+		<menu label="Basic Tree" path="tree/plain-tree-page.htm"/>
+		<menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
+		<menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
+   	</menu>
+
+   	<menu label="Panel" path="#">
+		<menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
+		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
+		<menu label="List Panel" path="panel/list-panel-demo.htm"/>
+		<menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
+   	</menu>
+   
+	<menu label="Charts" path="#">
+		<menu label="Bar Chart" path="graph/bar-chart.htm"/>
+		<menu label="Line Chart" path="graph/line-chart.htm"/>
+		<menu label="Pie Chart" path="graph/pie-chart.htm"/>
+	</menu>
+   
+	<menu label="Cayenne" path="#">
+		<menu label="CayenneForm" path="cayenne/cayenne-form-page.htm"/>
+		<menu label="TabbedCayenneForm" path="cayenne/tabbed-cayenne-form-page.htm"/>
+	</menu>
+   
 </menu>
