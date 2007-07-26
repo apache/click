@@ -121,7 +121,7 @@ public class ErrorPage extends Page {
                                 getContext().getRequest(),
                                 getContext().getServletContext());
 
-            addModel("errorReport", errorReport.getErrorReport());
+            addModel("errorReport", errorReport);
         }
     }
 
