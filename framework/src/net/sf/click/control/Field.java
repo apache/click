@@ -17,6 +17,8 @@ package net.sf.click.control;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -178,6 +180,9 @@ public abstract class Field extends AbstractControl {
     /** The parent Form. */
     protected Form form;
 
+    /** The Field help text. */
+    protected String help;
+
     /** The Field label. */
     protected String label;
 
@@ -337,6 +342,65 @@ public abstract class Field extends AbstractControl {
      */
     public void setForm(Form form) {
         this.form = form;
+    }
+
+    /**
+     * Return the field help text.
+     * <p/>
+     * If the help value is null, this method will attempt to find a
+     * localized help message in the parent messages using the key:
+     * <blockquote>
+     * <tt>getName() + ".help"</tt>
+     * </blockquote>
+     * If not found then the message will be looked up in the
+     * <tt>/click-control.properties</tt> file using the same key.
+     * <p/>
+     * For examle given a <tt>CustomerPage</tt> with the properties file
+     * <tt>CustomerPage.properties</tt>:
+     *
+     * <pre class="codeConfig">
+     * <span class="st">name</span>.label=<span class="red">Customer Name</span>
+     * <span class="st">name</span>.help=<span class="red">Full name or Business name</span> </pre>
+     *
+     * The page TextField code:
+     * <pre class="codeJava">
+     * <span class="kw">public class</span> CustomerPage <span class="kw">extends</span> Page {
+     *     TextField nameField = <span class="kw">new</span> TextField(<span class="st">"name"</span>);
+     *     ..
+     * } </pre>
+     *
+     * Will render the TextField label and title properties as:
+     * <pre class="codeHtml">
+     * &lt;td&gt;&lt;label&gt;<span class="red">Customer Name</span>&lt;/label&gt;&lt;/td&gt;
+     * &lt;td&gt;&lt;input type="text" name="<span class="st">name</span>"/&gt; &lt;span="<span class="red">Full name or Business name</span>"/&gt;/td&gt; </pre>
+     *
+     * How the help text is rendered is depends upon the Field subclass.
+     *
+     * @return the help text of the Field
+     */
+    public String getHelp() {
+        if (help == null) {
+            help = getMessage(getName() + ".help");
+
+            if (help != null) {
+                if (help.indexOf("$context") != -1) {
+                    help = StringUtils.replace(help, "$context", getContext().getRequest().getContextPath());
+
+                } else if (help.indexOf("${context}") != -1) {
+                    help = StringUtils.replace(help, "${context}", getContext().getRequest().getContextPath());
+                }
+            }
+        }
+        return help;
+    }
+
+    /**
+     * Set the Field help text.
+     *
+     * @param help the help text of the Field
+     */
+    public void setHelp(String help) {
+        this.help = help;
     }
 
     /**
@@ -751,6 +815,15 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * additional initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+    }
+
+    /**
      * This method processes the page request returning true to continue
      * processing or false otherwise. The Field <tt>onProcess()</tt> method is
      * typically invoked by the Form <tt>onProcess()</tt> method when
@@ -774,11 +847,6 @@ public abstract class Field extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined, for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         bindRequestValue();
 
         if (getValidate()) {
