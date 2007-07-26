@@ -29,7 +29,6 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
-import net.sf.click.util.MessagesMap;
 import net.sf.click.util.SessionMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -114,17 +113,11 @@ import org.apache.commons.lang.StringUtils;
  * @author Phil Barnes
  * @author Malcolm Edgar
  */
-public class Panel implements Control {
+public class Panel extends AbstractControl {
 
     private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
-
-    /** The Panel attributes Map. */
-    protected Map attributes;
-
-    /** A request context. */
-    protected transient Context context;
 
     /** The list of panel controls. */
     protected List controls;
@@ -135,20 +128,11 @@ public class Panel implements Control {
     /** The (localized) label of this panel. */
     protected String label;
 
-    /** The map of localized messages for this panel. */
-    protected Map messages;
-
     /** A temporary storage for model objects until the Page is set. */
     protected Map model = new HashMap();
 
-    /** The name of the control. */
-    protected String name;
-
     /** The list of sub panels. */
     protected List panels = new ArrayList(5);
-
-    /** The control's parent. */
-    protected transient Object parent;
 
     /** The path of the Velocity template to render. */
     protected String template;
@@ -199,74 +183,6 @@ public class Panel implements Control {
     // ------------------------------------------------------------- Properties
 
     /**
-     * Return the Panel HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of panel HTML attribute
-     * @return the Panel HTML attribute
-     */
-    public String getAttribute(String name) {
-        if (attributes != null) {
-            return (String) attributes.get(name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the Panels with the given HTML attribute name and value. These
-     * attributes will be rendered as HTML attributes.
-     * <p/>
-     * If there is an existing named attribute in the Panel it will be replaced
-     * with the new value. If the given attribute value is null, any existing
-     * attribute will be removed.
-     *
-     * @param name the name of the field HTML attribute
-     * @param value the value of the field HTML attribute
-     * @throws IllegalArgumentException if attribute name is null
-     */
-    public void setAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-
-        if (value != null) {
-            attributes.put(name, value);
-        } else {
-            attributes.remove(name);
-        }
-    }
-
-    /**
-     * Return the Panel attributes Map.
-     *
-     * @return the panel attributes Map.
-     */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-        return attributes;
-    }
-
-    /**
-     * Return true if the Panel has attributes or false otherwise.
-     *
-     * @return true if the Panel has attributes on false otherwise
-     */
-    public boolean hasAttributes() {
-        if (attributes != null && !attributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Add the control to the panel. The control will be added to the panels model
      * using the controls name as the key. The Controls context property will
      * be set if the context is available. The Controls parent property will
@@ -292,10 +208,6 @@ public class Panel implements Control {
         }
 
         control.setParent(this);
-
-        if (getContext() != null) {
-            control.setContext(getContext());
-        }
     }
 
     /**
@@ -317,35 +229,6 @@ public class Panel implements Control {
      */
     public boolean hasControls() {
         return (controls == null) ? false : !controls.isEmpty();
-    }
-
-    /**
-     * @see net.sf.click.Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return context;
-    }
-
-    /**
-     * @see net.sf.click.Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-
-        if (hasControls()) {
-            for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
-                control.setContext(context);
-            }
-        }
     }
 
     /**
@@ -456,62 +339,6 @@ public class Panel implements Control {
     }
 
     /**
-     * Return a Map of localized messages for the Field.
-     *
-     * @return a Map of localized messages for the Field
-     * @throws IllegalStateException if the context for the Field has not be set
-     */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
-
-            } else {
-                String msg = "Cannot initialize messages as context not set "
-                    + "for panel: " + getName();
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
-    }
-
-    /**
-     * Return the localized message for the given key, or null if not found.
-     * <p/>
-     * This method will attempt to lookup for the localized message in the
-     * parent, which by default represents the Page's resource bundle.
-     * <p/>
-     * If the message was not found, the this method will attempt to look up the
-     * value in the fields class properties file and then finally in the global
-     * controls <tt>/click-control.properties</tt> message properties file.
-     * <p/>
-     * If still not found, this method will return null.
-     *
-     * @param name the name of the message resource
-     * @return the named localized message, or null if not found
-     */
-    public String getMessage(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        String message = null;
-
-        Map parentMessages = ClickUtils.getParentMessages(this);
-        if (parentMessages.containsKey(name)) {
-
-            message = (String) parentMessages.get(name);
-        }
-
-        if (message == null && getMessages().containsKey(name)) {
-            message = (String) getMessages().get(name);
-        }
-
-        return message;
-    }
-
-    /**
      * Add the named object value to the Panels model map.
      *
      * @param name the key name of the object to add
@@ -550,20 +377,6 @@ public class Panel implements Control {
     }
 
     /**
-     * Adds a 'sub-panel' to this panel.  This is useful for 'panels of panels',
-     * in which each Panel will be rendered recursively, allowing advanced
-     * layout functionality.
-     *
-     * @deprecated this method will be removed in Click RC1, please use
-     * addControl() instead
-     *
-     * @param panel the pannel to add
-     */
-    public void addPanel(Panel panel) {
-        addControl(panel);
-    }
-
-    /**
      * Return the list of sub panels associated with this panel. Do not
      * add sub panels using this method, use {@link #addPanel(Panel)} instead.
      *
@@ -574,46 +387,6 @@ public class Panel implements Control {
             panels = new ArrayList();
         }
         return panels;
-    }
-
-    /**
-     * @see Panel#getName()
-     *
-     * @return the name of this panel, to be used to uniquely identify it in the
-     * model context
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name for this panel.  This is used to uniquely identify the panel
-     * in the model context.
-     *
-     * @see Control#setName(String)
-     *
-     * @param name the name of this control
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
     }
 
     /**
@@ -646,6 +419,19 @@ public class Panel implements Control {
     public void onDeploy(ServletContext servletContext) {
     }
 
+
+    /**
+     * Initialize the child controls contained in the panel.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            control.onInit();
+        }
+    }
+
     /**
      * Process the request and invoke the <tt>onProcess()</tt> method of any
      * child controls.
@@ -655,11 +441,6 @@ public class Panel implements Control {
      * @return true or false to abort further processing
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined, for panel: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         if (hasControls()) {
             List controls = getControls();
             for (int i = 0; i < controls.size(); i++) {
@@ -683,10 +464,6 @@ public class Panel implements Control {
      * @return the HTML string representation of the form
      */
     public String toString() {
-        if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
-        }
-
         Context context = getContext();
 
         if (getTemplate() != null) {
