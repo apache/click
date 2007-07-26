@@ -406,6 +406,15 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * additional initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+    }
+
+    /**
      * Return the HTML rendered anchor link string. This method
      * will render the entire anchor link including the tags, the label and
      * any attributes, see {@link #setAttribute(String, String)} for an
