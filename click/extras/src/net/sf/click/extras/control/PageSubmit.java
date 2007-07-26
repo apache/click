@@ -15,7 +15,6 @@
  */
 package net.sf.click.extras.control;
 
-import net.sf.click.Context;
 import net.sf.click.Page;
 import net.sf.click.control.Submit;
 import net.sf.click.util.ClickUtils;
@@ -67,6 +66,8 @@ public class PageSubmit extends Submit {
      */
     public PageSubmit(String name) {
         super(name);
+
+        setListener(this, "onClick");
     }
 
     /**
@@ -77,6 +78,8 @@ public class PageSubmit extends Submit {
      */
     public PageSubmit(String name, String label) {
         super(name, label);
+
+        setListener(this, "onClick");
     }
 
     /**
@@ -87,7 +90,9 @@ public class PageSubmit extends Submit {
      */
     public PageSubmit(String name, Class pageClass) {
         super(name);
+
         setPageClass(pageClass);
+        setListener(this, "onClick");
     }
 
     /**
@@ -100,7 +105,9 @@ public class PageSubmit extends Submit {
      */
     public PageSubmit(String name, String label, Class pageClass) {
         super(name, label);
+
         setPageClass(pageClass);
+        setListener(this, "onClick");
     }
 
     /**
@@ -111,22 +118,10 @@ public class PageSubmit extends Submit {
      */
     public PageSubmit() {
         super();
+        setListener(this, "onClick");
     }
 
     // ------------------------------------------------------ Public Attributes
-
-    /**
-     * Set the context value and initialize the onClick listener.
-     *
-     * @see net.sf.click.Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        super.setContext(context);
-        setListener(this, "onClick");
-    }
 
     /**
      * Return the target page class to redirect to.
