@@ -18,7 +18,6 @@ package net.sf.click;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,6 +41,8 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
 
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
@@ -155,8 +156,11 @@ class ClickApp implements EntityResolver {
     /** The automatically bind controls, request parameters and models flag. */
     private boolean autobinding = true;
 
-    /** The format constructor. */
-    private Constructor formatConstructor;
+    /** The Commons Upload FileItem Factory. */
+    private FileItemFactory fileItemFactory;
+
+    /** The format class. */
+    private Class formatClass;
 
     /** The charcter encoding of this application. */
     private String charset;
@@ -255,6 +259,9 @@ class ClickApp implements EntityResolver {
             // Load the format class
             loadFormatClass(rootElm);
 
+            // Load the Commons Upload file item factory
+            loadFileItemFactory(rootElm);
+
             // Load the pages
             loadPages(rootElm);
 
@@ -326,20 +333,22 @@ class ClickApp implements EntityResolver {
     }
 
     /**
-     * Return a new format object for the given locale.
+     * Return the application FileItemFactory.
      *
-     * @param locale the request locale
-     * @return a new format object for request locale
+     * @return the application FileItemFactory
      */
-    Format getFormat(Locale locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("null locale parameter");
-        }
+    FileItemFactory getFileItemFactory() {
+        return fileItemFactory;
+    }
 
+    /**
+     * Return a new format object.
+     *
+     * @return a new format object
+     */
+    Format getFormat() {
         try {
-            Object[] objectArgs = { locale };
-
-            return (Format) formatConstructor.newInstance(objectArgs);
+            return (Format) formatClass.newInstance();
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -770,8 +779,6 @@ class ClickApp implements EntityResolver {
 
         Element formatElm = getChild(rootElm, "format");
 
-        Class formatClass = null;
-
         if (formatElm != null) {
             String classname = formatElm.getAttribute("classname");
 
@@ -785,14 +792,26 @@ class ClickApp implements EntityResolver {
         } else {
             formatClass = net.sf.click.util.Format.class;
         }
+    }
 
-        try {
-            Class[] classArgs = { Locale.class };
+    private void loadFileItemFactory(Element rootElm) throws Exception {
 
-            formatConstructor = formatClass.getConstructor(classArgs);
+        Element fileItemFactoryElm = getChild(rootElm, "file-item-factory");
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        if (fileItemFactoryElm != null) {
+            String classname = fileItemFactoryElm.getAttribute("classname");
+
+            if (classname == null) {
+                String msg = "'file-item-factory' element missing 'classname' attribute.";
+                throw new RuntimeException(msg);
+            }
+
+            Class fifClass = Class.forName(classname);
+
+            fileItemFactory = (FileItemFactory) fifClass.newInstance();
+
+        } else {
+            fileItemFactory = new DiskFileItemFactory();
         }
     }
 
