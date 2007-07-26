@@ -642,8 +642,7 @@ public class CheckList extends Field {
 
         // TODO: resolve multiple values when multipart/form-data
 
-        String[] values = getContext().getRequest().getParameterValues(
-                getName());
+        String[] values = getContext().getRequestParameterValues(getName());
 
         if (values != null) {
             for (int i = 0; i < values.length; i++) {

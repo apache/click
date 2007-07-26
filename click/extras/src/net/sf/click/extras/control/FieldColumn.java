@@ -168,7 +168,6 @@ public class FieldColumn extends Column {
         }
 
         field.setName(getName() + "_" + rowIndex);
-        field.setContext(context);
 
         if (getTable() instanceof FormTable) {
             FormTable formTable = (FormTable) getTable();

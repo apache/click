@@ -361,7 +361,6 @@ public class LinkDecorator implements Decorator {
      * @param value the value of the link
      */
     protected void initLink(AbstractLink link, Context context, Object value) {
-        link.setContext(context);
         link.setId(null);
 
         if (link instanceof ActionLink) {
@@ -390,8 +389,6 @@ public class LinkDecorator implements Decorator {
      * @param value the value of the button
      */
     protected void initButton(ActionButton button, Context context, Object value) {
-        button.setContext(context);
-
         button.setValueObject(value);
 
         button.setParameter(Table.PAGE, String.valueOf(table.getPageNumber()));
@@ -459,6 +456,9 @@ public class LinkDecorator implements Decorator {
         public void onDeploy(ServletContext servletContext) {
         }
 
+        public void onInit() {
+        }
+
         public boolean onProcess() {
             if (anyLinkOrButtonClicked()) {
                 String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
@@ -502,8 +502,14 @@ public class LinkDecorator implements Decorator {
                     AbstractLink link = linksArray[i];
                     if (link instanceof ActionLink) {
                         ActionLink actionLink = (ActionLink) link;
-                        clicked =
-                                actionLink.getName().equals(table.getContext().getRequestParameter(ActionLink.ACTION_LINK));
+
+                        String name = actionLink.getName();
+                        if (name != null) {
+                            clicked = name.equals(table.getContext().getRequestParameter(ActionLink.ACTION_LINK));
+                        } else {
+                            throw new IllegalStateException("ActionLink name not defined");
+                        }
+
                         if (clicked) {
                             return clicked;
                         }
@@ -515,8 +521,14 @@ public class LinkDecorator implements Decorator {
             if (buttonsArray != null) {
                 for (int i = 0; i < buttonsArray.length; i++) {
                     ActionButton button = buttonsArray[i];
-                    clicked =
-                            button.getName().equals(table.getContext().getRequestParameter(ActionButton.ACTION_BUTTON));
+
+                    String name = button.getName();
+                    if (name != null) {
+                        clicked = name.equals(table.getContext().getRequestParameter(ActionButton.ACTION_BUTTON));
+                    } else {
+                        throw new IllegalStateException("ActionButton name not defined");
+                    }
+
                     if (clicked) {
                         return clicked;
                     }

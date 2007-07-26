@@ -147,7 +147,7 @@ public class EmailField extends TextField {
      * @return the HTML head import statements for the RegexField.js
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(EMAILFIELD_IMPORTS, "$", path);
     }
