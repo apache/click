@@ -39,6 +39,7 @@ public class FileUpload extends BorderPage {
     }
 
     public boolean onOkClick() {
+
         if (form.isValid()) {
             addModel("fileItem", fileField.getFileItem());
             addModel("fileDesc", descField.getValue());

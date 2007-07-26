@@ -10,6 +10,6 @@ import net.sf.click.extras.control.Menu;
  */
 public class MenuPage extends BorderPage {
 
-    public Menu rootMenu = new Menu();
+    public Menu rootMenu = Menu.getRootMenu();
 
 }
