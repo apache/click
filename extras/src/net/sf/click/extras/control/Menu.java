@@ -68,7 +68,7 @@ import org.w3c.dom.NodeList;
  * <pre class="codeJava">
  * <span class="kw">public class</span> MenuPage <span class="kw">extends</span> Page {
  *
- *     <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
+ *     <span class="kw">public</span> Menu rootMenu = Menu.getRootMenu();
  *
  *     <span class="kw">public</span> ActionLink logoutLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onLogoutClick"</span>);
  *
@@ -174,8 +174,6 @@ public class Menu implements Control {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Object LOAD_LOCK = new Object();
-
     /**
      * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
      */
@@ -197,9 +195,6 @@ public class Menu implements Control {
 
     /** The list of submenu items. */
     protected List children = new ArrayList();
-
-    /** The request context. */
-    protected transient Context context;
 
     /**
      * The menu path is to an external page flag, by default this value is false.
@@ -240,9 +235,6 @@ public class Menu implements Control {
     /** The list of valid role names. */
     protected List roles = new ArrayList();
 
-    /** The menu is selected flag. */
-    protected boolean selected;
-
     /** The menu separator flag. */
     protected boolean separator;
 
@@ -252,26 +244,21 @@ public class Menu implements Control {
     /** The tooltip title attribute. */
     protected String title = "";
 
-    /** The is root menu item flag. */
-    protected boolean isRootMenu;
-
     // ----------------------------------------------------------- Constructors
 
     /**
-     * Create a new root Menu instance.
+     * Create a root Menu instance.
      */
     public Menu() {
-        isRootMenu = true;
     }
 
     /**
-     * Create a new root Menu instance with the given name.
+     * Create a new Menu instance with the given name.
      *
      * @param name the name of the menu
      */
     public Menu(String name) {
         setName(name);
-        isRootMenu = true;
     }
 
     /**
@@ -337,31 +324,18 @@ public class Menu implements Control {
         }
     }
 
-    /**
-     * Create a new Menu from the given menu. Provides a deep copy constructor.
-     *
-     * @param menu the menu to copy
-     */
-    protected Menu(Menu menu) {
-        if (menu == null) {
-            throw new IllegalArgumentException("Null menu parameter");
-        }
-        setLabel(menu.getLabel());
-        setImageSrc(menu.getImageSrc());
-        setName(menu.getName());
-        setPath(menu.getPath());
-        setExternal(menu.isExternal());
-        setSeparator(menu.isSeparator());
-        setTarget(menu.getTarget());
-        setTitle(menu.getTitle());
-        setRoles(menu.getRoles());
-        setPages(menu.getPages());
-        setSelected(menu.isSelected());
+    // ---------------------------------------------------- Constructor Methods
 
-        for (int i = 0; i < menu.getChildren().size(); i++) {
-            Menu menuChild = (Menu) menu.getChildren().get(i);
-            getChildren().add(new Menu(menuChild));
+    /**
+     * Return root menu item defined in the WEB-INF/menu.xml file.
+     *
+     * @return the root menu item defined in the WEB-INF/menu.xml file
+     */
+    public static Menu getRootMenu() {
+        if (rootMenu == null) {
+            rootMenu = loadRootMenu();
         }
+        return rootMenu;
     }
 
     // ------------------------------------------------------ Public Attributes
@@ -381,34 +355,7 @@ public class Menu implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
-        return context;
-    }
-
-    /**
-     * Set the request context. If the Menu item is the root menu item,
-     * this method will load the root Menu's children elements.
-     *
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-
-        if (isRootMenu()) {
-            Menu rootMenu = getRootMenu(context);
-            setLabel(rootMenu.getLabel());
-            setPath(rootMenu.getPath());
-            setTitle(rootMenu.getTitle());
-            setRoles(rootMenu.getRoles());
-            setPages(rootMenu.getPages());
-            setSelected(rootMenu.isSelected());
-            children.addAll(rootMenu.getChildren());
-        }
+        return Context.getThreadLocalContext();
     }
 
     /**
@@ -481,8 +428,7 @@ public class Menu implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
+                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
 
             } else {
                 String msg = "Cannot initialize messages as context not set "
@@ -550,20 +496,39 @@ public class Menu implements Control {
     }
 
     /**
-     * Return true if the Menu is root menu time.
-     *
-     * @return true if the Menu is root menu time
-     */
-    public boolean isRootMenu() {
-        return isRootMenu;
-    }
-
-    /**
      * Return true if the Menu item is selected.
      *
      * @return true if the Menu item is selected
      */
     public boolean isSelected() {
+        if (this == rootMenu) {
+            return true;
+        }
+
+        final String pageToView = getContext().getResourcePath();
+
+        boolean selected = false;
+
+        if (getPages().contains(pageToView)) {
+            selected = true;
+
+        } else {
+            String path = getPath();
+            if (path != null) {
+                path = path.startsWith("/") ? path : "/" + path;
+                selected = path.equals(pageToView);
+            } else {
+                selected = false;
+            }
+        }
+
+        for (int i = 0; i < getChildren().size(); i++) {
+            Menu menu = (Menu) getChildren().get(i);
+            if (menu.isSelected()) {
+                selected = true;
+            }
+        }
+
         return selected;
     }
 
@@ -627,15 +592,6 @@ public class Menu implements Control {
     }
 
     /**
-     * Set the selected status of the Menu item.
-     *
-     * @param selected the selected status of the Menu item.
-     */
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
-    /**
      * Return the target attribute of the Menu item.
      *
      * @return the target attribute of the Menu item
@@ -682,7 +638,6 @@ public class Menu implements Control {
      */
     public String getHtmlImports() {
         String path = getContext().getRequest().getContextPath();
-
         return StringUtils.replace(HTML_IMPORTS, "$", path);
     }
 
@@ -783,6 +738,15 @@ public class Menu implements Control {
             };
 
         ClickUtils.deployFiles(servletContext, files, "click");
+    }
+
+    /**
+     * This method does nothing. Subclasses may override this method to perform
+     * additional initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
     }
 
     /**
@@ -889,6 +853,8 @@ public class Menu implements Control {
         return null;
     }
 
+    // ------------------------------------------------------ Protected Methods
+
     /**
      * Return a copy of the Applications root Menu as defined in the
      * configuration file "<tt>/WEB-INF/menu.xml</tt>", with the Control
@@ -896,87 +862,36 @@ public class Menu implements Control {
      * <p/>
      * The returned root menu is always selected.
      *
-     * @param context the request context
      * @return a copy of the application's root Menu
      */
-    public static synchronized Menu getRootMenu(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
+    protected static Menu loadRootMenu() {
+        Context context = Context.getThreadLocalContext();
+
+        Menu menu = new Menu("rootMenu");
+
+        ServletContext servletContext = context.getServletContext();
+        InputStream inputStream =
+            servletContext.getResourceAsStream(CONFIG_FILE);
+
+        if (inputStream == null) {
+            String msg = "could not find configuration file:" + CONFIG_FILE;
+            throw new RuntimeException(msg);
         }
 
-        synchronized (LOAD_LOCK) {
-            if (rootMenu == null) {
-                Menu menu = new Menu("rootMenu");
+        Document document = ClickUtils.buildDocument(inputStream);
 
-                ServletContext servletContext = context.getServletContext();
-                InputStream inputStream =
-                    servletContext.getResourceAsStream(CONFIG_FILE);
+        Element rootElm = document.getDocumentElement();
 
-                if (inputStream == null) {
-                    String msg =
-                        "could not find configuration file:" + CONFIG_FILE;
-                    throw new RuntimeException(msg);
-                }
+        NodeList list = rootElm.getChildNodes();
 
-                Document document = ClickUtils.buildDocument(inputStream);
-
-                Element rootElm = document.getDocumentElement();
-
-                NodeList list = rootElm.getChildNodes();
-
-                for (int i = 0; i < list.getLength(); i++) {
-                    Node node = list.item(i);
-                    if (node instanceof Element) {
-                        menu.getChildren().add(new Menu((Element) node));
-                    }
-                }
-
-                rootMenu = menu;
+        for (int i = 0; i < list.getLength(); i++) {
+            Node node = list.item(i);
+            if (node instanceof Element) {
+                menu.getChildren().add(new Menu((Element) node));
             }
         }
-
-        Menu menu = new Menu(rootMenu);
-
-        menu.select(context);
-        menu.setSelected(true);
 
         return menu;
-    }
-
-    /**
-     * Set the selected status of the menu and its children depending upon
-     * the current context's path. If the path equals the menus path the
-     * menu will be selected.
-     * <p/>
-     * If any of these Menu items pages paths match the current request then
-     * the Menu item will be selected.
-     *
-     * @param context the request context
-     */
-    public void select(Context context) {
-        final String pageToView = context.getResourcePath();
-
-        if (pages.contains(pageToView)) {
-            selected = true;
-
-        } else {
-            String path = getPath();
-            if (path != null) {
-                path = path.startsWith("/") ? path : "/" + path;
-                selected = path.equals(pageToView);
-            } else {
-                selected = false;
-            }
-        }
-
-        for (int i = 0; i < getChildren().size(); i++) {
-            Menu menu = (Menu) getChildren().get(i);
-            menu.select(context);
-            menu.setContext(context);
-            if (menu.isSelected()) {
-                selected = true;
-            }
-        }
     }
 
 }

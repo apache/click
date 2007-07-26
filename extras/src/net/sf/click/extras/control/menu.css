@@ -1,81 +1,96 @@
 /* Menu Control css */
 
 #menuTable #menu {
-    font: 11px verdana, arial, helvetica, lucida-sans, sans-serif;
+    font: 11px arial, helvetica, lucida-sans, sans-serif;
     line-height: 15px; 
-    height: 27px; 
-    background: #707070; 
-    color: #707070; 
+    height: 28px; 
+    background: #c0c0c0; 
+    color: #c0c0c0; 
     padding: 0; 
-    margin: 0
+    margin: 0;
 }
-.menustyle .menubar {
+.menubar {
     list-style-type: none; 
     margin: 0; 
     padding: 0; 
 } 
-.menustyle .topitem {
-    font-weight: normal; 
-    float: left; 
-    display: block; 
-    height: 24px;  
+.topitem {
+	font-weight: normal;
+	float: left;
+	display: block;
+	margin-top: 1px;
+	margin-left: 0px;
 } 
-.menustyle .topitem a, .menustyle .topitem a:visited {
-    font-weight: bold; 
-    color: white; 
-    padding-left:15px; 
-    padding-right:14px; 
+.topitem a, .topitem a:visited {
+	font-weight: normal;
+	color: #000; 
+    padding-left:12px; 
+    padding-right:12px; 
     padding-top:4px; 
-    padding-bottom:5px; 
+    padding-bottom:4px; 
     display: block; 
     text-decoration: none; 
-    border: 1px solid #707070; 
+    border: 1px solid #c0c0c0; 
+    vertical-align: middle;
 }
-.menustyle .topitem a:hover {
-    text-decoration: none; 
-    background: #fff; 
-    color: #000; 
-    border: 1px solid #3699dd; 
+.topitem a:hover {
+	font-weight: normal;
+	text-decoration: none; 
+    background: #c0c0c0; 
+    color: blue; 
+    border-top: 1px solid #f0f0f0; 
+    border-left: 1px solid #f0f0f0; 
+    border-bottom: 1px solid #707070; 
+    border-right: 1px solid #707070; 
 }
-.menustyle .selected {
+.selected {
     font-weight: normal; 
     background: #afaea9 repeat-x left; 
 }
+img.link {
+	vertical-align: middle;
+}
 
-.menustyle ul.submenu {
+ul.submenu {
     list-style-type: none; 
     position: absolute; 
     margin: 0; 
     padding: 0; 
     display: none; 
-    width: 180px;  
+    width: 160px;  
     z-index: 255;
+    border-top: 1px solid #f0f0f0; 
 } 
-.menustyle ul.submenu li {
-    padding: 0; 
+ul.submenu li {
+	padding: 0; 
     margin: 0; 
     font-size: 11px;
 } 
-.menustyle ul.submenu li a, .menustyle ul.submenu li a:visited {
-    padding: 3px 3px 3px 16px; 
+ul.submenu li a, ul.submenu li a:visited {
+    vertical-align: middle;
+	padding: 3px 3px 0px 16px; 
     color: #000; 
     border: 1px solid #c0c0c0; 
     text-decoration: none; 
     margin: 0;
-} 
-.menustyle ul.submenu li a:hover {
-    padding: 3px 3px 3px 16px; 
+}
+ul.submenu li img {
+	vertical-align: middle;
+}
+ul.submenu li a:hover {
+    vertical-align: middle;
+	padding: 3px 3px 0px 16px; 
     text-decoration: none; 
     background: #fff; 
     color: #000; 
     border: 1px solid #3699dd; 
-} 
-.menustyle li:hover ul, .menustyle li.over ul {
+}
+li:hover ul, li.over ul {
     margin: 0; 
     padding: 4px; 
     display: block; 
     background: #c0c0c0;
 } 
-.menustyle #dmenu li>ul {
+#dmenu li>ul {
     top: auto; left: auto;
 }
