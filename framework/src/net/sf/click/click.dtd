@@ -34,7 +34,7 @@
  
   <!-- Commons Upload FileItem Factory class. -->
   <!ELEMENT file-item-factory (#PCDATA)>
-   <!ATTLIST file-item-factory classname CDATA #FIXED "org.apache.commons.fileupload.disk.DiskFileItem">
+   <!ATTLIST file-item-factory classname CDATA #FIXED "org.apache.commons.fileupload.disk.DiskFileItemFactory">
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
