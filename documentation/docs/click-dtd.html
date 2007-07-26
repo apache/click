@@ -17,7 +17,7 @@ Click application XML descriptor Documentation Type Definition (DTD):
 
 <pre class="codeDtd">
 &lt;!-- The Click Application (click.xml) Document Type Definition. --&gt;
-&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">file-item-factory</span>?, <span class="blue">mode</span>?, <span class="blue">controls</span>?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (<span class="blue">pages</span>?, <span class="blue">headers</span>?, <span class="blue">format</span>?, <span class="blue">mode</span>?, <span class="blue">controls</span>?, <span class="blue">file-item-factory</span>?)&gt;
   &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">charset</span> CDATA #IMPLIED&gt;
   &lt;!ATTLIST <span class="red">click-app</span> <span class="blue">locale</span> CDATA #IMPLIED&gt;
 
@@ -50,10 +50,6 @@ Click application XML descriptor Documentation Type Definition (DTD):
   &lt;!ELEMENT <span class="red">format</span> (#PCDATA)&gt;
     &lt;!ATTLIST <span class="red">format</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">net.sf.click.util.Format</span>"&gt;
  
-  &lt;!-- Commons Upload FileItem Factory class. --&gt;
-  &lt;!ELEMENT <span class="red">file-item-factory</span> (#PCDATA)&gt;
-    &lt;!ATTLIST <span class="red">file-item-factory</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.commons.fileupload.disk.DiskFileItem</span>"&gt;
- 
   &lt;!-- Application mode, which configures logging and caching. --&gt;
   &lt;!ELEMENT <span class="red">mode</span> (#PCDATA)&gt;
      &lt;!ATTLIST <span class="red">mode</span> <span class="blue">value</span> (production|profile|development|debug|trace) "<span class="green">development</span>"&gt;
@@ -64,6 +60,15 @@ Click application XML descriptor Documentation Type Definition (DTD):
     &lt;-- Deployable control class. --&gt;
     &lt;!ELEMENT <span class="red">control</span> (#PCDATA)&gt;
       &lt;!ATTLIST <span class="red">control</span> <span class="blue">classname</span> CDATA #REQUIRED&gt;
+
+  &lt;!-- Commons Upload FileItem Factory class. --&gt;
+  &lt;!ELEMENT <span class="red">file-item-factory</span> (property*)&gt;
+    &lt;!ATTLIST <span class="red">file-item-factory</span> <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.commons.fileupload.disk.DiskFileItemFactory</span>"&gt;
+ 
+    &lt;!-- FileItem Factory property set after factory creation. --&gt;
+    &lt;!ELEMENT <span class="red">property</span> (#PCDATA)&gt;
+      &lt;!ATTLIST <span class="red">property</span> <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST <span class="red">property</span> <span class="blue">value</span> CDATA #REQUIRED&gt;
 </pre>
 </body>
 </html>
