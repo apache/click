@@ -8,13 +8,11 @@ public class TextFieldTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         TextField textField = new TextField("text");
         assertEquals("text", textField.getName());
         
-        textField.setContext(context);
-
         request.getParameterMap().put("text", "textvalue");
         
         assertTrue(textField.onProcess());

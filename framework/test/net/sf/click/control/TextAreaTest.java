@@ -8,13 +8,11 @@ public class TextAreaTest extends TestCase {
     
     public void testOnProcess() {
         MockRequest request = new MockRequest();
-        MockContext context = new MockContext(request);
+        MockContext.initContext(request);
         
         TextArea textArea = new TextArea("text");
         assertEquals("text", textArea.getName());
         
-        textArea.setContext(context);
-
         request.getParameterMap().put("text", "textvalue");
         
         assertTrue(textArea.onProcess());
