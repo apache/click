@@ -559,6 +559,11 @@ public class PropertySelect extends Select {
                     label = getDecorator().render(dataObject, getContext());
 
                 } else {
+                    if (getOptionLabel() == null) {
+                        String msg =
+                            "optionLabel not defined for PropertySelect: " + getName();
+                        throw new IllegalStateException(msg);
+                    }
                     label = PropertyUtils.getValue(dataObject, getOptionLabel(), cache);
                 }
 
@@ -574,8 +579,8 @@ public class PropertySelect extends Select {
                 add(option);
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchMethodException nsme) {
+            throw new RuntimeException(nsme);
         }
     }
 
