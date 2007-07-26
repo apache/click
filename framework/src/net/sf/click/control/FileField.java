@@ -20,10 +20,6 @@ import java.text.MessageFormat;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Provides a File Field control: &nbsp; &lt;input type='file'&gt;.
@@ -98,13 +94,6 @@ public class FileField extends Field {
      * after processing a file upload request.
      */
     protected FileItem fileItem;
-
-    /**
-     * The
-     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileUploadBase.html">FileUploadBase</a>
-     * utility, used to process the request.
-     */
-    protected FileUploadBase fileUpload;
 
     // ----------------------------------------------------------- Constructors
 
@@ -185,34 +174,6 @@ public class FileField extends Field {
     }
 
     /**
-     * Return the
-     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileUploadBase.html">FileUploadBase</a>
-     * utility used to process the request. This property is lazy loaded. If
-     * its is not already set it will initialize to
-     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileUpload.html">FileUpload</a>
-     *
-     * @return the file upload utility used to process the request
-     */
-    public FileUploadBase getFileUpload() {
-        if (fileUpload == null) {
-            FileItemFactory factory = new DiskFileItemFactory();
-            fileUpload = new ServletFileUpload(factory);
-        }
-        return fileUpload;
-    }
-
-    /**
-     * Return the
-     * <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileUploadBase.html">FileUploadBase</a>
-     * utility used to process the request.
-     *
-     * @param fileUpload the file upload utility used to process the request
-     */
-    public void setFileUpload(FileUploadBase fileUpload) {
-        this.fileUpload = fileUpload;
-    }
-
-    /**
      * Return the field size.
      *
      * @return the field size
@@ -265,8 +226,7 @@ public class FileField extends Field {
      * submission.
      */
     public void bindRequestValue() {
-        fileItem =
-            (FileItem) getContext().getMultiPartFormData().get(getName());
+        fileItem = (FileItem) getContext().getFileItemMap().get(getName());
     }
 
     /**
@@ -305,6 +265,10 @@ public class FileField extends Field {
         }
 
         buffer.elementEnd();
+
+        if (getHelp() != null) {
+            buffer.append(getHelp());
+        }
 
         return buffer.toString();
     }
