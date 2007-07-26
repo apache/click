@@ -197,11 +197,6 @@ public class Submit extends Button {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        if (getContext() == null) {
-            String msg = "context is not defined for field: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
         bindRequestValue();
 
         if (isClicked()) {

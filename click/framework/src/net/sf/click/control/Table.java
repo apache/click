@@ -26,7 +26,6 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -263,9 +262,6 @@ public class Table extends AbstractControl {
      * query and is used to determine the number of pages which can be
      * displayed.
      */
-    // TODO: need to consider than passed lists will not be indexed from the
-    // start of the query, ie Page 50, wont have 50 pages worth of empty data
-    // in the provided list
     protected int rowCount;
 
     /** The list Table rows. */
@@ -445,20 +441,6 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     */
-    public void setContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
-        }
-        this.context = context;
-        controlLink.setName(getName() + "-controlLink");
-        controlLink.setContext(context);
-    }
-
-    /**
      * Add the given Control to the table. The control will be processed when
      * the Table is processed.
      *
@@ -470,9 +452,6 @@ public class Table extends AbstractControl {
         }
         getControls().add(control);
 
-        if (getContext() != null) {
-            control.setContext(context);
-        }
         control.setParent(this);
     }
 
@@ -577,6 +556,17 @@ public class Table extends AbstractControl {
      */
     public void setListener(Object listener, String method) {
         // Does nothing
+    }
+
+    /**
+     * @see Control#setName(String)
+     *
+     * @param name of the control
+     * @throws IllegalArgumentException if the name is null
+     */
+    public void setName(String name) {
+        super.setName(name);
+        controlLink.setName(getName() + "-controlLink");
     }
 
     /**
@@ -818,6 +808,18 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Initialize the controls contained in the Table.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            control.onInit();
+        }
+    }
+
+    /**
      * Process any Table paging control requests, and process any added Table
      * Controls.
      *
@@ -853,7 +855,6 @@ public class Table extends AbstractControl {
         boolean continueProcessing = true;
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
-            control.setContext(getContext());
             continueProcessing = control.onProcess();
             if (!continueProcessing) {
                 return false;
@@ -966,7 +967,7 @@ public class Table extends AbstractControl {
         final List tableColumns = getColumnList();
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
-            column.renderTableHeader(buffer, context);
+            column.renderTableHeader(buffer, getContext());
             if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
             }
@@ -1042,7 +1043,7 @@ public class Table extends AbstractControl {
 
         for (int j = 0; j < tableColumns.size(); j++) {
             Column column = (Column) tableColumns.get(j);
-            column.renderTableData(row, buffer, context, rowIndex);
+            column.renderTableData(row, buffer, getContext(), rowIndex);
             if (j < tableColumns.size() - 1) {
                 buffer.append("\n");
             }
