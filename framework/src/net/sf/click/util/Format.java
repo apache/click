@@ -22,6 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import net.sf.click.Context;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -80,20 +82,6 @@ public class Format {
     /** The empty string value. */
     protected String emptyString = "";
 
-    // ----------------------------------------------------------- Constructors
-
-    /**
-     * Create a new Format object with the given locale.
-     *
-     * @param locale the locale to use to format objects
-     */
-    public Format(Locale locale) {
-        if (locale == null) {
-            throw new IllegalArgumentException("Null locale parameter");
-        }
-        this.locale = locale;
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -102,6 +90,9 @@ public class Format {
      * @return the locale used to format objects
      */
     public Locale getLocale() {
+        if (locale == null) {
+            locale = Context.getThreadLocalContext().getLocale();
+        }
         return locale;
     }
 

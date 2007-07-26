@@ -101,14 +101,12 @@ public class MessagesMap implements Map {
      *
      * @param baseClass the target class
      * @param globalResource the global resource bundle name
-     * @param context the request context
      */
-    public MessagesMap(Class baseClass, String globalResource, Context context) {
+    public MessagesMap(Class baseClass, String globalResource) {
         Validate.notNull(baseClass, "Null object parameter");
-        Validate.notNull(context, "Null context parameter");
 
         this.baseClass = baseClass;
-        this.locale = context.getLocale();
+        this.locale = Context.getThreadLocalContext().getLocale();
 
         this.globalBaseName = globalResource;
     }
