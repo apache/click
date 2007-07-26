@@ -359,10 +359,6 @@ public class Page {
         addModel(control.getName(), control);
 
         control.setParent(this);
-
-        if (getContext() != null) {
-            control.setContext(getContext());
-        }
     }
 
     /**
@@ -388,36 +384,14 @@ public class Page {
 
     /**
      * Return the request context of the page.
-     * <p/>
-     * Please not the context will not be available when pages constructor is
-     * invoked. The context will be first available when the {@link #onInit()}
-     * method is called.
      *
      * @return the request context of the page
      */
     public Context getContext() {
-        return context;
-    }
-
-    /**
-     * Set the request context of the page. If the page model contains any
-     * Controls the context will also be set in the Controls.
-     *
-     * @param context the request context to set
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
         if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
+            context = Context.getThreadLocalContext();
         }
-        this.context = context;
-
-        if (hasControls()) {
-            for (int i = 0; i < getControls().size(); i++) {
-                Control control = (Control) getControls().get(i);
-                control.setContext(context);
-            }
-        }
+        return context;
     }
 
     /**
@@ -683,8 +657,7 @@ public class Page {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages =
-                        new MessagesMap(getClass(), PAGE_MESSAGES, getContext());
+                messages = new MessagesMap(getClass(), PAGE_MESSAGES);
 
             } else {
                 String msg = "Context not set cannot initialize messages";
