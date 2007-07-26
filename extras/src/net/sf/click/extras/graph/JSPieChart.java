@@ -221,6 +221,15 @@ public class JSPieChart extends AbstractControl {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * additional initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+    }
+
+    /**
      * Returns true, as javascript charts perform no server side logic.
      *
      * @return true

@@ -281,12 +281,6 @@ public class NumberField extends TextField {
     public NumberFormat getNumberFormat() {
         if (numberFormat == null) {
 
-            if (getContext() == null) {
-                String msg =
-                    "No context to get Locale from for field: " + getName();
-                throw new IllegalStateException(msg);
-            }
-
             Locale locale = getContext().getLocale();
             numberFormat = NumberFormat.getInstance(locale);
 
@@ -382,7 +376,7 @@ public class NumberField extends TextField {
      * @return the HTML head import statements for the IntegerField.js
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(NUMERICFIELD_IMPORTS, "$", path);
     }
