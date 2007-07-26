@@ -8,9 +8,15 @@
             </td>
             <td class="tp_tab_space"></td>
           #else
+            #if ($panel.isDisabled())
+            <td class="tp_tab_off_disabled">
+                $panel.label
+            </td>
+            #else 
             <td class="tp_tab_off">
                 <a href="$this.tabLink.getHref($panel.name)" id="$panel.id" class="tp_tab_link">$panel.label</a>
             </td>
+            #end
             <td class="tp_tab_space"></td>
           #end
         #end
