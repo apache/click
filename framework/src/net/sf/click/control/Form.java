@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,13 +36,6 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -718,10 +710,6 @@ public class Form implements Control {
 
         field.setForm(this);
 
-        if (getContext() != null) {
-            field.setContext(getContext());
-        }
-
         field.setParent(this);
 
         if (getDefaultFieldSize() > 0) {
@@ -954,25 +942,10 @@ public class Form implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
-        return context;
-    }
-
-    /**
-     * @see Control#setContext(Context)
-     *
-     * @param context the Page request Context
-     * @throws IllegalArgumentException if the Context is null
-     */
-    public void setContext(Context context) {
         if (context == null) {
-            throw new IllegalArgumentException("Null context parameter");
+            context = Context.getThreadLocalContext();
         }
-        this.context = context;
-
-        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
-            field.setContext(context);
-        }
+        return context;
     }
 
     /**
@@ -1262,94 +1235,13 @@ public class Form implements Control {
      * @return true if the page request is a submission from this form
      */
     public boolean isFormSubmission() {
-        if (getContext() == null) {
-            String msg = "context is not defined for form: " + getName();
-            throw new IllegalStateException(msg);
-        }
-
-        final HttpServletRequest request = getContext().getRequest();
-
-        String requestMethod = request.getMethod();
+        String requestMethod = getContext().getRequest().getMethod();
 
         if (!getMethod().equalsIgnoreCase(requestMethod)) {
             return false;
         }
 
-        // If "multipart/form-data" request
-        if (getContext().isMultipartRequest()) {
-
-            if (!getContext().getMultiPartFormData().isEmpty()) {
-                String formName = getContext().getRequestParameter(FORM_NAME);
-                return getName().equals(formName);
-            }
-
-            FileField fileField = null;
-            List fieldList = ClickUtils.getFormFields(this);
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
-                if (!field.isHidden() && (field instanceof FileField)) {
-                    fileField = (FileField) field;
-                    break;
-                }
-            }
-
-            FileUploadBase fileUpload = null;
-            if (fileField != null) {
-                fileUpload = fileField.getFileUpload();
-                if (fileUpload.getFileItemFactory() == null) {
-                    FileItemFactory fif = new DiskFileItemFactory();
-                    fileUpload.setFileItemFactory(fif);
-                }
-
-            } else {
-                FileItemFactory factory = new DiskFileItemFactory();
-                fileUpload = new ServletFileUpload(factory);
-            }
-
-            Map itemsMap = new HashMap();
-
-            try {
-                ServletRequestContext srvContext =
-                    new ServletRequestContext(request);
-
-                List itemsList = fileUpload.parseRequest(srvContext);
-
-                for (int i = 0; i < itemsList.size(); i++) {
-                    FileItem fileItem = (FileItem) itemsList.get(i);
-                    itemsMap.put(fileItem.getFieldName(), fileItem);
-                }
-
-            } catch (FileUploadException fue) {
-                throw new RuntimeException(fue);
-            }
-
-            FileItem fileItem = (FileItem) itemsMap.get(FORM_NAME);
-            String formName = null;
-
-            if (fileItem != null) {
-                if (request.getCharacterEncoding() != null) {
-                    try {
-                        formName = fileItem.getString(request.getCharacterEncoding());
-
-                    } catch (UnsupportedEncodingException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                } else {
-                    formName = fileItem.getString();
-                }
-            }
-
-            if (getName().equals(formName)) {
-                getContext().setMultiPartFormData(itemsMap);
-                return true;
-
-            } else {
-                return false;
-            }
-
-        } else {
-            return getName().equals(request.getParameter(FORM_NAME));
-        }
+        return getName().equals(getContext().getRequestParameter(FORM_NAME));
     }
 
     /**
@@ -1611,8 +1503,7 @@ public class Form implements Control {
     public Map getMessages() {
         if (messages == null) {
             if (getContext() != null) {
-                messages =
-                    new MessagesMap(getClass(), CONTROL_MESSAGES, getContext());
+                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
 
             } else {
                 String msg = "Cannot initialize messages as context not set, "
@@ -1870,6 +1761,23 @@ public class Form implements Control {
     }
 
     /**
+     * Initialize the fields and buttons contained in the Form.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            field.onInit();
+        }
+
+        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+            Button button = (Button) getButtonList().get(i);
+            button.onInit();
+        }
+    }
+
+    /**
      * Process the Form when the request method is the same as the Form's
      * method. The default Form method is "post".
      * <p/>
@@ -1879,17 +1787,9 @@ public class Form implements Control {
      * <li>All {@link Button} controls in the order they were added</li>
      * <li>Invoke the Forms listener if defined</li>
      * </ol>
-     * <p/>
-     * If the request is a Content-type <tt>"multipart"</tt> POST (i.e. a
-     * file upload request), then the form will determine whether the multi part
-     * data has been loaded into the request <tt>Context</tt>. &nbsp; If not
-     * loaded, the Form will search for a contained <tt>FileUpload</tt>
-     * control and use this control to process the <tt>"multipart"</tt> data.
-     * This data will then be loaded into the context using
-     * {@link Context#setMultiPartFormData(Map)}.
      *
      * @see Context#getRequestParameter(String)
-     * @see Context#getMultiPartFormData()
+     * @see Context#getFileItemMap()
      *
      * @return true to continue Page event processing or false otherwise
      */
@@ -2118,10 +2018,6 @@ public class Form implements Control {
      * @return the HTML string representation of the form
      */
     public String toString() {
-        if (getContext() == null) {
-            throw new IllegalStateException("context is not defined");
-        }
-
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
 
