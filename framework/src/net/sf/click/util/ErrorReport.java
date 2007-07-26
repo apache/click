@@ -88,6 +88,8 @@ public class ErrorReport {
     /** The error souce LineNumberReader. */
     protected LineNumberReader sourceReader;
 
+    // ------------------------------------------------------------ Constructor
+
     /**
      * Create a ErrorReport instance from the given error and page.
      *
@@ -176,14 +178,16 @@ public class ErrorReport {
         }
     }
 
+    // --------------------------------------------------------- Public Methods
+
     /**
      * Return a error report HTML &lt;div&gt; element for the given error and
      * page. The HTML &lt;div&gt; element 'id' and 'class' attribute values are
      * 'errorReport'.
      *
-     * @return a error HTML display
+     * @return a error HTML display string
      */
-    public String getErrorReport() {
+    public String toString() {
 
         if (isProductionMode()) {
             Locale locale = request.getLocale();
@@ -199,7 +203,7 @@ public class ErrorReport {
         buffer.append("<div id='errorReport' class='errorReport'>\n");
 
         // Exception table
-        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%' style='background-color: white;'>");
         if (isParseError()) {
             buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page Parsing Error</td></tr>");
             buffer.append("<tr><td width='12%'><b>Source</b></td><td>");
@@ -228,7 +232,7 @@ public class ErrorReport {
         buffer.append("<br/>");
 
         // Page table
-        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%' style='background-color: white;'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
         buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
         buffer.append(pageClass.getName());
@@ -236,14 +240,11 @@ public class ErrorReport {
         buffer.append("<tr><td width='12%'><b>Path</b></td><td>");
         buffer.append(ClickUtils.getResourcePath(request));
         buffer.append("</td></tr>");
-//        buffer.append("<tr><td><b width='12%'>Template</b></td><td>");
-//        buffer.append(page.getTemplate());
-//        buffer.append("</td></tr>");
         buffer.append("</table>");
         buffer.append("<br/>");
 
         // Request table
-        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%'>");
+        buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%' style='background-color: white;'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Request</td></tr>");
 
         TreeMap requestAttributes = new TreeMap();
@@ -335,12 +336,14 @@ public class ErrorReport {
         return buffer.toString();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
     /**
      * Return the cause of the error.
      *
      * @return the cause of the error
      */
-    public Throwable getCause() {
+    protected Throwable getCause() {
         Throwable cause = null;
         if (error instanceof ServletException) {
             cause = ((ServletException) error).getRootCause();
@@ -364,7 +367,7 @@ public class ErrorReport {
      *
      * @return the error source column number, or -1 if not determined
      */
-    public int getColumnNumber() {
+    protected int getColumnNumber() {
         return columnNumber;
     }
 
@@ -373,7 +376,7 @@ public class ErrorReport {
      *
      * @return true if the error was a Velocity parsing exception
      */
-    public boolean isParseError() {
+    protected boolean isParseError() {
         return isParseError;
     }
 
@@ -382,7 +385,7 @@ public class ErrorReport {
      *
      * @return true if the application is in "production" mode
      */
-    public boolean isProductionMode() {
+    protected boolean isProductionMode() {
         return isProductionMode;
     }
 
@@ -391,7 +394,7 @@ public class ErrorReport {
      *
      * @return the error source line number, or -1 if not determined
      */
-    public int getLineNumber() {
+    protected int getLineNumber() {
         return lineNumber;
     }
 
@@ -400,7 +403,7 @@ public class ErrorReport {
      *
      * @return the error message
      */
-    public String getMessage() {
+    protected String getMessage() {
         if (isParseError()) {
             String message = error.getMessage();
 
@@ -430,7 +433,7 @@ public class ErrorReport {
      *
      * @return the error source name
      */
-    public String getSourceName() {
+    protected String getSourceName() {
         return sourceName;
     }
 
@@ -441,11 +444,9 @@ public class ErrorReport {
      * @return LineNumberReader for the error source file, or null if not
      *      defined
      */
-    public LineNumberReader getSourceReader() {
+    protected LineNumberReader getSourceReader() {
         return sourceReader;
     }
-
-    // ------------------------------------------------------ Protected Methods
 
     /**
      * Return Java Source LineNumberReader for the given filename, or null if
