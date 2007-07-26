@@ -34,17 +34,23 @@ import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 /**
- * Provides the HTTP request context information for pages. A new Context object
- * is created for each Page.
+ * Provides the HTTP request context information for pages and controls.
+ * A new Context object is created for each Page request. The request Context
+ * object can be obtained from the thread local variable via the
+ * {@link Context#getThreadLocalContext()} method.
  *
  * @author Malcolm Edgar
  */
 public class Context {
+
+    /** The thread local context. */
+    private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
 
     /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
     public static final String LOCALE = "locale";
@@ -56,16 +62,18 @@ public class Context {
     protected final ServletConfig config;
 
     /**
-     * The Map of form data for Content-Type <tt>"multipart/form-data"</tt>
-     * request.
+     * The <tt>FileItem</tt> objects for <tt>"multipart"</tt> POST requests.
      */
-    protected Map multiPartFormData;
+    protected final Map fileItemMap;
 
     /** The click services interface. */
     protected final ClickServlet.ClickService clickService;
 
     /** The servlet request. */
     protected final HttpServletRequest request;
+
+    /** The map of request parameter values. */
+    protected final Map requestParameterMap;
 
     /** The servlet response. */
     protected final HttpServletResponse response;
@@ -96,9 +104,73 @@ public class Context {
         this.response = response;
         this.isPost = isPost;
         this.clickService = clickService;
+
+        if (!ClickUtils.isMultipartRequest(request)) {
+            requestParameterMap = ClickUtils.getRequestParameterMap(request);
+            fileItemMap = Collections.EMPTY_MAP;
+
+        } else {
+            FileItemFactory factory = clickService.getFileItemFactory();
+            FileUploadBase fileUpload = new ServletFileUpload(factory);
+
+            Map requestParams = new HashMap();
+            Map fileItems = new HashMap();
+
+            try {
+                ServletRequestContext srvContext =
+                    new ServletRequestContext(request);
+
+                List itemsList = fileUpload.parseRequest(srvContext);
+
+                for (int i = 0; i < itemsList.size(); i++) {
+                    FileItem fileItem = (FileItem) itemsList.get(i);
+
+                    String name = fileItem.getFieldName();
+                    String value = null;
+
+                    if (request.getCharacterEncoding() == null) {
+                        value = fileItem.getString();
+
+                    } else {
+                        try {
+                            value = fileItem.getString(request.getCharacterEncoding());
+
+                        } catch (UnsupportedEncodingException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+
+                    requestParams.put(name, value);
+                    fileItems.put(name, fileItem);
+                }
+
+                requestParameterMap = Collections.unmodifiableMap(requestParams);
+                fileItemMap = Collections.unmodifiableMap(fileItems);
+
+            } catch (FileUploadException fue) {
+                throw new RuntimeException(fue);
+            }
+
+        }
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Return the thread local request context instance.
+     *
+     * @return the thread local request context instance.
+     */
+    public static Context getThreadLocalContext() {
+        Context context = (Context) THREAD_LOCAL_CONTEXT.get();
+
+        if (context != null) {
+            return context;
+
+        } else {
+            throw new IllegalStateException("contex is null");
+        }
+    }
 
     /**
      * Returns the servlet request.
@@ -231,56 +303,13 @@ public class Context {
      *
      * @see net.sf.click.control.Form#onProcess()
      * @see #isMultipartRequest()
-     * @see #getMultiPartFormData()
+     * @see #getFileItemMap()
      *
      * @param name the name of the request parameter
      * @return the value of the request parameter.
      */
     public String getRequestParameter(String name) {
-        String value = null;
-
-        if (isMultipartRequest()) {
-            // If form has not alreay initialized multipart form data, load it
-            // now. Form will overwrite it later during the request processing
-            if (multiPartFormData == null) {
-                FileItemFactory factory = new DiskFileItemFactory();
-                ServletFileUpload fileUpload = new ServletFileUpload(factory);
-
-                try {
-                    List itemsList = fileUpload.parseRequest(request);
-
-                    Map itemsMap = new HashMap(itemsList.size());
-                    for (int i = 0; i < itemsList.size(); i++) {
-                        FileItem fileItem = (FileItem) itemsList.get(i);
-                        itemsMap.put(fileItem.getFieldName(), fileItem);
-                    }
-                    multiPartFormData = itemsMap;
-
-                } catch (FileUploadException fue) {
-                    throw new RuntimeException(fue);
-                }
-            }
-
-            FileItem fileItem = (FileItem) multiPartFormData.get(name);
-            if (fileItem != null) {
-                if (request.getCharacterEncoding() == null) {
-                    value = fileItem.getString();
-
-                } else {
-                    try {
-                        value = fileItem.getString(request.getCharacterEncoding());
-
-                    } catch (UnsupportedEncodingException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-            }
-
-        } else {
-            value = request.getParameter(name);
-        }
-
-        return value;
+        return (String) requestParameterMap.get(name);
     }
 
     /**
@@ -288,8 +317,32 @@ public class Context {
      *
      * @return the ordered map of request parameters
      */
-    public Map getRequestParameters() {
-        return ClickUtils.getRequestParameters(getRequest());
+    public Map getRequestParameterMap() {
+        return requestParameterMap;
+    }
+
+    /**
+     * Returns an array of String objects containing all of the values the given
+     * request parameter has, or null if the parameter does not exist.
+     *
+     * @param name a <tt>String</tt> containing the name of the parameter whose
+     *     value is requested
+     * @return an array of <tt>String</tt> objects containing the parameter's values
+     */
+    public String[] getRequestParameterValues(String name) {
+        Object values = requestParameterMap.get(name);
+
+        if (values != null) {
+            if (values instanceof String[]) {
+                return (String[]) values;
+
+            } else {
+                return new String[] { values.toString() };
+            }
+
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -516,6 +569,17 @@ public class Context {
     }
 
     /**
+     * Returns a map of <tt>FileItem</tt> keyed on request parameter name for
+     * "multipart" POST requests (file uploads).
+     *
+     * @return map of <tt>FileItem</tt> keyed on request parameter name for
+     * "multipart" POST requests
+     */
+    public Map getFileItemMap() {
+        return fileItemMap;
+    }
+
+    /**
      * Return the users Locale.
      * <p/>
      * If the users Locale is stored in their session this will be returned.
@@ -564,42 +628,12 @@ public class Context {
     }
 
     /**
-     * Returns a map of <tt>FileItem</tt> keyed on name for Content-type
-     * "multipart/form-data" requests, or an <tt>Collections.EMPTY_MAP</tt>
-     * otherwise.
-     *
-     * @return map of <tt>FileItem</tt> keyed on name for
-     * "multipart/form-data" requests
-     */
-    public Map getMultiPartFormData() {
-        if (multiPartFormData != null) {
-            return multiPartFormData;
-        } else {
-            return Collections.EMPTY_MAP;
-        }
-    }
-
-    /**
-     * Set the map of FileItem keyed on name for a Content-type
-     * "multipart/form-data" request.
-     *
-     * @param multiPartFormData the map of form FileItem data keyed on name
-     */
-    public void setMultiPartFormData(Map multiPartFormData) {
-        if (!isMultipartRequest()) {
-            String msg = "Not a POST Content-type 'multipart' request";
-            throw new IllegalStateException(msg);
-        }
-        this.multiPartFormData = multiPartFormData;
-    }
-
-    /**
      * Return true if the request is a multi-part content type POST request.
      *
      * @return true if the request is a multi-part content type POST request
      */
     public boolean isMultipartRequest() {
-        return (isPost() && ServletFileUpload.isMultipartContent(request));
+        return ClickUtils.isMultipartRequest(request);
     }
 
     /**
@@ -652,4 +686,15 @@ public class Context {
         return clickService.renderTemplate(templatePath, model);
     }
 
+    // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Set the thread local request context instance.
+     *
+     * @param context the thread local request context instance.
+     */
+    static void setThreadLocalContext(Context context) {
+        THREAD_LOCAL_CONTEXT.set(context);
+    }
+ 
 }
