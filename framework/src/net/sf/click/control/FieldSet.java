@@ -210,7 +210,7 @@ public class FieldSet extends Field {
 
             } else if (field instanceof FileField) {
                 ((FileField) field).setSize(getForm().getDefaultFieldSize());
-                	
+
             } else if (field instanceof TextArea) {
                 ((TextArea) field).setCols(getForm().getDefaultFieldSize());
             }
