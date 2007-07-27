@@ -718,7 +718,7 @@ public class Form implements Control {
 
             } else if (field instanceof FileField) {
                 ((FileField) field).setSize(getDefaultFieldSize());
-                	
+
             } else if (field instanceof TextArea) {
                 ((TextArea) field).setCols(getDefaultFieldSize());
             }
