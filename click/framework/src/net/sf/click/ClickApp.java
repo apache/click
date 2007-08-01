@@ -1062,7 +1062,7 @@ class ClickApp implements EntityResolver {
         // If 'macro.vm' exists set it as default VM library, otherwise use
         // 'click/VM_global_library.vm'
         URL macroURL = context.getResource("/" + MACRO_VM_FILE_NAME);
-        if(macroURL != null) {
+        if (macroURL != null) {
             velProps.put("velocimacro.library", MACRO_VM_FILE_NAME);
         } else {
             velProps.put("velocimacro.library", CLICK_PATH + File.separator
