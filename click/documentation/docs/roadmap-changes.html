@@ -35,7 +35,7 @@ and documentation updates.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 1.4 - 31 July 2007</dt>
+  <dt>Version 1.4 - ?? August 2007</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -47,11 +47,22 @@ and documentation updates.
 		<span style="font-weight:bold;color:navy;">Important Change</span> 
 		added Control <a href="click-api/net/sf/click/Control.html#onInit()">onInit()</a> 
 		initialization event handler.
+		As the <tt>setContext()</tt> method has been
+		removed any control initialization code contained in this method should be
+		migrated to the new control <tt>onInit()</tt> method.
       </li>
       <li class="change">
 		<span style="font-weight:bold;color:navy;">Important Change</span> 
 		the XML configured root Menu item is obtained via the static method 
         <a href="extras-api/net/sf/click/extras/control/Menu.html#getRootMenu()">getRootMenu()</a>.
+      </li>
+      <li class="change">
+		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		multipart file upload requests are now processed using a globally configured Commons FileUpload
+		class. Please see the 
+		<a href="configuration.html#application-file-item-factory">File Item Factory</a> 
+		topic for more details. This change enables for request parameter auto binding
+		on multipart file upload requests.
       </li>
       <li class="change">
       	Added AbstractControl <a href="click-api/net/sf/click/control/AbstractControl.html#getPage()">getPage()</a> method. 

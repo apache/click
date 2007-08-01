@@ -116,35 +116,17 @@ A simple Click app config file is provided below:
 &lt;/click-app&gt; 
 </pre>
 
-Alternatively Page classes can be mapped mannually to page paths:
-
-<pre class="codeConfig">
-&lt;click-app&gt; 
-  &lt;pages automapping="<span class="blue">false</span>"&gt;
-    &lt;page path="<span class="navy">home.htm</span>" classname="<span class="maroon">com.mycorp.page.Home</span>"/&gt;
-    &lt;page path="<span class="navy">login.htm</span>" classname="<span class="maroon">com.mycorp.page.Login</span>"/&gt;
-    &lt;page path="<span class="navy">logout.htm</span>" classname="<span class="maroon">com.mycorp.page.Logout</span>"/&gt;    
-    &lt;page path="<span class="navy">search.htm</span>" classname="<span class="maroon">com.mycorp.page.Search</span>"/&gt;
-    &lt;page path="<span class="navy">results.htm</span>" classname="<span class="maroon">com.mycorp.page.Results</span>"/&gt;
-  &lt;/pages&gt;
-&lt;/click-app&gt; 
-</pre>
-
-
-
 <p/>
-An example of a fully optioned up config file is:
+An example of an optioned up config file is:
 
 <pre class="codeConfig">
 &lt;click-app charset="UTF-8" locale="de"&gt; 
   &lt;pages package="<span class="">com.mycorp.page</span>"&gt;
     &lt;page path="<span class="">index.htm</span>" classname="<span class="">com.mycorp.page.Home</span>"/&gt;
   &lt;/pages&gt;
-  &lt;headers&gt;
-    &lt;header name="<span class="">Pragma</span>" value="<span class="">no-cache</span>"/&gt;
-  &lt;/headers&gt;
   &lt;format classname="<span class="">com.mycorp.util.Format</span>"/&gt;
-  &lt;mode value="<span class="">debug</span>"/&gt;
+  &lt;mode value="<span class="">profile</span>"/&gt;
+  &lt;file-item-factory classname="<span class="">com.mycorp.util.AppFileItemFactory</span>"/&gt;
 &lt;/click-app&gt; 
 </pre>
 
@@ -155,7 +137,7 @@ localization attributes <span class="blue">charset</span> and
 <span class="blue">locale</span>.
 
 <pre class="codeDtd">
-&lt;!ELEMENT <span class="red">click-app</span> (pages?, headers?, format?, mode?, controls?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (pages?, headers?, format?, mode?, controls?, file-item-factory?)&gt;
   &lt;!ATTLIST click-app <span class="blue">charset</span> CDATA #IMPLIED&gt;
   &lt;!ATTLIST click-app <span class="blue">locale</span> CDATA #IMPLIED&gt;
 </pre>
@@ -640,6 +622,42 @@ class you would add the following elements to your <tt>click.xml</tt> file:
      &lt;<span class="blue">control</span> classname=<span class="red">"com.mycorp.control.CustomField"</span>/&gt;
    &lt;/controls&gt;
 &lt;/click-app&gt; </pre>
+
+
+
+<a name="application-file-item-factory" class="heading"><h3>File Item Factory</h3></a>
+
+The optional <tt>file-item-factory</tt> element defines the 
+<a href="http://commons.apache.org/fileupload/">Commons FileUpload</a> 
+<a href="http://commons.apache.org/fileupload/apidocs/org/apache/commons/fileupload/FileItemFactory.html">FileItemFactory</a>
+object to be used for processing multipart file upload requests.
+
+<pre class="codeDtd">
+&lt;!ELEMENT <span class="blue">file-item-factory</span> (<span class="red">property</span>*)&gt;
+    &lt;ATTLIST file-item-factory <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.commons.fileupload.disk.DiskFileItemFactory</span>"&gt; 
+    
+    &lt;!-- FileItem Factory property set after factory creation. --&gt;
+    &lt;!ELEMENT <span class="red">property</span> (#PCDATA)&gt;
+      &lt;!ATTLIST property <span class="blue">name</span> CDATA #REQUIRED&gt;
+      &lt;!ATTLIST property <span class="blue">value</span> CDATA #REQUIRED&gt;
+</pre>
+
+By default file upload requests are processed using the 
+<a target="topic" href="http://commons.apache.org/fileupload/apidocs/org/apache/commons/fileupload/disk/DiskFileItemFactory.html">DiskFileItemFactory</a>. 
+<p/>
+Factory properties can also be set by specifying property elements. These property 
+values will be applied to the FileItemFactory using OGNL type coercion. For example:
+
+<pre class="codeConfig">
+&lt;click-app&gt; 
+  ..
+  &lt;file-item-factory classname="<span class="green">org.apache.commons.fileupload.disk.DiskFileItemFactory</span>"&gt;
+     &lt;property name=<span class="blue">"sizeThreshold"</span> name=<span class="red">"524288"</span>/&gt;
+  &lt;/file-item-factory&gt;
+&lt;/click-app&gt; 
+</pre>
+
+
 
 <a name="velocity-properties" class="heading"><h2>Velocity Properties</h2></a>
 
