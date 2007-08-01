@@ -523,7 +523,8 @@ public class ClickServlet extends HttpServlet {
                     if (logger.isTraceEnabled()) {
                         String controlClassName = control.getClass().getName();
                         controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
-                        String msg =  "   invoked: " + controlClassName + ".onInit()";
+                        String msg =  "   invoked: '" + control.getName()
+                            + "' " + controlClassName + ".onInit()";
                         logger.trace(msg);
                     }
                 }
@@ -542,8 +543,8 @@ public class ClickServlet extends HttpServlet {
                         String controlClassName = control.getClass().getName();
                         controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
 
-                        String msg =  "   invoked: " + controlClassName
-                            + ".onProcess() : " + continueProcessing;
+                        String msg =  "   invoked: '" + control.getName() + "' "
+                            + controlClassName + ".onProcess() : " + continueProcessing;
                         logger.trace(msg);
                     }
 
