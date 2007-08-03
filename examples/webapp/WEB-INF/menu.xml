@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?> 
 <menu>
-	<menu label=" Home" path="home.htm" imageSrc="/images/icons-16px/home.png"/>
+	<menu label=" Home" path="home.htm" imageSrc="/images/icons-16px/home.png">
+		<menu label="BorderPage Class" path="source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/BorderPage.java" title="BorderPage Java source" target="_blank"/>
+		<menu label="Border Template HTML" path="source-viewer.htm?filename=border-template.htm" title="Page border HTML template" target="_blank" />
+		<menu separator="true"/>
+		<menu label="Javadoc API" path="javadoc/index.html" title="Examples HTML Javadoc API" target="_blank" />
+		<menu separator="true"/>
+		<menu label="click.xml" path="source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor" target="_blank" />
+		<menu label="web.xml" path="source-viewer.htm?filename=WEB-INF/web.xml" title="Web application descriptor" target="_blank" />
+	</menu>
 
 	<menu label="Intro Examples" path="#">
     	<menu label="Hello World" path="introduction/hello-world.htm"/>
@@ -20,7 +28,7 @@
 		<menu label="JSP Page" path="jsp/customer-table.htm"/>
 		<menu label="Page Security" path="security/secure.htm"/>
 		<menu separator="true"/>
-		<menu label="Page Navigation" path="page-navigation.htm"/>
+		<menu label="Page Navigation" path="navigation-a.htm"/>
 		<menu label="Page Flow" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
 		<menu label="AJAX Dynamic Select" path="ajax/ajax.htm"/>
@@ -32,35 +40,36 @@
 	</menu>
 	
    	<menu label="Forms" path="#">
-		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
-		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
-		<menu separator="true"/>
 		<menu label="Form Layout" path="form/form-layout.htm"/>
 		<menu label="Form Properties" path="form/form-properties.htm"/>
 		<menu label="Search Form" path="form/search-form.htm"/>
 		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
    	</menu>
    
-   	<menu label="Table" path="#">
-		<menu label="Edit Table" path="table/edit-table.htm"/>
-		<menu label="FormTable" path="table/form-table.htm"/>
-		<menu label="Table Decorator" path="table/table-decorator.htm"/>
-		<menu label="Table Paging" path="table/table-paging.htm"/>
-		<menu label="Table Sorting" path="table/table-sorting.htm"/>
-		<menu label="Table Styles" path="table/table-styles.htm"/>
-   	</menu>
-   
 	<menu label="Controls" path="#">
+		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
      	<menu label="Action Controls" path="control/action-demo.htm"/>
 		<menu label="CheckList" path="control/check-list-demo.htm"/>
 		<menu label="FieldSet" path="control/field-set-demo.htm"/>
 		<menu label="FileField" path="control/file-upload.htm"/>
 		<menu label="ImageSubmit" path="control/image-demo.htm"/>
+		<menu label="Select" path="control/select-demo.htm"/>
+		<menu separator="true"/>
+		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
 		<menu label="Menu" path="menu/menu-a1.htm"/>
 		<menu label="PickList" path="control/pick-list-demo.htm"/>
 		<menu label="RegexField" path="control/regex-demo.htm"/>
 		<menu label="RichTextArea" path="control/email-form.htm"/>
-		<menu label="Select" path="control/select-demo.htm"/>
+   	</menu>
+   
+   	<menu label="Table" path="#">
+		<menu label="Edit Table" path="table/edit-table.htm"/>
+		<menu label="FormTable" path="table/form-table.htm"/>
+		<menu label="Search Table" path="table/search-table.htm"/>
+		<menu label="Table Decorator" path="table/table-decorator.htm"/>
+		<menu label="Table Paging" path="table/table-paging.htm"/>
+		<menu label="Table Sorting" path="table/table-sorting.htm"/>
+		<menu label="Table Styles" path="table/table-styles.htm"/>
    	</menu>
 
    	<menu label="Tree" path="#">

@@ -279,8 +279,8 @@ public class Table extends AbstractControl {
      */
     protected boolean sortable = false;
 
-    /** The row list is sorted status. */
-    protected boolean sorted;
+    /** The row list is sorted status. By default sorted is false. */
+    protected boolean sorted = false;
 
     /** The rows list is sorted in ascending order. */
     protected boolean sortedAscending = true;
@@ -813,6 +813,8 @@ public class Table extends AbstractControl {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        sorted = false;
+
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             control.onInit();

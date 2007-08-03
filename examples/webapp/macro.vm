@@ -22,7 +22,11 @@
         </li>
       #end
     #end
-  </ul>
+        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=WEB-INF/classes/$srcPath" title="Page Java source">Page Java</a>
+        </li>
+        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=$path" title="Page Content source">Page HTML</a>
+        </li>
+  </ul>  
  </div>
   </td>
  </tr>
@@ -92,16 +96,8 @@ $form.endTag()
  * Write drop down border template header menu
  *********************************************#
  
-#macro( writeTemplateMenu )
+#macro( writeInfoBar )
 
-<table cellpadding="8" class="menuTable">
-<tr>
-<td>
-&nbsp;<a class="menu" href="$context/home.htm" title="Examples Home page">Home</a>
-#if ($title != 'Source Viewer')
- &nbsp; | &nbsp;
- <a class="menu" href="$context$path" title="Refresh Page">Refresh</a>
-#end
 &nbsp; | &nbsp;
 <a class="menu" href="$context/source-viewer.htm?filename=WEB-INF/click.xml" title="Click application descriptor">click.xml</a>
 &nbsp; | &nbsp;
@@ -118,12 +114,6 @@ $form.endTag()
  &nbsp; | &nbsp;
  <a class="menu" href="$context/source-viewer.htm?filename=$path" title="Page Content source">Page HTML</a>
 #end
-</td>
-<td width="100px" style="color:d0d0d0;text-align:right">
-$messages.version
-</td>
-</tr>
-</table>
 
 #end
 

@@ -252,6 +252,49 @@ public class CayenneForm extends Form {
 
     // --------------------------------------------------------- Public Methods
 
+//    public void copyFrom(Object object) {
+//        super.copyFrom(object);
+//
+//        final List fieldList = ClickUtils.getFormFields(this);
+//
+//        for (int i = 0; i < fieldList.size(); i++) {
+//            Field field = (Field) fieldList.get(i);
+//            if (field instanceof PropertySelect) {
+//                PropertySelect select = (PropertySelect) field;
+//
+//                Set properties = ClickUtils.getObjectPropertyNames(object);
+//
+//                if (ClickUtils.hasMatchingProperty(select, properties)) {
+//                    // Get property id and apply to field
+//
+//
+//                        DataObject dataObject =
+//                            DataObjectUtils.objectForPK(dataContext, doClass, doPk);
+//
+//                        String getterName = ClickUtils.toGetterName(getName());
+//
+//                        try {
+//                            Method method = doClass.getMethod(getterName, null);
+//
+//                            DataObject property =
+//                                (DataObject) method.invoke(dataObject, null);
+//
+//                            if (property != null) {
+//                                Object propPk = DataObjectUtils.pkForObject(property);
+//                                select.setValue(propPk.toString());
+//                            }
+//
+//                        } catch (Exception e) {
+//                            throw new RuntimeException(e);
+//                        }
+//
+//
+//
+//                }
+//            }
+//        }
+//    }
+
     /**
      * Return the thread local <tt>DataContext</tt> obtained via
      * <tt>DataContext.getThreadDataContext()</tt>.

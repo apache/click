@@ -40,9 +40,6 @@ public abstract class AbstractControl implements Control {
     /** The Field attributes Map. */
     protected Map attributes;
 
-    /** The request context. */
-    private transient Context context;
-
     /** The Field localized messages Map. */
     protected Map messages;
 
@@ -50,7 +47,7 @@ public abstract class AbstractControl implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected transient Object parent;
+    protected Object parent;
 
     /** The Map of CSS style attributes. */
     protected Map styles;
@@ -130,10 +127,7 @@ public abstract class AbstractControl implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
-        if (context == null) {
-            context = Context.getThreadLocalContext();
-        }
-        return context;
+        return Context.getThreadLocalContext();
     }
 
     /**

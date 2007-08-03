@@ -240,7 +240,7 @@ public class TabbedForm extends Form {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(TABBED_FORM_IMPORTS, "$", path);
     }

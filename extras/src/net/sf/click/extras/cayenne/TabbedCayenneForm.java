@@ -164,7 +164,7 @@ public class TabbedCayenneForm extends CayenneForm {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = context.getRequest().getContextPath();
+        String path = getContext().getRequest().getContextPath();
 
         return StringUtils.replace(TabbedForm.TABBED_FORM_IMPORTS, "$", path);
     }

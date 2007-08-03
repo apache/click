@@ -6,7 +6,7 @@
     <excludes pattern="/tiny_mce/"/>
   </pages>
 
-  <mode value="profile"/>
+  <mode value="development"/>
 
   <controls>
     <control classname="net.sf.click.examples.control.FilterPanel"/>

@@ -549,9 +549,6 @@ public class Form implements Control {
      */
     protected int columns = 1;
 
-    /** The form context. */
-    protected transient Context context;
-
     /**
      * The default field size, default value: <tt>0</tt>.
      * <p/>
@@ -642,7 +639,7 @@ public class Form implements Control {
     protected String name;
 
     /** The control's parent. */
-    protected transient Object parent;
+    protected Object parent;
 
     /** The form is readonly flag. */
     protected boolean readonly;
@@ -945,10 +942,7 @@ public class Form implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
-        if (context == null) {
-            context = Context.getThreadLocalContext();
-        }
-        return context;
+        return Context.getThreadLocalContext();
     }
 
     /**
