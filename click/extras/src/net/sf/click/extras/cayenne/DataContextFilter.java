@@ -274,14 +274,14 @@ public class DataContextFilter implements Filter {
      */
     protected synchronized DataContext getDataContext(HttpSession session) {
 
-        DataContext context = null;
+        DataContext dataContext = null;
 
         if (sessionScope) {
-            context = (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
+            dataContext = (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
         }
 
-        if (context == null) {
-            context = DataContext.createDataContext(sharedCache);
+        if (dataContext == null) {
+            dataContext = DataContext.createDataContext(sharedCache);
 
             if (logger.isDebugEnabled()) {
                 String msg = "created DataContex with shared-cache=" + sharedCache;
@@ -289,11 +289,11 @@ public class DataContextFilter implements Filter {
             }
 
             if (sessionScope) {
-                session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, context);
+                session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, dataContext);
             }
         }
 
-        return context;
+        return dataContext;
     }
 
 }

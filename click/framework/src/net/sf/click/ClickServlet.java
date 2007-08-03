@@ -32,6 +32,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
@@ -369,7 +370,11 @@ public class ClickServlet extends HttpServlet {
             if (page != null) {
                 page.onDestroy();
 
-                Context.setThreadLocalContext(null);
+                if (page.isStateful()) {
+                    page.getContext().setSessionAttribute(page.getClass().getName(), page);
+                } else {
+                    page.getContext().removeSessionAttribute(page.getClass().getName());
+                }
 
                 if (logger.isTraceEnabled()) {
                     String shortClassName = page.getClass().getName();
@@ -884,13 +889,22 @@ public class ClickServlet extends HttpServlet {
             HttpServletRequest request) {
 
         try {
-            final Page newPage = newPageInstance(path, pageClass, request);
+            Page newPage = null;
 
-            if (logger.isTraceEnabled()) {
-                String shortClassName = pageClass.getName();
-                shortClassName =
-                    shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
-                logger.trace("   invoked: " + shortClassName + ".<<init>>");
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                newPage = (Page) session.getAttribute(pageClass.getName());
+            }
+
+            if (newPage == null) {
+                newPage = newPageInstance(path, pageClass, request);
+
+                if (logger.isTraceEnabled()) {
+                    String shortClassName = pageClass.getName();
+                    shortClassName =
+                        shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                    logger.trace("   invoked: " + shortClassName + ".<<init>>");
+                }
             }
 
             if (newPage.getHeaders() == null) {
@@ -903,6 +917,9 @@ public class ClickServlet extends HttpServlet {
                 newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             }
 
+            // Bind to final variable to enable callback processing
+            final Page page = newPage;
+
             if (clickApp.isPagesAutoBinding()) {
                 // Automatically add public controls to the page
                 processPageFields(newPage, new FieldCallback() {
@@ -913,16 +930,14 @@ public class ClickServlet extends HttpServlet {
                                 control.setName(fieldName);
                             }
 
-                            if (!newPage.getModel().containsKey(control.getName())) {
-                                newPage.addControl(control);
+                            if (!page.getModel().containsKey(control.getName())) {
+                                page.addControl(control);
                             }
-
-                            // TODO: if a Field log a warning message
                         }
                     }
                 });
 
-                processPageRequestParams(newPage);
+                processPageRequestParams(page);
             }
 
             return newPage;
@@ -1073,7 +1088,7 @@ public class ClickServlet extends HttpServlet {
         final HttpServletRequest request = page.getContext().getRequest();
 
         Object pop = context.put("request", request);
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"request\". The page model object "
@@ -1082,7 +1097,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         pop = context.put("response", page.getContext().getResponse());
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"response\". The page model object "
@@ -1092,7 +1107,7 @@ public class ClickServlet extends HttpServlet {
 
         SessionMap sessionMap = new SessionMap(request.getSession(false));
         pop = context.put("session", sessionMap);
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"session\". The page model object "
@@ -1102,7 +1117,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         pop = context.put("context", request.getContextPath());
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"context\". The page model object "
@@ -1112,7 +1127,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         Format format = page.getFormat();
-        if (format != null) {
+        if (format != null && !page.isStateful()) {
            pop = context.put("format", format);
             if (pop != null) {
                 String msg = page.getClass().getName() + " on "
@@ -1127,7 +1142,7 @@ public class ClickServlet extends HttpServlet {
         String path = page.getPath();
         if (path != null) {
            pop = context.put("path", path);
-            if (pop != null) {
+            if (pop != null && !page.isStateful()) {
                 String msg = page.getClass().getName() + " on "
                         + page.getPath()
                         + " model contains an object keyed with reserved "
@@ -1138,7 +1153,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         pop = context.put("messages", page.getMessages());
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"messages\". The page model object "
@@ -1148,7 +1163,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         pop = context.put("imports", new PageImports(page));
-        if (pop != null) {
+        if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
                          + "name \"imports\". The page model object "

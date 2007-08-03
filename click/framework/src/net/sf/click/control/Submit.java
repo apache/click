@@ -180,6 +180,8 @@ public class Submit extends Button {
 
         if (value != null) {
             this.clicked = true;
+        } else {
+            this.clicked = false;
         }
     }
 

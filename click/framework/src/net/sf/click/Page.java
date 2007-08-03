@@ -149,15 +149,6 @@ public class Page {
 
     // ----------------------------------------------------- Instance Variables
 
-    /**
-     * The request context.
-     * <p/>
-     * Please not the context will not be available when pages constructor is
-     * invoked. The context will be first available when the {@link #onInit()}
-     * method is called.
-     */
-    protected transient Context context;
-
     /** The list of page controls. */
     protected List controls;
 
@@ -188,6 +179,12 @@ public class Page {
 
     /** The redirect path. */
     protected String redirect;
+
+    /**
+     * The page is stateful and should be save to the users HttpSession
+     * between requests.
+     */
+    protected boolean stateful;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -388,10 +385,7 @@ public class Page {
      * @return the request context of the page
      */
     public Context getContext() {
-        if (context == null) {
-            context = Context.getThreadLocalContext();
-        }
-        return context;
+        return Context.getThreadLocalContext();
     }
 
     /**
@@ -408,7 +402,7 @@ public class Page {
      * @return the HTTP response content type
      */
     public String getContentType() {
-        String charset = context.getRequest().getCharacterEncoding();
+        String charset = getContext().getRequest().getCharacterEncoding();
 
         if (charset == null) {
             return "text/html";
@@ -741,6 +735,27 @@ public class Page {
      */
     public String getRedirect() {
         return redirect;
+    }
+
+    /**
+     * Return true if the page is stateful and should be saved in the users
+     * HttpSession between requests.
+     *
+     * @return true if the page is stateful and should be save in the users session
+     */
+    public boolean isStateful() {
+        return stateful;
+    }
+
+    /**
+     * Set whether the page is stateful and should be saved in the users
+     * HttpSession between requests.
+     *
+     * @param stateful the flag indicating whether the page should be saved
+     *         between user requests
+     */
+    public void setStateful(boolean stateful) {
+        this.stateful = stateful;
     }
 
     /**

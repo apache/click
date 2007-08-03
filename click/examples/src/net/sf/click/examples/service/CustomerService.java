@@ -7,6 +7,7 @@ import java.util.List;
 import net.sf.click.examples.domain.Customer;
 import net.sf.click.extras.cayenne.CayenneTemplate;
 
+import org.apache.commons.lang.StringUtils;
 import org.objectstyle.cayenne.exp.Expression;
 import org.objectstyle.cayenne.exp.ExpressionFactory;
 import org.objectstyle.cayenne.query.SelectQuery;
@@ -37,6 +38,22 @@ public class CustomerService extends CayenneTemplate {
         if (property != null) {
             query.addOrdering(property, ascending);
         }
+        return performQuery(query);
+    }
+
+    public List getCustomers(String name, Date startDate) {
+        SelectQuery query = new SelectQuery(Customer.class);
+
+        if (StringUtils.isNotBlank(name)) {
+            query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(Customer.NAME_PROPERTY, "%" + name + "%"));
+        }
+        if (startDate != null) {
+            query.andQualifier(ExpressionFactory.greaterOrEqualExp(Customer.DATE_JOINED_PROPERTY, startDate));
+        }
+
+        query.addOrdering(Customer.NAME_PROPERTY, true);
+        query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
+
         return performQuery(query);
     }
 
