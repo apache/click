@@ -260,6 +260,24 @@ public class TreeNode implements Serializable {
         return Collections.unmodifiableList(children);
     }
 
+    /**
+     * Returns true if this node is currently in the selected state, false otherwise.
+     *
+     * @return true if this node is currently selected, false otherwise.
+     */
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * Returns true if this node is currently in the expanded state, false otherwise.
+     *
+     * @return true if this node is currently expanded, false otherwise.
+     */
+    public boolean isExpanded() {
+        return expanded;
+    }
+
     // -------------------------------------------------------- Public Behavior
 
     /**
@@ -509,30 +527,12 @@ public class TreeNode implements Serializable {
     // ----------------------------------------------- Package-private Behavior
 
     /**
-     * Returns true if this node is currently in the selected state, false otherwise.
-     *
-     * @return true if this node is currently selected, false otherwise.
-     */
-    boolean isSelected() {
-        return selected;
-    }
-
-    /**
      * Sets this node to the specified selected state.
      *
      * @param selected new value for this node's selected state
      */
     void setSelected(boolean selected) {
         this.selected = selected;
-    }
-
-    /**
-     * Returns true if this node is currently in the expanded state, false otherwise.
-     *
-     * @return true if this node is currently expanded, false otherwise.
-     */
-    boolean isExpanded() {
-        return expanded;
     }
 
     /**
