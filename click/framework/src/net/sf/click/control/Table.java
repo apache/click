@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -261,11 +262,18 @@ public class Table extends AbstractControl {
      * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
      * query and is used to determine the number of pages which can be
      * displayed.
+     *
+     * @deprecated this property will be removed in subsequent releases
      */
     protected int rowCount;
 
-    /** The list Table rows. */
-    protected List rowList;
+    /**
+     * The list Table rows. Please note the table rowList is a transient weakly
+     * referenced variable variable and may not be stored in the session with
+     * stateful Pages. Please ensure that the table rowList is reinitialized
+     * with each request.
+     */
+    protected transient WeakReference rowListRef;
 
     /**
      * The show table banner flag detailing number of rows and rows
@@ -579,11 +587,11 @@ public class Table extends AbstractControl {
             return 1;
         }
 
-        if (rowList == null || rowList.isEmpty()) {
+        if (getRowList().isEmpty()) {
             return 1;
         }
 
-        double value = (double) rowList.size() / (double) getPageSize();
+        double value = (double) getRowList().size() / (double) getPageSize();
 
         return (int) Math.ceil(value);
     }
@@ -634,6 +642,8 @@ public class Table extends AbstractControl {
      * query and is used to determine the number of pages which can be
      * displayed.
      *
+     * @deprecated this method will be removed in subsequent releases
+     *
      * @return the total number of rows in the quer]y, or 0 if undefined
      */
     public int getRowCount() {
@@ -646,6 +656,8 @@ public class Table extends AbstractControl {
      * query and is used to determine the number of pages which can be
      * displayed.
      *
+     * @deprecated this method will be removed in subsequent releases
+     *
      * @param rowCount the total number of rows in the quer]y, or 0 if undefined
      */
     public void setRowCount(int rowCount) {
@@ -654,23 +666,45 @@ public class Table extends AbstractControl {
 
     /**
      * Return the list of table rows.
+     * <p/>
+     * Please note the table rowList is a transient weakly referenced variable
+     * and may not be stored in the session with stateful Pages. Please ensure
+     * that the table rowList is reinitialized with each request.
      *
      * @return the list of table rows
      */
     public List getRowList() {
+        List rowList = null;
+
+        if (rowListRef != null) {
+            rowList = (List) rowListRef.get();
+        }
+
         if (rowList == null) {
             rowList = new ArrayList();
+
+            rowListRef = new WeakReference(rowList);
         }
+
         return rowList;
     }
 
     /**
      * Set the list of table rows.
+     * <p/>
+     * Please note the table rowList is a transient weakly referenced variable
+     * and may not be stored in the session with stateful Pages. Please ensure
+     * that the table rowList is reinitialized with each request.
      *
      * @param rowList the list of table rows to set
      */
     public void setRowList(List rowList) {
-        this.rowList = rowList;
+        if (rowList != null) {
+            rowListRef = new WeakReference(rowList);
+
+        } else {
+            rowListRef = null;
+        }
     }
 
     /**
