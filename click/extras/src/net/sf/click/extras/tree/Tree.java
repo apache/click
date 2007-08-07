@@ -806,6 +806,14 @@ public class Tree extends AbstractControl {
 
     /**
      * This method does nothing.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+    }
+
+    /**
+     * This method does nothing.
      * <p/>
      * Please use the {@link #addListener(TreeListener)} method instead.
      *

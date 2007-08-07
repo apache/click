@@ -485,6 +485,9 @@ public class LinkDecorator implements Decorator {
             return true;
         }
 
+        public void onDestroy() {
+        }
+
         /**
          * Query if the user clicked on a button or button contained
          * in LinkDecorator. As soon as either a button or link if found
