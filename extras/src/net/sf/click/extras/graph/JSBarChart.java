@@ -240,6 +240,14 @@ public class JSBarChart extends AbstractControl {
     }
 
     /**
+     * This method does nothing.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+    }
+
+    /**
      * Return the HTML rendered bar chart.
      *
      * @return the HTML rendered bar chart string

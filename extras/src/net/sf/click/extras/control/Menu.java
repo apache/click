@@ -761,6 +761,14 @@ public class Menu implements Control {
     }
 
     /**
+     * This method does nothing.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+    }
+
+    /**
      * Return an HTML anchor tag representation of the menu item. If the menu is
      * a separator this method will return a HR tag &lt;hr/&gt;.
      * <p/>
