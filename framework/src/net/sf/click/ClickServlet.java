@@ -368,6 +368,23 @@ public class ClickServlet extends HttpServlet {
 
         } finally {
             if (page != null) {
+                if (page.hasControls()) {
+                    List controls = page.getControls();
+
+                    for (int i = 0, size = controls.size(); i < size; i++) {
+                        Control control = (Control) controls.get(i);
+                        control.onDestroy();
+
+                        if (logger.isTraceEnabled()) {
+                            String controlClassName = control.getClass().getName();
+                            controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+                            String msg =  "   invoked: '" + control.getName()
+                                + "' " + controlClassName + ".onDestroy()";
+                            logger.trace(msg);
+                        }
+                    }
+                }
+
                 page.onDestroy();
 
                 if (page.isStateful()) {
