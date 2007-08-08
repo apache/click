@@ -541,6 +541,22 @@ public class FieldSet extends Field {
     }
 
     /**
+     * Destroy the fields contained in the fieldset.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            try {
+                field.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Return the HTML string representation of the fieldset.
      *
      * @see Object#toString()

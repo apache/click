@@ -400,6 +400,16 @@ public class RadioGroup extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getRadioList().size(); i < size; i++) {
+            Radio radio = (Radio) getRadioList().get(i);
+            radio.onInit();
+        }
+    }
+
+    /**
      * Process the request Context setting the checked value and invoking
      * the controls listener if defined.
      *
@@ -424,6 +434,20 @@ public class RadioGroup extends Field {
         }
 
         return invokeListener();
+    }
+
+    /**
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        for (int i = 0, size = getRadioList().size(); i < size; i++) {
+            Radio radio = (Radio) getRadioList().get(i);
+            try {
+                radio.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
     }
 
     /**

@@ -328,6 +328,9 @@ public class Page {
      * <p/>
      * This method is guaranteed to be called before the Page object reference
      * goes out of scope and is available for garbage collection.
+     * <p/>
+     * Stateful pages will have this method invoked before they are saved to
+     * the session.
      */
     public void onDestroy() {
     }

@@ -440,7 +440,6 @@ public class Panel extends AbstractControl {
     public void onDeploy(ServletContext servletContext) {
     }
 
-
     /**
      * Initialize the child controls contained in the panel.
      *
@@ -472,6 +471,22 @@ public class Panel extends AbstractControl {
             }
         }
         return true;
+    }
+
+    /**
+     * Destroy the child controls contained in the panel.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            try {
+                control.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
     }
 
     /**
