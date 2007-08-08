@@ -1822,6 +1822,31 @@ public class Form implements Control {
     }
 
     /**
+     * Destroy the fields and buttons contained in the Form.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            try {
+                field.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
+        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+            Button button = (Button) getButtonList().get(i);
+            try {
+                button.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Perform a form submission check ensuring the user has not replayed the
      * form submission by using the browser back button. If the form submit
      * is valid this method will return true, otherwise set the page to

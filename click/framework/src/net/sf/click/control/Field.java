@@ -857,6 +857,15 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * clean up any resources.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+    }
+
+    /**
      * The validate method is invoked by <tt>onProcess()</tt> to validate
      * the request submission. Field subclasses should override this method
      * to implement request validation logic.

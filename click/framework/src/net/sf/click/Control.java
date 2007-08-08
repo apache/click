@@ -253,4 +253,14 @@ public interface Control extends Serializable {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess();
+
+    /**
+     * The on destroy request event handler. Control classes should use this
+     * method to add any resource clean up code.
+     * <p/>
+     * This method is guaranteed to be called before the Page object reference
+     * goes out of scope and is available for garbage collection.
+     */
+    public void onDestroy();
+
 }

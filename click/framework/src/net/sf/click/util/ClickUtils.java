@@ -1660,7 +1660,7 @@ public class ClickUtils {
 
     // -------------------------------------------------------- Private Methods
 
-    public static Set getObjectPropertyNames(Object object) {
+    private static Set getObjectPropertyNames(Object object) {
         if (object instanceof Map) {
             return ((Map) object).keySet();
         }
@@ -1695,7 +1695,7 @@ public class ClickUtils {
         return hashSet;
     }
 
-    public static boolean hasMatchingProperty(Field field, Set properties) {
+    private static boolean hasMatchingProperty(Field field, Set properties) {
         String fieldName = field.getName();
         if (fieldName.indexOf(".") != -1) {
             fieldName = fieldName.substring(0, fieldName.indexOf("."));

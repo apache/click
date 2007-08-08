@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -268,12 +267,10 @@ public class Table extends AbstractControl {
     protected int rowCount;
 
     /**
-     * The list Table rows. Please note the table rowList is a transient weakly
-     * referenced variable variable and may not be stored in the session with
-     * stateful Pages. Please ensure that the table rowList is reinitialized
-     * with each request.
+     * The list Table rows. Please note the rowList is cleared in table
+     * {@link #onDestroy()} method at the end of each request.
      */
-    protected transient WeakReference rowListRef;
+    protected List rowList;
 
     /**
      * The show table banner flag detailing number of rows and rows
@@ -665,46 +662,27 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return the list of table rows.
-     * <p/>
-     * Please note the table rowList is a transient weakly referenced variable
-     * and may not be stored in the session with stateful Pages. Please ensure
-     * that the table rowList is reinitialized with each request.
+     * Return the list of table rows. Please note the rowList is cleared in
+     * table {@link #onDestroy()} method at the end of each request.
      *
      * @return the list of table rows
      */
     public List getRowList() {
-        List rowList = null;
-
-        if (rowListRef != null) {
-            rowList = (List) rowListRef.get();
-        }
-
         if (rowList == null) {
             rowList = new ArrayList();
-
-            rowListRef = new WeakReference(rowList);
         }
 
         return rowList;
     }
 
     /**
-     * Set the list of table rows.
-     * <p/>
-     * Please note the table rowList is a transient weakly referenced variable
-     * and may not be stored in the session with stateful Pages. Please ensure
-     * that the table rowList is reinitialized with each request.
+     * Set the list of table rows. Please note the rowList is cleared in
+     * table {@link #onDestroy()} method at the end of each request.
      *
      * @param rowList the list of table rows to set
      */
     public void setRowList(List rowList) {
-        if (rowList != null) {
-            rowListRef = new WeakReference(rowList);
-
-        } else {
-            rowListRef = null;
-        }
+        this.rowList = rowList;
     }
 
     /**
@@ -847,8 +825,6 @@ public class Table extends AbstractControl {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        sorted = false;
-
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             control.onInit();
@@ -898,6 +874,27 @@ public class Table extends AbstractControl {
         }
 
         return true;
+    }
+
+    /**
+     * This method will clear the rowList, set the sorted flag to false and
+     * will invoke the onDestroy() method of any child controls.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        rowList.clear();
+        rowList = null;
+        sorted = false;
+
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            try {
+                control.onDestroy();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
     }
 
     /**
