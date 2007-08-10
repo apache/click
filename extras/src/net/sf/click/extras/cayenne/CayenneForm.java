@@ -552,6 +552,16 @@ public class CayenneForm extends Form {
     }
 
     /**
+     * Clear the cached dataObject and destroy the form fields.
+     *
+     * @see Form#onDestroy()
+     */
+    public void onDestroy() {
+        super.onDestroy();
+        dataObject = null;
+    }
+
+    /**
      * This method applies the object meta data to the form fields and then
      * invokes the <tt>super.toString()</tt> method.
      *
