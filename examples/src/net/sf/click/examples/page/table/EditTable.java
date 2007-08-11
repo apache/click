@@ -45,7 +45,7 @@ public class EditTable extends BorderPage {
 
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
-        table.setPageSize(10);
+        table.setPageSize(8);
         table.setShowBanner(true);
 
         Column column = new Column("name");
