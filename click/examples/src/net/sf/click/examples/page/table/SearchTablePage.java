@@ -10,6 +10,7 @@ import net.sf.click.control.PageLink;
 import net.sf.click.control.Submit;
 import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
+import net.sf.click.examples.control.SpacerButton;
 import net.sf.click.examples.domain.Customer;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.EditCustomer;
@@ -42,6 +43,8 @@ public class SearchTablePage extends BorderPage {
         form.add(dateField);
         form.add(new Submit("Search"));
         form.add(new Submit("Clear", this, "onClearClick"));
+        form.add(new SpacerButton());
+        form.add(new Submit("New...", this, "onNewClick"));
 
         // Setup customers table
         table.setClass(Table.CLASS_ITS);
@@ -98,6 +101,18 @@ public class SearchTablePage extends BorderPage {
         return true;
     }
 
+    /**
+     * Handle the new button click event.
+     *
+     * @return false
+     */
+    public boolean onNewClick() {
+    	String path = getContext().getPagePath(EditCustomer.class);
+    	path += "?referrer=/table/search-table.htm";
+    	setRedirect(path);
+    	return false;
+    }
+    
     /**
      * Handle the delete link click event.
      *
