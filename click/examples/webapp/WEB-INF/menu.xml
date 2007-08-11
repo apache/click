@@ -39,14 +39,14 @@
 		<menu label="Velocity Action Table" path="control/action-table.htm"/>
 	</menu>
 	
-   	<menu label="Forms" path="#">
+   	<menu label=" Forms" path="#" imageSrc="/images/form.png">
 		<menu label="Form Layout" path="form/form-layout.htm"/>
 		<menu label="Form Properties" path="form/form-properties.htm"/>
 		<menu label="Search Form" path="form/search-form.htm"/>
 		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
    	</menu>
    
-	<menu label="Controls" path="#">
+	<menu label=" Controls" path="#"  imageSrc="/images/icons-16px/text_rich_colored.png">
 		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
      	<menu label="Action Controls" path="control/action-demo.htm"/>
 		<menu label="CheckList" path="control/check-list-demo.htm"/>
@@ -56,13 +56,13 @@
 		<menu label="Select" path="control/select-demo.htm"/>
 		<menu separator="true"/>
 		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
-		<menu label="Menu" path="menu/menu-a1.htm"/>
+		<menu label="Menu" path="control/menu-documentation.htm"/>
 		<menu label="PickList" path="control/pick-list-demo.htm"/>
 		<menu label="RegexField" path="control/regex-demo.htm"/>
 		<menu label="RichTextArea" path="control/email-form.htm"/>
    	</menu>
    
-   	<menu label="Table" path="#">
+   	<menu label=" Table" path="#" imageSrc="/images/icons-16px/table_sql.png">
 		<menu label="Edit Table" path="table/edit-table.htm"/>
 		<menu label="FormTable" path="table/form-table.htm"/>
 		<menu label="Search Table" path="table/search-table.htm"/>
@@ -72,26 +72,26 @@
 		<menu label="Table Styles" path="table/table-styles.htm"/>
    	</menu>
 
-   	<menu label="Tree" path="#">
+   	<menu label=" Tree" path="#" imageSrc="/images/icons-16px/text_tree.png">
 		<menu label="Basic Tree" path="tree/plain-tree-page.htm"/>
 		<menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
 		<menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
    	</menu>
 
-   	<menu label="Panel" path="#">
+   	<menu label=" Panel" path="#" imageSrc="/images/icons-16px/window_split_ver.png">
 		<menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
 		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
 		<menu label="List Panel" path="panel/list-panel-demo.htm"/>
 		<menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
    	</menu>
    
-	<menu label="Charts" path="#">
+	<menu label=" Charts" path="#" imageSrc="/images/icons-16px/column-chart.png">
 		<menu label="Bar Chart" path="graph/bar-chart.htm"/>
 		<menu label="Line Chart" path="graph/line-chart.htm"/>
 		<menu label="Pie Chart" path="graph/pie-chart.htm"/>
 	</menu>
    
-	<menu label="Cayenne" path="#">
+	<menu label=" Cayenne" path="#" imageSrc="/images/cayenne.png">
 		<menu label="CayenneForm" path="cayenne/cayenne-form-page.htm"/>
 		<menu label="TabbedCayenneForm" path="cayenne/tabbed-cayenne-form-page.htm"/>
 	</menu>
