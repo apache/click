@@ -39,13 +39,6 @@
 		<menu label="Velocity Action Table" path="control/action-table.htm"/>
 	</menu>
 	
-   	<menu label=" Forms" path="#" imageSrc="/images/form.png">
-		<menu label="Form Layout" path="form/form-layout.htm"/>
-		<menu label="Form Properties" path="form/form-properties.htm"/>
-		<menu label="Search Form" path="form/search-form.htm"/>
-		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
-   	</menu>
-   
 	<menu label=" Controls" path="#"  imageSrc="/images/icons-16px/text_rich_colored.png">
 		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
      	<menu label="Action Controls" path="control/action-demo.htm"/>
@@ -62,7 +55,14 @@
 		<menu label="RichTextArea" path="control/email-form.htm"/>
    	</menu>
    
-   	<menu label=" Table" path="#" imageSrc="/images/icons-16px/table_sql.png">
+   	<menu label=" Forms" path="#" imageSrc="/images/form.png">
+		<menu label="Form Layout" path="form/form-layout.htm"/>
+		<menu label="Form Properties" path="form/form-properties.htm"/>
+		<menu label="Search Form" path="form/search-form.htm"/>
+		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
+   	</menu>
+   
+   	<menu label=" Table" path="#" imageSrc="/images/icons-16px/table.png">
 		<menu label="Edit Table" path="table/edit-table.htm"/>
 		<menu label="FormTable" path="table/form-table.htm"/>
 		<menu label="Search Table" path="table/search-table.htm"/>
