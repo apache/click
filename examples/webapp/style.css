@@ -1,56 +1,60 @@
+/* 
+ * Border template specific styles. 
+ */
 body {
-	font-family: Arial;
-	margin: 0;
-	padding: 0;
+	background: #547cc3;
+	color: #000000;
+	font-family: Arial, Helvetica, "Sans Serif";
+	margin: 12px 12px 12px 12px;
 }
 
-#clickLink {
-	margin-top: 0px;
-	position: absolute;
-	top: 10px;
-	left: 10px;
+table.page {
+	border: 1px solid #d0d0d0;
+	border-collapse: collapse;
+	background: #ffffff;
+	width: 990px;
 }
 
-#title {
-	color: black; 
-	font-weight: bold;
-	font-size: 20pt;
-	position: absolute;
-	top: 8px;
-	left: 55px;
+td.title-icon {
+	vertical-align: bottom;
+	padding-left: 14px;
+	padding-right: 12px;
+	padding-top: 10px;
+	padding-bottom: 6px;
 }
 
-#homeTitle {
-	color: black; 
-	font-weight: bold;
-	font-size: 20pt;
-	position: absolute;
-	top: 8px;
-	left: 40px;
+td.title-left {
+	color: navy;
+	font-size: 24pt;
+	font-weight: bolder;
+	vertical-align: middle;
+	white-space: nowrap;
 }
 
-#hostedTitle {
-	color: #d0d0d0; 
+td.title-hosted p, td.title-hosted a {
+	color: navy;
 	font-size: 8pt;
+	margin: 1em;
+	text-align:right;
 	text-decoration: none;
-	position: absolute;
-	top: 28px;
-	right: 10px;
+	vertical-align: middle;
+	white-space: nowrap;
 }
 
-#header {
-	background: #4A70BC url(/click-examples/images/banner.gif) top left no-repeat;
-	height: 50px;
-	position: relative;
-	width: 100%;
+td.header-color {
+	background-color: #334ECF;
+	font-size: 9pt;
 }
 
-#container { 
-	padding-top: 1.5em;
-	padding-left: 1.5em;
-	position: relative;
-	z-index: 0;
+td.content {
+	font-size: 10pt;
+	padding: 15px;
+	border-collapse: separate;
 }
+
+/*
+ * General styles. 
+ */
 
 #msgDiv {
 	background-color: #f0f0f0;
@@ -61,114 +65,56 @@ body {
 	padding: 1em;
 }
 
-
-.menuTable {
-	color: white;
-	background-color: #08108F; 
-	width: 100%;
-}
-
-span.msg {
-	font-style: italic;
-	color: blue;
-	margin-left: 1em;
-}
-
-a.external {
-	background: url(images/external.png) center right no-repeat;
-	padding-right: 14px;
-}
-
-body, table, p {
-	font-family: verdana, arial, helvetica, lucida-sans, sans-serif; 
-	font-size: 12px;
-}
-
-p.info, p.error {
-	border: 1px solid #c0c0e0;
+.infoMsg {
+	border: 1px solid #a7bcd6;
 	background-color: #ffffc0;
-	margin-top: 0.5em;
-	margin-bottom: 1em;
-	margin-right: 1.5em;
+	margin: 0.5em;
 	padding: 0.5em;
 }
 
-p.info {
-	color: navy;
-}
-
-p.error {
-	color: red;
+td, th {
+	font-size: 9pt;
 }
 
 a:visited {
 	color: blue;
 }
 
-.menu {
-	color: white;
-	text-decoration: none;
+/*
+ * Table styles
+ */
+table.complex td, table.complex th, table.isi td, table.isi th, table.its td, table.its th, table.mars td, table.mars th, table.nocol td, table.nocol th, table.simple td, table.simple th, table.simple input, table.simple select, table.report td, table.report th {
+	font-size: 9pt;
 }
 
-.menu:visited {
-	color: white;
+span.pagebanner, span.pagelinks {
+	font-size: 9pt;
 }
 
-.menu:hover {
-	color: yellow;
+table input {
+	font-size: 9pt;
 }
 
-.flash {
-	color: blue;
-	font-style: italic;
-	margin-left:1em;
+/*
+ * Form styles
+ */
+table.errors td, table.fields td, table.fields label, table.fields input, table.fields select, table.fields textarea, table.buttons input {
+	font-size: 9pt;
 }
 
-h1  { 
-	font-size: 24px;
-	font-weight: bold;
+/*
+ * Tabbed Panel styles
+ */
+a.tb_label {
+	font-size: 9pt;
 }
 
-td {
-	white-space: nowrap; 
-}
-
-tr.titleBar {
-	background-color: black;
-	color: white;
-}
-
-td.titleText {
-	font-weight: bold;
-	letter-spacing: 0.2em; 
-	margin: 2px 2px;
-	padding-bottom: 0px;
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-top: 0px;
-	text-decoration: none;
-}
-
-dt {
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-	margin-left: 1em;
-	margin-right: 1em;
-}
-
-.left-column {
-	text-align: right; 
-	padding-right: 0.5em;
-}
-
-.right-column {
-	text-align: left; 
-	padding-left: 0.5em;
-}
-
+/*
+ * Example Styles
+ */
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
 	font-family: Courier New, courier;
-	font-size: 10pt;
+	font-size: 9pt;
 	border: 1px solid #AAAAAA;
 	background-color: #FAFAFA;
 	padding: 1em;
@@ -226,32 +172,3 @@ dt {
 
 .navy { color: navy; }
 
-/* Tabbed Form */
-table.tf_tab { 
-	border-collapse: collapse; 
-}
-td.tf_separator { 
-	border-bottom: 1px solid #336699; 
-}
-td.tf_tab { 
-	border-left: 1px solid #336699; 
-	border-top: 1px solid #336699; 
-	border-right: 1px solid #336699;  
-	border-bottom: 1px solid #336699; 
-	padding: 5px; 
-	white-space: nowrap;
-	text-decoration: none;
-}
-td.tf_sheet {
-	border-left: 1px solid #336699; 
-	border-right: 1px solid #336699;  
-	border-bottom: 1px solid #336699;
-	vertical-align: top;
-	padding: 0.75em; 
-}
-td.tf_error {
-    color: red;
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-    padding-left: 0.5em;
-}
