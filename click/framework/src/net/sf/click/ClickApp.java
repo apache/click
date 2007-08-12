@@ -264,6 +264,9 @@ class ClickApp implements EntityResolver {
             // Load the Commons Upload file item factory
             loadFileItemFactory(rootElm);
 
+            // Load the common headers
+            loadHeaders(rootElm);
+
             // Load the pages
             loadPages(rootElm);
 
@@ -776,6 +779,17 @@ class ClickApp implements EntityResolver {
         }
     }
 
+    private void loadHeaders(Element rootElm) {
+        Element headersElm = getChild(rootElm, "headers");
+
+        if (headersElm != null) {
+            commonHeaders =
+                Collections.unmodifiableMap(loadHeadersMap(headersElm));
+        } else {
+            commonHeaders = Collections.unmodifiableMap(DEFAULT_HEADERS);
+        }
+    }
+
     private void loadFormatClass(Element rootElm)
             throws ClassNotFoundException {
 
@@ -913,14 +927,6 @@ class ClickApp implements EntityResolver {
             throw new RuntimeException(msg);
         }
 
-
-        Element headersElm = getChild(rootElm, "headers");
-        if (headersElm != null) {
-            commonHeaders =
-                Collections.unmodifiableMap(loadHeadersMap(headersElm));
-        } else {
-            commonHeaders = Collections.unmodifiableMap(DEFAULT_HEADERS);
-        }
 
         List pageList = getChildren(pagesElm, "page");
 
