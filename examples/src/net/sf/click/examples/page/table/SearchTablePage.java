@@ -107,12 +107,12 @@ public class SearchTablePage extends BorderPage {
      * @return false
      */
     public boolean onNewClick() {
-    	String path = getContext().getPagePath(EditCustomer.class);
-    	path += "?referrer=/table/search-table.htm";
-    	setRedirect(path);
-    	return false;
+        String path = getContext().getPagePath(EditCustomer.class);
+        path += "?referrer=/table/search-table.htm";
+        setRedirect(path);
+        return false;
     }
-    
+
     /**
      * Handle the delete link click event.
      *
