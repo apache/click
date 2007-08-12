@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>Click Examples</title>
+<link rel="stylesheet" type="text/css" href="$context/style.css" title="Style"></link>
+$imports
+#if ($headInclude) #parse($headInclude) #end
+</head>
+<body #if($bodyOnload) onload="$bodyOnload" #end>
+
+<center>
+<table height="100%" border="0" cellpadding="0" cellspacing="4" class="page">
+## Title Header
+<tr>
+	<td width="100%">			
+		<table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse:collapse;">
+			<tr>
+				<td class="title-icon">
+					<a target="blank" href="http://click.sourceforge.net"><img src="$context/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+				</td>
+				<td class="title-left" width="100%">
+					$title
+				</td>
+				<td class="title-hosted">
+					<p>$messages.version</p>
+					<a target="blank" href="http://www.avoka.com">Hosted by Avoka Technologies</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="header-color" colspan="3">&nbsp;</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+## Menu
+<tr>		
+	<td>
+#if ($rootMenu)
+#writeMenu($rootMenu)
+#end
+	</td>
+</tr>
+## Page Content
+<tr>		
+	<td class="content">
+#parse($path)
+	</td>
+</tr>
+## Vertical Spacer
+<tr>		
+	<td height="100%">&nbsp;</td>
+</tr>
+</table>
+</center>
+
+</body>
+</html>
