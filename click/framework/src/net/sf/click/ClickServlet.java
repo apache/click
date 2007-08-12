@@ -373,46 +373,46 @@ public class ClickServlet extends HttpServlet {
 
                     for (int i = 0, size = controls.size(); i < size; i++) {
                         try {
-                        	Control control = (Control) controls.get(i);
-                        	control.onDestroy();
+                            Control control = (Control) controls.get(i);
+                            control.onDestroy();
 
-                        	if (logger.isTraceEnabled()) {
-                        		String controlClassName = control.getClass().getName();
-                        		controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
-                        		String msg =  "   invoked: '" + control.getName()
-                        		+ "' " + controlClassName + ".onDestroy()";
-                        		logger.trace(msg);
-                        	}
+                            if (logger.isTraceEnabled()) {
+                                String controlClassName = control.getClass().getName();
+                                controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+                                String msg =  "   invoked: '" + control.getName()
+                                + "' " + controlClassName + ".onDestroy()";
+                                logger.trace(msg);
+                            }
                         } catch (Throwable error) {
-                        	logger.error(error.toString(), error);
+                            logger.error(error.toString(), error);
                         }
                     }
                 }
 
                 try {
-                	page.onDestroy();
+                    page.onDestroy();
 
-                	if (page.isStateful()) {
-                		page.getContext().setSessionAttribute(page.getClass().getName(), page);
-                	} else {
-                		page.getContext().removeSessionAttribute(page.getClass().getName());
-                	}
+                    if (page.isStateful()) {
+                        page.getContext().setSessionAttribute(page.getClass().getName(), page);
+                    } else {
+                        page.getContext().removeSessionAttribute(page.getClass().getName());
+                    }
 
-                	if (logger.isTraceEnabled()) {
-                		String shortClassName = page.getClass().getName();
-                		shortClassName =
-                			shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
-                		logger.trace("   invoked: " + shortClassName + ".onDestroy()");
-                	}
+                    if (logger.isTraceEnabled()) {
+                        String shortClassName = page.getClass().getName();
+                        shortClassName =
+                            shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                        logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+                    }
 
-                	if (!clickApp.isProductionMode()) {
-                		logger.info("handleRequest:  " + page.getPath() + " - "
-                				+ (System.currentTimeMillis() - startTime)
-                				+ " ms");
-                	}
-                
+                    if (!clickApp.isProductionMode()) {
+                        logger.info("handleRequest:  " + page.getPath() + " - "
+                                + (System.currentTimeMillis() - startTime)
+                                + " ms");
+                    }
+
                 } catch (Throwable error) {
-                	logger.error(error.toString(), error);
+                    logger.error(error.toString(), error);
                 }
             }
         }
@@ -496,27 +496,27 @@ public class ClickServlet extends HttpServlet {
                     List controls = finalizeRef.getControls();
 
                     for (int i = 0, size = controls.size(); i < size; i++) {
-                    	try {
-                    		Control control = (Control) controls.get(i);
-                        	control.onDestroy();
+                        try {
+                            Control control = (Control) controls.get(i);
+                            control.onDestroy();
                         } catch (Throwable error) {
-                        	logger.error(error.toString(), error);
+                            logger.error(error.toString(), error);
                         }
                     }
                 }
-                
-            	try {
-            		finalizeRef.onDestroy();
 
-            		if (logger.isTraceEnabled()) {
-            			String shortClassName = finalizeRef.getClass().getName();
-            			shortClassName =
-            				shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
-            			logger.trace("   invoked: " + shortClassName + ".onDestroy()");
-            		}
-            		
+                try {
+                    finalizeRef.onDestroy();
+
+                    if (logger.isTraceEnabled()) {
+                        String shortClassName = finalizeRef.getClass().getName();
+                        shortClassName =
+                            shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                        logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+                    }
+
                 } catch (Throwable error) {
-                	logger.error(error.toString(), error);
+                    logger.error(error.toString(), error);
                 }
             }
         }
