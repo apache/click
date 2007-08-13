@@ -285,21 +285,10 @@ public class Context {
     }
 
     /**
-     * Return the named request parameter. If the request is a Content-type
-     * <tt>"multipart/form-data"</tt> POST request, then request parameter will
-     * be derived from the {@link #multiPartFormData} map.
-     * <p/>
-     * Generally the <tt>Form</tt> control is responsible for populating the
-     * multipart form data map. However if a call is made to this method
-     * before the {@link net.sf.click.control.Form#onProcess()} has had a chance
-     * to populate the multipart form data map, then this method will load the
-     * data itself using the <tt>DefaultFileItemFactory</tt>.
-     * <p/>
-     * If the Context loads the multi part data map then the Form will not
-     * attempt to reload the data map and any <tt>FileField</tt> configurations
-     * will not be applied. The reason for this is because
-     * <tt>HttpServletRequest</tt> <tt>InputStream</tt> cannot be processed
-     * twice.
+     * Return the named request parameter. This method supports
+     * <tt>"multipart/form-data"</tt> POST requests and should be used in
+     * preference to the <tt>HttpServletRequest</tt> method
+     * <tt>getParameter()</tt>.
      *
      * @see net.sf.click.control.Form#onProcess()
      * @see #isMultipartRequest()
