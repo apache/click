@@ -388,6 +388,26 @@ public class ClickServlet extends HttpServlet {
                         }
                     }
                 }
+                
+                // Reset the page navigation state
+                try {
+                	// Reset the path
+                    String path = clickApp.getPagePath(page.getClass());
+                    page.setPath(path);
+
+                    // Reset the foward
+                    if (clickApp.isJspPage(path)) {
+                    	page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
+                    } else {
+                    	page.setForward((String) null);
+                    }
+
+                    // Reset the redirect
+                	page.setRedirect((String) null);
+                	
+                } catch (Throwable error) {
+                    logger.error(error.toString(), error);
+                }
 
                 try {
                     page.onDestroy();
