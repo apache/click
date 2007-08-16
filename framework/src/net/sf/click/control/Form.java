@@ -1822,6 +1822,23 @@ public class Form implements Control {
     }
 
     /**
+     * Perform any pre rendering logic.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            field.onRender();
+        }
+
+        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+            Button button = (Button) getButtonList().get(i);
+            button.onRender();
+        }
+    }
+
+    /**
      * Destroy the fields and buttons contained in the Form.
      *
      * @see net.sf.click.Control#onDestroy()

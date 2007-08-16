@@ -231,8 +231,7 @@ public interface Control extends Serializable {
 
     /**
      * The on initialize event handler. Each Page control will be initialized
-     * before its {@link #onInit()} method is called. Controls are initialized
-     * called.
+     * before its {@link #onProcess()} method is called.
      */
     public void onInit();
 
@@ -253,6 +252,17 @@ public interface Control extends Serializable {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess();
+
+    /**
+     * The on render event handler. This event handler is invoked prior to the
+     * control being rendered, and is useful for providing pre rendering logic.
+     * <p/>
+     * The on render method is typically used to populate tables performing some
+     * database intensive operation. By putting the intensive operations in the
+     * on render method they will not be performed if the user navigates away
+     * to a different page.
+     */
+    public void onRender();
 
     /**
      * The on destroy request event handler. Control classes should use this

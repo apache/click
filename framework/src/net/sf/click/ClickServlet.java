@@ -388,23 +388,23 @@ public class ClickServlet extends HttpServlet {
                         }
                     }
                 }
-                
+
                 // Reset the page navigation state
                 try {
-                	// Reset the path
+                    // Reset the path
                     String path = clickApp.getPagePath(page.getClass());
                     page.setPath(path);
 
                     // Reset the foward
                     if (clickApp.isJspPage(path)) {
-                    	page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
+                        page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
                     } else {
-                    	page.setForward((String) null);
+                        page.setForward((String) null);
                     }
 
                     // Reset the redirect
-                	page.setRedirect((String) null);
-                	
+                    page.setRedirect((String) null);
+
                 } catch (Throwable error) {
                     logger.error(error.toString(), error);
                 }
@@ -643,6 +643,23 @@ public class ClickServlet extends HttpServlet {
 
                 if (logger.isTraceEnabled()) {
                     logger.trace(tracePrefix + ".onRender()");
+                }
+
+                if (page.hasControls()) {
+                    List controls = page.getControls();
+
+                    for (int i = 0, size = controls.size(); i < size; i++) {
+                        Control control = (Control) controls.get(i);
+                        control.onRender();
+
+                        if (logger.isTraceEnabled()) {
+                            String controlClassName = control.getClass().getName();
+                            controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+                            String msg =  "   invoked: '" + control.getName()
+                                + "' " + controlClassName + ".onRender()";
+                            logger.trace(msg);
+                        }
+                    }
                 }
             }
         }

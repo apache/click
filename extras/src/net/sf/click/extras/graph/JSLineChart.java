@@ -242,6 +242,14 @@ public class JSLineChart extends AbstractControl {
     /**
      * This method does nothing.
      *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+    }
+
+    /**
+     * This method does nothing.
+     *
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {

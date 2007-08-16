@@ -485,6 +485,9 @@ public class LinkDecorator implements Decorator {
             return true;
         }
 
+        public void onRender() {
+        }
+
         public void onDestroy() {
         }
 
