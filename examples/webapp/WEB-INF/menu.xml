@@ -80,9 +80,9 @@
 
    	<menu label=" Panel" path="#" imageSrc="/images/icons-16px/window_split_ver.png">
 		<menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
-		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
 		<menu label="List Panel" path="panel/list-panel-demo.htm"/>
 		<menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
+		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
    	</menu>
    
 	<menu label=" Charts" path="#" imageSrc="/images/icons-16px/column-chart.png">
