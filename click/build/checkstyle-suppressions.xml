@@ -79,6 +79,10 @@
 	<!-- Method Length -->              
               
     <suppress checks="MethodLength"
+              files="ClickServlet.java"
+              lines="553"/>
+
+    <suppress checks="MethodLength"
               files="ErrorReport.java"
               lines="186"/>
 
