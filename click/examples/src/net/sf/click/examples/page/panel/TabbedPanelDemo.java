@@ -20,7 +20,6 @@ public class TabbedPanelDemo extends BorderPage {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
         panel1.setLabel("The First Panel");
         tabbedPanel.addControl(panel1);
-        tabbedPanel.setActivePanel(panel1);
 
         Panel panel2 = new Panel("panel2", "panel/customersPanel2.htm");
         panel2.setLabel("The Second Panel");
