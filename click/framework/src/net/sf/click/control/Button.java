@@ -139,6 +139,15 @@ public class Button extends Field {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * pre rendering logic.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+    }
+
+    /**
      * Return a HTML rendered Button string. Note the button label is rendered
      * as the HTML "value" attribute.
      *

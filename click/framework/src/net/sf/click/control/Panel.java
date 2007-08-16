@@ -399,7 +399,7 @@ public class Panel extends AbstractControl {
 
     /**
      * Return the list of sub panels associated with this panel. Do not
-     * add sub panels using this method, use {@link #addPanel(Panel)} instead.
+     * add sub panels using this method, use {@link #addControl(Control)} instead.
      *
      * @return the list of sub-panels, if any
      */
@@ -471,6 +471,18 @@ public class Panel extends AbstractControl {
             }
         }
         return true;
+    }
+
+    /**
+     * Perform any pre rendering logic.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            control.onRender();
+        }
     }
 
     /**

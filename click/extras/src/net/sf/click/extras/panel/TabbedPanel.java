@@ -281,6 +281,72 @@ public class TabbedPanel extends Panel {
     }
 
     /**
+     * Initialize the child controls contained in the panel. Note with the child
+     * panels only the active panel will be initialized.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            if (control instanceof Panel) {
+                if (control == getActivePanel()) {
+                    control.onInit();
+                }
+            } else {
+                control.onInit();
+            }
+        }
+    }
+
+    /**
+     * Process the request and invoke the <tt>onProcess()</tt> method of any
+     * child controls. Note with the child panels only the active panel will be
+     * processed.
+     *
+     * @see net.sf.click.Control#onProcess()
+     *
+     * @return true or false to abort further processing
+     */
+    public boolean onProcess() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            if (control instanceof Panel) {
+                if (control == getActivePanel()) {
+                    if (!control.onProcess()) {
+                        return false;
+                    }
+                }
+            } else {
+                if (!control.onProcess()) {
+                    return false;
+                }
+            }
+        }
+         return true;
+    }
+
+    /**
+     * Perform any pre rendering logic and invoke the <tt>onRender()</tt> method
+     * of any child controls. Note with the child panels only the active panel
+     * will have its <tt>onRender()</tt> method invoked.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            if (control instanceof Panel) {
+                if (control == getActivePanel()) {
+                    control.onRender();
+                }
+            } else {
+                control.onRender();
+            }
+        }
+    }
+
+    /**
      * The tab switch event handler.  This method will invoke the
      * listener.method() as set by {@link #setTabListener(Object, String)} if
      * available, otherwise will just continue processing, therefore
@@ -293,10 +359,9 @@ public class TabbedPanel extends Panel {
         for (int i = 0; i < getPanels().size(); i++) {
             Panel panel = (Panel) getPanels().get(i);
 
-            if (tabLink.getValue().equals(panel.getName())
-                && !panel.isDisabled()) {
-
+            if (tabLink.getValue().equals(panel.getName()) && !panel.isDisabled()) {
                 setActivePanel(panel);
+                panel.onInit();
             }
         }
 

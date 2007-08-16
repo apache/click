@@ -46,9 +46,6 @@ import org.apache.commons.lang.StringUtils;
  *   automatically initialized when they are created.
  * </li>
  * <li class="spaced">
- *   {@link #context} property is set
- * </li>
- * <li class="spaced">
  *   {@link #format} property is set
  * </li>
  * <li class="spaced">

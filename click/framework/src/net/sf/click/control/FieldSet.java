@@ -541,6 +541,18 @@ public class FieldSet extends Field {
     }
 
     /**
+     * Perform any pre rendering logic.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+            Field field = (Field) getFieldList().get(i);
+            field.onRender();
+        }
+    }
+
+    /**
      * Destroy the fields contained in the fieldset.
      *
      * @see net.sf.click.Control#onDestroy()

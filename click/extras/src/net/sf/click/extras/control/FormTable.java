@@ -232,7 +232,7 @@ public class FormTable extends Table {
     }
 
     /**
-     * @see Control#setName(String)
+     * @see net.sf.click.Control#setName(String)
      *
      * @param name of the control
      * @throws IllegalArgumentException if the name is null

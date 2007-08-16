@@ -832,6 +832,18 @@ public class Table extends AbstractControl {
     }
 
     /**
+     * Perform any pre rendering logic.
+     *
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+            control.onRender();
+        }
+    }
+
+    /**
      * Process any Table paging control requests, and process any added Table
      * Controls.
      *
