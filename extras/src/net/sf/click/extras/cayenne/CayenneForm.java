@@ -320,6 +320,10 @@ public class CayenneForm extends Form {
      */
     public DataObject getDataObject(boolean copyTo) {
         if (dataObject != null) {
+            if (copyTo) {
+                copyTo(dataObject);
+            }
+            
             return dataObject;
         }
 
