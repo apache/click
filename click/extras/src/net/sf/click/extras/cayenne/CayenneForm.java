@@ -323,7 +323,7 @@ public class CayenneForm extends Form {
             if (copyTo) {
                 copyTo(dataObject);
             }
-            
+
             return dataObject;
         }
 
