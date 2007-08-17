@@ -3,7 +3,6 @@ package net.sf.click.examples.page;
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
-import net.sf.click.extras.control.PageSubmit;
 
 /**
  * Provides an example of a flash session attribute.
@@ -18,14 +17,23 @@ public class FlashPage extends BorderPage {
 
     public FlashPage() {
         form.add(valueField);
-        form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
-        form.add(new PageSubmit("cancel", HomePage.class));
+        form.add(new Submit("flashPage", "  Flash Page ", this, "onFlashClick"));
+        form.add(new Submit("homePage", "  Home Page ", this, "onHomeClick"));
     }
 
-    public boolean onOkClick() {
+    public boolean onFlashClick() {
         if (form.isValid()) {
             getContext().setFlashAttribute("flash", valueField.getValueObject());
             setRedirect(FlashPage.class);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean onHomeClick() {
+        if (form.isValid()) {
+            getContext().setFlashAttribute("flash", valueField.getValueObject());
+            setRedirect(HomePage.class);
             return false;
         }
         return true;
