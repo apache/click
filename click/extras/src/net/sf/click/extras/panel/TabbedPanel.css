@@ -42,6 +42,7 @@ td.tp_tab_off_disabled {
 }
 table.tp_content { 
 	border: 1px solid #336699; 
+	border-collapse: collapse; 
 }
 tr.tp_content { 
 }
