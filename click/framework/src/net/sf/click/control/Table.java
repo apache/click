@@ -669,7 +669,7 @@ public class Table extends AbstractControl {
      */
     public List getRowList() {
         if (rowList == null) {
-            rowList = new ArrayList();
+            rowList = new ArrayList(0);
         }
 
         return rowList;
@@ -895,8 +895,7 @@ public class Table extends AbstractControl {
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
-        rowList.clear();
-        rowList = null;
+        getRowList().clear();
         sorted = false;
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
