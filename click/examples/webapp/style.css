@@ -2,14 +2,14 @@
  * Border template specific styles. 
  */
 body {
-	background: #547cc3;
+	background: #585858;
 	color: #000000;
 	font-family: Arial, Helvetica, "Sans Serif";
 	margin: 12px 12px 12px 12px;
 }
 
 table.page {
-	border: 1px solid #d0d0d0;
+	border: 1px solid #202020;
 	border-collapse: collapse;
 	background: #ffffff;
 	width: 990px;
@@ -51,10 +51,6 @@ td.content {
 	padding: 15px;
 	border-collapse: separate;
 }
-
-/*
- * General styles. 
- */
 
 #msgDiv {
 	background-color: #f0f0f0;
