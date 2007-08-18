@@ -34,6 +34,7 @@ import org.eclipse.jst.j2ee.webapplication.WebapplicationFactory;
 import org.eclipse.jst.j2ee.webapplication.WelcomeFileList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbenchPage;
@@ -63,16 +64,33 @@ public class ClickUtils {
 	private static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
 	
 	/**
-	 * Creates GridData.
+	 * Creates <code>GridData</code>.
 	 * 
 	 * @param colspan the horizontal span
 	 * @param style the style constants
-	 * @return the created GridData
+	 * @return the created <code>GridData</code>
 	 */
 	public static GridData createGridData(int colspan, int style){
 		GridData gd = new GridData(style);
 		gd.horizontalSpan = colspan;
 		return gd;
+	}
+	
+	/**
+	 * Creates <code>GridLayout</code> that has no margins.
+	 * 
+	 * @param columns 
+	 * @return the created <code>GridLayout</code>
+	 */
+	public static GridLayout createGridLayout(int columns){
+		GridLayout layout = new GridLayout(columns, false);
+		layout.marginBottom = 0;
+		layout.marginTop = 0;
+		layout.marginLeft = 0;
+		layout.marginRight = 0;
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
+		return layout;
 	}
 	
 	/**
