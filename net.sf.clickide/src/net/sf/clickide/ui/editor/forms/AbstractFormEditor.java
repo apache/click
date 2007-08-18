@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 
@@ -22,7 +22,7 @@ import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 public abstract class AbstractFormEditor extends EditorPart {
 
 	protected FormToolkit toolkit;
-	protected ScrolledForm form;
+	protected Form form;
 	
 	public void doSave(IProgressMonitor monitor) {
 	}
@@ -48,10 +48,11 @@ public abstract class AbstractFormEditor extends EditorPart {
 	
 	public void createPartControl(Composite parent) {
 		toolkit = new FormToolkit(parent.getDisplay());
-		form = toolkit.createScrolledForm(parent);
+		form = toolkit.createForm(parent);
 		form.setText(ClickPlugin.getString("editor.clickXML.title"));
-		form.getBody().setLayout(new GridLayout(2, false));
+		form.getBody().setLayout(new GridLayout(1, false));
 		form.getBody().setLayoutData(new GridData(GridData.FILL_BOTH));
+		toolkit.decorateFormHeading(form);
 	}
 	
 	public abstract void initModel(IStructuredModel model);

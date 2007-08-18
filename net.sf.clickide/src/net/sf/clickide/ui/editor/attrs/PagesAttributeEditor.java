@@ -8,7 +8,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -24,7 +23,7 @@ public class PagesAttributeEditor implements IAttributeEditor {
 	
 	public Composite createForm(FormToolkit toolkit, Composite parent, final IDOMElement element) {
 		Composite composite = toolkit.createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(ClickUtils.createGridLayout(2));
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		final Text text = AttributeEditorUtils.createText(
