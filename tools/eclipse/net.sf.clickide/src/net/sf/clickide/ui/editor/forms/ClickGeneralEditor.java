@@ -13,6 +13,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
@@ -44,8 +45,13 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 		IDOMElement format = ClickUtils.getElement(clickApp, ClickPlugin.TAG_FORMAT);
 		IDOMElement mode   = ClickUtils.getElement(clickApp, ClickPlugin.TAG_MODE);
 		
+		Composite compsote = toolkit.createComposite(generic);
+		compsote.setLayout(ClickUtils.createGridLayout(2));
+		compsote.setLayoutData(new GridData(GridData.FILL_BOTH));
+		generic.setClient(compsote);
+		
 		textCharset = AttributeEditorUtils.createText(
-				toolkit, form.getBody(), clickApp, 
+				toolkit, compsote, clickApp, 
 				ClickPlugin.getString("editor.clickXML.general.charset"), 
 				ClickPlugin.ATTR_CHARSET);
 		textCharset.addModifyListener(new ModifyListener(){
@@ -59,7 +65,7 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 		});
 		
 		textLocale = AttributeEditorUtils.createText(
-				toolkit, form.getBody(), clickApp,
+				toolkit, compsote, clickApp,
 				ClickPlugin.getString("editor.clickXML.general.locale"), 
 				ClickPlugin.ATTR_LOCALE);
 		textLocale.addModifyListener(new ModifyListener(){
@@ -76,7 +82,7 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 		IJavaProject project = JavaCore.create(file.getProject());
 		
 		textFormat = AttributeEditorUtils.createClassText(
-				project, toolkit, form.getBody(), format, 
+				project, toolkit, compsote, format, 
 				ClickPlugin.getString("editor.clickXML.general.format"), 
 				ClickPlugin.ATTR_CLASSNAME, null, null);
 		textFormat.addModifyListener(new ModifyListener(){
@@ -108,7 +114,7 @@ public class ClickGeneralEditor extends AbstractFormEditor {
 		});
 		
 		comboMode = AttributeEditorUtils.createCombo(
-				toolkit, form.getBody(), mode, 
+				toolkit, compsote, mode, 
 				ClickPlugin.getString("editor.clickXML.general.mode"), 
 				ClickPlugin.ATTR_VALUE, 
 				ClickUtils.createComboValues(ClickPlugin.MODE_VALUES));

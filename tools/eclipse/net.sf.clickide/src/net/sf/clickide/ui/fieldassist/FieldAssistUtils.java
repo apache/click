@@ -118,7 +118,7 @@ public class FieldAssistUtils {
 		}
 		Label space = new Label(composite, SWT.NULL);
 		GridData gd = new GridData();
-		gd.widthHint = 5;
+		gd.widthHint = 7;
 		space.setLayoutData(gd);
 		if(white){
 			space.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));

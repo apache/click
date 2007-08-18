@@ -22,8 +22,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
@@ -52,18 +52,25 @@ public class ClickHeadersEditor extends AbstractFormEditor {
 		
 		final Composite left = toolkit.createComposite(sash);
 		left.setLayoutData(new GridData(GridData.FILL_BOTH));
-		left.setLayout(new GridLayout(1, false));
-		
-		final Composite right = toolkit.createComposite(sash);
-		right.setLayoutData(new GridData(GridData.FILL_BOTH));
-		right.setLayout(new GridLayout(2, false));
+		left.setLayout(new FillLayout());
 		
 		Section headerSection = toolkit.createSection(left, Section.DESCRIPTION|Section.TITLE_BAR);
 		headerSection.setText(ClickPlugin.getString("editor.clickXML.headers"));
-		headerSection.setLayoutData(ClickUtils.createGridData(1, GridData.FILL_HORIZONTAL));
 		
-		Tree tree = toolkit.createTree(left, SWT.NULL);
+		Composite detailComposite = toolkit.createComposite(sash);
+		detailComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		detailComposite.setLayout(new FillLayout());
+		
+		Section detailSection = toolkit.createSection(detailComposite, Section.DESCRIPTION|Section.TITLE_BAR);
+		detailSection.setText(ClickPlugin.getString("editor.clickXML.details"));
+		
+		final Composite right = toolkit.createComposite(detailSection);
+		right.setLayout(new FillLayout());
+		detailSection.setClient(right);
+		
+		Tree tree = toolkit.createTree(headerSection, SWT.NULL);
 		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
+		headerSection.setClient(tree);
 		
 		List acceptElements = new ArrayList();
 		acceptElements.add(ClickPlugin.TAG_HEADERS);
@@ -111,10 +118,6 @@ public class ClickHeadersEditor extends AbstractFormEditor {
 			}
 		});		
 		toolkit.paintBordersFor(left);
-		
-		Section detailSection = toolkit.createSection(right, Section.DESCRIPTION|Section.TITLE_BAR);
-		detailSection.setText(ClickPlugin.getString("editor.clickXML.details"));
-		detailSection.setLayoutData(ClickUtils.createGridData(2, GridData.FILL_HORIZONTAL));
 	}
 
 	public void modelUpdated(IStructuredModel model){

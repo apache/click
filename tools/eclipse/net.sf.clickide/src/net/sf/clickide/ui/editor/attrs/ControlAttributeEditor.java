@@ -9,7 +9,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -24,7 +23,7 @@ public class ControlAttributeEditor implements IAttributeEditor {
 	
 	public Composite createForm(FormToolkit toolkit, Composite parent, final IDOMElement element) {
 		final Composite composite = toolkit.createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(ClickUtils.createGridLayout(2));
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		
 		IFile file = (IFile)ClickUtils.getResource(element.getStructuredDocument());
