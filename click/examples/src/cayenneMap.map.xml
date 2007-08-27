@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data-map project-version="1.1">
+<data-map project-version="2.0">
 	<property name="defaultPackage" value="net.sf.click.examples.domain"/>
 	<property name="defaultSuperclass" value="net.sf.click.examples.domain.BaseEntity"/>
 	<db-entity name="ADDRESS">
@@ -103,13 +103,13 @@
 	</db-relationship>
 	<obj-relationship name="client" source="Address" target="Client" db-relationship-path="client"/>
 	<obj-relationship name="address" source="Client" target="Address" db-relationship-path="address"/>
-	<query name="states" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
+	<query name="states" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
 		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cachePolicy" value="sharedcache"/>
 		<qualifier><![CDATA[name = "STATE"]]></qualifier>
 		<ordering><![CDATA[orderBy]]></ordering>
 	</query>
-	<query name="titles" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
+	<query name="titles" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
 		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cachePolicy" value="sharedcache"/>
 		<qualifier><![CDATA[name = "TITLE"]]></qualifier>

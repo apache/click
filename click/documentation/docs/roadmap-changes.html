@@ -35,13 +35,13 @@ and documentation updates.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 1.4 RC1 - 18 August 2007</dt>
+  <dt>Version 1.4 RC1 - 1 September 2007</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
 		<span style="font-weight:bold;color:navy;">Important Change</span> 
 		the Page <a href="click-api/net/sf/click/Page.html#stateful">stateful</a> property
-		to support persistence.
+		added to support persistence.
       </li>
       <li class="change">
 		<span style="font-weight:bold;color:navy;">Important Change</span> 
@@ -70,8 +70,18 @@ and documentation updates.
 		on multipart file upload requests.
       </li>
       <li class="change">
+		<span style="font-weight:bold;color:navy;">Important Change</span> 
+		Click Extras now supports Apache Cayenne 2.x rather than Objectstyle Cayenne 1.x 
+		by default. Note backward compatability Cayenne 1.x JARS are provide in the dist directory.
+      </li>
+      <li class="change">
+		Added Control <a href="click-api/net/sf/click/Control.html#onRender()">onRender()</a> 
+		render event handler. This method is useful for Panel controls populating tables.
+      </li>
+      <li class="change">
 		Added Control <a href="click-api/net/sf/click/Control.html#onDestroy()">onDestroy()</a> 
-		destroy event handler.
+		destroy event handler. This method is useful for controls to free resources, when the controls
+		are contained in stateful pages.
       </li>
       <li class="change">
       	Added AbstractControl <a href="click-api/net/sf/click/control/AbstractControl.html#getPage()">getPage()</a> method. 
@@ -117,6 +127,9 @@ and documentation updates.
       	Fixed macro.vm is only available if war is unpacked bug. This issue was
       	raised by Andrus Adamchik and fixed by Bob Schellink
      	[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-230">230</a>].
+      </li>
+      <li class="change">
+        Updated Cayenne library to version 2.0.3.
       </li>
       <li class="change">Updated documentation and examples.</li> 
     </ul>

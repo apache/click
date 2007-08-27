@@ -23,9 +23,8 @@
 	<classpathentry path="lib/spring-context-1.2.9.jar" kind="lib"/>
 	<classpathentry path="lib/spring-core-1.2.9.jar" kind="lib"/>
 	<classpathentry path="lib/spring-web-1.2.9.jar" kind="lib"/>
-	<classpathentry path="lib/cayenne-nodeps-1.2.3.jar" kind="lib"/>
 	<classpathentry path="EXAMPLES/ashwood-1.1.jar" kind="var"/>
-	<classpathentry path="EXAMPLES/cayenne-nodeps-1.2.3.jar" kind="var"/>
+	<classpathentry path="EXAMPLES/cayenne-nodeps-2.0.3.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/commons-logging-1.0.4.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/hsqldb-1.8.0.1.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/jstl-1.1.2.jar" kind="var"/>
@@ -36,5 +35,6 @@
 	<classpathentry path="EXAMPLES/spring-core-1.2.9.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/spring-web-1.2.9.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/standard-1.1.2.jar" kind="var"/>
+	<classpathentry path="lib/cayenne-nodeps-2.0.3.jar" kind="lib"/>
 	<classpathentry path="bin" kind="output"/>
 </classpath>

@@ -8,9 +8,9 @@ import net.sf.click.examples.domain.Customer;
 import net.sf.click.extras.cayenne.CayenneTemplate;
 
 import org.apache.commons.lang.StringUtils;
-import org.objectstyle.cayenne.exp.Expression;
-import org.objectstyle.cayenne.exp.ExpressionFactory;
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides a Customer Service.

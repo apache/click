@@ -24,14 +24,14 @@ import net.sf.click.examples.domain.SystemCode;
 import net.sf.click.examples.domain.User;
 import net.sf.click.util.ClickUtils;
 
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.access.DataDomain;
-import org.objectstyle.cayenne.access.DataNode;
-import org.objectstyle.cayenne.access.DbGenerator;
-import org.objectstyle.cayenne.conf.Configuration;
-import org.objectstyle.cayenne.conf.ServletUtil;
-import org.objectstyle.cayenne.map.DataMap;
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.access.DataDomain;
+import org.apache.cayenne.access.DataNode;
+import org.apache.cayenne.access.DbGenerator;
+import org.apache.cayenne.conf.Configuration;
+import org.apache.cayenne.conf.ServletUtil;
+import org.apache.cayenne.map.DataMap;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides a database initialization filter. This servlet filter creates a

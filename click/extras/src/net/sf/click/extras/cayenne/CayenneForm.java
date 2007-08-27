@@ -28,19 +28,19 @@ import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.PersistenceState;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.dba.TypesMapping;
-import org.objectstyle.cayenne.map.DbAttribute;
-import org.objectstyle.cayenne.map.DbEntity;
-import org.objectstyle.cayenne.map.ObjAttribute;
-import org.objectstyle.cayenne.map.ObjEntity;
-import org.objectstyle.cayenne.map.ObjRelationship;
-import org.objectstyle.cayenne.validation.ValidationException;
-import org.objectstyle.cayenne.validation.ValidationResult;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.PersistenceState;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.dba.TypesMapping;
+import org.apache.cayenne.map.DbAttribute;
+import org.apache.cayenne.map.DbEntity;
+import org.apache.cayenne.map.ObjAttribute;
+import org.apache.cayenne.map.ObjEntity;
+import org.apache.cayenne.map.ObjRelationship;
+import org.apache.cayenne.validation.ValidationException;
+import org.apache.cayenne.validation.ValidationResult;
 
 /**
  * Provides Cayenne data aware Form control: &nbsp; &lt;form method='POST'&gt;.

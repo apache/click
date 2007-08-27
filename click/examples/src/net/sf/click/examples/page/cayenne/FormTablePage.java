@@ -11,7 +11,7 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.extras.cayenne.CayenneForm;
 import net.sf.click.extras.control.LinkDecorator;
 
-import org.objectstyle.cayenne.DataObject;
+import org.apache.cayenne.DataObject;
 
 /**
  * Provides an abstract CayenneForm and Table Page for creating and editing
