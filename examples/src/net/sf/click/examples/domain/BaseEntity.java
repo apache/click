@@ -1,8 +1,8 @@
 package net.sf.click.examples.domain;
 
-import org.objectstyle.cayenne.CayenneDataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.PersistenceState;
+import org.apache.cayenne.CayenneDataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.PersistenceState;
 
 /**
  * Provides an base entity CayenneDataObject class with id getter and isNew

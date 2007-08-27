@@ -30,8 +30,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.conf.ServletUtil;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.conf.ServletUtil;
 
 /**
  * Provides a servlet filter which binds DataContext objects to the request.
@@ -138,7 +138,7 @@ import org.objectstyle.cayenne.conf.ServletUtil;
  * Please see the Click Examples application for a demonstration of Cayenne integration.
  * <p/>
  * This class is adapted from the Cayenne
- * {@link org.objectstyle.cayenne.conf.WebApplicationContextFilter}.
+ * {@link org.apache.cayenne.conf.WebApplicationContextFilter}.
  *
  * @author Malcolm Edgar
  */

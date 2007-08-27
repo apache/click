@@ -6,7 +6,7 @@ import net.sf.click.examples.service.ClientService;
 import net.sf.click.examples.service.CustomerService;
 import net.sf.click.examples.service.UserService;
 
-import org.objectstyle.cayenne.access.DataContext;
+import org.apache.cayenne.access.DataContext;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

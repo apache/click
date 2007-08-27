@@ -8,7 +8,7 @@
       
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-1.2.3.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-2.0.3.jar"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
@@ -131,7 +131,9 @@
       <mkdir dir="${dir.weblib}"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
       <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
+   	  <!--
       <webDownloadMacro name="${jar.cayenne}" path="org.objectstyle.cayenne"/>
+      -->
       <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
       <webDownloadMacro name="${jar.jstl}" path="jstl"/>
       <webDownloadMacro name="${jar.logging}" path="commons-logging"/>

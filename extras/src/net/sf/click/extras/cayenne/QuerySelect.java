@@ -25,10 +25,10 @@ import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.PropertyUtils;
 
-import org.objectstyle.cayenne.DataRow;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.query.NamedQuery;
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.DataRow;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.query.NamedQuery;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides a Cayenne Query Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.

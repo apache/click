@@ -5,7 +5,7 @@ import java.util.List;
 import net.sf.click.examples.domain.Client;
 import net.sf.click.extras.cayenne.CayenneTemplate;
 
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides a Client Service.

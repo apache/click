@@ -20,20 +20,20 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.Validate;
-import org.objectstyle.cayenne.CayenneRuntimeException;
-import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.DeleteDenyException;
-import org.objectstyle.cayenne.ObjectId;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.exp.Expression;
-import org.objectstyle.cayenne.exp.ExpressionFactory;
-import org.objectstyle.cayenne.map.DbAttribute;
-import org.objectstyle.cayenne.map.DbEntity;
-import org.objectstyle.cayenne.map.ObjEntity;
-import org.objectstyle.cayenne.query.ObjectIdQuery;
-import org.objectstyle.cayenne.query.Query;
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.CayenneRuntimeException;
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.DeleteDenyException;
+import org.apache.cayenne.ObjectId;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.exp.Expression;
+import org.apache.cayenne.exp.ExpressionFactory;
+import org.apache.cayenne.map.DbAttribute;
+import org.apache.cayenne.map.DbEntity;
+import org.apache.cayenne.map.ObjEntity;
+import org.apache.cayenne.query.ObjectIdQuery;
+import org.apache.cayenne.query.Query;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides base Cayenne data access object or service class to extend, following
@@ -79,7 +79,7 @@ public class CayenneTemplate {
      * ("nullify" rule), deletion operation is cascaded (cascade rule).
      *
      * @param dataObject a persistent data object that we want to delete
-     * @throws org.objectstyle.cayenne.DeleteDenyException if a DENY delete rule
+     * @throws org.apache.cayenne.DeleteDenyException if a DENY delete rule
      * is applicable for object deletion
      */
     protected void deleteObject(DataObject dataObject) throws DeleteDenyException {

@@ -27,12 +27,12 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.PropertyUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.objectstyle.cayenne.DataObject;
-import org.objectstyle.cayenne.DataObjectUtils;
-import org.objectstyle.cayenne.access.DataContext;
-import org.objectstyle.cayenne.query.NamedQuery;
-import org.objectstyle.cayenne.query.Ordering;
-import org.objectstyle.cayenne.query.SelectQuery;
+import org.apache.cayenne.DataObject;
+import org.apache.cayenne.DataObjectUtils;
+import org.apache.cayenne.access.DataContext;
+import org.apache.cayenne.query.NamedQuery;
+import org.apache.cayenne.query.Ordering;
+import org.apache.cayenne.query.SelectQuery;
 
 /**
  * Provides a DataObject property Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.

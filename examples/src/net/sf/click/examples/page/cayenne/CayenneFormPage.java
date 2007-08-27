@@ -11,7 +11,7 @@ import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.IntegerField;
 
-import org.objectstyle.cayenne.DataObject;
+import org.apache.cayenne.DataObject;
 
 /**
  * Provides a CayenneForm and QuerySelect control demonstration.
