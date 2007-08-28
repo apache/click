@@ -6,6 +6,7 @@
     
    <property file="./build/build.properties"/>
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.3.jar"/>
+   <property name="jar.cayenne.1x" value="cayenne-nodeps-1.2.3.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
@@ -22,6 +23,7 @@
    <property name="jar.spring-web" value="spring-web-1.2.9.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.2.jar"/>
    <property name="jar.velocity" value="velocity-1.5.jar"/>
+   <property name="repository" value="http://www.ibiblio.org/maven"/>
    
 
    <!--
@@ -97,6 +99,19 @@
       <pathelement location="lib/${jar.spring-core}"/>
       <pathelement location="lib/${jar.spring-web}"/>
       <pathelement location="dist/click-${version}.jar"/>
+   </path>
+	
+   <path id="classpath.extras.cayenne.1x">
+	  <pathelement location="temp/classes"/> 
+	  <pathelement location="lib/${jar.cayenne.1x}"/>
+	  <pathelement location="lib/${jar.hibernate}"/>
+	  <pathelement location="lib/${jar.log4j}"/>
+	  <pathelement location="lib/${jar.servlet}"/>
+	  <pathelement location="lib/${jar.spring-beans}"/>
+	  <pathelement location="lib/${jar.spring-context}"/>
+	  <pathelement location="lib/${jar.spring-core}"/>
+	  <pathelement location="lib/${jar.spring-web}"/>
+	  <pathelement location="dist/click-${version}.jar"/>
    </path>
 
    <path id="classpath.examples"> 
@@ -205,11 +220,39 @@
            <attribute name="Package" value="net.sf.click.extras"/>
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
-         <fileset dir="extras/classes">
-            <exclude name="org/apache/log4j/chainsaw/**"/>
-         </fileset>
+         <fileset dir="extras/classes"/>
       </jar>  
       <!-- Generate Cayenne 1.2.x JAR -->
+      <downloadMacro name="${jar.cayenne.1x}" 
+      	             path="org.objectstyle.cayenne"/>
+   	  <delete dir="temp" quiet="false"/>
+   	  <mkdir dir="temp/src"/>
+   	  <mkdir dir="temp/classes"/>
+      <copy todir="temp/src">
+         <fileset dir="extras/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+   	  <replace dir="temp/src" 
+   	  	       token="org.apache.cayenne" 
+   	  	       value="org.objectstyle.cayenne"/>
+      <javac srcdir="temp/src"
+             destdir="temp/classes"
+             debug="true"
+             excludes="**/Test*"
+             encoding="ISO-8859-1"
+             source="1.4">
+          <classpath refid="classpath.extras.cayenne.1x"/>
+      </javac>  
+      <jar destfile="dist/click-extras-${version}-cayenne-1x.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click.extras"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="temp/classes"/>
+      </jar> 
+ 	  <delete dir="temp" quiet="false"/>
    </target>
 
 
@@ -345,7 +388,7 @@
 
  
    <target name="get-deps" description="download JAR dependencies">
-      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      
       <downloadMacro name="${jar.codec}" path="commons-codec"/>
       <downloadMacro name="${jar.collections}" path="commons-collections"/>
       <downloadMacro name="${jar.io}" path="commons-io"/>

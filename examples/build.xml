@@ -131,9 +131,6 @@
       <mkdir dir="${dir.weblib}"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
       <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
-   	  <!--
-      <webDownloadMacro name="${jar.cayenne}" path="org.objectstyle.cayenne"/>
-      -->
       <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
       <webDownloadMacro name="${jar.jstl}" path="jstl"/>
       <webDownloadMacro name="${jar.logging}" path="commons-logging"/>
@@ -144,6 +141,10 @@
       <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>
       <webDownloadMacro name="${jar.spring-web}" path="org.springframework"/>
       <webDownloadMacro name="${jar.standard}" path="taglibs"/>
+      <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/cayenne/cayenne-nodeps/2.0.3/${jar.cayenne}" 
+	       dest="${dir.weblib}/${jar.cayenne}"
+	       verbose="true"
+	       usetimestamp="true"/> 
    </target>
    
 
