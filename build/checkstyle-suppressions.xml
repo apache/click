@@ -80,7 +80,7 @@
               
     <suppress checks="MethodLength"
               files="ClickServlet.java"
-              lines="553"/>
+              lines="552"/>
 
     <suppress checks="MethodLength"
               files="ErrorReport.java"

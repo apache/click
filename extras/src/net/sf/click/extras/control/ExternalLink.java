@@ -31,6 +31,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * </td></tr>
  * </table>
  *
+ * The <tt>ExternalLink</tt> control is used to create links to external pages
+ * and resources.
+ *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
