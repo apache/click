@@ -36,7 +36,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * @see AbstractLink
  * @see ActionLink
- * @see Submit
  *
  * @author Malcolm Edgar
  */

@@ -46,6 +46,7 @@
 		<menu label="FieldSet" path="control/field-set-demo.htm"/>
 		<menu label="FileField" path="control/file-upload.htm"/>
 		<menu label="ImageSubmit" path="control/image-demo.htm"/>
+     	<menu label="Link Controls" path="control/link-demo.htm"/>
 		<menu label="Select" path="control/select-demo.htm"/>
 		<menu separator="true"/>
 		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
