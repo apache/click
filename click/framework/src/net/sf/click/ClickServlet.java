@@ -44,7 +44,6 @@ import net.sf.click.util.PageImports;
 import net.sf.click.util.PropertyUtils;
 import net.sf.click.util.RequestTypeConverter;
 import net.sf.click.util.SessionMap;
-import ognl.DefaultTypeConverter;
 import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.TypeConverter;
@@ -686,7 +685,7 @@ public class ClickServlet extends HttpServlet {
             request.setAttribute(CLICK_FORWARD, CLICK_FORWARD);
 
             if (logger.isTraceEnabled()) {
-                logger.debug("    forward: " + page.getForward());
+                logger.debug("   forward: " + page.getForward());
 
             } else if (logger.isDebugEnabled()) {
                 logger.debug("forward: " + page.getForward());
@@ -1049,7 +1048,7 @@ public class ClickServlet extends HttpServlet {
         Map ognlContext = null;
 
         boolean customConverter =
-            ! getTypeConverter().getClass().equals(DefaultTypeConverter.class);
+            ! getTypeConverter().getClass().equals(RequestTypeConverter.class);
 
         Map requestParameters = page.getContext().getRequestParameterMap();
 

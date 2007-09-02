@@ -173,6 +173,19 @@ import net.sf.click.util.PropertyUtils;
  *     }
  * } </pre>
  *
+ * <h4>Internationalization</h4>
+ *
+ * Column header titles can be localized using the controls parent messages.
+ * If the column header title value is null, the column will attempt to find a
+ * localized message in the parent messages using the key:
+ * <blockquote>
+ * <tt>getName() + ".headerTitle"</tt>
+ * </blockquote>
+ * If not found then the message will be looked up in the
+ * <tt>/click-control.properties</tt> file using the same key.
+ * If a value still cannot be found then the Column name will be converted
+ * into a header title using the method: {@link ClickUtils#toLabel(String)}.
+ * <p/>
  *
  * @see Decorator
  * @see Table

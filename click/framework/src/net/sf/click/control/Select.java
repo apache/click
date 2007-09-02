@@ -694,7 +694,7 @@ public class Select extends Field {
      */
     public void validate() {
         setError(null);
-        
+
         if (isRequired()) {
             if (isMultiple()) {
                 if (getMultipleValues().isEmpty()) {
@@ -703,7 +703,7 @@ public class Select extends Field {
 
             } else {
                 // TODO: if only one item present is this a select error
-            	
+
                 if (getValue().length() == 0) {
                     setErrorMessage("select-error");
 

@@ -76,6 +76,11 @@ a:visited {
 	color: blue;
 }
 
+a.external {
+  background: url(/click-examples/images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
 /*
  * Table styles
  */
