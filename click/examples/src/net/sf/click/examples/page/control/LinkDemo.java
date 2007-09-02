@@ -9,7 +9,7 @@ import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.ExternalLink;
 
 public class LinkDemo extends BorderPage {
-    
+
     public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
     public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
     public PageLink pageLink = new PageLink("PageLink", HomePage.class);
