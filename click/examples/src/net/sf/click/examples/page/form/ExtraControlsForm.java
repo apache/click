@@ -50,6 +50,7 @@ public class ExtraControlsForm extends BorderPage {
 
     public ExtraControlsForm() {
         form.setErrorsPosition(Form.POSITION_TOP);
+        form.setColumns(2);
 
         checkList.setHeight("5em");
         form.add(checkList);

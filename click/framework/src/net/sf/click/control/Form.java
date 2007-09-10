@@ -1839,7 +1839,8 @@ public class Form implements Control {
     }
 
     /**
-     * Destroy the fields and buttons contained in the Form.
+     * Destroy the fields and buttons contained in the Form and clear any form
+     * error message.
      *
      * @see net.sf.click.Control#onDestroy()
      */
@@ -1861,6 +1862,8 @@ public class Form implements Control {
                 t.printStackTrace();
             }
         }
+
+        setError(null);
     }
 
     /**
