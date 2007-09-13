@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -228,7 +229,8 @@ public class MockRequest implements HttpServletRequest {
     }
 
     public Enumeration getParameterNames() {
-        return null;
+    	Hashtable map = new Hashtable(parameters);
+    	return map.keys();
     }
 
     public String[] getParameterValues(String arg0) {
