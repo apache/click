@@ -8,7 +8,6 @@ BUGS
 CODE
 * CayenneForm override copyFrom to set PropertySelect value
 * Select can have multiple values
-* generate Cayenne 1.2 & Cayenne 2.0 JARS
 
 DOCUMENTATION
 * FAQ topic on rendering PDF, Excel documents
