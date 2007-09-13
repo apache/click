@@ -31,47 +31,47 @@ public class NumberFieldTest extends TestCase{
 
         assertNull(engF.getPattern());
         engF.setPattern("#.00");
-        assertEquals("#.00",engF.getPattern());
+        assertEquals("#.00", engF.getPattern());
         engF.setPattern(null);
         assertNull(engF.getPattern());
 
         engF.setValue("some Text");
-        assertEquals("some Text",engF.getValue());
+        assertEquals("some Text", engF.getValue());
         assertNull(engF.getNumber());
         
         engF.setValue("12.456,5656");
-        assertEquals("12.456,5656",engF.getValue());
-        assertEquals(new Double(12.456),engF.getNumber());
+        assertEquals("12.456,5656", engF.getValue());
+        assertEquals(new Double(12.456), engF.getNumber());
         
         engF.setNumber(decNum);
-        assertEquals("2.56",engF.getValue());
-        assertEquals(2.56d,engF.getNumber().doubleValue(),0);
+        assertEquals("2.56", engF.getValue());
+        assertEquals(2.56d, engF.getNumber().doubleValue(),0);
         
         engF.setValue("123.6");
-        assertEquals(123.6d,engF.getNumber().doubleValue(),0);
-        assertEquals(engF.getNumber(),engF.getValueObject());
+        assertEquals(123.6d, engF.getNumber().doubleValue(),0);
+        assertEquals(engF.getNumber(), engF.getValueObject());
         
         engF.setPattern("0");
         engF.setNumber(new Float(123.6f));
-        assertEquals("124",engF.getValue());
-        assertEquals(124,engF.getNumber().intValue());
+        assertEquals("124", engF.getValue());
+        assertEquals(124, engF.getNumber().intValue());
         
         engF.setValue("123.6");
-        assertEquals("123.6",engF.getValue());
-        assertEquals(123.6f,engF.getNumber().floatValue(),0);
+        assertEquals("123.6", engF.getValue());
+        assertEquals(123.6f, engF.getNumber().floatValue(),0);
         
         engF.setPattern("0.00");
         engF.setNumber(new Float(123.6f));
-        assertEquals("123.60",engF.getValue());
-        assertEquals(123.6f,engF.getNumber().floatValue(),0);
+        assertEquals("123.60", engF.getValue());
+        assertEquals(123.6f, engF.getNumber().floatValue(),0);
         
         engF.setValue("12.223");
-        assertEquals(12.223f,engF.getNumber().floatValue(),0);
+        assertEquals(12.223f, engF.getNumber().floatValue(),0);
         
         //keeps the pattern
         engF.setNumberFormat(NumberFormat.getInstance(Locale.GERMAN));
         engF.setNumber(decNum);
-        assertEquals("2,56",engF.getValue());
+        assertEquals("2,56", engF.getValue());
         engF.setValue("3456,134");
         assertEquals(3456.134f, engF.getNumber().floatValue(),0);
         
@@ -80,7 +80,7 @@ public class NumberFieldTest extends TestCase{
         NumberField germanF = new NumberField("de");
         
         germanF.setNumber(decNum);
-        assertEquals("2,56",germanF.getValue());
+        assertEquals("2,56", germanF.getValue());
         germanF.setValue("3.456,134");
         assertEquals(3456.134f, germanF.getNumber().floatValue(),0);
     }
@@ -96,7 +96,7 @@ public class NumberFieldTest extends TestCase{
         engF.setValidate(false);
         params.put("en", "no number");
         assertTrue(engF.onProcess());
-        assertEquals("no number",engF.getValue());
+        assertEquals("no number", engF.getValue());
         assertTrue(engF.isValid());
         assertNull(engF.getNumber());
         engF.validate();
@@ -123,7 +123,7 @@ public class NumberFieldTest extends TestCase{
         
         params.put("en", "some value");
         assertTrue(engF.onProcess());
-        assertEquals("some value",engF.getValue());
+        assertEquals("some value", engF.getValue());
         assertNull(engF.getNumber());
         assertEquals("some value", engF.getRequestValue());
     }
@@ -143,17 +143,17 @@ public class NumberFieldTest extends TestCase{
         params.put("en", "2.23");
         assertTrue(engF.onProcess());
         assertTrue(engF.isValid());
-        assertEquals("2",engF.getValue());
+        assertEquals("2", engF.getValue());
         
         engF.setValue("123,45");
         engF.validate();
         assertFalse(engF.isValid());
-        assertEquals("123,45",engF.getValue());
+        assertEquals("123,45", engF.getValue());
         
         engF.setValue("-12");
         engF.validate();
         assertFalse(engF.isValid());
-        assertEquals("-12",engF.getValue());
+        assertEquals("-12", engF.getValue());
         
         engF = new NumberField("en");
         engF.setPattern("0");
@@ -163,7 +163,7 @@ public class NumberFieldTest extends TestCase{
         
         assertTrue(engF.onProcess());
         assertFalse(engF.isValid());
-        assertEquals(0,engF.getValue().length());
+        assertEquals(0, engF.getValue().length());
         
         engF.setValue("");
         assertFalse(engF.isValid());
@@ -171,7 +171,7 @@ public class NumberFieldTest extends TestCase{
         
         engF.setValue("some text");
         assertFalse(engF.isValid());
-        assertEquals("some text",engF.getValue());    
+        assertEquals("some text", engF.getValue());    
     }
     
 }
