@@ -67,5 +67,12 @@ public class MockContext extends Context {
     public String getApplicationMode() {
         return "debug";
     }
+    
+    /**
+     * @see Context#getRequestParameter(String)
+     */
+    public String getRequestParameter(String name) {
+        return (String) request.getParameter(name);
+    }    
 
 }
