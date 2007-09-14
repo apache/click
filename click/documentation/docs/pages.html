@@ -113,8 +113,8 @@ Then the <tt>onSecurityCheck()</tt> handler. This method can used to
 ensure the user is authorized to access the page, and if necessary can abort any 
 further processing.
 <p/>
-The next method invoked is the <tt>onInit()</tt>, this is where you place any initialization code which requires
-access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
+The next method invoked is the <tt>onInit()</tt>, this is where you place any 
+post constructor initialization code.
 <p/>
 The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
 Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
