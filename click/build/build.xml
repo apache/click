@@ -244,6 +244,12 @@
              source="1.4">
           <classpath refid="classpath.extras.cayenne.1x"/>
       </javac>  
+      <copy todir="temp/classes">
+          <fileset dir="extras/src">
+              <exclude name="**/package.html"/>
+              <exclude name="**/*.java"/>
+          </fileset>
+      </copy>
       <jar destfile="dist/click-extras-${version}-cayenne-1x.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
