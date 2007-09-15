@@ -556,9 +556,21 @@ public class CheckList extends Field {
      * Return the list of selected values. The values are the values of the
      * Options selected.
      *
+     * @deprecated use {@link #getSelectedValues()} instead
+     *
      * @return a list of Strings
      */
     public List getValues() {
+        return getSelectedValues();
+    }
+
+    /**
+     * Return the list of selected values. The values are the values of the
+     * Options selected.
+     *
+     * @return the list of selected values
+     */
+    public List getSelectedValues() {
         if (values != null) {
             return values;
 
