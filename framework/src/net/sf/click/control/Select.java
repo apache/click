@@ -500,9 +500,20 @@ public class Select extends Field {
     /**
      * Return the list of selected values.
      *
+     * @deprecated use {@link #getSelectedValues()} instead
+     *
      * @return the list of selected values
      */
     public List getMultipleValues() {
+        return getSelectedValues();
+    }
+
+    /**
+     * Return the list of selected values.
+     *
+     * @return the list of selected values
+     */
+    public List getSelectedValues() {
         if (multipleValues != null) {
             return multipleValues;
 

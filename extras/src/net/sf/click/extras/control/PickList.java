@@ -19,11 +19,9 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -148,7 +146,7 @@ public class PickList extends Field {
     /**
      * The selected values.
      */
-    protected Set selectedValues;
+    protected List selectedValues;
 
     /**
      * The component size (width) in pixels. The default size is 400px.
@@ -391,9 +389,9 @@ public class PickList extends Field {
      *
      * @return selected values
      */
-    public Set getSelectedValues() {
+    public List getSelectedValues() {
         if (selectedValues == null) {
-            selectedValues = new HashSet();
+            selectedValues = new ArrayList();
         }
         return selectedValues;
     }
@@ -447,7 +445,7 @@ public class PickList extends Field {
         }
 
         // Load the selected items.
-        this.selectedValues = new HashSet();
+        this.selectedValues = new ArrayList();
 
         String[] values =
             getContext().getRequest().getParameterValues(getName());
@@ -486,7 +484,7 @@ public class PickList extends Field {
      */
     public void validate() {
         setError(null);
-        Set value = getSelectedValues();
+        List value = getSelectedValues();
 
         if (value.size() > 0) {
             return;
@@ -506,7 +504,7 @@ public class PickList extends Field {
     public String toString() {
 
         List optionList      = getOptionList();
-        Set  selectedValues  = getSelectedValues();
+        List selectedValues  = getSelectedValues();
         List selectedItems   = new ArrayList();
         List unselectedItems = new ArrayList();
 
