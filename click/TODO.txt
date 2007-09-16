@@ -11,6 +11,7 @@ CODE
 * Select can have multiple values
 
 DOCUMENTATION
+* document stateful pages
 * FAQ topic on rendering PDF, Excel documents
 * JSP forwarding
 * add page topic writing directly to response
