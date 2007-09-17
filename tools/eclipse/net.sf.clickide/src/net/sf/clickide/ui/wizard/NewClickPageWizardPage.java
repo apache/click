@@ -333,9 +333,9 @@ public class NewClickPageWizardPage extends WizardPage {
 		} else if(initPackage!=null && initPackage.length()!=0){
 			packageName.setText(initPackage);
 		} else if(getProject()!=null){
-			String pagesPackage = ClickUtils.getPagePackageName(getProject());
-			if(pagesPackage != null){
-				packageName.setText(pagesPackage);
+			String[] pagesPackageNames = ClickUtils.getPagePackageName(getProject());
+			if(pagesPackageNames != null && pagesPackageNames.length > 0){
+				packageName.setText(pagesPackageNames[0]);
 			}
 		}
 		packageName.addModifyListener(new ModifyListener(){
@@ -428,10 +428,10 @@ public class NewClickPageWizardPage extends WizardPage {
 		
 		addToClickXML = new Button(composite, SWT.CHECK);
 		addToClickXML.setText(ClickPlugin.getString("wizard.newPage.addMapping"));
-		if(getProject()!=null){
-			addToClickXML.setSelection(!ClickUtils.getAutoMapping(getProject()));
-		}
 		addToClickXML.setSelection(settings.getBoolean(NewClickPageWizard.SHOULD_ADD_TO_CLICK_XML));
+		if(getProject()!=null && ClickUtils.getAutoMapping(getProject())){
+			addToClickXML.setSelection(false);
+		}
 		
 		updateHTMLGroup();
 		updateClassGroup();

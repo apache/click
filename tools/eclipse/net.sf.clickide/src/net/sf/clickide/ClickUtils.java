@@ -493,14 +493,15 @@ public class ClickUtils {
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
-			if(list.getLength()==1){
-				Element pages = (Element)list.item(0);
+			for(int i=0;i<list.getLength();i++){
+				Element pages = (Element)list.item(i);
 				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
 					String autoMapping = pages.getAttribute(ClickPlugin.ATTR_AUTO_MAPPING);
 					if("false".equals(autoMapping)){
-						return false;
+						//return false;
+					} else {
+						return true;
 					}
-					return true;
 				}
 			}
 		} catch(Exception ex){
@@ -519,14 +520,15 @@ public class ClickUtils {
 	 * @param project the project
 	 * @return the package name of page classes or <code>null</code>
 	 */
-	public static String getPagePackageName(IProject project){
+	public static String[] getPagePackageName(IProject project){
 		IStructuredModel model = getClickXMLModel(project);
+		List packageNames = new ArrayList();
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
-			if(list.getLength()==1){
-				Element pages = (Element)list.item(0);
+			for(int i=0;i<list.getLength();i++){
+				Element pages = (Element)list.item(i);
 				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
-					return pages.getAttribute(ClickPlugin.ATTR_PACKAGE);
+					packageNames.add(pages.getAttribute(ClickPlugin.ATTR_PACKAGE));
 				}
 			}
 		} catch(Exception ex){
@@ -535,7 +537,7 @@ public class ClickUtils {
 				model.releaseFromRead();
 			}
 		}
-		return null;
+		return (String[]) packageNames.toArray(new String[packageNames.size()]);
 	}
 	
 	/**
@@ -548,7 +550,6 @@ public class ClickUtils {
 	 */
 	public static String getHTMLfromClass(IProject project, String className){
 		
-		String packageName = getPagePackageName(project);
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
@@ -556,7 +557,8 @@ public class ClickUtils {
 				Element element = (Element)list.item(i);
 				String clazz = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
 				if(clazz!=null){
-					if(packageName!=null && packageName.length()>0){
+					String packageName = ((Element) element.getParentNode()).getAttribute(ClickPlugin.ATTR_PACKAGE);
+					if(packageName.length()>0){
 						clazz = packageName + "." + clazz;
 					}
 					if(clazz.equals(className)){
@@ -565,31 +567,34 @@ public class ClickUtils {
 				}
 			}
 			
-			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
+			String[] packageNames = getPagePackageName(project);
+			if(getAutoMapping(project) && packageNames.length>0){
 				String root = getWebAppRootFolder(project);
-				if(className.startsWith(packageName + ".")){
-					String dir = null;
-					String path = className.substring(packageName.length() + 1);
-					
-					path = path.replaceAll("\\.", "/");
-					
-					int index = path.lastIndexOf('/');
-					if(index >= 0){
-						dir =  path.substring(0, index);
-						path = path.substring(index + 1);;
-					}
-					path = path.replaceFirst("Page$", "");
-					String[] templateProposals = getTempleteProposals(path);
-					
-					IFolder folder = project.getFolder(root);
-					for(int i=0;i<templateProposals.length;i++){
-						IResource resource = null;
-						if(dir!=null){
-							templateProposals[i] = dir + "/" + templateProposals[i];
+				for(int i=0;i<packageNames.length;i++){
+					if(className.startsWith(packageNames[i] + ".")){
+						String dir = null;
+						String path = className.substring(packageNames[i].length() + 1);
+						
+						path = path.replaceAll("\\.", "/");
+						
+						int index = path.lastIndexOf('/');
+						if(index >= 0){
+							dir =  path.substring(0, index);
+							path = path.substring(index + 1);;
 						}
-						resource = folder.findMember(templateProposals[i]);
-						if(resource!=null && resource.exists() && resource instanceof IFile){
-							return templateProposals[i];
+						path = path.replaceFirst("Page$", "");
+						String[] templateProposals = getTempleteProposals(path);
+						
+						IFolder folder = project.getFolder(root);
+						for(int j=0;j<templateProposals.length;j++){
+							IResource resource = null;
+							if(dir!=null){
+								templateProposals[j] = dir + "/" + templateProposals[j];
+							}
+							resource = folder.findMember(templateProposals[j]);
+							if(resource!=null && resource.exists() && resource instanceof IFile){
+								return templateProposals[j];
+							}
 						}
 					}
 				}
@@ -652,8 +657,6 @@ public class ClickUtils {
 	 */
 	public static String getClassfromHTML(IProject project, String htmlName){
 		
-		String packageName = getPagePackageName(project);
-		
 		IStructuredModel model = getClickXMLModel(project);
 		try {
 			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
@@ -662,46 +665,52 @@ public class ClickUtils {
 				String path = element.getAttribute(ClickPlugin.ATTR_PATH);
 				if(path!=null && path.equals(htmlName)){
 					String className = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
-					if(className!=null && className.length()>0 && 
-							packageName!=null && packageName.length()>0){
+					String packageName = ((Element) element.getParentNode()).getAttribute(ClickPlugin.ATTR_PACKAGE);
+					if(className!=null && className.length()>0 && packageName.length()>0){
 						className = packageName + "." + className;
 					}
 					return className;
 				}
 			}
 			
-			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
+			String[] packageNames = getPagePackageName(project);
+			if(getAutoMapping(project) && packageNames.length>0){
+				IJavaProject javaProject = JavaCore.create(project);
 				
-				String className = "";
-				
-		        if (htmlName.indexOf("/") != -1) {
-		            StringTokenizer tokenizer = new StringTokenizer(htmlName, "/");
-		            while (tokenizer.hasMoreTokens()) {
-		                String token = tokenizer.nextToken();
-		                if (tokenizer.hasMoreTokens()) {
-		                	if(packageName.length()!=0){
-		                		packageName += ".";
-		                	}
-		                    packageName = packageName + token;
-		                } else {
-		                    className = token.replaceFirst("\\.htm$", "");
-		                }
-		            }
-		        } else {
-		            className = htmlName.substring(0, htmlName.lastIndexOf('.'));
-		        }
-		        
-		        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
-		        className = "";
-		        while (tokenizer.hasMoreTokens()) {
-		            String token = tokenizer.nextToken();
-		            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
-		            className += token;
-		        }
-
-		        className = packageName + "." + className;
-		        
-		        return className;
+				for(int i=0;i<packageNames.length;i++){
+					String packageName = packageNames[i];
+					String className = "";
+					
+			        if (htmlName.indexOf("/") != -1) {
+			            StringTokenizer tokenizer = new StringTokenizer(htmlName, "/");
+			            while (tokenizer.hasMoreTokens()) {
+			                String token = tokenizer.nextToken();
+			                if (tokenizer.hasMoreTokens()) {
+			                	if(packageName.length()!=0){
+			                		packageName += ".";
+			                	}
+			                    packageName = packageName + token;
+			                } else {
+			                    className = token.replaceFirst("\\.htm$", "");
+			                }
+			            }
+			        } else {
+			            className = htmlName.substring(0, htmlName.lastIndexOf('.'));
+			        }
+			        
+			        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
+			        className = "";
+			        while (tokenizer.hasMoreTokens()) {
+			            String token = tokenizer.nextToken();
+			            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+			            className += token;
+			        }
+	
+			        className = packageName + "." + className;
+			        if(javaProject.findType(className)!=null){
+			        	return className;
+			        }
+				}
 			}
 			
 		} catch(Exception ex){
