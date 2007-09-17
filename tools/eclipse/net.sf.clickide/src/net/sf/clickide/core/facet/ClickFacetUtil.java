@@ -1,8 +1,10 @@
 package net.sf.clickide.core.facet;
 
+import net.sf.clickide.ClickUtils;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
+import org.eclipse.core.runtime.Path;
 
 /**
  * Provides constants and utility methods about the project facet.
@@ -21,17 +23,18 @@ public class ClickFacetUtil {
 	};
 	
 	public static IPath getWebContentPath(IProject project) {
-		WebArtifactEdit web = null;
-		try {
-			web = WebArtifactEdit.getWebArtifactEditForRead(project);
-			IPath webxml = web.getDeploymentDescriptorPath();
-			//remove project name, WEB-INF an web.xml from path
-			IPath webContentPath = webxml.removeLastSegments(2).removeFirstSegments(1);
-			return webContentPath;
-		} finally {
-			if (web != null) {
-				web.dispose();
-			}
-		}
+		return new Path(ClickUtils.getWebAppRootFolder(project));
+//		WebArtifactEdit web = null;
+//		try {
+//			web = WebArtifactEdit.getWebArtifactEditForRead(project);
+//			IPath webxml = web.getDeploymentDescriptorPath();
+//			//remove project name, WEB-INF an web.xml from path
+//			IPath webContentPath = webxml.removeLastSegments(2).removeFirstSegments(1);
+//			return webContentPath;
+//		} finally {
+//			if (web != null) {
+//				web.dispose();
+//			}
+//		}
 	}
 }
