@@ -196,12 +196,53 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			
 			// welcome-file-list
 			ClickUtils.createOrUpdateFilelist(webApp);
-			
+		} catch(Exception ex){
+			deployWebXMLFor25(project);
 		} finally {
 			if (artifactEdit != null) {
 				// save and dispose
 				artifactEdit.saveIfNecessary(monitor);
 				artifactEdit.dispose();
+			}
+			
+		}
+	}
+	
+	private void deployWebXMLFor25(IProject project){
+		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
+		
+		File webInf = destPath.append("WEB-INF").toFile();
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			File file = new File(webInf, "web.xml");
+		
+			if(!file.exists()){
+				file.createNewFile();
+			}
+			
+			URL url = ClickPlugin.getDefault().getBundle().getEntry(
+					ClickFacetUtil.CLICK_DIR + "/web.xml");
+			in = url.openStream();
+			out = new FileOutputStream(file);
+			
+			byte[] buf = new byte[1024 * 8];
+			int length = 0;
+			while((length = in.read(buf))!=-1){
+				out.write(buf, 0, length);
+			}
+		} catch(Exception ex){
+			ClickPlugin.log(ex);
+		} finally {
+			if(in!=null){
+				try {
+					in.close();
+				} catch(Exception ex){}
+			}
+			if(out!=null){
+				try {
+					out.close();
+				} catch(Exception ex){}
 			}
 		}
 	}
