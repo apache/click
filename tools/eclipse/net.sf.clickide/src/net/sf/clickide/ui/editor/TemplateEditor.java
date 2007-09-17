@@ -18,8 +18,8 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
  * <ul>
  *   <li>Code completion for Velocity directives and the $format object</li>
  *   <li>Velocity syntax validation by {@link TemplateValidator}</li>
- *   <li>TODO syntax highlighting for Velocity directives</li>
- *   <li>TODO Code completion for the Page public fields as variables</li>
+ *   <li>Syntax highlighting for Velocity directives</li>
+ *   <li>Code completion for the Page public fields as variables</li>
  *   <li>TODO Code completion for the variables which declared by the #set directive</li>
  * </ul>
  * 
