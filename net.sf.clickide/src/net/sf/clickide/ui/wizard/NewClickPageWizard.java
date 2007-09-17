@@ -68,7 +68,7 @@ public class NewClickPageWizard extends Wizard implements INewWizard {
 			IDialogSettings section = settings.addNewSection(SECTION_NEW_CLICK_PAGE);
 			section.put(SHOULD_CREATE_HTML, true);
 			section.put(SHOULD_CREATE_CLASS, true);
-			section.put(SHOULD_ADD_TO_CLICK_XML, true);
+			section.put(SHOULD_ADD_TO_CLICK_XML, false);
 			section.put(SUPERCLASS, "net.sf.click.Page");
 		}
 		setDialogSettings(settings.getSection(SECTION_NEW_CLICK_PAGE));
