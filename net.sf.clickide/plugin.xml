@@ -222,7 +222,7 @@
      </editorContribution>
      <editorContribution
            id="net.sf.clickide.editorContribution3"
-           targetID="net.sf.clickide.ui.editor.TamplateEditor">
+           targetID="net.sf.clickide.ui.editor.TemplateEditor">
         <menu
               id="clickMenu"
               label="Click">
