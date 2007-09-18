@@ -503,26 +503,23 @@ public class PickList extends Field {
      */
     public String toString() {
 
-        List optionList      = getOptionList();
-        List selectedValues  = getSelectedValues();
-        List selectedItems   = new ArrayList();
-        List unselectedItems = new ArrayList();
+        List optionList     = getOptionList();
+        List selectedValues = getSelectedValues();
+        List options        = new ArrayList();
 
         for (int i = 0; i < optionList.size(); i++) {
             Option option = (Option) optionList.get(i);
-            if (selectedValues.contains(option.getValue())) {
-                selectedItems.add(option);
-            } else {
-                unselectedItems.add(option);
-            }
+            Map map = new HashMap();
+            map.put("option", option);
+            map.put("selected", new Boolean(selectedValues.contains(option.getValue())));
+            options.add(map);
         }
 
         Map model = new HashMap();
 
         model.put("id", getId());
         model.put("name", getName());
-        model.put("selectedItems", selectedItems);
-        model.put("unselectedItems", unselectedItems);
+        model.put("options", options);
         model.put("selectedLabel", selectedLabel);
         model.put("unselectedLabel", unselectedLabel);
         model.put("format", new Format());

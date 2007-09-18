@@ -15,29 +15,16 @@ function pickListMoveAll(from, to, hidden, isSelected){
 }
 
 function pickListMoveItem(from, to, index, hidden, isSelected){
-	var insertIndex = 0;
-	if(isSelected){
-		for(var i=0;i<hidden.options.length;i++){
-			if(hidden.options[i].value == from.options[index].value){
-				hidden.options[i].selected = true;
-				insertIndex = i;
-			}
+	var toIndex = 0;
+	for(var i=0;i<hidden.options.length;i++){
+		if(hidden.options[i].value == from.options[index].value){
+			hidden.options[i].selected = isSelected;
 		}
-	} else {
-		for(var i=0;i<hidden.options.length;i++){
-			if(hidden.options[i].value == from.options[index].value){
-				hidden.options[i].selected = false;
-				insertIndex = i;
-			}
+		if(hidden.options[i].selected == isSelected){
+			to.options[toIndex] = new Option(hidden.options[i].text, hidden.options[i].value);
+			toIndex++;
 		}
 	}
-	for(var i=to.options.length-1;i>=insertIndex;i--){
-		to.options[i+1] = new Option(to.options[i].text, to.options[i].value);
-	}
-	if(insertIndex > to.options.length){
-		insertIndex = to.options.length;
-	}
-	to.options[insertIndex] = new Option(from.options[index].text, from.options[index].value);
 	from.options[index] = null;
 }
 
