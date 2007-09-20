@@ -158,7 +158,8 @@ public class ClickPagesEditor extends AbstractFormEditor {
 				deleteAction.setElement(element);
 			}
 			
-			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP)){
+			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP) && 
+					ClickUtils.getElement(element, ClickPlugin.TAG_PAGES)==null){
 				IDOMElement[] elements = {
 						ClickUtils.getElement(element, ClickPlugin.TAG_HEADERS),
 						ClickUtils.getElement(element, ClickPlugin.TAG_FORMAT),
