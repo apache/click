@@ -13,6 +13,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IImportDeclaration;
@@ -195,6 +196,14 @@ public class ClickUtils {
 		}
 		if(obj instanceof IResource){
 			return JavaCore.create(((IResource)obj).getProject());
+		}
+		if(obj instanceof IAdaptable){
+			Object result = ((IAdaptable) obj).getAdapter(IJavaProject.class);
+			if(result instanceof IJavaProject){
+				return (IJavaProject) result;
+			} else if(result instanceof IProject){
+				return JavaCore.create((IProject) result);
+			}
 		}
 		try {
 			Method method = obj.getClass().getMethod("getProject", new Class[0]);
