@@ -11,7 +11,8 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class AjaxLiveGrid extends BorderPage {
 
-    public String bodyOnload = "javascript:bodyOnLoad();";
+    public String headInclude = "ajax/ajax-live-grid-head.htm";
+    public String addLoadEvent = "onLoad";
 
     public void onInit() {
         List customerList = getCustomerService().getCustomers();
