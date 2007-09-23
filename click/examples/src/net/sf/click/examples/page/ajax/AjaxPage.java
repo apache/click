@@ -16,7 +16,7 @@ import net.sf.click.examples.page.BorderPage;
 public class AjaxPage extends BorderPage {
 
     public String headInclude = "ajax/ajax-head.htm";
-    public String bodyOnload = "registerAjax();";
+    public String addLoadEvent = "registerAjax";
     public Select customerSelect = new Select("customerSelect");
 
     public void onInit() {
