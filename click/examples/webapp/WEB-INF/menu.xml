@@ -25,14 +25,16 @@
 		<menu label="Direct Page" path="direct-page.htm"/>
 		<menu label="Exception Demo" path="exception.htm"/>
 		<menu label="Flash Attribute" path="flash.htm"/>
-		<menu label="JSP Page" path="jsp/customer-table.htm"/>
 		<menu label="Page Security" path="security/secure.htm"/>
-		<menu separator="true"/>
-		<menu label="Page Navigation" path="navigation-a.htm"/>
-		<menu label="Page Flow" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
 		<menu label="AJAX Dynamic Select" path="ajax/ajax.htm"/>
 		<menu label="AJAX Live Grid" path="ajax/ajax-live-grid.htm"/>
+		<menu separator="true"/>
+		<menu label="JSP Hello World" path="jsp/hello-world.htm"/>
+		<menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
+		<menu separator="true"/>
+		<menu label="Page Navigation" path="navigation-a.htm"/>
+		<menu label="Page Flow" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
       	<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
       	<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
