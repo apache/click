@@ -104,7 +104,7 @@ import org.apache.cayenne.conf.ServletUtil;
  * <p/>
  * This configuration is useful when multiple applications are making changes to
  * the database.
- *
+ 
  * <pre class="codeConfig">
  *
  * &lt;web-app&gt;
@@ -222,9 +222,8 @@ public class DataContextFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
 
-        // Obtain the users DataContext from their session
-        HttpSession session = ((HttpServletRequest) request).getSession(true);
-        DataContext dataContext = getDataContext(session);
+        // Obtain the users DataContext
+        DataContext dataContext = getDataContext((HttpServletRequest) request);
 
         if (dataContext == null) {
             throw new RuntimeException("dataContex could not be obtained");
@@ -269,14 +268,16 @@ public class DataContextFilter implements Filter {
      * (which is the default behaviour) this method will create DataContext objects
      * using the Cayenne shared cache, otherwise they will not use the shared cache.
      *
-     * @param session the users session
-     * @return the session DataContext object
+     * @param request the page request
+     * @return the DataContext object
      */
-    protected synchronized DataContext getDataContext(HttpSession session) {
+    protected synchronized DataContext getDataContext(HttpServletRequest request) {
 
+        HttpSession session = null;
         DataContext dataContext = null;
 
         if (sessionScope) {
+            session = request.getSession(true);
             dataContext = (DataContext) session.getAttribute(ServletUtil.DATA_CONTEXT_KEY);
         }
 
