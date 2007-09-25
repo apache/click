@@ -1,12 +1,13 @@
-Click 1.3 Release
----------------------
+Click 1.4 Release
+-----------------
 BUGS
-* JSP example border page
+* DataContextFilter session bug
 * ColorPicker rendering bug
 * Form rendering bug, with setting style, see FieldSet example probably due to
   recent form rendering refactoring and removing align property from parent element
 
 CODE
+* Document Application Template scripts
 * CayenneForm override copyFrom to set PropertySelect value
 * Select can have multiple values
 
