@@ -1,13 +1,13 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-Example JSP customers table.
-
-<p/>
-
 <style type="text/css">
 th { color: white; }
 </style>
+
+<p>
+Example JSP customers table.
+</p>
 
 <table style="border: 1px solid black;" cellpadding="6" cellspacing="0">
   <tr valign="baseline" bgcolor="404060">
