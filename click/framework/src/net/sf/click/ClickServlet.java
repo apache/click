@@ -835,8 +835,12 @@ public class ClickServlet extends HttpServlet {
         setRequestAttributes(page);
 
         RequestDispatcher dispatcher = null;
-
-        if (page.getForward().equals(page.getTemplate())) {
+        
+        // Since the "getTemplate" returns the page.getPath() by default, which is *.htm
+        // we need to change to *.jsp in order to compare to the page.getForward()
+        String jspTemplate = StringUtils.replace(page.getTemplate(), ".htm", ".jsp");
+ 
+        if (page.getForward().equals(jspTemplate)) {
             dispatcher = request.getRequestDispatcher(page.getForward());
 
         } else {
