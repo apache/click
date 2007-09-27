@@ -149,7 +149,7 @@ public class ExternalLink extends AbstractLink {
      *
      * @param targetPath the link href target path
      */
-    public void setPageClass(String targetPath) {
+    public void setTargetPath(String targetPath) {
         this.targetPath = targetPath;
     }
 
