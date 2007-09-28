@@ -41,13 +41,15 @@
    <!ATTLIST mode value (production|profile|development|debug|trace) "development">
 
   <!-- Application control objects. -->
-  <!ELEMENT controls (control*)>
+  <!ELEMENT controls (control*, control-set*)>
   
     <!-- Deployable control class. -->
     <!ELEMENT control (#PCDATA)>
       <!ATTLIST control classname CDATA #REQUIRED>
    
-
+    <!-- Deployable Third Party Set of Controls -->
+    <!ELEMENT control-set (#PCDATA)>
+      <!ATTLIST control-set name CDATA #REQUIRED>
   
    
   
