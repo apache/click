@@ -683,6 +683,32 @@ class ClickApp implements EntityResolver {
         }
     }
 
+    private void deployControlSets(Element rootElm) throws Exception {
+        if (rootElm == null) {
+            return;
+        }
+
+        Element controlsElm = getChild(rootElm, "controls");
+
+        if (controlsElm == null) {
+            return;
+        }
+
+        List controlSets = getChildren(controlsElm, "control-set");
+
+        for (int i = 0; i < controlSets.size(); i++) {
+            Element controlSet = (Element) controlSets.get(i);
+            String name = controlSet.getAttribute("name");
+            if (StringUtils.isBlank(name)) {
+                String msg =
+                        "'control-set' element missing 'name' attribute.";
+                throw new RuntimeException(msg);
+            }
+            deployControls(getResourceRootElement("/" + name));
+        }
+
+    }
+
     private void deployFiles(Element rootElm) throws Exception {
 
         ClickUtils.deployFile(servletContext,
@@ -708,6 +734,7 @@ class ClickApp implements EntityResolver {
         deployControls(getResourceRootElement("/click-controls.xml"));
         deployControls(getResourceRootElement("/extras-controls.xml"));
         deployControls(rootElm);
+        deployControlSets(rootElm);
     }
 
     private void loadMode(Element rootElm) {
