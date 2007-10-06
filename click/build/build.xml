@@ -71,7 +71,14 @@
             <delete dir="upload-bundle" quiet="false"/>
         </sequential>
     </macrodef>
-            
+
+    <macrodef  name="digestMacro">
+        <attribute name="file"/>
+        <sequential>
+            <checksum file="@{file}" forceOverwrite="true" />
+            <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
+        </sequential>
+    </macrodef>
    <!-- 
     Path Definitions
     -->
@@ -222,6 +229,7 @@
          </manifest>
          <fileset dir="extras/classes"/>
       </jar>  
+      <digestMacro file="dist/click-extras-${version}.jar"/>
       <!-- Generate Cayenne 1.2.x JAR -->
       <downloadMacro name="${jar.cayenne.1x}" 
       	             path="org.objectstyle.cayenne"/>
@@ -257,8 +265,9 @@
            <attribute name="Built-By" value="${user.name}"/>
          </manifest>
          <fileset dir="temp/classes"/>
-      </jar> 
- 	  <delete dir="temp" quiet="false"/>
+      </jar>
+      <digestMacro file="dist/click-extras-${version}-cayenne-1x.jar"/> 	  
+	  <delete dir="temp" quiet="false"/>
    </target>
 
 
@@ -297,7 +306,8 @@
          </manifest>
          <fileset dir="${dir.classes}"/>
       </jar>
-      <!-- With Dependencies -->
+      <digestMacro file="dist/click-nodeps-${version}.jar"/> 
+	  <!-- With Dependencies -->
       <unzip src="lib/${jar.codec}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
@@ -317,6 +327,7 @@
             <exclude name="org/apache/velocity/texen/**"/>
          </fileset>
       </jar>
+      <digestMacro file="dist/click-${version}.jar"/> 
    </target>
 
     
