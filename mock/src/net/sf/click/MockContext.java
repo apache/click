@@ -16,6 +16,7 @@
 package net.sf.click;
 
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,7 +73,20 @@ public class MockContext extends Context {
      * @see Context#getRequestParameter(String)
      */
     public String getRequestParameter(String name) {
-        return (String) request.getParameter(name);
+        return request.getParameter(name);
     }    
+   
+    /**
+     * @see Context#getRequestParameterMap()
+     */
+    public Map getRequestParameterMap() {
+        return request.getParameterMap();
+    }
 
+    /**
+     * @see Context#getRequestParameterValues(String)
+     */
+    public String[] getRequestParameterValues(String name) {
+        return request.getParameterValues(name);
+    }    
 }
