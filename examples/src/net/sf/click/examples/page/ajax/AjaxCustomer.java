@@ -40,7 +40,7 @@ public class AjaxCustomer extends SpringPage {
      * @see Page#getContentType()
      */
     public String getContentType() {
-        return "text/xml";
+        return "text/xml; charset=UTF-8";
     }
 
 }
