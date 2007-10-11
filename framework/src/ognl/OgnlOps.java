@@ -116,10 +116,10 @@ public abstract class OgnlOps implements NumericTypes
      * sense that they are the same object or, if both are non-null
      * if they are equal in the <CODE>equals()</CODE> sense.
      *
-     * @param v1 First object to compare
-     * @param v2 Second object to compare
+     * @param object1 First object to compare
+     * @param object2 Second object to compare
      *
-     * @return true if v1 == v2
+     * @return true if objec1 == object2
      */
     public static boolean isEqual(Object object1, Object object2)
     {
