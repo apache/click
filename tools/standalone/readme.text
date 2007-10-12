@@ -1,0 +1,6 @@
+Standalone Tools for the Click Framework
+========================================
+
+* dev-tasks - a set of ANT tasks to help in the development of Click Framework
+  itself, Click based 3rd party controls and Click based webapplications.
+
