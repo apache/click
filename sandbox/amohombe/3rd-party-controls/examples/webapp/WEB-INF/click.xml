@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app charset="UTF-8">
+
+    <pages package="net.sf.click.webcode.examples.page">        
+        <excludes pattern="/excluded/"/>
+        
+    </pages>
+
+    <mode value="trace"/>
+
+    <controls>
+         <!--<control classname="net.sf.click.webcode.examples.control.TinyMCE"/> -->
+        <control-set name="webcode-controls.xml"/>
+        <!--<control-set name="misc-controls.xml"/>-->
+    </controls>
+
+</click-app>
