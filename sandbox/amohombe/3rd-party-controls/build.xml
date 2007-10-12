@@ -1,0 +1,175 @@
+<project name="3rd-party-controls" default="help" basedir=".">
+
+   <!--
+    Project Properties 
+    -->
+    <property file="./../../../click/build/build.properties"/>
+    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
+    <property name="jar.original" value="click-${version}.jar"/>
+    <property name="dir.webapp" value="examples/webapp"/>
+
+    <!--
+    Task Definitions
+    -->
+    <taskdef name="listfiles"
+   	        classname="net.sf.click.tools.devtasks.ListFilesTask" 
+   	        classpath="click-dev-tasks-1.4-RC1.jar"/>
+
+   <!--
+    Path Definitions
+    -->
+    <path id="classpath.webcode">
+        <pathelement location="build/${jar.servlet}"/>
+        <pathelement location="build/${jar.original}"/>
+    </path>
+    <path id="classpath.misc">
+        <pathelement location="build/${jar.servlet}"/>
+        <pathelement location="build/${jar.original}"/>
+    </path>
+    <path id="classpath.examples">
+        <pathelement location="build/${jar.servlet}"/>
+        <pathelement location="build/${jar.original}"/>
+        <pathelement location="dist/click-webcode-${version}.jar"/>
+        <pathelement location="dist/click-misc-${version}.jar"/>
+    </path>
+
+    <!--
+    Target Definitions 
+    -->
+    <target name="build-webcode" depends="init" description="build webcode controls">     
+		<!-- 1. Compile the controls -->
+        <javac srcdir="webcode/src"
+               destdir="webcode/classes"
+               debug="true"
+               excludes="**/Test*"
+               encoding="ISO-8859-1"
+               source="1.4">
+           <classpath refid="classpath.webcode"/>
+        </javac>
+
+        <!-- 2. generate list files for controls -->
+        <listfiles controlPath="webcode/src/net/sf/click/webcode/EditArea" dirName="edit_area" />
+        <listfiles controlPath="webcode/src/net/sf/click/webcode/SyntaxHighlight" dirName="syntax_highlight" />
+
+		<!-- 3. package the controls in a JAR -->
+        <copy todir="webcode/classes">
+            <!--<fileset dir="webcode/src" includes="**/*.xml"/>-->
+            <fileset dir="webcode/src"/>
+        </copy>
+
+        <jar destfile="dist/click-webcode-${version}.jar">
+            <manifest>
+              <attribute name="Click-Version" value="${version}"/>
+              <attribute name="Package" value="net.sf.click.webcode"/>
+              <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+            <fileset dir="webcode/classes"/>
+        </jar>
+    </target>
+    
+    <target name="build-misc" depends="init" description="build misc controls">
+        <fail message="This task is not ready/implemented yet!"/> 
+        <!-- 1. Compile the controls -->
+        <javac srcdir="misc/src"
+               destdir="misc/classes"
+               debug="true"
+               excludes="**/Test*"
+               encoding="ISO-8859-1"
+               source="1.4">
+           <classpath refid="classpath.misc"/>
+        </javac>
+
+        <!-- 2. package the controls in a JAR -->
+        <copy todir="misc/classes">
+            <!--<fileset dir="misc/src" includes="**/*.xml"/>-->
+            <fileset dir="misc/src"/>
+        </copy>
+
+        <jar destfile="dist/click-misc-${version}.jar">
+            <manifest>
+              <attribute name="Click-Version" value="${version}"/>
+              <attribute name="Package" value="net.sf.click.misc"/>
+              <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+            <fileset dir="misc/classes"/>
+        </jar>        
+    </target>
+    
+    <target name="build-examples" depends="build-webcode"
+            description="build examples WAR file">
+        <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
+        <mkdir dir="${dir.webapp}/WEB-INF/classes"/>
+        <copy todir="${dir.webapp}/WEB-INF/classes">
+            <fileset dir="examples/src">
+                <exclude name="**/package.html"/>
+            </fileset>
+        </copy>
+        <javac srcdir="examples/src"
+               destdir="${dir.webapp}/WEB-INF/classes"
+               debug="true"
+               encoding="ISO-8859-1"
+               source="1.4">
+            <classpath refid="classpath.examples"/>
+        </javac>
+        <war destfile="dist/webcode-examples.war" webxml="examples/webapp/WEB-INF/web.xml">
+            <lib file="dist/click-webcode-${version}.jar"/>
+            <!--<lib file="dist/click-misc-${version}.jar"/>-->
+            <lib file="build/${jar.original}"/>
+            <fileset dir="${dir.webapp}">
+                <exclude name="**/web.xml"/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name="build-all" depends="build-webcode, build-misc, build-examples"
+           description="build all controls, and examples"/>
+
+    <target name="init" depends="clean">
+        <!-- 1. copy the Original JAR from the original dist directory -->
+        <mkdir dir="dist"/>
+        <mkdir dir="build"/>
+        <available file="./../../../click/dist/${jar.original}" property="isJarAvail"/>
+        <fail message="Ensure that you have build Click first (to be able here to copy the core jar)!">
+         <condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
+        </fail>
+        <copy file="./../../../click/dist/${jar.original}" todir="build"/>
+        <copy file="./../../../click/lib/${jar.servlet}" todir="build"/>
+
+        <!-- 2. Cleanup the old classes -->
+        <delete dir="webcode/classes" quiet="false"/>
+        <mkdir dir="webcode/classes"/>
+        <delete dir="misc/classes" quiet="false"/>
+        <mkdir dir="misc/classes"/>        
+    </target>
+    
+   <target name="clean">
+      <delete dir="dist" quiet="false"/>
+      <delete dir="build" quiet="false"/>
+   </target>
+
+   <target name="get-deps" description="download JAR dependencies">
+   </target>
+
+   <target name="help" description="display the Help message">
+      <echo>3rd party controls for Click ${version} web application framework
+==============================================================
+
+Main targets:
+
+	build-all             build all controls, and examples
+	build-webcode         build webcode controls only
+	build-examples        build examples WAR file
+
+	get-deps              download JAR dependencies
+	help                  display the Help message
+
+Environment:
+
+	java.home = ${java.home}
+	ant.home  = ${ant.home}
+
+Please ensure you have configured build.properties</echo>
+   </target>
+</project>

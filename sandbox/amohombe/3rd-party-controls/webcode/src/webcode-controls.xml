@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<click-app>
+
+  <controls>
+    <control classname="net.sf.click.webcode.EditArea"/>
+    <control classname="net.sf.click.webcode.SyntaxHighlight"/>
+  </controls>
+
+</click-app>
