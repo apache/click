@@ -1,0 +1,129 @@
+<project name="Standalone Tools for Click" default="help" basedir=".">
+
+    <!--
+    Project Properties 
+    -->
+    <property file="./../../click/build/build.properties"/>
+    <property name="jar.original" value="click-${version}.jar"/>    
+
+    <!--
+     Macro Definitions
+    -->
+    <macrodef  name="digestMacro">
+        <attribute name="file"/>
+        <sequential>
+            <checksum file="@{file}" forceOverwrite="true" />
+            <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
+        </sequential>
+    </macrodef>
+    <!--
+    Path Definitions
+    -->
+    <path id="classpath.dev-tasks">
+        <pathelement location="build/${jar.original}"/>
+    </path>
+    
+    <path id="classpath.examples">
+        <pathelement location="build/${jar.original}"/>
+    </path>
+
+    <!--
+    Target Definitions 
+    -->
+    <target name="build-dev-tasks" description="build the dev-tasks">
+        <!-- 1. Compile the tasks -->
+        <javac srcdir="dev-tasks/src"
+               destdir="dev-tasks/classes"
+               debug="true"
+               excludes="**/Test*"
+               encoding="ISO-8859-1"
+               source="1.4">
+           <classpath refid="classpath.dev-tasks"/>               
+        </javac>
+
+        <!-- 2. package the tasks into a JAR -->
+        <copy todir="dev-tasks/classes">
+            <fileset dir="dev-tasks/src" includes="**/*.xml"/>
+        </copy>
+
+        <jar destfile="dist/click-dev-tasks-${version}.jar">
+            <manifest>
+              <attribute name="Click-Version" value="${version}"/>
+              <attribute name="Package" value="net.sf.click.tools.devtasks"/>
+              <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+            <fileset dir="dev-tasks/classes"/>
+        </jar>
+        <digestMacro file="dist/click-dev-tasks-${version}.jar"/>
+    </target>
+            
+    <target name="build-examples" depends="build-dev-tasks" description="build examples">
+        <fail message="This task is not implemented yet!"/>
+    </target>
+
+    <target name="build-all" depends="build-dev-tasks"
+           description="build all tools, and examples"/>
+
+    <target name="build-distribution" description="build distribution ZIP file">
+        <fail message="This task is not implemented yet!"/>
+    </target>
+
+    <target name="build-sources" description="build source ZIP files for use with IDEs">
+        <!-- zip the dev tasks without the dependencies -->
+        <zip destfile="dist/click-dev-tasks-${version}-src.zip">
+            <fileset dir="dev-tasks/src">
+                <exclude name="**/*.html"/>
+            </fileset>
+        </zip>
+        
+    </target>
+    
+    <target name="init" depends="clean">
+        <!-- 1. copy the Original JAR from the original dist directory -->
+        <mkdir dir="dist"/>
+        <mkdir dir="build"/>
+        <available file="./../../click/dist/${jar.original}" property="isJarAvail"/>
+        <fail message="Ensure that you have build Click first (to be able here to copy the core jar)!">
+         <condition>
+  	        <or><isfalse value="${isJarAvail}"/></or>
+  	     </condition>
+        </fail>
+        <copy file="./../../click/dist/${jar.original}" todir="build"/>
+
+        <!-- 2. Cleanup the old classes -->
+        <delete dir="dev-tasks/classes" quiet="false"/>
+        <mkdir dir="dev-tasks/classes"/>
+    </target>
+    
+   <target name="clean">
+      <delete dir="dist" quiet="false"/>
+      <delete dir="build" quiet="false"/>
+   </target>
+
+   <target name="get-deps" description="download JAR dependencies">
+       <fail message="This task is not implemented yet!"/>
+   </target>
+    
+   <target name="help" description="display the Help message">
+      <echo>Standalone Tools for Click ${version} web application framework
+==============================================================
+
+Main targets:
+
+	build-all             build all tools, and examples
+	build-distribution    build distribution ZIP file
+    build-dev-tasks       build the dev-tasks
+	build-examples        build examples
+    build-sources         build source ZIP files for use with IDEs
+
+    get-deps              download JAR dependencies
+	help                  display the Help message
+
+Environment:
+
+	java.home = ${java.home}
+	ant.home  = ${ant.home}
+
+Please ensure you have configured build.properties</echo>
+   </target>
+</project>
