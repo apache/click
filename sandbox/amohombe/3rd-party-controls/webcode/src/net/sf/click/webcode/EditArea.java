@@ -3,7 +3,6 @@ package net.sf.click.webcode;
 import net.sf.click.control.Field;
 import net.sf.click.control.TextArea;
 import net.sf.click.util.ClickUtils;
-import net.sf.click.util.ControlUtils;
 
 import javax.servlet.ServletContext;
 import java.text.MessageFormat;
@@ -76,7 +75,7 @@ public class EditArea extends TextArea {
     }
 
     public void onDeploy(ServletContext servletContext) {
-        ControlUtils.deployFileList(servletContext,EditArea.class,"click");
+        ClickUtils.deployFileList(servletContext,EditArea.class,"click");
     }
 
     /**

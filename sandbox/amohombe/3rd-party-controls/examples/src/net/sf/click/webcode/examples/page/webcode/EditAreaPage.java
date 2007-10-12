@@ -21,13 +21,13 @@ public class EditAreaPage extends DecoratorPage {
         editArea.setLabel("");
         editArea.setStyle("width", "400px");
         editArea.setStyle("height", "400px");
-        System.out.println("*---> Not found as resource! Open as real path!");
+        
         String realPath = getContext().getServletContext().getRealPath("/click/control.css");
         try {
             String fileContent = FileUtils.readFileToString(new File(realPath), null);
             editArea.setValue(fileContent);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         form.add(editArea);
 

@@ -13,7 +13,7 @@
     -->
     <taskdef name="listfiles"
    	        classname="net.sf.click.tools.devtasks.ListFilesTask" 
-   	        classpath="click-dev-tasks-1.4-RC1.jar"/>
+   	        classpath="click-dev-tasks-${version}.jar"/>
 
    <!--
     Path Definitions

@@ -1,12 +1,12 @@
 package net.sf.click.webcode;
 
 import net.sf.click.control.TextArea;
-import net.sf.click.util.ControlUtils;
+import net.sf.click.util.ClickUtils;
 
 import javax.servlet.ServletContext;
-import java.util.Map;
-import java.util.HashMap;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Click Control for doing syntax highlight for source code snippets dispayed in webpages,
@@ -130,7 +130,7 @@ public class SyntaxHighlight extends TextArea {
     }
 
     public void onDeploy(ServletContext servletContext) {
-        ControlUtils.deployFileList(servletContext,SyntaxHighlight.class,"click");
+        ClickUtils.deployFileList(servletContext,SyntaxHighlight.class,"click");
     }
 
     /**
