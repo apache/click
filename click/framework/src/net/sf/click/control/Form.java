@@ -29,12 +29,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.Context;
-import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -439,7 +436,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Form implements Control {
+public class Form extends AbstractControl {
 
     // -------------------------------------------------------------- Constants
 
@@ -528,9 +525,6 @@ public class Form implements Control {
     }
 
     // ----------------------------------------------------- Instance Variables
-
-    /** The form attributes map. */
-    protected Map attributes;
 
     /** The button align, default value is "<tt>left</tt>". */
     protected String buttonAlign = ALIGN_LEFT;
@@ -626,20 +620,11 @@ public class Form implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
-    /** The map of localized messages for the form. */
-    protected Map messages;
-
     /**
      * The form method <tt>["post, "get"]</tt>, default value: &nbsp;
      * <tt>post</tt>.
      */
     protected String method = "post";
-
-    /** The form name. */
-    protected String name;
-
-    /** The control's parent. */
-    protected Object parent;
 
     /** The form is readonly flag. */
     protected boolean readonly;
@@ -806,44 +791,6 @@ public class Form implements Control {
     }
 
     /**
-     * Return the form HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of form HTML attribute
-     * @return the form HTML attribute
-     */
-    public String getAttribute(String name) {
-        if (attributes != null) {
-            return (String) attributes.get(name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the form HTML attribute with the given attribute name and value.
-     *
-     * @param name the name of the form HTML attribute
-     * @param value the value of the form HTML attribute
-     * @throws IllegalArgumentException if name parameter is null
-     */
-    public void setAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-
-        if (value != null) {
-            attributes.put(name, value);
-        } else {
-            attributes.remove(name);
-        }
-    }
-
-    /**
      * Return the form attributes Map.
      *
      * @return the form attributes Map
@@ -853,19 +800,6 @@ public class Form implements Control {
             attributes = new HashMap(5);
         }
         return attributes;
-    }
-
-    /**
-     * Return true if the form has attributes or false otherwise.
-     *
-     * @return true if the form has attributes on false otherwise
-     */
-    public boolean hasAttributes() {
-        if (attributes != null && !attributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     /**
@@ -934,15 +868,6 @@ public class Form implements Control {
      */
     public void setColumns(int columns) {
         this.columns = columns;
-    }
-
-    /**
-     * @see Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return Context.getThreadLocalContext();
     }
 
     /**
@@ -1292,21 +1217,6 @@ public class Form implements Control {
     }
 
     /**
-     * Return the "id" attribute value if defined, or the Form name otherwise.
-     *
-     * @see net.sf.click.Control#getId()
-     *
-     * @return HTML element identifier attribute "id" value
-     */
-    public String getId() {
-        if (hasAttributes() && getAttributes().containsKey("id")) {
-            return getAttribute("id");
-        } else {
-            return getName();
-        }
-    }
-
-    /**
      * Return true if JavaScript client side form validation is enabled.
      *
      * @return true if JavaScript client side form validation is enabled
@@ -1492,26 +1402,6 @@ public class Form implements Control {
     }
 
     /**
-     * Return a Map of localized messages for the Form.
-     *
-     * @return a Map of localized messages for the Form
-     * @throws IllegalStateException if the context for the Field has not be set
-     */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
-
-            } else {
-                String msg = "Cannot initialize messages as context not set, "
-                    + "for form: " + getName();
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
-    }
-
-    /**
      * Return the form method <tt>["post" | "get"]</tt>.
      *
      * @return the form method
@@ -1527,17 +1417,6 @@ public class Form implements Control {
      */
     public void setMethod(String value) {
         method = value;
-    }
-
-    /**
-     * Return the name of the form.
-     *
-     * @see net.sf.click.Control#getName()
-     *
-     * @return the name of the control
-     */
-    public String getName() {
-        return name;
     }
 
     /**
@@ -1560,24 +1439,6 @@ public class Form implements Control {
             add(nameField);
         }
         nameField.setValue(name);
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
     }
 
     /**
@@ -2180,9 +2041,9 @@ public class Form implements Control {
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("action", getActionURL());
         buffer.appendAttribute("enctype", getEnctype());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (getJavaScriptValidation()) {
             String javaScript = "return on_" + getId() + "_submit();";
             buffer.appendAttribute("onsubmit", javaScript);
