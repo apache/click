@@ -168,14 +168,11 @@ public class Button extends Field {
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.elementEnd();

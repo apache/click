@@ -232,14 +232,10 @@ public class ImageSubmit extends Submit {
             buffer.appendAttribute("src", src);
         }
 
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.elementEnd();

@@ -276,17 +276,14 @@ public class TextField extends Field {
         if (getMaxLength() > 0) {
             buffer.appendAttribute("maxlength", getMaxLength());
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         if (!isValid()) {

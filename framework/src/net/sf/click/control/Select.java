@@ -633,17 +633,14 @@ public class Select extends Field {
         if (isMultiple()) {
             buffer.appendAttribute("multiple", "multiple");
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
         }
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.closeTag();

@@ -934,14 +934,11 @@ public class Table extends AbstractControl {
         // Render table start.
         buffer.elementStart("table");
         buffer.appendAttribute("id", getId());
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         buffer.appendAttribute("height", getHeight());
         buffer.appendAttribute("width", getWidth());
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
-        }
 
         buffer.closeTag();
         buffer.append("\n");

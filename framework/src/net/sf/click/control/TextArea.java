@@ -289,9 +289,9 @@ public class TextArea extends Field {
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
@@ -302,9 +302,6 @@ public class TextArea extends Field {
             buffer.appendAttribute("class", "error");
         } else if (isDisabled()) {
             buffer.appendAttribute("class", "disabled");
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.closeTag();
