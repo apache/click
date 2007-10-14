@@ -870,13 +870,8 @@ public class Tree extends AbstractControl {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
 
+        appendAttributes(buffer);
 
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
-        }
         buffer.append(">\n");
 
         if (isRootNodeDisplayed()) {
