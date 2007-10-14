@@ -456,8 +456,8 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.appendAttribute("class", "disabled");
 
-            if (hasStyles()) {
-                buffer.appendStyleAttributes(getStyles());
+            if (hasAttribute("style")) {
+                buffer.appendAttribute("style", getAttribute("style"));
             }
 
             buffer.closeTag();
@@ -475,14 +475,9 @@ public abstract class AbstractLink extends AbstractControl {
             if (getTabIndex() > 0) {
                 buffer.appendAttribute("tabindex", getTabIndex());
             }
-            if (hasAttributes()) {
-                buffer.appendAttributes(getAttributes());
-            }
+            appendAttributes(buffer);
             if (isDisabled()) {
                 buffer.appendAttributeDisabled();
-            }
-            if (hasStyles()) {
-                buffer.appendStyleAttributes(getStyles());
             }
 
             buffer.closeTag();

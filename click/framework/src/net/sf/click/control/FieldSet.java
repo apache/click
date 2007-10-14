@@ -584,14 +584,11 @@ public class FieldSet extends Field {
             buffer.elementStart("fieldset");
 
             buffer.appendAttribute("id", getId());
-            if (hasAttributes()) {
-                buffer.appendAttributes(getAttributes());
-            }
+
+            appendAttributes(buffer);
+
             if (isDisabled()) {
                 buffer.appendAttributeDisabled();
-            }
-            if (hasStyles()) {
-                buffer.appendStyleAttributes(getStyles());
             }
 
             buffer.closeTag();
@@ -669,7 +666,18 @@ public class FieldSet extends Field {
                     }
 
                     if (field.hasAttributes()) {
+                        //Temporarily remove the style attribute
+                        String tempStyle = null;
+                        if (field.hasAttribute("style")) {
+                            tempStyle = field.getAttribute("style");
+                            field.setAttribute("style", null);
+                        }
                         buffer.appendAttributes(field.getAttributes());
+
+                        //Put style back in attribute map
+                        if (tempStyle != null) {
+                            field.setAttribute("style", tempStyle);
+                        }
                     }
                     buffer.append(">");
                     buffer.append(field);

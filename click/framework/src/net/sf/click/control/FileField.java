@@ -248,9 +248,9 @@ public class FileField extends Field {
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
         }
@@ -259,9 +259,6 @@ public class FileField extends Field {
         }
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.elementEnd();

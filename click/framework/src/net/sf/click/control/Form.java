@@ -2260,7 +2260,18 @@ public class Form implements Control {
                     }
 
                     if (field.hasAttributes()) {
+                        //Temporarily remove the style attribute
+                        String tempStyle = null;
+                        if (field.hasAttribute("style")) {
+                            tempStyle = field.getAttribute("style");
+                            field.setAttribute("style", null);
+                        }
                         buffer.appendAttributes(field.getAttributes());
+
+                        //Put style back in attribute map
+                        if (tempStyle != null) {
+                            field.setAttribute("style", tempStyle);
+                        }
                     }
                     buffer.append(">");
                     buffer.append(field);

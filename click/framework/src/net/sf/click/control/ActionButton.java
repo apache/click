@@ -500,14 +500,10 @@ public class ActionButton extends Button {
         String onClickAction = " onclick=\"" + getOnClick() + "\"";
         buffer.append(onClickAction);
 
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+        appendAttributes(buffer);
+
         if (isDisabled()) {
             buffer.appendAttributeDisabled();
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.elementEnd();

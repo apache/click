@@ -235,17 +235,14 @@ public class Checkbox extends Field {
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
         }
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(buffer);
+
         if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
         }
         if (!isValid()) {
             buffer.appendAttribute("class", "error");
-        }
-        if (hasStyles()) {
-            buffer.appendStyleAttributes(getStyles());
         }
 
         buffer.elementEnd();
