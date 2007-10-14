@@ -1171,7 +1171,7 @@ public class Form extends AbstractControl {
      * (<tt>click/control.css</tt>) and JavaScript
      * (<tt>click/control.js</tt>) files.
      *
-     * @see Control#getHtmlImports()
+     * @see net.sf.click.Control#getHtmlImports()
      *
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files
@@ -1185,7 +1185,7 @@ public class Form extends AbstractControl {
     /**
      * Return the HTML head imports for the form and all its controls.
      *
-     * {@link Control#getHtmlImports()}
+     * {@link net.sf.click.Control#getHtmlImports()}
      *
      * @return all the HTML head imports for the form and all its controls
      */
@@ -1646,8 +1646,8 @@ public class Form extends AbstractControl {
      * <li>Invoke the Forms listener if defined</li>
      * </ol>
      *
-     * @see Context#getRequestParameter(String)
-     * @see Context#getFileItemMap()
+     * @see net.sf.click.Context#getRequestParameter(String)
+     * @see net.sf.click.Context#getFileItemMap()
      *
      * @return true to continue Page event processing or false otherwise
      */
