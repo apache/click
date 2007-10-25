@@ -4,8 +4,8 @@
 // Author: Mihai Bazon, <mihai_bazon@yahoo.com>
 // Translation team: <sv@li.org>
 // Translator: Leonard Norrgård <leonard.norrgard@refactor.fi>
-// Last translator: Leonard Norrgård <leonard.norrgard@refactor.fi>
-// Encoding: iso-latin-1
+// Last translator: Emil Ljungdahl <emil@kratern.se>
+// Encoding: UTF-8
 // Distributed under the same terms as the calendar itself.
 
 // For translators: please use UTF-8 if possible.  We strongly believe that
@@ -34,8 +34,21 @@ Calendar._DN = new Array
 // If N = 3 then this is not needed either since we assume a value of 3 if not
 // present, to be compatible with translation files that were written before
 // this feature.
-Calendar._SDN_len = 2;
-Calendar._SMN_len = 3;
+
+// short day names
+Calendar._SDN = new Array
+("sön",
+ "mån",
+ "tis",
+ "ons",
+ "tor",
+ "fre",
+ "lör",
+ "sön");
+
+// First day of the week. "0" means display Sunday first, "1" means display
+// Monday first, etc.
+Calendar._FD = 0;
 
 // full month names
 Calendar._MN = new Array
@@ -51,6 +64,21 @@ Calendar._MN = new Array
  "oktober",
  "november",
  "december");
+
+// short month names
+Calendar._SMN = new Array
+("jan",
+ "feb",
+ "mar",
+ "apr",
+ "maj",
+ "jun",
+ "jul",
+ "aug",
+ "sep",
+ "okt",
+ "nov",
+ "dec");
 
 // tooltips
 Calendar._TT = {};
@@ -82,6 +110,16 @@ Calendar._TT["DRAG_TO_MOVE"] = "Drag för att flytta";
 Calendar._TT["PART_TODAY"] = " (idag)";
 Calendar._TT["MON_FIRST"] = "Visa måndag först";
 Calendar._TT["SUN_FIRST"] = "Visa söndag först";
+
+// the following is to inform that "%s" is to be the first day of week
+// %s will be replaced with the day name.
+Calendar._TT["DAY_FIRST"] = "Visa %s först";
+
+// This may be locale-dependent.  It specifies the week-end days, as an array
+// of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
+// means Monday, etc.
+Calendar._TT["WEEKEND"] = "0";
+
 Calendar._TT["CLOSE"] = "Stäng";
 Calendar._TT["TODAY"] = "Idag";
 Calendar._TT["TIME_PART"] = "(Skift-)klicka eller drag för att ändra tid";
@@ -91,3 +129,4 @@ Calendar._TT["DEF_DATE_FORMAT"] = "%Y-%m-%d";
 Calendar._TT["TT_DATE_FORMAT"] = "%A %d %b %Y";
 
 Calendar._TT["WK"] = "vecka";
+Calendar._TT["TIME"] = "Tid:";
