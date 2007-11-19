@@ -1,0 +1,16 @@
+<!-- 
+Tomcat specific application context information 
+-->
+<Context
+   path="/template-context" 
+   reloadable="true"
+   antiJARLocking="true">
+
+   <!-- 
+   User logins are authenticated/authorized using $TOMCAT/conf/tomcat-users.xml
+   -->
+   <ResourceLink
+      name="users"
+      global="UserDatabase"
+      type="org.apache.catalina.UserDatabase"/>
+</Context>

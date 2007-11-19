@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<click-app> 
+
+  <pages package="template.page"/>
+
+  <mode value="debug"/>
+
+</click-app> 
