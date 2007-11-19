@@ -1,0 +1,72 @@
+<project name="quickstart" default="build" basedir=".">
+
+   <!-- 
+    Project Properties 
+    -->
+   
+   <property name="name" value="template-context"/>
+
+	
+   <!-- 
+    Path Definitions
+    -->
+   
+   <path id="classpath">
+   	  <pathelement location="lib/servlet-api-2.3.jar"/>
+      <fileset dir="WebContent/WEB-INF/lib">
+         <include name="*.jar"/>
+      </fileset>
+   </path>
+	
+    
+   <!-- 
+    Task Definitions
+    -->
+
+   <target name="build" description="build web application WAR file" depends="compile">
+      <delete file="${name}.war"/>
+      <war destfile="${name}.war"
+           webxml="WebContent/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="WebContent">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+   
+   
+   <target name="compile" description="compile Java source">
+      <delete dir="WebContent/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="WebContent/WEB-INF/classes"/>
+      <copy todir="WebContent/WEB-INF/classes">
+         <fileset dir="src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="src" 
+             destdir="WebContent/WEB-INF/classes" 
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
+         <classpath refid="classpath"/>
+      </javac> 
+   </target>
+              
+              
+   <target name="help" description="display the Help message">
+      <echo message="Quick Start web application"/>
+      <echo message="==========================="/> 
+      <echo/>  
+      <echo message="Main targets:"/> 
+      <echo/>    
+      <echo message="build                 build web application WAR file"/> 
+      <echo message="compile               compile Java code"/>
+      <echo message="help                  display the Help message"/>  
+      <echo/>
+      <echo/>
+   </target>  
+
+	   
+</project>
