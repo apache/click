@@ -1222,14 +1222,16 @@ class ClickApp implements EntityResolver {
     private void processDirectory(String dirPath, List fileList) {
         Set resources = servletContext.getResourcePaths(dirPath);
 
-        for (Iterator i = resources.iterator(); i.hasNext();) {
-            String resource = (String) i.next();
+        if (resources != null) {
+            for (Iterator i = resources.iterator(); i.hasNext();) {
+                String resource = (String) i.next();
 
-            if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
-                fileList.add(resource);
+                if (resource.endsWith(".htm") || resource.endsWith(".jsp")) {
+                    fileList.add(resource);
 
-            } else if (resource.endsWith("/")) {
-                processDirectory(resource, fileList);
+                } else if (resource.endsWith("/")) {
+                    processDirectory(resource, fileList);
+                }
             }
         }
     }
