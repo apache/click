@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry path="examples/src" kind="src"/>
-	<classpathentry path="quickstart/src" kind="src"/>
+	<classpathentry path="template/src" kind="src"/>
 	<classpathentry path="mock/src" kind="src"/>
 	<classpathentry path="extras/src" kind="src"/>
 	<classpathentry path="extras/test" kind="src"/>
