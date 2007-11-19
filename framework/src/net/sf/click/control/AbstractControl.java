@@ -376,7 +376,7 @@ public abstract class AbstractControl implements Control {
         //Check if the new style is already present
         if (stylesMap.containsKey(name)) {
 
-            //If the style is present and the value is null, remove the style, 
+            //If the style is present and the value is null, remove the style,
             //otherwise replace it with the new value
             if (value == null) {
                 stylesMap.remove(name);
