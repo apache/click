@@ -196,10 +196,6 @@
            dir="examples"
            target="build" 
            inheritall="false"/>
-      <ant antfile="build.xml" 
-           dir="quickstart"
-           target="build" 
-           inheritall="false"/>
    </target>
 
    
