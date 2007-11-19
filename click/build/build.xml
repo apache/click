@@ -38,6 +38,10 @@
    	        classname="dev.ReplaceTabsTask" 
    	        classpath="lib/dev.jar"/>
             
+   <taskdef name="package" 
+   	        classname="dev.PackageTask" 
+   	        classpath="lib/dev.jar"/>
+            
    <taskdef resource="checkstyletask.properties"
             classpath="lib/${jar.checkstyle}"/>
 
@@ -160,6 +164,7 @@
             <exclude name="design/**"/>
             <exclude name="dist/*-src.zip"/>
             <exclude name="lib/${jar.cayenne}"/>
+            <exclude name="lib/${jar.cayenne.1x}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
             <exclude name="lib/${jar.hibernate}"/>
@@ -231,8 +236,6 @@
       </jar>  
       <digestMacro file="dist/click-extras-${version}.jar"/>
       <!-- Generate Cayenne 1.2.x JAR -->
-      <downloadMacro name="${jar.cayenne.1x}" 
-      	             path="org.objectstyle.cayenne"/>
    	  <delete dir="temp" quiet="false"/>
    	  <mkdir dir="temp/src"/>
    	  <mkdir dir="temp/classes"/>
@@ -255,7 +258,6 @@
       <copy todir="temp/classes">
           <fileset dir="extras/src">
               <exclude name="**/package.html"/>
-              <exclude name="**/*.java"/>
           </fileset>
       </copy>
       <jar destfile="dist/click-extras-${version}-cayenne-1x.jar">
@@ -405,7 +407,7 @@
 
  
    <target name="get-deps" description="download JAR dependencies">
-      
+      <downloadMacro name="${jar.cayenne.1x}" path="org.objectstyle.cayenne"/>
       <downloadMacro name="${jar.codec}" path="commons-codec"/>
       <downloadMacro name="${jar.collections}" path="commons-collections"/>
       <downloadMacro name="${jar.io}" path="commons-io"/>
@@ -628,4 +630,70 @@ Please ensure you have configured build.properties</echo>
    
    <target name="test-all" depends="test-framework, test-extras"/>
    
+	
+   <target name="project-quick-start" description="build starter application">
+      <input 
+      	message="Please enter the project name (e.g. quickstart):" 
+        addproperty="project-name"/>
+      <input 
+      	message="Please enter the root package name (e.g. com.${project-name}):" 
+        addproperty="package-name"/>
+    <input 
+    	message="Please enter the web app context path:" 
+    	defaultvalue="${project-name}"
+      addproperty="context-path"/>
+      <delete 
+      	dir="../${project-name}" 
+      	quiet="false"/>
+   	  <package 
+   	  	projectName="${project-name}" 
+   	  	packageName="${package-name}"/>
+      <copy todir="../${project-name}/WebContent">
+      	<fileset dir="template/WebContent"/>
+      </copy>
+      <copy 
+      	todir="../${project-name}/WebContent/WEB-INF/lib"
+      	file="dist/click-${version}.jar"/>
+      <copy 
+      	todir="../${project-name}/WebContent/WEB-INF/lib"
+      	file="dist/click-extras-${version}.jar"/>
+      <copy 
+      	todir="../${project-name}/lib"
+      	file="lib/servlet-api-2.3.jar"/>
+      <copy 
+      	todir="../${project-name}" 
+      	file="template/build.xml"/>
+      <copy 
+      	todir="../${project-name}" 
+      	file="template/README.txt"/>
+      <copy todir="${package.path}">
+        <fileset dir="template/src/template"/>
+      </copy>
+   	  <replace 
+   	  	token="package template" 
+   	  	value="package ${package-name}"
+   	  	dir="../${project-name}/src"/>
+   	  <replace 
+   	  	token="import template" 
+   	  	value="import ${package-name}"
+   	  	dir="../${project-name}/src"/>
+ 	  <replace 
+ 	  	token="template" 
+ 	  	value="${package-name}"
+ 	  	file="../${project-name}/WebContent/WEB-INF/click.xml"/>   
+ 	  <replace 
+ 	  	token="project-name" 
+ 	  	value="${project-name}"
+ 	  	file="../${project-name}/WebContent/border-template.htm"/>   
+ 	  <replace 
+ 	  	token="project-name" 
+ 	  	value="${project-name}"
+ 	  	file="../${project-name}/WebContent/click/error.htm"/>   
+ 	  <replace
+ 	  	token="template-context" 
+ 	  	value="${context-path}"
+ 	  	dir="../${project-name}"/>   
+   </target>
+
+
 </project>
