@@ -285,7 +285,7 @@ public class DataContextFilter implements Filter {
             dataContext = DataContext.createDataContext(sharedCache);
 
             if (logger.isDebugEnabled()) {
-                String msg = "created DataContex with shared-cache=" + sharedCache;
+                String msg = "created DataContext with shared-cache=" + sharedCache;
                 logger.debug(msg);
             }
 
