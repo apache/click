@@ -15,20 +15,36 @@
  */
 package net.sf.click.util;
 
-import net.sf.click.Context;
-import net.sf.click.Control;
-import net.sf.click.Page;
-import net.sf.click.control.Field;
-import net.sf.click.control.FieldSet;
-import net.sf.click.control.Form;
-import net.sf.click.control.Label;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.lang.ClassUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.io.IOUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.EntityResolver;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
@@ -36,15 +52,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.net.URLEncoder;
-import java.security.MessageDigest;
-import java.util.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+
+import net.sf.click.Context;
+import net.sf.click.Control;
+import net.sf.click.Page;
+import net.sf.click.control.Field;
+import net.sf.click.control.FieldSet;
+import net.sf.click.control.Form;
+import net.sf.click.control.Label;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
 
 /**
  * Provides miscellaneous Form, String and Stream utility methods.
@@ -847,7 +870,7 @@ public class ClickUtils {
 
         ClickLogger logger = ClickLogger.getInstance();
         String descriptorFile = packageName + "/" + controlName + ".files";
-        logger.debug("Use deployment descriptor file:"+descriptorFile);
+        logger.debug("Use deployment descriptor file:" + descriptorFile);
         try {
             InputStream is = ClickUtils.class.getResourceAsStream(descriptorFile);
             List fileList = IOUtils.readLines(is);
@@ -864,7 +887,7 @@ public class ClickUtils {
                 String destination = "";
                 int index = filePath.lastIndexOf('/');
                 if (index != -1) {
-                    destination = filePath.substring(0,index + 1);
+                    destination = filePath.substring(0, index + 1);
                 }
                 targetDirList.add(i, targetDir + "/" + destination);
                 fileList.set(i, packageName + "/" + filePath);
