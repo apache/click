@@ -216,7 +216,8 @@ public class FormTable extends Table {
     }
 
     /**
-     * Return the HTML head element import string.
+     * Return the HTML head element import string. This method will also include
+     * the imports of the form and the contained fields.
      *
      * @see net.sf.click.Control#getHtmlImports()
      *
@@ -227,6 +228,17 @@ public class FormTable extends Table {
 
         buffer.append(super.getHtmlImports());
         buffer.append(getForm().getHtmlImports());
+
+        for (int i = 0; i < getColumnList().size(); i++) {
+            Column column = (Column) getColumnList().get(i);
+            if (column instanceof FieldColumn) {
+                Field field = ((FieldColumn) column).getField();
+                String htmlImports = field.getHtmlImports();
+                if (htmlImports != null) {
+                    buffer.append(htmlImports);
+                }
+            }
+        }
 
         return buffer.toString();
     }

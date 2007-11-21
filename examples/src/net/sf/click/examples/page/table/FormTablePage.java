@@ -10,6 +10,7 @@ import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.InvestmentSelect;
 import net.sf.click.examples.page.BorderPage;
+import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.FieldColumn;
 import net.sf.click.extras.control.FormTable;
@@ -55,6 +56,10 @@ public class FormTablePage extends BorderPage {
         numberField.setSize(10);
         column = new FieldColumn("holdings", numberField);
         column.setTextAlign("right");
+        table.addColumn(column);
+
+        column = new FieldColumn("dateJoined", new DateField());
+        column.setDataStyle("white-space", "nowrap");
         table.addColumn(column);
 
         column = new FieldColumn("active", new Checkbox());
