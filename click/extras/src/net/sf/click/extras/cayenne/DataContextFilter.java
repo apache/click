@@ -28,6 +28,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.cayenne.access.DataContext;
@@ -226,7 +228,7 @@ public class DataContextFilter implements Filter {
         DataContext dataContext = getDataContext((HttpServletRequest) request);
 
         if (dataContext == null) {
-            throw new RuntimeException("dataContex could not be obtained");
+            throw new RuntimeException("DataContext could not be obtained");
         }
 
         // Bind DataContext to the request thread
@@ -284,13 +286,24 @@ public class DataContextFilter implements Filter {
         if (dataContext == null) {
             dataContext = DataContext.createDataContext(sharedCache);
 
-            if (logger.isDebugEnabled()) {
-                String msg = "created DataContext with shared-cache=" + sharedCache;
-                logger.debug(msg);
-            }
-
             if (sessionScope) {
                 session.setAttribute(ServletUtil.DATA_CONTEXT_KEY, dataContext);
+            }
+
+            if (logger.isDebugEnabled()) {
+                HtmlStringBuffer buffer = new HtmlStringBuffer();
+                buffer.append("DataContext created with ");
+                if (sessionScope) {
+                    buffer.append("session scope");
+                } else {
+                    buffer.append("request scope");
+                }
+                if (sharedCache) {
+                    buffer.append(" and shared cache.");
+                } else {
+                    buffer.append(".");
+                }
+                logger.debug(buffer);
             }
         }
 
