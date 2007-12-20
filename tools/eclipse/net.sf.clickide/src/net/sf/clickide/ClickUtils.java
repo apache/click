@@ -640,6 +640,7 @@ public class ClickUtils {
 		List list = new ArrayList();
 		
 		list.add(path + ".htm");
+		list.add(path + "Page.htm");
 		list.add(lower + ".htm");
 		list.add(lower + "Page.htm");
 		list.add(hifun + ".htm");
