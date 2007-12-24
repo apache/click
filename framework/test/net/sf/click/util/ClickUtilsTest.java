@@ -285,10 +285,12 @@ public class ClickUtilsTest extends TestCase {
     public void testGetMimeType() {
         assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("worksheet.xls"));
 
+        assertEquals("application/vnd.ms-excel", ClickUtils.getMimeType("WORKSHEET.XLS"));
+        
         try {
-	    assertNull(ClickUtils.getMimeType("broken.xxx"));
+        	assertNull(ClickUtils.getMimeType("broken.xxx"));
         } catch (Exception e) {
-	    assertTrue(false);
+        	assertTrue(false);
         }
     }
     
