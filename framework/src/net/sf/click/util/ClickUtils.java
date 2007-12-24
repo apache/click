@@ -1364,7 +1364,7 @@ public class ClickUtils {
                 ResourceBundle bundle =
                     ResourceBundle.getBundle("net/sf/click/util/mime-type");
 
-                return bundle.getString(ext);
+                return bundle.getString(ext.toLowerCase());
 
             } catch (MissingResourceException mre) {
                 return null;
