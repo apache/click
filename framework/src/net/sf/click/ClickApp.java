@@ -681,7 +681,7 @@ class ClickApp implements EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            Class deployClass = Class.forName(classname);
+            Class deployClass = ClickUtils.classForName(classname);
             Control control = (Control) deployClass.newInstance();
 
             control.onDeploy(getServletContext());
@@ -835,7 +835,7 @@ class ClickApp implements EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            formatClass = Class.forName(classname);
+            formatClass = ClickUtils.classForName(classname);
 
         } else {
             formatClass = net.sf.click.util.Format.class;
@@ -854,7 +854,7 @@ class ClickApp implements EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            Class fifClass = Class.forName(classname);
+            Class fifClass = ClickUtils.classForName(classname);
 
             fileItemFactory = (FileItemFactory) fifClass.newInstance();
 
@@ -1279,7 +1279,7 @@ class ClickApp implements EntityResolver {
 
         Class pageClass = null;
         try {
-            pageClass = Class.forName(className);
+            pageClass = ClickUtils.classForName(className);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Automapped page class " + className
@@ -1294,7 +1294,7 @@ class ClickApp implements EntityResolver {
             if (!className.endsWith("Page")) {
                 String classNameWithPage = className + "Page";
                 try {
-                    pageClass = Class.forName(classNameWithPage);
+                    pageClass = ClickUtils.classForName(classNameWithPage);
 
                     if (!Page.class.isAssignableFrom(pageClass)) {
                         String msg = "Automapped page class " + classNameWithPage
@@ -1403,7 +1403,7 @@ class ClickApp implements EntityResolver {
                 throw new RuntimeException(msg);
             }
 
-            pageClass = Class.forName(value);
+            pageClass = ClickUtils.classForName(value);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
                 String msg = "Page class " + value
@@ -1442,7 +1442,7 @@ class ClickApp implements EntityResolver {
             this.fieldArray = null;
             this.fields = Collections.EMPTY_MAP;
             this.headers = Collections.EMPTY_MAP;
-            pageClass = Class.forName(classname);
+            pageClass = ClickUtils.classForName(classname);
             this.path = path;
         }
 

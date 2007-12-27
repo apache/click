@@ -20,6 +20,7 @@ import java.io.Serializable;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
+import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EntityMode;
@@ -245,7 +246,7 @@ public class HibernateForm extends Form {
     public Object getValueObject() {
         if (StringUtils.isNotBlank(classField.getValue())) {
             try {
-                Class valueClass = Class.forName(classField.getValue());
+                Class valueClass = ClickUtils.classForName(classField.getValue());
 
                 Serializable oid = (Serializable) oidField.getValueObject();
 
@@ -381,7 +382,7 @@ public class HibernateForm extends Form {
         }
 
         try {
-            Class valueClass = Class.forName(classField.getValue());
+            Class valueClass = ClickUtils.classForName(classField.getValue());
 
             String classname = getClassname(valueClass);
 

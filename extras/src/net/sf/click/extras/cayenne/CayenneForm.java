@@ -433,7 +433,7 @@ public class CayenneForm extends Form {
         }
 
         try {
-            return Class.forName(className);
+            return ClickUtils.classForName(className);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -606,7 +606,7 @@ public class CayenneForm extends Form {
         }
 
         try {
-            Class dataClass = Class.forName(classField.getValue());
+            Class dataClass = ClickUtils.classForName(classField.getValue());
 
             ObjEntity objEntity =
                 getDataContext().getEntityResolver().lookupObjEntity(dataClass);
@@ -727,7 +727,7 @@ public class CayenneForm extends Form {
         String className = TypesMapping.getJavaBySqlType(attr.getType());
 
         try {
-            return Class.forName(className);
+            return ClickUtils.classForName(className);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
