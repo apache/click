@@ -80,6 +80,9 @@ is provided below.
 
 By default the <tt>ClickServlet</tt> will attempt to load an application
 configuration file using the path: &nbsp; <tt>/WEB-INF/click.xml</tt>
+<p/>
+If this file is not found under the <tt>WEB-INF</tt> directory, then
+the ClickServlet will attempt to load it from the classpath as <tt>/click.xml</tt>.
 
 <h3>Servlet Mapping</h3>
 By convention all Click page templates should have a .htm extension, and
