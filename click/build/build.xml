@@ -387,8 +387,9 @@
 
 
    <target name="deploy-examples" description="copy example WAR files to app server"> 
+      <delete file="${dir.appserver}/click-examples.war" quiet="true"/>
+   	  <sleep seconds="5"/>
       <copy file="dist/click-examples.war" todir="${dir.appserver}" overwrite="true"/>
-      <copy file="dist/click-quickstart.war" todir="${dir.appserver}" overwrite="true"/>
    </target>
 
 
