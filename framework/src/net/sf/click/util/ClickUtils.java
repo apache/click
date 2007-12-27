@@ -66,6 +66,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 
@@ -767,7 +768,7 @@ public class ClickUtils {
 
             if (!destinationFile.exists()) {
                 InputStream inputStream =
-                    ClickUtils.class.getResourceAsStream(resource);
+                    getResourceAsStream(resource, ClickUtils.class);
 
                 if (inputStream != null) {
                     FileOutputStream fos = null;
@@ -872,7 +873,7 @@ public class ClickUtils {
         String descriptorFile = packageName + "/" + controlName + ".files";
         logger.debug("Use deployment descriptor file:" + descriptorFile);
         try {
-            InputStream is = ClickUtils.class.getResourceAsStream(descriptorFile);
+            InputStream is = getResourceAsStream(descriptorFile, ClickUtils.class);
             List fileList = IOUtils.readLines(is);
             if (fileList == null || fileList.isEmpty()) {
                 logger.info("there are no files to deploy for control " + controlClass.getName());
@@ -1506,6 +1507,33 @@ public class ClickUtils {
         }
 
         return path;
+    }
+
+    /**
+     * Finds a resource with a given name. This method returns null if no
+     * resource with this name is found.
+     * <p>
+     * This method uses the current <tt>Thread</tt> context <tt>ClassLoader</tt> to find
+     * the resource. If the resource is not found the class loader of the given
+     * class is then used to find the resource.
+     *
+     * @param name the name of the resource
+     * @param aClass the class lookup the resource against, if the resource is
+     *     not found using the  current <tt>Thread</tt> context <tt>ClassLoader</tt>.
+     * @return the input stream of the resouce if found or null otherwise
+     */
+    public static InputStream getResourceAsStream(String name, Class aClass) {
+        Validate.notNull(name, "Parameter name is null");
+        Validate.notNull(aClass, "Parameter aClass is null");
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        InputStream inputStream = classLoader.getResourceAsStream(name);
+        if (inputStream == null) {
+            inputStream = aClass.getResourceAsStream(name);
+        }
+
+        return inputStream;
     }
 
     /**

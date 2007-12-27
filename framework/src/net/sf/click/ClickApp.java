@@ -73,7 +73,7 @@ class ClickApp implements EntityResolver {
      * The Click configuration filename: &nbsp;
      * "<tt>/WEB-INF/click.xml</tt>".
      */
-    static final String APP_CONFIG_FILENAME = "/WEB-INF/click.xml";
+    static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
     /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>". */
     static final String CLICK_LOGGER = "net.sf.click";
@@ -241,13 +241,18 @@ class ClickApp implements EntityResolver {
         ClickLogger.setInstance(logger);
 
         InputStream inputStream =
-            getServletContext().getResourceAsStream(APP_CONFIG_FILENAME);
+            getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
 
         if (inputStream == null) {
-            String msg =
-                "could not find click app configuration file: "
-                + APP_CONFIG_FILENAME;
-            throw new RuntimeException(msg);
+            inputStream =
+                ClickUtils.getResourceAsStream("/click.xml", getClass());
+
+            if (inputStream == null) {
+                String msg =
+                    "could not find click app configuration file: "
+                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
+                throw new RuntimeException(msg);
+            }
         }
 
         try {
@@ -317,7 +322,7 @@ class ClickApp implements EntityResolver {
     public InputSource resolveEntity(String publicId, String systemId)
             throws SAXException, IOException {
 
-        InputStream inputStream = getClass().getResourceAsStream(DTD_FILE_PATH);
+        InputStream inputStream = ClickUtils.getResourceAsStream(DTD_FILE_PATH, getClass());
 
         if (inputStream != null) {
             return new InputSource(inputStream);
@@ -634,7 +639,7 @@ class ClickApp implements EntityResolver {
         Document document = null;
         InputStream inputStream = null;
         try {
-            inputStream = getClass().getResourceAsStream(path);
+            inputStream = ClickUtils.getResourceAsStream(path, getClass());
 
             if (inputStream != null) {
                 document = ClickUtils.buildDocument(inputStream, this);

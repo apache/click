@@ -384,7 +384,10 @@ public class FieldSet extends Field {
     }
 
     /**
-     * Set the fieldset Legend element value: &lt;legend&gt;.
+     * Set the fieldset Legend element value: &lt;legend&gt;. If the legend
+     * value is a zero length string no legend element will be rendered. You
+     * can set a blank zero length string if you want to render the fieldset
+     * border but don't want a legend caption.
      *
      * @param legend the fieldset Legend element value
      */
@@ -594,7 +597,7 @@ public class FieldSet extends Field {
             buffer.closeTag();
             buffer.append("\n");
 
-            if (getLegend() != null) {
+            if (getLegend().length() > 0) {
                 buffer.elementStart("legend");
                 buffer.appendAttribute("id", getId() + "-legend");
                 if (hasLegendAttributes()) {
