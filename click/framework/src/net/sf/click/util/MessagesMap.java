@@ -248,7 +248,8 @@ public class MessagesMap implements Map {
     private void ensureInitialized() {
         if (messages == null) {
 
-            String resourceKey = baseClass.getName() + locale.toString();
+            String resourceKey =
+                globalBaseName + baseClass.getName() + locale.toString();
 
             messages = (Map) MESSAGES_CACHE.get(resourceKey);
 

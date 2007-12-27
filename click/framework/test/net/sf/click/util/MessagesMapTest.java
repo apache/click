@@ -102,4 +102,26 @@ public class MessagesMapTest extends TestCase {
         assertEquals("Test2TextField", map.get("classname"));
     }
     
+    /**
+     * CLK-274
+     * 
+     * Create two MessagesMaps for the same class eg. Object.class
+     * with different global resources eg. "missingResource" and 
+     * "click-control". The first messagesMap is created specifying 
+     * "missingResource" as its global resource. Since no 
+     * missingResource.properties file exists, this messagesMap will be empty.
+     * 
+     * Test that the second messagesMap, specifying "click-control" as its 
+     * global resource, should pick up the properties from the 
+     * click-control.properties file.
+     */
+    public void testGlobalResourceKey() {
+        MockContext.initContext(Locale.ENGLISH);
+        MessagesMap emptyMap = new MessagesMap(Object.class, "missingResource");
+        assertTrue(emptyMap.isEmpty());
+
+        MessagesMap map = new MessagesMap(Object.class, "click-control");
+        assertFalse(map.isEmpty());
+        assertEquals("First", map.get("table-first-label"));
+}
 }
