@@ -47,7 +47,9 @@ import org.w3c.dom.NodeList;
  * </tr>
  * </table>
  *
- * Application menus can be defined using a <tt>/WEB-INF/menu.xml</tt> configuration file:
+ * Application menus are defined using a <tt>/WEB-INF</tt> configuration
+ * file located under the <tt>/WEB-INF</tt> directory or the root classpath.
+ * An example Menu configuration files is provided below.
  *
  * <pre class="codeConfig">
  * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
@@ -177,7 +179,7 @@ public class Menu implements Control {
     /**
      * The menu configuration filename: &nbsp; "<tt>/WEB-INF/menu.xml</tt>".
      */
-    protected static final String CONFIG_FILE = "/WEB-INF/menu.xml";
+    protected static final String DEFAULT_CONFIG_FILE = "/WEB-INF/menu.xml";
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
@@ -327,9 +329,11 @@ public class Menu implements Control {
     // ---------------------------------------------------- Constructor Methods
 
     /**
-     * Return root menu item defined in the WEB-INF/menu.xml file.
+     * Return root menu item defined in the WEB-INF/menu.xml file or menu.xml in
+     * the root classpath.
      *
-     * @return the root menu item defined in the WEB-INF/menu.xml file
+     * @return the root menu item defined in the WEB-INF/menu.xml file or menu.xml
+     * in the root classpath
      */
     public static Menu getRootMenu() {
         if (rootMenu == null) {
@@ -887,10 +891,13 @@ public class Menu implements Control {
 
         ServletContext servletContext = context.getServletContext();
         InputStream inputStream =
-            servletContext.getResourceAsStream(CONFIG_FILE);
+            servletContext.getResourceAsStream(DEFAULT_CONFIG_FILE);
 
         if (inputStream == null) {
-            String msg = "could not find configuration file:" + CONFIG_FILE;
+            inputStream = ClickUtils.getResourceAsStream("/menu.xml", Menu.class);
+            String msg =
+                "could not find configuration file:" + DEFAULT_CONFIG_FILE
+                + " or menu.xml on classpath";
             throw new RuntimeException(msg);
         }
 

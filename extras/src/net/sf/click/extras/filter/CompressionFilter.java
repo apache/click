@@ -246,10 +246,13 @@ public class CompressionFilter implements Filter {
             servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
 
         if (inputStream == null) {
-            String msg =
-                "could not find click app configuration file: "
-                + DEFAULT_APP_CONFIG;
-            throw new RuntimeException(msg);
+            inputStream = ClickUtils.getResourceAsStream("/click.xml", getClass());
+            if (inputStream == null) {
+                String msg =
+                    "could not find click app configuration file: "
+                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
+                throw new RuntimeException(msg);
+            }
         }
 
         try {
