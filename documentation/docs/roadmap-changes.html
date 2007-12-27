@@ -35,7 +35,7 @@ and documentation updates.
 <h2>Changes</h2>
 
 <dl>
-  <dt>Version 1.4 RC2 - ?? December 2007</dt>
+  <dt>Version 1.4 RC2 - 30 December 2007</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -43,15 +43,36 @@ and documentation updates.
 		This issue was raised and fixed by David Marko
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-238">242</a>].
       </li>
-	  <li class="change">
-		Fix translation errors for French properties.
-		This issue was raised and fixed by Patrick Talbot 
-		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-238">238</a>].
+      <li class="change">
+		Added facility to load <tt>click.xml</tt> from class path if not found
+		user <tt>WEB-INF</tt>.
+		This issue was raised and fixed by Andre Bremer
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-273">273</a>].
+      </li>
+      <li class="change">
+		Added Calendar property and JS files with translation for the Dutch language.
+		This issue was raised and fixed by Harry Wissiak
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-275">275</a>].
       </li>
 	  <li class="change">
 		Updated ExternalLink control renaming method <tt>setPageClass</tt> to <tt>setTargetPath</tt>.
 		This issue was raised by Itou Akihiro 
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-244">244</a>].
+      </li>
+	  <li class="change">
+		Updated FieldSet to support rendering without a Legend.
+		This issue was raised by Joel Schmidt
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-257">257</a>].
+      </li>
+	  <li class="change">
+		Updated MessageMap to improve cache key.
+		This issue was raised and fixed by Bob Schellink 
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-274">274</a>].
+      </li>
+	  <li class="change">
+		Fix translation errors for French properties.
+		This issue was raised and fixed by Patrick Talbot 
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-238">238</a>].
       </li>
       <li class="change">
 		Fixed JSP page recursion bug when not border template defined.
@@ -69,9 +90,20 @@ and documentation updates.
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-248">248</a>].
       </li>
       <li class="change">
+		Fixed missing language properties.
+		This issue was raised by Bob Schellick
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-269">269</a>, 
+		 <a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-271">271</a>].
+      </li>
+      <li class="change">
 		Fixed FormTable missing field imports bug.
 		This issue was raised by François-Xavier Guillemette
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-272">CLK-272</a>].
+      </li>
+      <li class="change">
+		Fixed ClickUtils.getMimieType() not supporting upper case file extensions.
+		This issue was raised by Ben Warner
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-276">CLK-276</a>].
       </li>
       <li class="change">Updated documentation and examples.</li> 
     </ul>
