@@ -429,6 +429,21 @@ public class ClickUtils {
     }
 
     /**
+     * Returns the <code>Class</code> object associated with the class or
+     * interface with the given string name, using the current Thread context
+     * class loader.
+     *
+     * @param classname the name of the class to load
+     * @return the <tt>Class</tt> object
+     * @throws ClassNotFoundException if the class cannot be located
+     */
+    public static Class classForName(String classname)
+            throws ClassNotFoundException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        return Class.forName(classname, true, classLoader);
+    }
+
+    /**
      * Close the given input stream and ignore any exceptions thrown.
      *
      * @param stream the input stream to close.
