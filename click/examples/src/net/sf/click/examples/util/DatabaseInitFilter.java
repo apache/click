@@ -141,7 +141,7 @@ public class DatabaseInitFilter implements Filter {
     private static void loadFile(String filename, DataContext dataContext,
             LineProcessor lineProcessor) throws IOException {
 
-        InputStream is = DatabaseInitFilter.class.getResourceAsStream(filename);
+        InputStream is = ClickUtils.getResourceAsStream(filename, DatabaseInitFilter.class);
 
         if (is == null) {
             throw new RuntimeException("classpath file not found: " + filename);
