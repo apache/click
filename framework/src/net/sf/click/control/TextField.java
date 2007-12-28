@@ -277,6 +277,17 @@ public class TextField extends Field {
             buffer.appendAttribute("maxlength", getMaxLength());
         }
 
+        if (isValid()) {
+            removeStyleClass("error");
+            if (isDisabled()) {
+                addStyleClass("disabled");
+            } else {
+                removeStyleClass("disabled");
+            }
+        } else {
+            addStyleClass("error");
+        }
+
         appendAttributes(buffer);
 
         if (isDisabled()) {
@@ -284,12 +295,6 @@ public class TextField extends Field {
         }
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
-        }
-
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
-        } else if (isDisabled()) {
-            buffer.appendAttribute("class", "disabled");
         }
 
         buffer.elementEnd();
