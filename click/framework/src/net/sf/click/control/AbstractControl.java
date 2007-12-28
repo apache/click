@@ -19,8 +19,10 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 import net.sf.click.Context;
@@ -37,8 +39,8 @@ import net.sf.click.util.MessagesMap;
  * Subclasses are expected to at least override {@link java.lang.Object#toString()}
  * to render the control.
  *
- * @author Malcolm Edgar
  * @author Bob Schellink
+ * @author Malcolm Edgar
  */
 public abstract class AbstractControl implements Control {
 
@@ -57,7 +59,8 @@ public abstract class AbstractControl implements Control {
     /**
      * The Map of CSS style attributes.
      *
-     * @deprecated
+     * @deprecated use {@link #addStyleClass(String)} and
+     * {@link #removeStyleClass(String)} instead.
      */
     protected Map styles;
 
@@ -80,7 +83,7 @@ public abstract class AbstractControl implements Control {
     /**
      * Set the control attribute with the given attribute name and value. You would
      * generally use attributes if you were creating the entire Control
-     * programatically and rendering it with the {@link #toString()} method.
+     * programmatically and rendering it with the {@link #toString()} method.
      * <p/>
      * For example given the ActionLink:
      *
@@ -92,12 +95,13 @@ public abstract class AbstractControl implements Control {
      * <pre class="codeHtml">
      * &lt;a href=".." <span class="st">target</span>=<span class="st">"_blank"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
      *
-     * <b>Note:</b> for the <tt>style</tt> attribute please use
-     * {@link #setStyle(String, String)} and {@link #getStyle(String)}
-     * instead. These methods provides better support for working
-     * with this attribute.
+     * <b>Note:</b> for <tt>style</tt> and <tt>class</tt> attributes you can
+     * also use the methods {@link #setStyle(String, String)} and
+     * {@link #addStyleClass(String)}.
      *
      * @see #setStyle(String, String)
+     * @see #addStyleClass(String)
+     * @see #removeStyleClass(String)
      *
      * @param name the attribute name
      * @param value the attribute value
@@ -184,7 +188,7 @@ public abstract class AbstractControl implements Control {
     /**
      * Return the "id" attribute value if defined, or the control name otherwise.
      *
-     * @see Control#getId()
+     * @see net.sf.click.Control#getId()
      *
      * @return HTML element identifier attribute "id" value
      */
@@ -294,7 +298,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * @see Control#getParent()
+     * @see net.sf.click.Control#getParent()
      *
      * @return the Control's parent
      */
@@ -303,7 +307,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * @see Control#setParent(Object)
+     * @see net.sf.click.Control#setParent(Object)
      *
      * @param parent the parent of the Control
      */
@@ -358,20 +362,20 @@ public abstract class AbstractControl implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
 
-        String currentStyles = getAttribute("style");
+        String oldStyles = getAttribute("style");
 
         //If existing style and value is not null, just append the new style
-        if (currentStyles == null && value != null) {
+        if (oldStyles == null && value != null) {
             getAttributes().put("style", name + ":" + value + ";");
             return;
         }
 
         //Create buffer and estimate the new size
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-            currentStyles.length() + 10);
+            oldStyles.length() + 10);
 
         //Parse the current styles into a map
-        Map stylesMap = parseStyles(currentStyles);
+        Map stylesMap = parseStyles(oldStyles);
 
         //Check if the new style is already present
         if (stylesMap.containsKey(name)) {
@@ -410,7 +414,7 @@ public abstract class AbstractControl implements Control {
     /**
      * Return true if CSS styles are defined.
      *
-     * @deprecated use {@link #hasAttribute("style")} instead
+     * @deprecated use {@link #hasAttribute(String)} instead
      *
      * @return true if CSS styles are defined
      */
@@ -430,6 +434,104 @@ public abstract class AbstractControl implements Control {
             styles = new HashMap();
         }
         return styles;
+    }
+
+    /**
+     * Add the CSS class attribute. Null values will be ignored.
+     * <p/>
+     * For example given the ActionLink:
+     *
+     * <pre class="codeJava">
+     * ActionLink addLink = <span class="kw">new</span> ActionLink(<span class="red">"addLink"</span>, <span class="st">"Add"</span>);
+     * addLink.setStyle(<span class="st">"color"</span>, <span class="st">"red"</span>);
+     * addLink.setStyle(<span class="st">"border"</span>, <span class="st">"1px solid black"</span>); </pre>
+     *
+     * Will render the HTML as:
+     * <pre class="codeHtml">
+     * &lt;a href=".." <span class="st">style</span>=<span class="st">"color:red;border:1px solid black;"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     *
+     * @param value the class attribute to add
+     */
+    public void addStyleClass(String value) {
+        //If vaule is null, exit early
+        if (value == null) {
+            return;
+        }
+
+        //If any class attributes already exist, check if the specified class
+        //exists in the current set of classes.
+        if (hasAttribute("class")) {
+            String oldStyleClasses = getAttribute("class").trim();
+
+            //Check if the specified class exists in the class attribute set
+            boolean classExists = classExists(value, oldStyleClasses);
+
+            if (classExists) {
+                 //If the class already exist, exit early
+                return;
+            }
+
+            //Specified class does not exist so add it with the other class
+            //attributes
+            getAttributes().put("class", oldStyleClasses + " " + value);
+
+        } else {
+            //Since no class attributes exist yet, only add the specified class
+            setAttribute("class", value);
+        }
+    }
+
+    /**
+     * Removes the CSS class attribute.
+     *
+     * @param value the CSS class attribute
+     */
+    public void removeStyleClass(String value) {
+        //If vaule is null, exit early
+        if (value == null) {
+            return;
+        }
+
+        //If any class attributes already exist, check if the specified class
+        //exists in the current set of classes.
+        if (hasAttribute("class")) {
+            String oldStyleClasses = getAttribute("class").trim();
+
+            //Check if the specified class exists in the class attribute set
+            boolean classExists = classExists(value, oldStyleClasses);
+
+            if (!classExists) {
+                 //If the class does not exist, exit early
+                return;
+            }
+
+            //If the class does exist, parse the class attributes into a set
+            //and remove the specified class
+            Set styleClassSet = parseStyleClasses(oldStyleClasses);
+            styleClassSet.remove(value);
+
+            if (styleClassSet.isEmpty()) {
+                //If there are no more styleClasses left, remove the class
+                //attribute from the attributes list
+                getAttributes().remove("class");
+            } else {
+                //Otherwise render the styleClasses.
+                //Create buffer and estimate the new size
+                HtmlStringBuffer buffer = new HtmlStringBuffer(
+                    oldStyleClasses.length() + value.length());
+
+                //Iterate over the styleClassSet appending each entry to buffer
+                Iterator it = styleClassSet.iterator();
+                while (it.hasNext()) {
+                    String entry = (String) it.next();
+                    buffer.append(entry);
+                    if (it.hasNext()) {
+                        buffer.append(" ");
+                    }
+                }
+                getAttributes().put("class", buffer.toString());
+            }
+        }
     }
 
     // ----------------------------------protected methods
@@ -482,5 +584,66 @@ public abstract class AbstractControl implements Control {
         }
 
         return stylesMap;
+    }
+
+    /**
+     * Parse the specified string of style attributes and return a Map
+     * of key/value pairs. Invalid key/value pairs will not be added to
+     * the map.
+     *
+     * @param styleClasses the string containing the styles to parse
+     * @return map containing key/value pairs of the specified style
+     */
+    protected Set parseStyleClasses(String styleClasses) {
+        if (styleClasses == null) {
+            throw new IllegalArgumentException("styleClasses cannot be null");
+}
+
+        //LinkHashMap is used to keep the order of the class names. Probably
+        //makes no difference to browser but it makes testing easier since the
+        //order that classes were added in, are kept when rendering the control.
+        //Thus one can test whether the expected result and actual result match.
+        Set styleClassesSet = new LinkedHashSet();
+        StringTokenizer tokens = new StringTokenizer(styleClasses, " ");
+        while (tokens.hasMoreTokens()) {
+            String token = tokens.nextToken();
+            styleClassesSet.add(token);
+        }
+
+        return styleClassesSet;
+    }
+
+    /**
+     * Return true if the new value existing in the current value.
+     *
+     * @param newValue the value of the class attribute to check
+     * @param currentValue the current value to test
+     * @return true if the classToFind exists in the current value set
+     */
+    protected boolean classExists(String newValue, String currentValue) {
+        //To find if a class eg. "myclass" exists, check the following:
+
+        //1. Check if "myclass" is the only value in the string
+        //   -> "myclass"
+        if (newValue.length() == currentValue.length()
+            && currentValue.indexOf(newValue) == 0) {
+            return true;
+        }
+
+        //2. Check if "myclass" exists at beginning of string
+        //   -> "myclass otherclass"
+        if (currentValue.startsWith(newValue + " ")) {
+            return true;
+        }
+
+        //3. Check if "myclass" exists in middle of string
+        //   -> "anotherclass myclass otherclass"
+        if (currentValue.indexOf(" " + newValue + " ") >= 0) {
+            return true;
+        }
+
+        //4. Check if "myclass" exists at end of string
+        //   -> "anotherclass myclass"
+        return (currentValue.endsWith(" " + newValue));
     }
 }
