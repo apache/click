@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package net.sf.click;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +27,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -100,16 +102,20 @@ public class Context {
 
         this.context = context;
         this.config = config;
-        this.request = request;
+        this.request = new RequestWrapper(request);
         this.response = response;
         this.isPost = isPost;
         this.clickService = clickService;
 
         if (!ClickUtils.isMultipartRequest(request)) {
-            requestParameterMap = ClickUtils.getRequestParameterMap(request);
+            //If this request is not multipart, simply reference the requests
+            //parameterMap
+            requestParameterMap = unmodifiableMap(request.getParameterMap());
             fileItemMap = Collections.EMPTY_MAP;
 
         } else {
+            //If this request is multipart, populate two maps, one for normal
+            //request parameters, the other for all uploaded files
             FileItemFactory factory = clickService.getFileItemFactory();
             FileUploadBase fileUpload = new ServletFileUpload(factory);
 
@@ -128,6 +134,10 @@ public class Context {
                     String name = fileItem.getFieldName();
                     String value = null;
 
+                    //Form fields are placed in the request parameter map,
+                    //while file uploads are placed in the file item map.
+                    if (fileItem.isFormField()) {
+
                     if (request.getCharacterEncoding() == null) {
                         value = fileItem.getString();
 
@@ -140,12 +150,16 @@ public class Context {
                         }
                     }
 
-                    requestParams.put(name, value);
-                    fileItems.put(name, fileItem);
+                        //Add the form field value to the parameters
+                        addToMapAsString(requestParams, name, value);
+                    } else {
+                        //Add the file item to the list of file items
+                        addToMapAsFileItem(fileItems, name, fileItem);
+                }
                 }
 
-                requestParameterMap = Collections.unmodifiableMap(requestParams);
-                fileItemMap = Collections.unmodifiableMap(fileItems);
+                requestParameterMap = unmodifiableMap(requestParams);
+                fileItemMap = unmodifiableMap(fileItems);
 
             } catch (FileUploadException fue) {
                 throw new RuntimeException(fue);
@@ -298,7 +312,7 @@ public class Context {
      * @return the value of the request parameter.
      */
     public String getRequestParameter(String name) {
-        return (String) requestParameterMap.get(name);
+        return request.getParameter(name);
     }
 
     /**
@@ -307,7 +321,7 @@ public class Context {
      * @return the ordered map of request parameters
      */
     public Map getRequestParameterMap() {
-        return requestParameterMap;
+        return request.getParameterMap();
     }
 
     /**
@@ -319,20 +333,8 @@ public class Context {
      * @return an array of <tt>String</tt> objects containing the parameter's values
      */
     public String[] getRequestParameterValues(String name) {
-        Object values = requestParameterMap.get(name);
-
-        if (values != null) {
-            if (values instanceof String[]) {
-                return (String[]) values;
-
-            } else {
-                return new String[] { values.toString() };
+        return request.getParameterValues(name);
             }
-
-        } else {
-            return null;
-        }
-    }
 
     /**
      * Return the named session attribute, or null if not defined.
@@ -558,14 +560,44 @@ public class Context {
     }
 
     /**
-     * Returns a map of <tt>FileItem</tt> keyed on request parameter name for
-     * "multipart" POST requests (file uploads).
+     * Returns a map of <tt>FileItem arrays</tt> keyed on request parameter
+     * name for "multipart" POST requests (file uploads). Thus each map entry
+     * will consist of one or more <tt>FileItem</tt> objects.
      *
-     * @return map of <tt>FileItem</tt> keyed on request parameter name for
-     * "multipart" POST requests
+     * @return map of <tt>FileItem arrays</tt> keyed on request parameter name
+     * for "multipart" POST requests
      */
     public Map getFileItemMap() {
         return fileItemMap;
+    }
+
+    /**
+     * Returns the value of a request parameter as a FileItem, for
+     * "multipart" POST requests (file uploads), or null if the parameter
+     * is not found.
+     * <p/>
+     * If there were multivalued parameters in the request (ie two or more
+     * file upload fields with the same name), the first fileItem
+     * in the array is returned.
+     *
+     * @param name the name of the parameter of the fileItem to retrieve
+     *
+     * @return the fileItem for the specified name
+     */
+    public FileItem getFileItem(String name) {
+        Object value = fileItemMap.get(name);
+
+        if (value != null) {
+            if (value instanceof FileItem[]) {
+                FileItem[] array = (FileItem[]) value;
+                if (array.length >= 1) {
+                    return array[0];
+                }
+            } else if (value instanceof FileItem) {
+                return (FileItem) value;
+            }
+        }
+        return null;
     }
 
     /**
@@ -686,4 +718,131 @@ public class Context {
         THREAD_LOCAL_CONTEXT.set(context);
     }
  
+    /**
+     * Returns an unmodifiable map. The reason this functionality is placed
+     * in its own method, is so that a mock version can override this method
+     * and return a modifiable map instead. This streamlines the testing
+     * of Click, because the new request parameters can be added on the fly.
+     *
+     * @return an unmodifiable map
+     */
+    Map unmodifiableMap(Map map) {
+        return Collections.unmodifiableMap(map);
+    }
+
+    // ----------------------------------------------- Private methods
+
+    /**
+     * Stores the specified value in a FileItem array in the map, under the
+     * specified name. Thus two values stored under the same name will be
+     * stored in the same array.
+     *
+     * @param map the map to add the specified name and value to
+     * @param name the name of the map key
+     * @param value the value to add to the FileItem array
+     */
+    private void addToMapAsFileItem(Map map, String name, FileItem value) {
+        FileItem[] oldValues = (FileItem[]) map.get(name);
+        FileItem[] newValues = null;
+        if (oldValues == null) {
+            newValues = new FileItem[] {value};
+        } else {
+            newValues = new FileItem[oldValues.length + 1];
+            System.arraycopy(oldValues, 0, newValues, 0, oldValues.length);
+            newValues[oldValues.length] = value;
+        }
+        map.put(name, newValues);
+    }
+
+    /**
+     * Stores the specified value in an String array in the map, under the
+     * specified name. Thus two values stored under the same name will be
+     * stored in the same array.
+     *
+     * @param map the map to add the specified name and value to
+     * @param name the name of the map key
+     * @param value the value to add to the string array
+     */
+    private void addToMapAsString(Map map, String name, String value) {
+        String[] oldValues = (String[]) map.get(name);
+        String[] newValues = null;
+        if (oldValues == null) {
+            newValues = new String[] {value};
+        } else {
+            newValues = new String[oldValues.length + 1];
+            System.arraycopy(oldValues, 0, newValues, 0, oldValues.length);
+            newValues[oldValues.length] = value;
+        }
+        map.put(name, newValues);
+    }
+
+    // ---------------------------------------------- Inner classes
+
+    /**
+     * Provides a custom HttpServletRequest class for shielding users from
+     * multipart request parameters. Thus calling request.getParameter(String)
+     * will still work properly.
+     *
+     * @author Bob Schellink
+     */
+    private class RequestWrapper extends HttpServletRequestWrapper {
+
+        /**
+         * @see HttpServletRequestWrapper(HttpServletRequest)
+         */
+        public RequestWrapper(HttpServletRequest request) {
+            super(request);
+        }
+
+        /**
+         * @see javax.servlet.ServletRequest#getParameter(String)
+         */
+        public String getParameter(String name) {
+            Object value = requestParameterMap.get(name);
+
+            if (value instanceof String) {
+                return (String) value;
+            }
+
+            if (value instanceof String[]) {
+                String[] array = (String[]) value;
+                if (array.length >= 1) {
+                    return array[0];
+                } else {
+                    return null;
+                }
+            }
+
+            return (value == null ? null : value.toString());
+        }
+
+        /**
+         * @see javax.servlet.ServletRequest#getParameterNames()
+         */
+        public Enumeration getParameterNames() {
+            return Collections.enumeration(requestParameterMap.keySet());
+        }
+
+        /**
+         * @see javax.servlet.ServletRequest#getParameterValues(String)
+         */
+        public String[] getParameterValues(String name) {
+            Object values = requestParameterMap.get(name);
+            if (values instanceof String) {
+                return new String[] { values.toString() };
+            }
+            if (values instanceof String[]) {
+                return (String[]) values;
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * @see javax.servlet.ServletRequest#getParameterMap()
+         */
+        public Map getParameterMap() {
+            return requestParameterMap;
+        }
+    }
 }

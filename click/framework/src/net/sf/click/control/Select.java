@@ -216,7 +216,7 @@ public class Select extends Field {
      * The multiple selected values. This list will only be populated if
      * {@link #multiple} is true.
      */
-    protected List multipleValues;
+    protected List selectedValues;
 
     // ----------------------------------------------------------- Constructors
 
@@ -500,7 +500,8 @@ public class Select extends Field {
     /**
      * Return the list of selected values.
      *
-     * @deprecated use {@link #getSelectedValues()} instead
+     * @deprecated use {@link #getSelectedValues()} instead, this method will
+     * be removed in subsequent releases
      *
      * @return the list of selected values
      */
@@ -514,8 +515,8 @@ public class Select extends Field {
      * @return the list of selected values
      */
     public List getSelectedValues() {
-        if (multipleValues != null) {
-            return multipleValues;
+        if (selectedValues != null) {
+            return selectedValues;
 
         } else {
             return Collections.EMPTY_LIST;
@@ -525,10 +526,22 @@ public class Select extends Field {
     /**
      * Set the list of selected values.
      *
+     * @deprecated use {@link #getSelectedValues()} instead, this method will
+     * be removed in subsequent releases
+     *
      * @param multipleValues the list of selected values
      */
     public void setMultipleValues(List multipleValues) {
-        this.multipleValues = multipleValues;
+        this.selectedValues = multipleValues;
+    }
+
+    /**
+     * Set the list of selected values.
+     *
+     * @param multipleValues the list of selected values
+     */
+    public void setSelectedValues(List multipleValues) {
+        this.selectedValues = multipleValues;
     }
 
     /**
@@ -577,7 +590,7 @@ public class Select extends Field {
 
     /**
      * Bind the request submission, setting the {@link #value} or
-     * {@link #multipleValues} property if defined in the request.
+     * {@link #selectedValues} property if defined in the request.
      */
     public void bindRequestValue() {
 
@@ -586,23 +599,24 @@ public class Select extends Field {
             return;
         }
 
-        // Process single item select case, do the easy one first.
+        selectedValues = new ArrayList(5);
+
+        // Process single item select case.
         if (!isMultiple()) {
             // Load the selected item.
-            this.value = getContext().getRequestParameter(getName());
+            value = getContext().getRequestParameter(getName());
+            selectedValues.add(value);
 
         // Process the multiple item select case.
         } else {
 
             // Load the selected items.
-            this.multipleValues = new ArrayList();
-
             String[] values =
                 getContext().getRequest().getParameterValues(getName());
 
             if (values != null) {
                 for (int i = 0; i < values.length; i++) {
-                    multipleValues.add(values[i]);
+                    selectedValues.add(values[i]);
                 }
             }
         }
@@ -705,7 +719,7 @@ public class Select extends Field {
 
         if (isRequired()) {
             if (isMultiple()) {
-                if (getMultipleValues().isEmpty()) {
+                if (getSelectedValues().isEmpty()) {
                     setErrorMessage("select-error");
                 }
 

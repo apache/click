@@ -169,10 +169,10 @@ public class Option implements Serializable {
 
         if (select.isMultiple()) {
 
-            if (!select.getMultipleValues().isEmpty()) {
+            if (!select.getSelectedValues().isEmpty()) {
 
                 // Search through selection list for matching value
-                List values = select.getMultipleValues();
+                List values = select.getSelectedValues();
                 for (int i = 0, size = values.size(); i < size; i++) {
                     String value = values.get(i).toString();
                     if (getValue().equals(value)) {

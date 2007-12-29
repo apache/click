@@ -634,14 +634,24 @@ public class ClickUtils {
             throw new IllegalArgumentException("Null object parameter");
         }
 
-        String objectClassname = object.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
         final List fieldList = getFormFields(form);
 
         if (fieldList.isEmpty()) {
             log("   Form has no fields to copy from", debug);
+            // Exit early.
+            return;
+        }
+
+        String objectClassname = object.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        // If the given object is a map, its key/value pair is populated from
+        // the fields name/value.
+        if (object instanceof Map) {
+            copyFieldsToMap(fieldList, (Map) object, debug);
+            // Exit after populating the map.
+            return;
         }
 
         Set properties = getObjectPropertyNames(object);
@@ -1766,6 +1776,60 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
+
+   /**
+    * Populate the given map with the Form's field values. The maps
+    * key/value pairs are populated from the fields name/value.
+    *
+    * @param fieldList the forms list of fields to obtain field values from
+    * @param map the map to populate with field values
+    * @param debug log debug statements when populating the map
+    */
+    private static void copyFieldsToMap(List fieldList, Map map, boolean debug) {
+
+        String objectClassname = map.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            Field field = (Field) fieldList.get(i);
+
+            String fieldName = field.getName();
+            if (fieldName.indexOf(".") != -1) {
+                fieldName = fieldName.substring(0, fieldName.indexOf("."));
+            }
+
+            if (map.containsKey(field.getName())) {
+
+                if (map.get(field.getName()) == null) {
+                    //If it is the time a value is assigned to the key.
+                    map.put(field.getName(), field.getValueObject());
+                } else {
+                    //If there is already a value for this key, create a list to hold all values
+                    Object value = map.get(field.getName());
+                    if (!(value instanceof List)) {
+                        List list = new ArrayList();
+                        list.add(value);
+                        map.put(field.getName(), list);
+                    }
+                    List list = (List) map.get(field.getName());
+                    list.add(field.getValueObject());
+                }
+                String msg = "   Form -> " + objectClassname + "."
+                      + field.getName() + " : " + field.getValueObject();
+
+                log(msg, debug);
+
+            } else if (map.containsKey(fieldName)) {
+                map.put(field.getName(), field.getValueObject());
+
+                String msg = "   Form -> " + objectClassname + "."
+                      + field.getName() + " : " + field.getValueObject();
+
+                log(msg, debug);
+            }
+        }
+    }
 
     private static Set getObjectPropertyNames(Object object) {
         if (object instanceof Map) {
