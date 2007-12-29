@@ -78,7 +78,7 @@ public class SelectDemo extends BorderPage {
     public void onPost() {
         if (form.isValid()) {
             addModel("gender", genderSelect.getValue());
-            addModel("investment", investmentSelect.getMultipleValues());
+            addModel("investment", investmentSelect.getSelectedValues());
             addModel("location", locationSelect.getValue());
         }
     }

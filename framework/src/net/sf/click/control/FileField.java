@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Malcolm A. Edgar
+ * Copyright 2006-2007 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -226,7 +226,7 @@ public class FileField extends Field {
      * submission.
      */
     public void bindRequestValue() {
-        fileItem = (FileItem) getContext().getFileItemMap().get(getName());
+        fileItem = (FileItem) getContext().getFileItem(getName());
     }
 
     /**

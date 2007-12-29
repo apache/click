@@ -62,8 +62,8 @@ public class CheckListDemo extends BorderPage{
     public boolean onOkClick() {
         if (form.isValid()) {
             addModel("showSelected", Boolean.TRUE);
-            addModel("list1", standardCheckList.getValues());
-            addModel("list2", sortableCheckList.getValues());
+            addModel("list1", standardCheckList.getSelectedValues());
+            addModel("list2", sortableCheckList.getSelectedValues());
 
             // Use the sort out of the list2
             List order = sortableCheckList.getSortorder();
