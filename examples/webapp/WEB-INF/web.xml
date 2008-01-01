@@ -12,7 +12,7 @@
 	be needed.
 	-->
 	<filter>
-		<filter-name>database-filter</filter-name>
+		<filter-name>DatabaseInitFilter</filter-name>
 		<filter-class>net.sf.click.examples.util.DatabaseInitFilter</filter-class>
 	</filter>
  
@@ -20,7 +20,7 @@
 	Provides a thread local Cayenne DataContext filter.
 	-->
 	<filter>
-		<filter-name>cayenne-filter</filter-name>
+		<filter-name>DataContextFilter</filter-name>
 		<filter-class>net.sf.click.extras.cayenne.DataContextFilter</filter-class>
 		<init-param>
 			<param-name>session-scope</param-name>
@@ -28,7 +28,7 @@
 		</init-param>
 		<init-param>
 			<param-name>shared-cache</param-name>
-			<param-value>false</param-value>
+			<param-value>true</param-value>
 		</init-param>
 	</filter>
  
@@ -38,18 +38,18 @@
 	provided by a web server instead.
 	-->
 	<filter>
-		<filter-name>compression-filter</filter-name>
+		<filter-name>CompressionFilter</filter-name>
 		<filter-class>net.sf.click.extras.filter.CompressionFilter</filter-class>
 	</filter>
  	
 	<filter-mapping>
-		<filter-name>cayenne-filter</filter-name>
-		<servlet-name>click-servlet</servlet-name>
+		<filter-name>DataContextFilter</filter-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 	</filter-mapping>
  
 	<filter-mapping>
-		<filter-name>compression-filter</filter-name>
-		<servlet-name>click-servlet</servlet-name>
+		<filter-name>CompressionFilter</filter-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 	</filter-mapping>
 
 	<!--
@@ -58,7 +58,7 @@
 	context file on the classpath.
 	-->
 	<servlet>
-		<servlet-name>click-servlet</servlet-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 		<servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
 		<init-param>
 			<param-name>spring-path</param-name>
@@ -68,7 +68,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>click-servlet</servlet-name>
+		<servlet-name>SpringClickServlet</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 
