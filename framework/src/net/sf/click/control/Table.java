@@ -223,6 +223,12 @@ public class Table extends AbstractControl {
      */
     protected int bannerPosition = POSITION_BOTTOM;
 
+    /**
+     * The flag to clear the <tt>rowList</tt> when <tt>onDestroy()</tt> is
+     * invoked, the default value is true.
+     */
+    protected boolean clearRowListOnDestroy = true;
+
     /** The map of table columns keyed by column name. */
     protected Map columns = new HashMap();
 
@@ -415,6 +421,27 @@ public class Table extends AbstractControl {
                 removeColumn(columnNames.get(i).toString());
             }
         }
+    }
+
+    /**
+     * Return true if the Table will clear the <tt>rowList</tt> when the
+     * <tt>onDestroy()</tt> method is invoked.
+     *
+     * @return true if the rowList is cleared when onDestroy is invoked
+     */
+    public boolean getClearRowListOnDestroy() {
+        return clearRowListOnDestroy;
+    }
+
+    /**
+     * Set the flag to clear the <tt>rowList</tt> when the <tt>onDestroy()</tt>
+     * method is invoked.
+     *
+     * @param value the flag value to clear the table rowList when onDestroy is
+     * called
+     */
+    public void setClearRowListOnDestroy(boolean value) {
+        clearRowListOnDestroy = value;
     }
 
     /**
@@ -889,13 +916,16 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * This method will clear the rowList, set the sorted flag to false and
+     * This method will clear the <tt>rowList</tt>, if the property
+     * <tt>clearRowListOnDestroy</tt> is true, set the sorted flag to false and
      * will invoke the onDestroy() method of any child controls.
      *
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
-        getRowList().clear();
+        if (getClearRowListOnDestroy()) {
+            getRowList().clear();
+        }
         sorted = false;
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
