@@ -2,7 +2,7 @@ package net.sf.click.examples.page;
 
 import net.sf.click.Page;
 import net.sf.click.extras.control.Menu;
-import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a page border template. This Page returns the template
@@ -30,15 +30,7 @@ public class BorderPage extends SpringPage {
         String className = getClass().getName();
 
         String shortName = className.substring(className.lastIndexOf('.') + 1);
-        HtmlStringBuffer title = new HtmlStringBuffer();
-        title.append(shortName.charAt(0));
-        for (int i = 1; i < shortName.length(); i++) {
-            char aChar = shortName.charAt(i);
-            if (Character.isUpperCase(aChar)) {
-                title.append(' ');
-            }
-            title.append(aChar);
-        }
+        String title = ClickUtils.toLabel(shortName);
         addModel("title", title);
 
         String srcPath = className.replace('.', '/') + ".java";
