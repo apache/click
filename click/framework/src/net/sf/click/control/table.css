@@ -1,0 +1,254 @@
+/*
+ * Table CSS style
+ * 
+ * This CSS style sheet was adapted from DisplayTag 1.0 - screen.css
+ * http://displaytag.sourceforge.net
+ */
+
+th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
+}
+
+th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report {
+	vertical-align: top;
+}
+
+td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+	vertical-align: baseline;
+}
+
+th.ascending, th.descending {
+	background-color: orange;
+}
+
+th a, th a:visited {
+	color: black;
+}
+
+th a:hover {
+	color: black;
+	text-decoration: none;
+}
+
+th.ascending a, th.descending a, th.sortable a {
+	background-position: right;
+	display: block;
+	text-decoration: none;
+	width: 100%;
+}
+
+tr.odd {
+	background-color: #fff
+}
+
+tr.tableRowEven, tr.even {
+	background-color: #fea
+}
+
+/*
+complex, isi, its, mars, nocol, simple, report
+*/
+
+/** Individual Styles **/
+
+/* complex style */
+table.complex thead tr {
+    background-color: #ccc;
+}
+table.complex tr.even {
+    background-color: #ddd;
+}
+table.complex tr.odd {
+    background-color: #fff;
+}
+table.complex td.textRed {
+    color: #b11;
+}
+table.complex, table.complex td, table.complex th {
+	border: 1px solid #999;
+	border-collapse: collapse;
+}
+table.complex th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.complex td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* isi style */
+table.isi, table.isi td, table.isi th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.isi th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.isi td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* its style */
+table.its thead tr {
+    background-color: #7DAEDF;
+}
+table.its tr.even {
+    background-color: #def;
+}
+table.its, table.its td, table.its th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.its th, table.its td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* mars style */
+table.mars thead tr {
+    background-color: #9c9;
+}
+table.mars tr.even {
+    background-color: #ccb;
+}
+table.mars tr.odd {
+    background-color: #eec;
+}
+table.mars, table.mars td, table.mars th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.mars th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.mars td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* nocol style */
+table.nocol tbody td,table.nocol tbody th {
+	border-left: none;
+	border-right: none;
+}
+table.nocol th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.nocol td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* simple style */
+table.simple thead tr {
+    background-color: #eee;
+}
+table.simple tr.even {
+    background-color: #fff;
+}
+table.simple td.textRed {
+    color: #b11;
+}
+table.simple, table.simple td, table.simple th {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+table.simple th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.simple td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* report style */
+table.report {
+    border: 1px solid #666;
+}
+table.report td, table.report th {
+	font: menu;
+}
+table.report th {
+	background:   buttonface;
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	cursor:       hand;
+}
+table.report idcol {
+	background: buttonface;
+}
+table.report tr.even{
+	background-color: #C2EFEF;
+}
+table.report tbody {
+/*	height: 180px; */
+/*	overflow: auto; */
+}
+table.report {
+/*	height: 200px; */
+/*	overflow: auto; */
+}
+table.report tbody tr{
+/*	height: 10px; */
+}
+table.report th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.report td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
+/* table pagination styles */
+span.pagebanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 390px;
+	margin-top: 10px;
+	display: block;
+	border-bottom: none;
+}
+
+span.pagebanner-nolinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 390px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+span.pagelinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 390px;
+	display: block;
+	margin-bottom: 10px;
+	border-top: none;
+}
+
+img.link {
+	vertical-align: middle;
+}
+
+span.pagelinks-nobanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 390px;
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

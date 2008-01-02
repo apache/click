@@ -1,0 +1,32 @@
+<ajax-response>
+<response type="element" id="customerDetails">
+#if ($customer) 
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>Name</b></td>
+  <td>$format.string($customer.name)</td>
+ </tr>
+ <tr>
+  <td><b>Email</b></td>
+  <td>$format.email($customer.email, "style='{text-decoration:none;}'")</td>
+ </tr>
+ <tr>
+  <td><b>Age</b></td>
+   <td>$format.string($customer.age)</td>
+ </tr>
+ <tr>
+  <td><b>Investments</b></td>
+  <td>$format.string($customer.investments)</td>
+ </tr>
+ <tr>
+  <td><b>Holdings</b></td>
+  <td>$format.currency($customer.holdings)</td>
+ </tr>
+ <tr>
+  <td><b>Date Joined</b></td>
+  <td>$format.date($customer.dateJoined, "dd MMM yyyy")</td>
+ </tr>
+</table>
+#end
+</response>
+</ajax-response>

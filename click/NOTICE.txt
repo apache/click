@@ -1,0 +1,39 @@
+
+This product includes software developed by 
+The Apache Software Foundation (http://jakarta.apache.org/).
+
+This product includes the OGNL library, 
+developed by Drew Davidson (http://www.ognl.org/).
+
+This product includes the Concurrent utilities library, 
+developed by Doug Lea 
+(http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/intro.html).
+
+This product includes the DHTML Calandar widget, developed by 
+Mihai Bazon (http://www.dynarch.com/).
+
+This product includes the JSGraphics library, developed by 
+Walter Zorn (http://www.walterzorn.com/).
+
+This product includes software developed by Atlassian
+(http://www.atlassian.com/), released under the Apache Software License.
+
+This product includes the Java API for Servlets,
+developed by Sun Microsystems Inc (http://www.sun.com). 
+Please note the Java Servlet API is NOT included in the 
+Click runtime library.
+
+This product includes the prototype JavaScript library,
+developed by Sam Stephenson (http://prototype.conio.net).
+Please note this library is NOT included in the
+Click runtime library.
+
+This product includes the rico JavaScript library,
+developed by Sabre Airline Solutions (http://openrico.org).
+Please note this library is NOT included in the
+Click runtime library.
+
+This product includes the TinyMCE JavaScript library,
+developed by Moxiecode Systems (http://www.moxiecode.com/).
+Please note this library is NOT included in the
+Click runtime library.
