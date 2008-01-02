@@ -108,14 +108,20 @@ public class Context {
         this.clickService = clickService;
 
         if (!ClickUtils.isMultipartRequest(request)) {
-            //If this request is not multipart, simply reference the requests
-            //parameterMap
-            requestParameterMap = unmodifiableMap(request.getParameterMap());
+            // If this request is not multipart, build parameter map. Note do not
+            // use request.getParameterMap() because of Tomcat bug.
+            Map paramMap = new HashMap();
+            for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+                String name = e.nextElement().toString();
+                String value = request.getParameter(name);
+                paramMap.put(name, value);
+            }
+            requestParameterMap = unmodifiableMap(paramMap);
             fileItemMap = Collections.EMPTY_MAP;
 
         } else {
-            //If this request is multipart, populate two maps, one for normal
-            //request parameters, the other for all uploaded files
+            // If this request is multipart, populate two maps, one for normal
+            // request parameters, the other for all uploaded files
             FileItemFactory factory = clickService.getFileItemFactory();
             FileUploadBase fileUpload = new ServletFileUpload(factory);
 
