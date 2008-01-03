@@ -15,11 +15,6 @@
  */
 package net.sf.click;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,7 +22,6 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -35,11 +29,6 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 /**
  * Provides the HTTP request context information for pages and controls.
@@ -63,19 +52,11 @@ public class Context {
     /** The servlet config. */
     protected final ServletConfig config;
 
-    /**
-     * The <tt>FileItem</tt> objects for <tt>"multipart"</tt> POST requests.
-     */
-    protected final Map fileItemMap;
-
     /** The click services interface. */
     protected final ClickServlet.ClickService clickService;
 
     /** The servlet request. */
-    protected final HttpServletRequest request;
-
-    /** The map of request parameter values. */
-    protected final Map requestParameterMap;
+    protected final ClickRequestWrapper request;
 
     /** The servlet response. */
     protected final HttpServletResponse response;
@@ -86,6 +67,8 @@ public class Context {
     /** The HTTP method is POST flag. */
     protected final boolean isPost;
 
+    // ----------------------------------------------------------- Constructors
+    
     /**
      * Create a new request context.
      *
@@ -102,76 +85,10 @@ public class Context {
 
         this.context = context;
         this.config = config;
-        this.request = new RequestWrapper(request);
+        this.request = new ClickRequestWrapper(request, clickService);
         this.response = response;
         this.isPost = isPost;
         this.clickService = clickService;
-
-        if (!ClickUtils.isMultipartRequest(request)) {
-            // If this request is not multipart, build parameter map. Note do not
-            // use request.getParameterMap() because of Tomcat bug.
-            Map paramMap = new HashMap();
-            for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
-                String name = e.nextElement().toString();
-                String value = request.getParameter(name);
-                paramMap.put(name, value);
-            }
-            requestParameterMap = unmodifiableMap(paramMap);
-            fileItemMap = Collections.EMPTY_MAP;
-
-        } else {
-            // If this request is multipart, populate two maps, one for normal
-            // request parameters, the other for all uploaded files
-            FileItemFactory factory = clickService.getFileItemFactory();
-            FileUploadBase fileUpload = new ServletFileUpload(factory);
-
-            Map requestParams = new HashMap();
-            Map fileItems = new HashMap();
-
-            try {
-                ServletRequestContext srvContext =
-                    new ServletRequestContext(request);
-
-                List itemsList = fileUpload.parseRequest(srvContext);
-
-                for (int i = 0; i < itemsList.size(); i++) {
-                    FileItem fileItem = (FileItem) itemsList.get(i);
-
-                    String name = fileItem.getFieldName();
-                    String value = null;
-
-                    //Form fields are placed in the request parameter map,
-                    //while file uploads are placed in the file item map.
-                    if (fileItem.isFormField()) {
-
-                    if (request.getCharacterEncoding() == null) {
-                        value = fileItem.getString();
-
-                    } else {
-                        try {
-                            value = fileItem.getString(request.getCharacterEncoding());
-
-                        } catch (UnsupportedEncodingException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-
-                        //Add the form field value to the parameters
-                        addToMapAsString(requestParams, name, value);
-                    } else {
-                        //Add the file item to the list of file items
-                        addToMapAsFileItem(fileItems, name, fileItem);
-                }
-                }
-
-                requestParameterMap = unmodifiableMap(requestParams);
-                fileItemMap = unmodifiableMap(fileItems);
-
-            } catch (FileUploadException fue) {
-                throw new RuntimeException(fue);
-            }
-
-        }
     }
 
     // --------------------------------------------------------- Public Methods
@@ -574,7 +491,7 @@ public class Context {
      * for "multipart" POST requests
      */
     public Map getFileItemMap() {
-        return fileItemMap;
+        return request.getFileItemMap();
     }
 
     /**
@@ -591,7 +508,7 @@ public class Context {
      * @return the fileItem for the specified name
      */
     public FileItem getFileItem(String name) {
-        Object value = fileItemMap.get(name);
+        Object value = request.getFileItemMap().get(name);
 
         if (value != null) {
             if (value instanceof FileItem[]) {
@@ -724,131 +641,4 @@ public class Context {
         THREAD_LOCAL_CONTEXT.set(context);
     }
  
-    /**
-     * Returns an unmodifiable map. The reason this functionality is placed
-     * in its own method, is so that a mock version can override this method
-     * and return a modifiable map instead. This streamlines the testing
-     * of Click, because the new request parameters can be added on the fly.
-     *
-     * @return an unmodifiable map
-     */
-    Map unmodifiableMap(Map map) {
-        return Collections.unmodifiableMap(map);
-    }
-
-    // ----------------------------------------------- Private methods
-
-    /**
-     * Stores the specified value in a FileItem array in the map, under the
-     * specified name. Thus two values stored under the same name will be
-     * stored in the same array.
-     *
-     * @param map the map to add the specified name and value to
-     * @param name the name of the map key
-     * @param value the value to add to the FileItem array
-     */
-    private void addToMapAsFileItem(Map map, String name, FileItem value) {
-        FileItem[] oldValues = (FileItem[]) map.get(name);
-        FileItem[] newValues = null;
-        if (oldValues == null) {
-            newValues = new FileItem[] {value};
-        } else {
-            newValues = new FileItem[oldValues.length + 1];
-            System.arraycopy(oldValues, 0, newValues, 0, oldValues.length);
-            newValues[oldValues.length] = value;
-        }
-        map.put(name, newValues);
-    }
-
-    /**
-     * Stores the specified value in an String array in the map, under the
-     * specified name. Thus two values stored under the same name will be
-     * stored in the same array.
-     *
-     * @param map the map to add the specified name and value to
-     * @param name the name of the map key
-     * @param value the value to add to the string array
-     */
-    private void addToMapAsString(Map map, String name, String value) {
-        String[] oldValues = (String[]) map.get(name);
-        String[] newValues = null;
-        if (oldValues == null) {
-            newValues = new String[] {value};
-        } else {
-            newValues = new String[oldValues.length + 1];
-            System.arraycopy(oldValues, 0, newValues, 0, oldValues.length);
-            newValues[oldValues.length] = value;
-        }
-        map.put(name, newValues);
-    }
-
-    // ---------------------------------------------- Inner classes
-
-    /**
-     * Provides a custom HttpServletRequest class for shielding users from
-     * multipart request parameters. Thus calling request.getParameter(String)
-     * will still work properly.
-     *
-     * @author Bob Schellink
-     */
-    private class RequestWrapper extends HttpServletRequestWrapper {
-
-        /**
-         * @see HttpServletRequestWrapper(HttpServletRequest)
-         */
-        public RequestWrapper(HttpServletRequest request) {
-            super(request);
-        }
-
-        /**
-         * @see javax.servlet.ServletRequest#getParameter(String)
-         */
-        public String getParameter(String name) {
-            Object value = requestParameterMap.get(name);
-
-            if (value instanceof String) {
-                return (String) value;
-            }
-
-            if (value instanceof String[]) {
-                String[] array = (String[]) value;
-                if (array.length >= 1) {
-                    return array[0];
-                } else {
-                    return null;
-                }
-            }
-
-            return (value == null ? null : value.toString());
-        }
-
-        /**
-         * @see javax.servlet.ServletRequest#getParameterNames()
-         */
-        public Enumeration getParameterNames() {
-            return Collections.enumeration(requestParameterMap.keySet());
-        }
-
-        /**
-         * @see javax.servlet.ServletRequest#getParameterValues(String)
-         */
-        public String[] getParameterValues(String name) {
-            Object values = requestParameterMap.get(name);
-            if (values instanceof String) {
-                return new String[] { values.toString() };
-            }
-            if (values instanceof String[]) {
-                return (String[]) values;
-            } else {
-                return null;
-            }
-        }
-
-        /**
-         * @see javax.servlet.ServletRequest#getParameterMap()
-         */
-        public Map getParameterMap() {
-            return requestParameterMap;
-        }
-    }
 }
