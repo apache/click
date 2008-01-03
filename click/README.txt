@@ -26,8 +26,6 @@ Example pre-built web appliation include:
 
    dist/click-examples.war
 
-   dist/click-quickstart.war
-
 Click is built using the J2SE 1.4.2 and Ant 1.6.5. 
 
 The Ant build.xml and build.properties files are located in 
