@@ -756,6 +756,9 @@ public class Page {
      */
     public void setStateful(boolean stateful) {
         this.stateful = stateful;
+        if (isStateful()) {
+            getContext().getSession();
+        }
     }
 
     /**
