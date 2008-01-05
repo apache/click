@@ -33,7 +33,7 @@ import ognl.TypeConverter;
  * Provides an request parameter OGNL TypeConverter class.
  * <p/>
  * This class is adapted from the OGNL <tt>DefaultTypeConverter</tt>, by
- * Luke Blanshard and Drew Davidson, and provides additionial Date conversion
+ * Luke Blanshard and Drew Davidson, and provides additional Date conversion
  * capabilities.
  *
  * @author Malcolm Edgar
