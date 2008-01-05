@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 public class ContextAccessTest extends TestCase {
 	
-	private static final int INTERATIONS = 100000;
+	private static final int ITERATIONS = 100000;
 	
 	private Object object;
 	
@@ -14,7 +14,7 @@ public class ContextAccessTest extends TestCase {
 		long start = System.currentTimeMillis();
 		
 		int count = 0;
-		for (int i = 0; i < INTERATIONS; i++) {
+		for (int i = 0; i < ITERATIONS; i++) {
 			Object objectA = getObjectA();
 			if (objectA != null) {
 				count += 1;
@@ -28,7 +28,7 @@ public class ContextAccessTest extends TestCase {
 		long start = System.currentTimeMillis();
 		
 		int count = 0;
-		for (int i = 0; i < INTERATIONS; i++) {
+		for (int i = 0; i < ITERATIONS; i++) {
 			Object objectA = getObjectB();
 			if (objectA != null) {
 				count += 1;
