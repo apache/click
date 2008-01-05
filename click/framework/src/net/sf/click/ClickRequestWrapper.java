@@ -47,10 +47,16 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * The <tt>FileItem</tt> objects for <tt>"multipart"</tt> POST requests.
      */
-    protected final Map fileItemMap;
+    private final Map fileItemMap;
+
+    /** The request is a multi-part file upload POST request. */
+    private final boolean isMultipartRequest;
+
+    /** The wrapped servlet request. */
+    private final HttpServletRequest request;
 
     /** The map of request parameter values. */
-    protected final Map requestParameterMap;
+    private final Map requestParameterMap;
 
     // ----------------------------------------------------------- Constructors
 
@@ -60,19 +66,10 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     ClickRequestWrapper(HttpServletRequest request, ClickServlet.ClickService clickService) {
         super(request);
 
-        if (!ClickUtils.isMultipartRequest(request)) {
-            // If this request is not multipart, build parameter map. Note do not
-            // use request.getParameterMap() because of Tomcat bug.
-            Map paramMap = new HashMap();
-            for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
-                String name = e.nextElement().toString();
-                String value = request.getParameter(name);
-                paramMap.put(name, value);
-            }
-            requestParameterMap = unmodifiableMap(paramMap);
-            fileItemMap = Collections.EMPTY_MAP;
+        this.isMultipartRequest = ClickUtils.isMultipartRequest(request);
+        this.request = request;
 
-        } else {
+        if (isMultipartRequest) {
             // If this request is multipart, populate two maps, one for normal
             // request parameters, the other for all uploaded files
             FileItemFactory factory = clickService.getFileItemFactory();
@@ -97,34 +94,37 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     //while file uploads are placed in the file item map.
                     if (fileItem.isFormField()) {
 
-                    if (request.getCharacterEncoding() == null) {
-                        value = fileItem.getString();
+                        if (request.getCharacterEncoding() == null) {
+                            value = fileItem.getString();
 
-                    } else {
-                        try {
-                            value = fileItem.getString(request.getCharacterEncoding());
+                        } else {
+                            try {
+                                value = fileItem.getString(request.getCharacterEncoding());
 
-                        } catch (UnsupportedEncodingException ex) {
-                            throw new RuntimeException(ex);
+                            } catch (UnsupportedEncodingException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
-                    }
 
                         //Add the form field value to the parameters
                         addToMapAsString(requestParams, name, value);
                     } else {
                         //Add the file item to the list of file items
                         addToMapAsFileItem(fileItems, name, fileItem);
-                }
+                    }
                 }
 
-                requestParameterMap = unmodifiableMap(requestParams);
-                fileItemMap = unmodifiableMap(fileItems);
+                fileItemMap = Collections.unmodifiableMap(fileItems);
+                requestParameterMap = Collections.unmodifiableMap(requestParams);
 
             } catch (FileUploadException fue) {
                 throw new RuntimeException(fue);
             }
-        }
 
+        } else {
+            fileItemMap = Collections.EMPTY_MAP;
+            requestParameterMap = Collections.EMPTY_MAP;
+        }
     }
 
     // --------------------------------------------------------- Public Methods
@@ -145,43 +145,58 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @see javax.servlet.ServletRequest#getParameter(String)
      */
     public String getParameter(String name) {
-        Object value = requestParameterMap.get(name);
+        if (isMultipartRequest) {
+            Object value = requestParameterMap.get(name);
 
-        if (value instanceof String) {
-            return (String) value;
-        }
-
-        if (value instanceof String[]) {
-            String[] array = (String[]) value;
-            if (array.length >= 1) {
-                return array[0];
-            } else {
-                return null;
+            if (value instanceof String) {
+                return (String) value;
             }
-        }
 
-        return (value == null ? null : value.toString());
+            if (value instanceof String[]) {
+                String[] array = (String[]) value;
+                if (array.length >= 1) {
+                    return array[0];
+                } else {
+                    return null;
+                }
+            }
+
+            return (value == null ? null : value.toString());
+
+        } else {
+            return request.getParameter(name);
+        }
     }
 
     /**
      * @see javax.servlet.ServletRequest#getParameterNames()
      */
     public Enumeration getParameterNames() {
-        return Collections.enumeration(requestParameterMap.keySet());
+        if (isMultipartRequest) {
+            return Collections.enumeration(requestParameterMap.keySet());
+
+        } else {
+            return request.getParameterNames();
+        }
     }
 
     /**
      * @see javax.servlet.ServletRequest#getParameterValues(String)
      */
     public String[] getParameterValues(String name) {
-        Object values = requestParameterMap.get(name);
-        if (values instanceof String) {
-            return new String[] { values.toString() };
-        }
-        if (values instanceof String[]) {
-            return (String[]) values;
+        if (isMultipartRequest) {
+            Object values = requestParameterMap.get(name);
+            if (values instanceof String) {
+                return new String[] { values.toString() };
+            }
+            if (values instanceof String[]) {
+                return (String[]) values;
+            } else {
+                return null;
+            }
+
         } else {
-            return null;
+            return request.getParameterValues(name);
         }
     }
 
@@ -189,21 +204,11 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @see javax.servlet.ServletRequest#getParameterMap()
      */
     public Map getParameterMap() {
-        return requestParameterMap;
-    }
-
-    // ------------------------------------------------ Package Private methods
-
-    /**
-     * Returns an unmodifiable map. The reason this functionality is placed
-     * in its own method, is so that a mock version can override this method
-     * and return a modifiable map instead. This streamlines the testing
-     * of Click, because the new request parameters can be added on the fly.
-     *
-     * @return an unmodifiable map
-     */
-    Map unmodifiableMap(Map map) {
-        return Collections.unmodifiableMap(map);
+        if (isMultipartRequest) {
+            return requestParameterMap;
+        } else {
+            return request.getParameterMap();
+        }
     }
 
     // -------------------------------------------------------- Private methods
