@@ -614,7 +614,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return true if the new value existing in the current value.
+     * Return true if the new value exists in the current value.
      *
      * @param newValue the value of the class attribute to check
      * @param currentValue the current value to test
