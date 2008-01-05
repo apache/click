@@ -68,7 +68,7 @@ public class Context {
     protected final boolean isPost;
 
     // ----------------------------------------------------------- Constructors
-    
+
     /**
      * Create a new request context.
      *
