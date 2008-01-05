@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.click.control.Field;
 import net.sf.click.control.TextArea;
 
 /**
@@ -28,8 +27,8 @@ public class RichTextArea extends TextArea {
         "<script type=\"text/javascript\" src=\"{0}/tiny_mce/tiny_mce.js\"></script>\n";
 
     /**
-     * The textarea TinyMCE theme [<tt>simle</tt> | <tt>advanced</tt>],
-     * default value: &nbsp; <tt>"simle"</tt>
+     * The textarea TinyMCE theme [<tt>simple</tt> | <tt>advanced</tt>],
+     * default value: &nbsp; <tt>"simple"</tt>
      */
     protected String theme = "simple";
 
