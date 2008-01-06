@@ -153,6 +153,10 @@ import org.apache.commons.lang.StringUtils;
  * When populating an object from a form post Click will automatically create
  * any null nested objects so their properties can be set. To do this Click
  * uses the no-args constructor of the nested objects class.
+ * <p/>
+ * {@link #copyTo(Object)} and {@link #copyFrom(Object)} also supports
+ * <tt>java.util.Map</tt> as an argument. Examples of using
+ * <tt>java.util.Map</tt> are shown in the respective method descriptions.
  *
  * <a name="form-validation"><h3>Form Validation</h3></a>
  *
@@ -424,7 +428,7 @@ import org.apache.commons.lang.StringUtils;
  * and in a hidden field in the form to ensure a form post isn't replayed.
  * <p/>
  * <b>Please Note</b> the Form submit check currently only supports having
- * one for per Page.
+ * one form per Page.
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
@@ -1547,6 +1551,30 @@ public class Form extends AbstractControl {
      *  }
      * </pre>
      *
+     * copyForm also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * By specifying a map, the Form's field values will be populated by
+     * matching key/value pairs. A match occurs when the map's key is equal to
+     * a field's name.
+     * <p/>
+     * The following example populates the Form fields with a map's key/value
+     * pairs:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onInit() {
+     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
+     *  }
+     *
+     *  <span class="kw">public void</span> onGet() {
+     *     Map map = <span class="kw">new</span> HashMap();
+     *     map.put(<span class="st">"name"</span>, <span class="st">"Steve"</span>);
+     *     map.put(<span class="st">"address.street"</span>, <span class="st">"12 Long street"</span>);
+     *     form.copyFrom(map);
+     *  }
+     * </pre>
+     *
      * @param object the object to obtain attribute values from
      * @throws IllegalArgumentException if the object parameter is null
      */
@@ -1557,7 +1585,9 @@ public class Form extends AbstractControl {
     /**
      * Copy the given object's attributes into the Form's field values. In other
      * words automatically populate Forms field values with the given objects
-     * attributes. If the debug parameter is true, debugging messages will be
+     * attributes. copyFrom also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * If the debug parameter is true, debugging messages will be
      * logged.
      *
      * @param object the object to obtain attribute values from
@@ -1587,6 +1617,31 @@ public class Form extends AbstractControl {
      *  }
      * </pre>
      *
+     * copyTo also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * By specifying a map, the map's key/value pairs are populated from
+     * matching Form field names. A match occurs when a field's name is
+     * equal to a map's key.
+     * <p/>
+     * The following example populates the map with the Form field values:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onInit() {
+     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
+     *  }
+     *
+     *  <span class="kw">public void</span> onGet() {
+     *     Map map = <span class="kw">new</span> HashMap();
+     *     map.put(<span class="st">"name"</span>, null);
+     *     map.put(<span class="st">"address.street"</span>, null);
+     *     form.copyTo(map);
+     *  }
+     * </pre>
+     * Note that the map acts as a template to specify which fields to populate
+     * from.
+     *
      * @param object the object to populate with field values
      * @throws IllegalArgumentException if the object parameter is null
      */
@@ -1597,7 +1652,9 @@ public class Form extends AbstractControl {
     /**
      * Copy the Form's field values into the given object's attributes. In other
      * words automatically populate Object attributes with the Forms field
-     * values. If the debug parameter is true, debugging messages will be
+     * values. copyTo also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * If the debug parameter is true, debugging messages will be
      * logged.
      *
      * @param object the object to populate with field values
@@ -2003,7 +2060,7 @@ public class Form extends AbstractControl {
         final Long time = new Long(System.currentTimeMillis());
         HiddenField field = new HiddenField(submitTokenName, Long.class);
         field.setValueObject(time);
-        add(field);
+            add(field);
 
         getContext().setSessionAttribute(submitTokenName, time);
 
