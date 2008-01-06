@@ -28,6 +28,8 @@ and covers to following topics:
   </li>
   <li><a href="#page-security">Security</a> - page security model
   </li>
+  <li><a href="#page-stateful">Stateful</a> - stateful pages
+  </li>
   <li><a href="#page-error-handling">Error Handling</a> - page error handling
   </li>
   <li><a href="#page-not-found">Page Not Found</a> - page not found handling
@@ -773,6 +775,40 @@ invalidate the session.
     }
 } 
 </pre>
+
+
+<a name="page-stateful" class="heading"><h2>Stateful Pages</h2></a>
+
+Click supports stateful pages where the state of the page is saved between the 
+users requests. Stateful pages are useful in a number of scenarios including:
+<ul>
+<li>Search page and edit page interactions, in this scenario you navigage from a 
+stateful search page which may have filter criteria applied to an object edit page.
+Once object update has been completed on the edit page, the user is redirected to
+the search page and the stateful filter criteria still applied.
+</li>
+<li>Complex pages with multiple forms and or tables which need to maintain their
+state between interactions.
+</li>
+</ul>
+
+To make a page stateful you simply need to set the page
+<a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
+property to be true. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> SearchPage() {
+        setStateful(<span class="kw">true</span>);
+        ..
+    }
+} 
+</pre>
+
+Stateful page instances are stored in the user's  
+<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
+
 
 <a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
 
