@@ -88,12 +88,12 @@
               
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2069"/>
+              lines="2126"/>
 
 	<!-- Static Variable Name -->              
               
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="507,510,513,516"/>
+              lines="511,514,517,520"/>
                             
 </suppressions>
