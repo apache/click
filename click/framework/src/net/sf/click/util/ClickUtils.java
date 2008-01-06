@@ -619,6 +619,11 @@ public class ClickUtils {
 
     /**
      * Populate the given object's attributes with the Form's field values.
+     * <p/>
+     * The specified Object can either be a POJO (plain old java object) or
+     * a {@link java.util.Map}. If a POJO is specified, its attributes are
+     * populated from  matching form fields. If a map is specified, its
+     * key/value pairs are populated from matching form fields.
      *
      * @param form the Form to obtain field values from
      * @param object the object to populate with field values
@@ -647,7 +652,7 @@ public class ClickUtils {
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
 
         // If the given object is a map, its key/value pair is populated from
-        // the fields name/value.
+        // the fields name/value pair.
         if (object instanceof Map) {
             copyFieldsToMap(fieldList, (Map) object, debug);
             // Exit after populating the map.
@@ -687,6 +692,11 @@ public class ClickUtils {
 
     /**
      * Populate the given Form field values with the object's attributes.
+     * <p/>
+     * The specified Object can either be a POJO (plain old java object) or
+     * a {@link java.util.Map}. If a POJO is specified, its attributes are
+     * copied to matching form fields. If a map is specified, its key/value
+     * pairs are copied to matching form fields.
      *
      * @param object the object to obtain attribute values from
      * @param form the Form to populate
@@ -706,11 +716,22 @@ public class ClickUtils {
 
         if (fieldList.isEmpty()) {
             log("   Form has no fields to copy to", debug);
+            //Exit early.
+            return;
         }
 
         String objectClassname = object.getClass().getName();
         objectClassname =
             objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        //If the given object is a map, populate the fields name/value from
+        //the maps key/value pair.
+        if (object instanceof Map) {
+
+            copyMapToFields((Map) object, fieldList, debug);
+            //Exit after populating the fields.
+            return;
+        }
 
         Set properties = getObjectPropertyNames(object);
 
@@ -1334,7 +1355,7 @@ public class ClickUtils {
     }
 
     /**
-     * Return the list of Field for the given Form, including the any Fields
+     * Return the list of Fields for the given Form, including any Fields
      * contained in FieldSets. The list of returned fields will exclude any
      * <tt>FieldSet</tt> or <tt>Label</tt> fields.
      *
@@ -1778,8 +1799,10 @@ public class ClickUtils {
     // -------------------------------------------------------- Private Methods
 
    /**
-    * Populate the given map with the Form's field values. The maps
-    * key/value pairs are populated from the fields name/value.
+    * Populate the given map from the values of the specified fieldList. The
+    * map's key/value pairs are populated from the fields name/value. The keys
+    * of the map are matched against each field name. If a key matches a field
+    * name will the value of the field be copied to the map.
     *
     * @param fieldList the forms list of fields to obtain field values from
     * @param map the map to populate with field values
@@ -1794,38 +1817,51 @@ public class ClickUtils {
         for (int i = 0, size = fieldList.size(); i < size; i++) {
             Field field = (Field) fieldList.get(i);
 
-            String fieldName = field.getName();
-            if (fieldName.indexOf(".") != -1) {
-                fieldName = fieldName.substring(0, fieldName.indexOf("."));
-            }
-
+            // Check if the map contains the fields name. The fields name can
+            // also be a path for example 'foo.bar'
             if (map.containsKey(field.getName())) {
 
-                if (map.get(field.getName()) == null) {
-                    //If it is the time a value is assigned to the key.
-                    map.put(field.getName(), field.getValueObject());
-                } else {
-                    //If there is already a value for this key, create a list to hold all values
-                    Object value = map.get(field.getName());
-                    if (!(value instanceof List)) {
-                        List list = new ArrayList();
-                        list.add(value);
-                        map.put(field.getName(), list);
-                    }
-                    List list = (List) map.get(field.getName());
-                    list.add(field.getValueObject());
-                }
-                String msg = "   Form -> " + objectClassname + "."
-                      + field.getName() + " : " + field.getValueObject();
-
-                log(msg, debug);
-
-            } else if (map.containsKey(fieldName)) {
                 map.put(field.getName(), field.getValueObject());
 
                 String msg = "   Form -> " + objectClassname + "."
-                      + field.getName() + " : " + field.getValueObject();
+                         + field.getName() + " : " + field.getValueObject();
 
+                log(msg, debug);
+            }
+        }
+    }
+
+    /**
+     * Copy the map values to the specified fieldList. For every field in the
+     * field list, a lookup is done in the map for a matching value. A match is
+     * found if a field name matches against a key in the map. The matching
+     * value is then copied to the field.
+     *
+     * @param map the map containing values to populate the fields with
+     * @param fieldList the forms list of fields to be populated
+     * @param debug log debug statements when populating the object
+     */
+    private static void copyMapToFields(Map map, List fieldList, boolean debug) {
+
+        String objectClassname = map.getClass().getName();
+        objectClassname =
+            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
+
+        for (int i = 0, size = fieldList.size(); i < size; i++) {
+            Field field = (Field) fieldList.get(i);
+            String fieldName = field.getName();
+
+            // Check if the fieldName is contained in the map. For
+            // example if a field has the name 'user.address', check if
+            // 'user.address' is contained in the map.
+            if (map.containsKey(fieldName)) {
+
+                Object result = map.get(field.getName());
+
+                field.setValueObject(result);
+
+                String msg = "   Form <- " + objectClassname + "."
+                    + field.getName() + " : " + result;
                 log(msg, debug);
             }
         }
