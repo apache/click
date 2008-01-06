@@ -82,8 +82,8 @@ import org.apache.commons.lang.StringUtils;
  *
  *     <span class="kw">public</span> FormTablePage() {
  *         // Setup customers table
- *         table.setAttribute(<span class="st">"class"</span>, <span class="st">"simple"</span>);
- *         table.setAttribute(<span class="kw">"width"</span>, <span class="kw">"550px"</span>);
+ *         table.addStyleClass(<span class="st">"simple"</span>);
+ *         table.setAttribute(<span class="st">"width"</span>, <span class="st">"550px"</span>);
  *         table.getForm().setButtonAlign(Form.ALIGN_RIGHT);
  *
  *         table.addColumn(<span class="kw">new</span> Column(<span class="st">"id"</span>));
@@ -256,9 +256,9 @@ public class FormTable extends Table {
         getForm().setName(getName() + "_form");
 
         // TODO: this wont work, as table control links have unique name
-        form.add(new HiddenField(PAGE, String.class));
-        form.add(new HiddenField(COLUMN, String.class));
-        form.add(new HiddenField(ASCENDING, String.class));
+        getForm().add(new HiddenField(PAGE, String.class));
+        getForm().add(new HiddenField(COLUMN, String.class));
+        getForm().add(new HiddenField(ASCENDING, String.class));
     }
 
     /**
@@ -357,20 +357,20 @@ public class FormTable extends Table {
             }
         } else {
             String page = getContext().getRequestParameter(PAGE);
-            form.getField(PAGE).setValue(page);
+            getForm().getField(PAGE).setValue(page);
 
             String column = getContext().getRequestParameter(COLUMN);
-            form.getField(COLUMN).setValue(column);
+            getForm().getField(COLUMN).setValue(column);
 
             String ascending = getContext().getRequestParameter(ASCENDING);
-            form.getField(ASCENDING).setValue(ascending);
+            getForm().getField(ASCENDING).setValue(ascending);
 
             // Flip sorting order
             // Table.onProcess() flips the sort order, so we apply a flip here as well so that
             // the value of ASCENDING field in the form is in sync with the table.
             String sort = getContext().getRequestParameter(SORT);
             if ("true".equals(sort) || ascending == null) {
-                form.getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
+                getForm().getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
             }
         }
 
