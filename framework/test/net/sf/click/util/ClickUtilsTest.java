@@ -177,7 +177,114 @@ public class ClickUtilsTest extends TestCase {
         form.copyFrom(map, true);
         assertEquals("malcolm", nameField2.getValue());
     }
-    
+
+    /**
+     * CLK-278.
+     * 
+     * Test that the map are populated from field values.
+     */
+    public void testCopyMapToForm() {
+
+        Integer id = new Integer(9876);
+        String name = "Rocky Balboa";
+        Integer age = new Integer(61);
+        String stateCode = "NSW";
+        String street = "12 Short street";
+        
+        // Setup the map
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("name", name);
+        map.put("age", age);
+        map.put("address.street", street);
+        map.put("address.state.code", stateCode);
+
+        // Setup the form and fields
+        Form form = new Form("form");
+        TextField idField = new TextField("id");
+        form.add(idField);
+
+        // Create fieldset
+        FieldSet fieldset = new FieldSet("fieldset");
+        form.add(fieldset);
+        TextField nameField = new TextField("name");
+        fieldset.add(nameField);
+
+        TextField ageField = new TextField("age");
+        form.add(ageField);
+        TextField streetField = new TextField("address.street");
+        form.add(streetField);
+        TextField stateCodeField = new TextField("address.state.code");
+        form.add(stateCodeField);
+
+        // Copy the map values into the fields
+        form.copyFrom(map, true);
+
+        // Test that values were copied
+        assertEquals(id, new Integer(idField.getValue()));
+        assertEquals(name, nameField.getValue());
+        assertEquals(age, new Integer(ageField.getValue()));
+        assertEquals(street, streetField.getValue());
+        assertEquals(stateCode, stateCodeField.getValue());
+    }
+
+    /**
+     * CLK-239.
+     * 
+     * Test that field value are copied to map.
+     */
+    public void testCopyFormToMap() {
+        
+        Integer id = new Integer(9876);
+        String name = "Rocky Balboa";
+        Integer age = new Integer(61);
+        String stateCode = "NSW";
+        String street = "12 Short street";
+
+        // Setup the map with no values
+        Map map = new HashMap();
+        map.put("id", null);
+        map.put("name", null);
+        map.put("age", null);
+        map.put("address.street", null);
+        map.put("address.state.code", null);
+
+        // Setup the form and fields with initial values
+        Form form = new Form("form");
+        TextField idField = new TextField("id");
+        idField.setValue(id.toString());
+        form.add(idField);
+        
+        // Create fieldset
+        FieldSet fieldset = new FieldSet("fieldset");
+        form.add(fieldset);
+        TextField nameField = new TextField("name");
+        nameField.setValue(name);
+        fieldset.add(nameField);
+        
+        TextField ageField = new TextField("age");
+        ageField.setValue(age.toString());        
+        form.add(ageField);
+        TextField streetField = new TextField("address.street");
+        streetField.setValue(street);
+        form.add(streetField);
+        TextField stateCodeField = new TextField("address.state.code");
+        stateCodeField.setValue(stateCode);
+        form.add(stateCodeField);
+
+        // Copy the fields values back into the map
+        form.copyTo(map, true);
+
+        // Test that values were copied
+        String copiedId = map.get("id").toString();
+        assertEquals(id, new Integer(copiedId));
+        assertEquals(name, map.get("name"));
+        String copiedAge = map.get("age").toString();
+        assertEquals(age, new Integer(copiedAge));
+        assertEquals(street, map.get("address.street"));
+        assertEquals(stateCode, map.get("address.state.code"));
+    }
+
     public void testCopyToNullNestedObject() {
         final String lineOne = "55 Dunkley Avenue";
         final String code = "NSW";
