@@ -251,7 +251,7 @@ public class Column implements Serializable {
     protected String name;
 
     /** The method cached for rendering column values. */
-    protected Map methodCache;
+    protected transient Map methodCache;
 
     /** The column sortable status. The default value is false. */
     protected Boolean sortable;
