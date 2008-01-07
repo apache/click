@@ -21,10 +21,12 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -348,7 +350,14 @@ public class ClickServlet extends HttpServlet {
         try {
             page = createPage(request, response, isPost);
 
-            processPage(page);
+            if (page.isStateful()) {
+                synchronized (page) {
+                    processPage(page);
+                }
+
+            } else {
+                processPage(page);
+            }
 
         } catch (Exception e) {
             Class pageClass =
@@ -367,71 +376,13 @@ public class ClickServlet extends HttpServlet {
 
         } finally {
             if (page != null) {
-                if (page.hasControls()) {
-                    List controls = page.getControls();
-
-                    for (int i = 0, size = controls.size(); i < size; i++) {
-                        try {
-                            Control control = (Control) controls.get(i);
-                            control.onDestroy();
-
-                            if (logger.isTraceEnabled()) {
-                                String controlClassName = control.getClass().getName();
-                                controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
-                                String msg =  "   invoked: '" + control.getName()
-                                + "' " + controlClassName + ".onDestroy()";
-                                logger.trace(msg);
-                            }
-                        } catch (Throwable error) {
-                            logger.error(error.toString(), error);
-                        }
-                    }
-                }
-
-                // Reset the page navigation state
-                try {
-                    // Reset the path
-                    String path = clickApp.getPagePath(page.getClass());
-                    page.setPath(path);
-
-                    // Reset the foward
-                    if (clickApp.isJspPage(path)) {
-                        page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
-                    } else {
-                        page.setForward((String) null);
+                if (page.isStateful()) {
+                    synchronized (page) {
+                        processPageOnDestroy(page, startTime);
                     }
 
-                    // Reset the redirect
-                    page.setRedirect((String) null);
-
-                } catch (Throwable error) {
-                    logger.error(error.toString(), error);
-                }
-
-                try {
-                    page.onDestroy();
-
-                    if (page.isStateful()) {
-                        page.getContext().setSessionAttribute(page.getClass().getName(), page);
-                    } else {
-                        page.getContext().removeSessionAttribute(page.getClass().getName());
-                    }
-
-                    if (logger.isTraceEnabled()) {
-                        String shortClassName = page.getClass().getName();
-                        shortClassName =
-                            shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
-                        logger.trace("   invoked: " + shortClassName + ".onDestroy()");
-                    }
-
-                    if (!clickApp.isProductionMode()) {
-                        logger.info("handleRequest:  " + page.getPath() + " - "
-                                + (System.currentTimeMillis() - startTime)
-                                + " ms");
-                    }
-
-                } catch (Throwable error) {
-                    logger.error(error.toString(), error);
+                } else {
+                    processPageOnDestroy(page, startTime);
                 }
             }
         }
@@ -511,31 +462,13 @@ public class ClickServlet extends HttpServlet {
 
         } finally {
             if (finalizeRef != null) {
-                if (finalizeRef.hasControls()) {
-                    List controls = finalizeRef.getControls();
-
-                    for (int i = 0, size = controls.size(); i < size; i++) {
-                        try {
-                            Control control = (Control) controls.get(i);
-                            control.onDestroy();
-                        } catch (Throwable error) {
-                            logger.error(error.toString(), error);
-                        }
-                    }
-                }
-
-                try {
-                    finalizeRef.onDestroy();
-
-                    if (logger.isTraceEnabled()) {
-                        String shortClassName = finalizeRef.getClass().getName();
-                        shortClassName =
-                            shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
-                        logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+                if (finalizeRef.isStateful()) {
+                    synchronized (finalizeRef) {
+                        processPageOnDestroy(finalizeRef, 0);
                     }
 
-                } catch (Throwable error) {
-                    logger.error(error.toString(), error);
+                } else {
+                    processPageOnDestroy(finalizeRef, 0);
                 }
             }
         }
@@ -887,7 +820,15 @@ public class ClickServlet extends HttpServlet {
         Context.setThreadLocalContext(context);
 
         if (logger.isTraceEnabled()) {
-            Map requestParams = context.getRequestParameterMap();
+            Map requestParams = new TreeMap();
+
+            Enumeration e = request.getParameterNames();
+            while (e.hasMoreElements()) {
+                String name = e.nextElement().toString();
+                String value = request.getParameter(name);
+                requestParams.put(name, value);
+            }
+
             Iterator i = requestParams.entrySet().iterator();
             while (i.hasNext()) {
                 Map.Entry entry = (Map.Entry) i.next();
@@ -929,6 +870,83 @@ public class ClickServlet extends HttpServlet {
         }
 
         return page;
+    }
+
+    /**
+     * Process the given pages controls <tt>onDestroy</tt> methods, reset the pages
+     * navigation state and process the pages <tt>onDestroy</tt> method.
+     *
+     * @param page the page to process
+     * @param startTime the start time to log if greater than 0 and not in
+     * production mode
+     */
+    protected void processPageOnDestroy(Page page, long startTime) {
+        if (page.hasControls()) {
+            List controls = page.getControls();
+
+            for (int i = 0, size = controls.size(); i < size; i++) {
+                try {
+                    Control control = (Control) controls.get(i);
+                    control.onDestroy();
+
+                    if (logger.isTraceEnabled()) {
+                        String controlClassName = control.getClass().getName();
+                        controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
+                        String msg =  "   invoked: '" + control.getName()
+                        + "' " + controlClassName + ".onDestroy()";
+                        logger.trace(msg);
+                    }
+                } catch (Throwable error) {
+                    logger.error(error.toString(), error);
+                }
+            }
+        }
+
+        // Reset the page navigation state
+        try {
+            // Reset the path
+            String path = clickApp.getPagePath(page.getClass());
+            page.setPath(path);
+
+            // Reset the foward
+            if (clickApp.isJspPage(path)) {
+                page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
+            } else {
+                page.setForward((String) null);
+            }
+
+            // Reset the redirect
+            page.setRedirect((String) null);
+
+        } catch (Throwable error) {
+            logger.error(error.toString(), error);
+        }
+
+        try {
+            page.onDestroy();
+
+            if (page.isStateful()) {
+                page.getContext().setSessionAttribute(page.getClass().getName(), page);
+            } else {
+                page.getContext().removeSessionAttribute(page.getClass().getName());
+            }
+
+            if (logger.isTraceEnabled()) {
+                String shortClassName = page.getClass().getName();
+                shortClassName =
+                    shortClassName.substring(shortClassName.lastIndexOf('.') + 1);
+                logger.trace("   invoked: " + shortClassName + ".onDestroy()");
+            }
+
+            if (!clickApp.isProductionMode() && startTime > 0) {
+                logger.info("handleRequest:  " + page.getPath() + " - "
+                        + (System.currentTimeMillis() - startTime)
+                        + " ms");
+            }
+
+        } catch (Throwable error) {
+            logger.error(error.toString(), error);
+        }
     }
 
     /**
@@ -975,6 +993,7 @@ public class ClickServlet extends HttpServlet {
         try {
             Page newPage = null;
 
+            // Look up the page in the users session.
             HttpSession session = request.getSession(false);
             if (session != null) {
                 newPage = (Page) session.getAttribute(pageClass.getName());
@@ -1054,12 +1073,11 @@ public class ClickServlet extends HttpServlet {
         boolean customConverter =
             ! getTypeConverter().getClass().equals(RequestTypeConverter.class);
 
-        Map requestParameters = page.getContext().getRequestParameterMap();
+        HttpServletRequest request = page.getContext().getRequest();
 
-        for (Iterator i = requestParameters.entrySet().iterator(); i.hasNext();) {
-            Map.Entry entry = (Map.Entry) i.next();
-            String name = entry.getKey().toString();
-            String value = entry.getValue().toString();
+        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+            String name = e.nextElement().toString();
+            String value = request.getParameter(name);
 
             if (StringUtils.isNotBlank(value)) {
 
