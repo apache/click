@@ -353,6 +353,9 @@ public class ClickServlet extends HttpServlet {
             if (page.isStateful()) {
                 synchronized (page) {
                     processPage(page);
+                    processPageOnDestroy(page, startTime);
+                    // Mark page as already destroyed for finally block
+                    page = null;
                 }
 
             } else {
@@ -448,7 +451,17 @@ public class ClickServlet extends HttpServlet {
                 }
             });
 
-            processPage(errorPage);
+            if (errorPage.isStateful()) {
+                synchronized (errorPage) {
+                    processPage(errorPage);
+                    processPageOnDestroy(errorPage, 0);
+                    // Mark page as already destroyed for finally block
+                    finalizeRef = null;
+                }
+
+            } else {
+                processPage(errorPage);
+            }
 
         } catch (Exception ex) {
             String message =
