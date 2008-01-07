@@ -794,10 +794,16 @@ state between interactions.
 
 To make a page stateful you simply need to set the page
 <a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
-property to be true. For example:
+property to be true and have the page implement the <tt>Serializable</tt> interface. For example:
 
 <pre class="codeJava">
-<span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page {
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">import</span> java.io.Serializable;
+
+<span class="kw">import</span> net.sf.click.Page;
+ 
+<span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page <span class="kw">implements</span> Serializable {
 
     <span class="kw">public</span> SearchPage() {
         setStateful(<span class="kw">true</span>);
@@ -807,7 +813,9 @@ property to be true. For example:
 </pre>
 
 Stateful page instances are stored in the user's  
-<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>.
+<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+using the pages class name as the key. In the example above the page would be stored in 
+the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
 
 
 <a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
