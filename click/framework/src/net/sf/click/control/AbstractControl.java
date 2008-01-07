@@ -48,7 +48,7 @@ public abstract class AbstractControl implements Control {
     protected Map attributes;
 
     /** The Field localized messages Map. */
-    protected Map messages;
+    protected transient Map messages;
 
     /** The Field name. */
     protected String name;

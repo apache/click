@@ -217,7 +217,7 @@ public class Menu implements Control {
     protected String label;
 
     /** The controls localized messages. */
-    protected Map messages;
+    protected transient Map messages;
 
     /** The menu control name. */
     protected String name;
