@@ -1,5 +1,6 @@
 package net.sf.click.examples.page.table;
 
+import java.io.Serializable;
 import java.util.List;
 
 import net.sf.click.control.AbstractLink;
@@ -22,7 +23,9 @@ import net.sf.click.extras.control.LinkDecorator;
  *
  * @author Malcolm Edgar
  */
-public class SearchTablePage extends BorderPage {
+public class SearchTablePage extends BorderPage implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public Form form = new Form();
     public Table table = new Table();
