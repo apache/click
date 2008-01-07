@@ -15,8 +15,10 @@
  */
 package net.sf.click;
 
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -239,12 +241,30 @@ public class Context {
     }
 
     /**
-     * Return an ordered map of request parameters.
+     * Return an ordered map of request parameter string values keyed on
+     * parameter name.
+     * <p/>
+     * Note this method returns the single string value for a named parameter
+     * and not an array of String[] values, as does the <tt>ServletRequest</tt>
+     * method of the same name.
+     *
+     * @deprecated This method is scheduled to be removed because of its
+     * ambigous relationship with the <tt>ServletRequest</tt> method
+     * of the same name.
      *
      * @return the ordered map of request parameters
      */
     public Map getRequestParameterMap() {
-        return request.getParameterMap();
+        Map requestParamMap = new TreeMap();
+
+        Enumeration e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String name = e.nextElement().toString();
+            String value = request.getParameter(name);
+            requestParamMap.put(name, value);
+        }
+
+        return requestParamMap;
     }
 
     /**
@@ -257,7 +277,7 @@ public class Context {
      */
     public String[] getRequestParameterValues(String name) {
         return request.getParameterValues(name);
-            }
+    }
 
     /**
      * Return the named session attribute, or null if not defined.
