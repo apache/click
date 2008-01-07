@@ -15,6 +15,7 @@
  */
 package net.sf.click.extras.control;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,7 +99,9 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class LinkDecorator implements Decorator {
+public class LinkDecorator implements Decorator, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The row object identifier property. */
     protected String idProperty;
@@ -116,7 +119,7 @@ public class LinkDecorator implements Decorator {
     protected Table table;
 
     /** The method cached for rendering column values. */
-    protected Map methodCache;
+    protected transient Map methodCache;
 
     /**
      * Create a new AbstractLink table column Decorator with the given actionLink
