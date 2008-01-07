@@ -84,7 +84,7 @@
               
     <suppress checks="MethodLength"
               files="ClickServlet.java"
-              lines="552"/>
+              lines="485"/>
               
     <suppress checks="MethodLength"
               files="Form.java"
