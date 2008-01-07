@@ -817,6 +817,20 @@ Stateful page instances are stored in the user's
 using the pages class name as the key. In the example above the page would be stored in 
 the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
 
+<h4>Page Creation</h4>
+
+With stateful pages they are only created once, after which they are retrieved from the session.
+However page event handlers are invoked for each request, including the the <tt>onInit()</tt> method.
+<p/>
+When you are creating stateful pages you typically place all your control creation code in the Pages 
+constructor so it is invoked only once, and don't put this code in the <tt>onInit()</tt> method which 
+will be invoked with each request.
+<p/>
+If you have dynamic control creation code you would typically place this <tt>onInit()</tt> method, but 
+you will need to take care that controls and or models are not already present in the page.
+
+<h4>Page Destruction</h4>
+
 
 <a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
 
