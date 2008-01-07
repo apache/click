@@ -31,33 +31,33 @@ public class DateFieldTest extends TestCase {
 
     public void testFormatPattern() throws Exception {
         DateField dateField = new DateField("Delivery date");
-        assertEquals(dateField.getFormatPattern(), "dd MMM yyyy");
-        assertEquals(dateField.getCalendarPattern(), "%e %b %Y");
+        assertEquals("dd MMM yyyy", dateField.getFormatPattern());
+        assertEquals("%d %b %Y", dateField.getCalendarPattern());
         
         dateField = new DateField("Delivery date");
         dateField.setFormatPattern(" dd MMM yyyy ");
-        assertEquals(dateField.getFormatPattern(), " dd MMM yyyy ");
-        assertEquals(dateField.getCalendarPattern(), " %e %b %Y ");        
+        assertEquals(" dd MMM yyyy ", dateField.getFormatPattern());
+        assertEquals(" %d %b %Y ", dateField.getCalendarPattern());        
 
         dateField = new DateField("Delivery date");
         dateField.setFormatPattern("dd/MMM/yyyy");
-        assertEquals(dateField.getFormatPattern(), "dd/MMM/yyyy");
-        assertEquals(dateField.getCalendarPattern(), "%e/%b/%Y"); 
+        assertEquals("dd/MMM/yyyy", dateField.getFormatPattern());
+        assertEquals("%d/%b/%Y", dateField.getCalendarPattern()); 
         
         dateField = new DateField("Delivery date");
         dateField.setFormatPattern("dd.MMM.yyyy");
-        assertEquals(dateField.getFormatPattern(), "dd.MMM.yyyy");
-        assertEquals(dateField.getCalendarPattern(), "%e.%b.%Y");
+        assertEquals("dd.MMM.yyyy", dateField.getFormatPattern());
+        assertEquals("%d.%b.%Y", dateField.getCalendarPattern());
         
         dateField = new DateField("Delivery date");
         dateField.setFormatPattern("dd.MM.yy");
-        assertEquals(dateField.getFormatPattern(), "dd.MM.yy");
-        assertEquals(dateField.getCalendarPattern(), "%e.%m.%y");
+        assertEquals("dd.MM.yy", dateField.getFormatPattern());
+        assertEquals("%d.%m.%y", dateField.getCalendarPattern());
         
         dateField = new DateField("Delivery date");
         dateField.setFormatPattern("d/M/yy");
-        assertEquals(dateField.getFormatPattern(), "d/M/yy");
-        assertEquals(dateField.getCalendarPattern(), "%e/%m/%y");
+        assertEquals("d/M/yy", dateField.getFormatPattern());
+        assertEquals("%e/%m/%y", dateField.getCalendarPattern());
     }
     
     public void testNullParameter() {
