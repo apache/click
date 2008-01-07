@@ -1,7 +1,7 @@
 Click 1.4 Release
 -----------------
 BUGS
-* DataContextFilter session bug
+* SearchTable page not search criteria working in "profile" mode
 * ColorPicker rendering bug
 * Form rendering bug, with setting style, see FieldSet example probably due to
   recent form rendering refactoring and removing align property from parent element
@@ -9,10 +9,9 @@ BUGS
 CODE
 * Document Application Template scripts
 * CayenneForm override copyFrom to set PropertySelect value
-* Select can have multiple values
 
 DOCUMENTATION
-* document stateful pages
+* quick start tutorial
 * FAQ topic on rendering PDF, Excel documents
 * JSP forwarding
 * add page topic writing directly to response
