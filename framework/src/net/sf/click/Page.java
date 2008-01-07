@@ -162,7 +162,7 @@ public class Page {
     protected boolean headersEdited;
 
     /** The map of localized page resource messages. **/
-    protected MessagesMap messages;
+    protected transient MessagesMap messages;
 
     /**
      * The page model. For Velocity templates the model is used to populate the
