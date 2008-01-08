@@ -832,6 +832,7 @@ public class ClickServlet extends HttpServlet {
 
         Context.setThreadLocalContext(context);
 
+        // Log request parameters
         if (logger.isTraceEnabled()) {
             Map requestParams = new TreeMap();
 
@@ -1023,6 +1024,8 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
+            activatePageInstance(newPage);
+
             if (newPage.getHeaders() == null) {
                 newPage.setHeaders(clickApp.getPageHeaders(path));
             }
@@ -1168,6 +1171,17 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
+     * Provides an extension point for ClickServlet sub classes to activate
+     * stateful page which may have been deserialized.
+     * <p/>
+     * This method does nothing and is designed for extension.
+     *
+     * @param page the page instance to activate
+     */
+    protected void activatePageInstance(Page page) {
+    }
+
+    /**
      * Return a new VelocityContext for the given pages model and Context.
      * <p/>
      * The following values automatically added to the VelocityContext:
@@ -1186,7 +1200,7 @@ public class ClickServlet extends HttpServlet {
      * @param page the page to create a VelocityContext for
      * @return a new VelocityContext
      */
-    protected VelocityContext createVelocityContext(Page page) {
+    protected VelocityContext createVelocityContext(final Page page) {
 
         final VelocityContext context = new VelocityContext(page.getModel());
 
@@ -1195,6 +1209,12 @@ public class ClickServlet extends HttpServlet {
                 public void processField(String fieldName, Object fieldValue) {
                     if (fieldValue instanceof Control == false) {
                         context.put(fieldName, fieldValue);
+                    } else {
+                        // Add any controls not already added to model
+                        Control control = (Control) fieldValue;
+                        if (!page.getModel().containsKey(control.getName())) {
+                            page.addControl(control);
+                        }
                     }
                 }
             });
