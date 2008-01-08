@@ -12,6 +12,8 @@ import net.sf.click.examples.page.BorderPage;
 public class LastPage extends BorderPage {
 
     public void onInit() {
+        super.onInit();
+
         String bookingId = getContext().getRequest().getParameter("bookingId");
 
         if (bookingId != null) {

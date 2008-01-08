@@ -18,8 +18,11 @@ import org.springframework.context.ApplicationContextAware;
  */
 public class SpringPage extends Page implements ApplicationContextAware {
 
-    /** The Spring application context. */
-    protected ApplicationContext applicationContext;
+    /**
+     * The Spring application context. Note this variable is transient to
+     * support stateful page serialization.
+     */
+    protected transient ApplicationContext applicationContext;
 
     /**
      * Return the course Booking Service object.

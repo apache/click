@@ -72,6 +72,8 @@ public class StartPage extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         List customerList = getCustomerService().getCustomersSortedByName();
         customerSelect.add(new Option(""));
         for (Iterator i = customerList.iterator(); i.hasNext();) {

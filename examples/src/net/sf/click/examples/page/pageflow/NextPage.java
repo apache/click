@@ -36,6 +36,8 @@ public class NextPage extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         if (getContext().isForward() && courseBooking != null) {
             courseField.setValueObject(courseBooking);
 

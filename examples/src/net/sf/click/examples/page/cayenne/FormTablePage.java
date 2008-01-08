@@ -78,6 +78,8 @@ public abstract class FormTablePage extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         // Complete form initialization
         form.add(new Submit("save", " Save ", this, "onSaveClick"));
         form.add(new Submit("cancel", "Cancel", this, "onCancelClick"));

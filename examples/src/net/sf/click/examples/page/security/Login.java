@@ -46,6 +46,8 @@ public class Login extends BorderPage {
     // --------------------------------------------------------- Event Handlers
 
     public void onInit() {
+        super.onInit();
+
         String username = null;
 
         if (getContext().isPost()) {

@@ -16,6 +16,8 @@ public class LineChart extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         chart.setChartHeight(300);
         chart.setChartWidth(400);
 

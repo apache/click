@@ -20,6 +20,8 @@ public class AjaxPage extends BorderPage {
     public Select customerSelect = new Select("customerSelect");
 
     public void onInit() {
+        super.onInit();
+
         customerSelect.setAttribute("onchange", "onCustomerChange(this);");
 
         List customerList = getCustomerService().getCustomersSortedByName(8);

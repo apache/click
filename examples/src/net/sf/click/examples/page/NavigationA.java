@@ -22,6 +22,8 @@ public class NavigationA extends BorderPage {
      * @see Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         // Initialise param ActionLink values from any parameters passed through
         // from other pages via forwards or redirects.
         Integer number = new Integer(1);

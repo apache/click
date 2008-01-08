@@ -17,6 +17,8 @@ public class Logout extends BorderPage {
      * @see Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         user = (User) getContext().getSessionAttribute("user");
         if (user != null) {
             getContext().removeSessionAttribute("user");

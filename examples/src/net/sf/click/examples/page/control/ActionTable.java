@@ -27,6 +27,8 @@ public class ActionTable extends BorderPage {
     public ActionLink deleteLink = new ActionLink(this, "onDeleteClick");
 
     public void onInit() {
+        super.onInit();
+
         String path = getContext().getPagePath(getClass());
         editLink.setParameter("referrer", path);
     }

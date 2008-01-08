@@ -15,6 +15,8 @@ public class AjaxLiveGrid extends BorderPage {
     public String addLoadEvent = "onLoad";
 
     public void onInit() {
+        super.onInit();
+
         List customerList = getCustomerService().getCustomers();
         addModel("customers", customerList);
 
