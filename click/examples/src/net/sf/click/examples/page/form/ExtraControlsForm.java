@@ -84,6 +84,8 @@ public class ExtraControlsForm extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         List customers = getCustomerService().getCustomersSortedByName();
         checkList.addAll(customers, "id", "name");
         applyOptions();

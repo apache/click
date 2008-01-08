@@ -55,6 +55,8 @@ public class AdvancedForm extends BorderPage {
      * @see Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         CustomerService customerService = getCustomerService();
         investmentSelect.add(Option.EMPTY_OPTION);
         investmentSelect.addAll(customerService.getInvestmentCatetories());

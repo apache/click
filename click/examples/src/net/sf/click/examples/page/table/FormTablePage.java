@@ -76,6 +76,8 @@ public class FormTablePage extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         List customers = getCustomerService().getCustomersSortedByName(NUM_ROWS);
         table.setRowList(customers);
     }

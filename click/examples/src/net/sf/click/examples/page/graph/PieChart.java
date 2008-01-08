@@ -16,6 +16,8 @@ public class PieChart extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         chart.setChartHeight(350);
         chart.setChartWidth(380);
 

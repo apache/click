@@ -13,8 +13,11 @@ import net.sf.click.util.ClickUtils;
  */
 public class BorderPage extends SpringPage {
 
-    /** The root menu. */
-    public Menu rootMenu = Menu.getRootMenu();
+    /**
+     * The root menu. Note this variable is initialized in onInit() to support
+     * serialized stateful pages.
+     */
+    public transient Menu rootMenu;
 
     // ------------------------------------------------------------ Constructor
 
@@ -35,6 +38,14 @@ public class BorderPage extends SpringPage {
 
         String srcPath = className.replace('.', '/') + ".java";
         addModel("srcPath", srcPath);
+    }
+
+    // --------------------------------------------------------- Event Handlers
+
+    public void onInit() {
+        super.onInit();
+
+        rootMenu = Menu.getRootMenu();
     }
 
     // --------------------------------------------------------- Public Methods

@@ -211,6 +211,8 @@ public class FormProperties extends BorderPage {
      * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
+        super.onInit();
+
         // Apply saved options to the demo form and the optionsForm
         Options options = (Options) getSessionObject(Options.class);
         applyOptions(options);
