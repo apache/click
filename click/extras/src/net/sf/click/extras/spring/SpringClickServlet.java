@@ -312,13 +312,24 @@ public class SpringClickServlet extends ClickServlet {
             page = (Page) pageClass.newInstance();
         }
 
+        return page;
+    }
+
+    /**
+     * This method associates the <tt>ApplicationContext</tt> with any
+     * <tt>ApplicationContextAware</tt> pages and supports the deserialized of
+     * stateful pages.
+     *
+     * @see ClickServlet#activatePageInstance(Page)
+     *
+     * @param page the page instance to activate
+     */
+    protected void activatePageInstance(Page page) {
         if (page instanceof ApplicationContextAware) {
             ApplicationContextAware aware =
                 (ApplicationContextAware) page;
             aware.setApplicationContext(applicationContext);
         }
-
-        return page;
     }
 
 }
