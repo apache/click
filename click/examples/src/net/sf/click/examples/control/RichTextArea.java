@@ -63,7 +63,7 @@ public class RichTextArea extends TextArea {
     /**
      * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>
      *
-     * @see Field#getHtmlImports()
+     * @see net.sf.click.control.Field#getHtmlImports()
      */
     public String getHtmlImports() {
         String[] args = { getContext().getRequest().getContextPath() };
