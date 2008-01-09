@@ -224,10 +224,13 @@ public class Table extends AbstractControl {
     protected int bannerPosition = POSITION_BOTTOM;
 
     /**
-     * The flag to clear the <tt>rowList</tt> when <tt>onDestroy()</tt> is
-     * invoked, the default value is true.
+     * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
+     * invoked, the default value is true. This flag only applies to
+     * <tt>stateful</tt> pages.
+     * <p/>
+     * @see #setNullifyRowListOnDestroy(boolean)
      */
-    protected boolean clearRowListOnDestroy = true;
+    protected boolean nullifyRowListOnDestroy = true;
 
     /** The map of table columns keyed by column name. */
     protected Map columns = new HashMap();
@@ -361,7 +364,7 @@ public class Table extends AbstractControl {
      * @param value the HTML class attribute
      */
     public void setClass(String value) {
-        setAttribute("class", value);
+        addStyleClass(value);
     }
 
     /**
@@ -424,24 +427,30 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return true if the Table will clear the <tt>rowList</tt> when the
+     * Return true if the Table will nullify the <tt>rowList</tt> when the
      * <tt>onDestroy()</tt> method is invoked.
      *
-     * @return true if the rowList is cleared when onDestroy is invoked
+     * @return true if the rowList is nullified when onDestroy is invoked
      */
-    public boolean getClearRowListOnDestroy() {
-        return clearRowListOnDestroy;
+    public boolean getNullifyRowListOnDestroy() {
+        return nullifyRowListOnDestroy;
     }
 
     /**
-     * Set the flag to clear the <tt>rowList</tt> when the <tt>onDestroy()</tt>
+     * Set the flag to nullify the <tt>rowList</tt> when the <tt>onDestroy()</tt>
      * method is invoked.
+     * <p/>
+     * This option only applies to <tt>stateful</tt> pages.
+     * <p/>
+     * If this option is false, the rowList will be persisted between requests.
+     * If this option is true (<tt>the default</tt>), the rowList must be set
+     * each request.
      *
-     * @param value the flag value to clear the table rowList when onDestroy is
-     * called
+     * @param value the flag value to nullify the table rowList when onDestroy
+     * is called
      */
-    public void setClearRowListOnDestroy(boolean value) {
-        clearRowListOnDestroy = value;
+    public void setNullifyRowListOnDestroy(boolean value) {
+        nullifyRowListOnDestroy = value;
     }
 
     /**
@@ -923,9 +932,6 @@ public class Table extends AbstractControl {
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
-        if (getClearRowListOnDestroy()) {
-            getRowList().clear();
-        }
         sorted = false;
 
         for (int i = 0, size = getControls().size(); i < size; i++) {
@@ -935,6 +941,9 @@ public class Table extends AbstractControl {
             } catch (Throwable t) {
                 t.printStackTrace();
             }
+        }
+        if (getNullifyRowListOnDestroy()) {
+            setRowList(null);
         }
     }
 
