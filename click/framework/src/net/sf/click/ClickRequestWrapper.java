@@ -63,7 +63,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see HttpServletRequestWrapper(HttpServletRequest)
      */
-    ClickRequestWrapper(HttpServletRequest request, ClickServlet.ClickService clickService) {
+    ClickRequestWrapper(HttpServletRequest request, FileItemFactory fileItemFactory) {
         super(request);
 
         this.isMultipartRequest = ClickUtils.isMultipartRequest(request);
@@ -72,8 +72,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
         if (isMultipartRequest) {
             // If this request is multipart, populate two maps, one for normal
             // request parameters, the other for all uploaded files
-            FileItemFactory factory = clickService.getFileItemFactory();
-            FileUploadBase fileUpload = new ServletFileUpload(factory);
+            FileUploadBase fileUpload = new ServletFileUpload(fileItemFactory);
 
             Map requestParams = new HashMap();
             Map fileItems = new HashMap();
