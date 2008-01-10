@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package net.sf.click;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Field;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,7 +48,6 @@ import ognl.Ognl;
 import ognl.OgnlException;
 import ognl.TypeConverter;
 
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
@@ -188,11 +185,11 @@ public class ClickServlet extends HttpServlet {
     /** The click application. */
     protected ClickApp clickApp;
 
+    /** The click service proxy. */
+    protected ClickService clickService;
+
     /** The servlet logger. */
     protected ClickLogger logger;
-
-    /** The page creator factory. */
-    protected final ClickService pageMaker = new ClickService();
 
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
@@ -230,6 +227,8 @@ public class ClickServlet extends HttpServlet {
 
             newClickApp.init(createClickLogger());
 
+            clickService = new ClickService(this);
+
             logger = newClickApp.getLogger();
 
             // Initialise the Cache of velocity writers.
@@ -257,6 +256,8 @@ public class ClickServlet extends HttpServlet {
             throw new UnavailableException(e.toString());
         }
     }
+
+    //---------------------------------------------- protected methods
 
     /**
      * Handle HTTP GET requests. This method will delegate the request to
@@ -323,6 +324,17 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
+        // Context must only be created on the first call to this method,
+        // while forward and include calls must use the thread bound context.
+        // Forward and include calls are wrapped by a ClickRequestWrapper.
+        // If request is not wrapped, createContext can be called.
+        // see the issue CLK-282 for details.
+        if (!(request instanceof ClickRequestWrapper)) {
+            Context context = createContext(request, response, isPost);
+            // bind context to current thread
+            Context.setThreadLocalContext(context);
+        }
+
         if (logger.isDebugEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(200);
             buffer.append(request.getMethod());
@@ -348,7 +360,7 @@ public class ClickServlet extends HttpServlet {
 
         Page page = null;
         try {
-            page = createPage(request, response, isPost);
+            page = createPage(request);
 
             if (page.isStateful()) {
                 synchronized (page) {
@@ -378,14 +390,27 @@ public class ClickServlet extends HttpServlet {
             handleException(request, response, isPost, cause, pageClass);
 
         } finally {
-            if (page != null) {
-                if (page.isStateful()) {
-                    synchronized (page) {
+
+            try {
+                if (page != null) {
+                    if (page.isStateful()) {
+                        synchronized (page) {
+                            processPageOnDestroy(page, startTime);
+                        }
+
+                    } else {
                         processPageOnDestroy(page, startTime);
                     }
+                }
 
-                } else {
-                    processPageOnDestroy(page, startTime);
+            } finally {
+                // Forward and include calls must not unbind the context.
+                // Forward and include requests are wrapped by
+                // ClickRequestWrapper. If request is not wrapped, destroy can
+                // be called.
+                // See the issue CLK-282 for details.
+                if (!(request instanceof ClickRequestWrapper)) {
+                    Context.setThreadLocalContext(null);
                 }
             }
         }
@@ -393,15 +418,15 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Provides the application exception handler. The application exception
-     * will be delegated to the configured error page. The default error page
-     * is {@link ErrorPage} and the page template is "click/error.htm"
-     * <p/>
+     * will be delegated to the configured error page. The default error page is
+     * {@link ErrorPage} and the page template is "click/error.htm" <p/>
      * Applications which wish to provide their own customized error handling
-     * must subclass ErrorPage and specify their page in the "/WEB-INF/click.xml"
-     * application configuration file. For example:
+     * must subclass ErrorPage and specify their page in the
+     * "/WEB-INF/click.xml" application configuration file. For example:
      *
      * <pre class="codeConfig">
-     * &lt;page path="<span class="navy">click/error.htm</span>" classname="<span class="maroon">com.mycorp.util.ErrorPage</span>"/&gt; </pre>
+     *  &lt;page path=&quot;&lt;span class=&quot;navy&quot;&gt;click/error.htm&lt;/span&gt;&quot; classname=&quot;&lt;span class=&quot;maroon&quot;&gt;com.mycorp.util.ErrorPage&lt;/span&gt;&quot;/&gt;
+     * </pre>
      *
      * If the ErrorPage throws an exception, it will be logged as an error and
      * then be rethrown nested inside a RuntimeException.
@@ -638,7 +663,7 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (page.getForward().endsWith(".jsp")) {
-                renderJSP(request, response, page);
+                renderJSP(page);
 
             } else {
                 RequestDispatcher dispatcher =
@@ -648,7 +673,7 @@ public class ClickServlet extends HttpServlet {
             }
 
         } else if (page.getPath() != null) {
-            renderTemplate(page, request);
+            renderTemplate(page);
 
         } else {
             if (logger.isTraceEnabled()) {
@@ -670,20 +695,18 @@ public class ClickServlet extends HttpServlet {
      * This method was adapted from org.apache.velocity.servlet.VelocityServlet.
      *
      * @param page the page template to merge
-     * @param request the page request
      * @throws Exception if an error occurs
      */
-    protected void renderTemplate(Page page, HttpServletRequest request)
-        throws Exception {
+    protected void renderTemplate(Page page) throws Exception {
 
         long startTime = System.currentTimeMillis();
 
         final VelocityContext context = createVelocityContext(page);
 
         // May throw parsing error if template could not be obtained
-        final Template template = clickApp.getTemplate(page.getTemplate());
+        Template template = clickApp.getTemplate(page.getTemplate());
 
-        final HttpServletResponse response = page.getContext().getResponse();
+        HttpServletResponse response = page.getContext().getResponse();
 
         response.setContentType(page.getContentType());
 
@@ -716,7 +739,7 @@ public class ClickServlet extends HttpServlet {
                 new ErrorReport(error,
                                 page.getClass(),
                                 clickApp.isProductionMode(),
-                                request,
+                                page.getContext().getRequest(),
                                 getServletContext());
 
             if (velocityWriter == null) {
@@ -768,15 +791,16 @@ public class ClickServlet extends HttpServlet {
     /**
      * Render the given page as a JSP to the response.
      *
-     * @param request the page request
-     * @param response the servlet response
      * @param page the page to render
      * @throws Exception if an error occurs rendering the JSP
      */
-    protected void renderJSP(HttpServletRequest request,
-            HttpServletResponse response, Page page) throws Exception {
+    protected void renderJSP(Page page) throws Exception {
 
         long startTime = System.currentTimeMillis();
+
+        HttpServletRequest request = page.getContext().getRequest();
+
+        HttpServletResponse response = page.getContext().getResponse();
 
         setRequestAttributes(page);
 
@@ -816,21 +840,9 @@ public class ClickServlet extends HttpServlet {
      * the Page instance and then set the properties on the page.
      *
      * @param request the servlet request
-     * @param response the servlet response
-     * @param isPost determines whether the request is a POST
      * @return a new Page instance for the given request
      */
-    protected Page createPage(HttpServletRequest request,
-        HttpServletResponse response, boolean isPost) {
-
-        Context context = new Context(getServletContext(),
-                                      getServletConfig(),
-                                      request,
-                                      response,
-                                      isPost,
-                                      pageMaker);
-
-        Context.setThreadLocalContext(context);
+    protected Page createPage(HttpServletRequest request) {
 
         // Log request parameters
         if (logger.isTraceEnabled()) {
@@ -856,7 +868,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        String path = context.getResourcePath();
+        String path = Context.getThreadLocalContext().getResourcePath();
 
         if (request.getAttribute(FORWARD_PAGE) != null) {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
@@ -1077,8 +1089,7 @@ public class ClickServlet extends HttpServlet {
      * @param page the page whose fields are to be processed
      * @throws OgnlException if an error occurs
      */
-    protected void processPageRequestParams(Page page)
-        throws OgnlException {
+    protected void processPageRequestParams(Page page) throws OgnlException {
 
         if (clickApp.getPageFields(page.getClass()).isEmpty()) {
             return;
@@ -1126,7 +1137,7 @@ public class ClickServlet extends HttpServlet {
     /**
      * Return a new Page instance for the given page path, class and request.
      * <p/>
-     * The default implementation of this method simply creates a new page
+     * The default implementation of this method simply creates new page
      * instances:
      * <pre class="codeJava">
      * <span class="kw">protected</span> Page newPageInstance(String path, Class pageClass,
@@ -1554,212 +1565,44 @@ public class ClickServlet extends HttpServlet {
         return new ClickLogger("Click");
     }
 
-    // ---------------------------------------------------------- Inner Classes
+    /**
+     * Creates and returns a new Context instance for this path, class and
+     * request.
+     * <p/>
+     * The default implementation of this method simply creates a new Context
+     * instance.
+     * <p/>
+     * Subclasses can override this method to provide a custom Context.
+     *
+     * @param request the page request
+     * @param response the page response
+     * @param isPost true if this is a post request, false otherwise
+     * @return a Context instance
+     */
+    protected Context createContext(HttpServletRequest request,
+      HttpServletResponse response, boolean isPost) {
+
+        Context context = new Context(getServletContext(),
+                                      getServletConfig(),
+                                      request,
+                                      response,
+                                      isPost,
+                                      clickService);
+        return context;
+    }
+
+    // ------------------------------------------------ Package Private Methods
 
     /**
-     * Provides a package visibility interface for the Context class for
-     * accessing ClickApp and ClickServlet services.
+     * Return the Click Application instance.
      *
-     * @author Malcolm Edgar
+     * @return the Click Application instance
      */
-    class ClickService {
-
-        /**
-         * Return a new Page instance for the given path.
-         *
-         * @param path the Page path configured in the click.xml file
-         * @return a new Page object
-         * @throws IllegalArgumentException if the Page is not found
-         */
-        Page createPage(String path, HttpServletRequest request) {
-            Class pageClass = clickApp.getPageClass(path);
-
-            if (pageClass == null) {
-                String msg = "No Page class configured for path: " + path;
-                throw new IllegalArgumentException(msg);
-            }
-
-            return initPage(path, pageClass, request);
-        }
-
-        /**
-         * Return a new Page instance for the page Class.
-         *
-         * @param pageClass the class of the Page to create
-         * @return a new Page object
-         * @throws IllegalArgumentException if the Page Class is not configured
-         * with a unique path
-         */
-        Page createPage(Class pageClass, HttpServletRequest request) {
-            String path = clickApp.getPagePath(pageClass);
-
-            if (path == null) {
-                String msg =
-                    "No path configured for Page class: " + pageClass.getName();
-                throw new IllegalArgumentException(msg);
-            }
-
-            return initPage(path, pageClass, request);
-        }
-
-        /**
-         * Return the Click application mode value: &nbsp;
-         * <tt>["production", "profile", "development", "debug"]</tt>.
-         *
-         * @return the application mode value
-         */
-        String getApplicationMode() {
-            return clickApp.getModeValue();
-        }
-
-        /**
-         * Return the Click application charset or null if not defined.
-         *
-         * @return the application charset value
-         */
-        String getCharset() {
-            return clickApp.getCharset();
-        }
-
-        /**
-         * Return the Click application FileItemFactory.
-         *
-         * @return the application FileItemFactory
-         */
-        FileItemFactory getFileItemFactory() {
-            return clickApp.getFileItemFactory();
-        }
-
-        /**
-         * Return the Click application locale or null if not defined.
-         *
-         * @return the application locale value
-         */
-        Locale getLocale() {
-            return clickApp.getLocale();
-        }
-
-        /**
-         * Return the path for the given page Class.
-         *
-         * @param pageClass the class of the Page to lookup the path for
-         * @return the path for the given page Class
-         * @throws IllegalArgumentException if the Page Class is not configured
-         * with a unique path
-         */
-        String getPagePath(Class pageClass) {
-            String path = clickApp.getPagePath(pageClass);
-
-            if (path == null) {
-                String msg =
-                    "No path configured for Page class: " + pageClass.getName();
-                throw new IllegalArgumentException(msg);
-            }
-
-            return path;
-        }
-
-        /**
-         * Return a rendered Velocity template and model for the given
-         * class and model data.
-         * <p/>
-         * This method will merge the class <tt>.htm</tt> and model using the
-         * Velocity Engine.
-         * <p/>
-         * An example of the class template resolution is provided below:
-         * <pre class="codeConfig">
-         * <span class="cm">// Full class name</span>
-         * com.mycorp.control.CustomTextField
-         *
-         * <span class="cm">// Template path name</span>
-         * /com/mycorp/control/CustomTextField.htm </pre>
-         *
-         * Example method usage:
-         * <pre class="codeJava">
-         * <span class="kw">public String</span> toString() {
-         *     Map model = getModel();
-         *     <span class="kw">return</span> getContext().renderTemplate(getClass(), model);
-         * } </pre>
-         *
-         * @param templateClass the class to resolve the template for
-         * @param model the model data to merge with the template
-         * @return rendered Velocity template merged with the model data
-         * @throws RuntimeException if an error occurs
-         */
-        String renderTemplate(Class templateClass, Map model) {
-
-            if (templateClass == null) {
-                String msg = "Null templateClass parameter";
-                throw new IllegalArgumentException(msg);
-            }
-
-            String templatePath = templateClass.getName();
-            templatePath = '/' + templatePath.replace('.', '/') + ".htm";
-
-            return renderTemplate(templatePath, model);
-        }
-
-        /**
-         * Return a rendered Velocity template and model data.
-         * <p/>
-         * Example method usage:
-         * <pre class="codeJava">
-         * <span class="kw">public String</span> toString() {
-         *     Map model = getModel();
-         *     <span class="kw">return</span> getContext().renderTemplate(<span class="st">"/custom-table.htm"</span>, model);
-         * } </pre>
-         *
-         * @param templatePath the path of the Velocity template to render
-         * @param model the model data to merge with the template
-         * @return rendered Velocity template merged with the model data
-         * @throws RuntimeException if an error occurs
-         */
-        String renderTemplate(String templatePath, Map model) {
-
-            if (templatePath == null) {
-                String msg = "Null templatePath parameter";
-                throw new IllegalArgumentException(msg);
-            }
-
-            if (model == null) {
-                String msg = "Null model parameter";
-                throw new IllegalArgumentException(msg);
-            }
-
-            VelocityContext context = new VelocityContext(model);
-
-            StringWriter stringWriter = new StringWriter(1024);
-
-            try {
-                Template template = null;
-
-                String charset = clickApp.getCharset();
-                if (charset != null) {
-                    template = clickApp.getTemplate(templatePath, charset);
-                } else {
-                    template = clickApp.getTemplate(templatePath);
-                }
-
-                if (template == null) {
-                    String msg =
-                        "Template not found for template path: " + templatePath;
-                    throw new IllegalArgumentException(msg);
-                }
-
-                template.merge(context, stringWriter);
-
-            } catch (Exception e) {
-                String msg = "Error occured rendering template: "
-                             + templatePath;
-                logger.error(msg, e);
-
-                throw new RuntimeException(e);
-            }
-
-            return stringWriter.toString();
-        }
-
+    ClickApp getClickApp() {
+        return clickApp;
     }
+
+    // ---------------------------------------------------------- Inner Classes
 
     /**
      * Field iterator callback.
