@@ -426,9 +426,6 @@ import org.apache.commons.lang.StringUtils;
  *
  * The form submit check methods store a special token in the users session
  * and in a hidden field in the form to ensure a form post isn't replayed.
- * <p/>
- * <b>Please Note</b> the Form submit check currently only supports having
- * one form per Page.
  *
  * <p>&nbsp;<p/>
  * See also the W3C HTML reference:
@@ -2034,7 +2031,7 @@ public class Form extends AbstractControl {
 
         final HttpServletRequest request = getContext().getRequest();
         final String submitTokenName =
-            SUBMIT_CHECK + getContext().getResourcePath();
+            SUBMIT_CHECK + getName() + "_" +getContext().getResourcePath();
 
         boolean isValidSubmit = true;
 
