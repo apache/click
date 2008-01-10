@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class Context {
     protected final ServletConfig config;
 
     /** The click services interface. */
-    protected final ClickServlet.ClickService clickService;
+    protected final ClickService clickService;
 
     /** The servlet request. */
     protected final ClickRequestWrapper request;
@@ -83,11 +83,11 @@ public class Context {
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
-        boolean isPost, ClickServlet.ClickService clickService) {
+        boolean isPost, ClickService clickService) {
 
         this.context = context;
         this.config = config;
-        this.request = new ClickRequestWrapper(request, clickService);
+        this.request = new ClickRequestWrapper(request, clickService.getFileItemFactory());
         this.response = response;
         this.isPost = isPost;
         this.clickService = clickService;
