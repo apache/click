@@ -8,7 +8,7 @@
  
 	<!-- 
 	Provides an in memory databae initialization filter. In a production 
-	application a separate database should be used, and this filter would not
+	application a separate database would be used, and this filter would not
 	be needed.
 	-->
 	<filter>
@@ -32,26 +32,11 @@
 		</init-param>
 	</filter>
  
-	<!-- 
-	Provides a HTTP response GZIP compression filter to improve network 
-	performance. In production applications you may use a compression module
-	provided by a web server instead.
-	-->
-	<filter>
-		<filter-name>CompressionFilter</filter-name>
-		<filter-class>net.sf.click.extras.filter.CompressionFilter</filter-class>
-	</filter>
- 	
 	<filter-mapping>
 		<filter-name>DataContextFilter</filter-name>
 		<servlet-name>SpringClickServlet</servlet-name>
 	</filter-mapping>
  
-	<filter-mapping>
-		<filter-name>CompressionFilter</filter-name>
-		<servlet-name>SpringClickServlet</servlet-name>
-	</filter-mapping>
-
 	<!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
 	init parameter tells the servlet where to find the Spring application
