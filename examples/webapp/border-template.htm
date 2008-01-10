@@ -4,9 +4,6 @@
 <link rel="stylesheet" type="text/css" href="$context/style.css" title="Style"></link>
 $imports
 #if ($headInclude) #parse($headInclude) #end
-<script type='text/javascript'>
-    #if($addLoadEvent) addLoadEvent($addLoadEvent) #end
-</script >
 </head>
 <body>
 
@@ -57,3 +54,8 @@ $imports
 
 </body>
 </html>
+#if($addLoadEvent)
+<script type='text/javascript'>
+    addLoadEvent($addLoadEvent)
+</script>
+#end
