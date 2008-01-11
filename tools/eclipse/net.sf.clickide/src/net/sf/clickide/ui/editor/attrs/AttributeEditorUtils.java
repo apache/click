@@ -227,7 +227,7 @@ public class AttributeEditorUtils {
 			}
 		}
 		
-		Button button = toolkit.createButton(composite, "...", SWT.PUSH);
+		Button button = toolkit.createButton(composite, ClickPlugin.getString("action.browse"), SWT.PUSH);
 		button.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent evt){
 				Shell shell = text.getShell();
