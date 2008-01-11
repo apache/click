@@ -54,7 +54,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * FieldSet provides a container for laying out form <tt>Field</tt> controls.
  * The FieldSet will use the properties of its parent Form for laying out and
- * rendering of its Fields. To further customise the rendering of a FieldSet
+ * rendering of its Fields. To further customize the rendering of a FieldSet
  * override the {@link #renderFields(HtmlStringBuffer)} method.
  * <p/>
  * A FieldSet can contain any Field controls except for <tt>Button</tt> and
