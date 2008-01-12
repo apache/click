@@ -547,6 +547,8 @@ public abstract class AbstractControl implements Control {
         }
     }
 
+    //---------------------------------------------- private methods
+
     /**
      * Parse the specified string of style attributes and return a Map
      * of key/value pairs. Invalid key/value pairs will not be added to
@@ -556,7 +558,7 @@ public abstract class AbstractControl implements Control {
      * @return map containing key/value pairs of the specified style
      * @throws IllegalArgumentException if style is null
      */
-    protected Map parseStyles(String style) {
+    private Map parseStyles(String style) {
         if (style == null) {
             throw new IllegalArgumentException("style cannot be null");
         }
@@ -596,7 +598,7 @@ public abstract class AbstractControl implements Control {
      * @return map containing key/value pairs of the specified style
      * @throws IllegalArgumentException if styleClasses is null
      */
-    protected Set parseStyleClasses(String styleClasses) {
+    private Set parseStyleClasses(String styleClasses) {
         if (styleClasses == null) {
             throw new IllegalArgumentException("styleClasses cannot be null");
         }
@@ -614,8 +616,6 @@ public abstract class AbstractControl implements Control {
 
         return styleClassesSet;
     }
-
-    //---------------------------------------------- private methods
 
     /**
      * Return true if the new value exists in the current value.
