@@ -554,6 +554,7 @@ public abstract class AbstractControl implements Control {
      *
      * @param style the string containing the styles to parse
      * @return map containing key/value pairs of the specified style
+     * @throws IllegalArgumentException if style is null
      */
     protected Map parseStyles(String style) {
         if (style == null) {
@@ -593,11 +594,12 @@ public abstract class AbstractControl implements Control {
      *
      * @param styleClasses the string containing the styles to parse
      * @return map containing key/value pairs of the specified style
+     * @throws IllegalArgumentException if styleClasses is null
      */
     protected Set parseStyleClasses(String styleClasses) {
         if (styleClasses == null) {
             throw new IllegalArgumentException("styleClasses cannot be null");
-}
+        }
 
         //LinkHashMap is used to keep the order of the class names. Probably
         //makes no difference to browser but it makes testing easier since the
@@ -613,6 +615,8 @@ public abstract class AbstractControl implements Control {
         return styleClassesSet;
     }
 
+    //---------------------------------------------- private methods
+
     /**
      * Return true if the new value exists in the current value.
      *
@@ -620,7 +624,7 @@ public abstract class AbstractControl implements Control {
      * @param currentValue the current value to test
      * @return true if the classToFind exists in the current value set
      */
-    protected boolean classExists(String newValue, String currentValue) {
+    private boolean classExists(String newValue, String currentValue) {
         //To find if a class eg. "myclass" exists, check the following:
 
         //1. Check if "myclass" is the only value in the string
