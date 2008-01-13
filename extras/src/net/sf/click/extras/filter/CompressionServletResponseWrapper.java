@@ -120,9 +120,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         stream.setBuffer(threshold);
 
         return stream;
-
     }
-
 
     /**
      * Finish a response.
@@ -140,9 +138,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-
     // ------------------------------------------------ ServletResponse Methods
-
 
     /**
      * Flush the buffer and commit this response.

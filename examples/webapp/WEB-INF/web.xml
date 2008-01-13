@@ -32,18 +32,58 @@
 		</init-param>
 	</filter>
  
+	<!-- 
+	Provides a web application performance filter which compresses the response
+	and sets the Expires header on selected static resources. 
+	The "cachable-paths" init parameter tells the filter resources can have 
+	their Expires header set so the browser will cache them.
+	-->
+	<filter>
+		<filter-name>PerformanceFilter</filter-name>
+		<filter-class>net.sf.click.extras.filter.PerformanceFilter</filter-class>
+		<init-param>
+			<param-name>cachable-paths</param-name>
+ 			<param-value>/images/*, *.css</param-value>
+		</init-param>
+	</filter>
+ 	
 	<filter-mapping>
 		<filter-name>DataContextFilter</filter-name>
-		<servlet-name>SpringClickServlet</servlet-name>
+		<servlet-name>ClickServlet</servlet-name>
 	</filter-mapping>
  
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<servlet-name>ClickServlet</servlet-name>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<url-pattern>*.css</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<url-pattern>*.js</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<url-pattern>*.gif</url-pattern>
+	</filter-mapping>
+	
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<url-pattern>*.png</url-pattern>
+	</filter-mapping>
+	
 	<!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
 	init parameter tells the servlet where to find the Spring application
 	context file on the classpath.
 	-->
 	<servlet>
-		<servlet-name>SpringClickServlet</servlet-name>
+		<servlet-name>ClickServlet</servlet-name>
 		<servlet-class>net.sf.click.extras.spring.SpringClickServlet</servlet-class>
 		<init-param>
 			<param-name>spring-path</param-name>
@@ -53,7 +93,7 @@
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>SpringClickServlet</servlet-name>
+		<servlet-name>ClickServlet</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,10 +91,11 @@ public class DateField extends TextField {
     private static final long serialVersionUID = 1L;
 
     /** The HTML import statements. */
-    static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}.js\" charset=\"UTF-8\"></script>\n";
+    public static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}_{7}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar_{7}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}_{7}.js\" charset=\"UTF-8\"></script>\n"
+        + "<script type=\"text/javascript\">Calendar.setup('{' inputField : ''{3}'', ifFormat : ''{4}'', showsTime : {5}, button : ''{3}-button'', align : ''cr'', singleClick : true, firstDay : {6} '}');</script>";
 
     /** The Calendar resource file names. */
     static final String[] CALENDAR_RESOURCES =
@@ -394,10 +395,15 @@ public class DateField extends TextField {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String[] args = {
-            getContext().getRequest().getContextPath(),
-            getStyle(),
-            getLocale().getLanguage()
+        Object args[] = {
+                getContext().getRequest().getContextPath(),
+                getStyle(),
+                getLocale().getLanguage(),
+                getId(),
+                getCalendarPattern(),
+                new Boolean(getShowTime()),
+                new Integer(getFirstDayOfWeek() - 1),
+                getClickVersion()
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -517,7 +523,8 @@ public class DateField extends TextField {
 
             ClickUtils.deployFile(servletContext,
                                   calendarResource,
-                                  "click/calendar");
+                                  "click/calendar",
+                                  true);
         }
     }
 
@@ -536,7 +543,9 @@ public class DateField extends TextField {
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getContext().getRequest().getContextPath());
-            buffer.append("/click/calendar/calendar.gif\" id=\"");
+            buffer.append("/click/calendar/calendar_");
+            buffer.append(getClickVersion());
+            buffer.append(".gif\" id=\"");
             buffer.append(getId());
             buffer.append("-button\" ");
 
@@ -544,27 +553,6 @@ public class DateField extends TextField {
             buffer.appendAttribute("alt", calendarTitle);
             buffer.appendAttribute("title", calendarTitle);
             buffer.elementEnd();
-
-            buffer.append("<script type=\"text/javascript\">\n");
-            buffer.append("Calendar.setup({ \n");
-            buffer.append(" inputField :  '");
-            buffer.append(getId());
-            buffer.append("', \n");
-            buffer.append(" ifFormat :    '");
-            buffer.append(getCalendarPattern());
-            buffer.append("', \n");
-            if (getShowTime()) {
-                buffer.append(" showsTime : true, \n");
-            }
-            buffer.append(" button :      '");
-            buffer.append(getId());
-            buffer.append("-button', \n");
-            buffer.append(" align :       'cr', \n");
-            buffer.append(" singleClick : true, \n");
-            buffer.append(" firstDay :    ");
-            buffer.append(getFirstDayOfWeek() - 1);
-            buffer.append("\n});\n");
-            buffer.append("</script> \n");
         }
 
         return buffer.toString();

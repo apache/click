@@ -9,6 +9,9 @@
 	<!-- File Length -->                                          
               
     <suppress checks="FileLength"
+              files="ClickUtils.java"/>
+              
+    <suppress checks="FileLength"
               files="Form.java"/>
 
     <suppress checks="FileLength"
@@ -88,12 +91,12 @@
               
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2126"/>
+              lines="2121"/>
 
 	<!-- Static Variable Name -->              
               
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="511,514,517,520"/>
+              lines="508,511,514,517,521"/>
                             
 </suppressions>

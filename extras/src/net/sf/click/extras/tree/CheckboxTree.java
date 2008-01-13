@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Malcolm A. Edgar
+ * Copyright 2007-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
+
 import net.sf.click.Context;
 import net.sf.click.control.Decorator;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Implementation of a tree control that provides checkboxes to enable selection
@@ -104,8 +105,8 @@ public class CheckboxTree extends Tree {
     // -------------------------------------------------------------- Constants
 
     /** Client side javascript import. This extends on the functions available in {@link Tree} */
-    public static final String JAVASCRIPT_IMPORTS =
-            "<script type=\"text/javascript\" src=\"$/click/tree/checkbox-tree.js\"></script>\n";
+    public static final String HTML_IMPORTS =
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree_{1}.js\"></script>\n";
 
     /** The Tree resource file names. */
     protected static final String[] TREE_RESOURCES = {
@@ -149,10 +150,9 @@ public class CheckboxTree extends Tree {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-        StringBuffer buffer = new StringBuffer(100);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
-            buffer.append(StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path));
+            buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
         }
         buffer.append(super.getHtmlImports());
         return buffer.toString();
@@ -171,8 +171,9 @@ public class CheckboxTree extends Tree {
     public void onDeploy(ServletContext servletContext) {
         super.onDeploy(servletContext);
         ClickUtils.deployFiles(servletContext,
-                TREE_RESOURCES,
-                "click/tree");
+                               TREE_RESOURCES,
+                               "click/tree",
+                               true);
     }
 
     /**

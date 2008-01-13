@@ -56,7 +56,7 @@ public class FilterPanel extends Panel {
             "/net/sf/click/examples/control/twistie-up.png"
         };
 
-        ClickUtils.deployFiles(servletContext, files, "images");
+        ClickUtils.deployFiles(servletContext, files, "images", false);
     }
 
 }

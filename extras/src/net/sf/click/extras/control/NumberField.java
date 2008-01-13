@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,12 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
-
-import net.sf.click.control.TextField;
-import net.sf.click.util.ClickUtils;
-
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.StringUtils;
+import net.sf.click.control.TextField;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a Number Field control: &nbsp; &lt;input type='text'&gt;.
@@ -117,11 +114,9 @@ public class NumberField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /**
-     * The NumberField.js imports statement.
-     */
-    public static final String NUMERICFIELD_IMPORTS =
-        "<script type=\"text/javascript\" src=\"$/click/NumberField.js\"></script>\n";
+    /** The NumberField.js imports statement. */
+    public static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/NumberField_{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -376,9 +371,7 @@ public class NumberField extends TextField {
      * @return the HTML head import statements for the IntegerField.js
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(NUMERICFIELD_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -418,7 +411,8 @@ public class NumberField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/NumberField.js",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -182,11 +182,11 @@ public class Menu implements Control {
     protected static final String DEFAULT_CONFIG_FILE = "/WEB-INF/menu.xml";
 
     /** The HTML imports statements. */
-    protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/menu.css\"></link>\n"
-        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"$/click/menu.js\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent( function() { initMenu() } );</script>\n";
+    public static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu_{1}.css\"></link>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/control_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/menu_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
 
     // -------------------------------------------------------- Class Variables
 
@@ -641,8 +641,7 @@ public class Menu implements Control {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-        return StringUtils.replace(HTML_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -741,7 +740,7 @@ public class Menu implements Control {
                 "/net/sf/click/extras/control/menu.js"
             };
 
-        ClickUtils.deployFiles(servletContext, files, "click");
+        ClickUtils.deployFiles(servletContext, files, "click", true);
     }
 
     /**

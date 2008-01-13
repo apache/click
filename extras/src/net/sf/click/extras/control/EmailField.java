@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package net.sf.click.extras.control;
 import java.text.MessageFormat;
 
 import javax.servlet.ServletContext;
-
-import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
@@ -73,11 +71,9 @@ public class EmailField extends TextField {
         + "   '}'\n"
         + "'}'\n";
 
-    /**
-     * The RegexField.js imports statement.
-     */
-    public static final String EMAILFIELD_IMPORTS =
-        "<script type=\"text/javascript\" src=\"$/click/EmailField.js\"></script>\n";
+    /** The EmailField.js imports statement. */
+    public static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/EmailField_{1}.js\"></script>\n";
 
     // ----------------------------------------------------------- Constructors
 
@@ -147,9 +143,7 @@ public class EmailField extends TextField {
      * @return the HTML head import statements for the RegexField.js
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(EMAILFIELD_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -191,7 +185,8 @@ public class EmailField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/EmailField.js",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

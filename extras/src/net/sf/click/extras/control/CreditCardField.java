@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-
-import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
@@ -175,8 +173,8 @@ public class CreditCardField extends TextField {
     /**
      * The CreditCardField.js imports statement.
      */
-    public static final String CREDITCARD_IMPORTS =
-        "<script type=\"text/javascript\" src=\"$/click/CreditCardField.js\"></script>\n";
+    public static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/CreditCardField_{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -288,9 +286,7 @@ public class CreditCardField extends TextField {
      * @return the HTML head import statements for the CreditCardField.js
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(CREDITCARD_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     // -------------------------------------------------------- Public Methods
@@ -449,7 +445,8 @@ public class CreditCardField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/CreditCardField.js",
-                              "click");
+                              "click",
+                              true);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -453,20 +453,28 @@ public class CheckList extends Field {
 
         buffer.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"");
         buffer.append(path);
-        buffer.append("/click/checklist/checklist.css\"/>\n");
+        buffer.append("/click/checklist/checklist_");
+        buffer.append(getClickVersion());
+        buffer.append(".css\"/>\n");
 
         buffer.append("<script type=\"text/javascript\" src=\"");
         buffer.append(path);
-        buffer.append("/click/checklist/checklist.js\"/>\n");
+        buffer.append("/click/checklist/checklist_");
+        buffer.append(getClickVersion());
+        buffer.append(".js\"></script>\n");
 
         if (isSortable()) {
             buffer.append("<script type=\"text/javascript\" src=\"");
             buffer.append(path);
-            buffer.append("/click/prototype/prototype.js\"></script>\n");
+            buffer.append("/click/prototype/prototype_");
+            buffer.append(getClickVersion());
+            buffer.append(".js\"></script>\n");
 
             buffer.append("<script type=\"text/javascript\" src=\"");
             buffer.append(path);
-            buffer.append("/click/prototype/scriptaculous.js\"></script>\n");
+            buffer.append("/click/prototype/scriptaculous_");
+            buffer.append(getClickVersion());
+            buffer.append(".js\"></script>\n");
 
             // Script to execute
             HtmlStringBuffer script = new HtmlStringBuffer(50);
@@ -491,9 +499,9 @@ public class CheckList extends Field {
 
         } else {
             buffer.append("<script type=\"text/javascript\">");
-            buffer.append("addLoadEvent(function () {initChecklist('");
+            buffer.append("addLoadEvent(function () { initChecklist('");
             buffer.append(StringEscapeUtils.escapeJavaScript(getId()));
-            buffer.append("_ul');});</script>\n");
+            buffer.append("_ul'); });</script>\n");
         }
 
         return buffer.toString();
@@ -717,11 +725,13 @@ public class CheckList extends Field {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext,
                                CHECKLIST_RESOURCES,
-                               "click/checklist");
+                               "click/checklist",
+                               true);
 
         ClickUtils.deployFiles(servletContext,
                                PROTOTYPE_RESOURCES,
-                               "click/prototype");
+                               "click/prototype",
+                               true);
     }
 
     /**

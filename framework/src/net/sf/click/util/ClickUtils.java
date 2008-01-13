@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -444,6 +445,17 @@ public class ClickUtils {
     }
 
     /**
+     * Return the Click Framework version string.
+     *
+     * @return the Click Framework version string
+     */
+    public static String getClickVersion() {
+        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
+
+        return bundle.getString("click-version");
+    }
+
+    /**
      * Close the given input stream and ignore any exceptions thrown.
      *
      * @param stream the input stream to close.
@@ -486,6 +498,23 @@ public class ClickUtils {
                 // Ignore
             }
         }
+    }
+
+    /**
+     * Create an HTML import statement from the given string pattern formatted
+     * with the request context path and Click Version args.
+     *
+     * @param pattern the HTML import pattern string to format
+     * @param context the request context
+     * @return the formatted HTML import statement
+     */
+    public static String createHtmlImport(String pattern, Context context) {
+        String[] args = {
+                context.getRequest().getContextPath(),
+                getClickVersion()
+        };
+
+        return MessageFormat.format(pattern, args);
     }
 
     /**
@@ -770,9 +799,10 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resource the classpath resource name
      * @param targetDir the target directory to deploy the resource to
+     * @param addVersion embedded the click vesion number in the deployed filename
      */
     public static void deployFile(ServletContext servletContext,
-        String resource, String targetDir) {
+        String resource, String targetDir, boolean addVersion) {
 
         if (servletContext == null) {
             throw new IllegalArgumentException("Null servletContext parameter");
@@ -808,6 +838,15 @@ public class ClickUtils {
             if (index != -1) {
                 destination = resource.substring(index + 1);
             }
+
+            if (addVersion) {
+                int dotIndex = destination.lastIndexOf(".");
+                destination =
+                    destination.substring(0, dotIndex)
+                    + "_" + ClickUtils.getClickVersion()
+                    + destination.substring(dotIndex);
+            }
+
             destination = realTargetDir + File.separator + destination;
 
             File destinationFile = new File(destination);
@@ -873,9 +912,10 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resources the array of classpath resource names
      * @param targetDir the target directory to deploy the resource to
+     * @param addVersion embedded the click vesion number in the deployed filenames
      */
     public static void deployFiles(ServletContext servletContext,
-            String[] resources, String targetDir) {
+            String[] resources, String targetDir, boolean addVersion) {
 
         if (resources == null) {
             throw new IllegalArgumentException("Null resources parameter");
@@ -884,7 +924,8 @@ public class ClickUtils {
         for (int i = 0; i < resources.length; i++) {
             ClickUtils.deployFile(servletContext,
                                   resources[i],
-                                  targetDir);
+                                  targetDir,
+                                  addVersion);
         }
     }
 
@@ -910,6 +951,7 @@ public class ClickUtils {
      * is only the reserved directory <code>click</code>
      */
     public static void deployFileList(ServletContext servletContext, Class controlClass, String targetDir) {
+
         String packageName = ClassUtils.getPackageName(controlClass);
         packageName = StringUtils.replaceChars(packageName, '.', '/');
         packageName = "/" + packageName;
@@ -918,6 +960,7 @@ public class ClickUtils {
         ClickLogger logger = ClickLogger.getInstance();
         String descriptorFile = packageName + "/" + controlName + ".files";
         logger.debug("Use deployment descriptor file:" + descriptorFile);
+
         try {
             InputStream is = getResourceAsStream(descriptorFile, ClickUtils.class);
             List fileList = IOUtils.readLines(is);
@@ -939,17 +982,19 @@ public class ClickUtils {
                 targetDirList.add(i, targetDir + "/" + destination);
                 fileList.set(i, packageName + "/" + filePath);
             }
+
             for (int i = 0; i < fileList.size(); i++) {
                 String source = (String) fileList.get(i);
                 String targetDirName = (String) targetDirList.get(i);
-                ClickUtils.deployFile(servletContext, source, targetDirName);
+                ClickUtils.deployFile(servletContext, source, targetDirName, false);
             }
+
         } catch (IOException e) {
             String msg = "error occured getting resource " + descriptorFile + ", error " + e;
             logger.warn(msg);
         }
-
     }
+
     /**
      * Return an encoded version of the <tt>Serializble</tt> object. The object
      * will be serialized, compressed and Base 64 encoded.
