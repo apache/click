@@ -45,7 +45,7 @@ public abstract class FormTablePage extends BorderPage {
         form.setErrorsPosition(Form.POSITION_TOP);
 
         // Table
-        table.setAttribute("class", "simple");
+        table.addStyleClass("simple");
         table.setAttribute("width", "500px;");
         table.setShowBanner(true);
         table.setPageSize(getMaxTableSize());
