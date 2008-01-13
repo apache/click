@@ -1,4 +1,4 @@
- /* Copyright 2004-2006 Malcolm A. Edgar
+ /* Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import javax.servlet.ServletContext;
 import net.sf.click.control.Field;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a ColorPicker control: &nbsp; &lt;input type='text'&gt;&lt;img&gt;.
@@ -85,8 +83,8 @@ public class ColorPicker extends Field {
 
     /** The HTML imports statements. */
     static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"${path}/click/prototype/prototype.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"${path}/click/colorpicker/colorpicker.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/colorpicker/colorpicker_{1}.js\"></script>\n";
 
     /** The color validation hexidecimal pattern. */
     static final Pattern HEX_PATTERN =
@@ -200,9 +198,7 @@ public class ColorPicker extends Field {
      * @return the HTML head import statements for prototype.js and colorpicker.js
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(HTML_IMPORTS, "${path}", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -272,9 +268,12 @@ public class ColorPicker extends Field {
      */
     public void onDeploy(ServletContext servletContext) {
         for (int i = 0; i < COLOR_PICKER_RESOURCES.length; i++) {
+            boolean version = COLOR_PICKER_RESOURCES[i].endsWith(".js");
+
             ClickUtils.deployFile(servletContext,
                                   COLOR_PICKER_RESOURCES[i],
-                                  "click/colorpicker");
+                                  "click/colorpicker",
+                                  version);
         }
     }
 

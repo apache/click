@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a tabbed panel with multiple sub-panels in 'tabs'.
@@ -110,11 +108,9 @@ public class TabbedPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The TabbedPanel.css style sheet import link.
-     */
-    public static final String PANEL_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/TabbedPanel.css\">\n";
+    /** The TabbedPanel.css style sheet import link. */
+    public static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedPanel_{1}.css\">\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -223,9 +219,7 @@ public class TabbedPanel extends Panel {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(PANEL_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -277,7 +271,8 @@ public class TabbedPanel extends Panel {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/panel/TabbedPanel.css",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

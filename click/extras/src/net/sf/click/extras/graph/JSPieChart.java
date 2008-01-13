@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Malcolm A. Edgar
+ * Copyright 2007-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,14 @@
  */
 package net.sf.click.extras.graph;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
-import java.util.List;
-import java.util.ArrayList;
 
+import net.sf.click.control.AbstractControl;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.control.AbstractControl;
 
 /**
  * Provides a Pie Chart control based on JavaScript only.
@@ -46,9 +45,9 @@ public class JSPieChart extends AbstractControl {
     private static final long serialVersionUID = 1L;
 
     /** The HTML imports statements. */
-    protected static final String CHART_IMPORTS =
-            "<script type=\"text/javascript\" src=\"$/click/graph/jsgraph/wz_jsgraphics.js\"></script>\n"
-            + "<script type=\"text/javascript\" src=\"$/click/graph/jsgraph/pie.js\"></script>\n";
+    protected static final String HTML_IMPORTS =
+            "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics_{1}.js\"></script>\n"
+            + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/pie_{1}.js\"></script>\n";
 
     /** Chart resource file names. */
     protected static final String[] CHART_RESOURCES = {
@@ -191,10 +190,7 @@ public class JSPieChart extends AbstractControl {
      * used by this control.
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-        StringBuffer buffer = new StringBuffer(100);
-        buffer.append(StringUtils.replace(CHART_IMPORTS, "$", path));
-        return buffer.toString();
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -217,7 +213,10 @@ public class JSPieChart extends AbstractControl {
      * @param servletContext the webapplication's servlet context
      */
     public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext, CHART_RESOURCES, "click/graph/jsgraph");
+        ClickUtils.deployFiles(servletContext,
+                               CHART_RESOURCES,
+                               "click/graph/jsgraph",
+                               true);
     }
 
     /**

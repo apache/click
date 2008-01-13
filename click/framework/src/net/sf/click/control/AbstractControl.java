@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Malcolm A. Edgar
+ * Copyright 2007-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -534,7 +534,16 @@ public abstract class AbstractControl implements Control {
         }
     }
 
-    // ----------------------------------protected methods
+    // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the Click Framework version string.
+     *
+     * @return the Click Framework version string
+     */
+    protected String getClickVersion() {
+        return getMessage("click-version");
+    }
 
     /**
      * Append all the controls attributes to the specified buffer.
@@ -547,7 +556,7 @@ public abstract class AbstractControl implements Control {
         }
     }
 
-    //---------------------------------------------- private methods
+    // -------------------------------------------------------- Private Methods
 
     /**
      * Parse the specified string of style attributes and return a Map

@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Malcolm A. Edgar
+ * Copyright 2007-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
 import net.sf.click.util.PropertyUtils;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a twin multiple Select box control to select items.
@@ -101,11 +99,9 @@ public class PickList extends Field {
 
     // -------------------------------------------------------------- Constants
 
-    /**
-     * The <tt>Palette.js</tt> imports statement.
-     */
-    public static final String PICKLIST_IMPORTS =
-        "<script type=\"text/javascript\" src=\"$/click/PickList.js\"></script>\n";
+    /** The <tt>Palette.js</tt> imports statement. */
+    public static final String HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/PickList_{1}.js\"></script>\n";
 
     /**
      * The field validation JavaScript function template.
@@ -365,9 +361,7 @@ public class PickList extends Field {
      * @return the HTML head import statements for the PickList.js
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(PICKLIST_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -468,7 +462,8 @@ public class PickList extends Field {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/PickList.js",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

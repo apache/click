@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.extras.control.TabbedForm;
 import net.sf.click.util.ClickUtils;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides Cayenne data aware tabbed Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -164,9 +162,7 @@ public class TabbedCayenneForm extends CayenneForm {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(TabbedForm.TABBED_FORM_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS, getContext());
     }
 
     /**
@@ -271,7 +267,8 @@ public class TabbedCayenneForm extends CayenneForm {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/TabbedForm.css",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

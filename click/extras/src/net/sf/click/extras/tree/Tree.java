@@ -1,5 +1,5 @@
 /*
- * Copyright 2007 Malcolm A. Edgar
+ * Copyright 2007-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,15 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import javax.servlet.ServletContext;
+
 import net.sf.click.Context;
-import net.sf.click.control.Decorator;
 import net.sf.click.control.AbstractControl;
+import net.sf.click.control.Decorator;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -158,15 +161,15 @@ public class Tree extends AbstractControl {
 
     /** The tree.css style sheet import link. */
     public static final String TREE_IMPORTS =
-            "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/tree/tree.css\"></link>\n";
+            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree_{1}.css\"></link>\n";
 
     /** Client side javascript import link. */
     public static final String JAVASCRIPT_IMPORTS =
-            "<script type=\"text/javascript\" src=\"$/click/tree/tree.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/tree_{1}.js\"></script>\n";
 
     /** Client side javascript cookie import link. */
     public static final String JAVASCRIPT_COOKIE_IMPORTS =
-            "<script type=\"text/javascript\" src=\"$/click/tree/cookie-helper.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/cookie-helper_{1}.js\"></script>\n";
 
     /** The Tree resource file names. */
     public static final String[] TREE_RESOURCES = {
@@ -437,15 +440,14 @@ public class Tree extends AbstractControl {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-        StringBuffer buffer = new StringBuffer(100);
+        HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
-            buffer.append(StringUtils.replace(JAVASCRIPT_IMPORTS, "$", path));
+            buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_IMPORTS, getContext()));
             if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
-                buffer.append(StringUtils.replace(JAVASCRIPT_COOKIE_IMPORTS, "$", path));
+                buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_COOKIE_IMPORTS, getContext()));
             }
         }
-        buffer.append(StringUtils.replace(TREE_IMPORTS, "$", path));
+        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS, getContext()));
         return buffer.toString();
     }
 
@@ -724,8 +726,15 @@ public class Tree extends AbstractControl {
      * @see net.sf.click.Control#onDeploy(ServletContext)
      */
     public void onDeploy(ServletContext servletContext) {
-        ClickUtils.deployFiles(servletContext, TREE_RESOURCES, "click/tree");
-        ClickUtils.deployFiles(servletContext, TREE_IMAGES, "click/tree/images");
+        ClickUtils.deployFiles(servletContext,
+                               TREE_RESOURCES,
+                               "click/tree",
+                               true);
+
+        ClickUtils.deployFiles(servletContext,
+                               TREE_IMAGES,
+                               "click/tree/images",
+                               false);
     }
 
     /**

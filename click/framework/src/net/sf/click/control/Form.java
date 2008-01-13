@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -492,8 +492,8 @@ public class Form extends AbstractControl {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/control.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"$/click/control.js\"></script>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control_{1}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/control_{1}.js\"></script>\n";
 
     /** The Form set field focus JavaScript. */
     protected static final String FOCUS_JAVASCRIPT =
@@ -1178,9 +1178,7 @@ public class Form extends AbstractControl {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(HTML_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -2031,7 +2029,7 @@ public class Form extends AbstractControl {
 
         final HttpServletRequest request = getContext().getRequest();
         final String submitTokenName =
-            SUBMIT_CHECK + getName() + "_" +getContext().getResourcePath();
+            SUBMIT_CHECK + getName() + "_" + getContext().getResourcePath();
 
         boolean isValidSubmit = true;
 

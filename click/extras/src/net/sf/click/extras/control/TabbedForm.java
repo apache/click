@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.util.ClickUtils;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Tabbed Form control: &nbsp; &lt;form method='post'&gt;.
@@ -122,11 +120,9 @@ public class TabbedForm extends Form {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The TabbedForm.css style sheet import link.
-     */
-    public static final String TABBED_FORM_IMPORTS = Form.HTML_IMPORTS
-        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/TabbedForm.css\"/>\n";
+    /** The TabbedForm.css style sheet import link. */
+    public static final String HTML_IMPORTS = Form.HTML_IMPORTS
+        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedForm_{1}.css\"/>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -240,9 +236,7 @@ public class TabbedForm extends Form {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
-        return StringUtils.replace(TABBED_FORM_IMPORTS, "$", path);
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -338,7 +332,8 @@ public class TabbedForm extends Form {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/TabbedForm.css",
-                              "click");
+                              "click",
+                              true);
     }
 
     /**

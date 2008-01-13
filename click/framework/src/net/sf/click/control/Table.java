@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,15 +162,15 @@ public class Table extends AbstractControl {
      * The table.css style sheet import link with a light contract sortable icon.
      */
     public static final String TABLE_IMPORTS_LIGHT =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style type=\"text/css\"> th.sortable a {background: url($/click/column-sortable-light.gif) center right no-repeat;} th.ascending a {background: url($/click/column-ascending-light.gif) center right no-repeat;} th.descending a {background: url($/click/column-descending-light.gif) center right no-repeat;} </style>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table_{1}.css\"/>\n"
+        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-light_{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-light_{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-light_{1}.gif) center right no-repeat;'}' </style>\n";
 
     /**
      * The table.css style sheet import link with a dark contract sortable icon.
      */
     public static final String TABLE_IMPORTS_DARK =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"$/click/table.css\"/>\n"
-        + "<style type=\"text/css\"> th.sortable a {background: url($/click/column-sortable-dark.gif) center right no-repeat;} th.ascending a {background: url($/click/column-ascending-dark.gif) center right no-repeat;} th.descending a {background: url($/click/column-descending-dark.gif) center right no-repeat;} </style>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table_{1}.css\"/>\n"
+        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark_{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark_{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark_{1}.gif) center right no-repeat;'}' </style>\n";
 
     /** The table top banner position. */
     public static final int POSITION_TOP = 1;
@@ -579,13 +579,11 @@ public class Table extends AbstractControl {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        String path = getContext().getRequest().getContextPath();
-
         if (DARK_STYLES.contains(getAttribute("class"))) {
-            return StringUtils.replace(TABLE_IMPORTS_DARK, "$", path);
+            return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK, getContext());
 
         } else {
-            return StringUtils.replace(TABLE_IMPORTS_LIGHT, "$", path);
+            return ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT, getContext());
         }
     }
 
@@ -852,7 +850,12 @@ public class Table extends AbstractControl {
                 "/net/sf/click/control/table.css"
             };
 
-        ClickUtils.deployFiles(servletContext, files, "click");
+        for (int i = 0; i < files.length; i++) {
+            ClickUtils.deployFile(servletContext,
+                                  files[i],
+                                  "click",
+                                  true);
+        }
     }
 
     /**

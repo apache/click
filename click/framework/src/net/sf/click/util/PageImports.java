@@ -15,9 +15,8 @@
  */
 package net.sf.click.util;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import net.sf.click.Control;
 import net.sf.click.Page;
@@ -47,6 +46,23 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;body&gt;
  * &lt;/html&gt; </pre>
  *
+ * You should also follow the performance best practice by importing CSS includes
+ * in the head section, then include the JS imports after the html body.
+ * For example:
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ *  &lt;head&gt;
+ *   <span class="blue">$cssImports</span>
+ *  &lt;/head&gt;
+ *  &lt;body&gt;
+ *   <span class="red">$form</span>
+ *   &lt;br/&gt;
+ *   <span class="red">$table</span>
+ *  &lt;body&gt;
+ * &lt;/html&gt;
+ * <span class="blue">$jsImports</span>
+ * </pre>
+ *
  * Please also see {@link Control#getHtmlImports()}.
  *
  * @see Format
@@ -55,14 +71,22 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PageImports {
 
-    /** The cached page imports value. */
-    protected String cachedPageImports;
+    /** The page imports initialized flag. */
+    protected boolean initialize = false;
 
-    /** The set of included imports. */
-    protected Set includeSet;
+    /** The list of CSS import lines. */
+    protected List cssImports = new ArrayList();
+
+    /** The list of JS import lines. */
+    protected List jsImports = new ArrayList();
+
+    /** The list of JS script block lines. */
+    protected List jsScripts = new ArrayList();
 
     /** The page instance. */
     protected final Page page;
+
+    // ------------------------------------------------------------ Constructor
 
     /**
      * Create a page control HTML includes object.
@@ -76,59 +100,129 @@ public class PageImports {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return the Page's set of control HTML head imports.
+     * Return a HTML string of all the page's HTML imports, including:
+     * CSS imports, JS imports and JS script blocks.
      *
-     * @see Object#toString()
-     *
-     * @return the Page's set of control HTML head imports
+     * @return a HTML string of all the page's HTML imports, including:
+     * CSS imports, JS imports and JS script blocks.
      */
-    public String toString() {
-        if (cachedPageImports != null) {
-            return cachedPageImports;
+    public String getAllIncludes() {
+        processPageControls();
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        for (int i = 0; i  < cssImports.size(); i++) {
+            String line = cssImports.get(i).toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+        for (int i = 0; i  < jsImports.size(); i++) {
+            String line = jsImports.get(i).toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+        for (int i = 0; i  < jsScripts.size(); i++) {
+            String line = jsScripts.get(i).toString();
+            buffer.append(line);
+            buffer.append('\n');
         }
 
-        if (!page.hasControls()) {
-            return "";
+        return buffer.toString();
+    }
+
+    /**
+     * Return a HTML string of all the page's HTML CSS imports.
+     *
+     * @return a HTML string of all the page's HTML CSS imports.
+     */
+    public String getCssImports() {
+        processPageControls();
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        for (int i = 0; i  < cssImports.size(); i++) {
+            String line = cssImports.get(i).toString();
+            buffer.append(line);
+            if (i < cssImports.size() - 1) {
+                buffer.append('\n');
+            }
         }
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(80);
-        includeSet = null;
+        return buffer.toString();
+    }
 
-        for (int i = 0; i < page.getControls().size(); i++) {
-            Control control = (Control) page.getControls().get(i);
+    /**
+     * Return a HTML string of all the page's HTML JS imports and scripts.
+     *
+     * @return a HTML string of all the page's HTML JS imports and scripts.
+     */
+    public String getJsImports() {
+        processPageControls();
 
-            processControl(control, buffer);
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+
+        for (int i = 0; i  < jsImports.size(); i++) {
+            String line = jsImports.get(i).toString();
+            buffer.append(line);
+            if (i < jsImports.size() - 1 || !jsScripts.isEmpty()) {
+                buffer.append('\n');
+            }
         }
 
-        cachedPageImports = buffer.toString();
+        for (int i = 0; i  < jsScripts.size(); i++) {
+            String line = jsScripts.get(i).toString();
+            buffer.append(line);
+            if (i < jsScripts.size() - 1) {
+                buffer.append('\n');
+            }
+        }
 
-        return cachedPageImports;
+        return buffer.toString();
     }
 
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Process the given control adding its imports to the buffer and processing
-     * any child controls it may contain.
-     *
-     * @param control the control to add
-     * @param buffer the import lines buffer
+     * Process the Page's set of control HTML head imports.
      */
-    protected void processControl(Control control, HtmlStringBuffer buffer) {
-        addImport(control.getHtmlImports(), buffer);
+    protected void processPageControls() {
+        if (initialize) {
+            return;
+        }
+
+        initialize = true;
+
+        if (!page.hasControls()) {
+            return;
+        }
+
+        for (int i = 0; i < page.getControls().size(); i++) {
+            Control control = (Control) page.getControls().get(i);
+
+            processControl(control);
+        }
+    }
+
+    /**
+     * Process the given control HTML imports.
+     *
+     * @param control the control to process
+     */
+    protected void processControl(Control control) {
+        processLine(control.getHtmlImports());
 
         if (control instanceof Form) {
             Form form = (Form) control;
             List controls = form.getFieldList();
             for (int i = 0, size = controls.size(); i < size; i++) {
-                processControl((Control) controls.get(i), buffer);
+                processControl((Control) controls.get(i));
             }
 
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
             List controls = fieldSet.getFieldList();
             for (int i = 0, size = controls.size(); i < size; i++) {
-                processControl((Control) controls.get(i), buffer);
+                processControl((Control) controls.get(i));
             }
 
         } else if (control instanceof Panel) {
@@ -136,7 +230,7 @@ public class PageImports {
             if (panel.hasControls()) {
                 List controls = panel.getControls();
                 for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i), buffer);
+                    processControl((Control) controls.get(i));
                 }
             }
 
@@ -145,46 +239,66 @@ public class PageImports {
             if (table.hasControls()) {
                 List controls = table.getControls();
                 for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i), buffer);
+                    processControl((Control) controls.get(i));
                 }
             }
         }
     }
 
     /**
-     * Add the HTML imports value to the string buffer, ensuring the same import
-     * line is not repeatedly added.
+     * Process the given control HTML import line.
      *
-     * @param value the control HTML header imports value
-     * @param buffer the string buffer to append the import lines to
+     * @param value the HTML import line to process
      */
-    protected void addImport(String value, HtmlStringBuffer buffer) {
+    protected void processLine(String value) {
         if (value == null || value.length() == 0) {
             return;
         }
 
         String[] lines = StringUtils.split(value, '\n');
 
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            if (!getIncludeSet().contains(line)) {
-                buffer.append(line);
-                buffer.append('\n');
-                getIncludeSet().add(line);
+        for (int i = 0; i  < lines.length; i++) {
+            String line = lines[i].trim().toLowerCase();
+            if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
+                addToList(lines[i], cssImports);
+
+            } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
+                addToList(lines[i], cssImports);
+
+            } else if (line.startsWith("<script")) {
+                if (line.indexOf(" src=") != -1) {
+                    addToList(lines[i], jsImports);
+
+                } else {
+                    addToList(lines[i], jsScripts);
+
+                }
+            } else {
+                throw new IllegalArgumentException("Unknown include type: " + lines[i]);
             }
         }
     }
 
     /**
-     * Return the set of included HTML control imports. This set will not be
-     * filled until the {@link #toString()} method has been invoked.
+     * Add the given string item to the list if it is not already present.
      *
-     * @return the set of included HTML control imports
+     * @param item the line item to add
+     * @param list the list to add the item to
      */
-    protected Set getIncludeSet() {
-        if (includeSet == null) {
-            includeSet = new HashSet();
+    protected void addToList(String item, List list) {
+        item = item.trim();
+
+        boolean found = false;
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(item)) {
+                found = true;
+                break;
+            }
         }
-        return includeSet;
+
+        if (!found) {
+            list.add(item);
+        }
     }
 }

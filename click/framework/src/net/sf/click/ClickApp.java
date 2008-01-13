@@ -718,23 +718,28 @@ class ClickApp implements EntityResolver {
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/control.css",
-                              "click");
+                              "click",
+                              true);
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/control.js",
-                              "click");
+                              "click",
+                              true);
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/util/error.htm",
-                              "click");
+                              "click",
+                              false);
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/not-found.htm",
-                              "click");
+                              "click",
+                              false);
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/VM_global_library.vm",
-                              "click");
+                              "click",
+                              false);
 
         deployControls(getResourceRootElement("/click-controls.xml"));
         deployControls(getResourceRootElement("/extras-controls.xml"));
