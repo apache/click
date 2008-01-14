@@ -352,7 +352,9 @@ public abstract class AbstractControl implements Control {
      *
      * Will render the HTML as:
      * <pre class="codeHtml">
-     * &lt;a href=".." <span class="st">style</span>=<span class="st">"color:red;border:1px solid black;"</span>&gt;<span class="st">Add</span>&lt;/a&gt; </pre>
+     * &lt;a href=".." <span class="st">style</span>=<span class="st">"color:red;border:1px solid black;"</span>&gt;<span class="st">Add</span>&lt;/a&gt;
+     * </pre>
+     * To remove an existing style, set the value to <tt>null</tt>.
      *
      * @param name the CSS style name
      * @param value the CSS style value
