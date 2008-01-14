@@ -2,6 +2,7 @@ package net.sf.click.control;
 
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
+import net.sf.click.MockFactory;
 
 /**
  * Test for manipulating html attributes of Click Controls.
@@ -19,8 +20,14 @@ public class AttributeTest extends TestCase {
     public void testAttributesAndStyles() {
         MockContext.initContext();
         
-        //Check that multiple styles are rendered as expected
+        //Check that null styles are rendered as expected
         TextField nameField = new TextField("nameFld");
+        nameField.setStyle("color", null);
+        //Assert that no styles are generated
+        assertFalse(nameField.hasAttributes());
+
+        //Check that multiple styles are rendered as expected
+        nameField = new TextField("nameFld");
         nameField.setStyle("color", "red");
         nameField.setStyle("border", "1px solid");
         String expected = "style=\"color:red;border:1px solid;\"";
@@ -34,11 +41,11 @@ public class AttributeTest extends TestCase {
         nameField.setAttribute("style", null);
         assertFalse(nameField.hasAttributes());
 
-        //Check that setStyle("style", null) will remove all styles
+        //Check that setStyle("style", null) will remove the color style
         nameField = new TextField("nameFld");
         nameField.setStyle("color", "red");
         nameField.setStyle("color", null);
-        assertFalse(nameField.hasAttributes());
+        assertTrue(nameField.getStyle("color") == null);
 
         //Check that setAttribute("style", styles) will be parsed and added
         //to the styles map
