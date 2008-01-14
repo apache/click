@@ -50,9 +50,9 @@ public class CheckListDemo extends BorderPage{
 
         sortableCheckList = new CheckList("sortableList", "Sortable List ");
         sortableCheckList.setOptionList(SORTABLE_OPTIONS);
-        sortableCheckList.setAttribute("class", "cl2");
+        sortableCheckList.addStyleClass("cl2");
         sortableCheckList.setSortable(true);
-        sortableCheckList.addStyle("width: 100%;");
+        sortableCheckList.setStyle("width", "100%;");
         form.add(sortableCheckList);
 
         form.add(new Submit("ok", "  OK  ",  this, "onOkClick"));
