@@ -229,6 +229,11 @@ public class Checkbox extends Field {
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("title", getTitle());
+        if (isValid()) {
+            removeStyleClass("error");
+        } else {
+            addStyleClass("error");
+        }
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
@@ -240,9 +245,6 @@ public class Checkbox extends Field {
 
         if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
-        }
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
         }
 
         buffer.elementEnd();

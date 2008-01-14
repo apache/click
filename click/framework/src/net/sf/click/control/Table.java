@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
@@ -579,7 +580,25 @@ public class Table extends AbstractControl {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        if (DARK_STYLES.contains(getAttribute("class"))) {
+
+        // Flag indicating which import style to return
+        boolean useDarkStyle = false;
+
+        if (hasAttribute("class")) {
+
+            String styleClasses = getAttribute("class");
+
+            StringTokenizer tokens = new StringTokenizer(styleClasses, " ");
+            while (tokens.hasMoreTokens()) {
+                String token = tokens.nextToken();
+                if (DARK_STYLES.contains(token)) {
+                    useDarkStyle = true;
+                    break;
+                }
+            }
+        }
+
+        if (useDarkStyle) {
             return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK, getContext());
 
         } else {

@@ -286,6 +286,16 @@ public class TextArea extends Field {
         buffer.appendAttribute("rows", getRows());
         buffer.appendAttribute("cols", getCols());
         buffer.appendAttribute("title", getTitle());
+        if (isValid()) {
+            removeStyleClass("error");
+            if (isDisabled()) {
+                addStyleClass("disabled");
+            } else {
+                removeStyleClass("disabled");
+            }
+        } else {
+            addStyleClass("error");
+        }
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
@@ -297,11 +307,6 @@ public class TextArea extends Field {
         }
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
-        }
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
-        } else if (isDisabled()) {
-            buffer.appendAttribute("class", "disabled");
         }
 
         buffer.closeTag();
