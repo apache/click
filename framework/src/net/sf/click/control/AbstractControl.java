@@ -366,10 +366,16 @@ public abstract class AbstractControl implements Control {
 
         String oldStyles = getAttribute("style");
 
-        //If existing style and value is not null, just append the new style
-        if (oldStyles == null && value != null) {
-            getAttributes().put("style", name + ":" + value + ";");
-            return;
+        if (oldStyles == null) {
+
+            if (value == null) {
+                //Exit early
+                return;
+            } else {
+                //If value is not null, append the new style and return
+                getAttributes().put("style", name + ":" + value + ";");
+                return;
+            }
         }
 
         //Create buffer and estimate the new size
