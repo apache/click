@@ -641,6 +641,11 @@ public class Select extends Field {
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
+        if (isValid()) {
+            removeStyleClass("error");
+        } else {
+            addStyleClass("error");
+        }
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
@@ -652,9 +657,6 @@ public class Select extends Field {
 
         if (isDisabled() || isReadonly()) {
             buffer.appendAttributeDisabled();
-        }
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
         }
 
         buffer.closeTag();

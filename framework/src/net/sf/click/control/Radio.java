@@ -297,6 +297,11 @@ public class Radio extends Field {
         buffer.appendAttribute("value", getValue());
         buffer.appendAttribute("id", id);
         buffer.appendAttribute("title", getTitle());
+        if (isValid()) {
+            removeStyleClass("error");
+        } else {
+            addStyleClass("error");
+        }
         if (isChecked()) {
             buffer.appendAttribute("checked", "checked");
         }
@@ -308,9 +313,6 @@ public class Radio extends Field {
         }
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
-        }
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
         }
 
         buffer.elementEnd();

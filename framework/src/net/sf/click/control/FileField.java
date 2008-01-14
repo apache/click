@@ -245,6 +245,11 @@ public class FileField extends Field {
         buffer.appendAttribute("value", getValue());
         buffer.appendAttribute("size", getSize());
         buffer.appendAttribute("title", getTitle());
+        if (isValid()) {
+            removeStyleClass("error");
+        } else {
+            addStyleClass("error");
+        }
         if (getTabIndex() > 0) {
             buffer.appendAttribute("tabindex", getTabIndex());
         }
@@ -256,9 +261,6 @@ public class FileField extends Field {
         }
         if (isReadonly()) {
             buffer.appendAttributeReadonly();
-        }
-        if (!isValid()) {
-            buffer.appendAttribute("class", "error");
         }
 
         buffer.elementEnd();
