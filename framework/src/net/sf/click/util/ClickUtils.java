@@ -912,7 +912,7 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resources the array of classpath resource names
      * @param targetDir the target directory to deploy the resource to
-     * @param addVersion embedded the click vesion number in the deployed filenames
+     * @param addVersion embedded the click version number in the deployed filenames
      */
     public static void deployFiles(ServletContext servletContext,
             String[] resources, String targetDir, boolean addVersion) {
