@@ -39,43 +39,51 @@ import org.apache.commons.lang.StringUtils;
  * Provides a scrollable check list. This is an implementation of the Checklist
  * from <a href="http://c82.net/article.php?ID=25">Check it don't select it</a>
  * <p/>
- * A scrollable check list is a more userfriendly substitution for
+ * A scrollable check list is a more user friendly substitution for
  * multiple-select-boxes. It is a scrollabe div which has many select-boxes.
  * <p/>
- * To make the CheckList scrollable set the height of the CheckList through
- * {@link #setHeight(String)}. <b>Note when setting the height it is recommended
- * that the CheckList should not be sortable, because of browser incompatibilities</b>
+ * To make the CheckList scrollable, set the height of the CheckList through
+ * {@link #setHeight(String)}.
+ * <p/>
+ * <b>Note</b> when setting the height it is recommended that the CheckList
+ * should not be sortable, because of browser incompatibilities.
  * <p/>
  * The CheckList is also sortable by drag-drop if the
  * {@link #setSortable(boolean)} property is set to true. In this case the
  * method {@link #getSortorder()} returns the keys of all the options whether
- * they where selected or not in the order provided by the user. Sortable is
- * provided by scriptaculous which only supports on IE6, FF and Safari1.2 and higher. This
- * control is only tested on IE6 and FF on windows. With IE the text of the dragged element
- * has a black-outline which does not look good. To turn this off define an explicit
- * back-ground color for the &lt;li&gt; elements. Typically you will do this in a
- * style: .listClass li {background-color: #xxx}, where the listClass is set through
- * {@link #setHtmlClass(String)}.
+ * they where selected or not in the order provided by the user.
+ * <p/>
+ * Sortable is provided by scriptaculous which is only supported on IE6, FF and
+ * Safari1.2 and higher. This control is only tested on IE6 and FF on Windows.
+ * With IE the text of the dragged element has a black-outline which does not
+ * look good. To turn this off define an explicit back-ground color for the
+ * &lt;li&gt; elements. Typically you will do this in a style: .listClass li
+ * {background-color: #xxx}, where the listClass is set through
+ * {@link #addStyleClass(String)}.
  * <p/>
  * If a select is required at least one item must be
  * selected so that the input is valid. Other validations are not done.
  * <p/>
  * The Control listener will be invoked in any case whether the CheckList is valid or not.
  * <p/>
- * The values of the CheckList are provided by {@link net.sf.click.control.Option} objects
- * like for a Select. To populate the CheckList with Options use the add methods.
- * The label of the Option is shown to the user and the value is the what is provided in
- * the {@link #getValues()} and the {@link #getSortorder()} returned Lists.
+ * The values of the CheckList are provided by
+ * {@link net.sf.click.control.Option} instances. To populate the CheckList with
+ * Options, use the add methods.
  * <p/>
- * The selected values can be retrieved from {@link #getValues()}. The get/setValue()
- * property is not supported. The selected values are the
+ * The label of the Option is shown to the user and the value is what is
+ * provided in the {@link #getSelectedValues()} and {@link #getSortorder()}
+ * Lists.
+ * <p/>
+ * The selected values can be retrieved from {@link #getSelectedValues()}. The
+ * get/setValue() property is not supported.
  * <p/>
  * The select uses the /click/checklist.css style. By providing a style which
  * extends this style the appearance of the list can be changed.
- * To set the additional style class use setAttribute("class","additionalClass").
+ * <p/>
+ * To set the additional style class use {@link #addStyleClass(String)}.
  * This will append the given class to the default class of this control.
- * Alternatively {@link #addStyle(String)} can be used to set the style of the
- * outer div.
+ * Alternatively {@link #setStyle(String, String)} can be used to set the style
+ * of the outer div.
  * <p/>
  * For an example please look at the click-examples and the at the above blog.
  *
@@ -357,6 +365,8 @@ public class CheckList extends Field {
      * list.addStyle(<span class="st">"&quot;width: 100%; height: 25em&quot;"</span>); </pre>
      *
      * @param style the style name:value pair without a ending ;
+     *
+     * @deprecated use @{link #setStyle(String, String)}
      */
     public void addStyle(String style) {
         if (StringUtils.isBlank(style)) {
@@ -421,16 +431,20 @@ public class CheckList extends Field {
      * class="checkList my-class" where my-class is
      * the set class. The default value is null.
      *
+     * @deprecated use {@link #addStyleClass(String)} instead
+     *
      * @param clazz the class to set or null
      */
     public void setHtmlClass(String clazz) {
-        setAttribute("class", clazz);
+        addStyleClass(clazz);
     }
 
     /**
      * The html class to set on this control.
      *
      * @see #setHtmlClass(String)
+     *
+     * @deprecated use {@link #getAttribute(String)} instead
      *
      * @return the class or null (default null)
      */
@@ -532,7 +546,7 @@ public class CheckList extends Field {
     }
     /**
      * Whether the list should be drag-drop sortable. This is supported by
-     * scriptacolus. Note when the list also has a size than this might not work
+     * scriptaculous. Note when the list also has a size than this might not work
      * on different browsers.
      *
      * @param sortable default is false.
@@ -633,13 +647,6 @@ public class CheckList extends Field {
         args[2] = String.valueOf(isRequired());
         args[3] = getMessage("field-required-error", getErrorLabel());
 
-//        if (!getRadioList().isEmpty()) {
-//            Radio radio = (Radio) getRadioList().get(0);
-//            args[4] = radio.getId();
-//        } else {
-//            args[4] = "";
-//        }
-
         return MessageFormat.format(VALIDATE_CHECKLIST_FUNCTION, args);
     }
 
@@ -659,8 +666,6 @@ public class CheckList extends Field {
 
         // Load the selected items.
         this.values = new ArrayList();
-
-        // TODO: resolve multiple values when multipart/form-data
 
         String[] values = getContext().getRequestParameterValues(getName());
 
@@ -754,6 +759,8 @@ public class CheckList extends Field {
         buffer.appendAttribute("id", getId());
 
         // style class
+        addStyleClass(STYLE_CLASS);
+        /*
         buffer.append(" class=\"");
         buffer.append(STYLE_CLASS);
         String classAttr = getAttribute("class");
@@ -762,46 +769,24 @@ public class CheckList extends Field {
             buffer.append(" ");
             buffer.append(classAttr);
         }
-
-        if (!isValid()) {
-            buffer.append(" error");
-        }
-        buffer.append("\"");
-
-        // the style
-        String style = getAttribute("style");
-        if (style != null) {
-            setAttribute("style", null);
-        }
-
-        String styleValue = style == null ? "" : style;
-        if (getHeight() != null) {
-            styleValue = "height: " + getHeight() + ";" + styleValue;
-        }
-
-        if (!sortable || getHeight() != null) {
-            styleValue = "overflow: auto;" + styleValue;
+       */
+        if (isValid()) {
+            removeStyleClass("error");
+            //buffer.append(" error");
         } else {
-            styleValue = "overflow: hidden;" + styleValue;
+            addStyleClass("error");
         }
 
+        // set the style
+        setStyle("height", getHeight());
 
-        if (styleValue.length() > 0) {
-            buffer.appendAttribute("style", styleValue);
+        if (sortable && getHeight() == null) {
+            setStyle("overflow", "hidden");
+        } else {
+            setStyle("overflow", "auto");
         }
 
-        // other attributes
-        if (hasAttributes()) {
-            buffer.appendAttributes(getAttributes());
-        }
-
-        // reset attrubutes
-        if (classAttr != null) {
-            setAttribute("class", classAttr);
-        }
-        if (style != null) {
-            setAttribute("style", style);
-        }
+        appendAttributes(buffer);
 
         buffer.closeTag();
 
@@ -839,8 +824,8 @@ public class CheckList extends Field {
                     buffer.appendAttribute("style", "cursor:default;");
                 }
 
-                // wheter checked
-                if (getValues().contains(option.getValue())) {
+                // set checked status
+                if (getSelectedValues().contains(option.getValue())) {
                     buffer.appendAttribute("checked", "checked");
                 }
 
@@ -899,7 +884,7 @@ public class CheckList extends Field {
      */
     public void validate() {
         if (isRequired()) {
-            if (getValues().isEmpty()) {
+            if (getSelectedValues().isEmpty()) {
                 setErrorMessage("select-error");
             }
         }
