@@ -198,7 +198,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		registerProposal(result, offset, matchString, "#set()", "set", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#foreach()", "foreach", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#else", "else", IMAGE_DIRECTIVE);
-		registerProposal(result, offset, matchString, "#elsif()", "elsif", IMAGE_DIRECTIVE);
+		registerProposal(result, offset, matchString, "#elseif()", "elsif", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#end", "end", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#include()", "include", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#parse()", "parse", IMAGE_DIRECTIVE);
