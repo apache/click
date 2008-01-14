@@ -306,15 +306,21 @@ public class ColorPicker extends Field {
                 textFieldAttributes.appendAttributeReadonly();
             }
             textFieldAttributes.appendAttribute("maxlength", 7);
-            if (!isValid()) {
-                textFieldAttributes.appendAttribute("class", "error");
-            } else if (isDisabled()) {
-                textFieldAttributes.appendAttribute("class", "disabled");
+
+            if (isValid()) {
+                removeStyleClass("error");
+                if (isDisabled()) {
+                    addStyleClass("disabled");
+                } else {
+                    removeStyleClass("disabled");
+                }
+            } else {
+                addStyleClass("error");
             }
         }
-        if (hasAttributes()) {
-            textFieldAttributes.appendAttributes(getAttributes());
-        }
+
+        appendAttributes(textFieldAttributes);
+
         if (isDisabled()) {
             textFieldAttributes.appendAttributeDisabled();
         }
