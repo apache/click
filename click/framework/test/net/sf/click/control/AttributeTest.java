@@ -2,7 +2,6 @@ package net.sf.click.control;
 
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
-import net.sf.click.MockFactory;
 
 /**
  * Test for manipulating html attributes of Click Controls.
