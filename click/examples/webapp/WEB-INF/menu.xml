@@ -11,7 +11,7 @@
 	</menu>
 
 	<menu label="Intro Examples" path="#">
-    	<menu label="Hello World" path="introduction/hello-world.htm"/>
+    <menu label="Hello World" path="introduction/hello-world.htm"/>
 		<menu label="Control Listener" path="introduction/control-listener.htm"/>
 		<menu separator="true"/>
 		<menu label="Simple Table" path="introduction/simple-table.htm"/>
@@ -36,27 +36,27 @@
 		<menu label="Page Navigation" path="navigation-a.htm"/>
 		<menu label="Page Flow" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
-      	<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
-      	<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
+    <menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
+    <menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
 		<menu label="Velocity Action Table" path="control/action-table.htm"/>
 	</menu>
-	
+
 	<menu label=" Controls" path="#"  imageSrc="/images/icons-16px/text_rich_colored.png">
-     	<menu label="Action Controls" path="control/action-demo.htm"/>
+    <menu label="Action Controls" path="control/action-demo.htm"/>
 		<menu label="CheckList" path="control/check-list-demo.htm"/>
 		<menu label="FieldSet" path="control/field-set-demo.htm"/>
 		<menu label="FileField" path="control/file-upload.htm"/>
 		<menu label="ImageSubmit" path="control/image-demo.htm"/>
-     	<menu label="Link Controls" path="control/link-demo.htm"/>
+    <menu label="Link Controls" path="control/link-demo.htm"/>
 		<menu label="Select" path="control/select-demo.htm"/>
 		<menu separator="true"/>
 		<menu label="Menu" path="control/menu-documentation.htm"/>
 		<menu label="PickList" path="control/pick-list-demo.htm"/>
 		<menu label="RegexField" path="control/regex-demo.htm"/>
 		<menu label="RichTextArea" path="control/email-form.htm"/>
-   	</menu>
+ 	</menu>
    
-   	<menu label=" Forms" path="#" imageSrc="/images/form.png">
+  <menu label=" Forms" path="#" imageSrc="/images/form.png">
 		<menu label="Standard Form Controls" path="form/standard-controls-form.htm"/>
 		<menu label="Extra Form Controls" path="form/extra-controls-form.htm"/>
 		<menu separator="true"/>
@@ -64,9 +64,10 @@
 		<menu label="Form Layout" path="form/form-layout.htm"/>
 		<menu label="Search Form" path="form/search-form.htm"/>
 		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
-   	</menu>
+    <menu label="Multiple Forms" path="form/multiple-forms-demo.htm"/>
+  </menu>
    
-   	<menu label=" Table" path="#" imageSrc="/images/icons-16px/table.png">
+  <menu label=" Table" path="#" imageSrc="/images/icons-16px/table.png">
 		<menu label="Table Styles" path="table/table-styles.htm"/>
 		<menu label="Table Paging" path="table/table-paging.htm"/>
 		<menu label="Table Sorting" path="table/table-sorting.htm"/>
@@ -76,20 +77,20 @@
 		<menu separator="true"/>
 		<menu label="Edit Table" path="table/edit-table.htm"/>
 		<menu label="Search Table" path="table/search-table.htm"/>
-   	</menu>
+  </menu>
 
-   	<menu label=" Tree" path="#" imageSrc="/images/icons-16px/text_tree.png">
+  <menu label=" Tree" path="#" imageSrc="/images/icons-16px/text_tree.png">
 		<menu label="Basic Tree" path="tree/plain-tree-page.htm"/>
 		<menu label="Advanced Tree" path="tree/advanced-tree-page.htm"/>
 		<menu label="Checkbox Tree" path="tree/checkbox-tree-page.htm"/>
-   	</menu>
+  </menu>
 
-   	<menu label=" Panel" path="#" imageSrc="/images/icons-16px/window_split_ver.png">
+  <menu label=" Panel" path="#" imageSrc="/images/icons-16px/window_split_ver.png">
 		<menu label="Simple Panel" path="panel/simple-panel-demo.htm"/>
 		<menu label="List Panel" path="panel/list-panel-demo.htm"/>
 		<menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
 		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
-   	</menu>
+  </menu>
    
 	<menu label=" Charts" path="#" imageSrc="/images/icons-16px/column-chart.png">
 		<menu label="Bar Chart" path="graph/bar-chart.htm"/>
