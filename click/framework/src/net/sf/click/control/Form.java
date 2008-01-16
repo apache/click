@@ -1806,6 +1806,7 @@ public class Form extends AbstractControl {
      * @param page the page invoking the Form submit check
      * @param redirectPath the path to redirect invalid submissions to
      * @return true if the form submit is OK or false otherwise
+     * @throws IllegalArgumentException if the page or redirectPath is null
      */
     public boolean onSubmitCheck(Page page, String redirectPath) {
         if (page == null) {
@@ -1852,6 +1853,7 @@ public class Form extends AbstractControl {
      * @param page the page invoking the Form submit check
      * @param pageClass the page class to redirect invalid submissions to
      * @return true if the form submit is OK or false otherwise
+     * @throws IllegalArgumentException if the page or pageClass is null
      */
     public boolean onSubmitCheck(Page page, Class pageClass) {
         if (page == null) {
@@ -1888,7 +1890,7 @@ public class Form extends AbstractControl {
      *     ..
      *
      *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"onInvalidSubmit"</span>);
+     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="kw">this</span>, <span class="st">"onInvalidSubmit"</span>);
      *     }
      *
      *     <span class="kw">public boolean</span> onInvalidSubmit() {
@@ -1901,16 +1903,22 @@ public class Form extends AbstractControl {
      * Form submit checks should generally be combined with the Post-Redirect
      * pattern which provides a better user experience when pages are refreshed.
      *
+     * @param page the page invoking the Form submit check
      * @param submitListener the listener object to call when an invalid submit
      *      occurs
      * @param submitListenerMethod the listener method to invoke when an
      *      invalid submit occurs
      * @return true if the form submit is valid, or the return value of the
      *      listener method otherwise
+     * @throws IllegalArgumentException if the page, submitListener or
+     *      submitListenerMethod is null
      */
-    public boolean onSubmitCheck(Object submitListener,
+    public boolean onSubmitCheck(Page page, Object submitListener,
             String submitListenerMethod) {
 
+        if (page == null) {
+            throw new IllegalArgumentException("Null page parameter");
+        }
         if (submitListener == null) {
             throw new IllegalArgumentException("Null submitListener parameter");
         }
@@ -2027,6 +2035,10 @@ public class Form extends AbstractControl {
      */
     protected boolean performSubmitCheck() {
 
+        if (StringUtils.isBlank(getName())) {
+            throw new IllegalStateException("Form name is not defined.");
+        }
+
         final HttpServletRequest request = getContext().getRequest();
         final String submitTokenName =
             SUBMIT_CHECK + getName() + "_" + getContext().getResourcePath();
@@ -2046,10 +2058,10 @@ public class Form extends AbstractControl {
 
             if (sessionTime != null) {
                 String value = getContext().getRequestParameter(submitTokenName);
-                Long formTime = Long.valueOf(value);
-                isValidSubmit = formTime.equals(sessionTime);
+                    Long formTime = Long.valueOf(value);
+                    isValidSubmit = formTime.equals(sessionTime);
+                }
             }
-        }
 
         // Save state info to form and session
         final Long time = new Long(System.currentTimeMillis());
