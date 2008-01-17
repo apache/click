@@ -22,9 +22,9 @@
         </li>
       #end
     #end
-        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=WEB-INF/classes/$srcPath" title="Page Java source"><img border="0" class="link" alt="" src="/click-examples/images/icons-16px/text_code_java.png"/> Page Java</a>
+        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=WEB-INF/classes/$srcPath" title="Page Java source"><img border="0" class="link" alt="" src="/click-examples/assets/images/icons-16px/text_code_java.png"/> Page Java</a>
         </li>
-        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=$path" title="Page Content source"><img border="0" class="link" alt="" src="/click-examples/images/icons-16px/text_marked.png"/> Page HTML</a>
+        <li class="topitem"><a target="_blank" href="$context/source-viewer.htm?filename=$path" title="Page Content source"><img border="0" class="link" alt="" src="/click-examples/assets/images/icons-16px/text_marked.png"/> Page HTML</a>
         </li>
   </ul>  
  </div>

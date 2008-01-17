@@ -43,7 +43,7 @@
 		<filter-class>net.sf.click.extras.filter.PerformanceFilter</filter-class>
 		<init-param>
 			<param-name>cachable-paths</param-name>
- 			<param-value>/images/*, *.css</param-value>
+ 			<param-value>/assets/*</param-value>
 		</init-param>
 	</filter>
  	
