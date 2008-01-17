@@ -13,6 +13,10 @@ import org.springframework.context.ApplicationContextAware;
 
 /**
  * Provides a Spring Services page for subclasses to extend.
+ * <p/>
+ * Please note this page is designed for extending by Page subclasses and will
+ * not be auto mapped as there is not page template template name matching the
+ * Pages class name <tt>SpringPage</tt>.
  *
  * @author Malcolm Edgar
  */
