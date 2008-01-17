@@ -51,10 +51,12 @@ ids must match.
 The Rico ajaxEngine is initialised through the JavaScript page body onload function:
 
 <pre class="codeHtml">
-&lt;head&gt;
+&lt;html&gt;
 ...
-&lt;script type='text/javascript' src='<a href="prototype.js">prototype.js</a>'&gt;&lt;/script&gt;
-&lt;script type='text/javascript' src='<a href="rico.js">rico.js</a>'&gt;&lt;/script&gt;
+&lt;/html"&gt;
+<span class="red">$</span>jsImports
+&lt;script type='text/javascript' src='<a href="../assets/js/prototype.js">prototype.js</a>'&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src='<a href="../assets/js/rico.js">rico.js</a>'&gt;&lt;/script&gt;
 &lt;script type='text/javascript'&gt;
 function <span class="maroon">registerAjax</span>() {
    ajaxEngine.registerRequest('<span class="green">getCustomerInfo</span>', '<a href="$context/source-viewer.htm?filename=ajax/ajax-customer.htm">ajax-customer.htm</a>');
@@ -64,13 +66,12 @@ function <span class="maroon">registerAjax</span>() {
 function <span class="red">onCustomerChange</span>(select) {
    ajaxEngine.sendRequest('<span class="green">getCustomerInfo</span>', 'customerId=' + select.value);
 }
+
+addLoadEvent(registerAjax);
 &lt;/script&gt;
-&lt;/head&gt;
-&lt;body onload="<span class="maroon">registerAjax</span>();"&gt;
-...
 </pre>
 
 The initialization code above is contained in the 
-<a href="$context/source-viewer.htm?filename=ajax/ajax-head.htm">ajax-head.htm</a> file.
+<a href="$context/source-viewer.htm?filename=ajax/ajax-include.htm">ajax-include.htm</a> file.
 Note when including the JavaScript prototype.js and rico.js files, ensure prototype.js is before rico.js
 as rico is dependent upon prototype. 

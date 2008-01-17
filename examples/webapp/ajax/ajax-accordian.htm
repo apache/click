@@ -1,0 +1,74 @@
+Demonstration of the <a href="http://openrico.org/">Rico</a> Accordion. 
+Please note the accordian CSS styles are defined in the <tt>/assets/css/style.css</tt> file.
+
+<div style="margin-top:2em; border-top-width:1px; border-top-style:solid;" id="accordionDiv">
+
+	<div id="panel1">
+	  <div id="panel1Header" class="accordionTabTitle">
+	  Overview</div>
+	  <div id="panel1Content"  class="accordionTabContent">
+		<br/>
+		This example illustrates how to use the Rico.Accordion behavior to transform a set of
+		divs into a first class accordion component.
+		<br/><br/>
+		The Rico.Accordion behavior makes use of the Effect.AccordionSize which is an effect that simultaneously
+		grows the height of one element while shrinking the height of another.  The Rico.Accordion behavior adds
+		the necessary event handlers on the respective divs to handle the visual aspects of expanding, collapsing
+		and hovering.
+	  </div>
+	</div>
+
+	<div id="panel2">
+	  <div id="panel2Header" class="accordionTabTitle">
+	  HTML Code</div>
+	  <div id="panel2Content" class="accordionTabContent">
+		<br/>
+		The HTML structure is an outer div that holds all of the panels.  Then, each panel is just a
+		couple of DIVs (one for the header and one for the content) wrapped in an outer DIV.
+<pre style="font-size:8pt;">
+&lt;div id="accordionDiv"&gt;
+   &lt;div id="overviewPanel"&gt;
+     &lt;div id="overviewHeader"&gt;
+       Overview &lt;/div&gt;
+      &lt;div id="panel1Content"&gt;
+       ... content text ...
+      &lt;/div&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+	  </div>
+	</div>
+
+	<div id="panel3">
+	  <div id="panel3Header"  class="accordionTabTitle">
+	  Rico Code</div>
+	  <div id="panel3Content" class="accordionTabContent">
+		<br/>To attach the accordion behavior to the accordion container div, construct a Rico.Accordion
+		object and pass the container to it.  Thats it!
+<pre style="font-size:8pt;">
+  new Rico.Accordion( $('accordionDiv') );
+
+     -or-
+ 
+  new Rico.Accordion( $('accordionDiv'), '.accordionTabTitle', '.accordionTabContent' );</pre>
+
+		The second example specifies the height of the accordion panels.  There are  many other
+		configuration parameters that can be specified to modify various visual aspects of the
+		accordion. The panelHeight is the attribute that is most commonly overridden.
+	  </div>
+	</div>
+
+	<div id="panel4">
+	  <div id="panel4Header" class="accordionTabTitle">
+	  Important Note</div>
+	  <div id="panel4Content" class="accordionTabContent">
+		<br/>The content div for each panel should not be styled to have borders, margins, or padding.
+		When padding/margin is required, nest another DIV inside the content div and style it accordingly.
+		Also, the panel content should not grow beyond the panelHeight attribute of the configuration
+		parameter. On Firefox/Mac the scrollbar for an overflow area will cause the scrollbar to
+		always be visible--even when the panel is collapsed. You can resolve this by setting the
+		visibility of the contents when the panel starts to collapse or expand.<br/>&nbsp;
+	  </div>
+	</div>
+
+</div>
