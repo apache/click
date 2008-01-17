@@ -19,12 +19,12 @@ public class ImageDemo extends BorderPage {
 
     public ImageDemo() {
         // Buttons Form
-        ImageSubmit editSubmit = new ImageSubmit("edit", "../images/edit.gif");
+        ImageSubmit editSubmit = new ImageSubmit("edit", "/assets/images/edit.gif");
         editSubmit.setListener(this, "onEditClick");
         editSubmit.setTitle("Edit");
         buttonsForm.add(editSubmit);
 
-        ImageSubmit deleteSubmit = new ImageSubmit("delete", "../images/delete.gif");
+        ImageSubmit deleteSubmit = new ImageSubmit("delete", "/assets/images/delete.gif");
         deleteSubmit.setListener(this, "onDeleteClick");
         deleteSubmit.setTitle("Delete");
         buttonsForm.add(deleteSubmit);
@@ -32,7 +32,7 @@ public class ImageDemo extends BorderPage {
         // Colors Form
         form.add(new Label("label", "<b>Color Chooser</b>"));
 
-        colorSubmit = new ImageSubmit("submit", "../images/colors.gif");
+        colorSubmit = new ImageSubmit("submit", "/assets/images/colors.gif");
         colorSubmit.setListener(this, "onColorClick");
         form.add(colorSubmit);
     }

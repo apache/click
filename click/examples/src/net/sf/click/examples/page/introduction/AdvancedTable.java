@@ -37,11 +37,11 @@ public class AdvancedTable extends BorderPage {
 
         table.addColumn(new Column("investments"));
 
-        editLink.setImageSrc("/images/window-edit.png");
+        editLink.setImageSrc("/assets/images/window-edit.png");
         editLink.setTitle("Edit customer details");
         editLink.setParameter("referrer", "/introduction/advanced-table.htm");
 
-        deleteLink.setImageSrc("/images/window-delete.png");
+        deleteLink.setImageSrc("/assets/images/window-delete.png");
         deleteLink.setTitle("Delete customer record");
         deleteLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
 

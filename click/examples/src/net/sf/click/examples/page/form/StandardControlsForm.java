@@ -74,7 +74,7 @@ public class StandardControlsForm extends BorderPage {
         Button button = new Button("button");
         button.setAttribute("onclick", "alert('Button clicked');");
         form.add(button);
-        ImageSubmit imageSubmit = new ImageSubmit("image", "../images/edit-button.gif");
+        ImageSubmit imageSubmit = new ImageSubmit("image", "/assets/images/edit-button.gif");
         imageSubmit.setTitle("ImageSubmit");
         form.add(imageSubmit);
         form.add(new Reset("reset"));

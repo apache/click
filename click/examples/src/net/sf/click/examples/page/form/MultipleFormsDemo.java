@@ -68,7 +68,7 @@ public class MultipleFormsDemo extends BorderPage {
         if (form2.isValid()) {
 
             // NOTE: to correctly implement the redirect-after-post pattern,
-            // uncomment the lines below.            
+            // uncomment the lines below.
             //redirectAfterPost();
             //return false;
         }

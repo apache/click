@@ -50,8 +50,8 @@ public abstract class FormTablePage extends BorderPage {
         table.setShowBanner(true);
         table.setPageSize(getMaxTableSize());
 
-        editLink.setImageSrc("/images/edit.gif");
-        removeLink.setImageSrc("/images/delete.gif");
+        editLink.setImageSrc("/assets/images/edit.gif");
+        removeLink.setImageSrc("/assets/images/delete.gif");
     }
 
     // --------------------------------------------------------- Event Handlers

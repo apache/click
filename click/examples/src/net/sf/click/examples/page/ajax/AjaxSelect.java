@@ -13,10 +13,10 @@ import net.sf.click.examples.page.BorderPage;
  *
  * @author Malcolm Edgar
  */
-public class AjaxPage extends BorderPage {
+public class AjaxSelect extends BorderPage {
 
-    public String headInclude = "ajax/ajax-head.htm";
-    public String addLoadEvent = "registerAjax";
+    public String jsInclude = "ajax/ajax-select-include.htm";
+
     public Select customerSelect = new Select("customerSelect");
 
     public void onInit() {
