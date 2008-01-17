@@ -75,11 +75,11 @@ public class SearchTablePage extends BorderPage implements Serializable {
         column.setWidth("100px;");
         table.addColumn(column);
 
-        editLink.setImageSrc("/images/window-edit.png");
+        editLink.setImageSrc("/assets/images/window-edit.png");
         editLink.setTitle("Edit customer details");
         editLink.setParameter("referrer", "/table/search-table.htm");
 
-        deleteLink.setImageSrc("/images/window-delete.png");
+        deleteLink.setImageSrc("/assets/images/window-delete.png");
         deleteLink.setTitle("Delete customer record");
         deleteLink.setAttribute("onclick", "return window.confirm('Are you sure you want to delete this record?');");
 
