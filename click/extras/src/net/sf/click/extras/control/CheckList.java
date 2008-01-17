@@ -110,9 +110,22 @@ public class CheckList extends Field {
         "/net/sf/click/extras/control/prototype/dragdrop.js",
         "/net/sf/click/extras/control/prototype/effects.js",
         "/net/sf/click/extras/control/prototype/prototype.js",
-        "/net/sf/click/extras/control/prototype/scriptaculous.js",
         "/net/sf/click/extras/control/prototype/slider.js"
     };
+
+    /** The HTML import statements. */
+    public static final String HTML_IMPORTS =
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist_{1}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist_{1}.js\"></script>\n";
+
+    /** The JavaScript sorting HTML import statements. */
+    public static final String JS_SORT_HTML_IMPORTS =
+        "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder.js_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls.js_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop.js_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects.js_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype.js_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider.js_{1}.js\"></script>\n";
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
@@ -425,11 +438,9 @@ public class CheckList extends Field {
     }
 
     /**
-     * Set the given html class. The class will
-     * be set on the select list together with
-     * the {@link #STYLE_CLASS}. Ie
-     * class="checkList my-class" where my-class is
-     * the set class. The default value is null.
+     * Set the given html class. The class will be set on the select list
+     * together with the {@link #STYLE_CLASS}. Ie class="checkList my-class"
+     * where my-class is the set class. The default value is null.
      *
      * @deprecated use {@link #addStyleClass(String)} instead
      *
@@ -463,32 +474,10 @@ public class CheckList extends Field {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(400);
 
-        String path = getContext().getRequest().getContextPath();
-
-        buffer.append("<link type=\"text/css\" rel=\"stylesheet\" href=\"");
-        buffer.append(path);
-        buffer.append("/click/checklist/checklist_");
-        buffer.append(getClickVersion());
-        buffer.append(".css\"/>\n");
-
-        buffer.append("<script type=\"text/javascript\" src=\"");
-        buffer.append(path);
-        buffer.append("/click/checklist/checklist_");
-        buffer.append(getClickVersion());
-        buffer.append(".js\"></script>\n");
+        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
 
         if (isSortable()) {
-            buffer.append("<script type=\"text/javascript\" src=\"");
-            buffer.append(path);
-            buffer.append("/click/prototype/prototype_");
-            buffer.append(getClickVersion());
-            buffer.append(".js\"></script>\n");
-
-            buffer.append("<script type=\"text/javascript\" src=\"");
-            buffer.append(path);
-            buffer.append("/click/prototype/scriptaculous_");
-            buffer.append(getClickVersion());
-            buffer.append(".js\"></script>\n");
+            buffer.append(ClickUtils.createHtmlImport(JS_SORT_HTML_IMPORTS, getContext()));
 
             // Script to execute
             HtmlStringBuffer script = new HtmlStringBuffer(50);
@@ -507,6 +496,7 @@ public class CheckList extends Field {
             if (getHeight() != null) {
                 buffer.append("Position.includeScrollOffset = true;");
             }
+
             buffer.append("addLoadEvent(function () {");
             buffer.append(script);
             buffer.append("});</script>\n");
