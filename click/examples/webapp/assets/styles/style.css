@@ -1,0 +1,212 @@
+/* 
+ * Border template specific styles. 
+ */
+body {
+	background: #585858;
+	color: #000000;
+	font-family: Arial, Helvetica, "Sans Serif";
+	margin: 12px 12px 12px 12px;
+}
+
+table.page {
+	border: 1px solid #202020;
+	border-collapse: collapse;
+	background: #ffffff;
+	width: 990px;
+}
+
+td.title-icon {
+	vertical-align: bottom;
+	padding-left: 14px;
+	padding-right: 12px;
+	padding-top: 10px;
+	padding-bottom: 6px;
+}
+
+td.title-left {
+	color: navy;
+	font-size: 24pt;
+	font-weight: bolder;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+td.title-hosted p, td.title-hosted a {
+	color: navy;
+	font-size: 8pt;
+	margin: 1em;
+	text-align:right;
+	text-decoration: none;
+	vertical-align: middle;
+	white-space: nowrap;
+}
+
+td.header-color {
+	background-color: #334ECF;
+	font-size: 9pt;
+}
+
+td.content {
+	font-size: 10pt;
+	padding: 15px;
+	border-collapse: separate;
+}
+
+#msgDiv {
+	background-color: #f0f0f0;
+	border: thin solid navy;
+	margin: 1em;
+	margin-left: 0em;
+	margin-right: 2em;
+	padding: 1em;
+}
+
+.infoMsg {
+	border: 1px solid #a7bcd6;
+	background-color: #ffffc0;
+	margin: 0.5em;
+	padding: 0.5em;
+}
+
+td, th {
+	font-size: 9pt;
+}
+
+a:visited {
+	color: blue;
+}
+
+a.external {
+  background: url(/click-examples/assets/images/external.png) center right no-repeat;
+  padding-right: 14px;
+}
+
+/*
+ * Table styles
+ */
+table.complex td, table.complex th, table.isi td, table.isi th, table.its td, table.its th, table.mars td, table.mars th, table.nocol td, table.nocol th, table.simple td, table.simple th, table.simple input, table.simple select, table.report td, table.report th {
+	font-size: 9pt;
+}
+
+span.pagebanner, span.pagelinks {
+	font-size: 9pt;
+}
+
+table input {
+	font-size: 9pt;
+}
+
+/*
+ * Form styles
+ */
+table.errors td, table.fields td, table.fields label, table.fields input, table.fields select, table.fields textarea, table.buttons input {
+	font-size: 9pt;
+}
+
+/*
+ * Tabbed Panel styles
+ */
+a.tb_label {
+	font-size: 9pt;
+}
+
+/*
+ * Example Styles
+ */
+.code, .codeConfig, .codeDtd, .codeJava, .codeHtml {
+	font-family: Courier New, courier;
+	font-size: 9pt;
+	border: 1px solid #AAAAAA;
+	background-color: #FAFAFA;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-left: 0em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeJava {
+	font-family: Courier New, courier;
+	border: 1px solid #AAAAAA;
+	background-color: white;
+	padding: 1em;
+	margin-top: 1em;
+	margin-bottom: 1.5em;
+	margin-right: 1.5em;
+	white-space: pre;
+}
+
+.codeHtml 
+{
+	border: 1px solid #97A9FF;
+	background-color: white;
+}
+
+/* Java keyword. */
+.kw {
+    color: #7f0055;
+    font-weight: bold;
+}
+
+/* Javadoc */
+.jd {
+    color: #3f5fbf;
+}
+
+/* Java comment */
+.cm {
+    color: #3f7f5f;
+}
+
+/* Java String literal */
+.st {
+    color: #2a00ff;
+}
+.red { color: red; }
+
+.green { color: green; }
+
+.blue { color: blue; }
+
+.maroon { color: maroon; }
+
+.navy { color: navy; }
+
+/* RICO Accordian Demo */
+
+.accordionTabTitle {
+	background-color: #6b79a5;
+	color: #ced7ef;
+	height: 22px;
+	padding-left: 5px;
+	border-bottom-color: #182052;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-style: solid;
+	border-top-color: #bdc7e7;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 0px;
+	font-size: 12px;
+}
+
+.accordionTabTitle {
+	background-color: #6b79a5;
+	color: #ced7ef;
+	height: 22px;
+	padding-left: 5px;
+	border-bottom-color: #182052;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-style: solid;
+	border-top-color: #bdc7e7;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 0px;
+	font-size: 12px;
+}
