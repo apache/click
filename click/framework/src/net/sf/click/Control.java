@@ -122,26 +122,28 @@ public interface Control extends Serializable {
     public Context getContext();
 
     /**
-     * Return the HTML head element import string.
+     * Return the HTML import string to be include in the page.
      * <p/>
      * Override this method to specify JavaScript and CSS includes for the
-     * HTML head element. For example:
+     * page. For example:
      *
      * <pre class="codeJava">
      * <span class="kw">protected static final</span> String HTML_IMPORT =
      *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
      *
      * <span class="kw">public</span> String getHtmlImports() {
-     *     String[] args = { getContext().getRequest().getContextPath() };
-     *     <span class="kw">return</span> MessageFormat.format(HTML_IMPORTS, args);
+     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
      * } </pre>
      *
      * <b>Note</b> multiple import lines should be separated by a
      * <tt>'\n'</tt> char, as the {@link net.sf.click.util.PageImports} will
      * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
      * imports are not included twice.
+     * <p/>
+     * The order in which JS and CSS files are include will be preserved in the
+     * page.
      *
-     * @return the HTML head import statements for the control stylesheet and
+     * @return the HTML includes statements for the control stylesheet and
      * JavaScript files
      */
     public String getHtmlImports();

@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Click Examples</title>
-<link rel="stylesheet" type="text/css" href="${context}/style.css" title="Style"></link>
+<link rel="stylesheet" type="text/css" href="${context}/assets/css/style.css" title="Style"></link>
 ${imports}
 </head>
 <body>
@@ -17,7 +17,7 @@ ${imports}
 		<table cellpadding="0" cellspacing="0" width="100%" border="0" style="border-collapse:collapse;">
 			<tr>
 				<td class="title-icon">
-					<a target="blank" href="http://click.sourceforge.net"><img src="${context}/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
+					<a target="blank" href="http://click.sourceforge.net"><img src="${context}/assets/images/click-icon-blue-32.png" border="0" alt="Click"/></a>
 				</td>
 				<td class="title-left" width="100%">
 					${title}
@@ -51,9 +51,9 @@ ${imports}
           ></ul>
         </li>
     </c:forEach>
-        <li class="topitem"><a target="_blank" href="${context}/source-viewer.htm?filename=WEB-INF/classes/${srcPath}" title="Page Java source"><img border="0" class="link" alt="" src="${context}/images/icons-16px/text_code_java.png"/> Page Java</a>
+        <li class="topitem"><a target="_blank" href="${context}/source-viewer.htm?filename=WEB-INF/classes/${srcPath}" title="Page Java source"><img border="0" class="link" alt="" src="${context}/assets/images/icons-16px/text_code_java.png"/> Page Java</a>
         </li>
-        <li class="topitem"><a target="_blank" href="${context}/source-viewer.htm?filename=${path}" title="Page Content source"><img border="0" class="link" alt="" src="${context}/images/icons-16px/text_marked.png"/> Page HTML</a>
+        <li class="topitem"><a target="_blank" href="${context}/source-viewer.htm?filename=${path}" title="Page Content source"><img border="0" class="link" alt="" src="${context}/assets/images/icons-16px/text_marked.png"/> Page HTML</a>
         </li>
   </ul>  
  </div>
