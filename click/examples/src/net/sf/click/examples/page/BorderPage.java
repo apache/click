@@ -1,6 +1,5 @@
 package net.sf.click.examples.page;
 
-import net.sf.click.Page;
 import net.sf.click.extras.control.Menu;
 import net.sf.click.util.ClickUtils;
 
