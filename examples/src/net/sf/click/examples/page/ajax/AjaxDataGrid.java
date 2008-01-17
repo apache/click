@@ -9,10 +9,9 @@ import net.sf.click.examples.page.BorderPage;
  *
  * @author Phil Barnes
  */
-public class AjaxLiveGrid extends BorderPage {
+public class AjaxDataGrid extends BorderPage {
 
-    public String headInclude = "ajax/ajax-live-grid-head.htm";
-    public String addLoadEvent = "onLoad";
+    public String headInclude = "ajax/ajax-data-grid-include.htm";
 
     public void onInit() {
         super.onInit();

@@ -6,8 +6,12 @@ import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a page border template. This Page returns the template
- * <tt>"border.htm"</tt>, and sets the Page model values <tt>$title</tt> and
+ * <tt>"border-template.htm"</tt>, and sets the Page model values <tt>$title</tt> and
  * <tt>$srcPath</tt>.
+ * <p/>
+ * Please note this page is designed for extending by Page subclasses and will
+ * not be auto mapped as the template name <tt>"border-template.htm"</tt> does
+ * not match the Pages class name <tt>BorderPage</tt>.
  *
  * @author Malcolm Edgar
  */
@@ -52,6 +56,10 @@ public class BorderPage extends SpringPage {
 
     /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.htm"</tt>
+     * <p/>
+     * Please note this page is designed for extending by Page subclasses and will
+     * not be auto mapped as the template name <tt>"border-template.htm"</tt> does
+     * not match the Pages class name <tt>BorderPage</tt>.
      *
      * @see Page#getTemplate()
      */

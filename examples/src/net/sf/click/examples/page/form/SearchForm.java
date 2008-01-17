@@ -29,6 +29,7 @@ public class SearchForm extends BorderPage {
         typeSelect = new Select("type");
         typeSelect.addAll(new String[] {"ID", "Name", "Age"});
         typeSelect.setValue("Name");
+        typeSelect.setStyle("font-size", "9pt");
         form.add(typeSelect);
 
         form.add(new Submit("go", " Go "));
