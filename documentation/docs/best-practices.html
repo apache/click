@@ -351,7 +351,7 @@ Applications typically use a border template and have a <tt>BorderPage</tt> whic
 extends <tt>BasePage</tt> and defines the template. For example:
 
 <pre class="codeJava">
-<span class="kw">public class</span> BasePage <span class="kw">extends</span> BasePage {
+<span class="kw">public class</span> BorderPage <span class="kw">extends</span> BasePage {
 
     <span class="cm">/** The root Menu item. */</span>
     <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
@@ -369,6 +369,12 @@ have no need for a HTML border template and typically extend <tt>BasePage</tt>.
 The <tt>BorderPage</tt> class should not include common logic, other than that
 required for rendering the border template.  Common page logic should be defined
 in the <tt>BasePage</tt> class.
+<p/>
+To prevent these base Page classes being auto mapped, and becoming directly 
+acessible web pages, ensure that there are no page templates which could match 
+their class name. For example the <tt>BorderPage</tt> class above will not be 
+auto mapped to <span class="st">border-template.htm</span>.
+
 
 <a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
 

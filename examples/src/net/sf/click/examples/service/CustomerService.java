@@ -99,12 +99,12 @@ public class CustomerService extends CayenneTemplate {
         }
     }
 
-    public Customer findCustomerByID(Integer id) {
-        return (Customer) getCustomer(id);
-    }
-
-    public Customer findCustomerByID(String value) {
-        return (Customer) getCustomer(Integer.valueOf(value));
+    public Customer findCustomerByID(Object value) {
+        if (value != null && value.toString().length() > 0) {
+            return (Customer) getCustomer(value);
+        } else {
+            return null;
+        }
     }
 
     public List findCustomersByName(String value) {
