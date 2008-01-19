@@ -363,7 +363,7 @@ public class PerformanceFilter implements Filter {
             } else {
                 return null;
             }
-
+            
         } finally {
             ClickUtils.close(inputStream);
         }

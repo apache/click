@@ -101,7 +101,7 @@ public class PickList extends Field {
 
     /** The <tt>Palette.js</tt> imports statement. */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/PickList_{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/PickList{1}.js\"></script>\n";
 
     /**
      * The field validation JavaScript function template.
@@ -462,8 +462,7 @@ public class PickList extends Field {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/PickList.js",
-                              "click",
-                              true);
+                              "click");
     }
 
     /**

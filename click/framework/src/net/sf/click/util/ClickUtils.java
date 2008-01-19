@@ -509,9 +509,18 @@ public class ClickUtils {
      * @return the formatted HTML import statement
      */
     public static String createHtmlImport(String pattern, Context context) {
+        // If application mode is production or profile, version static resources.
+        String versionStr = "";
+        if (context.getApplicationMode().startsWith("pro")) {
+            versionStr = "_" + getClickVersion();
+        }
+
+// TODO: CLK-290 - remove line below once PerformanceFilter change completed
+versionStr = "";
+
         String[] args = {
                 context.getRequest().getContextPath(),
-                getClickVersion()
+                versionStr
         };
 
         return MessageFormat.format(pattern, args);
@@ -799,10 +808,9 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resource the classpath resource name
      * @param targetDir the target directory to deploy the resource to
-     * @param addVersion embedded the click vesion number in the deployed filename
      */
     public static void deployFile(ServletContext servletContext,
-        String resource, String targetDir, boolean addVersion) {
+        String resource, String targetDir) {
 
         if (servletContext == null) {
             throw new IllegalArgumentException("Null servletContext parameter");
@@ -837,14 +845,6 @@ public class ClickUtils {
             int index = resource.lastIndexOf('/');
             if (index != -1) {
                 destination = resource.substring(index + 1);
-            }
-
-            if (addVersion) {
-                int dotIndex = destination.lastIndexOf(".");
-                destination =
-                    destination.substring(0, dotIndex)
-                    + "_" + ClickUtils.getClickVersion()
-                    + destination.substring(dotIndex);
             }
 
             destination = realTargetDir + File.separator + destination;
@@ -912,10 +912,9 @@ public class ClickUtils {
      * @param servletContext the web applications servlet context
      * @param resources the array of classpath resource names
      * @param targetDir the target directory to deploy the resource to
-     * @param addVersion embedded the click version number in the deployed filenames
      */
     public static void deployFiles(ServletContext servletContext,
-            String[] resources, String targetDir, boolean addVersion) {
+            String[] resources, String targetDir) {
 
         if (resources == null) {
             throw new IllegalArgumentException("Null resources parameter");
@@ -924,8 +923,7 @@ public class ClickUtils {
         for (int i = 0; i < resources.length; i++) {
             ClickUtils.deployFile(servletContext,
                                   resources[i],
-                                  targetDir,
-                                  addVersion);
+                                  targetDir);
         }
     }
 
@@ -986,7 +984,7 @@ public class ClickUtils {
             for (int i = 0; i < fileList.size(); i++) {
                 String source = (String) fileList.get(i);
                 String targetDirName = (String) targetDirList.get(i);
-                ClickUtils.deployFile(servletContext, source, targetDirName, false);
+                ClickUtils.deployFile(servletContext, source, targetDirName);
             }
 
         } catch (IOException e) {

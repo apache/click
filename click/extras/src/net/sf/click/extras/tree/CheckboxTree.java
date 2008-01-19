@@ -106,7 +106,7 @@ public class CheckboxTree extends Tree {
 
     /** Client side javascript import. This extends on the functions available in {@link Tree} */
     public static final String HTML_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree_{1}.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree{1}.js\"></script>\n";
 
     /** The Tree resource file names. */
     protected static final String[] TREE_RESOURCES = {
@@ -172,8 +172,7 @@ public class CheckboxTree extends Tree {
         super.onDeploy(servletContext);
         ClickUtils.deployFiles(servletContext,
                                TREE_RESOURCES,
-                               "click/tree",
-                               true);
+                               "click/tree");
     }
 
     /**

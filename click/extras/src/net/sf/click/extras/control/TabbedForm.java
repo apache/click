@@ -122,7 +122,7 @@ public class TabbedForm extends Form {
 
     /** The TabbedForm.css style sheet import link. */
     public static final String HTML_IMPORTS = Form.HTML_IMPORTS
-        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedForm_{1}.css\"/>\n";
+        + "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedForm{1}.css\"/>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -332,8 +332,7 @@ public class TabbedForm extends Form {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/TabbedForm.css",
-                              "click",
-                              true);
+                              "click");
     }
 
     /**

@@ -83,8 +83,8 @@ public class ColorPicker extends Field {
 
     /** The HTML imports statements. */
     static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/colorpicker/colorpicker_{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/colorpicker/colorpicker{1}.js\"></script>\n";
 
     /** The color validation hexidecimal pattern. */
     static final Pattern HEX_PATTERN =
@@ -268,12 +268,9 @@ public class ColorPicker extends Field {
      */
     public void onDeploy(ServletContext servletContext) {
         for (int i = 0; i < COLOR_PICKER_RESOURCES.length; i++) {
-            boolean version = COLOR_PICKER_RESOURCES[i].endsWith(".js");
-
             ClickUtils.deployFile(servletContext,
                                   COLOR_PICKER_RESOURCES[i],
-                                  "click/colorpicker",
-                                  version);
+                                  "click/colorpicker");
         }
     }
 

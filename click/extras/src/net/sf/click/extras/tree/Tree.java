@@ -161,15 +161,15 @@ public class Tree extends AbstractControl {
 
     /** The tree.css style sheet import link. */
     public static final String TREE_IMPORTS =
-            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree_{1}.css\"></link>\n";
+            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree{1}.css\"></link>\n";
 
     /** Client side javascript import link. */
     public static final String JAVASCRIPT_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/tree_{1}.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/tree{1}.js\"></script>\n";
 
     /** Client side javascript cookie import link. */
     public static final String JAVASCRIPT_COOKIE_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/tree/cookie-helper_{1}.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/tree/cookie-helper{1}.js\"></script>\n";
 
     /** The Tree resource file names. */
     public static final String[] TREE_RESOURCES = {
@@ -728,13 +728,11 @@ public class Tree extends AbstractControl {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext,
                                TREE_RESOURCES,
-                               "click/tree",
-                               true);
+                               "click/tree");
 
         ClickUtils.deployFiles(servletContext,
                                TREE_IMAGES,
-                               "click/tree/images",
-                               false);
+                               "click/tree/images");
     }
 
     /**

@@ -116,7 +116,7 @@ public class NumberField extends TextField {
 
     /** The NumberField.js imports statement. */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/NumberField_{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/NumberField{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -411,8 +411,7 @@ public class NumberField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/NumberField.js",
-                              "click",
-                              true);
+                              "click");
     }
 
     /**
