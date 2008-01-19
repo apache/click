@@ -86,7 +86,7 @@ public class ErrorPage extends Page {
 
     /**
      * The application mode: &nbsp;
-     * ["production", "profile", "development", "debug"].
+     * ["production", "profile", "development", "debug", "trace"].
      */
     protected String mode;
 
@@ -147,7 +147,7 @@ public class ErrorPage extends Page {
 
     /**
      * Return the application mode: <tt>["production", "profile", "development",
-     * debug"]</tt>.
+     * debug", "trace"]</tt>.
      *
      * @return the application mode
      */
@@ -157,7 +157,7 @@ public class ErrorPage extends Page {
 
     /**
      * Set the application mode: <tt>["production", "profile", "development",
-     * debug"]</tt>
+     * debug", "trace"]</tt>
      * <p/>
      * The application mode is added to the model by the {@link #onInit()} method.
      * This property is used to determines whether the error page template
