@@ -115,17 +115,17 @@ public class CheckList extends Field {
 
     /** The HTML import statements. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist_{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist_{1}.js\"></script>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist{1}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist{1}.js\"></script>\n";
 
     /** The JavaScript sorting HTML import statements. */
     public static final String JS_SORT_HTML_IMPORTS =
-          "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype_{1}.js\"></script>\n"
-    	+ "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider_{1}.js\"></script>\n";
+          "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider{1}.js\"></script>\n";
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
@@ -720,13 +720,11 @@ public class CheckList extends Field {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext,
                                CHECKLIST_RESOURCES,
-                               "click/checklist",
-                               true);
+                               "click/checklist");
 
         ClickUtils.deployFiles(servletContext,
                                PROTOTYPE_RESOURCES,
-                               "click/prototype",
-                               true);
+                               "click/prototype");
     }
 
     /**

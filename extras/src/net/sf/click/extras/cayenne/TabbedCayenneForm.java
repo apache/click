@@ -267,8 +267,7 @@ public class TabbedCayenneForm extends CayenneForm {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/TabbedForm.css",
-                              "click",
-                              true);
+                              "click");
     }
 
     /**

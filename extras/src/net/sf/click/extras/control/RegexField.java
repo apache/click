@@ -98,7 +98,7 @@ public class RegexField extends TextField {
 
     /** The RegexField.js imports statement. */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/RegexField_{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/RegexField{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -281,8 +281,7 @@ public class RegexField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/RegexField.js",
-                              "click",
-                              true);
+                              "click");
     }
 
     // ------------------------------------------------------ Private Methods

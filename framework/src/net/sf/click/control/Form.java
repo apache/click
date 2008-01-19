@@ -492,8 +492,8 @@ public class Form extends AbstractControl {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control_{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control_{1}.js\"></script>\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n";
 
     /** The Form set field focus JavaScript. */
     protected static final String FOCUS_JAVASCRIPT =

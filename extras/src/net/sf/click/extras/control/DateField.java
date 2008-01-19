@@ -92,9 +92,9 @@ public class DateField extends TextField {
 
     /** The HTML import statements. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}_{7}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar_{7}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}_{7}.js\" charset=\"UTF-8\"></script>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}{7}.css\"/>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar{7}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}{7}.js\" charset=\"UTF-8\"></script>\n"
         + "<script type=\"text/javascript\">Calendar.setup('{' inputField : ''{3}'', ifFormat : ''{4}'', showsTime : {5}, button : ''{3}-button'', align : ''cr'', singleClick : true, firstDay : {6} '}');</script>";
 
     /** The Calendar resource file names. */
@@ -395,6 +395,14 @@ public class DateField extends TextField {
      * JavaScript files
      */
     public String getHtmlImports() {
+        String versionStr = "";
+        if (getContext().getApplicationMode().startsWith("pro")) {
+            versionStr = "_" + getClickVersion();
+        }
+
+//      TODO: CLK-290 - remove line below once PerformanceFilter change completed
+versionStr = "";
+
         Object args[] = {
                 getContext().getRequest().getContextPath(),
                 getStyle(),
@@ -403,7 +411,7 @@ public class DateField extends TextField {
                 getCalendarPattern(),
                 new Boolean(getShowTime()),
                 new Integer(getFirstDayOfWeek() - 1),
-                getClickVersion()
+                versionStr
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -523,8 +531,7 @@ public class DateField extends TextField {
 
             ClickUtils.deployFile(servletContext,
                                   calendarResource,
-                                  "click/calendar",
-                                  true);
+                                  "click/calendar");
         }
     }
 

@@ -174,7 +174,7 @@ public class CreditCardField extends TextField {
      * The CreditCardField.js imports statement.
      */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/CreditCardField_{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/CreditCardField{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -445,8 +445,7 @@ public class CreditCardField extends TextField {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/extras/control/CreditCardField.js",
-                              "click",
-                              true);
+                              "click");
     }
 
 }

@@ -47,8 +47,8 @@ public class JSBarChart extends AbstractControl {
 
     /** The HTML imports statements. */
     public static final String HTML_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics_{1}.js\"></script>\n"
-            + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/bar_{1}.js\"></script>\n";
+            "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics{1}.js\"></script>\n"
+            + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/bar{1}.js\"></script>\n";
 
     /** Chart resource file names. */
     protected static final String[] CHART_RESOURCES = {
@@ -216,8 +216,7 @@ public class JSBarChart extends AbstractControl {
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFiles(servletContext,
                                CHART_RESOURCES,
-                               "click/graph/jsgraph",
-                               true);
+                               "click/graph/jsgraph");
     }
 
     /**

@@ -183,9 +183,9 @@ public class Menu implements Control {
 
     /** The HTML imports statements. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu_{1}.css\"></link>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/menu_{1}.js\"></script>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"></link>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/menu{1}.js\"></script>\n"
         + "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
 
     // -------------------------------------------------------- Class Variables
@@ -740,7 +740,7 @@ public class Menu implements Control {
                 "/net/sf/click/extras/control/menu.js"
             };
 
-        ClickUtils.deployFiles(servletContext, files, "click", true);
+        ClickUtils.deployFiles(servletContext, files, "click");
     }
 
     /**
