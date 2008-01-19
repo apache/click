@@ -120,12 +120,12 @@ public class CheckList extends Field {
 
     /** The JavaScript sorting HTML import statements. */
     public static final String JS_SORT_HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder.js_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls.js_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop.js_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects.js_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype.js_{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider.js_{1}.js\"></script>\n";
+          "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype_{1}.js\"></script>\n"
+    	+ "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects_{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider_{1}.js\"></script>\n";
 
     /** The style class which is always set on this element (checkList). */
     protected static final String STYLE_CLASS = "checkList";
