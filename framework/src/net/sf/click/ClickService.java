@@ -89,7 +89,7 @@ class ClickService {
 
     /**
      * Return the Click application mode value: &nbsp;
-     * <tt>["production", "profile", "development", "debug"]</tt>.
+     * <tt>["production", "profile", "development", "debug", "trace"]</tt>.
      *
      * @return the application mode value
      */
