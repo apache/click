@@ -107,7 +107,7 @@ public class Context {
             return context;
 
         } else {
-            throw new IllegalStateException("contex is null");
+            throw new IllegalStateException("context is null");
         }
     }
 
@@ -472,7 +472,7 @@ public class Context {
 
     /**
      * Return the Click application mode value: &nbsp;
-     * <tt>["production", "profile", "development", "debug"]</tt>.
+     * <tt>["production", "profile", "development", "debug", "trace"]</tt>.
      *
      * @return the application mode value
      */
@@ -660,5 +660,5 @@ public class Context {
     static void setThreadLocalContext(Context context) {
         THREAD_LOCAL_CONTEXT.set(context);
     }
- 
+
 }
