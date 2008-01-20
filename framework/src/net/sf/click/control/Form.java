@@ -1178,7 +1178,8 @@ public class Form extends AbstractControl {
      * JavaScript files
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext());
     }
 
     /**
@@ -2067,7 +2068,7 @@ public class Form extends AbstractControl {
         final Long time = new Long(System.currentTimeMillis());
         HiddenField field = new HiddenField(submitTokenName, Long.class);
         field.setValueObject(time);
-            add(field);
+        add(field);
 
         getContext().setSessionAttribute(submitTokenName, time);
 
