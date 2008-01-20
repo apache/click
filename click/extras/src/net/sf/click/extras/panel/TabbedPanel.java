@@ -219,7 +219,8 @@ public class TabbedPanel extends Panel {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext());
     }
 
     /**
