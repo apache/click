@@ -171,7 +171,7 @@ public class Table extends AbstractControl {
      */
     public static final String TABLE_IMPORTS_DARK =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
-        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark_{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
+        + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
 
     /** The table top banner position. */
     public static final int POSITION_TOP = 1;
