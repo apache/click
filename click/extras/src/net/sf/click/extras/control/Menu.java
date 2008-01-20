@@ -19,16 +19,14 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
-import net.sf.click.Control;
+import net.sf.click.control.AbstractControl;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.MessagesMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
@@ -170,7 +168,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Malcolm Edgar
  */
-public class Menu implements Control {
+public class Menu extends AbstractControl {
 
     // -------------------------------------------------------------- Constants
 
@@ -216,12 +214,6 @@ public class Menu implements Control {
     /** The menu display label. */
     protected String label;
 
-    /** The controls localized messages. */
-    protected transient Map messages;
-
-    /** The menu control name. */
-    protected String name;
-
     /**
      * The list of valid page paths. If any of these page paths match the
      * current request then the Menu item will be selected.
@@ -230,9 +222,6 @@ public class Menu implements Control {
 
     /** The menu path. */
     protected String path;
-
-    /** The control's parent. */
-    protected Object parent;
 
     /** The list of valid role names. */
     protected List roles = new ArrayList();
@@ -354,15 +343,6 @@ public class Menu implements Control {
     }
 
     /**
-     * @see Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return Context.getThreadLocalContext();
-    }
-
-    /**
      * Return true if the menu path refers to an external resource.
      *
      * @return true if the menu path refers to an external resource
@@ -421,26 +401,6 @@ public class Menu implements Control {
      */
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    /**
-     * Return a Map of localized messages for the Menu.
-     *
-     * @return a Map of localized messages for the Menu
-     * @throws IllegalStateException if the context for the Menu has not be set
-     */
-    public Map getMessages() {
-        if (messages == null) {
-            if (getContext() != null) {
-                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
-
-            } else {
-                String msg = "Cannot initialize messages as context not set "
-                    + " for field: " + getName();
-                throw new IllegalStateException(msg);
-            }
-        }
-        return messages;
     }
 
     /**
@@ -686,42 +646,6 @@ public class Menu implements Control {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
-    }
-
-    /**
-     * @see Control#getName()
-     *
-     * @return the name of the control
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @see Control#setName(String)
-     *
-     * @param name of the control
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @see Control#getParent()
-     *
-     * @return the Control's parent
-     */
-    public Object getParent() {
-        return parent;
-    }
-
-    /**
-     * @see Control#setParent(Object)
-     *
-     * @param parent the parent of the Control
-     */
-    public void setParent(Object parent) {
-        this.parent = parent;
     }
 
     // --------------------------------------------------------- Public Methods
