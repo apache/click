@@ -545,12 +545,13 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Return the Click Framework version string.
+     * Return a version indicator for web resources eg. image, stylesheet and
+     * javascript files.
      *
-     * @return the Click Framework version string
+     * @return a version indicator for web resources
      */
-    protected String getClickVersion() {
-        return getMessage("click-version");
+    protected String getResourceVersionIndicator() {
+        return ClickUtils.getResourceVersionIndicator();
     }
 
     /**
