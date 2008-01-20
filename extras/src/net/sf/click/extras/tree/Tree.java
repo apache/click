@@ -442,12 +442,15 @@ public class Tree extends AbstractControl {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
-            buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_IMPORTS, getContext()));
+            buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_IMPORTS,
+                getResourceVersionIndicator(), getContext()));
             if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
-                buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_COOKIE_IMPORTS, getContext()));
+                buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_COOKIE_IMPORTS,
+                    getResourceVersionIndicator(), getContext()));
             }
         }
-        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS, getContext()));
+        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS,
+            getResourceVersionIndicator(), getContext()));
         return buffer.toString();
     }
 
