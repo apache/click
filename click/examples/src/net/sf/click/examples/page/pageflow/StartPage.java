@@ -22,7 +22,7 @@ import net.sf.click.extras.control.DateField;
  */
 public class StartPage extends BorderPage {
 
-    public String headInclude = "ajax/ajax-head.htm";
+    public String jsInclude = "ajax/ajax-select-include.htm";
     public String bodyOnload = "registerAjax();";
     public Form form = new Form();
 
