@@ -54,6 +54,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.sf.click.ClickServlet;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
@@ -77,6 +78,9 @@ import org.xml.sax.EntityResolver;
  * @author Malcolm Edgar
  */
 public class ClickUtils {
+
+    private static final String RESOURCE_VERSION_INDICATOR =
+        "_" + getClickVersion();
 
     /** Hexadecimal characters for MD5 encoding. */
     private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
@@ -445,14 +449,13 @@ public class ClickUtils {
     }
 
     /**
-     * Return the Click Framework version string.
+     * Return a version indicator for web resources eg. image, stylesheet and
+     * javascript files.
      *
-     * @return the Click Framework version string
+     * @return a version indicator for web resources
      */
-    public static String getClickVersion() {
-        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
-
-        return bundle.getString("click-version");
+    public static String getResourceVersionIndicator() {
+        return RESOURCE_VERSION_INDICATOR;
     }
 
     /**
@@ -511,16 +514,14 @@ public class ClickUtils {
     public static String createHtmlImport(String pattern, Context context) {
         // If application mode is production or profile, version static resources.
         String versionStr = "";
-        if (context.getApplicationMode().startsWith("pro")) {
+        if (context.getApplicationMode().startsWith("pro") &&
+            isEnableResourceVersion(context)) {
             versionStr = "_" + getClickVersion();
         }
 
-// TODO: CLK-290 - remove line below once PerformanceFilter change completed
-versionStr = "";
-
         String[] args = {
-                context.getRequest().getContextPath(),
-                versionStr
+            context.getRequest().getContextPath(),
+            versionStr
         };
 
         return MessageFormat.format(pattern, args);
@@ -2040,4 +2041,18 @@ versionStr = "";
         return false;
     }
 
+    /**
+     * Return the Click Framework version string.
+     *
+     * @return the Click Framework version string
+     */
+    private static String getClickVersion() {
+        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
+
+        return bundle.getString("click-version");
+    }
+
+    private static boolean isEnableResourceVersion(Context context) {
+        return "true".equals(context.getRequestAttribute(ClickServlet.ENABLE_RESOURCE_VERSION));
+    }
 }

@@ -180,6 +180,9 @@ public class ClickServlet extends HttpServlet {
      */
     protected final static String FORWARD_PAGE = "forward-page";
 
+    /** The resource versioning request attribute: key: &nbsp; <tt>enable-resource-version</tt>. */
+    public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
+
     // ------------------------------------------------------ Instance Varables
 
     /** The click application. */
