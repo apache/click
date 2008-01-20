@@ -397,11 +397,8 @@ public class DateField extends TextField {
     public String getHtmlImports() {
         String versionStr = "";
         if (getContext().getApplicationMode().startsWith("pro")) {
-            versionStr = "_" + getClickVersion();
+            versionStr = getResourceVersionIndicator();
         }
-
-//      TODO: CLK-290 - remove line below once PerformanceFilter change completed
-versionStr = "";
 
         Object args[] = {
                 getContext().getRequest().getContextPath(),
@@ -546,12 +543,17 @@ versionStr = "";
         String textField = super.toString();
         buffer.append(textField);
 
+        String versionStr = "";
+        if (getContext().getApplicationMode().startsWith("pro")) {
+            versionStr = getResourceVersionIndicator();
+        }
+
         if (!isReadonly() && !isDisabled()) {
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getContext().getRequest().getContextPath());
-            buffer.append("/click/calendar/calendar_");
-            buffer.append(getClickVersion());
+            buffer.append("/click/calendar/calendar");
+            buffer.append(versionStr);
             buffer.append(".gif\" id=\"");
             buffer.append(getId());
             buffer.append("-button\" ");
