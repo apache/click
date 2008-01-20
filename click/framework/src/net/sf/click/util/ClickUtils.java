@@ -508,19 +508,28 @@ public class ClickUtils {
     }
 
     /**
-     * Create an HTML import statement from the given string pattern formatted
-     * with the request context path and Click Version args.
+     * Create an HTML import statement from the given string pattern and
+     * versionIndicator, formatted with the request context path.
+     * <p/>
+     * <b>Remember</b>: the version indicator will only be added in
+     * <tt>production</tt> and <tt>profile</tt> modes, and only if the
+     * request attribute {@link net.sf.click.ClickServlet#ENABLE_RESOURCE_VERSION}
+     * is set to <tt>"true"</tt>.
      *
      * @param pattern the HTML import pattern string to format
+     * @param versionIndicator the versionIndicator to apply to the resources
      * @param context the request context
      * @return the formatted HTML import statement
      */
-    public static String createHtmlImport(String pattern, Context context) {
-        // If application mode is production or profile, version static resources.
+    public static String createHtmlImport(String pattern,
+        String versionIndicator, Context context) {
+
+        // If application mode is production or profile, version static
+        // resources.
         String versionStr = "";
-        if (context.getApplicationMode().startsWith("pro") &&
-            isEnableResourceVersion(context)) {
-            versionStr = getResourceVersionIndicator();
+        if (context.getApplicationMode().startsWith("pro")
+            && isEnableResourceVersion(context)) {
+            versionStr = versionIndicator;
         }
 
         String[] args = {

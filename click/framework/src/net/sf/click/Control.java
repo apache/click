@@ -132,7 +132,7 @@ public interface Control extends Serializable {
      *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
      *
      * <span class="kw">public</span> String getHtmlImports() {
-     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
      * } </pre>
      *
      * <b>Note</b> multiple import lines should be separated by a

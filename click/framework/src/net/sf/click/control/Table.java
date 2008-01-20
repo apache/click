@@ -599,10 +599,12 @@ public class Table extends AbstractControl {
         }
 
         if (useDarkStyle) {
-            return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK, getContext());
+            return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK,
+                getResourceVersionIndicator(), getContext());
 
         } else {
-            return ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT, getContext());
+            return ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT,
+                getResourceVersionIndicator(), getContext());
         }
     }
 
