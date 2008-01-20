@@ -371,7 +371,8 @@ public class NumberField extends TextField {
      * @return the HTML head import statements for the IntegerField.js
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext());
     }
 
     /**

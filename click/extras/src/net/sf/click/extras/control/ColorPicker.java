@@ -198,7 +198,8 @@ public class ColorPicker extends Field {
      * @return the HTML head import statements for prototype.js and colorpicker.js
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext());
     }
 
     /**
