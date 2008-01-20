@@ -104,7 +104,7 @@ public class CheckboxTree extends Tree {
 
     // -------------------------------------------------------------- Constants
 
-    /** Client side javascript import. This extends on the functions available in {@link Tree} */
+    /** Client side javascript import. This extends on the functions available in {@link Tree}. */
     public static final String HTML_IMPORTS =
             "<script type=\"text/javascript\" src=\"{0}/click/tree/checkbox-tree{1}.js\"></script>\n";
 
@@ -116,7 +116,7 @@ public class CheckboxTree extends Tree {
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
-    // ---------------------------------------------------- Public Constructors
+   // ---------------------------------------------------- Public Constructors
 
     /**
      * Create an Tree control for the given name.
@@ -152,7 +152,8 @@ public class CheckboxTree extends Tree {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
-            buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+            buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS,
+                getResourceVersionIndicator(), getContext()));
         }
         buffer.append(super.getHtmlImports());
         return buffer.toString();
@@ -258,9 +259,9 @@ public class CheckboxTree extends Tree {
 
                     renderIcon(buffer, treeNode);
 
-                    //TODO IE HACK. Witht a empty span <span></span> IE does not render the
-                    //icons. Putting a '&nbsp;' in the span seemed to work. Perhaps there is a
-                    //better workaround.
+                    // TODO IE HACK. With an empty span <span></span> IE does
+                    // not render the icons. Putting a '&nbsp;' in the span
+                    // seemed to work. Perhaps there is a better workaround.
                     buffer.append("&nbsp;");
 
                     buffer.append("</span>");
@@ -363,7 +364,7 @@ public class CheckboxTree extends Tree {
         /**
          * Called when a tree node's checkbox is rendered. Enables the
          * renderer to add attributes needed by javascript functionality
-         * for example something like:
+         * for example:
          * <pre class="codeJava">
          *     buffer.append(<span class="st">" onclick=\"checkboxClicked(this,event);\""</span>);
          * </pre>
