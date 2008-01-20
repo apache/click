@@ -802,12 +802,6 @@ public class Tree extends AbstractControl {
     public boolean onProcess() {
         bindExpandOrCollapseValues();
         bindSelectOrDeselectValues();
-
-        if (isJavascriptEnabled()) {
-            //Populate the javascript handler with its state. This call will notify
-            //any tree listeners about new values.
-            //javascriptHandler.init();
-        }
         return true;
     }
 
