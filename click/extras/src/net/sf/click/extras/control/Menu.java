@@ -595,7 +595,7 @@ public class Menu extends AbstractControl {
      * Return the HTML head import statements for the CSS stylesheet
      * (<tt>click/menu.css</tt>) and JavaScript (<tt>click/menu.js</tt>) files.
      *
-     * @see Control#getHtmlImports()
+     * @see net.sf.click.Control#getHtmlImports()
      *
      * @return the HTML head import statements for the control stylesheet and
      * JavaScript files
@@ -630,7 +630,7 @@ public class Menu extends AbstractControl {
     /**
      * This method returns null.
      *
-     * @see Control#getId()
+     * @see net.sf.click.Control#getId()
      *
      * @return null
      */
@@ -641,7 +641,7 @@ public class Menu extends AbstractControl {
     /**
      * This method does nothing.
      *
-     * @see Control#setListener(Object, String)
+     * @see net.sf.click.Control#setListener(Object, String)
      *
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
@@ -655,7 +655,7 @@ public class Menu extends AbstractControl {
      * Deploy the <tt>menu.css</tt> and <tt>menu.js</tt> files to the
      * <tt>click</tt> web directory when the application is initialized.
      *
-     * @see Control#onDeploy(ServletContext)
+     * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
      */
@@ -680,7 +680,7 @@ public class Menu extends AbstractControl {
     /**
      * This method performs no processing and returns true.
      *
-     * @see Control#onProcess()
+     * @see net.sf.click.Control#onProcess()
      *
      * @return true
      */
