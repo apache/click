@@ -451,6 +451,10 @@ public class ClickUtils {
     /**
      * Return a version indicator for web resources eg. image, stylesheet and
      * javascript files.
+     * <p/>
+     * The version indicator is based on the current Click release version.
+     * For example when using Click 1.4 this method will return the string
+     * <tt>"-1.4"</tt>.
      *
      * @return a version indicator for web resources
      */
@@ -516,7 +520,7 @@ public class ClickUtils {
         String versionStr = "";
         if (context.getApplicationMode().startsWith("pro") &&
             isEnableResourceVersion(context)) {
-            versionStr = "_" + getClickVersion();
+            versionStr = getResourceVersionIndicator();
         }
 
         String[] args = {
