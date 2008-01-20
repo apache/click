@@ -474,10 +474,12 @@ public class CheckList extends Field {
     public String getHtmlImports() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(400);
 
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext()));
 
         if (isSortable()) {
-            buffer.append(ClickUtils.createHtmlImport(JS_SORT_HTML_IMPORTS, getContext()));
+            buffer.append(ClickUtils.createHtmlImport(JS_SORT_HTML_IMPORTS,
+                getResourceVersionIndicator(), getContext()));
 
             // Script to execute
             HtmlStringBuffer script = new HtmlStringBuffer(50);

@@ -286,7 +286,8 @@ public class CreditCardField extends TextField {
      * @return the HTML head import statements for the CreditCardField.js
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS,
+            getResourceVersionIndicator(), getContext());
     }
 
     // -------------------------------------------------------- Public Methods
