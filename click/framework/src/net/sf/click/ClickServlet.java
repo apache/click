@@ -180,7 +180,19 @@ public class ClickServlet extends HttpServlet {
      */
     protected final static String FORWARD_PAGE = "forward-page";
 
-    /** The resource versioning request attribute: key: &nbsp; <tt>enable-resource-version</tt>. */
+    /**
+     * The resource <tt>versioning</tt> request attribute: key: &nbsp;
+     * <tt>enable-resource-version</tt>.
+     * <p/>
+     * If this attribute is set to <tt>true</tt> and Click is running in
+     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
+     * {@link net.sf.click.Control#getHtmlImports()} will have a
+     * <tt>version indicator</tt> added to their path.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     * @see net.sf.click.control.AbstractControl#getResourceVersionIndicator()
+     * @see net.sf.click.util.ClickUtils#createHtmlImport(String, String, Context)
+     */
     public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
 
     // ------------------------------------------------------ Instance Varables
