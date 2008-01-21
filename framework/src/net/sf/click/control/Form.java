@@ -1178,8 +1178,7 @@ public class Form extends AbstractControl {
      * JavaScript files
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -2059,10 +2058,10 @@ public class Form extends AbstractControl {
 
             if (sessionTime != null) {
                 String value = getContext().getRequestParameter(submitTokenName);
-                    Long formTime = Long.valueOf(value);
-                    isValidSubmit = formTime.equals(sessionTime);
-                }
+                Long formTime = Long.valueOf(value);
+                isValidSubmit = formTime.equals(sessionTime);
             }
+        }
 
         // Save state info to form and session
         final Long time = new Long(System.currentTimeMillis());

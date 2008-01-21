@@ -600,11 +600,11 @@ public class Table extends AbstractControl {
 
         if (useDarkStyle) {
             return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK,
-                getResourceVersionIndicator(), getContext());
+                getContext());
 
         } else {
             return ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT,
-                getResourceVersionIndicator(), getContext());
+                getContext());
         }
     }
 

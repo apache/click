@@ -545,49 +545,6 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Return a <tt>version indicator</tt> for web resources eg. image,
-     * stylesheet and javascript files. The <tt>version indicator</tt> can be
-     * used to improve browser caching by setting long expiry headers.
-     * <p/>
-     * This method is used in conjuction with {@link net.sf.click.Control#getHtmlImports()}.
-     * <p/>
-     * By default this method will delegate to
-     * {@link net.sf.click.util.ClickUtils#getResourceVersionIndicator()}.
-     * <p/>
-     * For custom controls you can provide an alternative implementation based
-     * on your <tt>application version</tt> or a resource's <tt>last modified
-     * date</tt>.
-     * <p/>
-     * <b>Please note</b> the <tt>version indicator</tt> is generated and used
-     * only at runtime and does not effect the filename of the physical
-     * resource. For example if the physical location of a javascript file
-     * is located at
-     * <tt>'click-examples/click/control.js'</tt> calling
-     * {@link net.sf.click.Control#getHtmlImports()} could generate the
-     * following resource path:
-     *
-     * <pre class="codeHtml">
-     * &lt;script type=<span class="st">"text/javascript"</span> src=<span class="st">"/click-examples/click/control<span class="red">-12345</span>.js"</span>&gt;&lt;/script&gt;
-     * </pre>
-     *
-     * where <tt>'-12345'</tt> is the <tt>version indicator</tt> in this case.
-     * However the physical file will still be named
-     * <tt>'click-examples/click/control.js'</tt>.
-     * <p/>
-     * <b>So remember</b>, if you add your own custom <tt>version indicator</tt>,
-     * you need to remove that indicator again (normally using a Filter) before
-     * the resource is served, otherwise the path would not be found.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     * @see net.sf.click.ClickServlet#ENABLE_RESOURCE_VERSION
-     *
-     * @return a version indicator for web resources
-     */
-    protected String getResourceVersionIndicator() {
-        return ClickUtils.getResourceVersionIndicator();
-    }
-
-    /**
      * Append all the controls attributes to the specified buffer.
      *
      * @param buffer the specified buffer to append all the attributes
