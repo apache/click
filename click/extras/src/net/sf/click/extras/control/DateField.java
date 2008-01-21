@@ -397,7 +397,7 @@ public class DateField extends TextField {
     public String getHtmlImports() {
         String versionStr = "";
         if (getContext().getApplicationMode().startsWith("pro")) {
-            versionStr = getResourceVersionIndicator();
+            versionStr = ClickUtils.getResourceVersionIndicator();
         }
 
         Object args[] = {
@@ -545,7 +545,7 @@ public class DateField extends TextField {
 
         String versionStr = "";
         if (getContext().getApplicationMode().startsWith("pro")) {
-            versionStr = getResourceVersionIndicator();
+            versionStr = ClickUtils.getResourceVersionIndicator();
         }
 
         if (!isReadonly() && !isDisabled()) {

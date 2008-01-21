@@ -191,8 +191,7 @@ public class JSBarChart extends AbstractControl {
      * used by this control.
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**

@@ -236,8 +236,7 @@ public class TabbedForm extends Form {
      * JavaScript files
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
