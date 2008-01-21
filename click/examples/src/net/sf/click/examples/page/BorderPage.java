@@ -60,7 +60,7 @@ public class BorderPage extends SpringPage {
      * not be auto mapped as the template name <tt>"border-template.htm"</tt> does
      * not match the Pages class name <tt>BorderPage</tt>.
      *
-     * @see Page#getTemplate()
+     * @see net.sf.click.Page#getTemplate()
      */
     public String getTemplate() {
         return "/border-template.htm";
