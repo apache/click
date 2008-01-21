@@ -143,8 +143,7 @@ public class EmailField extends TextField {
      * @return the HTML head import statements for the RegexField.js
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**

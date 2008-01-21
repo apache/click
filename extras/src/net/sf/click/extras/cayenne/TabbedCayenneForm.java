@@ -163,7 +163,7 @@ public class TabbedCayenneForm extends CayenneForm {
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(TabbedForm.HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+            getContext());
     }
 
     /**

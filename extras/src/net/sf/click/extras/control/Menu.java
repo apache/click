@@ -601,8 +601,7 @@ public class Menu extends AbstractControl {
      * JavaScript files
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS,
-            getResourceVersionIndicator(), getContext());
+        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
