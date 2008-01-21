@@ -153,7 +153,7 @@ public class CheckboxTree extends Tree {
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
             buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS,
-                getResourceVersionIndicator(), getContext()));
+                getContext()));
         }
         buffer.append(super.getHtmlImports());
         return buffer.toString();
