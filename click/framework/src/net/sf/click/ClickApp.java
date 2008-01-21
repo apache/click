@@ -40,7 +40,6 @@ import javax.servlet.ServletContext;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
-
 import ognl.Ognl;
 
 import org.apache.commons.fileupload.FileItemFactory;
@@ -240,20 +239,7 @@ class ClickApp implements EntityResolver {
 
         ClickLogger.setInstance(logger);
 
-        InputStream inputStream =
-            getServletContext().getResourceAsStream(DEFAULT_APP_CONFIG);
-
-        if (inputStream == null) {
-            inputStream =
-                ClickUtils.getResourceAsStream("/click.xml", getClass());
-
-            if (inputStream == null) {
-                String msg =
-                    "could not find click app configuration file: "
-                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
-                throw new RuntimeException(msg);
-            }
-        }
+        InputStream inputStream = ClickUtils.getClickConfig(getServletContext());
 
         try {
             Document document = ClickUtils.buildDocument(inputStream, this);
@@ -663,7 +649,7 @@ class ClickApp implements EntityResolver {
             return;
         }
 
-        Element controlsElm = getChild(rootElm, "controls");
+        Element controlsElm = ClickUtils.getChild(rootElm, "controls");
 
         if (controlsElm == null) {
             return;
@@ -693,7 +679,7 @@ class ClickApp implements EntityResolver {
             return;
         }
 
-        Element controlsElm = getChild(rootElm, "controls");
+        Element controlsElm = ClickUtils.getChild(rootElm, "controls");
 
         if (controlsElm == null) {
             return;
@@ -743,7 +729,7 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadMode(Element rootElm) {
-        Element modeElm = getChild(rootElm, "mode");
+        Element modeElm = ClickUtils.getChild(rootElm, "mode");
 
         String modeValue = "development";
 
@@ -812,7 +798,7 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadHeaders(Element rootElm) {
-        Element headersElm = getChild(rootElm, "headers");
+        Element headersElm = ClickUtils.getChild(rootElm, "headers");
 
         if (headersElm != null) {
             commonHeaders =
@@ -825,7 +811,7 @@ class ClickApp implements EntityResolver {
     private void loadFormatClass(Element rootElm)
             throws ClassNotFoundException {
 
-        Element formatElm = getChild(rootElm, "format");
+        Element formatElm = ClickUtils.getChild(rootElm, "format");
 
         if (formatElm != null) {
             String classname = formatElm.getAttribute("classname");
@@ -844,7 +830,7 @@ class ClickApp implements EntityResolver {
 
     private void loadFileItemFactory(Element rootElm) throws Exception {
 
-        Element fileItemFactoryElm = getChild(rootElm, "file-item-factory");
+        Element fileItemFactoryElm = ClickUtils.getChild(rootElm, "file-item-factory");
 
         if (fileItemFactoryElm != null) {
             String classname = fileItemFactoryElm.getAttribute("classname");
@@ -911,7 +897,7 @@ class ClickApp implements EntityResolver {
     }
 
     private void loadPages(Element rootElm) throws ClassNotFoundException {
-        Element pagesElm = getChild(rootElm, "pages");
+        Element pagesElm = ClickUtils.getChild(rootElm, "pages");
 
         if (pagesElm == null) {
             String msg = "required configuration 'pages' element missing.";
@@ -1331,19 +1317,6 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        return null;
-    }
-
-    private Element getChild(Element element, String name) {
-        NodeList nodeList = element.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node instanceof Element) {
-                if (node.getNodeName().equals(name)) {
-                    return (Element) node;
-                }
-            }
-        }
         return null;
     }
 
