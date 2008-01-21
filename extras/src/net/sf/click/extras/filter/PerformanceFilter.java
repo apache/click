@@ -39,8 +39,6 @@ import net.sf.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Provides a filter for improving the performance of web applications by
@@ -300,22 +298,13 @@ import org.w3c.dom.NodeList;
  * This filter will automaitically set the configured click.xml charset as the
  * requests character encoding.
  * <p/>
- * This class is derived from the Jakarta CompressionFilter from
+ * This class is adapted from the Jakarta CompressionFilter from
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>.
  *
  * @author Malcolm Edgar
- * @author Amy Roh
- * @author Dmitri Valdin
+ * @author Bob Schellink
  */
 public class PerformanceFilter implements Filter {
-
-    // ---------------------------------------------- Private Constants
-
-    /**
-     * The default Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>".
-     */
-    private static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
     // ---------------------------------------------- Protected Constants
 
@@ -336,12 +325,6 @@ public class PerformanceFilter implements Filter {
     /** The configured click application request encoding character set. */
     protected String charset;
 
-    /**
-     * The application mode value:
-     * "production", "profile", "development", "debug", "trace".
-     */
-    protected String modeValue;
-
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
 
@@ -357,8 +340,11 @@ public class PerformanceFilter implements Filter {
     /** The cachable-path include files. */
     protected List includeFiles = new ArrayList();
 
+    /** The application in production or profile mode flag. */
+    protected boolean inProductionProfileMode = false;
+
     /** The filter logger. */
-    protected ClickLogger logger = new ClickLogger("PerformanceFilter");
+    protected final ClickLogger logger = new ClickLogger("PerformanceFilter");
 
     // --------------------------------------------------------- Public Methods
 
@@ -413,14 +399,25 @@ public class PerformanceFilter implements Filter {
                 cacheMaxAge = Long.parseLong(param);
             }
 
+            // Get the configured application character set if defined
             charset = getCharset(filterConfig.getServletContext());
 
-            modeValue = getApplicationMode(filterConfig.getServletContext());
+            // Determine whether the appliation is in production or profile mode
+            String modeValue = getApplicationMode(filterConfig.getServletContext());
+            inProductionProfileMode = modeValue.startsWith("pro");
 
-            String message =
-                "initialized with: cachable-paths="
-                + filterConfig.getInitParameter("cachable-paths")
-                + " and cachable-max-age=" + cacheMaxAge;
+            String message = null;
+            if (inProductionProfileMode) {
+                message =
+                    "initialized with: cachable-paths="
+                    + filterConfig.getInitParameter("cachable-paths")
+                    + " and cachable-max-age=" + cacheMaxAge;
+
+            } else {
+                message =
+                    "initialized but not active in application mode: "
+                    + modeValue;
+            }
 
             logger.info(message);
         }
@@ -450,9 +447,9 @@ public class PerformanceFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
-        // if modeValue is not in one of the production modes eg "production" or
-        // "profile", do not apply the performance filter.
-        if (modeValue.indexOf("pro") != 0) {
+        // Don't apply the performance filter if application is not
+        // "production" or "profile" mode.
+        if (!inProductionProfileMode) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -460,7 +457,7 @@ public class PerformanceFilter implements Filter {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-        // enable resource versioning in Click
+        // Enable resource versioning in Click
         request.setAttribute(ClickServlet.ENABLE_RESOURCE_VERSION, "true");
 
         // Apply cache expiry Headers
@@ -486,6 +483,7 @@ public class PerformanceFilter implements Filter {
         }
 
         final String realPath = stripResourceVersionIndicator(path);
+        final boolean isVersionedResourcePath = (realPath.length() != path.length());
 
         // Apply response compression
         if (useGzipCompression(request, path)) {
@@ -496,27 +494,27 @@ public class PerformanceFilter implements Filter {
             wrappedResponse.setCompressionThreshold(compressionThreshold);
 
             try {
-                if (realPath.length() == path.length()) {
-                    // path is not a versioned resource, continue normally
-                    chain.doFilter(request, wrappedResponse);
+                // If a versioned resource path, forward request to real resource path
+                if (isVersionedResourcePath) {
+                    request.getRequestDispatcher(realPath).forward(request, wrappedResponse);
+
+                // Else chain filter
                 } else {
-                    // path is a versioned resource, so forward to the real
-                    // resource
-                    request.getRequestDispatcher(realPath).forward(request,
-                        wrappedResponse);
+                    chain.doFilter(request, wrappedResponse);
                 }
+
             } finally {
                 wrappedResponse.finishResponse();
             }
 
         } else {
-            if (realPath.length() == path.length()) {
-                // path is not a versioned resource, continue normally
-                chain.doFilter(request, response);
+            // If a versioned resource path, forward request to real resource path
+            if (isVersionedResourcePath) {
+                request.getRequestDispatcher(realPath).forward(request, response);
+
+            // Else chain filter
             } else {
-                // path is a versioned resource, so forward to the real resource
-                request.getRequestDispatcher(realPath).forward(request,
-                    response);
+                chain.doFilter(request, response);
             }
         }
     }
@@ -601,7 +599,7 @@ public class PerformanceFilter implements Filter {
      */
     protected String getCharset(ServletContext servletContext) {
 
-        InputStream inputStream = getClickConfig(servletContext);
+        InputStream inputStream = ClickUtils.getClickConfig(servletContext);
 
         try {
             Document document = ClickUtils.buildDocument(inputStream);
@@ -630,14 +628,14 @@ public class PerformanceFilter implements Filter {
      */
     protected String getApplicationMode(ServletContext servletContext) {
 
-        InputStream inputStream = getClickConfig(servletContext);
+        InputStream inputStream = ClickUtils.getClickConfig(servletContext);
 
         try {
             Document document = ClickUtils.buildDocument(inputStream);
 
             Element rootElm = document.getDocumentElement();
 
-            Element modeElm = getChild(rootElm, "mode");
+            Element modeElm = ClickUtils.getChild(rootElm, "mode");
 
             String tmpModeValue = "development";
 
@@ -737,36 +735,5 @@ public class PerformanceFilter implements Filter {
         return false;
     }
 
-    // ------------------------------------------------------ Private Methods
-
-    private InputStream getClickConfig(ServletContext servletContext) {
-        InputStream inputStream =
-            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
-
-        if (inputStream == null) {
-            inputStream = ClickUtils.getResourceAsStream("/click.xml", getClass());
-            if (inputStream == null) {
-                String msg =
-                    "could not find click app configuration file: "
-                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
-                throw new RuntimeException(msg);
-            }
-        }
-
-        return inputStream;
-    }
-
-     private Element getChild(Element element, String name) {
-        NodeList nodeList = element.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node instanceof Element) {
-                if (node.getNodeName().equals(name)) {
-                    return (Element) node;
-                }
-            }
-        }
-        return null;
-    }
 }
 

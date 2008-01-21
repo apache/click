@@ -70,6 +70,9 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 
 /**
@@ -79,12 +82,11 @@ import org.xml.sax.EntityResolver;
  */
 public class ClickUtils {
 
-    private static final String RESOURCE_VERSION_INDICATOR =
-        "_" + getClickVersion();
-
-    /** Hexadecimal characters for MD5 encoding. */
-    private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
-        '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    /**
+     * The default Click configuration filename: &nbsp;
+     * "<tt>/WEB-INF/click.xml</tt>".
+     */
+    private static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
 
     /**
      * Character used to separate username and password in persistent cookies.
@@ -95,10 +97,14 @@ public class ClickUtils {
 
     /*
      * "Tweakable" parameters for the cookie encoding. NOTE: changing these
-     *and recompiling this class will essentially invalidate old cookies.
+     * and recompiling this class will essentially invalidate old cookies.
      */
     private final static char ENCODE_CHAR_OFFSET1 = 'C';
     private final static char ENCODE_CHAR_OFFSET2 = 'i';
+
+    /** Hexadecimal characters for MD5 encoding. */
+    private static final char[] HEXADECIMAL = { '0', '1', '2', '3', '4', '5',
+        '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
     /**
      * The array of escaped HTML character values, indexed on char value.
@@ -391,6 +397,10 @@ public class ClickUtils {
         // <!-- rsaquo is proposed but not yet ISO standardized -->
         HTML_ENTITIES[8364] = "&euro;";   //  -- euro sign, U+20AC NEW -->
     };
+
+    /** The static web resource version number indicator string. */
+    private static final String RESOURCE_VERSION_INDICATOR =
+        "_" + getClickVersion();
 
     // --------------------------------------------------------- Public Methods
 
@@ -1410,6 +1420,55 @@ public class ClickUtils {
             ret = value.substring(0, maxlength - suffix.length()) + suffix;
         }
         return ret;
+    }
+
+    /**
+     * Return the first XML child Element for the given parent Element and child
+     * Element name.
+     *
+     * @param parent the parent element to get the child from
+     * @param name the name of the child element
+     * @return the first child element for the given name and parent
+     */
+    public static Element getChild(Element parent, String name) {
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    return (Element) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the InputStream for the Click configuration file <tt>click.xml</tt>.
+     * This method will first lookup the <tt>click.xml</tt> under the
+     * applications <tt>WEB-INF</tt> directory, and then if not found it will
+     * attempt to find the configuration file on the classpath root.
+     *
+     * @param servletContext the servlet context to obtain the Click configuration
+     *     from
+     * @return the InputStream for the Click configuration file
+     * @throws RuntimeException if the resource could not be found
+     */
+    public static InputStream getClickConfig(ServletContext servletContext) {
+        InputStream inputStream =
+            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+
+        if (inputStream == null) {
+            inputStream = ClickUtils.getResourceAsStream("/click.xml", ClickUtils.class);
+            if (inputStream == null) {
+                String msg =
+                    "could not find click app configuration file: "
+                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
+                throw new RuntimeException(msg);
+            }
+        }
+
+        return inputStream;
     }
 
     /**
