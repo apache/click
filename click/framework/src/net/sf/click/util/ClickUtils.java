@@ -527,19 +527,17 @@ public class ClickUtils {
      * is set to <tt>"true"</tt>.
      *
      * @param pattern the HTML import pattern string to format
-     * @param versionIndicator the versionIndicator to apply to the resources
      * @param context the request context
      * @return the formatted HTML import statement
      */
-    public static String createHtmlImport(String pattern,
-        String versionIndicator, Context context) {
+    public static String createHtmlImport(String pattern, Context context) {
 
         // If application mode is production or profile, version static
         // resources.
         String versionStr = "";
         if (context.getApplicationMode().startsWith("pro")
             && isEnableResourceVersion(context)) {
-            versionStr = versionIndicator;
+            versionStr = getResourceVersionIndicator();
         }
 
         String[] args = {
