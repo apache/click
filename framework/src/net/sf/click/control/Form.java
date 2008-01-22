@@ -2063,11 +2063,16 @@ public class Form extends AbstractControl {
             }
         }
 
+        // CLK-267: check against adding a duplicate field
+        HiddenField field = (HiddenField) getField(submitTokenName);
+        if (field == null) {
+            field = new HiddenField(submitTokenName, Long.class);
+            add(field);
+        }
+
         // Save state info to form and session
         final Long time = new Long(System.currentTimeMillis());
-        HiddenField field = new HiddenField(submitTokenName, Long.class);
         field.setValueObject(time);
-        add(field);
 
         getContext().setSessionAttribute(submitTokenName, time);
 
