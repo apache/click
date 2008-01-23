@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.Page;
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -2058,8 +2059,22 @@ public class Form extends AbstractControl {
 
             if (sessionTime != null) {
                 String value = getContext().getRequestParameter(submitTokenName);
-                Long formTime = Long.valueOf(value);
-                isValidSubmit = formTime.equals(sessionTime);
+                if (value == null) {
+                    // CLK-289. If a session attribute exists for the
+                    // SUBMIT_CHECK, but no request parameter, we assume the
+                    // submission is a duplicate and therefore invalid.
+                    ClickLogger logger = ClickLogger.getInstance();
+                    logger.warn("    WARNING: A 'Redirect After Post' "
+                        + "token called '" + submitTokenName + "' is "
+                        + "registered in the session, but no matching request "
+                        + "parameter was found. (form name: '" + getName()
+                        + "'). To protect against a 'duplicate post', "
+                        +     "Form.onSubmitCheck() will return false.");
+                    isValidSubmit = false;
+                } else {
+                    Long formTime = Long.valueOf(value);
+                    isValidSubmit = formTime.equals(sessionTime);
+                }
             }
         }
 
