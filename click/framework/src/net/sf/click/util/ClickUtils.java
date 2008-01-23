@@ -39,6 +39,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -591,6 +592,33 @@ public class ClickUtils {
     }
 
     /**
+     * Return a resource bundle using the specified base name.
+     *
+     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @return a resource bundle for the given base name
+     * @throws MissingResourceException if no resource bundle for the specified base name can be found
+     */
+    public static ResourceBundle getBundle(String baseName) {
+        return getBundle(baseName, Locale.getDefault());
+    }
+
+    /**
+     * Return a resource bundle using the specified base name and locale.
+     *
+     * @param baseName the base name of the resource bundle, a fully qualified class name
+     * @param locale the locale for which a resource bundle is desired
+     * @return a resource bundle for the given base name and locale
+     * @throws MissingResourceException if no resource bundle for the specified base name can be found
+     */
+    public static ResourceBundle getBundle(String baseName, Locale locale) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = ClassLoader.getSystemClassLoader();
+        }
+        return ResourceBundle.getBundle(baseName, locale, classLoader);
+    }
+
+    /**
      * Returns the specified Cookie object, or null if the cookie does not exist.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
@@ -678,8 +706,7 @@ public class ClickUtils {
      * @return the Click Framework version string
      */
     public static String getClickVersion() {
-        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
-
+        ResourceBundle bundle = getBundle("click-control");
         return bundle.getString("click-version");
     }
 
@@ -1562,8 +1589,7 @@ public class ClickUtils {
             String ext = filename.substring(index + 1);
 
             try {
-                ResourceBundle bundle =
-                    ResourceBundle.getBundle("net/sf/click/util/mime-type");
+                ResourceBundle bundle = getBundle("net/sf/click/util/mime-type");
 
                 return bundle.getString(ext.toLowerCase());
 

@@ -295,8 +295,7 @@ public class MessagesMap implements Map {
 
         if (!NOT_FOUND_CACHE.contains(resourceKey)) {
             try {
-                ResourceBundle resources =
-                    getBundle(resourceName, locale);
+                ResourceBundle resources = ClickUtils.getBundle(resourceName, locale);
 
                 Enumeration e = resources.getKeys();
                 while (e.hasMoreElements()) {
@@ -309,10 +308,6 @@ public class MessagesMap implements Map {
                 NOT_FOUND_CACHE.add(resourceKey);
             }
         }
-    }
-
-    private ResourceBundle getBundle(String baseName, Locale locale) {
-        return ResourceBundle.getBundle(baseName, locale);
     }
 
 }

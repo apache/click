@@ -493,7 +493,7 @@ public class Form extends AbstractControl {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"></link>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n";
 
     /** The Form set field focus JavaScript. */
@@ -518,7 +518,7 @@ public class Form extends AbstractControl {
     protected static String LABEL_NOT_REQUIRED_SUFFIX = "";
 
     static {
-        ResourceBundle bundle = ResourceBundle.getBundle(CONTROL_MESSAGES);
+        ResourceBundle bundle = ClickUtils.getBundle(CONTROL_MESSAGES);
 
         LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
         LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
@@ -2064,12 +2064,12 @@ public class Form extends AbstractControl {
                     // SUBMIT_CHECK, but no request parameter, we assume the
                     // submission is a duplicate and therefore invalid.
                     ClickLogger logger = ClickLogger.getInstance();
-                    logger.warn("    WARNING: A 'Redirect After Post' "
-                        + "token called '" + submitTokenName + "' is "
-                        + "registered in the session, but no matching request "
-                        + "parameter was found. (form name: '" + getName()
+                    logger.warn("    'Redirect After Post' token called '"
+                        + submitTokenName + "' is registered in the session, "
+                        + "but no matching request parameter was found. "
+                        + "(form name: '" + getName()
                         + "'). To protect against a 'duplicate post', "
-                        +     "Form.onSubmitCheck() will return false.");
+                        + "Form.onSubmitCheck() will return false.");
                     isValidSubmit = false;
                 } else {
                     Long formTime = Long.valueOf(value);
