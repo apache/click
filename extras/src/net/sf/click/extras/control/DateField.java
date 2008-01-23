@@ -395,11 +395,6 @@ public class DateField extends TextField {
      * JavaScript files
      */
     public String getHtmlImports() {
-        String versionStr = "";
-        if (getContext().getApplicationMode().startsWith("pro")) {
-            versionStr = ClickUtils.getResourceVersionIndicator();
-        }
-
         Object args[] = {
                 getContext().getRequest().getContextPath(),
                 getStyle(),
@@ -408,7 +403,7 @@ public class DateField extends TextField {
                 getCalendarPattern(),
                 new Boolean(getShowTime()),
                 new Integer(getFirstDayOfWeek() - 1),
-                versionStr
+                ClickUtils.getResourceVersionIndicator(getContext())
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -543,17 +538,12 @@ public class DateField extends TextField {
         String textField = super.toString();
         buffer.append(textField);
 
-        String versionStr = "";
-        if (getContext().getApplicationMode().startsWith("pro")) {
-            versionStr = ClickUtils.getResourceVersionIndicator();
-        }
-
         if (!isReadonly() && !isDisabled()) {
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
             buffer.append(getContext().getRequest().getContextPath());
             buffer.append("/click/calendar/calendar");
-            buffer.append(versionStr);
+            buffer.append(ClickUtils.getResourceVersionIndicator(getContext()));
             buffer.append(".gif\" id=\"");
             buffer.append(getId());
             buffer.append("-button\" ");

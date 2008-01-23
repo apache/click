@@ -183,7 +183,7 @@ public class Menu extends AbstractControl {
     public static final String HTML_IMPORTS =
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"></link>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/menu{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
 
     // -------------------------------------------------------- Class Variables
@@ -593,7 +593,7 @@ public class Menu extends AbstractControl {
 
     /**
      * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/menu.css</tt>) and JavaScript (<tt>click/menu.js</tt>) files.
+     * (<tt>click/menu.css</tt>) and JavaScript (<tt>click/extras-control.js</tt>) files.
      *
      * @see net.sf.click.Control#getHtmlImports()
      *
@@ -661,7 +661,7 @@ public class Menu extends AbstractControl {
     public void onDeploy(ServletContext servletContext) {
         String[] files = new String[] {
                 "/net/sf/click/extras/control/menu.css",
-                "/net/sf/click/extras/control/menu.js"
+                "/net/sf/click/extras/control/extras-control.js"
             };
 
         ClickUtils.deployFiles(servletContext, files, "click");

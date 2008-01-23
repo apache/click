@@ -116,7 +116,7 @@ public class NumberField extends TextField {
 
     /** The NumberField.js imports statement. */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/NumberField{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -366,9 +366,12 @@ public class NumberField extends TextField {
     }
 
     /**
-     * Return the HTML head import statements for the IntegerField.js.
+     * Return the HTML head import statements for the JavaScript
+     * (<tt>click/extras-control.js</tt>) file.
      *
-     * @return the HTML head import statements for the IntegerField.js
+     * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the JavaScript file
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
@@ -401,7 +404,7 @@ public class NumberField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Deploy the <tt>NumberField.js</tt> file to the <tt>click</tt> web
+     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
@@ -410,7 +413,7 @@ public class NumberField extends TextField {
      */
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/extras/control/NumberField.js",
+                              "/net/sf/click/extras/control/extras-control.js",
                               "click");
     }
 

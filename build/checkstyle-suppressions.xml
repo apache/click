@@ -87,11 +87,11 @@
               
     <suppress checks="MethodLength"
               files="ClickServlet.java"
-              lines="538"/>
+              lines="524"/>
               
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2134"/>
+              lines="2138"/>
 
 	<!-- Static Variable Name -->              
               

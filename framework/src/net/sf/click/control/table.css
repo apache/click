@@ -5,16 +5,16 @@
  * http://displaytag.sourceforge.net
  */
 
-th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+th.avoka, th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
 	padding: 2px 4px 2px 4px !important;
 	text-align: left;
 }
 
-th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report {
+th.avoka, th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report {
 	vertical-align: top;
 }
 
-td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+td.avoka, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
 	vertical-align: baseline;
 }
 
@@ -47,23 +47,45 @@ tr.tableRowEven, tr.even {
 }
 
 /*
-complex, isi, its, mars, nocol, simple, report
+avoka, complex, isi, its, mars, nocol, simple, report
 */
 
 /** Individual Styles **/
 
+/* avoka style */
+table.avoka thead tr {
+    color: white;
+	background-color: #6c90cc;
+}
+table.avoka tr.even {
+    background-color: #cedae8;
+}
+table.avoka tr.odd {
+    background-color: #eef1f7;
+}
+table.avoka, table.avoka td, table.avoka th {
+	border: 1px solid #a7bcd6;
+	border-collapse: collapse;
+}
+table.avoka th {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+table.avoka td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+}
+
 /* complex style */
 table.complex thead tr {
-    background-color: #ccc;
+    color: black;
+	background-color: #c0c0c0;
 }
 table.complex tr.even {
-    background-color: #ddd;
+    background-color: #d0d0d0;
 }
 table.complex tr.odd {
-    background-color: #fff;
-}
-table.complex td.textRed {
-    color: #b11;
+    background-color: white;
 }
 table.complex, table.complex td, table.complex th {
 	border: 1px solid #999;
@@ -79,6 +101,16 @@ table.complex td {
 }
 
 /* isi style */
+table.isi thead tr {
+    color: black;
+	background-color: #ffcc00;
+}
+table.isi tr.even {
+    background-color: #ffeeaa;
+}
+table.isi tr.odd {
+    background-color: white;
+}
 table.isi, table.isi td, table.isi th {
     border: 1px solid #666;
     border-collapse: collapse;
@@ -94,10 +126,14 @@ table.isi td {
 
 /* its style */
 table.its thead tr {
-    background-color: #7DAEDF;
+    color: black;
+	background-color: #6699CC;
 }
 table.its tr.even {
-    background-color: #def;
+    background-color: #ddeeff;
+}
+table.its tr.odd {
+    background-color: white;
 }
 table.its, table.its td, table.its th {
     border: 1px solid #666;
@@ -110,13 +146,14 @@ table.its th, table.its td {
 
 /* mars style */
 table.mars thead tr {
-    background-color: #9c9;
+    color: black;
+	background-color: #99cc99;
 }
 table.mars tr.even {
-    background-color: #ccb;
+    background-color: #ccccbb;
 }
 table.mars tr.odd {
-    background-color: #eec;
+    background-color: #eeeecc;
 }
 table.mars, table.mars td, table.mars th {
     border: 1px solid #666;
@@ -132,7 +169,21 @@ table.mars td {
 }
 
 /* nocol style */
-table.nocol tbody td,table.nocol tbody th {
+table.nocol thead tr {
+    color: black;
+	background-color: #ffcc00;
+}
+table.nocol tr.even {
+    background-color: #ffeeaa;
+}
+table.nocol tr.odd {
+    background-color: white;
+}
+table.nocol, table.nocol td, table.nocol th {
+    border: 4px solid white;
+}
+table.nocol tbody td, table.nocol tbody th {
+	border-collapse: separate;
 	border-left: none;
 	border-right: none;
 }
@@ -147,13 +198,14 @@ table.nocol td {
 
 /* simple style */
 table.simple thead tr {
-    background-color: #eee;
+    color: black;
+	background-color: #eee;
 }
 table.simple tr.even {
-    background-color: #fff;
+    background-color: white;
 }
-table.simple td.textRed {
-    color: #b11;
+table.simple tr.odd {
+    background-color: white;
 }
 table.simple, table.simple td, table.simple th {
 	border: 1px solid #ccc;
@@ -171,16 +223,15 @@ table.simple td {
 /* report style */
 table.report {
     border: 1px solid #666;
-}
-table.report td, table.report th {
-	font: menu;
+	border-collapse: separate;
 }
 table.report th {
-	background:   buttonface;
+	background: buttonface;
 	border-width: 1px;
 	border-style: solid;
 	border-color: threedhighlight threedshadow threedshadow threedhighlight;
-	cursor:       hand;
+    color: black;
+	cursor: hand;
 }
 table.report idcol {
 	background: buttonface;
@@ -194,10 +245,10 @@ table.report tbody {
 }
 table.report {
 /*	height: 200px; */
-/*	overflow: auto; */
+*	overflow: auto; */
 }
 table.report tbody tr{
-/*	height: 10px; */
+	height: 10px;
 }
 table.report th {
 	padding: 2px 4px 2px 4px;

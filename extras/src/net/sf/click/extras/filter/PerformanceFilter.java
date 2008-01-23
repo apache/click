@@ -32,7 +32,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.ClickServlet;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
@@ -315,7 +314,7 @@ public class PerformanceFilter implements Filter {
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         // Enable resource versioning in Click
-        request.setAttribute(ClickServlet.ENABLE_RESOURCE_VERSION, "true");
+        request.setAttribute(ClickUtils.ENABLE_RESOURCE_VERSION, "true");
 
         // Apply cache expiry Headers
         final String path = ClickUtils.getResourcePath(request);
@@ -404,7 +403,7 @@ public class PerformanceFilter implements Filter {
      * @return a version indicator for web resources
      */
     protected String getResourceVersionIndicator(String path) {
-        return ClickUtils.getResourceVersionIndicator();
+        return ClickUtils.RESOURCE_VERSION_INDICATOR;
     }
 
     /**
