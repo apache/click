@@ -54,7 +54,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import net.sf.click.ClickServlet;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
@@ -82,11 +81,7 @@ import org.xml.sax.EntityResolver;
  */
 public class ClickUtils {
 
-    /**
-     * The default Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>".
-     */
-    private static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
+    // ------------------------------------------------------ Private Constants
 
     /**
      * Character used to separate username and password in persistent cookies.
@@ -398,8 +393,31 @@ public class ClickUtils {
         HTML_ENTITIES[8364] = "&euro;";   //  -- euro sign, U+20AC NEW -->
     };
 
+    // ------------------------------------------------------- Public Constants
+
+    /**
+     * The resource <tt>versioning</tt> request attribute: key: &nbsp;
+     * <tt>enable-resource-version</tt>.
+     * <p/>
+     * If this attribute is set to <tt>true</tt> and Click is running in
+     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
+     * {@link net.sf.click.Control#getHtmlImports()} will have a
+     * <tt>version indicator</tt> added to their path.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     * @see net.sf.click.util.ClickUtils#createHtmlImport(String, Context)
+     * @see net.sf.click.util.ClickUtils#getResourceVersionIndicator(Context)
+     */
+    public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
+
+    /**
+     * The default Click configuration filename: &nbsp;
+     * "<tt>/WEB-INF/click.xml</tt>".
+     */
+    public static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
+
     /** The static web resource version number indicator string. */
-    private static final String RESOURCE_VERSION_INDICATOR =
+    public static final String RESOURCE_VERSION_INDICATOR =
         "_" + getClickVersion();
 
     // --------------------------------------------------------- Public Methods
@@ -456,20 +474,6 @@ public class ClickUtils {
             throws ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         return Class.forName(classname, true, classLoader);
-    }
-
-    /**
-     * Return a version indicator for web resources eg. image, stylesheet and
-     * javascript files.
-     * <p/>
-     * The version indicator is based on the current Click release version.
-     * For example when using Click 1.4 this method will return the string
-     * <tt>"-1.4"</tt>.
-     *
-     * @return a version indicator for web resources
-     */
-    public static String getResourceVersionIndicator() {
-        return RESOURCE_VERSION_INDICATOR;
     }
 
     /**
@@ -531,18 +535,9 @@ public class ClickUtils {
      * @return the formatted HTML import statement
      */
     public static String createHtmlImport(String pattern, Context context) {
-
-        // If application mode is production or profile, version static
-        // resources.
-        String versionStr = "";
-        if (context.getApplicationMode().startsWith("pro")
-            && isEnableResourceVersion(context)) {
-            versionStr = getResourceVersionIndicator();
-        }
-
         String[] args = {
             context.getRequest().getContextPath(),
-            versionStr
+            getResourceVersionIndicator(context)
         };
 
         return MessageFormat.format(pattern, args);
@@ -675,6 +670,40 @@ public class ClickUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Return the Click Framework version string.
+     *
+     * @return the Click Framework version string
+     */
+    public static String getClickVersion() {
+        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
+
+        return bundle.getString("click-version");
+    }
+
+    /**
+     * Return a version indicator for static web resources
+     * (eg. css, js and image files), if resource versioning is active;
+     * otherwise this method will return an empty string.
+     * <p/>
+     * The version indicator is based on the current Click release version.
+     * For example when using Click 1.4 this method will return the string
+     * <tt>"-1.4"</tt>.
+     *
+     * @param context the request context
+     * @return a version indicator for web resources
+     */
+    public static String getResourceVersionIndicator(Context context) {
+        if (context.getApplicationMode().startsWith("pro")
+            && isEnableResourceVersion(context)) {
+
+            return RESOURCE_VERSION_INDICATOR;
+
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -1385,6 +1414,16 @@ public class ClickUtils {
                 targetMethod.setAccessible(false);
             }
         }
+    }
+
+    /**
+     * Return true if static web content resource versioning is enabled.
+     *
+     * @param context the request context
+     * @return true if static web content resource versioning is enabled
+     */
+    public static boolean isEnableResourceVersion(Context context) {
+        return "true".equals(context.getRequestAttribute(ENABLE_RESOURCE_VERSION));
     }
 
     /**
@@ -2112,18 +2151,4 @@ public class ClickUtils {
         return false;
     }
 
-    /**
-     * Return the Click Framework version string.
-     *
-     * @return the Click Framework version string
-     */
-    private static String getClickVersion() {
-        ResourceBundle bundle = ResourceBundle.getBundle("click-control");
-
-        return bundle.getString("click-version");
-    }
-
-    private static boolean isEnableResourceVersion(Context context) {
-        return "true".equals(context.getRequestAttribute(ClickServlet.ENABLE_RESOURCE_VERSION));
-    }
 }

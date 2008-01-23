@@ -1,7 +1,6 @@
 Click 1.4 Release
 -----------------
 BUGS
-* SearchTable page not search criteria working in "profile" mode
 * ColorPicker rendering bug
 * Form rendering bug, with setting style, see FieldSet example probably due to
   recent form rendering refactoring and removing align property from parent element

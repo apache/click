@@ -229,13 +229,21 @@ public class FormTable extends Table {
         buffer.append(super.getHtmlImports());
         buffer.append(getForm().getHtmlImports());
 
+        int firstRow = getFirstRow();
+        int lastRow = getLastRow();
+
         for (int i = 0; i < getColumnList().size(); i++) {
             Column column = (Column) getColumnList().get(i);
             if (column instanceof FieldColumn) {
                 Field field = ((FieldColumn) column).getField();
-                String htmlImports = field.getHtmlImports();
-                if (htmlImports != null) {
-                    buffer.append(htmlImports);
+
+                for (int j = firstRow; j < lastRow; j++) {
+                    field.setName(column.getName() + "_" + j);
+
+                    String htmlImports = field.getHtmlImports();
+                    if (htmlImports != null) {
+                        buffer.append(htmlImports);
+                    }
                 }
             }
         }

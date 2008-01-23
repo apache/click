@@ -153,21 +153,17 @@ import org.apache.velocity.util.SimplePool;
  */
 public class ClickServlet extends HttpServlet {
 
-    // --------------------------------------------------------------- Contants
+    // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
-
-    private static final int WRITER_BUFFER_SIZE = 32 * 1024;
 
     private static final String APPLICAION_RELOADED_MSG  =
         "<html><head>"
         + "<style type='text/css'>body{font-family:Arial;}</style></head>"
         + "<body><h2>Application Reloaded</h2></body></html>";
 
-    /**
-     * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
-     */
-    protected final static String CLICK_FORWARD = "click-forward";
+    /** The Velocity writer buffer size. */
+    private static final int WRITER_BUFFER_SIZE = 32 * 1024;
 
     /**
      * The click application is reloadable flag servlet init parameter name:
@@ -176,24 +172,14 @@ public class ClickServlet extends HttpServlet {
     protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
+     * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
+     */
+    protected final static String CLICK_FORWARD = "click-forward";
+
+    /**
      * The Page to forward to request attribute: &nbsp; "<tt>click-page</tt>".
      */
     protected final static String FORWARD_PAGE = "forward-page";
-
-    /**
-     * The resource <tt>versioning</tt> request attribute: key: &nbsp;
-     * <tt>enable-resource-version</tt>.
-     * <p/>
-     * If this attribute is set to <tt>true</tt> and Click is running in
-     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
-     * {@link net.sf.click.Control#getHtmlImports()} will have a
-     * <tt>version indicator</tt> added to their path.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     * @see net.sf.click.control.AbstractControl#getResourceVersionIndicator()
-     * @see net.sf.click.util.ClickUtils#createHtmlImport(String, String, Context)
-     */
-    public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
 
     // ------------------------------------------------------ Instance Varables
 

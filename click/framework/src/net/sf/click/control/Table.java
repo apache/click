@@ -112,6 +112,7 @@ import org.apache.commons.lang.StringUtils;
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
  * <ul style="margin-top:0.5em;">
+ *  <li>avoka</li>
  *  <li>complex</li>
  *  <li>isi</li>
  *  <li>its</li>
@@ -163,14 +164,14 @@ public class Table extends AbstractControl {
      * The table.css style sheet import link with a light contract sortable icon.
      */
     public static final String TABLE_IMPORTS_LIGHT =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"></link>\n"
         + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-light{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-light{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-light{1}.gif) center right no-repeat;'}' </style>\n";
 
     /**
      * The table.css style sheet import link with a dark contract sortable icon.
      */
     public static final String TABLE_IMPORTS_DARK =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"></link>\n"
         + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
 
     /** The table top banner position. */
@@ -193,6 +194,9 @@ public class Table extends AbstractControl {
 
     /** The control ActionLink sort number parameter name: <tt>"sort"</tt>. */
     public static final String SORT = "sort";
+
+    /** The table CSS style: <tt>"avoka"</tt>. */
+    public static final String CLASS_AVOKA = "avoka";
 
     /** The table CSS style: <tt>"complex"</tt>. */
     public static final String CLASS_COMPLEX = "complex";

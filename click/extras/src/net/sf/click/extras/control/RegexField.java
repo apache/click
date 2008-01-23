@@ -98,7 +98,7 @@ public class RegexField extends TextField {
 
     /** The RegexField.js imports statement. */
     public static final String HTML_IMPORTS =
-        "<script type=\"text/javascript\" src=\"{0}/click/RegexField{1}.js\"></script>\n";
+        "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
@@ -194,15 +194,18 @@ public class RegexField extends TextField {
         return pattern;
     }
 
+
     /**
-     * Return the HTML head import statements for the RegexField.js.
+     * Return the HTML head import statements for the JavaScript
+     * (<tt>click/extras-control.js</tt>) file.
      *
-     * @return the HTML head import statements for the RegexField.js
+     * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the JavaScript file
      */
     public String getHtmlImports() {
         return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
-
 
     /**
      * Return the field JavaScript client side validation function.
@@ -271,7 +274,7 @@ public class RegexField extends TextField {
     }
 
     /**
-     * Deploy the <tt>RegexField.js</tt> file to the <tt>click</tt> web
+     * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
      *
      * @see net.sf.click.Control#onDeploy(ServletContext)
@@ -280,7 +283,7 @@ public class RegexField extends TextField {
      */
     public void onDeploy(ServletContext servletContext) {
         ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/extras/control/RegexField.js",
+                              "/net/sf/click/extras/control/extras-control.js",
                               "click");
     }
 
