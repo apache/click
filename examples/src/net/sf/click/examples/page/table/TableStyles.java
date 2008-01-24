@@ -17,11 +17,6 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class TableStyles extends BorderPage {
 
-    private static final String[] STYLES = {
-        Table.CLASS_AVOKA, Table.CLASS_COMPLEX, Table.CLASS_ISI, Table.CLASS_ITS,
-        Table.CLASS_MARS, Table.CLASS_NOCOL, Table.CLASS_REPORT, Table.CLASS_SIMPLE
-    };
-
     public Form form = new Form();
     public Table table = new Table();
 
@@ -34,7 +29,7 @@ public class TableStyles extends BorderPage {
         form.setLabelAlign(Form.ALIGN_LEFT);
         form.setMethod("GET");
 
-        styleSelect.addAll(STYLES);
+        styleSelect.addAll(Table.CLASS_STYLES);
         styleSelect.setAttribute("onchange", "this.form.submit();");
         form.add(styleSelect);
 
