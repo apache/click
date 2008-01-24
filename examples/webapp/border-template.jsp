@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Click Examples</title>
-<link rel="stylesheet" type="text/css" href="${context}/assets/css/style.css" title="Style"></link>
+<link rel="stylesheet" type="text/css" href="${context}/assets/css/style.css" title="Style"/>
 ${imports}
 </head>
 <body>
