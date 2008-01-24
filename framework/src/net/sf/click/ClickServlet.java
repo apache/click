@@ -412,6 +412,7 @@ public class ClickServlet extends HttpServlet {
                 // See the issue CLK-282 for details.
                 if (!(request instanceof ClickRequestWrapper)) {
                     Context.setThreadLocalContext(null);
+                    ClickLogger.setInstance(null);
                 }
             }
         }
