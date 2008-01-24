@@ -932,7 +932,7 @@ public class ClickServlet extends HttpServlet {
         // Reset the page navigation state
         try {
             // Reset the path
-            String path = clickApp.getPagePath(page.getClass());
+            String path = page.getContext().getResourcePath();
             page.setPath(path);
 
             // Reset the foward
