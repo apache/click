@@ -592,8 +592,13 @@ class ClickApp implements EntityResolver {
     Field[] getPageFieldArray(Class pageClass) {
         Object object = pageByClassMap.get(pageClass);
 
-        if (object != null) {
+        if (object instanceof ClickApp.PageElm) {
             ClickApp.PageElm page = (ClickApp.PageElm) object;
+            return page.getFieldArray();
+
+        } else if (object instanceof List) {
+            List list = (List) object;
+            ClickApp.PageElm page = (ClickApp.PageElm) list.get(0);
             return page.getFieldArray();
 
         } else {
@@ -610,8 +615,13 @@ class ClickApp implements EntityResolver {
     Map getPageFields(Class pageClass) {
         Object object = pageByClassMap.get(pageClass);
 
-        if (object != null) {
+        if (object instanceof ClickApp.PageElm) {
             ClickApp.PageElm page = (ClickApp.PageElm) object;
+            return page.getFields();
+
+        } else if (object instanceof List) {
+            List list = (List) object;
+            ClickApp.PageElm page = (ClickApp.PageElm) list.get(0);
             return page.getFields();
 
         } else {
