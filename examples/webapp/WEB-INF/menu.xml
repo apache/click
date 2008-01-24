@@ -35,7 +35,7 @@
 		<menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
 		<menu separator="true"/>
 		<menu label="Page Navigation" path="navigation-a.htm"/>
-		<menu label="Page Flow" path="pageflow/start-page.htm"/>
+		<menu label="Page Flow Patterns" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
       	<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
       	<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
@@ -77,8 +77,8 @@
 		<menu separator="true"/>
 		<menu label="FormTable" path="table/form-table.htm"/>
 		<menu separator="true"/>
-		<menu label="Edit Table" path="table/edit-table.htm"/>
-		<menu label="Search Table" path="table/search-table.htm"/>
+		<menu label="Edit Table Pattern" path="table/edit-table.htm"/>
+		<menu label="Search Table Pattern" path="table/search-table.htm"/>
    	</menu>
 
    	<menu label=" Tree" path="#" imageSrc="/assets/images/icons-16px/text_tree.png">
