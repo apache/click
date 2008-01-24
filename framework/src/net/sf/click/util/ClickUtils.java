@@ -471,7 +471,7 @@ public class ClickUtils {
      * @return the <tt>Class</tt> object
      * @throws ClassNotFoundException if the class cannot be located
      */
-    public static Class classForName(String classname)
+    public static Class classForName(String classname) 
             throws ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         return Class.forName(classname, true, classLoader);
@@ -612,9 +612,6 @@ public class ClickUtils {
      */
     public static ResourceBundle getBundle(String baseName, Locale locale) {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader == null) {
-            classLoader = ClassLoader.getSystemClassLoader();
-        }
         return ResourceBundle.getBundle(baseName, locale, classLoader);
     }
 
