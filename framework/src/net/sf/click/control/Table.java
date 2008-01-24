@@ -167,14 +167,14 @@ public class Table extends AbstractControl {
      * The table.css style sheet import link with a light contract sortable icon.
      */
     public static final String TABLE_IMPORTS_LIGHT =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"></link>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
         + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-light{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-light{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-light{1}.gif) center right no-repeat;'}' </style>\n";
 
     /**
      * The table.css style sheet import link with a dark contract sortable icon.
      */
     public static final String TABLE_IMPORTS_DARK =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"></link>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/table{1}.css\"/>\n"
         + "<style type=\"text/css\"> th.sortable a '{'background: url({0}/click/column-sortable-dark{1}.gif) center right no-repeat;'}' th.ascending a '{'background: url({0}/click/column-ascending-dark{1}.gif) center right no-repeat;'}' th.descending a '{'background: url({0}/click/column-descending-dark{1}.gif) center right no-repeat;'}' </style>\n";
 
     /** The table top banner position. */
