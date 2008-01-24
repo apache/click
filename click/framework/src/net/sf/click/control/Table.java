@@ -112,12 +112,15 @@ import org.apache.commons.lang.StringUtils;
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
  * <ul style="margin-top:0.5em;">
- *  <li>avoka</li>
+ *  <li>blue1</li>
+ *  <li>blue2</li>
  *  <li>complex</li>
  *  <li>isi</li>
  *  <li>its</li>
  *  <li>mars</li>
  *  <li>nocol</li>
+ *  <li>orange1</li>
+ *  <li>orange2</li>
  *  <li>report</li>
  *  <li>simple</li>
  * </ul>
@@ -195,8 +198,11 @@ public class Table extends AbstractControl {
     /** The control ActionLink sort number parameter name: <tt>"sort"</tt>. */
     public static final String SORT = "sort";
 
-    /** The table CSS style: <tt>"avoka"</tt>. */
-    public static final String CLASS_AVOKA = "avoka";
+    /** The table CSS style: <tt>"blue1"</tt>. */
+    public static final String CLASS_BLUE1 = "blue1";
+
+    /** The table CSS style: <tt>"blue2"</tt>. */
+    public static final String CLASS_BLUE2 = "blue2";
 
     /** The table CSS style: <tt>"complex"</tt>. */
     public static final String CLASS_COMPLEX = "complex";
@@ -213,11 +219,25 @@ public class Table extends AbstractControl {
     /** The table CSS style: <tt>"nocol"</tt>. */
     public static final String CLASS_NOCOL = "nocol";
 
+    /** The table CSS style: <tt>"orange1"</tt>. */
+    public static final String CLASS_ORANGE1 = "orange1";
+
+    /** The table CSS style: <tt>"orange2"</tt>. */
+    public static final String CLASS_ORANGE2 = "orange2";
+
     /** The table CSS style: <tt>"report"</tt>. */
     public static final String CLASS_REPORT = "report";
 
     /** The table CSS style: <tt>"simple"</tt>. */
     public static final String CLASS_SIMPLE = "simple";
+
+    /** The array of pre-defined table CSS class styles. */
+    public static final String[] CLASS_STYLES = {
+        Table.CLASS_BLUE1, Table.CLASS_BLUE2, Table.CLASS_COMPLEX,
+        Table.CLASS_ISI, Table.CLASS_ITS, Table.CLASS_MARS, Table.CLASS_NOCOL,
+        Table.CLASS_ORANGE1, Table.CLASS_ORANGE2, Table.CLASS_REPORT,
+        Table.CLASS_SIMPLE
+    };
 
     // ----------------------------------------------------- Instance Variables
 

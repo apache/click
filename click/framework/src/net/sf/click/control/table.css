@@ -5,16 +5,19 @@
  * http://displaytag.sourceforge.net
  */
 
-th.avoka, th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
-	padding: 2px 4px 2px 4px !important;
-	text-align: left;
+table.blue1, table.blue2, table.complex, table.isi, table.its, table.mars, table.nocol, table.orange1, table.orange2, table.simple, table.report {
+	border-collapse: collapse;
 }
 
-th.avoka, th.complex, th.isi, th.its, th.mars, th.nocol, th.simple, th.report {
+table.blue1 th, table.blue2 th, table.complex th, table.isi th, table.its th, table.mars th, table.nocol th, table.orange1 th, table.orange2 th, table.simple th, table.report th {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
 	vertical-align: top;
 }
 
-td.avoka, td.complex, td.isi, td.its, td.mars, td.nocol, td.simple, td.report {
+table.blue1 td, table.blue2 td, table.complex td, table.isi td, table.its td, table.mars td, table.nocol td, table.orange1 td, table.orange2 td, table.simple td, table.report td {
+	padding: 2px 4px 2px 4px !important;
+	text-align: left;
 	vertical-align: baseline;
 }
 
@@ -38,48 +41,49 @@ th.ascending a, th.descending a, th.sortable a {
 	width: 100%;
 }
 
-tr.odd {
-	background-color: #fff
-}
-
-tr.tableRowEven, tr.even {
-	background-color: #fea
-}
-
 /*
-avoka, complex, isi, its, mars, nocol, simple, report
+Styles: blue1, blue2, complex, isi, its, mars, nocol, orange1, orange2, simple, report
 */
 
 /** Individual Styles **/
 
-/* avoka style */
-table.avoka thead tr {
+/* blue1 style */
+table.blue1 thead tr {
     color: white;
 	background-color: #6c90cc;
 }
-table.avoka tr.even {
+table.blue1 tr.even {
     background-color: #cedae8;
 }
-table.avoka tr.odd {
+table.blue1 tr.odd {
+    background-color: white;
+}
+table.blue1, table.blue1 td, table.blue1 th {
+	border: 1px solid #6c90cc;
+}
+table.blue1 td {
+	border: 1px transparent;
+}
+
+/* blue2 style */
+table.blue2 thead tr {
+    color: white;
+	background-color: #6c90cc;
+}
+table.blue2 tr.even {
+    background-color: #cedae8;
+}
+table.blue2 tr.odd {
     background-color: #eef1f7;
 }
-table.avoka, table.avoka td, table.avoka th {
-	border: 1px solid #a7bcd6;
-	border-collapse: collapse;
-}
-table.avoka th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-table.avoka td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+table.blue2, table.blue2 td, table.blue2 th {
+	border: 1px solid #6c90cc;
 }
 
 /* complex style */
 table.complex thead tr {
-    color: black;
-	background-color: #c0c0c0;
+    color: white;
+	background-color: #303030;
 }
 table.complex tr.even {
     background-color: #d0d0d0;
@@ -87,17 +91,14 @@ table.complex tr.even {
 table.complex tr.odd {
     background-color: white;
 }
-table.complex, table.complex td, table.complex th {
-	border: 1px solid #999;
-	border-collapse: collapse;
+table.complex {
+	border: 1px solid #303030;
 }
 table.complex th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+	border: 1px solid #303030;
 }
 table.complex td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+	border: 1px transparent;
 }
 
 /* isi style */
@@ -113,15 +114,6 @@ table.isi tr.odd {
 }
 table.isi, table.isi td, table.isi th {
     border: 1px solid #666;
-    border-collapse: collapse;
-}
-table.isi th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-table.isi td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
 }
 
 /* its style */
@@ -137,11 +129,6 @@ table.its tr.odd {
 }
 table.its, table.its td, table.its th {
     border: 1px solid #666;
-    border-collapse: collapse;
-}
-table.its th, table.its td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
 }
 
 /* mars style */
@@ -157,15 +144,6 @@ table.mars tr.odd {
 }
 table.mars, table.mars td, table.mars th {
     border: 1px solid #666;
-    border-collapse: collapse;
-}
-table.mars th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-table.mars td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
 }
 
 /* nocol style */
@@ -187,19 +165,44 @@ table.nocol tbody td, table.nocol tbody th {
 	border-left: none;
 	border-right: none;
 }
-table.nocol th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+
+/* orange1 style */
+table.orange1 thead tr {
+    color: white;
+	background-color: #ff8716;
 }
-table.nocol td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+table.orange1 tr.even {
+    background-color: #ffeeaa;
+}
+table.orange1 tr.odd {
+    background-color: white;
+}
+table.orange1, table.orange1 th {
+	border: 1px solid #ff8716;
+}
+table.orange1 td {
+	border: 1px transparent;
+}
+
+/* orange2 style */
+table.orange2 thead tr {
+    color: white;
+	background-color: #ff8716;
+}
+table.orange2 tr.even {
+    background-color: #ffd07f;
+}
+table.orange2 tr.odd {
+    background-color: #ffeeaa;
+}
+table.orange2, table.orange2 td, table.orange2 th {
+	border: 1px solid #ff8716;
 }
 
 /* simple style */
 table.simple thead tr {
     color: black;
-	background-color: #eee;
+	background-color: #c0c0c0;
 }
 table.simple tr.even {
     background-color: white;
@@ -208,16 +211,7 @@ table.simple tr.odd {
     background-color: white;
 }
 table.simple, table.simple td, table.simple th {
-	border: 1px solid #ccc;
-	border-collapse: collapse;
-}
-table.simple th {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
-}
-table.simple td {
-	padding: 2px 4px 2px 4px;
-	text-align: left;
+	border: 1px solid #808080;
 }
 
 /* report style */
@@ -239,15 +233,7 @@ table.report idcol {
 table.report tr.even{
 	background-color: #C2EFEF;
 }
-table.report tbody {
-/*	height: 180px; */
-/*	overflow: auto; */
-}
-table.report {
-/*	height: 200px; */
-*	overflow: auto; */
-}
-table.report tbody tr{
+table.report tbody tr {
 	height: 10px;
 }
 table.report th {
