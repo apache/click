@@ -115,7 +115,7 @@ public class CheckList extends Field {
 
     /** The HTML import statements. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist{1}.css\"></link>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/checklist/checklist{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/checklist/checklist{1}.js\"></script>\n";
 
     /** The JavaScript sorting HTML import statements. */

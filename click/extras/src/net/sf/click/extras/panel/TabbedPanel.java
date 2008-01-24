@@ -110,7 +110,7 @@ public class TabbedPanel extends Panel {
 
     /** The TabbedPanel.css style sheet import link. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedPanel{1}.css\">\n";
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/TabbedPanel{1}.css\"/>\n";
 
     // ----------------------------------------------------- Instance Variables
 

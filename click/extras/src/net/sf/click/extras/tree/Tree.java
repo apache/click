@@ -161,7 +161,7 @@ public class Tree extends AbstractControl {
 
     /** The tree.css style sheet import link. */
     public static final String TREE_IMPORTS =
-            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree{1}.css\"></link>\n";
+            "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree{1}.css\"/>\n";
 
     /** Client side javascript import link. */
     public static final String JAVASCRIPT_IMPORTS =
