@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>Click Examples</title>
-<link rel="stylesheet" type="text/css" href="${context}/style.css" title="Style"></link>
+<link rel="stylesheet" type="text/css" href="${context}/style.css" title="Style"/>
 <style>
 body {
 	background: white;
