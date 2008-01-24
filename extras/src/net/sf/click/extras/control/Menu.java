@@ -181,7 +181,7 @@ public class Menu extends AbstractControl {
 
     /** The HTML imports statements. */
     public static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"></link>\n"
+        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
