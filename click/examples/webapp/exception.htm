@@ -55,7 +55,7 @@ it is closed.
 <dd>
 This error is caused by a Page model object throwing a NPE when being rendered by 
 Velocity. When Velocity tries to merge the page model with the template, it will
-call the objects <t>toString()</tt> method which throws a <tt>NullPointerException</tt>.
+call the objects <tt>toString()</tt> method which throws a <tt>NullPointerException</tt>.
 As this error usually occurs after some contents has been written to the 
 <tt>HttpServletResponse</tt> Click will append the error report
 to the end of the response.
