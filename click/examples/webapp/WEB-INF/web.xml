@@ -46,12 +46,17 @@
  			<param-value>/assets/*</param-value>
 		</init-param>
 	</filter>
- 	
-	<filter-mapping>
+
+ 	<filter-mapping>
+		<filter-name>DatabaseInitFilter</filter-name>
+		<servlet-name>ClickServlet</servlet-name>
+	</filter-mapping>
+
+  <filter-mapping>
 		<filter-name>DataContextFilter</filter-name>
 		<servlet-name>ClickServlet</servlet-name>
 	</filter-mapping>
- 
+
 	<filter-mapping>
 		<filter-name>PerformanceFilter</filter-name>
 		<servlet-name>ClickServlet</servlet-name>
@@ -76,8 +81,8 @@
 		<filter-name>PerformanceFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
-	
-	<!--
+
+  <!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
 	init parameter tells the servlet where to find the Spring application
 	context file on the classpath.
