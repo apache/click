@@ -56,15 +56,14 @@ import org.apache.commons.lang.StringUtils;
  * </td></tr>
  * </table>
  *
- * The format class can defined in the "click.xml" configuration file
+ * The custom format class can be defined in the "click.xml" configuration file
  * using the syntax:
  *
  * <pre class="codeConfig">
- * &lt;format classname="<span class="st">com.mycorp.utils.Format</span>"/&gt; </pre>
+ * &lt;format classname="<span class="st">com.mycorp.utils.MyFormat</span>"/&gt; </pre>
  *
- * The format subclass must provide a public constructor which takes a single
- * Locale object argument. After a Page is
- * created its <a href="../Page.html#format">format</a> property is set.
+ * After a Page is created its <a href="../Page.html#format">format</a> property
+ * is set.
  * The ClickServlet will then add this property to the Velocity Context.
  * <p/>
  * When subclassing Format ensure it is light weight object, as a new format
