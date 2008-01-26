@@ -755,8 +755,11 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set the list of table rows. Please note the rowList is cleared in
-     * table {@link #onDestroy()} method at the end of each request.
+     * Set the list of table rows. Each row can either be a value object
+     * (JavaBean) or an instance of a <tt>Map</tt>.
+     * <p/>
+     * Please note the rowList is cleared in table {@link #onDestroy()} method
+     * at the end of each request.
      *
      * @param rowList the list of table rows to set
      */
