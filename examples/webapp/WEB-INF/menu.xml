@@ -28,6 +28,7 @@
 		<menu label="Page Security" path="security/secure.htm"/>
 		<menu separator="true"/>
 		<menu label="AJAX Accordian" path="ajax/ajax-accordian.htm"/>
+		<menu label="AJAX Auto Complete Field" path="ajax/auto-complete.htm"/>
 		<menu label="AJAX Data Grid" path="ajax/ajax-data-grid.htm"/>
 		<menu label="AJAX Select" path="ajax/ajax-select.htm"/>
 		<menu separator="true"/>

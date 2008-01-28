@@ -464,8 +464,8 @@ public class CheckList extends Field {
     }
 
     /**
-     * Returns the header tags for the import of checklist.css, control.js and
-     * adds the script the checklist onload event.
+     * Returns the CSS and JavaScript imports and adds the script the checklist
+     * onload event.
      *
      * @see net.sf.click.control.Field#getHtmlImports()
      *

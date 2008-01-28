@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,9 +58,9 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class TextField extends Field {
 
-    private static final long serialVersionUID = 1L;
-
     // -------------------------------------------------------------- Constants
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * The field validation JavaScript function template.

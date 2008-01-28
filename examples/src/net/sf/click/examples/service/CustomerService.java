@@ -57,6 +57,22 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
+    public List getCustomerNamesLike(String name) {
+        SelectQuery query = new SelectQuery(Customer.class);
+
+        query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(Customer.NAME_PROPERTY, "%" + name + "%"));
+
+        query.addOrdering(Customer.NAME_PROPERTY, true);
+
+        List list = performQuery(query);
+
+        for (int i = 0; i < list.size(); i++) {
+            list.set(i, ((Customer)list.get(i)).getName());
+        }
+
+        return list;
+    }
+
     public List getCustomers(Date from, Date to) {
         Expression qual = ExpressionFactory.noMatchExp("dateJoined", null);
 

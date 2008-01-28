@@ -176,7 +176,6 @@ public class EmailField extends TextField {
 
     // --------------------------------------------------------- Public Methods
 
-
     /**
      * Deploy the <tt>extras-control.js</tt> file to the <tt>click</tt> web
      * directory when the application is initialized.
