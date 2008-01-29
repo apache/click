@@ -135,7 +135,8 @@ public abstract class AbstractLink extends AbstractControl {
     /**
      * Return the image src path attribute. If the image src is defined then a
      * <tt>&lt;img/&gt;</tt> element will rendered inside the anchor link when
-     * using the AbstractLink {@link #toString()} method.
+     * using the AbstractLink {@link #toString()} method, and the label will
+     * not be rendered.
      * <p/>
      * If the src value is prefixed with '/' then the request context path will
      * be prefixed to the src value when rendered by the control.
@@ -150,6 +151,10 @@ public abstract class AbstractLink extends AbstractControl {
      * Set the image src path attribute. If the src value is prefixed with
      * '/' then the request context path will be prefixed to the src value when
      * rendered by the control.
+     * <p/>
+     * If the image src is defined then a <tt>&lt;img/&gt;</tt> element will
+     * rendered inside the anchor link when using the AbstractLink
+     * {@link #toString()} method, and the label will not be rendered.
      *
      * @param src the image src path attribute
      */
