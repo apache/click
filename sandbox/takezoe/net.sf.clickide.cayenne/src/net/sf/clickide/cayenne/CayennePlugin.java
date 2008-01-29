@@ -71,6 +71,7 @@ public class CayennePlugin extends AbstractUIPlugin {
 		}
 		File dir = CayennePlugin.getDefault().getStateLocation().toFile();
 		files = new File[]{
+				new File(dir, "cayenne.jar"),
 				new File(dir, "cayenne-modeler.jar"),
 				new File(dir, "commons-dbcp-1.2.1.jar"),
 				new File(dir, "commons-pool-1.2.jar"),
