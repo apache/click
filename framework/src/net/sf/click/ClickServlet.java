@@ -1456,13 +1456,19 @@ public class ClickServlet extends HttpServlet {
      *
      * @param page the page to set the request attributes on
      */
-    protected void setRequestAttributes(Page page) {
+    protected void setRequestAttributes(final Page page) {
         final HttpServletRequest request = page.getContext().getRequest();
 
         processPageFields(page, new FieldCallback() {
             public void processField(String fieldName, Object fieldValue) {
                 if (fieldValue instanceof Control == false) {
                     request.setAttribute(fieldName, fieldValue);
+                }  else {
+                    // Add any controls not already added to model
+                    Control control = (Control) fieldValue;
+                    if (!page.getModel().containsKey(control.getName())) {
+                        page.addControl(control);
+                    }
                 }
             }
         });
