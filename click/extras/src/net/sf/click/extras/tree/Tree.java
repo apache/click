@@ -34,6 +34,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.AbstractControl;
 import net.sf.click.control.Decorator;
+import net.sf.click.control.PageLink;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -1030,14 +1031,9 @@ public class Tree extends AbstractControl {
      */
     protected void renderExpandAndCollapseAction(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-
-        buffer.append(" href=\"");
-        buffer.append(getContext().getRequest().getRequestURI());
-        buffer.append("?");
-        buffer.append(EXPAND_TREE_NODE_PARAM);
-        buffer.append("=");
-        buffer.append(treeNode.getId());
-        buffer.append("\"");
+        Map hrefParameters = new HashMap(1);
+        hrefParameters.put(EXPAND_TREE_NODE_PARAM, treeNode.getId());
+        buffer.appendAttribute("href", getHref(hrefParameters));
 
         buffer.appendAttribute("class", "spacer");
         if (isJavascriptEnabled()) {
@@ -1121,13 +1117,10 @@ public class Tree extends AbstractControl {
      */
     protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-        buffer.append(" href=\"");
-        buffer.append(getContext().getRequest().getRequestURI());
-        buffer.append("?");
-        buffer.append(SELECT_TREE_NODE_PARAM);
-        buffer.append("=");
-        buffer.append(treeNode.getId());
-        buffer.append("\"");
+
+        Map hrefParameters = new HashMap(1);
+        hrefParameters.put(SELECT_TREE_NODE_PARAM, treeNode.getId());
+        buffer.appendAttribute("href", getHref(hrefParameters));
 
         buffer.closeTag();
         if (treeNode.getValue() != null) {
@@ -1461,6 +1454,41 @@ public class Tree extends AbstractControl {
     protected String[] getRequestValues(String name) {
         String[] resultArray = getContext().getRequest().getParameterValues(name);
         return resultArray;
+    }
+
+    /**
+     * Return an anchor &lt;a&gt; tag href attribute for the given parameters.
+     * This method will encode the URL with the session ID
+     * if required using <tt>HttpServletResponse.encodeURL()</tt>.
+     *
+     * @param parameters the href parameters
+     * @return the HTML href attribute
+     */
+    protected String getHref(Map parameters) {
+        String uri = getContext().getRequest().getRequestURI();
+
+        HtmlStringBuffer buffer =
+                new HtmlStringBuffer(uri.length() + (parameters.size() * 20));
+
+        buffer.append(uri);
+        if (parameters != null && !parameters.isEmpty()) {
+            buffer.append("?");
+            Iterator i = parameters.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry entry = (Map.Entry) i.next();
+                String name = entry.getKey().toString();
+                String value = entry.getValue().toString();
+
+                buffer.append(name);
+                buffer.append("=");
+                buffer.append(ClickUtils.encodeUrl(value, getContext()));
+                if (i.hasNext()) {
+                    buffer.append("&");                
+                }
+            }
+        }
+
+        return getContext().getResponse().encodeURL(buffer.toString());
     }
 
     //----------------------------------------------------------- Inner classes
