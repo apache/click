@@ -34,7 +34,6 @@ import javax.servlet.ServletContext;
 import net.sf.click.Context;
 import net.sf.click.control.AbstractControl;
 import net.sf.click.control.Decorator;
-import net.sf.click.control.PageLink;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -1483,7 +1482,7 @@ public class Tree extends AbstractControl {
                 buffer.append("=");
                 buffer.append(ClickUtils.encodeUrl(value, getContext()));
                 if (i.hasNext()) {
-                    buffer.append("&");                
+                    buffer.append("&");
                 }
             }
         }
