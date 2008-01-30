@@ -5,11 +5,8 @@ import java.io.File;
 import net.sf.clickide.cayenne.CayennePlugin;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.Launch;
-import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
@@ -48,15 +45,10 @@ public class CayenneModelerLauncher implements IEditorLauncher {
 					"org.apache.cayenne.modeler.Main", classpath);
 			vmConfig.setProgramArguments(new String[]{file.makeAbsolute().toString()});
 			
-			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-			ILaunchConfigurationType type = manager.getLaunchConfigurationType(
-					IJavaLaunchConfigurationConstants.ID_JAVA_APPLICATION);
-			
-			Launch launch = new Launch(type.newInstance(null, "Cayenne Modeler"),
-					ILaunchManager.RUN_MODE, null);
-			
+			Launch launch = new Launch(null, ILaunchManager.RUN_MODE, null);
 			IVMRunner vmRunner = JavaRuntime.getDefaultVMInstall().getVMRunner(
 					ILaunchManager.RUN_MODE);
+			
 			vmRunner.run(vmConfig, launch, null);
 		} catch(Exception ex){
 			ex.printStackTrace();
