@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.click.control.TextArea;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a HTML Rich TextArea editor control using the
@@ -61,27 +62,22 @@ public class RichTextArea extends TextArea {
     }
 
     /**
-     * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>
+     * Return the JavaScript include: &nbsp; <tt>"tiny_mce/tiny_mce.js"</tt>,
+     * and TinyMCE JavaScript initialization code.
      *
      * @see net.sf.click.control.Field#getHtmlImports()
      */
     public String getHtmlImports() {
-        String[] args = { getContext().getRequest().getContextPath() };
-        return MessageFormat.format(HTML_IMPORTS, args);
-    }
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-    /**
-     * This method overrides the TextArea <tt>toString()</tt> method to
-     * add TinyMCE JavaScript initialization code.
-     *
-     * @see TextArea#toString()
-     */
-    public String toString() {
+        String[] args = { getContext().getRequest().getContextPath() };
+        buffer.append(MessageFormat.format(HTML_IMPORTS, args));
+
         Map model = new HashMap();
-        model.put("textArea", super.toString());
         model.put("theme", getTheme());
         model.put("id", getId());
+        buffer.append(getContext().renderTemplate(getClass(), model));
 
-        return getContext().renderTemplate(getClass(), model);
+        return buffer.toString();
     }
 }
