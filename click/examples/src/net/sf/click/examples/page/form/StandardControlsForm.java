@@ -98,7 +98,7 @@ public class StandardControlsForm extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List customers = getCustomerService().getCustomersSortedByName();
+        List customers = getCustomerService().getCustomers();
         select.add(new Option("[Select]"));
         select.addAll(customers, "id", "name");
         applyOptions();

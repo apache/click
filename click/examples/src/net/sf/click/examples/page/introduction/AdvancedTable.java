@@ -65,7 +65,7 @@ public class AdvancedTable extends BorderPage {
      * @see Page#onRender()
      */
     public void onRender() {
-        List list = getCustomerService().getCustomersSortedByName();
+        List list = getCustomerService().getCustomers();
         table.setRowList(list);
     }
 }

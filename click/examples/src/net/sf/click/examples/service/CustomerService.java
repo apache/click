@@ -27,12 +27,6 @@ public class CustomerService extends CayenneTemplate {
         return performQuery(query);
     }
 
-    public List getCustomersSortedByName() {
-        SelectQuery query = new SelectQuery(Customer.class);
-        query.addOrdering("name", true);
-        return performQuery(query);
-    }
-
     public List getCustomersSortedBy(String property, boolean ascending) {
         SelectQuery query = new SelectQuery(Customer.class);
         if (property != null) {
@@ -63,6 +57,8 @@ public class CustomerService extends CayenneTemplate {
         query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(Customer.NAME_PROPERTY, "%" + name + "%"));
 
         query.addOrdering(Customer.NAME_PROPERTY, true);
+
+        query.setFetchLimit(10);
 
         List list = performQuery(query);
 
@@ -103,12 +99,12 @@ public class CustomerService extends CayenneTemplate {
         commitChanges();
     }
 
-    public Customer getCustomer(Object id) {
+    public Customer getCustomerForID(Object id) {
         return (Customer) getObjectForPK(Customer.class, id);
     }
 
     public void deleteCustomer(Integer id) {
-        Customer customer = getCustomer(id);
+        Customer customer = getCustomerForID(id);
         if (customer != null) {
             deleteObject(customer);
             commitChanges();
@@ -117,23 +113,36 @@ public class CustomerService extends CayenneTemplate {
 
     public Customer findCustomerByID(Object value) {
         if (value != null && value.toString().length() > 0) {
-            return (Customer) getCustomer(value);
+            return (Customer) getCustomerForID(value);
         } else {
             return null;
         }
     }
 
-    public List findCustomersByName(String value) {
+    public Customer findCustomerByName(String name) {
+        SelectQuery query = new SelectQuery(Customer.class);
+        query.andQualifier(ExpressionFactory.matchExp(Customer.NAME_PROPERTY,name));
+
+        List list = performQuery(query);
+
+        if (!list.isEmpty()) {
+            return (Customer) list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public List getCustomersForName(String value) {
         Expression template = Expression.fromString("name likeIgnoreCase $name");
         Expression e = template.expWithParameters(toMap("name", "%" + value + "%"));
         return  performQuery(new SelectQuery(Customer.class, e));
     }
 
-    public List findCustomersByAge(String value) {
+    public List getCustomersForAge(String value) {
         return performQuery(Customer.class, "age", Integer.valueOf(value));
     }
 
-    public List findCustomersByPage(int offset, int pageSize) {
+    public List getCustomersForPage(int offset, int pageSize) {
         SelectQuery query = new SelectQuery(Customer.class);
         query.setPageSize(pageSize);
         List list = performQuery(query);

@@ -74,7 +74,7 @@ public class StartPage extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List customerList = getCustomerService().getCustomersSortedByName();
+        List customerList = getCustomerService().getCustomers();
         customerSelect.add(new Option(""));
         for (Iterator i = customerList.iterator(); i.hasNext();) {
             Customer customer = (Customer) i.next();
