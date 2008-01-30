@@ -471,7 +471,7 @@ public class ClickUtils {
      * @return the <tt>Class</tt> object
      * @throws ClassNotFoundException if the class cannot be located
      */
-    public static Class classForName(String classname) 
+    public static Class classForName(String classname)
             throws ClassNotFoundException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         return Class.forName(classname, true, classLoader);
