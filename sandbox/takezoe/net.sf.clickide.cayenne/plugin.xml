@@ -5,10 +5,23 @@
          point="org.eclipse.ui.editors">
       <editor
             filenames="cayenne.xml"
-            id="net.sf.clickide.cayenne.editor"
-            launcher="net.sf.clickide.cayenne.CayenneModelerLauncher"
+            id="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
+            launcher="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
             name="Cayenne Modeler">
       </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="net.sf.clickide.cayenne"
+            name="Cayenne">
+      </category>
+      <wizard
+            category="net.sf.clickide.cayenne"
+            class="net.sf.clickide.cayenne.wizard.NewCayenneWizard"
+            id="net.sf.clickide.cayenne.wizard"
+            name="Cayenne Mapping Peroject">
+      </wizard>
    </extension>
 
 </plugin>

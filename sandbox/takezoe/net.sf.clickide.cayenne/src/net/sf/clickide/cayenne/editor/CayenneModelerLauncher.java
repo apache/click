@@ -1,6 +1,8 @@
-package net.sf.clickide.cayenne;
+package net.sf.clickide.cayenne.editor;
 
 import java.io.File;
+
+import net.sf.clickide.cayenne.CayennePlugin;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.debug.core.DebugPlugin;
@@ -18,6 +20,8 @@ import org.eclipse.ui.IEditorLauncher;
  * @author Naoki Takezoe
  */
 public class CayenneModelerLauncher implements IEditorLauncher {
+	
+	public static final String EDITOR_ID = CayenneModelerLauncher.class.getName();
 	
 	private boolean firstOpen = true;
 	
