@@ -33,7 +33,7 @@ public class AjaxCustomerLiveGrid extends SpringPage {
         String pageSize = getContext().getRequest().getParameter("page_size");
 
         if (offset != null && pageSize != null) {
-            List customers = getCustomerService().findCustomersByPage(
+            List customers = getCustomerService().getCustomersForPage(
                     Integer.parseInt(offset),
                     Integer.parseInt(pageSize));
 
