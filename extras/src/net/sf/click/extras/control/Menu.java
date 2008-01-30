@@ -618,11 +618,14 @@ public class Menu extends AbstractControl {
      * @return the menu anchor HREF attribute
      */
     public String getHref() {
-        if (isExternal() || "#".equals(getPath())) {
+        if (isExternal()) {
             return getPath();
 
+        } else if ("#".equals(getPath())) {
+            return getContext().getResponse().encodeURL(getPath());
+
         } else {
-            return getContext().getRequest().getContextPath() + "/" + getPath();
+            return getContext().getResponse().encodeURL(getContext().getRequest().getContextPath() + "/" + getPath());
         }
     }
 
