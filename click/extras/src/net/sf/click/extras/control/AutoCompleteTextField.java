@@ -68,7 +68,6 @@ public abstract class AutoCompleteTextField extends TextField {
     /** The Prototype resource file names. */
     static final String[] PROTOTYPE_RESOURCES = {
         "/net/sf/click/extras/control/prototype/controls.js",
-        "/net/sf/click/extras/control/prototype/dragdrop.js",
         "/net/sf/click/extras/control/prototype/effects.js",
         "/net/sf/click/extras/control/prototype/prototype.js",
     };
@@ -79,7 +78,6 @@ public abstract class AutoCompleteTextField extends TextField {
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
         + "<script type=\"text/javascript\">new Ajax.Autocompleter( ''{2}'', ''{2}_auto_complete_div'', ''{0}{3}'', {4} );</script>\n";
 
@@ -87,9 +85,9 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * The JavaScript 'script.aculo.us' Autocompleter initialization options,
-     * default value is: <tt>{}</tt>.
+     * default value is: <tt>{minChars:1}</tt>.
      */
-    protected String autoCompleteOptions = "{}";
+    protected String autoCompleteOptions = "{minChars:1}";
 
     // ----------------------------------------------------------- Constructors
 
