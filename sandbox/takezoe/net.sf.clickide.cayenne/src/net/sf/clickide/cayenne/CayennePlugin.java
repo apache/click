@@ -106,7 +106,7 @@ public class CayennePlugin extends AbstractUIPlugin {
 		for(int i=0;i<files.length;i++){
 			if(!files[i].exists()){
 				copyFile(CayennePlugin.getDefault().getBundle().getEntry(
-						"/modeler/" + files[i].getName()), files[i]);
+						"/cayenne/" + files[i].getName()), files[i]);
 			}
 		}
 	}
