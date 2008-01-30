@@ -15,10 +15,7 @@
  */
 package net.sf.click.extras.hibernate;
 
-import java.io.Serializable;
-
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -116,84 +113,6 @@ public class SessionContext {
      */
     public static SessionFactory getSessionFactory() {
         return SESSION_FACTORY;
-    }
-
-    /**
-     * Return the persistent instance of the given entity class with the given
-     * identifier, or null if there is no such persistent instance. (If the
-     * instance, or a proxy for the instance, is already associated with the
-     * session, return that instance or proxy.)
-     * <p/>
-     * This method provides a convenience wrapper around the corresponding
-     * <tt>Session</tt> method.
-     *
-     * @deprecated redundant Session method will be remove in version 1.3
-     *
-     * @param clazz a persistent class
-     * @param id an identifier
-     * @return a persistent instance or null
-     * @throws HibernateException if a Hibernate error occurs
-     */
-    public static Object get(Class clazz, Serializable id)
-        throws HibernateException {
-
-        return getSession().get(clazz, id);
-    }
-
-    /**
-     * Remove a persistent instance from the datastore. The argument may be an
-     * instance associated with the receiving Session or a transient instance
-     * with an identifier associated with existing persistent state.
-     * This operation cascades to associated instances if the association is
-     * mapped with <tt>cascade="delete"</tt>.
-     * <p/>
-     * This method provides a convenience wrapper around the corresponding
-     * <tt>Session</tt> method.
-     *
-     * @deprecated redundant Session method will be remove in version 1.3
-     *
-     * @param object the instance to be removed
-     * @throws HibernateException if a Hibernate error occurs
-     */
-    public static void delete(Object object) throws HibernateException {
-        getSession().delete(object);
-    }
-
-    /**
-     * Create a new instance of Query for the given query string.
-     * <p/>
-     * This method provides a convenience wrapper around the corresponding
-     * <tt>Session</tt> method.
-     *
-     * @deprecated redundant Session method will be remove in version 1.3
-     *
-     * @param queryString a Hibernate query
-     * @return a Hibernate query
-     * @throws HibernateException if an error occurs creating the query
-     */
-    public static Query createQuery(String queryString)
-        throws HibernateException {
-
-        return getSession().createQuery(queryString);
-    }
-
-    /**
-     * Obtain an instance of Query for a named query string defined in the
-     * mapping file.
-     * <p/>
-     * This method provides a convenience wrapper around the corresponding
-     * <tt>Session</tt> method.
-     *
-     * @deprecated redundant Session method will be remove in version 1.3
-     *
-     * @param queryName the name of a query defined externally
-     * @return a Hibernate query
-     * @throws HibernateException if an error occurs creating the query
-     */
-    public static Query getNamedQuery(String queryName)
-        throws HibernateException {
-
-        return getSession().getNamedQuery(queryName);
     }
 
 }
