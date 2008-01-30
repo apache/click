@@ -5,6 +5,7 @@
          point="org.eclipse.ui.editors">
       <editor
             filenames="cayenne.xml"
+            icon="icons/cayenne.png"
             id="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
             launcher="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
             name="Cayenne Modeler">
@@ -19,6 +20,7 @@
       <wizard
             category="net.sf.clickide.cayenne"
             class="net.sf.clickide.cayenne.wizard.NewCayenneWizard"
+            icon="icons/cayenne.png"
             id="net.sf.clickide.cayenne.wizard"
             name="Cayenne Mapping Peroject">
       </wizard>
