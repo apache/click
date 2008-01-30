@@ -86,7 +86,7 @@ public class ExtraControlsForm extends BorderPage {
     public void onInit() {
         super.onInit();
 
-        List customers = getCustomerService().getCustomersSortedByName();
+        List customers = getCustomerService().getCustomers();
         checkList.addAll(customers, "id", "name");
         applyOptions();
     }

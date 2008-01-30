@@ -79,7 +79,7 @@ public class EditTable extends BorderPage {
 
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();
-        Customer customer = getCustomerService().getCustomer(id);
+        Customer customer = getCustomerService().getCustomerForID(id);
         if (customer != null) {
             form.setDataObject(customer);
         }

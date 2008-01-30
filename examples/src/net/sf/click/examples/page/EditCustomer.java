@@ -75,7 +75,7 @@ public class EditCustomer extends BorderPage {
      */
     public void onGet() {
         if (id != null) {
-            Customer customer = getCustomerService().getCustomer(id);
+            Customer customer = getCustomerService().getCustomerForID(id);
 
             if (customer != null) {
                 form.copyFrom(customer);
@@ -86,7 +86,7 @@ public class EditCustomer extends BorderPage {
     public boolean onOkClick() {
         if (form.isValid()) {
             Integer id = (Integer) idField.getValueObject();
-            Customer customer = getCustomerService().getCustomer(id);
+            Customer customer = getCustomerService().getCustomerForID(id);
 
             form.copyTo(customer);
 

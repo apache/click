@@ -35,7 +35,7 @@ public class ActionTable extends BorderPage {
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();
-        customerDetail = getCustomerService().getCustomer(id);
+        customerDetail = getCustomerService().getCustomerForID(id);
 
         return true;
     }
