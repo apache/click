@@ -26,12 +26,12 @@ public class CayenneClasspathVariableInitializer extends
 			
 			{ //cayenne.jar
 				String fullPath = new File(
-						local.getPath(), "modeler/cayenne.jar").getAbsolutePath();
+						local.getPath(), "cayenne/cayenne.jar").getAbsolutePath();
 				JavaCore.setClasspathVariable(VAR_CAYENNE_LIB, new Path(fullPath), null);
 			}
 			{ // cayenne-nodeps.jar
 				String fullPath = new File(
-						local.getPath(), "modeler/cayenne-nodeps.jar").getAbsolutePath();
+						local.getPath(), "cayenne/cayenne-nodeps.jar").getAbsolutePath();
 				JavaCore.setClasspathVariable(VAR_CAYENNE_NODEPS_LIB, new Path(fullPath), null);
 			}
 			
