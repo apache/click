@@ -1,42 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-<!--
-  <extension
-        id="net.sf.clickide.cayenne.facet"
-        name="Cayenne"
-        point="org.eclipse.wst.common.project.facet.core.facets">
-    
-    <project-facet id="cayenne">
-      <label>Cayenne</label>
-      <description>Cayenne Description</description>
-    </project-facet>
-
-    <project-facet-version facet="cayenne" version="2.0.4">
-       <constraint>
-        <and>
-          <requires facet="jst.web" version="[2.3"/>
-        </and>
-      </constraint>
-    </project-facet-version> 
-
-    <action type="install" facet="cayenne" version="2.0.4">
-      <delegate class="net.sf.clickide.cayenne.facet.CayenneFacetInstallDelegate"/>
-      <config-factory class="net.sf.clickide.cayenne.facet.CayenneFacetInstallDataModelProvider"/>
-    </action>
-    
-	<action type="uninstall" facet="cayenne" version="2.0.4">
-      <delegate class="net.sf.clickide.cayenne.facet.CayenneFacetUninstallDelegate"/>
- 	</action>
-  </extension>
-   
-  <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
-    <supported>
-      <runtime-component any="true"/>
-      <facet id="cayenne" version="2.0.4"/>
-    </supported>
-  </extension>
--->
    <extension
          point="org.eclipse.ui.editors">
       <editor
