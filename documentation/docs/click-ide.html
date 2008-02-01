@@ -125,7 +125,33 @@ can switch between the page class and the html file by CTRL+ALT+S.</p>
 <p><img src="../images/clickide_6.png" align="absmiddle" border="0"
 	alt="Integrated Click Documentation" /></p>
 
+<h4>Cayenne Integration (since ClickIDE 2.0.0)</h4>
 
+<p>ClickIDE also support <a href="http://cayenne.apache.org/">Apache Cayenne</a>
+ since ClickIDE 2.0.0.</p>
+ 
+<p>You can create new Cayenne mapping project using the New Cayenne Mapping 
+Project wizard.</p>
+
+<p>[TODO:image]</p>
+
+<p>This wizard generates an empty cayenne.xml and open it by Cayenne Modeler.
+If you have an existing cayenne.xml, you can open it by Cayenne Modeler 
+from the context menu. See below:</p>
+
+<p>[TODO:image]</p>
+
+<p>ClickIDE also provides classpath variables "CAYENNE_LIB" and 
+"CAYENNE_NODEPS_LIB". You can add cayenne.jar / cayenne-nodeps.jar to 
+your project classpath using these variables at the project build path 
+settings. </p>
+
+<p>[TODO:image]</p>
+
+<p><strong>Note:</strong> If your project is WTP dynamic web project, 
+you should add these variables at the J2EE Module Dependencies page 
+in your project properties dialog because this setting is applied to 
+deploying and exporting as a war file.</p>
 
 </body>
 </html>

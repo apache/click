@@ -39,6 +39,9 @@ ClickIDE's roadmap is to includes the following features:
     Velocity Editor - toggle Velocity Comment action
   </li>
   <li class="change">
+    Velocity Editor - define global variables for code completion
+  </li>
+  <li class="change">
     Java Editor - code completion for string literals which specify the listener method
   </li>
   <li class="change">
@@ -54,6 +57,18 @@ ClickIDE's roadmap is to includes the following features:
     Configuration Editor - code completion in the source editor
   </li>
   <li class="change">
+    Cayenne Integration - new Cayenne mapping project creation wizard
+  </li>
+  <li class="change">
+    Cayenne Integration - launch Cayenne Modeler for cayenne.xml
+  </li>
+  <li class="change">
+    Cayenne Integration - provide Cayenne libraries as classpath variable
+  </li>
+  <li class="change">
+    Cayenne Integration - display ER diagram from Cayenne definition
+  </li>
+  <li class="change">
     Others - provide configuration template such as "With Spring" or "With Hibernate"
   </li>
  </ul>
@@ -64,6 +79,29 @@ ClickIDE's roadmap is to includes the following features:
 
 <dl>
 
+  <dt>Version 2.0.0 - Spring 2008</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Supports Click 1.4.0 and Eclipse 3.3 / WTP 2.0.
+        This version can't work with Eclipse 3.2.
+      </li>
+      <li class="change">
+        Added new Cayenne mapping project creation wizard.
+        This wizard generates an empty cayenne.xml and open it by Cayenne Modeler.
+      </li>
+      <li class="change">
+        Added Cayenne Modeler launcher.
+      </li>
+      <li class="change">
+        Added classpath variables "CAYENNE_LIB" and "CAYENNE_NODEPS_LIB".
+        You can add cayenne.jar / cayenne-nodeps.jar to your project classpath
+        using these variables at the project build path settings.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
   <dt>Version 1.7.0 - 14 Jun 2007</dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
