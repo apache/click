@@ -269,8 +269,11 @@ public abstract class AutoCompleteTextField extends TextField {
                 if (criteria != null) {
                     List autoCompleteList = getAutoCompleteList(criteria);
                     renderAutoCompleteList(autoCompleteList);
+                    return false;
+
+                } else {
+                    return true;
                 }
-                return false;
 
             } else {
                 return super.onProcess();
