@@ -122,9 +122,9 @@ public class CheckList extends Field {
     public static final String JS_SORT_HTML_IMPORTS =
           "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/builder{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/dragdrop{1}.js\"></script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/slider{1}.js\"></script>\n";
 
     /** The style class which is always set on this element (checkList). */
