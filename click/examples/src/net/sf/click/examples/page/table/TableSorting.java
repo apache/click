@@ -17,7 +17,7 @@ public class TableSorting extends BorderPage {
 
     public TableSorting() {
         // Setup customers table
-        table.setClass("complex");
+        table.setClass(Table.CLASS_SIMPLE);
         table.setHoverRows(true);
         table.setSortable(true);
 

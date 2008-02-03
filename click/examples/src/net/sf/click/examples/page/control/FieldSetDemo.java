@@ -30,6 +30,7 @@ public class FieldSetDemo extends BorderPage {
 
     public FieldSetDemo() {
         form.setLabelAlign(Form.ALIGN_RIGHT);
+        form.setLabelStyle("width:11em;");
         form.setFieldStyle("width:22em;");
 
         // Delivery fieldset

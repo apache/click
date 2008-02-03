@@ -7,6 +7,11 @@ import net.sf.click.control.Column;
 import net.sf.click.control.Table;
 import net.sf.click.examples.page.BorderPage;
 
+/**
+ * Provides an simple Table usage example Page.
+ *
+ * @author Malcolm Edgar
+ */
 public class SimpleTablePage extends BorderPage {
 
     public Table table = new Table();

@@ -6,15 +6,21 @@ import net.sf.click.control.TextField;
 import net.sf.click.examples.page.BorderPage;
 
 /**
+ * Provides an example of multiple Forms on one page using submit checks.
  *
  * @author Bob Schellink
  */
 public class MultipleFormsDemo extends BorderPage {
 
     private Form form1 = new Form("form1");
-
     private Form form2 = new Form("form2");
 
+    // --------------------------------------------------------- Event Handlers
+
+
+    /**
+     * @see net.sf.click.Page#onSecurityCheck()
+     */
     public boolean onSecurityCheck() {
         String pagePath = getContext().getPagePath(getClass());
 
@@ -26,16 +32,21 @@ public class MultipleFormsDemo extends BorderPage {
             // if form1 failed the submit check, set error message and stop further processing
             getContext().setFlashAttribute("error", "You have made an invalid form submission for '" + form1.getName() + "'");
             return false;
+
         } else if (!form2SubmitCheckSucceed) {
             // if form2 failed the submit check, set error message and stop further processing
             getContext().setFlashAttribute("error", "You have made an invalid form submission for '" + form2.getName() + "'");
             return false;
+
         } else {
             // if both forms succeeded the check, continue processing the request
             return true;
         }
     }
 
+    /**
+     * @see net.sf.click.Page#onInit()
+     */
     public void onInit() {
         super.onInit();
 
@@ -54,7 +65,6 @@ public class MultipleFormsDemo extends BorderPage {
 
     public boolean onForm1Submit() {
         if (form1.isValid()) {
-
             // NOTE: to correctly implement the redirect-after-post pattern,
             // uncomment the lines below.
             //redirectAfterPost();
@@ -75,6 +85,8 @@ public class MultipleFormsDemo extends BorderPage {
 
         return true;
     }
+
+    // --------------------------------------------------------- Public Methods
 
     public void redirectAfterPost() {
         // redirect back to this page after the post

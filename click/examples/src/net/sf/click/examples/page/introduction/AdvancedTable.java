@@ -12,6 +12,11 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.EditCustomer;
 import net.sf.click.extras.control.LinkDecorator;
 
+/**
+ * Provides an advanced Table usage example Page.
+ *
+ * @author Malcolm Edgar
+ */
 public class AdvancedTable extends BorderPage {
 
     public Table table = new Table();

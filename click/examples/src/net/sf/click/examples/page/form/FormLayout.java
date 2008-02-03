@@ -11,6 +11,11 @@ import net.sf.click.extras.control.EmailField;
 import net.sf.click.extras.control.PageSubmit;
 import net.sf.click.extras.control.TelephoneField;
 
+/**
+ * Provides Form layout examples using the Form and FieldSet controls.
+ *
+ * @author Malcolm Edgar
+ */
 public class FormLayout extends BorderPage {
 
     public Form form1 = new Form();
