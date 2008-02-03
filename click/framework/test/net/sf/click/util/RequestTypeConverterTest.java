@@ -1,5 +1,6 @@
 package net.sf.click.util;
 
+import java.util.Locale;
 import junit.framework.TestCase;
 
 public class RequestTypeConverterTest extends TestCase {
@@ -24,14 +25,18 @@ public class RequestTypeConverterTest extends TestCase {
 
         // TODO: MS test needs to account for daylight savings and other factors
         String timeValue = "1166878800000";
-        
-        String sqlValue = "2006-12-24"; 
+
+        String sqlValue = "2006-12-24";
+
+        // Set default Locale to Australia so that formatting date in the
+        // format dd/MM/yyyy works
+        Locale.setDefault(new Locale("en", "AU"));
         String localValue = "24/12/2006";
-        
+
         java.util.Date date1 = (java.util.Date) rtc.convertValue(timeValue, java.util.Date.class);
         java.util.Date date2 = (java.util.Date) rtc.convertValue(sqlValue, java.util.Date.class);
         java.util.Date date3 = (java.util.Date) rtc.convertValue(localValue, java.util.Date.class);
-        
+
         assertNotNull(date1);
         assertNotNull(date2);
         assertNotNull(date3);
