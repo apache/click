@@ -86,6 +86,14 @@ public class SourceViewer extends BorderPage {
         try {
             in = context.getResourceAsStream(resourceFilename);
 
+            if (in == null && filename.endsWith(".htm")) {
+                resourceFilename =
+                    resourceFilename.substring(0, resourceFilename.length() - 4)
+                    + ".jsp";
+
+                in = context.getResourceAsStream(resourceFilename);
+            }
+
             if (in != null) {
 
                 loadResource(in, filename);

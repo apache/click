@@ -26,10 +26,6 @@
 			<param-name>session-scope</param-name>
  			<param-value>false</param-value>
 		</init-param>
-		<init-param>
-			<param-name>shared-cache</param-name>
-			<param-value>true</param-value>
-		</init-param>
 	</filter>
  
 	<!-- 
@@ -52,7 +48,7 @@
 		<servlet-name>ClickServlet</servlet-name>
 	</filter-mapping>
 
-  <filter-mapping>
+	<filter-mapping>
 		<filter-name>DataContextFilter</filter-name>
 		<servlet-name>ClickServlet</servlet-name>
 	</filter-mapping>
@@ -82,7 +78,7 @@
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
 
-  <!--
+	<!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
 	init parameter tells the servlet where to find the Spring application
 	context file on the classpath.

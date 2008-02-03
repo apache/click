@@ -63,7 +63,7 @@ public class JSBarChart extends JSChart {
      * @param name the button name
      */
     public JSBarChart(String name) {
-        super.setName(name);
+        setName(name);
     }
 
     /**
@@ -73,7 +73,7 @@ public class JSBarChart extends JSChart {
      * @param label the label of the chart that will be displayed
      */
     public JSBarChart(String name, String label) {
-        super.setName(name);
+        setName(name);
         setLabel(label);
     }
 

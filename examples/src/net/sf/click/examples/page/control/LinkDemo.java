@@ -8,6 +8,11 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.ExternalLink;
 
+/**
+ * Provides an ActionLink, ExternalLink and PageLink control examples Page.
+ *
+ * @author Malcolm Edgar
+ */
 public class LinkDemo extends BorderPage {
 
     public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
