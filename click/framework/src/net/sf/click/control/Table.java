@@ -160,7 +160,6 @@ public class Table extends AbstractControl {
         DARK_STYLES.add("isi");
         DARK_STYLES.add("nocol");
         DARK_STYLES.add("report");
-        DARK_STYLES.add("simple");
     }
 
     /**
@@ -289,16 +288,6 @@ public class Table extends AbstractControl {
      * page size.
      */
     protected int pageSize;
-
-    /**
-     * The total number of rows in the query, if 0 rowCount is undefined. Row
-     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
-     * query and is used to determine the number of pages which can be
-     * displayed.
-     *
-     * @deprecated this property will be removed in subsequent releases
-     */
-    protected int rowCount;
 
     /**
      * The list Table rows. Please note the rowList is cleared in table
@@ -713,34 +702,6 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return total number of rows in the query, if 0 rowCount is undefined. Row
-     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
-     * query and is used to determine the number of pages which can be
-     * displayed.
-     *
-     * @deprecated this method will be removed in subsequent releases
-     *
-     * @return the total number of rows in the quer]y, or 0 if undefined
-     */
-    public int getRowCount() {
-        return rowCount;
-    }
-
-    /**
-     * Set the total number of rows in the query, if 0 rowCount is undefined. Row
-     * count is generally populated with a <tt>SELECT COUNT(*) FROM ..</tt>
-     * query and is used to determine the number of pages which can be
-     * displayed.
-     *
-     * @deprecated this method will be removed in subsequent releases
-     *
-     * @param rowCount the total number of rows in the quer]y, or 0 if undefined
-     */
-    public void setRowCount(int rowCount) {
-        this.rowCount = rowCount;
-    }
-
-    /**
      * Return the list of table rows. Please note the rowList is cleared in
      * table {@link #onDestroy()} method at the end of each request.
      *
@@ -1005,8 +966,12 @@ public class Table extends AbstractControl {
      * @return a HTML rendered Table string
      */
     public String toString() {
-        int bufferSize =
-            (getColumnList().size() * 60) * (getRowList().size() + 1);
+        int bufferSize = 0;
+        if (getPageSize() > 0) {
+            bufferSize = (getColumnList().size() * 60) * (getPageSize() + 1) + 1792;
+        } else {
+            bufferSize = (getColumnList().size() * 60) * (getRowList().size() + 1);
+        }
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
@@ -1203,12 +1168,7 @@ public class Table extends AbstractControl {
      */
     protected void renderTableBanner(HtmlStringBuffer buffer) {
         if (getShowBanner()) {
-            String totalRows = null;
-            if (getRowCount() > 0) {
-                totalRows = String.valueOf(getRowCount());
-            } else {
-                totalRows = String.valueOf(getRowList().size());
-            }
+            String totalRows = String.valueOf(getRowList().size());
 
             String firstRow = null;
             if (getRowList().isEmpty()) {
