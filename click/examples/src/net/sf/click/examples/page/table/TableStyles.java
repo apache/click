@@ -23,6 +23,8 @@ public class TableStyles extends BorderPage {
     private Select styleSelect = new Select("style", "Table Style:");
     private Checkbox hoverCheckbox = new Checkbox("hover", "Hover Rows:");
 
+    // ----------------------------------------------------------- Constructor
+
     public TableStyles() {
         // Setup table style select.
         form.setColumns(3);
@@ -61,6 +63,8 @@ public class TableStyles extends BorderPage {
         column.setTextAlign("right");
         table.addColumn(column);
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     /**
      * @see net.sf.click.Page#onGet()

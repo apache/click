@@ -26,6 +26,8 @@ public class TableDecorator extends BorderPage {
     public PageLink editLink = new PageLink("edit", EditCustomer.class);
     public ActionLink deleteLink = new ActionLink("delete", this, "onDeleteClick");
 
+    // ------------------------------------------------------------ Constructor
+
     public TableDecorator() {
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
@@ -77,6 +79,8 @@ public class TableDecorator extends BorderPage {
         });
         table.addColumn(column);
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     public boolean onViewClick() {
         Integer id = viewLink.getValueInteger();

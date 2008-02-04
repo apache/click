@@ -4,8 +4,8 @@
 <html>
 <head>
 <title>Click Examples</title>
-<link rel="stylesheet" type="text/css" href="${context}/assets/css/style.css" title="Style"/>
-${imports}
+<link type="text/css" rel="stylesheet" href="${context}/assets/css/style.css" title="Style"/>
+${cssImports}
 </head>
 <body>
 
@@ -78,3 +78,4 @@ ${imports}
 
 </body>
 </html>
+${jsImports}

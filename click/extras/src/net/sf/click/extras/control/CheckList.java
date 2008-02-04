@@ -498,13 +498,13 @@ public class CheckList extends Field {
                 buffer.append("Position.includeScrollOffset = true;");
             }
 
-            buffer.append("addLoadEvent(function () {");
+            buffer.append("addLoadEvent(function() { ");
             buffer.append(script);
-            buffer.append("});</script>\n");
+            buffer.append(" });</script>\n");
 
         } else {
             buffer.append("<script type=\"text/javascript\">");
-            buffer.append("addLoadEvent(function () { initChecklist('");
+            buffer.append("addLoadEvent(function() { initChecklist('");
             buffer.append(StringEscapeUtils.escapeJavaScript(getId()));
             buffer.append("_ul'); });</script>\n");
         }
