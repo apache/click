@@ -60,45 +60,26 @@ import org.w3c.dom.Element;
  * of your page</li>
  * </ul>
  *
- * <h3>How does compression work?</h3>
- * The response from non image resources will be gzipped before writing to
- * the browser.
- * <p/>
- * The browser will receive the gzipped resource, unzip it, and display the
- * content in its original form.
- *
- * <h3>How does caching work?</h3>
- * For an explanation of how browsers and caching work, you can read the
- * following
- * <a href="http://betterexplained.com/articles/how-to-optimize-your-site-with-http-caching/" action="_blank">article.</a>
- * <p/>
- * Only configured resources (see below) will have expiry headers added. The
- * browser will not contact the server until the specified expiry date. When the
- * resource expires, the browser will request a new copy from the server.
- *
- * <h3>Does PerformanceFilter work in development, debug or trace modes?</h3>
- * PerformanceFilter is only applied in <tt>production</tt> and <tt>profile</tt>
- * modes. In the development modes, this filter will simply pass through to
- * ClickServlet without adding expiry headers or compressing content.
- * <p/>
- * This ensures a smoother development experience. There is not need to worry
- * about server and browser resources getting out of sync. In development mode,
- * simply edit a javascript or style sheet and the browser will pick up the
- * latest version.
- *
  * <h3>Click Static Resources</h3>
- * This filter will automatically add long expiry headers to static Click
+ * This filter will automatically add long expiry headers (5 years) to static Click
  * resources such as CSS style sheets imports, JavaScript imports, and images.
- * The filter will also compress non image static resources such as style sheets
- * and JavaScript imports.
+ * This will ensure these resources are cached in the users browser and will not
+ * have to be requested again.  With Click static resources are deployed automatically
+ * on startup to the web directory <tt style="color:blue;">/click</tt>.
  * <p/>
- * Clicks static resources are deployed automatically by the ClickServlet on
- * startup and include a Click version number in the filename, which is used to
- * identify Click resources.
+ * When the PerformanceFilter is active Click will add a version number to the
+ * static resource filenames and apply a long expiry header to these versioned files.
+ * When you upgrade the the next version of Click Framework this version number
+ * will increment, and the new static resources will be requested and cached by
+ * the users browser.
+ * <p/>
+ * When the PerformanceFilter is not active Click not include a version number in the
+ * static resource filenames and no expiry header will be applied..
+ * <p/>
+ * The filter will always compress non image static Click resources such as
+ * style sheets and JavaScript imports.
  *
- * <h3>Configured Resources</h3>
- * Click *.htm pages are automatically compressed by the filter.
- * <p/>
+ * <h3>Configured Static Resources</h3>
  * You can also configure your own applications static resources such as CSS, JS
  * files and images to be processed by the filter.
  *
@@ -106,6 +87,9 @@ import org.w3c.dom.Element;
  * content. The content will only be compressed if it is bigger than a
  * configurable threshold. The default threshold is 384 bytes.
  * <p/>
+ *
+ * <h3>Click Pages</h3>
+ * Click *.htm pages are automatically compressed by the filter.
  *
  * <h3>Configuration</h3>
  *
@@ -118,7 +102,7 @@ import org.w3c.dom.Element;
  *  &lt;filter-class&gt;<span class="red">net.sf.click.extras.filter.PerformanceFilter</span>&lt;/filter-class&gt;
  *   &lt;init-param&gt;
  *     &lt;param-name&gt;<font color="blue">cachable-paths</font>&lt;/param-name&gt;
- *   &lt;param-value&gt;<font color="red">/images/*, *.css</font>&lt;/param-value&gt;
+ *   &lt;param-value&gt;<font color="red">/assets/*, *.css</font>&lt;/param-value&gt;
  *  &lt;/init-param&gt;
  * &lt;/filter&gt;
  *
@@ -153,9 +137,44 @@ import org.w3c.dom.Element;
  *
  * This filter will automaitically set the configured click.xml charset as the
  * requests character encoding.
+ *
+ * <h3>Frequently Asked Questions</h3>
+ *
+ * <h4>How does compression work?</h4>
+ * The response from non image (gif, jpg, png) content will be gzipped before
+ * writing to the browser.  The browser will receive the gzipped content, unzip it,
+ * and display the content in its original form.
  * <p/>
+ * As the GZIP compresssion greatly reduces the size of HTML, CSS and JavaScript
+ * content these resources are downloaded faster and displayed quicker in the
+ * users browser.
+ * <p/>
+ * GZIP compression is only applied if the browser supports it, and if the size
+ * of the content is greater than 384 bytes.
+ *
+ * <h4>How does caching work?</h4>
+ * For an explanation of how browsers and caching work, you can read the
+ * following
+ * <a href="http://betterexplained.com/articles/how-to-optimize-your-site-with-http-caching/" action="_blank">article.</a>
+ * <p/>
+ * Only configured resources (see below) will have expiry headers added. The
+ * browser will not contact the server until the specified expiry date. When the
+ * resource expires, the browser will request a new copy from the server.
+ *
+ * <h4>Does PerformanceFilter work in development, debug or trace modes?</h4>
+ * PerformanceFilter is only applied in <tt>production</tt> and <tt>profile</tt>
+ * modes. In the development modes, this filter will simply pass through to
+ * ClickServlet without adding expiry headers or compressing content.
+ * <p/>
+ * This ensures a smoother development experience. There is not need to worry
+ * about server and browser resources getting out of sync. In development mode,
+ * simply edit a javascript or style sheet and the browser will pick up the
+ * latest version.
+ *
+ * <h3>Acknowledgements</h3>
  * This class is adapted from the Jakarta CompressionFilter from
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>.
+ * <p/>
  *
  * @author Malcolm Edgar
  * @author Bob Schellink

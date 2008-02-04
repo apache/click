@@ -15,6 +15,8 @@ public class TableSorting extends BorderPage {
 
     public Table table = new Table();
 
+    // ------------------------------------------------------------ Constructor
+
     public TableSorting() {
         // Setup customers table
         table.setClass(Table.CLASS_SIMPLE);
@@ -44,6 +46,8 @@ public class TableSorting extends BorderPage {
         column.setTextAlign("center");
         table.addColumn(column);
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     /**
      * Load the Table rowList to render using the selected sorting column, and

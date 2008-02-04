@@ -30,6 +30,8 @@ public class EditTable extends BorderPage {
     public ActionLink editLink = new ActionLink("edit", "Edit", this, "onEditClick");
     public ActionLink deleteLink = new ActionLink("delete", "Delete", this, "onDeleteClick");
 
+    // ------------------------------------------------------------ Constructor
+
     public EditTable() {
         // Setup customers form
         FieldSet fieldSet = new FieldSet("customer");
@@ -76,6 +78,8 @@ public class EditTable extends BorderPage {
 
         deleteLink.setAttribute("onclick", "return window.confirm('Please confirm delete');");
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     public boolean onEditClick() {
         Integer id = editLink.getValueInteger();

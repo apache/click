@@ -184,7 +184,7 @@ public class Menu extends AbstractControl {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/menu{1}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/extras-control{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\">addLoadEvent( function() '{ initMenu() '} );</script>\n";
+        + "<script type=\"text/javascript\">addLoadEvent(function() '{ initMenu();' });</script>\n";
 
     // -------------------------------------------------------- Class Variables
 
