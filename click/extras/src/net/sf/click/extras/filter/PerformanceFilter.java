@@ -73,8 +73,8 @@ import org.w3c.dom.Element;
  * will increment, and the new static resources will be requested and cached by
  * the users browser.
  * <p/>
- * When the PerformanceFilter is not active Click not include a version number in the
- * static resource filenames and no expiry header will be applied..
+ * When the PerformanceFilter is not active Click will not include a version number
+ * in the static resource filenames and no expiry header will be applied.
  * <p/>
  * The filter will always compress non image static Click resources such as
  * style sheets and JavaScript imports.
