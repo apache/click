@@ -58,6 +58,8 @@ import org.w3c.dom.Element;
  * top of you page</li>
  * <li>Rule 6 - Put Scripts at the Bottom, by using $jsImports at the bottom
  * of your page</li>
+ * <li>Rule 12 - {@link net.sf.click.Control#getHtmlImports()} automatically
+ * removes duplicate scripts.</li>
  * </ul>
  *
  * <h3>Click Static Resources</h3>
