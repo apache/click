@@ -840,8 +840,27 @@ will be invoked with each request.
 If you have dynamic control creation code you would typically place this <tt>onInit()</tt> method, but 
 you will need to take care that controls and or models are not already present in the page.
 
+<h4>Page Execution</h4>
+
+The default Click page execution model is thread safe as a new Page instance is created
+for each request and thread. With stateful pages a user will have a single page instance which is
+reused in multiple requests and threads. To ensure page execution is thread safe, a users
+page instances are synchronized so only one request thread can execute a page instance at 
+any one time. 
+
 <h4>Page Destruction</h4>
 
+After normal page instances have been executed, they are de-referenced and garbage 
+collected by the JVM. However with stateful pages they are stored in the users 
+<tt>HttpSession</tt> so care needs to be take not store too many objects in stateful 
+page instances which may cause memory and performance issues.
+<p/>
+When pages have completed their execution, all the Page's controls <tt>onDestroy()</tt>
+methods are invoked, and then the Page's <tt>onDestroy()</tt> method is invoked. This
+is your opportunity to de-reference any large sets or graphs. For example the Table 
+control by default de-references its rowList in its
+<a target="topic" href="click-api/net/sf/click/control/Table.html#onDestroy()">onDestory()</a>
+method.
 
 <a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
 
