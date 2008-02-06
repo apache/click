@@ -528,7 +528,7 @@ public class ClickUtils {
      * <p/>
      * <b>Remember</b>: the version indicator will only be added in
      * <tt>production</tt> and <tt>profile</tt> modes, and only if the
-     * request attribute {@link net.sf.click.ClickServlet#ENABLE_RESOURCE_VERSION}
+     * request attribute {@link #ENABLE_RESOURCE_VERSION}
      * is set to <tt>"true"</tt>.
      *
      * @param pattern the HTML import pattern string to format
