@@ -1,7 +1,6 @@
 Click 1.4 Release
 -----------------
 BUGS
-* ColorPicker rendering bug
 * Form rendering bug, with setting style, see FieldSet example probably due to
   recent form rendering refactoring and removing align property from parent element
 
@@ -17,3 +16,16 @@ DOCUMENTATION
 
 BUILD
 * update to Checkstyle 4.3
+
+
+Release Procedures
+------------------
+1. finalize Roadmap and Changes
+2. ant build-distribution
+3. clean deploy to Tomcat and test click-examples
+4. tag release, e.g. click-1.4-RC3
+5. ftp upload click-xxx.zip to sourceforge
+6. release file at sourceforge
+7. upload web site
+8. add sourceforge release notes
+9. email release announcement to click, velocity and cayenne
