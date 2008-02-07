@@ -333,7 +333,7 @@ public class CayenneForm extends Form {
 
                 String id = oidField.getValue();
                 if (StringUtils.isNotBlank(id)) {
-                    dataObject = DataObjectUtils.objectForPK(getDataContext(),
+                    dataObject = (DataObject) DataObjectUtils.objectForPK(getDataContext(),
                                                              dataClass,
                                                              id);
 
@@ -528,6 +528,11 @@ public class CayenneForm extends Form {
 
         try {
             getDataContext().commitChanges();
+
+            // update oidField with new/generated primary key value
+            Object pk = DataObjectUtils.pkForObject(dataObject);
+            oidField.setValue(pk.toString());
+            
             return true;
 
         } catch (ValidationException e) {
