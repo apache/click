@@ -409,7 +409,7 @@ public class PropertySelect extends Select {
 
                 String propertyPk = getValue();
 
-                valueObject = DataObjectUtils.objectForPK(dataContext,
+                valueObject = (DataObject) DataObjectUtils.objectForPK(dataContext,
                                                           propertyClass,
                                                           propertyPk);
 
@@ -443,7 +443,7 @@ public class PropertySelect extends Select {
 
             if (doPk != null) {
                 DataObject dataObject =
-                    DataObjectUtils.objectForPK(dataContext, doClass, doPk);
+                    (DataObject) DataObjectUtils.objectForPK(dataContext, doClass, doPk);
 
                 String getterName = ClickUtils.toGetterName(getName());
 
