@@ -1,0 +1,37 @@
+$form
+
+<p>&nbsp;</p>
+
+#if ($customer) 
+<b>Customer Details</b>
+<table border="0" cellspacing="2" cellpadding="2">
+ <tr>
+  <td><b>ID</b></td><td>&nbsp;</td><td>$customer.id</td>
+ </tr>
+ <tr>
+  <td><b>Name</b></td><td>&nbsp;</td><td>$customer.name</td>
+ </tr>
+ <tr>
+  <td><b>Email</b></td><td>&nbsp;</td>
+  <td><a style="{text-decoration:none;}" href="mailto:$customer.email">$customer.email</a></td>
+ </tr>
+ <tr>
+  <td><b>Age</b></td><td>&nbsp;</td>
+  <td>#if ($customer.age) $customer.age #end</td>
+ </tr>
+ <tr>
+  <td><b>Investments</b></td><td>&nbsp;</td>
+  <td>#if ($customer.investments) $customer.investments #end</td>
+ </tr>
+ <tr>
+  <td><b>Holdings</b></td><td>&nbsp;</td>
+  <td>#if ($customer.holdings) $format.currency($customer.holdings) #end</td>
+ </tr>
+ <tr>
+  <td><b>Date Joined</b></td><td>&nbsp;</td>
+  <td>#if ($customer.dateJoined) $format.date($customer.dateJoined) #end</td>
+ </tr>
+</table>
+<p>
+#end
+

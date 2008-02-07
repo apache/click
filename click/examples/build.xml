@@ -1,0 +1,176 @@
+<project name="click-examples" default="help" basedir=".">
+
+   <!-- 
+    Project Properties 
+    -->
+   
+   <property file="../build/build.properties"/>
+      
+   <property name="name" value="click-examples"/>
+   <property name="jar.ashwood" value="ashwood-1.1.jar"/>
+   <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
+   <property name="jar.click" value="click-${version}.jar"/>
+   <property name="jar.click-extras" value="click-extras-${version}.jar"/>
+   <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
+   <property name="jar.jstl" value="jstl-1.1.2.jar"/>
+   <property name="jar.log4j" value="log4j-1.2.14.jar"/>
+   <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
+   <property name="jar.oro" value="oro-2.0.8.jar"/>
+   <property name="jar.servlet" value="servlet-api-2.3.jar"/>
+   <property name="jar.spring-beans" value="spring-beans-1.2.9.jar"/>
+   <property name="jar.spring-context" value="spring-context-1.2.9.jar"/>
+   <property name="jar.spring-core" value="spring-core-1.2.9.jar"/>
+   <property name="jar.spring-web" value="spring-web-1.2.9.jar"/>
+   <property name="jar.standard" value="standard-1.1.2.jar"/>
+     
+   <property name="dir.deploy" value="../dist"/>
+   <property name="dir.webapp" value="webapp"/>
+   <property name="dir.weblib" value="${dir.webapp}/WEB-INF/lib"/>
+       
+   <!-- 
+    Macro Definitions
+    -->
+   
+   <macrodef name="webDownloadMacro">
+        <attribute name="name"/>
+        <attribute name="path"/>
+        <sequential>
+            <get src="${repository}/@{path}/jars/@{name}" 
+                 dest="${dir.weblib}/@{name}"
+                 verbose="true"
+                 usetimestamp="true"/>            
+        </sequential>
+    </macrodef> 
+    
+    
+   <!-- 
+    Path Definitions
+    -->
+   
+   <path id="classpath">
+      <pathelement location="../dist/${jar.click}"/>
+      <pathelement location="../dist/${jar.click-extras}"/>
+      <pathelement location="../lib/${jar.servlet}"/>
+      <fileset dir="${dir.weblib}">
+        <include name="*.jar"/>
+      </fileset>
+   </path>
+	
+    
+   <!-- 
+    Task Definitions
+    -->
+
+   <target name="build" description="build web application WAR file" depends="compile">
+      <delete quiet="true" failonerror="false">
+         <fileset dir="${dir.webapp}/javadoc" includes="**/*"/>
+      </delete>
+      <delete dir="${dir.webapp}/click"/>
+      <javadoc sourcepath="src"
+               destdir="${dir.webapp}/javadoc"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="Click Examples"
+               doctitle="Click Example API">
+         <classpath refid="classpath"/>
+         <packageset dir="src"/>
+         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+         <link href="http://click.sourceforge.net/docs/click-api/"/>
+         <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
+      </javadoc>
+      <copy file="../framework/stylesheet.css"  
+      	    overwrite="true"
+            todir="${dir.webapp}/javadoc"/>
+      <delete file="${dir.deploy}/${name}.war"/>
+      <mkdir dir="${dir.deploy}"/>
+      <war destfile="${dir.deploy}/${name}.war"
+           webxml="${dir.webapp}/WEB-INF/web.xml">
+         <manifest>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <lib file="../dist/${jar.click}"/>
+         <lib file="../dist/${jar.click-extras}"/>
+         <fileset dir="${dir.webapp}">
+            <exclude name="**/web.xml"/>
+         </fileset>
+      </war>
+   </target>
+   
+   
+   <target name="compile" description="compile Java source">
+      <available file="../dist/click-extras-${version}.jar" property="isExtrasAvail"/>
+      <fail message="Build extras first with 'build-extras'">
+         <condition>
+  	        <or><isfalse value="${isExtrasAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete dir="${dir.webapp}/WEB-INF/classes" quiet="false"/>
+      <mkdir dir="${dir.webapp}/WEB-INF/classes"/>
+      <copy todir="${dir.webapp}/WEB-INF/classes">
+         <fileset dir="src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="src" 
+             destdir="${dir.webapp}/WEB-INF/classes" 
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
+         <classpath refid="classpath"/>
+      </javac> 
+   </target>
+              
+              
+   <target name="deploy" description="copy WAR files to application server"> 
+      <copy file="${dir.deploy}/${name}.war" todir="${dir.appserver}" overwrite="true"/>
+   </target>
+   
+    
+   <target name="get-deps" description="download JAR dependencies">
+      <mkdir dir="${dir.weblib}"/>
+      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
+      <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
+      <webDownloadMacro name="${jar.jstl}" path="jstl"/>
+      <webDownloadMacro name="${jar.logging}" path="commons-logging"/>
+      <webDownloadMacro name="${jar.log4j}" path="log4j"/>
+      <webDownloadMacro name="${jar.oro}" path="oro"/>
+      <webDownloadMacro name="${jar.spring-beans}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-context}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.spring-web}" path="org.springframework"/>
+      <webDownloadMacro name="${jar.standard}" path="taglibs"/>
+      <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}" 
+	       dest="${dir.weblib}/${jar.cayenne}"
+	       verbose="true"
+	       usetimestamp="true"/> 
+   </target>
+   
+
+
+   <target name="get-deps-proxy" description="download JAR dependencies via proxy">
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"/>
+      <antcall target="get-deps"/>
+   </target>
+ 
+ 
+   <target name="help" description="display the Help message">
+      <echo message="Click Examples web application"/>
+      <echo message="=============================="/> 
+      <echo/>  
+      <echo message="Main targets:"/> 
+      <echo/>    
+      <echo message="build                 build web application WAR file"/> 
+      <echo message="compile               compile Java code"/>
+      <echo message="deploy                copy WAR file to application server"/>
+      <echo message="get-deps              download JAR dependencies"/> 
+      <echo message="get-deps-proxy        download JAR dependencies via proxy"/> 
+      <echo message="help                  display the Help message"/>  
+      <echo/>
+      <echo/>
+      <echo message="Please ensure you have configured build.properties"/> 
+      <echo/>  
+   </target>  
+	   
+</project>

@@ -1,0 +1,75 @@
+<table width="$size" class="picklist">
+  #if($unselectedLabel || $selectedLabel)
+  <tr>
+    <th>$unselectedLabel</th>
+    <td>&nbsp;</td>
+    <th>$selectedLabel</th>
+  </tr>
+  #end
+<tr>
+<td width="50%">
+  <select id="${id}_unselected" size="$height" style="width:100%;" multiple
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  >
+    #foreach($item in $options)
+      #if(!$item.get("selected"))
+      <option value="$format.html($item.get("option").value)">$format.html($item.get("option").label)</option>
+      #end
+    #end
+  </select>
+</td>
+<td valign="middle" width="0%">
+  <input type="button" value="&gt;" style="width:60px;" 
+         onclick="pickListMove(${id}_unselected, $id, ${id}_hidden, true)"
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  /><br>
+  <input type="button" value="&lt;" style="width:60px;" 
+         onclick="pickListMove($id, ${id}_unselected, ${id}_hidden, false)"
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  /><br>
+  <input type="button" value="&gt;&gt;" style="width:60px;" 
+         onclick="pickListMoveAll(${id}_unselected, $id, ${id}_hidden, true)"
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  /><br>
+  <input type="button" value="&lt;&lt;" style="width:60px;" 
+         onclick="pickListMoveAll($id, ${id}_unselected, ${id}_hidden, false)"
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  /><br>
+</td>
+<td width="50%">
+  <select id="$id" size="$height" style="width:100%;" multiple
+    #if(!$valid)
+      class="error"
+    #end
+    #if($readOnly || $disabled)
+      disabled="disabled"
+    #end
+  >
+    #foreach($item in $options)
+      #if($item.get("selected"))
+        <option value="$format.html($item.get("option").value)">$format.html($item.get("option").label)</option>
+      #end
+    #end
+  </select>
+</td>
+</table>
+
+<select id="${id}_hidden" name="$name" style="display: none;" multiple>
+  #foreach($item in $options)
+    <option value="$format.html($item.get("option").value)"
+      #if($item.get("selected"))
+        selected
+      #end
+    >$format.html($item.option.label)</option>
+  #end
+</select>

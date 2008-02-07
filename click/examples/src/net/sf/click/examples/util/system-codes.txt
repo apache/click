@@ -1,0 +1,19 @@
+#
+# SYSTEM_CODES table data file, format: 
+# name, value, label, orderBy
+#
+
+TITLE, Mr, Mr, 0
+TITLE, Ms, Ms, 1
+TITLE, Mrs, Mrs, 2
+TITLE, Miss, Miss, 3
+TITLE, Dr, Dr, 4
+
+STATE, NSW, NSW, 0
+STATE, VIC, VIC, 1
+STATE, QLD, QLD, 2
+STATE, WA, WA, 3
+STATE, SA, SA, 4
+STATE, TAS, TAS, 5
+STATE, NT, NT, 6
+STATE, ACT, ACT, 7

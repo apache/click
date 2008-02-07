@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <style type="text/css">
+  dl { 
+    margin-left: 2em; 
+  }
+  dt { 
+    font-weight: 700;
+    margin-top: 1.5em; 
+    margin-bottom: 0.5em; 
+  }
+  .change {
+    margin-bottom: 0.75em;
+  }
+ </style>
+</head>
+<body>
+  
+<h1>Road Map and Changes</h1>
+
+<h2>Road Map</h2>
+ClickIDE's roadmap is to includes the following features:
+<ul>
+  <li class="change">
+    Velocity Editor - code completion for page model/control objects
+  </li>
+  <li class="change">
+    Velocity Editor - syntax Highlighting for Velocity directives and comments 
+  </li>
+  <li class="change">
+    Velocity Editor - toggle Velocity Comment action
+  </li>
+  <li class="change">
+    Velocity Editor - define global variables for code completion
+  </li>
+  <li class="change">
+    Java Editor - code completion for string literals which specify the listener method
+  </li>
+  <li class="change">
+    Java Editor - hyperlink for string literals which specify the listener method
+  </li>
+  <li class="change">
+    Java Editor - validates string literals which specify the listener method
+  </li>
+  <li class="change">
+    Java Editor - code completion templates such as "Click Listener Method"
+  </li>
+  <li class="change">
+    Configuration Editor - code completion in the source editor
+  </li>
+  <li class="change">
+    Cayenne Integration - new Cayenne mapping project creation wizard
+  </li>
+  <li class="change">
+    Cayenne Integration - launch Cayenne Modeler for cayenne.xml
+  </li>
+  <li class="change">
+    Cayenne Integration - provide Cayenne libraries as classpath variable
+  </li>
+  <li class="change">
+    Cayenne Integration - display ER diagram from Cayenne definition
+  </li>
+  <li class="change">
+    Others - provide configuration template such as "With Spring" or "With Hibernate"
+  </li>
+ </ul>
+
+<p>&nbsp;</p>
+
+<h2>Changes</h2>
+
+<dl>
+
+  <dt>Version 2.0.0 - Spring 2008</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        Supports Click 1.4.0 and Eclipse 3.3 / WTP 2.0.
+        This version can't work with Eclipse 3.2.
+      </li>
+      <li class="change">
+        Added new Cayenne mapping project creation wizard.
+        This wizard generates an empty cayenne.xml and open it by Cayenne Modeler.
+      </li>
+      <li class="change">
+        Added Cayenne Modeler launcher.
+      </li>
+      <li class="change">
+        Added classpath variables "CAYENNE_LIB" and "CAYENNE_NODEPS_LIB".
+        You can add cayenne.jar / cayenne-nodeps.jar to your project classpath
+        using these variables at the project build path settings.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.7.0 - 14 Jun 2007</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 1.3.1.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.6.0 - 24 Mar 2007</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 1.2
+      	[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-19">19</a>].
+      </li>
+      <li class="change">
+      	Code completion for the braced variables (${...}) in the TemplateEditor.
+      </li>
+      <li class="change">
+      	Code completion for the user define macros in the TemplateEditor.
+      	TemplateEditor also recognizes macros which are defined in the /macro.vm.
+      </li>
+      <li class="change">
+        Checking for exiting click jars before deploying them.
+      	This addition was raised by Malcolm Edgar
+      	[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-18">18</a>].
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.5.1 - 16 Dec 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Added syntax highlighting for the Velocity template.
+      </li>
+      <li class="change">
+      	Added package / classname completion in the "New Click Page" wizard.
+      </li>
+      <li class="change">
+      	Re-support Servlet API 2.3 (ClickIDE 1.5.0 has supported only 2.4).
+      </li>
+    </ul>
+  </dd>
+  <p/>
+    
+  <dt>Version 1.5.0 - 26 November 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 1.1.
+      </li>
+      <li class="change">
+      	Added classname completion in the click.xml graphical editor.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+
+  <dt>Version 1.4.1 - 8 November 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Added support for Page classname suffix. 
+      	This issue was raised by Masanobu Shimura
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-13">13</a>].
+      </li>
+      <li class="change">
+      	Fixed auto complete support for pages in subdirectories. 
+      	This issue was raised by Masanobu Shimura
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-14">14</a>].
+      </li>
+      <li class="change">
+      	Fixed page automapping bug
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-15">15</a>].
+      </li>
+      <li class="change">
+      	Fixed variable code-completion bug for the interface in the Velocity editor.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.4.0 - 6 October 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 1.0.
+      </li>
+      <li class="change">
+      	Added Velocity Editor
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-12">12</a>].
+      </li>
+      <li class="change">
+      	Fixed click.xml validation when classes are removed
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-5">5</a>].
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.3.0 - 8 July 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Updated ClickIDE to support Eclipse 3.2 & WTP 1.5.
+      </li>
+      <li class="change">
+      	Added support for click-app locale attribute. 
+      	This issue was raised by Malcolm Edgar
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-10">10</a>].
+      </li>
+      <li class="change">
+      	Added switch support for pages ending with Page name 
+      	This issue was raised by Malcolm Edgar
+        [<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLKE-11">11</a>].
+      </li>
+    </ul>
+  </dd>
+  <p/>
+
+  <dt>Version 1.2.0 - 16 June 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 0.20.
+      </li>
+      <li class="change">
+      	New Click Page wizard supports templates (You can register your own template at the preference).
+      </li>
+      <li class="change">
+      	Switch the page class <-> the HTML file action (CTRL+ALT+S).
+      </li>
+    </ul>
+  </dd>
+  <p/>
+
+  <dt>Version 1.1.0 - 15 April 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports Click 0.19.
+      </li>
+      <li class="change">
+      	Improvement of the New Click Page wizard.
+      </li>
+      <li class="change">
+      	Improvement of the click.xml tree editor.
+      </li>
+      <li class="change">
+      	Add "New Click Page" to toolbar and menubar.
+      </li>
+    </ul>
+  </dd>
+  <p/>
+
+  <dt>Version 1.0.1 - 25 February 2006</dt>
+  <dd>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+      	Supports TextEditor actions in the Source tab of the click.xml editor.
+      </li>
+      <li class="change">
+      	Improvement about the NewClickPageWizard.
+      </li>
+      <li class="change">
+      	Internationalization (supports only English and Japanese).
+      </li>
+    </ul>
+  </dd>
+  <p/>
+  
+  <dt>Version 1.0.0 - 18 Feb 2006</dt>
+  <dd>
+  This is the first release of ClickIDE.
+  </dd>
+  <p/>
+</dl>
+
+</body>
+</html>
+

@@ -1,0 +1,71 @@
+<!--A velocity macro which prints all nodes in specified list-->
+#macro (printState $list)    
+    #if($list)
+        #foreach ($node in $list)
+            $node<br>
+        #end
+    #end    
+#end
+
+This page provides a demonstration of the CheckboxTree component.
+
+<p/>
+In this example the Page is a TreeListener. The section below will display any events triggered by the tree:
+
+$form.startTag()
+
+<table style="margin: 1em;">
+    
+    #if ($form.error)
+    <tr>
+        <td colspan="2" style="color: red;"> $form.error </td>
+    </tr>
+    #end
+    <tr>
+        <td>
+            $checkboxTree
+        </td>
+    </tr>     
+     #foreach ($field in $form.fieldList)
+   #if (!$field.hidden)
+     #if (!$field.valid)
+     <tr>
+       <td colspan="2"> $field.error </td>
+     </tr>
+     #end
+
+   <tr>
+     <td> $field.label: </td><td> $field </td>
+   </tr>
+   #end
+ #end
+    <tr>
+        <td>
+            $form.fields.select
+            $form.fields.reset
+        </td>
+    </tr>
+    
+</table>
+
+$form.endTag()
+
+<div style="width:55em; border:1px solid #CCCCCC">
+    <dl>
+        <dt><strong>Selected</strong></dt>
+        <dd>#printState($selected)</dd>
+
+        <dt><strong>Deselected</strong></dt>
+        <dd>#printState($deselected)</dd>
+
+        <dt><strong>Expanded</strong></dt>
+        <dd>#printState($expanded)</dd>
+
+        <dt><strong>Collapsed</strong></dt>    
+        <dd>#printState($collapsed)</dd>
+    </dl>            
+</div>
+
+<br>
+
+$optionForm

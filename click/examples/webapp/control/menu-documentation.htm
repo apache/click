@@ -1,0 +1,18 @@
+In Click a applications menu is in the configuration file 
+<a href="$context/source-viewer.htm?filename=WEB-INF/menu.xml">/WEB-INF/menu.xml</a>.
+<p/>
+This JavaScript drop down menu is rendered using the Velocity Macro <tt>writeMenu()</tt>,
+defined in <a href="$context/source-viewer.htm?filename=macro.vm">macro.vm</a>.
+
+<pre class="codeHtml">
+&#35;writeMenu(&#36;rootMenu) </pre>
+
+The example menu pages all extend <tt>MenuPage</tt> which defines a <span class="st">"rootMenu"</span>
+control.
+
+<pre class="codeJava">
+<span class="kw">public class</span> MenuPage <span class="kw">extends</span> BorderedPage {
+
+     <span class="kw">public</span> Menu rootMenu = Menu.getRootMenu();
+
+}</pre>

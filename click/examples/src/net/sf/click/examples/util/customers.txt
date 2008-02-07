@@ -1,0 +1,80 @@
+#
+# CUSTOMERS table data file, format: 
+# fullname, email, age, investments, holdings, date joined, active status
+#
+Ann Melan, ann_melan@iinet.com, 41, Residential Property, 434560, 1986-12-05, true
+Joh Holgate, jholgate@gate.com, 55, Residential Property, 145000, 1998-01-29, true
+Peter Harold, peterh@easymail.com, 43, Stocks, 10200, 1999-11-02, true
+Angus Robins, arobins@robins.com, 39, Bonds, 40000, 1991-09-10, false
+David Huew, david.huew@city.com, 47, Options, 87600, 2001-02-12, true
+Paula Matthews, paulam@robinson.com, 31, Commerical Property, 348700, 1984-12-23, true
+Robin Master, robin.master@gmail.com, 32, Bonds, 45000, 2000-08-03, false
+James Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03, true
+Sandra Nomi, snomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17, true
+David Anderson, david_anderson@faststream.net, 53, Options, 762000, 2001-10-03, false
+Alison Smart, asmart@biztalk.com, 48, Residential Property, 558000, 1993-12-25, true
+Rodney Alan, ralan@gmail.com, 31, Stocks, 125000, 2002-01-29, true
+Bensen Romanolf, benr@albert.net, 45, Bonds, 284230, 2002-02-07, true
+Charles Fisher, charles.filser@fisher.com, 58, Stocks, 872050, 2002-02-17, true
+Kylie Simons, ksimons@hotmail.com, 37, Options, 255000, 2002-07-12, false
+Leah Smith, lsmith@halbert.com, 25, Stocks, 55000, 2002-10-13, true
+Zara Smart, zsmart@johnsone.co.uk,
+Oliver Thompson, oliver.thompson@gmail.com, 45, Options, 345000, 2000-11-09, true
+Peter Hassel, phassel@bigpond.com, 71, Stocks, 890000, 2001-01-21, true
+Andy Mitchel, andym@hotmail.com, 63, Stocks, 1250400, 1984-04-08, true
+David Olders, david.olders@olders.com, 56, Stocks, 2871000, 1989-12-02, true
+Lisa Simons, lsimons@zurich.com, 34, Options, 348000, 1994-04-19, true
+Thomas Essel, tessel@ibm.com, 54, Commercial Property, 895000, 1996-02-07, false
+Andrew Phips, andyp@mycorp.com, 34, Stocks, 240000, 1997-04-12, true
+Mia Bernard, mia.bernard@mycorp.com, 21, Stocks, 150000, 2004-07-23, true
+Jamie Nestle, jamien@yahoo.com, 60, Options, 765000, 2001-05-24, true
+David Smart, dsmart@johnsone.co.uk,
+Peter Melan, peter_melan@iinet.com, 41, Residential Property, 434560, 1986-12-05, true
+Tom Holgate, tholgate@gate.com, 55, Residential Property, 145000, 1987-01-29, true
+Ally Emery, allye@easymail.com, 43, Stocks, 10200, 2004-11-02, true
+Marry Robins, mrobins@robins.com, 39, Bonds, 40000, 2000-09-10, false
+Scott Huew, scott.huew@city.com, 47, Options, 87600, 2001-02-12, true
+Simon Matthews, simonm@robinson.com, 31, Commerical Property, 348700, 2001-12-23, true
+Albert Master, albert.master@gmail.com, 32, Bonds, 45000, 2004-08-03, false
+Ron Master, ron.master@hotcom.com, 34, Options, 65000, 2001-08-03, true
+Petra Nomi, pnomi@gmail.com, 47, Commerial Property, 285000, 2001-09-17, true
+William Anderson, william_anderson@faststream.net, 53, Options, 762000, 2001-10-03, false
+Karol Tokren, ksmart@biztalk.com, 48, Residential Property, 558000, 2004-12-25, true
+Alfred Alan, aalan@gmail.com, 31, Stocks, 125000, 1994-01-29, true
+Karren Romanolf, karrenr@albert.net, 45, Bonds, 284230, 1992-02-07, true
+James Fisher, james.filser@fisher.com, 58, Stocks, 872050, 2005-02-17, true
+Nigel Watershire, nsimonw@hotmail.com, 37, Options, 255000, 2006-07-12, false
+Lisa Hobson, lsmith@halbert.com, 25, Stocks, 55000, 2004-10-13, true
+Peter Smart, psmart@johnsone.co.uk,
+Oscar Thompson, oscar.thompson@gmail.com, 45, Options, 345000, 2000-11-09, true
+Mark Hassel, mhassel@bigpond.com, 71, Stocks, 890000, 1991-01-21, true
+Ben Bessel, benb@hotmail.com, 63, Stocks, 1250400, 1984-04-08, true
+Grahame Olders, grahame.olders@olders.com, 56, Stocks, 2871000, 1989-12-02, true
+Victor Simons, vsimons@zurich.com, 34, Options, 348000, 1994-04-19, true
+Karl Essel, kessel@ibm.com, 54, Commercial Property, 895000, 1999-02-07, false
+Dominic Phips, docinicp@mycorp.com, 34, Stocks, 240000, 1990-04-12, true
+Sandra Bernard, sandra.bernard@mycorp.com, 21, Stocks, 150000, 2004-07-23, true
+Rian Nestle, riann@yahoo.com, 60, Options, 765000, 2001-05-24, true
+Devish Smart, dsmart@johnsone.co.uk,
+Peter William, p_williams@alertson.com, 43, Stocks, 234000, 1996-05-28, true
+Malcolm Kilmore, mkilmore@scotts.com, 51, Residential Property, 589000, 2005-12-24, true
+Catherine Benchman, cathb@hotmail.com, 67, Stocks, 632000, 1997-05-04, false
+Thong Tran, ttran@avion.net, 53, Stocks, 432000, 2005-11-20, true
+Tien Tong, ttong@gmail.com, 37, Stocks, 2030000, 1999-07-05, true
+Zack Benders, zack.benders@mycorp.com, 28, Options, 145000, 1984-05-24, true
+Joe Tessel, joet@yoodle.net, 31, Options, 287000,
+Tom Brennan, tomb@wilderness.org, 40, Stocks, 123000,
+Jackie Williamson, jackiew@datamart.com, 28, Stocks, 35000,
+Finn Peterson, finnp@gmail.com, 37, Stocks, 215000,
+David Warren, dwarren@biz.net, 36, Residential Property, 546500,  1974-05-08, true
+John Quinn, johnq@apple.com, 38, Options, 500000,
+Peter Williams, pwilliams@iinet.net.au, 36, Stocks, 150000,
+Rhoda Mason, rmason@gmail.com, 34, Residential Property, 2400000,
+David Dockery, davidd@yahoo.com, 40, Residential Property, 4500000,  1988-01-11, true
+Brad Cole, bradc@hotmail.com, 42, Stocks
+William Thong, wthong@westnet.com, 40, Options, 345000
+Tanya Stockwell, t.stockwell@abs.com, 39, Stocks, 289000
+Steve Haywood, steve.haywood@timbercorp.com, 45, Stocks, 150000,  1998-10-09, true
+Rove Apple, rove.apple@bignet.com, 31, Stocks, 34000,
+Greg Matherson, gregm@bubhub.com, 27, Stocks, 234000,
+Katie Lang, klang@rockit.net, 21, Stocks

@@ -1,0 +1,12 @@
+$form
+
+<p>&nbsp;</p>
+
+#if ($selectedValues)
+Selected Option values:
+<ul>
+#foreach ($value in $selectedValues)
+	<li>$value</li>
+#end
+</ul>
+#end

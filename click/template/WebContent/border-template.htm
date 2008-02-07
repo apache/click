@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Click Quick Start - $title</title>
+<link rel="stylesheet" type="text/css" href="$context/assets/style.css" title="Style"></link>
+$imports
+</head>
+
+<body>
+
+  <div id="header">
+  	<span id="title">project-name :: $title</span>
+  </div>
+  
+#if ($rootMenu) 
+  #writeMenu($rootMenu) 
+#end
+
+  <div id="container">
+    #parse($path)
+  </div>
+ 
+</body>
+</html>

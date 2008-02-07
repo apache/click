@@ -1,0 +1,625 @@
+<!DOCTYPE' HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+ "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+ <meta name="Author" content="Malcolm Edgar"/>
+ <meta name="description" lang="en" content="Click Java web application framework"/>
+ <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
+ <title>Click Framework</title>
+ <link rel="stylesheet" type="text/css" href="../help.css"/>
+</head>
+<body>
+  
+<h1>Best Practices</h1>
+
+This section discusses Best Practices for designing and building Click application.
+The following topics are covered:
+<ul>
+  <li><a href="#security">Security</a> - use JEE role based security
+  </li>
+  <li><a href="#packages-classes">Packages and Classes</a> - project package structures and page classes
+  </li>
+  <li><a href="#automapping">Page Auto Mapping</a> - use Convention over Configuration
+  </li>
+  <li><a href="#navigation">Navigation</a> - use Page classes to forward and redirect
+  </li>
+  <li><a href="#templating">Templating</a> - to standardize your web application
+  </li>
+  <li><a href="#menus">Menus</a> - centralize your page navigation
+  </li>
+  <li><a href="#logging">Logging</a> - use Log4j in a base page
+  </li>
+  <li><a href="#error-handling">Error Handling</a> - use custom error page
+  </li>
+</ul>
+
+<p>&nbsp;</p>
+
+<a name="security" class="heading"><h2>Security</h2></a>
+
+For application security it is highly recommended that you use the declarative 
+JEE Servlet path role based security model. While Click pages provide an 
+<tt>onSecurityCheck()</tt> method for rolling your own programatic security model, 
+the declarative JEE model provides numerous advantages.
+<p/>
+These advantages include:
+
+<ul>
+  <li>
+  Its an industry standard pattern making development and maintenance easier.
+  </li>
+  <li>
+  Application servers generally provide numerous ways of integration with an
+  organisations security infrastructure, including LDAP directories and 
+  relational databases.
+  </li>
+  <li>  
+  Servlet security model support users bookmarking pages. When users go to access
+  these pages later, the container will automatically authenticate them before
+  allowing them to access the resource.
+  </li>
+  <li>
+  Using this security model you can keep your Page code free of security 
+  concerns. This makes you code more reusable, or at least easier to write.
+  </li>
+</ul>
+
+If your application has very fine grained or complex security requirements you 
+may need to combine both the JEE declarative security model and a programmatic 
+security model to meet your needs. In these cases its recommended you use declarative
+security for course grained access and programmatic security for finner grained
+access control.
+
+<h4>Declarative Security</h4>
+
+The declarative JEE Servlet security model requires users to be authenticated and
+in the right roles before they can access secure resources. Relative to many of 
+the JEE specifications the Servlet security model is surprisingly simple. 
+<p/>
+For example to secure admin pages, you add a security 
+constraint in your <tt>web.xml</tt> file. This requires users to be in the
+<span class="blue">admin</span> role before they can access to any resources 
+under the <span class="red">admin</span> directory:
+
+<pre class="codeConfig">
+&lt;security-constraint&gt;
+   &lt;web-resource-collection&gt;
+      &lt;web-resource-name&gt;admin&lt;/web-resource-name&gt;   
+      &lt;url-pattern&gt;<span class="red">/admin/*</span>&lt;/url-pattern&gt;
+   &lt;/web-resource-collection&gt;
+   &lt;auth-constraint&gt;
+      &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
+   &lt;/auth-constraint&gt;
+&lt;/security-constraint&gt; </pre>
+
+The application user roles are defined in the <tt>web.xml</tt> file as 
+<tt>security-role</tt> elements:
+
+<pre class="codeConfig">
+&lt;security-role&gt;
+   &lt;role-name&gt;<span class="blue">admin</span>&lt;/role-name&gt;
+&lt;/security-role&gt;  </pre>
+
+The Servlet security model supports three different authentication method:
+<ul>
+  <li>
+    <tt>BASIC</tt> - only recommended for internal applications where security 
+    is not important. This is the easiest authentication method, which simply
+    displays a dialog box to users requiring them to authenticate before
+    accessing secure resources. The BASIC method is relatively unsecure as the 
+    username and password are posted to the server as a Base64 encoded string.
+  </li>
+  <li>
+    <tt>DIGEST</tt> - recommended for internal applications with a moderate level
+    of security. As with BASIC authentication, this method simply displays a 
+    dialog box to users requiring them to authenticate before accessing 
+    secure resources. Not all application servers support DIGEST authentication,
+    with only more recent versions of Apache Tomcat supporting this method.
+  </li>
+  <li>
+    <tt>FORM</tt> - recommended applications for where you need a customised 
+    login page. For applications requiring a high level of security it is 
+    recommended that you use the FORM method over HTTPS.
+  </li>
+</ul>
+
+The authentication method is specified in the &lt;login-method&gt; element. For
+example to use the BASIC authentication method you would specify:
+
+<pre class="codeConfig">
+&lt;login-config&gt;
+   &lt;auth-method&gt;<span class="blue">BASIC</span>&lt;/auth-method&gt;
+   &lt;realm-name&gt;Admin Realm&lt;/realm-name&gt;
+&lt;/login-config&gt;  </pre>
+
+To use the FORM method you also need to specify the path to the login page and
+the login error page:
+
+<pre class="codeConfig">
+&lt;login-config&gt;
+   &lt;auth-method&gt;<span class="blue">FORM</span>&lt;/auth-method&gt;
+   &lt;realm-name&gt;Secure Realm&lt;/realm-name&gt;
+   &lt;form-login-config&gt;
+      &lt;form-login-page&gt;<span class="red">/login.htm</span>&lt;/form-login-page&gt;
+      &lt;form-error-page&gt;<span class="red">/login.htm?auth-error=true</span>&lt;/form-error-page&gt;
+   &lt;/form-login-config&gt;
+&lt;/login-config&gt; </pre>
+
+In your Click <tt>login.htm</tt> page you need to include a special 
+<span class="blue">j_security_check</span> form which includes the input
+fields <span class="blue">j_username</span> and <span class="blue">j_password</span>.
+For example:
+
+<pre class="codeHtml">
+<span class="kw">#if</span> ($request.getParameter(<span class="red">"auth-error"</span>))
+&lt;div style="margin-bottom:1em;margin-top:1em;color:red;"&gt;
+  Invalid User Name or Password, please try again.&lt;br/&gt;
+  Please ensure Caps Lock is off.
+&lt;/div&gt;
+<span class="kw">#end</span>
+
+&lt;form method="POST" action="<span class="blue">j_security_check</span>" name="form"&gt;
+&lt;table border="0" style="margin-left:0.25em;"&gt;
+ &lt;tr&gt;
+   &lt;td&gt;&lt;label&gt;User Name&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="text" name="<span class="blue">j_username</span>" maxlength="20" style="width:150px;"/&gt;&lt;/td&gt;
+   &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;&lt;label&gt;User Password&lt;/label&gt;&lt;font color="red"&gt;*&lt;/font&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="password" name="<span class="blue">j_password</span>" maxlength="20" style="width:150px;"/&gt;&lt;/td&gt;
+   &lt;td&gt;&lt;input type="image" src="$context/images/login.png" title="Click to Login"/&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+
+&lt;script type="text/javascript"&gt;
+  document.form.j_username.focus(); 
+&lt;/script&gt; </pre>
+
+When using FORM based authentication do <b>NOT</b> put application logic in a 
+Click Login Page class, as the role of this page is to simply render the login 
+form. If you attempt to put navigation logic in your Login Page class, the 
+JEE Container may simply ignore it or throw errors.
+<p/>
+Putting this all together below is a <tt>web.xml</tt> snippet which features 
+security constraints for pages under the admin path and the user path. This 
+configuration uses the FORM method for authentication, and will also redirect
+unauthorized (403) requests to the <tt>/not-authorized.htm</tt> page.
+
+<pre class="codeConfig">
+&lt;web-app&gt;
+
+    ..
+
+    &lt;error-page&gt;
+        &lt;error-code&gt;403&lt;/error-code&gt;
+        &lt;location&gt;<span class="green">/not-authorized.htm</span>&lt;/location&gt;
+    &lt;/error-page&gt;	
+
+    &lt;security-constraint&gt;
+        &lt;web-resource-collection&gt;
+            &lt;web-resource-name&gt;admin&lt;/web-resource-name&gt;   
+            &lt;url-pattern&gt;<span class="blue">/admin/*</span>&lt;/url-pattern&gt;
+        &lt;/web-resource-collection&gt;
+        &lt;auth-constraint&gt;
+            &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+        &lt;/auth-constraint&gt;
+    &lt;/security-constraint&gt;
+
+    &lt;security-constraint&gt;
+        &lt;web-resource-collection&gt;
+            &lt;web-resource-name&gt;user&lt;/web-resource-name&gt;   
+            &lt;url-pattern&gt;<span class="blue">/user/*</span>&lt;/url-pattern&gt;
+        &lt;/web-resource-collection&gt;
+        &lt;auth-constraint&gt;
+            &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+            &lt;role-name&gt;<span class="red">user</span>&lt;/role-name&gt;
+        &lt;/auth-constraint&gt;
+    &lt;/security-constraint&gt;
+
+    &lt;login-config&gt;
+        &lt;auth-method&gt;<span class="green">FORM</span>&lt;/auth-method&gt;
+        &lt;realm-name&gt;Secure Zone&lt;/realm-name&gt;
+        &lt;form-login-config&gt;
+            &lt;form-login-page&gt;<span class="green">/login.htm</span>&lt;/form-login-page&gt;
+            &lt;form-error-page&gt;<span class="green">/login.htm?auth-error=true</span>&lt;/form-error-page&gt;
+        &lt;/form-login-config&gt;
+    &lt;/login-config&gt;
+
+    &lt;security-role&gt;
+        &lt;role-name&gt;<span class="red">admin</span>&lt;/role-name&gt;
+    &lt;/security-role&gt;
+
+    &lt;security-role&gt;
+        &lt;role-name&gt;<span class="red">user</span>&lt;/role-name&gt;
+    &lt;/security-role&gt;
+
+&lt;/web-app&gt;
+</pre>
+
+<h4>Resources</h4>
+
+For more information on using security see the resources below:
+<ul>
+  <li><a href="http://infinity.crosslogic.com/clinfinity/ContentPath/crosslogic/Resources/WebPages/cl_site/downloads/white_papers/FormBasedAuthentication.pdf">Form Based Authentication</a> by Louis E. Mauget
+  </li>
+  <li><a href="http://java.sun.com/products/servlet/download.html">Servlet Specification</a> by Sun Microsystems
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Basic_authentication_scheme">Basic authentication scheme</a> 
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Digest_access_authentication">Digest authentication scheme</a>
+  </li>
+  <li><a href="http://en.wikipedia.org/wiki/Https">Https URI scheme</a>
+  </li>
+</ul>
+
+
+<a name="packages-classes" class="heading"><h2>Packages and Classes</h2></a>
+
+An excellent way to design your project package structure is the classify packages 
+initially by technology. So in a Click application all of our pages would be contained
+under a <tt>page</tt> package. This also works very well with the Page automapping feature.
+<p/>
+All the projects domain entity classes would be contained under a <tt>entity</tt> package,
+and service classes would be contained under a <tt>service</tt> directory. Note alternative
+names for the <tt>entity</tt> package include domain or model. We also typically have a
+<tt>util</tt> package for any stray classes which don't quite fit into the other packages.
+<p/>
+In Java package names are singular by convention, so we have a util package rather than
+an utils package.
+<p/>
+An example project structure for a MyCorp web application is illustrated below:
+<blockquote>
+<img alt="Example Project Structure" src="../images/packages-classes.png"/>  
+</blockquote>
+
+In this example application we use declarative role and path based security. 
+All the pages in the <tt>admin</tt> package and directory require the <tt>"admin"</tt>
+role to be access, while all the pages in the <tt>user</tt> package and directory
+require the <tt>"user"</tt> role to be accessed. 
+
+<h4>Page Classes</h4>
+
+A best practice when developing application Page classes is to place common
+methods in a base page class. This is typically used for providing access methods
+to application services and logger objects. 
+<p/>
+For example the BasePage below provides access to Spring configured service objects
+and a Log4J logger object:
+
+<pre class="codeJava">
+<span class="kw">public class</span> BasePage <span class="kw">extends</span> Page <span class="kw">implements</span> ApplicationContextAware {
+	
+    <span class="cm">/** The Spring application context. */</span>
+    <span class="kw">protected</span> ApplicationContext applicationContext;
+    
+    <span class="cm">/** The page Logger instance. */</span>
+    <span class="kw">protected</span> Logger logger;
+	
+    <span class="cm">/**
+     * Return the Spring configured Customer service.
+     *
+     * @return the Spring configured Customer service
+     */</span>
+    <span class="kw">public</span> CustomerService getCustomerService() {
+        <span class="kw">return</span> (CustomerService) getBean(<span class="st">"customerService"</span>);
+    }
+	
+    <span class="cm">/**
+     * Return the Spring configured User service.
+     *
+     * @return the Spring configured User service
+     */</span>
+    <span class="kw">public</span> UserService getUserService() {
+        <span class="kw">return</span> (UserService) getBean(<span class="st">"userService"</span>);
+    }
+	
+    <span class="cm">/**
+     * Return the page Logger instance.
+     *
+     * @return the page Logger instance
+     */</span>
+    <span class="kw">public</span> Logger getLogger() {
+        <span class="kw">if</span> (logger == <span class="kw">null</span>) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span class="kw">return</span> logger;
+    }
+
+    <span class="cm">/**
+     * @see ApplicationContextAware#setApplicationContext(ApplicationContext)
+     */</span>
+    <span class="kw">public void</span> setApplicationContext(ApplicationContext applicationContext)  {
+        this.applicationContext = applicationContext;
+    }
+
+    <span class="cm">/**
+     * Return the configured Spring Bean for the given name.
+     *
+     * @param beanName the configured name of the Java Bean
+     * @return the configured Spring Bean for the given name
+     */</span>
+    <span class="kw">public</span> Object getBean(String beanName) {
+        return applicationContext.getBean(beanName);
+    }
+
+} </pre> 
+
+Applications typically use a border template and have a <tt>BorderPage</tt> which
+extends <tt>BasePage</tt> and defines the template. For example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> BorderPage <span class="kw">extends</span> BasePage {
+
+    <span class="cm">/** The root Menu item. */</span>
+    <span class="kw">public</span> Menu rootMenu = <span class="kw">new</span> Menu();
+	
+    <span class="cm">/**
+     * @see Page#getTemplate()
+     */</span>
+    <span class="kw">public</span> String getTemplate() {
+        <span class="kw">return</span> <span class="st">"/border-template.htm"</span>;
+    }
+} </pre> 
+
+Most application pages subclass <tt>BorderPage</tt>, except AJAX pages which
+have no need for a HTML border template and typically extend <tt>BasePage</tt>.
+The <tt>BorderPage</tt> class should not include common logic, other than that
+required for rendering the border template.  Common page logic should be defined
+in the <tt>BasePage</tt> class.
+<p/>
+To prevent these base Page classes being auto mapped, and becoming directly 
+acessible web pages, ensure that there are no page templates which could match 
+their class name. For example the <tt>BorderPage</tt> class above will not be 
+auto mapped to <span class="st">border-template.htm</span>.
+
+
+<a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
+
+You should use the Click page automapping configuration feature. See
+the <a href="configuration.html#application-automapping">Page Automapping</a> 
+topic for details.
+<p/>
+Automapping will save you from having to manually configure URL path to Page class 
+mappings in your <tt>click.xml</tt> file. If you follow this convention it is very 
+easy to maintain and refactor applications. 
+<p/>
+You can also quickly determine what the corresponding Page class is for a page 
+HTML template and visa versa, and if you use the ClickIDE Eclipse plugin you can 
+switch between a page's class and template by pressing Ctrl+Alt+S. 
+<p/>
+An example <tt>click.xml</tt> automapping configuration is provided below 
+(automapping is enabled by default):
+
+<pre class="codeConfig">
+&lt;click-app&gt;
+  &lt;pages <span class="blue">package</span>="<span class="red">com.mycorp.dashboard.page</span>"/&gt;
+&lt;/click-app&gt; </pre>
+
+To see how the page templates are mapped to Page classes set the application 
+<a href="configuration.html#application-mode">mode</a> to <tt>debug</tt> and
+at startup the mappings will be listed out. An example Click startup listing is 
+provided below:
+
+<pre class="codeConfig">
+[Click] [debug] automapped pages:
+[Click] [debug] /category-tree.htm -&gt; com.mycorp.dashboard.page.CategoryTree
+[Click] [debug] /process-list.htm -&gt; com.mycorp.dashboard.page.ProcessList
+[Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList  </pre>
+
+
+<a name="navigation" class="heading"><h2>Navigation</h2></a>
+
+When navigating between Pages using forwards and redirects, you should refer 
+to the target page using the Page class rather than using path. 
+This provides you compile time checking and will save you from having to update 
+path strings in Java code if you move pages about.
+<p/>
+To forward to another page using the Page class:
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> ActionLink customerLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    
+    ..
+    
+    <span class="kw">public boolean</span> onCustomerClick() {
+        Integer id = customerLink.getValueInteger();
+        Customer customer = getCustomerService().getCustomer(id); 
+   
+        CustomerDetailPage customerDetailPage = (CustomerDetailPage)
+            getContext().createPage(CustomerDetailPage.<span class="kw">class</span>);
+
+        customerDetailPage.setCustomer(customer);
+        setForward(customerDetailPage);
+   
+        <span class="kw">return false</span>;
+    }
+} </pre>
+
+To redirect to another page using the Page class you can obtain the pages path
+from the <tt>Context</tt>. In the example below we are passing through the 
+customer id as a request parameter to the target page.
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> Page {
+
+    <span class="kw">public</span> ActionLink customerLink = <span class="kw">new</span> ActionLink(<span class="kw">this</span>, <span class="st">"onCustomerClick"</span>);
+    
+    ..
+    
+    <span class="kw">public boolean</span> onCustomerClick() {
+        String id = customerLink.getValueInteger();
+   
+        String path = getContext().getPagePath(CustomerDetailPage.<span class="kw">class</span>);		
+        setRedirect(path + <span class="st">"?id="</span> + id);
+   
+        <span class="kw">return false</span>;
+    }
+} </pre>
+
+A quick way of redirecting to another page is to simply refer to the target class. 
+The example below logs a user out, by invalidating their session, and then redirects
+them to the applications home page.
+
+<pre class="codeJava">
+    <span class="kw">public boolean</span> onLogoutClick() {
+        getContext().getSession().invalidate();
+        
+        setRedirect(HomePage.<span class="kw">class</span>);
+        
+        <span class="kw">return false</span>;
+    }
+</pre>
+
+<a name="templating" class="heading"><h2>Templating</h2></a>
+
+Use Page templating it is highly recommended. Page templates provide numerous 
+advantages including:
+<ul>
+    <li>greatly reduce the amount of HTML you need to maintain</li>
+    <li>ensure you have a common look and feel across your application</li>
+    <li>make global application changes very easy</li>
+</ul>
+
+To see how to use templates see the <a href="pages.html#page-templating">Page Templating</a> topic.
+Also see the Click <a href="examples.html">Examples</a> use of page templating.
+
+
+<a name="menus" class="heading"><h2>Menus</h2></a>
+
+For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
+control to centralize application navigation is very useful. 
+Menus are defined in a <tt>WEB-INF/menu.xml</tt> file which changes very easy.
+<p/>
+An menu is typically defined in the a page border template so they are available 
+through out the application. The Menu control does not support HTML rendering, 
+so you need to define a Velocity macro to programattically render the menu. 
+You would call the macro in your border template with code like this:
+
+<pre class="codeHtml">
+<span class="red">#</span><span class="blue">writeMenu</span>(<span class="red">$</span>rootMenu) </pre>
+
+An advantage of using a macro to render your menu is that you can reuse the code
+across different applications, and to modify an applications menu you simply need
+to edit the <tt>WEB-INF/menu.xml</tt> file.
+A good place to define your macros is in the webroot <tt>/macro.vm</tt> file 
+as it is automatically included by Click. 
+<p/>
+Using macros you can create dynamic menu behaviour such as only rendering menu items 
+a user is authorized to access with <a href="extras-api/net/sf/click/extras/control/Menu.html#isUserInRoles()">isUserInRoles()</a>.
+
+<pre class="codeHtml">
+<span class="kw">#if</span> (<span class="red">$</span>menu.isUserInRoles())
+   ..
+<span class="kw">#end</span> </pre>
+
+You can also use JavaScript to add dynamic behaviour such as drop down menus, 
+for example see the Menu page in Click <a href="examples.html">Examples</a>.
+
+
+<a name="logging" class="heading"><h2>Logging</h2></a>
+
+For page logging you should use <a href="http://logging.apache.org/log4j/docs/">Log4j</a>
+library. An alternative library is the 
+<a href="http://jakarta.apache.org/commons/logging/">Commons Logging</a>. 
+If you are using Commons Logging please be aware that there have been class loader 
+issues with this library on some application servers. If you are using 
+Commons Logging please make sure you have the latest version.
+<p/>
+The best place to define your logger is in a common base page, for example:
+
+<pre class="codeJava">
+<span class="kw">public class</span> BasePage <span class="kw">extends</span> Page {
+	
+    <span class="kw">protected</span> Logger logger;
+	
+    <span class="kw">public</span> Logger getLogger() {
+        <span class="kw">if</span> (logger == <span class="kw">null</span>) {
+            logger = Logger.getLogger(getClass());
+        }
+        <span class="kw">return</span> logger;
+    }
+} </pre>
+
+Using this pattern all your application bases should extend <tt>BasePage</tt>
+so they can use the <tt>getLogger()</tt> method.
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
+	
+    <span class="kw">public void</span> onGet() {
+        <span class="kw">try</span> {
+            ..
+        
+        } <span class="kw">catch</span> (Exception e) {
+            getLogger().error(e);
+        }
+    }
+} </pre>
+
+If you have some very heavy debug statement you should possibly use an 
+<tt>isDebugEnabled</tt> switch so it is not invoked if debug is not required.
+
+<pre class="codeJava">
+<span class="kw">public class</span> CustomerListPage <span class="kw">extends</span> BasePage {
+	
+    <span class="kw">public void</span> onGet() {
+        <span class="kw">if</span> (getLogger().isDebugEnabled()) {
+            String msg = ..
+            
+            getLogger().debug(msg);
+        }
+        
+        ..
+    }
+} </pre>
+
+<p/>
+
+
+Please note the Click logging facility is not designed for application use, and is 
+for Click internal use only. When Click is running in <tt>production</tt> mode
+it will not produce any logging output.
+
+<a name="error-handling" class="heading"><h2>Error Handling</h2></a>
+
+In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
+for display. If applications require additional error handling they can create and
+register a custom error page in <tt>WEB-INF/click.xml</tt>. For example:
+
+<pre class="codeConfig">
+&lt;pages package="<span class="red">com.mycorp.page</span>" automapping="true"/&gt;
+  &lt;page path="<span class="blue">click/error.htm</span>" classname="<span class="red">ErrorPage</span>"/&gt; 
+&lt;/pages&gt; </pre>
+
+Generally application handle transactional errors using service layer code or via a
+servlet <a href="servlet-api/javax/servlet/Filter.html">Filter</a> and would not 
+need to include error handling logic in an error page.
+<p/>
+Potential uses for a custom error page include custom logging. 
+<p/>
+For example if an application requires unhandled errors to be logged to an 
+application log (rather than System.out) then a custom 
+<a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a> could be
+configured. An example <tt>ErrorPage</tt> error logging page is provided 
+below:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page.ErrorPage;
+..
+
+<span class="kw">public class</span> ErrorPage <span class="kw">extends</span> net.sf.click.util.ErrorPage {
+	
+    <span class="kw">public void</span> onDestory() {
+    	Logger.getLogger(getClass()).error(getError());
+    }
+} </pre>
+
+
+
+</body>
+</html>

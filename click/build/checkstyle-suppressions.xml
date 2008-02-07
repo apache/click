@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+    
+	<!-- File Length -->                                          
+              
+    <suppress checks="FileLength"
+              files="ClickUtils.java"/>
+              
+    <suppress checks="FileLength"
+              files="Form.java"/>
+
+    <suppress checks="FileLength"
+              files="Tree.java"/>
+
+	<!-- Javadoc Method -->                                          
+              
+    <suppress checks="JavadocMethod"
+              files="MessagesMap.java"/>
+              
+    <suppress checks="JavadocMethod"
+              files="SessionMap.java"/>
+              
+	<!-- Line Length -->              
+
+    <suppress checks="LineLength"
+              files="ColorPicker.java"
+              lines="87,88"/>    
+              
+    <suppress checks="LineLength"
+              files="ClickServlet.java"
+              lines="797"/> 
+              
+    <suppress checks="LineLength"
+              files="ClickUtils.java"/>
+              
+    <suppress checks="LineLength"
+              files="IntegerField.java"
+              lines="94"/> 
+              
+    <suppress checks="LineLength"
+              files="CreditCardField.java"
+              lines="164,176"/>    
+              
+    <suppress checks="LineLength"
+              files="EmailField.java"
+              lines="68,80"/>
+              
+    <suppress checks="LineLength"
+              files="DateField.java"
+              lines="96,97,98"/>
+              
+    <suppress checks="LineLength"
+              files="ErrorReport.java"/>  
+              
+    <suppress checks="LineLength"
+              files="FieldSet.java"
+              lines="559,571,599"/>  
+              
+    <suppress checks="LineLength"
+              files="Form.java"/>
+
+    <suppress checks="LineLength"
+              files="Tree.java"/>
+
+    <suppress checks="LineLength"
+              files="RegexField.java"
+              lines="91,103"/>    
+              
+    <suppress checks="LineLength"
+              files="TabbedPanel.java"
+              lines="117"/>    
+                                        
+    <suppress checks="LineLength"
+              files="Table.java"
+              lines="148"/>      
+              
+	<!-- Method Length -->              
+              
+    <suppress checks="MethodLength"
+              files="ErrorReport.java"
+              lines="186"/>
+              
+    <suppress checks="MethodLength"
+              files="ClickServlet.java"
+              lines="525"/>
+
+    <suppress checks="MethodLength"
+              files="Form.java"
+              lines="2153"/>
+
+	<!-- Static Variable Name -->              
+              
+    <suppress checks="StaticVariableName"
+              files="Form.java"
+              lines="509,512,515,518"/>
+                            
+</suppressions>

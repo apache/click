@@ -1,0 +1,39 @@
+#*********************************
+ * Write drop down menu and Search
+ *********************************#
+
+#macro( writeMenu $rootMenu )
+
+<table id="menuTable" border="0" width="100%" cellspacing="0" cellpadding="0" style="margin-top: 2px;">
+<tr>
+
+<td>
+<div id="searchbar">
+<div class="menustyle" id="menu">
+  <ul class="menubar" id="dmenu">
+    #foreach ($topMenu in $rootMenu.children)
+      #if ($topMenu.isUserInRoles() || $topMenu.isUserInChildMenuRoles())
+        #if ($topMenu.children.empty)
+		  <li class="topitem">$topMenu</li>
+        #else
+		  <li class="topitem">$topMenu
+		    <ul class="submenu"
+            #foreach ($subMenu in $topMenu.children)
+              #if ($subMenu.isUserInRoles())
+                ><li>$subMenu</li
+              #end
+		    #end
+            ></ul>
+		  </li>
+        #end
+      #end
+	#end
+	</ul>
+  </div>
+</div>
+</td>
+
+</tr>
+</table>
+
+#end

@@ -1,0 +1,51 @@
+<div style="margin-bottom:12px;">
+#if ($this.selected)
+ <img id="filterImg" src="$context/images/twistie-down.png"/> 
+#else
+ <img id="filterImg" src="$context/images/twistie-up.png"/> 
+#end
+ <a id="filterLink" href="#" onclick="onFilterTwistieClick()" style="text-decoration:none;">Date Filter</a>
+</div>
+
+#if ($this.selected)
+<div id="filterDiv" style="display:block;">
+#else
+<div id="filterDiv" style="display:none;">
+#end
+ $filterForm.startTag()
+ <fieldset style="width:200px;">
+  <legend>Date Range</legend>
+  <table class="form">
+   <tr>
+    <td class="fields">From:</td> 
+    <td class="fields" style="white-space:nowrap;">$filterForm.fields.startDate</td>
+    <td class="fields">To:</td> 
+    <td class="fields" style="white-space:nowrap;">$filterForm.fields.endDate</td> 
+    <td class="fields"><input type="submit" value="Apply"/></td>
+    <td class="fields"><input type="button" onclick="onClearClick()" value="Clear"/></td>
+   </tr>
+  </table>
+ </fieldset>
+ $filterForm.endTag()
+</div>
+
+<script type="text/javascript">
+function onFilterTwistieClick() {
+	var filterDiv = document.getElementById("filterDiv");
+
+   	if (filterDiv.style.display == "none") {
+   		document.getElementById("filterImg").src = "$context/images/twistie-down.png";
+   		filterDiv.style.display = "block";
+
+   	} else {
+   		document.getElementById("filterImg").src = "$context/images/twistie-up.png";
+   		filterDiv.style.display = "none";
+   }
+}
+function onClearClick() {
+	document.getElementById("startDate_field").value = "";
+	document.getElementById("endDate_field").value = "";
+	document.getElementById("filterForm").submit();
+}
+</script>
+

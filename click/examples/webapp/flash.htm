@@ -1,0 +1,10 @@
+Enter a flash session attribute value:
+  
+$form
+
+#set ($flash = "") 
+#set ($flash = $session.flash) 
+#if ($flash != "")
+  <b>Flash Message:</b>
+  <p class="infoMsg">$flash</p>
+#end

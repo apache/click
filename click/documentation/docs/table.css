@@ -1,0 +1,256 @@
+/*
+ * Table CSS style
+ * 
+ * This CSS style sheet was adapted from DisplayTag 1.0 - screen.css
+ * http://displaytag.sourceforge.net
+ */
+
+/** Global styles **/
+
+td a, td a:visited, td a:hover {
+    text-decoration: none; 
+}
+td a:hover {
+    text-decoration: underline;
+}
+thead tr {
+    background-color: #fc0;
+}
+th.sorted {
+    background-color: orange;
+}
+th a, th a:visited {
+    color: black;
+}
+th a:hover {
+    text-decoration: underline;
+    color: black;
+}
+th.sorted a, th.sortable a {
+	background-position: right;
+	display: block;
+	width: 100%;
+}
+th.sortable a {
+	background-image: url(../img/arrow_off.png);
+}
+th.order1 a {
+	background-image: url(../img/arrow_down.png);
+}
+th.order2 a {
+	background-image: url(../img/arrow_up.png);
+}
+tr.odd {
+    background-color: #fff
+}
+tr.tableRowEven, tr.even {
+    background-color: #fea
+}
+
+tr.hover {
+	background: #777; color: #fff;
+}
+
+ul#showsource {
+	float: right;
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	margin: 5px;
+	width:100px;
+	list-style-type: none;
+}
+
+/** Individual Styles **/
+
+/* isi style */
+table.isi, table.isi td, table.isi th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.isi th, table.isi td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+/* its style */
+table.its thead tr {
+    background-color: #69c;
+}
+table.its tr.even {
+    background-color: #def;
+}
+table.its, table.its td, table.its th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.its th, table.its td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+/* mars style */
+table.mars thead tr {
+    background-color: #9c9;
+}
+table.mars tr.even {
+    background-color: #ccb;
+}
+table.mars tr.odd {
+    background-color: #eec;
+}
+table.mars, table.mars td, table.mars th {
+    border: 1px solid #666;
+    border-collapse: collapse;
+}
+table.mars th, table.mars td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+/* simple style */
+table.simple thead tr {
+    background-color: #eee;
+}
+table.simple tr.even {
+    background-color: #fff;
+}
+table.simple td.textRed {
+    color: #b11;
+}
+table.simple, table.simple td, table.simple th {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+}
+table.simple th, table.simple td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+/* nocol style */
+table.nocol tbody td,table.nocol tbody th {
+	border-left: none;
+	border-right: none;
+}
+table.nocol th, table.nocol td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+/* report style */
+table.report {
+    border: 1px solid #666;
+}
+table.report td, table.report th {
+	font: menu;
+}
+table.report th {
+	background:   buttonface;
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	cursor:       hand;
+}
+table.report idcol {
+	background: buttonface;
+}
+table.report tr.even{
+	background-color: #C2EFEF;
+}
+table.report tbody {
+	height: 180px;
+	overflow: auto;
+}
+table.report {
+	height: 200px;
+	overflow: auto;
+}
+table.report tbody tr{
+	height: 10px;
+}
+table.report th, table.report td {
+	padding: 2px 4px 2px 4px;
+	text-align: left;
+	vertical-align: top;
+}
+
+
+table.sublist {
+	margin: 0 0 0 0;
+	width: 100%;
+}
+table.sublist td, table.sublist th {
+	width: 50%;
+}
+
+div.exportlinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	margin: -10px 0 10px 0;
+	width: 79%;
+}
+
+span.export {
+	padding: 0 4px 1px 20px;
+	display:inline; display:inline-block;
+	cursor: pointer;
+}
+
+span.excel {
+	background-image: url(../img/ico_file_excel.png);
+}
+span.csv {
+	background-image: url(../img/ico_file_csv.png);
+}
+span.xml {
+	background-image: url(../img/ico_file_xml.png);
+}
+span.pdf {
+	background-image: url(../img/ico_file_pdf.png);
+}
+
+span.pagebanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 350px;
+	margin-top: 10px;
+	display: block;
+	border-bottom: none;
+}
+
+span.pagebanner-nolinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 350px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+span.pagelinks {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 350px;
+	display: block;
+	margin-bottom: 10px;
+	border-top: none;
+}
+
+span.pagelinks-nobanner {
+	background-color: #eee;
+	border: 1px dotted #999;
+	padding: 2px 4px 2px 4px;
+	width: 350px;
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

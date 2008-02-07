@@ -1,0 +1,53 @@
+<p>This page demonstrates Click's support for multiple forms on the same page.</p>
+
+<p>To see how this works, enter and submit a name in either form1 or form2. 
+Notice that the value you entered are displayed in the name field after the 
+submit.</p>
+
+<p>Now click the 'Refresh/Reload' button on your browser. A confirmation dialog
+should popup warning you about the dangers of resending form data. Click
+'Retry/OK' to continue. At this point Click will receive your second POST, and
+notice it is a duplicate.</>
+
+<p>Because it is a duplicate POST, the request is not processed further and you
+will be redirected back to this page. An error message will also be displayed.</p>
+
+<p>For more information on duplicate POSTs please read the section 
+<em>"Preventing Accidental Form Posts"</em>
+<a target="_blank" href="http://click.sourceforge.net/docs/click-api/net/sf/click/control/Form.html">
+in the Form's JavaDoc.</a></p> 
+
+<p>Also look at the
+<a target="_blank" href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/page/form/MultipleFormsDemo.java">Java Source</a>
+to see how this example is implemented.</p>
+
+#set ($error = $session.error) 
+#if ($error)
+<b>Error:</b>
+<p class="infoMsg">$error</p>
+#end
+
+<br>
+
+<div style="border:1px outset #000000;float:left;clear:left">
+    <h4 style="margin: 0 0 .5em; 
+               padding:2px; 
+               background:buttonface none repeat scroll 0%;
+               border-color:threedhighlight threedshadow threedshadow threedhighlight; 
+               border-style:solid; 
+               border-width:1px;">Form 1</h4>
+    $form1
+</div>
+
+<br style="clear:left;">
+<br>
+
+<div style="border:1px outset #000000;float:left;clear:left">
+    <h4 style="margin: 0 0 .5em; 
+               padding:2px;  
+               background:buttonface none repeat scroll 0%; 
+               border-color:threedhighlight threedshadow threedshadow threedhighlight; 
+               border-style:solid; 
+               border-width:1px;">Form 2</h4>
+    $form2
+</div>
