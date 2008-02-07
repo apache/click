@@ -395,6 +395,12 @@ public class DateField extends TextField {
      * JavaScript files
      */
     public String getHtmlImports() {
+
+        // CLK-309. Skip imports if dateField is disabled or readonly.
+        if (isReadonly() || isDisabled()) {
+            return null;
+        }
+
         Object args[] = {
                 getContext().getRequest().getContextPath(),
                 getStyle(),
