@@ -99,6 +99,10 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				monitor.worked(1);
 			}
 			
+			// TODO Install Spring
+			
+			// TODO Install Cayenne
+			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 			
 		} finally {
