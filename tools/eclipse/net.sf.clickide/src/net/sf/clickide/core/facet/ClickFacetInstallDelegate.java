@@ -11,6 +11,7 @@ import java.util.List;
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.core.builder.ClickProjectNature;
+import net.sf.clickide.ui.wizard.ClickFacetWizardPage;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -41,22 +42,23 @@ public class ClickFacetInstallDelegate implements IDelegate {
 	
 	public void execute(IProject project, IProjectFacetVersion fv,
 			Object cfg, IProgressMonitor monitor) throws CoreException {
-		
-		if (monitor != null) {
-			monitor.beginTask("", 3); //$NON-NLS-1$
-		}
-
 		try {
 			IDataModel config = null;
-
 			if (cfg != null) {
 				config = (IDataModel) cfg;
-			} else {
-				//FIXME: how would we hit this???
-//				config = new JSFFacetInstallConfig();
-//				config.setJsfImplID(jsfImplID);
 			}
 			
+			if (monitor != null) {
+				int totalTasks = 3;
+				if(config.getBooleanProperty(ClickFacetWizardPage.USE_SPRING)){
+					totalTasks++;
+				}
+				if(config.getBooleanProperty(ClickFacetWizardPage.USE_CAYENNE)){
+					totalTasks++;
+				}
+				monitor.beginTask("", totalTasks); //$NON-NLS-1$
+			}
+
 			// Add Click JARs to WEB-INF/lib
 			deployClickFiles(project, config, monitor);
 
@@ -99,9 +101,17 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				monitor.worked(1);
 			}
 			
-			// TODO Install Spring
+			// Install Spring
+			deploySpringFiles(project, config, monitor);
+			if (monitor != null) {
+				monitor.worked(1);
+			}
 			
-			// TODO Install Cayenne
+			// Install Cayenne
+			deployCayenneFiles(project, config, monitor);
+			if (monitor != null) {
+				monitor.worked(1);
+			}
 			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
 			
@@ -110,6 +120,14 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				monitor.done();
 			}
 		}
+	}
+	
+	private void deploySpringFiles(IProject project, IDataModel config, IProgressMonitor monitor){
+		// TODO implement here
+	}
+	
+	private void deployCayenneFiles(IProject project, IDataModel config, IProgressMonitor monitor){
+		// TODO implement here
 	}
 	
 	private void deployClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
