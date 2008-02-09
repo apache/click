@@ -151,12 +151,13 @@ public abstract class JSChart extends AbstractControl {
             buffer.append("); ");
         }
 
+        buffer.append("addLoadEvent(function(){");
         buffer.append(var);
         buffer.append(".render('");
         buffer.append(getId());
         buffer.append("','");
         buffer.append(getLabel());
-        buffer.append("');</script>\n");
+        buffer.append("');});</script>\n");
 
         return buffer.toString();
     }
