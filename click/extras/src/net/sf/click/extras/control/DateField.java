@@ -95,7 +95,7 @@ public class DateField extends TextField {
         "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/calendar/calendar-{1}{7}.css\"/>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar{7}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/calendar/calendar-{2}{7}.js\" charset=\"UTF-8\"></script>\n"
-        + "<script type=\"text/javascript\">Calendar.setup('{' inputField : ''{3}'', ifFormat : ''{4}'', showsTime : {5}, button : ''{3}-button'', align : ''cr'', singleClick : true, firstDay : {6} '}');</script>";
+        + "<script type=\"text/javascript\">addLoadEvent( function() '{'Calendar.setup('{' inputField : ''{3}'', ifFormat : ''{4}'', showsTime : {5}, button : ''{3}-button'', align : ''cr'', singleClick : true, firstDay : {6} '}');'}');</script>";
 
     /** The Calendar resource file names. */
     static final String[] CALENDAR_RESOURCES =

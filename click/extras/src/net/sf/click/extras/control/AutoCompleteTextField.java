@@ -79,7 +79,7 @@ public abstract class AutoCompleteTextField extends TextField {
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/prototype{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/effects{1}.js\"></script>\n"
         + "<script type=\"text/javascript\" src=\"{0}/click/prototype/controls{1}.js\"></script>\n"
-        + "<script type=\"text/javascript\">new Ajax.Autocompleter( ''{2}'', ''{2}_auto_complete_div'', ''{0}{3}'', {4} );</script>\n";
+        + "<script type=\"text/javascript\">addLoadEvent(function() '{'new Ajax.Autocompleter( ''{2}'', ''{2}_auto_complete_div'', ''{0}{3}'', {4} );'}');</script>\n";
 
     // ----------------------------------------------------- Instance Variables
 
