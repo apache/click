@@ -12,6 +12,7 @@ import org.eclipse.wst.common.project.facet.ui.AbstractFacetWizardPage;
 /**
  * 
  * @author Naoki Takezoe
+ * @since 2.0.0
  */
 public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	

@@ -26,6 +26,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jst.j2ee.internal.deployables.J2EEFlexProjDeployable;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
+import org.eclipse.jst.j2ee.webapplication.InitParam;
 import org.eclipse.jst.j2ee.webapplication.JSPType;
 import org.eclipse.jst.j2ee.webapplication.Servlet;
 import org.eclipse.jst.j2ee.webapplication.ServletMapping;
@@ -63,6 +64,7 @@ public class ClickUtils {
 	
 	private static final String CLICK_SERVLET_NAME = "ClickServlet";
 	private static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
+	private static final String CLICK_SPRING_SERVLET_CLASS = "net.sf.click.extras.spring.SpringClickServlet";
 	
 	/**
 	 * Creates <code>GridData</code>.
@@ -252,19 +254,22 @@ public class ClickUtils {
 	 * Returns <code>null</code> if this nethod couldn't find ClickServlet.
 	 * 
 	 * @param webApp the <code>WebApp</code> object
+	 * @param useSpring If <code>true</code> then use Spring Framework with Click
 	 * @return the <code>Servlet</code> object of the ClickServlet or <code>null</code>
 	 */
-	public static Servlet findClickServlet(WebApp webApp) {
+	public static Servlet findClickServlet(WebApp webApp, boolean useSpring) {
+		String servletClassName = useSpring ? CLICK_SPRING_SERVLET_CLASS : CLICK_SERVLET_CLASS;
+		
 		Servlet servlet = null;
 		Iterator it = webApp.getServlets().iterator();
 		while (it.hasNext()) {
 			servlet = (Servlet) it.next();
 			if (servlet.getWebType().isServletType()) {
-				if (((ServletType) servlet.getWebType()).getClassName().equals(CLICK_SERVLET_CLASS)) {
+				if (((ServletType) servlet.getWebType()).getClassName().equals(servletClassName)) {
 					break;
 				}
 			} else if (servlet.getWebType().isJspType()) {
-				if (((JSPType) servlet.getWebType()).getJspFile().equals(CLICK_SERVLET_CLASS)) {
+				if (((JSPType) servlet.getWebType()).getJspFile().equals(servletClassName)) {
 					break;
 				}
 			}
@@ -313,13 +318,15 @@ public class ClickUtils {
 	 * Adds or updates the servlet information in the web.xml.
 	 * 
 	 * @param webApp  the <code>WebApp</code> object
-	 * @param config
+	 * @param config the facet installation configuration
 	 * @param servlet the <code>Servlet</code> object of the ClickServlet
+	 * @param useSpring If <code>true</code> then use Spring Framework with Click
 	 * @return the <code>Servlet</code> object of the ClickServlet
 	 */
-	public static Servlet createOrUpdateServletRef(WebApp webApp, IDataModel config, Servlet servlet) {
+	public static Servlet createOrUpdateServletRef(WebApp webApp, IDataModel config, 
+			Servlet servlet, boolean useSpring) {
 		//String displayName = config.getStringProperty(CLICK_SERVLET_NAME);
-
+		
 		if (servlet == null) {
 			// Create the servlet instance and set up the parameters from data
 			// model
@@ -327,9 +334,19 @@ public class ClickUtils {
 			servlet.setServletName(CLICK_SERVLET_NAME);
 
 			ServletType servletType = WebapplicationFactory.eINSTANCE.createServletType();
-			servletType.setClassName(CLICK_SERVLET_CLASS);
+			if(useSpring){
+				servletType.setClassName(CLICK_SPRING_SERVLET_CLASS);
+				// TODO init-param
+				InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
+				initParam.setParamName("spring-path");
+				initParam.setParamValue("/applicationContext.xml");
+				servlet.getInitParams().add(initParam);
+			} else {
+				servletType.setClassName(CLICK_SERVLET_CLASS);
+			}
 			servlet.setWebType(servletType);
 			servlet.setLoadOnStartup(new Integer(1));
+			
 			// Add the servlet to the web application model
 			webApp.getServlets().add(servlet);
 		} else {
