@@ -18,6 +18,8 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * Uninstalls the click facet.
+ * <p>
+ * TODO Uninstall Spring and Cayenne JARs and configurations.
  * 
  * @author Naoki Takezoe
  */
@@ -70,7 +72,8 @@ public class ClickFacetUninstallDelegate implements IDelegate {
 		WebApp webApp = artifactEdit.getWebApp();
 
 		try {
-			Servlet servlet = ClickUtils.findClickServlet(webApp);
+			// TODO useSpring parameter
+			Servlet servlet = ClickUtils.findClickServlet(webApp, true);
 			if (servlet == null){
 				return;
 			}

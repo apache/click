@@ -14,7 +14,6 @@ import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
-import net.sf.clickide.cayenne.CayennePlugin;
 import net.sf.clickide.core.builder.ClickProjectNature;
 
 import org.apache.velocity.VelocityContext;
@@ -138,25 +137,43 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		}
 	}
 	
+	/**
+	 * Deploy Spring JARs into <tt>WEB-INF/lib</tt>.
+	 */
 	private void deploySpringFiles(IProject project, IDataModel config, 
 			IProgressMonitor monitor) throws JavaModelException {
-		// TODO implement here
+		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
+		File webInf = destPath.append("WEB-INF").toFile();
+		
+		for(int i=0;i<ClickFacetUtil.SPRING_LIBS.length;i++){
+			try {
+				File file = new File(webInf, ClickFacetUtil.SPRING_LIBS[i]);
+				URL url = ClickPlugin.getDefault().getBundle().getEntry(
+						ClickFacetUtil.SPRING_DIR + ClickFacetUtil.SPRING_LIBS[i]);
+				copyStream(url.openStream(), new FileOutputStream(file));
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
+			}
+		}
 	}
 	
 	/**
-	 * Deploy <tt>cayenne-nodeps.jar</tt> into <tt>WEB-INF/lib</tt>.
+	 * Deploy Cayenne JARs into <tt>WEB-INF/lib</tt>.
 	 */
 	private void deployCayenneFiles(IProject project, IDataModel config, 
 			IProgressMonitor monitor) throws JavaModelException {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
 		File webInf = destPath.append("WEB-INF").toFile();
 		
-		URL url = CayennePlugin.getDefault().getBundle().getEntry("cayenne/cayenne-nodeps.jar");
-		File file = new File(webInf, "lib/cayenne-nodeps.jar");
-		try {
-			copyStream(url.openStream(), new FileOutputStream(file));
-		} catch(IOException ex){
-			ClickPlugin.log(ex);
+		for(int i=0;i<ClickFacetUtil.CAYENNE_LIBS.length;i++){
+			try {
+				File file = new File(webInf, ClickFacetUtil.CAYENNE_LIBS[i]);
+				URL url = ClickPlugin.getDefault().getBundle().getEntry(
+						ClickFacetUtil.CAYENNE_DIR + ClickFacetUtil.CAYENNE_LIBS[i]);
+				copyStream(url.openStream(), new FileOutputStream(file));
+			} catch(Exception ex){
+				ClickPlugin.log(ex);
+			}
 		}
 	}
 	
@@ -236,13 +253,13 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			webApp = artifactEdit.getWebApp();
 
 			// create or update servlet ref
-			Servlet servlet = ClickUtils.findClickServlet(webApp);
+			Servlet servlet = ClickUtils.findClickServlet(webApp, useSpring);
 			if (servlet != null) {
 				// remove old mappings
 				ClickUtils.removeURLMappings(webApp, servlet);
 			}
 			
-			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet);
+			servlet = ClickUtils.createOrUpdateServletRef(webApp, config, servlet, useSpring);
 
 			// init mappings
 			String[] listOfMappings = {"*.htm"};
@@ -257,7 +274,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				filter.setFilterClassName("net.sf.click.extras.cayenne.DataContextFilter");
 				filter.setName("DataContextFilter");
 				
-				// TODO 
+				// TODO init-param
 //				InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
 //				initParam.setParamName("session-scope");
 //				initParam.setParamValue("false");
@@ -271,6 +288,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				webApp.getFilterMappings().add(mapping);
 			}
 		} catch(Exception ex){
+			ex.printStackTrace();
 			deployWebXMLFor25(project, useSpring, useCayenne);
 		} finally {
 			if (artifactEdit != null) {

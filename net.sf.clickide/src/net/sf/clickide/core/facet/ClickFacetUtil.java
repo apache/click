@@ -15,11 +15,30 @@ import org.eclipse.core.runtime.Path;
 public class ClickFacetUtil {
 	
 	public static String CLICK_DIR = "click-1.3.1";
+	public static String CAYENNE_DIR = "cayenne-2.0.4";
+	public static String SPRING_DIR = "spring-1.2.9";
 	
 	public static final String[] COPY_FILES = {
 		"/lib/click-1.3.1.jar",
 		"/lib/click-extras-1.3.1.jar",
 		"/click.xml",
+	};
+	
+	public static final String[] CAYENNE_LIBS = {
+		"/lib/ashwood-1.1.jar",
+		"/lib/cayenne-nodeps.jar",
+		"/lib/commons-logging-1.0.4.jar",
+		"/lib/log4j-1.2.14.jar",
+		"/lib/oro-2.0.8.jar"
+	};
+	
+	public static final String[] SPRING_LIBS = {
+		"/lib/jstl-1.1.2.jar",
+		"/lib/spring-beans-1.2.9.jar",
+		"/lib/spring-context-1.2.9.jar",
+		"/lib/spring-core-1.2.9.jar",
+		"/lib/spring-web-1.2.9.jar",
+		"/lib/standard-1.1.2.jar",
 	};
 	
 	public static IPath getWebContentPath(IProject project) {
