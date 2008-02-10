@@ -1,5 +1,7 @@
 package net.sf.clickide.ui.wizard;
 
+import net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -16,9 +18,6 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	private IDataModel model;
 	private Button useSpring;
 	private Button useCayenne;
-	
-	public static final String USE_SPRING = "useSpring";
-	public static final String USE_CAYENNE = "useCayenne";
 	
 	public ClickFacetWizardPage() {
 		super("ClickFacetWizardPage");
@@ -43,7 +42,9 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	}
 
 	public void transferStateToConfig() {
-		model.setBooleanProperty(USE_SPRING, useSpring.getSelection());
-		model.setBooleanProperty(USE_CAYENNE, useCayenne.getSelection());
+		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING, 
+				useSpring.getSelection());
+		model.setBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE, 
+				useCayenne.getSelection());
 	}
 }
