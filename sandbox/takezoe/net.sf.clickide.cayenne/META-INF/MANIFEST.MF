@@ -12,3 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core
 Eclipse-LazyStart: true
 Bundle-ClassPath: .
+Export-Package: net.sf.clickide.cayenne,
+ net.sf.clickide.cayenne.editor,
+ net.sf.clickide.cayenne.wizard
