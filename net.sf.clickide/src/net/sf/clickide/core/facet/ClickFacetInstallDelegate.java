@@ -1,25 +1,35 @@
 package net.sf.clickide.core.facet;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.cayenne.CayennePlugin;
 import net.sf.clickide.core.builder.ClickProjectNature;
-import net.sf.clickide.ui.wizard.ClickFacetWizardPage;
 
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
+import org.eclipse.jst.j2ee.webapplication.Filter;
+import org.eclipse.jst.j2ee.webapplication.FilterMapping;
 import org.eclipse.jst.j2ee.webapplication.Servlet;
 import org.eclipse.jst.j2ee.webapplication.WebApp;
+import org.eclipse.jst.j2ee.webapplication.WebapplicationFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IDelegate;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -50,10 +60,10 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			
 			if (monitor != null) {
 				int totalTasks = 3;
-				if(config.getBooleanProperty(ClickFacetWizardPage.USE_SPRING)){
+				if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING)){
 					totalTasks++;
 				}
-				if(config.getBooleanProperty(ClickFacetWizardPage.USE_CAYENNE)){
+				if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE)){
 					totalTasks++;
 				}
 				monitor.beginTask("", totalTasks); //$NON-NLS-1$
@@ -63,7 +73,9 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			deployClickFiles(project, config, monitor);
 
 			// Update web model
-			createServletAndModifyWebXML(project, config, monitor);
+			createServletAndModifyWebXML(project, config, monitor, 
+					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING), 
+					config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE));
 
 			if (monitor != null) {
 				monitor.worked(1);
@@ -102,15 +114,19 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			}
 			
 			// Install Spring
-			deploySpringFiles(project, config, monitor);
-			if (monitor != null) {
-				monitor.worked(1);
+			if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_SPRING)){
+				deploySpringFiles(project, config, monitor);
+				if (monitor != null) {
+					monitor.worked(1);
+				}
 			}
 			
 			// Install Cayenne
-			deployCayenneFiles(project, config, monitor);
-			if (monitor != null) {
-				monitor.worked(1);
+			if(config.getBooleanProperty(ClickFacetInstallDataModelProvider.USE_CAYENNE)){
+				deployCayenneFiles(project, config, monitor);
+				if (monitor != null) {
+					monitor.worked(1);
+				}
 			}
 			
 			project.refreshLocal(IProject.DEPTH_INFINITE, monitor);
@@ -122,24 +138,57 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		}
 	}
 	
-	private void deploySpringFiles(IProject project, IDataModel config, IProgressMonitor monitor){
+	private void deploySpringFiles(IProject project, IDataModel config, 
+			IProgressMonitor monitor) throws JavaModelException {
 		// TODO implement here
 	}
 	
-	private void deployCayenneFiles(IProject project, IDataModel config, IProgressMonitor monitor){
-		// TODO implement here
+	/**
+	 * Deploy <tt>cayenne-nodeps.jar</tt> into <tt>WEB-INF/lib</tt>.
+	 */
+	private void deployCayenneFiles(IProject project, IDataModel config, 
+			IProgressMonitor monitor) throws JavaModelException {
+		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
+		File webInf = destPath.append("WEB-INF").toFile();
+		
+		URL url = CayennePlugin.getDefault().getBundle().getEntry("cayenne/cayenne-nodeps.jar");
+		File file = new File(webInf, "lib/cayenne-nodeps.jar");
+		try {
+			copyStream(url.openStream(), new FileOutputStream(file));
+		} catch(IOException ex){
+			ClickPlugin.log(ex);
+		}
+	}
+	
+	private static void copyStream(InputStream in, OutputStream out){
+		try {
+			byte[] buf = new byte[1024 * 8];
+			int length = 0;
+			while((length = in.read(buf))!=-1){
+				out.write(buf, 0, length);
+			}
+		} catch(IOException ex){
+			ClickPlugin.log(ex);
+		} finally {
+			if(in!=null){
+				try {
+					in.close();
+				} catch(Exception ex){}
+			}
+			if(out!=null){
+				try {
+					out.close();
+				} catch(Exception ex){}
+			}
+		}
 	}
 	
 	private void deployClickFiles(IProject project, IDataModel config, IProgressMonitor monitor) {
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
-		
 		File webInf = destPath.append("WEB-INF").toFile();
 		for(int i=0;i<ClickFacetUtil.COPY_FILES.length;i++){
-			InputStream in = null;
-			OutputStream out = null;
 			try {
 				File file = new File(webInf, ClickFacetUtil.COPY_FILES[i]);
-			
 				if(!file.exists() && checkOldFile(file)){
 					file.createNewFile();
 				} else {
@@ -148,27 +197,9 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				
 				URL url = ClickPlugin.getDefault().getBundle().getEntry(
 						ClickFacetUtil.CLICK_DIR + ClickFacetUtil.COPY_FILES[i]);
-				in = url.openStream();
-				out = new FileOutputStream(file);
-				
-				byte[] buf = new byte[1024 * 8];
-				int length = 0;
-				while((length = in.read(buf))!=-1){
-					out.write(buf, 0, length);
-				}
+				copyStream(url.openStream(), new FileOutputStream(file));
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
-			} finally {
-				if(in!=null){
-					try {
-						in.close();
-					} catch(Exception ex){}
-				}
-				if(out!=null){
-					try {
-						out.close();
-					} catch(Exception ex){}
-				}
 			}
 		}
 	}
@@ -195,7 +226,8 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		return true;
 	}
 
-	private void createServletAndModifyWebXML(IProject project, final IDataModel config, IProgressMonitor monitor) {
+	private void createServletAndModifyWebXML(IProject project, final IDataModel config, 
+			IProgressMonitor monitor, boolean useSpring, boolean useCayenne) {
 		
 		WebApp webApp = null;
 		WebArtifactEdit artifactEdit = null;
@@ -218,8 +250,28 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			
 			// welcome-file-list
 			ClickUtils.createOrUpdateFilelist(webApp);
+			
+			// Add Cayenne Support
+			if(useCayenne){
+				Filter filter = WebapplicationFactory.eINSTANCE.createFilter();
+				filter.setFilterClassName("net.sf.click.extras.cayenne.DataContextFilter");
+				filter.setName("DataContextFilter");
+				
+				// TODO 
+//				InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
+//				initParam.setParamName("session-scope");
+//				initParam.setParamValue("false");
+//				filter.getInitParamValues().add(initParam);
+				
+				webApp.getFilters().add(filter);
+				
+				FilterMapping mapping = WebapplicationFactory.eINSTANCE.createFilterMapping();
+				mapping.setServletName(servlet.getServletName());
+				mapping.setFilter(filter);
+				webApp.getFilterMappings().add(mapping);
+			}
 		} catch(Exception ex){
-			deployWebXMLFor25(project);
+			deployWebXMLFor25(project, useSpring, useCayenne);
 		} finally {
 			if (artifactEdit != null) {
 				// save and dispose
@@ -230,42 +282,30 @@ public class ClickFacetInstallDelegate implements IDelegate {
 		}
 	}
 	
-	private void deployWebXMLFor25(IProject project){
+	private void deployWebXMLFor25(IProject project, boolean useSpring, boolean useCayenne){
 		IPath destPath = project.getLocation().append(ClickFacetUtil.getWebContentPath(project));
-		
 		File webInf = destPath.append("WEB-INF").toFile();
-		InputStream in = null;
-		OutputStream out = null;
 		try {
 			File file = new File(webInf, "web.xml");
-		
 			if(!file.exists()){
 				file.createNewFile();
 			}
 			
 			URL url = ClickPlugin.getDefault().getBundle().getEntry(
 					ClickFacetUtil.CLICK_DIR + "/web.xml");
-			in = url.openStream();
-			out = new FileOutputStream(file);
 			
-			byte[] buf = new byte[1024 * 8];
-			int length = 0;
-			while((length = in.read(buf))!=-1){
-				out.write(buf, 0, length);
-			}
+			VelocityContext context = new VelocityContext();
+			context.put("useSpring", new Boolean(useSpring));
+			context.put("useCayenne", new Boolean(useCayenne));
+			StringWriter writer = new StringWriter();
+			
+			InputStreamReader reader = new InputStreamReader(url.openStream(), "UTF-8");
+			Velocity.evaluate(context, writer, null, reader);
+			
+			copyStream(new ByteArrayInputStream(writer.toString().getBytes("UTF-8")), 
+					new FileOutputStream(file));
 		} catch(Exception ex){
 			ClickPlugin.log(ex);
-		} finally {
-			if(in!=null){
-				try {
-					in.close();
-				} catch(Exception ex){}
-			}
-			if(out!=null){
-				try {
-					out.close();
-				} catch(Exception ex){}
-			}
 		}
 	}
 

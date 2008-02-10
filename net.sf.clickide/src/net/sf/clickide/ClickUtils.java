@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
  */
 public class ClickUtils {
 	
-	private static final String CLICK_SERVLET_NAME = "click-servlet";
+	private static final String CLICK_SERVLET_NAME = "ClickServlet";
 	private static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
 	
 	/**
