@@ -18,10 +18,15 @@ import net.sf.clickide.core.builder.ClickProjectNature;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.j2ee.common.CommonFactory;
 import org.eclipse.jst.j2ee.common.ParamValue;
@@ -159,6 +164,22 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				ClickPlugin.log(ex);
 			}
 		}
+		
+		IJavaProject javaProject = JavaCore.create(project);
+		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
+		for(int i=0;i<roots.length;i++){
+			if(roots[i].getResource() instanceof IFolder){
+				IFile file = ((IFolder) roots[i].getResource()).getFile("applicationContext.xml");
+				try {
+					file.create(ClickPlugin.getDefault().getBundle().getEntry(
+							ClickFacetUtil.SPRING_DIR + "/applicationContext.xml").openStream(), 
+							true, monitor);
+				} catch(Exception ex){
+					ClickPlugin.log(ex);
+				}
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -177,6 +198,22 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				copyStream(url.openStream(), new FileOutputStream(file));
 			} catch(Exception ex){
 				ClickPlugin.log(ex);
+			}
+		}
+		
+		IJavaProject javaProject = JavaCore.create(project);
+		IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
+		for(int i=0;i<roots.length;i++){
+			if(roots[i].getResource() instanceof IFolder){
+				IFile file = ((IFolder) roots[i].getResource()).getFile("cayenne.xml");
+				try {
+					file.create(ClickPlugin.getDefault().getBundle().getEntry(
+							ClickFacetUtil.CAYENNE_DIR + "/cayenne.xml").openStream(), 
+							true, monitor);
+				} catch(Exception ex){
+					ClickPlugin.log(ex);
+				}
+				break;
 			}
 		}
 	}
