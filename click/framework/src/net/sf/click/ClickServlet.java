@@ -331,6 +331,20 @@ public class ClickServlet extends HttpServlet {
         // If request is not wrapped, createContext can be called.
         // see the issue CLK-282 for details.
         if (!(request instanceof ClickRequestWrapper)) {
+
+            // CLK-312. Apply request.setCharacterEncoding before creating a
+            // new Context
+            if (clickApp.getCharset() != null) {
+                try {
+                    request.setCharacterEncoding(clickApp.getCharset());
+
+                } catch (UnsupportedEncodingException ex) {
+                    String msg = "The character encoding "
+                                 + clickApp.getCharset() + " is invalid.";
+                    logger.warn(msg, ex);
+                }
+            }
+
             Context context = createContext(request, response, isPost);
             // bind context to current thread
             Context.setThreadLocalContext(context);
@@ -346,17 +360,6 @@ public class ClickServlet extends HttpServlet {
             }
             buffer.append(request.getRequestURL());
             logger.debug(buffer);
-        }
-
-        if (clickApp.getCharset() != null) {
-            try {
-                request.setCharacterEncoding(clickApp.getCharset());
-
-            } catch (UnsupportedEncodingException ex) {
-                String msg = "The character encoding "
-                             + clickApp.getCharset() + " is invalid.";
-                logger.warn(msg, ex);
-            }
         }
 
         Page page = null;
