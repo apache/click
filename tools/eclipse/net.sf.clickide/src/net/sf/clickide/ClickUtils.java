@@ -24,6 +24,9 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jst.j2ee.common.CommonFactory;
+import org.eclipse.jst.j2ee.common.ParamValue;
+import org.eclipse.jst.j2ee.internal.J2EEVersionConstants;
 import org.eclipse.jst.j2ee.internal.deployables.J2EEFlexProjDeployable;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
 import org.eclipse.jst.j2ee.webapplication.InitParam;
@@ -336,11 +339,19 @@ public class ClickUtils {
 			ServletType servletType = WebapplicationFactory.eINSTANCE.createServletType();
 			if(useSpring){
 				servletType.setClassName(CLICK_SPRING_SERVLET_CLASS);
-				// TODO init-param
-				InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
-				initParam.setParamName("spring-path");
-				initParam.setParamValue("/applicationContext.xml");
-				servlet.getInitParams().add(initParam);
+				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
+					// J2EE 1.4
+					ParamValue initParam = CommonFactory.eINSTANCE.createParamValue();
+					initParam.setName("spring-path");
+					initParam.setValue("/applicationContext.xml");
+					servlet.getInitParams().add(initParam);
+				} else {
+					// J2EE 1.2 or 1.3
+					InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
+					initParam.setParamName("spring-path");
+					initParam.setParamValue("/applicationContext.xml");
+					servlet.getParams().add(initParam);
+				}
 			} else {
 				servletType.setClassName(CLICK_SERVLET_CLASS);
 			}

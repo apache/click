@@ -23,9 +23,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jst.j2ee.common.CommonFactory;
+import org.eclipse.jst.j2ee.common.ParamValue;
+import org.eclipse.jst.j2ee.internal.J2EEVersionConstants;
 import org.eclipse.jst.j2ee.web.componentcore.util.WebArtifactEdit;
 import org.eclipse.jst.j2ee.webapplication.Filter;
 import org.eclipse.jst.j2ee.webapplication.FilterMapping;
+import org.eclipse.jst.j2ee.webapplication.InitParam;
 import org.eclipse.jst.j2ee.webapplication.Servlet;
 import org.eclipse.jst.j2ee.webapplication.WebApp;
 import org.eclipse.jst.j2ee.webapplication.WebapplicationFactory;
@@ -274,11 +278,19 @@ public class ClickFacetInstallDelegate implements IDelegate {
 				filter.setFilterClassName("net.sf.click.extras.cayenne.DataContextFilter");
 				filter.setName("DataContextFilter");
 				
-				// TODO init-param
-//				InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
-//				initParam.setParamName("session-scope");
-//				initParam.setParamValue("false");
-//				filter.getInitParamValues().add(initParam);
+				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
+					// J2EE 1.4
+					ParamValue initParam = CommonFactory.eINSTANCE.createParamValue();
+					initParam.setName("session-scope");
+					initParam.setValue("false");
+					filter.getInitParamValues().add(initParam);
+				} else {
+					// J2EE 1.2 or 1.3
+					InitParam initParam = WebapplicationFactory.eINSTANCE.createInitParam();
+					initParam.setParamName("session-scope");
+					initParam.setParamValue("false");
+					filter.getInitParams().add(initParam);
+				}
 				
 				webApp.getFilters().add(filter);
 				
