@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <title>Customer List</title>
+        <link rel="stylesheet" type="text/css" href="styles/default.css"/>
+    </head>
+    <body>
+        <h1>Customer List</h1>
+        <table class="decorated">
+            <thead>
+                <tr>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td>State</td>
+                    <td>Birth Date</td>
+                    <td>Options</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr wicket:id="rows">
+                    <td wicket:id="firstName">Mike</td>
+                    <td wicket:id="lastName">Smith</td>
+                    <td wicket:id="state">Oregon</td>
+                    <td wicket:id="birthDate">June 23, 1981</td>
+                    <td>
+                        <a href="" wicket:id="delete">Delete</a>
+                        <a href="" wicket:id="edit">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </body>
+</html>
+
