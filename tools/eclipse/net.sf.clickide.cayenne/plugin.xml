@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            filenames="cayenne.xml"
+            icon="icons/cayenne.png"
+            id="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
+            launcher="net.sf.clickide.cayenne.editor.CayenneModelerLauncher"
+            name="Cayenne Modeler">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="net.sf.clickide.cayenne"
+            name="Cayenne">
+      </category>
+      <wizard
+            category="net.sf.clickide.cayenne"
+            class="net.sf.clickide.cayenne.wizard.NewCayenneWizard"
+            icon="icons/cayenne.png"
+            id="net.sf.clickide.cayenne.wizard"
+            name="Cayenne Mapping Peroject">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.jdt.core.classpathVariableInitializer">
+      <classpathVariableInitializer
+            class="net.sf.clickide.cayenne.CayenneClasspathVariableInitializer"
+            variable="net.sf.clickide.cayenne.classpathVariableInitializer">
+      </classpathVariableInitializer>
+   </extension>
+
+</plugin>
