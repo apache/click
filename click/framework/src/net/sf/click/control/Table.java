@@ -32,6 +32,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Provides a HTML Table control: &lt;table&gt;.
@@ -903,8 +904,10 @@ public class Table extends AbstractControl {
 
         if (controlLink.isClicked()) {
             String page = getContext().getRequestParameter(PAGE);
-            if (StringUtils.isNotBlank(page)) {
+            if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
+            } else {
+                setPageNumber(0);
             }
 
             String column = getContext().getRequestParameter(COLUMN);
