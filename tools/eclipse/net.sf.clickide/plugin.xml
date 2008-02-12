@@ -312,4 +312,16 @@
         <actionSet id="net.sf.clickide.ui.actionSet"/>
      </perspectiveExtension>
   </extension>
+  <!--===============================================-->
+  <!-- Property Pages -->
+  <!--===============================================-->
+  <extension
+        point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IProject"
+            name="Click"
+            adaptable="true"
+            class="net.sf.clickide.preferences.ClickProjectPropertyPage"
+            id="net.sf.clickide.preferences.ClickProjectPropertyPage" />
+  </extension>
 </plugin>
