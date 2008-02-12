@@ -1,0 +1,13 @@
+The javadoc folder contains a test for javadoc purposes. The file 'src/build.txt'
+contains the snippet that must be part of the 'javadoc' and target.
+
+The prettify*.css and prettify*.js is the external files that must be linked
+to a blog so syntax highlighting can work. The file 'src/blog-test.html' is a 
+test which links prettify*.css and prettify*.js to show how it works.
+
+To activate prettify the window.onload event must call the 'prettyPrint()'
+function.
+
+Once active the all <pre class="prettyprint"> tags will be highlighted. In blogs
+rather use <pre class="prettyprint" style="overflow:auto"> so that a scrollbar
+appear when sentences becomes very long.
