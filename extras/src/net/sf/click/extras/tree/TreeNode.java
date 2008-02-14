@@ -147,7 +147,8 @@ public class TreeNode implements Serializable {
      * @param value the nodes value
      * @param id the nodes id
      * @param parent specifies the parent of this node
-     * @param childrenSupported specifies the parent of this node
+     * @param childrenSupported indicates if the treeNode supports child nodes
+     * or not.
      */
     public TreeNode(Object value, String id, TreeNode parent, boolean childrenSupported) {
         setValue(value);
@@ -285,8 +286,8 @@ public class TreeNode implements Serializable {
      * to this node.
      *
      * @param child child node to add
-     * @throws IllegalArgumentException if this node does not support child nodes
-     * @throws IllegalArgumentException if the argument is null
+     * @throws IllegalArgumentException if the argument is null or if this node
+     * does not support child nodes
      */
     public void add(TreeNode child) {
        add(getChildren().size(), child);
@@ -298,8 +299,8 @@ public class TreeNode implements Serializable {
      *
      * @param index the index at which specified child must be added
      * @param child child node to add
-     * @throws IllegalArgumentException if this node does not support child nodes
-     * @throws IllegalArgumentException if the argument is null
+     * @throws IllegalArgumentException if the argument is null or if this node
+     * does not support child nodes
      */
     public void add(int index, TreeNode child) {
         addChildOnly(index, child);
@@ -311,8 +312,8 @@ public class TreeNode implements Serializable {
      * parent to this node.
      *
      * @param child child node to add
-     * @throws IllegalArgumentException if this node does not support child nodes
-     * @throws IllegalArgumentException if the argument is null
+     * @throws IllegalArgumentException if the argument is null or if this node
+     * does not support child nodes
      */
     public void addChildOnly(TreeNode child) {
         addChildOnly(getChildren().size(), child);
@@ -324,8 +325,8 @@ public class TreeNode implements Serializable {
      *
      * @param index of the child node to add to
      * @param child child node to add
-     * @throws IllegalArgumentException if this node does not support child nodes
-     * @throws IllegalArgumentException if the argument is null
+     * @throws IllegalArgumentException if the argument is null or if this node
+     * does not support child nodes
      */
     public void addChildOnly(int index, TreeNode child) {
         if (!isChildrenSupported()) {
