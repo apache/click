@@ -523,7 +523,7 @@ public class Tree extends AbstractControl {
     /**
      * Expand the node and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param node the node to be expanded.
      */
@@ -537,7 +537,7 @@ public class Tree extends AbstractControl {
     /**
      * Collapse the node with matching id and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param id identifier of node to be collapsed.
      */
@@ -551,7 +551,7 @@ public class Tree extends AbstractControl {
     /**
      * Collapse the node and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param node the node to be collapsed.
      */
@@ -565,7 +565,7 @@ public class Tree extends AbstractControl {
     /**
      * Expand all the nodes of the tree and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      */
     public void expandAll() {
         for (Iterator it = iterator(); it.hasNext();) {
@@ -581,7 +581,7 @@ public class Tree extends AbstractControl {
     /**
      * Collapse all the nodes of the tree and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      */
     public void collapseAll() {
         for (Iterator it = iterator(); it.hasNext();) {
@@ -597,7 +597,7 @@ public class Tree extends AbstractControl {
     /**
      * Select the node with matching id and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param id identifier of node to be selected.
      */
@@ -611,7 +611,7 @@ public class Tree extends AbstractControl {
     /**
      * Select the node and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param node the node to be selected.
      */
@@ -625,7 +625,7 @@ public class Tree extends AbstractControl {
     /**
      * Deselect the node with matching id and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      *
      * @param id id of node to be deselected.
      */
@@ -639,7 +639,8 @@ public class Tree extends AbstractControl {
     /**
      * Deselect the node and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
+     *
      * @param node the node to be deselected.
      */
     public void deselect(TreeNode node) {
@@ -652,7 +653,7 @@ public class Tree extends AbstractControl {
     /**
      * Select all the nodes of the tree and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      */
     public void selectAll() {
         for (Iterator it = iterator(); it.hasNext();) {
@@ -668,7 +669,7 @@ public class Tree extends AbstractControl {
     /**
      * Deselect all the nodes of the tree and inform any listeners of the change.
      * If {@link #isNotifyListeners()} returns false, this method will not
-     * notify its listeners of any change.
+     * notify listeners of any change.
      */
     public void deselectAll() {
         for (Iterator it = iterator(); it.hasNext();) {
