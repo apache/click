@@ -1,11 +1,13 @@
 package net.sf.clickide.preferences;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.clickide.ClickPlugin;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -38,6 +40,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * The project property page to define additonal Velocity variables.
@@ -59,8 +62,10 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		viewer = new TableViewer(composite);
+		viewer = new TableViewer(composite, 
+				SWT.FULL_SELECTION|SWT.V_SCROLL|SWT.H_SCROLL|SWT.BORDER);
 		Table table = viewer.getTable();
+		table.setLinesVisible(true);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setHeaderVisible(true);
 		
@@ -157,6 +162,14 @@ public class ClickProjectPropertyPage extends PropertyPage {
 			public void removeListener(ILabelProviderListener listener) {
 			}
 		});
+		
+		ScopedPreferenceStore store = new ScopedPreferenceStore(
+				new ProjectScope(getProject()), ClickPlugin.PLUGIN_ID);
+		String vars = store.getString(ClickPlugin.PREF_VELOCITY_VARS);
+		if(vars != null && vars.length() > 0){
+			models = VariableModel.deserialize(vars);
+		}
+		
 		viewer.setInput(models);
 		
 		return composite;
@@ -166,6 +179,26 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		return (IProject)getElement();
 	}
 	
+	protected void performDefaults() {
+		models.clear();
+		super.performDefaults();
+	}
+
+	public boolean performOk() {
+		ScopedPreferenceStore store = new ScopedPreferenceStore(
+				new ProjectScope(getProject()), ClickPlugin.PLUGIN_ID);
+		store.setValue(ClickPlugin.PREF_VELOCITY_VARS, VariableModel.serialize(models));
+		try {
+			store.save();
+		} catch(IOException ex){
+			ClickPlugin.log(ex);
+			return false;
+		}
+		return super.performOk();
+	}
+
+
+
 	/**
 	 * The dialog to register / modify a Velocity variable.
 	 */
@@ -241,6 +274,33 @@ public class ClickProjectPropertyPage extends PropertyPage {
 	public static class VariableModel {
 		public String name = "";
 		public String type = "";
+		
+		public static String serialize(List models){
+			StringBuffer sb = new StringBuffer();
+			for(int i=0;i<models.size();i++){
+				VariableModel model = (VariableModel) models.get(i);
+				if(sb.length() != 0){
+					sb.append(",");
+				}
+				sb.append(model.name);
+				sb.append("=");
+				sb.append(model.type);
+			}
+			return sb.toString();
+		}
+		
+		public static List deserialize(String value){
+			List list = new ArrayList();
+			String[] dim = value.split(",");
+			for(int i=0;i<dim.length;i++){
+				String[] nameAndType = dim[i].split("=");
+				VariableModel model = new VariableModel();
+				model.name = nameAndType[0];
+				model.type = nameAndType[1];
+				list.add(model);
+			}
+			return list;
+		}
 	}
 
 }

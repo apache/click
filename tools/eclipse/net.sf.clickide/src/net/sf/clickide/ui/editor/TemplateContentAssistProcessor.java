@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
+import net.sf.clickide.preferences.ClickProjectPropertyPage.VariableModel;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectElement;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectMethod;
 import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectProperty;
@@ -18,6 +19,7 @@ import net.sf.clickide.ui.editor.TemplateObject.TemplateObjectProperty;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaProject;
@@ -29,6 +31,7 @@ import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
 
 /**
@@ -121,6 +124,7 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		}
 		
 		IType format = null;
+		List preferenceObjects = null;
 		
 		if(this.file != null){
 			// for the format object
@@ -137,6 +141,22 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 					IType type = findType((String)entry.getValue());
 					if(type != null){
 						return processType(type, result, matchString, offset);
+					}
+				}
+			}
+			// prefeberce objects
+			ScopedPreferenceStore store = new ScopedPreferenceStore(
+					new ProjectScope(file.getProject()), ClickPlugin.PLUGIN_ID);
+			String vars = store.getString(ClickPlugin.PREF_VELOCITY_VARS);
+			if(vars != null && vars.length() > 0){
+				preferenceObjects = VariableModel.deserialize(vars);
+				for(int i=0;i<preferenceObjects.size();i++){
+					VariableModel model = (VariableModel) preferenceObjects.get(i);
+					if(matchString.startsWith("$" + model.name + ".") || matchString.startsWith("${" + model.name + ".")){
+						IType type = findType((String)model.type);
+						if(type != null){
+							return processType(type, result, matchString, offset);
+						}
 					}
 				}
 			}
@@ -193,6 +213,14 @@ public class TemplateContentAssistProcessor extends XMLContentAssistProcessor {
 		registerProposal(result, offset, matchString, "$request", "$request - HttpServletRequest", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$response", "$response - HttpServletResponse", IMAGE_VAR);
 		registerProposal(result, offset, matchString, "$session", "$session - SessionMap", IMAGE_VAR);
+		
+		if(preferenceObjects != null){
+			for(int i=0;i<preferenceObjects.size();i++){
+				VariableModel model = (VariableModel) preferenceObjects.get(i);
+				registerProposal(result, offset, matchString, 
+						"$" + model.name, "$" + model.name + " - " + model.type, IMAGE_VAR);
+			}
+		}
 		
 		registerProposal(result, offset, matchString, "#if()", "if", IMAGE_DIRECTIVE);
 		registerProposal(result, offset, matchString, "#set()", "set", IMAGE_DIRECTIVE);
