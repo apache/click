@@ -47,7 +47,7 @@ public class PlainTreePage extends BorderPage {
         addModel("treeNode", node);
     }
 
-    // --------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Protected Methods
 
     /**
      * Creates and return a new tree instance.
@@ -135,6 +135,8 @@ public class PlainTreePage extends BorderPage {
 
         return tree;
     }
+
+    // --------------------------------------------------------- Private Methods
 
     /**
      * Store the tree nodes in the session
