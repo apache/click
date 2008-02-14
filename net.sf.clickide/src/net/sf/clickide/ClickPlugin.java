@@ -17,7 +17,9 @@ import org.osgi.framework.BundleContext;
  * @author Naoki Takezoe
  */
 public class ClickPlugin extends AbstractUIPlugin {
-
+	
+	public static final String PLUGIN_ID = "net.sf.clickide";
+	
 	//The shared instance.
 	private static ClickPlugin plugin;
 	private ResourceBundle resource;
@@ -57,6 +59,7 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String PREF_COLOR_VAR = "click.color.variable";
 	public static final String PREF_COLOR_DIR = "click.color.directive";
 	public static final String PREF_COLOR_CMT = "click.color.comment";
+	public static final String PREF_VELOCITY_VARS = "click.velocity.variables";
 	
 	/**
 	 * The constructor.
