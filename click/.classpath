@@ -12,19 +12,19 @@
 	<classpathentry path="lib/commons-collections-3.1.jar" kind="lib"/>
 	<classpathentry path="lib/junit-3.8.1.jar" kind="lib"/>
 	<classpathentry path="lib/servlet-api-2.3.jar" kind="lib"/>
-	<classpathentry sourcepath="C:/Users/medgar/java/commons-fileupload-1.2/src/java" path="lib/commons-lang-2.1.jar" kind="lib"/>
+	<classpathentry path="lib/commons-lang-2.1.jar" kind="lib"/>
 	<classpathentry path="lib/hibernate-3.1.3.jar" kind="lib"/>
 	<classpathentry path="lib/ognl-2.6.9.jar" kind="lib"/>
 	<classpathentry path="lib/log4j-1.2.14.jar" kind="lib"/>
 	<classpathentry path="lib/velocity-1.5.jar" kind="lib"/>
-	<classpathentry sourcepath="C:/Users/medgar/java/commons-fileupload-1.2/src/java" path="lib/commons-fileupload-1.2.jar" kind="lib"/>
+	<classpathentry path="lib/commons-fileupload-1.2.jar" kind="lib"/>
 	<classpathentry path="lib/commons-io-1.3.jar" kind="lib"/>
 	<classpathentry path="lib/spring-beans-1.2.9.jar" kind="lib"/>
 	<classpathentry path="lib/spring-context-1.2.9.jar" kind="lib"/>
 	<classpathentry path="lib/spring-core-1.2.9.jar" kind="lib"/>
 	<classpathentry path="lib/spring-web-1.2.9.jar" kind="lib"/>
 	<classpathentry path="EXAMPLES/ashwood-1.1.jar" kind="var"/>
-	<classpathentry path="EXAMPLES/cayenne-nodeps-2.0.4.jar" kind="var"/>
+	<classpathentry path="EXAMPLES/cayenne-server-3.0M2.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/commons-logging-1.0.4.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/hsqldb-1.8.0.1.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/jstl-1.1.2.jar" kind="var"/>
@@ -35,6 +35,5 @@
 	<classpathentry path="EXAMPLES/spring-core-1.2.9.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/spring-web-1.2.9.jar" kind="var"/>
 	<classpathentry path="EXAMPLES/standard-1.1.2.jar" kind="var"/>
-	<classpathentry path="lib/cayenne-nodeps-2.0.4.jar" kind="lib"/>
 	<classpathentry path="bin" kind="output"/>
 </classpath>
