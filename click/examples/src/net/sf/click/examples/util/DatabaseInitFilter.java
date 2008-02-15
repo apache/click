@@ -20,6 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import net.sf.click.examples.domain.Customer;
+import net.sf.click.examples.domain.PostCode;
 import net.sf.click.examples.domain.SystemCode;
 import net.sf.click.examples.domain.User;
 import net.sf.click.util.ClickUtils;
@@ -32,6 +33,7 @@ import org.apache.cayenne.conf.Configuration;
 import org.apache.cayenne.conf.ServletUtil;
 import org.apache.cayenne.map.DataMap;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.commons.lang.WordUtils;
 
 /**
  * Provides a database initialization filter. This servlet filter creates a
@@ -135,6 +137,9 @@ public class DatabaseInitFilter implements Filter {
         // Load customers data file
         loadSystemCodes(dataContext);
 
+        // Load post codes data file
+        loadPostCodes(dataContext);
+
         dataContext.commitChanges();
     }
 
@@ -231,12 +236,40 @@ public class DatabaseInitFilter implements Filter {
         });
     }
 
+    private void loadPostCodes(final DataContext dataContext) throws IOException {
+        loadFile("post-codes-australian.csv", dataContext, new LineProcessor() {
+            public void processLine(String line, DataContext context) {
+                if (!line.startsWith("Pcode")) {
+                    StringTokenizer tokenizer = new StringTokenizer(line, ",");
+                    
+                    String postcode = next(tokenizer);
+                    String locality = WordUtils.capitalizeFully(next(tokenizer));
+                    String state = next(tokenizer);
+                    
+                    PostCode postCode = new PostCode();
+                    postCode.setPostCode(postcode);
+                    postCode.setLocality(locality);
+                    postCode.setState(state);
+
+                    dataContext.registerNewObject(postCode);
+                }
+            }
+        });
+    }
+
     private static interface LineProcessor {
         public void processLine(String line, DataContext dataContext);
     }
 
     private static String next(StringTokenizer tokenizer) {
-        return tokenizer.nextToken().trim();
+    	String token = tokenizer.nextToken().trim();
+    	if (token.startsWith("\"")) {
+    		token = token.substring(1);
+    	}
+    	if (token.endsWith("\"")) {
+    		token = token.substring(0, token.length() - 1);
+    	}
+    	return token;
     }
 
     private static Date createDate(String pattern) {
