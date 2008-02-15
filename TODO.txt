@@ -1,12 +1,14 @@
 Click 1.4 Release
 -----------------
 BUGS
-* Form rendering bug, with setting style, see FieldSet example probably due to
-  recent form rendering refactoring and removing align property from parent element
+* 
 
 CODE
-* Document Application Template scripts
+* Remote role-based security template application to make app server neutral
+* Update QuickStart Guide, using build script & new screen shots
+* Update Cheat Sheet with $cssImports and $jsImports
 * CayenneForm override copyFrom to set PropertySelect value
+* Try using Cayenne 3M3 with click-examples
 
 DOCUMENTATION
 * quick start tutorial
