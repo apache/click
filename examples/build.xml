@@ -8,7 +8,7 @@
       
    <property name="name" value="click-examples"/>
    <property name="jar.ashwood" value="ashwood-1.1.jar"/>
-   <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
+   <property name="jar.cayenne" value="cayenne-server-3.0M3.jar"/>
    <property name="jar.click" value="click-${version}.jar"/>
    <property name="jar.click-extras" value="click-extras-${version}.jar"/>
    <property name="jar.hsqldb" value="hsqldb-1.8.0.1.jar"/>
@@ -141,7 +141,7 @@
       <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>
       <webDownloadMacro name="${jar.spring-web}" path="org.springframework"/>
       <webDownloadMacro name="${jar.standard}" path="taglibs"/>
-      <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}" 
+      <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/cayenne/cayenne-server/3.0M3/${jar.cayenne}" 
 	       dest="${dir.weblib}/${jar.cayenne}"
 	       verbose="true"
 	       usetimestamp="true"/> 
