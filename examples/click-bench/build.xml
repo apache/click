@@ -56,7 +56,7 @@
                destdir="${build.classes.dir}"
                debug="true"
                encoding="ISO-8859-1"
-               source="1.5">
+               source="1.4">
             <classpath refid="classpath"/>
         </javac>
     </target>
