@@ -2,26 +2,25 @@ package benchmark.dao;
 
 import java.util.Date;
 
-public class Customer implements Comparable<Customer> {
+public class Customer implements Comparable {
     private Integer id;
     private String firstName;
     private String lastName;
     private String state;
     private Date birthDate;
 
-    public int compareTo(Customer rhs) {
-        return id.compareTo(rhs.getId());
+    public int compareTo(Object rhs) {
+        Customer cust = (Customer) rhs;
+        return id.compareTo(cust.getId());
     }
     
-    @Override
     public boolean equals(Object rhs) {
         if (rhs instanceof Customer) {
             return compareTo((Customer) rhs) == 0;
         }
         return false;
     }
-    
-    @Override
+
     public int hashCode() {
         return id.hashCode();
     }
@@ -67,7 +66,7 @@ public class Customer implements Comparable<Customer> {
     }
     
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        StringBuffer builder = new StringBuffer();
         builder.append("{Customer: id=").append(id).append(", ");
         builder.append("firstName=").append(firstName).append(", ");
         builder.append("lastName=").append(lastName).append(", ");

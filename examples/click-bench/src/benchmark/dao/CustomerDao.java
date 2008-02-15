@@ -47,20 +47,20 @@ public class CustomerDao {
     
     private static final CustomerDao INSTANCE = new CustomerDao();
     
-    private Map<Integer, Customer> customers = Collections.synchronizedMap(createNewMap());
+    private Map customers = Collections.synchronizedMap(createNewMap());
     
     public static CustomerDao getInstance() {
         return INSTANCE;
     }
     
-    public List<Customer> findAll() {
-        List<Customer> ret = new ArrayList<Customer>(50);
+    public List findAll() {
+        List ret = new ArrayList(50);
         ret.addAll(customers.values());
         return ret;
     }
     
     public Customer findById(Integer id) {
-        return customers.get(id);
+        return (Customer) customers.get(id);
     }
     
     public void saveOrUpdate(Customer customer) {
@@ -75,8 +75,8 @@ public class CustomerDao {
         }
     }
     
-    private static Map<Integer, Customer> createNewMap() {
-        Map<Integer, Customer> ret = new LinkedHashMap<Integer, Customer>(50);
+    private static Map createNewMap() {
+        Map ret = new LinkedHashMap(50);
         
         for (int i = 0; i < 50; i++) {
             Customer customer = new Customer();            

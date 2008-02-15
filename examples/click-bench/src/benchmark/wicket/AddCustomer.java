@@ -32,7 +32,6 @@ public class AddCustomer extends WebPage {
             add(new TextField("birthDate"));
         }
 
-        @Override
         public void onSubmit() {
             Customer customer = (Customer) getModelObject();
             CustomerDao.getInstance().saveOrUpdate(customer);

@@ -41,7 +41,6 @@ public class CustomerList extends Page {
         addControl(deleteLink);
     }
 
-    @Override
     public void onRender() {
         table.setRowList(CustomerDao.getInstance().findAll());
     }

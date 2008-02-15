@@ -10,7 +10,6 @@ import org.apache.wicket.session.ISessionStore;
  */
 public class WicketHttpSessionStoreApplication extends WebApplication {
 
-    @Override
     protected void init() {
         getMarkupSettings().setStripWicketTags(true);
         getRequestLoggerSettings().setRequestLoggerEnabled(false);
@@ -22,12 +21,10 @@ public class WicketHttpSessionStoreApplication extends WebApplication {
      *
      * @return HttpSessionStore
      */
-    @Override
     protected ISessionStore newSessionStore() {
         return new HttpSessionStore(this);
     }
 
-    @Override
     public Class getHomePage() {
         return CustomerList.class;
     }

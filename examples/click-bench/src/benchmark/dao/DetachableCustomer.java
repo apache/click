@@ -14,7 +14,6 @@ public class DetachableCustomer extends LoadableDetachableModel {
         id = customer.getId();
     }
 
-    @Override
     protected Object load() {
         return CustomerDao.getInstance().findById(id);
     }

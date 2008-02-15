@@ -22,7 +22,6 @@ public class EditCustomer extends Page {
         this.customer = customer;
     }
 
-    @Override
     public void onInit() {
         form = new Form("form");
         form.add(new HiddenField("id", Integer.class));

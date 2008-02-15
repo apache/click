@@ -34,20 +34,17 @@ public class CustomerList extends WebPage {
             super(id, model);
         }
 
-        @Override
         protected IModel getListItemModel(IModel model, int index) {
-            Customer customer = ((List<Customer>) model.getObject()).get(index);
+            Customer customer = (Customer) ((List) model.getObject()).get(index);
             return new CompoundPropertyModel(new DetachableCustomer(customer));
         }
 
-        @Override
         protected void populateItem(final ListItem item) {
             item.add(new Label("firstName"));
             item.add(new Label("lastName"));
             item.add(new Label("state"));
             item.add(new Label("birthDate", new Model() {
 
-                @Override
                 public Object getObject() {
                     Customer customer = (Customer) item.getModelObject();
 
@@ -68,7 +65,6 @@ public class CustomerList extends WebPage {
 
             item.add(new Link("delete") {
 
-                @Override
                 public void onClick() {
                     Customer customer = (Customer) getParent().getModelObject();
                     CustomerDao.getInstance().delete(customer);
@@ -77,7 +73,6 @@ public class CustomerList extends WebPage {
 
             item.add(new Link("edit") {
 
-                @Override
                 public void onClick() {
                     EditCustomer editPage = new EditCustomer(getParent().getModel());
                     setResponsePage(editPage);
