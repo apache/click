@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data-map project-version="2.0">
+<data-map project-version="3.0">
 	<property name="defaultPackage" value="net.sf.click.examples.domain"/>
 	<property name="defaultSuperclass" value="net.sf.click.examples.domain.BaseEntity"/>
 	<db-entity name="ADDRESS">
@@ -37,6 +37,12 @@
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="investments" type="VARCHAR" length="32"/>
 		<db-attribute name="name" type="VARCHAR" isMandatory="true" length="32"/>
+	</db-entity>
+	<db-entity name="POST_CODE">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="locality" type="VARCHAR" isMandatory="true" length="50"/>
+		<db-attribute name="postCode" type="VARCHAR" isMandatory="true" length="5"/>
+		<db-attribute name="state" type="VARCHAR" isMandatory="true" length="5"/>
 	</db-entity>
 	<db-entity name="SYSTEM_CODE">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
@@ -82,6 +88,11 @@
 		<obj-attribute name="holdings" type="java.lang.Double" db-attribute-path="holdings"/>
 		<obj-attribute name="investments" type="java.lang.String" db-attribute-path="investments"/>
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="PostCode" className="net.sf.click.examples.domain.PostCode" dbEntityName="POST_CODE" superClassName="net.sf.click.examples.domain.BaseEntity">
+		<obj-attribute name="locality" type="java.lang.String" db-attribute-path="locality"/>
+		<obj-attribute name="postCode" type="java.lang.String" db-attribute-path="postCode"/>
+		<obj-attribute name="state" type="java.lang.String" db-attribute-path="state"/>
 	</obj-entity>
 	<obj-entity name="SystemCode" className="net.sf.click.examples.domain.SystemCode" dbEntityName="SYSTEM_CODE" superClassName="net.sf.click.examples.domain.BaseEntity">
 		<obj-attribute name="label" type="java.lang.String" db-attribute-path="label"/>
