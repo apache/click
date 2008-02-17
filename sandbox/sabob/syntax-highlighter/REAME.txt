@@ -1,13 +1,61 @@
-The javadoc folder contains a test for javadoc purposes. The file 'src/build.txt'
-contains the snippet that must be part of the 'javadoc' and target.
+This project contains a few utilities to provide syntax highlighting to
+different types of source code including Java, Javascript, HTML and XML.
 
-The prettify*.css and prettify*.js is the external files that must be linked
-to a blog so syntax highlighting can work. The file 'src/blog-test.html' is a 
-test which links prettify*.css and prettify*.js to show how it works.
+Syntax highlighting can be used for http://click-framework.blogspot.com/
+or Javadoc. 
 
-To activate prettify the window.onload event must call the 'prettyPrint()'
-function.
+Unfortunately IE7 blocks javascript when running offline. One has
+to manually allow the blocked content or add the "Mark of the web" to the page:
 
-Once active the all <pre class="prettyprint"> tags will be highlighted. In blogs
-rather use <pre class="prettyprint" style="overflow:auto"> so that a scrollbar
-appear when sentences becomes very long.
+  http://msdn2.microsoft.com/en-us/library/ms537628.aspx
+
+Adding "Mark of the web" to each javadoc generated page will probably need a
+customer Doclet.
+
+The two sections below show how to add syntax highlighting to Blogspot and
+Javadoc.
+
+# http://click-framework.blogspot.com/
+For syntax highlighting to work in the blog the following files must be
+included in the <head> tag:
+
+  'src/prettify-min.css'
+  'src/prettify-min.js'
+
+To active syntax highlighting the javascript function prettyPrint() must be
+called when the window loads:
+
+for example:
+
+  <head>
+    <link type='text/css' rel="stylesheet" href="prettify-min.css"/>
+    <script type='text/javascript' src="prettify-min.js"></script>
+  </head>
+  <body onload="prettyPrint()">
+      ...
+  </body>
+
+Once the above is included in a page code snippets can be highlighted by
+including them inside a <pre> tag with the CSS class "prettyprint" for example:
+
+  <pre class="prettyprint">
+
+    public class MyPage extends Page {
+      public MyPage() {
+        System.out.println("This is a test to see how syntax highlighting will display in blog.");
+       }
+    } 
+  </pre>
+
+# Javadoc
+For syntax highlighting to work with javadoc, the files 'src/prettify.js' and
+'src/prettify.css' must be included in each javadoc generated file.
+
+An easy way to achieve this is to use ant to include the javascript and css
+content.
+
+The file 'src/build.txt' contains the <bottom> tag that must be included as
+part of the ant javadoc target.
+
+As an example the file build.xml includes the <bottom> tag as part of its
+javadoc target.

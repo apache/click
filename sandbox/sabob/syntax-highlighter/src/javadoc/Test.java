@@ -1,7 +1,7 @@
 package javadoc;
 
 /**
- * <pre class="prettyprint" style="overflow:auto">
+ * <pre class="prettyprint">
  *  &#47;**
  *   * Test class
  *   *&#47;
