@@ -2,14 +2,8 @@ package net.sf.click.examples.page.ajax;
 
 import java.util.List;
 
-import org.apache.cayenne.exp.ExpressionFactory;
-import org.apache.cayenne.query.SelectQuery;
-
+import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
-import net.sf.click.control.Submit;
-import net.sf.click.control.TextField;
-import net.sf.click.examples.domain.Customer;
-import net.sf.click.examples.domain.PostCode;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.extras.control.AutoCompleteTextField;
 
@@ -21,53 +15,22 @@ import net.sf.click.extras.control.AutoCompleteTextField;
 public class AutoCompletePage extends BorderPage {
 
     public Form form = new Form();
-    public Customer customer;
-
-    private TextField nameField;
 
     // ------------------------------------------------------------ Constructor
 
     public AutoCompletePage() {
-        nameField = new AutoCompleteTextField("name", true) {
+    	FieldSet fieldSet = new FieldSet("Enter a Suburb Location");
+    	fieldSet.setStyle("background-color", "");
+    	form.add(fieldSet);
+    	
+    	AutoCompleteTextField postCodeField = new AutoCompleteTextField("postCode") {
             public List getAutoCompleteList(String criteria) {
-                return getPostCodeLocations(criteria);
+                return getPostCodeService().getPostCodeLocations(criteria);
             }
         };
-        nameField.setSize(40);
+        postCodeField.setSize(40);
 
-        form.add(nameField);
-
-        form.add(new Submit(" OK ", this, "onOkClick"));
-    }
-
-    // --------------------------------------------------------- Event Handlers
-
-    public boolean onOkClick() {
-//        if (form.isValid()) {
-//            String name = nameField.getValue();
-//            customer = getCustomerService().findCustomerByName(name);
-//        }
-        return true;
-    }
-    
-    public List getPostCodeLocations(String criteria) {
-    	SelectQuery query = new SelectQuery(PostCode.class);
-    	
-        query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(PostCode.LOCALITY_PROPERTY, criteria + "%"));
-
-        query.addOrdering(PostCode.LOCALITY_PROPERTY, true);
-
-        query.setFetchLimit(10);
-
-        List list = getDataContext().performQuery(query);
-
-        for (int i = 0; i < list.size(); i++) {
-        	PostCode postCode = (PostCode) list.get(i);
-        	String value = postCode.getLocality() + ", " + postCode.getState() + " " + postCode.getPostCode();
-            list.set(i, value);
-        }
-
-        return list;
+        fieldSet.add(postCodeField);
     }
 
 }

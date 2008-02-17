@@ -4,6 +4,7 @@ import net.sf.click.Page;
 import net.sf.click.examples.service.BookingService;
 import net.sf.click.examples.service.ClientService;
 import net.sf.click.examples.service.CustomerService;
+import net.sf.click.examples.service.PostCodeService;
 import net.sf.click.examples.service.UserService;
 
 import org.apache.cayenne.access.DataContext;
@@ -55,6 +56,15 @@ public class SpringPage extends Page implements ApplicationContextAware {
         return (CustomerService) getBean("customerService");
     }
 
+    /**
+     * Return the PostCode Service object.
+     *
+     * @return the PostCode Service object.
+     */
+    public PostCodeService getPostCodeService() {
+        return (PostCodeService) getBean("postCodeService");
+    }
+    
     /**
      * Return the User Service object.
      *
