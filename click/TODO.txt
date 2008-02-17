@@ -6,15 +6,15 @@ BUGS
 CODE
 * Remote role-based security template application to make app server neutral
 * Update QuickStart Guide, using build script & new screen shots
-* Update Cheat Sheet with $cssImports and $jsImports
 * CayenneForm override copyFrom to set PropertySelect value
-* Try using Cayenne 3M3 with click-examples
 
 DOCUMENTATION
 * quick start tutorial
 * FAQ topic on rendering PDF, Excel documents
 * JSP forwarding
 * add page topic writing directly to response
+* Update Cheat Sheet with $cssImports and $jsImports
+* Update SpringClickSerlvet with activatePage doco
 
 BUILD
 * update to Checkstyle 4.3
