@@ -10,6 +10,8 @@
     
     <bean id="customerService" class="net.sf.click.examples.service.CustomerService"/>
     
+    <bean id="postCodeService" class="net.sf.click.examples.service.PostCodeService"/>
+        
     <bean id="userService" class="net.sf.click.examples.service.UserService"/>
 
 </beans>

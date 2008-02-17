@@ -51,7 +51,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * };
  * form.add(nameField); </pre>
  *
- * <p/>
+ * <p>
+ * This control uses the JavaScript 'script.aculo.us' <tt>Ajax.Autocompleter</tt> class.
+ * </p>
  *
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
