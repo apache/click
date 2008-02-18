@@ -666,7 +666,14 @@ public class Context {
     }
 
     static Context popThreadLocalContext() {
-        return getContextStack().pop();
+        ContextStack contextStack = getContextStack();
+        Context context = contextStack.pop();
+
+        if (contextStack.isEmpty()) {
+            THREAD_LOCAL_CONTEXT.set(null);
+        }
+
+        return context;
     }
 
     // -------------------------------------------------- Private Inner Classes
