@@ -16,10 +16,10 @@ import net.sf.click.extras.cayenne.CayenneTemplate;
  * @author Malcolm Edgar
  */
 public class PostCodeService extends CayenneTemplate {
-	
+
     public List getPostCodeLocations(String location) {
-    	SelectQuery query = new SelectQuery(PostCode.class);
-    	
+        SelectQuery query = new SelectQuery(PostCode.class);
+
         query.andQualifier(ExpressionFactory.likeIgnoreCaseExp(PostCode.LOCALITY_PROPERTY, location + "%"));
 
         query.addOrdering(PostCode.LOCALITY_PROPERTY, true);
@@ -29,12 +29,12 @@ public class PostCodeService extends CayenneTemplate {
         List list = performQuery(query);
 
         for (int i = 0; i < list.size(); i++) {
-        	PostCode postCode = (PostCode) list.get(i);
-        	String value = postCode.getLocality() + ", " + postCode.getState() + " " + postCode.getPostCode();
+            PostCode postCode = (PostCode) list.get(i);
+            String value = postCode.getLocality() + ", " + postCode.getState() + " " + postCode.getPostCode();
             list.set(i, value);
         }
 
         return list;
     }
-    
+
 }

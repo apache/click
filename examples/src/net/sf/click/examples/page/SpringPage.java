@@ -64,7 +64,7 @@ public class SpringPage extends Page implements ApplicationContextAware {
     public PostCodeService getPostCodeService() {
         return (PostCodeService) getBean("postCodeService");
     }
-    
+
     /**
      * Return the User Service object.
      *
