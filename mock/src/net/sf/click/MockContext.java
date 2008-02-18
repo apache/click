@@ -44,15 +44,15 @@ public class MockContext extends Context {
     // --------------------------------------------------------- Public Methods
     
     public static void initContext() {
-    	Context.setThreadLocalContext(new MockContext());
+    	Context.pushThreadLocalContext(new MockContext());
     }
     
     public static void initContext(Locale locale) {
-    	Context.setThreadLocalContext(new MockContext(locale));
+    	Context.pushThreadLocalContext(new MockContext(locale));
     }
     
     public static void initContext(HttpServletRequest request) {
-    	Context.setThreadLocalContext(new MockContext(request));
+    	Context.pushThreadLocalContext(new MockContext(request));
     }
     
     /**
