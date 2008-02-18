@@ -325,30 +325,22 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-        // Context must only be created on the first call to this method,
-        // while forward and include calls must use the thread bound context.
-        // Forward and include calls are wrapped by a ClickRequestWrapper.
-        // If request is not wrapped, createContext can be called.
-        // see the issue CLK-282 for details.
-        if (!(request instanceof ClickRequestWrapper)) {
+        // CLK-312. Apply request.setCharacterEncoding before creating a
+        // new Context
+        if (clickApp.getCharset() != null) {
+            try {
+                request.setCharacterEncoding(clickApp.getCharset());
 
-            // CLK-312. Apply request.setCharacterEncoding before creating a
-            // new Context
-            if (clickApp.getCharset() != null) {
-                try {
-                    request.setCharacterEncoding(clickApp.getCharset());
-
-                } catch (UnsupportedEncodingException ex) {
-                    String msg = "The character encoding "
-                                 + clickApp.getCharset() + " is invalid.";
-                    logger.warn(msg, ex);
-                }
+            } catch (UnsupportedEncodingException ex) {
+                String msg =
+                    "The character encoding " + clickApp.getCharset() + " is invalid.";
+                logger.warn(msg, ex);
             }
-
-            Context context = createContext(request, response, isPost);
-            // bind context to current thread
-            Context.setThreadLocalContext(context);
         }
+
+        Context context = createContext(request, response, isPost);
+        // Bind context to current thread
+        Context.pushThreadLocalContext(context);
 
         if (logger.isDebugEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(200);
@@ -408,15 +400,8 @@ public class ClickServlet extends HttpServlet {
                 }
 
             } finally {
-                // Forward and include calls must not unbind the context.
-                // Forward and include requests are wrapped by
-                // ClickRequestWrapper. If request is not wrapped, destroy can
-                // be called.
-                // See the issue CLK-282 for details.
-                if (!(request instanceof ClickRequestWrapper)) {
-                    Context.setThreadLocalContext(null);
-                    ClickLogger.setInstance(null);
-                }
+                Context.popThreadLocalContext();
+                ClickLogger.setInstance(null);
             }
         }
     }
@@ -1638,7 +1623,7 @@ public class ClickServlet extends HttpServlet {
                                       request,
                                       response,
                                       isPost,
-                                      clickService);
+                                      this);
         return context;
     }
 

@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
@@ -42,11 +43,18 @@ import org.apache.commons.fileupload.FileItem;
  */
 public class Context {
 
+    // -------------------------------------------------------------- Constants
+
     /** The thread local context. */
     private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
 
     /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
     public static final String LOCALE = "locale";
+
+    // -------------------------------------------------------------- Constants
+
+    /** The click services interface. */
+    protected final ClickService clickService;
 
     /** The servlet context. */
     protected final ServletContext context;
@@ -54,8 +62,8 @@ public class Context {
     /** The servlet config. */
     protected final ServletConfig config;
 
-    /** The click services interface. */
-    protected final ClickService clickService;
+    /** The HTTP method is POST flag. */
+    protected final boolean isPost;
 
     /** The servlet request. */
     protected final ClickRequestWrapper request;
@@ -65,9 +73,6 @@ public class Context {
 
     /** The http session. */
     protected HttpSession session;
-
-    /** The HTTP method is POST flag. */
-    protected final boolean isPost;
 
     // ----------------------------------------------------------- Constructors
 
@@ -79,18 +84,18 @@ public class Context {
      * @param request the servlet request
      * @param response the servlet response
      * @param isPost the servlet request is a POST
-     * @param clickService the click service interface
+     * @param clickServlet the click servlet
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
-        boolean isPost, ClickService clickService) {
+        boolean isPost, ClickServlet clickServlet) {
 
+        this.clickService = clickServlet.clickService;
         this.context = context;
         this.config = config;
-        this.request = new ClickRequestWrapper(request, clickService.getFileItemFactory());
-        this.response = response;
         this.isPost = isPost;
-        this.clickService = clickService;
+        this.request = new ClickRequestWrapper(request, clickServlet.clickService.getFileItemFactory());
+        this.response = response;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -101,14 +106,7 @@ public class Context {
      * @return the thread local request context instance.
      */
     public static Context getThreadLocalContext() {
-        Context context = (Context) THREAD_LOCAL_CONTEXT.get();
-
-        if (context != null) {
-            return context;
-
-        } else {
-            throw new IllegalStateException("context is null");
-        }
+        return getContextStack().peek();
     }
 
     /**
@@ -652,13 +650,58 @@ public class Context {
 
     // ------------------------------------------------ Package Private Methods
 
+    static ContextStack getContextStack() {
+        ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
+
+        if (contextStack == null) {
+            contextStack = new ContextStack();
+            THREAD_LOCAL_CONTEXT.set(contextStack);
+        }
+
+        return contextStack;
+    }
+
+    static void pushThreadLocalContext(Context context) {
+        getContextStack().push(context);
+    }
+
+    static Context popThreadLocalContext() {
+        return getContextStack().pop();
+    }
+
+    // -------------------------------------------------- Private Inner Classes
+
     /**
-     * Set the thread local request context instance.
-     *
-     * @param context the thread local request context instance.
+     * Provides an unsynchronized Context Stack.
      */
-    static void setThreadLocalContext(Context context) {
-        THREAD_LOCAL_CONTEXT.set(context);
+    private static class ContextStack extends ArrayList {
+
+        private static final long serialVersionUID = 1L;
+
+        private Context push(Context context) {
+            add(context);
+
+            return context;
+        }
+
+        private Context pop() {
+            Context context = peek();
+
+            remove(size() - 1);
+
+            return context;
+        }
+
+        private Context peek() {
+            int length = size();
+
+            if (length == 0) {
+                String msg = "No Context available on ThreadLocal Context Stack";
+                throw new RuntimeException(msg);
+            }
+
+            return (Context) get(length - 1);
+        }
     }
 
 }

@@ -107,6 +107,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
 
                         //Add the form field value to the parameters
                         addToMapAsString(requestParams, name, value);
+
                     } else {
                         //Add the file item to the list of file items
                         addToMapAsFileItem(fileItems, name, fileItem);
