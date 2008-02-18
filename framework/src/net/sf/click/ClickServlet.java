@@ -183,12 +183,6 @@ public class ClickServlet extends HttpServlet {
 
     // ------------------------------------------------------ Instance Varables
 
-    /** The click application. */
-    protected ClickApp clickApp;
-
-    /** The click service proxy. */
-    protected ClickService clickService;
-
     /** The servlet logger. */
     protected ClickLogger logger;
 
@@ -200,6 +194,12 @@ public class ClickServlet extends HttpServlet {
 
     /** Cache of velocity writers. */
     protected SimplePool writerPool;
+
+    /** The click application. */
+    ClickApp clickApp;
+
+    /** The click service proxy. */
+    ClickService clickService;
 
     // --------------------------------------------------------- Public Methods
 
@@ -1548,34 +1548,6 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Process all the Pages public fields using the given callback.
-     *
-     * @param page the page to obtain the fields from
-     * @param callback the fields iterator callback
-     */
-    protected void processPageFields(Page page, FieldCallback callback) {
-
-        Field[] fields = clickApp.getPageFieldArray(page.getClass());
-
-        if (fields != null) {
-            for (int i = 0; i < fields.length; i++) {
-                Field field = fields[i];
-
-                try {
-                    Object fieldValue = field.get(page);
-
-                    if (fieldValue != null) {
-                        callback.processField(field.getName(), fieldValue);
-                    }
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    /**
      * Return the request parameters OGNL <tt>TypeConverter</tt>. By default
      * this method returns a {@link RequestTypeConverter} instance.
      *
@@ -1628,6 +1600,34 @@ public class ClickServlet extends HttpServlet {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Process all the Pages public fields using the given callback.
+     *
+     * @param page the page to obtain the fields from
+     * @param callback the fields iterator callback
+     */
+    void processPageFields(Page page, FieldCallback callback) {
+
+        Field[] fields = clickApp.getPageFieldArray(page.getClass());
+
+        if (fields != null) {
+            for (int i = 0; i < fields.length; i++) {
+                Field field = fields[i];
+
+                try {
+                    Object fieldValue = field.get(page);
+
+                    if (fieldValue != null) {
+                        callback.processField(field.getName(), fieldValue);
+                    }
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
     /**
      * Return the Click Application instance.

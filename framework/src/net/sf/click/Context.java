@@ -51,10 +51,7 @@ public class Context {
     /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
     public static final String LOCALE = "locale";
 
-    // -------------------------------------------------------------- Constants
-
-    /** The click services interface. */
-    protected final ClickService clickService;
+    // -------------------------------------------------------------- Instance Variables
 
     /** The servlet context. */
     protected final ServletContext context;
@@ -65,14 +62,17 @@ public class Context {
     /** The HTTP method is POST flag. */
     protected final boolean isPost;
 
-    /** The servlet request. */
-    protected final ClickRequestWrapper request;
-
     /** The servlet response. */
     protected final HttpServletResponse response;
 
     /** The http session. */
     protected HttpSession session;
+
+    /** The click services interface. */
+    final ClickService clickService;
+
+    /** The servlet request. */
+    final ClickRequestWrapper request;
 
     // ----------------------------------------------------------- Constructors
 
