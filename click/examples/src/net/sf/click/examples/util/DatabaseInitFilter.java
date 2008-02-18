@@ -241,11 +241,11 @@ public class DatabaseInitFilter implements Filter {
             public void processLine(String line, DataContext context) {
                 if (!line.startsWith("Pcode")) {
                     StringTokenizer tokenizer = new StringTokenizer(line, ",");
-                    
+
                     String postcode = next(tokenizer);
                     String locality = WordUtils.capitalizeFully(next(tokenizer));
                     String state = next(tokenizer);
-                    
+
                     PostCode postCode = new PostCode();
                     postCode.setPostCode(postcode);
                     postCode.setLocality(locality);
@@ -262,14 +262,14 @@ public class DatabaseInitFilter implements Filter {
     }
 
     private static String next(StringTokenizer tokenizer) {
-    	String token = tokenizer.nextToken().trim();
-    	if (token.startsWith("\"")) {
-    		token = token.substring(1);
-    	}
-    	if (token.endsWith("\"")) {
-    		token = token.substring(0, token.length() - 1);
-    	}
-    	return token;
+        String token = tokenizer.nextToken().trim();
+        if (token.startsWith("\"")) {
+            token = token.substring(1);
+        }
+        if (token.endsWith("\"")) {
+            token = token.substring(0, token.length() - 1);
+        }
+        return token;
     }
 
     private static Date createDate(String pattern) {

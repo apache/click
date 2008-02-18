@@ -19,11 +19,11 @@ public class AutoCompletePage extends BorderPage {
     // ------------------------------------------------------------ Constructor
 
     public AutoCompletePage() {
-    	FieldSet fieldSet = new FieldSet("Enter a Suburb Location");
-    	fieldSet.setStyle("background-color", "");
-    	form.add(fieldSet);
-    	
-    	AutoCompleteTextField postCodeField = new AutoCompleteTextField("postCode") {
+        FieldSet fieldSet = new FieldSet("Enter a Suburb Location");
+        fieldSet.setStyle("background-color", "");
+        form.add(fieldSet);
+
+        AutoCompleteTextField postCodeField = new AutoCompleteTextField("postCode") {
             public List getAutoCompleteList(String criteria) {
                 return getPostCodeService().getPostCodeLocations(criteria);
             }
