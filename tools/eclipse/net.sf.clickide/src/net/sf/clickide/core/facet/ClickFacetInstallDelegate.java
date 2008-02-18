@@ -312,7 +312,7 @@ public class ClickFacetInstallDelegate implements IDelegate {
 			// Add Cayenne Support
 			if(useCayenne){
 				Filter filter = WebapplicationFactory.eINSTANCE.createFilter();
-				filter.setFilterClassName("net.sf.click.extras.cayenne.DataContextFilter");
+				filter.setFilterClassName(ClickUtils.CAYENNE_FILTER_CLASS);
 				filter.setName("DataContextFilter");
 				
 				if (webApp.getJ2EEVersionID() >= J2EEVersionConstants.J2EE_1_4_ID) {
