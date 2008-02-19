@@ -15,6 +15,7 @@
  */
 package net.sf.click;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -23,11 +24,14 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.FlashAttribute;
 
@@ -72,7 +76,7 @@ public class Context {
     final ClickService clickService;
 
     /** The servlet request. */
-    final ClickRequestWrapper request;
+    final HttpServletRequest request;
 
     // ----------------------------------------------------------- Constructors
 
@@ -94,7 +98,29 @@ public class Context {
         this.context = context;
         this.config = config;
         this.isPost = isPost;
-        this.request = new ClickRequestWrapper(request, clickServlet.clickService.getFileItemFactory());
+
+        ContextStack contextStack  = getContextStack();
+
+        if (contextStack.size() == 0) {
+
+            // CLK-312. Apply request.setCharacterEncoding before wrapping
+            // reuqest in ClickRequestWrapper
+            String charset = clickService.getCharset();
+            if (charset != null) {
+
+                try {
+                    request.setCharacterEncoding(charset);
+
+                } catch (UnsupportedEncodingException ex) {
+                    String msg =
+                        "The character encoding " + charset + " is invalid.";
+                    ClickLogger.getInstance().warn(msg, ex);
+                }
+            }
+            this.request = new ClickRequestWrapper(request, this.clickService.getFileItemFactory());
+        } else {
+            this.request = request;
+        }
         this.response = response;
     }
 
@@ -509,7 +535,7 @@ public class Context {
      * for "multipart" POST requests
      */
     public Map getFileItemMap() {
-        return request.getFileItemMap();
+        return findClickRequestWrapper(request).getFileItemMap();
     }
 
     /**
@@ -526,7 +552,7 @@ public class Context {
      * @return the fileItem for the specified name
      */
     public FileItem getFileItem(String name) {
-        Object value = request.getFileItemMap().get(name);
+        Object value = findClickRequestWrapper(request).getFileItemMap().get(name);
 
         if (value != null) {
             if (value instanceof FileItem[]) {
@@ -650,7 +676,7 @@ public class Context {
 
     // ------------------------------------------------ Package Private Methods
 
-    static ContextStack getContextStack() {
+    static final ContextStack getContextStack() {
         ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
 
         if (contextStack == null) {
@@ -674,6 +700,21 @@ public class Context {
         }
 
         return context;
+    }
+
+    static ClickRequestWrapper findClickRequestWrapper(ServletRequest request) {
+
+        while (!(request instanceof ClickRequestWrapper)
+            && request instanceof HttpServletRequestWrapper
+            && request != null) {
+            request = ((HttpServletRequestWrapper) request).getRequest();
+        }
+
+        if (request instanceof ClickRequestWrapper) {
+            return (ClickRequestWrapper) request;
+        } else {
+            throw new IllegalStateException("Click request is not present");
+        }
     }
 
     // -------------------------------------------------- Private Inner Classes

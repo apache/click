@@ -16,7 +16,6 @@
 package net.sf.click;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
@@ -324,19 +323,6 @@ public class ClickServlet extends HttpServlet {
         HttpServletResponse response, boolean isPost) {
 
         long startTime = System.currentTimeMillis();
-
-        // CLK-312. Apply request.setCharacterEncoding before creating a
-        // new Context
-        if (clickApp.getCharset() != null) {
-            try {
-                request.setCharacterEncoding(clickApp.getCharset());
-
-            } catch (UnsupportedEncodingException ex) {
-                String msg =
-                    "The character encoding " + clickApp.getCharset() + " is invalid.";
-                logger.warn(msg, ex);
-            }
-        }
 
         Context context = createContext(request, response, isPost);
         // Bind context to current thread
