@@ -30,6 +30,23 @@ import net.sf.click.control.TextField;
  * TelephoneField will validate the telephone number when the control is
  * processed and invoke the control listener if defined.
  * <p/>
+ * The TelephoneField uses a JavaScript onkeypress() noLetterFilter() method to prevent
+ * users from entering invalid characters.  To enable number key filtering
+ * reference <tt class="blue">$jsImports</tt> and <tt class="blue">$cssImports</tt> in your page
+ * template. For example:
+ *
+ * <pre class="codeHtml">
+ * &lt;html&gt;
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * &lt;body&gt;
+ * <span class="red">$form</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span> </pre>
+ * 
+ * <p/>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
  *    href="../../../../../html/interact/forms.html#h-17.4">INPUT</a>
