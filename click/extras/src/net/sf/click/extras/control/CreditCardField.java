@@ -54,13 +54,14 @@ import net.sf.click.util.HtmlStringBuffer;
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$imports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$form</span>
- *  &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * &lt;body&gt;
+ * <span class="red">$form</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span> </pre>
  *
  * An example page using CreditCardField is provided below:
  *
