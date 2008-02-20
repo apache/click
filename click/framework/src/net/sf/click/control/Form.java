@@ -189,14 +189,14 @@ import org.apache.commons.lang.StringUtils;
  * {@link Submit#setCancelJavaScriptValidation(boolean)} set to true. This
  * prevents JavaScript form validation being performed the cancel button is clicked.
  *
- * <h3>HTML CSS and JavaScript Imports</h3>
+ * <h3>CSS and JavaScript Imports</h3>
  *
  * The Form control automatically deploys the control CSS style sheet
  * (<tt>control.css</tt>) and JavaScript file (<tt>control.js</tt>) to
  * the application directory <tt>/click</tt>.
  * To import these files and any form control imports simply reference 
  * <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
- * in your page template. For example:
+ * in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;

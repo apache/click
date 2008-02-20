@@ -97,18 +97,20 @@ import org.apache.commons.lang.math.NumberUtils;
  *
  * The Table control automatically deploys the table CSS style sheet
  * (<tt>table.css</tt>) to the application directory <tt>/click</tt>.
- * To import the style sheet simply reference the
- * {@link net.sf.click.util.PageImports} object. For example:
+ * To import the Table CSS styles and any control JavaScript simply reference <span class="blue">$cssImports</span>
+ * and <span class="blue">$jsImports</span> in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$imports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$table</span>
- *  &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * 
+ * &lt;body&gt;
+ * <span class="red">$table</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span></pre>
  *
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>
  * style sheet and includes the styles:
