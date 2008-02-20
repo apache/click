@@ -58,7 +58,6 @@ import net.sf.click.util.HtmlStringBuffer;
  * &lt;head&gt;
  * <span class="blue">$cssImports</span>
  * &lt;/head&gt;
- * 
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;

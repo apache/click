@@ -105,7 +105,6 @@ import org.apache.commons.lang.math.NumberUtils;
  * &lt;head&gt;
  * <span class="blue">$cssImports</span>
  * &lt;/head&gt;
- * 
  * &lt;body&gt;
  * <span class="red">$table</span>
  * &lt;/body&gt;
