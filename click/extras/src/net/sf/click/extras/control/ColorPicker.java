@@ -50,18 +50,20 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * The color picker popup is based on JS script code from liferay.com which in turn is based on code
  * from http://typetester.maratz.com/. To enable the color
- * popup, reference the {@link net.sf.click.util.PageImports} object
+ * popup, reference the <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
  * in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$imports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$form</span>
- *  &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * 
+ * &lt;body&gt;
+ * <span class="red">$form</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span> </pre>
  *
  * @author Christian Essl
  */
