@@ -47,18 +47,19 @@ import net.sf.click.util.HtmlStringBuffer;
  * The Calendar popup is provided by the JSCalendar library by
  * <a href="http://www.dynarch.com/">Dynarch.com</a>. The Calendar popup is
  * created as a &lt;div&gt; element using JavaScript. To enable the Calenar
- * popup, reference the {@link net.sf.click.util.PageImports} object
+ * popup, reference <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
  * in the page template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$imports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$form</span>
- *  &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * &lt;body&gt;
+ * <span class="red">$form</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span> </pre>
  *
  * The default Calendar style is 'system' which has a similar appearance
  * to the Windows Calendar control. The JSCalendar styles include:

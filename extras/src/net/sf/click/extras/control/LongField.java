@@ -29,19 +29,20 @@ package net.sf.click.extras.control;
  * the control listener if defined.
  * <p/>
  * The LongField uses a JavaScript onkeypress() integerFilter() method to prevent
- * users from entering invalid characters. To enable number key filtering
- * reference the {@link net.sf.click.util.PageImports} object in your page
- * header section. For example:
+ * users from entering invalid characters.  To enable number key filtering
+ * reference <tt class="blue">$jsImports</tt> and <tt class="blue">$cssImports</tt> in your page
+ * template. For example:
  *
  * <pre class="codeHtml">
  * &lt;html&gt;
- *  &lt;head&gt;
- *   <span class="blue">$imports</span>
- *  &lt;/head&gt;
- *  &lt;body&gt;
- *   <span class="red">$form</span>
- *  &lt;/body&gt;
- * &lt;/html&gt; </pre>
+ * &lt;head&gt;
+ * <span class="blue">$cssImports</span>
+ * &lt;/head&gt;
+ * &lt;body&gt;
+ * <span class="red">$form</span>
+ * &lt;/body&gt;
+ * &lt;/html&gt; 
+ * <span class="blue">$jsImports</span> </pre>
  *
  * The LongField has left justified horizontal text alignment,
  * {@link #setTextAlign(String)}.
