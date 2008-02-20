@@ -4,12 +4,12 @@
 <!-- (If you delete it and reopen the project it will be recreated.) -->
 <project name="SyntaxHighlighter" default="default" basedir=".">
     <description>Builds, tests, and runs the project SyntaxHighlighter.</description>
-
+    
     <property name="java.docs.api" value="file:///c:/jdk1.4.2/docs/api"/>
     <property name="dist.dir" value="dist"/>
     <property name="dist.javadoc.dir" value="${dist.dir}/javadoc"/>
     <property name="src.dir" value="src"/>
-        
+    
     <target name="javadoc" description="Javadoc">
         <mkdir dir="${dist.javadoc.dir}"/>
         <javadoc sourcepath="${src.dir}" 
@@ -20,7 +20,7 @@
                  windowtitle="Click Bench API"
                  packagenames="*"
                  doctitle="Click Bench API">
-<bottom><![CDATA[
+            <bottom><![CDATA[
 <style type='text/css'>
 .str{color:#080;}.kwd{color:#008;}.com{color:#800;}.typ{color:#606;}.lit{color:#066;}.pun{color:#660;}.pln{color:#000;}.tag{color:#008;}.atn{color:#606;}.atv{color:#080;}.dec{color:#606;}pre.prettyprint{padding:2px;border:1px solid #888;overflow:auto;}@media print{.str{color:#060;}.kwd{color:#006;font-weight:bold;}.com{color:#600;font-style:italic;}.typ{color:#404;font-weight:bold;}.lit{color:#044;}.pun{color:#440;}.pln{color:#000;}.tag{color:#006;font-weight:bold;}.atn{color:#404;}.atv{color:#060;}}
 </style>
@@ -94,18 +94,18 @@ pre.innerHTML=newContent;cs.parentNode.replaceChild(pre,cs);}}}}
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 </script>
-<script type='text/javascript'>prettyPrint();</script>]]></bottom>
+            <script type='text/javascript'>prettyPrint();</script>]]></bottom>
             
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
             <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
             <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
         </javadoc>
-        
-        <!--<copy file="C:/downloads/javascript/prettify-small/prettify.css"  
-              overwrite="true"
-              todir="${dist.javadoc.dir}"/>         
-        <copy file="C:/downloads/javascript/prettify-small/prettify.js"  
-              overwrite="true"
-              todir="${dist.javadoc.dir}"/>-->
-    </target>
-</project>
+
+        <replace dir="${dist.javadoc.dir}" value="&lt;!-- saved from url=(0014)about:internet --&gt;">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
+        </replace>
+
+          </target>
+      </project>
+      
