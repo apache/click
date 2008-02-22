@@ -36,13 +36,13 @@ The section disucsses the ClickIDE and includes the following topics:
 </a>
 
 <p>
-  ClickIDE requires <a href="http://www.eclipse.org/">Eclipse</a> 3.2.x</li>
-  and <a href="http://www.eclipse.org/webtools/">WTP</a> 1.5.x.
-  The easiest way to use ClickIDE is introducing WTP using 
-  <a href="http://www.eclipse.org/callisto/">Callisto</a>.
+  ClickIDE 2.x requires <a href="http://www.eclipse.org/">Eclipse</a> 3.3.x</li>
+  and <a href="http://www.eclipse.org/webtools/">WTP</a> 2.0.x.
 </p>
 <p>
-  After WTP installed, get ClickIDE from the 
+  The easiest way to use ClickIDE is installing 
+  <a href="http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/20071103/eclipse-jee-europa-fall2-win32.zip">Eclipse IDE for Java EE Developers</a>
+  and get ClickIDE from the 
   <a href="https://sourceforge.net/project/showfiles.php?group_id=82095">SF.net download page</a>.
   Unzip clickide-x.x.x.zip and put 2 folders (plugins/ and features/) into 
   your ECLIPSE_HOME.
@@ -63,16 +63,24 @@ Click.
 	<li>Click page creation wizard</li>
 	<li>Visual editor for the Click configuration file</li>
 	<li>Velocity template editor</li>
+	<li>Spring Framework and Apache Cayenne Integration</li>
 	<li>Integrated Click documentation</li>
 </ul>
 
 <h4>Create Dynamic Web Project</h4>
 
-<p>Create "Dynamic Web Project" in the J2EE perspective and select
-"Click" as Project Facet. The project creation wizard will add Click
-JARs, web.xml and template of click.xml into your project.</p>
+<p>Create <strong>"Dynamic Web Project"</strong> in the J2EE perspective and 
+select <strong>"Click"</strong> as Project Facet. The project creation wizard 
+will add Click JARs, web.xml and template of click.xml into your project.</p>
 
-<p><img src="../images/clickide_1.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_create_project_1.png" align="absmiddle" border="0"
+	alt="Create Project" /></p>
+
+<p>You can also add Spring and Cayenne support to your project in this wizard.
+If Spring or Cayenne option are checked, the project creation wizard adds 
+required JAR files to WEB-INF/lib and configures web.xml as well.</p>
+
+<p><img src="../images/clickide_create_project_2.png" align="absmiddle" border="0"
 	alt="Create Project" /></p>
 
 <h4>Configuration Editor</h4>
@@ -81,16 +89,16 @@ JARs, web.xml and template of click.xml into your project.</p>
 file (click.xml). It has some tabs. You can edit click.xml using this
 editor easily.</p>
 
-<p><img src="../images/clickide_2.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_config_editor_1.png" align="absmiddle" border="0"
 	alt="Graphical Editor for the click.xml" /></p>
 
-<p>In the "Source" tab of the configuration file editor, you can
-edit click.xml directly and you can jump to the source code of the page
-class and the page template by CTRL+CLICK. ClickIDE also provides the
-validation for click.xml. Error markers are displayed in the editor and
-"Problems" view.</p>
+<p>In the <strong>"Source"</strong> tab of the configuration file editor, 
+you can edit click.xml directly and you can jump to the source code of 
+the page class and the page template by <strong>CTRL+CLICK</strong>. 
+ClickIDE also provides the validation for click.xml. Error markers are 
+displayed in the editor and <strong>"Problems"</strong> view.</p>
 
-<p><img src="../images/clickide_3.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_config_editor_2.png" align="absmiddle" border="0"
 	alt="Direct Editing for the click.xml" /></p>
 
 <h4>Page Creation Wizard</h4>
@@ -98,9 +106,9 @@ validation for click.xml. Error markers are displayed in the editor and
 <p>You can create the page class and the page template file using
 the page creation wizard. In the wizard, you can choose template for the
 page class and the html file. These template can be configured at the
-preference dialog ("Window" &gt; "Preferences" &gt; "Click").</p>
+preference dialog (<strong>"Window" &gt; "Preferences" &gt; "Click"</strong>).</p>
 
-<p><img src="../images/clickide_4.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_page_wizard.png" align="absmiddle" border="0"
 	alt="New Page Creation Wizard" /></p>
 
 <h4>Velocity Template Editor</h4>
@@ -110,19 +118,32 @@ provides code-completion, highlighting and validation as velocity
 syntax. You can also configure highlighting colors in the preference
 dialog.</p>
 
-<p><img src="../images/clickide_5.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_velocity_editor.png" align="absmiddle" border="0"
 	alt="Template Editor" /></p>
 
 <h4>Fast switch between Page classes and templates</h4>
 
-<p>In the JDT's Java editor and the Velocity template editor, you
-can switch between the page class and the html file by CTRL+ALT+S.</p>
+<p>In the JDT's Java editor and the Velocity template editor, you can switch 
+between the page class and the html file by <strong>CTRL+ALT+S</strong>
+or from menubar <strong>"Click" &gt; "Switch to Class (HTML)"</strong></p>
+
+<p><img src="../images/clickide_switch_file.png" align="absmiddle" border="0"
+	alt="Switch from menubar" /></p>
+
+<h4>User definition variables</h4>
+
+<p>You can register your own variables that would be used in the Velocity 
+templates in the project property page. Registered variables are available 
+in the code-completion.</p>
+
+<p><img src="../images/clickide_user_variables.png" align="absmiddle" border="0"
+	alt="Integrated Click Documentation" /></p>
 
 <h4>Online Help</h4>
 
 <p>Click documentation is integrated with the Eclipse help system.</p>
 
-<p><img src="../images/clickide_6.png" align="absmiddle" border="0"
+<p><img src="../images/clickide_help.png" align="absmiddle" border="0"
 	alt="Integrated Click Documentation" /></p>
 
 <h4>Cayenne Integration (since ClickIDE 2.0.0)</h4>
@@ -130,23 +151,24 @@ can switch between the page class and the html file by CTRL+ALT+S.</p>
 <p>ClickIDE also support <a href="http://cayenne.apache.org/">Apache Cayenne</a>
  since ClickIDE 2.0.0.</p>
  
-<p>You can create new Cayenne mapping project using the New Cayenne Mapping 
-Project wizard.</p>
+<p>You can create new Cayenne mapping project using the 
+<strong>New Cayenne Mapping Project</strong> wizard.</p>
 
-<p>[TODO:image]</p>
+<p><img src="../images/clickide_create_cayenne.png" align="absmiddle" border="0"
+	alt="Cayenne Mapping Project Creation Wizard" /></p>
 
 <p>This wizard generates an empty cayenne.xml and open it by Cayenne Modeler.
 If you have an existing cayenne.xml, you can open it by Cayenne Modeler 
 from the context menu. See below:</p>
 
-<p>[TODO:image]</p>
+<p><img src="../images/clickide_cayenne_modeler.png" align="absmiddle" border="0"
+	alt="Open cayenne.xml with Cayenne Modeler" /></p>
 
-<p>ClickIDE also provides classpath variables "CAYENNE_LIB" and 
-"CAYENNE_NODEPS_LIB". You can add cayenne.jar / cayenne-nodeps.jar to 
-your project classpath using these variables at the project build path 
-settings. </p>
 
-<p>[TODO:image]</p>
+<p>ClickIDE also provides classpath variables <strong>"CAYENNE_LIB"</strong> 
+and <strong>"CAYENNE_NODEPS_LIB"</strong>. You can add cayenne.jar or 
+cayenne-nodeps.jar to your project classpath using these variables at 
+the project build path settings. </p>
 
 <p><strong>Note:</strong> If your project is WTP dynamic web project, 
 you should add these variables at the J2EE Module Dependencies page 
