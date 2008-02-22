@@ -1,5 +1,6 @@
 package net.sf.clickide.ui.wizard;
 
+import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider;
 
 import org.eclipse.swt.SWT;
@@ -22,8 +23,8 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 	
 	public ClickFacetWizardPage() {
 		super("ClickFacetWizardPage");
-		setTitle("Options");
-		setDescription("Select additinal features for the Click project.");
+		setTitle(ClickPlugin.getString("wizard.facet.title"));
+		setDescription(ClickPlugin.getString("wizard.facet.description"));
 	}
 
 	public void setConfig(Object config) {
@@ -34,10 +35,10 @@ public class ClickFacetWizardPage extends AbstractFacetWizardPage {
 		Composite composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout());
 		useSpring = new Button(composite, SWT.CHECK);
-		useSpring.setText("Use Spring Framework");
+		useSpring.setText(ClickPlugin.getString("wizard.facet.useSpring"));
 		
 		useCayenne = new Button(composite, SWT.CHECK);
-		useCayenne.setText("Use Apache Cayenne");
+		useCayenne.setText(ClickPlugin.getString("wizard.facet.useCayenne"));
 		
 		setControl(composite);
 	}
