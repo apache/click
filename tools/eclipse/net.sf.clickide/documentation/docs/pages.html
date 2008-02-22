@@ -28,6 +28,8 @@ and covers to following topics:
   </li>
   <li><a href="#page-security">Security</a> - page security model
   </li>
+  <li><a href="#page-stateful">Stateful</a> - stateful pages
+  </li>
   <li><a href="#page-error-handling">Error Handling</a> - page error handling
   </li>
   <li><a href="#page-not-found">Page Not Found</a> - page not found handling
@@ -113,8 +115,8 @@ Then the <tt>onSecurityCheck()</tt> handler. This method can used to
 ensure the user is authorized to access the page, and if necessary can abort any 
 further processing.
 <p/>
-The next method invoked is the <tt>onInit()</tt>, this is where you place any initialization code which requires
-access to the <a target="topic" href="click-api/net/sf/click/Context.html">Context</a>.
+The next method invoked is the <tt>onInit()</tt>, this is where you place any 
+post constructor initialization code.
 <p/>
 The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
 Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
@@ -133,13 +135,24 @@ objects to the model:
   <li>context &nbsp; - &nbsp; 
    the Servlet context path, e.g. <span class="">/mycorp</span>
   </li>  
+  <li>cssImports &nbsp; - &nbsp; 
+    the CSS imports and style blocks to include in the pages header. 
+    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    for more details.
+  </li>
   <li>format &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/Format.html">Format</a> 
-    object for formatting the display of objects
+    the <a href="../click-api/net/sf/click/util/Format.html">Format</a> 
+    object for formatting the display of objects.
   </li>
   <li>imports &nbsp; - &nbsp; 
-   the <a href="click-api/net/sf/click/util/PageImports.html">PageImports</a> 
-    object for rendering page controls HTML header imports
+    the CSS and JavaScript imports to include in the pages header.
+    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    for more details.
+  </li>
+  <li>jsImports &nbsp; - &nbsp; 
+    the JavaScript imports and script blocks to include in the pages footer. 
+    Please see <a href="../click-api/net/sf/click/util/PageImports.html">PageImports</a> 
+    for more details.
   </li>
   <li>messages &nbsp; - &nbsp; 
    the <a target="topic" href="click-api/net/sf/click/util/MessagesMap.html">MessagesMap</a> adaptor
@@ -237,6 +250,7 @@ After processing the request our page would be rendered as:
  <td>Customer ID: 7203</td>
 </tr>
 </table>
+
 
 <h4>Customizing Auto Binding</h4>
 
@@ -772,6 +786,81 @@ invalidate the session.
     }
 } 
 </pre>
+
+
+<a name="page-stateful" class="heading"><h2>Stateful Pages</h2></a>
+
+Click supports stateful pages where the state of the page is saved between the 
+users requests. Stateful pages are useful in a number of scenarios including:
+<ul>
+<li>Search page and edit page interactions, in this scenario you navigage from a 
+stateful search page which may have filter criteria applied to an object edit page.
+Once object update has been completed on the edit page, the user is redirected to
+the search page and the stateful filter criteria still applied.
+</li>
+<li>Complex pages with multiple forms and or tables which need to maintain their
+state between interactions.
+</li>
+</ul>
+
+To make a page stateful you simply need to set the page
+<a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
+property to be true and have the page implement the <tt>Serializable</tt> interface. For example:
+
+<pre class="codeJava">
+<span class="kw">package</span> com.mycorp.page;
+
+<span class="kw">import</span> java.io.Serializable;
+
+<span class="kw">import</span> net.sf.click.Page;
+ 
+<span class="kw">public class</span> SearchPage <span class="kw">extends</span> Page <span class="kw">implements</span> Serializable {
+
+    <span class="kw">public</span> SearchPage() {
+        setStateful(<span class="kw">true</span>);
+        ..
+    }
+} 
+</pre>
+
+Stateful page instances are stored in the user's  
+<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html">HttpSession</a>
+using the pages class name as the key. In the example above the page would be stored in 
+the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
+
+<h4>Page Creation</h4>
+
+With stateful pages they are only created once, after which they are retrieved from the session.
+However page event handlers are invoked for each request, including the the <tt>onInit()</tt> method.
+<p/>
+When you are creating stateful pages you typically place all your control creation code in the Pages 
+constructor so it is invoked only once, and don't put this code in the <tt>onInit()</tt> method which 
+will be invoked with each request.
+<p/>
+If you have dynamic control creation code you would typically place this <tt>onInit()</tt> method, but 
+you will need to take care that controls and or models are not already present in the page.
+
+<h4>Page Execution</h4>
+
+The default Click page execution model is thread safe as a new Page instance is created
+for each request and thread. With stateful pages a user will have a single page instance which is
+reused in multiple requests and threads. To ensure page execution is thread safe, a users
+page instances are synchronized so only one request thread can execute a page instance at 
+any one time. 
+
+<h4>Page Destruction</h4>
+
+After normal page instances have been executed, they are de-referenced and garbage 
+collected by the JVM. However with stateful pages they are stored in the users 
+<tt>HttpSession</tt> so care needs to be take not store too many objects in stateful 
+page instances which may cause memory and performance issues.
+<p/>
+When pages have completed their execution, all the Page's controls <tt>onDestroy()</tt>
+methods are invoked, and then the Page's <tt>onDestroy()</tt> method is invoked. This
+is your opportunity to de-reference any large sets or graphs. For example the Table 
+control by default de-references its rowList in its
+<a target="topic" href="click-api/net/sf/click/control/Table.html#onDestroy()">onDestory()</a>
+method.
 
 <a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
 

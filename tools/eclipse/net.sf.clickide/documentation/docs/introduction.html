@@ -271,18 +271,20 @@ which is rendered when its <tt>toString()</tt> method is called.
 <pre class="codeHtml">
 &lt;html&gt;
 &lt;head&gt;
-  <span class="blue">$imports</span>
+<span class="blue">$cssImports</span>
 &lt;/head&gt;
 &lt;body&gt;
   
-  <span class="blue">$table</span>
+<span class="blue">$table</span>
     
 &lt;/body&gt;
 &lt;/html&gt; 
+<span class="blue">$jsImports</span>
 </pre>
 
-Note above we also specify the <span class="blue">$imports</span> reference so the table can include any
-header imports such as style sheets in the page.
+Note above we also specify the <span class="blue">$cssImports</span> reference so the table can include any
+CSS imports or styles in the header, and the <span class="blue">$jsImports</span> reference 
+so any JavaScript imports or scripts at the bottom.
 <p/>
 At runtime the Table would be rendered in the page as:
 
@@ -389,14 +391,15 @@ which is rendered when its <tt>toString()</tt> method is called.
 <pre class="codeHtml">
 &lt;html&gt;
 &lt;head&gt;
-  <span class="blue">$imports</span>
+<span class="blue">$cssImports</span>
 &lt;/head&gt;
 &lt;body&gt;
   
-  <span class="blue">$table</span>
+<span class="blue">$table</span>
     
 &lt;/body&gt;
-&lt;/html&gt; 
+&lt;/html&gt;
+<span class="blue">$jsImports</span> 
 </pre>
 
 At runtime the Table would be rendered in the page as:
@@ -468,11 +471,11 @@ the <tt>SimpleForm</tt> class.
 <pre class="codeHtml">
 &lt;html&gt;
 &lt;head&gt;
-  <span class="blue">$imports</span>
+<span class="blue">$cssImports</span>
 &lt;/head&gt;
 &lt;body&gt;
   
-  <span class="blue">$form</span>
+<span class="blue">$form</span>
   
 <span class="red">#if</span> (<span class="blue">$msg</span>)
   &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
@@ -480,6 +483,7 @@ the <tt>SimpleForm</tt> class.
     
 &lt;/body&gt;
 &lt;/html&gt; 
+<span class="blue">$jsImports</span>
 </pre>
 
 When the SimpleForm page is first requested the <span class="blue">$form</span> object will 
@@ -688,7 +692,7 @@ the <tt>AdvancedForm</tt> class.
 <pre class="codeHtml">
 &lt;html&gt;
 &lt;head&gt;
-   <span class="blue">$imports</span>
+<span class="blue">$cssImports</span>
 &lt;/head&gt;
 &lt;body&gt;
 
@@ -696,10 +700,11 @@ the <tt>AdvancedForm</tt> class.
   &lt;div id="msgDiv"&gt; <span class="blue">$msg</span> &lt;/div&gt;
 <span class="red">#end</span>
   
-   <span class="blue">$form</span>
+<span class="blue">$form</span>
     
 &lt;/body&gt;
 &lt;/html&gt; 
+<span class="blue">$jsImports</span>
 </pre>
 
 When the AdvancedForm page is first requested the <span class="blue">$form</span> object will 
