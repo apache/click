@@ -53,8 +53,8 @@ public class ClickProjectPropertyPage extends PropertyPage {
 	private TableViewer viewer;
 	
 	public ClickProjectPropertyPage(){
-		setTitle("Click");
-		setDescription("Define Velocity Variables");
+		setTitle(ClickPlugin.getString("propertyPage.variables.title"));
+		setDescription(ClickPlugin.getString("propertyPage.variables.description"));
 	}
 	
 	protected Control createContents(Composite parent) {
@@ -70,11 +70,11 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		table.setHeaderVisible(true);
 		
 		TableColumn column1 = new TableColumn(table, SWT.NULL);
-		column1.setText("Name");
+		column1.setText(ClickPlugin.getString("propertyPage.variables.column.name"));
 		column1.setWidth(80);
 		
 		TableColumn column2 = new TableColumn(table, SWT.NULL);
-		column2.setText("Type");
+		column2.setText(ClickPlugin.getString("propertyPage.variables.column.type"));
 		column2.setWidth(200);
 		
 		Composite buttons = new Composite(composite, SWT.NULL);
@@ -87,7 +87,7 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		buttons.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING));
 		
 		Button addButton = new Button(buttons, SWT.PUSH);
-		addButton.setText("Add");
+		addButton.setText(ClickPlugin.getString("action.add"));
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
@@ -101,7 +101,7 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		});
 		
 		final Button editButton = new Button(buttons, SWT.PUSH);
-		editButton.setText("Edit");
+		editButton.setText(ClickPlugin.getString("action.edit"));
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		editButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
@@ -118,7 +118,7 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		editButton.setEnabled(false);
 		
 		final Button removeButton = new Button(buttons, SWT.PUSH);
-		removeButton.setText("Remove");
+		removeButton.setText(ClickPlugin.getString("action.remove"));
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		removeButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
@@ -220,24 +220,24 @@ public class ClickProjectPropertyPage extends PropertyPage {
 		}
 
 		protected Control createDialogArea(Composite parent) {
-			getShell().setText("Velocity Variable");
+			getShell().setText(ClickPlugin.getString("propertyPage.variables.dialog.title"));
 			
 			Composite composite = new Composite(parent, SWT.NULL);
 			composite.setLayout(new GridLayout(3, false));
 			composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
-			new Label(composite, SWT.NULL).setText("Name:");
+			new Label(composite, SWT.NULL).setText(ClickPlugin.getString("propertyPage.variables.dialog.name"));
 			name = new Text(composite, SWT.BORDER);
 			name.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			name.setText(model.name);
 			new Label(composite, SWT.NULL);
 			
-			new Label(composite, SWT.NULL).setText("Type:");
+			new Label(composite, SWT.NULL).setText(ClickPlugin.getString("propertyPage.variables.dialog.type"));
 			type = new Text(composite, SWT.BORDER);
 			type.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			type.setText(model.type);
 			Button browseButton = new Button(composite, SWT.PUSH);
-			browseButton.setText("Browse...");
+			browseButton.setText(ClickPlugin.getString("action.browse"));
 			browseButton.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent evt){
 					Shell shell = type.getShell();
