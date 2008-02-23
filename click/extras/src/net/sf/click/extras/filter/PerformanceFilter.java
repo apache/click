@@ -90,11 +90,11 @@ import org.w3c.dom.Element;
  * configurable threshold. The default threshold is 384 bytes.
  * <p/>
  * Click *.htm pages are automatically compressed by the filter.
- * 
+ *
  * <h3>Page Template Import References</h3>
- * 
+ *
  * To import static control references in your page template you simply reference
- * the <tt class="blue">$cssImports</tt> and <tt class="blue">$jsImports</tt>. 
+ * the <tt class="blue">$cssImports</tt> and <tt class="blue">$jsImports</tt>.
  * For example:
  *
  * <pre class="codeHtml">
@@ -105,13 +105,13 @@ import org.w3c.dom.Element;
  * &lt;body&gt;
  * <span class="red">$table</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span></pre>
- * 
- * CSS imports should be included in the head section of your page, and the 
+ *
+ * CSS imports should be included in the head section of your page, and the
  * JavaScript imports should be included at the bottom of your page to support
  * progressive rendering in the browser.
- * 
+ *
  * <h3>Click Pages</h3>
  *
  * <h3>Configuration</h3>

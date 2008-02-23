@@ -194,7 +194,7 @@ import org.apache.commons.lang.StringUtils;
  * The Form control automatically deploys the control CSS style sheet
  * (<tt>control.css</tt>) and JavaScript file (<tt>control.js</tt>) to
  * the application directory <tt>/click</tt>.
- * To import these files and any form control imports simply reference 
+ * To import these files and any form control imports simply reference
  * <span class="blue">$cssImports</span> and <span class="blue">$jsImports</span>
  * in the page template. For example:
  *
@@ -206,7 +206,7 @@ import org.apache.commons.lang.StringUtils;
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span></pre>
  *
  * <a name="form-layout"><h3>Form Layout</h3></a>

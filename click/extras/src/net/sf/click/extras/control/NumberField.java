@@ -72,7 +72,7 @@ import net.sf.click.util.ClickUtils;
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span> </pre>
  *
  *

@@ -58,7 +58,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span> </pre>
  *
  * The default Calendar style is 'system' which has a similar appearance

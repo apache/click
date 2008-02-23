@@ -108,7 +108,7 @@ import org.apache.commons.lang.math.NumberUtils;
  * &lt;body&gt;
  * <span class="red">$table</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span></pre>
  *
  * The table CSS style sheet is adapted from the DisplayTag <tt>screen.css</tt>

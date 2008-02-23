@@ -2,6 +2,6 @@ package template.page;
 
 public class LoginPage extends BorderPage {
 
-	public String title = "Login";
+    public String title = "Login";
 
 }

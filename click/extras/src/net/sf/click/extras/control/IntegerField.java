@@ -41,7 +41,7 @@ package net.sf.click.extras.control;
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span> </pre>
  *
  * The InteferField has left justified horizontal text alignment,
