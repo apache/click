@@ -400,6 +400,8 @@
       <replacetabs srcdir="extras/src" includes="**/*.java"/>
       <linetrim srcdir="examples/src" includes="**/*.java"/>
       <replacetabs srcdir="examples/src" includes="**/*.java"/>
+      <linetrim srcdir="template/src" includes="**/*.java"/>
+      <replacetabs srcdir="template/src" includes="**/*.java"/>
    </target>
 
  
@@ -654,6 +656,9 @@ Please ensure you have configured build.properties</echo>
       <copy 
       	todir="../${project-name}/WebContent/WEB-INF/lib"
       	file="dist/click-extras-${version}.jar"/>
+      <copy 
+      	todir="../${project-name}/WebContent/WEB-INF/lib"
+      	file="lib/${jar.log4j}"/>
       <copy 
       	todir="../${project-name}/lib"
       	file="lib/servlet-api-2.3.jar"/>
