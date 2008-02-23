@@ -43,9 +43,9 @@ import net.sf.click.control.TextField;
  * &lt;body&gt;
  * <span class="red">$form</span>
  * &lt;/body&gt;
- * &lt;/html&gt; 
+ * &lt;/html&gt;
  * <span class="blue">$jsImports</span> </pre>
- * 
+ *
  * <p/>
  * See also W3C HTML reference
  * <a title="W3C HTML 4.01 Specification"
