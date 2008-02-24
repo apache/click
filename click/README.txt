@@ -45,4 +45,5 @@ The main Ant targets include:
     get-deps-proxy        download JAR dependencies via proxy
     help                  display the Help message
     javadoc               create Javadoc HTML files
+    project-quick-start   build application template
 
