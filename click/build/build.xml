@@ -461,6 +461,7 @@ Main targets:
 	get-deps-proxy        download JAR dependencies via proxy
 	help                  display the Help message
 	javadoc               create Javadoc HTML files
+    project-quick-start   build application template
       	
 Environment:
 
@@ -630,17 +631,17 @@ Please ensure you have configured build.properties</echo>
    <target name="test-all" depends="test-framework, test-extras"/>
    
 	
-   <target name="project-quick-start" description="build starter application">
+   <target name="project-quick-start" description="build application template">
       <input 
       	message="Please enter the project name (e.g. quickstart):" 
         addproperty="project-name"/>
       <input 
       	message="Please enter the root package name (e.g. com.${project-name}):" 
         addproperty="package-name"/>
-    <input 
+      <input 
     	message="Please enter the web app context path:" 
     	defaultvalue="${project-name}"
-      addproperty="context-path"/>
+        addproperty="context-path"/>
       <delete 
       	dir="../${project-name}" 
       	quiet="false"/>
