@@ -84,11 +84,17 @@
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="petclinic/war/WEB-INF/lib"/>
       <property name="repository" value="http://www.ibiblio.org/maven"/>
+       <get src="${repository}/net.sf.click/jars/${jar.click}" verbose="true"
+            dest="${dir.weblib}/${jar.click}"
+            usetimestamp="true"/>
+       <get src="${repository}/net.sf.click/jars/${jar.click-extras}" verbose="true"
+            dest="${dir.weblib}/${jar.click-extras}"
+            usetimestamp="true"/>
       <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
            dest="${dir.weblib}/${jar.cayenne}"
            usetimestamp="true"/>
        <get src="${repository}/org.objectstyle.ashwood/jars/${jar.ashwood}" verbose="true"
-            dest="${dir.weblib}/${jar.cayenne}"
+            dest="${dir.weblib}/${jar.ashwood}"
             usetimestamp="true"/>       
       <get src="${repository}/hsqldb/jars/${jar.hsqldb}" verbose="true"
            dest="${dir.weblib}/${jar.hsqldb}"
