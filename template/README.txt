@@ -4,6 +4,8 @@ Click Quick Start Application
 
 The structure of this web application is detailed below:
 
+ +---[lib]                  Build time JAR libs directory
+ |
  +---[src]                  Java source files directory
  |
  +---[webapp]               Web application root directory
@@ -26,7 +28,9 @@ The structure of this web application is detailed below:
  |         |
  |         +---web.xml      Web configuration file
  |
- +---build.xml
+ +---build.xml              Ant build script file
+ |
+ +---README.txt             Read Me description file
 
 
 To build the application WAR file using the Ant command:
