@@ -87,6 +87,9 @@
       <get src="${repository}/org.objectstyle.cayenne/jars/${jar.cayenne}" verbose="true"
            dest="${dir.weblib}/${jar.cayenne}"
            usetimestamp="true"/>
+       <get src="${repository}/org.objectstyle.ashwood/jars/${jar.ashwood}" verbose="true"
+            dest="${dir.weblib}/${jar.cayenne}"
+            usetimestamp="true"/>       
       <get src="${repository}/hsqldb/jars/${jar.hsqldb}" verbose="true"
            dest="${dir.weblib}/${jar.hsqldb}"
            usetimestamp="true"/>
