@@ -1,0 +1,32 @@
+<h2>#if ($form.fields.id.value == "") New #end  Visit:</h2>
+
+<p/>
+<b>Pet:</b>
+<table border="1" cellpadding="2" cellspacing="1">
+  <th>Name</th> <th>Birth Date</th> <th>Type</th> <th>Owner</th>
+  <tr>
+    <td> $pet.name </td>
+    <td> $format.date($pet.birthDate, "yyyy-MM-dd") </td>
+    <td> $pet.type.name </td>
+    <td> $pet.owner.firstName $pet.owner.lastName </td>
+  </tr>
+</table>
+<p/>
+	
+$form
+
+<p/>
+<br/>
+<b>Previous Visits:</b>
+<table border="true">
+  <th>Date</th> <th>Description</th>
+  #foreach ($visit in $pet.visits)
+	#if (!$visit.new)
+    <tr>
+      <td> $format.date($visit.date, "yyyy-MM-dd") </td>
+      <td> $visit.description </td>
+    </tr>
+	#end
+  #end
+</table>
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map project-version="1.1">
+	<property name="defaultPackage" value="org.springframework.samples.petclinic.model"/>
+	<property name="defaultSuperclass" value="org.springframework.samples.petclinic.model.Entity"/>
+	<db-entity name="OWNERS">
+		<db-attribute name="ADDRESS" type="VARCHAR" length="255"/>
+		<db-attribute name="CITY" type="VARCHAR" length="80"/>
+		<db-attribute name="FIRST_NAME" type="VARCHAR" length="30"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="LAST_NAME" type="VARCHAR" length="30"/>
+		<db-attribute name="TELEPHONE" type="VARCHAR" length="20"/>
+	</db-entity>
+	<db-entity name="PETS">
+		<db-attribute name="BIRTH_DATE" type="DATE"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="NAME" type="VARCHAR" length="30"/>
+		<db-attribute name="OWNER_ID" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="TYPE_ID" type="INTEGER" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="SPECIALTIES">
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="NAME" type="VARCHAR" length="80"/>
+	</db-entity>
+	<db-entity name="TYPES">
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="NAME" type="VARCHAR" length="80"/>
+	</db-entity>
+	<db-entity name="VETS">
+		<db-attribute name="FIRST_NAME" type="VARCHAR" length="30"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="LAST_NAME" type="VARCHAR" length="30"/>
+	</db-entity>
+	<db-entity name="VET_SPECIALTIES">
+		<db-attribute name="SPECIALTY_ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="VET_ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+	</db-entity>
+	<db-entity name="VISITS">
+		<db-attribute name="DESCRIPTION" type="VARCHAR" length="255"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="PET_ID" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="VISIT_DATE" type="DATE"/>
+	</db-entity>
+	<obj-entity name="Owner" className="org.springframework.samples.petclinic.model.Owner" dbEntityName="OWNERS" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="ADDRESS"/>
+		<obj-attribute name="city" type="java.lang.String" db-attribute-path="CITY"/>
+		<obj-attribute name="firstName" type="java.lang.String" db-attribute-path="FIRST_NAME"/>
+		<obj-attribute name="lastName" type="java.lang.String" db-attribute-path="LAST_NAME"/>
+		<obj-attribute name="telephone" type="java.lang.String" db-attribute-path="TELEPHONE"/>
+	</obj-entity>
+	<obj-entity name="Pet" className="org.springframework.samples.petclinic.model.Pet" dbEntityName="PETS" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="birthDate" type="java.util.Date" db-attribute-path="BIRTH_DATE"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="PetType" className="org.springframework.samples.petclinic.model.PetType" dbEntityName="TYPES" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="Specialty" className="org.springframework.samples.petclinic.model.Specialty" dbEntityName="SPECIALTIES" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="Vet" className="org.springframework.samples.petclinic.model.Vet" dbEntityName="VETS" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="firstName" type="java.lang.String" db-attribute-path="FIRST_NAME"/>
+		<obj-attribute name="lastName" type="java.lang.String" db-attribute-path="LAST_NAME"/>
+	</obj-entity>
+	<obj-entity name="Visit" className="org.springframework.samples.petclinic.model.Visit" dbEntityName="VISITS" superClassName="org.springframework.samples.petclinic.model.Entity">
+		<obj-attribute name="date" type="java.util.Date" db-attribute-path="VISIT_DATE"/>
+		<obj-attribute name="description" type="java.lang.String" db-attribute-path="DESCRIPTION"/>
+	</obj-entity>
+	<db-relationship name="petsArray" source="OWNERS" target="PETS" toMany="true">
+		<db-attribute-pair source="ID" target="OWNER_ID"/>
+	</db-relationship>
+	<db-relationship name="toOwners" source="PETS" target="OWNERS" toMany="false">
+		<db-attribute-pair source="OWNER_ID" target="ID"/>
+	</db-relationship>
+	<db-relationship name="toTypes" source="PETS" target="TYPES" toMany="false">
+		<db-attribute-pair source="TYPE_ID" target="ID"/>
+	</db-relationship>
+	<db-relationship name="visitsArray" source="PETS" target="VISITS" toMany="true">
+		<db-attribute-pair source="ID" target="PET_ID"/>
+	</db-relationship>
+	<db-relationship name="vetSpecialtiesArray" source="SPECIALTIES" target="VET_SPECIALTIES" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="ID" target="SPECIALTY_ID"/>
+	</db-relationship>
+	<db-relationship name="petsArray" source="TYPES" target="PETS" toMany="true">
+		<db-attribute-pair source="ID" target="TYPE_ID"/>
+	</db-relationship>
+	<db-relationship name="vetSpecialtiesArray" source="VETS" target="VET_SPECIALTIES" toDependentPK="true" toMany="true">
+		<db-attribute-pair source="ID" target="VET_ID"/>
+	</db-relationship>
+	<db-relationship name="toSpecialties" source="VET_SPECIALTIES" target="SPECIALTIES" toMany="false">
+		<db-attribute-pair source="SPECIALTY_ID" target="ID"/>
+	</db-relationship>
+	<db-relationship name="toVets" source="VET_SPECIALTIES" target="VETS" toMany="false">
+		<db-attribute-pair source="VET_ID" target="ID"/>
+	</db-relationship>
+	<db-relationship name="toPets" source="VISITS" target="PETS" toMany="false">
+		<db-attribute-pair source="PET_ID" target="ID"/>
+	</db-relationship>
+	<obj-relationship name="pets" source="Owner" target="Pet" deleteRule="Cascade" db-relationship-path="petsArray"/>
+	<obj-relationship name="owner" source="Pet" target="Owner" db-relationship-path="toOwners"/>
+	<obj-relationship name="type" source="Pet" target="PetType" db-relationship-path="toTypes"/>
+	<obj-relationship name="visits" source="Pet" target="Visit" deleteRule="Cascade" db-relationship-path="visitsArray"/>
+	<obj-relationship name="specialties" source="Vet" target="Specialty" db-relationship-path="vetSpecialtiesArray.toSpecialties"/>
+	<obj-relationship name="pet" source="Visit" target="Pet" db-relationship-path="toPets"/>
+	<query name="OwnerSearch" factory="org.objectstyle.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="Owner">
+		<prefetch>pets</prefetch>
+		<qualifier><![CDATA[lastName likeIgnoreCase $name]]></qualifier>
+		<ordering><![CDATA[firstName]]></ordering>
+		<ordering><![CDATA[lastName]]></ordering>
+	</query>
+</data-map>

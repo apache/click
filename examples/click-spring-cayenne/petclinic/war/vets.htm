@@ -1,0 +1,18 @@
+<h2>Veterinarians:</h2>
+
+<table border="1" cellpadding="2" cellspacing="1">
+	<th>Name</th><th>Specialties</th>
+	#foreach ($vet in $vets)
+    <tr>
+		<td>$vet.firstName $vet.lastName</td>
+		<td>
+		#foreach ($specialty in $vet.specialties)
+			$specialty.name
+		#end
+		#if ($vet.nrOfSpecialties == 0)
+			none
+		#end
+    	</td>
+    </tr>
+	#end
+</table>

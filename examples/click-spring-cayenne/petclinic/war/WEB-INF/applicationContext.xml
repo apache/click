@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<!-- Application context definition for Petclinic on Cayenne -->
+<beans>
+    
+	<!-- ========================= RESOURCE DEFINITIONS ========================= -->
+	<!-- Configurer that replaces ${...} placeholders with values from a properties file -->
+	<!-- (in this case, JDBC-related settings for the dataSource definition below) -->
+	<bean id="propertyConfigurer" 
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>/WEB-INF/jdbc.properties</value>
+		</property>
+	</bean>
+    
+	<!-- Local DataSource that works in any environment -->
+	<bean id="dataSource" 
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>${jdbc.driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc.url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc.username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc.password}</value>
+		</property>
+	</bean>
+    
+	<!-- JNDI DataSource for J2EE environments -->
+	<!--
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+		<property name="jndiName"><value>java:comp/env/jdbc/petclinic</value></property>
+	</bean>
+	-->
+	<!-- Transaction manager for a single JDBC DataSource (alternative to JTA) -->
+	<bean id="transactionManager" 
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref local="dataSource"/>
+		</property>
+	</bean>
+    
+	<!-- =============== CAYENNE STACK AND INTERCEPTOR DEFINITIONS ========================= -->
+	<bean id="cayenneWebInterceptor" 
+		class="org.springframework.orm.cayenne.WebInterceptor">
+		<!-- configuring to use default domain from configuration -->
+		<constructor-arg>
+			<ref local="cayenneConfig"/>
+		</constructor-arg>
+	</bean>
+    
+	<!-- Load Cayenne with default location of cayenne.xml and Cayenne-configured DataSource -->
+	<bean id="cayenneConfig" 
+		class="org.springframework.orm.cayenne.ConfigurationFactory">
+		<property name="dataSource">
+			<ref local="dataSource"/>
+		</property>
+	</bean>
+    
+	<!-- ========================= BUSINESS OBJECT DEFINITIONS ========================= -->
+	<!--
+	   Petclinic's central data access object, Cayenne implementation.
+       -->
+	<bean id="clinicTarget" 
+		class="org.springframework.samples.petclinic.service.impl.ClinicServiceImpl">
+		<property name="autoRollback">
+			<value>true</value>
+		</property>
+	</bean>
+    
+	<!--
+		- Transactional proxy for Petclinic's central data access object.
+		- Note that in a real-life app with multiple transaction proxies,
+		- you will probably want to use parent and child bean definitions
+		- as described in the manual, to reduce duplication.
+       -->
+	<bean id="clinic" 
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager">
+			<ref local="transactionManager"/>
+		</property>
+		<property name="target">
+			<ref local="clinicTarget"/>
+		</property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+    
+</beans>

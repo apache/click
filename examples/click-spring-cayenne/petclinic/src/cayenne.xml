@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<domains project-version="1.1">
+<domain name="domain">
+	<property name="cayenne.DataDomain.usingExternalTransactions" value="true"/>
+	<property name="cayenne.DataRowStore.snapshot.size" value="3000"/>
+
+	<map name="petclinic" location="petclinic.map.xml"/>
+
+	<node name="hsqldb"
+		 datasource="hsqldb.driver.xml"
+		 adapter="org.objectstyle.cayenne.dba.hsqldb.HSQLDBAdapter"
+		 factory="org.objectstyle.cayenne.conf.DriverDataSourceFactory">
+			<map-ref name="petclinic"/>
+	 </node>
+</domain>
+</domains>

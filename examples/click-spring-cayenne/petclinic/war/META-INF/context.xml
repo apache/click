@@ -1,0 +1,7 @@
+<Context 
+   path="/click-spring-cayenne" 
+   docBase="${catalina.home}/webapps/click-spring-cayenne" 
+   reloadable="true"
+   antiJARLocking="true">
+
+</Context>

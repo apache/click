@@ -1,0 +1,56 @@
+<h2>Owner Information</h2>
+
+    <table border="0">
+      <tr><td>Name</td><td><b>$owner.firstName $owner.lastName</b></td></tr>
+      <tr><td>Address</td><td>$owner.address</td></tr>
+      <tr><td>City</td><td>$owner.city</td></tr>
+      <tr><td>Telephone </td><td>$owner.telephone</td></tr>
+      <tr>
+        <td colspan="2">
+			$editOwnerButton $deleteOwnerButton
+        </td>
+      </tr>
+    </table>
+    <p/>
+	
+<h3>Pets and Visits</h3>
+
+    #foreach ($pet in $owner.pets)
+    <table border="0">
+      <tr><td valign="top">
+        <table border="0">
+            <tr><td>Name</td><td><b>$pet.name</b></td></tr>
+            <tr><td>Birth Date</td><td>$format.date($pet.birthDate, "yyyy-MM-dd")</td></tr>
+            <tr><td>Type</td><td>$pet.type.name</td></tr>
+            <tr>
+                <td colspan="2">
+                    <form method="GET" action="$context/editPet.htm" name="formEditPet${pet.id}">
+                        <input type="hidden" name="pet.id" value="$pet.id"/>
+                        <input type="submit" value="Edit Pet"/>
+                    </form>
+                    <form method="GET" action="$context/addVisit.htm" name="formVisitPet${pet.id}">
+                        <input type="hidden" name="pet.id" value="$pet.id"/>
+                        <input type="submit" value="Add Visit"/>
+                    </form>
+                </td>
+            </tr>
+        </table>
+      </td><td valign="top">
+        <table border="1" cellpadding="2" cellspacing="1">
+            <th>Visit Date</th><th>Description</th>
+            #foreach ($visit in $pet.visits)
+            <tr>
+                <td> $format.date($visit.date, "yyyy-MM-dd") </td>
+                <td> $visit.description </td>
+            </tr>
+            #end
+        </table>
+        </td></tr>
+    </table>
+    <p/>
+    #end
+
+    <form method="GET" action="$context/editPet.htm" name="formAddPet">
+        <input type="hidden" name="owner.id" value="$owner.id"/>
+        <input type="submit" value="Add New Pet"/>
+    </form>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="cayenne/src"/>
+	<classpathentry kind="src" path="cayenne/test"/>
+	<classpathentry kind="src" path="petclinic/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="petclinic/war/WEB-INF/lib/ashwood-1.1.jar"/>
+	<classpathentry sourcepath="C:/java/cayenne-1.2M9/src/cayenne" kind="lib" path="petclinic/war/WEB-INF/lib/cayenne-nodeps-1.2M9.jar"/>
+	<classpathentry kind="lib" path="petclinic/war/WEB-INF/lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="petclinic/war/WEB-INF/lib/log4j-1.2.9.jar"/>
+	<classpathentry sourcepath="C:/java/spring-framework-1.2.6/src" kind="lib" path="petclinic/war/WEB-INF/lib/spring-1.2.6.jar"/>
+	<classpathentry kind="lib" path="petclinic/war/WEB-INF/lib/click-0.19.jar"/>
+	<classpathentry kind="lib" path="petclinic/war/WEB-INF/lib/click-extras-0.19.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/junit-3.8.1.jar"/>
+	<classpathentry kind="output" path="petclinic/war/WEB-INF/classes"/>
+</classpath>

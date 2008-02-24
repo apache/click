@@ -1,0 +1,131 @@
+2006-02-16 16:01:41,984 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization started
+2006-02-16 16:01:42,000 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/click-spring-cayenne]] - Loading Spring root WebApplicationContext
+2006-02-16 16:01:42,343 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext.xml]
+2006-02-16 16:01:42,703 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Bean factory for application context [Root WebApplicationContext]: org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy
+2006-02-16 16:01:42,750 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - 7 beans defined in application context [Root WebApplicationContext]
+2006-02-16 16:01:42,890 INFO [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer] - Loading properties file from ServletContext resource [/WEB-INF/jdbc.properties]
+2006-02-16 16:01:42,921 INFO [org.springframework.core.CollectionFactory] - JDK 1.4+ collections available
+2006-02-16 16:01:42,953 INFO [org.springframework.core.CollectionFactory] - Commons Collections 3.x available
+2006-02-16 16:01:42,968 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@ae1cf]
+2006-02-16 16:01:42,968 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@1ed1dbe]
+2006-02-16 16:01:42,984 INFO [org.springframework.ui.context.support.UiApplicationContextUtils] - Unable to locate ThemeSource with name 'themeSource': using default [org.springframework.ui.context.support.ResourceBundleThemeSource@dc3b82]
+2006-02-16 16:01:42,984 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory] - Pre-instantiating singletons in factory [org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy]
+2006-02-16 16:01:43,015 INFO [org.springframework.jdbc.datasource.DriverManagerDataSource] - Loaded JDBC driver: org.hsqldb.jdbcDriver
+2006-02-16 16:01:43,250 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - started configuration loading.
+2006-02-16 16:01:43,281 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded domain: domain
+2006-02-16 16:01:43,687 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded <map name='petclinic' location='petclinic.map.xml'>.
+2006-02-16 16:01:43,687 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loading <node name='hsqldb' datasource='hsqldb.driver.xml' factory='org.objectstyle.cayenne.conf.DriverDataSourceFactory'>.
+2006-02-16 16:01:43,750 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - using factory: org.springframework.orm.cayenne.ConfigurationFactory$ExternalDataSourceFactory
+2006-02-16 16:01:43,750 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded datasource.
+2006-02-16 16:01:43,890 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded map-ref: petclinic.
+2006-02-16 16:01:43,906 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - finished configuration loading in 656 ms.
+2006-02-16 16:01:44,203 INFO [org.springframework.aop.framework.DefaultAopProxyFactory] - CGLIB2 not available: proxyTargetClass feature disabled
+2006-02-16 16:01:44,406 INFO [org.springframework.web.context.ContextLoader] - Using context class [org.springframework.web.context.support.XmlWebApplicationContext] for root WebApplicationContext
+2006-02-16 16:01:44,421 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization completed in 2437 ms
+2006-02-16 16:02:30,000 INFO [org.springframework.jdbc.datasource.JdbcTransactionObjectSupport] - JDBC 3.0 Savepoint class is available
+2006-02-16 16:06:33,484 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 2 queries.
+2006-02-16 16:06:33,562 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.ADDRESS, t0.CITY, t0.FIRST_NAME, t0.LAST_NAME, t0.TELEPHONE, t0.ID FROM OWNERS t0 WHERE UPPER(t0.LAST_NAME) LIKE UPPER(?) ORDER BY t0.FIRST_NAME, t0.LAST_NAME [bind: '%%'] - prepared in 16 ms.
+2006-02-16 16:06:33,671 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 8 rows. - took 140 ms.
+2006-02-16 16:06:33,687 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.BIRTH_DATE, t0.NAME, t0.OWNER_ID, t0.TYPE_ID, t0.ID FROM PETS t0, OWNERS t1 WHERE t0.OWNER_ID = t1.ID AND (UPPER(t1.LAST_NAME) LIKE UPPER(?)) [bind: '%%'] - prepared in 16 ms.
+2006-02-16 16:06:33,687 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 16 rows. - took 16 ms.
+2006-02-16 16:06:33,687 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:06:36,328 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:06:36,328 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- transaction started.
+2006-02-16 16:06:36,328 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.NAME, t0.ID FROM TYPES t0 WHERE t0.ID = ? [bind: 3]
+2006-02-16 16:06:36,343 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 1 row. - took 15 ms.
+2006-02-16 16:06:36,343 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ transaction committed.
+2006-02-16 16:06:36,343 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:06:36,359 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.VISIT_DATE, t0.DESCRIPTION, t0.PET_ID, t0.ID FROM VISITS t0 WHERE t0.PET_ID = ? [bind: 5] - prepared in 16 ms.
+2006-02-16 16:06:36,359 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 0 rows. - took 16 ms.
+2006-02-16 16:06:36,359 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:07:39,546 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/click-spring-cayenne]] - Closing Spring root WebApplicationContext
+2006-02-16 16:07:39,546 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Closing application context [Root WebApplicationContext]
+2006-02-16 16:07:39,546 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory] - Destroying singletons in factory {org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy}
+2006-02-16 16:24:53,671 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization started
+2006-02-16 16:24:53,671 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/click-spring-cayenne]] - Loading Spring root WebApplicationContext
+2006-02-16 16:24:53,875 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext.xml]
+2006-02-16 16:24:54,171 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Bean factory for application context [Root WebApplicationContext]: org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy
+2006-02-16 16:24:54,234 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - 7 beans defined in application context [Root WebApplicationContext]
+2006-02-16 16:24:54,359 INFO [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer] - Loading properties file from ServletContext resource [/WEB-INF/jdbc.properties]
+2006-02-16 16:24:54,390 INFO [org.springframework.core.CollectionFactory] - JDK 1.4+ collections available
+2006-02-16 16:24:54,406 INFO [org.springframework.core.CollectionFactory] - Commons Collections 3.x available
+2006-02-16 16:24:54,406 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@109dc35]
+2006-02-16 16:24:54,421 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@523be]
+2006-02-16 16:24:54,437 INFO [org.springframework.ui.context.support.UiApplicationContextUtils] - Unable to locate ThemeSource with name 'themeSource': using default [org.springframework.ui.context.support.ResourceBundleThemeSource@1555185]
+2006-02-16 16:24:54,437 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory] - Pre-instantiating singletons in factory [org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy]
+2006-02-16 16:24:54,468 INFO [org.springframework.jdbc.datasource.DriverManagerDataSource] - Loaded JDBC driver: org.hsqldb.jdbcDriver
+2006-02-16 16:24:54,625 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - started configuration loading.
+2006-02-16 16:24:54,625 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded domain: domain
+2006-02-16 16:24:54,906 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded <map name='petclinic' location='petclinic.map.xml'>.
+2006-02-16 16:24:54,921 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loading <node name='hsqldb' datasource='hsqldb.driver.xml' factory='org.objectstyle.cayenne.conf.DriverDataSourceFactory'>.
+2006-02-16 16:24:55,140 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - using factory: org.springframework.orm.cayenne.ConfigurationFactory$ExternalDataSourceFactory
+2006-02-16 16:24:55,281 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded datasource.
+2006-02-16 16:24:55,406 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded map-ref: petclinic.
+2006-02-16 16:24:55,406 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - finished configuration loading in 781 ms.
+2006-02-16 16:24:55,500 INFO [org.springframework.aop.framework.DefaultAopProxyFactory] - CGLIB2 not available: proxyTargetClass feature disabled
+2006-02-16 16:24:55,687 INFO [org.springframework.web.context.ContextLoader] - Using context class [org.springframework.web.context.support.XmlWebApplicationContext] for root WebApplicationContext
+2006-02-16 16:24:55,687 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization completed in 2016 ms
+2006-02-16 16:27:12,359 INFO [org.springframework.jdbc.datasource.JdbcTransactionObjectSupport] - JDBC 3.0 Savepoint class is available
+2006-02-16 16:27:13,171 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 2 queries.
+2006-02-16 16:27:13,265 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.ADDRESS, t0.CITY, t0.FIRST_NAME, t0.LAST_NAME, t0.TELEPHONE, t0.ID FROM OWNERS t0 WHERE UPPER(t0.LAST_NAME) LIKE UPPER(?) ORDER BY t0.FIRST_NAME, t0.LAST_NAME [bind: '%%'] - prepared in 31 ms.
+2006-02-16 16:27:13,343 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 8 rows. - took 109 ms.
+2006-02-16 16:27:13,343 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.BIRTH_DATE, t0.NAME, t0.OWNER_ID, t0.TYPE_ID, t0.ID FROM PETS t0, OWNERS t1 WHERE t0.OWNER_ID = t1.ID AND (UPPER(t1.LAST_NAME) LIKE UPPER(?)) [bind: '%%']
+2006-02-16 16:27:13,359 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 16 rows. - took 16 ms.
+2006-02-16 16:27:13,359 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:27:16,421 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:16,421 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- transaction started.
+2006-02-16 16:27:16,421 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.NAME, t0.ID FROM TYPES t0 WHERE t0.ID = ? [bind: 5]
+2006-02-16 16:27:16,437 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 1 row. - took 16 ms.
+2006-02-16 16:27:16,437 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ transaction committed.
+2006-02-16 16:27:16,437 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:16,453 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.VISIT_DATE, t0.DESCRIPTION, t0.PET_ID, t0.ID FROM VISITS t0 WHERE t0.PET_ID = ? [bind: 9] - prepared in 16 ms.
+2006-02-16 16:27:16,453 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 0 rows. - took 16 ms.
+2006-02-16 16:27:16,453 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:27:24,578 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:24,578 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.NAME, t0.ID FROM TYPES t0
+2006-02-16 16:27:24,578 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 6 rows. - took 0 ms.
+2006-02-16 16:27:24,578 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:27:28,109 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:28,109 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.NAME, t0.ID FROM TYPES t0
+2006-02-16 16:27:28,109 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 6 rows. - took 0 ms.
+2006-02-16 16:27:28,109 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:27:28,156 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:28,156 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.NAME, t0.ID FROM TYPES t0
+2006-02-16 16:27:28,156 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 6 rows. - took 0 ms.
+2006-02-16 16:27:28,156 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:27:28,468 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 1 query.
+2006-02-16 16:27:28,500 INFO [org.objectstyle.cayenne.access.QueryLogger] - UPDATE PETS SET TYPE_ID = ? WHERE ID = ?
+2006-02-16 16:27:28,500 INFO [org.objectstyle.cayenne.access.QueryLogger] - [bind: 2, 9]
+2006-02-16 16:27:28,515 INFO [org.objectstyle.cayenne.access.QueryLogger] - === updated 1 row.
+2006-02-16 16:27:28,515 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.
+2006-02-16 16:45:39,859 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization started
+2006-02-16 16:45:39,859 INFO [org.apache.catalina.core.ContainerBase.[Catalina].[localhost].[/click-spring-cayenne]] - Loading Spring root WebApplicationContext
+2006-02-16 16:45:40,093 INFO [org.springframework.beans.factory.xml.XmlBeanDefinitionReader] - Loading XML bean definitions from ServletContext resource [/WEB-INF/applicationContext.xml]
+2006-02-16 16:45:40,375 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Bean factory for application context [Root WebApplicationContext]: org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy
+2006-02-16 16:45:40,421 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - 7 beans defined in application context [Root WebApplicationContext]
+2006-02-16 16:45:40,546 INFO [org.springframework.beans.factory.config.PropertyPlaceholderConfigurer] - Loading properties file from ServletContext resource [/WEB-INF/jdbc.properties]
+2006-02-16 16:45:40,562 INFO [org.springframework.core.CollectionFactory] - JDK 1.4+ collections available
+2006-02-16 16:45:40,593 INFO [org.springframework.core.CollectionFactory] - Commons Collections 3.x available
+2006-02-16 16:45:40,609 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@6ef7ba]
+2006-02-16 16:45:40,625 INFO [org.springframework.web.context.support.XmlWebApplicationContext] - Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@3bc1a1]
+2006-02-16 16:45:40,656 INFO [org.springframework.ui.context.support.UiApplicationContextUtils] - Unable to locate ThemeSource with name 'themeSource': using default [org.springframework.ui.context.support.ResourceBundleThemeSource@c7057c]
+2006-02-16 16:45:40,656 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory] - Pre-instantiating singletons in factory [org.springframework.beans.factory.support.DefaultListableBeanFactory defining beans [propertyConfigurer,dataSource,transactionManager,cayenneWebInterceptor,cayenneConfig,clinicTarget,clinic]; root of BeanFactory hierarchy]
+2006-02-16 16:45:40,671 INFO [org.springframework.jdbc.datasource.DriverManagerDataSource] - Loaded JDBC driver: org.hsqldb.jdbcDriver
+2006-02-16 16:45:40,828 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - started configuration loading.
+2006-02-16 16:45:40,843 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded domain: domain
+2006-02-16 16:45:41,250 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded <map name='petclinic' location='petclinic.map.xml'>.
+2006-02-16 16:45:41,250 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loading <node name='hsqldb' datasource='hsqldb.driver.xml' factory='org.objectstyle.cayenne.conf.DriverDataSourceFactory'>.
+2006-02-16 16:45:41,312 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - using factory: org.springframework.orm.cayenne.ConfigurationFactory$ExternalDataSourceFactory
+2006-02-16 16:45:41,312 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded datasource.
+2006-02-16 16:45:41,437 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - loaded map-ref: petclinic.
+2006-02-16 16:45:41,437 INFO [org.objectstyle.cayenne.conf.RuntimeLoadDelegate] - finished configuration loading in 609 ms.
+2006-02-16 16:45:41,718 INFO [org.springframework.aop.framework.DefaultAopProxyFactory] - CGLIB2 not available: proxyTargetClass feature disabled
+2006-02-16 16:45:41,906 INFO [org.springframework.web.context.ContextLoader] - Using context class [org.springframework.web.context.support.XmlWebApplicationContext] for root WebApplicationContext
+2006-02-16 16:45:41,906 INFO [org.springframework.web.context.ContextLoader] - Root WebApplicationContext: initialization completed in 2047 ms
+2006-02-16 16:46:13,109 INFO [org.springframework.jdbc.datasource.JdbcTransactionObjectSupport] - JDBC 3.0 Savepoint class is available
+2006-02-16 16:46:39,562 INFO [org.objectstyle.cayenne.access.QueryLogger] - --- will run 2 queries.
+2006-02-16 16:46:39,625 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.ADDRESS, t0.CITY, t0.FIRST_NAME, t0.LAST_NAME, t0.TELEPHONE, t0.ID FROM OWNERS t0 WHERE UPPER(t0.LAST_NAME) LIKE UPPER(?) ORDER BY t0.FIRST_NAME, t0.LAST_NAME [bind: '%%'] - prepared in 16 ms.
+2006-02-16 16:46:39,718 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 8 rows. - took 125 ms.
+2006-02-16 16:46:39,718 INFO [org.objectstyle.cayenne.access.QueryLogger] - SELECT t0.BIRTH_DATE, t0.NAME, t0.OWNER_ID, t0.TYPE_ID, t0.ID FROM PETS t0, OWNERS t1 WHERE t0.OWNER_ID = t1.ID AND (UPPER(t1.LAST_NAME) LIKE UPPER(?)) [bind: '%%']
+2006-02-16 16:46:39,718 INFO [org.objectstyle.cayenne.access.QueryLogger] - === returned 16 rows. - took 0 ms.
+2006-02-16 16:46:39,718 INFO [org.objectstyle.cayenne.access.QueryLogger] - +++ no commit - transaction controlled externally.

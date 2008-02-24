@@ -1,0 +1,24 @@
+<h2>Owners:</h2>
+
+<table border="1" cellpadding="1" cellspacing="2">
+  <th>Name</th><th>Address</th><th>City</th><th>Telephone</th><th>Pets</th>
+  #foreach ($owner in $owners)
+    <tr>
+      <td>
+        <form method="POST" action="ownerDetails.htm"/>
+          <input type="hidden" name="owner.id" value="$owner.id"/>
+          <input type="submit" value="$owner.firstName $owner.lastName" />
+        </form>
+      </td>
+      <td>$owner.address</td>
+      <td>$owner.city</td>
+      <td>$owner.telephone</td>
+      <td>
+        #foreach ($pet in $owner.pets)
+          $pet.name
+        #end
+      </td>
+    </tr>
+  #end
+</table>
+
