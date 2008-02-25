@@ -9,19 +9,19 @@ import net.sf.click.Page;
  *  other application pages should extend.
  */
 public class BasePage extends Page {
-	
-	private Logger logger;
+    
+    private Logger logger;
 
-	/**
-	 * Return the class logger.
-	 * 
-	 * @return the class logger
-	 */
-	public Logger getLogger() {
-		if (logger == null) {
-			logger = Logger.getLogger(getClass());
-		}
-		return logger;
-	}
-	
+    /**
+     * Return the class logger.
+     *
+     * @return the class logger
+     */
+    public Logger getLogger() {
+        if (logger == null) {
+            logger = Logger.getLogger(getClass());
+        }
+        return logger;
+    }
+    
 }
