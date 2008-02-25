@@ -9,7 +9,7 @@ import net.sf.click.Page;
  *  other application pages should extend.
  */
 public class BasePage extends Page {
-    
+
     private Logger logger;
 
     /**
@@ -23,5 +23,5 @@ public class BasePage extends Page {
         }
         return logger;
     }
-    
+
 }
