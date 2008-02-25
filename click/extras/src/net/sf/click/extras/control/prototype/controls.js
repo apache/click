@@ -84,7 +84,7 @@ Autocompleter.Base.prototype = {
     Element.hide(this.update);
 
     Event.observe(this.element, "blur", this.onBlur.bindAsEventListener(this));
-    Event.observe(this.element, "keypress", this.onKeyPress.bindAsEventListener(this));
+    Event.observe(this.element, "keyup", this.onKeyPress.bindAsEventListener(this));
   },
 
   show: function() {
