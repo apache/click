@@ -20,7 +20,7 @@
 		<menu label="Simple Form" path="introduction/simple-form.htm"/>
 		<menu label="Advanced Form" path="introduction/advanced-form.htm"/>
 	</menu>
-   
+
 	<menu label="General" path="#">
 		<menu label="Direct Page" path="direct-page.htm"/>
 		<menu label="Exception Demo" path="exception.htm"/>
@@ -93,6 +93,7 @@
 		<menu label="List Panel" path="panel/list-panel-demo.htm"/>
 		<menu label="Tabbed Panel" path="panel/tabbed-panel-demo.htm"/>
 		<menu label="Filter Panel" path="panel/filter-panel-demo.htm"/>
+    <menu label="Column Panel" path="panel/panel-column-demo.htm"/>
    	</menu>
    
 	<menu label=" Charts" path="#" imageSrc="/assets/images/icons-16px/column-chart.png">
