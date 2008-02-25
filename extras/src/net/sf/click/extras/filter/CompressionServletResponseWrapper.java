@@ -146,6 +146,7 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
      * @exception IOException if an input/output error occurs
      */
     public void flushBuffer() throws IOException {
+    	// CLK-323 fix NPE
         if (writer != null) {
             writer.flush();
         } else if (stream != null) {
