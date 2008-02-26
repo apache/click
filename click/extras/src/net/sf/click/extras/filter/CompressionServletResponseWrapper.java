@@ -218,4 +218,15 @@ class CompressionServletResponseWrapper extends HttpServletResponseWrapper {
     public void setContentLength(int length) {
     }
 
+    public void setIntHeader(String header, int value) {
+        if (!"Content-Length".equals(header)) {
+            super.setIntHeader(header, value);
+        }
+    }
+
+    public void setHeader(String header, String value) {
+        if (!"Content-Length".equals(header)) {
+            super.setHeader(header, value);
+        }
+    }
 }
