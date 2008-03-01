@@ -13,11 +13,11 @@ import net.sf.click.util.HtmlStringBuffer;
 public class PanelColumn extends Column {
 
     private static final long serialVersionUID = 1L;
-    
+
     private final Panel panel;
 
     // ------------------------------------------------------------ Constructor
-    
+
     public PanelColumn(String name, Panel panel) {
         super(name);
         this.panel = panel;

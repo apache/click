@@ -4,7 +4,6 @@ BUGS
 * 
 
 CODE
-* Remote role-based security template application to make app server neutral
 * Update QuickStart Guide, using build script & new screen shots
 * CayenneForm override copyFrom to set PropertySelect value
 
