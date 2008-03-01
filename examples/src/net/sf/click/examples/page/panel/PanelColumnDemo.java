@@ -7,6 +7,7 @@ import net.sf.click.control.Panel;
 import net.sf.click.control.Submit;
 import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
+import net.sf.click.examples.page.BorderPage;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -15,42 +16,33 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author rlecheta
  */
-public class PanelColumnDemo extends net.sf.click.examples.page.BorderPage {
+public class PanelColumnDemo extends BorderPage {
 
     public Panel panel = new Panel("panel", "/panel/customerDetailsPanel.htm");
-
     public Form form = new Form();
-
-    private TextField textName;
-
-    private Table table;
-
     public String nameSearch;
+    public Table table = new Table("table");
 
-    /**
-     * @see net.sf.click.examples.page.BorderPage#onInit()
-     */
-    public void onInit() {
-        super.onInit();
+    private TextField textName = new TextField("name", true);
 
+    // ------------------------------------------------------------ Constructor
+
+    public PanelColumnDemo() {
         form.setMethod("get");
-
-        form.add(textName = new TextField("name", "Name: ", true));
+        form.add(textName);
         textName.setFocus(true);
         form.add(new Submit("search", " Search ", this, "onSearch"));
 
-        table = new Table("table");
         // The name of the PanelColumn is "customer" thus ${customer}
         // variable will be available in the template
         table.addColumn(new PanelColumn("customer", panel));
         table.setPageSize(3);
-        addControl(table);
     }
 
+    // --------------------------------------------------------- Event Handlers
+
     /**
-     * Search listener
-     * 
-     * @return
+     * Search button handler
      */
     public boolean onSearch() {
         if (form.isValid()) {
@@ -63,21 +55,25 @@ public class PanelColumnDemo extends net.sf.click.examples.page.BorderPage {
         return false;
     }
 
+    /**
+     * @see net.sf.click.Page#onGet()
+     */
     public void onGet() {
         if (StringUtils.isNotEmpty(nameSearch)) {
 
-            //just fill the value so the user can see it...
+            // Just fill the value so the user can see it
             textName.setValue(nameSearch);
 
-            //and fill the table again...
+            // And fill the table again.
             processSearch(nameSearch);
         }
-
     }
+
+    // -------------------------------------------------------- Private Methods
 
     /**
      * Search the Customer by name and create the Table control
-     * 
+     *
      * @param value
      */
     private void processSearch(String value) {
@@ -86,8 +82,8 @@ public class PanelColumnDemo extends net.sf.click.examples.page.BorderPage {
 
         table.setRowList(list);
 
-        // Set the parameter in the pagination link, 
-        // so in the next page, we can fill the table again...
+        // Set the parameter in the pagination link,
+        // so in the next page, we can fill the table again.
         table.getControlLink().setParameter("nameSearch", value);
     }
 }

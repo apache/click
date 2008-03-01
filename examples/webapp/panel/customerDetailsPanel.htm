@@ -1,9 +1,9 @@
-<div id="customer-$customer.id" style="width: 520px; position: relative;top: $top;left: $left;border:1px solid black;background:#eeeeee;">
-    <i>You can use some cool design here inside the panel...</i>
-    <br/>$customer.name
-    <br/>$customer.email
-    <br/>$customer.age
+<div id="customer-$customer.id" style="width: 520px; position: relative;top: $top;left: $left; border:1px solid black; background:#eeeeee; padding: 4px;">
+    <i style="color:navy;">You can use some cool design here inside the panel...</i>
+    <br/><b>$customer.name</b>
+    <br/>$format.email($customer.email)
+    <br/>$format.string($customer.age) 
     <br/>$format.currency($customer.holdings)
-    <br/>$customer.investments
+    <br/>$format.string($customer.investments)
     <br/>$format.date($customer.dateJoined)
 </div>

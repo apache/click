@@ -12,18 +12,25 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class PanelColumn extends Column {
 
+    private static final long serialVersionUID = 1L;
+    
     private final Panel panel;
 
+    // ------------------------------------------------------------ Constructor
+    
     public PanelColumn(String name, Panel panel) {
         super(name);
         this.panel = panel;
     }
 
+    // --------------------------------------------------------- Event Handlers
+
     /**
-     * @see net.sf.click.control.Column#renderTableDataContent(java.lang.Object, net.sf.click.util.HtmlStringBuffer, net.sf.click.Context, int)
+     * @see Column#renderTableDataContent(Object, HtmlStringBuffer, Context, int)
      */
-    protected void renderTableDataContent(Object row, HtmlStringBuffer buffer, 
+    protected void renderTableDataContent(Object row, HtmlStringBuffer buffer,
         Context context, int rowIndex) {
+
         // We use the name of the column in the model. So if the name is
         // "customer" we can access $customer.name in the "panel.htm" template
         panel.getModel().remove(name);
