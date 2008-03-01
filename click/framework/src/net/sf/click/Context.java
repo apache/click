@@ -124,6 +124,22 @@ public class Context {
         this.response = response;
     }
 
+    /**
+     * Package private constructor to support Mock objects.
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     */
+    Context(HttpServletRequest request, HttpServletResponse response) {
+
+        this.request = request;
+        this.response = response;
+        this.clickService = null;
+        this.context = null;
+        this.config = null;
+        this.isPost = "POST".equalsIgnoreCase(request.getMethod());
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**

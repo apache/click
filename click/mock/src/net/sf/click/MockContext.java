@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,15 +30,15 @@ public class MockContext extends Context {
     // ----------------------------------------------------------- Constructors
     
     private MockContext() {
-        super(null, null, new MockRequest(), null, true, null);
+        super(new MockRequest(), null);
     }
 
     private MockContext(Locale locale) {
-        super(null, null, new MockRequest(locale), null, true, null);
+        super(new MockRequest(locale), null);
     }
     
     private MockContext(HttpServletRequest request) {
-        super(null, null, request, null, true, null);
+        super(request, null);
     }
     
     // --------------------------------------------------------- Public Methods
