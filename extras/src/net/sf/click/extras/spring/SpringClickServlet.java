@@ -55,12 +55,6 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
  *         page = (Page) pageClass.newIntance();
  *     }
  *
- *     <span class="kw">if</span> (page instanceof ApplicationContextAware) {
- *         ApplicationContextAware aware =
- *             (ApplicationContextAware) page;
- *         aware.setApplicationContext(applicationContext);
- *     }
- *
  *     <span class="kw">return</span> page;
  * } </pre>
  *
