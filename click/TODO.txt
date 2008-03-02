@@ -12,10 +12,8 @@ DOCUMENTATION
 * FAQ topic on rendering PDF, Excel documents
 * JSP forwarding
 * add page topic writing directly to response
-* Update SpringClickSerlvet with activatePage doco
 
 BUILD
-* update to Checkstyle 4.3
 
 
 Release Procedures
