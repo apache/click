@@ -21,8 +21,6 @@ A Quick Start application is also included in the <a href="examples.html">Exampl
 <p/>
 The following topics are covered:
 <ul>
-  <li><a href="#ant">Project Quick Start</a>
-  </li>
   <li><a href="#web">Web Application Structure</a>
   </li>
   <li><a href="#jars">JAR Files</a>
@@ -37,102 +35,11 @@ The following topics are covered:
   </li>
   <li><a href="#where">Whats Next</a>
   </li>
+  <li><a href="#ant">Quick Start Project Builder</a>
+  </li>
 </ul>
 
 <p>&nbsp;</p>
-
-<a name="ant" class="heading"><h2>Project Quick Start</h2></a>
-
-The fastest way to get a Click web application up and running is to use the
-Ant task <tt>project-quick-start</tt>. This ant task will build you a functional
-application which includes:
-<ul>
-<li>JEE container security integration, with login screen</li>
-<li>Menu component</li>
-<li>Border Template</li>
-</ul>
-
-<h4>Prerequisites</h4>
-To run the <tt>project-quick-start</tt> ant task please ensure the following 
-requirements are met:
-<ol>
-  <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
-  a JDK installation (1.4 or later).<p/>
-  </li>
-  
-  <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
-  an Ant installation (1.7.0 or later).<p/>
-  </li>
-</ol>
-
-<h4>Running Quickstart</h4>
-
-To run the quick start application builder simply follow the example below:
-
-<blockquote>
-<pre class="codeLog">
-<span class="yellow">ant project-quick-start</span>
-Buildfile: build.xml
-
-project-quick-start:
-    [input] Please enter the project name (e.g. quickstart):
-<span class="yellow">quickstart</span>
-    [input] Please enter the root package name (e.g. com.quickstart):
-<span class="yellow">com.quickstart</span>
-    [input] Please enter the web app context path: [quickstart]
-<span class="yellow">quickstart</span>
-     [copy] Copying 37 files to C:\quickstart\WebContent
-     [copy] Copied 15 empty directories to 1 empty directory under C:\quickstart\WebContent
-     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
-     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
-     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
-     [copy] Copying 1 file to C:\quickstart\lib
-     [copy] Copying 1 file to C:\quickstart\
-     [copy] Copying 1 file to C:\quickstart\
-     [copy] Copying 11 files to C:\quickstart\src\com\quickstart
-
-BUILD SUCCESSFUL
-Total time: 18 seconds</pre>
-</blockquote>
-
-Once the task has been completed you should have a directory structure something 
-like the one below.
-
-<table style="margin: 1em 3em;" class="codeConfig">
-<tr valign="top">
-  <td>
-    <img alt="Quickstart directory structure" src="../images/quick-start-0.png"/>  
-  </td>
-  <td style="padding-left:3em;">
-<pre>
-[quickstart]                Project root directory
- |
- +---[lib]                  Build time JAR libs directory
- |
- +---[src]                  Java source files directory
- |
- +---[WebContent]           Web application root directory
- |    |
- |    +---[admin]           Admin role pages directory 
- |    |
- |    +---[assets]          Application static assets directory 
- |    |    
- |    +---[click]           Click static assets directory 
- |    |    
- |    +---[META-INF]        Tomcat context.xml directory
- |    |
- |    +---[user]            User role pages directory 
- |    |
- |    +---[WEB-INF]         Protected Web Inf directory
- |         |
- |         +---[lib]        Run time JAR libs directory
- |
- +---build.xml              Ant build script file
- |
- +---README.txt             Read Me description file </pre>  
-  </td>
-</tr>
-</table>
 
 
 <a name="web" class="heading"><h2>Web Application Structure</h2></a>
@@ -180,13 +87,13 @@ Your <tt>web.xml</tt> file should contain:
 &lt;web-app&gt;
 
   &lt;servlet&gt;
-    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
     &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
     &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
   
   &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
+    &lt;servlet-name&gt;ClickServlet&lt;/servlet-name&gt;
     &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
   
@@ -273,26 +180,16 @@ Next add a <span class="blue">style.css</span> file to your web root directory:
 <pre class="codeHtml">
 body {
 	font-family: Arial;
-	font-size: 11pt;
-	margin: 0;
-	padding: 0;
 }
 
 #header {
-	background: #FDE3B5 url(/click-quickstart/assets/banner.png) top left no-repeat;
-	border-bottom: 1px solid black;
-	height: 51px;
-	position: relative;
-	width: 100%;
+	background-color: navy;
 }
 
 #title {
 	color: white; 
-	font-size: 24px;
+	font-size: 18px;
 	font-weight: bolder;
-	position: absolute;
-	left: 15px;
-	top: 10px;
 }
 
 #container { 
@@ -364,7 +261,7 @@ root directory. In this file include the HTML content:
 &lt;body&gt;
  
   &lt;div id="header"&gt;
-    &lt;span class="title"&gt;<span class="blue">Quick Start :: $title</span>&lt;/span&gt;
+    &lt;span class="title"&gt;<span class="blue">$title</span>&lt;/span&gt;
   &lt;/div&gt;
   
   &lt;div id="container"&gt;
@@ -510,6 +407,7 @@ form posts.
 [Click] [info ] handleRequest:  /home.htm - 24 ms  </pre>
 
 
+<br/>
 <a name="where" class="heading"><h2>Whats Next ?</h2></a>
 
 After you have the Quick Start application up and running you might be wondering,
@@ -517,24 +415,142 @@ where do I go from here? At this point you are recommended to:
 
 <ol>
 <li>
+ Use the <a href="#ant">Quick Start Project Builder</a> to generate a more
+ complete project example. 
+</li>
+<li>
  Read the Click <a href="best-practices.html">Best Practices</a> topic.  
 </li>
 <li>
  Review the Click <a href="examples.html">Examples</a> application. 
  <p/>
  There is lot of good code examples and patterns you can lift into your application.
-<li>
- Add a <a href="best-practices.html#menus">Menu</a> control 
- to your <tt>border-template.htm</tt> to provide application wide navigation.
-</li>
-<li>
- Integrate J2EE <a href="best-practices.html#security">Security</a> into your
- application. 
- <p/>
- Use the Menu <tt>$menu.isUserInRoles()</tt> method in your menu 
- rendering macro to only display a users authorized menu options.
 </li>
 </ol>
+
+<br/>
+<a name="ant" class="heading"><h2>Quick Start Project Builder</h2></a>
+
+The fastest way to get a Click web application up and running is to use the
+Ant task <tt>project-quick-start</tt>. This ant task will build you a functional
+application which includes:
+<ul>
+<li>JEE container security integration, with login screen</li>
+<li>Menu control for application wide navigation</li>
+<li>Border Template</li>
+</ul>
+
+<h4>Prerequisites</h4>
+To run the <tt>project-quick-start</tt> ant task please ensure the following 
+requirements are met:
+<ol>
+  <li>Ensure <tt>JAVA_HOME</tt> environment variable is set and points to
+  a JDK installation (1.4 or later).<p/>
+  </li>
+  
+  <li>Ensure <tt>ANT_HOME</tt> environment variable is set and points to
+  an Ant installation (1.7.0 or later).<p/>
+  </li>
+</ol>
+
+<h4>Running Quickstart</h4>
+
+To run the quick start application builder simply follow the example below:
+
+<blockquote>
+<pre class="codeLog">
+<span class="yellow">ant project-quick-start</span>
+Buildfile: build.xml
+
+project-quick-start:
+    [input] Please enter the project name (e.g. quickstart):
+<span class="yellow">quickstart</span>
+    [input] Please enter the root package name (e.g. com.quickstart):
+<span class="yellow">com.quickstart</span>
+    [input] Please enter the web app context path: [quickstart]
+<span class="yellow">quickstart</span>
+     [copy] Copying 37 files to C:\quickstart\WebContent
+     [copy] Copied 15 empty directories to 1 empty directory under C:\quickstart\WebContent
+     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
+     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
+     [copy] Copying 1 file to C:\quickstart\WebContent\WEB-INF\lib
+     [copy] Copying 1 file to C:\quickstart\lib
+     [copy] Copying 1 file to C:\quickstart\
+     [copy] Copying 1 file to C:\quickstart\
+     [copy] Copying 11 files to C:\quickstart\src\com\quickstart
+
+BUILD SUCCESSFUL
+Total time: 18 seconds</pre>
+</blockquote>
+
+Once the task has been completed you should have a directory structure something 
+like the one below.
+
+<table style="margin: 1em 0em;" class="codeConfig">
+<tr valign="top">
+  <td>
+    <img alt="Quickstart directory structure" src="../images/quick-start-0.png"/>  
+  </td>
+  <td style="padding-left:1em;">
+<pre>
+[quickstart]             Project root directory
+ |
+ +---[lib]               Build time JAR libs directory
+ |
+ +---[src]               Java source files directory
+ |
+ +---[WebContent]        Web application root directory
+ |    |
+ |    +---[admin]        Admin role pages directory 
+ |    |
+ |    +---[assets]       Application static assets directory 
+ |    |    
+ |    +---[click]        Click static assets directory 
+ |    |    
+ |    +---[META-INF]     Tomcat context.xml directory
+ |    |
+ |    +---[user]         User role pages directory 
+ |    |
+ |    +---[WEB-INF]      Protected Web Inf directory
+ |         |
+ |         +---[lib]     Run time JAR libs directory
+ |
+ +---build.xml           Ant build script file
+ |
+ +---README.txt          Read Me description file </pre>  
+  </td>
+</tr>
+</table>
+
+<h4>Deploying to Tomcat</h4>
+
+To run the quickstart application on Tomcat you need to configure
+<tt>user</tt> and <tt>admin</tt> security roles and add some users. To do this add a 
+<tt>tomcat-users.xml</tt> file to the <tt>$TOMCAT\conf</tt> directory. For example:
+
+<pre class="codeConfig">
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;tomcat-users&gt;
+  &lt;role rolename="user"/&gt;
+  &lt;role rolename="admin"/&gt;
+  &lt;user username="user1" password="password" roles="user"/&gt;
+  &lt;user username="admin1" password="password" roles="user,admin"/&gt;
+&lt;/tomcat-users&gt;
+</pre>
+
+For other JEE application server you will need to study their specific security
+configuration.
+<p/>
+Next copy the quickstart.war file to the <tt>$TOMCAT\webapps</tt> directory and
+login to your application as the user: <tt>admin1 / password</tt>
+
+<table style="margin: 1em;border:1px solid #c0c0c0;">
+<tr valign="top">
+  <td>
+    <img alt="Quick Start Home Page" src="../images/quick-start-4.png"/>  
+  </td>
+</tr>
+</table>
 
 </body>
 </html>
