@@ -14,7 +14,7 @@
       <description>Click Description</description>
     </project-facet>
 
-    <project-facet-version facet="click" version="1.3.1">
+    <project-facet-version facet="click" version="1.4">
        <constraint>
         <and>
           <requires facet="jst.web" version="[2.3"/>
@@ -26,7 +26,7 @@
           facet="click"
           id="click.install"
           type="install"
-          version="1.3.1">
+          version="1.4">
       <delegate class="net.sf.clickide.core.facet.ClickFacetInstallDelegate"/>
       <config-factory class="net.sf.clickide.core.facet.ClickFacetInstallDataModelProvider"/>
       <!--
@@ -38,7 +38,7 @@
        facet="click"
        id="click.uninstall"
        type="uninstall"
-       version="1.3.1">
+       version="1.4">
       <delegate class="net.sf.clickide.core.facet.ClickFacetUninstallDelegate"/>
  	</action>
   </extension>
@@ -46,7 +46,7 @@
   <extension point="org.eclipse.wst.common.project.facet.core.runtimes">
     <supported>
       <runtime-component any="true"/>
-      <facet id="click" version="1.3.1"/>
+      <facet id="click" version="1.4"/>
     </supported>
   </extension>
   
@@ -318,10 +318,14 @@
   <extension
         point="org.eclipse.ui.propertyPages">
       <page
-            objectClass="org.eclipse.core.resources.IProject"
-            name="Click"
-            adaptable="true"
             class="net.sf.clickide.preferences.ClickProjectPropertyPage"
-            id="net.sf.clickide.preferences.ClickProjectPropertyPage" />
+            id="net.sf.clickide.preferences.ClickProjectPropertyPage"
+            name="Click">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+            </adapt>
+         </enabledWhen>
+      </page>
   </extension>
 </plugin>

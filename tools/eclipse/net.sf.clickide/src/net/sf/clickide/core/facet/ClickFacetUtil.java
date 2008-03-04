@@ -14,13 +14,13 @@ import org.eclipse.core.runtime.Path;
  */
 public class ClickFacetUtil {
 	
-	public static String CLICK_DIR = "click-1.3.1";
+	public static String CLICK_DIR = "click-1.4";
 	public static String CAYENNE_DIR = "cayenne-2.0.4";
 	public static String SPRING_DIR = "spring-1.2.9";
 	
 	public static final String[] COPY_FILES = {
-		"/lib/click-1.3.1.jar",
-		"/lib/click-extras-1.3.1.jar",
+		"/lib/click-1.4.jar",
+		"/lib/click-extras-1.4.jar",
 		"/click.xml",
 	};
 	
