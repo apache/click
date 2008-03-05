@@ -42,6 +42,8 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 	
 	protected abstract IAttributeEditor getAttributeEditor(String elementName);
 	
+	protected abstract void createMenu(IDOMElement element);
+	
 	public void initModel(IStructuredModel model) {
 		sash = new SashForm(form.getBody(), SWT.HORIZONTAL);
 		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -120,6 +122,26 @@ public abstract class AbstractMasterDetailEditor extends AbstractFormEditor {
 		});
 		
 		toolkit.paintBordersFor(left);
+	}
+	
+	public void updateMenu(){
+		newMenu.removeAll();
+		
+		IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+		Object obj = selection.getFirstElement();
+		
+		if(obj instanceof IDOMElement){
+			IDOMElement element = (IDOMElement)obj;
+			
+			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP)){
+				deleteAction.setEnabled(false);
+			} else {
+				deleteAction.setEnabled(true);
+				deleteAction.setElement(element);
+			}
+			
+			createMenu(element);
+		}
 	}
 
 	public void modelUpdated(IStructuredModel model) {
