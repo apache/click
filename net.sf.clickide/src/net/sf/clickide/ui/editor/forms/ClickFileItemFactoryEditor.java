@@ -1,142 +1,21 @@
 package net.sf.clickide.ui.editor.forms;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ClickUtils;
 import net.sf.clickide.ui.editor.actions.ElementAppendAction;
-import net.sf.clickide.ui.editor.actions.ElementRemoveAction;
 import net.sf.clickide.ui.editor.attrs.FileItemFactoryAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.IAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.PropertyAttributeEditor;
 
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
  * 
  * @author Naoki Takezoe
  */
-public class ClickFileItemFactoryEditor extends AbstractFormEditor {
+public class ClickFileItemFactoryEditor extends AbstractMasterDetailEditor {
 
-	private SashForm sash;
-	private TreeViewer viewer;
-	private Composite currentEditor;
-	
-	private MenuManager menu;
-	private MenuManager newMenu;
-	private ElementRemoveAction deleteAction = new ElementRemoveAction();
-	
-	public void initModel(IStructuredModel model) {
-		sash = new SashForm(form.getBody(), SWT.HORIZONTAL);
-		sash.setLayoutData(new GridData(GridData.FILL_BOTH));
-		sash.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-		
-		final Composite left = toolkit.createComposite(sash);
-		left.setLayoutData(new GridData(GridData.FILL_BOTH));
-		left.setLayout(new FillLayout());
-		
-		Section headerSection = toolkit.createSection(left, Section.DESCRIPTION|Section.TITLE_BAR);
-		headerSection.setText(ClickPlugin.getString("editor.clickXML.fileUpload"));
-		
-		Composite detailComposite = toolkit.createComposite(sash);
-		detailComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		detailComposite.setLayout(new FillLayout());
-		
-		Section detailSection = toolkit.createSection(detailComposite, Section.DESCRIPTION|Section.TITLE_BAR);
-		detailSection.setText(ClickPlugin.getString("editor.clickXML.details"));
-		
-		final Composite right = toolkit.createComposite(detailSection);
-		right.setLayout(new FillLayout());
-		detailSection.setClient(right);
-		
-		Tree tree = toolkit.createTree(headerSection, SWT.NULL);
-		tree.setLayoutData(new GridData(GridData.FILL_BOTH));
-		headerSection.setClient(tree);
-		
-		List acceptElements = new ArrayList();
-		acceptElements.add(ClickPlugin.TAG_FILE_ITEM_FACTORY);
-		acceptElements.add(ClickPlugin.TAG_PROPERTY);
-		
-		viewer = new TreeViewer(tree);
-		viewer.setContentProvider(new ClickTreeContentProvider(acceptElements));
-		viewer.setLabelProvider(new ClickTreeLabelProvider());
-		viewer.addSelectionChangedListener(new ISelectionChangedListener(){
-			public void selectionChanged(SelectionChangedEvent event){
-				if(currentEditor!=null){
-					currentEditor.dispose();
-				}
-				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				Object obj = selection.getFirstElement();
-				if(obj != null){
-					if(obj instanceof IDOMElement){
-						if(((IDOMElement)obj).getNodeName().equals(ClickPlugin.TAG_FILE_ITEM_FACTORY)){
-							IAttributeEditor editor = new FileItemFactoryAttributeEditor();
-							currentEditor = editor.createForm(toolkit, right, (IDOMElement)obj);
-						}
-						if(((IDOMElement)obj).getNodeName().equals(ClickPlugin.TAG_PROPERTY)){
-							IAttributeEditor editor = new PropertyAttributeEditor();
-							currentEditor = editor.createForm(toolkit, right, (IDOMElement)obj);
-						}
-					}
-				}
-				right.layout();
-			}
-		});
-		
-		viewer.setInput(model);
-		viewer.expandAll();
-		
-		menu = new MenuManager();
-		newMenu = new MenuManager(ClickPlugin.getString("action.new"));
-		menu.add(newMenu);
-		menu.add(new Separator());
-		menu.add(deleteAction);
-		tree.setMenu(menu.createContextMenu(tree));
-		tree.addSelectionListener(new SelectionAdapter(){
-			public void widgetSelected(SelectionEvent evt){
-				updateMenu();
-			}
-		});
-		tree.addKeyListener(new KeyAdapter(){
-			public void keyReleased(KeyEvent e) {
-				if(e.keyCode == SWT.DEL && deleteAction.isEnabled()){
-					deleteAction.run();
-				}
-			}
-		});
-		
-		toolkit.paintBordersFor(left);
-	}
-
-	public void modelUpdated(IStructuredModel model){
-		viewer.setSelection(null);
-		viewer.refresh();
-	}
-	
-	public void setFocus() {
-		form.setFocus();
-	}
-	
 	public void updateMenu(){
 		newMenu.removeAll();
 		
@@ -165,12 +44,19 @@ public class ClickFileItemFactoryEditor extends AbstractFormEditor {
 			}
 		}
 	}
-	
-	public Object getAdapter(Class adapter) {
-		if(adapter.equals(TreeViewer.class)){
-			return this.viewer;
+
+	protected String[] getAcceptElementNames() {
+		return new String[]{ClickPlugin.TAG_FILE_ITEM_FACTORY, ClickPlugin.TAG_PROPERTY};
+	}
+
+	protected IAttributeEditor getAttributeEditor(String elementName) {
+		if(elementName.equals(ClickPlugin.TAG_FILE_ITEM_FACTORY)){
+			return new FileItemFactoryAttributeEditor();
 		}
-		return super.getAdapter(adapter);
+		if(elementName.equals(ClickPlugin.TAG_PROPERTY)){
+			return new PropertyAttributeEditor();
+		}
+		return null;
 	}
 
 }
