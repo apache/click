@@ -153,9 +153,9 @@ public class AttributeEditorUtils {
 					Control[] controls = parent.getChildren();
 					Text text = null;
 					for(int i=0;i<controls.length;i++){
-						if(i>0 && controls[i-1]==link){
+						if(i>0 && controls[i-1]==link && controls[i] instanceof Composite){
 							Composite composite = (Composite)controls[i];
-							text = (Text)composite.getChildren()[0];
+							text = (Text)((Composite)composite.getChildren()[0]).getChildren()[0];
 						}
 					}
 					if(text!=null && !text.getText().equals("")){
