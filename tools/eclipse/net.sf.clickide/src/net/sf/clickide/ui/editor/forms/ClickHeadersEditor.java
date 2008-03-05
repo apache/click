@@ -6,7 +6,6 @@ import net.sf.clickide.ui.editor.actions.ElementAppendAction;
 import net.sf.clickide.ui.editor.attrs.HeaderAttributeEditor;
 import net.sf.clickide.ui.editor.attrs.IAttributeEditor;
 
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 
 /**
@@ -15,40 +14,25 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
  */
 public class ClickHeadersEditor extends AbstractMasterDetailEditor {
 	
-	public void updateMenu(){
-		newMenu.removeAll();
-		
-		IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-		Object obj = selection.getFirstElement();
-		
-		if(obj instanceof IDOMElement){
-			IDOMElement element = (IDOMElement)obj;
-			
-			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP)){
-				deleteAction.setEnabled(false);
-			} else {
-				deleteAction.setEnabled(true);
-				deleteAction.setElement(element);
-			}
-			if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP) && 
-					ClickUtils.getElement(element, ClickPlugin.TAG_HEADERS)==null){
-				IDOMElement[] elements = {
-						ClickUtils.getElement(element, ClickPlugin.TAG_FORMAT),
-						ClickUtils.getElement(element, ClickPlugin.TAG_MODE),
-						ClickUtils.getElement(element, ClickPlugin.TAG_CONTROLS)};
-				for(int i=0;i<elements.length;i++){
-					if(elements[i]!=null){
-						newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADERS, element, elements[i], this));
-						break;
-					}
-				}
-				if(newMenu.getItems().length==0){
-					newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADERS, element, null, this));
+	protected void createMenu(IDOMElement element){
+		if(element.getNodeName().equals(ClickPlugin.TAG_CLICK_APP) && 
+				ClickUtils.getElement(element, ClickPlugin.TAG_HEADERS)==null){
+			IDOMElement[] elements = {
+					ClickUtils.getElement(element, ClickPlugin.TAG_FORMAT),
+					ClickUtils.getElement(element, ClickPlugin.TAG_MODE),
+					ClickUtils.getElement(element, ClickPlugin.TAG_CONTROLS)};
+			for(int i=0;i<elements.length;i++){
+				if(elements[i]!=null){
+					newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADERS, element, elements[i], this));
+					break;
 				}
 			}
-			if(element.getNodeName().equals(ClickPlugin.TAG_HEADERS)){
-				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADER, element, null, this));
+			if(newMenu.getItems().length==0){
+				newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADERS, element, null, this));
 			}
+		}
+		if(element.getNodeName().equals(ClickPlugin.TAG_HEADERS)){
+			newMenu.add(new ElementAppendAction(ClickPlugin.TAG_HEADER, element, null, this));
 		}
 	}
 
