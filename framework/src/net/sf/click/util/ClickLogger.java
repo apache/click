@@ -259,6 +259,16 @@ public class ClickLogger implements LogChute {
     }
 
     /**
+     * Log the given message and error at [info] logging level.
+     *
+     * @param message the message to log
+     * @param error the error to log
+     */
+    public void info(Object message, Throwable error) {
+        log(INFO_ID, String.valueOf(message), error);
+    }
+
+    /**
      * Log the given message at [trace] logging level.
      *
      * @param message the message to log
