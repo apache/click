@@ -22,7 +22,7 @@
             class="net.sf.clickide.cayenne.wizard.NewCayenneWizard"
             icon="icons/cayenne.png"
             id="net.sf.clickide.cayenne.wizard"
-            name="Cayenne Mapping Peroject">
+            name="Cayenne Mapping Project">
       </wizard>
    </extension>
    <extension
