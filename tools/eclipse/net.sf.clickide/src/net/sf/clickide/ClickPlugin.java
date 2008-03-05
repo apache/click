@@ -38,6 +38,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public static final String TAG_FORMAT = "format";
 	public static final String TAG_MODE = "mode";
 	public static final String TAG_EXCLUDES = "excludes";
+	public static final String TAG_FILE_ITEM_FACTORY = "file-item-factory";
+	public static final String TAG_PROPERTY = "property";
 	public static final String ATTR_CHARSET = "charset";
 	public static final String ATTR_LOCALE = "locale";
 	public static final String ATTR_CLASSNAME = "classname";

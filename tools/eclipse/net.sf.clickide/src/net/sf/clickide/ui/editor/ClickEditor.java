@@ -2,6 +2,7 @@ package net.sf.clickide.ui.editor;
 
 import net.sf.clickide.ClickPlugin;
 import net.sf.clickide.ui.editor.forms.ClickControlsEditor;
+import net.sf.clickide.ui.editor.forms.ClickFileItemFactoryEditor;
 import net.sf.clickide.ui.editor.forms.ClickGeneralEditor;
 import net.sf.clickide.ui.editor.forms.ClickHeadersEditor;
 import net.sf.clickide.ui.editor.forms.ClickPagesEditor;
@@ -41,6 +42,7 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 	private ClickHeadersEditor headerEditor;
 	private ClickPagesEditor pageEditor;
 	private ClickControlsEditor controlEditor;
+	private ClickFileItemFactoryEditor fileItemFactoryEditior;
 	
 //	private int generalEditorIndex;
 //	private int headerEditorIndex;
@@ -88,6 +90,15 @@ public class ClickEditor extends MultiPageEditorPart implements IResourceChangeL
 		
 		IStructuredModel model = (IStructuredModel)sourceEditor.getAdapter(IStructuredModel.class);
 		
+		try {
+			fileItemFactoryEditior = new ClickFileItemFactoryEditor();
+			addPage(0, fileItemFactoryEditior, getEditorInput());
+			fileItemFactoryEditior.initModel(model);
+			setPageText(0, ClickPlugin.getString("editor.clickXML.fileUpload"));
+			sourceEditorIndex++;
+		} catch(Exception ex){
+			removePage(0);
+		}
 		try {
 			controlEditor = new ClickControlsEditor();
 			addPage(0, controlEditor, getEditorInput());
