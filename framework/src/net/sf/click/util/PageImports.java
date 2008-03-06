@@ -28,7 +28,8 @@ import net.sf.click.control.Table;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Provides a utility object for rendering a Page's control HTML header imports.
+ * Provides a utility object for rendering a Page's HTML header imports and its
+ * control HTML header imports.
  * <p/>
  * A <tt>PageImports</tt> instance is automatically added to the Velocity Context
  * for Velocity templates, or as a request attribute for JSP pages using the key
@@ -63,6 +64,7 @@ import org.apache.commons.lang.StringUtils;
  * <span class="blue">$jsImports</span>
  * </pre>
  *
+ * Please also see {@link Page#getHtmlImports()}.
  * Please also see {@link Control#getHtmlImports()}.
  *
  * @see Format
@@ -192,15 +194,15 @@ public class PageImports {
 
         initialize = true;
 
-        if (!page.hasControls()) {
-            return;
+        if (page.hasControls()) {
+            for (int i = 0; i < page.getControls().size(); i++) {
+                Control control = (Control) page.getControls().get(i);
+
+                processControl(control);
+            }
         }
 
-        for (int i = 0; i < page.getControls().size(); i++) {
-            Control control = (Control) page.getControls().get(i);
-
-            processControl(control);
-        }
+        processLine(page.getHtmlImports());
     }
 
     /**

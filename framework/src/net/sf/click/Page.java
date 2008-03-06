@@ -558,6 +558,36 @@ public class Page {
     }
 
     /**
+     * Return the HTML import string to be include in the page, by default
+     * this method returns null.
+     * <p/>
+     * Override this method to specify JavaScript and CSS includes for the
+     * page. For example:
+     *
+     * <pre class="codeJava">
+     * <span class="kw">protected static final</span> String HTML_IMPORT =
+     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
+     *
+     * <span class="kw">public</span> String getHtmlImports() {
+     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
+     * } </pre>
+     *
+     * <b>Note</b> multiple import lines should be separated by a
+     * <tt>'\n'</tt> char, as the {@link net.sf.click.util.PageImports} will
+     * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
+     * imports are not included twice.
+     * <p/>
+     * The order in which JS and CSS files are include will be preserved in the
+     * page.
+     *
+     * @return the HTML includes statements for the control stylesheet and
+     * JavaScript files, by default this method returns null
+     */
+    public String getHtmlImports() {
+        return null;
+    }
+
+    /**
      * Return the localized Page resource message for the given resource
      * property key. The resource message returned will use the Locale obtained
      * from the Context.
