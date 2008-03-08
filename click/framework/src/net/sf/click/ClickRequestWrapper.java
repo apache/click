@@ -30,7 +30,6 @@ import net.sf.click.util.ClickUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
@@ -114,11 +113,14 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     }
                 }
 
+            } catch (Throwable t) {
+                // Don't throw exception here as it will break Context creation.
+                // Instead add the exception as a request attribute.
+                request.setAttribute(Context.CONTEXT_FATAL_EXCEPTION, t);
+
+            } finally {
                 fileItemMap = Collections.unmodifiableMap(fileItems);
                 requestParameterMap = Collections.unmodifiableMap(requestParams);
-
-            } catch (FileUploadException fue) {
-                throw new RuntimeException(fue);
             }
 
         } else {

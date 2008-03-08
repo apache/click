@@ -49,11 +49,17 @@ public class Context {
 
     // -------------------------------------------------------------- Constants
 
-    /** The thread local context. */
-    private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
-
     /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
     public static final String LOCALE = "locale";
+
+    /**
+     * The attribute key used for storing a fatal exception that occurred while
+     * Context is created.
+     */
+    static final String CONTEXT_FATAL_EXCEPTION = "_context_fatal_exception";
+
+    /** The thread local context. */
+    private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
 
     // -------------------------------------------------------------- Instance Variables
 

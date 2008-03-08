@@ -324,10 +324,6 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-        Context context = createContext(request, response, isPost);
-        // Bind context to current thread
-        Context.pushThreadLocalContext(context);
-
         if (logger.isDebugEnabled()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(200);
             buffer.append(request.getMethod());
@@ -342,6 +338,20 @@ public class ClickServlet extends HttpServlet {
 
         Page page = null;
         try {
+
+            Context context = createContext(request, response, isPost);
+            // Bind context to current thread
+            Context.pushThreadLocalContext(context);
+
+            // Check for fatal exception that occurred while creating Context
+            Exception exception = (Exception)
+                request.getAttribute(Context.CONTEXT_FATAL_EXCEPTION);
+
+            if (exception != null) {
+                // Process exception through Click's exception handler.
+                throw exception;
+            }
+
             page = createPage(request);
 
             if (page.isStateful()) {
