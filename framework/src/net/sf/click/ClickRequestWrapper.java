@@ -28,9 +28,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
-import net.sf.click.util.FileUploadException;
 import net.sf.click.util.FileUploadService;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 
 /**
  * Provides a custom HttpServletRequest class for shielding users from
@@ -77,14 +77,13 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                 List itemsList = null;
 
                 try {
-                    itemsList = fileUploadService.parseRequest(request);
-                } catch (FileUploadException fue) {
-                    ClickLogger.getInstance().debug(fue.getCause().getMessage());
-                    itemsList = fue.getFileItems();
-                    request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
 
-                    // Clear any reference to itemsList
-                    fue.setFileItems(null);
+                    itemsList = fileUploadService.parseRequest(request);
+
+                } catch (FileUploadException fue) {
+                    ClickLogger.getInstance().debug(fue.getMessage());
+                    request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
+                    itemsList = Collections.EMPTY_LIST;
                 }
 
                 for (int i = 0; i < itemsList.size(); i++) {

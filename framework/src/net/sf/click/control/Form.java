@@ -32,11 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Page;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
-import net.sf.click.util.FileUploadException;
 import net.sf.click.util.FileUploadService;
 import net.sf.click.util.HtmlStringBuffer;
 
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -1711,16 +1712,18 @@ public class Form extends AbstractControl {
      */
     public boolean onProcess() {
 
-        if (isFormSubmission()) {
-
+        // If a POST error occurred exit early.
+        if (hasPostError()) {
             if (getValidate()) {
                 validate();
-
-                // If size was exceeded skip further processing.
-                if (isPostSizeLimitExceeded()) {
-                    return true;
-                }
+                getContext().getRequest().removeAttribute(
+                    FileUploadService.UPLOAD_EXCEPTION);
             }
+
+            return true;
+        }
+
+        if (isFormSubmission()) {
 
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
@@ -1758,6 +1761,7 @@ public class Form extends AbstractControl {
      * <ul>
      *   <li>/click-control.properties
      *     <ul>
+     *       <li>file-size-limit-exceeded-error</li>
      *       <li>post-size-limit-exceeded-error</li>
      *     </ul>
      *   </li>
@@ -1779,15 +1783,33 @@ public class Form extends AbstractControl {
         String key = null;
         Object args[] = null;
 
-        if (fue.getCause() instanceof SizeLimitExceededException) {
+        if (fue instanceof SizeLimitExceededException) {
             SizeLimitExceededException se =
-                (SizeLimitExceededException) fue.getCause();
+                (SizeLimitExceededException) fue;
 
             key = "post-size-limit-exceeded-error";
 
             args = new Object[2];
             args[0] = new Long(se.getPermittedSize());
             args[1] = new Long(se.getActualSize());
+            setError(getMessage(key, args));
+
+        } else if (fue instanceof FileSizeLimitExceededException) {
+            FileSizeLimitExceededException fse =
+                (FileSizeLimitExceededException) fue;
+
+            key = "file-size-limit-exceeded-error";
+            
+            // Parse the FileField name from the message
+            String msg = fue.getMessage();
+            int start = 10;
+            int end = msg.indexOf(' ', start);
+            String fieldName = fue.getMessage().substring(start, end);
+
+            args = new Object[3];
+            args[0] = fieldName;
+            args[1] = new Long(fse.getPermittedSize());
+            args[2] = new Long(fse.getActualSize());
             setError(getMessage(key, args));
         }
     }
@@ -2578,19 +2600,17 @@ public class Form extends AbstractControl {
     }
 
     /**
-     * Returns true if the POST size limit was exceeded.
+     * Returns true if a POST error occurred, false otherwise.
      *
-     * @return true if the request size limit was exceeded, false otherwise
+     * @return true if a POST error occurred, false otherwise
      */
-    protected boolean isPostSizeLimitExceeded() {
-        Exception exception = (Exception) getContext().getRequest()
+    protected boolean hasPostError() {
+        Exception e = (Exception) getContext().getRequest()
             .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
 
-        if (exception instanceof FileUploadException) {
-            FileUploadException fue = (FileUploadException) exception;
-            if (fue.getCause() instanceof SizeLimitExceededException) {
-                return true;
-            }
+        if (e instanceof FileSizeLimitExceededException ||
+            e instanceof SizeLimitExceededException) {
+            return true;
         }
 
         return false;

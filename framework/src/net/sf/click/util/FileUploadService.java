@@ -15,30 +15,16 @@
  */
 package net.sf.click.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 
-//TODO available form FileUpload 1.2.1
-//import org.apache.commons.fileupload.FileItemHeaders;
-//import org.apache.commons.fileupload.FileItemHeadersSupport;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadBase.FileUploadIOException;
-import org.apache.commons.fileupload.FileUploadBase.IOFileUploadException;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
-import org.apache.commons.fileupload.util.LimitedInputStream;
-import org.apache.commons.fileupload.util.Streams;
 
 /**
  * Provides the services and configuration needed to parse a multipart request.
@@ -119,13 +105,24 @@ public class FileUploadService {
     }
 
     /**
+     * Create and return a new Commons Upload RequestContext instance.
+     *
+     * @param request the servlet request
+     * @return a new Commons FileUpload RequestContext instance
+     */
+    public RequestContext createRequestContext(HttpServletRequest request) {
+        return new ServletRequestContext(request);
+    }
+
+    /**
      * Parse the request and extract FileItem instances.
      *
      * @param request the servlet request
      * @return list of FileField instances
-     * @throws FileUploadException if request cannot be parsed
+     * @throws org.apache.commons.fileupload.FileUploadException if request
+     * cannot be parsed
      */
-    public final List parseRequest(final HttpServletRequest request)
+     public List parseRequest(final HttpServletRequest request)
         throws FileUploadException {
 
         if (request == null) {
@@ -136,146 +133,8 @@ public class FileUploadService {
         FileUploadBase fileUploadBase = createFileUpload(request);
         fileUploadBase.setFileItemFactory(fileItemFactory);
 
-        long sizeMax = fileUploadBase.getSizeMax();
+        RequestContext requestContext = createRequestContext(request);
 
-        RequestContext requestContext = createRequestContext(request,
-            fileUploadBase.getSizeMax());
-
-        // Reset sizeMax to -1 so that exceptions won't be thrown. Instead
-        // exceptions will handled manually.
-        fileUploadBase.setSizeMax(-1L);
-
-        // Indicates whether a request maximum size has been exceeded.
-        boolean isSizeMaxExceeded = false;
-
-        long requestSize = request.getContentLength();
-
-        try {
-
-            if (requestSize >= 0) {
-                isSizeMaxExceeded = (sizeMax >= 0 && requestSize > sizeMax);
-            }
-
-            FileItemIterator iter = fileUploadBase.getItemIterator(requestContext);
-            List items = new ArrayList();
-            FileItemFactory fac = fileUploadBase.getFileItemFactory();
-            if (fac == null) {
-                throw new NullPointerException(
-                    "No FileItemFactory has been set.");
-            }
-
-            FileItem fileItem = null;
-
-            while (iter.hasNext()) {
-                FileItemStream item = iter.next();
-                fileItem = fac.createItem(item.getFieldName(),
-                    item.getContentType(), item.isFormField(),
-                    item.getName());
-                try {
-
-                    // Always extract the parameter if it is a form field.
-                    if (!isSizeMaxExceeded || fileItem.isFormField()) {
-                        Streams.copy(item.openStream(),
-                            fileItem.getOutputStream(), true);
-
-                        //TODO available form FileUpload 1.2.1
-                        /*
-                        if (fileItem instanceof FileItemHeadersSupport) {
-                            final FileItemHeaders fih = item.getHeaders();
-                            ((FileItemHeadersSupport) fileItem).setHeaders(fih);
-                        }*/
-                        items.add(fileItem);
-                    } else {
-                        // If the request size was exceeded and current fileItem
-                        // is a file upload field, throw exception.
-                        Exception e = new SizeLimitExceededException(
-                            "the request was rejected because its size ("
-                            + requestSize + ") exceeds the configured maximum ("
-                            + sizeMax + ")", requestSize, sizeMax);
-
-                        throw new FileUploadException(e,
-                            fileItem.getFieldName(), fileItem.getName(), items);
-                    }
-                } catch (FileUploadIOException e) {
-
-                    if (e.getCause() instanceof FileSizeLimitExceededException
-                        || e.getCause() instanceof SizeLimitExceededException) {
-                        FileUploadException exception = new FileUploadException(
-                            e.getCause(), fileItem.getFieldName(),
-                            fileItem.getName(), items);
-                        throw exception;
-
-                    } else {
-                        throw e.getCause();
-                    }
-
-                } catch (IOException e) {
-                    throw new IOFileUploadException(
-                        "Processing of " + FileUploadBase.MULTIPART_FORM_DATA
-                        + " request failed. " + e.getMessage(), e);
-                }
-            }
-
-            return items;
-        } catch (FileUploadIOException e) {
-
-            // FileLoadIOException must be unwrapped to get the cause.
-            throw new RuntimeException((FileUploadException) e.getCause());
-        } catch (FileUploadException e) {
-
-            // Let Click custom exception continue up the stack.
-            throw e;
-        } catch (Throwable t) {
-            throw new RuntimeException(t);
-        }
-    }
-
-    final RequestContext createRequestContext(final HttpServletRequest request,
-        long sizeMax) {
-
-        RequestContext requestContext = new CustomServletRequestContext(request,
-            sizeMax);
-
-        return requestContext;
-    }
-
-    /**
-     * Custom ServletRequestContext that caters for situation where
-     * request#getContentLength is not set.
-     */
-    class CustomServletRequestContext extends ServletRequestContext {
-
-        final long sizeMax;
-
-        final long requestSize;
-
-        public CustomServletRequestContext(HttpServletRequest request,
-            long sizeMax) {
-            super(request);
-            this.sizeMax = sizeMax;
-            this.requestSize = request.getContentLength();
-        }
-
-        public InputStream getInputStream() throws IOException {
-            // If sizeMax is set and contentLength is not set, wrap the
-            // InputStream and limit the size of the stream to the specified
-            // sizeMax
-            if (sizeMax >= 0 && requestSize == -1) {
-                return new LimitedInputStream(super.getInputStream(), sizeMax) {
-                    protected void raiseError(long pSizeMax, long pCount)
-                        throws IOException {
-                        String msg = "the request was rejected because"
-                            + " its size (" + pCount
-                            + ") exceeds the configured maximum"
-                            + " (" + pSizeMax + ")";
-                        SizeLimitExceededException ex =
-                            new SizeLimitExceededException(msg, pCount, pSizeMax);
-                        throw new FileUploadIOException(ex);
-                    }
-                };
-            } else {
-                return super.getInputStream();
-            }
-        }
+        return fileUploadBase.parseRequest(requestContext);
     }
 }
