@@ -23,14 +23,14 @@ public class AutoCompletePage extends BorderPage {
         fieldSet.setStyle("background-color", "");
         form.add(fieldSet);
 
-        AutoCompleteTextField postCodeField = new AutoCompleteTextField("postCode") {
+        AutoCompleteTextField locationField = new AutoCompleteTextField("location") {
             public List getAutoCompleteList(String criteria) {
                 return getPostCodeService().getPostCodeLocations(criteria);
             }
         };
-        postCodeField.setSize(40);
+        locationField.setSize(40);
 
-        fieldSet.add(postCodeField);
+        fieldSet.add(locationField);
     }
 
 }
