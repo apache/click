@@ -43,32 +43,37 @@ import org.apache.commons.fileupload.util.Streams;
 /**
  * Provides the services and configuration needed to parse a multipart request.
  * <p/>
- * You can provide your own implementation by extending this class and override
- * needed methods. Specify your custom implementation in click.xml:
- *
- * <pre class="codeConfig">
- * &lt;click-app charset="UTF-8" locale="de"&gt; 
- *     &lt;pages package="<span class="">com.mycorp.page</span>"/&gt;
- *     &lt;mode value="<span class="">profile</span>"/&gt;
- *     &lt;file-upload-service classname="<span class="">com.mycorp.util.AppFileUploadService</span>"/&gt;
- * &lt;/click-app&gt;
- * </pre>
+ * This class is built on the Commons FileUpload library.
+ * <p/>
+ * You can configure Commons FileUpload by overriding one of the createXxx
+ * methods.
+ * <p/>
+ * Below is an example of how to set the maxSize and fileMaxSize configuration:
  *
  * <pre class="codeConfig">
  * <span class="kw">public class</span> AppFileUploadService <span class="kw">extends</span> FileUploadService {
- * 
+ *
  *     <span class="kw">public </span>FileUploadBase createFileUpload(HttpServletRequest request) {
- * 
+ *
  *         FileUploadBase fileUploadBase = <span class="kw">super</span>.createFileUpload(request);
  *
- *         <span class="cm">//Set total request maximum size to 5meg -> 5,000,000 bytes.</span>
+ *         <span class="cm">//Set request maximum size to 5mb -> 5,000,000 bytes.</span>
  *         fileUploadBase.setSizeMax(50000000);
  *
- *         <span class="cm">//Set file maximum size to 2meg -> 2,000,000 bytes.</span>
+ *         <span class="cm">//Set file maximum size to 2mb -> 2,000,000 bytes.</span>
  *         fileUploadBase.setFileSizeMax(2000000);
- *         return fileUploadBase;
- *     }   
+ *         <span class="kw">return </span>fileUploadBase;
+ *     }
  * }
+ * </pre>
+ *
+ * Specify your custom implementation in click.xml:
+ *
+ * <pre class="codeConfig">
+ * &lt;click-app charset="UTF-8" locale="de"&gt;
+ *     &lt;pages package="<span class="st">com.mycorp.page</span>"/&gt;
+ *     &lt;file-upload-service classname="<span class="st">com.mycorp.util.AppFileUploadService</span>"/&gt;
+ * &lt;/click-app&gt;
  * </pre>
  *
  * <b>Please note:</b> this class must have a default no-argument constructor.
@@ -148,8 +153,7 @@ public class FileUploadService {
         try {
 
             if (requestSize >= 0) {
-                isSizeMaxExceeded = sizeMax >= 0 &&
-                    requestSize > sizeMax;
+                isSizeMaxExceeded = (sizeMax >= 0 && requestSize > sizeMax);
             }
 
             FileItemIterator iter = fileUploadBase.getItemIterator(requestContext);
@@ -171,8 +175,8 @@ public class FileUploadService {
 
                     // Always extract the parameter if it is a form field.
                     if (!isSizeMaxExceeded || fileItem.isFormField()) {
-                        Streams.copy(item.openStream(), fileItem.getOutputStream(),
-                            true);
+                        Streams.copy(item.openStream(),
+                            fileItem.getOutputStream(), true);
 
                         //TODO available form FileUpload 1.2.1
                         /*
@@ -183,8 +187,14 @@ public class FileUploadService {
                         items.add(fileItem);
                     } else {
                         // If the request size was exceeded and current fileItem
-                        // is a file upload field, don't process any further.
-                        break;
+                        // is a file upload field, throw exception.
+                        Exception e = new SizeLimitExceededException(
+                            "the request was rejected because its size ("
+                            + requestSize + ") exceeds the configured maximum ("
+                            + sizeMax + ")", requestSize, sizeMax);
+
+                        throw new FileUploadException(e,
+                            fileItem.getFieldName(), fileItem.getName(), items);
                     }
                 } catch (FileUploadIOException e) {
 
@@ -204,19 +214,6 @@ public class FileUploadService {
                         "Processing of " + FileUploadBase.MULTIPART_FORM_DATA
                         + " request failed. " + e.getMessage(), e);
                 }
-            }
-
-            // If sizeMaxLimitExceeded occurred add this exception to the
-            // exception stack.
-            if (isSizeMaxExceeded) {
-                Exception exception = new SizeLimitExceededException(
-                    "the request was rejected because its size (" + requestSize
-                    + ") exceeds the configured maximum ("
-                    + sizeMax + ")",
-                    requestSize, sizeMax);
-
-                throw new FileUploadException(exception, fileItem.getFieldName(),
-                    fileItem.getName(), items);
             }
 
             return items;

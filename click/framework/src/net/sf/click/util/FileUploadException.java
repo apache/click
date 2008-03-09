@@ -21,6 +21,11 @@ import org.apache.commons.io.FilenameUtils;
 /**
  * This exception is thrown by {@link FileUploadService} to indicate that a
  * multipart POST failed.
+ * <p/>
+ * The actual Commons FileUpload exception that occurred are wrapped by this
+ * class.
+ * <p/>
+ * The original exception is available by invoking {@link #getCause()}.
  *
  * @author Bob Schellink
  */
@@ -43,16 +48,16 @@ public class FileUploadException extends Exception {
      * Constructs a FileUploadException with the specified exception, fileItem
      * and fileItems list.
      *
-     * @param t exception that occurred
+     * @param cause exception that occurred
      * @param fieldName name of the FileField that caused the exception
      * @param fileName name of the file that caused the exception
      * @param fileItems list of fileItems that is already parsed
      */
-    public FileUploadException(Throwable t, String fieldName, String fileName,
+    public FileUploadException(Throwable cause, String fieldName, String fileName,
         List fileItems) {
-        super(t);
+        super(cause);
         this.fieldName = fieldName;
-        this.fileName = FilenameUtils.getName(fieldName);        
+        this.fileName = FilenameUtils.getName(fileName);
         this.fileItems = fileItems;
     }
 
