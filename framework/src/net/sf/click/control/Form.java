@@ -1712,15 +1712,18 @@ public class Form extends AbstractControl {
      */
     public boolean onProcess() {
 
-        // If a POST error occurred exit early.
-        if (hasPostError()) {
-            if (getValidate()) {
-                validate();
+        if (getValidate()) {
+            validate();
+
+            // If a POST error occurred exit early.
+            if (hasPostError()) {
+                // Remove exception to ensure other forms on Page do not
+                // validate twice for same error.
                 getContext().getRequest().removeAttribute(
                     FileUploadService.UPLOAD_EXCEPTION);
-            }
 
-            return true;
+                return true;
+            }
         }
 
         if (isFormSubmission()) {
