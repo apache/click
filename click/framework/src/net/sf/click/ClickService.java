@@ -21,7 +21,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItemFactory;
+import net.sf.click.util.FileUploadService;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 
@@ -107,12 +107,12 @@ class ClickService {
     }
 
     /**
-     * Return the Click application FileItemFactory.
+     * Create and return a new FileUploadSupport instance.
      *
-     * @return the application FileItemFactory
+     * @return a new FileUploadSupport instance
      */
-    FileItemFactory getFileItemFactory() {
-        return clickServlet.clickApp.getFileItemFactory();
+    FileUploadService createFileUploadService() {
+        return clickServlet.clickApp.createFileUploadService();
     }
 
     /**

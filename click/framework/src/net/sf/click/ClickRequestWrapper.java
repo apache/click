@@ -25,13 +25,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
+import net.sf.click.util.FileUploadException;
+import net.sf.click.util.FileUploadService;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadBase;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.servlet.ServletRequestContext;
 
 /**
  * Provides a custom HttpServletRequest class for shielding users from
@@ -62,25 +61,31 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /**
      * @see HttpServletRequestWrapper(HttpServletRequest)
      */
-    ClickRequestWrapper(HttpServletRequest request, FileItemFactory fileItemFactory) {
+    ClickRequestWrapper(final HttpServletRequest request,
+        final FileUploadService fileUploadService) {
         super(request);
 
         this.isMultipartRequest = ClickUtils.isMultipartRequest(request);
         this.request = request;
 
         if (isMultipartRequest) {
-            // If this request is multipart, populate two maps, one for normal
-            // request parameters, the other for all uploaded files
-            FileUploadBase fileUpload = new ServletFileUpload(fileItemFactory);
 
             Map requestParams = new HashMap();
             Map fileItems = new HashMap();
 
             try {
-                ServletRequestContext srvContext =
-                    new ServletRequestContext(request);
+                List itemsList = null;
 
-                List itemsList = fileUpload.parseRequest(srvContext);
+                try {
+                    itemsList = fileUploadService.parseRequest(request);
+                } catch (FileUploadException fue) {
+                    ClickLogger.getInstance().debug(fue.getCause().getMessage());
+                    itemsList = fue.getFileItems();
+                    request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
+
+                    // Clear any reference to itemsList
+                    fue.setFileItems(null);
+                }
 
                 for (int i = 0; i < itemsList.size(); i++) {
                     FileItem fileItem = (FileItem) itemsList.get(i);
@@ -114,6 +119,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                 }
 
             } catch (Throwable t) {
+
                 // Don't throw exception here as it will break Context creation.
                 // Instead add the exception as a request attribute.
                 request.setAttribute(Context.CONTEXT_FATAL_EXCEPTION, t);
