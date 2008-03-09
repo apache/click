@@ -188,13 +188,8 @@ public class FileUploadService {
                     }
                 } catch (FileUploadIOException e) {
 
-                    if (e.getCause() instanceof FileSizeLimitExceededException) {
-                        FileUploadException exception = new FileUploadException(
-                            e.getCause(), fileItem.getFieldName(),
-                            fileItem.getName(), items);
-                        throw exception;
-
-                    } else if (e.getCause() instanceof SizeLimitExceededException) {
+                    if (e.getCause() instanceof FileSizeLimitExceededException
+                        || e.getCause() instanceof SizeLimitExceededException) {
                         FileUploadException exception = new FileUploadException(
                             e.getCause(), fileItem.getFieldName(),
                             fileItem.getName(), items);
