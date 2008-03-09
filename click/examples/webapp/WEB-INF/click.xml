@@ -6,6 +6,9 @@
     <excludes pattern="/tiny_mce/"/>
   </pages>
 
+  <file-upload-service classname="net.sf.click.examples.util.CustomFileUploadService">
+  </file-upload-service>
+
   <mode value="profile"/>
 
   <controls>

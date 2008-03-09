@@ -18,21 +18,36 @@ public class FileUpload extends BorderPage {
 
     public Form form = new Form();
 
-    private FileField fileField;
-    private TextField descField;
+    private FileField fileField1;
+    private TextField descField1;
+
+    private FileField fileField2;
+    private TextField descField2;
 
     public FileUpload() {
         form.setLabelsPosition("top");
 
-        FieldSet fieldSet = new FieldSet("upload", "<b>Upload File</b>");
-        form.add(fieldSet);
+        FieldSet fieldSet1 = new FieldSet("upload1", "<b>Upload File 1</b>");
+        form.add(fieldSet1);
 
-        fileField = new FileField("selectFile", "Select File", 40);
-        fileField.setRequired(true);
-        fieldSet.add(fileField);
+        fileField1 = new FileField("selectFile1", "Select File 1", 40);
+        fileField1.setRequired(true);
+        fieldSet1.add(fileField1);
 
-        descField = new TextField("description", "File Description", 30);
-        fieldSet.add(descField);
+        descField1 = new TextField("description", "File Description 1", 30);
+        descField1.setRequired(true);
+        fieldSet1.add(descField1);
+
+        FieldSet fieldSet2 = new FieldSet("upload2", "<b>Upload File 2</b>");
+        form.add(fieldSet2);
+
+        fileField2 = new FileField("selectFile2", "Select File 2", 40);
+        fileField2.setRequired(true);
+        fieldSet2.add(fileField2);
+
+        descField2 = new TextField("description", "File Description 2", 30);
+        descField2.setRequired(true);
+        fieldSet2.add(descField2);
 
         form.add(new Submit("ok", "  OK  ", this, "onOkClick"));
         form.add(new PageSubmit("cancel", HomePage.class));
@@ -41,11 +56,18 @@ public class FileUpload extends BorderPage {
     public boolean onOkClick() {
 
         if (form.isValid()) {
-            addModel("fileItem", fileField.getFileItem());
-            addModel("fileDesc", descField.getValue());
+            if (fileField1.getFileItem() != null) {
+                addModel("fileItem1", fileField1.getFileItem());
+            }
+            addModel("fileDesc1", descField1.getValue());
+
+            if (fileField2.getFileItem() != null) {
+                addModel("fileItem2", fileField2.getFileItem());
+            }
+            addModel("fileDesc2", descField2.getValue());
         }
         return true;
     }
 
 }
- 
+
