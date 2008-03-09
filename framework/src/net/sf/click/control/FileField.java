@@ -17,9 +17,13 @@ package net.sf.click.control;
 
 import java.text.MessageFormat;
 
+import net.sf.click.util.FileUploadException;
+import net.sf.click.util.FileUploadService;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a File Field control: &nbsp; &lt;input type='file'&gt;.
@@ -282,6 +286,7 @@ public class FileField extends Field {
      *   <li>/click-control.properties
      *     <ul>
      *       <li>file-required-error</li>
+     *       <li>file-size-limit-exceeded-error</li>
      *     </ul>
      *   </li>
      * </ul>
@@ -293,10 +298,57 @@ public class FileField extends Field {
         FileItem fileItem = getFileItem();
 
         if (fileItem != null) {
-            if (isRequired() && fileItem.getSize() == 0) {
+            if (isRequired() && StringUtils.isBlank(fileItem.getName())) {
+                setErrorMessage("file-required-error");
+            }
+        } else {
+
+            Exception exception = (Exception) getContext().getRequest()
+                .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
+
+            if (exception instanceof FileUploadException) {
+                FileUploadException fue = (FileUploadException) exception;
+
+                // Check if the exception matches the fileField.
+                if (fue.getFieldName().equals(getName())) {
+                    handleUploadException(fue);
+                } else if (isRequired()) {
+                    setErrorMessage("file-required-error");
+                }
+
+            } else if (isRequired()) {
                 setErrorMessage("file-required-error");
             }
         }
     }
 
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Sets the upload error message if there was a upload error.
+     *
+     * @param exception the exception to validate against
+     */
+    private void handleUploadException(FileUploadException fue) {
+
+        String key = null;
+        Object args[] = null;
+
+        if (fue.getCause() instanceof FileSizeLimitExceededException) {
+            FileSizeLimitExceededException fse =
+                (FileSizeLimitExceededException) fue.getCause();
+
+            key = "file-size-limit-exceeded-error";
+
+            args = new Object[4];
+            args[0] = fue.getFileName();
+            args[1] = getErrorLabel();
+            args[2] = new Long(fse.getPermittedSize());
+            args[3] = new Long(fse.getActualSize());
+        }
+
+        if (key != null) {
+            setError(getMessage(key, args));
+        }
+    }
 }

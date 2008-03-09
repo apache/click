@@ -31,10 +31,10 @@
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
    <!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format">
- 
-  <!-- Commons Upload FileItem Factory class. -->
-  <!ELEMENT file-item-factory (#PCDATA)>
-   <!ATTLIST file-item-factory classname CDATA #FIXED "org.apache.commons.fileupload.disk.DiskFileItemFactory">
+
+  <!-- Commons Upload Service class. -->
+  <!ELEMENT file-upload-service (#PCDATA)>
+   <!ATTLIST file-upload-service classname CDATA #FIXED "net.sf.click.util.FileUploadService">
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>

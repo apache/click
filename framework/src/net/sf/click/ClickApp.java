@@ -39,11 +39,9 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.FileUploadService;
 import net.sf.click.util.Format;
-import ognl.Ognl;
 
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
@@ -61,7 +59,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Application the Click application object which defines the
- * application's configuration, intializes the Velocity Engine and provides
+ * application's configuration, initializes the Velocity Engine and provides
  * page templates.
  *
  * @author Malcolm Edgar
@@ -157,8 +155,8 @@ class ClickApp implements EntityResolver {
     /** The automatically bind controls, request parameters and models flag. */
     private boolean autobinding = true;
 
-    /** The Commons Upload FileItem Factory. */
-    private FileItemFactory fileItemFactory;
+    /** The Commons Upload service class. */
+    private Class fileUploadServiceClass;
 
     /** The format class. */
     private Class formatClass;
@@ -252,8 +250,8 @@ class ClickApp implements EntityResolver {
             // Load the format class
             loadFormatClass(rootElm);
 
-            // Load the Commons Upload file item factory
-            loadFileItemFactory(rootElm);
+            // Load the Commons Upload service
+            loadFileUploadServiceClass(rootElm);
 
             // Load the common headers
             loadHeaders(rootElm);
@@ -326,15 +324,6 @@ class ClickApp implements EntityResolver {
      */
     String getCharset() {
         return charset;
-    }
-
-    /**
-     * Return the application FileItemFactory.
-     *
-     * @return the application FileItemFactory
-     */
-    FileItemFactory getFileItemFactory() {
-        return fileItemFactory;
     }
 
     /**
@@ -415,7 +404,7 @@ class ClickApp implements EntityResolver {
      * Return the page <tt>Class</tt> for the given path.
      *
      * @param path the page path
-     * @return the page class
+     * @return the page class for the given path or null if no class is found
      */
     Class getPageClass(String path) {
 
@@ -478,6 +467,8 @@ class ClickApp implements EntityResolver {
      *
      * @param pageClass the page class
      * @return path the page path
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
      */
     String getPagePath(Class pageClass) {
         Object object = pageByClassMap.get(pageClass);
@@ -838,34 +829,41 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadFileItemFactory(Element rootElm) throws Exception {
+    void loadFileUploadServiceClass(Element rootElm) throws Exception {
 
-        Element fileItemFactoryElm = ClickUtils.getChild(rootElm, "file-item-factory");
+        Element fileUploadServiceElm = ClickUtils.getChild(rootElm, "file-upload-service");
 
-        if (fileItemFactoryElm != null) {
-            String classname = fileItemFactoryElm.getAttribute("classname");
+        if (fileUploadServiceElm != null) {
+            String classname = fileUploadServiceElm.getAttribute("classname");
 
             if (classname == null) {
-                String msg = "'file-item-factory' element missing 'classname' attribute.";
+                String msg = "'file-upload-service' element missing 'classname' attribute.";
                 throw new RuntimeException(msg);
             }
 
-            Class fifClass = ClickUtils.classForName(classname);
-
-            fileItemFactory = (FileItemFactory) fifClass.newInstance();
-
-            Map propertyMap = loadPropertyMap(fileItemFactoryElm);
-
-            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
-                String name = i.next().toString();
-                String value = propertyMap.get(name).toString();
-
-                Ognl.setValue(name, fileItemFactory, value);
-            }
+            fileUploadServiceClass = ClickUtils.classForName(classname);
 
         } else {
-            fileItemFactory = new DiskFileItemFactory();
+            fileUploadServiceClass = FileUploadService.class;
         }
+    }
+
+    /**
+     * Create and return a new {@link net.sf.click.util.FileUploadService}
+     * instance.
+     *
+     * @return a new FileUploadService instance
+     */
+    FileUploadService createFileUploadService() {
+        FileUploadService fileUploadService;
+        try {
+            fileUploadService = (FileUploadService)
+                fileUploadServiceClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return fileUploadService;
     }
 
     private static Map loadPropertyMap(Element parentElm) {

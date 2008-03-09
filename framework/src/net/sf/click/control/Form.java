@@ -32,8 +32,11 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Page;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.FileUploadException;
+import net.sf.click.util.FileUploadService;
 import net.sf.click.util.HtmlStringBuffer;
 
+import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -1710,6 +1713,15 @@ public class Form extends AbstractControl {
 
         if (isFormSubmission()) {
 
+            if (getValidate()) {
+                validate();
+
+                // If size was exceeded skip further processing.
+                if (isPostSizeLimitExceeded()) {
+                    return true;
+                }
+            }
+
             boolean continueProcessing = true;
             for (int i = 0, size = getFieldList().size(); i < size; i++) {
                 Field field = (Field) getFieldList().get(i);
@@ -1735,6 +1747,49 @@ public class Form extends AbstractControl {
         }
 
         return true;
+    }
+
+    /**
+     * Validate the Form request submission.
+     * <p/>
+     * A form error message is displayed if a validation error occurs.
+     * These messages are defined in the resource bundle:
+     * <blockquote>
+     * <ul>
+     *   <li>/click-control.properties
+     *     <ul>
+     *       <li>post-size-limit-exceeded-error</li>
+     *     </ul>
+     *   </li>
+     * </ul>
+     * </blockquote>
+     */
+    public void validate() {
+        setError(null);
+
+        Exception exception = (Exception) getContext().getRequest()
+            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
+
+        if (!(exception instanceof FileUploadException)) {
+            return;
+        }
+
+        FileUploadException fue = (FileUploadException) exception;
+
+        String key = null;
+        Object args[] = null;
+
+        if (fue.getCause() instanceof SizeLimitExceededException) {
+            SizeLimitExceededException se =
+                (SizeLimitExceededException) fue.getCause();
+
+            key = "post-size-limit-exceeded-error";
+
+            args = new Object[2];
+            args[0] = new Long(se.getPermittedSize());
+            args[1] = new Long(se.getActualSize());
+            setError(getMessage(key, args));
+        }
     }
 
     /**
@@ -2520,6 +2575,25 @@ public class Form extends AbstractControl {
             }
             buffer.append("//--></script>\n");
         }
+    }
+
+    /**
+     * Returns true if the POST size limit was exceeded.
+     *
+     * @return true if the request size limit was exceeded, false otherwise
+     */
+    protected boolean isPostSizeLimitExceeded() {
+        Exception exception = (Exception) getContext().getRequest()
+            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
+
+        if (exception instanceof FileUploadException) {
+            FileUploadException fue = (FileUploadException) exception;
+            if (fue.getCause() instanceof SizeLimitExceededException) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

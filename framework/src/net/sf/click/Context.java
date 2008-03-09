@@ -123,7 +123,8 @@ public class Context {
                     ClickLogger.getInstance().warn(msg, ex);
                 }
             }
-            this.request = new ClickRequestWrapper(request, this.clickService.getFileItemFactory());
+            this.request = new ClickRequestWrapper(request,
+                this.clickService.createFileUploadService());
         } else {
             this.request = request;
         }
