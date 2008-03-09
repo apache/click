@@ -10,19 +10,38 @@ $form
 
 <p>&nbsp;</p>
 
-#if ($fileItem)
+#if ($fileItem1)
 <table border="1" cellspacing="0" cellpadding="6" style="margin-left:1em;empty-cells:show;"> 
  <tr>
-  <td><b>File Name</b></td> <td>$fileItem.name</td>
+  <td><b>File Name</b></td> <td>$fileItem1.name</td>
  </tr>
  <tr>
-  <td><b>File Size</b></td> <td>$format.decimal($fileItem.size) bytes</td>
+  <td><b>File Size</b></td> <td>$format.decimal($fileItem1.size) bytes</td>
  </tr>
  <tr>
-  <td><b>Content Type</b></td> <td>$fileItem.contentType</td>
+  <td><b>Content Type</b></td> <td>$fileItem1.contentType</td>
  </tr>
  <tr>
-  <td><b>Description</b></td> <td>$fileDesc</td>
+  <td><b>Description</b></td> <td>$fileDesc1</td>
+ </tr>
+</table> 
+#end
+
+<p/>
+
+#if ($fileItem2)
+<table border="1" cellspacing="0" cellpadding="6" style="margin-left:1em;empty-cells:show;">
+ <tr>
+  <td><b>File Name</b></td> <td>$fileItem2.name</td>
+ </tr>
+ <tr>
+  <td><b>File Size</b></td> <td>$format.decimal($fileItem2.size) bytes</td>
+ </tr>
+ <tr>
+  <td><b>Content Type</b></td> <td>$fileItem2.contentType</td>
+ </tr>
+ <tr>
+  <td><b>Description</b></td> <td>$fileDesc2</td>
  </tr>
 </table> 
 #end
