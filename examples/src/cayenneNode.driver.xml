@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<driver project-version="3.0" class="org.hsqldb.jdbcDriver">
+<driver project-version="2.0" class="org.hsqldb.jdbcDriver">
 	<url value="jdbc:hsqldb:mem:examples"/>
-	<connectionPool min="10" max="20"/>
-	<login encoderClass="org.apache.cayenne.conf.PlainTextPasswordEncoder" encoderSalt="" passwordLocation="model" passwordSource="Not Applicable"/>
+	<connectionPool min="10" max="20" />
 </driver>
