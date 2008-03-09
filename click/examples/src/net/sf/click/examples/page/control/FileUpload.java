@@ -34,7 +34,7 @@ public class FileUpload extends BorderPage {
         fileField1.setRequired(true);
         fieldSet1.add(fileField1);
 
-        descField1 = new TextField("description", "File Description 1", 30);
+        descField1 = new TextField("description1", "File Description 1", 30);
         descField1.setRequired(true);
         fieldSet1.add(descField1);
 
@@ -45,7 +45,7 @@ public class FileUpload extends BorderPage {
         fileField2.setRequired(true);
         fieldSet2.add(fileField2);
 
-        descField2 = new TextField("description", "File Description 2", 30);
+        descField2 = new TextField("description2", "File Description 2", 30);
         descField2.setRequired(true);
         fieldSet2.add(descField2);
 
