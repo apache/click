@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<data-map project-version="3.0">
+<data-map project-version="2.0">
 	<property name="defaultPackage" value="net.sf.click.examples.domain"/>
 	<property name="defaultSuperclass" value="net.sf.click.examples.domain.BaseEntity"/>
 	<db-entity name="ADDRESS">
@@ -37,6 +37,14 @@
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
 		<db-attribute name="investments" type="VARCHAR" length="32"/>
 		<db-attribute name="name" type="VARCHAR" isMandatory="true" length="32"/>
+	</db-entity>
+	<db-entity name="POSTAL_ADDRESS">
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
+		<db-attribute name="post_code_id" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="state" type="VARCHAR" isMandatory="true" length="4"/>
+		<db-attribute name="street_name" type="VARCHAR" isMandatory="true" length="100"/>
+		<db-attribute name="street_number" type="INTEGER" isMandatory="true"/>
+		<db-attribute name="unit_number" type="INTEGER"/>
 	</db-entity>
 	<db-entity name="POST_CODE">
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true"/>
@@ -94,6 +102,12 @@
 		<obj-attribute name="postCode" type="java.lang.String" db-attribute-path="postCode"/>
 		<obj-attribute name="state" type="java.lang.String" db-attribute-path="state"/>
 	</obj-entity>
+	<obj-entity name="PostalAddress" className="net.sf.click.examples.domain.PostalAddress" dbEntityName="POSTAL_ADDRESS" superClassName="net.sf.click.examples.domain.BaseEntity">
+		<obj-attribute name="state" type="java.lang.String" db-attribute-path="state"/>
+		<obj-attribute name="streetName" type="java.lang.String" db-attribute-path="street_name"/>
+		<obj-attribute name="streetNumber" type="java.lang.Integer" db-attribute-path="street_number"/>
+		<obj-attribute name="unitNumber" type="java.lang.Integer" db-attribute-path="unit_number"/>
+	</obj-entity>
 	<obj-entity name="SystemCode" className="net.sf.click.examples.domain.SystemCode" dbEntityName="SYSTEM_CODE" superClassName="net.sf.click.examples.domain.BaseEntity">
 		<obj-attribute name="label" type="java.lang.String" db-attribute-path="label"/>
 		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
@@ -112,8 +126,15 @@
 	<db-relationship name="address" source="CLIENT" target="ADDRESS" toMany="false">
 		<db-attribute-pair source="address_id" target="id"/>
 	</db-relationship>
+	<db-relationship name="postCode" source="POSTAL_ADDRESS" target="POST_CODE" toMany="false">
+		<db-attribute-pair source="post_code_id" target="id"/>
+	</db-relationship>
+	<db-relationship name="postalAddress" source="POST_CODE" target="POSTAL_ADDRESS" toMany="true">
+		<db-attribute-pair source="id" target="post_code_id"/>
+	</db-relationship>
 	<obj-relationship name="client" source="Address" target="Client" db-relationship-path="client"/>
 	<obj-relationship name="address" source="Client" target="Address" db-relationship-path="address"/>
+	<obj-relationship name="postCode" source="PostalAddress" target="PostCode" db-relationship-path="postCode"/>
 	<query name="states" factory="org.apache.cayenne.map.SelectQueryBuilder" root="obj-entity" root-name="SystemCode">
 		<property name="cayenne.GenericSelectQuery.refreshingObjects" value="false"/>
 		<property name="cayenne.GenericSelectQuery.cachePolicy" value="sharedcache"/>
