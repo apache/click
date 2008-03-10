@@ -1802,7 +1802,7 @@ public class Form extends AbstractControl {
                 (FileSizeLimitExceededException) fue;
 
             key = "file-size-limit-exceeded-error";
-            
+
             // Parse the FileField name from the message
             String msg = fue.getMessage();
             int start = 10;
