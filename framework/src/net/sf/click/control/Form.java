@@ -2345,7 +2345,7 @@ public class Form extends AbstractControl {
                         buffer.appendAttribute("style", getFieldStyle());
 
                         if (width != null) {
-                            int colspan = (width.intValue() * 2) + 1;
+                            int colspan = (width.intValue() * 2) - 1;
                             buffer.appendAttribute("colspan", colspan);
                         }
 

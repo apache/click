@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -727,7 +727,7 @@ public class FieldSet extends Field {
                         buffer.appendAttribute("style", form.getFieldStyle());
 
                         if (width != null) {
-                            int colspan = (width.intValue() * 2) + 1;
+                            int colspan = (width.intValue() * 2) - 1;
                             buffer.appendAttribute("colspan", colspan);
                         }
 
