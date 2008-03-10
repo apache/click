@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.lang.Validate;
 
 /**
  * Provides the services and configuration needed to parse a multipart request.
@@ -50,8 +51,7 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
  *         fileUploadBase.setFileSizeMax(2000000);
  *         <span class="kw">return </span>fileUploadBase;
  *     }
- * }
- * </pre>
+ * } </pre>
  *
  * Specify your custom implementation in click.xml:
  *
@@ -68,12 +68,12 @@ import org.apache.commons.fileupload.servlet.ServletRequestContext;
  */
 public class FileUploadService {
 
-    // -------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
     /** The attribute key used for storing an upload exception. */
     public static final String UPLOAD_EXCEPTION = "_upload_exception";
 
-    // -------------------------------------------------------- Public Constructors
+    // ----------------------------------------------------- Public Constructor
 
     /**
      * Public no-argument constructor.
@@ -81,7 +81,7 @@ public class FileUploadService {
     public FileUploadService() {
     }
 
-    // -------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Create and return a new Commons Upload FileItemFactory instance.
@@ -119,15 +119,12 @@ public class FileUploadService {
      *
      * @param request the servlet request
      * @return list of FileField instances
-     * @throws org.apache.commons.fileupload.FileUploadException if request
-     * cannot be parsed
+     * @throws FileUploadException if request cannot be parsed
      */
      public List parseRequest(final HttpServletRequest request)
-        throws FileUploadException {
+            throws FileUploadException {
 
-        if (request == null) {
-            throw new IllegalStateException("Request cannot be null");
-        }
+        Validate.notNull(request, "Request parameters cannot be null");
 
         FileItemFactory fileItemFactory = createFileItemFactory(request);
         FileUploadBase fileUploadBase = createFileUpload(request);
