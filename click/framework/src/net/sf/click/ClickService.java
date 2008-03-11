@@ -145,6 +145,26 @@ class ClickService {
     }
 
     /**
+     * Return the page <tt>Class</tt> for the given path.
+     *
+     * @param path the page path
+     * @return the page class for the given path
+     * @throws IllegalArgumentException if the Page Class for the path is not
+     * found
+     */
+    Class getPageClass(String path) {
+        Class pageClass = clickServlet.clickApp.getPageClass(path);
+
+        if (pageClass == null) {
+            String msg =
+                "No class configured for path: " + path;
+            throw new IllegalArgumentException(msg);
+        }
+
+        return pageClass;
+    }
+
+    /**
      * Return a rendered Velocity template and model for the given
      * class and model data.
      * <p/>

@@ -518,6 +518,18 @@ public class Context {
     }
 
     /**
+     * Return the page <tt>Class</tt> for the given path.
+     *
+     * @param path the page path
+     * @return the page class for the given path
+     * @throws IllegalArgumentException if the Page Class for the path is not
+     * found
+     */
+    public Class getPageClass(String path) {
+        return clickService.getPageClass(path);
+    }
+
+    /**
      * Return the Click application mode value: &nbsp;
      * <tt>["production", "profile", "development", "debug", "trace"]</tt>.
      *
