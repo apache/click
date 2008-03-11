@@ -488,6 +488,24 @@ class ClickApp implements EntityResolver {
     }
 
     /**
+     * Returns the map of all the pages keyed by class.
+     *
+     * @return map containing all pages keyed by class
+     */
+    Map getPageByClassMap() {
+        return pageByClassMap;
+    }
+
+    /**
+     * Returns the map of all the pages keyed by path.
+     *
+     * @return map containing all pages keyed by path
+     */
+    Map getPageByPathMap() {
+        return pageByPathMap;
+    }
+
+    /**
      * Return the headers of the page for the given path.
      *
      * @param path the path of the page
@@ -620,9 +638,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    // -------------------------------------------------------- Private Methods
-
-    private Element getResourceRootElement(String path) throws IOException {
+    Element getResourceRootElement(String path) throws IOException {
         Document document = null;
         InputStream inputStream = null;
         try {
@@ -644,7 +660,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void deployControls(Element rootElm) throws Exception {
+    void deployControls(Element rootElm) throws Exception {
 
         if (rootElm == null) {
             return;
@@ -675,7 +691,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void deployControlSets(Element rootElm) throws Exception {
+    void deployControlSets(Element rootElm) throws Exception {
         if (rootElm == null) {
             return;
         }
@@ -701,7 +717,7 @@ class ClickApp implements EntityResolver {
 
     }
 
-    private void deployFiles(Element rootElm) throws Exception {
+    void deployFiles(Element rootElm) throws Exception {
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/control.css",
@@ -729,7 +745,7 @@ class ClickApp implements EntityResolver {
         deployControlSets(rootElm);
     }
 
-    private void loadMode(Element rootElm) {
+    void loadMode(Element rootElm) {
         Element modeElm = ClickUtils.getChild(rootElm, "mode");
 
         String modeValue = "development";
@@ -781,7 +797,7 @@ class ClickApp implements EntityResolver {
                                                velocityLogLevel);
     }
 
-    private void loadDefaultPages() throws ClassNotFoundException {
+    void loadDefaultPages() throws ClassNotFoundException {
 
         if (!pageByPathMap.containsKey(ERROR_PATH)) {
             ClickApp.PageElm page =
@@ -798,7 +814,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadHeaders(Element rootElm) {
+    void loadHeaders(Element rootElm) {
         Element headersElm = ClickUtils.getChild(rootElm, "headers");
 
         if (headersElm != null) {
@@ -809,7 +825,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadFormatClass(Element rootElm)
+    void loadFormatClass(Element rootElm)
             throws ClassNotFoundException {
 
         Element formatElm = ClickUtils.getChild(rootElm, "format");
@@ -866,7 +882,7 @@ class ClickApp implements EntityResolver {
         return fileUploadService;
     }
 
-    private static Map loadPropertyMap(Element parentElm) {
+    static Map loadPropertyMap(Element parentElm) {
         Map propertyMap = new HashMap();
 
         List propertyList = getChildren(parentElm, "property");
@@ -883,7 +899,7 @@ class ClickApp implements EntityResolver {
         return propertyMap;
     }
 
-    private void loadTemplates() throws Exception {
+    void loadTemplates() throws Exception {
         if (mode == ClickApp.PRODUCTION || mode == ClickApp.PROFILE) {
 
             // Load page templates, which will be cached in ResourceManager
@@ -904,7 +920,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadPages(Element rootElm) throws ClassNotFoundException {
+    void loadPages(Element rootElm) throws ClassNotFoundException {
         Element pagesElm = ClickUtils.getChild(rootElm, "pages");
 
         if (pagesElm == null) {
@@ -1039,14 +1055,14 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private void loadCharset(Element rootElm) {
+    void loadCharset(Element rootElm) {
         String charset = rootElm.getAttribute("charset");
         if (charset != null && charset.length() > 0) {
             this.charset = charset;
         }
     }
 
-    private void loadLocale(Element rootElm) {
+    void loadLocale(Element rootElm) {
         String value = rootElm.getAttribute("locale");
         if (value != null && value.length() > 0) {
             StringTokenizer tokenizer = new StringTokenizer(value, "_");
@@ -1061,7 +1077,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private Properties getVelocityProperties(ServletContext context)
+    Properties getVelocityProperties(ServletContext context)
             throws Exception {
 
         final Properties velProps = new Properties();
@@ -1161,7 +1177,7 @@ class ClickApp implements EntityResolver {
         return velProps;
     }
 
-    private static Map loadHeadersMap(Element parentElm) {
+    static Map loadHeadersMap(Element parentElm) {
         Map headersMap = new HashMap();
 
         List headerList = getChildren(parentElm, "header");
@@ -1195,7 +1211,7 @@ class ClickApp implements EntityResolver {
         return headersMap;
     }
 
-    private List getTemplateFiles() {
+    List getTemplateFiles() {
         List fileList = new ArrayList();
 
         Set resources = servletContext.getResourcePaths("/");
@@ -1218,7 +1234,7 @@ class ClickApp implements EntityResolver {
         return fileList;
     }
 
-    private void processDirectory(String dirPath, List fileList) {
+    void processDirectory(String dirPath, List fileList) {
         Set resources = servletContext.getResourcePaths(dirPath);
 
         if (resources != null) {
@@ -1235,7 +1251,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    private Class getPageClass(String pagePath, String pagesPackage) {
+    Class getPageClass(String pagePath, String pagesPackage) {
         String packageName = pagesPackage + ".";
         String className = "";
 
@@ -1315,7 +1331,7 @@ class ClickApp implements EntityResolver {
         return pageClass;
     }
 
-    private Class getExcludesPageClass(String path) {
+    Class getExcludesPageClass(String path) {
         for (int i = 0; i < excludesList.size(); i++) {
             ClickApp.ExcludesElm override =
                 (ClickApp.ExcludesElm) excludesList.get(i);
@@ -1328,7 +1344,7 @@ class ClickApp implements EntityResolver {
         return null;
     }
 
-    private static List getChildren(Element element, String name) {
+    static List getChildren(Element element, String name) {
         List list = new ArrayList();
         NodeList nodeList = element.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -1344,19 +1360,19 @@ class ClickApp implements EntityResolver {
 
     // ---------------------------------------------------------- Inner Classes
 
-    private static class PageElm {
+    static class PageElm {
 
-        private final Map fields;
+        final Map fields;
 
-        private final Field[] fieldArray;
+        final Field[] fieldArray;
 
-        private final Map headers;
+        final Map headers;
 
-        private final Class pageClass;
+        final Class pageClass;
 
-        private final String path;
+        final String path;
 
-        private PageElm(Element element, String pagesPackage, Map commonHeaders)
+        public PageElm(Element element, String pagesPackage, Map commonHeaders)
             throws ClassNotFoundException {
 
             // Set headers
@@ -1402,7 +1418,7 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        private PageElm(String path, Class pageClass, Map commonHeaders) {
+        public PageElm(String path, Class pageClass, Map commonHeaders) {
 
             headers = Collections.unmodifiableMap(commonHeaders);
             this.pageClass = pageClass;
@@ -1417,7 +1433,7 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        private PageElm(String classname, String path)
+        public PageElm(String classname, String path)
             throws ClassNotFoundException {
 
             this.fieldArray = null;
@@ -1427,33 +1443,33 @@ class ClickApp implements EntityResolver {
             this.path = path;
         }
 
-        private Field[] getFieldArray() {
+        public Field[] getFieldArray() {
             return fieldArray;
         }
 
-        private Map getFields() {
+        public Map getFields() {
             return fields;
         }
 
-        private Map getHeaders() {
+        public Map getHeaders() {
             return headers;
         }
 
-        private Class getPageClass() {
+        public Class getPageClass() {
             return pageClass;
         }
 
-        private String getPath() {
+        public String getPath() {
             return path;
         }
     }
 
-    private static class ExcludesElm {
+    static class ExcludesElm {
 
-        private Set pathSet = new HashSet();
-        private Set fileSet = new HashSet();
+        final Set pathSet = new HashSet();
+        final Set fileSet = new HashSet();
 
-        private ExcludesElm(Element element) throws ClassNotFoundException {
+        public ExcludesElm(Element element) throws ClassNotFoundException {
 
             String pattern = element.getAttribute("pattern");
 
@@ -1482,11 +1498,11 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        private Class getPageClass() {
+        public Class getPageClass() {
             return ClickApp.ExcludePage.class;
         }
 
-        private boolean isMatch(String resourcePath) {
+        public boolean isMatch(String resourcePath) {
             if (fileSet.contains(resourcePath)) {
                 return true;
             }
@@ -1507,9 +1523,9 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    public static class ExcludePage extends Page {
+    static class ExcludePage extends Page {
 
-        private static final Map HEADERS = new HashMap();
+        static final Map HEADERS = new HashMap();
 
         static {
             HEADERS.put("Cache-Control", "max-age=3600, public");

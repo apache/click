@@ -221,13 +221,13 @@ public class ClickServlet extends HttpServlet {
                 "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
             // Initialize the click application.
-            ClickApp newClickApp = new ClickApp();
+            ClickApp newClickApp = createClickApp();
 
             newClickApp.setServletContext(getServletContext());
 
             newClickApp.init(createClickLogger());
 
-            clickService = new ClickService(this);
+            clickService = createClickService();
 
             logger = newClickApp.getLogger();
 
@@ -433,8 +433,7 @@ public class ClickServlet extends HttpServlet {
 
         ErrorPage finalizeRef = null;
         try {
-            final ErrorPage errorPage =
-                (ErrorPage) clickApp.getErrorPageClass().newInstance();
+            final ErrorPage errorPage = createErrorPage(pageClass, exception);
 
             finalizeRef = errorPage;
 
@@ -1294,7 +1293,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        PageImports pageImports = new PageImports(page);
+        PageImports pageImports = createPageImports(page);
 
         pop = context.put("imports", pageImports.getAllIncludes());
         if (pop != null && !page.isStateful()) {
@@ -1512,7 +1511,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        PageImports pageImports = new PageImports(page);
+        PageImports pageImports = createPageImports(page);
 
         request.setAttribute("imports", pageImports.getAllIncludes());
         if (model.containsKey("imports")) {
@@ -1595,7 +1594,59 @@ public class ClickServlet extends HttpServlet {
         return context;
     }
 
+    /**
+     * Creates and returns a new PageImports instance for the specified page.
+     *
+     * @param page the page to create a new PageImports instance for
+     * @return the new PageImports instance
+     */
+    protected PageImports createPageImports(Page page) {
+        return new PageImports(page);
+    }
+
+    /**
+     * Creates and returns a new ErrorPage instance.
+     * <p/>
+     * This method creates the custom page as specified in <tt>click.xml</tt>,
+     * otherwise the default ErrorPage instance.
+     * <p/>
+     * Subclasses can override this method to provide custom ErrorPages tailored
+     * for specific exceptions.
+     * <p/>
+     * <b>Note</b> you can safely use {@link net.sf.click.Context} in this
+     * method.
+     *
+     * @param pageClass the page class with the error
+     * @param exception the error causing exception
+     * @return a new ErrorPage instance
+     */
+    protected ErrorPage createErrorPage(Class pageClass, Throwable exception) {
+        try {
+            return (ErrorPage) clickApp.getErrorPageClass().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Creates and return a new Click Application instance.
+     *
+     * @return creates and return a new Click Application instance
+     */
+    ClickApp createClickApp() {
+        return new ClickApp();
+    }
+
+    /**
+     * Creates and return a new Click Service instance.
+     *
+     * @return creates and return a new Click Service instance
+     */
+    ClickService createClickService() {
+        return new ClickService(this);
+    }
 
     /**
      * Process all the Pages public fields using the given callback.
