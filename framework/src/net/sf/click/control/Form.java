@@ -1255,8 +1255,7 @@ public class Form extends AbstractControl {
      * "<tt>center</tt>", "<tt>right</tt>".
      * Note the given align is not validated.
      *
-     * @param align
-     *            the field label HTML horizontal alignment
+     * @param align the field label HTML horizontal alignment
      */
     public void setLabelAlign(String align) {
         labelAlign = align;
