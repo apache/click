@@ -11,6 +11,7 @@ import net.sf.click.control.AbstractControl;
 import net.sf.click.control.Field;
 import net.sf.click.control.Form;
 import net.sf.click.control.TextField;
+import net.sf.click.extras.control.EmailField;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -120,6 +121,9 @@ public class LiveValidator extends AbstractControl {
 	 */
 	@SuppressWarnings("unchecked")
 	protected LiveValidatorAdapter getAdapter(Field field){
+		if(field instanceof EmailField){
+			return new EmailFieldAdapter();
+		}
 		if(field instanceof TextField){
 			return new TextFieldAdapter();
 		}

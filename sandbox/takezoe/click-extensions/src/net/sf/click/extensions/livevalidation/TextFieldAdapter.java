@@ -9,9 +9,9 @@ import net.sf.click.control.TextField;
  * 
  * @author Naoki Takezoe
  */
-public class TextFieldAdapter implements LiveValidatorAdapter<TextField> {
+public class TextFieldAdapter<T extends TextField> implements LiveValidatorAdapter<T> {
 
-	public List<ValidationRule> getValidationRules(TextField field) {
+	public List<ValidationRule> getValidationRules(T field) {
 		List<ValidationRule> rules = new ArrayList<ValidationRule>();
 		if(field.isRequired()){
 			JSONBuilder properties = new JSONBuilder();
