@@ -15,56 +15,64 @@
  */
 package net.sf.click.util;
 
+import java.io.IOException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.fileupload.FileItemFactory;
 
-import org.apache.commons.fileupload.FileUploadBase;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides the services and configuration needed to parse a multipart request.
- * <p/>
- * This class is built on the Commons FileUpload library.
- * <p/>
- * You can configure Commons FileUpload by overriding one of the createXxx
- * methods.
- * <p/>
- * Below is an example of how to set the maxSize and fileMaxSize configuration:
+ * Provides an application service to parse a multipart file upload requests.
+ * This class uses the Apache <a target="blank" href="http://commons.apache.org/fileupload/">Commons FileUpload</a>
+ * library internally.
+ *
+ * <h3>Configuration</h3>
+ *
+ * The FileUploadService can be configure in the <tt>click.xml</tt> configuration file.
+ * In the application config file you can specify the maximim size of any individual file upload in bytes
+ * (<tt>fileSizeMax</tt>) and specify the maximum total size of the request in bytes
+ * (<tt>sizeMax</tt>). For example:
  *
  * <pre class="codeConfig">
- * <span class="kw">public class</span> AppFileUploadService <span class="kw">extends</span> FileUploadService {
+ * &lt;click-app&gt;
  *
- *     <span class="kw">public </span>FileUploadBase createFileUpload(HttpServletRequest request) {
+ *     &lt;pages package="com.mycorp.page"/&gt;
  *
- *         FileUploadBase fileUploadBase = <span class="kw">super</span>.createFileUpload(request);
+ *     &lt;file-upload-service&gt;
+ *         &lt;property name="<span class="st">fileSizeMax</span>" value="1048576"/&gt;
+ *         &lt;property name="<span class="st">sizeMax</span>" value="10485760"/&gt;
+ *     &lt;/file-upload-service&gt;
  *
- *         <span class="cm">//Set request maximum size to 5mb -> 5,000,000 bytes.</span>
- *         fileUploadBase.setSizeMax(50000000);
+ * &lt;/click-app&gt; </pre>
  *
- *         <span class="cm">//Set file maximum size to 2mb -> 2,000,000 bytes.</span>
- *         fileUploadBase.setFileSizeMax(2000000);
- *         <span class="kw">return </span>fileUploadBase;
- *     }
- * } </pre>
- *
- * Specify your custom implementation in click.xml:
+ * You can also subclass the FileUploadService to provide your own customization.
+ * For example you may wish to override the {@link #createFileItemFactory(HttpServletRequest)} method.
+ * To specify an alternative class please see the example configuration below:
  *
  * <pre class="codeConfig">
- * &lt;click-app charset="UTF-8" locale="de"&gt;
- *     &lt;pages package="<span class="st">com.mycorp.page</span>"/&gt;
- *     &lt;file-upload-service classname="<span class="st">com.mycorp.util.AppFileUploadService</span>"/&gt;
- * &lt;/click-app&gt;
- * </pre>
+ * &lt;click-app&gt;
+ *     &lt;pages package="com.mycorp.page"/&gt;
+ *     &lt;file-upload-service classname="<span class="st">com.mycorp.util.AppFileUploadService</span>"&gt;
+ *         &lt;property name="fileSizeMax" value="1048576"/&gt;
+ *         &lt;property name="sizeMax" value="10485760"/&gt;
+ *     &lt;/file-upload-service&gt;
+ * &lt;/click-app&gt; </pre>
  *
  * <b>Please note:</b> this class must have a default no-argument constructor.
  *
  * @author Bob Schellink
+ * @author Malcolm Edgar
  */
 public class FileUploadService {
 
@@ -72,6 +80,12 @@ public class FileUploadService {
 
     /** The attribute key used for storing an upload exception. */
     public static final String UPLOAD_EXCEPTION = "_upload_exception";
+
+    /** The total request maximum size in bytes. */
+    protected long sizeMax;
+
+    /** The maximum individual size in bytes. */
+    protected long fileSizeMax;
 
     // ----------------------------------------------------- Public Constructor
 
@@ -84,6 +98,42 @@ public class FileUploadService {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Return maximum individual size in bytes.
+     *
+     * @return the fileSizeMax
+     */
+    public long getFileSizeMax() {
+        return fileSizeMax;
+    }
+
+    /**
+     * Set the maximum individual size in bytes.
+     *
+     * @param value the fileSizeMax to set
+     */
+    public void setFileSizeMax(long value) {
+        this.fileSizeMax = value;
+    }
+
+    /**
+     * Return the total request maximum size in bytes.
+     *
+     * @return the setSizeMax
+     */
+    public long getSizeMax() {
+        return sizeMax;
+    }
+
+    /**
+     * Set the total request maximum size in bytes.
+     *
+     * @param value the setSizeMax to set
+     */
+    public void setSizeMax(long value) {
+        this.sizeMax = value;
+    }
+
+    /**
      * Create and return a new Commons Upload FileItemFactory instance.
      *
      * @param request the servlet request
@@ -94,44 +144,84 @@ public class FileUploadService {
     }
 
     /**
-     * Create and return a new Commons Upload FileUploadBase instance.
-     *
-     * @param request the servlet request
-     * @return a new Commons FileUpload FileUploadBase instance
-     */
-    public FileUploadBase createFileUpload(HttpServletRequest request) {
-        FileUploadBase fileUploadBase = new ServletFileUpload();
-        return fileUploadBase;
-    }
-
-    /**
-     * Create and return a new Commons Upload RequestContext instance.
-     *
-     * @param request the servlet request
-     * @return a new Commons FileUpload RequestContext instance
-     */
-    public RequestContext createRequestContext(HttpServletRequest request) {
-        return new ServletRequestContext(request);
-    }
-
-    /**
      * Parse the request and extract FileItem instances.
      *
      * @param request the servlet request
-     * @return list of FileField instances
+     * @param fileItems the list of FileItem instances to return, this list cannot be null
      * @throws FileUploadException if request cannot be parsed
      */
-     public List parseRequest(final HttpServletRequest request)
+     public void parseRequest(final HttpServletRequest request, final List fileItems)
             throws FileUploadException {
 
-        Validate.notNull(request, "Request parameters cannot be null");
+        Validate.notNull(request, "Null request parameter");
+        Validate.notNull(fileItems, "Null items parameter");
 
         FileItemFactory fileItemFactory = createFileItemFactory(request);
-        FileUploadBase fileUploadBase = createFileUpload(request);
-        fileUploadBase.setFileItemFactory(fileItemFactory);
 
-        RequestContext requestContext = createRequestContext(request);
+        ClickFileUpload fileUpload = new ClickFileUpload();
+        fileUpload.setFileItemFactory(fileItemFactory);
 
-        return fileUploadBase.parseRequest(requestContext);
+        if (fileSizeMax > 0) {
+            fileUpload.setFileSizeMax(fileSizeMax);
+        }
+        if (sizeMax > 0) {
+            fileUpload.setSizeMax(sizeMax);
+        }
+
+        ServletRequestContext requestContext = new ServletRequestContext(request);
+
+        fileUpload.parseRequest(requestContext, fileItems);
     }
+
+     // --------------------------------------------------------- Inner Classes
+
+     /**
+      * Provides an ServletFileUpload class with improve error handling.
+      */
+     static class ClickFileUpload extends ServletFileUpload {
+
+        private void parseRequest(RequestContext requestContext, List items)
+            throws FileUploadException {
+
+            Validate.notNull(requestContext, "Null requestContext parameter");
+
+            try {
+                FileItemIterator iter = getItemIterator(requestContext);
+                FileItemFactory fac = getFileItemFactory();
+
+                if (fac == null) {
+                    throw new IllegalStateException("No FileItemFactory has been set.");
+                }
+
+                while (iter.hasNext()) {
+                    FileItemStream item = iter.next();
+
+                    FileItem fileItem = fac.createItem(item.getFieldName(),
+                            item.getContentType(),
+                            item.isFormField(),
+                            item.getName());
+
+                    try {
+                        Streams.copy(item.openStream(), fileItem.getOutputStream(), true);
+
+                    } catch (FileUploadIOException e) {
+                        throw (FileUploadException) e.getCause();
+
+                    } catch (IOException e) {
+                        throw new IOFileUploadException("Processing of "
+                                + MULTIPART_FORM_DATA + " request failed. "
+                                + e.getMessage(), e);
+                    }
+
+                    items.add(fileItem);
+                }
+
+            } catch (FileUploadIOException e) {
+                throw (FileUploadException) e.getCause();
+
+            } catch (IOException e) {
+                throw new FileUploadException(e.getMessage(), e);
+            }
+        }
+     }
 }

@@ -1505,6 +1505,28 @@ public class ClickUtils {
     }
 
     /**
+     * Return the list of XML child Element elements with the given name from
+     * the given parent Element.
+     *
+     * @param parent the parent element to get the child from
+     * @param name the name of the child element
+     * @return the list of XML child elements for the given name
+     */
+    public static List getChildren(Element parent, String name) {
+        List list = new ArrayList();
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    list.add(node);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
      * Return the InputStream for the Click configuration file <tt>click.xml</tt>.
      * This method will first lookup the <tt>click.xml</tt> under the
      * applications <tt>WEB-INF</tt> directory, and then if not found it will

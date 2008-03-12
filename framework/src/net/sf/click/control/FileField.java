@@ -52,10 +52,10 @@ import org.apache.commons.lang.StringUtils;
  * <p/>
  * Please also see the references:
  * <ul>
- * <li><a href="http://jakarta.apache.org/commons/fileupload/using.html">Jakarta Commons - Using FileUpload</a></li>
- * <li><a href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867 - Form-based File Upload in HTML</a></li>
- * <li><a href="http://www.cs.tut.fi/~jkorpela/forms/file.html">Jukka Korpela - File input (or "upload") in HTML forms</a></li>
- * <li><a href="https://www.sdn.sap.com/sdn/weblogs.sdn?blog=/pub/wlg/684">SDN - INPUT TYPE="FILE" and your options...</a></li>
+ * <li><a target="blank" href="http://commons.apache.org/fileupload/using.html">Apache Commons - Using FileUpload</a></li>
+ * <li><a target="blank" href="http://www.ietf.org/rfc/rfc1867.txt">RFC 1867 - Form-based File Upload in HTML</a></li>
+ * <li><a target="blank" href="http://www.cs.tut.fi/~jkorpela/forms/file.html">Jukka Korpela - File input (or "upload") in HTML forms</a></li>
+ * <li><a target="blank" href="https://www.sdn.sap.com/sdn/weblogs.sdn?blog=/pub/wlg/684">SDN - INPUT TYPE="FILE" and your options...</a></li>
  * </ul>
  *
  * @author Malcolm Edgar
