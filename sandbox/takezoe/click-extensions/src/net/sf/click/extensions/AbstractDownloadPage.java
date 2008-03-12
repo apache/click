@@ -26,7 +26,7 @@ import net.sf.click.Page;
  * 
  * @author Naoki Takezoe
  */
-public abstract class DownloadPage extends Page {
+public abstract class AbstractDownloadPage extends Page {
 	
 	protected String contentType = "application/octet-stream";
 	protected String contentDisposition = "attachment";
