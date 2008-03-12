@@ -107,12 +107,12 @@ class ClickService {
     }
 
     /**
-     * Create and return a new FileUploadSupport instance.
+     * Return the Click application FileUploadService instance.
      *
-     * @return a new FileUploadSupport instance
+     * @return the Click application FileUploadService instance
      */
-    FileUploadService createFileUploadService() {
-        return clickServlet.clickApp.createFileUploadService();
+    FileUploadService getFileUploadService() {
+        return clickServlet.clickApp.getFileUploadService();
     }
 
     /**

@@ -16,6 +16,7 @@
 package net.sf.click;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -74,16 +75,15 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
             Map fileItems = new HashMap();
 
             try {
-                List itemsList = null;
+                List itemsList = new ArrayList();
 
                 try {
 
-                    itemsList = fileUploadService.parseRequest(request);
+                    fileUploadService.parseRequest(request, itemsList);
 
                 } catch (FileUploadException fue) {
-                    ClickLogger.getInstance().debug(fue.getMessage());
+                    ClickLogger.getInstance().info(fue.getMessage());
                     request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
-                    itemsList = Collections.EMPTY_LIST;
                 }
 
                 for (int i = 0; i < itemsList.size(); i++) {
@@ -92,8 +92,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     String name = fileItem.getFieldName();
                     String value = null;
 
-                    //Form fields are placed in the request parameter map,
-                    //while file uploads are placed in the file item map.
+                    // Form fields are placed in the request parameter map,
+                    // while file uploads are placed in the file item map.
                     if (fileItem.isFormField()) {
 
                         if (request.getCharacterEncoding() == null) {
@@ -108,11 +108,11 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                             }
                         }
 
-                        //Add the form field value to the parameters
+                        // Add the form field value to the parameters.
                         addToMapAsString(requestParams, name, value);
 
                     } else {
-                        //Add the file item to the list of file items
+                        // Add the file item to the list of file items.
                         addToMapAsFileItem(fileItems, name, fileItem);
                     }
                 }

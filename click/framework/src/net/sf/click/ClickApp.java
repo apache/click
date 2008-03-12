@@ -42,6 +42,8 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.FileUploadService;
 import net.sf.click.util.Format;
 
+import ognl.Ognl;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
@@ -51,8 +53,6 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -155,8 +155,8 @@ class ClickApp implements EntityResolver {
     /** The automatically bind controls, request parameters and models flag. */
     private boolean autobinding = true;
 
-    /** The Commons Upload service class. */
-    private Class fileUploadServiceClass;
+    /** The Commons FileUpload service class. */
+    private FileUploadService fileUploadService;
 
     /** The format class. */
     private Class formatClass;
@@ -250,8 +250,8 @@ class ClickApp implements EntityResolver {
             // Load the format class
             loadFormatClass(rootElm);
 
-            // Load the Commons Upload service
-            loadFileUploadServiceClass(rootElm);
+            // Load the File Upload service
+            loadFileUploadService(rootElm);
 
             // Load the common headers
             loadHeaders(rootElm);
@@ -324,6 +324,15 @@ class ClickApp implements EntityResolver {
      */
     String getCharset() {
         return charset;
+    }
+
+    /**
+     * Return the FileUpload service.
+     *
+     * @return the FileUpload service
+     */
+    FileUploadService getFileUploadService() {
+        return fileUploadService;
     }
 
     /**
@@ -672,7 +681,7 @@ class ClickApp implements EntityResolver {
             return;
         }
 
-        List deployableList = getChildren(controlsElm, "control");
+        List deployableList = ClickUtils.getChildren(controlsElm, "control");
 
         for (int i = 0; i < deployableList.size(); i++) {
             Element deployableElm = (Element) deployableList.get(i);
@@ -702,7 +711,7 @@ class ClickApp implements EntityResolver {
             return;
         }
 
-        List controlSets = getChildren(controlsElm, "control-set");
+        List controlSets = ClickUtils.getChildren(controlsElm, "control-set");
 
         for (int i = 0; i < controlSets.size(); i++) {
             Element controlSet = (Element) controlSets.get(i);
@@ -845,47 +854,40 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    void loadFileUploadServiceClass(Element rootElm) throws Exception {
+
+    void loadFileUploadService(Element rootElm) throws Exception {
 
         Element fileUploadServiceElm = ClickUtils.getChild(rootElm, "file-upload-service");
 
         if (fileUploadServiceElm != null) {
+            Class fileUploadServiceClass = FileUploadService.class;
+
             String classname = fileUploadServiceElm.getAttribute("classname");
 
-            if (classname == null) {
-                String msg = "'file-upload-service' element missing 'classname' attribute.";
-                throw new RuntimeException(msg);
+            if (StringUtils.isNotBlank(classname)) {
+                fileUploadServiceClass = ClickUtils.classForName(classname);
             }
 
-            fileUploadServiceClass = ClickUtils.classForName(classname);
+            fileUploadService = (FileUploadService) fileUploadServiceClass.newInstance();
+
+            Map propertyMap = loadPropertyMap(fileUploadServiceElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, fileUploadService, value);
+            }
 
         } else {
-            fileUploadServiceClass = FileUploadService.class;
+            fileUploadService = new FileUploadService();
         }
-    }
-
-    /**
-     * Create and return a new {@link net.sf.click.util.FileUploadService}
-     * instance.
-     *
-     * @return a new FileUploadService instance
-     */
-    FileUploadService createFileUploadService() {
-        FileUploadService fileUploadService;
-        try {
-            fileUploadService = (FileUploadService)
-                fileUploadServiceClass.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        return fileUploadService;
     }
 
     static Map loadPropertyMap(Element parentElm) {
         Map propertyMap = new HashMap();
 
-        List propertyList = getChildren(parentElm, "property");
+        List propertyList = ClickUtils.getChildren(parentElm, "property");
 
         for (int i = 0, size = propertyList.size(); i < size; i++) {
             Element property = (Element) propertyList.get(i);
@@ -970,7 +972,7 @@ class ClickApp implements EntityResolver {
         }
 
 
-        List pageList = getChildren(pagesElm, "page");
+        List pageList = ClickUtils.getChildren(pagesElm, "page");
 
         if (!pageList.isEmpty() && logger.isDebugEnabled()) {
             logger.debug("click.xml pages:");
@@ -995,7 +997,7 @@ class ClickApp implements EntityResolver {
 
             // Build list of automap path page class overrides
             excludesList.clear();
-            for (Iterator i = getChildren(pagesElm, "excludes").iterator();
+            for (Iterator i = ClickUtils.getChildren(pagesElm, "excludes").iterator();
                  i.hasNext();) {
 
                 excludesList.add(new ClickApp.ExcludesElm((Element) i.next()));
@@ -1180,7 +1182,7 @@ class ClickApp implements EntityResolver {
     static Map loadHeadersMap(Element parentElm) {
         Map headersMap = new HashMap();
 
-        List headerList = getChildren(parentElm, "header");
+        List headerList = ClickUtils.getChildren(parentElm, "header");
 
         for (int i = 0, size = headerList.size(); i < size; i++) {
             Element header = (Element) headerList.get(i);
@@ -1344,20 +1346,6 @@ class ClickApp implements EntityResolver {
         return null;
     }
 
-    static List getChildren(Element element, String name) {
-        List list = new ArrayList();
-        NodeList nodeList = element.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node instanceof Element) {
-                if (node.getNodeName().equals(name)) {
-                    list.add(node);
-                }
-            }
-        }
-        return list;
-    }
-
     // ---------------------------------------------------------- Inner Classes
 
     static class PageElm {
@@ -1418,7 +1406,7 @@ class ClickApp implements EntityResolver {
             }
         }
 
-        public PageElm(String path, Class pageClass, Map commonHeaders) {
+        private PageElm(String path, Class pageClass, Map commonHeaders) {
 
             headers = Collections.unmodifiableMap(commonHeaders);
             this.pageClass = pageClass;
@@ -1523,7 +1511,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    static class ExcludePage extends Page {
+    public static class ExcludePage extends Page {
 
         static final Map HEADERS = new HashMap();
 

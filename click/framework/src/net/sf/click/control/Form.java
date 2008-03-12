@@ -1809,7 +1809,7 @@ public class Form extends AbstractControl {
             String fieldName = fue.getMessage().substring(start, end);
 
             args = new Object[3];
-            args[0] = fieldName;
+            args[0] = ClickUtils.toLabel(fieldName);
             args[1] = new Long(fse.getPermittedSize());
             args[2] = new Long(fse.getActualSize());
             setError(getMessage(key, args));
@@ -2607,11 +2607,11 @@ public class Form extends AbstractControl {
      * @return true if a POST error occurred, false otherwise
      */
     protected boolean hasPostError() {
-        Exception e = (Exception) getContext().getRequest()
-            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
+        Exception e = (Exception)
+            getContext().getRequest().getAttribute(FileUploadService.UPLOAD_EXCEPTION);
 
-        if (e instanceof FileSizeLimitExceededException ||
-            e instanceof SizeLimitExceededException) {
+        if (e instanceof FileSizeLimitExceededException
+            || e instanceof SizeLimitExceededException) {
             return true;
         }
 
