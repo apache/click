@@ -34,6 +34,8 @@
 		<menu separator="true"/>
 		<menu label="JSP Hello World" path="jsp/hello-world.htm"/>
 		<menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
+    <menu label="JSP Form Demo" path="jsp/edit-customer.htm"/>
+    <menu label="JSP Page Navigation" path="jsp/navigation-a.htm"/>
 		<menu separator="true"/>
 		<menu label="Page Navigation" path="navigation-a.htm"/>
 		<menu label="Page Flow Patterns" path="pageflow/start-page.htm"/>
