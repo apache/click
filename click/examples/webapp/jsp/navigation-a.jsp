@@ -6,7 +6,7 @@ You are currently on page <span>NavigationA</span>.
 To forward to <b>NavigationB</b> click <a href="${forwardLink.href}">here</a>.
 
 <pre class="javaCode">
-    setForward(<span class='st'>"/navigation-b.htm"</span>);
+    setForward(<span class='st'>"/navigation-b.jsp"</span>);
 </pre>
 
 To forward to <b>NavigationB</b> passing the parameter $forwardParamLink.value click
@@ -14,7 +14,7 @@ To forward to <b>NavigationB</b> passing the parameter $forwardParamLink.value c
 
 <pre class="javaCode">
     getContext().getRequest().setAttribute(<span class='st'>"param"</span>, param);
-    setForward(<span class='st'>"/navigation-b.htm"</span>);
+    setForward(<span class='st'>"/navigation-b.jsp"</span>);
 </pre>
 
 <h4 style="margin-top:2em;">Redirect</h4>
@@ -22,14 +22,14 @@ To forward to <b>NavigationB</b> passing the parameter $forwardParamLink.value c
 To redirect to <b>NavigationB</b> click <a href="${redirectLink.href}">here</a>.
 
 <pre class="javaCode">
-    setRedirect(<span class='st'>"/navigation-b.htm"</span>);
+    setRedirect(<span class='st'>"/navigation-b.jsp"</span>);
 </pre>
 
 To redirect to <b>NavigationB</b> passing the parameter $redirectParamLink.value click
 <a href="${redirectParamLink.href}">here</a>.
 
 <pre class="javaCode">
-    setRedirect(<span class='st'>"/navigation-b.htm?param="</span> + param);
+    setRedirect(<span class='st'>"/navigation-b.jsp?param="</span> + param);
 </pre>
 
 
