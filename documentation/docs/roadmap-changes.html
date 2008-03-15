@@ -45,15 +45,32 @@ new features, bug fixes and documentation updates.
     <a target="blank" href="http://sourceforge.net/users/sabob/">Bob Schellink</a>
     accepts new Project Leader role for the Click project.<br/>
     New developer <a target="blank" href="ricardolecheta@users.sourceforge.net">Ricardo Lecheta</a> joins the Click project.
-    </div>  
+    </div>
     <ul style="padding: 0em; margin-left:0em;">
+    <li class="change">
+    Added new method <a href="click-api/net/sf/click/Context.html#isAjaxRequest()">Context#isAjaxRequest()</a>
+    which enables conditional checking for Ajax requests.
+	  </li>
     <li class="change">
 		Upgradeded to Scriptaculous 1.8.1 to fix auto form submit. This issue was raised by Andy Key.
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-336">336</a>].
 	  </li>
     <li class="change">
+    Fixed sendRedirect to convert <em>.jsp</em> extension to <em>.htm</em> when redirecting to a JSP page.
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-338">338</a>].
+	  </li>
+    <li class="change">
+		Fixed Form#clearValues() to exclude certain HiddenFields from being cleared.
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-337">337</a>].
+	  </li>
+    <li class="change">
 		Fixed Form action incorrect when using JSP. This issue was raised by Chas Erickson.
 		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-334">334</a>].
+	  </li>
+    <li class="change">
+    Fixed <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">Form#onSubmitCheck()</a>
+    to ignore Ajax calls. This issue was raised by Ivan Furdi.
+		[<a target='blank' href="http://www.avoka.com:8080/jira/browse/CLK-333">333</a>].
 	  </li>
 	  <li class="change">
 		Fixed Form and FieldSet column layout bug 
