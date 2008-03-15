@@ -624,6 +624,9 @@ public class ClickServlet extends HttpServlet {
 
             if (url.charAt(0) == '/') {
                 url = request.getContextPath() + url;
+                if (url.endsWith(".jsp")) {
+                    url = StringUtils.replace(url, ".jsp", ".htm");
+                }
             }
 
             url = response.encodeRedirectURL(url);
