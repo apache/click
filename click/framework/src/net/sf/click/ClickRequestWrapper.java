@@ -54,8 +54,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
     /** The wrapped servlet request. */
     private final HttpServletRequest request;
 
-    /** The map of request parameter values. */
-    private final Map requestParameterMap;
+    /** The map of <tt>"multipart"</tt> request parameter values. */
+    private final Map multipartParameterMap;
 
     // ----------------------------------------------------------- Constructors
 
@@ -125,12 +125,12 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
 
             } finally {
                 fileItemMap = Collections.unmodifiableMap(fileItems);
-                requestParameterMap = Collections.unmodifiableMap(requestParams);
+                multipartParameterMap = Collections.unmodifiableMap(requestParams);
             }
 
         } else {
             fileItemMap = Collections.EMPTY_MAP;
-            requestParameterMap = Collections.EMPTY_MAP;
+            multipartParameterMap = Collections.EMPTY_MAP;
         }
     }
 
@@ -153,7 +153,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      */
     public String getParameter(String name) {
         if (isMultipartRequest) {
-            Object value = requestParameterMap.get(name);
+            Object value = getMultipartParameterMap().get(name);
 
             if (value instanceof String) {
                 return (String) value;
@@ -180,7 +180,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      */
     public Enumeration getParameterNames() {
         if (isMultipartRequest) {
-            return Collections.enumeration(requestParameterMap.keySet());
+            return Collections.enumeration(getMultipartParameterMap().keySet());
 
         } else {
             return request.getParameterNames();
@@ -192,7 +192,7 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      */
     public String[] getParameterValues(String name) {
         if (isMultipartRequest) {
-            Object values = requestParameterMap.get(name);
+            Object values = getMultipartParameterMap().get(name);
             if (values instanceof String) {
                 return new String[] { values.toString() };
             }
@@ -212,10 +212,21 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      */
     public Map getParameterMap() {
         if (isMultipartRequest) {
-            return requestParameterMap;
+            return getMultipartParameterMap();
         } else {
             return request.getParameterMap();
         }
+    }
+
+    // -------------------------------------------------------- Package private methods
+
+    /**
+     * Return the map of <tt>"multipart"</tt> request parameter map.
+     *
+     * @return the <tt>"multipart"</tt> request parameter map
+     */
+    Map getMultipartParameterMap() {
+        return multipartParameterMap;
     }
 
     // -------------------------------------------------------- Private methods
