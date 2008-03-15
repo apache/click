@@ -1755,6 +1755,35 @@ public class ClickUtils {
     }
 
     /**
+     * Return the requestURI from the request. For example:
+     * <pre class="codeHtml">
+     * <span class="blue">http://www.mycorp.com/banking/secure/login.htm</span>  ->  <span class="red">/banking/secure/login.htm</span> </pre>
+     *
+     * @param request the page servlet request
+     * @return the requestURI from the request
+     */
+    public static String getRequestURI(HttpServletRequest request) {
+        // CLK-334. Adapted from VelocityViewServlet.handleRequest() method:
+
+        // If we get here from RequestDispatcher.include(), getServletPath()
+        // will return the original (wrong) URI requested.  The following
+        // special attribute holds the correct path.  See section 8.3 of the
+        // Servlet 2.3 specification.
+
+        String requestURI = (String) request.getAttribute("javax.servlet.include.request_uri");
+
+        if (requestURI == null) {
+            requestURI = request.getRequestURI();
+        }
+
+        if (requestURI != null) {
+            requestURI = StringUtils.replace(requestURI, ".jsp", ".htm");
+        }
+
+        return requestURI;
+    }
+
+    /**
      * Finds a resource with a given name. This method returns null if no
      * resource with this name is found.
      * <p>

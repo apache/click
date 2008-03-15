@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -302,9 +302,10 @@ public class ErrorReport {
 
         buffer.append("<tr><td width='12%' valign='top'><b>URI</b></td><td>");
         buffer.append("<a href='");
-        buffer.append(request.getRequestURI());
+        String requestURI = ClickUtils.getRequestURI(request);
+        buffer.append(requestURI);
         buffer.append("'>");
-        buffer.append(request.getRequestURI());
+        buffer.append(requestURI);
         buffer.append("</a>");
         buffer.append("</td></tr>");
 
