@@ -799,9 +799,10 @@ public class Page {
      * The request is redirected to using the HttpServletResponse.setRedirect()
      * method.
      * <p/>
-     * If the redirect location is begins with a <tt class="wr">"/"</tt>
+     * If the redirect location begins with a <tt class="wr">"/"</tt>
      * character the redirect location will be prefixed with the web applications
-     * context path.
+     * context path. Also if the location has a <tt>.jsp</tt> extension it will
+     * be changed to <tt>.htm</tt>.
      * <p/>
      * For example if an application is deployed to the context
      * <tt class="wr">"mycorp"</tt> calling
