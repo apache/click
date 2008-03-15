@@ -49,11 +49,14 @@ public class Context {
 
     // -------------------------------------------------------------- Constants
 
+    /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
+    public static final String LOCALE = "locale";
+
     /** The thread local context. */
     private static final ThreadLocal THREAD_LOCAL_CONTEXT = new ThreadLocal();
 
-    /** The user's session Locale key: &nbsp; <tt>locale</tt>. */
-    public static final String LOCALE = "locale";
+    /** Ajax request header. */
+    private static final String X_REQUESTED_WITH = "X-Requested-With";
 
     // -------------------------------------------------------------- Instance Variables
 
@@ -241,6 +244,19 @@ public class Context {
         } else {
             return getRequest().getMethod().equalsIgnoreCase("GET");
         }
+    }
+
+    /**
+     * Return true is this is an Ajax request, false otherwise.
+     * <p/>
+     * An Ajax request is identified by the presence of the request header
+     * <tt>"X-Requested-With: XMLHttpRequest"</tt>. This is the de-facto
+     * standard header used by Ajax libraries.
+     *
+     * @return if this is a Ajax request, false otherwise
+     */
+    public boolean isAjaxRequest() {
+        return getRequest().getHeader(X_REQUESTED_WITH) != null;
     }
 
     /**
