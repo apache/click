@@ -266,24 +266,18 @@ public abstract class AutoCompleteTextField extends TextField {
         if (getContext().isPost()) {
             // If an auto complete POST request then render suggested list,
             // otherwise continue as normal
-            if (!getForm().isFormSubmission()) {
+            if (getForm().isFormSubmission()) {
+                return super.onProcess();
+            } else if (getContext().isAjaxRequest()) {
                 String criteria = getContext().getRequestParameter(getName());
                 if (criteria != null) {
                     List autoCompleteList = getAutoCompleteList(criteria);
                     renderAutoCompleteList(autoCompleteList);
                     return false;
-
-                } else {
-                    return true;
                 }
-
-            } else {
-                return super.onProcess();
             }
-
-        } else {
-            return true;
         }
+        return true;
     }
 
     /**

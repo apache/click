@@ -1885,6 +1885,9 @@ public class Form extends AbstractControl {
      *
      * Form submit checks should generally be combined with the Post-Redirect
      * pattern which provides a better user experience when pages are refreshed.
+     * <p/>
+     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
+     * requests.
      *
      * @param page the page invoking the Form submit check
      * @param redirectPath the path to redirect invalid submissions to
@@ -1932,6 +1935,9 @@ public class Form extends AbstractControl {
      *
      * Form submit checks should generally be combined with the Post-Redirect
      * pattern which provides a better user experience when pages are refreshed.
+     * <p/>
+     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
+     * requests.
      *
      * @param page the page invoking the Form submit check
      * @param pageClass the page class to redirect invalid submissions to
@@ -1985,6 +1991,9 @@ public class Form extends AbstractControl {
      *
      * Form submit checks should generally be combined with the Post-Redirect
      * pattern which provides a better user experience when pages are refreshed.
+     * <p/>
+     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
+     * requests.
      *
      * @param page the page invoking the Form submit check
      * @param submitListener the listener object to call when an invalid submit
@@ -2120,6 +2129,12 @@ public class Form extends AbstractControl {
 
         if (StringUtils.isBlank(getName())) {
             throw new IllegalStateException("Form name is not defined.");
+        }
+
+        // CLK-333. Don't regenerate submit tokens for Ajax requests unless the
+        // Ajax submitted the form.
+        if (getContext().isAjaxRequest()) {
+            return true;
         }
 
         String resourcePath = getContext().getResourcePath();
