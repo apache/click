@@ -37,6 +37,7 @@ import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.ErrorReport;
+import net.sf.click.util.FileUploadService;
 import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
@@ -1649,6 +1650,20 @@ public class ClickServlet extends HttpServlet {
      */
     ClickService createClickService() {
         return new ClickService(this);
+    }
+
+    /**
+     * Creates and return a new ClickRequestWrapper instance.
+     *
+     * @param request the servlet request
+     * @param fileUploadService the {@link net.sf.click.util.FileUploadService}
+     * used for file upload requests.
+     *
+     * @return creates and return a new ClickRequestWrapper instance.
+     */
+    ClickRequestWrapper createClickRequestWrapper(final HttpServletRequest request,
+        final FileUploadService fileUploadService) {
+        return new ClickRequestWrapper(request, fileUploadService);
     }
 
     /**
