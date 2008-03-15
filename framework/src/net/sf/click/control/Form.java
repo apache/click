@@ -1527,7 +1527,8 @@ public class Form extends AbstractControl {
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
 
-            if (!field.getName().equals(FORM_NAME)) {
+            if (!field.getName().equals(FORM_NAME)
+                && (!field.getName().startsWith(SUBMIT_CHECK))) {
                 field.setValue(null);
             }
         }
@@ -2042,9 +2043,20 @@ public class Form extends AbstractControl {
             throw new IllegalStateException("Form name is not defined.");
         }
 
+        String resourcePath = getContext().getResourcePath();
+        int slashIndex = resourcePath.indexOf('/');
+        if (slashIndex != -1) {
+            resourcePath = resourcePath.replace('/', '_');
+
+            // Ensure resourcePath starts with a '_' seperator
+            if (slashIndex > 0) {
+                resourcePath = '_' + resourcePath;
+            }
+        }
+
         final HttpServletRequest request = getContext().getRequest();
         final String submitTokenName =
-            SUBMIT_CHECK + getName() + "_" + getContext().getResourcePath();
+            SUBMIT_CHECK + getName() + resourcePath;
 
         boolean isValidSubmit = true;
 
@@ -2061,7 +2073,7 @@ public class Form extends AbstractControl {
 
             if (sessionTime != null) {
                 String value = getContext().getRequestParameter(submitTokenName);
-                if (value == null) {
+                if (value == null || value.length() == 0) {
                     // CLK-289. If a session attribute exists for the
                     // SUBMIT_CHECK, but no request parameter, we assume the
                     // submission is a duplicate and therefore invalid.
