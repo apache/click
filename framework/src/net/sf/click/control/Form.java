@@ -791,7 +791,7 @@ public class Form extends AbstractControl {
     public String getActionURL() {
         HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
-        return response.encodeURL(request.getRequestURI());
+        return response.encodeURL(ClickUtils.getRequestURI(request));
     }
 
     /**

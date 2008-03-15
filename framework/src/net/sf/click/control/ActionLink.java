@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -296,7 +296,7 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink HTML href attribute
      */
     public String getHref(Object value) {
-        String uri = getContext().getRequest().getRequestURI();
+        String uri = ClickUtils.getRequestURI(getContext().getRequest());
 
         HtmlStringBuffer buffer =
                 new HtmlStringBuffer(uri.length() + getName().length() + 40);

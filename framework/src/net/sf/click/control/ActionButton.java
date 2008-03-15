@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -220,7 +220,6 @@ public class ActionButton extends Button {
         super.setName(name);
     }
 
-
     /**
      * Return the ActionButton onclick attribute for the given value.
      * This method will encode the URL with the session ID if required using
@@ -230,7 +229,7 @@ public class ActionButton extends Button {
      * @return the ActionButton JavaScript href attribute
      */
     public String getOnClick(Object value) {
-        String uri = getContext().getRequest().getRequestURI();
+        String uri = ClickUtils.getRequestURI(getContext().getRequest());
 
         HtmlStringBuffer buffer =
             new HtmlStringBuffer(uri.length() + getName().length() + 40);
@@ -277,7 +276,6 @@ public class ActionButton extends Button {
     public String getOnClick() {
         return getOnClick(getValueObject());
     }
-
 
     /**
      * Return the button request parameter value for the given name, or null if
