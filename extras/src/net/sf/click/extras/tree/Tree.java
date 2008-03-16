@@ -1465,7 +1465,7 @@ public class Tree extends AbstractControl {
      * @return the HTML href attribute
      */
     protected String getHref(Map parameters) {
-        String uri = getContext().getRequest().getRequestURI();
+        String uri = ClickUtils.getRequestURI(getContext().getRequest());
 
         HtmlStringBuffer buffer =
                 new HtmlStringBuffer(uri.length() + (parameters.size() * 20));
