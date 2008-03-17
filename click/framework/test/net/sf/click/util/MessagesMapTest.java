@@ -18,7 +18,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES);
 
         assertFalse(map.isEmpty());
-        assertEquals(28, map.size());
+        assertTrue(map.size() > 28);
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
@@ -38,7 +38,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(getClass(), Control.CONTROL_MESSAGES);
 
         assertFalse(map.isEmpty());
-        assertEquals(28, map.size());
+        assertTrue(map.size() > 28);
 
         assertTrue(map.containsKey("table-first-label"));
         assertEquals("First", map.get("table-first-label")); 
@@ -98,7 +98,7 @@ public class MessagesMapTest extends TestCase {
         MessagesMap map = new MessagesMap(Test2TextField.class, Control.CONTROL_MESSAGES);
 
         assertFalse(map.isEmpty());
-        assertEquals(30, map.size());
+        assertTrue(map.size() > 30);
         
         assertTrue(map.containsKey("name"));
         assertEquals("Test1TextField", map.get("name"));
