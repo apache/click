@@ -2131,8 +2131,7 @@ public class Form extends AbstractControl {
             throw new IllegalStateException("Form name is not defined.");
         }
 
-        // CLK-333. Don't regenerate submit tokens for Ajax requests unless the
-        // Ajax submitted the form.
+        // CLK-333. Don't regenerate submit tokens for Ajax requests.
         if (getContext().isAjaxRequest()) {
             return true;
         }
@@ -2141,11 +2140,12 @@ public class Form extends AbstractControl {
         int slashIndex = resourcePath.indexOf('/');
         if (slashIndex != -1) {
             resourcePath = resourcePath.replace('/', '_');
+        }
 
-            // Ensure resourcePath starts with a '_' seperator
-            if (slashIndex > 0) {
-                resourcePath = '_' + resourcePath;
-            }
+        // Ensure resourcePath starts with a '_' seperator. If slashIndex == -1
+        // or slashIndex > 0, resourcePath does not start with slash.
+        if (slashIndex != 0) {
+            resourcePath = '_' + resourcePath;
         }
 
         final HttpServletRequest request = getContext().getRequest();
