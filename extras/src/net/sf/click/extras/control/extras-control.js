@@ -194,31 +194,40 @@ function isLetterOrDigit (c){
 }
 
 function pickListMove(from, to, hidden, isSelected){
+	var values = new Object();
 	for(var i=0;i<from.options.length;i++){
 		if(from.options[i].selected){
-			pickListMoveItem(from, to, i, hidden, isSelected);
-			i--;
+			values[from.options[i].value] = true;
 		}
 	}
+	pickListMoveItem(from, to, values, hidden, isSelected);
 }
 
 function pickListMoveAll(from, to, hidden, isSelected){
-	for(i=0;i<from.options.length;i++){
-		pickListMoveItem(from, to, i, hidden, isSelected);
-		i--;
+	var values = new Object();
+	for(i=0; i<from.options.length; i++){
+		values[from.options[i].value] = true;
 	}
+	pickListMoveItem(from, to, values, hidden, isSelected);
 }
 
-function pickListMoveItem(from, to, index, hidden, isSelected){
-	var toIndex = 0;
-	for(var i=0;i<hidden.options.length;i++){
-		if(hidden.options[i].value == from.options[index].value){
+function pickListMoveItem(from, to, values, hidden, isSelected){
+	for(var i=0; i<hidden.options.length; i++){
+		if(values[hidden.options[i].value]){
 			hidden.options[i].selected = isSelected;
 		}
+	}
+	for(var i=0; i<from.options.length; i++){
+		if(values[from.options[i].value]){
+			from.options[i] = null;
+			i--;
+		}
+	}
+	var toIndex = 0;
+	for(var i=0; i<hidden.options.length; i++){
 		if(hidden.options[i].selected == isSelected){
 			to.options[toIndex] = new Option(hidden.options[i].text, hidden.options[i].value);
 			toIndex++;
 		}
 	}
-	from.options[index] = null;
 }
