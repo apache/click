@@ -1509,7 +1509,7 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    public static class ExcludePage extends Page {
+    static class ExcludePage extends Page {
 
         private static final Map HEADERS = new HashMap();
 
