@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
+import net.sf.click.servlet.MockRequest;
 
 public class ColorPickerTest extends TestCase {
 
@@ -31,9 +31,9 @@ public class ColorPickerTest extends TestCase {
     }
     
     public void testValidate() {
-        MockRequest mr = new MockRequest();
+        MockContext mockContext = MockContext.initContext();
+        MockRequest mr = mockContext.getMockRequest();
         Map paras = mr.getParameterMap();
-        MockContext.initContext(mr);
         
         ColorPicker cp = new ColorPicker("color");
         

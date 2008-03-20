@@ -5,9 +5,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
 
 import junit.framework.TestCase;
+import net.sf.click.servlet.MockRequest;
 
 public class NumberFieldTest extends TestCase{
 
@@ -23,8 +23,9 @@ public class NumberFieldTest extends TestCase{
     }
 
     public void testFormat() {
-        MockRequest req = new MockRequest(Locale.US);
-        MockContext.initContext(req);
+        MockContext mockContext = MockContext.initContext(Locale.US);
+        MockRequest req = mockContext.getMockRequest();
+        
         Number decNum = new Float(2.56f);
         
         NumberField engF = new NumberField("en");
@@ -75,8 +76,9 @@ public class NumberFieldTest extends TestCase{
         engF.setValue("3456,134");
         assertEquals(3456.134f, engF.getNumber().floatValue(),0);
         
-        req = new MockRequest(Locale.GERMANY);
-        MockContext.initContext(req);
+        mockContext = MockContext.initContext(Locale.GERMANY);
+        req = mockContext.getMockRequest();
+        
         NumberField germanF = new NumberField("de");
         
         germanF.setNumber(decNum);
@@ -86,9 +88,9 @@ public class NumberFieldTest extends TestCase{
     }
     
     public void testOnProcess() {
-        MockRequest req = new MockRequest(Locale.US);
+        MockContext mockContext = MockContext.initContext(Locale.US);
+        MockRequest req = mockContext.getMockRequest();
         Map params = req.getParameterMap();
-        MockContext.initContext(req);
         
         NumberField engF = new NumberField("en");
         engF.setPattern("#,##0.00");
@@ -129,9 +131,9 @@ public class NumberFieldTest extends TestCase{
     }
     
     public void testValidate() {
-        MockRequest req = new MockRequest(Locale.US);
+        MockContext mockContext = MockContext.initContext(Locale.US);
+        MockRequest req = mockContext.getMockRequest();
         Map params = req.getParameterMap();
-        MockContext.initContext(req);
         
         NumberField engF = new NumberField("en");
         engF.setPattern("0");

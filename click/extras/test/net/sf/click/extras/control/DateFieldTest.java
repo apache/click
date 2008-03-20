@@ -18,9 +18,9 @@ package net.sf.click.extras.control;
 import java.util.Date;
 
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
 import net.sf.click.extras.control.DateField;
 import junit.framework.TestCase;
+import net.sf.click.servlet.MockRequest;
 
 /**
  * Provides DateField JUnit TestCase.
@@ -61,9 +61,9 @@ public class DateFieldTest extends TestCase {
     }
     
     public void testNullParameter() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
-        
+        MockContext mockContext = MockContext.initContext();
+        MockRequest request = mockContext.getMockRequest();
+
         DateField dateField = new DateField("dateField");
         assertEquals("dateField", dateField.getName());
         
