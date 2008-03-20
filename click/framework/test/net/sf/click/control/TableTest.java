@@ -5,13 +5,11 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
 
 public class TableTest extends TestCase {
 
     public void testNoRows() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
+        MockContext.initContext();
 
         Table table = new Table();
         Column column = new Column("Foo");
@@ -24,8 +22,7 @@ public class TableTest extends TestCase {
     }
 
     public void testTdId() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
+        MockContext.initContext();
         
         List foos = new ArrayList();
         foos.add(new Foo("foo1"));

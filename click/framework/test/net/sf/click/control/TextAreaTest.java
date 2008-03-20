@@ -1,14 +1,14 @@
 package net.sf.click.control;
 
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
 import junit.framework.TestCase;
+import net.sf.click.servlet.MockRequest;
 
 public class TextAreaTest extends TestCase {
-    
+
     public void testOnProcess() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
+        MockContext context = MockContext.initContext();
+        MockRequest request = context.getMockRequest();
         
         TextArea textArea = new TextArea("text");
         assertEquals("text", textArea.getName());
