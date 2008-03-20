@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import junit.framework.TestCase;
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
+import net.sf.click.servlet.MockRequest;
 
 public class DoubleFieldTest extends TestCase {
 
@@ -20,8 +20,8 @@ public class DoubleFieldTest extends TestCase {
     }
 
     public void testOnProcess() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
+        MockContext mockContext = MockContext.initContext();
+        MockRequest request = mockContext.getMockRequest();
 
         DoubleField doubleField = new DoubleField("id");
         assertEquals("id", doubleField.getName());
@@ -136,14 +136,14 @@ public class DoubleFieldTest extends TestCase {
     }
 
     public void testLocaleServerENClientDE() {
-        MockRequest request = new MockRequest(Locale.GERMANY);
-        MockContext.initContext(request);
+        MockContext mockContext = MockContext.initContext(Locale.GERMANY);
+        MockRequest request = mockContext.getMockRequest();
 
         DoubleField doubleField = new DoubleField("id");
 
         // German uses ',' as the decimal separator
         // German 123,4 => double 123.4
-        request.getParameterMap().put("id", "123,4");
+        request.setParameter("id", "123,4");
         assertTrue(doubleField.onProcess());
         assertEquals("123,4", doubleField.getValue());
         assertEquals(new Double(123.4), doubleField.getDouble());

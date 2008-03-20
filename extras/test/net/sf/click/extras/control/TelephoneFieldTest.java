@@ -1,14 +1,14 @@
 package net.sf.click.extras.control;
 
 import net.sf.click.MockContext;
-import net.sf.click.MockRequest;
 import junit.framework.TestCase;
+import net.sf.click.servlet.MockRequest;
 
 public class TelephoneFieldTest extends TestCase {
     
     public void testOnProcess() {
-        MockRequest request = new MockRequest();
-        MockContext.initContext(request);
+        MockContext mockContext = MockContext.initContext();
+        MockRequest request = mockContext.getMockRequest();
         
         TelephoneField telephoneField = new TelephoneField("telephone");
         assertEquals("telephone", telephoneField.getName());
