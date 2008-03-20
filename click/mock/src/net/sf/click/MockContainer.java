@@ -535,7 +535,7 @@ public class MockContainer {
      * return blank.
      * </p/>
      * The reason this method returns blank is that <tt>forward</tt> and
-     * <tt>redirect</tt> calls are only recorded, <b>not<b/> executed.
+     * <tt>redirect</tt> calls are only recorded, <b>not</b> executed.
      * <p/>
      * The forward and redirect path's are only used for assertion purposes.
      * <p/>
