@@ -709,7 +709,7 @@ public class ClickUtils {
 
     /**
      * Return a version indicator for static web resources
-     * (eg. css, js and image files), if resource versioning is active;
+     * (eg css, js and image files), if resource versioning is active,
      * otherwise this method will return an empty string.
      * <p/>
      * The version indicator is based on the current Click release version.
