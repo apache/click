@@ -24,7 +24,8 @@
    <property name="jar.upload" value="commons-fileupload-1.2.jar"/>
    <property name="jar.velocity" value="velocity-1.5.jar"/>
    <property name="repository" value="http://www.ibiblio.org/maven"/>
-   
+   <property name="maven-bundle" value="../maven-upload"/>
+
 
    <!--
     Task Definitions
@@ -71,7 +72,7 @@
                      token="VERSION" 
                      value="${version}"/>
             <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
-            <jar basedir="upload-bundle" destfile="../@{name}-${version}-bundle.jar"/>
+            <jar basedir="upload-bundle" destfile="${maven-bundle}/@{name}-${version}-bundle.jar"/>
             <delete dir="upload-bundle" quiet="false"/>
         </sequential>
     </macrodef>
@@ -111,7 +112,20 @@
       <pathelement location="lib/${jar.spring-web}"/>
       <pathelement location="dist/click-${version}.jar"/>
    </path>
-	
+
+   <path id="classpath.mock">
+      <pathelement location="mock/classes"/>
+      <pathelement location="lib/${jar.codec}"/>
+      <pathelement location="lib/${jar.collections}"/>
+      <pathelement location="lib/${jar.io}"/>
+      <pathelement location="lib/${jar.lang}"/>
+      <pathelement location="lib/${jar.ognl}"/>
+      <pathelement location="lib/${jar.servlet}"/>
+      <pathelement location="lib/${jar.upload}"/>
+      <pathelement location="lib/${jar.velocity}"/>
+      <pathelement location="dist/click-${version}.jar"/>
+   </path>
+
    <path id="classpath.extras.cayenne.1x">
 	  <pathelement location="temp/classes"/> 
 	  <pathelement location="lib/${jar.cayenne.1x}"/>
@@ -144,12 +158,12 @@
     -->
    
    <target name="build-all" 
-           depends="build-framework, build-extras, build-examples" 
-           description="build Click framework, extras, examples"/>
+           depends="build-framework, build-mock, build-extras, build-examples" 
+           description="build Click framework, extras, mock, examples"/>
 
 
    <target name="build-distribution" 
-           depends="clean, build-framework, build-extras, build-examples, javadoc" 
+           depends="clean, build-framework, build-mock, build-extras, build-examples, javadoc" 
            description="build distribution ZIP file">
       <!-- create distribution zip file -->
       <delete dir="click-${version}" quiet="false"/>
@@ -198,7 +212,42 @@
            inheritall="false"/>
    </target>
 
-   
+
+   <target name="build-mock" description="build mock JAR file">
+      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <fail message="Build framework first with 'build-framework'">
+         <condition>
+  	        <or><isfalse value="${isClickAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete file="dist/click-mock-${version}.jar" quiet="false"/>
+      <delete dir="mock/classes" quiet="false"/>
+      <mkdir dir="mock/classes"/>
+      <copy todir="mock/classes">
+         <fileset dir="mock/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="mock/src"
+             destdir="mock/classes"
+             debug="true"
+             excludes="**/Test*"
+             encoding="ISO-8859-1"
+             source="1.4">
+         <classpath refid="classpath.mock"/>
+      </javac>
+      <jar destfile="dist/click-mock-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="mock/classes"/>
+      </jar>  
+      <digestMacro file="dist/click-mock-${version}.jar"/>
+   </target>
+
+
    <target name="build-extras" description="build extras JAR file">
       <available file="dist/click-${version}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
@@ -305,8 +354,14 @@
          <fileset dir="${dir.classes}"/>
       </jar>
       <digestMacro file="dist/click-nodeps-${version}.jar"/> 
-	  <!-- With Dependencies -->
-      <unzip src="lib/${jar.codec}" dest="${dir.classes}"/>
+	    <!-- With Dependencies -->
+      <unzip src="lib/${jar.codec}" dest="${dir.classes}">
+        <!-- Exclude .html pages -->
+        <patternset>
+          <include name="**/*.class"/>
+          <exclude name="**/*.html"/>
+        </patternset>
+      </unzip>
       <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
       <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
@@ -328,13 +383,17 @@
       <digestMacro file="dist/click-${version}.jar"/> 
    </target>
 
-    
+
    <target name="build-maven-bundles" 
-           depends="build-framework, build-extras"
+           depends="build-framework, build-mock, build-extras"
            description="build Maven repository upload bundles">
+      <!-- Start with a clean directory -->
+      <delete dir="${maven-bundle}" quiet="false"/>
+      <mkdir dir="${maven-bundle}"/>
       <buildBundleMacro name="click"/>
       <buildBundleMacro name="click-nodeps"/>
       <buildBundleMacro name="click-extras"/>
+      <buildBundleMacro name="click-mock"/>
    </target>
 
    
@@ -363,6 +422,12 @@
             <exclude name="**/*.html"/>
          </fileset>
       </zip>
+      <!-- zip mock -->
+      <zip destfile="dist/click-mock-${version}-src.zip" >
+         <fileset dir="mock/src">
+            <exclude name="**/*.html"/>
+         </fileset>
+      </zip>
    </target>
 
 
@@ -383,6 +448,9 @@
       <delete>
         <fileset dir="extras/test" includes="TEST-*.txt"/>
       </delete>
+      <delete>
+        <fileset dir="mock/test" includes="TEST-*.txt"/>
+      </delete>
    </target>
 
 
@@ -398,6 +466,8 @@
       <replacetabs srcdir="framework/src" includes="**/*.java"/>
       <linetrim srcdir="extras/src" includes="**/*.java"/>
       <replacetabs srcdir="extras/src" includes="**/*.java"/>
+      <linetrim srcdir="mock/src" includes="**/*.java"/>
+      <replacetabs srcdir="mock/src" includes="**/*.java"/>
       <linetrim srcdir="examples/src" includes="**/*.java"/>
       <replacetabs srcdir="examples/src" includes="**/*.java"/>
       <linetrim srcdir="template/src" includes="**/*.java"/>
@@ -448,10 +518,11 @@
 
 Main targets:
 
-	build-all             build framework, extras, examples
+	build-all             build framework, extras, mock, examples
 	build-distribution    build distribution ZIP file
 	build-examples        build click-examples WAR file
-	build-extras          build click-extras JAR file 
+	build-extras          build click-extras JAR file
+  build-mock            build click-mock JAR file
 	build-framework       build click framework JAR file
 	build-maven-bundles   build Maven repository upload bundles
 	build-sources         build source ZIP files for use with IDEs
@@ -462,7 +533,7 @@ Main targets:
 	help                  display the Help message
 	javadoc               create Javadoc HTML files
     project-quick-start   build application template
-      	
+
 Environment:
 
 	java.home = ${java.home}
@@ -476,41 +547,37 @@ Please ensure you have configured build.properties</echo>
       <delete quiet="false" failonerror="false">
          <fileset dir="documentation/docs/click-api" includes="**/*"/>
       </delete>
-      <javadoc sourcepath="framework/src"
-               destdir="documentation/docs/click-api"
-               author="true"
-               version="true"
-               verbose="false"
-               windowtitle="Click Framework API"
-      	       packagenames="net.*"
-               doctitle="Click API">
-         <classpath refid="classpath.framework"/>
-         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-         <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
-         <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
-      </javadoc>
+
+      <javadocMacro src="framework/src"
+                    destdir="documentation/docs/click-api"
+                    windowtitle="Click Framework API"
+                    doctitle="Click API"
+                    classpath="classpath.framework"/>
+
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
             todir="documentation/docs/click-api/net/sf/click/control"/>
       <!-- Extras -->
       <delete quiet="false" failonerror="false">
           <fileset dir="documentation/docs/extras-api" includes="**/*"/>
       </delete>
-      <javadoc sourcepath="extras/src"
-               destdir="documentation/docs/extras-api"
-               author="true"
-               version="true"
-               verbose="false"
-               windowtitle="Click Extras API"
-               doctitle="Click Extras API">
-         <classpath refid="classpath.extras"/>
-         <packageset dir="extras/src">
-            <include name="net/**"/>
-         </packageset>
-         <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
-         <link href="http://click.sourceforge.net/docs/click-api/"/>
-         <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
-         <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
-      </javadoc>
+
+      <javadocMacro src="extras/src"
+                    destdir="documentation/docs/extras-api"
+                    windowtitle="Click Extras API"
+                    doctitle="Click Extras API"
+                    classpath="classpath.extras"/>
+
+      <!-- Mock -->
+      <delete quiet="false" failonerror="false">
+         <fileset dir="documentation/docs/mock-api" includes="**/*"/>
+      </delete>
+
+      <javadocMacro src="mock/src"
+                    destdir="documentation/docs/mock-api"
+                    windowtitle="Click Mock API"
+                    doctitle="Click Mock API"
+                    classpath="classpath.mock"/>
+
       <copy file="documentation/images/post-sequence-diagram.png"
           todir="documentation/docs/click-api/net/sf/click/"/>
       <copy file="documentation/images/control-post-sequence-diagram.png"
@@ -543,6 +610,9 @@ Please ensure you have configured build.properties</echo>
       <copy file="framework/stylesheet.css"  
             overwrite="true"
             todir="documentation/docs/extras-api"/>
+      <copy file="framework/stylesheet.css"
+      	    overwrite="true"
+            todir="documentation/docs/mock-api"/>
       <copy file="framework/stylesheet.css"
       	    overwrite="true"
             todir="documentation/docs/servlet-api"/>
@@ -597,11 +667,6 @@ Please ensure you have configured build.properties</echo>
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
-      <copy todir="extras/classes">
-         <fileset dir="extras/test">
-            <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
       <javac srcdir="framework/src;extras/src;extras/test;mock/src" 
              destdir="extras/classes" 
              debug="true"
@@ -627,8 +692,45 @@ Please ensure you have configured build.properties</echo>
       </delete>
    </target>
 
-   
-   <target name="test-all" depends="test-framework, test-extras"/>
+
+   <target name="test-mock">
+      <copy todir="mock/classes">
+         <fileset dir="mock/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <copy todir="mock/classes">
+         <fileset dir="mock/test">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+      <javac srcdir="framework/src;mock/src;mock/test"
+             destdir="mock/classes"
+             debug="true"
+             encoding="ISO-8859-1"
+             source="1.4">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.mock"/>
+         <classpath refid="classpath.test"/>
+      </javac>
+      <junit haltonfailure="yes" showoutput="true">
+         <classpath refid="classpath.framework"/>
+         <classpath refid="classpath.mock"/>
+         <classpath refid="classpath.test"/>
+         <formatter type="plain"/>
+         <batchtest fork="yes" todir="mock/test">
+            <fileset dir="mock/test">
+               <include name="**/*Test.java"/>
+            </fileset>
+         </batchtest>
+      </junit>
+      <delete>
+        <fileset dir="mock/test" includes="TEST-*.txt"/>
+      </delete>
+   </target>
+
+
+   <target name="test-all" depends="test-framework, test-extras, test-mock"/>
    
 	
    <target name="project-quick-start" description="build application template">
@@ -693,10 +795,35 @@ Please ensure you have configured build.properties</echo>
  	  	value="${project-name}"
  	  	file="../${project-name}/WebContent/click/error.htm"/>   
  	  <replace
- 	  	token="template-context" 
+ 	  	token="template-context"
  	  	value="${context-path}"
- 	  	dir="../${project-name}"/>   
+ 	  	dir="../${project-name}"/>
    </target>
 
+   <macrodef name="javadocMacro">
+      <attribute name="src"/>
+      <attribute name="destdir"/>
+      <attribute name="windowtitle"/>
+      <attribute name="doctitle"/>
+      <attribute name="classpath"/>
+      <sequential>
+         <javadoc sourcepath="@{src}"
+               destdir="@{destdir}"
+               author="true"
+               version="true"
+               verbose="false"
+               windowtitle="@{windowtitle}"
+      	       packagenames="net.*"
+               doctitle="@{doctitle}">
+            <classpath refid="@{classpath}"/>
+            <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
+            <link href="http://java.sun.com/j2ee/sdk_1.3/techdocs/api/"/>
+            <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+            <link href="http://click.sourceforge.net/docs/click-api/"/>
+            <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
+            <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
+         </javadoc>
+      </sequential>
+   </macrodef> 
 
 </project>
