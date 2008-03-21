@@ -55,7 +55,7 @@ import org.apache.commons.lang.StringUtils;
  * value is not set then not resource location functionality will work and
  * instead null will always be returned.
  * <p/>
- * This class was adapted from http://wicket.apache.org.
+ * This class was adapted from <a href="http://wicket.apache.org">Apache Wicket</a>.
  *
  * @author Chris Turner
  * @author Bob Schellink

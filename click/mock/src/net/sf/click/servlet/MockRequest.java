@@ -54,9 +54,7 @@ import org.apache.commons.lang.StringUtils;
  * Mock servlet request. Implements all of the methods from the standard
  * HttpServletRequest class plus helper methods to aid setting up a request.
  * <p/>
- * Serves as a replacement for MockRequest.
- * <p/>
- * This class was adapted from http://wicket.apache.org.
+ * This class was adapted from <a href="http://wicket.apache.org">Apache Wicket</a>.
  *
  * @author Chris Turner
  * @author Bob Schellink
