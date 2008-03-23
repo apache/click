@@ -68,7 +68,7 @@ import net.sf.click.servlet.MockSession;
  *     form.onProcess();
  *
  *     // Check that nameField value is now bound to request value
- *     Assert.assertEquals(nameField.getValueObject(), requestValue);
+ *     Assert.assertEquals(requestValue, nameField.getValueObject());
  * }
  * </pre>
  *

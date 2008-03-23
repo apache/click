@@ -62,7 +62,12 @@ import org.apache.commons.lang.StringUtils;
  */
 public class MockServletContext implements ServletContext {
 
-    //private final Application application;
+    // -------------------------------------------------------- Constants
+
+    public static final String DEFAULT_CONTEXT_PATH = "/mock";
+
+    // -------------------------------------------------------- Private variables
+
     private final Map attributes = new HashMap();
 
     private final Map initParameters = new HashMap();
@@ -78,6 +83,8 @@ public class MockServletContext implements ServletContext {
 
     private String servletContextName = "mock";
 
+    private String contextPath = DEFAULT_CONTEXT_PATH;
+
     /**
      * Default constructor for this mock object.
      * <p/>
@@ -85,7 +92,7 @@ public class MockServletContext implements ServletContext {
      * The web content root and temporary work direcotry are set to null.
      */
     public MockServletContext() {
-        this("mock", null, null);
+        this(DEFAULT_CONTEXT_PATH, null, null);
     }
 
     /**
@@ -104,12 +111,12 @@ public class MockServletContext implements ServletContext {
      * The temporary work directory defaults to
      * System.getProperty("java.io.tmpdir").
      *
-     * @param servletContextName The servlet context name
+     * @param contextPath the servlet context path
      * @param webappPath The path to the root of the web application
      */
-    public MockServletContext(final String servletContextName,
+    public MockServletContext(final String contextPath,
         final String webappPath) {
-        this(servletContextName, webappPath, System.getProperty("java.io.tmpdir"));
+        this(contextPath, webappPath, System.getProperty("java.io.tmpdir"));
     }
 
     /**
@@ -125,13 +132,13 @@ public class MockServletContext implements ServletContext {
      * <b>Note</b> this temporary work directory is set as the value of the
      * ServletContext attribute 'javax.servlet.context.tempdir'.
      *
-     * @param servletContextName The servlet context name
-     * @param webappPath The path to the root of the web application
-     * @param tempPath The temporary work directory
+     * @param contextPath the servlet context path
+     * @param webappPath the path to the root of the web application
+     * @param tempPath the temporary work directory
      */
-    public MockServletContext(final String servletContextName,
+    public MockServletContext(final String contextPath,
         final String webappPath, final String tempPath) {
-        this.servletContextName = servletContextName;
+        setContextPath(contextPath);
 
         //Setup temp path, before webapp path, since setWebappPath() will
         //default tempPath to java.io.tmpdir if tempPath does not have a value
@@ -350,6 +357,24 @@ public class MockServletContext implements ServletContext {
      */
     public ServletContext getContext(String name) {
         return this;
+    }
+
+    /**
+     * Return the servlet context path.
+     *
+     * @return the servletContext path
+     */
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    /**
+     * Sets the servlet context path.
+     *
+     * @param contextPath the servlet context path
+     */
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;
     }
 
     /**

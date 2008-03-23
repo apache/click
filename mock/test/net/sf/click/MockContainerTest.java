@@ -39,13 +39,11 @@ public class MockContainerTest extends TestCase {
                 + container.getHtml() 
                 + "\n===============================================================\n");
 
-            Assert.assertEquals(testPage.getContext().getRequestAttribute("id"),
-                "200");
+            Assert.assertEquals("200", testPage.getContext().getRequestAttribute("id"));
 
             // Second run
             testPage = container.testPage("test.htm");
-            Assert.assertEquals(testPage.getContext().getRequestAttribute("id"),
-                "200");
+            Assert.assertEquals("200", testPage.getContext().getRequestAttribute("id"));
 
             System.out.println("\nSecond run finished");
             System.out.println(
@@ -131,7 +129,7 @@ public class MockContainerTest extends TestCase {
             testPage = container.testPage(ForwardPage.class);
 
             // Assert that forwardUrl was set
-            Assert.assertEquals(container.getForward(), "/test.htm");
+            Assert.assertEquals("/test.htm", container.getForward());
 
             // ForwardPage result will be empty because the template is NOT
             // rendered when forwarding a request.
@@ -170,12 +168,12 @@ public class MockContainerTest extends TestCase {
 
             // Assert that redirectUrl was set
             System.out.println("Redirect " + container.getRedirect());
-            Assert.assertEquals(container.getRedirect(), "/mock/test.htm");
+            Assert.assertEquals("/mock/test.htm", container.getRedirect());
 
             // Alternatively use the container.getDestination() call which returns
             // either the forward or redirect value. For redirect values the 
             // context is removed making for easier testing.
-            Assert.assertEquals(container.getForwardOrRedirectUrl(), "/test.htm");
+            Assert.assertEquals("/test.htm", container.getForwardOrRedirectUrl());
 
             // RedirectPage result will be empty because the template is NOT
             // rendered when redirecting a request.
