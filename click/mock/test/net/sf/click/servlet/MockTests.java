@@ -48,9 +48,9 @@ public class MockTests extends TestCase {
 
         servletConfig.addInitParameter(key, value);
 
-        Assert.assertEquals(servletConfig.getInitParameter(key), value);
-        Assert.assertEquals(servletConfig.getServletName(), servletName);
-        Assert.assertEquals(servletConfig.getServletContext(), servletContext);
+        Assert.assertEquals(value, servletConfig.getInitParameter(key));
+        Assert.assertEquals(servletName, servletConfig.getServletName());
+        Assert.assertEquals(servletContext, servletConfig.getServletContext());
     }
 
     /**
@@ -66,8 +66,8 @@ public class MockTests extends TestCase {
             MockServletContext servletContext = new MockServletContext(contextName, emptyWebappPath, emptyTempPath);
 
             servletContext.addInitParameter(key, value);
-            Assert.assertEquals(servletContext.getInitParameter(key), value);
-            Assert.assertEquals(servletContext.getServletContextName(), contextName);
+            Assert.assertEquals(value, servletContext.getInitParameter(key));
+            Assert.assertEquals(contextName, servletContext.getServletContextName());
 
             //Test if the temporary directory is created
             String tempPath = "click-temp";
@@ -173,7 +173,7 @@ public class MockTests extends TestCase {
             fis.close();
 
             //Test if delete directory will wipe the directory
-            boolean result = servletContext.deleteDirectory(tmpDir);
+            boolean result = MockServletContext.deleteDirectory(tmpDir);
             Assert.assertTrue(result);
         } catch (Exception ex) {
             ex.printStackTrace();

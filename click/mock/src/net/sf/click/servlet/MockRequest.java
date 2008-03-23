@@ -94,7 +94,7 @@ public class MockRequest implements HttpServletRequest {
 
     private String scheme = "http";
 
-    private String contextPath = "/mock";
+    private String contextPath = MockServletContext.DEFAULT_CONTEXT_PATH;
 
     private String servletPath = "";
 
@@ -131,7 +131,7 @@ public class MockRequest implements HttpServletRequest {
      */
     public MockRequest(final Locale locale, final ServletContext context,
         final HttpSession session) {
-        this(locale, null, null, context, session);
+        this(locale, MockServletContext.DEFAULT_CONTEXT_PATH, "", context, session);
     }
 
     public MockRequest(Locale locale, String contextPath, String servletPath,
@@ -139,18 +139,15 @@ public class MockRequest implements HttpServletRequest {
         if (locale != null) {
             this.locale = locale;
         }
-        if (StringUtils.isNotBlank(contextPath)) {
-            this.contextPath = contextPath;
-        }
-        if (StringUtils.isNotBlank(servletPath)) {
-            this.servletPath = servletPath;
-        }
+        this.contextPath = contextPath;
+        this.servletPath = servletPath;
         this.session = session;
         this.servletContext = context;
         initialize();
     }
 
     // -------------------------------------------------------- Mock intialization methods
+
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
@@ -751,6 +748,21 @@ public class MockRequest implements HttpServletRequest {
      * @return The context path
      */
     public String getContextPath() {
+
+        // If request's contextPath was set manually (eg user set 
+        // servletContext's contextPath), return that value.
+        if (!MockServletContext.DEFAULT_CONTEXT_PATH.equals(contextPath)) {
+            return contextPath;
+        }
+
+        // If servletContext path was set manually (eg user set servletContext's
+        // contextPath) then use that value in preference to the request default
+        // contextPath.
+        if (!MockServletContext.DEFAULT_CONTEXT_PATH.equals(servletContext.getContextPath())) {
+            return servletContext.getContextPath();
+        }
+
+        // Lastly fallback to the default contextPath.
         return contextPath;
     }
 

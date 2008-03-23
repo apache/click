@@ -57,7 +57,7 @@ import org.apache.commons.lang.StringUtils;
  *
  *         container.setParameter("param", "one");
  *         MyPage page = (MyPage) container.testPage(MyPage.class);
- *         Assert.assertEquals(page.getParam(), "one");
+ *         Assert.assertEquals("one", page.getParam());
  *
  *         container.stop();
  *     }
