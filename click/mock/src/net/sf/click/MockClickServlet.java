@@ -107,6 +107,7 @@ public class MockClickServlet extends ClickServlet {
     }
 
     protected Context createContext(HttpServletRequest request,
+        HttpServletResponse response, boolean isPost) {
         /*
         Overridden to ensure only a single context is created for this request.
         In a mock environment a mock Context can be created before the servlet
@@ -114,7 +115,6 @@ public class MockClickServlet extends ClickServlet {
         servlet as well. By overriding this method we ensure the servlet does
         not create a new Context if one already exists.
         */
-        HttpServletResponse response, boolean isPost) {
         try {
             return Context.getThreadLocalContext();
         } catch (Exception expected) {
