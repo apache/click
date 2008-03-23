@@ -50,6 +50,15 @@ class ClickService {
     // ------------------------------------------------ Package Private Methods
 
     /**
+     * Return the clickServlet instance.
+     *
+     * @return the clickServlet instance
+     */
+    ClickServlet getClickServlet() {
+        return clickServlet;
+    }
+
+    /**
      * Return a new Page instance for the given path.
      *
      * @param path the Page path configured in the click.xml file
