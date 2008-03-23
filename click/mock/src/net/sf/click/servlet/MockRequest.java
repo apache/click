@@ -758,8 +758,11 @@ public class MockRequest implements HttpServletRequest {
         // If servletContext path was set manually (eg user set servletContext's
         // contextPath) then use that value in preference to the request default
         // contextPath.
-        if (!MockServletContext.DEFAULT_CONTEXT_PATH.equals(servletContext.getContextPath())) {
-            return servletContext.getContextPath();
+        if (servletContext instanceof MockServletContext) {
+            MockServletContext mockServletContext = (MockServletContext) servletContext;
+            if (!MockServletContext.DEFAULT_CONTEXT_PATH.equals(mockServletContext.getContextPath())) {
+               return mockServletContext.getContextPath();
+            }
         }
 
         // Lastly fallback to the default contextPath.
