@@ -34,10 +34,9 @@ import net.sf.click.util.FileUploadService;
  */
 public class MockClickServlet extends ClickServlet {
 
-    // -------------------------------------------------------- Private variables
+    // -------------------------------------------------------- Constants
 
-    /** Stores all pages created during the request. */
-    private Map pageInstanceMap = new HashMap();
+    public static final String PAGE_REFERENCE = "_page_reference";
 
     // -------------------------------------------------------- Public methods
 
@@ -60,7 +59,7 @@ public class MockClickServlet extends ClickServlet {
     }
 
     protected void handleRequest(HttpServletRequest request, HttpServletResponse response, boolean isPost) {
-        pageInstanceMap.clear();
+        request.removeAttribute(PAGE_REFERENCE);
 
         // super#handleRequest() removes the context and logger from the thread.
         // Here we create an instance of Context before calling
@@ -91,18 +90,18 @@ public class MockClickServlet extends ClickServlet {
     /**
      * Return the {@link net.sf.click.Page} for the specified class.
      *
-     * @param pageClass specifies the class of the Page to return
+     * @param request the servlet request
      * @return the specified pageClass Page instance
      */
-    public Page getPage(Class pageClass) {
-        return (Page) pageInstanceMap.get(pageClass);
+    public Page getPage(HttpServletRequest request) {
+        return (Page) request.getAttribute(PAGE_REFERENCE);
     }
 
     //---------------------------------------------- protected methods
 
     protected Page newPageInstance(String path, Class pageClass, HttpServletRequest request) throws Exception {
         Page page = super.newPageInstance(path, pageClass, request);
-        pageInstanceMap.put(pageClass, page);
+        request.setAttribute(PAGE_REFERENCE, page);
         return page;
     }
 

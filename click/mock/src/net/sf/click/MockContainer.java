@@ -473,7 +473,7 @@ public class MockContainer {
             String servletPath = getClickServlet().getClickService().getPagePath(pageClass);
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
-            return getClickServlet().getPage(pageClass);
+            return getClickServlet().getPage(getRequest());
         } catch (Exception ex) {
             throw new CleanRuntimeException("MockContainer threw exception", ex);
         }
