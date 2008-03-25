@@ -306,7 +306,6 @@ public class MockContainer {
      * @see #stop()
      */
     public void start() {
-        clearContextStack();
         configure();
         this.started = true;
     }
@@ -469,11 +468,13 @@ public class MockContainer {
             throw new IllegalArgumentException("pageClass cannot be null");
         }
         try {
+            // Cleanup any Context instances available on stack.
+            clearContextStack();
             getResponse().reset();
             String servletPath = getClickServlet().getClickService().getPagePath(pageClass);
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
-            return getClickServlet().getPage(getRequest());
+            return (Page) getRequest().getAttribute(MockClickServlet.MOCK_PAGE_REFERENCE);
         } catch (Exception ex) {
             throw new CleanRuntimeException("MockContainer threw exception", ex);
         }
@@ -658,43 +659,48 @@ public class MockContainer {
      * simulate a complete servlet environment.
      */
     void configure() {
-        if (getServletContext() == null) {
-            setServletContext(new MockServletContext());
-        }
+        try {
+            if (getServletContext() == null) {
+                setServletContext(new MockServletContext());
+            }
 
-        getServletContext().setWebappPath(webappPath);
+            getServletContext().setWebappPath(webappPath);
 
-        // Check that click.xml can be found in WEB-INF/click.xml or on
-        // claspath. If this method throws exception click.xml is not
-        // available.
-        InputStream is = ClickUtils.getClickConfig(getServletContext());
-        ClickUtils.close(is);
+            // Check that click.xml can be found in WEB-INF/click.xml or on
+            // claspath. If this method throws exception click.xml is not
+            // available.
+            InputStream is = ClickUtils.getClickConfig(getServletContext());
+            ClickUtils.close(is);
 
-        if (getServletConfig() == null) {
-            String servletName = "click-servlet";
-            setServletConfig(new MockServletConfig(servletName,
-                getServletContext()));
-        }
+            if (getServletConfig() == null) {
+                String servletName = "click-servlet";
+                setServletConfig(new MockServletConfig(servletName,
+                    getServletContext()));
+            }
 
-        if (getClickServlet() == null) {
-            this.setClickServlet(new MockClickServlet());
-        }
+            if (getClickServlet() == null) {
+                this.setClickServlet(new MockClickServlet());
+            }
 
-        getClickServlet().init(getServletConfig());
+            getClickServlet().init(getServletConfig());
 
-        if (getSession() == null) {
-            setSession(new MockSession(getServletContext()));
-        }
+            if (getSession() == null) {
+                setSession(new MockSession(getServletContext()));
+            }
 
-        if (getResponse() == null) {
-            setResponse(new MockResponse());
-        }
+            if (getResponse() == null) {
+                setResponse(new MockResponse());
+            }
 
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        if (getRequest() == null) {
-            setRequest(new MockRequest(locale, getServletContext(), getSession()));
+            if (locale == null) {
+                locale = Locale.getDefault();
+            }
+            if (getRequest() == null) {
+                setRequest(new MockRequest(locale, getServletContext(),
+                    getSession()));
+            }
+        } catch (Exception e) {
+            throw new CleanRuntimeException(e);
         }
     }
 
