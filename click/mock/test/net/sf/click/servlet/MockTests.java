@@ -58,16 +58,16 @@ public class MockTests extends TestCase {
      */
     public void testMockServletContext() {
         try {
-            final String contextName = "mock-context";
+            final String contextPath = "/mock-context";
             final String emptyWebappPath = "";
             final String emptyTempPath = "";
             final String key = "initKey";
             final String value = "initValue";
-            MockServletContext servletContext = new MockServletContext(contextName, emptyWebappPath, emptyTempPath);
+            MockServletContext servletContext = new MockServletContext(contextPath, emptyWebappPath, emptyTempPath);
 
             servletContext.addInitParameter(key, value);
             Assert.assertEquals(value, servletContext.getInitParameter(key));
-            Assert.assertEquals(contextName, servletContext.getServletContextName());
+            Assert.assertEquals(contextPath, servletContext.getContextPath());
 
             //Test if the temporary directory is created
             String tempPath = "click-temp";
