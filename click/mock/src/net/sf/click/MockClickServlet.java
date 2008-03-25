@@ -32,7 +32,7 @@ public class MockClickServlet extends ClickServlet {
 
     // -------------------------------------------------------- Constants
 
-    public static final String MOCK_PAGE_REFERENCE = "_page_reference";
+    public static final String MOCK_PAGE_REFERENCE = "_mock_page_reference";
 
     // -------------------------------------------------------- Public methods
 
@@ -67,9 +67,5 @@ public class MockClickServlet extends ClickServlet {
 
     ClickRequestWrapper createClickRequestWrapper(HttpServletRequest request, FileUploadService fileUploadService) {
         return new MockClickRequestWrapper(request, fileUploadService);
-    }
-
-    ClickService getClickService() {
-        return clickService;
     }
 }
