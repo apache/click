@@ -270,8 +270,11 @@ class ClickApp implements EntityResolver {
             // Load the locale
             loadLocale(rootElm);
 
-            // Deploy the application files if not present
+            // Deploy the application files if not present.
+            // Only deploy if servletContext.getRealPath() returns a valid path.
+            if (servletContext.getRealPath("/") != null) {
             deployFiles(rootElm);
+            }
 
             // Set ServletContext instance for WebappLoader
             String className = ServletContext.class.getName();
@@ -1099,8 +1102,11 @@ class ClickApp implements EntityResolver {
         if (macroURL != null) {
             velProps.put("velocimacro.library", MACRO_VM_FILE_NAME);
         } else {
-            velProps.put("velocimacro.library", CLICK_PATH + File.separator
-                         + VM_FILE_NAME);
+            // Check if 'VM_global_library.vm' is available.
+            URL globalMacroURL = context.getResource(CLICK_PATH + "/" + VM_FILE_NAME);
+            if (globalMacroURL != null) {
+                velProps.put("velocimacro.library", CLICK_PATH + "/" + VM_FILE_NAME);
+        }
         }
 
         // Set the character encoding
