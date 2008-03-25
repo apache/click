@@ -87,7 +87,7 @@ public class MockContext extends Context {
      *
      * @param request the servlet request
      */
-    MockContext(HttpServletRequest request) {
+     MockContext(HttpServletRequest request) {
         super(request, null);
     }
 
@@ -236,35 +236,38 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, MockClickServlet clickServlet) {
+        try {
+            //Sanity checks
+            if (servletConfig == null) {
+                throw new IllegalArgumentException("ServletConfig cannot be null");
+            }
+            if (servletConfig.getServletContext() == null) {
+                throw new IllegalArgumentException("ServletConfig.getServletContext() cannot return null");
+            }
+            if (request == null) {
+                throw new IllegalArgumentException("Request cannot be null");
+            }
+            if (response == null) {
+                throw new IllegalArgumentException("Response cannot be null");
+            }
+            if (clickServlet == null) {
+                throw new IllegalArgumentException("ClickServlet cannot be null");
+            }
 
-        //Sanity checks
-        if (servletConfig == null) {
-            throw new IllegalArgumentException("ServletConfig cannot be null");
-        }
-        if (servletConfig.getServletContext() == null) {
-            throw new IllegalArgumentException("ServletConfig.getServletContext() cannot return null");
-        }
-        if (request == null) {
-            throw new IllegalArgumentException("Request cannot be null");
-        }
-        if (response == null) {
-            throw new IllegalArgumentException("Response cannot be null");
-        }
-        if (clickServlet == null) {
-            throw new IllegalArgumentException("ClickServlet cannot be null");
-        }
+            boolean isPost = true;
+            if (request != null) {
+                isPost = request.getMethod().equalsIgnoreCase("POST");
+            }
 
-        boolean isPost = true;
-        if (request != null) {
-            isPost = request.getMethod().equalsIgnoreCase("POST");
+            clickServlet.init(servletConfig);
+
+            MockContext mockContext = new MockContext(servletConfig, request,
+                response, isPost, clickServlet);
+            mockContext.setServlet(clickServlet);
+            Context.pushThreadLocalContext(mockContext);
+            return (MockContext) Context.getThreadLocalContext();
+        } catch (Exception e) {
+            throw new MockContainer.CleanRuntimeException(e);
         }
-
-        clickServlet.init(servletConfig);
-
-        MockContext mockContext = new MockContext(servletConfig, request,
-            response, isPost, clickServlet);
-        mockContext.setServlet(clickServlet);
-        Context.pushThreadLocalContext(mockContext);
-        return (MockContext) Context.getThreadLocalContext();
     }
 }
