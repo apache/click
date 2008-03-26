@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2006 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -409,7 +409,7 @@ public class PropertySelect extends Select {
 
                 String propertyPk = getValue();
 
-                valueObject = (DataObject) DataObjectUtils.objectForPK(dataContext,
+                valueObject = CayenneUtils.getObjectForPK(dataContext,
                                                           propertyClass,
                                                           propertyPk);
 
@@ -443,7 +443,7 @@ public class PropertySelect extends Select {
 
             if (doPk != null) {
                 DataObject dataObject =
-                    (DataObject) DataObjectUtils.objectForPK(dataContext, doClass, doPk);
+                    CayenneUtils.getObjectForPK(dataContext, doClass, doPk);
 
                 String getterName = ClickUtils.toGetterName(getName());
 
@@ -550,9 +550,8 @@ public class PropertySelect extends Select {
 
             for (int i = 0; i < list.size(); i++) {
                 DataObject dataObject = (DataObject) list.get(i);
-                int pk = DataObjectUtils.intPKForObject(dataObject);
+                String value = DataObjectUtils.pkForObject(dataObject).toString();
 
-                String value = String.valueOf(pk);
                 Object label = null;
 
                 if (getDecorator() != null) {

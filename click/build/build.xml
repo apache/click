@@ -7,7 +7,6 @@
    <property file="./build/build.properties"/>
    <xmlproperty file="./build/javascript-syntax-highlighter.xml"/>
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
-   <property name="jar.cayenne.1x" value="cayenne-nodeps-1.2.4.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
@@ -24,6 +23,7 @@
    <property name="jar.spring-web" value="spring-web-1.2.9.jar"/>
    <property name="jar.upload" value="commons-fileupload-1.2.jar"/>
    <property name="jar.velocity" value="velocity-1.5.jar"/>
+   <property name="javac.source" value="1.4"/>
    <property name="repository" value="http://www.ibiblio.org/maven"/>
    <property name="maven-bundle" value="../maven-upload"/>
 
@@ -78,13 +78,17 @@
         </sequential>
     </macrodef>
 
-    <macrodef  name="digestMacro">
+    <macrodef name="digestMacro">
         <attribute name="file"/>
         <sequential>
+    	<!--
             <checksum file="@{file}" forceOverwrite="true" />
             <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
+        -->
         </sequential>
     </macrodef>
+
+
    <!-- 
     Path Definitions
     -->
@@ -129,7 +133,6 @@
 
    <path id="classpath.extras.cayenne.1x">
 	  <pathelement location="temp/classes"/> 
-	  <pathelement location="lib/${jar.cayenne.1x}"/>
 	  <pathelement location="lib/${jar.hibernate}"/>
 	  <pathelement location="lib/${jar.log4j}"/>
 	  <pathelement location="lib/${jar.servlet}"/>
@@ -179,7 +182,6 @@
             <exclude name="design/**"/>
             <exclude name="dist/*-src.zip"/>
             <exclude name="lib/${jar.cayenne}"/>
-            <exclude name="lib/${jar.cayenne.1x}"/>
             <exclude name="lib/${jar.codec}"/>
             <exclude name="lib/${jar.collections}"/>
             <exclude name="lib/${jar.hibernate}"/>
@@ -234,7 +236,7 @@
              debug="true"
              excludes="**/Test*"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.mock"/>
       </javac>
       <jar destfile="dist/click-mock-${version}.jar">
@@ -269,7 +271,7 @@
              debug="true"
              excludes="**/Test*"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.extras"/>
       </javac>  
       <jar destfile="dist/click-extras-${version}.jar">
@@ -281,40 +283,6 @@
          <fileset dir="extras/classes"/>
       </jar>  
       <digestMacro file="dist/click-extras-${version}.jar"/>
-      <!-- Generate Cayenne 1.2.x JAR -->
-   	  <delete dir="temp" quiet="false"/>
-   	  <mkdir dir="temp/src"/>
-   	  <mkdir dir="temp/classes"/>
-      <copy todir="temp/src">
-         <fileset dir="extras/src">
-            <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
-   	  <replace dir="temp/src" 
-   	  	       token="org.apache.cayenne" 
-   	  	       value="org.objectstyle.cayenne"/>
-      <javac srcdir="temp/src"
-             destdir="temp/classes"
-             debug="true"
-             excludes="**/Test*"
-             encoding="ISO-8859-1"
-             source="1.4">
-          <classpath refid="classpath.extras.cayenne.1x"/>
-      </javac>  
-      <copy todir="temp/classes">
-          <fileset dir="extras/src">
-              <exclude name="**/package.html"/>
-          </fileset>
-      </copy>
-      <jar destfile="dist/click-extras-${version}-cayenne-1x.jar">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click.extras"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <fileset dir="temp/classes"/>
-      </jar>
-      <digestMacro file="dist/click-extras-${version}-cayenne-1x.jar"/> 	  
 	  <delete dir="temp" quiet="false"/>
    </target>
 
@@ -343,7 +311,7 @@
              destdir="${dir.classes}"
              debug="true"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.framework"/>
       </javac>  
       <jar destfile="dist/click-nodeps-${version}.jar">
@@ -477,7 +445,6 @@
 
  
    <target name="get-deps" description="download JAR dependencies">
-      <downloadMacro name="${jar.cayenne.1x}" path="org.objectstyle.cayenne"/>
       <downloadMacro name="${jar.codec}" path="commons-codec"/>
       <downloadMacro name="${jar.collections}" path="commons-collections"/>
       <downloadMacro name="${jar.io}" path="commons-io"/>
@@ -523,7 +490,7 @@ Main targets:
 	build-distribution    build distribution ZIP file
 	build-examples        build click-examples WAR file
 	build-extras          build click-extras JAR file
-  build-mock            build click-mock JAR file
+	build-mock            build click-mock JAR file
 	build-framework       build click framework JAR file
 	build-maven-bundles   build Maven repository upload bundles
 	build-sources         build source ZIP files for use with IDEs
@@ -635,7 +602,7 @@ Please ensure you have configured build.properties</echo>
              destdir="framework/classes" 
              debug="true"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
          <classpath refid="classpath.test"/>
@@ -672,7 +639,7 @@ Please ensure you have configured build.properties</echo>
              destdir="extras/classes" 
              debug="true"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.extras"/>
          <classpath refid="classpath.test"/>
@@ -709,7 +676,7 @@ Please ensure you have configured build.properties</echo>
              destdir="mock/classes"
              debug="true"
              encoding="ISO-8859-1"
-             source="1.4">
+             source="${javac.source}">
          <classpath refid="classpath.framework"/>
          <classpath refid="classpath.mock"/>
          <classpath refid="classpath.test"/>

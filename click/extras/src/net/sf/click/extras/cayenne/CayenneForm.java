@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2007 Malcolm A. Edgar
+ * Copyright 2004-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,20 +27,17 @@ import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.cayenne.CayenneRuntimeException;
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
 import org.apache.cayenne.access.DataContext;
-import org.apache.cayenne.dba.TypesMapping;
 import org.apache.cayenne.map.DbAttribute;
-import org.apache.cayenne.map.DbEntity;
 import org.apache.cayenne.map.ObjAttribute;
 import org.apache.cayenne.map.ObjEntity;
 import org.apache.cayenne.map.ObjRelationship;
 import org.apache.cayenne.validation.ValidationException;
 import org.apache.cayenne.validation.ValidationResult;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides Cayenne data aware Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -333,9 +330,11 @@ public class CayenneForm extends Form {
 
                 String id = oidField.getValue();
                 if (StringUtils.isNotBlank(id)) {
-                    dataObject = (DataObject) DataObjectUtils.objectForPK(getDataContext(),
-                                                             dataClass,
-                                                             id);
+
+                    dataObject = (DataObject)
+                        CayenneUtils.getObjectForPK(getDataContext(),
+                                                    dataClass,
+                                                    id);
 
                 } else {
                     if (copyTo) {
@@ -469,7 +468,7 @@ public class CayenneForm extends Form {
 
             Class doClass = getDataObjectClass();
 
-            Class pkClass = getPkClass(doClass);
+            Class pkClass = CayenneUtils.getPkClass(getDataContext(), doClass);
 
             if (pkClass.isAssignableFrom(String.class)) {
                 return value;
@@ -692,50 +691,6 @@ public class CayenneForm extends Form {
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Return the primary key class for the given DataObject class.
-     *
-     * @param dataObjectClass the DataObject class to get the primary key for
-     * @return the primary key class for the given DataObject class
-     */
-    protected Class getPkClass(Class dataObjectClass) {
-        if (dataObjectClass == null) {
-            throw new IllegalArgumentException("Null dataObjectClass parameter.");
-        }
-
-        ObjEntity objEntity =
-            getDataContext().getEntityResolver().lookupObjEntity(dataObjectClass);
-
-        if (objEntity == null) {
-            throw new CayenneRuntimeException("Unmapped DataObject Class: "
-                    + dataObjectClass.getName());
-        }
-
-        DbEntity dbEntity = objEntity.getDbEntity();
-        if (dbEntity == null) {
-            throw new CayenneRuntimeException("No DbEntity for ObjEntity: "
-                    + objEntity.getName());
-        }
-
-        List pkAttributes = dbEntity.getPrimaryKey();
-        if (pkAttributes.size() != 1) {
-            throw new CayenneRuntimeException("PK contains "
-                    + pkAttributes.size()
-                    + " columns, expected 1.");
-        }
-
-        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
-
-        String className = TypesMapping.getJavaBySqlType(attr.getType());
-
-        try {
-            return ClickUtils.classForName(className);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
