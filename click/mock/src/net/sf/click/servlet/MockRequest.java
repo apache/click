@@ -749,7 +749,7 @@ public class MockRequest implements HttpServletRequest {
      */
     public String getContextPath() {
 
-        // If request's contextPath was set manually (eg user set 
+        // If request's contextPath was set manually (eg user set
         // servletContext's contextPath), return that value.
         if (!MockServletContext.DEFAULT_CONTEXT_PATH.equals(contextPath)) {
             return contextPath;
