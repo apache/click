@@ -173,12 +173,10 @@ public class RegexField extends TextField {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Sets the field pattern as regular expression. Note compiling the regex
-     * pattern is deferred until <tt>onProcess()</tt> method is invoked. If
-     * at this point the pattern is invalid a <tt>PatternSyntaxException</tt>
-     * will be thrown.
+     * Sets the field pattern as regular expression.
      *
      * @param pattern the field regular expression pattern
+     * @throws java.util.regex.PatternSyntaxException if the regular expression pattern cannot be compiled
      */
     public void setPattern(String pattern) {
         Pattern.compile(pattern);
@@ -193,7 +191,6 @@ public class RegexField extends TextField {
     public String getPattern() {
         return pattern;
     }
-
 
     /**
      * Return the HTML head import statements for the JavaScript

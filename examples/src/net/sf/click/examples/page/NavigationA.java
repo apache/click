@@ -19,7 +19,7 @@ public class NavigationA extends BorderPage {
     // --------------------------------------------------------- Event Handlers
 
     /**
-     * @see Page#onInit()
+     * @see net.sf.click.Page#onInit()
      */
     public void onInit() {
         super.onInit();
