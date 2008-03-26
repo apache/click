@@ -1258,18 +1258,47 @@ class ClickApp implements EntityResolver {
         }
     }
 
+    /**
+     * Find and return the page class for the specified pagePath and
+     * pagesPackage.
+     * <p/>
+     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
+     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
+     * <p/>
+     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
+     * <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.admin.AddCustomer</tt> or
+     * <tt>com.mycorp.admin.AddCustomerPage</tt>.
+     *
+     * @param pagePath the path used for matching against a page class name
+     * @param pagesPackage the package of the page class
+     * @return the page class for the specified pagePath and pagesPackage
+     */
     Class getPageClass(String pagePath, String pagesPackage) {
+        // To understand this method lets walk through an example as the
+        // code plays out. Imagine this method is called with the arguments:
+        // pagePath='/pages/edit-customer.htm'
+        // pagesPackage='net.sf.click'
+
+        // Add period at end.
+        // packageName = 'net.sf.click.'
         String packageName = pagesPackage + ".";
         String className = "";
 
-        // Strip off .htm extension
+        // Strip off extension.
+        // path = '/pages/edit-customer'
         String path = pagePath.substring(0, pagePath.lastIndexOf("."));
 
+        // If page is excluded return the excluded class
         Class excludePageClass = getExcludesPageClass(path);
         if (excludePageClass != null) {
             return excludePageClass;
         }
 
+        // Build complete packageName.
+        // packageName = 'net.sf.click.pages.'
+        // className = 'edit-customer'
         if (path.indexOf("/") != -1) {
             StringTokenizer tokenizer = new StringTokenizer(path, "/");
             while (tokenizer.hasMoreTokens()) {
@@ -1284,6 +1313,8 @@ class ClickApp implements EntityResolver {
             className = path;
         }
 
+        // CamelCase className.
+        // className = 'EditCustomer'
         StringTokenizer tokenizer = new StringTokenizer(className, "_-");
         className = "";
         while (tokenizer.hasMoreTokens()) {
@@ -1292,10 +1323,12 @@ class ClickApp implements EntityResolver {
             className += token;
         }
 
+        // className = 'net.sf.click.pages.EditCustomer'
         className = packageName + className;
 
         Class pageClass = null;
         try {
+            // Attempt to load class.
             pageClass = ClickUtils.classForName(className);
 
             if (!Page.class.isAssignableFrom(pageClass)) {
@@ -1308,9 +1341,12 @@ class ClickApp implements EntityResolver {
 
             boolean classFound = false;
 
+            // Append "Page" to className and attempt to load class again.
+            // className = 'net.sf.click.pages.EditCustomerPage'
             if (!className.endsWith("Page")) {
                 String classNameWithPage = className + "Page";
                 try {
+                    // Attempt to load class.
                     pageClass = ClickUtils.classForName(classNameWithPage);
 
                     if (!Page.class.isAssignableFrom(pageClass)) {
