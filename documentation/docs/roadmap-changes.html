@@ -47,33 +47,33 @@ new features, bug fixes and documentation updates.
     New developer <a target="blank" href="ricardolecheta@users.sourceforge.net">Ricardo Lecheta</a> joins the Click project.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
-    <li class="change">
-    Added new method <a href="click-api/net/sf/click/Context.html#isAjaxRequest()">Context#isAjaxRequest()</a>
-    which enables conditional checking for Ajax requests.
-	  </li>
-    <li class="change">
+      <li class="change">
+        Added new method <a href="click-api/net/sf/click/Context.html#isAjaxRequest()">Context.isAjaxRequest()</a>
+        which enables conditional checking for Ajax requests.
+      </li>
+      <li class="change">
 		Upgradeded to Scriptaculous 1.8.1 to fix auto form submit. This issue was raised by Andy Key.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-336">336</a>].
 	  </li>
-    <li class="change">
-    Fixed deployment of resources when servlet container does not unpack war.
-    [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-340">340</a>].
+      <li class="change">
+        Fixed deployment of resources when servlet container does not unpack war.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-340">340</a>].
 	  </li>
-    <li class="change">
-    Fixed sendRedirect to convert <em>.jsp</em> extension to <em>.htm</em> when redirecting to a JSP page.
+      <li class="change">
+        Fixed sendRedirect to convert <em>.jsp</em> extension to <em>.htm</em> when redirecting to a JSP page.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-338">338</a>].
 	  </li>
-    <li class="change">
-		Fixed Form#clearValues() to exclude certain HiddenFields from being cleared.
+      <li class="change">
+		Fixed Form <tt>clearValues()</tt> to exclude certain HiddenFields from being cleared.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-337">337</a>].
 	  </li>
-    <li class="change">
+      <li class="change">
 		Fixed Form action incorrect when using JSP. This issue was raised by Chas Erickson.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-334">334</a>].
 	  </li>
-    <li class="change">
-    Fixed <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">Form#onSubmitCheck()</a>
-    to ignore Ajax calls. This issue was raised by Ivan Furdi.
+      <li class="change">
+        Fixed <a href="click-api/net/sf/click/control/Form.html#onSubmitCheck(net.sf.click.Page, java.lang.String)">Form.onSubmitCheck()</a>
+        to ignore Ajax calls. This issue was raised by Ivan Furdi.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-333">333</a>].
 	  </li>
 	  <li class="change">
@@ -85,12 +85,12 @@ new features, bug fixes and documentation updates.
   <dt><div style="padding:4px;background:#4252BD;color:#FFFFFF">Development branch - Version 1.5 M1 - 30 April 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
-    <li class="change">
+      <li class="change">
 		<span style="font-weight:bold;color:navy;">Important Change</span> 
 		added improved file upload support. TODO provide further details...
 		This issue was raised by Ricardo Lecheta
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
-    </li>
+      </li>
 	  <li class="change">
 		Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
 		method. This enables Pages to programatically define HTML imports which
@@ -102,8 +102,13 @@ new features, bug fixes and documentation updates.
 		Improve File Upload support with new <a href="click-api/net/sf/click/util/FileUploadService.html">FileUploadService</a> class.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
 	  </li>
+      <li class="change">
+        Fixed Cayenne 3.0M3 DataObjectUtils issue in CayenneForm when using JDK 1.5. 
+        Added <a href="extras-api/net/sf/click/extras/cayenne/CayenneUtils.html">CayenneUtils</a> helper class
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
+	  </li>
+	  <li class="change">Removed support for Cayenne 1.2.x.</li> 	
 	  <li class="change">Updated documentation and examples.</li> 	
-    <li class="change">
       <span style="color:brown;font-weight:bold">Upgrade Path</span>
       <dd>
         <ul style="padding: 0em; margin-left:0em;">
