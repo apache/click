@@ -15,7 +15,7 @@ public class NavigationB extends NavigationA {
     /**
      * Returns the name of the border template: &nbsp; <tt>"/border-template.jsp"</tt>
      *
-     * @see Page#getTemplate()
+     * @see net.sf.click.Page#getTemplate()
      */
     public String getTemplate() {
         return "/border-template.jsp";
