@@ -15,9 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.exp.*;
-import net.sf.click.control.*;
-
 /**
  *
  * @author Bob Schellink

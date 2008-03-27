@@ -15,8 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.control.Panel;
-
 /**
  *
  * @author Bob Schellink

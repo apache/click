@@ -89,12 +89,7 @@ public class BasicContainer extends BasicControl implements Container {
                 Control control = (Control) controls.get(i);
                 boolean continueProcessing = control.onProcess();
                 if (ClickLogger.getInstance().isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') +
-                        1);
-                    String msg = "   invoked: '" + control.getName() + "' " +
-                        controlClassName + ".onDestroy()";
-                    ClickLogger.getInstance().trace(msg);
+                    logLifeCycle(control, "onProcess");
                 }
                 if (!continueProcessing) {
                     return false;
@@ -118,12 +113,7 @@ public class BasicContainer extends BasicControl implements Container {
                 Control control = (Control) getControls().get(i);
                 control.onDestroy();
                 if (ClickLogger.getInstance().isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') +
-                        1);
-                    String msg = "   invoked: '" + control.getName() + "' " +
-                        controlClassName + ".onDestroy()";
-                    ClickLogger.getInstance().trace(msg);
+                    logLifeCycle(control, "onDestroy");
                 }
             }
         }
@@ -135,12 +125,7 @@ public class BasicContainer extends BasicControl implements Container {
                 Control control = (Control) getControls().get(i);
                 control.onInit();
                 if (ClickLogger.getInstance().isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') +
-                        1);
-                    String msg = "   invoked: '" + control.getName() + "' " +
-                        controlClassName + ".onInit()";
-                    ClickLogger.getInstance().trace(msg);
+                    logLifeCycle(control, "onInit");
                 }
             }
         }
@@ -152,12 +137,7 @@ public class BasicContainer extends BasicControl implements Container {
                 Control control = (Control) getControls().get(i);
                 control.onRender();
                 if (ClickLogger.getInstance().isTraceEnabled()) {
-                    String controlClassName = control.getClass().getName();
-                    controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') +
-                        1);
-                    String msg = "   invoked: '" + control.getName() + "' " +
-                        controlClassName + ".onRender()";
-                    ClickLogger.getInstance().trace(msg);
+                    logLifeCycle(control, "onRender");
                 }
             }
         }
@@ -290,13 +270,24 @@ public class BasicContainer extends BasicControl implements Container {
         }
     }
 
+    // -------------------------------------------------------- Private methods
+
+    private void logLifeCycle(Control control, String phase) {
+        String controlClassName = control.getClass().getName();
+        controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') +
+            1);
+        String msg = "   invoked: '" + control.getName() + "' " +
+            controlClassName + "." + phase + "()";
+        ClickLogger.getInstance().trace(msg);
+    }
+
     public static void main(String[] args) {
-        BasicContainer c = new BasicContainer("name") {
+        BasicContainer div = new BasicContainer("name") {
             public String getTag() {
                 return "div";
             }
         };
-        c.setStyle("border", "solid blue 1px");
-        System.out.println(c);
+        div.setStyle("border", "solid blue 1px");
+        System.out.println(div);
     }
 }
