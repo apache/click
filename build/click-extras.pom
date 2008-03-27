@@ -1,28 +1,13 @@
 <project>
 
+  <modelVersion>4.0.0</modelVersion>
+
   <groupId>net.sf.click</groupId>
-
   <artifactId>click-extras</artifactId>
+  <packaging>jar</packaging>
+  <version>VERSION</version>
 
-  <name>Click</name>
-
-  <currentVersion>VERSION</currentVersion>
-
-  <organization>
-    <name>Click Framework Project</name>
-    <url>http://click.sourceforge.net</url>
-  </organization>
-
-  <inceptionYear>2003</inceptionYear>
-
-  <package>net.sf.click</package>
-
-  <shortDescription>
-    J2EE web application framework designed for commercial developers.
-  </shortDescription>
-
-  <url>http://sourceforge.net/projects/click</url>
-  <distributionDirectory>http://sourceforge.net/project/showfiles.php?group_id=82095</distributionDirectory>
+<!--TEMPLATE-->
 
   <dependencies>
     <dependency>
@@ -43,7 +28,7 @@
     <dependency>
       <groupId>org.objectstyle.cayenne</groupId>
       <artifactId>cayenne-nodeps</artifactId>
-      <version>1.2.3</version>
+      <version>2.0.4</version>
     </dependency>
     <dependency>
       <groupId>springframework</groupId>

@@ -129,7 +129,7 @@
     
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="${dir.weblib}"/>
-      <property name="repository" value="http://repo1.maven.org/"/>
+      <property name="repository" value="http://repo1.maven.org"/>
       <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
       <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
       <webDownloadMacro name="${jar.jstl}" path="jstl"/>

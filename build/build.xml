@@ -24,7 +24,7 @@
    <property name="jar.upload" value="commons-fileupload-1.2.jar"/>
    <property name="jar.velocity" value="velocity-1.5.jar"/>
    <property name="javac.source" value="1.4"/>
-   <property name="repository" value="http://repo1.maven.org/"/>
+   <property name="repository" value="http://repo1.maven.org"/>
    <property name="maven-bundle" value="../maven-upload"/>
 
 
@@ -67,13 +67,24 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="upload-bundle"/>
-            <copy file="LICENSE.txt" todir="upload-bundle"/> 
+            <mkdir dir="${maven-bundle}/@{name}"/>
+            <copy file="LICENSE.txt" todir="upload-bundle"/>
             <copy file="build/@{name}.pom" tofile="upload-bundle/project.xml"/> 
             <replace file="upload-bundle/project.xml" 
                      token="VERSION" 
                      value="${version}"/>
+
+            <!--
+                Replace the TEMPLATE token with the value of the template pom
+            -->
+            <loadfile property="pom-template" srcFile="build/template.pom"/>
+            <replace file="upload-bundle/project.xml"
+                     value="${pom-template}">
+              <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
+            </replace>
             <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
-            <jar basedir="upload-bundle" destfile="${maven-bundle}/@{name}-${version}-bundle.jar"/>
+            <jar basedir="upload-bundle" destfile="${maven-bundle}/@{name}/@{name}-${version}.jar"/>
+            <copy file="upload-bundle/project.xml" tofile="${maven-bundle}/@{name}/pom.xml"/>
             <delete dir="upload-bundle" quiet="false"/>
         </sequential>
     </macrodef>
