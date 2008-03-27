@@ -15,6 +15,6 @@ public class MockContextTest extends TestCase {
     public void testContext() {
         MockServletContext servletContext = new MockServletContext();
         MockContext.initContext(new MockServletConfig(servletContext), 
-            new MockRequest(), new MockResponse(), new MockClickServlet());
+            new MockRequest(), new MockResponse(), new ClickServlet());
     }
 }

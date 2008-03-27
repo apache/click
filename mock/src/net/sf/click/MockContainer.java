@@ -96,8 +96,8 @@ public class MockContainer {
     /** Holds the MockResponse instance. */
     private MockResponse response;
 
-    /** Holds the MockClickServlet instance. */
-    private MockClickServlet clickServlet;
+    /** Holds the ClickServlet instance. */
+    private ClickServlet clickServlet;
 
     /** Holds the MockServletConfig instance. */
     private MockServletConfig servletConfig;
@@ -189,20 +189,20 @@ public class MockContainer {
     }
 
     /**
-     * Return the container {@link net.sf.click.MockClickServlet}.
+     * Return the container {@link net.sf.click.ClickServlet}.
      *
-     * @return the container MockClickServlet
+     * @return the container ClickServlet
      */
-    public MockClickServlet getClickServlet() {
+    public ClickServlet getClickServlet() {
         return clickServlet;
     }
 
     /**
-     * Set the container {@link net.sf.click.MockClickServlet}.
+     * Set the container {@link net.sf.click.ClickServlet}.
      *
-     * @param clickServlet the container MockClickServlet
+     * @param clickServlet the container ClickServlet
      */
-    public void setClickServlet(MockClickServlet clickServlet) {
+    public void setClickServlet(ClickServlet clickServlet) {
         this.clickServlet = clickServlet;
     }
 
@@ -268,7 +268,7 @@ public class MockContainer {
      * <p/>
      * During configuration a full mock servlet stack is created consisting of:
      * <ul>
-     *     <li>{@link net.sf.click.MockClickServlet}</li>
+     *     <li>{@link net.sf.click.ClickServlet}</li>
      *     <li>{@link net.sf.click.servlet.MockRequest}</li>
      *     <li>{@link net.sf.click.servlet.MockResponse}</li>
      *     <li>{@link net.sf.click.servlet.MockServletContext}</li>
@@ -474,7 +474,7 @@ public class MockContainer {
             String servletPath = getClickServlet().clickService.getPagePath(pageClass);
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
-            return (Page) getRequest().getAttribute(MockClickServlet.MOCK_PAGE_REFERENCE);
+            return getPage();
         } catch (Exception ex) {
             throw new CleanRuntimeException("MockContainer threw exception", ex);
         }
@@ -679,7 +679,7 @@ public class MockContainer {
             }
 
             if (getClickServlet() == null) {
-                this.setClickServlet(new MockClickServlet());
+                this.setClickServlet(new ClickServlet());
             }
 
             getClickServlet().init(getServletConfig());
@@ -699,6 +699,8 @@ public class MockContainer {
                 setRequest(new MockRequest(locale, getServletContext(),
                     getSession()));
             }
+            getRequest().setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
+
         } catch (Exception e) {
             throw new CleanRuntimeException(e);
         }
@@ -789,4 +791,14 @@ public class MockContainer {
         }
     }
 
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Return the Page instance of the most recent test run.
+     *
+     * @return the Page instance of the most recent test run
+     */
+    private Page getPage() {
+        return (Page) getRequest().getAttribute(ClickServlet.MOCK_PAGE_REFERENCE);
+    }
 }

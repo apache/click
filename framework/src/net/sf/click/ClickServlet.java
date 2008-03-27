@@ -166,6 +166,26 @@ public class ClickServlet extends HttpServlet {
     private static final int WRITER_BUFFER_SIZE = 32 * 1024;
 
     /**
+     * The <tt>mock page reference</tt> request attribute: key: &nbsp;
+     * <tt>mock_page_reference</tt>.
+     * <p/>
+     * This attribute stores the each Page instance as a request attribute.
+     * <p/>
+     * <b>Note:</b> a page is <tt>only</tt> stored as a request attribute
+     * if the {@link #MOCK_MODE_ENABLED} attribute is set.
+     */
+    static final String MOCK_PAGE_REFERENCE = "mock_page_reference";
+
+    /**
+     * The <tt>mock mode</tt> request attribute: key: &nbsp;
+     * <tt>mock_mode_enabled</tt>.
+     * <p/>
+     * If this attribute is set (the value does not matter) certain features
+     * will be enabled which is needed for running Click in a mock environment.
+     */
+    static final String MOCK_MODE_ENABLED = "mock_mode_enabled";
+
+    /**
      * The click application is reloadable flag servlet init parameter name:
      * &nbsp; "<tt>app-reloadable</tt>".
      */
@@ -397,8 +417,11 @@ public class ClickServlet extends HttpServlet {
                 }
 
             } finally {
-                Context.popThreadLocalContext();
-                ClickLogger.setInstance(null);
+                // Only clear the context and logger when running in normal mode.
+                if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
+                    Context.popThreadLocalContext();
+                    ClickLogger.setInstance(null);
+                }
             }
         }
     }
@@ -1064,6 +1087,11 @@ public class ClickServlet extends HttpServlet {
                 });
 
                 processPageRequestParams(page);
+            }
+
+            // In mock mode add the Page instance as a request attribute.
+            if (request.getAttribute(MOCK_MODE_ENABLED) != null) {
+                request.setAttribute(MOCK_PAGE_REFERENCE, page);
             }
 
             return newPage;
