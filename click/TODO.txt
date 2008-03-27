@@ -30,3 +30,23 @@ Release Procedures
 8. upload web site
 9. add sourceforge release notes
 10. email release announcement to click, velocity and cayenne
+
+Maven Artifact Upload Procedures
+--------------------------------
+1. Ensure the 'sf.repo' server is setup in ~/.m2/settings.xml, otherwise maven won't authenticate you at sourceforge. For example:
+  <settings>
+    <servers>
+      <server>
+        <id>sf.repo</id>
+        <username>SOURCEFORGE_USERNAME</username>
+        <password>SOURCEFORGE_PASSWORD</password>
+      </server>
+    </servers>
+  </settings>
+2. Ensure build/click.pom, build/click-extras.pom, build/click-mock.pom, build-nodeps.pom has the correct dependencies and versions
+3. ant build-maven-bundles
+4. cd to directory maven-upload (this directory will be on the same level as the Click folder. If Click is available at 'c:/dev/click', maven bundles will be under 'c:/dev/maven-upload')
+5. cd to each subdir in 'maven-upload' and execute the following command (Note: change <maven-artifact>.jar to the actual filename):
+5.1. mvn deploy:deploy-file -DpomFile=pom.xml -Dfile=<maven-artifact>.jar -Durl=scp://shell.sf.net/home/groups/c/cl/click/htdocs/maven2/ -DrepositoryId=sf.repo
+
+"net.sf.click","mavensync@shell.sourceforge.net:/home/groups/c/cl/click/htdocs/maven2","rsync_ssh","Bob Schellink","sabob1@gmail.com",,
