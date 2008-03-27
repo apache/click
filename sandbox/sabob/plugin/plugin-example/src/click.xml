@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<click-app>
+
+    <plugin name="plugin1">
+        <pages package="clickplugin"/>
+        <path value="plugin1"/>
+        <deploy>
+            <file classname="clickplugin.control.MyControl"/>
+            <file classname="clickplugin.page.MyPage"/>
+        </deploy>
+    </plugin>
+
+</click-app>
