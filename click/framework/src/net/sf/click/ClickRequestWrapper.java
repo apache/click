@@ -226,7 +226,14 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
      * @return the <tt>"multipart"</tt> request parameter map
      */
     Map getMultipartParameterMap() {
-        return multipartParameterMap;
+        if (request.getAttribute(ClickServlet.MOCK_MODE_ENABLED) == null) {
+            return multipartParameterMap;
+        } else {
+            // In mock mode return the request parameter map. This ensures
+            // calling request.setParameter(x,y) works for both normal and
+            // multipart requests.
+            return request.getParameterMap();
+        }
     }
 
     // -------------------------------------------------------- Private methods

@@ -39,7 +39,7 @@ import net.sf.click.servlet.MockSession;
  *   <li>{@link #initContext(Locale)}</li>
  *   <li>{@link #initContext(String)}</li>
  *   <li>{@link #initContext(Locale, String)}</li>
- *   <li>{@link #initContext(MockServletConfig, MockRequest, MockResponse, MockClickServlet)}</li>
+ *   <li>{@link #initContext(MockServletConfig, MockRequest, MockResponse, ClickServlet)}</li>
  * </ul>
  * To use this class in your own tests invoke one of the methods above.
  * For example:
@@ -76,7 +76,7 @@ import net.sf.click.servlet.MockSession;
  */
 public class MockContext extends Context {
 
-    private MockClickServlet mockClickServlet;
+    private ClickServlet clickServlet;
 
     // ----------------------------------------------------------- Constructors
 
@@ -109,22 +109,22 @@ public class MockContext extends Context {
     // --------------------------------------------------------- Public getters and setters
 
     /**
-     * Return the mock {@link net.sf.click.MockClickServlet} instance for this
+     * Return the mock {@link net.sf.click.ClickServlet} instance for this
      * context.
      *
-     * @return the mockClickServlet instance
+     * @return the clickServlet instance
      */
-    public MockClickServlet getServlet() {
-        return mockClickServlet;
+    public ClickServlet getServlet() {
+        return clickServlet;
     }
 
     /**
-     * Sets the {@link net.sf.click.MockClickServlet} instance for this context.
+     * Sets the {@link net.sf.click.ClickServlet} instance for this context.
      *
-     * @param mockClickServlet the specified mockClickServlet to set
+     * @param clickServlet the specified clickServlet to set
      */
-    public void setServlet(MockClickServlet mockClickServlet) {
-        this.mockClickServlet = mockClickServlet;
+    public void setServlet(ClickServlet clickServlet) {
+        this.clickServlet = clickServlet;
     }
 
     /**
@@ -133,7 +133,7 @@ public class MockContext extends Context {
      * @see net.sf.click.Context#getApplicationMode()
      */
     public String getApplicationMode() {
-        return mockClickServlet.getClickApp().getModeValue();
+        return clickServlet.getClickApp().getModeValue();
     }
 
     /**
@@ -212,7 +212,7 @@ public class MockContext extends Context {
         MockServletConfig servletConfig = new MockServletConfig(servletName,
             servletContext);
 
-        MockClickServlet servlet = new MockClickServlet();
+        ClickServlet servlet = new ClickServlet();
 
         MockResponse response = new MockResponse();
 
@@ -235,7 +235,7 @@ public class MockContext extends Context {
      * @return new Context instance
      */
     public static MockContext initContext(MockServletConfig servletConfig,
-        MockRequest request, MockResponse response, MockClickServlet clickServlet) {
+        MockRequest request, MockResponse response, ClickServlet clickServlet) {
         try {
             //Sanity checks
             if (servletConfig == null) {
