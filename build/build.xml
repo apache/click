@@ -6,7 +6,7 @@
     
    <property file="./build/build.properties"/>
    <property name="jar.cayenne" value="cayenne-nodeps-2.0.4.jar"/>
-   <property name="jar.cayenne.1x" value="cayenne-nodeps-1.2.3.jar"/>
+   <property name="jar.cayenne.1x" value="cayenne-nodeps-1.2.4.jar"/>
    <property name="jar.checkstyle" value="checkstyle-all-4.1.jar"/>
    <property name="jar.codec" value="commons-codec-1.3.jar"/>
    <property name="jar.collections" value="commons-collections-3.1.jar"/>  
@@ -24,7 +24,7 @@
    <property name="jar.upload" value="commons-fileupload-1.2.jar"/>
    <property name="jar.velocity" value="velocity-1.5.jar"/>
    <property name="repository" value="http://repo1.maven.org"/>
-   
+   <property name="maven-bundle" value="../maven-upload"/>
 
    <!--
     Task Definitions
@@ -65,13 +65,24 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="upload-bundle"/>
-            <copy file="LICENSE.txt" todir="upload-bundle"/> 
+            <mkdir dir="${maven-bundle}/@{name}"/>
+            <copy file="LICENSE.txt" todir="upload-bundle"/>
             <copy file="build/@{name}.pom" tofile="upload-bundle/project.xml"/> 
             <replace file="upload-bundle/project.xml" 
                      token="VERSION" 
                      value="${version}"/>
+
+            <!--
+                Replace the TEMPLATE token with the value of the template pom
+            -->
+            <loadfile property="pom-template" srcFile="build/template.pom"/>
+            <replace file="upload-bundle/project.xml"
+                     value="${pom-template}">
+              <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
+            </replace>
             <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
-            <jar basedir="upload-bundle" destfile="../@{name}-${version}-bundle.jar"/>
+            <jar basedir="upload-bundle" destfile="${maven-bundle}/@{name}/@{name}-${version}.jar"/>
+            <copy file="upload-bundle/project.xml" tofile="${maven-bundle}/@{name}/pom.xml"/>
             <delete dir="upload-bundle" quiet="false"/>
         </sequential>
     </macrodef>
@@ -332,6 +343,9 @@
    <target name="build-maven-bundles" 
            depends="build-framework, build-extras"
            description="build Maven repository upload bundles">
+      <!-- Start with a clean directory -->
+      <delete dir="${maven-bundle}" quiet="false"/>
+      <mkdir dir="${maven-bundle}"/>
       <buildBundleMacro name="click"/>
       <buildBundleMacro name="click-nodeps"/>
       <buildBundleMacro name="click-extras"/>

@@ -1,0 +1,65 @@
+  <name>Click</name>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Click Framework Project</name>
+    <url>http://click.sourceforge.net</url>
+  </organization>
+
+  <scm>
+    <connection>scm:svn:https://click.svn.sourceforge.net/svnroot</connection>
+    <developerConnection>scm:svn:https://username@click.svn.sourceforge.net/svnroot</developerConnection>
+    <url>http://click.svn.sourceforge.net/viewvc/click</url>
+  </scm>
+
+  <inceptionYear>2003</inceptionYear>
+  <url>http://sourceforge.net/projects/click</url>
+  <description>Click is a J2EE web application framework designed for commercial developers.</description>
+
+  <issueManagement>
+    <system>jira</system>
+    <url>http://www.avoka.com/jira/</url>
+  </issueManagement>
+
+  <mailingLists>
+    <mailingList>
+      <name>User List</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/click-user</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/click-user</unsubscribe>
+      <post>click-user@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=click-user</archive>
+    </mailingList>
+    <mailingList>
+      <name>Development List</name>
+      <subscribe>https://lists.sourceforge.net/lists/listinfo/click-development</subscribe>
+      <unsubscribe>https://lists.sourceforge.net/lists/listinfo/click-development</unsubscribe>
+      <post>click-development@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=click-development</archive>
+    </mailingList>
+  </mailingLists>
+
+  <distributionManagement>
+    <repository>
+
+      <!-- <id> must match the <id> specified in ~/.m2/settings.xml -->
+      <id>sf.repo</id>
+      <name>SourceForge Repository</name>
+      <url>scp://shell.sf.net/home/groups/c/cl/click/htdocs/maven2</url>
+    </repository>
+
+    <snapshotRepository>
+
+      <!-- <id> must match the <id> specified in ~/.m2/settings.xml -->
+      <id>sf.repo</id>
+      <name>SourceForge Snapshot Repository</name>
+      <url>scp://shell.sf.net/home/groups/c/cl/click/htdocs/snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+  </distributionManagement>
