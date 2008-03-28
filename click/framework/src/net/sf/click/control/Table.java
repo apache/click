@@ -28,7 +28,6 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
-import net.sf.click.util.ColumnComparator;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
@@ -249,15 +248,6 @@ public class Table extends AbstractControl {
      */
     protected int bannerPosition = POSITION_BOTTOM;
 
-    /**
-     * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
-     * invoked, the default value is true. This flag only applies to
-     * <tt>stateful</tt> pages.
-     * <p/>
-     * @see #setNullifyRowListOnDestroy(boolean)
-     */
-    protected boolean nullifyRowListOnDestroy = true;
-
     /** The map of table columns keyed by column name. */
     protected Map columns = new HashMap();
 
@@ -278,6 +268,15 @@ public class Table extends AbstractControl {
      * hoverRows is false.
      */
     protected boolean hoverRows;
+    
+    /**
+     * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
+     * invoked, the default value is true. This flag only applies to
+     * <tt>stateful</tt> pages.
+     * <p/>
+     * @see #setNullifyRowListOnDestroy(boolean)
+     */
+    protected boolean nullifyRowListOnDestroy = true;
 
     /**
      * The currently displayed page number. The page number is zero indexed,
@@ -1305,10 +1304,7 @@ public class Table extends AbstractControl {
 
             Column column = (Column) getColumns().get(getSortedColumn());
 
-            ColumnComparator comparator =
-                new ColumnComparator(column, isSortedAscending());
-
-            Collections.sort(getRowList(), comparator);
+            Collections.sort(getRowList(), column.getComparator());
 
             setSorted(true);
         }
