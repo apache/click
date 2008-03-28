@@ -17,12 +17,14 @@ package net.sf.click.control;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ColumnComparator;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
@@ -207,6 +209,9 @@ public class Column implements Serializable {
      */
     protected boolean autolink;
 
+    /** The column comparator object, which is used to sort column row values. */
+    protected Comparator comparator;
+
     /** The column table data &lt;td&gt; CSS class attribute. */
     protected String dataClass;
 
@@ -385,6 +390,29 @@ public class Column implements Serializable {
      */
     public void setAutolink(boolean autolink) {
         this.autolink = autolink;
+    }
+
+    /**
+     * Return the column comparator object, which is used to sort column row
+     * values.
+     *
+     * @return the column row data sorting comparator object.
+     */
+    public Comparator getComparator() {
+        if (comparator == null) {
+            comparator = new ColumnComparator(this);
+        }
+        return comparator;
+    }
+
+    /**
+     * Set the column comparator object, which is used to sort column row
+     * values.
+     *
+     * @param comparator the column row data sorting comparator object
+     */
+    public void getComparator(Comparator comparator) {
+        this.comparator = comparator;
     }
 
     /**
