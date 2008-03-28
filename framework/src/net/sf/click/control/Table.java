@@ -268,7 +268,7 @@ public class Table extends AbstractControl {
      * hoverRows is false.
      */
     protected boolean hoverRows;
-    
+
     /**
      * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
      * invoked, the default value is true. This flag only applies to
@@ -379,7 +379,7 @@ public class Table extends AbstractControl {
      * @param value the HTML class attribute
      */
     public void setClass(String value) {
-        addStyleClass(value);
+        setAttribute("class", value);
     }
 
     /**
