@@ -365,7 +365,12 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set the HTML class attribute. Predefined table CSS classes include:
+     * Set the HTML class attribute.
+     * <p/>
+     * <b>Note:</b> this method will replace the existing <tt>"class"</tt>
+     * attribute value.
+     * <p/>
+     * Predefined table CSS classes include:
      * <ul>
      *  <li>complex</li>
      *  <li>isi</li>
