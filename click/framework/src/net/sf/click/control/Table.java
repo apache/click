@@ -17,7 +17,6 @@ package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +28,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ColumnComparator;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
@@ -1303,50 +1303,12 @@ public class Table extends AbstractControl {
     protected void sortRowList() {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
-            final Column column = (Column) getColumns().get(getSortedColumn());
+            Column column = (Column) getColumns().get(getSortedColumn());
 
-            final int ascendingSort = (isSortedAscending()) ? 1 : -1;
+            ColumnComparator comparator =
+                new ColumnComparator(column, isSortedAscending());
 
-            Collections.sort(getRowList(), new Comparator() {
-                public int compare(Object row1, Object row2) {
-
-                    Object obj1 = column.getProperty(row1);
-                    Object obj2 = column.getProperty(row2);
-
-                    if (obj1 instanceof Comparable
-                        && obj2 instanceof Comparable) {
-
-                        return ((Comparable) obj1).compareTo(obj2) * ascendingSort;
-
-                    } else if (obj1 instanceof Boolean
-                               && obj2 instanceof Boolean) {
-
-                        boolean bool1 = ((Boolean) obj1).booleanValue();
-                        boolean bool2 = ((Boolean) obj2).booleanValue();
-
-                        if (bool1 == bool2) {
-                            return 0;
-
-                        } else if (bool1 && !bool2) {
-                            return 1 * ascendingSort;
-
-                        } else {
-                            return -1 * ascendingSort;
-                        }
-
-                    } else if (obj1 != null && obj2 == null) {
-
-                        return +1 * ascendingSort;
-
-                    } else if (obj1 == null && obj2 != null) {
-
-                        return -1 * ascendingSort;
-
-                    } else {
-                        return 0;
-                    }
-                }
-            });
+            Collections.sort(getRowList(), comparator);
 
             setSorted(true);
         }
