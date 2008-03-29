@@ -174,6 +174,8 @@ public class VelocityTemplateService implements TemplateService {
             template.merge(context, velocityWriter);
 
         } catch (Exception error) {
+            // TODO M.E. 2008-03-29 : need to review error handling with pages
+
             // Exception occured merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
@@ -283,6 +285,8 @@ public class VelocityTemplateService implements TemplateService {
                 velProps.put("velocimacro.library", VM_FILE_PATH);
 
             } else {
+                // TODO M.E. 2008-03-29 : Need to document altered behaviour
+
                 // Else use '/WEB-INF/macro.vm' if available.
                 String webInfMacroPath = "/WEB-INF/macro.vm";
                 URL webInfMacroURL = servletContext.getResource(webInfMacroPath);
