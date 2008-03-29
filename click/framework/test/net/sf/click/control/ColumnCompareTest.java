@@ -1,4 +1,4 @@
-package net.sf.click.util;
+package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class ColumnCompareTest extends TestCase {
 		Table table = new Table("table");
 		table.addColumn(column);
 		
-		ColumnComparator comparator = new ColumnComparator(column);
+		Column.Comparator comparator = new Column.Comparator(column);
 		List rowList = createRowList1();
 		Collections.sort(rowList, comparator);
 		System.out.println(rowList);
@@ -33,7 +33,7 @@ public class ColumnCompareTest extends TestCase {
 		Table table = new Table("table");
 		table.addColumn(column);
 		
-		ColumnComparator comparator = new ColumnComparator(column);
+		Column.Comparator comparator = new Column.Comparator(column);
 		List rowList = createRowList2();
 		Collections.sort(rowList, comparator);
 		System.out.println(rowList);
