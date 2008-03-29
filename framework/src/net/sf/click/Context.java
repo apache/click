@@ -253,7 +253,7 @@ public class Context {
      * <tt>"X-Requested-With: XMLHttpRequest"</tt>. This is the de-facto
      * standard header used by Ajax libraries.
      *
-     * @return true if this is a Ajax request, false otherwise
+     * @return true if this is an Ajax request, false otherwise
      */
     public boolean isAjaxRequest() {
         return getRequest().getHeader(X_REQUESTED_WITH) != null;
