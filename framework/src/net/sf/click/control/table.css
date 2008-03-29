@@ -64,6 +64,10 @@ table.blue1, table.blue1 td, table.blue1 th {
 table.blue1 td {
 	border: 1px transparent;
 }
+table.blue1 th.sortable a {
+	color: white;
+	text-decoration: none;
+}
 
 /* blue2 style */
 table.blue2 thead tr {
@@ -78,6 +82,10 @@ table.blue2 tr.odd {
 }
 table.blue2, table.blue2 td, table.blue2 th {
 	border: 1px solid #6c90cc;
+}
+table.blue2 th.sortable a {
+	color: white;
+	text-decoration: none;
 }
 
 /* complex style */
@@ -187,6 +195,10 @@ table.orange1, table.orange1 th {
 table.orange1 td {
 	border: 1px transparent;
 }
+table.orange1 th.sortable a {
+	color: white;
+	text-decoration: none;
+}
 
 /* orange2 style */
 table.orange2 thead tr {
@@ -201,6 +213,10 @@ table.orange2 tr.odd {
 }
 table.orange2, table.orange2 td, table.orange2 th {
 	border: 1px solid #ff8716;
+}
+table.orange2 th.sortable a {
+	color: white;
+	text-decoration: none;
 }
 
 /* simple style */
