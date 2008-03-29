@@ -1434,7 +1434,7 @@ public class Column implements Serializable {
         }
 
         /**
-         * @see Comparator#compare(Object, Object)
+         * @see java.util.Comparator#compare(Object, Object)
          *
          * @param row1 the first row to compare
          * @param row2 the second row to compare
