@@ -17,7 +17,6 @@ package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -249,15 +248,6 @@ public class Table extends AbstractControl {
      */
     protected int bannerPosition = POSITION_BOTTOM;
 
-    /**
-     * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
-     * invoked, the default value is true. This flag only applies to
-     * <tt>stateful</tt> pages.
-     * <p/>
-     * @see #setNullifyRowListOnDestroy(boolean)
-     */
-    protected boolean nullifyRowListOnDestroy = true;
-
     /** The map of table columns keyed by column name. */
     protected Map columns = new HashMap();
 
@@ -278,6 +268,15 @@ public class Table extends AbstractControl {
      * hoverRows is false.
      */
     protected boolean hoverRows;
+
+    /**
+     * Flag indicating if <tt>rowList</tt> is nullified when
+     * <tt>onDestroy()</tt> is invoked, default is true. This flag only applies
+     * to <tt>stateful</tt> pages.
+     * <p/>
+     * @see #setNullifyRowListOnDestroy(boolean)
+     */
+    protected boolean nullifyRowListOnDestroy = true;
 
     /**
      * The currently displayed page number. The page number is zero indexed,
@@ -366,7 +365,12 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Set the HTML class attribute. Predefined table CSS classes include:
+     * Set the HTML class attribute.
+     * <p/>
+     * <b>Note:</b> this method will replace the existing <tt>"class"</tt>
+     * attribute value.
+     * <p/>
+     * Predefined table CSS classes include:
      * <ul>
      *  <li>complex</li>
      *  <li>isi</li>
@@ -380,7 +384,7 @@ public class Table extends AbstractControl {
      * @param value the HTML class attribute
      */
     public void setClass(String value) {
-        addStyleClass(value);
+        setAttribute("class", value);
     }
 
     /**
@@ -1303,50 +1307,9 @@ public class Table extends AbstractControl {
     protected void sortRowList() {
         if (!isSorted() && StringUtils.isNotBlank(getSortedColumn())) {
 
-            final Column column = (Column) getColumns().get(getSortedColumn());
+            Column column = (Column) getColumns().get(getSortedColumn());
 
-            final int ascendingSort = (isSortedAscending()) ? 1 : -1;
-
-            Collections.sort(getRowList(), new Comparator() {
-                public int compare(Object row1, Object row2) {
-
-                    Object obj1 = column.getProperty(row1);
-                    Object obj2 = column.getProperty(row2);
-
-                    if (obj1 instanceof Comparable
-                        && obj2 instanceof Comparable) {
-
-                        return ((Comparable) obj1).compareTo(obj2) * ascendingSort;
-
-                    } else if (obj1 instanceof Boolean
-                               && obj2 instanceof Boolean) {
-
-                        boolean bool1 = ((Boolean) obj1).booleanValue();
-                        boolean bool2 = ((Boolean) obj2).booleanValue();
-
-                        if (bool1 == bool2) {
-                            return 0;
-
-                        } else if (bool1 && !bool2) {
-                            return 1 * ascendingSort;
-
-                        } else {
-                            return -1 * ascendingSort;
-                        }
-
-                    } else if (obj1 != null && obj2 == null) {
-
-                        return +1 * ascendingSort;
-
-                    } else if (obj1 == null && obj2 != null) {
-
-                        return -1 * ascendingSort;
-
-                    } else {
-                        return 0;
-                    }
-                }
-            });
+            Collections.sort(getRowList(), column.getComparator());
 
             setSorted(true);
         }

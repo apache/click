@@ -35,7 +35,7 @@
         <attribute name="name"/>
         <attribute name="path"/>
         <sequential>
-            <get src="${repository}/@{path}/jars/@{name}" 
+            <get src="${repository}/maven/@{path}/jars/@{name}" 
                  dest="${dir.weblib}/@{name}"
                  verbose="true"
                  usetimestamp="true"/>            
@@ -129,7 +129,7 @@
     
    <target name="get-deps" description="download JAR dependencies">
       <mkdir dir="${dir.weblib}"/>
-      <property name="repository" value="http://www.ibiblio.org/maven"/>
+      <property name="repository" value="http://repo1.maven.org"/>
       <webDownloadMacro name="${jar.ashwood}" path="org.objectstyle.ashwood"/>
       <webDownloadMacro name="${jar.hsqldb}" path="hsqldb"/>
       <webDownloadMacro name="${jar.jstl}" path="jstl"/>
@@ -141,7 +141,7 @@
       <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>
       <webDownloadMacro name="${jar.spring-web}" path="org.springframework"/>
       <webDownloadMacro name="${jar.standard}" path="taglibs"/>
-    <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}"
+    <get src="${repository}/maven2/org/apache/cayenne/cayenne-nodeps/2.0.4/${jar.cayenne}"
     	   dest="${dir.weblib}/${jar.cayenne}"
 	       verbose="true"
 	       usetimestamp="true"/> 

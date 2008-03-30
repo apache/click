@@ -26,10 +26,11 @@ public class TableStyles extends BorderPage {
     // ----------------------------------------------------------- Constructor
 
     public TableStyles() {
+        setStateful(true);
+
         // Setup table style select.
         form.setColumns(3);
         form.setLabelAlign(Form.ALIGN_LEFT);
-        form.setMethod("GET");
 
         styleSelect.addAll(Table.CLASS_STYLES);
         styleSelect.setAttribute("onchange", "this.form.submit();");
@@ -43,43 +44,46 @@ public class TableStyles extends BorderPage {
         // Setup customers table
         table.setClass(styleSelect.getValue());
         table.setHoverRows(true);
+        table.setPageSize(10);
+        table.setShowBanner(true);
+        table.setSortable(true);
 
-        Column id = new Column("id");
-        id.setWidth("50px");
-        table.addColumn(id);
+        Column column = new Column("id");
+        column.setWidth("50px");
+        column.setSortable(false);
+        table.addColumn(column);
 
-        table.addColumn(new Column("name"));
+        column = new Column("name");
+        column.setWidth("140px;");
+        table.addColumn(column);
 
-        Column column = new Column("email");
+        column = new Column("email");
         column.setAutolink(true);
+        column.setWidth("230px;");
         table.addColumn(column);
 
         column = new Column("age");
         column.setTextAlign("center");
+        column.setWidth("40px;");
         table.addColumn(column);
 
         column = new Column("holdings");
         column.setFormat("${0,number,#,##0.00}");
         column.setTextAlign("right");
+        column.setWidth("100px;");
         table.addColumn(column);
     }
 
     // --------------------------------------------------------- Event Handlers
 
     /**
-     * @see net.sf.click.Page#onGet()
-     */
-    public void onGet() {
-        // Note the style form uses GET method.
-        table.setClass(styleSelect.getValue());
-        table.setHoverRows(hoverCheckbox.isChecked());
-    }
-
-    /**
      * @see net.sf.click.Page#onRender()
      */
     public void onRender() {
-        List customers = getCustomerService().getCustomersSortedByName(12);
+        table.setClass(styleSelect.getValue());
+        table.setHoverRows(hoverCheckbox.isChecked());
+
+        List customers = getCustomerService().getCustomers();
         table.setRowList(customers);
     }
 
