@@ -270,9 +270,9 @@ public class Table extends AbstractControl {
     protected boolean hoverRows;
 
     /**
-     * The flag to nullify the <tt>rowList</tt> when <tt>onDestroy()</tt> is
-     * invoked, the default value is true. This flag only applies to
-     * <tt>stateful</tt> pages.
+     * Flag indicating if <tt>rowList</tt> is nullified when
+     * <tt>onDestroy()</tt> is invoked, default is true. This flag only applies
+     * to <tt>stateful</tt> pages.
      * <p/>
      * @see #setNullifyRowListOnDestroy(boolean)
      */
