@@ -62,15 +62,13 @@
                  usetimestamp="true"/>            
         </sequential>
     </macrodef> 
-    
+
     <macrodef name="buildBundleMacro">
         <attribute name="name"/>
         <sequential>
-            <mkdir dir="upload-bundle"/>
             <mkdir dir="${maven-bundle}/@{name}"/>
-            <copy file="LICENSE.txt" todir="upload-bundle"/>
-            <copy file="build/@{name}.pom" tofile="upload-bundle/project.xml"/> 
-            <replace file="upload-bundle/project.xml" 
+            <copy file="build/@{name}.pom" tofile="${maven-bundle}/@{name}/pom.xml"/> 
+            <replace file="${maven-bundle}/@{name}/pom.xml" 
                      token="VERSION" 
                      value="${version}"/>
 
@@ -78,14 +76,11 @@
                 Replace the TEMPLATE token with the value of the template pom
             -->
             <loadfile property="pom-template" srcFile="build/template.pom"/>
-            <replace file="upload-bundle/project.xml"
+            <replace file="${maven-bundle}/@{name}/pom.xml"
                      value="${pom-template}">
               <replacetoken>&lt;!--TEMPLATE--&gt;</replacetoken>
             </replace>
-            <copy file="dist/@{name}-${version}.jar" todir="upload-bundle"/> 
-            <jar basedir="upload-bundle" destfile="${maven-bundle}/@{name}/@{name}-${version}.jar"/>
-            <copy file="upload-bundle/project.xml" tofile="${maven-bundle}/@{name}/pom.xml"/>
-            <delete dir="upload-bundle" quiet="false"/>
+            <copy file="dist/@{name}-${version}.jar" todir="${maven-bundle}/@{name}/"/>
         </sequential>
     </macrodef>
 
