@@ -64,7 +64,7 @@ table.blue1, table.blue1 td, table.blue1 th {
 table.blue1 td {
 	border: 1px transparent;
 }
-table.blue1 th.sortable a {
+table.blue1 th.sortable a, table.blue1 th.ascending a, table.blue1 th.descending a {
 	color: white;
 	text-decoration: none;
 }
@@ -83,7 +83,7 @@ table.blue2 tr.odd {
 table.blue2, table.blue2 td, table.blue2 th {
 	border: 1px solid #6c90cc;
 }
-table.blue2 th.sortable a {
+table.blue2 th.sortable a, table.blue2 th.ascending a, table.blue2 th.descending a {
 	color: white;
 	text-decoration: none;
 }
@@ -108,7 +108,7 @@ table.complex th {
 table.complex td {
 	border: 1px transparent;
 }
-table.complex th.sortable a {
+table.complex th.sortable a, table.complex th.ascending a, table.complex th.descending a {
 	color: white;
 	text-decoration: none;
 }
@@ -195,7 +195,7 @@ table.orange1, table.orange1 th {
 table.orange1 td {
 	border: 1px transparent;
 }
-table.orange1 th.sortable a {
+table.orange1 th.sortable a, table.orange1 th.ascending a, table.orange1 th.descending a {
 	color: white;
 	text-decoration: none;
 }
@@ -214,7 +214,7 @@ table.orange2 tr.odd {
 table.orange2, table.orange2 td, table.orange2 th {
 	border: 1px solid #ff8716;
 }
-table.orange2 th.sortable a {
+table.orange2 th.sortable a, table.orange2 th.ascending a, table.orange2 th.descending a {
 	color: white;
 	text-decoration: none;
 }
