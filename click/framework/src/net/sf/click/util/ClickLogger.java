@@ -34,7 +34,7 @@ import org.apache.velocity.runtime.log.LogChute;
  * Log4J or Commons Logging libraries.
  * <p/>
  * If you need to customize the Click runtime logging output, please override
- * the {@link net.sf.click.ClickServlet#createClickLogger()} method and return
+ * the {@link net.sf.click.service.ConfigService#getLogger()} method and return
  * a subclassed ClickLogger.
  *
  * @author Malcolm Edgar

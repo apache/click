@@ -471,7 +471,7 @@ public class MockContainer {
             // Cleanup any Context instances available on stack.
             clearContextStack();
             getResponse().reset();
-            String servletPath = getClickServlet().clickService.getPagePath(pageClass);
+            String servletPath = getClickServlet().getConfigService().getPagePath(pageClass);
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
             return getPage();
@@ -498,7 +498,7 @@ public class MockContainer {
             throw new IllegalArgumentException("path cannot be null");
         }
         path = appendLeadingSlash(path);
-        Class pageClass = getClickServlet().clickService.getPageClass(path);
+        Class pageClass = getClickServlet().getConfigService().getPageClass(path);
         return testPage(pageClass);
     }
 
@@ -522,7 +522,7 @@ public class MockContainer {
             throw new IllegalArgumentException("path cannot be null");
         }
         path = appendLeadingSlash(path);
-        Class pageClass = getClickServlet().clickService.getPageClass(path);
+        Class pageClass = getClickServlet().getConfigService().getPageClass(path);
         return testPage(pageClass, parameters);
     }
 

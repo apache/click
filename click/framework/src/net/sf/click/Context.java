@@ -15,12 +15,11 @@
  */
 package net.sf.click;
 
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -31,6 +30,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.service.FileUploadService;
+import net.sf.click.service.TemplateService;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.FlashAttribute;
@@ -82,7 +83,7 @@ public class Context {
     protected HttpSession session;
 
     /** The click services interface. */
-    final ClickService clickService;
+    final ClickServlet clickServlet;
 
     /** The servlet request. */
     final HttpServletRequest request;
@@ -97,13 +98,13 @@ public class Context {
      * @param request the servlet request
      * @param response the servlet response
      * @param isPost the servlet request is a POST
-     * @param clickServlet the click servlet
+     * @param clickServlet the click servlet instance
      */
     public Context(ServletContext context, ServletConfig config,
         HttpServletRequest request, HttpServletResponse response,
         boolean isPost, ClickServlet clickServlet) {
 
-        this.clickService = clickServlet.clickService;
+        this.clickServlet = clickServlet;
         this.context = context;
         this.config = config;
         this.isPost = isPost;
@@ -114,7 +115,7 @@ public class Context {
 
             // CLK-312. Apply request.setCharacterEncoding before wrapping
             // reuqest in ClickRequestWrapper
-            String charset = clickService.getCharset();
+            String charset = clickServlet.getConfigService().getCharset();
             if (charset != null) {
 
                 try {
@@ -126,8 +127,11 @@ public class Context {
                     ClickLogger.getInstance().warn(msg, ex);
                 }
             }
-            this.request = clickServlet.createClickRequestWrapper(request,
-                this.clickService.getFileUploadService());
+
+            FileUploadService fus =
+                clickServlet.getConfigService().getFileUploadService();
+
+            this.request = new ClickRequestWrapper(request, fus);
 
         } else {
             this.request = request;
@@ -142,10 +146,10 @@ public class Context {
      * @param response the servlet response
      */
     Context(HttpServletRequest request, HttpServletResponse response) {
-
+        // TODO M.E. - should we remove this constructor?
         this.request = request;
         this.response = response;
-        this.clickService = null;
+        this.clickServlet = null;
         this.context = null;
         this.config = null;
         this.isPost = "POST".equalsIgnoreCase(request.getMethod());
@@ -302,33 +306,6 @@ public class Context {
      */
     public String getRequestParameter(String name) {
         return request.getParameter(name);
-    }
-
-    /**
-     * Return an ordered map of request parameter string values keyed on
-     * parameter name.
-     * <p/>
-     * Note this method returns the single string value for a named parameter
-     * and not an array of String[] values, as does the <tt>ServletRequest</tt>
-     * method of the same name.
-     *
-     * @deprecated This method is scheduled to be removed because of its
-     * ambigous relationship with the <tt>ServletRequest</tt> method
-     * of the same name.
-     *
-     * @return the ordered map of request parameters
-     */
-    public Map getRequestParameterMap() {
-        Map requestParamMap = new TreeMap();
-
-        Enumeration e = request.getParameterNames();
-        while (e.hasMoreElements()) {
-            String name = e.nextElement().toString();
-            String value = request.getParameter(name);
-            requestParamMap.put(name, value);
-        }
-
-        return requestParamMap;
     }
 
     /**
@@ -498,7 +475,7 @@ public class Context {
      * @throws IllegalArgumentException if the Page is not found
      */
     public Page createPage(String path) {
-        return clickService.createPage(path, request);
+        return clickServlet.createPage(path, request);
     }
 
     /**
@@ -519,7 +496,7 @@ public class Context {
      * configured with a unique path
      */
     public Page createPage(Class pageClass) {
-        return clickService.createPage(pageClass, request);
+        return clickServlet.createPage(pageClass, request);
     }
 
     /**
@@ -531,7 +508,7 @@ public class Context {
      * with a unique path
      */
     public String getPagePath(Class pageClass) {
-        return clickService.getPagePath(pageClass);
+        return clickServlet.getConfigService().getPagePath(pageClass);
     }
 
     /**
@@ -543,7 +520,7 @@ public class Context {
      * found
      */
     public Class getPageClass(String path) {
-        return clickService.getPageClass(path);
+        return clickServlet.getConfigService().getPageClass(path);
     }
 
     /**
@@ -553,7 +530,7 @@ public class Context {
      * @return the application mode value
      */
     public String getApplicationMode() {
-        return clickService.getApplicationMode();
+        return clickServlet.getConfigService().getApplicationMode();
     }
 
     /**
@@ -571,7 +548,7 @@ public class Context {
      * @return the application charset or ISO-8859-1 if not defined
      */
     public String getCharset() {
-        String charset = clickService.getCharset();
+        String charset = clickServlet.getConfigService().getCharset();
         if (charset == null) {
             charset = "ISO-8859-1";
         }
@@ -638,8 +615,8 @@ public class Context {
 
         if (locale == null) {
 
-            if (clickService.getLocale() != null) {
-                locale = clickService.getLocale();
+            if (clickServlet.getConfigService().getLocale() != null) {
+                locale = clickServlet.getConfigService().getLocale();
 
             } else {
                 locale = getRequest().getLocale();
@@ -704,7 +681,16 @@ public class Context {
      * @throws RuntimeException if an error occurs
      */
     public String renderTemplate(Class templateClass, Map model) {
-        return clickService.renderTemplate(templateClass, model);
+
+        if (templateClass == null) {
+            String msg = "Null templateClass parameter";
+            throw new IllegalArgumentException(msg);
+        }
+
+        String templatePath = templateClass.getName();
+        templatePath = '/' + templatePath.replace('.', '/') + ".htm";
+
+        return renderTemplate(templatePath, model);
     }
 
     /**
@@ -723,7 +709,34 @@ public class Context {
      * @throws RuntimeException if an error occurs
      */
     public String renderTemplate(String templatePath, Map model) {
-        return clickService.renderTemplate(templatePath, model);
+
+        if (templatePath == null) {
+            String msg = "Null templatePath parameter";
+            throw new IllegalArgumentException(msg);
+        }
+
+        if (model == null) {
+            String msg = "Null model parameter";
+            throw new IllegalArgumentException(msg);
+        }
+
+        StringWriter stringWriter = new StringWriter(1024);
+
+        TemplateService templateService =
+            clickServlet.getConfigService().getTemplateService();
+
+        try {
+            templateService.renderTemplate(templatePath, model, stringWriter);
+
+        } catch (Exception e) {
+            String msg = "Error occured rendering template: "
+                         + templatePath;
+            clickServlet.getConfigService().getLogger().error(msg, e);
+
+            throw new RuntimeException(e);
+        }
+
+        return stringWriter.toString();
     }
 
     // ------------------------------------------------ Package Private Methods

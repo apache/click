@@ -76,8 +76,6 @@ import net.sf.click.servlet.MockSession;
  */
 public class MockContext extends Context {
 
-    private ClickServlet clickServlet;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -116,24 +114,6 @@ public class MockContext extends Context {
      */
     public ClickServlet getServlet() {
         return clickServlet;
-    }
-
-    /**
-     * Sets the {@link net.sf.click.ClickServlet} instance for this context.
-     *
-     * @param clickServlet the specified clickServlet to set
-     */
-    public void setServlet(ClickServlet clickServlet) {
-        this.clickServlet = clickServlet;
-    }
-
-    /**
-     * Returns the application mode the test is running in.
-     *
-     * @see net.sf.click.Context#getApplicationMode()
-     */
-    public String getApplicationMode() {
-        return clickServlet.getClickApp().getModeValue();
     }
 
     /**
@@ -263,7 +243,7 @@ public class MockContext extends Context {
 
             MockContext mockContext = new MockContext(servletConfig, request,
                 response, isPost, clickServlet);
-            mockContext.setServlet(clickServlet);
+//            mockContext.setServlet(clickServlet);
             Context.pushThreadLocalContext(mockContext);
             return (MockContext) Context.getThreadLocalContext();
         } catch (Exception e) {
