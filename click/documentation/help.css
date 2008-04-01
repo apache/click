@@ -15,7 +15,9 @@
 	top: 8px;
 	left: 60px;
 }
-
+#version a {
+  color:white;
+}
 #version {
 	color: white; 
 	font-size: 8pt;
