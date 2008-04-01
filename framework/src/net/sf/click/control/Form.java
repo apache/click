@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Page;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
-import net.sf.click.util.FileUploadService;
+import net.sf.click.service.FileUploadService;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;

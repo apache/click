@@ -1,5 +1,5 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages?, headers?, format?, file-item-factory?, mode?, controls?)>
+<!ELEMENT click-app (pages?, headers?, format?, mode?, controls?, file-upload-service?, template-service?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
@@ -31,10 +31,6 @@
        the Velocity context under the key: "format". -->
   <!ELEMENT format (#PCDATA)>
    <!ATTLIST format classname CDATA #FIXED "net.sf.click.util.Format">
-
-  <!-- Commons Upload Service class. -->
-  <!ELEMENT file-upload-service (#PCDATA)>
-   <!ATTLIST file-upload-service classname CDATA #FIXED "net.sf.click.util.FileUploadService">
  
   <!-- Application mode, which configures logging and caching. -->
   <!ELEMENT mode (#PCDATA)>
@@ -51,7 +47,16 @@
     <!ELEMENT control-set (#PCDATA)>
       <!ATTLIST control-set name CDATA #REQUIRED>
   
+  <!-- File Upload Service class. -->
+  <!ELEMENT file-upload-service (property*)>
+   <!ATTLIST file-upload-service classname CDATA #FIXED "net.sf.click.service.FileUploadService">
    
+    <!-- Property definition. -->
+    <!ELEMENT property (#PCDATA)>
+      <!ATTLIST property name CDATA #REQUIRED>
+      <!ATTLIST property value CDATA #REQUIRED>
   
-  
+  <!-- Template Service class. -->
+  <!ELEMENT template-service (property*)>
+   <!ATTLIST template-service classname CDATA #FIXED "net.sf.click.service.FileUploadService">
   

@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Page;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ErrorReport;
 
@@ -41,7 +42,7 @@ import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
 
 /**
- * Provides a Velocity Templating service class.
+ * Provides a Velocity TemplateService class.
  *
  * @author Malcolm Edgar
  */
@@ -102,6 +103,7 @@ public class VelocityTemplateService implements TemplateService {
         Validate.notNull(servletContext, "Null servletContext parameter");
         Validate.notNull(applicationMode, "Null applicationMode parameter");
 
+        this.servletContext = servletContext;
         this.applicationMode = applicationMode;
         this.charSet = charSet;
 
@@ -129,9 +131,85 @@ public class VelocityTemplateService implements TemplateService {
      * @see TemplateService#onDestroy()
      */
     public void onDestroy() {
-        velocityEngine = null;
         // Dereference any allocated objects
+        velocityEngine = null;
         writerPool = null;
+    }
+
+    /**
+     * @see TemplateService#renderTemplate(Page, Map, Writer)
+     *
+     * @param page the page template to render
+     * @param model the model to merge with the template and render
+     * @param writer the writer to send the merged template and model data to
+     * @throws Exception if an error occurs
+     */
+    public void renderTemplate(Page page, Map model, Writer writer) throws Exception {
+
+        final VelocityContext context = new VelocityContext(model);
+
+        // May throw parsing error if template could not be obtained
+        Template template = null;
+        if (charSet != null) {
+            template = velocityEngine.getTemplate(page.getTemplate(), charSet);
+
+        } else {
+            template = velocityEngine.getTemplate(page.getTemplate());
+        }
+
+        VelocityWriter velocityWriter = null;
+
+        try {
+            velocityWriter = (VelocityWriter) writerPool.get();
+
+            if (velocityWriter == null) {
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+
+            } else {
+                velocityWriter.recycle(writer);
+            }
+
+            template.merge(context, velocityWriter);
+
+        } catch (Exception error) {
+            // Exception occured merging template and model. It is possible
+            // that some output has already been written, so we will append the
+            // error report to the previous output.
+            ErrorReport errorReport =
+                new ErrorReport(error,
+                                page.getClass(),
+                                applicationMode.equalsIgnoreCase("production"),
+                                page.getContext().getRequest(),
+                                servletContext);
+
+            if (velocityWriter == null) {
+
+                velocityWriter =
+                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
+            }
+
+            velocityWriter.write(errorReport.toString());
+
+            throw error;
+
+        } finally {
+            if (velocityWriter != null) {
+                // flush and put back into the pool don't close to allow
+                // us to play nicely with others.
+                velocityWriter.flush();
+
+                // Clear the VelocityWriter's reference to its
+                // internal Writer to allow the latter
+                // to be GC'd while vw is pooled.
+                velocityWriter.recycle(null);
+
+                writerPool.put(velocityWriter);
+            }
+
+            writer.flush();
+            writer.close();
+        }
     }
 
     /**
@@ -143,9 +221,7 @@ public class VelocityTemplateService implements TemplateService {
      * @throws Exception if an error occurs
      */
     public void renderTemplate(String templatePath, Map model, Writer writer)
-            throws Exception {
-
-        final boolean inProductionMode = applicationMode.equalsIgnoreCase("production");
+        throws Exception {
 
         final VelocityContext context = new VelocityContext(model);
 
@@ -174,15 +250,13 @@ public class VelocityTemplateService implements TemplateService {
             template.merge(context, velocityWriter);
 
         } catch (Exception error) {
-            // TODO M.E. 2008-03-29 : need to review error handling with pages
-
             // Exception occured merging template and model. It is possible
             // that some output has already been written, so we will append the
             // error report to the previous output.
             ErrorReport errorReport =
                 new ErrorReport(error,
                                 null,
-                                inProductionMode,
+                                applicationMode.equalsIgnoreCase("production"),
                                 null,
                                 servletContext);
 

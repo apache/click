@@ -20,6 +20,7 @@ import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +34,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.service.ConfigService;
+import net.sf.click.service.XmlConfigService;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
-import net.sf.click.util.ErrorReport;
-import net.sf.click.util.FileUploadService;
 import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PageImports;
@@ -50,11 +51,7 @@ import ognl.TypeConverter;
 
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.io.VelocityWriter;
-import org.apache.velocity.util.SimplePool;
 
 /**
  * Provides the Click application HttpServlet.
@@ -162,9 +159,6 @@ public class ClickServlet extends HttpServlet {
         + "<style type='text/css'>body{font-family:Arial;}</style></head>"
         + "<body><h2>Application Reloaded</h2></body></html>";
 
-    /** The Velocity writer buffer size. */
-    private static final int WRITER_BUFFER_SIZE = 32 * 1024;
-
     /**
      * The <tt>mock page reference</tt> request attribute: key: &nbsp;
      * <tt>mock_page_reference</tt>.
@@ -192,6 +186,12 @@ public class ClickServlet extends HttpServlet {
     protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
+     * The click application configuration service classname init parameter name:
+     * &nbsp; "<tt>config-service-class</tt>".
+     */
+    protected final static String CONFIG_SERVICE_CLASS = "config-service-class";
+
+    /**
      * The forwarded request marker attribute: &nbsp; "<tt>click-forward</tt>".
      */
     protected final static String CLICK_FORWARD = "click-forward";
@@ -203,6 +203,9 @@ public class ClickServlet extends HttpServlet {
 
     // ------------------------------------------------------ Instance Varables
 
+    /** The click application configuration service. */
+    protected ConfigService configService;
+
     /** The servlet logger. */
     protected ClickLogger logger;
 
@@ -211,15 +214,6 @@ public class ClickServlet extends HttpServlet {
 
     /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
-
-    /** Cache of velocity writers. */
-    protected SimplePool writerPool;
-
-    /** The click application. */
-    ClickApp clickApp;
-
-    /** The click service proxy. */
-    ClickService clickService;
 
     // --------------------------------------------------------- Public Methods
 
@@ -234,35 +228,21 @@ public class ClickServlet extends HttpServlet {
 
         try {
             // Dereference any allocated objects
-            clickApp = null;
-            writerPool = null;
+            if (configService != null) {
+                configService.onDestroy();
+                configService = null;
+            }
 
             // Determine whether the click application is reloadable
-            reloadable =
-                "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
+            reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
-            // Initialize the click application.
-            ClickApp newClickApp = createClickApp();
+            configService = createConfigService();
+            configService.onInit(getServletContext());
 
-            newClickApp.setServletContext(getServletContext());
-
-            newClickApp.init(createClickLogger());
-
-            clickService = createClickService();
-
-            logger = newClickApp.getLogger();
-
-            // Initialise the Cache of velocity writers.
-            SimplePool newWriterPool = new SimplePool(40);
-
-            // Set the new ClickApp and writer pool
-            clickApp = newClickApp;
-
-            // Create the Velocity writer pool
-            writerPool = newWriterPool;
+            logger = configService.getLogger();
 
             if (logger.isInfoEnabled()) {
-                logger.info("initialized in " + clickApp.getModeValue()
+                logger.info("initialized in " + configService.getApplicationMode()
                             + " mode");
             }
 
@@ -278,7 +258,15 @@ public class ClickServlet extends HttpServlet {
         }
     }
 
-    //---------------------------------------------- protected methods
+    /**
+     * @see javax.servlet.GenericServlet#destroy()
+     */
+    public void destroy() {
+        configService.onDestroy();
+        super.destroy();
+    }
+
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * Handle HTTP GET requests. This method will delegate the request to
@@ -389,7 +377,7 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Exception e) {
             Class pageClass =
-                clickApp.getPageClass(ClickUtils.getResourcePath(request));
+                configService.getPageClass(ClickUtils.getResourcePath(request));
 
             handleException(request, response, isPost, e, pageClass);
 
@@ -398,7 +386,7 @@ public class ClickServlet extends HttpServlet {
             cause = (cause != null) ? cause : eiie;
 
             Class pageClass =
-                clickApp.getPageClass(ClickUtils.getResourcePath(request));
+                configService.getPageClass(ClickUtils.getResourcePath(request));
 
             handleException(request, response, isPost, cause, pageClass);
 
@@ -463,12 +451,12 @@ public class ClickServlet extends HttpServlet {
 
             errorPage.setError(exception);
             if (errorPage.getFormat() == null) {
-                errorPage.setFormat(clickApp.getFormat());
+                errorPage.setFormat(configService.getFormat());
             }
-            errorPage.setHeaders(clickApp.getPageHeaders(ClickApp.ERROR_PATH));
-            errorPage.setMode(clickApp.getModeValue());
+            errorPage.setHeaders(configService.getPageHeaders(ConfigService.ERROR_PATH));
+            errorPage.setMode(configService.getApplicationMode());
             errorPage.setPageClass(pageClass);
-            errorPage.setPath(ClickApp.ERROR_PATH);
+            errorPage.setPath(ConfigService.ERROR_PATH);
 
             processPageFields(errorPage, new FieldCallback() {
                 public void processField(String fieldName, Object fieldValue) {
@@ -538,7 +526,7 @@ public class ClickServlet extends HttpServlet {
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
-            errorPage.setMode(clickApp.getModeValue());
+            errorPage.setMode(configService.getApplicationMode());
         }
 
         boolean continueProcessing = page.onSecurityCheck();
@@ -719,10 +707,7 @@ public class ClickServlet extends HttpServlet {
 
         long startTime = System.currentTimeMillis();
 
-        final VelocityContext context = createVelocityContext(page);
-
-        // May throw parsing error if template could not be obtained
-        Template template = clickApp.getTemplate(page.getTemplate());
+        final Map model = createTemplateModel(page);
 
         HttpServletResponse response = page.getContext().getResponse();
 
@@ -734,61 +719,9 @@ public class ClickServlet extends HttpServlet {
             setPageResponseHeaders(response, page.getHeaders());
         }
 
-        VelocityWriter velocityWriter = null;
+        configService.getTemplateService().renderTemplate(page, model, writer);
 
-        try {
-            velocityWriter = (VelocityWriter) writerPool.get();
-
-            if (velocityWriter == null) {
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-
-            } else {
-                velocityWriter.recycle(writer);
-            }
-
-            template.merge(context, velocityWriter);
-
-        } catch (Exception error) {
-            // Exception occured merging template and model. It is possible
-            // that some output has already been written, so we will append the
-            // error report to the previous output.
-            ErrorReport errorReport =
-                new ErrorReport(error,
-                                page.getClass(),
-                                clickApp.isProductionMode(),
-                                page.getContext().getRequest(),
-                                getServletContext());
-
-            if (velocityWriter == null) {
-
-                velocityWriter =
-                    new VelocityWriter(writer, WRITER_BUFFER_SIZE, true);
-            }
-
-            velocityWriter.write(errorReport.toString());
-
-            throw error;
-
-        } finally {
-            if (velocityWriter != null) {
-                // flush and put back into the pool don't close to allow
-                // us to play nicely with others.
-                velocityWriter.flush();
-
-                // Clear the VelocityWriter's reference to its
-                // internal Writer to allow the latter
-                // to be GC'd while vw is pooled.
-                velocityWriter.recycle(null);
-
-                writerPool.put(velocityWriter);
-            }
-
-            writer.flush();
-            writer.close();
-        }
-
-        if (!clickApp.isProductionMode()) {
+        if (!configService.isProductionMode()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(50);
             if (logger.isTraceEnabled()) {
                 buffer.append("   ");
@@ -837,7 +770,7 @@ public class ClickServlet extends HttpServlet {
 
         dispatcher.forward(request, response);
 
-        if (!clickApp.isProductionMode()) {
+        if (!configService.isProductionMode()) {
             HtmlStringBuffer buffer = new HtmlStringBuffer(50);
             buffer.append("renderJSP: ");
             if (!page.getTemplate().equals(page.getForward())) {
@@ -892,7 +825,7 @@ public class ClickServlet extends HttpServlet {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
 
             if (forwardPage.getFormat() == null) {
-                forwardPage.setFormat(clickApp.getFormat());
+                forwardPage.setFormat(configService.getFormat());
             }
 
             request.removeAttribute(FORWARD_PAGE);
@@ -900,17 +833,17 @@ public class ClickServlet extends HttpServlet {
             return forwardPage;
         }
 
-        Class pageClass = clickApp.getPageClass(path);
+        Class pageClass = configService.getPageClass(path);
 
         if (pageClass == null) {
-            pageClass = clickApp.getNotFoundPageClass();
-            path = ClickApp.NOT_FOUND_PATH;
+            pageClass = configService.getNotFoundPageClass();
+            path = ConfigService.NOT_FOUND_PATH;
         }
 
         final Page page = initPage(path, pageClass, request);
 
         if (page.getFormat() == null) {
-            page.setFormat(clickApp.getFormat());
+            page.setFormat(configService.getFormat());
         }
 
         return page;
@@ -953,7 +886,7 @@ public class ClickServlet extends HttpServlet {
             page.setPath(path);
 
             // Reset the foward
-            if (clickApp.isJspPage(path)) {
+            if (configService.isJspPage(path)) {
                 page.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             } else {
                 page.setForward((String) null);
@@ -982,7 +915,7 @@ public class ClickServlet extends HttpServlet {
                 logger.trace("   invoked: " + shortClassName + ".onDestroy()");
             }
 
-            if (!clickApp.isProductionMode() && startTime > 0) {
+            if (!configService.isProductionMode() && startTime > 0) {
                 logger.info("handleRequest:  " + page.getPath() + " - "
                         + (System.currentTimeMillis() - startTime)
                         + " ms");
@@ -1057,19 +990,19 @@ public class ClickServlet extends HttpServlet {
             activatePageInstance(newPage);
 
             if (newPage.getHeaders() == null) {
-                newPage.setHeaders(clickApp.getPageHeaders(path));
+                newPage.setHeaders(configService.getPageHeaders(path));
             }
 
             newPage.setPath(path);
 
-            if (clickApp.isJspPage(path)) {
+            if (configService.isJspPage(path)) {
                 newPage.setForward(StringUtils.replace(path, ".htm", ".jsp"));
             }
 
             // Bind to final variable to enable callback processing
             final Page page = newPage;
 
-            if (clickApp.isPagesAutoBinding()) {
+            if (configService.isPagesAutoBinding()) {
                 // Automatically add public controls to the page
                 processPageFields(newPage, new FieldCallback() {
                     public void processField(String fieldName, Object fieldValue) {
@@ -1114,7 +1047,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected void processPageRequestParams(Page page) throws OgnlException {
 
-        if (clickApp.getPageFields(page.getClass()).isEmpty()) {
+        if (configService.getPageFields(page.getClass()).isEmpty()) {
             return;
         }
 
@@ -1131,7 +1064,7 @@ public class ClickServlet extends HttpServlet {
 
             if (StringUtils.isNotBlank(value)) {
 
-                Field field = clickApp.getPageField(page.getClass(), name);
+                Field field = configService.getPageField(page.getClass(), name);
 
                 if (field != null) {
                     Class type = field.getType();
@@ -1234,15 +1167,14 @@ public class ClickServlet extends HttpServlet {
      * @param page the page to create a VelocityContext for
      * @return a new VelocityContext
      */
-    protected VelocityContext createVelocityContext(final Page page) {
+    protected Map createTemplateModel(final Page page) {
 
-        final VelocityContext context = new VelocityContext(page.getModel());
-
-        if (clickApp.isPagesAutoBinding()) {
+        if (configService.isPagesAutoBinding()) {
             processPageFields(page, new FieldCallback() {
                 public void processField(String fieldName, Object fieldValue) {
                     if (fieldValue instanceof Control == false) {
-                        context.put(fieldName, fieldValue);
+                        page.getModel().put(fieldName, fieldValue);
+
                     } else {
                         // Add any controls not already added to model
                         Control control = (Control) fieldValue;
@@ -1254,9 +1186,11 @@ public class ClickServlet extends HttpServlet {
             });
         }
 
+        final Map model = new HashMap(page.getModel());
+
         final HttpServletRequest request = page.getContext().getRequest();
 
-        Object pop = context.put("request", request);
+        Object pop = model.put("request", request);
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1265,7 +1199,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        pop = context.put("response", page.getContext().getResponse());
+        pop = model.put("response", page.getContext().getResponse());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1275,7 +1209,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         SessionMap sessionMap = new SessionMap(request.getSession(false));
-        pop = context.put("session", sessionMap);
+        pop = model.put("session", sessionMap);
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1285,7 +1219,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        pop = context.put("context", request.getContextPath());
+        pop = model.put("context", request.getContextPath());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1297,7 +1231,7 @@ public class ClickServlet extends HttpServlet {
 
         Format format = page.getFormat();
         if (format != null && !page.isStateful()) {
-           pop = context.put("format", format);
+           pop = model.put("format", format);
             if (pop != null) {
                 String msg = page.getClass().getName() + " on "
                         + page.getPath()
@@ -1310,7 +1244,7 @@ public class ClickServlet extends HttpServlet {
 
         String path = page.getPath();
         if (path != null) {
-           pop = context.put("path", path);
+           pop = model.put("path", path);
             if (pop != null && !page.isStateful()) {
                 String msg = page.getClass().getName() + " on "
                         + page.getPath()
@@ -1321,7 +1255,7 @@ public class ClickServlet extends HttpServlet {
             }
         }
 
-        pop = context.put("messages", page.getMessages());
+        pop = model.put("messages", page.getMessages());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1333,7 +1267,7 @@ public class ClickServlet extends HttpServlet {
 
         PageImports pageImports = createPageImports(page);
 
-        pop = context.put("imports", pageImports.getAllIncludes());
+        pop = model.put("imports", pageImports.getAllIncludes());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                          + " model contains an object keyed with reserved "
@@ -1342,7 +1276,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        pop = context.put("cssImports", pageImports.getCssImports());
+        pop = model.put("cssImports", pageImports.getCssImports());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
             + " model contains an object keyed with reserved "
@@ -1351,7 +1285,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        pop = context.put("jsImports", pageImports.getJsImports());
+        pop = model.put("jsImports", pageImports.getJsImports());
         if (pop != null && !page.isStateful()) {
             String msg = page.getClass().getName() + " on " + page.getPath()
             + " model contains an object keyed with reserved "
@@ -1360,7 +1294,7 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        return context;
+        return model;
     }
 
     /**
@@ -1406,7 +1340,7 @@ public class ClickServlet extends HttpServlet {
      * @throws UnavailableException if the application has not been initialized
      */
     protected void ensureAppInitialized() throws UnavailableException {
-        if (clickApp == null || writerPool == null) {
+        if (configService == null) {
             if (reloadable) {
                 String msg = "The application is temporarily unavailable"
                              + " - please try again in 1 minute";
@@ -1595,18 +1529,6 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Return a new ClickLogger instance to be used for logging output for the
-     * Click runtime. This logger should have the name <tt>"Click"</tt>.
-     * <p/>
-     * You can subclass this method to provide your own logging behaviour.
-     *
-     * @return a new ClickLogger instance to be used for Click runtime logging output
-     */
-    protected ClickLogger createClickLogger() {
-        return new ClickLogger("Click");
-    }
-
-    /**
      * Creates and returns a new Context instance for this path, class and
      * request.
      * <p/>
@@ -1621,8 +1543,14 @@ public class ClickServlet extends HttpServlet {
      * @return a Context instance
      */
     protected Context createContext(HttpServletRequest request,
-      HttpServletResponse response, boolean isPost) {
+            HttpServletResponse response, boolean isPost) {
 
+//        Context context = new Context(getServletContext(),
+//                                      getServletConfig(),
+//                                      request,
+//                                      response,
+//                                      isPost,
+//                                      new ClickServletContextService(this));
         Context context = new Context(getServletContext(),
                                       getServletConfig(),
                                       request,
@@ -1660,45 +1588,84 @@ public class ClickServlet extends HttpServlet {
      */
     protected ErrorPage createErrorPage(Class pageClass, Throwable exception) {
         try {
-            return (ErrorPage) clickApp.getErrorPageClass().newInstance();
+            return (ErrorPage) configService.getErrorPageClass().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Create a Click application configuration service instance.
+     * <p/>
+     * This method is invoked by the {@link #init()} method when the ClickServlet
+     * starts up.
+     *
+     * @return a new ConfigService instance
+     * @throws Exception if an error occurs creating the config service
+     */
+    protected ConfigService createConfigService() throws Exception {
+        Class serviceClass = XmlConfigService.class;
+
+        String classname = getInitParameter(CONFIG_SERVICE_CLASS);
+        if (StringUtils.isNotBlank(classname)) {
+            serviceClass = ClickUtils.classForName(classname);
+        }
+
+        ConfigService configService = (ConfigService) serviceClass.newInstance();
+
+        return configService;
+    }
+
+    /**
+     * Return the application configuration service instance.
+     *
+     * @return the application configuration service instance
+     */
+    protected ConfigService getConfigService() {
+        return configService;
+    }
+
+    /**
+     * Return a new Page instance for the given path.
+     *
+     * @param path the Page path configured in the click.xml file
+     * @param request the Page request
+     * @return a new Page object
+     * @throws IllegalArgumentException if the Page is not found
+     */
+    protected Page createPage(String path, HttpServletRequest request) {
+        Class pageClass = getConfigService().getPageClass(path);
+
+        if (pageClass == null) {
+            String msg = "No Page class configured for path: " + path;
+            throw new IllegalArgumentException(msg);
+        }
+
+        return initPage(path, pageClass, request);
+    }
+
+    /**
+     * Return a new Page instance for the page Class.
+     *
+     * @param pageClass the class of the Page to create
+     * @param request the Page request
+     * @return a new Page object
+     * @throws IllegalArgumentException if the Page Class is not configured
+     * with a unique path
+     */
+    protected Page createPage(Class pageClass, HttpServletRequest request) {
+        String path = getConfigService().getPagePath(pageClass);
+
+        if (path == null) {
+            String msg =
+                "No path configured for Page class: " + pageClass.getName();
+            throw new IllegalArgumentException(msg);
+        }
+
+        return initPage(path, pageClass, request);
+    }
+
     // ------------------------------------------------ Package Private Methods
-
-    /**
-     * Creates and return a new Click Application instance.
-     *
-     * @return creates and return a new Click Application instance
-     */
-    ClickApp createClickApp() {
-        return new ClickApp();
-    }
-
-    /**
-     * Creates and return a new Click Service instance.
-     *
-     * @return creates and return a new Click Service instance
-     */
-    ClickService createClickService() {
-        return new ClickService(this);
-    }
-
-    /**
-     * Creates and return a new ClickRequestWrapper instance.
-     *
-     * @param request the servlet request
-     * @param fileUploadService the {@link net.sf.click.util.FileUploadService}
-     * used for file upload requests.
-     *
-     * @return creates and return a new ClickRequestWrapper instance.
-     */
-    ClickRequestWrapper createClickRequestWrapper(final HttpServletRequest request,
-        final FileUploadService fileUploadService) {
-        return new ClickRequestWrapper(request, fileUploadService);
-    }
 
     /**
      * Process all the Pages public fields using the given callback.
@@ -1708,7 +1675,7 @@ public class ClickServlet extends HttpServlet {
      */
     void processPageFields(Page page, FieldCallback callback) {
 
-        Field[] fields = clickApp.getPageFieldArray(page.getClass());
+        Field[] fields = configService.getPageFieldArray(page.getClass());
 
         if (fields != null) {
             for (int i = 0; i < fields.length; i++) {
@@ -1726,15 +1693,6 @@ public class ClickServlet extends HttpServlet {
                 }
             }
         }
-    }
-
-    /**
-     * Return the Click Application instance.
-     *
-     * @return the Click Application instance
-     */
-    ClickApp getClickApp() {
-        return clickApp;
     }
 
     // ---------------------------------------------------------- Inner Classes

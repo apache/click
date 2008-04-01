@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Page;
+
 /**
  * Provides a templating service interface.
  *
@@ -28,10 +30,10 @@ import javax.servlet.ServletContext;
 public interface TemplateService {
 
     /**
-     * Initialize the Template Service with the given application servlet context,
+     * Initialize the TemplateService with the given application servlet context,
      * application mode and the application character set.
      * <p/>
-     * This method is invoked after the Template Service has been constructed.
+     * This method is invoked after the TemplateService has been constructed.
      *
      * @param servletContext the application servlet context
      * @param applicationMode the Click application mode
@@ -42,9 +44,19 @@ public interface TemplateService {
             String charSet) throws Exception;
 
     /**
-     * Destroy the Template Service.
+     * Destroy the TemplateService.
      */
     public void onDestroy();
+
+    /**
+     * Render the given page to the writer.
+     *
+     * @param page the page template to render
+     * @param model the model to merge with the template and render
+     * @param writer the writer to send the merged template and model data to
+     * @throws Exception if an error occurs
+     */
+    public void renderTemplate(Page page, Map model, Writer writer) throws Exception;
 
     /**
      * Render the given template and model to the writer.
