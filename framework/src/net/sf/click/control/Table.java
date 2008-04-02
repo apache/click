@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -586,10 +587,10 @@ public class Table extends AbstractControl {
      * <pre class="codeHtml">
      * hover:hover { color: navy } </pre>
      *
-     * @param hooverRows specify whether class 'hover' rows attribute is rendered (default false).
+     * @param hoverRows specify whether class 'hover' rows attribute is rendered (default false).
      */
-    public void setHoverRows(boolean hooverRows) {
-        this.hoverRows = hooverRows;
+    public void setHoverRows(boolean hoverRows) {
+        this.hoverRows = hoverRows;
     }
 
     /**

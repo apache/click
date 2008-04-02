@@ -1754,7 +1754,7 @@ public class ClickUtils {
             requestURI = request.getRequestURI();
         }
 
-        if (requestURI != null) {
+        if (requestURI != null && requestURI.endsWith(".jsp")) {
             requestURI = StringUtils.replace(requestURI, ".jsp", ".htm");
         }
 

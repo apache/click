@@ -1514,7 +1514,10 @@ class ClickApp implements EntityResolver {
         }
     }
 
-    static class ExcludePage extends Page {
+    /**
+     * A custom Page that is used for excluded urls.
+     */
+    public static class ExcludePage extends Page {
 
         private static final Map HEADERS = new HashMap();
 
@@ -1522,6 +1525,11 @@ class ClickApp implements EntityResolver {
             HEADERS.put("Cache-Control", "max-age=3600, public");
         }
 
+        /**
+         * Return the excluded page headers.
+         *
+         * @return the excluded page headers
+         */
         public Map getHeaders() {
             return HEADERS;
         }
