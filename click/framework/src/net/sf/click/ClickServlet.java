@@ -255,6 +255,12 @@ public class ClickServlet extends HttpServlet {
             }
 
         } catch (Throwable e) {
+            // In mock mode this exception can occur if click.xml is not
+            // available.
+            if (getServletContext().getAttribute(MOCK_MODE_ENABLED) != null) {
+                return;
+            }
+
             e.printStackTrace();
 
             String msg = "error initializing throwing "
@@ -431,7 +437,7 @@ public class ClickServlet extends HttpServlet {
      * "/WEB-INF/click.xml" application configuration file. For example:
      *
      * <pre class="codeConfig">
-     *  &lt;page path=&quot;&lt;span class=&quot;navy&quot;&gt;click/error.htm&lt;/span&gt;&quot; classname=&quot;&lt;span class=&quot;maroon&quot;&gt;com.mycorp.util.ErrorPage&lt;/span&gt;&quot;/&gt;
+     *  &lt;page path=&quot;<span class="navy">click/error.htm</span>&quot; classname=&quot;<span class="maroon">com.mycorp.util.ErrorPage</span>&quot;/&gt;
      * </pre>
      *
      * If the ErrorPage throws an exception, it will be logged as an error and
@@ -955,7 +961,7 @@ public class ClickServlet extends HttpServlet {
      * <tt>"table"</tt>, and the ActionLink controls are added using the names
      * <tt>"editDetailsLink"</tt> and <tt>"viewDetailsLink"</tt>.
      *
-     * <pre class="javaCode">
+     * <pre class="codeJava">
      * <span class="kw">public class</span> OrderDetailsPage <span class="kw">extends</span> Page {
      *
      *     <span class="kw">public</span> Table table = <span class="kw">new</span> Table();
