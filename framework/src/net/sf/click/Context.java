@@ -782,7 +782,7 @@ public class Context {
         }
     }
 
-    // -------------------------------------------------- Private Inner Classes
+    // -------------------------------------------------- Inner Classes
 
     /**
      * Provides an unsynchronized Context Stack.
