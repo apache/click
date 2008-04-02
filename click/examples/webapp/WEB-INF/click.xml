@@ -11,12 +11,5 @@
   <controls>
     <control classname="net.sf.click.examples.control.FilterPanel"/>
   </controls>
-    
-  <file-upload-service classname="net.sf.click.service.CommonsFileUploadService">
-  	<property name="sizeMax" value="1024"/>
-  	<property name="fileSizeMax" value="1024"/>
-  </file-upload-service>
-
-  <template-service classname="net.sf.click.service.VelocityTemplateService"/>
 
 </click-app>
