@@ -111,7 +111,8 @@ public class PageImports {
     public String getAllIncludes() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * cssImports.size()
+            + jsImports.size() + jsScripts.size());
 
         for (int i = 0; i  < cssImports.size(); i++) {
             String line = cssImports.get(i).toString();
@@ -140,7 +141,7 @@ public class PageImports {
     public String getCssImports() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * cssImports.size());
 
         for (int i = 0; i  < cssImports.size(); i++) {
             String line = cssImports.get(i).toString();
@@ -161,7 +162,7 @@ public class PageImports {
     public String getJsImports() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * jsImports.size());
 
         for (int i = 0; i  < jsImports.size(); i++) {
             String line = jsImports.get(i).toString();

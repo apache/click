@@ -745,7 +745,7 @@ public class Context {
         ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
 
         if (contextStack == null) {
-            contextStack = new ContextStack();
+            contextStack = new ContextStack(2);
             THREAD_LOCAL_CONTEXT.set(contextStack);
         }
 
@@ -790,6 +790,10 @@ public class Context {
     static class ContextStack extends ArrayList {
 
         private static final long serialVersionUID = 1L;
+
+        private ContextStack(int initialCapacity) {
+            super(initialCapacity);
+        }
 
         private Context push(Context context) {
             add(context);
