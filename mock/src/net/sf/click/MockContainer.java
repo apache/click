@@ -551,13 +551,13 @@ public class MockContainer {
     }
 
     /**
-     * Return the forward or redirect url as specified by the Page.
+     * Return the forward or redirect url as set by the Page.
      * <p/>
      * <b>Note:</b> redirect url's inside this application will have their
      * context path removed. This ensures that a forward or redirect to the
      * same url will have the same value.
      *
-     * @return either the forward or redirect value.
+     * @return either forward or redirect value.
      */
     public String getForwardOrRedirectUrl() {
         String forward = getRequest().getForward();
@@ -566,51 +566,60 @@ public class MockContainer {
             return forward;
         }
 
-        String redirect = getResponse().getRedirectUrl();
-        if (redirect != null &&
-            redirect.startsWith(getRequest().getContextPath())) {
-            redirect = redirect.substring(redirect.indexOf('/', 1));
-        }
+        String redirect = removeContextPath(getResponse().getRedirectUrl());
 
         return redirect;
     }
 
     /**
-     * Return the path that the {@link net.sf.click.Page} forwarded to.
+     * Return the path that {@link net.sf.click.Page} forwarded to.
      *
-     * @return the path the Page forwarded to
+     * @return the path that Page forwarded to
      */
     public String getForward() {
         return getRequest().getForward();
     }
 
     /**
-     * Return the Class that the {@link net.sf.click.Page} forwarded to.
+     * Return the Class that {@link net.sf.click.Page} forwarded to.
      *
-     * @return the class the Page forwarded to
+     * @return the class that Page forwarded to
      */
     public Class getForwardPageClass() {
-        // TODO map from the forwardUrl to the Page class.
-        return null;
+        if (Context.getContextStack().isEmpty()) {
+            return null;
+        }
+        if (getRequest().getForward() == null) {
+            return null;
+        }
+        Context context = Context.getThreadLocalContext();
+        return context.getPageClass(getRequest().getForward());
     }
 
     /**
-     * Return the path that the {@link net.sf.click.Page} redirected to.
+     * Return the path that {@link net.sf.click.Page} redirected to.
      *
-     * @return the path the Page redirected to
+     * @return the path that Page redirected to
      */
     public String getRedirect() {
         return getResponse().getRedirectUrl();
     }
 
     /**
-     * Return the Class that the {@link net.sf.click.Page} redirected to.
+     * Return the Class that {@link net.sf.click.Page} redirected to.
      *
-     * @return the Class the Page redirected to
+     * @return the Class that Page redirected to
      */
     public Class getRedirectPageClass() {
-        // TODO map from the redirectUrl to the Page class.
-        return null;
+        if (Context.getContextStack().isEmpty()) {
+            return null;
+        }
+        if (getResponse().getRedirectUrl() == null) {
+            return null;
+        }
+        Context context = Context.getThreadLocalContext();
+        String redirect = removeContextPath(getResponse().getRedirectUrl());
+        return context.getPageClass(redirect);
     }
 
     /**
@@ -666,12 +675,6 @@ public class MockContainer {
 
             getServletContext().setWebappPath(webappPath);
 
-            // Check that click.xml can be found in WEB-INF/click.xml or on
-            // claspath. If this method throws exception click.xml is not
-            // available.
-            InputStream is = ClickUtils.getClickConfig(getServletContext());
-            ClickUtils.close(is);
-
             if (getServletConfig() == null) {
                 String servletName = "click-servlet";
                 setServletConfig(new MockServletConfig(servletName,
@@ -700,6 +703,8 @@ public class MockContainer {
                     getSession()));
             }
             getRequest().setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
+            getServletContext().setAttribute(ClickServlet.MOCK_MODE_ENABLED,
+                Boolean.TRUE);
 
         } catch (Exception e) {
             throw new CleanRuntimeException(e);
@@ -800,5 +805,19 @@ public class MockContainer {
      */
     private Page getPage() {
         return (Page) getRequest().getAttribute(ClickServlet.MOCK_PAGE_REFERENCE);
+    }
+
+    /**
+     * Removes the context path from the specified value.
+     *
+     * @param value the value to remove context path from
+     * @return the value without context path
+     */
+    private String removeContextPath(String value) {
+        if (value != null &&
+            value.startsWith(getRequest().getContextPath())) {
+            value = value.substring(value.indexOf('/', 1));
+        }
+        return value;
     }
 }

@@ -239,6 +239,13 @@ public class MockContext extends Context {
                 isPost = request.getMethod().equalsIgnoreCase("POST");
             }
 
+            MockServletContext servletContext =
+                (MockServletContext) servletConfig.getServletContext();
+
+            servletContext.setAttribute(ClickServlet.MOCK_MODE_ENABLED,
+                Boolean.TRUE);
+            request.setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
+
             clickServlet.init(servletConfig);
 
             MockContext mockContext = new MockContext(servletConfig, request,

@@ -265,7 +265,7 @@ public class Context {
      * <tt>"X-Requested-With: XMLHttpRequest"</tt>. This is the de-facto
      * standard header used by Ajax libraries.
      *
-     * @return if this is a Ajax request, false otherwise
+     * @return true if this is an Ajax request, false otherwise
      */
     public boolean isAjaxRequest() {
         return getRequest().getHeader(X_REQUESTED_WITH) != null;
@@ -787,7 +787,7 @@ public class Context {
     /**
      * Provides an unsynchronized Context Stack.
      */
-    private static class ContextStack extends ArrayList {
+    static class ContextStack extends ArrayList {
 
         private static final long serialVersionUID = 1L;
 

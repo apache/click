@@ -16,7 +16,7 @@ import net.sf.click.pages.TestPage;
  */
 public class MockContainerTest extends TestCase {
 
-    public void testPage() {
+    public void estPage() {
         try {
             MockContainer container = new MockContainer("web");
 
@@ -71,7 +71,7 @@ public class MockContainerTest extends TestCase {
         }
     }
 
-    public void testBroderPage() {
+    public void estBroderPage() {
         try {
             MockContainer container = new MockContainer("web");
 
@@ -102,7 +102,7 @@ public class MockContainerTest extends TestCase {
         }
     }
 
-    public void testForward() {
+    public void estForward() {
         try {
             MockContainer container = new MockContainer("web");
 
@@ -130,6 +130,7 @@ public class MockContainerTest extends TestCase {
 
             // Assert that forwardUrl was set
             Assert.assertEquals("/test.htm", container.getForward());
+            Assert.assertEquals(TestPage.class, container.getForwardPageClass());
 
             // ForwardPage result will be empty because the template is NOT
             // rendered when forwarding a request.
@@ -169,6 +170,7 @@ public class MockContainerTest extends TestCase {
             // Assert that redirectUrl was set
             System.out.println("Redirect " + container.getRedirect());
             Assert.assertEquals("/mock/test.htm", container.getRedirect());
+            Assert.assertEquals(TestPage.class, container.getRedirectPageClass());
 
             // Alternatively use the container.getDestination() call which returns
             // either the forward or redirect value. For redirect values the 
