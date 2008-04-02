@@ -26,6 +26,10 @@ import net.sf.click.util.Format;
 
 /**
  * Provides a Click application configuration service interface.
+ * <p/>
+ * A single application ConfigService instance is created by the ClickServlet at
+ * startup. Once the ConfigService has been initialized it is stored in the
+ * ServletContext using the key "<tt>net.sf.click.service.ConfigService</tt>".
  *
  * @author Malcolm Edgar
  */
@@ -51,6 +55,13 @@ public interface ConfigService {
 
     /** The page not found file path: &nbsp; "<tt>/click/not-found.htm</tt>". */
     public static final String NOT_FOUND_PATH = "/click/not-found.htm";
+
+    /**
+     * The servlet context attribute name. The ClickServlet stores the
+     * application ConfigService instance in the ServletContext using this
+     * context attribute name.
+     */
+    public static final String CONTEXT_NAME = "net.sf.click.service.ConfigService";
 
     /**
      * Initialize the ConfigurationService with the given application servlet context.

@@ -146,6 +146,12 @@ import org.apache.velocity.exception.ParseErrorException;
  *    &lt;/security-role&gt;
  * &lt;/web-app&gt; </pre>
  *
+ * <h4>ConfigService</h4>
+ *
+ * A single application {@link ConfigService} instance is created by the ClickServlet at
+ * startup. Once the ConfigService has been initialized it is stored in the
+ * ServletContext using the key "<tt>net.sf.click.service.ConfigService</tt>".
+ *
  * @author Malcolm Edgar
  */
 public class ClickServlet extends HttpServlet {
@@ -236,8 +242,10 @@ public class ClickServlet extends HttpServlet {
             // Determine whether the click application is reloadable
             reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
+            // Initialize the application config service
             configService = createConfigService();
             configService.onInit(getServletContext());
+            getServletContext().setAttribute(ConfigService.CONTEXT_NAME, configService);
 
             logger = configService.getLogger();
 
