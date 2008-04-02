@@ -791,7 +791,7 @@ public class Form extends AbstractControl {
 
     /**
      * Return the form "action" attribute URL value. If the action URL attribute
-     * has not been explicitly set the form will action attribute will target the
+     * has not been explicitly set the form action attribute will target the
      * page containing the form. This is the default behaviour for most scenarios.
      * However if you explicitly specify the form "action" URL attribute, this
      * value will be used instead.
@@ -801,7 +801,7 @@ public class Form extends AbstractControl {
      * form submit to the J2EE Container for authentication, by setting the
      * action URL to "<tt>j_security_check</tt>".
      * <p/>
-     * The action URL will always be encode by the response to ensure it includes
+     * The action URL will always be encoded by the response to ensure it includes
      * the Session ID if required.
      *
      * @return the form "action" attribute URL value.
