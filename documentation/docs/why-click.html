@@ -48,14 +48,14 @@ One of the first generation JEE web frameworks was Struts, which provides a comm
 tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions working with primitive 
 ActionForms.  Its not giving you much leverage at all.
 <p/>
-Tapestry was one of first the component base JEE web frameworks, introducing the component hierarchies, pages and an 
-event based programming model.  This is a much more productive way of working, and is what we have come to expect in 
+Tapestry was one of the first component based JEE web frameworks, introducing component hierarchies, pages and an 
+event based programming model.  This is a much more productive way of working, and is what we have come to expect 
 when developing desktop GUI applications.
 <p/>
 The idea with Click was to take this page and component design approach, and make it much easier to use and more 
 accessible.
 <p/>
-Click provides an Page oriented design, featuring Control components and an event based programming model. Click 
+Click provides a Page oriented design, featuring Control components and an event based programming model. Click 
 includes 40 Controls out of the box, which correspond to the major HTML elements. It's a great way of programming 
 more simply.
 <p/>
@@ -75,7 +75,7 @@ For most UI development however MVC is overkill. The control and the view are us
 a Select box is the view and the control and also holds the model. In Swing fortunately, most of the MVC design is 
 hidden away below the surface.  In VB and Delphi there is no MVC at all.
 <p/>
-In the early days of JEE web development design patterns were highly conveted, and MVC was grabbed and early Servlet/JSP 
+In the early days of JEE web development design patterns were highly coveted, and MVC was grabbed and early Servlet/JSP 
 designs were branded as MVC. In their analysis the model was usually a DAO, the view was the JSP and control was a 
 Servlet.  
 <p/>
@@ -113,10 +113,10 @@ At runtime the control <span class="st">href</span> attribute renders as:
 &lt;a href="<span class="st">/mycorp/example-page.htm?actionLink=myLink</span>"&gt;Click Me&lt;/a&gt;
 </pre>
 
-If the user clicks the link, the ActionLink control then invokes the invokes the Page's <code>onClick()</code> method. 
+If the user clicks the link, the ActionLink control invokes the Page's <code>onClick()</code> method. 
 <p/>
 Conversely with the JSP MVC architecture a JSP can tell you something, but it can't understand what it has just 
-said. Think about this for a second. There is no single UI component is taking responsibility for its own actions. 
+said. Think about this for a second. There is no single UI component that is taking responsibility for its own actions. 
 Guess where the responsibility then falls to... 
 <p/>
 You become responsible for wiring up the numerous pieces to make it work. In Struts this can include:

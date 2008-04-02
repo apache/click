@@ -21,7 +21,8 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 /**
- * Provides the interface for Page controls.
+ * Provides the interface for Page controls. Controls are sometimes referred to
+ * as components or widgets.
  * <p/>
  * When a Page request event is processed Controls may perform server side event
  * processing through their {@link #onProcess()} method. Controls are generally
