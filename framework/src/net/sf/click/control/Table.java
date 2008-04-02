@@ -586,10 +586,10 @@ public class Table extends AbstractControl {
      * <pre class="codeHtml">
      * hover:hover { color: navy } </pre>
      *
-     * @param hooverRows specify whether class 'hover' rows attribute is rendered (default false).
+     * @param hoverRows specify whether class 'hover' rows attribute is rendered (default false).
      */
-    public void setHoverRows(boolean hooverRows) {
-        this.hoverRows = hooverRows;
+    public void setHoverRows(boolean hoverRows) {
+        this.hoverRows = hoverRows;
     }
 
     /**
