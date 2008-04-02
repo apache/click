@@ -27,7 +27,8 @@
   .release-header {
     background: #EFEFF7;
     padding: 4px;
-    border: 1px solid navy;
+    padding-left: 8px;
+    border: 1px solid #99A4DF;
   }
  </style>
 </head>
@@ -44,7 +45,7 @@ new features, bug fixes and documentation updates.
 <h2>Changes</h2>
 
 <dl>
-  <dt><div class="release-header">Latest stable branch - Version 1.4.1 - 30 March 2008</div></dt>
+  <dt><div class="release-header">Latest Stable Release - Version 1.4.1 - 30 March 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> Developer
     <a target="blank" href="http://sourceforge.net/users/sabob/">Bob Schellink</a>
@@ -96,7 +97,7 @@ new features, bug fixes and documentation updates.
 	  </li>
   	</ul>
   </dd>
-  <dt><div class="release-header">Development branch - Version 1.5 M1 - 30 April 2008</div></dt>
+  <dt><div class="release-header">Latest Development Release - Version 1.5 M1 - 30 April 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -113,7 +114,13 @@ new features, bug fixes and documentation updates.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
 	  </li>
 	  <li class="change">
-		Improve File Upload support with new <a href="click-api/net/sf/click/util/FileUploadService.html">FileUploadService</a> class.
+	    Added support for setting Form  
+		<a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
+		URL attribute. This issue was raised by Erdem Gunay
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">319</a>].
+	  </li>
+	  <li class="change">
+		Improve File Upload support with new <a href="click-api/net/sf/click/service/FileUploadService.html">FileUploadService</a> class.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
 	  </li>
       <li class="change">
