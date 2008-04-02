@@ -534,6 +534,9 @@ public class Form extends AbstractControl {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The form action URL. */
+    protected String actionURL;
+
     /** The button align, default value is "<tt>left</tt>". */
     protected String buttonAlign = ALIGN_LEFT;
 
@@ -787,15 +790,47 @@ public class Form extends AbstractControl {
     }
 
     /**
-     * Return the form "action" attribute URL value. The action URL will be
-     * encode by the response to ensure it includes the Session ID if required.
+     * Return the form "action" attribute URL value. If the action URL attribute
+     * has not been explicitly set the form will action attribute will target the
+     * page containing the form. This is the default behaviour for most scenarios.
+     * However if you explicitly specify the form "action" URL attribute, this
+     * value will be used instead.
+     * <p/>
+     * Setting the form action attribute is useful for situations where you want
+     * a form to submit to a different page. This can also be used to have a
+     * form submit to the J2EE Container for authentication, by setting the
+     * action URL to "<tt>j_security_check</tt>".
+     * <p/>
+     * The action URL will always be encode by the response to ensure it includes
+     * the Session ID if required.
      *
      * @return the form "action" attribute URL value.
      */
     public String getActionURL() {
-        HttpServletRequest request = getContext().getRequest();
         HttpServletResponse response = getContext().getResponse();
-        return response.encodeURL(ClickUtils.getRequestURI(request));
+        if (actionURL == null) {
+            HttpServletRequest request = getContext().getRequest();
+            return response.encodeURL(ClickUtils.getRequestURI(request));
+
+        } else {
+            return response.encodeURL(actionURL);
+        }
+    }
+
+    /**
+     * Return the form "action" attribute URL value. By setting this value you
+     * will override the default action URL which points to the page containing
+     * the form.
+     * <p/>
+     * Setting the form action attribute is useful for situations where you want
+     * a form to submit to a different page. This can also be used to have a
+     * form submit to the J2EE Container for authentication, by setting the
+     * action URL to "<tt>j_security_check</tt>".
+     *
+     * @param value the form "action" attribute URL value
+     */
+    public void setActionURL(String value) {
+        this.actionURL = value;
     }
 
     /**
