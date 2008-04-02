@@ -16,7 +16,6 @@
 package net.sf.click.extras.filter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -25,19 +24,17 @@ import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Provides a filter for improving the performance of web applications by
@@ -220,11 +217,11 @@ public class PerformanceFilter implements Filter {
     /** The configured cache max age in seconds, default value is 1 year. */
     protected long cacheMaxAge = DEFAULT_CACHE_MAX_AGE;
 
-    /** The configured click application request encoding character set. */
-    protected String charset;
-
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
+
+    /** The application configuration service. */
+    protected ConfigService configService;
 
     /**
      * The filter configuration object we are associated with.  If this value
@@ -237,9 +234,6 @@ public class PerformanceFilter implements Filter {
 
     /** The cachable-path include files. */
     protected List includeFiles = new ArrayList();
-
-    /** The application in production or profile mode flag. */
-    protected boolean inProductionProfileMode = false;
 
     /** The filter logger. */
     protected final ClickLogger logger = new ClickLogger("PerformanceFilter");
@@ -297,26 +291,10 @@ public class PerformanceFilter implements Filter {
                 cacheMaxAge = Long.parseLong(param);
             }
 
-            // Get the configured application character set if defined
-            charset = getCharset(filterConfig.getServletContext());
-
-            // Determine whether the appliation is in production or profile mode
-            String modeValue = getApplicationMode(filterConfig.getServletContext());
-            inProductionProfileMode = modeValue.startsWith("pro");
-
-            String message = null;
-            if (inProductionProfileMode) {
-                message =
-                    "initialized with: cachable-paths="
-                    + filterConfig.getInitParameter("cachable-paths")
-                    + " and cachable-max-age=" + cacheMaxAge;
-
-            } else {
-                message =
-                    "initialized but not active in application mode: "
-                    + modeValue;
-            }
-
+            String message =
+                "initialized with: cachable-paths="
+                + filterConfig.getInitParameter("cachable-paths")
+                + " and cachable-max-age=" + cacheMaxAge;
             logger.info(message);
         }
     }
@@ -345,9 +323,7 @@ public class PerformanceFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
-        // Don't apply the performance filter if application is not
-        // "production" or "profile" mode.
-        if (!inProductionProfileMode) {
+        if (!getConfigService().getApplicationMode().startsWith("pro")) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -369,6 +345,7 @@ public class PerformanceFilter implements Filter {
         }
 
         // Set the character set
+        String charset = getConfigService().getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -439,6 +416,19 @@ public class PerformanceFilter implements Filter {
     // ------------------------------------------------------ Protected Methods
 
     /**
+     * Return the application configuration service.
+     *
+     * @return the application configuration service
+     */
+    protected ConfigService getConfigService() {
+        if (configService == null) {
+            configService = (ConfigService)
+                getFilterConfig().getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
+        }
+        return configService;
+    }
+
+    /**
      * Return the <tt>version indicator</tt> for the specified path.
      *
      * @param path the resource path
@@ -470,69 +460,6 @@ public class PerformanceFilter implements Filter {
             return path.substring(0, versionIndex) + extension;
         }
         return path;
-    }
-
-    /**
-     * Return the configured click application character set.
-     *
-     * @param servletContext the servlet context
-     * @return the configured click application character set
-     */
-    protected String getCharset(ServletContext servletContext) {
-
-        InputStream inputStream = ClickUtils.getClickConfig(servletContext);
-
-        try {
-            Document document = ClickUtils.buildDocument(inputStream);
-
-            Element rootElm = document.getDocumentElement();
-
-            String charset = rootElm.getAttribute("charset");
-
-            if (charset != null && charset.length() > 0) {
-                return charset;
-
-            } else {
-                return null;
-            }
-
-        } finally {
-            ClickUtils.close(inputStream);
-        }
-    }
-
-    /**
-     * Return the configured click application mode.
-     *
-     * @param servletContext the servlet context
-     * @return the configured click application mode
-     */
-    protected String getApplicationMode(ServletContext servletContext) {
-
-        InputStream inputStream = ClickUtils.getClickConfig(servletContext);
-
-        try {
-            Document document = ClickUtils.buildDocument(inputStream);
-
-            Element rootElm = document.getDocumentElement();
-
-            Element modeElm = ClickUtils.getChild(rootElm, "mode");
-
-            String tmpModeValue = "development";
-
-            if (modeElm != null) {
-                if (StringUtils.isNotBlank(modeElm.getAttribute("value"))) {
-                     tmpModeValue = modeElm.getAttribute("value");
-                }
-            }
-
-            tmpModeValue = System.getProperty("click.mode", tmpModeValue);
-
-            return tmpModeValue;
-
-        } finally {
-            ClickUtils.close(inputStream);
-        }
     }
 
     /**

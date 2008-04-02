@@ -16,7 +16,6 @@
 package net.sf.click.extras.filter;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 
@@ -30,11 +29,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickLogger;
-import net.sf.click.util.ClickUtils;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
@@ -73,16 +69,10 @@ import org.w3c.dom.Element;
 public class CompressionFilter implements Filter {
 
     /**
-     * The default Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>".
-     */
-    static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
-
-    /**
      * The filter configuration object we are associated with. If this value
      * is null, this filter instance is not currently configured.
      */
-    private FilterConfig config = null;
+    private FilterConfig filterConfig = null;
 
     /** Minimal reasonable threshold, 2048 bytes. */
     protected int minThreshold = 2048;
@@ -100,7 +90,7 @@ public class CompressionFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) {
 
-        config = filterConfig;
+        this.filterConfig = filterConfig;
 
         if (filterConfig != null) {
 
@@ -116,8 +106,6 @@ public class CompressionFilter implements Filter {
                 compressionThreshold = minThreshold;
             }
 
-            charset = getCharset(filterConfig.getServletContext());
-
         } else {
             compressionThreshold = minThreshold;
         }
@@ -127,7 +115,7 @@ public class CompressionFilter implements Filter {
      * Take this filter out of service.
      */
     public void destroy() {
-        this.config = null;
+        this.filterConfig = null;
     }
 
     /**
@@ -162,6 +150,7 @@ public class CompressionFilter implements Filter {
 
         boolean supportCompression = false;
 
+        String charset = getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -230,7 +219,7 @@ public class CompressionFilter implements Filter {
      * @return the filter configuration
      */
     public FilterConfig getFilterConfig() {
-        return config;
+        return filterConfig;
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -238,40 +227,19 @@ public class CompressionFilter implements Filter {
     /**
      * Return the configured click application character set.
      *
-     * @param servletContext the servlet context
      * @return the configured click application character set
      */
-    protected String getCharset(ServletContext servletContext) {
-        InputStream inputStream =
-            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+    protected String getCharset() {
+        if (charset == null && getFilterConfig() != null) {
+            ServletContext servletContext = (ServletContext)
+                getFilterConfig().getServletContext();
 
-        if (inputStream == null) {
-            inputStream = ClickUtils.getResourceAsStream("/click.xml", getClass());
-            if (inputStream == null) {
-                String msg =
-                    "could not find click app configuration file: "
-                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
-                throw new RuntimeException(msg);
-            }
+            ConfigService configService = (ConfigService)
+                servletContext.getAttribute(ConfigService.CONTEXT_NAME);
+            charset = configService.getCharset();
         }
 
-        try {
-            Document document = ClickUtils.buildDocument(inputStream);
-
-            Element rootElm = document.getDocumentElement();
-
-            String charset = rootElm.getAttribute("charset");
-
-            if (charset != null && charset.length() > 0) {
-                return charset;
-
-            } else {
-                return null;
-            }
-
-        } finally {
-            ClickUtils.close(inputStream);
-        }
+        return charset;
     }
 
 }

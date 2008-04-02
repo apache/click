@@ -55,12 +55,6 @@ import org.xml.sax.SAXException;
  */
 public class XmlConfigService implements ConfigService, EntityResolver {
 
-    /**
-     * The Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>".
-     */
-    static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
-
     /** The name of the Click logger: &nbsp; "<tt>net.sf.click</tt>". */
     static final String CLICK_LOGGER = "net.sf.click";
 
