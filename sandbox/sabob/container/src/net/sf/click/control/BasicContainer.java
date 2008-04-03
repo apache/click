@@ -163,7 +163,7 @@ public class BasicContainer extends BasicControl implements Container {
 
         //If tag is set, render it
         if (getTag() != null) {
-            renderElementStart(getTag(), buffer);
+            renderTagStart(getTag(), buffer);
             buffer.closeTag();
             renderContent(buffer);
             if (!hasControls()) {

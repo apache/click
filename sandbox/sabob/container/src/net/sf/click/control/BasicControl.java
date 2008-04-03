@@ -120,8 +120,8 @@ public class BasicControl extends AbstractControl {
     }
 
     public void render(HtmlStringBuffer buffer) {
-        renderElementStart(getTag(), buffer);
-        renderElementEnd(getTag(), buffer);
+        renderTagStart(getTag(), buffer);
+        renderTagEnd(getTag(), buffer);
     }
 
     public String toString() {
@@ -139,7 +139,7 @@ public class BasicControl extends AbstractControl {
      * Will render the element and common attributes. The element will not 
      * be closed, so one can add more attributes as needed.
      */
-    protected void renderElementStart(String elementName,
+    protected void renderTagStart(String elementName,
       HtmlStringBuffer buffer) {
         if (elementName == null) {
             throw new IllegalStateException("Element cannot be null");
@@ -157,7 +157,7 @@ public class BasicControl extends AbstractControl {
         appendAttributes(buffer);
     }
 
-    protected void renderElementEnd(String elementName, HtmlStringBuffer buffer) {
+    protected void renderTagEnd(String elementName, HtmlStringBuffer buffer) {
         buffer.elementEnd();
     }
 
