@@ -5,7 +5,7 @@
 <project name="click-bench" default="compile" basedir=".">
     <description>Builds, tests, and runs the project click-bench.</description>
 
-    <property name="click-version" value="1.4RC2"/>
+    <property name="click.version" value="1.4.1"/>
     <property name="name" value="click-bench"/>
     <property name="build.dir" value="build"/>
     <property name="build.web.dir" value="${build.dir}/web"/>
@@ -13,6 +13,7 @@
     <property name="build.lib.dir" value="${build.web.dir}/WEB-INF/lib"/>
     <property name="src.dir" value="src"/>
     <property name="dist.dir" value="dist"/>
+    <property name="archive.dir" value="archive"/>
     <property name="lib.dir" value="lib"/>
     <property name="webapp.dir" value="web"/>
     <property name="weblib.dir" value="${webapp.dir}/WEB-INF/lib"/>
@@ -31,7 +32,7 @@
         <delete dir="${dist.dir}" quiet="false"/>
     </target>
 
-    <target name="compile" description="compile Java source">
+    <target name="compile" description="compile Java source" depends="clean">
         <mkdir dir="${build.classes.dir}"/>
         <mkdir dir="${build.lib.dir}"/>
 
@@ -73,5 +74,7 @@
                 <exclude name="**/web.xml"/>
             </fileset>
         </war>
+        <mkdir dir="${archive.dir}/Click-${click.version}"/>
+        <copy todir="${archive.dir}/Click-${click.version}" file="${dist.dir}/${name}.war"/>
     </target>
 </project>
