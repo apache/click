@@ -465,7 +465,7 @@ public class ClickServlet extends HttpServlet {
 
             errorPage.setError(exception);
             if (errorPage.getFormat() == null) {
-                errorPage.setFormat(configService.getFormat());
+                errorPage.setFormat(configService.createFormat());
             }
             errorPage.setHeaders(configService.getPageHeaders(ConfigService.ERROR_PATH));
             errorPage.setMode(configService.getApplicationMode());
@@ -839,7 +839,7 @@ public class ClickServlet extends HttpServlet {
             Page forwardPage = (Page) request.getAttribute(FORWARD_PAGE);
 
             if (forwardPage.getFormat() == null) {
-                forwardPage.setFormat(configService.getFormat());
+                forwardPage.setFormat(configService.createFormat());
             }
 
             request.removeAttribute(FORWARD_PAGE);
@@ -857,7 +857,7 @@ public class ClickServlet extends HttpServlet {
         final Page page = initPage(path, pageClass, request);
 
         if (page.getFormat() == null) {
-            page.setFormat(configService.getFormat());
+            page.setFormat(configService.createFormat());
         }
 
         return page;

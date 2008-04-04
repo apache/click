@@ -118,11 +118,11 @@ public interface ConfigService {
     public Class getErrorPageClass();
 
     /**
-     * Return a new format object instance.
+     * Create and return a new format object instance.
      *
      * @return a new format object instance
      */
-    public Format getFormat();
+    public Format createFormat();
 
     /**
      * Return true if JSP exists for the given ".htm" path.
@@ -148,6 +148,13 @@ public interface ConfigService {
      * @return true if the application is in PRODUCTION mode
      */
     public boolean isProductionMode();
+
+    /**
+     * Return true if the application is in PROFILE mode.
+     *
+     * @return true if the application is in PROFILE mode
+     */
+    public boolean isProfileMode();
 
     /**
      * Return the Click application locale or null if not defined.
@@ -216,7 +223,6 @@ public interface ConfigService {
      * @return an array public fields for the given page class
      */
     public Field[] getPageFieldArray(Class pageClass);
-
 
     /**
      * Return the page not found <tt>Page</tt> <tt>Class</tt>.

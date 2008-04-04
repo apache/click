@@ -63,6 +63,7 @@ import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 
+import net.sf.click.service.ConfigService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
@@ -720,7 +721,13 @@ public class ClickUtils {
      * @return a version indicator for web resources
      */
     public static String getResourceVersionIndicator(Context context) {
-        if (context.getApplicationMode().startsWith("pro")
+        ConfigService configService = (ConfigService) 
+            context.getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
+
+        boolean isProductionModes = configService.isProductionMode()
+            || configService.isProfileMode();
+
+        if (isProductionModes
             && isEnableResourceVersion(context)) {
 
             return RESOURCE_VERSION_INDICATOR;
