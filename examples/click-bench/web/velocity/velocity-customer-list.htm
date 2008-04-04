@@ -16,16 +16,22 @@
 </tr>
 </thead>
 <tbody>
+#set( $count = 0 )
 #foreach( $customer in $customers )
-<tr>
-<td>$customer.firstName</td>
-<td>$customer.lastName</td>
-<td>$customer.state</td>
-<td>$format.date($customer.birthDate, "MMMM d, yyyy")</td>
-<td>
-<a href="$context/pages/edit-customer.htm/id=$customer.id">Delete</a>
-<a href="$context/pages/edit-customer.htm/id=$customer.id">Edit</a>
-</td>          
+
+#set( $count = $count + 1 )
+
+#if ($count % 2 == 0) <tr class="odd">
+#else <tr class="even"> #end
+
+     <td id="table-firstName_$count">$customer.firstName</td>
+     <td id="table-lastName_$count">$customer.lastName</td>
+     <td id="table-state_$count">$customer.state</td>
+     <td id="table-birthDate_$count">$format.date($customer.birthDate, "MMMM d, yyyy")</td>
+     <td>
+     <a href="$context/pages/edit-customer.htm?id=$customer.id&page=0&value=0">Delete</a>
+     <a href="$context/pages/edit-customer.htm?id=$customer.id&page=0&value=0">Edit</a>
+     </td>
 </tr>
 #end
 </tbody>

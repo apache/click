@@ -2,8 +2,11 @@
 <click-app> 
 
   <pages package="benchmark.click">
-      <!-- Setup a velocity page too -->
+      <!-- Setup a velocity page -->
       <page path="velocity/velocity-customer-list.htm" classname="velocity.VelocityCustomerList"/>
+
+      <!-- Setup a JSP page -->
+      <page path="jsp/jsp-customer-list.jsp" classname="jsp.JSPCustomerList"/>
   </pages>
 
   <mode value="production"/>
