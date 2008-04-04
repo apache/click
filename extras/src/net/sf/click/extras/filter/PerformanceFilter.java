@@ -323,7 +323,8 @@ public class PerformanceFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
-        if (!getConfigService().getApplicationMode().startsWith("pro")) {
+        if (!getConfigService().isProductionMode()
+            && !getConfigService().isProfileMode()) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }

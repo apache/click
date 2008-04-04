@@ -180,7 +180,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public void onInit(ServletContext servletContext) throws Exception {
 
-        this.servletContext = servletContext;
+        setServletContext(servletContext);
 
         logger = new ClickLogger("Click");
 
@@ -242,6 +242,24 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Return the servletContext instance.
+     *
+     * @return the servletContext instance
+     */
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
+
+    /**
+     * Sets the servletContext instance.
+     *
+     * @param servletContext the servletContext instance
+     */
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    /**
      * Return the application mode String value: &nbsp; <tt>["production",
      * "profile", "development", "debug"]</tt>.
      *
@@ -279,11 +297,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * @see ConfigService#getFormat()
+     * @see ConfigService#createFormat()
      *
      * @return a new format object
      */
-    public Format getFormat() {
+    public Format createFormat() {
         try {
             return (Format) formatClass.newInstance();
 
@@ -327,6 +345,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public boolean isProductionMode() {
         return (mode == PRODUCTION);
+    }
+
+    /**
+     * @see ConfigService#isProductionMode()
+     *
+     * @return true if the application is in PROFILE mode
+     */
+    public boolean isProfileMode() {
+        return (mode == PROFILE);
     }
 
     /**
@@ -1130,7 +1157,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @param pagesPackage the package of the page class
      * @return the page class for the specified pagePath and pagesPackage
      */
-    private Class getPageClass(String pagePath, String pagesPackage) {
+    Class getPageClass(String pagePath, String pagesPackage) {
         // To understand this method lets walk through an example as the
         // code plays out. Imagine this method is called with the arguments:
         // pagePath='/pages/edit-customer.htm'
