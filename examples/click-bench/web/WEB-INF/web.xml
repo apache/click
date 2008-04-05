@@ -3,12 +3,15 @@
 
 <web-app>
     <display-name>Click/Wicket Benchmark</display-name>
-
+    
     <context-param>
         <param-name>configuration</param-name>
         <param-value>deployment</param-value>
     </context-param>
-
+    
+    <!--
+    Wicket config
+    -->
     <servlet>
         <servlet-name>wicket-session</servlet-name>
         <servlet-class>org.apache.wicket.protocol.http.WicketServlet</servlet-class>
@@ -18,21 +21,53 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
-     <servlet>
+    
+    <!--
+    Click config
+    -->
+    <servlet>
         <servlet-name>click</servlet-name>
         <servlet-class>net.sf.click.ClickServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- 
+    Struts config
+    -->
+    <servlet>
+        <servlet-name>action</servlet-name>
+        <servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
+        <init-param>
+            <param-name>config</param-name>
+            <param-value>/WEB-INF/struts-config.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+   <!--
+    Wicket mapping
+    -->
     <servlet-mapping>
         <servlet-name>wicket-session</servlet-name>
         <url-pattern>/wicket-session/*</url-pattern>
     </servlet-mapping>
-
+    
+    <!--
+    Click mapping
+    -->
     <servlet-mapping>
         <servlet-name>click</servlet-name>
         <url-pattern>*.htm</url-pattern>
     </servlet-mapping>
-
+    
+     
+    <!--
+    Struts mapping
+    -->
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
+    
+    
 </web-app>

@@ -27,7 +27,7 @@
 <td id="table-firstName_<c:out value="${lineInfo.count}"/>"><c:out value="${customer.firstName}"/></td> 
  <td id="table-lastName_<c:out value="${lineInfo.count}"/>"><c:out value="${customer.lastName}"/></td>
 <td id="table-state_<c:out value="${lineInfo.count}"/>"> <c:out value="${customer.state}"/> </td>
- <td id="table-birthDate_<c:out value="${lineInfo.count}"/>"> <fmt:formatDate value="${customer.birthDate}" pattern="dd MMM yyyy"/> </td>
+ <td id="table-birthDate_<c:out value="${lineInfo.count}"/>"> <fmt:formatDate value="${customer.birthDate}" pattern="MMMM d, yyyy"/> </td>
 <td align="left">
 <a href="/jsp/jsp-customer-list.htm?id=${customer.id}&value=0&page=0">Edit</a> |
 <a href="/jsp/jsp-customer-list.htm?id=${customer.id}&value=0&page=0">Delete</a>                            
