@@ -28,7 +28,7 @@ import java.util.TreeMap;
 import javax.servlet.ServletContext;
 
 import net.sf.click.Page;
-import net.sf.click.util.ClickLogger;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorReport;
 
 import org.apache.commons.lang.Validate;
@@ -37,6 +37,8 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.io.VelocityWriter;
 import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.RuntimeServices;
+import org.apache.velocity.runtime.log.LogChute;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
@@ -49,6 +51,14 @@ import org.apache.velocity.util.SimplePool;
 public class VelocityTemplateService implements TemplateService {
 
     // -------------------------------------------------------------- Constants
+
+    /** The logger instance Velocity application attribute key. */
+    private static final String LOG_INSTANCE =
+        LogChuteAdapter.class.getName() + ".LOG_INSTANCE";
+
+    /** The velocity logger instance Velocity application attribute key. */
+    private static final String LOG_LEVEL =
+        LogChuteAdapter.class.getName() + ".LOG_LEVEL";
 
     /**
      * The default velocity properties filename: &nbsp;
@@ -72,14 +82,8 @@ public class VelocityTemplateService implements TemplateService {
 
     // -------------------------------------------------------------- Variables
 
-    /** The application mode. */
-    protected String applicationMode;
-
-    /** The application character set. */
-    protected String charSet;
-
-    /** The application servlet context. */
-    protected ServletContext servletContext;
+    /** The application configuration service. */
+    protected ConfigService configService;
 
     /** The VelocityEngine instance. */
     protected VelocityEngine velocityEngine = new VelocityEngine();
@@ -92,27 +96,27 @@ public class VelocityTemplateService implements TemplateService {
     /**
      * @see TemplateService#onInit(ServletContext, String, String)
      *
-     * @param servletContext the application servlet context
-     * @param applicationMode the Click application mode
-     * @param charSet the application character set
+     * @param configService the application configuration service instance
      * @throws Exception if an error occurs initializing the Template Service
      */
-    public void onInit(ServletContext servletContext, String applicationMode,
-            String charSet) throws Exception {
+    public void onInit(ConfigService configService) throws Exception {
 
-        Validate.notNull(servletContext, "Null servletContext parameter");
-        Validate.notNull(applicationMode, "Null applicationMode parameter");
+        Validate.notNull(configService, "Null configService parameter");
 
-        this.servletContext = servletContext;
-        this.applicationMode = applicationMode;
-        this.charSet = charSet;
+        this.configService = configService;
 
         // Set the velocity logging level
-        setVelocityLogLevel();
+        Integer logLevel = getInitLogLevel();
+
+        velocityEngine.setApplicationAttribute(LOG_LEVEL, logLevel);
+
+        // Set ConfigService instance for LogChuteAdapter
+        velocityEngine.setApplicationAttribute(ConfigService.class.getName(),
+                                               configService);
 
         // Set ServletContext instance for WebappLoader
-        String className = ServletContext.class.getName();
-        velocityEngine.setApplicationAttribute(className, servletContext);
+        velocityEngine.setApplicationAttribute(ServletContext.class.getName(),
+                                               configService.getServletContext());
 
         // Load velocity properties
         Properties properties = getInitProperties();
@@ -121,9 +125,10 @@ public class VelocityTemplateService implements TemplateService {
         velocityEngine.init(properties);
 
         // Turn down the Velocity logging level
-        if (applicationMode.startsWith("pro") || applicationMode.startsWith("dev")) {
-            ClickLogger velocityLogger = ClickLogger.getInstance(velocityEngine);
-            velocityLogger.setLevel(ClickLogger.WARN_ID);
+        if (configService.isProductionMode() || configService.isProfileMode()) {
+            LogChuteAdapter logChuteAdapter = (LogChuteAdapter)
+                velocityEngine.getApplicationAttribute(LOG_INSTANCE);
+            logChuteAdapter.logLevel = LogChute.WARN_ID;
         }
     }
 
@@ -150,8 +155,9 @@ public class VelocityTemplateService implements TemplateService {
 
         // May throw parsing error if template could not be obtained
         Template template = null;
-        if (charSet != null) {
-            template = velocityEngine.getTemplate(page.getTemplate(), charSet);
+        String charset = configService.getCharset();
+        if (charset != null) {
+            template = velocityEngine.getTemplate(page.getTemplate(), charset);
 
         } else {
             template = velocityEngine.getTemplate(page.getTemplate());
@@ -179,9 +185,9 @@ public class VelocityTemplateService implements TemplateService {
             ErrorReport errorReport =
                 new ErrorReport(error,
                                 page.getClass(),
-                                applicationMode.equalsIgnoreCase("production"),
+                                configService.isProductionMode(),
                                 page.getContext().getRequest(),
-                                servletContext);
+                                configService.getServletContext());
 
             if (velocityWriter == null) {
 
@@ -227,8 +233,9 @@ public class VelocityTemplateService implements TemplateService {
 
         // May throw parsing error if template could not be obtained
         Template template = null;
-        if (charSet != null) {
-            template = velocityEngine.getTemplate(templatePath, charSet);
+        String charset = configService.getCharset();
+        if (charset != null) {
+            template = velocityEngine.getTemplate(templatePath, charset);
 
         } else {
             template = velocityEngine.getTemplate(templatePath);
@@ -256,9 +263,9 @@ public class VelocityTemplateService implements TemplateService {
             ErrorReport errorReport =
                 new ErrorReport(error,
                                 null,
-                                applicationMode.equalsIgnoreCase("production"),
+                                configService.isProductionMode(),
                                 null,
-                                servletContext);
+                                configService.getServletContext());
 
             if (velocityWriter == null) {
 
@@ -292,25 +299,27 @@ public class VelocityTemplateService implements TemplateService {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Set the Velocity Engine log level.
+     * Return the Velocity Engine initialization log level.
+     *
+     * @return the Velocity Engine initialization log level
      */
-    protected void setVelocityLogLevel() {
+    protected Integer getInitLogLevel() {
 
         // Set Velocity log levels
-        Integer velocityLogLevel = new Integer(ClickLogger.ERROR_ID);
+        Integer initLogLevel = new Integer(LogChute.ERROR_ID);
+        String mode = configService.getApplicationMode();
 
-        if (applicationMode.equalsIgnoreCase("development")) {
-            velocityLogLevel = new Integer(ClickLogger.WARN_ID);
+        if (mode.equals(ConfigService.MODE_DEVELOPMENT)) {
+            initLogLevel = new Integer(LogChute.WARN_ID);
 
-        } else if (applicationMode.equalsIgnoreCase("debug")) {
-            velocityLogLevel = new Integer(ClickLogger.WARN_ID);
+        } else if (mode.equals(ConfigService.MODE_DEBUG)) {
+            initLogLevel = new Integer(LogChute.WARN_ID);
 
-        } else if (applicationMode.equalsIgnoreCase("trace")) {
-            velocityLogLevel = new Integer(ClickLogger.INFO_ID);
+        } else if (mode.equals(ConfigService.MODE_TRACE)) {
+            initLogLevel = new Integer(LogChute.INFO_ID);
         }
 
-        velocityEngine.setApplicationAttribute(ClickLogger.LOG_LEVEL,
-                                               velocityLogLevel);
+        return initLogLevel;
     }
 
     /**
@@ -331,7 +340,7 @@ public class VelocityTemplateService implements TemplateService {
         velProps.setProperty("class.resource.loader.class",
                              ClasspathResourceLoader.class.getName());
 
-        if (applicationMode.startsWith("pro")) {
+        if (configService.isProductionMode() || configService.isProfileMode()) {
             velProps.put("webapp.resource.loader.cache", "true");
             velProps.put("webapp.resource.loader.modificationCheckInterval", "0");
             velProps.put("class.resource.loader.cache", "true");
@@ -345,9 +354,10 @@ public class VelocityTemplateService implements TemplateService {
         }
 
         velProps.put(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-                     ClickLogger.class.getName());
+                     LogChuteAdapter.class.getName());
 
         // Use 'macro.vm' exists set it as default VM library
+        ServletContext servletContext = configService.getServletContext();
         URL macroURL = servletContext.getResource("/" + MACRO_VM_FILE_NAME);
         if (macroURL != null) {
             velProps.put("velocimacro.library", "/" + MACRO_VM_FILE_NAME);
@@ -371,8 +381,9 @@ public class VelocityTemplateService implements TemplateService {
         }
 
         // Set the character encoding
-        if (charSet != null) {
-            velProps.put("input.encoding", charSet);
+        String charset = configService.getCharset();
+        if (charset != null) {
+            velProps.put("input.encoding", charset);
         }
 
         // Load user velocity properties.
@@ -389,7 +400,7 @@ public class VelocityTemplateService implements TemplateService {
             } catch (IOException ioe) {
                 String message = "error loading velocity properties file: "
                     + filename;
-                ClickLogger.getInstance().error(message, ioe);
+                configService.getLogService().error(message, ioe);
 
             } finally {
                 try {
@@ -406,15 +417,19 @@ public class VelocityTemplateService implements TemplateService {
             Map.Entry entry = (Map.Entry) iterator.next();
 
             Object pop = velProps.put(entry.getKey(), entry.getValue());
-            if (pop != null && ClickLogger.getInstance().isDebugEnabled()) {
+
+            LogService logService = configService.getLogService();
+            if (pop != null && logService.isDebugEnabled()) {
                 String message = "user defined property '" + entry.getKey()
                     + "=" + entry.getValue() + "' replaced default propery '"
                     + entry.getKey() + "=" + pop + "'";
-                ClickLogger.getInstance().debug(message);
+                logService.debug(message);
             }
         }
 
-        if (ClickLogger.getInstance().isTraceEnabled()) {
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+        LogService logger = configService.getLogService();
+        if (logger.isTraceEnabled()) {
             TreeMap sortedPropMap = new TreeMap();
 
             Iterator i = velProps.entrySet().iterator();
@@ -423,10 +438,159 @@ public class VelocityTemplateService implements TemplateService {
                 sortedPropMap.put(entry.getKey(), entry.getValue());
             }
 
-            ClickLogger.getInstance().trace("velocity properties: " + sortedPropMap);
+            logger.trace("velocity properties: " + sortedPropMap);
         }
 
         return velProps;
+    }
+
+    // ---------------------------------------------------------- Inner Classes
+
+    /**
+     * Provides a Velocity <tt>LogChute</tt> adapter class around the application
+     * log service to enable to the Velocity Runtime to log to the application
+     * LogService.
+     *
+     *  @author Malcolm Edgar
+     */
+    public static class LogChuteAdapter implements LogChute {
+
+        private static final String MSG_PREFIX = "Velocity: ";
+
+        /** The application configuration service. */
+        protected ConfigService configService;
+
+        /** The application log service. */
+        protected LogService logger;
+
+        /** The log level. */
+        protected int logLevel;
+
+        /**
+         * Initialize the logger instance for the Velocity runtime. This method
+         * is invoked by the Velocity runtime.
+         *
+         * @see LogChute#init(RuntimeServices)
+         *
+         * @param rs the Velocity runtime services
+         * @throws Exception if an initialization error occurs
+         */
+        public void init(RuntimeServices rs) throws Exception {
+
+            // Swap the default logger instance with the global application logger
+            ConfigService configService = (ConfigService)
+                rs.getApplicationAttribute(ConfigService.class.getName());
+
+            this.logger = configService.getLogService();
+
+            Integer level = (Integer) rs.getApplicationAttribute(LOG_LEVEL);
+            if (level instanceof Integer) {
+                logLevel = level.intValue();
+
+            } else {
+                String msg = "Could not retrieve LOG_LEVEL from Runtime attributes";
+                throw new IllegalStateException(msg);
+            }
+
+            rs.setApplicationAttribute(LOG_INSTANCE, this);
+        }
+
+        /**
+         * Tell whether or not a log level is enabled.
+         *
+         * @see LogChute#isLevelEnabled(int)
+         *
+         * @param level the logging level to test
+         * @return true if the given logging level is enabled
+         */
+        public boolean isLevelEnabled(int level) {
+            if (level <= LogChute.TRACE_ID && logger.isTraceEnabled()) {
+                return true;
+
+            } else if (level <= LogChute.DEBUG_ID && logger.isDebugEnabled()) {
+                return true;
+
+            } else if (level <= LogChute.INFO_ID && logger.isInfoEnabled()) {
+                return true;
+
+            } else if (level == LogChute.WARN_ID || level == LogChute.ERROR_ID) {
+                return true;
+
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Log the given message and optional error at the specified logging level.
+         *
+         * @see LogChute#log(int, java.lang.String)
+         *
+         * @param level the logging level
+         * @param message the message to log
+         */
+        public void log(int level, String message) {
+            if (level < logLevel) {
+                return;
+            }
+
+            if (level == TRACE_ID) {
+                logger.trace(MSG_PREFIX + message);
+
+            } else if (level == DEBUG_ID) {
+                logger.debug(MSG_PREFIX + message);
+
+            } else if (level == INFO_ID) {
+                logger.info(MSG_PREFIX + message);
+
+            } else if (level == WARN_ID) {
+                logger.warn(MSG_PREFIX + message);
+
+            } else if (level == ERROR_ID) {
+                logger.error(MSG_PREFIX + message);
+
+            } else {
+                // TODO:
+            }
+        }
+
+        /**
+         * Log the given message and optional error at the specified logging level.
+         * <p/>
+         * If you need to customise the Click and Velocity runtime logging for your
+         * application modify this method.
+         *
+         * @see LogChute#log(int, java.lang.String, java.lang.Throwable)
+         *
+         * @param level the logging level
+         * @param message the message to log
+         * @param error the optional error to log
+         */
+        public void log(int level, String message, Throwable error) {
+            if (level < logLevel) {
+                return;
+            }
+
+            if (level == TRACE_ID) {
+                logger.trace(MSG_PREFIX + message, error);
+
+            } else if (level == DEBUG_ID) {
+                logger.debug(MSG_PREFIX + message, error);
+
+            } else if (level == INFO_ID) {
+                logger.info(MSG_PREFIX + message, error);
+
+            } else if (level == WARN_ID) {
+                logger.warn(MSG_PREFIX + message, error);
+
+            } else if (level == ERROR_ID) {
+                logger.error(MSG_PREFIX + message, error);
+
+            } else {
+                // TODO:
+            }
+        }
+
     }
 
 }

@@ -26,10 +26,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import net.sf.click.util.ClickLogger;
+import net.sf.click.service.FileUploadService;
 import net.sf.click.util.ClickUtils;
 
-import net.sf.click.service.FileUploadService;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
@@ -82,7 +81,8 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     itemsList = fileUploadService.parseRequest(request);
 
                 } catch (FileUploadException fue) {
-                    ClickLogger.getInstance().info(fue.getMessage());
+                    // TODO: review
+                    //ClickLogger.getInstance().info(fue.getMessage());
                     request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
                 }
 

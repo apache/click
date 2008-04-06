@@ -35,8 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.click.service.ConfigService;
-import net.sf.click.service.XmlConfigService;
-import net.sf.click.util.ClickLogger;
+import net.sf.click.service.LogService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.Format;
@@ -212,8 +211,8 @@ public class ClickServlet extends HttpServlet {
     /** The click application configuration service. */
     protected ConfigService configService;
 
-    /** The servlet logger. */
-    protected ClickLogger logger;
+    /** The application log service. */
+    protected LogService logger;
 
     /** The click application is reloadable flag. */
     protected boolean reloadable = false;
@@ -243,11 +242,9 @@ public class ClickServlet extends HttpServlet {
             reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
             // Initialize the application config service
-            configService = createConfigService();
-            configService.onInit(getServletContext());
-            getServletContext().setAttribute(ConfigService.CONTEXT_NAME, configService);
+            configService = ClickUtils.getConfigService(getServletContext());
 
-            logger = configService.getLogger();
+            logger = configService.getLogService();
 
             if (logger.isInfoEnabled()) {
                 logger.info("initialized in " + configService.getApplicationMode()
@@ -296,8 +293,6 @@ public class ClickServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        ClickLogger.setInstance(logger);
-
         ensureAppInitialized();
 
         if (ifAuthorizedReloadRequest(request)) {
@@ -321,8 +316,6 @@ public class ClickServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-
-        ClickLogger.setInstance(logger);
 
         ensureAppInitialized();
 
@@ -422,7 +415,6 @@ public class ClickServlet extends HttpServlet {
                 // Only clear the context and logger when running in normal mode.
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
-                    ClickLogger.setInstance(null);
                 }
             }
         }
@@ -1559,12 +1551,6 @@ public class ClickServlet extends HttpServlet {
     protected Context createContext(HttpServletRequest request,
             HttpServletResponse response, boolean isPost) {
 
-//        Context context = new Context(getServletContext(),
-//                                      getServletConfig(),
-//                                      request,
-//                                      response,
-//                                      isPost,
-//                                      new ClickServletContextService(this));
         Context context = new Context(getServletContext(),
                                       getServletConfig(),
                                       request,
@@ -1606,28 +1592,6 @@ public class ClickServlet extends HttpServlet {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Create a Click application configuration service instance.
-     * <p/>
-     * This method is invoked by the {@link #init()} method when the ClickServlet
-     * starts up.
-     *
-     * @return a new ConfigService instance
-     * @throws Exception if an error occurs creating the config service
-     */
-    protected ConfigService createConfigService() throws Exception {
-        Class serviceClass = XmlConfigService.class;
-
-        String classname = getInitParameter(CONFIG_SERVICE_CLASS);
-        if (StringUtils.isNotBlank(classname)) {
-            serviceClass = ClickUtils.classForName(classname);
-        }
-
-        ConfigService configService = (ConfigService) serviceClass.newInstance();
-
-        return configService;
     }
 
     /**

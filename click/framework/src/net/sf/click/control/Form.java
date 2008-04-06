@@ -30,14 +30,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.Page;
-import net.sf.click.util.ClickLogger;
-import net.sf.click.util.ClickUtils;
 import net.sf.click.service.FileUploadService;
+import net.sf.click.service.LogService;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -2206,8 +2206,8 @@ public class Form extends AbstractControl {
                     // CLK-289. If a session attribute exists for the
                     // SUBMIT_CHECK, but no request parameter, we assume the
                     // submission is a duplicate and therefore invalid.
-                    ClickLogger logger = ClickLogger.getInstance();
-                    logger.warn("    'Redirect After Post' token called '"
+                    LogService logService = ClickUtils.getLogService();
+                    logService.warn("    'Redirect After Post' token called '"
                         + submitTokenName + "' is registered in the session, "
                         + "but no matching request parameter was found. "
                         + "(form name: '" + getName()

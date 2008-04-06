@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.service.ConfigService;
-import net.sf.click.util.ClickLogger;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
@@ -68,20 +68,22 @@ import net.sf.click.util.ClickLogger;
  */
 public class CompressionFilter implements Filter {
 
+    /** The threshold number to compress, default value is 2048 bytes. */
+    protected int compressionThreshold;
+
+    /** The application configuration service. */
+    protected ConfigService configService;
+
     /**
      * The filter configuration object we are associated with. If this value
      * is null, this filter instance is not currently configured.
      */
-    private FilterConfig filterConfig = null;
+    private FilterConfig filterConfig;
 
     /** Minimal reasonable threshold, 2048 bytes. */
     protected int minThreshold = 2048;
 
-    /** The threshold number to compress, default value is 2048 bytes. */
-    protected int compressionThreshold;
-
-    /** The configured click application request encoding character set. */
-    protected String charset;
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Place this filter into service.
@@ -93,6 +95,9 @@ public class CompressionFilter implements Filter {
         this.filterConfig = filterConfig;
 
         if (filterConfig != null) {
+
+            ServletContext servletContext = getFilterConfig().getServletContext();
+            configService = ClickUtils.getConfigService(servletContext);
 
             String str = filterConfig.getInitParameter("compressionThreshold");
             if (str != null) {
@@ -150,7 +155,7 @@ public class CompressionFilter implements Filter {
 
         boolean supportCompression = false;
 
-        String charset = getCharset();
+        String charset = getConfigService().getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -158,7 +163,7 @@ public class CompressionFilter implements Filter {
             } catch (UnsupportedEncodingException ex) {
                 String msg =
                     "The character encoding " + charset + " is invalid.";
-                ClickLogger.getInstance().warn(msg, ex);
+                getConfigService().getLogService().warn(msg, ex);
             }
         }
 
@@ -225,21 +230,12 @@ public class CompressionFilter implements Filter {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Return the configured click application character set.
+     * Return the application configuration service.
      *
-     * @return the configured click application character set
+     * @return the application configuration service
      */
-    protected String getCharset() {
-        if (charset == null && getFilterConfig() != null) {
-            ServletContext servletContext = (ServletContext)
-                getFilterConfig().getServletContext();
-
-            ConfigService configService = (ConfigService)
-                servletContext.getAttribute(ConfigService.CONTEXT_NAME);
-            charset = configService.getCharset();
-        }
-
-        return charset;
+    protected ConfigService getConfigService() {
+        return configService;
     }
 
 }
