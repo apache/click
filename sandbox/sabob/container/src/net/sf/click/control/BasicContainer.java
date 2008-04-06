@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import net.sf.click.Container;
 import net.sf.click.Control;
-import net.sf.click.util.ClickLogger;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 public class BasicContainer extends BasicControl implements Container {
@@ -88,7 +88,7 @@ public class BasicContainer extends BasicControl implements Container {
             for (int i = 0; i < controls.size(); i++) {
                 Control control = (Control) controls.get(i);
                 boolean continueProcessing = control.onProcess();
-                if (ClickLogger.getInstance().isTraceEnabled()) {
+                if (ClickUtils.getLogService().isTraceEnabled()) {
                     logLifeCycle(control, "onProcess");
                 }
                 if (!continueProcessing) {
@@ -112,7 +112,7 @@ public class BasicContainer extends BasicControl implements Container {
             for (int i = 0,  size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 control.onDestroy();
-                if (ClickLogger.getInstance().isTraceEnabled()) {
+                if (ClickUtils.getLogService().isTraceEnabled()) {
                     logLifeCycle(control, "onDestroy");
                 }
             }
@@ -124,7 +124,7 @@ public class BasicContainer extends BasicControl implements Container {
             for (int i = 0,  size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 control.onInit();
-                if (ClickLogger.getInstance().isTraceEnabled()) {
+                if (ClickUtils.getLogService().isTraceEnabled()) {
                     logLifeCycle(control, "onInit");
                 }
             }
@@ -136,7 +136,7 @@ public class BasicContainer extends BasicControl implements Container {
             for (int i = 0,  size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 control.onRender();
-                if (ClickLogger.getInstance().isTraceEnabled()) {
+                if (ClickUtils.getLogService().isTraceEnabled()) {
                     logLifeCycle(control, "onRender");
                 }
             }
@@ -278,7 +278,7 @@ public class BasicContainer extends BasicControl implements Container {
             1);
         String msg = "   invoked: '" + control.getName() + "' " +
             controlClassName + "." + phase + "()";
-        ClickLogger.getInstance().trace(msg);
+        ClickUtils.getLogService().trace(msg);
     }
 
     public static void main(String[] args) {

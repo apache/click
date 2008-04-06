@@ -325,10 +325,10 @@ public class ContainerUtils {
     }
     
     private static void log(String msg) {
-        if(ClickLogger.getInstance().isDebugEnabled()) {
+        if(ClickUtils.getLogService().isDebugEnabled()) {
             System.out.println("[Click] [debug] " + msg);
         } else {
-            ClickLogger.getInstance().debug(msg);
+            ClickUtils.getLogService().debug(msg);
         }
     }
 
