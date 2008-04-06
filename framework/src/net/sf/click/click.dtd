@@ -47,7 +47,7 @@
     <!ELEMENT control-set (#PCDATA)>
       <!ATTLIST control-set name CDATA #REQUIRED>
   
-  <!-- File Upload Service class. -->
+  <!-- File Upload Service. -->
   <!ELEMENT file-upload-service (property*)>
    <!ATTLIST file-upload-service classname CDATA #FIXED "net.sf.click.service.FileUploadService">
    
@@ -56,7 +56,11 @@
       <!ATTLIST property name CDATA #REQUIRED>
       <!ATTLIST property value CDATA #REQUIRED>
   
+  <!-- Log Service. -->
+  <!ELEMENT log-service (property*)>
+   <!ATTLIST log-service classname CDATA #FIXED "net.sf.click.service.ConsoleLogService">
+  
   <!-- Template Service class. -->
   <!ELEMENT template-service (property*)>
-   <!ATTLIST template-service classname CDATA #FIXED "net.sf.click.service.FileUploadService">
+   <!ATTLIST template-service classname CDATA #FIXED "net.sf.click.service.VelocityTemplateService">
   

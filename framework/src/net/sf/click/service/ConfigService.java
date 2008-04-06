@@ -21,7 +21,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.Format;
 
 /**
@@ -143,16 +142,16 @@ public interface ConfigService {
     public boolean isPagesAutoBinding();
 
     /**
-     * Return true if the application is in PRODUCTION mode.
+     * Return true if the application is in "production" mode.
      *
-     * @return true if the application is in PRODUCTION mode
+     * @return true if the application is in "production" mode
      */
     public boolean isProductionMode();
 
     /**
-     * Return true if the application is in PROFILE mode.
+     * Return true if the application is in "profile" mode.
      *
-     * @return true if the application is in PROFILE mode
+     * @return true if the application is in "profile" mode
      */
     public boolean isProfileMode();
 
@@ -164,11 +163,11 @@ public interface ConfigService {
     public Locale getLocale();
 
     /**
-     * Return the Click application logger.
+     * Return the Click application log service.
      *
-     * @return the application logger.
+     * @return the application log service.
      */
-    public ClickLogger getLogger();
+    public LogService getLogService();
 
     /**
      * Return the path for the given page Class.
@@ -224,11 +223,19 @@ public interface ConfigService {
      */
     public Field[] getPageFieldArray(Class pageClass);
 
+
     /**
      * Return the page not found <tt>Page</tt> <tt>Class</tt>.
      *
      * @return the page not found <tt>Page</tt> <tt>Class</tt>
      */
     public Class getNotFoundPageClass();
+
+    /**
+     * Return the application servlet context.
+     *
+     * @return the application servlet context
+     */
+    public ServletContext getServletContext();
 
 }

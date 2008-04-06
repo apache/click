@@ -24,6 +24,7 @@ import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -31,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.click.service.ConfigService;
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -235,9 +235,6 @@ public class PerformanceFilter implements Filter {
     /** The cachable-path include files. */
     protected List includeFiles = new ArrayList();
 
-    /** The filter logger. */
-    protected final ClickLogger logger = new ClickLogger("PerformanceFilter");
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -252,6 +249,9 @@ public class PerformanceFilter implements Filter {
         if (filterConfig != null) {
 
             this.filterConfig = filterConfig;
+
+            ServletContext servletContext = getFilterConfig().getServletContext();
+            configService = ClickUtils.getConfigService(servletContext);
 
             // Get compression threshold
             String param = filterConfig.getInitParameter("compression-threshold");
@@ -280,7 +280,7 @@ public class PerformanceFilter implements Filter {
                     } else {
                         String message = "cachable-path '" + path + "' ignored, "
                             + "path must start or end with a wildcard character: *";
-                        logger.warn(message);
+                        getConfigService().getLogService().warn(message);
                     }
                 }
             }
@@ -292,10 +292,10 @@ public class PerformanceFilter implements Filter {
             }
 
             String message =
-                "initialized with: cachable-paths="
+                "PerformanceFilter initialized with: cachable-paths="
                 + filterConfig.getInitParameter("cachable-paths")
                 + " and cachable-max-age=" + cacheMaxAge;
-            logger.info(message);
+            getConfigService().getLogService().info(message);
         }
     }
 
@@ -354,7 +354,7 @@ public class PerformanceFilter implements Filter {
             } catch (UnsupportedEncodingException ex) {
                 String msg =
                     "The character encoding " + charset + " is invalid.";
-                logger.warn(msg, ex);
+                getConfigService().getLogService().warn(msg, ex);
             }
         }
 
@@ -422,10 +422,6 @@ public class PerformanceFilter implements Filter {
      * @return the application configuration service
      */
     protected ConfigService getConfigService() {
-        if (configService == null) {
-            configService = (ConfigService)
-                getFilterConfig().getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
-        }
         return configService;
     }
 

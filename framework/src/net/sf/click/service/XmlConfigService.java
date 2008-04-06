@@ -36,7 +36,6 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
 import ognl.Ognl;
@@ -143,8 +142,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The default application locale.*/
     private Locale locale;
 
-    /** The application logger. */
-    private ClickLogger logger;
+    /** The application log service. */
+    private LogService logService;
 
     /**
      * The application mode:
@@ -180,11 +179,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     public void onInit(ServletContext servletContext) throws Exception {
 
-        setServletContext(servletContext);
-
-        logger = new ClickLogger("Click");
-
-        ClickLogger.setInstance(logger);
+        this.servletContext = servletContext;
 
         InputStream inputStream = ClickUtils.getClickConfig(servletContext);
 
@@ -192,6 +187,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             Document document = ClickUtils.buildDocument(inputStream, this);
 
             Element rootElm = document.getDocumentElement();
+
+            // Load the log service
+            loadLogService(rootElm);
 
             // Load the application mode and set the logger levels
             loadMode(rootElm);
@@ -240,24 +238,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Return the servletContext instance.
-     *
-     * @return the servletContext instance
-     */
-    public ServletContext getServletContext() {
-        return servletContext;
-    }
-
-    /**
-     * Sets the servletContext instance.
-     *
-     * @param servletContext the servletContext instance
-     */
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
 
     /**
      * Return the application mode String value: &nbsp; <tt>["production",
@@ -320,12 +300,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * @see ConfigService#getLogger()
+     * @see ConfigService#getLogService()
      *
-     * @return the application logger.
+     * @return the application log service.
      */
-    public ClickLogger getLogger() {
-        return logger;
+    public LogService getLogService() {
+        return logService;
     }
 
     /**
@@ -341,16 +321,16 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * @see ConfigService#isProductionMode()
      *
-     * @return true if the application is in PRODUCTION mode
+     * @return true if the application is in "production" mode
      */
     public boolean isProductionMode() {
         return (mode == PRODUCTION);
     }
 
     /**
-     * @see ConfigService#isProductionMode()
+     * @see ConfigService#isProfileMode()
      *
-     * @return true if the application is in PROFILE mode
+     * @return true if the application is in "profile" mode
      */
     public boolean isProfileMode() {
         return (mode == PROFILE);
@@ -415,9 +395,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                             pageByPathMap.put(page.getPath(), page);
 
-                            if (logger.isDebugEnabled()) {
+                            if (logService.isDebugEnabled()) {
                                 String msg = path + " -> " + pageClass.getName();
-                                logger.debug(msg);
+                                logService.debug(msg);
                             }
                         }
                     }
@@ -452,24 +432,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else {
             return null;
         }
-    }
-
-//    /**
-//     * Returns the map of all the pages keyed by class.
-//     *
-//     * @return map containing all pages keyed by class
-//     */
-//    private Map getPageByClassMap() {
-//        return pageByClassMap;
-//    }
-
-    /**
-     * Returns the map of all the pages keyed by path.
-     *
-     * @return map containing all pages keyed by path
-     */
-    Map getPageByPathMap() {
-        return pageByPathMap;
     }
 
     /**
@@ -523,29 +485,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return net.sf.click.util.ErrorPage.class;
         }
     }
-
-//    /**
-//     * Return the Velocity Template for the give page path.
-//     *
-//     * @param path the Velocity template path
-//     * @return the Velocity Template for the give page path
-//     * @throws Exception if Velocity error occurs
-//     */
-//    Template getTemplate(String path) throws Exception {
-//        return velocityEngine.getTemplate(path);
-//    }
-
-//    /**
-//     * Return the Velocity Template for the give page path.
-//     *
-//     * @param path the Velocity template path
-//     * @param charset the template encoding charset
-//     * @return the Velocity Template for the give page path
-//     * @throws Exception if Velocity error occurs
-//     */
-//    Template getTemplate(String path, String charset) throws Exception {
-//        return velocityEngine.getTemplate(path, charset);
-//    }
 
     /**
      * @see ConfigService#getPageField(Class, String)
@@ -602,6 +541,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else {
             return Collections.EMPTY_MAP;
         }
+    }
+
+    /**
+     * @see ConfigService#getServletContext()
+     *
+     * @return the application servlet context
+     */
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
     /**
@@ -761,26 +709,28 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else if (modeValue.equalsIgnoreCase("trace")) {
             mode = TRACE;
         } else {
-            logger.error("invalid application mode: " + mode);
+            logService.error("invalid application mode: " + mode);
             mode = DEBUG;
         }
 
-        // Set Click and Velocity log levels
-        int clickLogLevel = ClickLogger.INFO_ID;
+        // Set log levels
+        if (logService instanceof ConsoleLogService) {
+            int logLevel = ConsoleLogService.INFO_LEVEL;
 
-        if (mode == PRODUCTION) {
-            clickLogLevel = ClickLogger.WARN_ID;
+            if (mode == PRODUCTION) {
+                logLevel = ConsoleLogService.WARN_LEVEL;
 
-        } else if (mode == DEVELOPMENT) {
+            } else if (mode == DEVELOPMENT) {
 
-        } else if (mode == DEBUG) {
-            clickLogLevel = ClickLogger.DEBUG_ID;
+            } else if (mode == DEBUG) {
+                logLevel = ConsoleLogService.DEBUG_LEVEL;
 
-        } else if (mode == TRACE) {
-            clickLogLevel = ClickLogger.TRACE_ID;
+            } else if (mode == TRACE) {
+                logLevel = ConsoleLogService.TRACE_LEVEL;
+            }
+
+            ((ConsoleLogService) logService).setLevel(logLevel);
         }
-
-        logger.setLevel(clickLogLevel);
     }
 
     private void loadDefaultPages() throws ClassNotFoundException {
@@ -859,7 +809,49 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             fileUploadService = new CommonsFileUploadService();
         }
 
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing FileLoadService: "
+                + fileUploadService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
         fileUploadService.onInit(servletContext);
+    }
+
+    private void loadLogService(Element rootElm) throws Exception {
+        Element logServiceElm = ClickUtils.getChild(rootElm, "log-service");
+
+        if (logServiceElm != null) {
+            Class logServiceClass = ConsoleLogService.class;
+
+            String classname = logServiceElm.getAttribute("classname");
+
+            if (StringUtils.isNotBlank(classname)) {
+                logServiceClass = ClickUtils.classForName(classname);
+            }
+
+            logService = (LogService) logServiceClass.newInstance();
+
+            Map propertyMap = loadPropertyMap(logServiceElm);
+
+            for (Iterator i = propertyMap.keySet().iterator(); i.hasNext();) {
+                String name = i.next().toString();
+                String value = propertyMap.get(name).toString();
+
+                Ognl.setValue(name, logService, value);
+            }
+
+        } else {
+            logService = new ConsoleLogService();
+        }
+
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing LogService: "
+                + logService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        logService.onInit(getServletContext());
     }
 
     private void loadTemplateService(Element rootElm) throws Exception {
@@ -889,7 +881,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             templateService = new VelocityTemplateService();
         }
 
-        templateService.onInit(servletContext, getApplicationMode(), getCharset());
+        if (getLogService().isDebugEnabled()) {
+            String msg = "initializing TemplateService: "
+                + templateService.getClass().getName();
+            getLogService().debug(msg);
+        }
+
+        templateService.onInit(this);
     }
 
     private static Map loadPropertyMap(Element parentElm) {
@@ -961,8 +959,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         List pageList = ClickUtils.getChildren(pagesElm, "page");
 
-        if (!pageList.isEmpty() && logger.isDebugEnabled()) {
-            logger.debug("click.xml pages:");
+        if (!pageList.isEmpty() && logService.isDebugEnabled()) {
+            logService.debug("click.xml pages:");
         }
 
         for (int i = 0; i < pageList.size(); i++) {
@@ -973,10 +971,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             pageByPathMap.put(page.getPath(), page);
 
-            if (logger.isDebugEnabled()) {
+            if (logService.isDebugEnabled()) {
                 String msg =
                     page.getPath() + " -> " + page.getPageClass().getName();
-                logger.debug(msg);
+                logService.debug(msg);
             }
         }
 
@@ -990,8 +988,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 excludesList.add(new XmlConfigService.ExcludesElm((Element) i.next()));
             }
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("automapped pages:");
+            if (logService.isDebugEnabled()) {
+                logService.debug("automapped pages:");
             }
 
             List templates = getTemplateFiles();
@@ -1010,10 +1008,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                         pageByPathMap.put(page.getPath(), page);
 
-                        if (logger.isDebugEnabled()) {
+                        if (logService.isDebugEnabled()) {
                             String msg =
                                 pagePath + " -> " + pageClass.getName();
-                            logger.debug(msg);
+                            logService.debug(msg);
                         }
                     }
                 }
@@ -1244,11 +1242,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             if (!classFound) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(pagePath + " -> CLASS NOT FOUND");
+                if (logService.isDebugEnabled()) {
+                    logService.debug(pagePath + " -> CLASS NOT FOUND");
                 }
-                if (logger.isTraceEnabled()) {
-                    logger.trace("class not found: " + className);
+                if (logService.isTraceEnabled()) {
+                    logService.trace("class not found: " + className);
                 }
             }
         }

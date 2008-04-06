@@ -62,8 +62,9 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
-
 import net.sf.click.service.ConfigService;
+import net.sf.click.service.LogService;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
@@ -617,6 +618,99 @@ public class ClickUtils {
     }
 
     /**
+     * Return the first XML child Element for the given parent Element and child
+     * Element name.
+     *
+     * @param parent the parent element to get the child from
+     * @param name the name of the child element
+     * @return the first child element for the given name and parent
+     */
+    public static Element getChild(Element parent, String name) {
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    return (Element) node;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the list of XML child Element elements with the given name from
+     * the given parent Element.
+     *
+     * @param parent the parent element to get the child from
+     * @param name the name of the child element
+     * @return the list of XML child elements for the given name
+     */
+    public static List getChildren(Element parent, String name) {
+        List list = new ArrayList();
+        NodeList nodeList = parent.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (node instanceof Element) {
+                if (node.getNodeName().equals(name)) {
+                    list.add(node);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * Return the InputStream for the Click configuration file <tt>click.xml</tt>.
+     * This method will first lookup the <tt>click.xml</tt> under the
+     * applications <tt>WEB-INF</tt> directory, and then if not found it will
+     * attempt to find the configuration file on the classpath root.
+     *
+     * @param servletContext the servlet context to obtain the Click configuration
+     *     from
+     * @return the InputStream for the Click configuration file
+     * @throws RuntimeException if the resource could not be found
+     */
+    public static InputStream getClickConfig(ServletContext servletContext) {
+        InputStream inputStream =
+            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
+
+        if (inputStream == null) {
+            inputStream = ClickUtils.getResourceAsStream("/click.xml", ClickUtils.class);
+            if (inputStream == null) {
+                String msg =
+                    "could not find click app configuration file: "
+                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
+                throw new RuntimeException(msg);
+            }
+        }
+
+        return inputStream;
+    }
+
+    /**
+     * Return the application configuration service instance from the given
+     * servlet context.
+     *
+     * @param servletContext the servlet context to get the config service instance
+     * @return the application config service instance
+     */
+    public static ConfigService getConfigService(ServletContext servletContext) {
+        ConfigService configService = (ConfigService)
+            servletContext.getAttribute(ConfigService.CONTEXT_NAME);
+
+        if (configService != null) {
+            return configService;
+
+        } else {
+            String msg =
+                "could not find ConfigService in the SerlvetContext, please "
+                + "ensure the ClickConfigLoader is defined in WEB-INF/web.xml";
+            throw new RuntimeException(msg);
+        }
+    }
+
+    /**
      * Returns the specified Cookie object, or null if the cookie does not exist.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
@@ -721,7 +815,7 @@ public class ClickUtils {
      * @return a version indicator for web resources
      */
     public static String getResourceVersionIndicator(Context context) {
-        ConfigService configService = (ConfigService) 
+        ConfigService configService = (ConfigService)
             context.getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
 
         boolean isProductionModes = configService.isProductionMode()
@@ -909,7 +1003,8 @@ public class ClickUtils {
             realTargetDir = realTargetDir + targetDir;
         }
 
-        ClickLogger logger = ClickLogger.getInstance();
+
+        LogService logger = getConfigService(servletContext).getLogService();
 
         try {
 
@@ -1038,15 +1133,16 @@ public class ClickUtils {
         packageName = "/" + packageName;
         String controlName = ClassUtils.getShortClassName(controlClass);
 
-        ClickLogger logger = ClickLogger.getInstance();
+        ConfigService configService = getConfigService(servletContext);
+        LogService logService = configService.getLogService();
         String descriptorFile = packageName + "/" + controlName + ".files";
-        logger.debug("Use deployment descriptor file:" + descriptorFile);
+        logService.debug("Use deployment descriptor file:" + descriptorFile);
 
         try {
             InputStream is = getResourceAsStream(descriptorFile, ClickUtils.class);
             List fileList = IOUtils.readLines(is);
             if (fileList == null || fileList.isEmpty()) {
-                logger.info("there are no files to deploy for control " + controlClass.getName());
+                logService.info("there are no files to deploy for control " + controlClass.getName());
                 return;
             }
 
@@ -1072,7 +1168,7 @@ public class ClickUtils {
 
         } catch (IOException e) {
             String msg = "error occured getting resource " + descriptorFile + ", error " + e;
-            logger.warn(msg);
+            logService.warn(msg);
         }
     }
 
@@ -1491,74 +1587,17 @@ public class ClickUtils {
     }
 
     /**
-     * Return the first XML child Element for the given parent Element and child
-     * Element name.
+     * Return the application LogService instance using thread local Context
+     * to perform the lookup.
      *
-     * @param parent the parent element to get the child from
-     * @param name the name of the child element
-     * @return the first child element for the given name and parent
+     * @return the application LogService instance
      */
-    public static Element getChild(Element parent, String name) {
-        NodeList nodeList = parent.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node instanceof Element) {
-                if (node.getNodeName().equals(name)) {
-                    return (Element) node;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Return the list of XML child Element elements with the given name from
-     * the given parent Element.
-     *
-     * @param parent the parent element to get the child from
-     * @param name the name of the child element
-     * @return the list of XML child elements for the given name
-     */
-    public static List getChildren(Element parent, String name) {
-        List list = new ArrayList();
-        NodeList nodeList = parent.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node instanceof Element) {
-                if (node.getNodeName().equals(name)) {
-                    list.add(node);
-                }
-            }
-        }
-        return list;
-    }
-
-    /**
-     * Return the InputStream for the Click configuration file <tt>click.xml</tt>.
-     * This method will first lookup the <tt>click.xml</tt> under the
-     * applications <tt>WEB-INF</tt> directory, and then if not found it will
-     * attempt to find the configuration file on the classpath root.
-     *
-     * @param servletContext the servlet context to obtain the Click configuration
-     *     from
-     * @return the InputStream for the Click configuration file
-     * @throws RuntimeException if the resource could not be found
-     */
-    public static InputStream getClickConfig(ServletContext servletContext) {
-        InputStream inputStream =
-            servletContext.getResourceAsStream(DEFAULT_APP_CONFIG);
-
-        if (inputStream == null) {
-            inputStream = ClickUtils.getResourceAsStream("/click.xml", ClickUtils.class);
-            if (inputStream == null) {
-                String msg =
-                    "could not find click app configuration file: "
-                    + DEFAULT_APP_CONFIG + " or click.xml on classpath";
-                throw new RuntimeException(msg);
-            }
-        }
-
-        return inputStream;
+    public static LogService getLogService() {
+        Context context = Context.getThreadLocalContext();
+        ServletContext servletContext = context.getServletContext();
+        ConfigService configService = getConfigService(servletContext);
+        LogService logService = configService.getLogService();
+        return logService;
     }
 
     /**
@@ -2207,7 +2246,7 @@ public class ClickUtils {
         if (debug) {
             System.out.println("[Click] [debug] " + msg);
         } else {
-            ClickLogger.getInstance().debug(msg);
+            getLogService().debug(msg);
         }
     }
 

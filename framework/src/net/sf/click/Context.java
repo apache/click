@@ -30,9 +30,10 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.service.ConfigService;
 import net.sf.click.service.FileUploadService;
+import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
-import net.sf.click.util.ClickLogger;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.FlashAttribute;
 
@@ -124,7 +125,9 @@ public class Context {
                 } catch (UnsupportedEncodingException ex) {
                     String msg =
                         "The character encoding " + charset + " is invalid.";
-                    ClickLogger.getInstance().warn(msg, ex);
+                    ConfigService configService = ClickUtils.getConfigService(context);
+                    LogService logService = configService.getLogService();
+                    logService.warn(msg, ex);
                 }
             }
 
@@ -731,7 +734,7 @@ public class Context {
         } catch (Exception e) {
             String msg = "Error occured rendering template: "
                          + templatePath;
-            clickServlet.getConfigService().getLogger().error(msg, e);
+            clickServlet.getConfigService().getLogService().error(msg, e);
 
             throw new RuntimeException(e);
         }

@@ -18,8 +18,6 @@ package net.sf.click.service;
 import java.io.Writer;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import net.sf.click.Page;
 
 /**
@@ -30,18 +28,15 @@ import net.sf.click.Page;
 public interface TemplateService {
 
     /**
-     * Initialize the TemplateService with the given application servlet context,
-     * application mode and the application character set.
+     * Initialize the TemplateService with the given application configuration
+     * service instance.
      * <p/>
      * This method is invoked after the TemplateService has been constructed.
      *
-     * @param servletContext the application servlet context
-     * @param applicationMode the Click application mode
-     * @param charSet the application character set
+     * @param configService the application configuration service instance
      * @throws Exception if an error occurs initializing the Template Service
      */
-    public void onInit(ServletContext servletContext, String applicationMode,
-            String charSet) throws Exception;
+    public void onInit(ConfigService configService) throws Exception;
 
     /**
      * Destroy the TemplateService.
