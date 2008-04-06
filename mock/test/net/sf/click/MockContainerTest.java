@@ -16,7 +16,7 @@ import net.sf.click.pages.TestPage;
  */
 public class MockContainerTest extends TestCase {
 
-    public void estPage() {
+    public void testPage() {
         try {
             MockContainer container = new MockContainer("web");
 
@@ -71,7 +71,7 @@ public class MockContainerTest extends TestCase {
         }
     }
 
-    public void estBroderPage() {
+    public void testBroderPage() {
         try {
             MockContainer container = new MockContainer("web");
 
@@ -102,7 +102,7 @@ public class MockContainerTest extends TestCase {
         }
     }
 
-    public void estForward() {
+    public void testForward() {
         try {
             MockContainer container = new MockContainer("web");
 
