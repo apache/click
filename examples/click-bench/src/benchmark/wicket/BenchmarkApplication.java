@@ -6,6 +6,7 @@ public class BenchmarkApplication extends WebApplication {
 
     protected void init() {
         getMarkupSettings().setStripWicketTags(true);
+        getRequestLoggerSettings().setRequestLoggerEnabled(false);
     }
 
     public Class getHomePage() {
