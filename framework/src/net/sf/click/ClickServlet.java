@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
@@ -234,8 +235,11 @@ public class ClickServlet extends HttpServlet {
         try {
             // Dereference any allocated objects
             if (configService != null) {
-                configService.onDestroy();
-                configService = null;
+                // TODO Profile and check for leaks
+                // Instantiate listener generate initialize context event
+                ClickConfigListener configListener = new ClickConfigListener();
+                ServletContextEvent event = new ServletContextEvent(getServletContext());
+                configListener.contextInitialized(event);
             }
 
             // Determine whether the click application is reloadable
@@ -1370,7 +1374,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected boolean ifAuthorizedReloadRequest(HttpServletRequest request) {
         if (reloadable && request.isUserInRole("click-admin")) {
-            String path = ClickUtils.getResourcePath(request);
+        String path = ClickUtils.getResourcePath(request);
 
             return "/click/reload-app.htm".equals(path);
 
@@ -1389,6 +1393,11 @@ public class ClickServlet extends HttpServlet {
      */
     protected void reloadClickApp(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
+
+        // Instantiate listener generate destroy context event
+        ClickConfigListener configListener = new ClickConfigListener();
+        ServletContextEvent event = new ServletContextEvent(getServletContext());
+        configListener.contextDestroyed(event);
 
         init();
 

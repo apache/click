@@ -64,6 +64,12 @@ public class ClickConfigListener implements ServletContextListener {
             configService.onInit(servletContext);
 
         } catch (Exception e) {
+            // In mock mode this exception can occur if click.xml is not
+            // available.
+            if (servletContext.getAttribute(ClickServlet.MOCK_MODE_ENABLED) != null) {
+                return;
+            }
+
             e.printStackTrace();
 
             if (e instanceof RuntimeException) {
@@ -75,7 +81,7 @@ public class ClickConfigListener implements ServletContextListener {
     }
 
     /**
-     * Destory the Click application <tt>ConfigService</tt> instance and remove
+     * Destroy the Click application <tt>ConfigService</tt> instance and remove
      * it as an attribute from the ServletContext.
      *
      * {@link ServletContextListener#contextDestroyed(ServletContextEvent)
