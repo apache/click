@@ -14,6 +14,66 @@ import net.sf.click.control.Submit;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
+ * Provides a extended Form control which has followng features:
+ * <ul>
+ *   <li>Show the confirmation dialog by JavaScript</li>
+ *   <li>Field auto registration which declared in the subclasses</li>
+ *   <li>Allows a Submit button which does not do JavaScript validation</li>
+ * </ul>
+ * 
+ * <h2>Confirmation dialog by JavaScript</h2>
+ * <p>
+ *   You can specify confirmation message using {@link #addMessage(String, String)}.
+ * </p>
+ * <pre>
+ * public SampleForm extends Form {
+ *   ...
+ *   private Submit register = new Submit("register");
+ *   
+ *   public SampleForm(){
+ *     addMessage("register", "Could you register it?");
+ *   }
+ *   
+ *   ...
+ * } </pre>
+ * 
+ * <h2>Field auto registration</h2>
+ * <p>
+ *   If you set <code>true</code> to {@link #setFieldAutoRegisteration(boolean)},
+ *   fields which are declared in the subclass are registered to this form automatically.
+ *   You don't have to call <code>addField()</code> in the initialization code.
+ * </p>
+ * <pre>
+ * public SampleForm extends Form {
+ *   private TextField userId = new TextField("userId");
+ *   private PasswordField password = new PasswordField("password");
+ *   private Submit submit = new Submit("submit", this, "doSubmit");
+ *   
+ *   public SampleForm(){
+ *     setFieldAutoRegisteration(true);
+ *   }
+ *   
+ *   ...
+ * } </pre>
+ * 
+ * <h2>Submit button which does not do JavaScript validation</h2>
+ * <p>
+ *   You can specify the button which does not do JavaScript validation
+ *   using {@link #addNoJavaScriptValidateAction(String)}.
+ * </p>
+ * <pre>
+ * public SampleForm extends Form {
+ *   ...
+ *   private Submit register = new Submit("register");
+ *   private Submit cancel = new Submit("cancel");
+ *   
+ *   public SampleForm(){
+ *     addNoJavaScriptValidateAction("register");
+ *   }
+ *   
+ *   ...
+ * } </pre>
+ * 
  * @author Naoki Takezoe
  */
 public class Form extends net.sf.click.control.Form {
@@ -24,10 +84,18 @@ public class Form extends net.sf.click.control.Form {
 	protected List<String> noJavaScriptValidateActions = new ArrayList<String>();
 	protected boolean fieldAutoRegisteration = false;
 	
+	/**
+	 * Create a Form with no name defined.
+	 */
 	public Form() {
 		super();
 	}
 
+	/**
+	 * Construct the Form with the given name.
+	 * 
+	 * @param name the form name
+	 */
 	public Form(String name) {
 		super(name);
 	}
