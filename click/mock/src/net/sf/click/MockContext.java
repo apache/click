@@ -21,8 +21,10 @@ import net.sf.click.servlet.MockRequest;
 import java.util.Locale;
 import javax.servlet.ServletConfig;
 
+import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.click.service.ConfigService;
 import net.sf.click.servlet.MockServletContext;
 import net.sf.click.servlet.MockSession;
 
@@ -246,11 +248,18 @@ public class MockContext extends Context {
                 Boolean.TRUE);
             request.setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
 
+            // If a ConfigService does not exist, initialize the ClickConfigListener
+            if (servletContext.getAttribute(ConfigService.CONTEXT_NAME) == null) {
+                ClickConfigListener configListener = new ClickConfigListener();
+                ServletContextEvent event = new ServletContextEvent(servletContext);
+                configListener.contextInitialized(event);
+            }
+
             clickServlet.init(servletConfig);
 
             MockContext mockContext = new MockContext(servletConfig, request,
                 response, isPost, clickServlet);
-//            mockContext.setServlet(clickServlet);
+
             Context.pushThreadLocalContext(mockContext);
             return (MockContext) Context.getThreadLocalContext();
         } catch (Exception e) {

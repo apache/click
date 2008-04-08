@@ -20,17 +20,17 @@ import net.sf.click.servlet.MockServletConfig;
 import net.sf.click.servlet.MockResponse;
 import net.sf.click.servlet.MockRequest;
 import java.io.File;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+import net.sf.click.service.ConfigService;
 import net.sf.click.servlet.MockSession;
-import net.sf.click.util.ClickUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -472,6 +472,11 @@ public class MockContainer {
             clearContextStack();
             getResponse().reset();
             String servletPath = getClickServlet().getConfigService().getPagePath(pageClass);
+            if (servletPath == null) {
+                throw new IllegalArgumentException("The class " + pageClass
+                    + " was not mapped by Click and does not have a"
+                    + " corresponding template file.");
+            }
             getRequest().setServletPath(servletPath);
             getClickServlet().service(request, getResponse());
             return getPage();
@@ -674,6 +679,13 @@ public class MockContainer {
             }
 
             getServletContext().setWebappPath(webappPath);
+
+            // If a ConfigService does not exist, initialize the ClickConfigListener
+            if (getServletContext().getAttribute(ConfigService.CONTEXT_NAME) == null) {
+                ClickConfigListener configListener = new ClickConfigListener();
+                ServletContextEvent event = new ServletContextEvent(servletContext);
+                configListener.contextInitialized(event);
+            }
 
             if (getServletConfig() == null) {
                 String servletName = "click-servlet";
