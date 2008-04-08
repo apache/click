@@ -29,7 +29,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 
 /**
- * Provides a Freemarker TemplateService class.
+ * Provides a <a target="_blank" href="http://www.freemarker.org/">Freemarker</a> TemplateService class.
+ *
+ * <h3>Configuration</h3>
+ * To configure the Freemarker TemplateService add the following element to your
+ * <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
  *
  * @author Malcolm Edgar
  */
@@ -37,6 +44,12 @@ public class FreemarkerTemplateService implements TemplateService {
 
     /** The Freemarker engine configuration. */
     protected Configuration configuration = new Configuration();
+
+    /**
+     * The production/profile mode cache duration in seconds. The default value
+     * is 24 hours.
+     */
+    protected int cacheDuration = 60 * 60 * 24;
 
     /**
      * @see TemplateService#onInit(ConfigService)
@@ -51,9 +64,11 @@ public class FreemarkerTemplateService implements TemplateService {
         // Templates are stoted in the / directory of the Web app.
         configuration.setServletContextForTemplateLoading(servletContext, "");
 
-        // Set update dealy to 0 for now, to ease debugging and testing.
-        // Higher value should be used in production environment.
-        if (!configService.isProductionMode() && configService.isProfileMode()) {
+        // Set the template cache duration in seconds
+        if (configService.isProductionMode() | configService.isProfileMode()) {
+            configuration.setTemplateUpdateDelay(getCacheDuration());
+
+        } else {
             configuration.setTemplateUpdateDelay(0);
         }
 
@@ -122,6 +137,26 @@ public class FreemarkerTemplateService implements TemplateService {
 
         // Merge the data-model and the template
         template.process(model, writer);
+    }
+
+    /**
+     * Return the template cache duration in seconds to use when the application
+     * is in "productin" or "profile" mode.
+     *
+     * @return the cacheDuration the template cache duration in seconds
+     */
+    public int getCacheDuration() {
+        return cacheDuration;
+    }
+
+    /**
+     * Return the template cache duration in seconds to use when the application
+     * is in "productin" or "profile" mode.
+     *
+     * @param cacheDuration the template cache duration in seconds to set
+     */
+    public void setCacheDuration(int cacheDuration) {
+        this.cacheDuration = cacheDuration;
     }
 
 }
