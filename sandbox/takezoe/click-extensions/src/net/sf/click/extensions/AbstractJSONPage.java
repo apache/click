@@ -10,6 +10,18 @@ import net.sf.click.Page;
 /**
  * The base class of JSON pages.
  * <p>
+ * You can return POJO, array, <code>java.util.List</code> or <code>java.util.Map</code> 
+ * which is set to {@link #setContents(Object)} as JSON by <a href="http://jsonic.sourceforge.jp/">JSONIC</a>.
+ * <p>
+ * For example:
+ * <pre>
+ * <span class="kw">public</span> SampleJSONPage <span class="kw">extends</span> AbstractJSONPage {
+ *   <span class="kw">public</span> SampleJSONPage(){
+ *     List&lt;Employee&gt; list = new ArrayList&lt;Employee&gt;();
+ *     ...
+ *     setContents(list);
+ *   }
+ * }</pre>
  * This page class does not have a template because response is written by this class.
  * So auto-mapping does not work for JSON pages.
  * You have to register extended page class to <tt>click.xml</tt>.

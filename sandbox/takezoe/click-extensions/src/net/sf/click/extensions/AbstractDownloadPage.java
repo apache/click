@@ -13,7 +13,7 @@ import net.sf.click.Page;
  * <p>
  * For example:
  * <pre>
- * <span class="kw">public</span> SampleDownloadPage <span class="kw">extends</span> DownloadPage {
+ * <span class="kw">public</span> SampleDownloadPage <span class="kw">extends</span> AbstractDownloadPage {
  *   <span class="kw">public</span> SampleDownloadPage(){
  *     setFileName(<span class="st">"sample.txt"</span>);
  *     setContents(SampleDownloadPage.class.getResourceAsStream(<span class="st">"sample.txt"</span>));
