@@ -1,6 +1,5 @@
 package net.sf.click.extensions;
 
-import java.io.Closeable;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -10,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Page;
 
 /**
- * The base class to file download pages.
+ * The base class of file download pages.
  * <p>
  * For example:
  * <pre>
@@ -125,22 +124,8 @@ public abstract class AbstractDownloadPage extends Page {
 		} catch(Exception ex){
 			throw new RuntimeException(ex);
 		} finally {
-			closeQuietly(this.contents);
-			closeQuietly(out);
-		}
-	}
-	
-	/**
-	 * Closes <code>Closeable</code> without exception.
-	 * 
-	 * @param closeable the <code>Closeable</code> object to close.
-	 */
-	private static void closeQuietly(Closeable closeable){
-		if(closeable != null){
-			try {
-				closeable.close();
-			} catch(Throwable t){
-			}
+			ExtUtils.closeQuietly(this.contents);
+			ExtUtils.closeQuietly(out);
 		}
 	}
 	
