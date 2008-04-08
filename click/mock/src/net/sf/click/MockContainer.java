@@ -657,15 +657,7 @@ public class MockContainer {
      * @see #start()
      */
     void clearContextStack() {
-        //TODO Context#ContextStack must be package private.
-        //Context.getContextStack().clear();
-
-        try {
-            // To empty Context, keep poping Context until exception is thrown.
-            while (Context.popThreadLocalContext() != null) {
-            }
-        } catch (Exception expected) {
-        }
+        Context.getContextStack().clear();
     }
 
     /**
