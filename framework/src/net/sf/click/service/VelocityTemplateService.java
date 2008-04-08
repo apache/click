@@ -44,9 +44,20 @@ import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
 
 /**
- * Provides a Velocity TemplateService class.
+ * Provides a <a target="_blank" href="http://velocity.apache.org//">Velocity</a> TemplateService class.
+ *
+ * <h3>Configuration</h3>
+ * The VelocityTemplateService is the default tempating service used by Click,
+ * so it does not require any specific configuration.
+ * <p/>
+ * However if you wanted to configure this service specifically in your
+ * <tt>click.xml</tt> configuration file you would add the following XML element.
+ *
+ * <pre class="codeConfig">
+ * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.service.VelocityTemplateService</span>"&gt; </pre>
  *
  * @author Malcolm Edgar
+
  */
 public class VelocityTemplateService implements TemplateService {
 

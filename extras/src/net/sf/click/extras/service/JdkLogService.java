@@ -15,26 +15,28 @@
  */
 package net.sf.click.extras.service;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.ServletContext;
 
 import net.sf.click.service.LogService;
 
-import org.apache.log4j.Logger;
-
 /**
- * Provides a <a target="_blank" href="http://logging.apache.org/log4j/1.2/index.html">Log4J</a>
- * LogService adapter class. This logger will use the category name of "<tt>Click</tt>".
+ * Provides a JDK Util
+ * <a target="_blank" href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/package-summary.html">Logging</a>
+ * LogService adapter class with a logger name of "<tt>Click</tt>".
  *
  * <h3>Configuration</h3>
  * To configure the Log4J LoggingService add the following element to your
  * <tt>click.xml</tt> configuration file.
  *
  * <pre class="codeConfig">
- * &lt;<span class="red">log-service</span> classname="<span class="blue">net.sf.click.extras.service.Log4JLogService</span>"&gt; </pre>
+ * &lt;<span class="red">log-service</span> classname="<span class="blue">net.sf.click.extras.service.JdkLogService</span>"&gt; </pre>
  *
  * @author Malcolm Edgar
  */
-public class Log4JLogService implements LogService {
+public class JdkLogService implements LogService {
 
     /** The wrapped Log4J logger instance. */
     protected Logger logger;
@@ -59,125 +61,151 @@ public class Log4JLogService implements LogService {
     }
 
     /**
+     * Log the message at <tt>Level.FINE</tt> level.
+     *
      * @see LogService#debug(Object)
      *
      * @param message the message to log
      */
     public void debug(Object message) {
-        logger.debug(message);
+        logger.log(Level.FINE, String.valueOf(message));
     }
 
     /**
+     * Log the message and error at <tt>Level.FINE</tt> level.
+     *
      * @see LogService#debug(Object, Throwable)
      *
      * @param message the message to log
      * @param error the error to log
      */
     public void debug(Object message, Throwable error) {
-        logger.debug(message, error);
+        logger.log(Level.FINE, String.valueOf(message), error);
     }
 
     /**
+     * Log the message at <tt>Level.SEVERE</tt> level.
+     *
      * @see LogService#error(Object)
      *
      * @param message the message to log
      */
     public void error(Object message) {
-        logger.error(message);
+        logger.log(Level.SEVERE, String.valueOf(message));
     }
 
     /**
+     * Log the message and error at <tt>Level.SEVERE</tt> level.
+     *
      * @see LogService#error(Object, Throwable)
      *
      * @param message the message to log
      * @param error the error to log
      */
     public void error(Object message, Throwable error) {
-        logger.error(message, error);
+        logger.log(Level.SEVERE, String.valueOf(message), error);
     }
 
     /**
+     * Log the message at <tt>Level.INFO</tt> level.
+     *
      * @see LogService#info(Object)
      *
      * @param message the message to log
      */
     public void info(Object message) {
-        logger.info(message);
+        logger.log(Level.INFO, String.valueOf(message));
     }
 
     /**
+     * Log the message and error at <tt>Level.INFO</tt> level.
+     *
      * @see LogService#info(Object, Throwable)
      *
      * @param message the message to log
      * @param error the error to log
      */
     public void info(Object message, Throwable error) {
-        logger.info(message, error);
+        logger.log(Level.INFO, String.valueOf(message), error);
     }
 
     /**
+     * Is logging enabled at the <tt>Level.FINE</tt> level.
+     *
      * @see LogService#isDebugEnabled()
      *
      * @return true if [debug] level logging is enabled
      */
     public boolean isDebugEnabled() {
-        return logger.isDebugEnabled();
+        return logger.isLoggable(Level.FINE);
     }
 
     /**
+     * Is logging enabled at the <tt>Level.INFO</tt> level.
+     *
      * @see LogService#isInfoEnabled()
      *
      * @return true if [info] level logging is enabled
      */
     public boolean isInfoEnabled() {
-        return logger.isInfoEnabled();
+        return logger.isLoggable(Level.INFO);
     }
 
     /**
+     * Is Trace logging enabled at the <tt>Level.FINER</tt> level.
+     *
      * @see LogService#isTraceEnabled()
      *
      * @return true if [trace] level logging is enabled
      */
     public boolean isTraceEnabled() {
-        return logger.isTraceEnabled();
+        return logger.isLoggable(Level.FINER);
     }
 
     /**
+     * Log the message at <tt>Level.FINER</tt> level.
+     *
      * @see LogService#trace(Object)
      *
      * @param message the message to log
      */
     public void trace(Object message) {
-        logger.trace(message);
+        logger.log(Level.FINER, String.valueOf(message));
     }
 
     /**
+     * Log the message and error at <tt>Level.FINER</tt> level.
+     *
      * @see LogService#trace(Object, Throwable)
      *
      * @param message the message to log
      * @param error the error to log
      */
     public void trace(Object message, Throwable error) {
-        logger.trace(message, error);
+        logger.log(Level.FINER, String.valueOf(message), error);
     }
 
     /**
+     * Log the message at <tt>Level.WARNING</tt> level.
+     *
      * @see LogService#warn(Object)
      *
      * @param message the message to log
      */
     public void warn(Object message) {
-        logger.warn(message);
+        logger.log(Level.WARNING, String.valueOf(message));
     }
 
     /**
+     * Log the message and error at <tt>Level.WARNING</tt> level.
+     *
      * @see LogService#warn(Object, Throwable)
      *
      * @param message the message to log
      * @param error the error to log
      */
     public void warn(Object message, Throwable error) {
-        logger.warn(message, error);
+        logger.log(Level.WARNING, String.valueOf(message), error);
     }
 
     /**
