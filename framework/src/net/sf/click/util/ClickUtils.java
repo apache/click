@@ -705,7 +705,10 @@ public class ClickUtils {
         } else {
             String msg =
                 "could not find ConfigService in the SerlvetContext, please "
-                + "ensure the ClickConfigLoader is defined in WEB-INF/web.xml";
+                + "ensure the ClickConfigListener is defined in WEB-INF/web.xml, for example:\n"
+                + "    <listener>\n"
+                + "        <listener-class>net.sf.click.ClickConfigListener</listener-class>\n"
+                + "    </listener>";
             throw new RuntimeException(msg);
         }
     }
