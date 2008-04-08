@@ -47,7 +47,7 @@ import org.apache.velocity.util.SimplePool;
  * Provides a <a target="_blank" href="http://velocity.apache.org//">Velocity</a> TemplateService class.
  *
  * <h3>Configuration</h3>
- * The VelocityTemplateService is the default tempating service used by Click,
+ * The VelocityTemplateService is the default template service used by Click,
  * so it does not require any specific configuration.
  * <p/>
  * However if you wanted to configure this service specifically in your

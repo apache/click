@@ -181,6 +181,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
         this.servletContext = servletContext;
 
+        // Set default logService early to log errors when services fail.
+        logService = new ConsoleLogService();
+
         InputStream inputStream = ClickUtils.getClickConfig(servletContext);
 
         try {
@@ -233,8 +236,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @see ConfigService#onDestroy()
      */
     public void onDestroy() {
-        getFileUploadService().onDestroy();
-        getTemplateService().onDestroy();
+        if (getFileUploadService() != null) {
+            getFileUploadService().onDestroy();
+        }
+
+        if (getTemplateService() != null) {
+            getTemplateService().onDestroy();
+        }        
     }
 
     // --------------------------------------------------------- Public Methods
