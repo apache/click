@@ -6,6 +6,7 @@ import java.util.List;
 import net.sf.click.control.TextField;
 
 /**
+ * <code>LiveValidatorAdapter</code> implementation for the <code>TextField</code>.
  * 
  * @author Naoki Takezoe
  */

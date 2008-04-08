@@ -4,6 +4,11 @@ import java.util.List;
 
 import net.sf.click.extras.control.EmailField;
 
+/**
+* <code>LiveValidatorAdapter</code> implementation for the <code>EmailField</code>.
+  * 
+ * @author Naoki Takezoe
+ */
 public class EmailFieldAdapter extends TextFieldAdapter<EmailField> {
 
 	@Override
