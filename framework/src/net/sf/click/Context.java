@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.service.ConfigService;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
@@ -116,7 +115,7 @@ public class Context {
 
             // CLK-312. Apply request.setCharacterEncoding before wrapping
             // reuqest in ClickRequestWrapper
-            String charset = clickServlet.getConfigService().getCharset();
+            String charset = ClickServlet.getConfigService().getCharset();
             if (charset != null) {
 
                 try {
@@ -125,14 +124,13 @@ public class Context {
                 } catch (UnsupportedEncodingException ex) {
                     String msg =
                         "The character encoding " + charset + " is invalid.";
-                    ConfigService configService = ClickUtils.getConfigService(context);
-                    LogService logService = configService.getLogService();
+                    LogService logService = ClickServlet.getConfigService().getLogService();
                     logService.warn(msg, ex);
                 }
             }
 
             FileUploadService fus =
-                clickServlet.getConfigService().getFileUploadService();
+                ClickServlet.getConfigService().getFileUploadService();
 
             this.request = new ClickRequestWrapper(request, fus);
 
@@ -511,7 +509,7 @@ public class Context {
      * with a unique path
      */
     public String getPagePath(Class pageClass) {
-        return clickServlet.getConfigService().getPagePath(pageClass);
+        return ClickServlet.getConfigService().getPagePath(pageClass);
     }
 
     /**
@@ -523,7 +521,7 @@ public class Context {
      * found
      */
     public Class getPageClass(String path) {
-        return clickServlet.getConfigService().getPageClass(path);
+        return ClickServlet.getConfigService().getPageClass(path);
     }
 
     /**
@@ -533,7 +531,7 @@ public class Context {
      * @return the application mode value
      */
     public String getApplicationMode() {
-        return clickServlet.getConfigService().getApplicationMode();
+        return ClickServlet.getConfigService().getApplicationMode();
     }
 
     /**
@@ -551,7 +549,7 @@ public class Context {
      * @return the application charset or ISO-8859-1 if not defined
      */
     public String getCharset() {
-        String charset = clickServlet.getConfigService().getCharset();
+        String charset = ClickServlet.getConfigService().getCharset();
         if (charset == null) {
             charset = "ISO-8859-1";
         }
@@ -618,8 +616,8 @@ public class Context {
 
         if (locale == null) {
 
-            if (clickServlet.getConfigService().getLocale() != null) {
-                locale = clickServlet.getConfigService().getLocale();
+            if (ClickServlet.getConfigService().getLocale() != null) {
+                locale = ClickServlet.getConfigService().getLocale();
 
             } else {
                 locale = getRequest().getLocale();
@@ -726,7 +724,7 @@ public class Context {
         StringWriter stringWriter = new StringWriter(1024);
 
         TemplateService templateService =
-            clickServlet.getConfigService().getTemplateService();
+            ClickServlet.getConfigService().getTemplateService();
 
         try {
             templateService.renderTemplate(templatePath, model, stringWriter);
@@ -734,7 +732,7 @@ public class Context {
         } catch (Exception e) {
             String msg = "Error occured rendering template: "
                          + templatePath;
-            clickServlet.getConfigService().getLogService().error(msg, e);
+            ClickServlet.getConfigService().getLogService().error(msg, e);
 
             throw new RuntimeException(e);
         }

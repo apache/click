@@ -28,7 +28,7 @@ import net.sf.click.service.LogService;
  * LogService adapter class with a logger name of "<tt>Click</tt>".
  *
  * <h3>Configuration</h3>
- * To configure the Log4J LoggingService add the following element to your
+ * To configure the JDK LoggingService add the following element to your
  * <tt>click.xml</tt> configuration file.
  *
  * <pre class="codeConfig">
@@ -219,7 +219,7 @@ public class JdkLogService implements LogService {
 
     /**
      * The logger category name. Setting the name after the <tt>onInit()</tt>
-     * method has bee invoked will have no effect on the Log4J loggers name.
+     * method has been invoked will have no effect on the JDK loggers name.
      *
      * @param name the logger category name to set
      */

@@ -31,7 +31,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.service.ConfigService;
+import net.sf.click.ClickServlet;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
@@ -220,9 +220,6 @@ public class PerformanceFilter implements Filter {
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
 
-    /** The application configuration service. */
-    protected ConfigService configService;
-
     /**
      * The filter configuration object we are associated with.  If this value
      * is null, this filter instance is not currently configured.
@@ -251,7 +248,7 @@ public class PerformanceFilter implements Filter {
             this.filterConfig = filterConfig;
 
             ServletContext servletContext = getFilterConfig().getServletContext();
-            configService = ClickUtils.getConfigService(servletContext);
+            ClickServlet.initConfigService(servletContext);
 
             // Get compression threshold
             String param = filterConfig.getInitParameter("compression-threshold");
@@ -280,7 +277,7 @@ public class PerformanceFilter implements Filter {
                     } else {
                         String message = "cachable-path '" + path + "' ignored, "
                             + "path must start or end with a wildcard character: *";
-                        getConfigService().getLogService().warn(message);
+                        ClickServlet.getConfigService().getLogService().warn(message);
                     }
                 }
             }
@@ -295,7 +292,7 @@ public class PerformanceFilter implements Filter {
                 "PerformanceFilter initialized with: cachable-paths="
                 + filterConfig.getInitParameter("cachable-paths")
                 + " and cachable-max-age=" + cacheMaxAge;
-            getConfigService().getLogService().info(message);
+            ClickServlet.getConfigService().getLogService().info(message);
         }
     }
 
@@ -323,8 +320,8 @@ public class PerformanceFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
-        if (!getConfigService().isProductionMode()
-            && !getConfigService().isProfileMode()) {
+        if (!ClickServlet.getConfigService().isProductionMode()
+            && !ClickServlet.getConfigService().isProfileMode()) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -346,7 +343,7 @@ public class PerformanceFilter implements Filter {
         }
 
         // Set the character set
-        String charset = getConfigService().getCharset();
+        String charset = ClickServlet.getConfigService().getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -354,7 +351,7 @@ public class PerformanceFilter implements Filter {
             } catch (UnsupportedEncodingException ex) {
                 String msg =
                     "The character encoding " + charset + " is invalid.";
-                getConfigService().getLogService().warn(msg, ex);
+                ClickServlet.getConfigService().getLogService().warn(msg, ex);
             }
         }
 
@@ -415,15 +412,6 @@ public class PerformanceFilter implements Filter {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Return the application configuration service.
-     *
-     * @return the application configuration service
-     */
-    protected ConfigService getConfigService() {
-        return configService;
-    }
 
     /**
      * Return the <tt>version indicator</tt> for the specified path.

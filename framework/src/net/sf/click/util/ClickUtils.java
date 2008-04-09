@@ -55,6 +55,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.sf.click.ClickServlet;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
@@ -689,31 +690,6 @@ public class ClickUtils {
     }
 
     /**
-     * Return the application configuration service instance from the given
-     * servlet context.
-     *
-     * @param servletContext the servlet context to get the config service instance
-     * @return the application config service instance
-     */
-    public static ConfigService getConfigService(ServletContext servletContext) {
-        ConfigService configService = (ConfigService)
-            servletContext.getAttribute(ConfigService.CONTEXT_NAME);
-
-        if (configService != null) {
-            return configService;
-
-        } else {
-            String msg =
-                "could not find ConfigService in the SerlvetContext, please "
-                + "ensure the ClickConfigListener is defined in WEB-INF/web.xml, for example:\n"
-                + "    <listener>\n"
-                + "        <listener-class>net.sf.click.ClickConfigListener</listener-class>\n"
-                + "    </listener>";
-            throw new RuntimeException(msg);
-        }
-    }
-
-    /**
      * Returns the specified Cookie object, or null if the cookie does not exist.
      * <p/>
      * This method was derived from Atlassian <tt>CookieUtils</tt> method of
@@ -818,8 +794,7 @@ public class ClickUtils {
      * @return a version indicator for web resources
      */
     public static String getResourceVersionIndicator(Context context) {
-        ConfigService configService = (ConfigService)
-            context.getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
+        ConfigService configService = (ConfigService) ClickServlet.getConfigService();
 
         boolean isProductionModes = configService.isProductionMode()
             || configService.isProfileMode();
@@ -1007,7 +982,7 @@ public class ClickUtils {
         }
 
 
-        LogService logger = getConfigService(servletContext).getLogService();
+        LogService logger = ClickServlet.getConfigService().getLogService();
 
         try {
 
@@ -1136,7 +1111,7 @@ public class ClickUtils {
         packageName = "/" + packageName;
         String controlName = ClassUtils.getShortClassName(controlClass);
 
-        ConfigService configService = getConfigService(servletContext);
+        ConfigService configService = ClickServlet.getConfigService();
         LogService logService = configService.getLogService();
         String descriptorFile = packageName + "/" + controlName + ".files";
         logService.debug("Use deployment descriptor file:" + descriptorFile);
@@ -1590,17 +1565,15 @@ public class ClickUtils {
     }
 
     /**
-     * Return the application LogService instance using thread local Context
-     * to perform the lookup.
+     * Return the application LogService referenced by the configuration
+     * service instance.
      *
      * @return the application LogService instance
+     * @throws RuntimeException if the configuration service is not available
      */
     public static LogService getLogService() {
-        Context context = Context.getThreadLocalContext();
-        ServletContext servletContext = context.getServletContext();
-        ConfigService configService = getConfigService(servletContext);
-        LogService logService = configService.getLogService();
-        return logService;
+        ConfigService configService = ClickServlet.getConfigService();
+        return configService.getLogService();
     }
 
     /**

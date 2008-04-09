@@ -56,13 +56,6 @@ public interface ConfigService {
     public static final String NOT_FOUND_PATH = "/click/not-found.htm";
 
     /**
-     * The servlet context attribute name. The ClickServlet stores the
-     * application ConfigService instance in the ServletContext using this
-     * context attribute name.
-     */
-    public static final String CONTEXT_NAME = "net.sf.click.service.ConfigService";
-
-    /**
      * Initialize the ConfigurationService with the given application servlet context.
      * <p/>
      * This method is invoked after the ConfigurationService has been constructed.
