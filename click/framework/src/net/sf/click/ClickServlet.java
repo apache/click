@@ -1444,12 +1444,8 @@ public class ClickServlet extends HttpServlet {
      *  and the user is in "click-admin" role
      */
     protected boolean ifAuthorizedReloadRequest(HttpServletRequest request) {
-        String path = ClickUtils.getResourcePath(request);
-        if ("/click/reload-app.htm".equals(path)) {
-            return true;
-        }
         if (reloadable && request.isUserInRole("click-admin")) {
-        path = ClickUtils.getResourcePath(request);
+            String path = ClickUtils.getResourcePath(request);
 
             return "/click/reload-app.htm".equals(path);
 
@@ -1469,10 +1465,6 @@ public class ClickServlet extends HttpServlet {
     protected synchronized void reloadClickServlet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        // Instantiate listener generate destroy context event
-        //ClickConfigListener configListener = new ClickConfigListener();
-        //ServletContextEvent event = new ServletContextEvent(getServletContext());
-        //configListener.contextDestroyed(event);
         destroyConfigService(getServletContext());
 
         init();
