@@ -244,7 +244,7 @@ public class ClickServlet extends HttpServlet {
             initConfigService(getServletContext());
 
             // Determine whether the click application is reloadable
-            reloadable = true;//"true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
+            reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
 
             logger = configService.getLogService();
 
