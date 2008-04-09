@@ -27,8 +27,8 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.ClickServlet;
 import net.sf.click.Page;
-import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorReport;
 
 import org.apache.commons.lang.Validate;
@@ -97,10 +97,10 @@ public class VelocityTemplateService implements TemplateService {
     protected ConfigService configService;
 
     /** The VelocityEngine instance. */
-    protected VelocityEngine velocityEngine = new VelocityEngine();
+    protected VelocityEngine velocityEngine;
 
     /** Cache of velocity writers. */
-    protected SimplePool writerPool = new SimplePool(40);
+    protected SimplePool writerPool;
 
     // --------------------------------------------------------- Public Methods
 
@@ -115,6 +115,8 @@ public class VelocityTemplateService implements TemplateService {
         Validate.notNull(configService, "Null configService parameter");
 
         this.configService = configService;
+        this.velocityEngine = new VelocityEngine();
+        this.writerPool = new SimplePool(40);
 
         // Set the velocity logging level
         Integer logLevel = getInitLogLevel();
@@ -438,8 +440,7 @@ public class VelocityTemplateService implements TemplateService {
             }
         }
 
-        ConfigService configService = ClickUtils.getConfigService(servletContext);
-        LogService logger = configService.getLogService();
+        LogService logger = ClickServlet.getConfigService().getLogService();
         if (logger.isTraceEnabled()) {
             TreeMap sortedPropMap = new TreeMap();
 

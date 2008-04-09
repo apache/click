@@ -29,6 +29,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.ClickServlet;
 import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 
@@ -71,9 +72,6 @@ public class CompressionFilter implements Filter {
     /** The threshold number to compress, default value is 2048 bytes. */
     protected int compressionThreshold;
 
-    /** The application configuration service. */
-    protected ConfigService configService;
-
     /**
      * The filter configuration object we are associated with. If this value
      * is null, this filter instance is not currently configured.
@@ -97,7 +95,7 @@ public class CompressionFilter implements Filter {
         if (filterConfig != null) {
 
             ServletContext servletContext = getFilterConfig().getServletContext();
-            configService = ClickUtils.getConfigService(servletContext);
+            ClickServlet.initConfigService(servletContext);
 
             String str = filterConfig.getInitParameter("compressionThreshold");
             if (str != null) {
@@ -155,7 +153,7 @@ public class CompressionFilter implements Filter {
 
         boolean supportCompression = false;
 
-        String charset = getConfigService().getCharset();
+        String charset = ClickServlet.getConfigService().getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -163,7 +161,7 @@ public class CompressionFilter implements Filter {
             } catch (UnsupportedEncodingException ex) {
                 String msg =
                     "The character encoding " + charset + " is invalid.";
-                getConfigService().getLogService().warn(msg, ex);
+                ClickServlet.getConfigService().getLogService().warn(msg, ex);
             }
         }
 
@@ -226,17 +224,4 @@ public class CompressionFilter implements Filter {
     public FilterConfig getFilterConfig() {
         return filterConfig;
     }
-
-    // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Return the application configuration service.
-     *
-     * @return the application configuration service
-     */
-    protected ConfigService getConfigService() {
-        return configService;
-    }
-
 }
-
