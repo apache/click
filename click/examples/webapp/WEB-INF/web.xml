@@ -5,7 +5,7 @@
     version="2.4">
     
 	<display-name>Click Examples</display-name>
- 
+
 	<!-- 
 	Provides an in memory databae initialization filter. In a production 
 	application a separate database would be used, and this filter would not
@@ -77,10 +77,6 @@
 		<filter-name>PerformanceFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
-	
-	<listener>
-		<listener-class>net.sf.click.ClickConfigListener</listener-class>
-	</listener>
 
 	<!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
