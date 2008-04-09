@@ -231,6 +231,11 @@ public class ClickServlet extends HttpServlet {
      * @throws ServletException if the click app could not be initialized
      */
     public void init() throws ServletException {
+    	
+    	// TODO: wondering whether initialization should be done in another
+    	// method, which is invoked by reloadClickApp() and init() as we are 
+    	// creating a new ConfigService instance here, instead of using the
+    	// instance created by ClickConfigListener
 
         try {
             // Dereference any allocated objects
