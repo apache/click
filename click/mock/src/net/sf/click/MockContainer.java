@@ -468,12 +468,12 @@ public class MockContainer {
             throw new IllegalArgumentException("pageClass cannot be null");
         }
         try {
-            // Cleanup any Context instances available on stack.
+            // Cleanup any Context instances still referenced on stack.
             clearContextStack();
             getResponse().reset();
-            String servletPath = getClickServlet().getConfigService().getPagePath(pageClass);
+            String servletPath = clickServlet.getConfigService().getPagePath(pageClass);
             if (servletPath == null) {
-                throw new IllegalArgumentException("The class " + pageClass
+                throw new IllegalArgumentException("The class " + pageClass.getName()
                     + " was not mapped by Click and does not have a"
                     + " corresponding template file.");
             }
@@ -671,13 +671,6 @@ public class MockContainer {
             }
 
             getServletContext().setWebappPath(webappPath);
-
-            // If a ConfigService does not exist, initialize the ClickConfigListener
-            if (getServletContext().getAttribute(ConfigService.CONTEXT_NAME) == null) {
-                ClickConfigListener configListener = new ClickConfigListener();
-                ServletContextEvent event = new ServletContextEvent(servletContext);
-                configListener.contextInitialized(event);
-            }
 
             if (getServletConfig() == null) {
                 String servletName = "click-servlet";
