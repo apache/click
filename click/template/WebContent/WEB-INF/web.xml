@@ -39,12 +39,10 @@
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
 
-	<!-- 
-	Provides a Click listener which initializes the application ConfigService. 
-	 -->
-	<listener>
-		<listener-class>net.sf.click.ClickConfigListener</listener-class>
-	</listener>
+	<filter-mapping>
+		<filter-name>PerformanceFilter</filter-name>
+		<url-pattern>*.jpg</url-pattern>
+	</filter-mapping>
 
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
