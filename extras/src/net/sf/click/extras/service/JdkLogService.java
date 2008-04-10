@@ -22,13 +22,13 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.service.LogService;
 
-/**
+/* *
  * Provides a JDK Util
  * <a target="_blank" href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/package-summary.html">Logging</a>
  * LogService adapter class with a logger name of "<tt>Click</tt>".
  *
  * <h3>Configuration</h3>
- * To configure the JDK LoggingService add the following element to your
+ * To configure the Log4J LoggingService add the following element to your
  * <tt>click.xml</tt> configuration file.
  *
  * <pre class="codeConfig">
@@ -219,7 +219,7 @@ public class JdkLogService implements LogService {
 
     /**
      * The logger category name. Setting the name after the <tt>onInit()</tt>
-     * method has been invoked will have no effect on the JDK loggers name.
+     * method has bee invoked will have no effect on the Log4J loggers name.
      *
      * @param name the logger category name to set
      */

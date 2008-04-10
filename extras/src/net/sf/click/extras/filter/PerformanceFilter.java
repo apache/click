@@ -31,12 +31,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.ClickServlet;
+import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-/**
+/* *
  * Provides a filter for improving the performance of web applications by
  * setting Expires header on static resources and by compressing the HTTP
  * response.
@@ -220,6 +220,9 @@ public class PerformanceFilter implements Filter {
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
 
+    /** The application configuration service. */
+    protected ConfigService configService;
+
     /**
      * The filter configuration object we are associated with.  If this value
      * is null, this filter instance is not currently configured.
@@ -248,7 +251,7 @@ public class PerformanceFilter implements Filter {
             this.filterConfig = filterConfig;
 
             ServletContext servletContext = getFilterConfig().getServletContext();
-            ClickServlet.initConfigService(servletContext);
+            configService = ClickUtils.getConfigService(servletContext);
 
             // Get compression threshold
             String param = filterConfig.getInitParameter("compression-threshold");
@@ -277,7 +280,7 @@ public class PerformanceFilter implements Filter {
                     } else {
                         String message = "cachable-path '" + path + "' ignored, "
                             + "path must start or end with a wildcard character: *";
-                        ClickServlet.getConfigService().getLogService().warn(message);
+                        getConfigService().getLogService().warn(message);
                     }
                 }
             }
@@ -292,7 +295,7 @@ public class PerformanceFilter implements Filter {
                 "PerformanceFilter initialized with: cachable-paths="
                 + filterConfig.getInitParameter("cachable-paths")
                 + " and cachable-max-age=" + cacheMaxAge;
-            ClickServlet.getConfigService().getLogService().info(message);
+            getConfigService().getLogService().info(message);
         }
     }
 
@@ -320,8 +323,8 @@ public class PerformanceFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
 
-        if (!ClickServlet.getConfigService().isProductionMode()
-            && !ClickServlet.getConfigService().isProfileMode()) {
+        if (!getConfigService().isProductionMode()
+            && !getConfigService().isProfileMode()) {
             chain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -343,7 +346,7 @@ public class PerformanceFilter implements Filter {
         }
 
         // Set the character set
-        String charset = ClickServlet.getConfigService().getCharset();
+        String charset = getConfigService().getCharset();
         if (charset != null) {
             try {
                 request.setCharacterEncoding(charset);
@@ -351,7 +354,7 @@ public class PerformanceFilter implements Filter {
             } catch (UnsupportedEncodingException ex) {
                 String msg =
                     "The character encoding " + charset + " is invalid.";
-                ClickServlet.getConfigService().getLogService().warn(msg, ex);
+                getConfigService().getLogService().warn(msg, ex);
             }
         }
 
@@ -412,6 +415,15 @@ public class PerformanceFilter implements Filter {
     }
 
     // ------------------------------------------------------ Protected Methods
+
+    /**
+     * Return the application configuration service.
+     *
+     * @return the application configuration service
+     */
+    protected ConfigService getConfigService() {
+        return configService;
+    }
 
     /**
      * Return the <tt>version indicator</tt> for the specified path.

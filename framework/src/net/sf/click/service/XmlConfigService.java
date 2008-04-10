@@ -215,17 +215,17 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the locale
             loadLocale(rootElm);
 
-            // Deploy the application files if not present.
-            // Only deploy if servletContext.getRealPath() returns a valid path.
-            if (servletContext.getRealPath("/") != null) {
-                deployFiles(rootElm);
-            }
-
             // Load the File Upload service
             loadFileUploadService(rootElm);
 
             // Load the Templating service
             loadTemplateService(rootElm);
+            
+            // Deploy the application files if not present.
+            // Only deploy if servletContext.getRealPath() returns a valid path.
+            if (servletContext.getRealPath("/") != null) {
+            	deployFiles(rootElm);
+            }
 
         } finally {
             ClickUtils.close(inputStream);
@@ -239,9 +239,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         if (getFileUploadService() != null) {
             getFileUploadService().onDestroy();
         }
-
         if (getTemplateService() != null) {
             getTemplateService().onDestroy();
+        }        
+        if (getLogService() != null) {
+        	getLogService().onDestroy();
         }        
     }
 
