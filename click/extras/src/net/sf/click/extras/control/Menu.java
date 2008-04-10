@@ -699,11 +699,12 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * This method does nothing.
+     * This sets the parent to be null.
      *
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
+        setParent(null);
     }
 
     /**
