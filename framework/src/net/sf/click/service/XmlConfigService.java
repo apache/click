@@ -855,13 +855,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             logService = new ConsoleLogService();
         }
 
+        logService.onInit(getServletContext());
+        
         if (getLogService().isDebugEnabled()) {
-            String msg = "initializing LogService: "
+            String msg = "initialized LogService: "
                 + logService.getClass().getName();
             getLogService().debug(msg);
         }
-
-        logService.onInit(getServletContext());
     }
 
     private void loadTemplateService(Element rootElm) throws Exception {
