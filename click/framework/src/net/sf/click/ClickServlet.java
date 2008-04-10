@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
@@ -37,7 +37,6 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.click.service.ConfigService;
 import net.sf.click.service.LogService;
-import net.sf.click.service.XmlConfigService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.Format;
@@ -54,7 +53,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.exception.ParseErrorException;
 
-/**
+/* *
  * Provides the Click application HttpServlet.
  * <p/>
  * Generally developers will simply configure the <tt>ClickServlet</tt> and
@@ -211,10 +210,9 @@ public class ClickServlet extends HttpServlet {
     // ------------------------------------------------------ Instance Varables
 
     /** The click application configuration service. */
-    private static ConfigService configService;
+    protected ConfigService configService;
 
     /** The application log service. */
-    //TODO Remove this Logger reference. Retrieve it from ConfigService instead
     protected LogService logger;
 
     /** The click application is reloadable flag. */
@@ -226,25 +224,34 @@ public class ClickServlet extends HttpServlet {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Initialize the Click servlet and the services runtime.
+     * Initialize the Click servlet and the Velocity runtime.
      *
      * @see javax.servlet.GenericServlet#init()
      *
-     * @throws ServletException if the click servlet could not be initialized
+     * @throws ServletException if the click app could not be initialized
      */
-    public synchronized void init() throws ServletException {
-
+    public void init() throws ServletException {
+    	
     	// TODO: wondering whether initialization should be done in another
     	// method, which is invoked by reloadClickApp() and init() as we are 
     	// creating a new ConfigService instance here, instead of using the
     	// instance created by ClickConfigListener
 
         try {
-
-            initConfigService(getServletContext());
+            // Dereference any allocated objects
+            if (configService != null) {
+                // TODO Profile and check for leaks
+                // Instantiate listener generate initialize context event
+                ClickConfigListener configListener = new ClickConfigListener();
+                ServletContextEvent event = new ServletContextEvent(getServletContext());
+                configListener.contextInitialized(event);
+            }
 
             // Determine whether the click application is reloadable
             reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
+
+            // Initialize the application config service
+            configService = ClickUtils.getConfigService(getServletContext());
 
             logger = configService.getLogService();
 
@@ -279,79 +286,6 @@ public class ClickServlet extends HttpServlet {
         super.destroy();
     }
 
-    /**
-     * Return the application configuration service instance.
-     *
-     * @return the application configuration service instance
-     * @throws RuntimeException if the configuration service is not set
-     */
-    public static ConfigService getConfigService() {
-
-        if (configService != null) {
-            return configService;
-
-        } else {
-
-            String msg =
-                "the ConfigService is currently not set. Before invoking"
-                + " ClickServlet.getConfigService(), ClickService must be"
-                + " initialized through the static method"
-                + " ClickServlet.initConfigService(ServletContext).";
-
-            throw new RuntimeException(msg);
-        }
-    }
-
-    /**
-     * Initialize and set the application configuration service instance.
-     * <p/>
-     * This method will use the configuration service class specified by the
-     * {@link #CONFIG_SERVICE_CLASS} parameter, otherwise it will create a
-     * {@link net.sf.click.service.XmlConfigService} instance.
-     * <p/>
-     * If a configuration service instance has already been set, this method
-     * will return without creating a new instance.
-     *
-     * @param servletContext the servlet context to retrieve the
-     * {@link #CONFIG_SERVICE_CLASS} from
-     * @return the application configuration service instance
-     * @throws RuntimeException if the configuration service cannot be
-     * initialized
-     */
-    public static ConfigService initConfigService(ServletContext servletContext) {
-
-        // If configService already exists, exit early
-        if (configService != null) {
-            return configService;
-        }
-
-        try {
-
-            // Create the global application ConfigService instance
-            Class serviceClass = XmlConfigService.class;
-
-            String classname = servletContext.getInitParameter(CONFIG_SERVICE_CLASS);
-            if (StringUtils.isNotBlank(classname)) {
-                serviceClass = ClickUtils.classForName(classname);
-            }
-
-            configService = (ConfigService) serviceClass.newInstance();
-
-            // Initialize the ConfigService instance
-            configService.onInit(servletContext);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            } else {
-                throw new RuntimeException(e);
-            }
-        }
-        return configService;
-    }
-
     // ------------------------------------------------------ Protected Methods
 
     /**
@@ -371,7 +305,7 @@ public class ClickServlet extends HttpServlet {
         ensureAppInitialized();
 
         if (ifAuthorizedReloadRequest(request)) {
-            reloadClickServlet(request, response);
+            reloadClickApp(request, response);
 
         } else {
             handleRequest(request, response, false);
@@ -1445,7 +1379,7 @@ public class ClickServlet extends HttpServlet {
      */
     protected boolean ifAuthorizedReloadRequest(HttpServletRequest request) {
         if (reloadable && request.isUserInRole("click-admin")) {
-            String path = ClickUtils.getResourcePath(request);
+        String path = ClickUtils.getResourcePath(request);
 
             return "/click/reload-app.htm".equals(path);
 
@@ -1455,17 +1389,20 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Reload the ClickServlet and send status message to the given response.
+     * Reload the ClickApp and send status message to the given response.
      *
      * @param request the servlet request
      * @param response the response to write the status message to
      * @throws ServletException if an error occurs reloading the application
      * @throws IOException if an I/O error occurs
      */
-    protected synchronized void reloadClickServlet(HttpServletRequest request,
+    protected void reloadClickApp(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        destroyConfigService(getServletContext());
+        // Instantiate listener generate destroy context event
+        ClickConfigListener configListener = new ClickConfigListener();
+        ServletContextEvent event = new ServletContextEvent(getServletContext());
+        configListener.contextDestroyed(event);
 
         init();
 
@@ -1672,6 +1609,15 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
+     * Return the application configuration service instance.
+     *
+     * @return the application configuration service instance
+     */
+    protected ConfigService getConfigService() {
+        return configService;
+    }
+
+    /**
      * Return a new Page instance for the given path.
      *
      * @param path the Page path configured in the click.xml file
@@ -1735,34 +1681,6 @@ public class ClickServlet extends HttpServlet {
                     }
 
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-    }
-
-    /**
-     * Destroy the application configuration service instance.
-     *
-     * @param servletContext the servlet context
-     */
-    static void destroyConfigService(ServletContext servletContext) {
-
-        if (configService != null) {
-
-            try {
-                configService.onDestroy();
-
-                // Dereference the ConfigService
-                configService = null;
-
-            } catch (Exception e) {
-                // TODO: logging exceptions
-                e.printStackTrace();
-
-                if (e instanceof RuntimeException) {
-                    throw (RuntimeException) e;
-                } else {
                     throw new RuntimeException(e);
                 }
             }

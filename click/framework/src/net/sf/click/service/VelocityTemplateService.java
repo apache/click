@@ -27,8 +27,8 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.ClickServlet;
 import net.sf.click.Page;
+import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorReport;
 
 import org.apache.commons.lang.Validate;
@@ -43,7 +43,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
 
-/**
+/* *
  * Provides a <a target="_blank" href="http://velocity.apache.org//">Velocity</a> TemplateService class.
  *
  * <h3>Configuration</h3>
@@ -97,10 +97,10 @@ public class VelocityTemplateService implements TemplateService {
     protected ConfigService configService;
 
     /** The VelocityEngine instance. */
-    protected VelocityEngine velocityEngine;
+    protected VelocityEngine velocityEngine = new VelocityEngine();
 
     /** Cache of velocity writers. */
-    protected SimplePool writerPool;
+    protected SimplePool writerPool = new SimplePool(40);
 
     // --------------------------------------------------------- Public Methods
 
@@ -115,8 +115,6 @@ public class VelocityTemplateService implements TemplateService {
         Validate.notNull(configService, "Null configService parameter");
 
         this.configService = configService;
-        this.velocityEngine = new VelocityEngine();
-        this.writerPool = new SimplePool(40);
 
         // Set the velocity logging level
         Integer logLevel = getInitLogLevel();
@@ -440,7 +438,8 @@ public class VelocityTemplateService implements TemplateService {
             }
         }
 
-        LogService logger = ClickServlet.getConfigService().getLogService();
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+        LogService logger = configService.getLogService();
         if (logger.isTraceEnabled()) {
             TreeMap sortedPropMap = new TreeMap();
 

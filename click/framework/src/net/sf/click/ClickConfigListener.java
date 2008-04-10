@@ -27,7 +27,14 @@ import net.sf.click.util.ClickUtils;
 
 /**
  * Provides servlet context listener which will bootstrap the Click application
- * configuration service.
+ * <tt>ConfigService</tt>.
+ *
+ * <h3>Configuration</h3>
+ * To configure the Freemarker TemplateService add the following element to your
+ * <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
  *
  * @author Malcolm Edgar
  */

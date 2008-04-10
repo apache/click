@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.click.service.ConfigService;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
@@ -38,7 +39,7 @@ import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
 
-/**
+/* *
  * Provides the HTTP request context information for pages and controls.
  * A new Context object is created for each Page request. The request Context
  * object can be obtained from the thread local variable via the
@@ -115,7 +116,7 @@ public class Context {
 
             // CLK-312. Apply request.setCharacterEncoding before wrapping
             // reuqest in ClickRequestWrapper
-            String charset = ClickServlet.getConfigService().getCharset();
+            String charset = clickServlet.getConfigService().getCharset();
             if (charset != null) {
 
                 try {
@@ -124,13 +125,14 @@ public class Context {
                 } catch (UnsupportedEncodingException ex) {
                     String msg =
                         "The character encoding " + charset + " is invalid.";
-                    LogService logService = ClickServlet.getConfigService().getLogService();
+                    ConfigService configService = ClickUtils.getConfigService(context);
+                    LogService logService = configService.getLogService();
                     logService.warn(msg, ex);
                 }
             }
 
             FileUploadService fus =
-                ClickServlet.getConfigService().getFileUploadService();
+                clickServlet.getConfigService().getFileUploadService();
 
             this.request = new ClickRequestWrapper(request, fus);
 
@@ -509,7 +511,7 @@ public class Context {
      * with a unique path
      */
     public String getPagePath(Class pageClass) {
-        return ClickServlet.getConfigService().getPagePath(pageClass);
+        return clickServlet.getConfigService().getPagePath(pageClass);
     }
 
     /**
@@ -521,7 +523,7 @@ public class Context {
      * found
      */
     public Class getPageClass(String path) {
-        return ClickServlet.getConfigService().getPageClass(path);
+        return clickServlet.getConfigService().getPageClass(path);
     }
 
     /**
@@ -531,7 +533,7 @@ public class Context {
      * @return the application mode value
      */
     public String getApplicationMode() {
-        return ClickServlet.getConfigService().getApplicationMode();
+        return clickServlet.getConfigService().getApplicationMode();
     }
 
     /**
@@ -549,7 +551,7 @@ public class Context {
      * @return the application charset or ISO-8859-1 if not defined
      */
     public String getCharset() {
-        String charset = ClickServlet.getConfigService().getCharset();
+        String charset = clickServlet.getConfigService().getCharset();
         if (charset == null) {
             charset = "ISO-8859-1";
         }
@@ -616,8 +618,8 @@ public class Context {
 
         if (locale == null) {
 
-            if (ClickServlet.getConfigService().getLocale() != null) {
-                locale = ClickServlet.getConfigService().getLocale();
+            if (clickServlet.getConfigService().getLocale() != null) {
+                locale = clickServlet.getConfigService().getLocale();
 
             } else {
                 locale = getRequest().getLocale();
@@ -724,7 +726,7 @@ public class Context {
         StringWriter stringWriter = new StringWriter(1024);
 
         TemplateService templateService =
-            ClickServlet.getConfigService().getTemplateService();
+            clickServlet.getConfigService().getTemplateService();
 
         try {
             templateService.renderTemplate(templatePath, model, stringWriter);
@@ -732,7 +734,7 @@ public class Context {
         } catch (Exception e) {
             String msg = "Error occured rendering template: "
                          + templatePath;
-            ClickServlet.getConfigService().getLogService().error(msg, e);
+            clickServlet.getConfigService().getLogService().error(msg, e);
 
             throw new RuntimeException(e);
         }
