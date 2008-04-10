@@ -78,6 +78,13 @@
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
 
+	<!-- 
+	Provides a Click listener which initializes the application ConfigService. 
+	 -->
+	<listener>
+		<listener-class>net.sf.click.ClickConfigListener</listener-class>
+	</listener>
+
 	<!--
 	The Spring Click Servlet which handles *.htm requests. The "spring-path"
 	init parameter tells the servlet where to find the Spring application

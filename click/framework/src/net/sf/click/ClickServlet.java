@@ -53,7 +53,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.exception.ParseErrorException;
 
-/* *
+/**
  * Provides the Click application HttpServlet.
  * <p/>
  * Generally developers will simply configure the <tt>ClickServlet</tt> and

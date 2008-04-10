@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.service.LogService;
 
-/* *
+/**
  * Provides a JDK Util
  * <a target="_blank" href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/logging/package-summary.html">Logging</a>
  * LogService adapter class with a logger name of "<tt>Click</tt>".
