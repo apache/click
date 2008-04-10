@@ -36,7 +36,7 @@ import net.sf.click.util.ClickUtils;
 
 import org.apache.commons.lang.StringUtils;
 
-/* *
+/**
  * Provides a filter for improving the performance of web applications by
  * setting Expires header on static resources and by compressing the HTTP
  * response.
@@ -220,6 +220,9 @@ public class PerformanceFilter implements Filter {
     /** The threshold number to compress, default value is 384 bytes. */
     protected int compressionThreshold = MIN_COMPRESSION_THRESHOLD;
 
+    /** The fitler has been configured flag. */
+    protected boolean configured;
+
     /** The application configuration service. */
     protected ConfigService configService;
 
@@ -245,58 +248,7 @@ public class PerformanceFilter implements Filter {
      * @param filterConfig The filter configuration object
      */
     public void init(FilterConfig filterConfig) {
-
-        if (filterConfig != null) {
-
-            this.filterConfig = filterConfig;
-
-            ServletContext servletContext = getFilterConfig().getServletContext();
-            configService = ClickUtils.getConfigService(servletContext);
-
-            // Get compression threshold
-            String param = filterConfig.getInitParameter("compression-threshold");
-            if (param != null) {
-                compressionThreshold = Integer.parseInt(param);
-                if (compressionThreshold != 0
-                        && compressionThreshold < MIN_COMPRESSION_THRESHOLD) {
-
-                    compressionThreshold = MIN_COMPRESSION_THRESHOLD;
-                }
-            }
-
-            param = filterConfig.getInitParameter("cachable-paths");
-            if (param != null) {
-                String[] paths = StringUtils.split(param, ',');
-
-                for (int i = 0; i  < paths.length; i++) {
-                    String path = paths[i].trim();
-
-                    if (path.endsWith("*")) {
-                        includeDirs.add(path.substring(0, path.length() - 1));
-
-                    } else if (path.startsWith("*")) {
-                        includeFiles.add(path.substring(1));
-
-                    } else {
-                        String message = "cachable-path '" + path + "' ignored, "
-                            + "path must start or end with a wildcard character: *";
-                        getConfigService().getLogService().warn(message);
-                    }
-                }
-            }
-
-            // Get the cache max-age in seconds
-            param = filterConfig.getInitParameter("cachable-max-age");
-            if (param != null) {
-                cacheMaxAge = Long.parseLong(param);
-            }
-
-            String message =
-                "PerformanceFilter initialized with: cachable-paths="
-                + filterConfig.getInitParameter("cachable-paths")
-                + " and cachable-max-age=" + cacheMaxAge;
-            getConfigService().getLogService().info(message);
-        }
+        this.filterConfig = filterConfig;
     }
 
     /**
@@ -322,6 +274,10 @@ public class PerformanceFilter implements Filter {
      */
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
             FilterChain chain) throws IOException, ServletException {
+
+        if (!configured) {
+            loadConfiguration();
+        }
 
         if (!getConfigService().isProductionMode()
             && !getConfigService().isProfileMode()) {
@@ -423,6 +379,62 @@ public class PerformanceFilter implements Filter {
      */
     protected ConfigService getConfigService() {
         return configService;
+    }
+
+    /**
+     * Load the filters configuration and set the configured flat to true.
+     */
+    protected void loadConfiguration() {
+
+        ServletContext servletContext = getFilterConfig().getServletContext();
+        configService = ClickUtils.getConfigService(servletContext);
+
+        // Get compression threshold
+        String param = filterConfig.getInitParameter("compression-threshold");
+        if (param != null) {
+            compressionThreshold = Integer.parseInt(param);
+            if (compressionThreshold != 0
+                    && compressionThreshold < MIN_COMPRESSION_THRESHOLD) {
+
+                compressionThreshold = MIN_COMPRESSION_THRESHOLD;
+            }
+        }
+
+        param = filterConfig.getInitParameter("cachable-paths");
+        if (param != null) {
+            String[] paths = StringUtils.split(param, ',');
+
+            for (int i = 0; i  < paths.length; i++) {
+                String path = paths[i].trim();
+
+                if (path.endsWith("*")) {
+                    includeDirs.add(path.substring(0, path.length() - 1));
+
+                } else if (path.startsWith("*")) {
+                    includeFiles.add(path.substring(1));
+
+                } else {
+                    String message = "cachable-path '" + path + "' ignored, "
+                        + "path must start or end with a wildcard character: *";
+                    getConfigService().getLogService().warn(message);
+                }
+            }
+        }
+
+        // Get the cache max-age in seconds
+        param = filterConfig.getInitParameter("cachable-max-age");
+        if (param != null) {
+            cacheMaxAge = Long.parseLong(param);
+        }
+
+        String message =
+            "PerformanceFilter initialized with: cachable-paths="
+            + filterConfig.getInitParameter("cachable-paths")
+            + " and cachable-max-age=" + cacheMaxAge;
+
+        getConfigService().getLogService().info(message);
+
+        configured = true;
     }
 
     /**

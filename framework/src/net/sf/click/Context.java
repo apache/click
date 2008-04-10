@@ -39,7 +39,7 @@ import net.sf.click.util.FlashAttribute;
 
 import org.apache.commons.fileupload.FileItem;
 
-/* *
+/**
  * Provides the HTTP request context information for pages and controls.
  * A new Context object is created for each Page request. The request Context
  * object can be obtained from the thread local variable via the
