@@ -23,7 +23,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.util.Format;
 
-/* *
+/**
  * Provides a Click application configuration service interface.
  * <p/>
  * A single application ConfigService instance is created by the ClickServlet at

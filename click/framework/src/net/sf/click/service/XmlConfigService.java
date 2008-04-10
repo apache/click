@@ -220,11 +220,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             // Load the Templating service
             loadTemplateService(rootElm);
-            
+
             // Deploy the application files if not present.
             // Only deploy if servletContext.getRealPath() returns a valid path.
             if (servletContext.getRealPath("/") != null) {
-            	deployFiles(rootElm);
+                deployFiles(rootElm);
             }
 
         } finally {
@@ -241,10 +241,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
         if (getTemplateService() != null) {
             getTemplateService().onDestroy();
-        }        
+        }
         if (getLogService() != null) {
-        	getLogService().onDestroy();
-        }        
+            getLogService().onDestroy();
+        }
     }
 
     // --------------------------------------------------------- Public Methods

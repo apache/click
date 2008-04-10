@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 
-/* *
+/**
  * Provides a GZIP compression <tt>Filter</tt> to compress HTML ServletResponse
  * content. The content will only be compressed if it is bigger than a
  * configurable threshold. The default threshold is 2048 bytes.
@@ -68,8 +68,14 @@ import net.sf.click.util.ClickUtils;
  */
 public class CompressionFilter implements Filter {
 
+    /** Minimal reasonable threshold, 2048 bytes. */
+    protected int minThreshold = 2048;
+
     /** The threshold number to compress, default value is 2048 bytes. */
-    protected int compressionThreshold;
+    protected int compressionThreshold = minThreshold;
+
+    /** The fitler has been configured flag. */
+    protected boolean configured;
 
     /** The application configuration service. */
     protected ConfigService configService;
@@ -80,9 +86,6 @@ public class CompressionFilter implements Filter {
      */
     private FilterConfig filterConfig;
 
-    /** Minimal reasonable threshold, 2048 bytes. */
-    protected int minThreshold = 2048;
-
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -91,29 +94,7 @@ public class CompressionFilter implements Filter {
      * @param filterConfig The filter configuration object
      */
     public void init(FilterConfig filterConfig) {
-
         this.filterConfig = filterConfig;
-
-        if (filterConfig != null) {
-
-            ServletContext servletContext = getFilterConfig().getServletContext();
-            configService = ClickUtils.getConfigService(servletContext);
-
-            String str = filterConfig.getInitParameter("compressionThreshold");
-            if (str != null) {
-                compressionThreshold = Integer.parseInt(str);
-                if (compressionThreshold != 0
-                    && compressionThreshold < minThreshold) {
-
-                    compressionThreshold = minThreshold;
-                }
-            } else {
-                compressionThreshold = minThreshold;
-            }
-
-        } else {
-            compressionThreshold = minThreshold;
-        }
     }
 
     /**
@@ -147,6 +128,10 @@ public class CompressionFilter implements Filter {
      */
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
+
+        if (!configured) {
+            loadConfiguration();
+        }
 
         if (compressionThreshold == 0) {
             chain.doFilter(request, response);
@@ -236,6 +221,27 @@ public class CompressionFilter implements Filter {
      */
     protected ConfigService getConfigService() {
         return configService;
+    }
+
+    /**
+     * Load the filters configuration and set the configured flat to true.
+     */
+    protected void loadConfiguration() {
+
+        ServletContext servletContext = getFilterConfig().getServletContext();
+        configService = ClickUtils.getConfigService(servletContext);
+
+        String str = filterConfig.getInitParameter("compressionThreshold");
+        if (str != null) {
+            compressionThreshold = Integer.parseInt(str);
+            if (compressionThreshold != 0
+                && compressionThreshold < minThreshold) {
+
+                compressionThreshold = minThreshold;
+            }
+        } else {
+            compressionThreshold = minThreshold;
+        }
     }
 
 }
