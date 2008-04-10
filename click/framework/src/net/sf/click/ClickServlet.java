@@ -158,10 +158,6 @@ public class ClickServlet extends HttpServlet {
 
     // --------------------------------------------------------- Public Methods
 
-    public ClickServlet() {
-        System.out.println("*****************************  <<CONSTRUCTOR>> *************************");
-    }
-
     /**
      * Initialize the Click servlet and the Velocity runtime.
      *
@@ -171,7 +167,7 @@ public class ClickServlet extends HttpServlet {
      * not be initialized
      */
     public void init() throws ServletException {
-        System.out.println("*****************************  <<INIT>> *************************");
+
         try {
 
             // Create and initialize the application config service
