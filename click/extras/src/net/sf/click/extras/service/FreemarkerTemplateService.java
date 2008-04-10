@@ -22,7 +22,10 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Page;
 import net.sf.click.service.ConfigService;
+import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
+import net.sf.click.util.ClickUtils;
+import freemarker.log.Logger;
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
@@ -43,7 +46,7 @@ import freemarker.template.TemplateExceptionHandler;
 public class FreemarkerTemplateService implements TemplateService {
 
     /** The Freemarker engine configuration. */
-    protected Configuration configuration = new Configuration();
+    protected Configuration configuration;
 
     /**
      * The production/profile mode cache duration in seconds. The default value
@@ -58,6 +61,17 @@ public class FreemarkerTemplateService implements TemplateService {
      * @throws Exception if an error occurs initializing the Template Service
      */
     public void onInit(ConfigService configService) throws Exception {
+    	
+        // Attempt to match Freemarker Logger to configured LogService type
+        LogService logService = configService.getLogService();
+        if (logService instanceof Log4JLogService) {
+            Logger.selectLoggerLibrary(Logger.LIBRARY_LOG4J);
+
+        } else if (logService instanceof JdkLogService) {
+            Logger.selectLoggerLibrary(Logger.LIBRARY_JAVA);
+        }
+        
+        configuration = new Configuration();
 
         ServletContext servletContext = configService.getServletContext();
 
@@ -95,6 +109,11 @@ public class FreemarkerTemplateService implements TemplateService {
         if (configService.getLocale() != null) {
             configuration.setLocale(configService.getLocale());
         }
+
+        // Deploy Freemarker error.htm template
+        ClickUtils.deployFile(servletContext,
+                              "/net/sf/click/extras/service/error.htm",
+                              "click");
     }
 
     /**
