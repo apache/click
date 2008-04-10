@@ -248,13 +248,6 @@ public class MockContext extends Context {
                 Boolean.TRUE);
             request.setAttribute(ClickServlet.MOCK_MODE_ENABLED, Boolean.TRUE);
 
-            // If a ConfigService does not exist, initialize the ClickConfigListener
-            if (servletContext.getAttribute(ConfigService.CONTEXT_NAME) == null) {
-                ClickConfigListener configListener = new ClickConfigListener();
-                ServletContextEvent event = new ServletContextEvent(servletContext);
-                configListener.contextInitialized(event);
-            }
-
             clickServlet.init(servletConfig);
 
             MockContext mockContext = new MockContext(servletConfig, request,
