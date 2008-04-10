@@ -57,7 +57,6 @@ import org.apache.velocity.util.SimplePool;
  * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.service.VelocityTemplateService</span>"&gt; </pre>
  *
  * @author Malcolm Edgar
-
  */
 public class VelocityTemplateService implements TemplateService {
 
@@ -150,6 +149,7 @@ public class VelocityTemplateService implements TemplateService {
         // Dereference any allocated objects
         velocityEngine = null;
         writerPool = null;
+        configService = null;
     }
 
     /**

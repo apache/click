@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.click.service.ConfigService;
 import net.sf.click.service.LogService;
+import net.sf.click.service.XmlConfigService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorPage;
 import net.sf.click.util.Format;
@@ -94,58 +95,6 @@ import org.apache.velocity.exception.ParseErrorException;
  * configured with the Click application mode in the "<tt>click.xml</tt>" file.
  * See the User Guide for information on how to configure the application mode.
  *
- * <a name="app-reloading"><h4>Application Reloading</h4></a>
- * The <tt>ClickServlet</tt> supports the ability to reload the click
- * application "<tt>click.xml</tt>" without having to restart the entire web
- * application.
- * <p/>
- * To reload the application simply make the GET request
- * <font color="blue">/click/reload-app.htm</font> while in the role
- * <font color="red">click-admin</font>.
- * <p/>
- * To enable application reloading you need to configure the servlet
- * init parameter <tt>app-reloadable</tt> as true, and secure
- * the path <tt>/click/reload-app.htm</tt> with the role <tt>click-admin</tt>.
- * If the user making a GET request to this path is not in this role the
- * ClickServlet will return the page not found template.
- *
- * <pre class="codeConfig">
- * &lt;web-app&gt;
- *    &lt;servlet&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
- *       &lt;servlet-class&gt;net.sf.click.ClickServlet&lt;/servlet-class&gt;
- *       &lt;init-param&gt;
- *         &lt;param-name&gt;<font color="blue">app-reloadable</font>&lt;/param-name&gt;
- *         &lt;param-value&gt;<font color="red">true</font>&lt;/param-value&gt;
- *       &lt;/init-param&gt;
- *       &lt;load-on-startup&gt;0&lt;/load-on-startup&gt;
- *    &lt;/servlet&gt;
- *
- *    &lt;servlet-mapping&gt;
- *       &lt;servlet-name&gt;click-servlet&lt;/servlet-name&gt;
- *       &lt;url-pattern&gt;*.htm&lt;/url-pattern&gt;
- *    &lt;/servlet-mapping&gt;
- *
- *    &lt;security-constraint&gt;
- *      &lt;web-resource-collection&gt;
- *        &lt;web-resource-name&gt;click-admin&lt;/web-resource-name&gt;
- *        &lt;url-pattern&gt;<font color="blue">/click/reload-app.htm</font>&lt;/url-pattern&gt;
- *      &lt;/web-resource-collection&gt;
- *      &lt;auth-constraint&gt;
- *        &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
- *      &lt;/auth-constraint&gt;
- *    &lt;/security-constraint&gt;
- *
- *    &lt;login-config&gt;
- *      &lt;auth-method&gt;DIGEST&lt;/auth-method&gt;
- *      &lt;realm-name&gt;MyCorp&lt;/realm-name&gt;
- *    &lt;/login-config&gt;
- *
- *    &lt;security-role&gt;
- *      &lt;role-name&gt;<font color="red">click-admin</font>&lt;/role-name&gt;
- *    &lt;/security-role&gt;
- * &lt;/web-app&gt; </pre>
- *
  * <h4>ConfigService</h4>
  *
  * A single application {@link ConfigService} instance is created by the ClickServlet at
@@ -159,11 +108,6 @@ public class ClickServlet extends HttpServlet {
     // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
-
-    private static final String APPLICAION_RELOADED_MSG  =
-        "<html><head>"
-        + "<style type='text/css'>body{font-family:Arial;}</style></head>"
-        + "<body><h2>Application Reloaded</h2></body></html>";
 
     /**
      * The <tt>mock page reference</tt> request attribute: key: &nbsp;
@@ -184,12 +128,6 @@ public class ClickServlet extends HttpServlet {
      * will be enabled which is needed for running Click in a mock environment.
      */
     static final String MOCK_MODE_ENABLED = "mock_mode_enabled";
-
-    /**
-     * The click application is reloadable flag servlet init parameter name:
-     * &nbsp; "<tt>app-reloadable</tt>".
-     */
-    protected final static String APP_RELOADABLE = "app-reloadable";
 
     /**
      * The click application configuration service classname init parameter name:
@@ -215,43 +153,30 @@ public class ClickServlet extends HttpServlet {
     /** The application log service. */
     protected LogService logger;
 
-    /** The click application is reloadable flag. */
-    protected boolean reloadable = false;
-
     /** The request parameters OGNL type converter. */
     protected TypeConverter typeConverter;
 
     // --------------------------------------------------------- Public Methods
+
+    public ClickServlet() {
+        System.out.println("*****************************  <<CONSTRUCTOR>> *************************");
+    }
 
     /**
      * Initialize the Click servlet and the Velocity runtime.
      *
      * @see javax.servlet.GenericServlet#init()
      *
-     * @throws ServletException if the click app could not be initialized
+     * @throws ServletException if the application configuration service could
+     * not be initialized
      */
     public void init() throws ServletException {
-    	
-    	// TODO: wondering whether initialization should be done in another
-    	// method, which is invoked by reloadClickApp() and init() as we are 
-    	// creating a new ConfigService instance here, instead of using the
-    	// instance created by ClickConfigListener
-
+        System.out.println("*****************************  <<INIT>> *************************");
         try {
-            // Dereference any allocated objects
-            if (configService != null) {
-                // TODO Profile and check for leaks
-                // Instantiate listener generate initialize context event
-                ClickConfigListener configListener = new ClickConfigListener();
-                ServletContextEvent event = new ServletContextEvent(getServletContext());
-                configListener.contextInitialized(event);
-            }
 
-            // Determine whether the click application is reloadable
-            reloadable = "true".equalsIgnoreCase(getInitParameter(APP_RELOADABLE));
-
-            // Initialize the application config service
-            configService = ClickUtils.getConfigService(getServletContext());
+            // Create and initialize the application config service
+            configService = createConfigService(getServletContext());
+            initConfigService(getServletContext());
 
             logger = configService.getLogService();
 
@@ -269,7 +194,7 @@ public class ClickServlet extends HttpServlet {
 
             e.printStackTrace();
 
-            String msg = "error initializing throwing "
+            String msg = "error while initializing Click servlet; throwing "
                          + "javax.servlet.UnavailableException";
 
             log(msg, e);
@@ -282,7 +207,31 @@ public class ClickServlet extends HttpServlet {
      * @see javax.servlet.GenericServlet#destroy()
      */
     public void destroy() {
-        configService.onDestroy();
+
+        try {
+
+            // Destroy the application config service
+            destroyConfigService(getServletContext());
+
+        } catch (Throwable e) {
+            // In mock mode this exception can occur if click.xml is not
+            // available.
+            if (getServletContext().getAttribute(MOCK_MODE_ENABLED) != null) {
+                return;
+            }
+
+            e.printStackTrace();
+
+            String msg = "error while destroying Click servlet, throwing "
+                         + "javax.servlet.UnavailableException";
+
+            log(msg, e);
+
+        } finally {
+            // Dereference the application config service
+            configService = null;
+        }
+
         super.destroy();
     }
 
@@ -302,14 +251,7 @@ public class ClickServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
 
-        ensureAppInitialized();
-
-        if (ifAuthorizedReloadRequest(request)) {
-            reloadClickApp(request, response);
-
-        } else {
-            handleRequest(request, response, false);
-        }
+        handleRequest(request, response, false);
     }
 
     /**
@@ -325,8 +267,6 @@ public class ClickServlet extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException, IOException {
-
-        ensureAppInitialized();
 
         handleRequest(request, response, true);
     }
@@ -1345,78 +1285,6 @@ public class ClickServlet extends HttpServlet {
     }
 
     /**
-     * Ensure the ClickApp and the Velocity WriterPool have been initialized
-     * otherwise throw a UnavailableException.
-     * <p/>
-     * If <tt>app-reloadable</tt> is true a temporarily UnavailableException
-     * is thrown, otherwise if not reloadable then a permanent
-     * UnavailableException is thrown.
-     *
-     * @throws UnavailableException if the application has not been initialized
-     */
-    protected void ensureAppInitialized() throws UnavailableException {
-        if (configService == null) {
-            if (reloadable) {
-                String msg = "The application is temporarily unavailable"
-                             + " - please try again in 1 minute";
-                throw new UnavailableException(msg, 60);
-            } else {
-                String msg = "The application is unavailable.";
-                throw new UnavailableException(msg);
-            }
-        }
-    }
-
-    /**
-     * Return true if the request is click application reload request GET
-     * <tt>"/click/reload-app.htm"</tt> and the user is in the role
-     * <tt>"click-admin"</tt>. To reload the click application the
-     * servlet init parameter <tt>app-reloadable</tt> must also be defined.
-     *
-     * @param request the servlet request
-     * @return if a reload request and servlet configured to enable reloading
-     *  and the user is in "click-admin" role
-     */
-    protected boolean ifAuthorizedReloadRequest(HttpServletRequest request) {
-        if (reloadable && request.isUserInRole("click-admin")) {
-        String path = ClickUtils.getResourcePath(request);
-
-            return "/click/reload-app.htm".equals(path);
-
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Reload the ClickApp and send status message to the given response.
-     *
-     * @param request the servlet request
-     * @param response the response to write the status message to
-     * @throws ServletException if an error occurs reloading the application
-     * @throws IOException if an I/O error occurs
-     */
-    protected void reloadClickApp(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException, IOException {
-
-        // Instantiate listener generate destroy context event
-        ClickConfigListener configListener = new ClickConfigListener();
-        ServletContextEvent event = new ServletContextEvent(getServletContext());
-        configListener.contextDestroyed(event);
-
-        init();
-
-        final String msg =
-            "ClickApp reloaded by " + request.getRemoteUser() + " on "
-            + (new Date()).toString();
-        logger.info(msg);
-
-        response.setContentType("text/html");
-        response.getWriter().print(APPLICAION_RELOADED_MSG);
-        response.getWriter().close();
-    }
-
-    /**
      * Set the page model, context, format, messages and path as request
      * attributes to support JSP rendering. These request attributes include:
      * <ul>
@@ -1658,6 +1526,93 @@ public class ClickServlet extends HttpServlet {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+   /**
+    * Create a Click application ConfigService instance.
+    *
+    * @param servletContext the Servlet Context
+    * @return a new application ConfigService instance
+    * @throws Exception if an initialization error occurs
+    */
+    ConfigService createConfigService(ServletContext servletContext)
+        throws Exception {
+
+        Class serviceClass = XmlConfigService.class;
+
+        String classname = servletContext.getInitParameter(CONFIG_SERVICE_CLASS);
+        if (StringUtils.isNotBlank(classname)) {
+            serviceClass = ClickUtils.classForName(classname);
+        }
+
+ 	return (ConfigService) serviceClass.newInstance();
+    }
+
+    /**
+     * Initialize the Click application <tt>ConfigService</tt> instance and bind
+     * it as a ServletContext attribute using the key
+     * "<tt>net.sf.click.service.ConfigService</tt>".
+     * <p/>
+     * This method will use the configuration service class specified by the
+     * {@link #CONFIG_SERVICE_CLASS} parameter, otherwise it will create a
+     * {@link net.sf.click.service.XmlConfigService} instance.
+     *
+     * @param servletContext the servlet context to retrieve the
+     * {@link #CONFIG_SERVICE_CLASS} from
+     * @return the application configuration service instance
+     * @throws RuntimeException if the configuration service cannot be
+     * initialized
+     */
+    void initConfigService(ServletContext servletContext) {
+
+        if (configService != null) {
+            try {
+
+                // Note this order is very important as components need to lookup
+                // the configService out of the ServletContext while the service
+                // is being initialized.
+                servletContext.setAttribute(ConfigService.CONTEXT_NAME, configService);
+
+                // Initialize the ConfigService instance
+                configService.onInit(servletContext);
+
+            } catch (Exception e) {
+
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                } else {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    /**
+     * Destroy the application configuration service instance and remove
+     * it from the ServletContext attribute.
+     *
+     * @param servletContext the servlet context
+     * @throws RuntimeException if the configuration service cannot be
+     * destroyed
+     */
+    void destroyConfigService(ServletContext servletContext) {
+
+        if (configService != null) {
+
+            try {
+                configService.onDestroy();
+
+            } catch (Exception e) {
+
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                } else {
+                    throw new RuntimeException(e);
+                }
+            } finally {
+                servletContext.setAttribute(ConfigService.CONTEXT_NAME, null);
+            }
+        }
+    }
 
     /**
      * Process all the Pages public fields using the given callback.
