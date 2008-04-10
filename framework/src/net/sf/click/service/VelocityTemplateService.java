@@ -43,7 +43,7 @@ import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.tools.view.servlet.WebappLoader;
 import org.apache.velocity.util.SimplePool;
 
-/* *
+/**
  * Provides a <a target="_blank" href="http://velocity.apache.org//">Velocity</a> TemplateService class.
  *
  * <h3>Configuration</h3>

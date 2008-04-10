@@ -38,11 +38,14 @@
 		<filter-name>PerformanceFilter</filter-name>
 		<url-pattern>*.png</url-pattern>
 	</filter-mapping>
-	
+
+	<!-- 
+	Provides a Click listener which initializes the application ConfigService. 
+	 -->
 	<listener>
 		<listener-class>net.sf.click.ClickConfigListener</listener-class>
 	</listener>
-	
+
 	<servlet>
 		<servlet-name>ClickServlet</servlet-name>
 		<servlet-class>net.sf.click.ClickServlet</servlet-class>
