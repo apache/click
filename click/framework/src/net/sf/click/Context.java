@@ -30,7 +30,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.service.ConfigService;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
@@ -115,7 +114,7 @@ public class Context {
         if (contextStack.size() == 0) {
 
             // CLK-312. Apply request.setCharacterEncoding before wrapping
-            // reuqest in ClickRequestWrapper
+            // request in ClickRequestWrapper
             String charset = clickServlet.getConfigService().getCharset();
             if (charset != null) {
 
@@ -125,8 +124,8 @@ public class Context {
                 } catch (UnsupportedEncodingException ex) {
                     String msg =
                         "The character encoding " + charset + " is invalid.";
-                    ConfigService configService = ClickUtils.getConfigService(context);
-                    LogService logService = configService.getLogService();
+                    LogService logService =
+                        clickServlet.getConfigService().getLogService();
                     logService.warn(msg, ex);
                 }
             }
