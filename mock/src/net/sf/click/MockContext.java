@@ -21,12 +21,12 @@ import net.sf.click.servlet.MockRequest;
 import java.util.Locale;
 import javax.servlet.ServletConfig;
 
-import javax.servlet.ServletContextEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.click.service.ConfigService;
+import net.sf.click.service.ConsoleLogService;
 import net.sf.click.servlet.MockServletContext;
 import net.sf.click.servlet.MockSession;
+import net.sf.click.util.ClickUtils;
 
 /**
  * Provides a mock {@link net.sf.click.Context} object for unit testing.
@@ -133,12 +133,12 @@ public class MockContext extends Context {
     /**
      * Creates and returns a new Context instance.
      *<p/>
-     * <b>Note:</b> servletPath will default to 'mock.htm'.
+     * <b>Note:</b> servletPath will default to '/mock.htm'.
      *
      * @return new Context instance
      */
     public static MockContext initContext() {
-        return initContext("mock.htm");
+        return initContext("/mock.htm");
     }
 
     /**
@@ -154,13 +154,13 @@ public class MockContext extends Context {
     /**
      * Creates and returns a new Context instance for the specified locale.
      *
-     * <b>Note:</b> servletPath will default to 'mock.htm'.
+     * <b>Note:</b> servletPath will default to '/mock.htm'.
      *
      * @param locale the requests locale
      * @return new Context instance
      */
     public static MockContext initContext(Locale locale) {
-        return initContext(locale, "mock.htm");
+        return initContext(locale, "/mock.htm");
     }
 
     /**
@@ -200,8 +200,8 @@ public class MockContext extends Context {
 
         MockSession session = new MockSession(servletContext);
 
-        MockRequest request = new MockRequest(locale, null, servletPath, servletContext,
-            session);
+        MockRequest request = new MockRequest(locale, MockServletContext.DEFAULT_CONTEXT_PATH,
+            servletPath, servletContext, session);
 
         return initContext(servletConfig, request, response, servlet);
     }
@@ -254,6 +254,9 @@ public class MockContext extends Context {
                 response, isPost, clickServlet);
 
             Context.pushThreadLocalContext(mockContext);
+
+            ConsoleLogService logService = (ConsoleLogService) ClickUtils.getLogService();
+            logService.setLevel(ConsoleLogService.TRACE_LEVEL);
             return (MockContext) Context.getThreadLocalContext();
         } catch (Exception e) {
             throw new MockContainer.CleanRuntimeException(e);
