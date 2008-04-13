@@ -25,7 +25,7 @@ import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.SessionMap;
 
-public class Panel extends BasicContainer {
+public class Panel extends AbstractContainer {
 
     protected String template;
 
@@ -39,7 +39,8 @@ public class Panel extends BasicContainer {
     }
     
     public Panel(String name, String id) {
-        super(name, id);
+        super(name);
+        setId(id);
     }
     
     public Panel() {
