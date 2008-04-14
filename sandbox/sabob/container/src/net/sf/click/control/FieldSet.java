@@ -254,7 +254,7 @@ public class FieldSet extends BasicFieldSet {
         if (!(control instanceof Field)) {
             throw new IllegalArgumentException("Only fields are allowed on this FieldSet");
         }
-        boolean contains = contains(control.getName());
+        boolean contains = contains(control);
         remove((Field) control);
         return contains;
     }

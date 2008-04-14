@@ -55,12 +55,12 @@ public interface Container extends Control {
     List getControls();
 
     /**
-     * Return true if the container has the specified control.
+     * Return true if the container contains the specified control.
      * 
      * @param control the control whose presence in this container is to be tested
-     * @return true if the container has the specified control
+     * @return true if the container contains the specified control
      */
-    boolean contains(String controlName);
+    boolean contains(Control control);
 
     /**
      * Return the named control from the container if found or null otherwise.

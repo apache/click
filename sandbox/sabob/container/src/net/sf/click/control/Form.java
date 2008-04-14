@@ -713,7 +713,7 @@ public class Form extends BasicForm {
         if (!(control instanceof Field)) {
             throw new IllegalArgumentException("Only fields are allowed on this Form");
         }
-        boolean contains = contains(control.getName());
+        boolean contains = contains(control);
         remove((Field) control);
         return contains;
     }
@@ -724,7 +724,7 @@ public class Form extends BasicForm {
      * @param field the field to remove from the form
      */
     public void remove(Field field) {
-        if (field != null && contains(field.getName())) {
+        if (field != null && getFields().containsKey(field.getName())) {
             field.setForm(null);
             if (field.getParent() == this) {
                 field.setParent(null);

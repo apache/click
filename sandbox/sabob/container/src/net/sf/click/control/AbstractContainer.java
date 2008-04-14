@@ -54,7 +54,7 @@ public abstract class AbstractContainer extends AbstractControl implements Conta
         }
 
         // Check if container already contains the control
-        if (contains(control.getName())) {
+        if (getControlMap().containsKey(control.getName())) {
 
             throw new IllegalArgumentException(
                 "Container already contains control named: " + control.getName());
@@ -111,8 +111,8 @@ public abstract class AbstractContainer extends AbstractControl implements Conta
         return null;
     }
 
-    public boolean contains(String controlName) {
-        return getControlMap().containsKey(controlName);
+    public boolean contains(Control control) {
+        return getControls().contains(control);
     }
 
     public List getControls() {

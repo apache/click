@@ -43,8 +43,8 @@ public class ContainerField extends Field implements Container {
         return container.getControl(controlName);
     }
 
-    public boolean contains(String controlName) {
-        return container.contains(controlName);
+    public boolean contains(Control control) {
+        return container.contains(control);
     }
 
     public List getControls() {
