@@ -41,6 +41,7 @@ import net.sf.click.util.Format;
 import ognl.Ognl;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.EntityResolver;
@@ -178,6 +179,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @throws Exception if an error occurs initializing the application
      */
     public void onInit(ServletContext servletContext) throws Exception {
+
+        Validate.notNull(servletContext, "Null servletContext parameter");
 
         this.servletContext = servletContext;
 
@@ -903,7 +906,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             getLogService().debug(msg);
         }
 
-        templateService.onInit(this);
+        templateService.onInit(servletContext);
     }
 
     private static Map loadPropertyMap(Element parentElm) {

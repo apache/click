@@ -106,14 +106,14 @@ public class VelocityTemplateService implements TemplateService {
     /**
      * @see TemplateService#onInit(ServletContext, String, String)
      *
-     * @param configService the application configuration service instance
+     * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the Template Service
      */
-    public void onInit(ConfigService configService) throws Exception {
+    public void onInit(ServletContext servletContext) throws Exception {
 
-        Validate.notNull(configService, "Null configService parameter");
+        Validate.notNull(servletContext, "Null servletContext parameter");
 
-        this.configService = configService;
+        this.configService = ClickUtils.getConfigService(servletContext);
 
         // Set the velocity logging level
         Integer logLevel = getInitLogLevel();
