@@ -18,6 +18,8 @@ package net.sf.click.service;
 import java.io.Writer;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.click.Page;
 
 /**
@@ -33,10 +35,10 @@ public interface TemplateService {
      * <p/>
      * This method is invoked after the TemplateService has been constructed.
      *
-     * @param configService the application configuration service instance
+     * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the Template Service
      */
-    public void onInit(ConfigService configService) throws Exception;
+    public void onInit(ServletContext servletContext) throws Exception;
 
     /**
      * Destroy the TemplateService.
