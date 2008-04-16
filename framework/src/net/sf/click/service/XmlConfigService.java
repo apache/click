@@ -225,6 +225,12 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Only deploy if servletContext.getRealPath() returns a valid path.
             if (servletContext.getRealPath("/") != null) {
                 deployFiles(rootElm);
+
+            } else {
+                String msg = "Could not auto deploy files to 'click' web folder."
+                    + " You may need to manually include click resources in your"
+                    + " web application.";
+                getLogService().warn(msg);
             }
 
         } finally {
@@ -856,7 +862,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
 
         logService.onInit(getServletContext());
-        
+
         if (getLogService().isDebugEnabled()) {
             String msg = "initialized LogService: "
                 + logService.getClass().getName();
