@@ -30,6 +30,7 @@ import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
+import org.apache.commons.lang.Validate;
 
 /**
  * Provides a <a target="_blank" href="http://www.freemarker.org/">Freemarker</a> TemplateService class.
@@ -57,11 +58,15 @@ public class FreemarkerTemplateService implements TemplateService {
     /**
      * @see TemplateService#onInit(ConfigService)
      *
-     * @param configService the application configuration service instance
+     * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the Template Service
      */
-    public void onInit(ConfigService configService) throws Exception {
-    	
+    public void onInit(ServletContext servletContext) throws Exception {
+
+        Validate.notNull(servletContext, "Null servletContext parameter");
+
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+
         // Attempt to match Freemarker Logger to configured LogService type
         LogService logService = configService.getLogService();
         if (logService instanceof Log4JLogService) {
@@ -72,8 +77,6 @@ public class FreemarkerTemplateService implements TemplateService {
         }
         
         configuration = new Configuration();
-
-        ServletContext servletContext = configService.getServletContext();
 
         // Templates are stoted in the / directory of the Web app.
         configuration.setServletContextForTemplateLoading(servletContext, "");
