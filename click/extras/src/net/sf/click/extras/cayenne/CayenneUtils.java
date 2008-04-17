@@ -162,4 +162,43 @@ public final class CayenneUtils {
         }
     }
 
+
+    /**
+     * Return the database primary key column name for the given data object.
+     *
+     * @param objectContext the Cayenne ObjectContext for the data object
+     * @param dataObjectClass the class of the data object
+     * @return the primary key column name
+     */
+    public static String getPkName(ObjectContext objectContext, Class dataObjectClass) {
+
+        Validate.notNull(objectContext, "Null objectContext parameter.");
+        Validate.notNull(dataObjectClass, "Null dataObjectClass parameter.");
+
+        ObjEntity objEntity =
+            objectContext.getEntityResolver().lookupObjEntity(dataObjectClass);
+
+        if (objEntity == null) {
+            throw new CayenneRuntimeException("Unmapped DataObject Class: "
+                    + dataObjectClass.getName());
+        }
+
+        DbEntity dbEntity = objEntity.getDbEntity();
+        if (dbEntity == null) {
+            throw new CayenneRuntimeException("No DbEntity for ObjEntity: "
+                    + objEntity.getName());
+        }
+
+        List pkAttributes = dbEntity.getPrimaryKey();
+        if (pkAttributes.size() != 1) {
+            throw new CayenneRuntimeException("PK contains "
+                    + pkAttributes.size()
+                    + " columns, expected 1.");
+        }
+
+        DbAttribute attr = (DbAttribute) pkAttributes.get(0);
+
+        return attr.getName();
+    }
+
 }

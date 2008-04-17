@@ -26,13 +26,13 @@ import net.sf.click.control.Select;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.PropertyUtils;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.access.DataContext;
 import org.apache.cayenne.query.NamedQuery;
 import org.apache.cayenne.query.Ordering;
 import org.apache.cayenne.query.SelectQuery;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a DataObject property Select control: &nbsp; &lt;select&gt;&lt;/select&gt;.
@@ -379,6 +379,31 @@ public class PropertySelect extends Select {
         return valueObject;
     }
 
+    /**
+     * Set the valueObject with the given <tt>DataObject</tt> and the select
+     * value to the <tt>DataObject</tt> primary key value.
+     *
+     * @see net.sf.click.control.Field#setValueObject(Object)
+     *
+     * @param object the object value to set
+     */
+    public void setValueObject(Object object) {
+        if (object != null) {
+            DataObject dataObject = (DataObject) object;
+            valueObject = dataObject;
+
+            CayenneForm form = (CayenneForm) getForm();
+            String pkName = CayenneUtils.getPkName(form.getDataContext(),
+                                                   dataObject.getClass());
+
+            Object pk = dataObject.getObjectId().getIdSnapshot().get(pkName);
+
+            if (pk != null) {
+                value = pk.toString();
+            }
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -394,10 +419,11 @@ public class PropertySelect extends Select {
 
         super.bindRequestValue();
 
+        CayenneForm form = (CayenneForm) getForm();
+        Class doClass = form.getDataObjectClass();
+
         if (StringUtils.isNotBlank(getValue())) {
 
-            CayenneForm form = (CayenneForm) getForm();
-            Class doClass = form.getDataObjectClass();
             String getterName = ClickUtils.toGetterName(getName());
 
             try {
@@ -418,6 +444,9 @@ public class PropertySelect extends Select {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+
+        } else {
+            valueObject = null;
         }
     }
 
@@ -465,6 +494,16 @@ public class PropertySelect extends Select {
         }
 
         return super.toString();
+    }
+
+    /**
+     * Clear the cached valueObject.
+     *
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        super.onDestroy();
+        valueObject = null;
     }
 
     // ------------------------------------------------------ Protected Methods
