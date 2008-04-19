@@ -398,19 +398,13 @@ public class FieldSet extends BasicFieldSet {
         throw new UnsupportedOperationException("setListener not supported");
     }
 
+    public int getControlSizeEst() {
+        return 160 + (getControls().size() * 350);
+    }
+
     // --------------------------------------------------------- Public Methods
 
-    /**
-     * Return the HTML string representation of the fieldset.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML string representation of the fieldset
-     */
-    public String toString() {
-        // Estimate the size of the string buffer
-        int bufferSize = 160 + (getFieldList().size() * 350);
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+    public void render(HtmlStringBuffer buffer) {
 
         if (getShowBorder()) {
             buffer.elementStart("fieldset");
@@ -445,7 +439,19 @@ public class FieldSet extends BasicFieldSet {
             buffer.elementEnd("fieldset");
             buffer.append("\n");
         }
+    }
 
+    /**
+     * Return the HTML string representation of the fieldset.
+     *
+     * @see Object#toString()
+     *
+     * @return the HTML string representation of the fieldset
+     */
+    public String toString() {
+        // Estimate the size of the string buffer
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
         return buffer.toString();
     }
 

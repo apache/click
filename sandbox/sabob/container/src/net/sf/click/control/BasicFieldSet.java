@@ -22,6 +22,7 @@ import java.util.Map;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 public class BasicFieldSet extends ContainerField {
 
@@ -223,9 +224,28 @@ public class BasicFieldSet extends ContainerField {
         }
         return true;
     }
+
     //-------------------------------------------- protected methods
 
+    protected void renderContent(HtmlStringBuffer buffer) {
+        if (getLegend().length() > 0) {
+            buffer.elementStart("legend");
+            if (hasLegendAttributes()) {
+                if (getLegendAttributes().containsKey("id")) {
+                   buffer.appendAttribute("id", getId());
+                }
+                buffer.appendAttributes(getLegendAttributes());
+            }
+            buffer.closeTag();
+            buffer.append(getLegend());
+            buffer.elementEnd("legend");
+            buffer.append("\n");
+        }
+        container.renderContent(buffer);
+    }
+
     // -------------------------------------------------------- Private methods
+
     public static void main(String[] args) {
         BasicFieldSet fs = new BasicFieldSet("name", "legend");
         fs.addControl(new TextField("text1"));
