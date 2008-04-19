@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import net.sf.click.Control;
+import net.sf.click.MockContext;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -35,9 +36,6 @@ public class BasicFieldSet extends ContainerField {
 
     /** The FieldSet legend attributes map. */
     protected Map legendAttributes;
-
-    /** The render the fieldset border flag, default value is true. */
-    protected boolean showBorder = true;
 
     // ------------------------------------------------------ Constructorrs
     public BasicFieldSet() {
@@ -165,26 +163,6 @@ public class BasicFieldSet extends ContainerField {
     }
 
     /**
-     * Return the render fieldset border flag. The border is the HTML
-     * &lt;fieldset&gt; element.
-     *
-     * @return the render the fieldset border flag
-     */
-    public boolean getShowBorder() {
-        return showBorder;
-    }
-
-    /**
-     * Set the render fieldset border flag. The border is the HTML
-     * &lt;fieldset&gt; element.
-     *
-     * @param value the render the fieldset border flag
-     */
-    public void setShowBorder(boolean value) {
-        this.showBorder = value;
-    }
-
-    /**
      * Return true if all contained fields are valid.
      *
      * @see Field#isValid()
@@ -247,7 +225,11 @@ public class BasicFieldSet extends ContainerField {
     // -------------------------------------------------------- Private methods
 
     public static void main(String[] args) {
-        BasicFieldSet fs = new BasicFieldSet("name", "legend");
+        MockContext.initContext();
+        Form form = new Form("form");
+        FieldSet fs = new FieldSet("name", "legend");
+        form.add(fs);
+        fs.setShowBorder(true);
         fs.addControl(new TextField("text1"));
         fs.addControl(new TextField("text2"));
         System.out.println(fs);

@@ -112,14 +112,11 @@ public class FieldSet extends BasicFieldSet {
      */
     protected Integer columns;
 
-    /** The ordered list of field values, excluding buttons. */
-    //protected final List fieldList = new ArrayList();
-
-    /** The map of fields keyed by field name. */
-    //protected final Map fields = new HashMap();
-
     /** The map of field width values. */
     protected Map fieldWidths = new HashMap();
+
+    /** The render the fieldset border flag, default value is true. */
+    protected boolean showBorder = true;
 
     // ----------------------------------------------------------- Constructors
 
@@ -400,6 +397,26 @@ public class FieldSet extends BasicFieldSet {
 
     public int getControlSizeEst() {
         return 160 + (getControls().size() * 350);
+    }
+
+    /**
+     * Return the render fieldset border flag. The border is the HTML
+     * &lt;fieldset&gt; element.
+     *
+     * @return the render the fieldset border flag
+     */
+    public boolean getShowBorder() {
+        return showBorder;
+    }
+
+    /**
+     * Set the render fieldset border flag. The border is the HTML
+     * &lt;fieldset&gt; element.
+     *
+     * @param value the render the fieldset border flag
+     */
+    public void setShowBorder(boolean value) {
+        this.showBorder = value;
     }
 
     // --------------------------------------------------------- Public Methods
