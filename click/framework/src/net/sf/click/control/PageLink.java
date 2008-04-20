@@ -20,6 +20,7 @@ import java.util.Map;
 
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Page Link control: &nbsp; &lt;a href="" &gt;&lt;/a&gt;.
@@ -135,9 +136,13 @@ public class PageLink extends AbstractLink {
 
         buffer.append(getContext().getRequest().getContextPath());
 
-        String pagePage = getContext().getPagePath(getPageClass());
+        String pagePath = getContext().getPagePath(getPageClass());
 
-        buffer.append(pagePage);
+        if (pagePath != null && pagePath.endsWith(".jsp")) {
+            pagePath = StringUtils.replace(pagePath, ".jsp", ".htm");
+        }
+
+        buffer.append(pagePath);
 
         if (hasParameters()) {
             buffer.append("?");
