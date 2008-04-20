@@ -26,10 +26,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import net.sf.click.service.ConfigService;
 import net.sf.click.servlet.MockSession;
 import org.apache.commons.lang.StringUtils;
 

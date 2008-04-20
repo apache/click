@@ -730,22 +730,46 @@ public class Page {
     }
 
     /**
-     * Return the path of the Velocity template to render.
+     * Return the path of the Template or JSP to render.
+     * <p/>
+     * If this method returns <tt>null</tt>, Click will not perform any rendering.
+     * This is useful when you want to stream or write directly to the
+     * HttpServletResponse.
      * <p/>
      * See also {@link #getForward()}, {@link #getRedirect()}
      *
-     * @return the path of the Velocity template to render
+     * @return the path of the Template or JSP to render
      */
     public String getPath() {
         return path;
     }
 
     /**
-     * Set the path of the Velocity template to render.
+     * Set the path of the Template or JSP to render.
+     * <p/>
+     * By default Click will set the path to the requested page url. Meaning
+     * if the url <tt>/edit-customer.htm</tt> is requested, path will be set
+     * to <tt>/edit-customer.htm</tt>.
+     * <p/>
+     * Here is an example if you want to change the path to a different Template:
+     * <p/>
+     * <pre class="prettyprint">
+     * public void onGet() {
+     *     setPath("/some-other-template.htm");
+     * }</pre>
+     * And here is an example if you want to change the path to a different JSP.
+     * <pre class="prettyprint">
+     * public void onGet() {
+     *     setPath("/some-other-jsp.jsp");
+     * }</pre>
+     * <p/>
+     * If path is set to <tt>null</tt>, Click will not perform any rendering.
+     * This is useful when you want to stream or write directly to the
+     * HttpServletResponse.
      * <p/>
      * See also {@link #setForward(String)}, {@link #setRedirect(String)}
      *
-     * @param value the path of the Velocity template to render
+     * @param value the path of the Template or JSP to render
      */
     public void setPath(String value) {
         path = value;
