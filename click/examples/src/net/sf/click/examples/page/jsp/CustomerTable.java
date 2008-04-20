@@ -2,7 +2,6 @@ package net.sf.click.examples.page.jsp;
 
 import java.util.List;
 
-import net.sf.click.Page;
 import net.sf.click.examples.page.BorderPage;
 
 /**

@@ -620,6 +620,10 @@ public class ClickServlet extends HttpServlet {
             }
 
             if (page.getForward().endsWith(".jsp")) {
+                // CLK-141. If path is a jsp page, change forward value.
+                if (page.getPath().endsWith(".jsp")) {
+                    page.setForward(page.getPath());
+                }
                 renderJSP(page);
 
             } else {
@@ -630,7 +634,13 @@ public class ClickServlet extends HttpServlet {
             }
 
         } else if (page.getPath() != null) {
-            renderTemplate(page);
+            // CLK-141. If path is a jsp page, set forward value.
+            if (page.getPath().endsWith(".jsp")) {
+                page.setForward(page.getPath());
+                renderJSP(page);
+            } else {
+	        renderTemplate(page);
+            }
 
         } else {
             if (logger.isTraceEnabled()) {
