@@ -241,8 +241,7 @@ public class BasicForm extends AbstractContainer {
     }
 
     /**
-     * Return the named field if contained in the form or the forms fieldsets,
-     * or null if not found.
+     * Return the named field if contained in the form or null if not found.
      *
      * @param name the name of the field
      * @return the named field if contained in the form

@@ -163,24 +163,6 @@ public class BasicFieldSet extends ContainerField {
     }
 
     /**
-     * Return true if all contained fields are valid.
-     *
-     * @see Field#isValid()
-     *
-     * @return true if all contained fields are valid
-     */
-    public boolean isValid() {
-        List fields = ContainerUtils.getFields(this);
-        for (Iterator it = fields.iterator(); it.hasNext();) {
-            Field field = (Field) it.next();
-            if (!field.isValid()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Process the request invoking <tt>onProcess()</tt> on the contained
      * <tt>Control</tt> elements.
      *
@@ -232,6 +214,10 @@ public class BasicFieldSet extends ContainerField {
         fs.setShowBorder(true);
         fs.addControl(new TextField("text1"));
         fs.addControl(new TextField("text2"));
-        System.out.println(fs);
+        fs.getField("text1").setError("error");
+        // FieldSet should be valid
+        System.out.println("Is Valid: " + fs.isValid());
+        // Form should be invalid.
+        System.out.println("Is Valid: " + form.isValid());
     }
 }
