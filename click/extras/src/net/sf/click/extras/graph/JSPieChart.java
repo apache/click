@@ -37,7 +37,8 @@ public class JSPieChart extends JSChart {
 
     /** The HTML imports statements. */
     protected static final String HTML_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics{1}.js\"></script>\n"
+            "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
+            + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics{1}.js\"></script>\n"
             + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/pie{1}.js\"></script>\n";
 
     /** Chart resource file names. */
