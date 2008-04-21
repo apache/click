@@ -183,6 +183,9 @@ public class Page {
      */
     protected boolean stateful;
 
+    /** The path of the page border template to render.*/
+    private String template;
+
     // --------------------------------------------------------- Event Handlers
 
     /**
@@ -855,13 +858,13 @@ public class Page {
     }
 
     /**
-     * Return the path of the page template to render, by default this method
-     * returns {@link #getPath()}.
+     * Return the path of the page border template to render, by default this
+     * method returns {@link #getPath()}.
      * <p/>
-     * Pages can override this method to return an alternative page template.
-     * This is very useful when implementing an standardized look and feel for
-     * a web site. The example below provides a BorderedPage base Page which
-     * other site templated Pages should extend.
+     * Pages can override this method to return an alternative border page
+     * template. This is very useful when implementing an standardized look and
+     * feel for a web site. The example below provides a BorderedPage base Page
+     * which other site templated Pages should extend.
      *
      * <pre class="codeJava">
      * <span class="kw">public class</span> BorderedPage <span class="kw">extends</span> Page {
@@ -898,7 +901,22 @@ public class Page {
      * {@link #getPath()}.
      */
     public String getTemplate() {
-        return getPath();
+        if (template == null) {
+            return getPath();
+        } else {
+            return template;
+        }
     }
 
+    /**
+     * Set the page border template path.
+     * <p/>
+     * <b>Note:</b> if this value is not set, {@link getTemplate()} will default
+     * to {@link #getPath()}.
+     *
+     * @param template the border template path
+     */
+    public void setTemplate(String template) {
+        this.template = template;
+    }
 }
