@@ -12,6 +12,7 @@
     <control classname="net.sf.click.extras.control.Menu"/>
     <control classname="net.sf.click.extras.control.RegexField"/>
     <control classname="net.sf.click.extras.control.TabbedForm"/>
+    <control classname="net.sf.click.extras.control.VirtualKeyboard"/>
     <control classname="net.sf.click.extras.graph.JSBarChart"/>
     <control classname="net.sf.click.extras.graph.JSLineChart"/>
     <control classname="net.sf.click.extras.graph.JSPieChart"/>

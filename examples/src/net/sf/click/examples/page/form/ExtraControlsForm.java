@@ -11,18 +11,7 @@ import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.HomePage;
-import net.sf.click.extras.control.CheckList;
-import net.sf.click.extras.control.ColorPicker;
-import net.sf.click.extras.control.CreditCardField;
-import net.sf.click.extras.control.DateField;
-import net.sf.click.extras.control.DoubleField;
-import net.sf.click.extras.control.EmailField;
-import net.sf.click.extras.control.IntegerField;
-import net.sf.click.extras.control.LongField;
-import net.sf.click.extras.control.NumberField;
-import net.sf.click.extras.control.PageSubmit;
-import net.sf.click.extras.control.RegexField;
-import net.sf.click.extras.control.TelephoneField;
+import net.sf.click.extras.control.*;
 import net.sf.click.util.ClickUtils;
 
 /**
@@ -64,6 +53,7 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new NumberField("numberField"));
         form.add(new RegexField("regexField"));
         form.add(new TelephoneField("telephoneField"));
+        form.add(new VirtualKeyboard("keyboardField"));
 
         form.add(new Submit("submit"));
         form.add(new PageSubmit("cancel", HomePage.class));
