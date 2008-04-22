@@ -56,7 +56,7 @@ public class FreemarkerTemplateService implements TemplateService {
     protected int cacheDuration = 60 * 60 * 24;
 
     /**
-     * @see TemplateService#onInit(ConfigService)
+     * @see TemplateService#onInit(javax.servlet.ServletContext)
      *
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the Template Service

@@ -316,8 +316,8 @@ public class CheckList extends Field {
      * instances based on the object properties specified by value and label.
      *
      * <pre class="codeJava">
-     *   CheckList list = &lt;span class=&quot;kw&quot;&gt;new&lt;/span&gt; CheckList(&lt;span class=&quot;st&quot;&gt;&quot;type&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;Type:&quot;&lt;/span&gt;);
-     *   list.addAll(getCustomerService().getCustomerTypes(), &lt;span class=&quot;st&quot;&gt;&quot;id&quot;&lt;/span&gt;, &lt;span class=&quot;st&quot;&gt;&quot;name&quot;&lt;/span&gt;);
+     *   CheckList list = <span class="kw">new</span> CheckList(<span class="st">"type"</span>, <span class="st">"Type:"</span>);
+     *   list.addAll(getCustomerService().getCustomerTypes(), <span class="st">"id"</span>, <span class="st">"name"</span>);
      *   form.add(select); </pre>
      *
      * @param objects the collection of objects to render as options
@@ -596,7 +596,7 @@ public class CheckList extends Field {
      * Set the list of selected values. The specified values must match
      * the values of the Options
      *
-     * @deprecated use {@link #setSelectedValues(String)} instead
+     * @deprecated use {@link #setSelectedValues(List)} instead
      *
      * @param values a list of strings or null
      */
@@ -617,9 +617,10 @@ public class CheckList extends Field {
      *
      * public void onInit() {
      *     List options = new ArrayList();
-     *     // Note this option value is specified as an Integer, but will be
-     *     // converted to a string value by the Option instance.
+     *     // Note: this option value is specified as an Integer, but will be
+     *     // converted to a String by the Option constructor.
      *     options.add(new Option(new Integer(1), "Option 1");
+     *
      *     // This option value is specified as a String.
      *     options.add(new Option("2", "Option 2");
      *     options.add(new Option("3", "Option 3");
@@ -629,7 +630,7 @@ public class CheckList extends Field {
      * public void onRender() {
      *     // Preselect some Options.
      *     List selected = new ArrayList();
-     *     // Specify both option values as a strings.
+     *     // Note: specify both option values as strings.
      *     selected.add("1");
      *     selected.add("3");
      *     checkList.setSelectedValues(selected);
