@@ -38,7 +38,8 @@ public class JSLineChart extends JSChart {
 
     /** The HTML imports statements. */
     public static final String HTML_IMPORTS =
-            "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics{1}.js\"></script>\n"
+            "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n"
+            + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/wz_jsgraphics{1}.js\"></script>\n"
             + "<script type=\"text/javascript\" src=\"{0}/click/graph/jsgraph/line{1}.js\"></script>\n";
 
     /** Chart resource file names. */
