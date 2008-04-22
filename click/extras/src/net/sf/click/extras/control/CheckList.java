@@ -596,9 +596,48 @@ public class CheckList extends Field {
      * Set the list of selected values. The specified values must match
      * the values of the Options
      *
+     * @deprecated use {@link #setSelectedValues(String)} instead
+     *
      * @param values a list of strings or null
      */
     public void setValues(List values) {
+        this.values = values;
+    }
+
+    /**
+     * Set the list of selected values. The specified values must match
+     * the values of the Options.
+     * <p/>
+     * <b>Note:</b> since the Option value are always converted to a String,
+     * specify the list of selected values as strings as well.
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * CheckList checkList = new CheckList("checkList");
+     *
+     * public void onInit() {
+     *     List options = new ArrayList();
+     *     // Note this option value is specified as an Integer, but will be
+     *     // converted to a string value by the Option instance.
+     *     options.add(new Option(new Integer(1), "Option 1");
+     *     // This option value is specified as a String.
+     *     options.add(new Option("2", "Option 2");
+     *     options.add(new Option("3", "Option 3");
+     *     checkList.setOptionList(options);
+     * }
+     *
+     * public void onRender() {
+     *     // Preselect some Options.
+     *     List selected = new ArrayList();
+     *     // Specify both option values as a strings.
+     *     selected.add("1");
+     *     selected.add("3");
+     *     checkList.setSelectedValues(selected);
+     * } </pre>
+     *
+     * @param values a list of strings or null
+     */
+    public void setSelectedValues(List values) {
         this.values = values;
     }
 
