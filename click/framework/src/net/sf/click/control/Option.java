@@ -114,6 +114,8 @@ public class Option implements Serializable {
 
     /**
      * Create an Option with the given value and display label.
+     * <p/>
+     * <b>Note:</b> the specified value will be converted to a String.
      *
      * @param value the Option value
      * @param label the Option display label

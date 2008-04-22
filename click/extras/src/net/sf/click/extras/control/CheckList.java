@@ -168,7 +168,7 @@ public class CheckList extends Field {
     protected List sortorder;
 
     /** The selected values. */
-    protected List values;
+    private List selectedValues;
 
     // ----------------------------------------------------------- Constructors
 
@@ -584,8 +584,8 @@ public class CheckList extends Field {
      * @return the list of selected values
      */
     public List getSelectedValues() {
-        if (values != null) {
-            return values;
+        if (selectedValues != null) {
+            return selectedValues;
 
         } else {
             return Collections.EMPTY_LIST;
@@ -601,15 +601,12 @@ public class CheckList extends Field {
      * @param values a list of strings or null
      */
     public void setValues(List values) {
-        this.values = values;
+        this.selectedValues = values;
     }
 
     /**
      * Set the list of selected values. The specified values must match
      * the values of the Options.
-     * <p/>
-     * <b>Note:</b> since the Option value are always converted to a String,
-     * specify the list of selected values as strings as well.
      * <p/>
      * For example:
      * <pre class="prettyprint">
@@ -617,11 +614,7 @@ public class CheckList extends Field {
      *
      * public void onInit() {
      *     List options = new ArrayList();
-     *     // Note: this option value is specified as an Integer, but will be
-     *     // converted to a String by the Option constructor.
-     *     options.add(new Option(new Integer(1), "Option 1");
-     *
-     *     // This option value is specified as a String.
+     *     options.add(new Option("1", "Option 1");
      *     options.add(new Option("2", "Option 2");
      *     options.add(new Option("3", "Option 3");
      *     checkList.setOptionList(options);
@@ -630,16 +623,15 @@ public class CheckList extends Field {
      * public void onRender() {
      *     // Preselect some Options.
      *     List selected = new ArrayList();
-     *     // Note: specify both option values as strings.
-     *     selected.add("1");
+     *     selected.add("1"));
      *     selected.add("3");
      *     checkList.setSelectedValues(selected);
      * } </pre>
      *
      * @param values a list of strings or null
      */
-    public void setSelectedValues(List values) {
-        this.values = values;
+    public void setSelectedValues(List selectedValues) {
+        this.selectedValues = selectedValues;
     }
 
     /**
@@ -696,13 +688,13 @@ public class CheckList extends Field {
         }
 
         // Load the selected items.
-        this.values = new ArrayList();
+        this.selectedValues = new ArrayList();
 
         String[] values = getContext().getRequestParameterValues(getName());
 
         if (values != null) {
             for (int i = 0; i < values.length; i++) {
-                this.values.add(values[i]);
+                this.selectedValues.add(values[i]);
             }
         }
 
@@ -854,8 +846,11 @@ public class CheckList extends Field {
                 }
 
                 // set checked status
-                if (getSelectedValues().contains(option.getValue())) {
-                    buffer.appendAttribute("checked", "checked");
+                List values = getSelectedValues();
+                for (int k = 0; k < values.size(); k++) {
+                    if (String.valueOf(values.get(k)).equals(option.getValue())) {
+                        buffer.appendAttribute("checked", "checked");
+                    }
                 }
 
                 if (isDisabled()) {
