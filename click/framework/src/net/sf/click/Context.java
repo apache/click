@@ -743,6 +743,11 @@ public class Context {
 
     // ------------------------------------------------ Package Private Methods
 
+    /**
+     * Return the stack data structure where Context's are stored.
+     *
+     * @return stack data structure where Context's are stored
+     */
     static final ContextStack getContextStack() {
         ContextStack contextStack = (ContextStack) THREAD_LOCAL_CONTEXT.get();
 
@@ -754,10 +759,20 @@ public class Context {
         return contextStack;
     }
 
+    /**
+     * Adds the specified Context on top of the Context stack.
+     *
+     * @param context a context instance
+     */
     static void pushThreadLocalContext(Context context) {
         getContextStack().push(context);
     }
 
+    /**
+     * Remove and return the context instance on top of the context stack.
+     *
+     * @return the context instance on top of the context stack
+     */
     static Context popThreadLocalContext() {
         ContextStack contextStack = getContextStack();
         Context context = contextStack.pop();
@@ -769,6 +784,13 @@ public class Context {
         return context;
     }
 
+    /**
+     * Find and return the ClickRequestWrapper that is wrapped by the specified
+     * request.
+     *
+     * @param request the servlet request that wraps the ClickRequestWrapper
+     * @return the wrapped servlet request
+     */
     static ClickRequestWrapper findClickRequestWrapper(ServletRequest request) {
 
         while (!(request instanceof ClickRequestWrapper)
