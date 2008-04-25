@@ -69,7 +69,8 @@ public class SessionFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         // Load the SessionContext class initializing the SessionFactory
         try {
-            SessionContext.class.getName();
+            SessionContext context = new SessionContext();
+            context.onInit(filterConfig.getServletContext());
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);

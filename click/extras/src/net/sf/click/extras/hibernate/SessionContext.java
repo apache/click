@@ -15,6 +15,8 @@
  */
 package net.sf.click.extras.hibernate;
 
+import javax.servlet.ServletContext;
+import net.sf.click.util.ClickUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,8 +32,8 @@ import org.hibernate.cfg.Configuration;
  * <p/>
  * The Hibernate initialization code used by <tt>SessionContext</tt> is:
  *
- * <pre class="codeJava">
- * Configuration configuration = <span class="kw">new</span> Configuration();
+ * <pre class="prettyprint">
+ * Configuration configuration = createConfiguration();
  * configuration.setProperties(System.getProperties());
  * configuration.configure();
  * SessionFactory sessionFactory = configuration.buildSessionFactory(); </pre>
@@ -47,25 +49,73 @@ import org.hibernate.cfg.Configuration;
 public class SessionContext {
 
     /** The Hibernate session factory. */
-    private static final SessionFactory SESSION_FACTORY;
+    private static SessionFactory SESSION_FACTORY;
 
     /** The ThreadLocal session holder. */
     private static final ThreadLocal SESSION_HOLDER = new ThreadLocal();
 
-    static {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.setProperties(System.getProperties());
-            configuration.configure();
-            SESSION_FACTORY = configuration.buildSessionFactory();
+    /**
+     * Initializes the SessionContext instance.
+     * <p/>
+     * This includes creating a new Hibernate Configuration and building
+     * the SessionFactory.
+     * <p/>
+     * This method first creates a new Configuration by invoking
+     * {@link #createConfiguration} and then initializes the configuration
+     * by invoking {@link #initConfiguration(org.hibernate.cfg.Configuration)}.
+     *
+     * @param servletContext the servlet context
+     */
+    public void onInit(ServletContext servletContext) {
+        Configuration configuration = createConfiguration();
+        initConfiguration(configuration);
+        SESSION_FACTORY = configuration.buildSessionFactory();
+    }
 
+    /**
+     * Creates and returns a new Configuration instance.
+     * <p/>
+     * <b>Note:</b> as annotations have become popular the last couple of
+     * years, this method will try and detect if Hibernate's
+     * AnnotationConfiguration is available on the classpath. If it is a new
+     * AnnotationConfiguration instance is created otherwise a Configuration
+     * instance is created.
+     *
+     * @return new Hibernate Configuration instance.
+     */
+    public Configuration createConfiguration() {
+        try {
+            // Try to instantiate AnnotationConfiguration by reflection
+            Class clazz = ClickUtils.classForName("org.hibernate.cfg.AnnotationConfiguration");
+            Configuration configuration = (Configuration) clazz.newInstance();
+            return configuration;
+        } catch (ClassNotFoundException e) {
+            // Fall back to normal configuration
+            return new Configuration();
         } catch (Throwable e) {
             throw new ExceptionInInitializerError(e);
         }
     }
 
     /**
-     * Get the Session for the current Thread, creating one if neccessary.
+     * Initialize the configuration instance.
+     * <p/>
+     * You can override this method and manually setup the configuration:
+     * <pre class="prettyprint">
+     * public Configuration createConfiguration() {
+     *     configuration.setProperties(System.getProperties());
+     *     configuration.configure();
+     * }</pre>
+     *
+     * @param configuration the configuration to initialize
+     */
+    public void initConfiguration(Configuration configuration) {
+        configuration.setProperties(System.getProperties());
+        configuration.configure();
+    }
+
+    /**
+     * Get the Session for the current Thread, creating one if necessary.
      *
      * @return the Session fro the current Thread.
      * @throws HibernateException if an error occurs opening the session
