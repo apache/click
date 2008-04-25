@@ -179,6 +179,24 @@ public class TextArea extends Field {
     }
 
     /**
+     * Construct the TextArea with the given name, label, number of columns and
+     * number of rows.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param cols the number of text area cols
+     * @param rows the number of text area rows
+     * @param required the field required status
+     */
+    public TextArea(String name, String label, int cols, int rows,
+        boolean required) {
+        super(name, label);
+        setCols(cols);
+        setRows(rows);
+        setRequired(required);
+    }
+
+    /**
      * Create a TextArea with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.

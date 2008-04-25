@@ -166,6 +166,21 @@ public class TextField extends Field {
     }
 
     /**
+     * Construct the TextField with the given name, label, size and required
+     * status.
+     *
+     * @param name the name of the field
+     * @param label the label of the field
+     * @param size the size of the field
+     * @param required the field required status
+     */
+    public TextField(String name, String label, int size, boolean required) {
+        super(name, label);
+        setSize(size);
+        setRequired(required);
+    }
+
+    /**
      * Create a TextField with no name defined.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
