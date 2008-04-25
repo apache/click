@@ -411,7 +411,7 @@ public class HibernateForm extends Form {
      * proxy information.
      *
      * @param aClass the class to obtain the original name from
-     * @return the orignial classname for the given class
+     * @return the original classname for the given class
      */
     protected String getClassname(Class aClass) {
 
