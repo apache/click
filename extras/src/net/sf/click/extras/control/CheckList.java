@@ -628,7 +628,7 @@ public class CheckList extends Field {
      *     checkList.setSelectedValues(selected);
      * } </pre>
      *
-     * @param values a list of strings or null
+     * @param selectedValues a list of strings or null
      */
     public void setSelectedValues(List selectedValues) {
         this.selectedValues = selectedValues;
@@ -676,8 +676,8 @@ public class CheckList extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Bind the request submission, setting the {@link #values} or property if
-     * defined in the request.
+     * Bind the request submission, setting the {@link #selectedValues} and
+     * sort order if the checkList is sortable.
      */
     public void bindRequestValue() {
 

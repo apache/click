@@ -34,7 +34,7 @@ import javax.servlet.ServletContext;
  *
  *
  * @author Ahmed Mohombe
- * @todo: add support for password fields and textareas too.
+ * TODO: add support for password fields and textareas too.
  */
 public class VirtualKeyboard extends TextField {
 
