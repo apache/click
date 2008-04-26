@@ -33,7 +33,7 @@ Release Procedures
 
 Maven Artifact Upload Procedures
 --------------------------------
-1. Ensure the 'sf.repo' server is setup in ~/.m2/settings.xml, otherwise maven won't authenticate you at sourceforge. For example:
+1. Ensure the 'sf.repo' server is setup in ~/.m2/settings.xml, otherwise maven won't authenticate at sourceforge. For example:
   <settings>
     <servers>
       <server>
