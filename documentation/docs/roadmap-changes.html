@@ -131,16 +131,44 @@ new features including Module support, bug fixes, documentation and example upda
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
 	  </li>
 	  <li class="change">Removed support for Cayenne 1.2.x.</li>
-    <li class="change">Updated documentation and examples.</li>
+    <li class="change">New examples:
+     <ul style="padding-top: 5px;">
+         <li class="change">
+             <a href="http://www.avoka.com/click-examples/jsp/edit-customer.htm">JSP - Edit Customer</a>
+         </li>
+         <li>
+             <a href="http://www.avoka.com/click-examples/jsp/navigation-a.htm">JSP - Navigation</a>
+         </li>
+         <li>
+             <a href="http://www.avoka.com/click-examples/jsp/multi-path-demo.htm">JSP - Multi Path Demo</a>
+         </li>
+         <li>
+             <a href="http://www.avoka.com/click-examples/form/extra-controls-form.htm">Virtual Keyboard field</a>
+         </li>
+     </ul>
+    </li>
+    <li class="change">Updated existing documentation and added documentation to cover new sections:
+     <ul style="padding-top: 5px;">
+         <li class="change">
+             
+         </li>
+     </ul>
+    </li>
+     <a href=""></a>
       <span style="color:brown;font-weight:bold">Upgrade Path</span>
       <dd>
        <ul style="padding: 0em; margin-left:0em;">
+         <li class="upgrade">
+          1.5 is not binary compatible with 1.4. What this means is that in order
+          to use 1.5, you will have to recompile your application against the 1.5
+          release. Note that Click 1.5 still runs on any <strong>JDK >= 1.4</strong>.
+         </li>
          <li class="upgrade">
           1.5 M1 introduces two new properties: <span style="font-weight:bold;color:navy;">file-size-limit-exceeded-error</span>
           and <span style="font-weight:bold;color:navy;">post-size-limit-exceeded-error</span>.
           For those building i18n applications please remember to add these two properties
           to your <span style="font-weight:bold;color:navy;">click-control&lt;lang&gt;.properties.</span>
-          <br>Feel free to send us patches for your preferred language.
+          <br>Please send us patches for your preferred language.
          </li>
          <li class="upgrade">
           ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
