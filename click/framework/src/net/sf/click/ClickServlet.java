@@ -638,8 +638,9 @@ public class ClickServlet extends HttpServlet {
             if (page.getPath().endsWith(".jsp")) {
                 page.setForward(page.getPath());
                 renderJSP(page);
+
             } else {
-	        renderTemplate(page);
+                renderTemplate(page);
             }
 
         } else {
@@ -1550,7 +1551,7 @@ public class ClickServlet extends HttpServlet {
             serviceClass = ClickUtils.classForName(classname);
         }
 
- 	return (ConfigService) serviceClass.newInstance();
+        return (ConfigService) serviceClass.newInstance();
     }
 
     /**
