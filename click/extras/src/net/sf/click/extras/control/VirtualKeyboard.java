@@ -60,9 +60,9 @@ public class VirtualKeyboard extends TextField {
 
      /** The HTML import statements. */
     public static final String HTML_IMPORTS =
-          "<script type=\"text/javascript\">var keyboard_png_path=\"{0}/click/keyboard.png\";</script>"
-        + "<script type=\"text/javascript\" src=\"{0}/click/keyboard.js\" charset=\"UTF-8\"></script>\n"
-        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/keyboard.css\">";
+          "<script type=\"text/javascript\">var keyboard_png_path=\"{0}/click/keyboard{1}.png\";</script>\n"
+        + "<script type=\"text/javascript\" src=\"{0}/click/keyboard{1}.js\" charset=\"UTF-8\"></script>\n"
+        + "<link rel=\"stylesheet\" type=\"text/css\" href=\"{0}/click/keyboard{1}.css\"/>\n";
 
     // ----------------------------------------------------------- Constructors
 
