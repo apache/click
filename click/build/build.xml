@@ -556,9 +556,13 @@ Please ensure you have configured build.properties</echo>
                     classpath="classpath.mock"/>
 
       <copy file="documentation/images/post-sequence-diagram.png"
-          todir="documentation/docs/click-api/net/sf/click/"/>
+            todir="documentation/docs/click-api/net/sf/click/"/>
       <copy file="documentation/images/control-post-sequence-diagram.png"
             todir="documentation/docs/click-api/net/sf/click/"/>
+      <copy file="documentation/images/service-package.png"
+            todir="documentation/docs/click-api/net/sf/click/service/"/>
+      <copy file="documentation/images/service-package.png"
+            todir="documentation/docs/extras-api/net/sf/click/extras/service/"/>
       <copy file="extras/src/net/sf/click/extras/control/calendar/calendar.gif"
             todir="documentation/docs/extras-api/net/sf/click/extras/control"/>
       <copy file="documentation/images/form-table.png"
