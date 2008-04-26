@@ -75,7 +75,7 @@ public class FreemarkerTemplateService implements TemplateService {
         } else if (logService instanceof JdkLogService) {
             Logger.selectLoggerLibrary(Logger.LIBRARY_JAVA);
         }
-        
+
         configuration = new Configuration();
 
         // Templates are stoted in the / directory of the Web app.
