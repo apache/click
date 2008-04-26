@@ -392,10 +392,11 @@ public class Table extends AbstractControl {
      * {@link #columns} Map using its name.
      *
      * @param column the column to add to the table
+     * @return the added column
      * @throws IllegalArgumentException if the table already contains a column
      * with the same name
      */
-    public void addColumn(Column column) {
+    public Column addColumn(Column column) {
         if (column == null) {
             String msg = "column parameter cannot be null";
             throw new IllegalArgumentException(msg);
@@ -409,6 +410,8 @@ public class Table extends AbstractControl {
         getColumns().put(column.getName(), column);
         getColumnList().add(column);
         column.setTable(this);
+
+        return column;
     }
 
     /**
@@ -506,14 +509,17 @@ public class Table extends AbstractControl {
      * the Table is processed.
      *
      * @param control the Control to add to the table
+     * @return the added control
      */
-    public void addControl(Control control) {
+    public Control addControl(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
         getControls().add(control);
 
         control.setParent(this);
+
+        return control;
     }
 
     /**
