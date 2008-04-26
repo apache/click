@@ -41,7 +41,7 @@ import net.sf.click.util.ClickUtils;
  * another language).
  *
  * <h3>Keyboard Layout Support</h3>
- * This controls comes with support for \Arabic, Belgian, Dutch, Dvorak, French, German,
+ * This controls comes with support for Arabic, Belgian, Dutch, Dvorak, French, German,
  * Greek, Hebrew, Hungarian, Italian, Lithuanian, Norwegian, Number Pad,
  * Polish Programmers, Portuguese, Russian, Slovenian, Spanish (Spain),
  * Turkish-F, Turkish-QWERTY, UK, US Standard and US International keyboard layouts,
@@ -53,8 +53,6 @@ import net.sf.click.util.ClickUtils;
  * @author Ahmed Mohombe
  *
  * @todo: add support for password fields and textareas too.
- * @author Ahmed Mohombe
- * TODO: add support for password fields and textareas too.
  */
 public class VirtualKeyboard extends TextField {
 
