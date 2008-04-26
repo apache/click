@@ -104,7 +104,7 @@ public class VelocityTemplateService implements TemplateService {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * @see TemplateService#onInit(ServletContext, String, String)
+     * @see TemplateService#onInit(ServletContext)
      *
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the Template Service
