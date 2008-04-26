@@ -168,7 +168,7 @@ public class CheckList extends Field {
     protected List sortorder;
 
     /** The selected values. */
-    private List selectedValues;
+    protected List selectedValues;
 
     // ----------------------------------------------------------- Constructors
 
@@ -628,7 +628,7 @@ public class CheckList extends Field {
      *     checkList.setSelectedValues(selected);
      * } </pre>
      *
-     * @param selectedValues a list of strings or null
+     * @param selectedValues the list of selected string values or null
      */
     public void setSelectedValues(List selectedValues) {
         this.selectedValues = selectedValues;
