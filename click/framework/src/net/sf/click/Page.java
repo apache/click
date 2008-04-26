@@ -184,7 +184,7 @@ public class Page {
     protected boolean stateful;
 
     /** The path of the page border template to render.*/
-    private String template;
+    protected String template;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -898,11 +898,12 @@ public class Page {
      * added to the VelocityContext by the ClickServlet.
      *
      * @return the path of the page template to render, by default returns
-     * {@link #getPath()}.
+     * {@link #getPath()}
      */
     public String getTemplate() {
         if (template == null) {
             return getPath();
+
         } else {
             return template;
         }
@@ -911,7 +912,7 @@ public class Page {
     /**
      * Set the page border template path.
      * <p/>
-     * <b>Note:</b> if this value is not set, {@link getTemplate()} will default
+     * <b>Note:</b> if this value is not set, {@link #getTemplate()} will default
      * to {@link #getPath()}.
      *
      * @param template the border template path
