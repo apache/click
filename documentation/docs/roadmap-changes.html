@@ -30,6 +30,11 @@
     padding-left: 8px;
     border: 1px solid #99A4DF;
   }
+  blockquote {
+    background: #EEEEEE;
+    padding: 4px;
+    border: 1px solid #99A4DF;
+  }
  </style>
 </head>
 <body>
@@ -38,46 +43,49 @@
 
 <h2>Road Map</h2>
 The next scheduled Click Framework release (version 1.5 M2) will include 
-new features, bug fixes and documentation updates.
+new features including Module support, bug fixes, documentation and example updates.
 
 <p>&nbsp;</p>
 
 <h2>Changes</h2>
 
 <dl>
-  <dt><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
+  <dt><div class="release-header">Latest Stable Release - Version 1.4.2 - 27 April 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">		  
-		  Fixed ExcludePage should be a public class.
-		  [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
+		Fixed ExcludePage should be a public class
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
       </li>
       <li class="change">		  
-		  Fixed maven artifacts packaging.
-		  [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
+		Fixed Maven artifacts packaging
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
       </li>
       <li class="change">		  
-		  Fixed slight performance degradation.
-		  [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
+		Fixed slight performance degradation
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
+      </li>
+      <li class="change">		  
+      	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
+      </li>
+      <li class="change">		  
+      	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
+      </li>
+      <li class="change">
+      	Fix DateField which produced duplicate stylesheet links.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-356">356</a>].
       </li>
     </ul>
   </dd>
-  <dt><div class="release-header">Latest Development Release - Version 1.5 M1 - 30 April 2008</div></dt>
+  <dt><div class="release-header">Latest Development Release - Version 1.5 M1 - 11 May 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
-		<span style="font-weight:bold;color:navy;">Important Change</span> 
-		added improved file upload support. TODO provide further details...
-		This issue was raised by Ricardo Lecheta
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
+        Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
+        control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
       </li>
-	  <li class="change">
-		Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
-		method. This enables Pages to programatically define HTML imports which
-		will be included in a border template using the PageImports object.
-		This issue was raised by David Frizelle
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
-	  </li>
 	  <li class="change">
 	    Added support for setting Form  
 		<a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
@@ -85,27 +93,80 @@ new features, bug fixes and documentation updates.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-319">319</a>].
 	  </li>
 	  <li class="change">
+		Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
+		method. This enables Pages to programatically define HTML imports which
+		will be included in a border template using the PageImports object.
+		This issue was raised by David Frizelle
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
+	  </li>
+    <li class="change">
+        Add Page <a href="click-api/net/sf/click/Page.html#setTemplate(java.lang.String)">setTemplate(String)</a>
+        method to enable dynamic changing of a page border template. This issue
+        was raised by Huy Do 
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-353">353</a>].
+	  </li>
+    <li class="change">
+        Updated <a href="click-api/net/sf/click/Page.html#setPath(java.lang.String)">Page.setPath</a> to handle JSP resources. This issue was raised and fixed by Huy Do.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-141">141</a>].
+	  </li>
+    <li class="change">
+        Added support for Hibernate AnnocationConfiguration. This issue was fixed by Jean-Francois.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-355">355</a>].
+	  </li>
+      <li class="change">
+		Improved FileUpload support. This issue was raised by Ricardo Lecheta
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
+      </li>
+	  <li class="change">
 		Improve File Upload support with new <a href="click-api/net/sf/click/service/FileUploadService.html">FileUploadService</a> class.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-326">326</a>].
+	  </li>
+      <li class="change">
+        Fixed PropertySelect which is not reset to original value. This is was raised by Tore Halset
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-317">317</a>].
 	  </li>
       <li class="change">
         Fixed Cayenne 3.0M3 DataObjectUtils issue in CayenneForm when using JDK 1.5. 
         Added <a href="extras-api/net/sf/click/extras/cayenne/CayenneUtils.html">CayenneUtils</a> helper class
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
 	  </li>
-	  <li class="change">Removed support for Cayenne 1.2.x.</li> 	
+	  <li class="change">Removed support for Cayenne 1.2.x.</li>
 	  <li class="change">Updated documentation and examples.</li> 	
       <span style="color:brown;font-weight:bold">Upgrade Path</span>
       <dd>
-        <ul style="padding: 0em; margin-left:0em;">
-          <li class="upgrade">
+       <ul style="padding: 0em; margin-left:0em;">
+         <li class="upgrade">
+          1.5 is not binary compatible with 1.4. What this means is that in order
+          to use 1.5, you will have to recompile your application against the 1.5
+          release. Note that Click 1.5 still runs on any <strong>JDK >= 1.4</strong>.
+         </li>
+         <li class="upgrade">
           1.5 M1 introduces two new properties: <span style="font-weight:bold;color:navy;">file-size-limit-exceeded-error</span>
           and <span style="font-weight:bold;color:navy;">post-size-limit-exceeded-error</span>.
           For those building i18n applications please remember to add these two properties
           to your <span style="font-weight:bold;color:navy;">click-control&lt;lang&gt;.properties.</span>
-          <br>Feel free to send us patches for your preferred language.
-        </li>
-      </ul>
+          <br>Please send us patches for your preferred language.
+         </li>
+         <li class="upgrade">
+          ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
+          LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
+          There are alternative implmentations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
+          and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).<br>
+          To retrieve a LogService instance a new utility method was introduced, <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">ClickUtils.getLogService()</a>.
+          <p/>
+          It is possible to write your own LogService instance or extend from
+          an existing implementation. To setup Click to use an alternative instance you have to
+          specify the LogService implementation in <em>click.xml</em>:
+          <blockquote>&lt;click-app charset="UTF-8"&gt;
+          <br>
+          &nbsp;&nbsp; &lt;pages package="net.sf.click.examples.page"/&gt;
+          <br>
+          &nbsp;&nbsp; &lt;<span style="font-weight:bold;color:#000099">log-service</span> <span style="color:#009900">classname</span>="net.sf.click.extras.service.JdkLogService"/&gt;
+          <br>
+          &lt;/click-app&gt;
+          </blockquote>
+         </li>
+       </ul>
       </dd>
   	</ul>
   </dd>
