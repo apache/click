@@ -2,7 +2,7 @@ This page demonstrates Clicks error handling.
 
 <dl>
    
-<dt><a href="$nullPointerLink.href">NullPointerException</a></dt>
+<dt><a href="${nullPointerLink.href}">NullPointerException</a></dt>
 <dd>
 This error is caused by the Pages <tt>onExceptionClick()</tt> method throwing a 
 <tt>NullPointerException</tt>. Note how the error report shows you the exact line
@@ -10,7 +10,7 @@ where the error occurred. Click will do this if it can find the Java source code
 on the classpath or under the WEB-INF directory.
 </dd>
 
-<dt><a href="$illegalArgumentLink.href">IllegalArgumentException</a></dt>
+<dt><a href="${illegalArgumentLink.href}">IllegalArgumentException</a></dt>
 <dd>
 This error is caused by the Pages <tt>onIllegalArgumentClick()</tt> method throwing a 
 <tt>IllegalArgumentException</tt>. Note how the error report shows you the exact line
@@ -18,7 +18,7 @@ where the error occurred. Click will do this if it can find the Java source code
 on the classpath or under the WEB-INF directory.
 </dd>
 
-<dt><a href="$missingMethodLink.href">NoSuchMethodException</a></dt>
+<dt><a href="${missingMethodLink.href}">NoSuchMethodException</a></dt>
 <dd>
 This error is caused by a Control action listener being set to a method which 
 doesn't exist. Typically a typo error when setting Control listeners. 
@@ -27,7 +27,7 @@ When the control attempts to call the listeners callback method it will throw a
 is not available, so the error source is not highlighted.
 </dd>
 
-<dt><a href="$brokenBorderLink.href">Broken Page Border Template</a></dt>
+<dt><a href="${brokenBorderLink.href}">Broken Page Border Template</a></dt>
 <dd>
 This error is caused by an invalid Velocity expression in a page border template.
 When Velocity tries to parse this expression it will throw a 
@@ -39,7 +39,7 @@ template errors and simply render the invalid template code.
 </dd>
 
 
-<dt><a href="$brokenContentLink.href">Broken Page Content Template</a></dt>
+<dt><a href="${brokenContentLink.href}">Broken Page Content Template</a></dt>
 <dd>
 This is another example of an invalid Velocity expression, but this time it is
 contained in the page content template. When a exception occurs in a content template, 
@@ -51,7 +51,7 @@ it is closed.
 </dd>
 
 
-<dt><a href="$brokenRendererLink.href">Broken Renderer</a></dt>
+<dt><a href="${brokenRendererLink.href}">Broken Renderer</a></dt>
 <dd>
 This error is caused by a Page model object throwing a NPE when being rendered by 
 Velocity. When Velocity tries to merge the page model with the template, it will
@@ -61,7 +61,7 @@ As this error usually occurs after some contents has been written to the
 to the end of the response.
 <ul style="margin-top: 0.5em;">
    <li>Line 1</li>
-   <li><a href="$brokenRendererLink.href">$brokenRenderer</a> &nbsp; &lt;- clicking on link 
+   <li><a href="${brokenRendererLink.href}">$brokenRenderer</a> &nbsp; &lt;- clicking on link 
        will add <tt>BrokenRenderer</tt> to page model</li>
    <li>Line 3</li>
 </ul>
