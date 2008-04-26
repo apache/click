@@ -193,17 +193,21 @@ public class FormTable extends Table {
      * @see Table#addColumn(Column)
      *
      * @param column the column to add to the table
+     * @return the added column
      * @throws IllegalArgumentException if the table already contains a column
      * with the same name
      */
-    public void addColumn(Column column) {
+    public Column addColumn(Column column) {
         super.addColumn(column);
+
         if (column instanceof FieldColumn) {
             FieldColumn fieldColumn = (FieldColumn) column;
             if (fieldColumn.getField() != null) {
                 fieldColumn.getField().setForm(getForm());
             }
         }
+
+        return column;
     }
 
     /**
