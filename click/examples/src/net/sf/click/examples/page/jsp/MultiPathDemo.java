@@ -12,7 +12,7 @@ import net.sf.click.examples.page.BorderPage;
 public class MultiPathDemo extends BorderPage {
 
     public ActionLink changePath = new ActionLink("changePath", this, "changePath");
-    
+
     public PageLink defaultPath = new PageLink("defaultPath", MultiPathDemo.class);
 
     public boolean changePath() {
