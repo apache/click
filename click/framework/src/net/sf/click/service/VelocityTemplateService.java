@@ -73,14 +73,14 @@ import org.apache.velocity.util.SimplePool;
  * resource.loader=<span class="blue">webapp</span>, <span class="red">class</span>
  * 
  * <span class="blue">webapp</span>.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
- * <span class="blue">webapp</span>.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
- * <span class="blue">webapp</span>.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
+ * <span class="blue">webapp</span>.resource.loader.cache=[true|false] &nbsp; <span class="green">#depending on application mode</span>
+ * <span class="blue">webapp</span>.resource.loader.modificationCheckInterval=0 <span class="green">#depending on application mode</span>
  * 
  * <span class="red">class.resource</span>.loader.class=org.apache.velocity.runtime.loader.ClasspathResourceLoader
- * <span class="red">class.resource</span>.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
- * <span class="red">class.resource</span>.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
+ * <span class="red">class.resource</span>.loader.cache=[true|false] &nbsp; <span class="green">#depending on application mode</span>
+ * <span class="red">class.resource</span>.loader.modificationCheckInterval=0 <span class="green">#depending on application mode</span>
  * 
- * velocimacro.library.autoreload=[true|false] <span class="green">depending on application mode</span>
+ * velocimacro.library.autoreload=[true|false] <span class="green">#depending on application mode</span>
  * velocimacro.library=click/VM_global_library.vm 
  * </pre>
  * 
