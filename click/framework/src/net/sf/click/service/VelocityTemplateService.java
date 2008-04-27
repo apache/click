@@ -84,6 +84,10 @@ import org.apache.velocity.util.SimplePool;
  * velocimacro.library=click/VM_global_library.vm 
  * </pre>
  * 
+ * This service uses the Velocity Tools WebappLoader for loading templates. 
+ * This avoids issues associate with using the Velocity FileResourceLoader on JEE 
+ * application servers.
+ * <p/>
  * See the Velocity
  * <a target="topic" href="../../../../../velocity/developer-guide.html#Velocity Configuration Keys and Values">Developer Guide</a>
  * for details about these properties. Note when the application is in <tt>trace</tt> mode 

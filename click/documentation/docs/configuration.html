@@ -26,8 +26,6 @@ covers to following topics:
   <li><a href="#application-configuration">Application Configuration</a> - how to configure the Click application
    descriptor
   </li>
-  <li><a href="#velocity-properties">Velocity Properties</a> - how to configure the Velocity runtime properties
-  </li>
   <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files
   </li>
 </ul>
@@ -44,9 +42,6 @@ The Click configuration files include:
 <ul>
  <li>WEB-INF/<a target='topic' href="#application-configuration">click.xml</a>
  &nbsp; - &nbsp; Application Configuration (<b>required</b>)
- </li>
- <li>WEB-INF/<a target='topic' href="#velocity-properties">velocity.properties</a>
- &nbsp; - &nbsp; Velocity Properties (optional)
  </li>
  <li>WEB-INF/<a target='topic' href="#servlet-configuration">web.xml</a>
  &nbsp; - &nbsp; Servlet Configuration (<b>required</b>)
@@ -66,15 +61,18 @@ is provided below.
 
 <pre class="codeConfig">
 &lt;web-app&gt;
+
   &lt;servlet&gt;
-    &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+    &lt;servlet-name&gt;<span class="blue">ClickServlet</span>&lt;/servlet-name&gt;
     &lt;servlet-class&gt;<span class="red">net.sf.click.ClickServlet</span>&lt;/servlet-class&gt;
     &lt;load-on-startup&gt;<span class="red">0</span>&lt;/load-on-startup&gt;
   &lt;/servlet&gt;
+  
   &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;<span class="blue">click-servlet</span>&lt;/servlet-name&gt;
+    &lt;servlet-name&gt;<span class="blue">ClickServlet</span>&lt;/servlet-name&gt;
     &lt;url-pattern&gt;<span class="red">*.htm</span>&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
+  
 &lt;/web-app&gt;
 </pre>
 
@@ -140,7 +138,8 @@ localization attributes <span class="blue">charset</span> and
 <span class="blue">locale</span>.
 
 <pre class="codeDtd">
-&lt;!ELEMENT <span class="red">click-app</span> (pages?, headers?, format?, mode?, controls?, file-item-factory?)&gt;
+&lt;!ELEMENT <span class="red">click-app</span> (pages?, headers?, format?, mode?, controls?, 
+                     file-upload-service?, log-service?, template-service?)&gt;
   &lt;!ATTLIST click-app <span class="blue">charset</span> CDATA #IMPLIED&gt;
   &lt;!ATTLIST click-app <span class="blue">locale</span> CDATA #IMPLIED&gt;
 </pre>
@@ -477,21 +476,19 @@ by setting the following system property and restarting the application.
 </pre>
 
 The Click Application modes and their settings for Page auto loading, 
-Velocity caching, template loading on startup and logging levels are:
+template caching and logging levels are:
 <p>
 <table style="border: 1px solid black;" cellspacing="0" cellpadding="6">
 <tr style="background-color: navy; color: white;">
  <th align="center">Application mode</th>
  <th align="center">Page auto loading</th>
- <th align="center">Velocity caching</th>
- <th align="center">Load templates on startup</th>
+ <th align="center">Template caching</th>
  <th align="center">Click logging level</th>
  <th align="center">Velocity logging level</th>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">production</span></tt></td>
  <td align="center">No</td>
- <td align="center">Yes</td>
  <td align="center">Yes</td>
  <td align="center">WARN</td>
  <td align="center">ERROR</td>
@@ -500,14 +497,12 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center"><tt><span class="blue">profile</span></tt></td>
  <td align="center">No</td>
  <td align="center">Yes</td>
- <td align="center">Yes</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">development</span></tt></td>
  <td align="center">Yes</td>
- <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">INFO</td>
  <td align="center">ERROR</td>
@@ -516,14 +511,12 @@ Velocity caching, template loading on startup and logging levels are:
  <td align="center"><tt><span class="blue">debug</span></tt></td>
  <td align="center">Yes</td>
  <td align="center">No</td>
- <td align="center">No</td>
  <td align="center">DEBUG</td>
  <td align="center">ERROR</td>
 </tr>
 <tr>
  <td align="center"><tt><span class="blue">trace</span></tt></td>
  <td align="center">Yes</td>
- <td align="center">No</td>
  <td align="center">No</td>
  <td align="center">TRACE</td>
  <td align="center">WARN</td>
@@ -540,31 +533,6 @@ be automatically loaded at runtime. These pages are loaded using the
 Page auto loading is a very handy feature for rapid development 
 as you do not have to restart you application server to pick up new pages.
 
-<h4>Velocity Caching</h4>
-
-When Velocity Caching is enabled Velocity page templates and macros files are 
-loaded once and cached. With caching enabled following Velocity runtime 
-properties are set:
-
-<pre class="codeConfig">
-webapp.resource.loader.cache=true
-webapp.resource.loader.modificationCheckInterval=0
-velocimacro.library.autoreload=false 
-</pre>
-
-When Velocity Caching is disabled Velocity templates and macros file are 
-reloaded when ever they change. With caching disabled the following Velocity 
-runtime properties are set:
-
-<pre class="codeConfig">
-webapp.resource.loader.cache=false
-velocimacro.library.autoreload=true 
-</pre>
-
-Template reloading is useful for application development as you can edit page templates on 
-a running application server and see the changes immediately. Note however, this 
-should <b>not</b> be used for production as Velocity can use a lot of memory when 
-introspecting templates and template reloading is significantly slower.
 
 <a name="click-logging" class="heading"><h4>Click and Velocity Logging</h4></a>
 
@@ -661,55 +629,8 @@ values will be applied to the FileItemFactory using OGNL type coercion. For exam
 </pre>
 
 
-
-<a name="velocity-properties" class="heading"><h2>Velocity Properties</h2></a>
-
-The Velocity runtime engine is configured through a series of properties when the 
-<tt>ClickServlet</tt> starts up.  The default Velocity properties set are:
-
-<pre class="codeConfig">
-resource.loader=webapp
-
-webapp.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
-webapp.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
-webapp.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
-
-velocimacro.library.autoreload=[true|false] <span class="green">depending on application mode</span>
-velocimacro.library=click/VM_global_library.vm 
-</pre>
-
-See the Velocity
-<a target="topic" href="velocity/developer-guide.html#Velocity Configuration Keys and Values">Developer Guide</a>
-for details about these properties. Note in <tt>trace</tt> mode the ClickServlet will
-log the Velocity properties used when in starts up.
-<p/>
-If you want to add some of your own Velocity properties, or replace Click's
-properties, add a <span class="blue"><tt>velocity.properties</tt></span> file in the <tt>WEB-INF</tt> 
-directory. Click will automatically pick up this file and load these properties.
-<p/>
-As a example say we have our own Velocity macro library called 
-<tt>mycorp.vm</tt> we can override the default <tt>velocimacro.library</tt>
-property by adding a <tt>WEB-INF/velocity.properties</tt> file to our web
-application. In this file we would then define the property as:
-
-<pre class="codeConfig">
-velocimacro.library=<span class="blue">mycorp.vm</span> 
-</pre>
-
-Note do not place Velocity macros under the WEB-INF directory as the Velocity
-ResourceManager will not be able to load them.
-<p/>
-The simplest way to set your own macro file is to add a file named <span class="blue"><tt>macro.vm</tt></span>
-under your web application's root directory. At startup Click will first check to see
-if this file exists, and if it does it will use it instead of <tt>click/VM_global_library.vm</tt>.
-
-
 <a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
 
-The Click framework uses the Velocity Tools <tt>WebappLoader</tt> for loading templates. 
-This avoids issues associate with using the Velocity <tt>FileResourceLoader</tt> 
-on JEE application servers.
-<p/>
 To make preconfigured resources (templates, stylesheets, etc.) available to web applications
 Click automatically deploys configured classpath resources to the <tt class="blue">/click</tt> 
 directory at startup (if not already present).
@@ -721,7 +642,6 @@ You can modify these support files and Click will not overwrite them. These file
    <li>click/control.css &nbsp; - &nbsp; the Controls cascading stylesheet</li>
    <li>click/control.js &nbsp; - &nbsp; the Controls JavaScript library</li>
    <li>click/not-found.htm &nbsp; - &nbsp; the <a href="pages.html#page-not-found">Page Not Found</a> template</li>
-   <li>click/VM_Global_library.vm &nbsp; - &nbsp; an empty Velocity macro library</li>
 </ul>
 
 <p/>
