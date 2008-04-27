@@ -45,17 +45,131 @@ import org.apache.velocity.util.SimplePool;
 
 /**
  * Provides a <a target="_blank" href="http://velocity.apache.org//">Velocity</a> TemplateService class.
+ * <p/>
+ * Velocity provides a simple to use, but powerful and performant templating engine
+ * for the Click Framework. The Velocity templating engine is configured and accessed
+ * by this VelocityTemplateService class.
+ * Velocity is the default templating engine used by Click and the Velocity class
+ * dependencies are included in the standard Click JAR file.
+ * <p/>
+ * To see how to use the Velocity templating language please see the
+ * <a target="blank" href="../../../../../velocity/VelocityUsersGuide.pdf">Velocity Users Guide</a>.
  *
- * <h3>Configuration</h3>
+ * <h3>Velocity Configuration</h3>
  * The VelocityTemplateService is the default template service used by Click,
  * so it does not require any specific configuration.
- * <p/>
  * However if you wanted to configure this service specifically in your
  * <tt>click.xml</tt> configuration file you would add the following XML element.
  *
  * <pre class="codeConfig">
  * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.service.VelocityTemplateService</span>"&gt; </pre>
+ * 
+ * <h4>Velocity Properties</h4>
  *
+ * The Velocity runtime engine is configured through a series of properties when the 
+ * VelocityTemplateService is initialized.  The default Velocity properties set are:
+ *
+ * <pre class="codeConfig">
+ * resource.loader=<span class="blue">webapp</span>, <span class="red">class</span>
+ * 
+ * <span class="blue">webapp</span>.resource.loader.class=org.apache.velocity.tools.view.servlet.WebappLoader
+ * <span class="blue">webapp</span>.resource.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
+ * <span class="blue">webapp</span>.resource.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
+ * 
+ * <span class="red">class.resource</span>.loader.class=org.apache.velocity.runtime.loader.ClasspathResourceLoader
+ * <span class="red">class.resource</span>.loader.cache=[true|false] &nbsp; <span class="green">depending on application mode</span>
+ * <span class="red">class.resource</span>.loader.modificationCheckInterval=0 <span class="green">depending on application mode</span>
+ * 
+ * velocimacro.library.autoreload=[true|false] <span class="green">depending on application mode</span>
+ * velocimacro.library=click/VM_global_library.vm 
+ * </pre>
+ * 
+ * See the Velocity
+ * <a target="topic" href="../../../../../velocity/developer-guide.html#Velocity Configuration Keys and Values">Developer Guide</a>
+ * for details about these properties. Note when the application is in <tt>trace</tt> mode 
+ * the Velocity properties used will be logged on startup.
+ * <p/>
+ * If you want to add some of your own Velocity properties, or replace Click's
+ * properties, add a <span class="blue"><tt>velocity.properties</tt></span> file in the <tt>WEB-INF</tt> 
+ * directory. Click will automatically pick up this file and load these properties.
+ * <p/>
+ * As a example say we have our own Velocity macro library called 
+ * <tt>mycorp.vm</tt> we can override the default <tt>velocimacro.library</tt>
+ * property by adding a <tt>WEB-INF/velocity.properties</tt> file to our web
+ * application. In this file we would then define the property as:
+ * 
+ * <pre class="codeConfig">
+ * velocimacro.library=<span class="blue">mycorp.vm</span> </pre>
+ * 
+ * Note do not place Velocity macros under the WEB-INF directory as the Velocity
+ * ResourceManager will not be able to load them.
+ * <p/>
+ * The simplest way to set your own macro file is to add a file named <span class="blue"><tt>macro.vm</tt></span>
+ * under your web application's root directory. At startup Click will first check to see
+ * if this file exists, and if it does it will use it instead of <tt>click/VM_global_library.vm</tt>.
+ *
+ * <h3>Application Modes and Caching</h3>
+ *
+ * <h4>Production and Profile Mode</h4>
+ * 
+ * When the Click application is in <tt>production</tt> or <tt>profile</tt> mode Velocity caching 
+ * is enabled. With caching enables page templates and macro files are loaded and
+ * parsed once and then are cached for use with later requests. When in 
+ * <tt>production</tt> or <tt>profile</tt> mode the following Velocity runtime 
+ * properties are set:
+ * 
+ * <pre class="codeConfig">
+ * webapp.resource.loader.cache=true
+ * webapp.resource.loader.modificationCheckInterval=0
+ * 
+ * class.resource.loader.cache=true
+ * class.resource.loader.modificationCheckInterval=0
+ * 
+ * velocimacro.library.autoreload=false </pre>
+ * 
+ * When running in these modes the {@link ConsoleLogService} will be configured
+ * to use 
+ * 
+ * <h4>Development and Debug Modes</h4>
+ * 
+ * When the Click application is in <tt>development</tt>, <tt>debug</tt> or <tt>trace</tt>
+ * modes Velocity caching is disabled. When caching is disabled page templates 
+ * and macro files are reloaded and parsed when ever they changed. With caching 
+ * disabled the following Velocity 
+ * runtime properties are set:
+ * 
+ * <pre class="codeConfig">
+ * webapp.resource.loader.cache=false
+ * 
+ * class.resource.loader.cache=false
+ * 
+ * velocimacro.library.autoreload=true </pre>
+ * 
+ * Disabling caching is useful for application development where you can edit page 
+ * templates on a running application server and see the changes immediately. 
+ * <p/>
+ * <b>Please Note</b> Velocity caching should be used for production as Velocity 
+ * template reloading is much much slower and the process of parsing and 
+ * introspecting templates and macros can use a lot of memory.
+ * 
+ * <h3>Velocity Logging</h3>
+ * Velocity logging is very verbose at the best of times, so this service
+ * keeps the logging level at <tt>ERROR</tt> in all modes except <tt>trace</tt>
+ * mode where the Velocity logging level is set to <tt>WARN</tt>.
+ * <p/>
+ * If you are having issues with some Velocity page templates or macros please
+ * switch the application mode into <tt>trace</tt> so you can see the warning
+ * messages provided.
+ * <p/>
+ * To support the use of Click <tt>LogService</tt> classes inside the Velocity 
+ * runtime a {@link LogChuteAdapter} class is provided. This class wraps the 
+ * Click LogService with a Velocity <tt>LogChute</tt> so the Velocity runtime can 
+ * use it for logging messages to. 
+ * <p/>
+ * If you are using LogServices other than {@link ConsoleLogService} you will 
+ * probably configure that service to filter out Velocity's verbose <tt>INFO</tt>
+ * level messages.
+ * 
  * @author Malcolm Edgar
  */
 public class VelocityTemplateService implements TemplateService {
@@ -380,10 +494,8 @@ public class VelocityTemplateService implements TemplateService {
                 velProps.put("velocimacro.library", VM_FILE_PATH);
 
             } else {
-                // TODO M.E. 2008-03-29 : Need to document altered behaviour
-
-                // Else use '/WEB-INF/macro.vm' if available.
-                String webInfMacroPath = "/WEB-INF/macro.vm";
+                // Else use '/WEB-INF/classes/macro.vm' if available.
+                String webInfMacroPath = "/WEB-INF/classes/macro.vm";
                 URL webInfMacroURL = servletContext.getResource(webInfMacroPath);
                 if (webInfMacroURL != null) {
                     velProps.put("velocimacro.library", webInfMacroPath);
@@ -461,6 +573,9 @@ public class VelocityTemplateService implements TemplateService {
      * Provides a Velocity <tt>LogChute</tt> adapter class around the application
      * log service to enable to the Velocity Runtime to log to the application
      * LogService.
+     * <p/>
+     * Please see the {@link VelocityTemplateService} class for more details on 
+     * Velocity logging.
      *
      *  @author Malcolm Edgar
      */
