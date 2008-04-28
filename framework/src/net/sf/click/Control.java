@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides the interface for Page controls. Controls are sometimes referred to
@@ -118,6 +119,10 @@ public interface Control extends Serializable {
     /**
      * Return the Page request Context of the Control.
      *
+     * @deprecated getContext() is now obsolete on the Control interface,
+     * but it is still available on AbstractControl:
+     * {@link AbstractControl#getContext()}
+     *
      * @return the Page request Context
      */
     public Context getContext();
@@ -152,6 +157,10 @@ public interface Control extends Serializable {
     /**
      * Return HTML element identifier attribute "id" value.
      *
+     * @deprecated getId() is now obsolete on the Control interface,
+     * but it is still available on AbstractControl:
+     * {@link AbstractControl#getId()}
+     *
      * @return HTML element identifier attribute "id" value
      */
     public String getId();
@@ -175,6 +184,10 @@ public interface Control extends Serializable {
      *
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
+     *
+     * @deprecated this method is now obsolete on the Control interface, but it
+     * is still available on AbstractControl:
+     * {@link AbstractControl#setListener(java.lang.Object, java.lang.String)}
      */
     public void setListener(Object listener, String method);
 
@@ -276,4 +289,33 @@ public interface Control extends Serializable {
      */
     public void onDestroy();
 
+    /**
+     * Render the control's output to the specified buffer. The control's
+     * {@link java.lang.Object#toString()} method should delegate the rendering
+     * to the render method for improved performance.
+     * <p/>
+     * An example implementation:
+     * <pre class="prettyprint">
+     * public class Border extends AbstractContainer {
+     *
+     *     public String toString() {
+     *         int estimatedSizeOfControl = 100;
+     *         HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedSizeOfControl);
+     *         render(buffer);
+     *         return buffer.toString();
+     *     }
+     *
+     *     public void render(HtmlStringBuffer buffer) {
+     *         buffer.elementStart("div");
+     *         buffer.appendAttribute("name", getName());
+     *         buffer.closeTag();
+     *         buffer.append(getField());
+     *         buffer.elementEnd("div");
+     *     }
+     * }
+     * </pre>
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    void render(HtmlStringBuffer buffer);
 }

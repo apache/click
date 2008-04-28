@@ -26,18 +26,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import net.sf.click.Page;
+import net.sf.click.Control;
 import net.sf.click.service.FileUploadService;
-import net.sf.click.service.LogService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -329,8 +323,8 @@ import org.apache.commons.lang.StringUtils;
  * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
  * are a great way to encapsulate customized forms.
  * <p/>
- * To create a generic form layout you can use the Form {@link #fieldList} and
- * {@link #buttonList} properties within a Velocity macro.
+ * To create a generic form layout you can use the Form {@link #getFieldList} and
+ * {@link #getButtonList} properties within a Velocity macro.
  * <p/>
  * The example below provides a generic <span class="green">writeForm()</span>
  * macro which you could use through out an application. This Velocity macro code
@@ -444,7 +438,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Form extends AbstractControl {
+public class Form extends BasicForm {
 
     // -------------------------------------------------------------- Constants
 
@@ -458,14 +452,6 @@ public class Form extends AbstractControl {
 
     /** The align right, form layout constant: &nbsp; <tt>"right"</tt>. */
     public static final String ALIGN_RIGHT = "right";
-
-    /**
-     * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
-     */
-    public static final String FORM_NAME = "form_name";
-
-    /** The HTTP content type header for multipart forms. */
-    public static final String MULTIPART_FORM_DATA = "multipart/form-data";
 
     /**
      * The position top, errors and labels form layout constant: &nbsp;
@@ -490,17 +476,6 @@ public class Form extends AbstractControl {
      * <tt>"left"</tt>.
      */
     public static final String POSITION_LEFT = "left";
-
-    /**
-     * The submit check reserved request parameter prefix: &nbsp;
-     * <tt>SUBMIT_CHECK_</tt>.
-     */
-    public static final String SUBMIT_CHECK = "SUBMIT_CHECK_";
-
-    /** The HTML imports statements. */
-    protected static final String HTML_IMPORTS =
-        "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/control{1}.css\"/>\n"
-        + "<script type=\"text/javascript\" src=\"{0}/click/control{1}.js\"></script>\n";
 
     /** The Form set field focus JavaScript. */
     protected static final String FOCUS_JAVASCRIPT =
@@ -534,9 +509,6 @@ public class Form extends AbstractControl {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The form action URL. */
-    protected String actionURL;
-
     /** The button align, default value is "<tt>left</tt>". */
     protected String buttonAlign = ALIGN_LEFT;
 
@@ -562,15 +534,6 @@ public class Form extends AbstractControl {
      */
     protected int defaultFieldSize;
 
-    /** The form disabled value. */
-    protected boolean disabled;
-
-    /** The form "enctype" attribute. */
-    protected String enctype;
-
-    /** The form level error message. */
-    protected String error;
-
     /** The errors block align, default value is <tt>"left"</tt>. */
     protected String errorsAlign = ALIGN_LEFT;
 
@@ -584,10 +547,10 @@ public class Form extends AbstractControl {
     protected String errorsStyle;
 
     /** The ordered list of field values, excluding buttons. */
-    protected final List fieldList = new ArrayList();
+    //protected final List fieldList = new ArrayList();
 
     /** The map of fields keyed by field name. */
-    protected final Map fields = new HashMap();
+    //protected final Map fields = new HashMap();
 
     /** The field &lt;td&gt; "style" attribute value. */
     protected String fieldStyle;
@@ -625,24 +588,6 @@ public class Form extends AbstractControl {
     /** The label &lt;td&gt; "style" attribute value. */
     protected String labelStyle;
 
-    /** The listener target object. */
-    protected Object listener;
-
-    /** The listener method name. */
-    protected String listenerMethod;
-
-    /**
-     * The form method <tt>["post, "get"]</tt>, default value: &nbsp;
-     * <tt>post</tt>.
-     */
-    protected String method = "post";
-
-    /** The form is readonly flag. */
-    protected boolean readonly;
-
-    /** The form validate fields when processing flag. */
-    protected boolean validate = true;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -656,7 +601,7 @@ public class Form extends AbstractControl {
     }
 
     /**
-     * Create an form with no name.
+     * Create a form with no name.
      * <p/>
      * <b>Please note</b> the control's name must be defined before it is valid.
      */
@@ -666,20 +611,33 @@ public class Form extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * @see Container#addControl(net.sf.click.Control)
+     */
+    public Control addControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Field parameter cannot be null");
+        }
+        if (!(control instanceof Field)) {
+            throw new IllegalArgumentException("Only fields are allowed on this Form");
+        }
+        add((Field) control);
+        return control;
+    }
+
+    /**
      * Add the field to the form, and set the fields form property. The field
      * will be added to the {@link #fields} Map using its name.
      * <p/>
-     * Button instances will also be added to the {@link #buttonList} while all
-     * others field types will also be added to the {@link #fieldList}.
+     * Button instances will also be added to the {@link #getButtonList} while all
+     * others field types will also be added to the {@link #getFieldList}.
      * <p/>
      * If the form has a
      *
      * @param field the field to add to the form
-     * @return the added field
      * @throws IllegalArgumentException if the form already contains a field or
      *  button with the same name, or if the field name is not defined
      */
-    public Field add(Field field) {
+    public void add(Field field) {
         if (field == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -717,8 +675,6 @@ public class Form extends AbstractControl {
                 ((TextArea) field).setCols(getDefaultFieldSize());
             }
         }
-
-        return field;
     }
 
     /**
@@ -728,11 +684,10 @@ public class Form extends AbstractControl {
      *
      * @param field the field to add to the form
      * @param width the width of the field in table columns
-     * @return the added field
      * @throws IllegalArgumentException if the form already contains a field or
      *  a button is added, or if the field name is not defined
      */
-    public Field add(Field field, int width) {
+    public void add(Field field, int width) {
         if (field == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -746,8 +701,21 @@ public class Form extends AbstractControl {
 
         add(field);
         getFieldWidths().put(field.getName(), new Integer(width));
+    }
 
-        return field;
+    /**
+     * @see Container#removeControl(net.sf.click.Control)
+     */
+    public boolean removeControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Field parameter cannot be null");
+        }
+        if (!(control instanceof Field)) {
+            throw new IllegalArgumentException("Only fields are allowed on this Form");
+        }
+        boolean contains = contains(control);
+        remove((Field) control);
+        return contains;
     }
 
     /**
@@ -793,62 +761,6 @@ public class Form extends AbstractControl {
                 removeField(fieldNames.get(i).toString());
             }
         }
-    }
-
-    /**
-     * Return the form "action" attribute URL value. If the action URL attribute
-     * has not been explicitly set the form action attribute will target the
-     * page containing the form. This is the default behaviour for most scenarios.
-     * However if you explicitly specify the form "action" URL attribute, this
-     * value will be used instead.
-     * <p/>
-     * Setting the form action attribute is useful for situations where you want
-     * a form to submit to a different page. This can also be used to have a
-     * form submit to the J2EE Container for authentication, by setting the
-     * action URL to "<tt>j_security_check</tt>".
-     * <p/>
-     * The action URL will always be encoded by the response to ensure it includes
-     * the Session ID if required.
-     *
-     * @return the form "action" attribute URL value.
-     */
-    public String getActionURL() {
-        HttpServletResponse response = getContext().getResponse();
-        if (actionURL == null) {
-            HttpServletRequest request = getContext().getRequest();
-            return response.encodeURL(ClickUtils.getRequestURI(request));
-
-        } else {
-            return response.encodeURL(actionURL);
-        }
-    }
-
-    /**
-     * Return the form "action" attribute URL value. By setting this value you
-     * will override the default action URL which points to the page containing
-     * the form.
-     * <p/>
-     * Setting the form action attribute is useful for situations where you want
-     * a form to submit to a different page. This can also be used to have a
-     * form submit to the J2EE Container for authentication, by setting the
-     * action URL to "<tt>j_security_check</tt>".
-     *
-     * @param value the form "action" attribute URL value
-     */
-    public void setActionURL(String value) {
-        this.actionURL = value;
-    }
-
-    /**
-     * Return the form attributes Map.
-     *
-     * @return the form attributes Map
-     */
-    public Map getAttributes() {
-        if (attributes == null) {
-            attributes = new HashMap(5);
-        }
-        return attributes;
     }
 
     /**
@@ -942,71 +854,6 @@ public class Form extends AbstractControl {
     }
 
     /**
-     * Return true if the form is a disabled.
-     *
-     * @return true if the form is a disabled
-     */
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    /**
-     * Set the form disabled flag.
-     *
-     * @param disabled the form disabled flag
-     */
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
-
-    /**
-     * Return the form "enctype" attribute value, or null if not defined.
-     *
-     * @return the form "enctype" attribute value, or null if not defined
-     */
-    public String getEnctype() {
-        if (enctype == null) {
-            List fieldList = ClickUtils.getFormFields(this);
-            for (int i = 0, size = fieldList.size(); i < size; i++) {
-                Field field = (Field) fieldList.get(i);
-                if (!field.isHidden() && (field instanceof FileField)) {
-                    enctype = MULTIPART_FORM_DATA;
-                    break;
-                }
-            }
-        }
-        return enctype;
-    }
-
-    /**
-     * Set the form "enctype" attribute value.
-     *
-     * @param enctype the form "enctype" attribute value, or null if not defined
-     */
-    public void setEnctype(String enctype) {
-        this.enctype = enctype;
-    }
-
-    /**
-     * Return the form level error message.
-     *
-     * @return the form level error message
-     */
-    public String getError() {
-        return error;
-    }
-
-    /**
-     * Set the form level validation error message. If the error message is not
-     * null the form is invalid.
-     *
-     * @param error the validation error message
-     */
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    /**
      * Return the errors block HTML horizontal alignment: "<tt>left</tt>",
      * "<tt>center</tt>", "<tt>right</tt>".
      *
@@ -1025,45 +872,6 @@ public class Form extends AbstractControl {
      */
     public void setErrorsAlign(String align) {
         errorsAlign = align;
-    }
-
-    /**
-     * Return a list of form fields which are not valid, not hidden and not
-     * disabled.
-     *
-     * @return list of form fields which are not valid, not hidden and not
-     *  disabled
-     */
-    public List getErrorFields() {
-        List list = new ArrayList();
-
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-
-            if (field instanceof FieldSet) {
-                FieldSet fieldSet = (FieldSet) field;
-
-                for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                    Field fieldSetField =
-                        (Field) fieldSet.getFieldList().get(j);
-
-                    if (!fieldSetField.isValid()
-                        && !fieldSetField.isHidden()
-                        && !fieldSetField.isDisabled()) {
-
-                        list.add(fieldSetField);
-                    }
-                }
-
-            } else if (!field.isValid()
-                       && !field.isHidden()
-                       && !field.isDisabled()) {
-
-                list.add(field);
-            }
-        }
-
-        return list;
     }
 
     /**
@@ -1118,7 +926,7 @@ public class Form extends AbstractControl {
      * @return the named field if contained in the form
      */
     public Field getField(String name) {
-        Field field = (Field) fields.get(name);
+        Field field = (Field) getFields().get(name);
 
         if (field != null) {
             return field;
@@ -1143,7 +951,7 @@ public class Form extends AbstractControl {
      * @return the ordered List of form fields
      */
     public List getFieldList() {
-        return fieldList;
+        return getControls();
     }
 
     /**
@@ -1152,25 +960,7 @@ public class Form extends AbstractControl {
      * @return the Map of form fields, keyed on field name
      */
     public Map getFields() {
-        return fields;
-    }
-
-    /**
-     * Return the field value for the named field, or null if the field is not
-     * found.
-     *
-     * @param name the name of the field
-     * @return the field value for the named field
-     */
-    public String getFieldValue(String name) {
-        Field field = getField(name);
-
-        if (field != null) {
-            return field.getValue();
-
-        } else {
-            return null;
-        }
+        return getControlMap();
     }
 
     /**
@@ -1198,35 +988,6 @@ public class Form extends AbstractControl {
      */
     public Map getFieldWidths() {
         return fieldWidths;
-    }
-
-    /**
-     * Return true if the page request is a submission from this form.
-     *
-     * @return true if the page request is a submission from this form
-     */
-    public boolean isFormSubmission() {
-        String requestMethod = getContext().getRequest().getMethod();
-
-        if (!getMethod().equalsIgnoreCase(requestMethod)) {
-            return false;
-        }
-
-        return getName().equals(getContext().getRequestParameter(FORM_NAME));
-    }
-
-    /**
-     * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/control.css</tt>) and JavaScript
-     * (<tt>click/control.js</tt>) files.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
-     */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
@@ -1443,140 +1204,10 @@ public class Form extends AbstractControl {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
-        this.listener = listener;
-        this.listenerMethod = method;
-    }
-
-    /**
-     * Return the form method <tt>["post" | "get"]</tt>.
-     *
-     * @return the form method
-     */
-    public String getMethod() {
-        return method;
-    }
-
-    /**
-     * Set the form method <tt>["post" | "get"]</tt>.
-     *
-     * @param value the form method
-     */
-    public void setMethod(String value) {
-        method = value;
-    }
-
-    /**
-     * Set the name of the form.
-     *
-     * @see net.sf.click.Control#setName(String)
-     *
-     * @param name of the control
-     * @throws IllegalArgumentException if the name is null
-     */
-    public void setName(String name) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-        this.name = name;
-
-        HiddenField nameField = (HiddenField) getField(FORM_NAME);
-        if (nameField == null) {
-            nameField = new HiddenField(FORM_NAME, String.class);
-            add(nameField);
-        }
-        nameField.setValue(name);
-    }
-
-    /**
-     * Return true if the form is a readonly.
-     *
-     * @return true if the form is a readonly
-     */
-    public boolean isReadonly() {
-        return readonly;
-    }
-
-    /**
-     * Set the form readonly flag.
-     *
-     * @param readonly the form readonly flag
-     */
-    public void setReadonly(boolean readonly) {
-        this.readonly = readonly;
-    }
-
-    /**
-     * Return true if the fields are valid and there is no form level error,
-     * otherwise return false.
-     *
-     * @return true if the fields are valid and there is no form level error
-     */
-    public boolean isValid() {
-        if (getError() != null) {
-            return false;
-        }
-
-        for (Iterator i = getFields().values().iterator(); i.hasNext();) {
-            Field field = (Field) i.next();
-            if (!field.isValid()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Return true if the Form's fields should validate themselves when being
-     * processed.
-     *
-     * @return true if the form fields should perform validation when being
-     *  processed
-     */
-    public boolean getValidate() {
-        return validate;
-    }
-
-    /**
-     * Set the Form's field validation flag, telling the Fields to validate
-     * themselves when their <tt>onProcess()</tt> method is invoked.
-     *
-     * @param validate the Form's field validation flag
-     */
-    public void setValidate(boolean validate) {
-        this.validate = validate;
+        super.setListener(listener, method);
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * Clear any form or field errors by setting them to null.
-     */
-    public void clearErrors() {
-        setError(null);
-        List fields = ClickUtils.getFormFields(this);
-        Field field = null;
-        for (int i = 0, size = fields.size(); i < size; i++) {
-            field = (Field) fields.get(i);
-            field.setError(null);
-        }
-    }
-
-    /**
-     * Clear all the form field values setting them to null.
-     */
-    public void clearValues() {
-        List fields = ClickUtils.getFormFields(this);
-        Field field = null;
-        for (int i = 0, size = fields.size(); i < size; i++) {
-            field = (Field) fields.get(i);
-
-            if (!field.getName().equals(FORM_NAME)
-                && (!field.getName().startsWith(SUBMIT_CHECK))) {
-                field.setValue(null);
-            }
-        }
-    }
 
     /**
      * Copy the given object's attributes into the Form's field values. In other
@@ -1788,74 +1419,10 @@ public class Form extends AbstractControl {
                 }
             }
 
-            if (listener != null && listenerMethod != null) {
-                return ClickUtils.invokeListener(listener, listenerMethod);
-            }
+            invokeListener();
         }
 
         return true;
-    }
-
-    /**
-     * Validate the Form request submission.
-     * <p/>
-     * A form error message is displayed if a validation error occurs.
-     * These messages are defined in the resource bundle:
-     * <blockquote>
-     * <ul>
-     *   <li>/click-control.properties
-     *     <ul>
-     *       <li>file-size-limit-exceeded-error</li>
-     *       <li>post-size-limit-exceeded-error</li>
-     *     </ul>
-     *   </li>
-     * </ul>
-     * </blockquote>
-     */
-    public void validate() {
-        setError(null);
-
-        Exception exception = (Exception) getContext().getRequest()
-            .getAttribute(FileUploadService.UPLOAD_EXCEPTION);
-
-        if (!(exception instanceof FileUploadException)) {
-            return;
-        }
-
-        FileUploadException fue = (FileUploadException) exception;
-
-        String key = null;
-        Object args[] = null;
-
-        if (fue instanceof SizeLimitExceededException) {
-            SizeLimitExceededException se =
-                (SizeLimitExceededException) fue;
-
-            key = "post-size-limit-exceeded-error";
-
-            args = new Object[2];
-            args[0] = new Long(se.getPermittedSize());
-            args[1] = new Long(se.getActualSize());
-            setError(getMessage(key, args));
-
-        } else if (fue instanceof FileSizeLimitExceededException) {
-            FileSizeLimitExceededException fse =
-                (FileSizeLimitExceededException) fue;
-
-            key = "file-size-limit-exceeded-error";
-
-            // Parse the FileField name from the message
-            String msg = fue.getMessage();
-            int start = 10;
-            int end = msg.indexOf(' ', start);
-            String fieldName = fue.getMessage().substring(start, end);
-
-            args = new Object[3];
-            args[0] = ClickUtils.toLabel(fieldName);
-            args[1] = new Long(fse.getPermittedSize());
-            args[2] = new Long(fse.getActualSize());
-            setError(getMessage(key, args));
-        }
     }
 
     /**
@@ -1901,171 +1468,6 @@ public class Form extends AbstractControl {
         }
 
         setError(null);
-    }
-
-    /**
-     * Perform a form submission check ensuring the user has not replayed the
-     * form submission by using the browser back button. If the form submit
-     * is valid this method will return true, otherwise set the page to
-     * redirect to the given redirectPath and return false.
-     * <p/>
-     * This method will add a token to the user's session and a hidden field
-     * to the form to validate future submits.
-     * <p/>
-     * Form submit checks should be performed before the pages controls are
-     * processed in the Page onSecurityCheck method. For example:
-     *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
-     *     ..
-     *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="st">"/invalid-submit.html"</span>);
-     *     }
-     * } </pre>
-     *
-     * Form submit checks should generally be combined with the Post-Redirect
-     * pattern which provides a better user experience when pages are refreshed.
-     * <p/>
-     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
-     * requests.
-     *
-     * @param page the page invoking the Form submit check
-     * @param redirectPath the path to redirect invalid submissions to
-     * @return true if the form submit is OK or false otherwise
-     * @throws IllegalArgumentException if the page or redirectPath is null
-     */
-    public boolean onSubmitCheck(Page page, String redirectPath) {
-        if (page == null) {
-            throw new IllegalArgumentException("Null page parameter");
-        }
-        if (redirectPath == null) {
-            throw new IllegalArgumentException("Null redirectPath parameter");
-        }
-
-        if (performSubmitCheck()) {
-            return true;
-
-        } else {
-            page.setRedirect(redirectPath);
-
-            return false;
-        }
-    }
-
-    /**
-     * Perform a form submission check ensuring the user has not replayed the
-     * form submission by using the browser back button. If the form submit
-     * is valid this method will return true, otherwise set the page to
-     * redirect to the given Page class and return false.
-     * <p/>
-     * This method will add a token to the user's session and a hidden field
-     * to the form to validate future submits.
-     * <p/>
-     * Form submit checks should be performed before the pages controls are
-     * processed in the Page onSecurityCheck method. For example:
-     *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
-     *     ..
-     *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, InvalidSubmitPage.<span class="kw">class</span>);
-     *     }
-     * } </pre>
-     *
-     * Form submit checks should generally be combined with the Post-Redirect
-     * pattern which provides a better user experience when pages are refreshed.
-     * <p/>
-     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
-     * requests.
-     *
-     * @param page the page invoking the Form submit check
-     * @param pageClass the page class to redirect invalid submissions to
-     * @return true if the form submit is OK or false otherwise
-     * @throws IllegalArgumentException if the page or pageClass is null
-     */
-    public boolean onSubmitCheck(Page page, Class pageClass) {
-        if (page == null) {
-            throw new IllegalArgumentException("Null page parameter");
-        }
-        if (pageClass == null) {
-            throw new IllegalArgumentException("Null pageClass parameter");
-        }
-
-        if (performSubmitCheck()) {
-            return true;
-
-        } else {
-            page.setRedirect(pageClass);
-
-            return false;
-        }
-    }
-
-    /**
-     * Perform a form submission check ensuring the user has not replayed the
-     * form submission by using the browser back button. If the form submit
-     * is valid this method will return true, otherwise the given listener
-     * object and method will be invoked.
-     * <p/>
-     * This method will add a token to the users session and a hidden field
-     * to the form to validate future submit's.
-     * <p/>
-     * Form submit checks should be performed before the pages controls are
-     * processed in the Page onSecurityCheck method. For example:
-     *
-     * <pre class="codeJava">
-     * <span class="kw">public class</span> Order <span class="kw">extends</span> Page {
-     *     ..
-     *
-     *     <span class="kw">public boolean</span> onSecurityCheck() {
-     *         <span class="kw">return</span> form.onSubmitCheck(<span class="kw">this</span>, <span class="kw">this</span>, <span class="st">"onInvalidSubmit"</span>);
-     *     }
-     *
-     *     <span class="kw">public boolean</span> onInvalidSubmit() {
-     *        getContext().setRequestAttribute(<span class="st">"invalidPath"</span>, getPath());
-     *        setForward(<span class="st">"invalid-submit.htm"</span>);
-     *        <span class="kw">return false</span>;
-     *     }
-     * } </pre>
-     *
-     * Form submit checks should generally be combined with the Post-Redirect
-     * pattern which provides a better user experience when pages are refreshed.
-     * <p/>
-     * <b>Please note:</b> a call to onSubmitCheck always succeeds for Ajax
-     * requests.
-     *
-     * @param page the page invoking the Form submit check
-     * @param submitListener the listener object to call when an invalid submit
-     *      occurs
-     * @param submitListenerMethod the listener method to invoke when an
-     *      invalid submit occurs
-     * @return true if the form submit is valid, or the return value of the
-     *      listener method otherwise
-     * @throws IllegalArgumentException if the page, submitListener or
-     *      submitListenerMethod is null
-     */
-    public boolean onSubmitCheck(Page page, Object submitListener,
-            String submitListenerMethod) {
-
-        if (page == null) {
-            throw new IllegalArgumentException("Null page parameter");
-        }
-        if (submitListener == null) {
-            throw new IllegalArgumentException("Null submitListener parameter");
-        }
-        if (submitListenerMethod == null) {
-            String msg = "Null submitListenerMethod parameter";
-            throw new IllegalArgumentException(msg);
-        }
-
-        if (performSubmitCheck()) {
-            return true;
-
-        } else {
-            return ClickUtils.invokeListener(submitListener, submitListenerMethod);
-        }
     }
 
     /**
@@ -2158,95 +1560,6 @@ public class Form extends AbstractControl {
     }
 
     // ------------------------------------------------------ Protected Methods
-
-    /**
-     * Perform a back button submit check, returning true if the request is
-     * valid or false otherwise. This method will add a submit check token
-     * to the form as a hidden field, and to the session.
-     *
-     * @return true if the submit is OK or false otherwise
-     */
-    protected boolean performSubmitCheck() {
-
-        if (StringUtils.isBlank(getName())) {
-            throw new IllegalStateException("Form name is not defined.");
-        }
-
-        // CLK-333. Don't regenerate submit tokens for Ajax requests.
-        if (getContext().isAjaxRequest()) {
-            return true;
-        }
-
-        String resourcePath = getContext().getResourcePath();
-        int slashIndex = resourcePath.indexOf('/');
-        if (slashIndex != -1) {
-            resourcePath = resourcePath.replace('/', '_');
-        }
-
-        // Ensure resourcePath starts with a '_' seperator. If slashIndex == -1
-        // or slashIndex > 0, resourcePath does not start with slash.
-        if (slashIndex != 0) {
-            resourcePath = '_' + resourcePath;
-        }
-
-        final HttpServletRequest request = getContext().getRequest();
-        final String submitTokenName =
-            SUBMIT_CHECK + getName() + resourcePath;
-
-        boolean isValidSubmit = true;
-
-        // If not this form exit
-        String formName = getContext().getRequestParameter(FORM_NAME);
-
-        // Only test if submit for this form
-        if (!getContext().isForward()
-            && request.getMethod().equalsIgnoreCase(getMethod())
-            && getName().equals(formName)) {
-
-            Long sessionTime =
-                (Long) getContext().getSessionAttribute(submitTokenName);
-
-            if (sessionTime != null) {
-                String value = getContext().getRequestParameter(submitTokenName);
-                if (value == null || value.length() == 0) {
-                    // CLK-289. If a session attribute exists for the
-                    // SUBMIT_CHECK, but no request parameter, we assume the
-                    // submission is a duplicate and therefore invalid.
-                    LogService logService = ClickUtils.getLogService();
-                    logService.warn("    'Redirect After Post' token called '"
-                        + submitTokenName + "' is registered in the session, "
-                        + "but no matching request parameter was found. "
-                        + "(form name: '" + getName()
-                        + "'). To protect against a 'duplicate post', "
-                        + "Form.onSubmitCheck() will return false.");
-                    isValidSubmit = false;
-                } else {
-                    Long formTime = Long.valueOf(value);
-                    isValidSubmit = formTime.equals(sessionTime);
-                }
-            }
-        }
-
-        // CLK-267: check against adding a duplicate field
-        HiddenField field = (HiddenField) getField(submitTokenName);
-        if (field == null) {
-            field = new HiddenField(submitTokenName, Long.class);
-            add(field);
-        }
-
-        // Save state info to form and session
-        final Long time = new Long(System.currentTimeMillis());
-        field.setValueObject(time);
-
-        getContext().setSessionAttribute(submitTokenName, time);
-
-        if (isValidSubmit) {
-            return true;
-
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Return the estimated rendered form size in characters.
@@ -2493,6 +1806,14 @@ public class Form extends AbstractControl {
             for (int i = 0, size = errorFieldList.size(); i < size; i++) {
                 Field field = (Field) errorFieldList.get(i);
 
+                // Certain fields (FieldSet) might be invalid because
+                // one of their contained fields are invalid. However these
+                // controls might not have an error message to display.
+                // If field error message is null don't render.
+                if (field.getError() == null) {
+                    continue;
+                }
+
                 buffer.append("<tr class=\"errors\">");
                 buffer.append("<td class=\"errors\"");
                 buffer.appendAttribute("align", getErrorsAlign());
@@ -2668,22 +1989,4 @@ public class Form extends AbstractControl {
             buffer.append("//--></script>\n");
         }
     }
-
-    /**
-     * Returns true if a POST error occurred, false otherwise.
-     *
-     * @return true if a POST error occurred, false otherwise
-     */
-    protected boolean hasPostError() {
-        Exception e = (Exception)
-            getContext().getRequest().getAttribute(FileUploadService.UPLOAD_EXCEPTION);
-
-        if (e instanceof FileSizeLimitExceededException
-            || e instanceof SizeLimitExceededException) {
-            return true;
-        }
-
-        return false;
-    }
-
 }

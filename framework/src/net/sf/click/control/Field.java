@@ -20,6 +20,7 @@ import javax.servlet.ServletContext;
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -177,20 +178,14 @@ public abstract class Field extends AbstractControl {
     /** The request focus flag. */
     protected boolean focus;
 
-    /** The parent Form. */
-    protected Form form;
+    /** The parent BasicForm. */
+    protected BasicForm form;
 
     /** The Field help text. */
     protected String help;
 
     /** The Field label. */
     protected String label;
-
-    /** The listener target object. */
-    protected Object listener;
-
-    /** The listener method name. */
-    protected String listenerMethod;
 
     /** The Field is readonly flag. */
     protected boolean readonly;
@@ -241,6 +236,15 @@ public abstract class Field extends AbstractControl {
     }
 
     // ------------------------------------------------------ Public Attributes
+
+    /**
+     * @see AbstractControl#getTag()
+     *
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
 
     /**
      * Return true if the Field is a disabled. The Field will also be disabled
@@ -327,12 +331,18 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
-     * Return the parent Form containing the Field.
+     * Return the parent Form containing the Field or null if no form is present
+     * in the parent hierarchy.
      *
      * @return the parent Form containing the Field
      */
-    public Form getForm() {
-        return form;
+    public BasicForm getForm() {
+        if (form != null) {
+            return form;
+        } else {
+            // Find form in parent hierarchy
+            return ContainerUtils.findForm(this);
+        }
     }
 
     /**
@@ -340,7 +350,7 @@ public abstract class Field extends AbstractControl {
      *
      * @param form Field's parent <tt>Form</tt>
      */
-    public void setForm(Form form) {
+    public void setForm(BasicForm form) {
         this.form = form;
     }
 
@@ -540,8 +550,7 @@ public abstract class Field extends AbstractControl {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
-        this.listener = listener;
-        this.listenerMethod = method;
+        super.setListener(listener, method);
     }
 
     /**

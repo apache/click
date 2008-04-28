@@ -849,62 +849,7 @@ public class ClickUtils {
     public static void copyFormToObject(Form form, Object object,
             boolean debug) {
 
-        if (form == null) {
-            throw new IllegalArgumentException("Null form parameter");
-        }
-        if (object == null) {
-            throw new IllegalArgumentException("Null object parameter");
-        }
-
-        final List fieldList = getFormFields(form);
-
-        if (fieldList.isEmpty()) {
-            log("   Form has no fields to copy from", debug);
-            // Exit early.
-            return;
-        }
-
-        String objectClassname = object.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
-        // If the given object is a map, its key/value pair is populated from
-        // the fields name/value pair.
-        if (object instanceof Map) {
-            copyFieldsToMap(fieldList, (Map) object, debug);
-            // Exit after populating the map.
-            return;
-        }
-
-        Set properties = getObjectPropertyNames(object);
-        Map ognlContext = new HashMap();
-
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
-
-            if (!hasMatchingProperty(field, properties)) {
-                continue;
-            }
-
-            ensureObjectPathNotNull(object, field.getName());
-
-            try {
-                PropertyUtils.setValueOgnl(object, field.getName(), field.getValueObject(), ognlContext);
-
-                String msg = "   Form -> " + objectClassname + "."
-                             + field.getName() + " : " + field.getValueObject();
-
-                log(msg, debug);
-
-            } catch (Exception e) {
-                String msg =
-                    "Error incurred invoking " + objectClassname + "."
-                    + field.getName() + " with " + field.getValueObject()
-                    + " error: " + e.toString();
-
-                log(msg, debug);
-            }
-        }
+        ContainerUtils.copyContainerToObject(form, object);
     }
 
     /**
@@ -922,59 +867,7 @@ public class ClickUtils {
     public static void copyObjectToForm(Object object, Form form,
             boolean debug) {
 
-        if (object == null) {
-            throw new IllegalArgumentException("Null object parameter");
-        }
-        if (form == null) {
-            throw new IllegalArgumentException("Null form parameter");
-        }
-
-        final List fieldList = getFormFields(form);
-
-        if (fieldList.isEmpty()) {
-            log("   Form has no fields to copy to", debug);
-            //Exit early.
-            return;
-        }
-
-        String objectClassname = object.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
-        //If the given object is a map, populate the fields name/value from
-        //the maps key/value pair.
-        if (object instanceof Map) {
-
-            copyMapToFields((Map) object, fieldList, debug);
-            //Exit after populating the fields.
-            return;
-        }
-
-        Set properties = getObjectPropertyNames(object);
-
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
-
-            if (!hasMatchingProperty(field, properties)) {
-                continue;
-            }
-
-            try {
-                Object result = PropertyUtils.getValue(object, field.getName());
-
-                field.setValueObject(result);
-
-                String msg = "   Form <- " + objectClassname + "."
-                             + field.getName() + " : " + result;
-                log(msg, debug);
-
-            } catch (Exception e) {
-                String msg = "Error incurred invoking " + objectClassname + "."
-                             + field.getName() + " error: " + e.toString();
-
-                log(msg, debug);
-            }
-        }
+        ContainerUtils.copyObjectToContainer(object, form);
     }
 
     /**
@@ -2074,75 +1967,6 @@ public class ClickUtils {
     }
 
     // -------------------------------------------------------- Private Methods
-
-   /**
-    * Populate the given map from the values of the specified fieldList. The
-    * map's key/value pairs are populated from the fields name/value. The keys
-    * of the map are matched against each field name. If a key matches a field
-    * name will the value of the field be copied to the map.
-    *
-    * @param fieldList the forms list of fields to obtain field values from
-    * @param map the map to populate with field values
-    * @param debug log debug statements when populating the map
-    */
-    private static void copyFieldsToMap(List fieldList, Map map, boolean debug) {
-
-        String objectClassname = map.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
-
-            // Check if the map contains the fields name. The fields name can
-            // also be a path for example 'foo.bar'
-            if (map.containsKey(field.getName())) {
-
-                map.put(field.getName(), field.getValueObject());
-
-                String msg = "   Form -> " + objectClassname + "."
-                         + field.getName() + " : " + field.getValueObject();
-
-                log(msg, debug);
-            }
-        }
-    }
-
-    /**
-     * Copy the map values to the specified fieldList. For every field in the
-     * field list, a lookup is done in the map for a matching value. A match is
-     * found if a field name matches against a key in the map. The matching
-     * value is then copied to the field.
-     *
-     * @param map the map containing values to populate the fields with
-     * @param fieldList the forms list of fields to be populated
-     * @param debug log debug statements when populating the object
-     */
-    private static void copyMapToFields(Map map, List fieldList, boolean debug) {
-
-        String objectClassname = map.getClass().getName();
-        objectClassname =
-            objectClassname.substring(objectClassname.lastIndexOf(".") + 1);
-
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
-            Field field = (Field) fieldList.get(i);
-            String fieldName = field.getName();
-
-            // Check if the fieldName is contained in the map. For
-            // example if a field has the name 'user.address', check if
-            // 'user.address' is contained in the map.
-            if (map.containsKey(fieldName)) {
-
-                Object result = map.get(field.getName());
-
-                field.setValueObject(result);
-
-                String msg = "   Form <- " + objectClassname + "."
-                    + field.getName() + " : " + result;
-                log(msg, debug);
-            }
-        }
-    }
 
     private static Set getObjectPropertyNames(Object object) {
         if (object instanceof Map) {

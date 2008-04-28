@@ -494,6 +494,9 @@ public class LinkDecorator implements Decorator, Serializable {
         public void onDestroy() {
         }
 
+        public void render(HtmlStringBuffer buffer) {
+        }
+
         /**
          * Query if the user clicked on a button or button contained
          * in LinkDecorator. As soon as either a button or link if found

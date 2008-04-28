@@ -72,6 +72,15 @@ public abstract class AbstractLink extends AbstractControl {
     // ----------------------------------------------------------- Constructors
 
     /**
+     * @see AbstractControl#getTag()
+     *
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "a";
+    }
+
+    /**
      * Create an AbstractLink for the given name.
      *
      * @param name the page link name
@@ -473,7 +482,7 @@ public abstract class AbstractLink extends AbstractControl {
             buffer.elementEnd("span");
 
         } else {
-            buffer.elementStart("a");
+            buffer.elementStart(getTag());
 
             buffer.appendAttribute("href", getHref());
             buffer.appendAttribute("id", getId());
@@ -511,7 +520,7 @@ public abstract class AbstractLink extends AbstractControl {
                 buffer.elementEnd();
             }
 
-            buffer.elementEnd("a");
+            buffer.elementEnd(getTag());
         }
 
         return buffer.toString();
