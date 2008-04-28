@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
+import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -300,9 +301,19 @@ public class HiddenField extends Field {
      * @return the HTML rendered Hidden Field string
      */
     public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
+        return buffer.toString();
+    }
 
-        buffer.elementStart("input");
+    /**
+     * @see Control#render(net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+
+        buffer.elementStart(getTag());
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
@@ -338,10 +349,7 @@ public class HiddenField extends Field {
 
         buffer.appendAttribute("value", valueStr);
 
-
         buffer.elementEnd();
-
-        return buffer.toString();
     }
 }
 

@@ -15,12 +15,11 @@
  */
 package net.sf.click.control;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.util.ClickUtils;
+import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
@@ -97,7 +96,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class FieldSet extends Field {
+public class FieldSet extends BasicFieldSet {
 
     private static final long serialVersionUID = 1L;
 
@@ -113,20 +112,8 @@ public class FieldSet extends Field {
      */
     protected Integer columns;
 
-    /** The ordered list of field values, excluding buttons. */
-    protected final List fieldList = new ArrayList();
-
-    /** The map of fields keyed by field name. */
-    protected final Map fields = new HashMap();
-
     /** The map of field width values. */
     protected Map fieldWidths = new HashMap();
-
-    /** The FieldSet legend. */
-    protected String legend;
-
-    /** The FieldSet legend attributes map. */
-    protected Map legendAttributes;
 
     /** The render the fieldset border flag, default value is true. */
     protected boolean showBorder = true;
@@ -139,7 +126,7 @@ public class FieldSet extends Field {
      * @param name the fieldset name element value
      */
     public FieldSet(String name) {
-        setName(name);
+        super(name);
     }
 
     /**
@@ -149,8 +136,7 @@ public class FieldSet extends Field {
      * @param legend the fieldset legend element value
      */
     public FieldSet(String name, String legend) {
-        setName(name);
-        setLegend(legend);
+        super(name, legend);
     }
 
     /**
@@ -162,6 +148,20 @@ public class FieldSet extends Field {
     }
 
     // ------------------------------------------------------ Public Attributes
+
+    /**
+     * @see Container#addControl(net.sf.click.Control)
+     */
+    public Control addControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Field parameter cannot be null");
+        }
+        if (!(control instanceof Field)) {
+            throw new IllegalArgumentException("Only fields are allowed on this FieldSet");
+        }
+        add((Field) control);
+        return control;
+    }
 
     /**
      * Add the field to the form, and set the fields form property. The field
@@ -204,17 +204,29 @@ public class FieldSet extends Field {
 
         field.setParent(this);
 
-        if (getForm() != null && getForm().getDefaultFieldSize() > 0) {
+        Form form = (Form) getForm();
+        if (form != null && form.getDefaultFieldSize() > 0) {
             if (field instanceof TextField) {
-                ((TextField) field).setSize(getForm().getDefaultFieldSize());
+                ((TextField) field).setSize(form.getDefaultFieldSize());
 
             } else if (field instanceof FileField) {
-                ((FileField) field).setSize(getForm().getDefaultFieldSize());
+                ((FileField) field).setSize(form.getDefaultFieldSize());
 
             } else if (field instanceof TextArea) {
-                ((TextArea) field).setCols(getForm().getDefaultFieldSize());
+                ((TextArea) field).setCols(form.getDefaultFieldSize());
             }
         }
+    }
+
+    /**
+     * @see net.sf.click.Control#setParent(java.lang.Object)
+     */
+    public void setParent(Object parent) {
+        if (!(parent instanceof Form)) {
+            throw new IllegalArgumentException("FieldSet can only be added"
+                + " to a Form.");
+        }
+        super.setParent(parent);
     }
 
     /**
@@ -236,6 +248,21 @@ public class FieldSet extends Field {
         }
         add(field);
         getFieldWidths().put(field.getName(), new Integer(width));
+    }
+
+    /**
+     * @see Container#removeControl(net.sf.click.Control)
+     */
+    public boolean removeControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Field parameter cannot be null");
+        }
+        if (!(control instanceof Field)) {
+            throw new IllegalArgumentException("Only fields are allowed on this FieldSet");
+        }
+        boolean contains = contains(control);
+        remove((Field) control);
+        return contains;
     }
 
     /**
@@ -290,7 +317,7 @@ public class FieldSet extends Field {
         if (columns != null) {
             return columns.intValue();
         } else {
-            return getForm().getColumns();
+            return ((Form) getForm()).getColumns();
         }
     }
 
@@ -312,7 +339,7 @@ public class FieldSet extends Field {
      * @return the named field if contained in the fieldset
      */
     public Field getField(String name) {
-        return (Field) fields.get(name);
+        return (Field) getFields().get(name);
     }
 
     /**
@@ -322,7 +349,7 @@ public class FieldSet extends Field {
      * @return the ordered List of fieldset fields
      */
     public List getFieldList() {
-        return fieldList;
+        return getControls();
     }
 
     /**
@@ -331,7 +358,7 @@ public class FieldSet extends Field {
      * @return the Map of fieldset fields, keyed on field name
      */
     public Map getFields() {
-        return fields;
+        return getControlMap();
     }
 
     /**
@@ -348,113 +375,19 @@ public class FieldSet extends Field {
      *
      * @param form fieldset's parent <tt>Form</tt>.
      */
-    public void setForm(Form form) {
+    public void setForm(BasicForm form) {
+        if (form == null) {
+            throw new IllegalArgumentException("Cannot set the Field's form to null");
+        }
+        if (!(form instanceof Form)) {
+            throw new IllegalArgumentException("BasicForm cannot be set as the"
+                + " parent of a FieldSet. Only a Form instance is allowed.");
+        }
         super.setForm(form);
 
         for (int i = 0, size = getFieldList().size(); i < size; i++) {
             Field field = (Field) getFieldList().get(i);
             field.setForm(form);
-        }
-    }
-
-    /**
-     * Return the fieldset Legend element value: &lt;legend&gt;
-     * <p/>
-     * If the legend value is null, this method will attempt to find a
-     * localized label message in the parent messages using the key:
-     * <blockquote>
-     * <tt>getName() + ".title"</tt>
-     * </blockquote>
-     * If not found then the message will be looked up in the
-     * <tt>/click-control.properties</tt> file using the same key.
-     * If a value cannot be found in the parent or control messages then the
-     * FieldSet name will be converted into a legend using the
-     * {@link ClickUtils#toLabel(String)} method.
-     *
-     * @return the fieldset Legend element value
-     */
-    public String getLegend() {
-        if (legend == null) {
-            legend = getMessage(getName() + ".legend");
-        }
-        if (legend == null) {
-            legend = ClickUtils.toLabel(getName());
-        }
-        return legend;
-    }
-
-    /**
-     * Set the fieldset Legend element value: &lt;legend&gt;. If the legend
-     * value is a zero length string no legend element will be rendered. You
-     * can set a blank zero length string if you want to render the fieldset
-     * border but don't want a legend caption.
-     *
-     * @param legend the fieldset Legend element value
-     */
-    public void setLegend(String legend) {
-        this.legend = legend;
-    }
-
-    /**
-     * Return the legend HTML attribute with the given name, or null if the
-     * attribute does not exist.
-     *
-     * @param name the name of legend HTML attribute
-     * @return the legend HTML attribute
-     */
-    public String getLegendAttribute(String name) {
-        if (legendAttributes != null) {
-            return (String) legendAttributes.get(name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Set the fieldset HTML attribute with the given attribute name and value.
-     *
-     * @param name the name of the form HTML attribute
-     * @param value the value of the form HTML attribute
-     * @throws IllegalArgumentException if name parameter is null
-     */
-    public void setLegendAttribute(String name, String value) {
-        if (name == null) {
-            throw new IllegalArgumentException("Null name parameter");
-        }
-
-        if (legendAttributes == null) {
-            legendAttributes = new HashMap(5);
-        }
-
-        if (value != null) {
-            legendAttributes.put(name, value);
-        } else {
-            legendAttributes.remove(name);
-        }
-    }
-
-    /**
-     * Return the fieldset attributes Map.
-     *
-     * @return the fieldset attributes Map
-     */
-    public Map getLegendAttributes() {
-        if (legendAttributes == null) {
-            legendAttributes = new HashMap(5);
-        }
-        return legendAttributes;
-    }
-
-    /**
-     * Return true if the fieldset has attributes or false otherwise.
-     *
-     * @return true if the fieldset has attributes on false otherwise
-     */
-    public boolean hasLegendAttributes() {
-        if (legendAttributes != null && !legendAttributes.isEmpty()) {
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -472,7 +405,14 @@ public class FieldSet extends Field {
     }
 
     /**
-     * Return the render the fieldset border flag. The border is the HTML
+     * @see AbstractControl#getControlSizeEst()
+     */
+    public int getControlSizeEst() {
+        return 160 + (getControls().size() * 350);
+    }
+
+    /**
+     * Return the render fieldset border flag. The border is the HTML
      * &lt;fieldset&gt; element.
      *
      * @return the render the fieldset border flag
@@ -482,7 +422,7 @@ public class FieldSet extends Field {
     }
 
     /**
-     * Set the render the fieldset border flag. The border is the HTML
+     * Set the render fieldset border flag. The border is the HTML
      * &lt;fieldset&gt; element.
      *
      * @param value the render the fieldset border flag
@@ -491,100 +431,17 @@ public class FieldSet extends Field {
         this.showBorder = value;
     }
 
-    /**
-     * Return true if all contained fields are valid.
-     *
-     * @see Field#isValid()
-     *
-     * @return true if all contained fields are valid
-     */
-    public boolean isValid() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            if (!field.isValid()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Initialize the fields contained in the fieldset.
+     * @see Control#render(net.sf.click.util.HtmlStringBuffer)
      *
-     * @see net.sf.click.Control#onInit()
+     * @param buffer the specified buffer to render the control's output to
      */
-    public void onInit() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.onInit();
-        }
-    }
-
-    /**
-     * Process the request invoking <tt>onProcess()</tt> on the contained
-     * <tt>Field</tt> elements.
-     *
-     * @return true if all Fields were processed, or false if one Field returned
-     *  false
-     */
-    public boolean onProcess() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            if (!field.getName().startsWith(Form.SUBMIT_CHECK)) {
-                boolean continueProcessing = field.onProcess();
-                if (!continueProcessing) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Perform any pre rendering logic.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.onRender();
-        }
-    }
-
-    /**
-     * Destroy the fields contained in the fieldset.
-     *
-     * @see net.sf.click.Control#onDestroy()
-     */
-    public void onDestroy() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            try {
-                field.onDestroy();
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Return the HTML string representation of the fieldset.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML string representation of the fieldset
-     */
-    public String toString() {
-        // Estimate the size of the string buffer
-        int bufferSize = 160 + (fieldList.size() * 350);
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+    public void render(HtmlStringBuffer buffer) {
 
         if (getShowBorder()) {
-            buffer.elementStart("fieldset");
+            buffer.elementStart(getTag());
 
             buffer.appendAttribute("id", getId());
 
@@ -613,10 +470,22 @@ public class FieldSet extends Field {
         renderFields(buffer);
 
         if (getShowBorder()) {
-            buffer.elementEnd("fieldset");
+            buffer.elementEnd(getTag());
             buffer.append("\n");
         }
+    }
 
+    /**
+     * Return the HTML string representation of the fieldset.
+     *
+     * @see Object#toString()
+     *
+     * @return the HTML string representation of the fieldset
+     */
+    public String toString() {
+        // Estimate the size of the string buffer
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
         return buffer.toString();
     }
 
@@ -642,9 +511,9 @@ public class FieldSet extends Field {
         int column = 1;
         boolean openTableRow = false;
 
-        for (int i = 0, size = fieldList.size(); i < size; i++) {
+        for (int i = 0, size = getFieldList().size(); i < size; i++) {
 
-            Field field = (Field) fieldList.get(i);
+            Field field = (Field) getFieldList().get(i);
 
             if (!field.isHidden()) {
 
@@ -656,9 +525,10 @@ public class FieldSet extends Field {
                     openTableRow = true;
                 }
 
+                Form form = (Form) getForm();
                 if (field instanceof Label) {
                     buffer.append("<td class=\"fields\" align=\"");
-                    buffer.append(getForm().getLabelAlign());
+                    buffer.append(form.getLabelAlign());
                     buffer.append("\"");
 
                     if (width != null) {
@@ -688,7 +558,7 @@ public class FieldSet extends Field {
 
                 } else {
                     // Write out label
-                    if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
+                    if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
                         buffer.append("<td class=\"fields\"");
                         buffer.appendAttribute("align", form.getLabelAlign());
                         buffer.appendAttribute("style", form.getLabelStyle());
@@ -721,7 +591,7 @@ public class FieldSet extends Field {
                         buffer.append(form.getLabelNotRequiredSuffix());
                     }
 
-                    if (Form.POSITION_LEFT.equals(getForm().getLabelsPosition())) {
+                    if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
                         buffer.append("</td>\n");
                         buffer.append("<td align=\"left\"");
                         buffer.appendAttribute("style", form.getFieldStyle());
