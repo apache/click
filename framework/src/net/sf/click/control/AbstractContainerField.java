@@ -288,7 +288,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * that the Container implementation manipulates certain state on the
      * AbstractContainerField instance.
      */
-    protected class InnerContainerField extends AbstractContainer {
+    class InnerContainerField extends AbstractContainer {
 
         // -------------------------------------------------------- Constants
 
