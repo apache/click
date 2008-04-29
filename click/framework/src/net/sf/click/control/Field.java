@@ -238,8 +238,10 @@ public abstract class Field extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the fields's html tag: <tt>input</tt>.
+     * 
      * @see AbstractControl#getTag()
-     *
+     * 
      * @return this controls html tag
      */
     public String getTag() {
@@ -452,9 +454,16 @@ public abstract class Field extends AbstractControl {
             return getAttribute("id");
 
         } else {
+            String fieldName = getName();
+
+            if (fieldName == null) {
+                // If fieldName is null, exit early
+                return null;
+            }
+
             String formId = (getForm() != null) ? getForm().getId() + "_" : "";
 
-            String id = formId + getName();
+            String id = formId + fieldName;
 
             if (id.indexOf('/') != -1) {
                 id = id.replace('/', '_');

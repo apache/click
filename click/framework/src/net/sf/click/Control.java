@@ -246,19 +246,26 @@ public interface Control extends Serializable {
     public void onDeploy(ServletContext servletContext);
 
     /**
-     * The on initialize event handler. Each Page control will be initialized
+     * The on initialize event handler. Each control will be initialized
      * before its {@link #onProcess()} method is called.
+     * <p/>
+     * {@link Container} implementations should recursively invoke the onInit
+     * method on each of their child controls ensuring that all controls receive
+     * this event.
      */
     public void onInit();
 
     /**
-     * The on process event handler. Each Page control will be processed when
-     * the Page is requested.
+     * The on process event handler. Each control will be processed when the
+     * Page is requested.
      * <p/>
-     * These controls may be processed by the ClickServlet, as with the
-     * {@link net.sf.click.control.ActionLink} and {@link net.sf.click.control.Form}
-     * controls, or they maybe processed by the Form, in the case of
-     * {@link net.sf.click.control.Field} controls.
+     * ClickServlet will process all Page controls in the order they were added
+     * to the Page.
+     * <p/>
+     * {@link Container} implementations should recursively invoke the onProcess
+     * method on each of their child controls ensuring that all controls receive
+     * this event. However when a control onProcess method return false,
+     * no other controls onProcess method should be invoked.
      * <p/>
      * When a control is processed it should return true if the Page should
      * continue event processing, or false if no other controls should be
@@ -277,6 +284,10 @@ public interface Control extends Serializable {
      * database intensive operation. By putting the intensive operations in the
      * on render method they will not be performed if the user navigates away
      * to a different page.
+     * <p/>
+     * {@link Container} implementations should recursively invoke the onRender
+     * method on each of their child controls ensuring that all controls receive
+     * this event.
      */
     public void onRender();
 
@@ -286,6 +297,10 @@ public interface Control extends Serializable {
      * <p/>
      * This method is guaranteed to be called before the Page object reference
      * goes out of scope and is available for garbage collection.
+     * <p/>
+     * {@link Container} implementations should recursively invoke the onDestroy
+     * method on each of their child controls ensuring that all controls receive
+     * this event.
      */
     public void onDestroy();
 

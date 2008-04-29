@@ -99,7 +99,11 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Public Methods
 
     /**
-     * Returns this controls html tag.
+     * Returns the controls html tag.
+     * <p/>
+     * Subclasses should override this method and return the correct tag.
+     * <p/>
+     * This method returns <tt>null</tt> by default.
      * <p/>
      * Example tags include <tt>table</tt>, <tt>form</tt>, <tt>a</tt> and
      * <tt>input</tt>.

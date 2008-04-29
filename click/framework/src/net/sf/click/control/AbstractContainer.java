@@ -116,7 +116,6 @@ public abstract class AbstractContainer extends AbstractControl implements
     /**
      * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)}.
      *
-     * @param control the control to remove from the container
      * @throws IllegalArgumentException if the control is null
      */
     public boolean removeControl(Control control) {
@@ -141,8 +140,6 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * @see net.sf.click.control.Container#getControls()}.
-     * 
-     * @return the sequential list of controls held by the container
      */
     public List getControls() {
         if (controls == null) {
@@ -152,10 +149,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#getControls()}.
-     * 
-     * @param controlName the name of the control to get from the container
-     * @return the named control from the container if found or null otherwise
+     * @see net.sf.click.control.Container#getControl(java.lang.String)
      */
     public Control getControl(String controlName) {
         if (hasControls()) {
@@ -165,11 +159,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#getControls()}.
-     * 
-     * @param control the control whose presence in this container is to be
-     * tested
-     * @return true if the container contains the specified control
+     * @see net.sf.click.control.Container#contains(net.sf.click.Control)
      */
     public boolean contains(Control control) {
         return getControls().contains(control);
@@ -186,8 +176,6 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * @see net.sf.click.Control#onProcess()}.
-     * 
-     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
 
@@ -212,8 +200,8 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * Return the HTML head imports for the container and all its
-     * child controls.
+     * Return the HTML head imports for the container and all its child
+     * controls.
      *
      * {@link net.sf.click.Control#getHtmlImports()}
      *
