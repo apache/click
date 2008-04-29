@@ -344,6 +344,17 @@ public class Table extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the table's html tag: <tt>table</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+     public String getTag() {
+        return "table";
+     }
+
+    /**
      * Return the Table pagination banner position. Banner position values:
      * <tt>[ POSITION_TOP | POSITION_BOTTOM | POSITION_BOTH ]</tt>.
      * The default banner position is <tt>POSITION_BOTTOM</tt>.
@@ -1000,7 +1011,7 @@ public class Table extends AbstractControl {
         }
 
         // Render table start.
-        buffer.elementStart("table");
+        buffer.elementStart(getTag());
         buffer.appendAttribute("id", getId());
 
         appendAttributes(buffer);
@@ -1018,7 +1029,8 @@ public class Table extends AbstractControl {
         renderBodyRows(buffer);
 
         // Render table end.
-        buffer.append("</table>\n");
+        buffer.elementEnd(getTag());
+        buffer.append("\n");
 
         if (getBannerPosition() == POSITION_BOTTOM
             || getBannerPosition() == POSITION_BOTH) {

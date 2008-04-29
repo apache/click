@@ -165,6 +165,17 @@ public class FileField extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the FileFields's html tag: <tt>input</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
+
+    /**
      * Return the <a href="http://jakarta.apache.org/commons/fileupload/apidocs/org/apache/commons/fileupload/FileItem.html">FileItem</a>
      * after processing the request, or null otherwise.
      *
@@ -238,7 +249,7 @@ public class FileField extends Field {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.elementStart("input");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());

@@ -273,6 +273,17 @@ public class Select extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the select's html tag: <tt>select</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "select";
+    }
+
+    /**
      * Add the given Option to the Select.
      *
      * @param option the Option value to add
@@ -635,7 +646,7 @@ public class Select extends Field {
         }
         HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
-        buffer.elementStart("select");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
@@ -681,7 +692,7 @@ public class Select extends Field {
             }
         }
 
-        buffer.elementEnd("select");
+        buffer.elementEnd(getTag());
 
         if (getHelp() != null) {
             buffer.append(getHelp());

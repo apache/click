@@ -208,6 +208,17 @@ public class TextArea extends Field {
     // ------------------------------------------------------- Public Attributes
 
     /**
+     * Return the textarea's html tag: <tt>textarea</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+     public String getTag() {
+         return "textarea";
+     }
+
+    /**
      * Return the number of text area columns.
      *
      * @return the number of text area columns
@@ -297,7 +308,7 @@ public class TextArea extends Field {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.elementStart("textarea");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("name", getName());
         buffer.appendAttribute("id", getId());
@@ -331,7 +342,7 @@ public class TextArea extends Field {
 
         buffer.appendEscaped(getValue());
 
-        buffer.elementEnd("textarea");
+        buffer.elementEnd(getTag());
 
         if (getHelp() != null) {
             buffer.append(getHelp());

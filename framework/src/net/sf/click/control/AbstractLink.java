@@ -72,8 +72,10 @@ public abstract class AbstractLink extends AbstractControl {
     // ----------------------------------------------------------- Constructors
 
     /**
+     * Return the links html tag: <tt>a</tt>.
+     * 
      * @see AbstractControl#getTag()
-     *
+     * 
      * @return this controls html tag
      */
     public String getTag() {

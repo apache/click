@@ -213,7 +213,7 @@ public class ImageSubmit extends Submit {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(40);
 
-        buffer.elementStart("input");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());
