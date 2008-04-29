@@ -138,6 +138,15 @@ public class Option implements Serializable {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the Options's html tag: <tt>option</tt>.
+     * 
+     * @return the Option's html tag
+     */
+     public String getTag() {
+        return "option";
+     }
+
+    /**
      * Return the Option display label.
      *
      * @return the Option display label
@@ -167,7 +176,7 @@ public class Option implements Serializable {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(48);
 
-        buffer.elementStart("option");
+        buffer.elementStart(getTag());
 
         if (select.isMultiple()) {
 
@@ -196,7 +205,7 @@ public class Option implements Serializable {
 
         buffer.appendEscaped(getLabel());
 
-        buffer.elementEnd("option");
+        buffer.elementEnd(getTag());
 
         return buffer.toString();
     }

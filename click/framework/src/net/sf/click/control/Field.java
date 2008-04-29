@@ -238,17 +238,6 @@ public abstract class Field extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return the fields's html tag: <tt>input</tt>.
-     * 
-     * @see AbstractControl#getTag()
-     * 
-     * @return this controls html tag
-     */
-    public String getTag() {
-        return "input";
-    }
-
-    /**
      * Return true if the Field is a disabled. The Field will also be disabled
      * if the parent Form is disabled.
      * <p/>

@@ -64,6 +64,15 @@ public class OptionGroup implements Serializable {
 
     // -------------------------------------------------- Public Attributes
 
+   /**
+     * Return the OptionGroups's html tag: <tt>optgroup</tt>.
+     * 
+     * @return the OptionGroup's html tag
+     */
+    public String getTag() {
+        return "optgroup";
+    }
+
     /**
      * Add the given Option or OptionGroup object to this group.
      *
@@ -103,7 +112,7 @@ public class OptionGroup implements Serializable {
 
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.elementStart("optgroup");
+        buffer.elementStart(getTag());
         buffer.appendAttribute("label", getLabel());
         buffer.closeTag();
 
@@ -126,7 +135,7 @@ public class OptionGroup implements Serializable {
             }
         }
 
-        buffer.elementEnd("optgroup");
+        buffer.elementEnd(getTag());
 
         return buffer.toString();
     }

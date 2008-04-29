@@ -106,8 +106,10 @@ public class BasicForm extends AbstractContainer {
     // -------------------------------------------------------- Public Attributes
     
     /**
+     * Return the form's html tag: <tt>form</tt>.
+     * 
      * @see AbstractControl#getTag()
-     *
+     * 
      * @return this controls html tag
      */
     public String getTag() {

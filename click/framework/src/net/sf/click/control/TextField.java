@@ -191,6 +191,17 @@ public class TextField extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the textfield's html tag: <tt>input</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
+
+    /**
      * Returns the maximum field length validation constraint. If the
      * {@link #maxLength} property is greater than zero, the Field values length
      * will be validated against this constraint when processed.
@@ -277,7 +288,7 @@ public class TextField extends Field {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer(96);
 
-        buffer.elementStart("input");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());

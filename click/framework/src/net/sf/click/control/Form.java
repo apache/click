@@ -1498,7 +1498,8 @@ public class Form extends BasicForm {
 
         List formFields = ClickUtils.getFormFields(this);
 
-        buffer.append("</form>\n");
+        buffer.elementEnd(getTag());
+        buffer.append("\n");
 
         renderFocusJavaScript(buffer, formFields);
 
@@ -1580,7 +1581,7 @@ public class Form extends BasicForm {
      */
     protected void renderHeader(HtmlStringBuffer buffer, List formFields) {
 
-        buffer.elementStart("form");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("method", getMethod());
         buffer.appendAttribute("name", getName());

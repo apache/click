@@ -95,6 +95,17 @@ public class Radio extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the radio's html tag: <tt>input</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
+
+    /**
      * Return true if the radio is checked, or false otherwise.
      *
      * @return true if the radio is checked.
@@ -290,7 +301,7 @@ public class Radio extends Field {
         String id = getId();
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.elementStart("input");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());

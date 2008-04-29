@@ -234,7 +234,7 @@ public class Checkbox extends Field {
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.elementStart("input");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
         buffer.appendAttribute("name", getName());

@@ -162,12 +162,6 @@ public class ActionLink extends AbstractLink {
     /** The link is clicked. */
     protected boolean clicked;
 
-    /** The listener target object. */
-    protected Object listener;
-
-    /** The listener method name. */
-    protected String listenerMethod;
-
     // ----------------------------------------------------------- Constructors
 
     /**
@@ -360,17 +354,6 @@ public class ActionLink extends AbstractLink {
             throw new IllegalArgumentException(msg);
         }
         super.setName(name);
-    }
-
-    /**
-     * @see net.sf.click.Control#setListener(Object, String)
-     *
-     * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
-     */
-    public void setListener(Object listener, String method) {
-        this.listener = listener;
-        this.listenerMethod = method;
     }
 
     /**
