@@ -1879,8 +1879,8 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * <strong>Please note</strong> this class is only meant for
-     * developers of this control, not users.
+     * <strong>Please note</strong> this class is <b>not</b> meant for public
+     * use.
      * <p/>
      * Provides the contract for pluggable javascript handlers.
      * <p/>
