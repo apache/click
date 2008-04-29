@@ -26,7 +26,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * 
  * @author Bob Schellink
  */
-public class BasicFieldSet extends ContainerField {
+public class BasicFieldSet extends AbstractContainerField {
 
     // -------------------------------------------------------------- Constants
 
@@ -71,7 +71,11 @@ public class BasicFieldSet extends ContainerField {
     // ------------------------------------------------------ Public methods
 
     /**
+     * Return the fieldsets's html tag: <tt>fieldset</tt>.
+     * 
      * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
      */
     public String getTag() {
         return "fieldset";
@@ -205,6 +209,8 @@ public class BasicFieldSet extends ContainerField {
 
     /**
      * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the buffer to append the output to
      */
     protected void renderContent(HtmlStringBuffer buffer) {
         if (getLegend().length() > 0) {
@@ -220,6 +226,6 @@ public class BasicFieldSet extends ContainerField {
             buffer.elementEnd("legend");
             buffer.append("\n");
         }
-        container.renderContent(buffer);
+        getContainer().renderContent(buffer);
     }
 }

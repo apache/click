@@ -95,6 +95,17 @@ public class Button extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the button's html tag: <tt>input</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
+
+    /**
      * Returns the button onclick attribute value, or null if not defined.
      *
      * @return the button onclick attribute value, or null if not defined.

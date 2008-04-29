@@ -108,6 +108,17 @@ public class Checkbox extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Return the checkbox's html tag: <tt>input</tt>.
+     * 
+     * @see AbstractControl#getTag()
+     * 
+     * @return this controls html tag
+     */
+    public String getTag() {
+        return "input";
+    }
+
+    /**
      * Return true if the checkbox is checked, or false otherwise.
      *
      * @return true if the checkbox is checked.
