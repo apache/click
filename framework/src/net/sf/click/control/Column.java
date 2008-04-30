@@ -27,7 +27,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Provides the Column table data &lt;td&gt; and table header &lt;th&gt;
@@ -1528,29 +1528,7 @@ public class Column implements Serializable {
          * @return true if a numeric sort should be used
          */
         protected boolean useNumericSort(String value1, String value2) {
-            if (isNumericValue(value1)) {
-                // Take a second sample
-                if (isNumericValue(value2)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /**
-         * Return true if the string value is a number.
-         *
-         * @param value the string value to test
-         * @return true if the value is a number
-         */
-        protected boolean isNumericValue(String value) {
-            if (StringUtils.containsOnly(value, "-.0123456789")) {
-                int negIndex = value.indexOf("-");
-                return (negIndex < 1);
-
-            } else {
-                return false;
-            }
+            return NumberUtils.isNumber(value1) && NumberUtils.isNumber(value2);
         }
 
         /**
