@@ -1,6 +1,7 @@
 package net.sf.click.examples.control;
 
 import net.sf.click.control.Button;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a button spacer control for adding spaces between buttons.
@@ -15,8 +16,8 @@ public class SpacerButton extends Button {
         setName(String.valueOf(System.currentTimeMillis()));
     }
 
-    public String toString() {
-        return "&nbsp;&nbsp;&nbsp;&nbsp;";
+    public void render(HtmlStringBuffer buffer) {
+        buffer.append("&nbsp;&nbsp;&nbsp;&nbsp;");
     }
 
 }
