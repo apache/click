@@ -97,7 +97,7 @@ public abstract class AbstractContainer extends AbstractControl implements
                 throw new IllegalArgumentException("This control's parent is"
                     + " already set to a Page.");
 
-            } else {
+            } else if (control instanceof Container) {
                 //remove control from parent
                 ((Container) control.getParent()).removeControl(control);
             }
@@ -222,7 +222,7 @@ public abstract class AbstractContainer extends AbstractControl implements
                 try {
                     control.onDestroy();
                 } catch (Throwable t) {
-                    ClickUtils.getLogService().error("", t);
+                    ClickUtils.getLogService().error("onDestroy error", t);
                 }
                 if (ClickUtils.getLogService().isTraceEnabled()) {
                     logEvent(control, "onDestroy");
@@ -262,7 +262,8 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * Render the container and all its child controls to the specified buffer.
+     * Render the HTML representation of the container and all its child
+     * controls to the specified buffer.
      * <p/>
      * If {@link #getTag()} returns null, this method will render only its
      * child controls.
