@@ -301,23 +301,27 @@ public class CreditCardField extends TextField {
     }
 
     /**
-     * Return the HTML rendered CreditCardField string.
-     *
-     * @return the HTML rendered CreditCardField string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(400);
+    public int getControlSizeEst() {
+        return 400;
+    }
 
+    /**
+     * Render the HTML representation of the CreditCardField.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         // Render card number field
-        String textField = super.toString();
-        buffer.append(textField);
+        super.render(buffer);
 
         // Render card type select
         cardTypeSelect.setValue(cardType);
         cardTypeSelect.setForm(getForm());
-        buffer.append(cardTypeSelect);
-
-        return buffer.toString();
+        cardTypeSelect.render(buffer);
     }
 
     /**

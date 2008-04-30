@@ -708,21 +708,16 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * Return an HTML anchor tag representation of the menu item. If the menu is
-     * a separator this method will return a HR tag &lt;hr/&gt;.
-     * <p/>
-     * Note for more fine grained rendering control you should use a Velocity
-     * #macro to render the menu item.
+     * Render the HTML representation of the Menu.
      *
-     * @see Object#toString()
+     * @see #toString()
      *
-     * @return an HTML anchor tag representation of the menu item
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+    public void render(HtmlStringBuffer buffer) {
 
         if (isSeparator()) {
-            return "<hr/>";
+            buffer.append("<hr/>");
 
         } else {
             buffer.elementStart("a");
@@ -776,9 +771,24 @@ public class Menu extends AbstractControl {
             }
 
             buffer.elementEnd("a");
-
-            return buffer.toString();
         }
+    }
+
+    /**
+     * Return an HTML anchor tag representation of the menu item. If the menu is
+     * a separator this method will return a HR tag &lt;hr/&gt;.
+     * <p/>
+     * Note for more fine grained rendering control you should use a Velocity
+     * #macro to render the menu item.
+     *
+     * @see Object#toString()
+     *
+     * @return an HTML anchor tag representation of the menu item
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(buffer);
+        return buffer.toString();
     }
 
     // --------------------------------------------------------- Public Methods

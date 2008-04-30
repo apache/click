@@ -29,6 +29,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
 /**
@@ -494,12 +495,13 @@ public class PickList extends Field {
     }
 
     /**
-     * Return a HTML rendered PickList string.
+     * Render the HTML representation of the PickList.
      *
-     * @return a HTML rendered PickList string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-
+    public void render(HtmlStringBuffer buffer) {
         List optionList     = getOptionList();
         List selectedValues = getSelectedValues();
         List options        = new ArrayList();
@@ -526,7 +528,17 @@ public class PickList extends Field {
         model.put("disabled", new Boolean(isDisabled()));
         model.put("readOnly", new Boolean(isReadonly()));
 
-        return getContext().renderTemplate(getClass(), model);
+        buffer.append(getContext().renderTemplate(getClass(), model));
     }
 
+    /**
+     * Return a HTML rendered PickList string.
+     *
+     * @return a HTML rendered PickList string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(2250);
+        render(buffer);
+        return buffer.toString();
+    }
 }

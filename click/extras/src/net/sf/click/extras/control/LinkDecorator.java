@@ -309,7 +309,7 @@ public class LinkDecorator implements Decorator, Serializable {
                     }
                 }
 
-                buffer.append(link.toString());
+                link.render(buffer);
             }
 
             return buffer.toString();
@@ -347,7 +347,7 @@ public class LinkDecorator implements Decorator, Serializable {
                     buffer.append(getLinkSeparator());
                 }
 
-                buffer.append(button.toString());
+                button.render(buffer);
             }
 
             return buffer.toString();
@@ -414,54 +414,93 @@ public class LinkDecorator implements Decorator, Serializable {
 
         private static final long serialVersionUID = 1L;
 
+        /** The PageNumberControl's Table instance. */
         final Table table;
 
+        /**
+         * Create an PageNumberControl with the specified table.
+         *
+         * @param table the table instance
+         */
         PageNumberControl(Table table) {
             this.table = table;
         }
 
+        /**
+         * @see net.sf.click.Control#getContext()
+         */
         public Context getContext() {
             return null;
         }
 
-        public void setContext(Context context) {
-        }
-
+        /**
+         * @see net.sf.click.Control#getHtmlImports()
+         */
         public String getHtmlImports() {
             return null;
         }
 
+        /**
+         * @see net.sf.click.Control#getId()
+         */
         public String getId() {
             return null;
         }
 
+        /**
+         * @see net.sf.click.Control#setListener(java.lang.Object, java.lang.String)
+         */
         public void setListener(Object listener, String method) {
         }
 
+        /**
+         * @see net.sf.click.Control#getMessages()
+         */
         public Map getMessages() {
             return null;
         }
 
+        /**
+         * @see net.sf.click.Control#getName()
+         */
         public String getName() {
             return null;
         }
 
+        /**
+         * @see net.sf.click.Control#setName(java.lang.String)
+         */
         public void setName(String name) {
         }
 
+        /**
+         * @see net.sf.click.Control#getParent()
+         */
         public Object getParent() {
             return null;
         }
 
+        /**
+         * @see net.sf.click.Control#setParent(java.lang.Object)
+         */
         public void setParent(Object parent) {
         }
 
+        /**
+         * @see net.sf.click.Control#onDeploy(javax.servlet.ServletContext)
+         */
         public void onDeploy(ServletContext servletContext) {
         }
 
+        /**
+         * @see net.sf.click.Control#onInit()
+         */
         public void onInit() {
         }
 
+        /**
+         * @see net.sf.click.Control#onProcess()
+         */
         public boolean onProcess() {
             if (anyLinkOrButtonClicked()) {
                 String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
@@ -488,12 +527,21 @@ public class LinkDecorator implements Decorator, Serializable {
             return true;
         }
 
+        /**
+         * @see net.sf.click.Control#onRender()
+         */
         public void onRender() {
         }
 
+        /**
+         * @see net.sf.click.Control#onDestroy()
+         */
         public void onDestroy() {
         }
 
+        /**
+         * @see net.sf.click.Control#render(net.sf.click.util.HtmlStringBuffer)
+         */
         public void render(HtmlStringBuffer buffer) {
         }
 
