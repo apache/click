@@ -22,6 +22,7 @@ import net.sf.click.control.Form;
 import net.sf.click.control.HiddenField;
 import net.sf.click.util.ClickUtils;
 
+import net.sf.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
@@ -353,16 +354,18 @@ public class HibernateForm extends Form {
     }
 
     /**
+     * Render the HTML representation of the HibernateForm.
+     * <p/>
      * This method applies the object meta data to the form fields and then
      * invokes the <tt>super.toString()</tt> method.
      *
-     * @see Form#toString()
+     * @see #toString()
      *
-     * @return the HTML string representation of the form
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
+    public void render(HtmlStringBuffer buffer) {
         applyMetaData();
-        return super.toString();
+        super.render(buffer);
     }
 
     // ------------------------------------------------------ Protected Methods

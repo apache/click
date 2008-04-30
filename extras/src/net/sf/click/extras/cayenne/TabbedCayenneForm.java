@@ -26,6 +26,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.extras.control.TabbedForm;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides Cayenne data aware tabbed Form control: &nbsp; &lt;form method='POST'&gt;.
@@ -294,8 +295,9 @@ public class TabbedCayenneForm extends CayenneForm {
     }
 
     /**
-     * Return the HTML string representation of the form. The form will
-     * be rendered using the classpath template:
+     * Render the HTML representation of the form.
+     * <p/>
+     * The form will be rendered using the classpath template:
      *
      * <pre class="codeConfig">
      * /net/sf/click/extras/control/TabbedForm.htm </pre>
@@ -303,15 +305,17 @@ public class TabbedCayenneForm extends CayenneForm {
      * If the form contains errors after processing, these errors will be
      * rendered.
      *
-     * @return the HTML string representation of the form
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
+    public void render(HtmlStringBuffer buffer) {
         applyMetaData();
 
         Map model = new HashMap();
         model.put("form", this);
 
-        return getContext().renderTemplate(getTemplate(), model);
+        buffer.append(getContext().renderTemplate(getTemplate(), model));
     }
 
 }

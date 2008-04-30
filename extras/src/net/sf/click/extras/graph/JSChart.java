@@ -174,18 +174,27 @@ public abstract class JSChart extends AbstractControl {
     }
 
     /**
-     * Return the HTML rendered bar chart.
+     * Render the HTML representation of the chart.
      *
-     * @return the HTML rendered bar chart string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
         buffer.appendAttribute("style", "overflow:auto; position:relative; height:" + getChartHeight() + "px; width:" + getChartWidth() + "px;");
         buffer.elementEnd();
+    }
 
+    /**
+     * Return the HTML rendered chart.
+     *
+     * @return the HTML rendered chart string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
         return buffer.toString();
     }
 
