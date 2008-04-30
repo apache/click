@@ -202,17 +202,14 @@ public class ImageSubmit extends Submit {
         }
     }
 
-
     /**
-     * Return a HTML rendered ImageButton string.
+     * Render the HTML representation of the ImageButton.
      *
-     * @see Object#toString()
+     * @see #toString()
      *
-     * @return a HTML rendered Button string
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
-
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
@@ -239,7 +236,5 @@ public class ImageSubmit extends Submit {
         }
 
         buffer.elementEnd();
-
-        return buffer.toString();
     }
 }

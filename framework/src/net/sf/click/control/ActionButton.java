@@ -474,16 +474,14 @@ public class ActionButton extends Button {
     }
 
     /**
-     * Return a HTML rendered Button string. Note the button label is rendered
-     * as the HTML "value" attribute.
+     * Render the HTML representation of the ActionButton. Note the button label
+     * is rendered as the HTML "value" attribute.
+     * 
+     * @see #toString()
      *
-     * @see Object#toString()
-     *
-     * @return a HTML rendered Button string
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
-
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
@@ -505,7 +503,5 @@ public class ActionButton extends Button {
         }
 
         buffer.elementEnd();
-
-        return buffer.toString();
     }
 }

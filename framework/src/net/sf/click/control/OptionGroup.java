@@ -103,15 +103,12 @@ public class OptionGroup implements Serializable {
     // ----------------------------------------------------- Public Methods
 
     /**
-     * Return a HTML rendered OptionGroup string.
+     * Return a HTML rendered Option string.
      *
      * @param select the parent Select
-     * @return a rendered HTML OptionGroup string
+     * @param buffer the specified buffer to render to
      */
-    public String renderHTML(Select select) {
-
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
+    public void render(Select select, HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
         buffer.appendAttribute("label", getLabel());
         buffer.closeTag();
@@ -136,7 +133,20 @@ public class OptionGroup implements Serializable {
         }
 
         buffer.elementEnd(getTag());
+    }
 
+    /**
+     * Return a HTML rendered OptionGroup string.
+     *
+     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)
+     * instead
+     *
+     * @param select the parent Select
+     * @return a rendered HTML OptionGroup string
+     */
+    public String renderHTML(Select select) {
+        HtmlStringBuffer buffer = new HtmlStringBuffer();
+        render(select, buffer);
         return buffer.toString();
     }
 }

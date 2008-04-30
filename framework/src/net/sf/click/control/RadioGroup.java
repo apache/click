@@ -451,18 +451,23 @@ public class RadioGroup extends Field {
     }
 
     /**
-     * Return the HTML rendered RadioGroup string.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML rendered RadioGroup string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        final int size = getRadioList().size();
+    public int getControlSizeEst() {
+        return getRadioList().size() * 30;
+    }
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(size * 30);
-
+    /**
+     * Render the HTML representation of the RadioGroup.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         String value = getValue();
+
+        final int size = getRadioList().size();
 
         for (int i = 0; i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
@@ -482,13 +487,24 @@ public class RadioGroup extends Field {
                 }
             }
 
-            buffer.append(radio.toString());
+            radio.render(buffer);
 
             if (isVerticalLayout() && (i < size - 1)) {
                 buffer.append("<br/>");
             }
         }
+    }
 
+    /**
+     * Return the HTML rendered RadioGroup string.
+     *
+     * @see Object#toString()
+     *
+     * @return the HTML rendered RadioGroup string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
         return buffer.toString();
     }
 

@@ -1498,33 +1498,26 @@ public class Form extends BasicForm {
 
         List formFields = ClickUtils.getFormFields(this);
 
-        buffer.elementEnd(getTag());
-        buffer.append("\n");
-
-        renderFocusJavaScript(buffer, formFields);
-
-        renderValidationJavaScript(buffer, formFields);
+        renderTagEnd(formFields, buffer);
 
         return buffer.toString();
     }
 
     /**
-     * Return the HTML string representation of the form.
+     * Render the HTML representation of the Form.
      * <p/>
      * If the form contains errors after processing, these errors will be
      * rendered.
      *
-     * @return the HTML string representation of the form
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
+    public void render(HtmlStringBuffer buffer) {
         final boolean process =
             getContext().getRequest().getMethod().equalsIgnoreCase(getMethod());
 
         List formFields = ClickUtils.getFormFields(this);
-
-        int bufferSize = getFormSizeEst(formFields);
-
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
 
         renderHeader(buffer, formFields);
 
@@ -1555,9 +1548,7 @@ public class Form extends BasicForm {
 
         buffer.append("</table>\n");
 
-        buffer.append(endTag());
-
-        return buffer.toString();
+        renderTagEnd(formFields, buffer);
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -1602,7 +1593,7 @@ public class Form extends BasicForm {
         for (int i = 0, size = formFields.size(); i < size; i++) {
             Field field = (Field) formFields.get(i);
             if (field.isHidden()) {
-                buffer.append(field);
+                field.render(buffer);
                 buffer.append("\n");
             }
         }
@@ -1652,7 +1643,7 @@ public class Form extends BasicForm {
                     }
 
                     buffer.append(">\n");
-                    buffer.append(field);
+                    field.render(buffer);
                     buffer.append("</td>\n");
 
                 } else if (field instanceof Label) {
@@ -1682,7 +1673,7 @@ public class Form extends BasicForm {
                         }
                     }
                     buffer.append(">");
-                    buffer.append(field);
+                    field.render(buffer);
                     buffer.append("</td>\n");
 
                 } else {
@@ -1736,7 +1727,7 @@ public class Form extends BasicForm {
                     }
 
                     // Write out field
-                    buffer.append(field);
+                    field.render(buffer);
                     buffer.append("</td>\n");
                 }
 
@@ -1871,7 +1862,7 @@ public class Form extends BasicForm {
                 buffer.closeTag();
 
                 Button button = (Button) getButtonList().get(i);
-                buffer.append(button);
+                button.render(buffer);
 
                 buffer.append("</td>");
             }
@@ -1880,6 +1871,25 @@ public class Form extends BasicForm {
             buffer.append("</table>\n");
             buffer.append("</td></tr>\n");
         }
+    }
+
+    /**
+     * Close the form tag and render any additional content after the Form.
+     * <p/>
+     * Additional content includes <tt>javascript validation</tt> and
+     * <tt>javascript focus</tt> scripts.
+     *
+     * @param formFields all fields contained within the form
+     * @param buffer the buffer to render to
+     */
+    protected void renderTagEnd(List formFields, HtmlStringBuffer buffer) {
+
+        buffer.elementEnd(getTag());
+        buffer.append("\n");
+
+        renderFocusJavaScript(buffer, formFields);
+
+        renderValidationJavaScript(buffer, formFields);
     }
 
     /**

@@ -305,19 +305,8 @@ public class HiddenField extends Field {
     }
 
     /**
-     * Return the HTML rendered Hidden Field string.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML rendered Hidden Field string
-     */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
-        render(buffer);
-        return buffer.toString();
-    }
-
-    /**
+     * Render the HTML representation of the HiddenField.
+     * 
      * @see Control#render(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the specified buffer to render the control's output to
@@ -363,4 +352,3 @@ public class HiddenField extends Field {
         buffer.elementEnd();
     }
 }
-

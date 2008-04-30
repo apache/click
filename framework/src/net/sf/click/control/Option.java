@@ -170,12 +170,9 @@ public class Option implements Serializable {
      * Return a HTML rendered Option string.
      *
      * @param select the parent Select
-     * @return rendered HTML Option string
+     * @param buffer the specified buffer to render to
      */
-    public String renderHTML(Select select) {
-
-        HtmlStringBuffer buffer = new HtmlStringBuffer(48);
-
+    public void render(Select select, HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         if (select.isMultiple()) {
@@ -206,7 +203,20 @@ public class Option implements Serializable {
         buffer.appendEscaped(getLabel());
 
         buffer.elementEnd(getTag());
+    }
 
+    /**
+     * Return a HTML rendered Option string.
+     *
+     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)
+     * instead
+     *
+     * @param select the parent Select
+     * @return rendered HTML Option string
+     */
+    public String renderHTML(Select select) {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(48);
+        render(select, buffer);
         return buffer.toString();
     }
 }
