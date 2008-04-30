@@ -195,7 +195,7 @@ public class FieldColumn extends Column {
                 }
 
             } else {
-                buffer.append(getField());
+                getField().render(buffer);
             }
 
         } else {
@@ -208,7 +208,7 @@ public class FieldColumn extends Column {
                 }
 
             } else {
-                buffer.append(getField());
+                getField().render(buffer);
             }
         }
 

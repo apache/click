@@ -536,15 +536,14 @@ public class DateField extends TextField {
     }
 
     /**
-     * Return the HTML rendered Date Field string.
+     * Render the HTML representation of the DateField.
      *
-     * @return the HTML rendered Date Field string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
-        String textField = super.toString();
-        buffer.append(textField);
+    public void render(HtmlStringBuffer buffer) {
+        super.render(buffer);
 
         if (!isReadonly() && !isDisabled()) {
             buffer.append("<img align=\"top\" ");
@@ -552,17 +551,19 @@ public class DateField extends TextField {
             buffer.append(getContext().getRequest().getContextPath());
             buffer.append("/click/calendar/calendar");
             buffer.append(ClickUtils.getResourceVersionIndicator(getContext()));
-            buffer.append(".gif\" id=\"");
-            buffer.append(getId());
-            buffer.append("-button\" ");
+            buffer.append(".gif\"");
+            String id = getId();
+            if (id != null) {
+                buffer.append(" id=\"");
+                buffer.append(getId());
+                buffer.append("-button\" ");
+            }
 
             String calendarTitle = getMessage("calendar-image-title");
             buffer.appendAttribute("alt", calendarTitle);
             buffer.appendAttribute("title", calendarTitle);
             buffer.elementEnd();
         }
-
-        return buffer.toString();
     }
 
     /**

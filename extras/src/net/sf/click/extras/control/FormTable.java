@@ -390,28 +390,27 @@ public class FormTable extends Table {
     }
 
     /**
-     * Return a HTML rendered FormTable string.
-     *
-     * @see Object#toString()
-     *
-     * @return a HTML rendered FormTable string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        int bufferSize =
-                (getColumnList().size() * 60) * (getRowList().size() + 1)
-                + 256;
+    public int getControlSizeEst() {
+        return (getColumnList().size() * 60) * (getRowList().size() + 1) + 256;
+    }
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
-
+    /**
+     * Render the HTML representation of the FormTable.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.append(getForm().startTag());
 
-        buffer.append(super.toString());
+        super.render(buffer);
 
         renderButtons(buffer);
 
         buffer.append(getForm().endTag());
-
-        return buffer.toString();
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -442,7 +441,7 @@ public class FormTable extends Table {
                 buffer.closeTag();
 
                 Button button = (Button) form.getButtonList().get(i);
-                buffer.append(button);
+                button.render(buffer);
 
                 buffer.append("</td>");
             }

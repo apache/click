@@ -225,6 +225,13 @@ public class CheckList extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * @see AbstractControl#getTag()
+     */
+    public String getTag() {
+        return "div";
+    }
+
+    /**
      * Add the given Option.
      *
      * @param option the Option value to add
@@ -761,39 +768,36 @@ public class CheckList extends Field {
     }
 
     /**
-     * Return a HTML rendered CheckList.
-     *
-     * @return a HTML rendered CheckList string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-
+    public int getControlSizeEst() {
         int bufferSize = 50;
         if (!getOptionList().isEmpty()) {
             bufferSize = bufferSize + (optionList.size() * 48);
         }
-        final HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+        return bufferSize;
+    }
+
+    /**
+     * Render the HTML representation of the CheckList.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         final boolean sortable = isSortable();
 
         // the div element
-        buffer.elementStart("div");
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("id", getId());
 
         // style class
         addStyleClass(STYLE_CLASS);
-        /*
-        buffer.append(" class=\"");
-        buffer.append(STYLE_CLASS);
-        String classAttr = getAttribute("class");
-        if (classAttr != null) {
-            setAttribute("class", null);
-            buffer.append(" ");
-            buffer.append(classAttr);
-        }
-       */
+
         if (isValid()) {
             removeStyleClass("error");
-            //buffer.append(" error");
         } else {
             addStyleClass("error");
         }
@@ -882,9 +886,7 @@ public class CheckList extends Field {
             }
         }
         buffer.append("</ul>");
-        buffer.append("</div>");
-
-        return buffer.toString();
+        buffer.elementEnd(getTag());
     }
 
     /**

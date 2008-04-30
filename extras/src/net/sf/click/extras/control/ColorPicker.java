@@ -276,12 +276,20 @@ public class ColorPicker extends Field {
     }
 
     /**
-     * Returns the HTML for the color-picker. This is the content of the
-     * ColorPicker.htm template.
-     *
-     * @return a HTML rendered TextField string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
+    public int getControlSizeEst() {
+        return 96;
+    }
+
+    /**
+     * Render the HTML representation of the ColorPicker.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         Map values = new HashMap();
 
         values.put("id", getId());
@@ -329,7 +337,19 @@ public class ColorPicker extends Field {
         values.put("noColorMsg", getMessage("no-color"));
         values.put("closeMsg", getMessage("close"));
 
-        return getContext().renderTemplate(ColorPicker.class, values);
+        buffer.append(getContext().renderTemplate(ColorPicker.class, values));
+    }
+
+    /**
+     * Returns the HTML for the color-picker. This is the content of the
+     * ColorPicker.htm template.
+     *
+     * @return a HTML rendered ColorPicker string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
+        return buffer.toString();
     }
 
     /**

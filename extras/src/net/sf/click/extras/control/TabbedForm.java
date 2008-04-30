@@ -26,6 +26,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 /**
  * Provides a Tabbed Form control: &nbsp; &lt;form method='post'&gt;.
@@ -358,6 +359,20 @@ public class TabbedForm extends Form {
     }
 
     /**
+     * Render the HTML representation of the TabbedForm.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        Map model = new HashMap();
+        model.put("form", this);
+
+        buffer.append(getContext().renderTemplate(getTemplate(), model));
+    }
+
+    /**
      * Return the HTML string representation of the form. The form will
      * be rendered using the classpath template:
      *
@@ -370,10 +385,7 @@ public class TabbedForm extends Form {
      * @return the HTML string representation of the form
      */
     public String toString() {
-        Map model = new HashMap();
-        model.put("form", this);
-
-        return getContext().renderTemplate(getTemplate(), model);
+        return super.toString();
     }
 
 }
