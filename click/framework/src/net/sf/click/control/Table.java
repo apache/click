@@ -984,21 +984,26 @@ public class Table extends AbstractControl {
     }
 
     /**
-     * Return a HTML rendered Table string.
-     *
-     * @see Object#toString()
-     *
-     * @return a HTML rendered Table string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
+    public int getControlSizeEst() {
         int bufferSize = 0;
         if (getPageSize() > 0) {
             bufferSize = (getColumnList().size() * 60) * (getPageSize() + 1) + 1792;
         } else {
             bufferSize = (getColumnList().size() * 60) * (getRowList().size() + 1);
         }
+        return bufferSize;
+    }
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+    /**
+     * Render the HTML representation of the Table.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
 
         if (getBannerPosition() == POSITION_TOP
             || getBannerPosition() == POSITION_BOTH) {
@@ -1038,8 +1043,6 @@ public class Table extends AbstractControl {
             renderTableBanner(buffer);
             renderPagingControls(buffer);
         }
-
-        return buffer.toString();
     }
 
     // ------------------------------------------------------ Protected Methods

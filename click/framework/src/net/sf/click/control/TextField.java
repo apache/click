@@ -281,12 +281,21 @@ public class TextField extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return a HTML rendered TextField string.
-     *
-     * @return a HTML rendered TextField string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
+    public int getControlSizeEst() {
+        return 96;
+    }
+
+    /**
+     * Render the HTML representation of the Button. Note the button label is
+     * rendered as the HTML "value" attribute.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
 
         buffer.elementStart(getTag());
 
@@ -328,8 +337,6 @@ public class TextField extends Field {
         if (getHelp() != null) {
             buffer.append(getHelp());
         }
-
-        return buffer.toString();
     }
 
     /**

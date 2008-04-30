@@ -159,16 +159,21 @@ public class Button extends Field {
     }
 
     /**
-     * Return a HTML rendered Button string. Note the button label is rendered
-     * as the HTML "value" attribute.
-     *
-     * @see Object#toString()
-     *
-     * @return a HTML rendered Button string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
+    public int getControlSizeEst() {
+        return 40;
+    }
 
+    /**
+     * Render the HTML representation of the Button. Note the button label is
+     * rendered as the HTML "value" attribute.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
@@ -187,7 +192,5 @@ public class Button extends Field {
         }
 
         buffer.elementEnd();
-
-        return buffer.toString();
     }
 }

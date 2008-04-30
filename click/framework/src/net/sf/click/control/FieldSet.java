@@ -434,6 +434,8 @@ public class FieldSet extends BasicFieldSet {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Render the HTML representation of the fieldset.
+     * 
      * @see Control#render(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the specified buffer to render the control's output to
@@ -473,20 +475,6 @@ public class FieldSet extends BasicFieldSet {
             buffer.elementEnd(getTag());
             buffer.append("\n");
         }
-    }
-
-    /**
-     * Return the HTML string representation of the fieldset.
-     *
-     * @see Object#toString()
-     *
-     * @return the HTML string representation of the fieldset
-     */
-    public String toString() {
-        // Estimate the size of the string buffer
-        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
-        render(buffer);
-        return buffer.toString();
     }
 
     // ------------------------------------------------------ Protected Methods
@@ -553,7 +541,7 @@ public class FieldSet extends BasicFieldSet {
                         }
                     }
                     buffer.append(">");
-                    buffer.append(field);
+                    field.render(buffer);
                     buffer.append("</td>\n");
 
                 } else {
@@ -607,7 +595,7 @@ public class FieldSet extends BasicFieldSet {
                     }
 
                     // Write out field
-                    buffer.append(field);
+                    field.render(buffer);
                     buffer.append("</td>\n");
                 }
 

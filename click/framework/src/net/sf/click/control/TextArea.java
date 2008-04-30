@@ -301,12 +301,20 @@ public class TextArea extends Field {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Return a HTML rendered TextArea string.
-     *
-     * @return a HTML rendered TextArea string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
+    public int getControlSizeEst() {
+        return 96;
+    }
+
+    /**
+     * Render the HTML representation of the TextArea.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
 
         buffer.elementStart(getTag());
 
@@ -347,8 +355,6 @@ public class TextArea extends Field {
         if (getHelp() != null) {
             buffer.append(getHelp());
         }
-
-        return buffer.toString();
     }
 
     /**

@@ -293,13 +293,14 @@ public class Radio extends Field {
     }
 
     /**
-     * Return the HTML rendered Radio string.
+     * Render a HTML Radio string.
      *
-     * @return the HTML rendered Radio string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
+    public void render(HtmlStringBuffer buffer) {
         String id = getId();
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
 
         buffer.elementStart(getTag());
 
@@ -343,7 +344,5 @@ public class Radio extends Field {
             buffer.appendAttribute("value", getValue());
             buffer.elementEnd();
         }
-
-        return buffer.toString();
     }
 }

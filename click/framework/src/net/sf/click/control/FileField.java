@@ -242,13 +242,20 @@ public class FileField extends Field {
     }
 
     /**
-     * Return a HTML rendered FileField string.
-     *
-     * @return a HTML rendered FileField string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(96);
+    public int getControlSizeEst() {
+        return 96;
+    }
 
+    /**
+     * Render the HTML representation of the FileField.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
@@ -280,8 +287,6 @@ public class FileField extends Field {
         if (getHelp() != null) {
             buffer.append(getHelp());
         }
-
-        return buffer.toString();
     }
 
     /**

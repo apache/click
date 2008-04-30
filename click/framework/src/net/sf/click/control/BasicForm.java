@@ -892,7 +892,7 @@ public class BasicForm extends AbstractContainer {
      * @see AbstractControl#getControlSizeEst()
      */
     protected int getControlSizeEst() {
-        return 400 + (getFieldList().size() * 350);
+        return 400 + (getControls().size() * 350);
     }
 
     /**

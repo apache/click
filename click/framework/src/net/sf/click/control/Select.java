@@ -634,18 +634,24 @@ public class Select extends Field {
     }
 
     /**
-     * Return a HTML rendered Select string.
-     *
-     * @return a HTML rendered Select string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-
+    public int getControlSizeEst() {
         int bufferSize = 50;
         if (!getOptionList().isEmpty()) {
-            bufferSize = bufferSize + (optionList.size() * 48);
+            bufferSize = bufferSize + (getOptionList().size() * 48);
         }
-        HtmlStringBuffer buffer = new HtmlStringBuffer(bufferSize);
+        return bufferSize;
+    }
 
+    /**
+     * Render the HTML representation of the Select.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("name", getName());
@@ -678,11 +684,11 @@ public class Select extends Field {
 
                 if (object instanceof Option) {
                     Option option = (Option) object;
-                    buffer.append(option.renderHTML(this));
+                    option.render(this, buffer);
 
                 } else if (object instanceof OptionGroup) {
                     OptionGroup optionGroup = (OptionGroup) object;
-                    buffer.append(optionGroup.renderHTML(this));
+                    optionGroup.render(this, buffer);
 
                 } else {
                     String msg = "Select option class not instance of Option"
@@ -707,8 +713,6 @@ public class Select extends Field {
             buffer.appendAttribute("value", getValue());
             buffer.elementEnd();
         }
-
-        return buffer.toString();
     }
 
     /**

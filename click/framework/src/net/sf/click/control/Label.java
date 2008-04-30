@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.util.HtmlStringBuffer;
+
 /**
  * Provides a Label display control. The Label control performs no server side
  * processing, and is used primarily to add descriptive labels or horizontal
@@ -89,6 +91,17 @@ public class Label extends Field {
      */
     public boolean onProcess() {
         return true;
+    }
+
+    /**
+     * Render a label.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        buffer.append(getLabel());
     }
 
     /**

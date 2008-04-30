@@ -449,7 +449,7 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     /**
-     * Return the HTML rendered anchor link string. This method
+     * Render the HTML representation of the anchor link. This method
      * will render the entire anchor link including the tags, the label and
      * any attributes, see {@link #setAttribute(String, String)} for an
      * example.
@@ -459,12 +459,11 @@ public abstract class AbstractLink extends AbstractControl {
      * <p/>
      * This method invokes the abstract {@link #getHref()} method.
      *
-     * @see Object#toString()
+     * @see #toString()
      *
-     * @return the HTML rendered anchor link string
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
+    public void render(HtmlStringBuffer buffer) {
 
         if (isDisabled()) {
 
@@ -524,7 +523,5 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.elementEnd(getTag());
         }
-
-        return buffer.toString();
     }
 }

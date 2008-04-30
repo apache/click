@@ -227,13 +227,13 @@ public class Checkbox extends Field {
     }
 
     /**
-     * Return the HTML rendered Checkbox string.
+     * Render the HTML representation of the Checkbox.
      *
-     * @return the HTML rendered Checkbox string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", getType());
@@ -273,8 +273,6 @@ public class Checkbox extends Field {
             buffer.appendAttribute("value", getValue());
             buffer.elementEnd();
         }
-
-        return buffer.toString();
     }
 
     /**
