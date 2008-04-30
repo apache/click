@@ -117,12 +117,6 @@ public class TabbedPanel extends Panel {
     /** The currently active panel. */
     protected Panel activePanel;
 
-    /** The tab switch listener object. */
-    protected Object listener;
-
-    /** The tab switch listener method. */
-    protected String method;
-
     /** The tab switch action link. */
     protected ActionLink tabLink =
         new ActionLink("tabLink", this, "onTabSwitch");
@@ -175,23 +169,25 @@ public class TabbedPanel extends Panel {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Add the control to the panel. The control will be added to the panels model
-     * using the controls name as the key. The Controls context property will
-     * be set if the context is available. The Controls parent property will
-     * also be set to the page instance.
+     * Add the control to the panel.
      * <p/>
      * If the control added is the first panel it will be made the active panel.
      *
-     * @param control the control to add
-     * @throws IllegalArgumentException if the control is null, or if the name
-     *      of the control is not defined
+     * @see net.sf.click.control.Panel#addControl(net.sf.click.Control)
+     *
+     * @param control the control to add to the container
+     * @throws IllegalArgumentException if the control is null, if the name
+     *     of the control is not defined, the container already contains a
+     *     control with the same name, or if the control's parent is a Page
      */
-    public void addControl(Control control) {
+    public Control addControl(Control control) {
         super.addControl(control);
 
         if (control instanceof Panel && getPanels().size() == 1) {
             setActivePanel((Panel) control);
         }
+
+        return control;
     }
 
     /**
@@ -223,6 +219,16 @@ public class TabbedPanel extends Panel {
     }
 
     /**
+     * @deprecated use setListener(java.lang.Object, java.lang.String) instead
+     * 
+     * @param listener
+     * @param listenerMethod
+     */
+    public void setTabListener(Object listener, String listenerMethod) {
+        setListener(listener, listenerMethod);
+    }
+
+    /**
      * Set the tab switch listener.  If the listener <b>and</b> method are
      * non-null, then the listener will be called whenever a request to switch
      * tabs is placed by clicking the link associated with that tab.
@@ -242,11 +248,11 @@ public class TabbedPanel extends Panel {
      * } </pre>
      *
      * @param listener the listener object with the named method to invoke
-     * @param method the name of the method to invoke
+     * @param listenerMethod the name of the method to invoke
      */
-    public void setTabListener(Object listener, String method) {
+    public void setListener(Object listener, String listenerMethod) {
         this.listener = listener;
-        this.method = method;
+        this.listenerMethod = listenerMethod;
     }
 
     /**
@@ -361,8 +367,8 @@ public class TabbedPanel extends Panel {
 
         // If a listener has been explicitely set to handle a tab switch,
         // then invoke it
-        if (listener != null && method != null) {
-            return ClickUtils.invokeListener(listener, method);
+        if (listener != null && listenerMethod != null) {
+            return ClickUtils.invokeListener(listener, listenerMethod);
         }
 
         return true;

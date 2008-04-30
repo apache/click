@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.click.Context;
@@ -29,6 +28,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.SessionMap;
 
 import org.apache.commons.lang.StringUtils;
@@ -113,7 +113,7 @@ import org.apache.commons.lang.StringUtils;
  * @author Phil Barnes
  * @author Malcolm Edgar
  */
-public class Panel extends AbstractControl {
+public class Panel extends AbstractContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -132,10 +132,10 @@ public class Panel extends AbstractControl {
     protected String label;
 
     /** A temporary storage for model objects until the Page is set. */
-    protected Map model = new HashMap();
+    protected Map model;
 
     /** The list of sub panels. */
-    protected List panels = new ArrayList(5);
+    protected List panels;
 
     /** The path of the Velocity template to render. */
     protected String template;
@@ -186,16 +186,34 @@ public class Panel extends AbstractControl {
     // ------------------------------------------------------------- Properties
 
     /**
-     * Add the control to the panel. The control will be added to the panels model
-     * using the controls name as the key. The Controls context property will
-     * be set if the context is available. The Controls parent property will
-     * also be set to the page instance.
+     * Add the control to the panel and return the specified control.
+     * <p/>
+     * In addition to the requirements specified by
+     * {@link Container#addControl(net.sf.click.Control), note
+     * the following:
+     * <ul>
+     *  <li>
+     *   The control's name must be set when adding to a panel.
+     *  </li>
+     *  <li>
+     *   The control will be added to the Panel model using the controls name as
+     *   the key and can be accessed through {@link #getModel()}. This allows 
+     *   one to reference the control in the Panels template.
+     *  </li>
+     *  <li>
+     *   If the specified control is an <tt>instanceof</tt> a Panel, it will
+     *   also be added to a list of panels and can be accessed through
+     *   {@link #getPanels()}.
+     *  </li>
+     * </ul>
+     * @see net.sf.click.control.Container#addControl(net.sf.click.Control)
      *
-     * @param control the control to add
-     * @throws IllegalArgumentException if the control is null, or if the name
-     *      of the control is not defined
+     * @param control the control to add to the container
+     * @throws IllegalArgumentException if the control is null, if the name
+     *     of the control is not defined, the container already contains a
+     *     control with the same name, or if the control's parent is a Page
      */
-    public void addControl(Control control) {
+    public Control addControl(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -203,20 +221,54 @@ public class Panel extends AbstractControl {
             throw new IllegalArgumentException("Control name not defined");
         }
 
-        getControls().add(control);
+        super.addControl(control);
+
         addModel(control.getName(), control);
 
         if (control instanceof Panel) {
             getPanels().add(control);
         }
 
-        control.setParent(this);
+        return control;
     }
 
     /**
-     * Return the list of page Controls.
+     * Remove the control from the panel and returning true if the control was 
+     * found in the container and removed, or false if the control was not
+     * found.
+     * <p/>
+     * In addition to the requirements specified by
+     * {@link Container#removeControl(net.sf.click.Control), the controls name
+     * must also be set.
+     * 
+     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)
      *
-     * @return the list of page Controls
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
+     * @throws IllegalArgumentException if the control is null or if the name of
+     *     the control is not defined
+     */
+    public boolean removeControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        if (StringUtils.isBlank(control.getName())) {
+            throw new IllegalArgumentException("Control name not defined");
+        }
+
+        boolean contains = super.removeControl(control);
+
+        getModel().remove(control.getName());
+
+        if (control instanceof Panel) {
+            getPanels().remove(control);
+        }
+
+        return contains;
+    }
+
+    /**
+     * @see net.sf.click.control.Container#getControls()
      */
     public List getControls() {
         if (controls == null) {
@@ -226,9 +278,7 @@ public class Panel extends AbstractControl {
     }
 
     /**
-     * Return true if the page has any controls defined.
-     *
-     * @return true if the page has any controls defined
+     * @see AbstractContainer#hasControls()
      */
     public boolean hasControls() {
         return (controls == null) ? false : !controls.isEmpty();
@@ -246,7 +296,7 @@ public class Panel extends AbstractControl {
     /**
      * Set whether the panel is disabled.
      *
-     * @param disabled the flat indicating whether the panel is disabled
+     * @param disabled the disabled flag
      */
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
@@ -349,7 +399,7 @@ public class Panel extends AbstractControl {
     }
 
     /**
-     * This method does nothing.
+     * This method does nothing, since Panel does not support listener callback.
      *
      * @see Control#setListener(Object, String)
      *
@@ -394,6 +444,9 @@ public class Panel extends AbstractControl {
      * @return the Page's model map
      */
     public Map getModel() {
+        if (model == null) {
+             model = new HashMap();
+        }
         return model;
     }
 
@@ -431,94 +484,25 @@ public class Panel extends AbstractControl {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * This method does nothing and can be overridden by subclasses.
-     *
-     * @see net.sf.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-    }
-
-    /**
-     * Initialize the child controls contained in the panel.
-     *
-     * @see net.sf.click.Control#onInit()
-     */
-    public void onInit() {
-        for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
-            control.onInit();
-        }
-    }
-
-    /**
-     * Process the request and invoke the <tt>onProcess()</tt> method of any
-     * child controls.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true or false to abort further processing
-     */
-    public boolean onProcess() {
-        if (hasControls()) {
-            List controls = getControls();
-            for (int i = 0; i < controls.size(); i++) {
-                Control control = (Control) controls.get(i);
-                if (!control.onProcess()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Perform any pre rendering logic.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-        for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
-            control.onRender();
-        }
-    }
-
-    /**
-     * Destroy the child controls contained in the panel.
-     *
-     * @see net.sf.click.Control#onDestroy()
-     */
-    public void onDestroy() {
-        for (int i = 0, size = getControls().size(); i < size; i++) {
-            Control control = (Control) getControls().get(i);
-            try {
-                control.onDestroy();
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Return the HTML string representation of the Panel. The panel will be
+     * Render the HTML string representation of the Panel. The panel will be
      * rendered by merging the Velocity {@link #template} with the template
      * model. The template model is created using {@link #createTemplateModel()}.
      * <p/>
      * If a Panel template is not defined, a template based on the classes
      * name will be loaded. For more details please see {@link Context#renderTemplate(Class, Map)}.
      *
-     * @return the HTML string representation of the form
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
+    public void render(HtmlStringBuffer buffer) {
         Context context = getContext();
 
         if (getTemplate() != null) {
-            return context.renderTemplate(getTemplate(), createTemplateModel());
+            buffer.append(context.renderTemplate(getTemplate(), createTemplateModel()));
 
         } else {
-            return context.renderTemplate(getClass(), createTemplateModel());
+            buffer.append(context.renderTemplate(getClass(), createTemplateModel()));
         }
     }
 
@@ -569,9 +553,9 @@ public class Panel extends AbstractControl {
             renderModel.put("format", format);
         }
 
-        Map messages = new HashMap(getMessages());
-        messages.putAll(page.getMessages());
-        renderModel.put("messages", messages);
+        Map templateMessages = new HashMap(getMessages());
+        templateMessages.putAll(page.getMessages());
+        renderModel.put("messages", templateMessages);
 
         renderModel.put("request", request);
 
