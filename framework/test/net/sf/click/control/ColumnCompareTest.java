@@ -51,6 +51,8 @@ public class ColumnCompareTest extends TestCase {
         rowList.add(createRow("Data Services"));
         rowList.add(createRow("Data 213 Services"));
         rowList.add(createRow("Data 123 Services"));
+        rowList.add(createRow("Data 2.1.3 Services"));
+        rowList.add(createRow("Data 1.2.3 Services"));
         rowList.add(createRow("0123"));
         rowList.add(createRow("1234"));
         rowList.add(createRow("-234"));
