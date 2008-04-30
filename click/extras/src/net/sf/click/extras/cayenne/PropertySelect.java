@@ -24,6 +24,7 @@ import net.sf.click.control.Decorator;
 import net.sf.click.control.Option;
 import net.sf.click.control.Select;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.PropertyUtils;
 
 import org.apache.cayenne.DataObject;
@@ -451,15 +452,16 @@ public class PropertySelect extends Select {
     }
 
     /**
-     * Return a HTML rendered Select string. If the Select option list is
-     * empty this method will load option list so that it can be rendered.
+     * Render the HTML representation of the PropertySelect.
+     * <p/>
+     * If the Select option list is empty this method will load option list so
+     * that it can be rendered.
      *
-     * @see Select#toString()
+     * @see #toString()
      *
-     * @return a HTML rendered Select string
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-
+    public void render(HtmlStringBuffer buffer) {
         loadOptionList();
 
         // Select option value if value defined and not form submission
@@ -492,8 +494,7 @@ public class PropertySelect extends Select {
                 }
             }
         }
-
-        return super.toString();
+        super.render(buffer);
     }
 
     /**

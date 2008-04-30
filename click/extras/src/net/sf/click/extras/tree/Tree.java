@@ -860,17 +860,20 @@ public class Tree extends AbstractControl {
     // ------------------------------------------------------ Default Rendering
 
     /**
-     * Return a HTML rendered Tree string of all the tree's nodes.
-     *
-     * <p/>Note: by default the tree's root node will not be rendered.
-     * However this behavior can be changed by calling
-     * {@link #setRootNodeDisplayed(boolean)} with true.
-     *
-     * @see java.lang.Object#toString()
-     * @return a HTML rendered Tree string
+     * @see AbstractControl#getControlSizeEst()
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(256);
+    public int getControlSizeEst() {
+        return 256;
+    }
+
+    /**
+     * Render the HTML representation of the tree.
+     *
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
         buffer.elementStart("div");
         buffer.appendAttribute("id", getId());
 
@@ -897,6 +900,21 @@ public class Tree extends AbstractControl {
             //Complete the lifecycle of the javascript handler.
             javascriptHandler.destroy();
         }
+    }
+
+    /**
+     * Return a HTML rendered Tree string of all the tree's nodes.
+     *
+     * <p/>Note: by default the tree's root node will not be rendered.
+     * However this behavior can be changed by calling
+     * {@link #setRootNodeDisplayed(boolean)} with true.
+     *
+     * @see java.lang.Object#toString()
+     * @return a HTML rendered Tree string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
         return buffer.toString();
     }
 
