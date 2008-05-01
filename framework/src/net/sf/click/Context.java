@@ -732,7 +732,7 @@ public class Context {
 
         } catch (Exception e) {
             String msg = "Error occured rendering template: "
-                         + templatePath;
+                         + templatePath + "\n";
             clickServlet.getConfigService().getLogService().error(msg, e);
 
             throw new RuntimeException(e);
