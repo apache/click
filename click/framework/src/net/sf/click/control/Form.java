@@ -637,7 +637,7 @@ public class Form extends BasicForm {
      * @throws IllegalArgumentException if the form already contains a field or
      *  button with the same name, or if the field name is not defined
      */
-    public void add(Field field) {
+    public Field add(Field field) {
         if (field == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -675,6 +675,8 @@ public class Form extends BasicForm {
                 ((TextArea) field).setCols(getDefaultFieldSize());
             }
         }
+
+        return field;
     }
 
     /**
@@ -687,7 +689,7 @@ public class Form extends BasicForm {
      * @throws IllegalArgumentException if the form already contains a field or
      *  a button is added, or if the field name is not defined
      */
-    public void add(Field field, int width) {
+    public Field add(Field field, int width) {
         if (field == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -701,6 +703,7 @@ public class Form extends BasicForm {
 
         add(field);
         getFieldWidths().put(field.getName(), new Integer(width));
+        return field;
     }
 
     /**
