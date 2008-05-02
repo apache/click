@@ -283,7 +283,6 @@ public abstract class AbstractContainer extends AbstractControl implements
             }
             renderContent(buffer);
             renderTagEnd(getTag(), buffer);
-            buffer.append("\n");
 
         } else {
 
