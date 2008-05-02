@@ -450,8 +450,8 @@ public abstract class Field extends AbstractControl {
                 return null;
             }
 
-            String formId = (getForm() != null) ? getForm().getId() + "_" : "";
-
+            BasicForm parentForm = getForm();
+            String formId = (parentForm != null) ? parentForm.getId() + "_" : "";
             String id = formId + fieldName;
 
             if (id.indexOf('/') != -1) {
@@ -895,7 +895,7 @@ public abstract class Field extends AbstractControl {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Return a normalised label for display in error messages.
+     * Return a normalized label for display in error messages.
      *
      * @return a normalized label for error message display
      */

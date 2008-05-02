@@ -102,7 +102,10 @@ public class BasicFieldSet extends AbstractContainerField {
             legend = getMessage(getName() + ".legend");
         }
         if (legend == null) {
-            legend = ClickUtils.toLabel(getName());
+            String fsName = getName();
+            if (fsName != null) {
+                legend = ClickUtils.toLabel(fsName);
+            }
         }
         return legend;
     }
@@ -194,7 +197,7 @@ public class BasicFieldSet extends AbstractContainerField {
             for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
                 String controlName = control.getName();
-                if (!controlName.startsWith(Form.SUBMIT_CHECK)) {
+                if (controlName == null || !controlName.startsWith(Form.SUBMIT_CHECK)) {
                     boolean continueProcessing = control.onProcess();
                     if (!continueProcessing) {
                         return false;
@@ -213,7 +216,8 @@ public class BasicFieldSet extends AbstractContainerField {
      * @param buffer the buffer to append the output to
      */
     protected void renderContent(HtmlStringBuffer buffer) {
-        if (getLegend().length() > 0) {
+        String fsLegend = getLegend();
+        if (fsLegend != null && fsLegend.length() > 0) {
             buffer.elementStart("legend");
             if (hasLegendAttributes()) {
                 if (getLegendAttributes().containsKey("id")) {
@@ -222,7 +226,7 @@ public class BasicFieldSet extends AbstractContainerField {
                 buffer.appendAttributes(getLegendAttributes());
             }
             buffer.closeTag();
-            buffer.append(getLegend());
+            buffer.append(fsLegend);
             buffer.elementEnd("legend");
             buffer.append("\n");
         }

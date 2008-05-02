@@ -160,7 +160,6 @@ public class BasicForm extends AbstractContainer {
         this.actionURL = value;
     }
 
-    
     /**
      * Return true if the form is a disabled.
      *
@@ -484,7 +483,7 @@ public class BasicForm extends AbstractContainer {
                 for (Iterator it = getControls().iterator(); it.hasNext(); ) {
                     Control control = (Control) it.next();
                     String controlName = control.getName();
-                    if (!controlName.startsWith(SUBMIT_CHECK)) {
+                    if (controlName == null || !controlName.startsWith(SUBMIT_CHECK)) {
                         boolean continueProcessing = control.onProcess();
                         if (!continueProcessing) {
                             return false;
