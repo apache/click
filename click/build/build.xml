@@ -827,6 +827,15 @@ Please ensure you have configured build.properties</echo>
             <include name="**/*.html"/>
             <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
          </replace>
+         <!-- 
+         IE throws exception when trying to access parent frame and Mark of the Web is active.
+         Disable setting of window title, which needs to access the parent frame.
+         -->
+         <replace dir="@{destdir}" value="">
+            <include name="**/*.html"/>
+            <replacetoken> onload="windowTitle();"</replacetoken>
+         </replace>
+
       </sequential>
    </macrodef>
 
