@@ -1053,6 +1053,11 @@ public class MockRequest implements HttpServletRequest {
         return this.includes;
     }
 
+    /**
+     * Returns the String representation of the mock request.
+     * 
+     * @return string representation of the mock request
+     */
     public String toString() {
         return getRequestURL().toString();
     }
