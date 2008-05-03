@@ -30,7 +30,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * See also the W3C HTML reference:
  * <a title="W3C HTML 4.01 Specification"
- *    href="../../../../../html/interact/links.html#h-12.2">A Links</a>
+ *    href="../../../../../html/struct/links.html#h-12.2">A Links</a>
  *
  * @see ActionLink
  * @see PageLink
