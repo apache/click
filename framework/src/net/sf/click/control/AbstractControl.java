@@ -37,8 +37,41 @@ import net.sf.click.util.MessagesMap;
  * Provides a default implementation of the {@link Control} interface,
  * to make it easier for developers to implement their own controls.
  * <p/>
- * Subclasses are expected to at least override {@link #toTag()}
- * to differentiate the control.
+ * Subclasses are expected to at least override {@link #getTag()}
+ * to differentiate the control. However some controls does not map cleanly
+ * to a html <em>tag</em>, in which case you can override
+ * {@link #render(net.sf.click.util.HtmlStringBuffer)} for complete control
+ * over the output.
+ * <p/>
+ * Below is an example of creating a new control:
+ * <pre class="prettyprint">
+ * public class MyField extends AbstractControl {
+ * 
+ *     private String value;
+ * 
+ *     public void setValue(String value) {
+ *         this.value = value;
+ *     }
+ * 
+ *     public String getValue() {
+ *         return value;
+ *     }
+ * 
+ *     public String getTag() {
+ *         // Return the HTML tag
+ *         return "input";
+ *     }
+ * 
+ *     public boolean onProcess() {
+ *         // Bind the request parameter to the field value
+ *         String requestValue = getContext().getRequestParamter(getName());
+ *         setValue(requestValue);
+ *         
+ *         // Invoke any listener of MyField
+ *         return invokeListener();
+ *     }
+ * }
+ * </pre>
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
