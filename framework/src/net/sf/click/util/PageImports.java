@@ -20,9 +20,7 @@ import java.util.List;
 
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.FieldSet;
-import net.sf.click.control.Form;
-import net.sf.click.control.Panel;
+import net.sf.click.control.Container;
 import net.sf.click.control.Table;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,7 +45,14 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;body&gt;
  * &lt;/html&gt; </pre>
  *
- * You should also follow the performance best practice by importing CSS includes
+ * "<span class="blue">imports</span>" include all javascript and stylesheet
+ * imports.
+ * <p/>
+ * PageImports also provides a way of including the javascript and stylesheet
+ * separately using the key names "<span class="blue">cssImports</span>" and
+ * "<span class="blue">jsImports</span>".
+ * <p/>
+ * You should follow the performance best practice by importing CSS includes
  * in the head section, then include the JS imports after the html body.
  * For example:
  * <pre class="codeHtml">
@@ -64,8 +69,8 @@ import org.apache.commons.lang.StringUtils;
  * <span class="blue">$jsImports</span>
  * </pre>
  *
- * Please also see {@link Page#getHtmlImports()}.
- * Please also see {@link Control#getHtmlImports()}.
+ * Please also see {@link Page#getHtmlImports()} and
+ * {@link Control#getHtmlImports()}.
  *
  * @see Format
  *
@@ -214,24 +219,10 @@ public class PageImports {
     protected void processControl(Control control) {
         processLine(control.getHtmlImports());
 
-        if (control instanceof Form) {
-            Form form = (Form) control;
-            List controls = form.getFieldList();
-            for (int i = 0, size = controls.size(); i < size; i++) {
-                processControl((Control) controls.get(i));
-            }
-
-        } else if (control instanceof FieldSet) {
-            FieldSet fieldSet = (FieldSet) control;
-            List controls = fieldSet.getFieldList();
-            for (int i = 0, size = controls.size(); i < size; i++) {
-                processControl((Control) controls.get(i));
-            }
-
-        } else if (control instanceof Panel) {
-            Panel panel = (Panel) control;
-            if (panel.hasControls()) {
-                List controls = panel.getControls();
+        if (control instanceof Container) {
+            Container container = (Container) control;
+            if (container.hasControls()) {
+                List controls = container.getControls();
                 for (int i = 0, size = controls.size(); i < size; i++) {
                     processControl((Control) controls.get(i));
                 }
