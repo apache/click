@@ -211,21 +211,19 @@ public abstract class AutoCompleteTextField extends TextField {
     }
 
     /**
-     * Return a HTML rendered AutoCompleteTextField.
+     * Render the HTML representation of the AutoCompleteTextField.
      *
-     * @return a HTML rendered AutoCompleteTextField string
+     * @see #toString()
+     *
+     * @param buffer the specified buffer to render the control's output to
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer();
-
-        buffer.append(super.toString());
+    public void render(HtmlStringBuffer buffer) {
+        super.render(buffer);
 
         buffer.elementStart("div");
         buffer.appendAttribute("class", "auto_complete");
         buffer.appendAttribute("id", getId() + "_auto_complete_div");
         buffer.elementEnd();
-
-        return buffer.toString();
     }
 
     // --------------------------------------------------------- Event Handlers
