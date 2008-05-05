@@ -2,7 +2,6 @@
 <click-app charset="UTF-8">
 
   <pages package="net.sf.click.examples.page">
-    <page path="exception.htm" classname="ExceptionDemo"/>
     <excludes pattern="/tiny_mce/"/>
   </pages>
 
