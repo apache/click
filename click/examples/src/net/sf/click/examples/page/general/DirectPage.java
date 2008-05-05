@@ -1,4 +1,4 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.general;
 
 import java.io.BufferedReader;
 import java.io.IOException;
