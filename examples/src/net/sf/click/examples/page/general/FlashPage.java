@@ -1,8 +1,10 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.general;
 
 import net.sf.click.control.Form;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
+import net.sf.click.examples.page.BorderPage;
+import net.sf.click.examples.page.HomePage;
 
 /**
  * Provides an example of a flash session attribute.

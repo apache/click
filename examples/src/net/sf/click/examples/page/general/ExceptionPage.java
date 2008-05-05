@@ -1,14 +1,15 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.general;
 
 import net.sf.click.Page;
 import net.sf.click.control.ActionLink;
+import net.sf.click.examples.page.BorderPage;
 
 /**
  * Provides examples of the Click Exception handling.
  *
  * @author Malcolm Edgar
  */
-public class ExceptionDemo extends BorderPage {
+public class ExceptionPage extends BorderPage {
 
     public ActionLink nullPointerLink = new ActionLink(this, "onNullPointerClick");
     public ActionLink illegalArgumentLink = new ActionLink(this, "onIllegalArgumentExceptionClick");

@@ -23,7 +23,7 @@ public class CustomerService extends CayenneTemplate {
 
     public List getCustomers() {
         SelectQuery query = new SelectQuery(Customer.class);
-        query.addOrdering("name", true);
+        query.addOrdering(Customer.NAME_PROPERTY, true);
         return performQuery(query);
     }
 
@@ -70,24 +70,24 @@ public class CustomerService extends CayenneTemplate {
     }
 
     public List getCustomers(Date from, Date to) {
-        Expression qual = ExpressionFactory.noMatchExp("dateJoined", null);
+        Expression qual = ExpressionFactory.noMatchExp(Customer.DATE_JOINED_PROPERTY, null);
 
         if (from != null) {
-            qual = qual.andExp(ExpressionFactory.greaterOrEqualExp("dateJoined", from));
+            qual = qual.andExp(ExpressionFactory.greaterOrEqualExp(Customer.DATE_JOINED_PROPERTY, from));
         }
         if (to != null) {
-            qual = qual.andExp(ExpressionFactory.lessOrEqualExp("dateJoined", to));
+            qual = qual.andExp(ExpressionFactory.lessOrEqualExp(Customer.DATE_JOINED_PROPERTY, to));
         }
 
         SelectQuery query = new SelectQuery(Customer.class, qual);
-        query.addOrdering("dateJoined", true);
+        query.addOrdering(Customer.DATE_JOINED_PROPERTY, true);
 
         return performQuery(query);
     }
 
     public List getCustomersSortedByName(int rows) {
         SelectQuery query = new SelectQuery(Customer.class);
-        query.addOrdering("name", true);
+        query.addOrdering(Customer.NAME_PROPERTY, true);
         query.setFetchLimit(rows);
         return performQuery(query);
     }
@@ -134,12 +134,12 @@ public class CustomerService extends CayenneTemplate {
 
     public List getCustomersForName(String value) {
         Expression template = Expression.fromString("name likeIgnoreCase $name");
-        Expression e = template.expWithParameters(toMap("name", "%" + value + "%"));
+        Expression e = template.expWithParameters(toMap(Customer.NAME_PROPERTY, "%" + value + "%"));
         return  performQuery(new SelectQuery(Customer.class, e));
     }
 
     public List getCustomersForAge(String value) {
-        return performQuery(Customer.class, "age", Integer.valueOf(value));
+        return performQuery(Customer.class, Customer.AGE_PROPERTY, Integer.valueOf(value));
     }
 
     public List getCustomersForPage(int offset, int pageSize) {

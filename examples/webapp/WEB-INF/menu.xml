@@ -22,9 +22,10 @@
 	</menu>
 
 	<menu label="General" path="#">
-		<menu label="Direct Page" path="direct-page.htm"/>
-		<menu label="Exception Demo" path="exception.htm"/>
-		<menu label="Flash Attribute" path="flash.htm"/>
+		<menu label="Direct Page" path="general/direct-page.htm"/>
+		<menu label="Excel Export Page" path="general/excel-export.htm"/>
+		<menu label="Exception Demo" path="general/exception.htm"/>
+		<menu label="Flash Attribute" path="general/flash.htm"/>
 		<menu label="Page Security" path="security/secure.htm"/>
 		<menu separator="true"/>
 		<menu label="AJAX Accordian" path="ajax/ajax-accordian.htm"/>
@@ -36,14 +37,14 @@
 		<menu label="JSP Customer Table" path="jsp/customer-table.htm"/>
 		<menu label="JSP Form Demo" path="jsp/edit-customer.htm"/>
 		<menu label="JSP Page Navigation" path="jsp/navigation-a.htm"/>
-    <menu label="JSP Multi Path Demo" path="jsp/multi-path-demo.htm"/>
+		<menu label="JSP Multi Path Demo" path="jsp/multi-path-demo.htm"/>
 		<menu separator="true"/>
-		<menu label="Page Navigation" path="navigation-a.htm"/>
-		<menu label="Page Flow Patterns" path="pageflow/start-page.htm"/>
+		<menu label="Page Navigation" path="general/navigation-a.htm"/>
+		<menu label="Page Flow Patterns" path="general/pageflow/start-page.htm"/>
 		<menu separator="true"/>
-    <menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
-    <menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
-		<menu label="Velocity Action Table" path="control/action-table.htm"/>
+		<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
+		<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
+		<menu label="Velocity Action Table" path="velocity/action-table.htm"/>
 	</menu>
 	
 	<menu label=" Controls" path="#"  imageSrc="/assets/images/icons-16px/text_rich_colored.png">

@@ -1,4 +1,4 @@
-package net.sf.click.examples.page.control;
+package net.sf.click.examples.page.velocity;
 
 import java.util.List;
 

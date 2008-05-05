@@ -15,6 +15,7 @@
    <property name="jar.jstl" value="jstl-1.1.2.jar"/>
    <property name="jar.log4j" value="log4j-1.2.14.jar"/>
    <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
+   <property name="jar.poi" value="poi-3.0-FINAL.jar "/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
    <property name="jar.spring-beans" value="spring-beans-1.2.9.jar"/>
@@ -136,6 +137,7 @@
       <webDownloadMacro name="${jar.logging}" path="commons-logging"/>
       <webDownloadMacro name="${jar.log4j}" path="log4j"/>
       <webDownloadMacro name="${jar.oro}" path="oro"/>
+      <webDownloadMacro name="${jar.poi}" path="poi"/>
       <webDownloadMacro name="${jar.spring-beans}" path="org.springframework"/>
       <webDownloadMacro name="${jar.spring-context}" path="org.springframework"/>
       <webDownloadMacro name="${jar.spring-core}" path="org.springframework"/>

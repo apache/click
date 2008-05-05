@@ -1,4 +1,4 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.general;
 
 /**
  * Provides an navigation example Page demonstrating forward and redirect

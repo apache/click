@@ -1,6 +1,7 @@
-package net.sf.click.examples.page;
+package net.sf.click.examples.page.general;
 
 import net.sf.click.control.ActionLink;
+import net.sf.click.examples.page.BorderPage;
 
 /**
  * Provides an navigation example Page demonstrating forward and redirect
