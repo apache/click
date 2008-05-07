@@ -30,6 +30,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Control;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.StringUtils;
@@ -323,8 +324,8 @@ import org.apache.commons.lang.StringUtils;
  * (<a target="topic" href="../../../../../velocity/user-guide.html#Velocimacros">velocimacros</a>)
  * are a great way to encapsulate customized forms.
  * <p/>
- * To create a generic form layout you can use the Form {@link #getFieldList} and
- * {@link #getButtonList} properties within a Velocity macro.
+ * To create a generic form layout you can use the Form {@link #getFieldList()} and
+ * {@link #getButtonList()} properties within a Velocity macro.
  * <p/>
  * The example below provides a generic <span class="green">writeForm()</span>
  * macro which you could use through out an application. This Velocity macro code
@@ -546,12 +547,6 @@ public class Form extends BasicForm {
     /** The error &lt;td&gt; "style" attribute value. */
     protected String errorsStyle;
 
-    /** The ordered list of field values, excluding buttons. */
-    //protected final List fieldList = new ArrayList();
-
-    /** The map of fields keyed by field name. */
-    //protected final Map fields = new HashMap();
-
     /** The field &lt;td&gt; "style" attribute value. */
     protected String fieldStyle;
 
@@ -611,83 +606,136 @@ public class Form extends BasicForm {
     // ------------------------------------------------------ Public Attributes
 
     /**
+     * Add a Field or FieldSet to the container and return the added instance.
+     * <p/>
+     * <b>Please note</b> only {@link Field} and {@link FieldSet} instances can
+     * be added to a Form. Trying to add any other control with throw an
+     * exception.
+     * <p/>
+     * The Fields inside the FieldSet will be laid out by the Form.
+     *
      * @see Container#addControl(net.sf.click.Control)
+     * 
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null, the Field's name
+     * is not defined, the container already contains a control with the same 
+     * name, if the control's parent is a Page or if the control is neither a
+     * Field nor FieldSet
      */
     public Control addControl(Control control) {
-        if (control == null) {
+         if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
-        if (!(control instanceof Field)) {
-            throw new IllegalArgumentException("Only fields are allowed on this Form");
+        if (control instanceof Field) {
+            Field field = (Field) control;
+            if (StringUtils.isBlank(field.getName())) {
+               String msg = "Field name not defined: " + field.getClass().getName();
+                throw new IllegalArgumentException(msg);
+            }
+            if (getControlMap().containsKey(field.getName())
+                && !(field instanceof Label)) {
+
+                throw new IllegalArgumentException(
+                    "Form already contains field named: " + field.getName());
+            }
+
+            if (field instanceof Button) {
+                getButtonList().add(field);
+            } else {
+                getControls().add(field);
+            }
+
+            getControlMap().put(field.getName(), field);
+
+            field.setForm(this);
+
+            field.setParent(this);
+
+            if (getDefaultFieldSize() > 0) {
+                if (field instanceof TextField) {
+                    ((TextField) field).setSize(getDefaultFieldSize());
+
+                } else if (field instanceof FileField) {
+                    ((FileField) field).setSize(getDefaultFieldSize());
+
+                } else if (field instanceof TextArea) {
+                    ((TextArea) field).setCols(getDefaultFieldSize());
+                }
+            }
+        } else if (control instanceof FieldSet) {
+            FieldSet fieldSet = (FieldSet) control;
+            super.addControl(getControls().size(), fieldSet);
+            fieldSet.setForm(this);
+        } else {
+            throw new IllegalArgumentException("Only fields and FieldSets are" +
+                " allowed on this Form");
         }
-        add((Field) control);
+
         return control;
     }
 
     /**
+     * This method is not supported for Form.
+     *
+     * @param index the index at which the control is to be inserted
+     * @param control the control to add to the container
+     * @throws IllegalArgumentException if the control is null,
+     */
+    public Control addControl(int index, Control control) {
+        throw new UnsupportedOperationException("This method is not supported" +
+            " for Form. Please use addControl(Control) instead.");
+    }
+
+    /**
      * Add the field to the form, and set the fields form property. The field
-     * will be added to the {@link #fields} Map using its name.
+     * will be added to {@link #getControlMap()} using its name.
      * <p/>
-     * Button instances will also be added to the {@link #getButtonList} while all
-     * others field types will also be added to the {@link #getFieldList}.
-     * <p/>
-     * If the form has a
+     * Button instances will be add to {@link #getButtonList()} while
+     * all others field types will be added to the {@link #getFieldList()}.
+     *
+     * @see #addControl(net.sf.click.Control)
      *
      * @param field the field to add to the form
-     * @throws IllegalArgumentException if the form already contains a field or
-     *  button with the same name, or if the field name is not defined
+     * @return the field added to this form
+     * @throws IllegalArgumentException if the field is null, the field name
+     * is not defined, the form already contains a control with the same name
+     * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        if (field == null) {
-            throw new IllegalArgumentException("Field parameter cannot be null");
-        }
-        if (StringUtils.isBlank(field.getName())) {
-            String msg = "Field name not defined: " + field.getClass().getName();
-            throw new IllegalArgumentException(msg);
-        }
-        if (getFields().containsKey(field.getName())
-            && !(field instanceof Label)) {
-
-            throw new IllegalArgumentException(
-                    "Form already contains field named: " + field.getName());
-        }
-
-        if (field instanceof Button) {
-            getButtonList().add(field);
-        } else {
-            getFieldList().add(field);
-        }
-
-        getFields().put(field.getName(), field);
-
-        field.setForm(this);
-
-        field.setParent(this);
-
-        if (getDefaultFieldSize() > 0) {
-            if (field instanceof TextField) {
-                ((TextField) field).setSize(getDefaultFieldSize());
-
-            } else if (field instanceof FileField) {
-                ((FileField) field).setSize(getDefaultFieldSize());
-
-            } else if (field instanceof TextArea) {
-                ((TextArea) field).setCols(getDefaultFieldSize());
-            }
-        }
-
+        addControl(field);
         return field;
+    }
+
+    /**
+     * Add the field to the form, and set the fields form property. The field
+     * will be added to {@link #getControlMap()} using its name.
+     *
+     * @see #addControl(net.sf.click.Control)
+     *
+     * @param fieldSet the fieldSet to add to the form
+     * @return the fieldSet added to this form
+     * @throws IllegalArgumentException if the fieldSet is null, the form
+     * already contains a control with the same name or if the fieldSet's parent
+     * is a Page
+     */
+    public FieldSet add(FieldSet fieldSet) {
+        addControl(fieldSet);
+        return fieldSet;
     }
 
     /**
      * Add the field to the form and specify the field's width in columns.
      * <p/>
-     * Note Button or HiddenFields types are not valid for this method.
+     * Note Button or HiddenFields types are not valid arguments for this method.
      *
      * @param field the field to add to the form
      * @param width the width of the field in table columns
-     * @throws IllegalArgumentException if the form already contains a field or
-     *  a button is added, or if the field name is not defined
+     * @return the field added to this form
+     * @throws IllegalArgumentException if the field is null, field's name is
+     * not defined, field is a Button or HiddenField, the form already contains
+     * a control with the same name, if the field's parent is a Page or the
+     * width &lt; 1
      */
     public Field add(Field field, int width) {
         if (field == null) {
@@ -707,41 +755,94 @@ public class Form extends BasicForm {
     }
 
     /**
+     * Add the fieldSet to the form and specify the fieldSet's width in columns.
+     * <p/>
+     *
+     * @param fieldSet the fieldSet to add to the form
+     * @param width the width of the fieldSet in table columns
+     * @return the fieldSet added to this form
+     * @throws IllegalArgumentException if the fieldSet is null, the form 
+     * already contains a control with the same name, if the fieldSet's parent
+     * is a Page or the width &lt; 1
+     */
+    public FieldSet add(FieldSet fieldSet, int width) {
+        if (fieldSet == null) {
+            throw new IllegalArgumentException("FieldSet parameter cannot be null");
+        }
+        if (width < 1) {
+            throw new IllegalArgumentException("Invalid field width: " + width);
+        }
+
+        add(fieldSet);
+
+        if (fieldSet.getName() != null) {
+            getFieldWidths().put(fieldSet.getName(), new Integer(width));
+        }
+        return fieldSet;
+    }
+
+    /**
      * @see Container#removeControl(net.sf.click.Control)
      */
     public boolean removeControl(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
-        if (!(control instanceof Field)) {
+
+        if (control instanceof Field) {
+            Field field = (Field) control;
+
+            boolean contains = false;
+
+            if (getControlMap().containsKey(field.getName())) {
+                field.setForm(null);
+                if (field.getParent() == this) {
+                    field.setParent(null);
+                }
+
+                getControlMap().remove(field.getName());
+                getFieldWidths().remove(field.getName());
+
+                if (field instanceof Button) {
+                    contains = getButtonList().remove(field);
+                } else {
+                    contains = getControls().remove(field);
+                }
+            }
+
+            return contains;
+        } else if (control instanceof FieldSet) {
+            FieldSet fieldSet = (FieldSet) control;
+            boolean contains = super.removeControl(fieldSet);
+
+            fieldSet.setForm(null);
+
+            return contains;
+        } else {
             throw new IllegalArgumentException("Only fields are allowed on this Form");
         }
-        boolean contains = contains(control);
-        remove((Field) control);
-        return contains;
     }
 
     /**
      * Remove the given field from the form.
      *
      * @param field the field to remove from the form
+     * 
+     * @throws IllegalArgumentException if the field is null
      */
     public void remove(Field field) {
-        if (field != null && getFields().containsKey(field.getName())) {
-            field.setForm(null);
-            if (field.getParent() == this) {
-                field.setParent(null);
-            }
+        removeControl(field);
+    }
 
-            getFields().remove(field.getName());
-            getFieldWidths().remove(field.getName());
-
-            if (field instanceof Button) {
-                getButtonList().remove(field);
-            } else {
-                getFieldList().remove(field);
-            }
-        }
+    /**
+     * Remove the given fieldSet from the form.
+     *
+     * @param fieldSet the fieldSet to remove from the form
+     * 
+     * @throws IllegalArgumentException if the fieldSet is null
+     */
+    public void remove(FieldSet fieldSet) {
+        removeControl(fieldSet);
     }
 
     /**
@@ -789,6 +890,8 @@ public class Form extends BasicForm {
 
     /**
      * Return the ordered list of {@link Button}s.
+     * <p/>
+     * The order of the buttons is the same order they were added to the form.
      *
      * @return the ordered list of {@link Button}s.
      */
@@ -929,27 +1032,14 @@ public class Form extends BasicForm {
      * @return the named field if contained in the form
      */
     public Field getField(String name) {
-        Field field = (Field) getFields().get(name);
-
-        if (field != null) {
-            return field;
-
-        } else {
-            for (Iterator i = getFields().values().iterator(); i.hasNext();) {
-                field = (Field) i.next();
-                if (field instanceof FieldSet) {
-                    FieldSet fieldSet = (FieldSet) field;
-                    if (fieldSet.getField(name) != null) {
-                        return fieldSet.getField(name);
-                    }
-                }
-            }
-            return null;
-        }
+        return super.getField(name);
     }
 
     /**
-     * Return the List of form fields, ordered in addition order to the form.
+     * Return the ordered list of form {@link Field}s as well as any
+     * {@link FieldSet} containers.
+     * <p/>
+     * The order of the fields is the same order they were added to the form.
      *
      * @return the ordered List of form fields
      */
@@ -958,9 +1048,9 @@ public class Form extends BasicForm {
     }
 
     /**
-     * Return the Map of form fields, keyed on field name.
+     * Return a Map of form fields and fieldsets, keyed on field name.
      *
-     * @return the Map of form fields, keyed on field name
+     * @return the Map of form fields and fieldsets, keyed on field name
      */
     public Map getFields() {
         return getControlMap();
@@ -997,6 +1087,8 @@ public class Form extends BasicForm {
      * Return the HTML head imports for the form and all its controls.
      *
      * {@link net.sf.click.Control#getHtmlImports()}
+     *
+     * @deprecated this method is not very useful and has been deprecated
      *
      * @return all the HTML head imports for the form and all its controls
      */
@@ -1353,15 +1445,12 @@ public class Form extends BasicForm {
     }
 
     /**
-     * Initialize the fields and buttons contained in the Form.
+     * Initialize the fields, fieldSet and buttons contained in the Form.
      *
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.onInit();
-        }
+        super.onInit();
 
         for (int i = 0, size = getButtonList().size(); i < size; i++) {
             Button button = (Button) getButtonList().get(i);
@@ -1404,10 +1493,12 @@ public class Form extends BasicForm {
         if (isFormSubmission()) {
 
             boolean continueProcessing = true;
-            for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                Field field = (Field) getFieldList().get(i);
-                if (!field.getName().startsWith(SUBMIT_CHECK)) {
-                    continueProcessing = field.onProcess();
+            for (Iterator it = getControls().iterator(); it.hasNext(); ) {
+                Control control = (Control) it.next();
+                if (control.getName() != null
+                    && !control.getName().startsWith(SUBMIT_CHECK)) {
+
+                    continueProcessing = control.onProcess();
                     if (!continueProcessing) {
                         return false;
                     }
@@ -1434,10 +1525,7 @@ public class Form extends BasicForm {
      * @see net.sf.click.Control#onRender()
      */
     public void onRender() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            field.onRender();
-        }
+        super.onRender();
 
         for (int i = 0, size = getButtonList().size(); i < size; i++) {
             Button button = (Button) getButtonList().get(i);
@@ -1452,21 +1540,14 @@ public class Form extends BasicForm {
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
-            Field field = (Field) getFieldList().get(i);
-            try {
-                field.onDestroy();
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        }
+        super.onDestroy();
 
         for (int i = 0, size = getButtonList().size(); i < size; i++) {
             Button button = (Button) getButtonList().get(i);
             try {
                 button.onDestroy();
             } catch (Throwable t) {
-                t.printStackTrace();
+                ClickUtils.getLogService().error("onDestroy error", t);
             }
         }
 
@@ -1504,6 +1585,54 @@ public class Form extends BasicForm {
         renderTagEnd(formFields, buffer);
 
         return buffer.toString();
+    }
+
+    /**
+     * Convenience method that allows the form to render the specified fieldSet,
+     * and layout its fields.
+     *
+     * @param buffer the buffer to render to
+     * @param fieldSet the fieldSet to render
+     */
+    public void renderFieldSet(HtmlStringBuffer buffer, FieldSet fieldSet) {
+        if (fieldSet.getShowBorder()) {
+            // Render the FieldSet
+            buffer.elementStart(fieldSet.getTag());
+
+            String id = fieldSet.getId();
+
+            if (id != null) {
+                buffer.appendAttribute("id", id);
+            }
+
+            fieldSet.appendAttributes(buffer);
+
+            buffer.closeTag();
+            buffer.append("\n");
+
+            if (fieldSet.getLegend().length() > 0) {
+                buffer.elementStart("legend");
+                if (fieldSet.hasLegendAttributes()) {
+                    Object legendId = fieldSet.getLegendAttributes().get("id");
+                    if (legendId != null) {
+                        buffer.appendAttribute("id", legendId);
+                    }
+                    buffer.appendAttributes(fieldSet.getLegendAttributes());
+                }
+
+                buffer.closeTag();
+                buffer.append(fieldSet.getLegend());
+                buffer.elementEnd("legend");
+                buffer.append("\n");
+            }
+        }
+
+        renderFieldSetFields(buffer, fieldSet);
+
+        if (fieldSet.getShowBorder()) {
+            buffer.elementEnd(fieldSet.getTag());
+            buffer.append("\n");
+        }
     }
 
     /**
@@ -1604,52 +1733,70 @@ public class Form extends BasicForm {
 
     /**
      * Render the non hidden Form Fields to the string buffer.
-     *
+     * <p/>
+     * This method delegates the rendering of the form fields to 
+     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map).
+     * 
      * @param buffer the StringBuffer to render to
      */
     protected void renderFields(HtmlStringBuffer buffer) {
-        if (getFieldList().size() == 1
-            && getFields().containsKey("form_name")) {
-            return;
+
+        // If Form contains only HiddenField, exit early
+        if (getControls().size() == 1) {
+
+            // getControlMap is cheaper than getFields, so check that first
+            if (getControlMap().containsKey("form_name")) {
+                return;
+            } else if (ContainerUtils.getFieldMap(this).containsKey("form_name")) {
+                return;
+            }
         }
 
         buffer.append("<tr><td>\n");
-        buffer.append("<table class=\"fields\" id=\"");
-        buffer.append(getId());
-        buffer.append("-fields\">\n");
+        renderControls(buffer, this, getControls(), getFieldWidths());
+        buffer.append("</td></tr>\n");
+    }
+
+    /**
+     * Render the specified controls of the container to the string buffer.
+     * <p/>
+     * fieldWidths is a map specifying the width for specific fields contained
+     * in the list of controls. The fieldWidths map is keyed on field name.
+     *
+     * @param buffer the StringBuffer to render to
+     * @param container the container which controls to render
+     * @param controls the controls to render
+     * @param fieldWidths a map of field widths keyed on field name
+     */
+    protected void renderControls(HtmlStringBuffer buffer,
+        AbstractContainer container, List controls, Map fieldWidths) {
+
+        buffer.append("<table class=\"fields\"");
+        String containerId = container.getId();
+        if (containerId != null) {
+            buffer.appendAttribute("id", containerId + "-fields");
+        }
+        buffer.append(">\n");
 
         int column = 1;
         boolean openTableRow = false;
 
-        for (int i = 0, size = getFieldList().size(); i < size; i++) {
+        for (int i = 0, size = controls.size(); i < size; i++) {
 
-            Field field = (Field) getFieldList().get(i);
+            Control control = (Control) controls.get(i);
 
-            if (!field.isHidden()) {
+            if (!isHidden(control)) {
 
-                // Field width
-                Integer width = (Integer) getFieldWidths().get(field.getName());
+                // Control width
+                Integer width = (Integer) fieldWidths.get(control.getName());
 
                 if (column == 1) {
                     buffer.append("<tr class=\"fields\">\n");
                     openTableRow = true;
                 }
 
-                if (field instanceof FieldSet) {
-                    buffer.append("<td class=\"fields\"");
-
-                    if (width != null) {
-                        int colspan = (width.intValue() * 2);
-                        buffer.appendAttribute("colspan", colspan);
-                    } else {
-                        buffer.appendAttribute("colspan", 2);
-                    }
-
-                    buffer.append(">\n");
-                    field.render(buffer);
-                    buffer.append("</td>\n");
-
-                } else if (field instanceof Label) {
+                if (control instanceof Label) {
+                    Label label = (Label) control;
                     buffer.append("<td class=\"fields\" align=\"");
                     buffer.append(getLabelAlign());
                     buffer.append("\"");
@@ -1661,25 +1808,41 @@ public class Form extends BasicForm {
                         buffer.appendAttribute("colspan", 2);
                     }
 
-                    if (field.hasAttributes()) {
+                    if (label.hasAttributes()) {
                         //Temporarily remove the style attribute
                         String tempStyle = null;
-                        if (field.hasAttribute("style")) {
-                            tempStyle = field.getAttribute("style");
-                            field.setAttribute("style", null);
+                        if (label.hasAttribute("style")) {
+                            tempStyle = label.getAttribute("style");
+                            label.setAttribute("style", null);
                         }
-                        buffer.appendAttributes(field.getAttributes());
+                        buffer.appendAttributes(label.getAttributes());
 
                         //Put style back in attribute map
                         if (tempStyle != null) {
-                            field.setAttribute("style", tempStyle);
+                            label.setAttribute("style", tempStyle);
                         }
                     }
                     buffer.append(">");
-                    field.render(buffer);
+                    label.render(buffer);
                     buffer.append("</td>\n");
 
+                } else if (control instanceof FieldSet) {
+                    FieldSet fieldSet = (FieldSet) control;
+                    buffer.append("<td class=\"fields\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+                    buffer.append(">\n");
+
+                    renderFieldSet(buffer, fieldSet);
+
+                    buffer.append("</td>\n");
                 } else {
+                    Field field = (Field) control;
                     // Write out label
                     if (POSITION_LEFT.equals(getLabelsPosition())) {
                         buffer.append("<td class=\"fields\"");
@@ -1697,17 +1860,17 @@ public class Form extends BasicForm {
                     } else {
                         buffer.append(getLabelNotRequiredPrefix());
                     }
-                    buffer.append("<label");
+                    buffer.elementStart("label");
                     buffer.appendAttribute("for", field.getId());
                     if (field.isDisabled()) {
-                        buffer.append(" disabled=\"disabled\"");
+                        buffer.appendAttributeDisabled();
                     }
                     if (field.getError() != null) {
-                        buffer.append(" class=\"error\"");
+                        buffer.appendAttribute("class", "error");
                     }
-                    buffer.append(">");
+                    buffer.closeTag();
                     buffer.append(field.getLabel());
-                    buffer.append("</label>");
+                    buffer.elementEnd("label");
                     if (field.isRequired()) {
                         buffer.append(getLabelRequiredSuffix());
                     } else {
@@ -1726,7 +1889,7 @@ public class Form extends BasicForm {
 
                         buffer.append(">");
                     } else {
-                        buffer.append("<br>");
+                        buffer.append("<br/>");
                     }
 
                     // Write out field
@@ -1735,7 +1898,7 @@ public class Form extends BasicForm {
                 }
 
                 if (width != null) {
-                    if (field instanceof Label || field instanceof FieldSet) {
+                    if (control instanceof Label || control instanceof FieldSet) {
                         column += width.intValue();
 
                     } else {
@@ -1748,14 +1911,10 @@ public class Form extends BasicForm {
                     openTableRow = false;
                     column = 1;
 
-                } else if (field instanceof FieldSet) {
-                    column++;
-
                 } else {
                     column++;
                 }
             }
-
         }
 
         if (openTableRow) {
@@ -1763,7 +1922,6 @@ public class Form extends BasicForm {
         }
 
         buffer.append("</table>\n");
-        buffer.append("</td></tr>\n");
     }
 
     /**
@@ -2001,6 +2159,45 @@ public class Form extends BasicForm {
                 buffer.append("_submit() { return true; }\n");
             }
             buffer.append("//--></script>\n");
+        }
+    }
+
+    /**
+     * Render the fieldsets form fields to the string buffer. This method will
+     * apply the parent Forms properties to the layout and rendering of fields.
+     * <p/>
+     * This method delegates the rendering of the fieldset fields to 
+     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map).
+     *
+     * @param buffer the StringBuffer to render to
+     * @param fieldSet the fieldSet to render
+     */
+    protected void renderFieldSetFields(HtmlStringBuffer buffer, FieldSet fieldSet) {
+        if (fieldSet.getControls().isEmpty()) {
+            return;
+        }
+
+        // TODO should we render all controls or only Fields???
+        // List fieldSetFields = fieldSet.getControl();
+        List fieldSetFields = ContainerUtils.getFields(fieldSet);
+        renderControls(buffer, fieldSet, fieldSetFields,
+            fieldSet.getFieldWidths());
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Return true if the control is hidden, false otherwise.
+     *
+     * @param control control to check hidden status
+     * @return true if the control is hidden, false otherwise
+     */
+    private boolean isHidden(Control control) {
+        if (!(control instanceof Field)) {
+            // Non-Field Controls can not be hidden
+            return false;
+        } else {
+            return ((Field) control).isHidden();
         }
     }
 }

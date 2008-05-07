@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.util.ContainerUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,9 +29,23 @@ import net.sf.click.util.HtmlStringBuffer;
  * Provides a default implementation of the {@link Container} interface,
  * to make it easier for developers to implement their own containers.
  * <p/>
- * Subclasses are expected to at least override {@link #toTag()}
- * to differentiate the container.
+ * Subclasses are expected to at least override {@link #getTag()}
+ * to differentiate the container. However some containers does not map cleanly
+ * to a html <em>tag</em>, in which case you can override
+ * {@link #render(net.sf.click.util.HtmlStringBuffer)} for complete control
+ * over the output.
+ * <p/>
+ * Below is an example of creating a new container:
+ * <pre class="prettyprint">
+ * public class Div extends AbstractContainer {
  *
+ *     public String getTag() {
+ *         // Return the HTML tag
+ *         return "div";
+ *     }
+ * }
+ * </pre>
+ * 
  * @author Bob Schellink
  */
 public abstract class AbstractContainer extends AbstractControl implements 
@@ -78,6 +91,19 @@ public abstract class AbstractContainer extends AbstractControl implements
      * is a Page
      */
     public Control addControl(Control control) {
+        return addControl(getControls().size(), control);
+    }
+
+    /**
+     * @see net.sf.click.control.Container#addControl(int, net.sf.click.Control)
+     *
+     * @param index the index at which the control is to be inserted
+     * @param control the control to add to the container
+     * @throws IllegalArgumentException if the control is null, the container
+     * already contains a control with the same name, or if the control's parent
+     * is a Page
+     */
+    public Control addControl(int index, Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -200,19 +226,6 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * Return the HTML head imports for the container and all its child
-     * controls.
-     *
-     * {@link net.sf.click.Control#getHtmlImports()}
-     *
-     * @return all the HTML head imports for the container and all its
-     * child controls
-     */
-    public String getHtmlImportsAll() {
-        return ContainerUtils.getHtmlImportsAll(this);
-    }
-
-    /**
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
@@ -287,9 +300,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         } else {
 
             //render only content because no tag is specified
-            if (hasControls()) {
-                renderContent(buffer);
-            }
+            renderContent(buffer);
         }
     }
 

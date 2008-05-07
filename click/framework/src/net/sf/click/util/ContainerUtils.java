@@ -19,7 +19,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +41,7 @@ public class ContainerUtils {
     /**
      * Return the list of Fields for the given Container, recursively including
      * any Fields contained in child containers. The list of returned fields
-     * will exclude any <tt>Button</tt> or <tt>Label</tt> fields.
+     * will exclude any <tt>Button</tt> and <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @return the list of contained fields
@@ -58,13 +57,28 @@ public class ContainerUtils {
     }
 
     /**
-     * Return a map of Fields for the given Container, recursively including
+     * Return the list of Fields for the given Container, recursively including
+     * any Fields contained in child containers. The list of returned fields
+     * will exclude any <tt>Button</tt> fields.
+     *
+     * @param container the container to obtain the fields from
+     * @return the list of contained fields
+     */
+    public static List getFieldsAndLabels(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List fields = new ArrayList();
+        addFieldsAndLabels(container, fields);
+        return fields;
+    }
+
+    /**
+     * Return a map of all Fields for the given Container, recursively including
      * any Fields contained in child containers.
      * <p/>
      * The map's key / value pair will consist of the control name and instance.
-     * <p/>
-     * The map of returned fields will exclude any <tt>Button</tt> or
-     * <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @return the map of contained fields
@@ -315,34 +329,6 @@ public class ContainerUtils {
         }
     }
 
-    /**
-     * Return the HTML head imports for the specified container and all its
-     * child controls.
-     *
-     * {@link net.sf.click.Control#getHtmlImports()}
-     *
-     * @param container the Container to obtain html head imports from
-     * @return all the HTML head imports for the container and all its
-     * child controls
-     */
-    public static String getHtmlImportsAll(Container container) {
-        if (container == null) {
-            throw new IllegalArgumentException("Container cannot be null");
-        }
-
-        Set htmlIncludeSet = new HashSet();
-        addAllHtmlImports(container, htmlIncludeSet);
-
-        HtmlStringBuffer buffer = new HtmlStringBuffer(htmlIncludeSet.size() * 20);
-
-        for (Iterator it = htmlIncludeSet.iterator(); it.hasNext();) {
-            String htmlInclude = (String) it.next();
-            buffer.append(htmlInclude);
-        }
-
-        return buffer.toString();
-    }
-
     // -------------------------------------------------------- Private Methods
 
     /**
@@ -556,7 +542,7 @@ public class ContainerUtils {
      * to the specified includeSet.
      *
      * {@link net.sf.click.Control#getHtmlImports()}
-     *
+     * 
      * @param container the Container to obtain html head imports from
      * @param includeSet the set containing all the HTML head imports for the
      * container and its child controls
@@ -585,8 +571,8 @@ public class ContainerUtils {
     /**
      * Add fields for the given Container to the specified field list,
      * recursively including any Fields contained in child containers. The list
-     * of returned fields will exclude any <tt>Container</tt>, <tt>Button</tt>
-     * or <tt>Label</tt> fields.
+     * of returned fields will exclude any <tt>Button</tt> or <tt>Label</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @param the list of contained fields
@@ -611,13 +597,37 @@ public class ContainerUtils {
     }
 
     /**
-     * Add the Fields for the given Container to the specified map, recursively
-     * including any Fields contained in child containers.
+     * Add fields for the container to the specified field list, recursively
+     * including any Fields contained in child containers. The list
+     * of returned fields will exclude any <tt>Button</tt> fields.
+     *
+     * @param container the container to obtain the fields from
+     * @param the list of contained fields
+     */
+    private static void addFieldsAndLabels(final Container container, final List fields) {
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control control = (Control) container.getControls().get(i);
+            if (control instanceof Button) {
+                // Skip buttons
+                continue;
+
+            } else if (control instanceof Container) {
+                if (control instanceof Field) {
+                    fields.add(control);
+                }
+                Container childContainer = (Container) control;
+                addFields(childContainer, fields);
+            } else if (control instanceof Field) {
+                fields.add(control);
+            }
+        }
+    }
+
+    /**
+     * Add all the Fields for the given Container to the specified map,
+     * recursively including any Fields contained in child containers.
      * <p/>
      * The map's key / value pair will consist of the control name and instance.
-     * <p/>
-     * The map of returned fields will exclude any <tt>Container</tt>,
-     * <tt>Button</tt> or <tt>Label</tt> fields.
      *
      * @param container the container to obtain the fields from
      * @param the map of contained fields
@@ -625,10 +635,7 @@ public class ContainerUtils {
     private static void addFields(final Container container, final Map fields) {
         for (int i = 0; i < container.getControls().size(); i++) {
             Control control = (Control) container.getControls().get(i);
-            if (control instanceof Label || control instanceof Button) {
-                // Skip buttons and labels
-                continue;
-            } else if (control instanceof Container) {
+            if (control instanceof Container) {
                 if (control instanceof Field) {
                     fields.put(control.getName(), control);
                 }
@@ -636,7 +643,6 @@ public class ContainerUtils {
                 addFields(childContainer, fields);
             } else if (control instanceof Field) {
                 fields.put(control.getName(), control);
-
             }
         }
     }
@@ -645,7 +651,8 @@ public class ContainerUtils {
      * Add the list of container fields to the specified list of fields, which
      * are not valid, not hidden and not disabled.
      * <p/>
-     * The list of returned invalid fields will exclude any <tt>Button</tt> fields.
+     * The list of returned invalid fields will exclude any <tt>Button</tt>
+     * fields.
      *
      * @param container the container to obtain the fields from
      * @return list of form fields which are not valid, not hidden and not

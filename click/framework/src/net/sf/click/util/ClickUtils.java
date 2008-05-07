@@ -36,7 +36,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -59,9 +58,7 @@ import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.control.Field;
-import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
-import net.sf.click.control.Label;
 import net.sf.click.service.ConfigService;
 import net.sf.click.service.LogService;
 
@@ -1499,7 +1496,7 @@ public class ClickUtils {
     /**
      * Return the list of Fields for the given Form, including any Fields
      * contained in FieldSets. The list of returned fields will exclude any
-     * <tt>FieldSet</tt> or <tt>Label</tt> fields.
+     * <tt>Button</tt>, <tt>FieldSet</tt> or <tt>Label</tt> fields.
      *
      * @param form the form to obtain the fields from
      * @return the list of contained form fields
@@ -1508,29 +1505,7 @@ public class ClickUtils {
         if (form == null) {
             throw new IllegalArgumentException("Null form parameter");
         }
-
-        List fieldList = new ArrayList();
-
-        for (int i = 0; i < form.getFieldList().size(); i++) {
-            Field field = (Field) form.getFieldList().get(i);
-
-            if (field instanceof FieldSet) {
-                FieldSet fieldSet = (FieldSet) field;
-                for (int j = 0; j < fieldSet.getFieldList().size(); j++) {
-                    Field fieldSetField =
-                        (Field) fieldSet.getFieldList().get(j);
-
-                    if (!(fieldSetField instanceof Label)) {
-                        fieldList.add(fieldSetField);
-                    }
-                }
-
-            } else if (!(field instanceof Label)) {
-                fieldList.add(field);
-            }
-        }
-
-        return fieldList;
+        return ContainerUtils.getFields(form);
     }
 
     /**

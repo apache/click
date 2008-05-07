@@ -75,14 +75,21 @@ public abstract class AbstractContainerField extends Field implements Container 
     // ------------------------------------------------------ Public methods
 
     /**
-     * @see net.sf.click.control.Container#addControl(net.sf.click.Control)}.
+     * @see net.sf.click.control.Container#addControl(net.sf.click.Control).
      */
     public Control addControl(Control control) {
         return container.addControl(control);
     }
 
     /**
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)}.
+     * @see net.sf.click.control.Container#addControl(int, net.sf.click.Control).
+     */
+    public Control addControl(int index, Control control) {
+        return container.addControl(index, control);
+    }
+
+    /**
+     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control).
      */
     public boolean removeControl(Control control) {
         return container.removeControl(control);
@@ -125,19 +132,6 @@ public abstract class AbstractContainerField extends Field implements Container 
      */
     public boolean onProcess() {
         return container.onProcess();
-    }
-
-    /**
-     * Return the HTML head imports for the container and all its child
-     * controls.
-     *
-     * @see AbstractContainer#getHtmlImportsAll()
-     *
-     * @return all the HTML head imports for the container and all its
-     * child controls
-     */
-    public String getHtmlImportsAll() {
-        return container.getHtmlImportsAll();
     }
 
     /**
