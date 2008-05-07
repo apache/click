@@ -159,7 +159,6 @@ import org.apache.commons.lang.math.NumberUtils;
  *             public String render(Object row, Context context) {
  *                 Customer customer = (Customer) row;
  *                 viewLink.setValue(<span class="st">""</span> + customer.getId());
- *                 viewLink.setContext(context);
  *
  *                 return viewLink.toString();
  *             }
