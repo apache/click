@@ -57,6 +57,35 @@ public interface Container extends Control {
     Control addControl(Control control);
 
     /**
+     * Add the control to the container at the specified index, and return the
+     * added instance. In some instances the returned control might be a
+     * different control from the control that was added.
+     * <p/>
+     * This method implementation must adhere to the following:
+     * <ul>
+     *  <li>
+     *   If the control's name is set, the control must be retrievable from
+     *   the container by invoking {@link #getControl(java.lang.String)}.
+     *  </li>
+     *  <li>
+     *   The control must be added to the containers list of controls and be
+     *   included in the list returned by the method
+     *   {@link #getControls()}.
+     *  </li>
+     *  <li>
+     *   The control's parent must be set to this container, so that invoking
+     *   {@link net.sf.click.Control#getParent()} returns this container
+     *   instance.
+     *  </li>
+     * </ul>
+     *
+     * @param index the index at which the control is to be inserted
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
+     */
+    Control addControl(int index, Control control);
+
+    /**
      * Remove the given control from the container, returning true if the 
      * control was found in the container and removed, or false if the control
      * was not found.
@@ -107,4 +136,10 @@ public interface Container extends Control {
      */
     boolean contains(Control control);
 
+    /**
+     * Returns true if this container has existing controls, false otherwise.
+     * 
+     * @return true if the container has existing controls, false otherwise.
+     */
+    public boolean hasControls();
 }

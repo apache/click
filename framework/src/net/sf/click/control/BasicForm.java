@@ -17,6 +17,7 @@ package net.sf.click.control;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.click.Control;
@@ -242,6 +243,9 @@ public class BasicForm extends AbstractContainer {
      *
      * @param name the name of the field
      * @return the named field if contained in the form
+     * 
+     * @throws IllegalStateException if a non-field control is found with the
+     * specified name
      */
     public Field getField(String name) {
         Control control = ContainerUtils.findControlByName(this, name);
@@ -320,17 +324,6 @@ public class BasicForm extends AbstractContainer {
     }
 
     /**
-     * Return the HTML head imports for the form and all its controls.
-     *
-     * {@link net.sf.click.Control#getHtmlImports()}
-     *
-     * @return all the HTML head imports for the form and all its controls
-     */
-    public String getHtmlImportsAll() {
-        return ContainerUtils.getHtmlImportsAll(this);
-    }
-
-    /**
      * Set the name of the form.
      *
      * @see net.sf.click.Control#setName(String)
@@ -393,12 +386,23 @@ public class BasicForm extends AbstractContainer {
     }
 
     /**
-     * Return the List of form fields, ordered in addition order to the form.
+     * Return the ordered list of form {@link Field}s.
+     * <p/>
+     * The order of the fields is the same order they were added to the form.
      *
      * @return the ordered List of form fields
      */
     public List getFieldList() {
-        return ContainerUtils.getFields(this);
+        return ContainerUtils.getFieldsAndLabels(this);
+    }
+
+    /**
+     * Return the Map of form fields, keyed on field name.
+     *
+     * @return the Map of form fields, keyed on field name
+     */
+    public Map getFields() {
+        return ContainerUtils.getFieldMap(this);
     }
 
     /**
@@ -429,7 +433,7 @@ public class BasicForm extends AbstractContainer {
      */
     public void clearErrors() {
         setError(null);
-        List fields = getFieldList();
+        List fields = ContainerUtils.getFields(this);
         Field field = null;
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
@@ -441,7 +445,7 @@ public class BasicForm extends AbstractContainer {
      * Clear all the form field values setting them to null.
      */
     public void clearValues() {
-        List fields = getFieldList();
+        List fields = ContainerUtils.getFields(this);
         Field field = null;
         for (int i = 0, size = fields.size(); i < size; i++) {
             field = (Field) fields.get(i);
@@ -851,7 +855,7 @@ public class BasicForm extends AbstractContainer {
      */
     protected void renderContent(HtmlStringBuffer buffer) {
         // Render hidden fields
-        List fields = getFieldList();
+        List fields = ContainerUtils.getFields(this);
         for (Iterator it = fields.iterator(); it.hasNext(); ) {
             Field field = (Field) it.next();
             if (field.isHidden()) {
