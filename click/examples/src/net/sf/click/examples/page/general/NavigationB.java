@@ -9,6 +9,6 @@ package net.sf.click.examples.page.general;
 public class NavigationB extends NavigationA {
 
     public String getTarget() {
-        return "/navigation-a.htm";
+        return "/general/navigation-a.htm";
     }
 }

@@ -73,6 +73,6 @@ public class NavigationA extends BorderPage {
     // --------------------------------------------------------- Public Methods
 
     public String getTarget() {
-        return "/navigation-b.htm";
+        return "/general/navigation-b.htm";
     }
 }
