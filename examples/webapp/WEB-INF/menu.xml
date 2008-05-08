@@ -40,7 +40,7 @@
 		<menu label="JSP Multi Path Demo" path="jsp/multi-path-demo.htm"/>
 		<menu separator="true"/>
 		<menu label="Page Navigation" path="general/navigation-a.htm"/>
-		<menu label="Page Flow Patterns" path="general/pageflow/start-page.htm"/>
+		<menu label="Page Flow Patterns" path="pageflow/start-page.htm"/>
 		<menu separator="true"/>
 		<menu label="Velocity Macro" path="velocity/velocity-macro.htm"/>
 		<menu label="Velocity Simple Table" path="velocity/simple-table.htm"/>
