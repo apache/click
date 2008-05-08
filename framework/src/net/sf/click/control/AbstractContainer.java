@@ -129,7 +129,7 @@ public abstract class AbstractContainer extends AbstractControl implements
             }
         }
 
-        getControls().add(control);
+        getControls().add(index, control);
         control.setParent(this);
 
         String controlName = control.getName();
