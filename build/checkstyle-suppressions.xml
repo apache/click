@@ -91,16 +91,19 @@
 
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="2302"/>
+              lines="1701"/>
 
 	<!-- Static Variable Name -->              
               
     <suppress checks="StaticVariableName"
               files="Form.java"
-              lines="509,515,518,521,524"/>
-                            
+              lines="491,494,497,500"/>
+
     <suppress checks="StaticVariableName"
-              files="SessionContext.java"
-              lines="52"/>
-                            
+              files="MockRequest.java"
+              lines="68"/>
+              
+    <suppress checks="StaticVariableName"
+              files="MockResponse.java"
+              lines="56,59"/>
 </suppressions>
