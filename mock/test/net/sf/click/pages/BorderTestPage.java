@@ -1,7 +1,5 @@
 package net.sf.click.pages;
 
-import net.sf.click.*;
-
 public class BorderTestPage extends BorderPage {
     
     public boolean onSecurityCheck() {

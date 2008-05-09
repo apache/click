@@ -5,7 +5,9 @@ import java.net.URI;
 import java.net.URL;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import net.sf.click.control.Form;
 import net.sf.click.pages.BorderTestPage;
+import net.sf.click.pages.FormPage;
 import net.sf.click.pages.ForwardPage;
 import net.sf.click.pages.RedirectPage;
 import net.sf.click.pages.TestPage;
@@ -180,6 +182,39 @@ public class MockContainerTest extends TestCase {
             // RedirectPage result will be empty because the template is NOT
             // rendered when redirecting a request.
             System.out.println("Redirect result: " + container.getHtml());
+        } catch (Exception exception) {
+            exception.printStackTrace(System.err);
+            Assert.fail();
+        }
+    }
+
+    public void testFormBinding() {
+        try {
+            MockContainer container = new MockContainer("web");
+
+            container.start();
+
+            // Set the form name to ensure a Form submission occurs
+            container.setParameter(Form.FORM_NAME, "form");
+
+            // Set the field parameter
+            container.setParameter("myfield", "one");
+
+            // Process page
+            FormPage formPage = (FormPage) container.testPage(FormPage.class);
+
+            System.out.println("\nFirst run finished");
+            System.out.println(
+                "======================== HTML Document ========================\n"
+                + container.getHtml()
+                + "\n===============================================================\n");
+
+            // Assert that form with id="form" was rendered
+            Assert.assertTrue(container.getHtml().indexOf("id=\"form\"") > 0);
+
+            // Assert that form field "myfield" was bound to request parameter "myfield"
+            Assert.assertEquals("one", formPage.getForm().getFieldValue("myfield"));
+
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
             Assert.fail();
