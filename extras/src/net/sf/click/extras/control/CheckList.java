@@ -225,7 +225,9 @@ public class CheckList extends Field {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * @see AbstractControl#getTag()
+     * @see net.sf.click.control.AbstractControl#getTag()
+     *
+     * @return this controls html tag
      */
     public String getTag() {
         return "div";
@@ -768,7 +770,9 @@ public class CheckList extends Field {
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         int bufferSize = 50;

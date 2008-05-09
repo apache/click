@@ -176,6 +176,7 @@ public class TabbedPanel extends Panel {
      * @see net.sf.click.control.Panel#addControl(net.sf.click.Control)
      *
      * @param control the control to add to the container
+     * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, if the name
      *     of the control is not defined, the container already contains a
      *     control with the same name, or if the control's parent is a Page
@@ -220,9 +221,9 @@ public class TabbedPanel extends Panel {
 
     /**
      * @deprecated use setListener(java.lang.Object, java.lang.String) instead
-     * 
-     * @param listener
-     * @param listenerMethod
+     *
+     * @param listener the listener object with the named method to invoke
+     * @param listenerMethod the name of the method to invoke
      */
     public void setTabListener(Object listener, String listenerMethod) {
         setListener(listener, listenerMethod);

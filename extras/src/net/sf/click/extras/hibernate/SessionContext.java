@@ -49,7 +49,7 @@ import org.hibernate.cfg.Configuration;
 public class SessionContext {
 
     /** The Hibernate session factory. */
-    private static SessionFactory SESSION_FACTORY;
+    private static SessionFactory sessionFactory;
 
     /** The ThreadLocal session holder. */
     private static final ThreadLocal SESSION_HOLDER = new ThreadLocal();
@@ -69,7 +69,7 @@ public class SessionContext {
     public void onInit(ServletContext servletContext) {
         Configuration configuration = createConfiguration();
         initConfiguration(configuration);
-        SESSION_FACTORY = configuration.buildSessionFactory();
+        sessionFactory = configuration.buildSessionFactory();
     }
 
     /**
@@ -162,7 +162,7 @@ public class SessionContext {
      * @return the Hibernate SessionFactory
      */
     public static SessionFactory getSessionFactory() {
-        return SESSION_FACTORY;
+        return sessionFactory;
     }
 
 }

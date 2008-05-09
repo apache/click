@@ -301,7 +301,9 @@ public class CreditCardField extends TextField {
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return 400;
