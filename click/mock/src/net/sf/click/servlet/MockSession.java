@@ -25,6 +25,10 @@ import net.sf.click.util.HtmlStringBuffer;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * Mock implementation of {@link javax.servlet.http.HttpSession}.
+ * <p/>
+ * Implements all of the methods from the standard HttpSession class plus
+ * helper methods to aid setting up a session.
  *
  * @author Bob Schellink
  */
@@ -32,31 +36,57 @@ public class MockSession implements HttpSession {
 
     // -------------------------------------------------------- Instance Variables
 
-    protected ServletContext servletContext = null;
+    /** The session servletContext. */
+    private ServletContext servletContext = null;
 
-    protected Map attributes = new HashMap();
+    /** The session attributes. */
+    private Map attributes = new HashMap();
 
-    protected String id = Long.toString(new Random().nextLong());
+    /** The session unique id. */
+    private String id = Long.toString(new Random().nextLong());
 
-    protected long creationTime = System.currentTimeMillis();
+    /** The session creationTime in milliseconds. */
+    private long creationTime = System.currentTimeMillis();
 
-    protected int maxInactiveInerval = -1;
+    /** Specifies the amount of time the session will remain active between
+     * client requests.
+     */
+    private int maxInactiveInerval = -1;
 
     // -------------------------------------------------------- Constructors
 
+    /**
+     * Create a default MockSession.
+     */
     public MockSession() {
     }
 
+    /**
+     * Create a MockSession for the specified session identifier.
+     *
+     * @param id session unique identifier.
+     */
     public MockSession(String id) {
         this(id, null);
     }
 
+    /**
+     * Create a MockSession for the specified servletContext.
+     *
+     * @param servletContext the servletContext to which this session belong
+     */
     public MockSession(ServletContext servletContext) {
         this(null, servletContext);
     }
 
+    /**
+     * Create a MockSession for the specified id and servletContext.
+     *
+     * @param id session unique identifier.
+     * @param servletContext the servletContext to which this session belong
+     */
     public MockSession(String id, ServletContext servletContext) {
-        if(StringUtils.isNotBlank(id)) {
+        if (StringUtils.isNotBlank(id)) {
             setId(id);
         }
         setServletContext(servletContext);
@@ -64,94 +94,207 @@ public class MockSession implements HttpSession {
 
     // -------------------------------------------------------- Test Configuration Methods
 
+    /**
+     * Sets session unique identifier.
+     *
+     * @param id a unique session identifier
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Sets the servletContext to which the session belong.
+     *
+     * @param servletContext the servletContext to which this session belong
+     */
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
     // -------------------------------------------------------- Session Methods
 
+    /**
+     * @see javax.servlet.http.HttpSession#getAttributeNames()
+     *
+     * @return an Enumeration of String objects specifying the names of all the
+     * objects bound to this session
+     */
     public Enumeration getAttributeNames() {
         return Collections.enumeration(attributes.keySet());
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getCreationTime()
+     *
+     * @return a long specifying when this session was created, expressed in
+     * milliseconds since 1/1/1970 GMT
+     */
     public long getCreationTime() {
         return creationTime;
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getId()
+     *
+     * @return a string specifying the identifier assigned to this session
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * This method will return the current time by invoking
+     * System.currentTimeMillis().
+     *
+     * @see javax.servlet.http.HttpSession#getLastAccessedTime()
+     *
+     * @return a long representing the last time the client sent a request
+     * associated with this session, expressed in milliseconds since 1/1/1970 GMT
+     */
     public long getLastAccessedTime() {
         return System.currentTimeMillis();
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getMaxInactiveInterval()
+     *
+     * @return an integer specifying the number of seconds this session remains
+     * open between client requests
+     */
     public int getMaxInactiveInterval() {
         return maxInactiveInerval;
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getServletContext()
+     *
+     * @return the session servletContext
+     */
     public ServletContext getServletContext() {
         return servletContext;
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getSessionContext()
+     *
+     * @return the session sessionContext
+     */
     public HttpSessionContext getSessionContext() {
         return null;
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#getValueNames()
+     *
+     * @return an array of String  objects specifying the names of all the
+     * objects bound to this session
+     */
     public String[] getValueNames() {
         return (String[]) attributes.keySet().toArray(new String[attributes.size()]);
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#invalidate()
+     */
     public void invalidate() {
         attributes.clear();
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#isNew()
+     *
+     * @return true if the server has created a session, but the client has not
+     * yet joined
+     */
     public boolean isNew() {
         return false;
     }
 
+    /**
+     * @see javax.servlet.http.HttpSession#setMaxInactiveInterval(int)
+     *
+     * @param maxInterval an integer specifying the number of seconds
+     */
     public void setMaxInactiveInterval(int maxInterval) {
         this.maxInactiveInerval = maxInterval;
     }
 
-    public void removeValue(String key) {
-        attributes.remove(key);
+    /**
+     * @see javax.servlet.http.HttpSession#removeValue(java.lang.String)
+     *
+     * @param name the name of the object to remove from this session
+     */
+    public void removeValue(String name) {
+        attributes.remove(name);
     }
 
-    public void removeAttribute(String key) {
-        attributes.remove(key);
+    /**
+     * @see javax.servlet.http.HttpSession#removeAttribute(java.lang.String)
+     *
+     * @param name the name of the object to remove from this session
+     */
+    public void removeAttribute(String name) {
+        attributes.remove(name);
     }
 
-    public Object getAttribute(String key) {
-        return attributes.get(key);
+    /**
+     * @see javax.servlet.http.HttpSession#getAttribute(java.lang.String)
+     *
+     * @param name a string specifying the name of the object
+     * @return the object with the specified name
+     */
+    public Object getAttribute(String name) {
+        return attributes.get(name);
     }
 
-    public Object getValue(String key) {
-        return attributes.get(key);
+    /**
+     * @see javax.servlet.http.HttpSession#getValue(java.lang.String)
+     *
+     * @param name a string specifying the name of the object
+     * @return the object with the specified name
+     */
+    public Object getValue(String name) {
+        return attributes.get(name);
     }
 
-    public void setAttribute(String key, Object value) {
-        attributes.put(key, value);
+    /**
+     * @see javax.servlet.http.HttpSession#setAttribute(java.lang.String, java.lang.Object)
+     *
+     * @param name the name to which the object is bound; cannot be null
+     * @param value the object to be bound
+     */
+    public void setAttribute(String name, Object value) {
+        attributes.put(name, value);
     }
 
-    public void putValue(String key, Object value) {
-        attributes.put(key, value);
+    /**
+     * @see javax.servlet.http.HttpSession#putValue(java.lang.String, java.lang.Object)
+     *
+     * @param name the name to which the object is bound; cannot be null
+     * @param value the object to be bound; cannot be null
+     */
+    public void putValue(String name, Object value) {
+        attributes.put(name, value);
     }
 
+    /**
+     * Return a string representation of the session.
+     * <p/>
+     * The string will print all attributes of the session.
+     *
+     * @return string representation of the session
+     */
     public String toString() {
         HtmlStringBuffer buffer = new HtmlStringBuffer();
         buffer.append("Session attributes {");
-        for(Enumeration en = getAttributeNames(); en.hasMoreElements(); ) {
+        for (Enumeration en = getAttributeNames(); en.hasMoreElements();) {
             String name = (String) en.nextElement();
             Object value = getAttribute(name);
             buffer.append(name);
             buffer.append("=");
             buffer.append(value);
-            if(en.hasMoreElements()) {
+            if (en.hasMoreElements()) {
                 buffer.append(", ");
             }
         }
