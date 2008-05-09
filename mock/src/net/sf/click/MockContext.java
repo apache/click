@@ -48,8 +48,8 @@ import net.sf.click.util.ClickUtils;
  * <pre class="prettyprint">
  * public class FormTest extends TestCase {
  *     // Create a mock context
- *     MockContext context = (MockContext) MockContext.initContext("test-form.htm");
- *     MockRequest request = (MockRequest) context.getMockRequest();
+ *     MockContext context = MockContext.initContext("test-form.htm");
+ *     MockRequest request = context.getMockRequest();
  *
  *     // The request value that should be set as the textField value
  *     String requestValue = "one";
@@ -169,6 +169,7 @@ public class MockContext extends Context {
      * @deprecated use one of the other initContext methods because those will
      * construct a complete mock stack including a MockRequest.
      *
+     * @param request the mock request
      * @return new Context instance
      */
     public static MockContext initContext(HttpServletRequest request) {

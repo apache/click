@@ -24,9 +24,11 @@ import javax.servlet.ServletResponse;
 import net.sf.click.MockContainer;
 
 /**
- * A RequestDispatcher which sets the resource path on the request when
+ * Mock implementation of {@link javax.servlet.RequestDispatcher}.
+ * <p/>
+ * This RequestDispatcher sets the resource path on the request when
  * {@link #forward(ServletRequest, ServletResponse)} or
- * {@link #include(ServletRequest, ServletResponse)} are called.
+ * {@link #include(ServletRequest, ServletResponse)} is called.
  * <p/>
  * The resourcePath can later be retrieved by calling
  * {@link MockRequest#getForward()} or {@link MockRequest#getIncludes()}.

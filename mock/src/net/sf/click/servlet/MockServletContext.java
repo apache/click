@@ -41,10 +41,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Mock implementation of the servlet context for testing purposes. This
- * implementation supports all of the standard context methods except that
- * request dispatching just indicates what is being dispatched to, rather than
- * doing the actual dispatch.
+ * Mock implementation of {@link javax.servlet.ServletContext}.
+ * <p/>
+ * This implementation supports all of the standard context methods except for
+ * request dispatching which just indicates what is being dispatched to, rather
+ * than performing an actual dispatch.
  * <p/>
  * The context can be configured with a path parameter that should point to an
  * directory location that represents the place where the contents of
@@ -64,25 +65,41 @@ public class MockServletContext implements ServletContext {
 
     // -------------------------------------------------------- Constants
 
+    /**
+     * The servlet context default context path, <em>"/mock"</em>.
+     */
     public static final String DEFAULT_CONTEXT_PATH = "/mock";
 
     // -------------------------------------------------------- Private variables
 
+    /** Map of attributes. */
     private final Map attributes = new HashMap();
 
+    /** Map of initialization parameters. */
     private final Map initParameters = new HashMap();
 
-    /** Map of mime types */
+    /** Map of mime types. */
     private final Map mimeTypes = new HashMap();
 
+    /** The context temporary path. */
     private String tempPath;
 
+    /** The web application path. */
     private String webappPath;
 
+    /**
+     * The web application root file. The File is created from the
+     * {@link #webappPath} value.
+     */
     private File webappRoot;
 
+    /** The servlet context name, <em>"mock"</em>. */
     private String servletContextName = "mock";
 
+    /**
+     * The context path, by default its value is set to
+     * {@link #DEFAULT_CONTEXT_PATH}.
+     */
     private String contextPath = DEFAULT_CONTEXT_PATH;
 
     /**
@@ -157,7 +174,10 @@ public class MockServletContext implements ServletContext {
     }
 
     /**
-     * Intializes the ServletContext.
+     * Creates the web application root File {@link #getWebappRoot()}.
+     *
+     * @throws IllegalStateException if the {@link #getWebappPath()} cannot
+     * be found
      */
     public void createWebappRoot() {
         webappRoot = null;
@@ -169,8 +189,8 @@ public class MockServletContext implements ServletContext {
         webappRoot = new File(getWebappPath());
         if (webappRoot.exists() && webappRoot.isDirectory()) {
             //If the webappRoot is a legal directory, we can return
-            System.out.println("    WEB root directory defined at -> " +
-                webappRoot.getAbsolutePath());
+            System.out.println("    WEB root directory defined at -> "
+                + webappRoot.getAbsolutePath());
             return;
         }
 
@@ -190,18 +210,20 @@ public class MockServletContext implements ServletContext {
                 if (webappRoot.exists() && webappRoot.isDirectory()) {
                     //If the webappRoot is a legal directory on the classpath
                     //we can return
-                    System.out.println("    WEB root directory defined at -> " + webappRoot.getAbsolutePath());
+                    System.out.println("    WEB root directory defined at -> "
+                        + webappRoot.getAbsolutePath());
                     return;
                 }
             }
             if (webappRoot == null) {
-                checkedPaths += ". Also note that the path '" + getWebappPath() + "' was checked but not found on the classpath";
+                checkedPaths += ". Also note that the path '" + getWebappPath()
+                    + "' was checked but not found on the classpath";
             } else {
                 checkedPaths += ", " + webappRoot.getAbsolutePath();
             }
         } catch (Exception ex) {
-            String msg = "error occured while create a web application root " +
-                "directory at : " + url;
+            String msg = "error occured while checking for existence of the web"
+                + " application root directory at : " + url;
             throw new RuntimeException(msg, ex);
         }
 
@@ -214,6 +236,11 @@ public class MockServletContext implements ServletContext {
             + checkedPaths + ".");
     }
 
+    /**
+     * Creates a temporary directory as specified by {@link #getTempPath()}.
+     *
+     * @throws IllegalStateException if the {@link #getTempPath()} is not valid
+     */
     public void createTempDir() {
         attributes.put("javax.servlet.context.tempdir", null);
 
@@ -225,25 +252,41 @@ public class MockServletContext implements ServletContext {
             if (tempDirectory.exists() && tempDirectory.isDirectory()) {
                 deleteDirectoryOnShutdown(tempDirectory);
                 attributes.put("javax.servlet.context.tempdir", tempDirectory);
-                System.out.println("    WEB temp directory defined at -> " +
-                    tempDirectory.getAbsolutePath());
+                System.out.println("    WEB temp directory defined at -> "
+                    + tempDirectory.getAbsolutePath());
             } else {
-                throw new IllegalStateException("ERROR: The " +
-                    "directory cannot be found: " + getTempPath() + ". " +
-                    "The following absolute locations were checked for the " +
-                    "path: " + tempDirectory.getAbsolutePath());
+                throw new IllegalStateException("ERROR: The "
+                    + "directory cannot be found: " + getTempPath() + ". "
+                    + "The following absolute locations were checked for the "
+                    + "path: " + tempDirectory.getAbsolutePath());
             }
         }
     }
 
+    /**
+     * Set the servlet context name to the specified value.
+     *
+     * @param servletContextName the servlet context name
+     */
     public void setServletContextName(String servletContextName) {
         this.servletContextName = servletContextName;
     }
 
+    /**
+     * Return the temporary path where files are stored during test runs.
+     *
+     * @return the temporary path where files are stored during test runs
+     */
     public String getTempPath() {
         return tempPath;
     }
 
+    /**
+     * Set the temporary path where files are stored during test runs.
+     *
+     * @param tempPath the temporary path where files are stored during test
+     * runs
+     */
     public void setTempPath(String tempPath) {
         if (StringUtils.isBlank(tempPath)) {
             return;
@@ -263,10 +306,22 @@ public class MockServletContext implements ServletContext {
         createTempDir();
     }
 
+    /**
+     * Return the web application path where resources like javascript, css
+     * and images can be picked up.
+     *
+     * @return the web application path
+     */
     public String getWebappPath() {
         return webappPath;
     }
 
+    /**
+     * Return the web application root File where resources like javascript, css
+     * and images can be picked up.
+     *
+     * @return the web application root File
+     */
     public File getWebappRoot() {
         return webappRoot;
     }
@@ -279,7 +334,7 @@ public class MockServletContext implements ServletContext {
      * is not set, this method will default tempPath to:
      * <tt>System.getProperty("java.io.tmpdir")</tt>.
      *
-     * @param webappPath
+     * @param webappPath set the context web application path
      */
     public void setWebappPath(String webappPath) {
         this.webappPath = webappPath;
@@ -349,8 +404,9 @@ public class MockServletContext implements ServletContext {
     }
 
     // -------------------------------------------------------- ServletContext interface methods
+
     /**
-     * Get the context for the given URL path
+     * Get the context for the given URL path.
      *
      * @param name The url path
      * @return Always returns this
@@ -563,8 +619,8 @@ public class MockServletContext implements ServletContext {
             File[] files = current.listFiles();
             boolean match = false;
             for (int f = 0; f < files.length; f++) {
-                if (files[f].getName().equals(elements[i]) &&
-                    files[f].isDirectory()) {
+                if (files[f].getName().equals(elements[i])
+                    && files[f].isDirectory()) {
                     current = files[f];
                     match = true;
                     break;

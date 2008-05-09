@@ -38,8 +38,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Mock servlet response. Implements all of the methods from the standard
- * HttpServletResponse class plus helper methods to aid viewing the generated
+ * Mock implementation of {@link javax.servlet.http.HttpServletResponse}.
+ * <p/>
+ * Implements all of the methods from the standard HttpServletResponse class
+ * plus helper methods to aid viewing the generated
  * response.
  * <p/>
  * This class was adapted from <a href="http://wicket.apache.org">Apache Wicket</a>.
@@ -48,11 +50,23 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MockResponse implements HttpServletResponse {
 
+    // -------------------------------------------------------- Constants
+
+    /* BEGIN: This code comes from Jetty 6.1.1 */
+    private static String[] DAYS = {"Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
+        "Fri", "Sat"};
+
+    private static String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
+    };
+
     private static final int MODE_BINARY = 1;
 
     private static final int MODE_NONE = 0;
 
     private static final int MODE_TEXT = 2;
+
+    // -------------------------------------------------------- Instance Variables
 
     private ByteArrayOutputStream byteStream;
 
@@ -190,7 +204,7 @@ public class MockResponse implements HttpServletResponse {
     /**
      * Flush the buffer.
      *
-     * @throws IOException
+     * @throws IOException if exception occurs during flush
      */
     public void flushBuffer() throws IOException {
     }
@@ -205,7 +219,7 @@ public class MockResponse implements HttpServletResponse {
     }
 
     /**
-     * Return the current buffer size
+     * Return the current buffer size.
      *
      * @return The buffer size
      */
@@ -293,7 +307,7 @@ public class MockResponse implements HttpServletResponse {
     }
 
     /**
-     * Get the encoded locale
+     * Get the encoded locale.
      *
      * @return The locale
      */
@@ -308,8 +322,8 @@ public class MockResponse implements HttpServletResponse {
      */
     public ServletOutputStream getOutputStream() {
         if (mode == MODE_TEXT) {
-            throw new IllegalArgumentException("Can't write binary after " +
-                "already selecting text");
+            throw new IllegalArgumentException("Can't write binary after "
+                + "already selecting text");
         }
         mode = MODE_BINARY;
         return servletStream;
@@ -343,8 +357,8 @@ public class MockResponse implements HttpServletResponse {
      */
     public PrintWriter getWriter() throws IOException {
         if (mode == MODE_BINARY) {
-            throw new IllegalStateException("Can't write text after " +
-                "getOutputStream() have already been called.");
+            throw new IllegalStateException("Can't write text after "
+                + "getOutputStream() have already been called.");
         }
         mode = MODE_TEXT;
         return printWriter;
@@ -502,6 +516,11 @@ public class MockResponse implements HttpServletResponse {
         setHeader("Content-Type", type);
     }
 
+    /**
+     * Return the response content type.
+     *
+     * @return the response content type
+     */
     public String getContentType() {
         return getHeader("Content-Type");
     }
@@ -530,21 +549,13 @@ public class MockResponse implements HttpServletResponse {
         return _dateBuffer.toString();
     }
 
-    /* BEGIN: This code comes from Jetty 6.1.1 */
-    private static String[] DAYS = {"Sat", "Sun", "Mon", "Tue", "Wed", "Thu",
-        "Fri", "Sat"};
-
-    private static String[] MONTHS = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan"
-    };
-
     /**
      * Format HTTP date "EEE, dd MMM yyyy HH:mm:ss 'GMT'" or
-     * "EEE, dd-MMM-yy HH:mm:ss 'GMT'" for cookies
+     * "EEE, dd-MMM-yy HH:mm:ss 'GMT'" for cookies.
      *
-     * @param buf
-     * @param calendar
-     * @param cookie
+     * @param buf the buffer to render to formatted date to
+     * @param calendar the date to format
+     * @param cookie should date be formatted for usage in a cookie
      */
     public static void formatDate(StringBuffer buf, Calendar calendar,
         boolean cookie) {
@@ -591,8 +602,8 @@ public class MockResponse implements HttpServletResponse {
     }
 
     /**
-     * @param buf
-     * @param i
+     * @param buf the buffer to add 2 digits to
+     * @param i the digits to add
      */
     public static void append2digits(StringBuffer buf, int i) {
         if (i < 100) {

@@ -22,6 +22,9 @@ import javax.servlet.ServletContext;
 
 /**
  * Mock implementation of {@link javax.servlet.ServletConfig}.
+ * <p/>
+ * Implements all of the methods from the standard ServletConfig class plus
+ * helper methods to aid setting up a config.
  *
  * @author Bob Schellink
  */
@@ -40,22 +43,50 @@ public class MockServletConfig implements ServletConfig {
 
     // -------------------------------------------------------- Constructors
 
+    /**
+     * Create a new MockServletConfig instance.
+     */
     public MockServletConfig() {
         this(null, null);
     }
 
+    /**
+     * Create a new MockServletConfig instance with the specified servletName.
+     *
+     * @param servletName the servlet name
+     */
     public MockServletConfig(String servletName) {
         this(servletName, null);
     }
 
+    /**
+     * Create a new MockServletConfig instance with the specified servletContext.
+     *
+     * @param servletContext the servletContext
+     */
     public MockServletConfig(ServletContext servletContext) {
         this(null, servletContext);
     }
 
+    /**
+     * Create a new MockServletConfig instance with the specified servletName
+     * and servletContext.
+     *
+     * @param servletName the servlet name
+     * @param servletContext the servlet context
+     */
     public MockServletConfig(String servletName, ServletContext servletContext) {
         this(servletName, servletContext, null);
     }
 
+    /**
+     * Create a new MockServletConfig instance with the specified servletName,
+     * servletContext and initialization parameters.
+     *
+     * @param servletName the servlet name
+     * @param servletContext the servlet context
+     * @param initParameters the initialization parameters
+     */
     public MockServletConfig(String servletName, ServletContext servletContext, Map initParameters) {
         this.servletContext = servletContext;
         this.servletName = servletName;
@@ -86,29 +117,63 @@ public class MockServletConfig implements ServletConfig {
         initParameters.putAll(initParameters);
     }
 
+    /**
+     * Set the servlet name.
+     *
+     * @param servletName the new servletName
+     */
     public void setServletName(String servletName) {
         this.servletName = servletName;
     }
 
+    /**
+     * Set the servlet context instance.
+     *
+     * @param servletContext a servletContext instance
+     */
     public void setServletContext(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
     // -------------------------------------------------------- ServletConfig Methods
 
+    /**
+     * Return the servlet name.
+     *
+     * @return the servlet name
+     */
     public String getServletName() {
         return servletName;
     }
 
+    /**
+     * Return the servlet context.
+     *
+     * @return the servletContext
+     */
     public ServletContext getServletContext() {
         return servletContext;
     }
 
+    /**
+     * Returns the names of the servlet's initialization parameters as an
+     * Enumeration of String objects, or an empty Enumeration if the servlet
+     * has no initialization parameters.
+     *
+     * @return enumeration of initialization parameters
+     */
     public Enumeration getInitParameterNames() {
         return Collections.enumeration(initParameters.keySet());
     }
 
-    public String getInitParameter(String key) {
-        return (String) initParameters.get(key);
+    /**
+     * Returns a String containing the value of the named initialization
+     * parameter, or null if the parameter does not exist.
+     *
+     * @param name a String specifying the name of the initialization parameter
+     * @return a String containing the value of the initialization parameter
+     */
+    public String getInitParameter(String name) {
+        return (String) initParameters.get(name);
     }
 }
