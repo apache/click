@@ -741,7 +741,7 @@ public class Tree extends AbstractControl {
     /**
      * TreeNode callback interface.
      */
-    interface Callback {
+    protected interface Callback {
         public void callback(final TreeNode node);
     }
 
@@ -861,6 +861,8 @@ public class Tree extends AbstractControl {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return 256;
@@ -1215,8 +1217,8 @@ public class Tree extends AbstractControl {
      */
     protected void fireNodeExpanded(TreeNode node, boolean oldValue) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener listener = (TreeListener) it.next();
-            listener.nodeExpanded(this, node, getContext(), oldValue);
+            TreeListener l = (TreeListener) it.next();
+            l.nodeExpanded(this, node, getContext(), oldValue);
         }
     }
 
@@ -1229,8 +1231,8 @@ public class Tree extends AbstractControl {
      */
     protected void fireNodeCollapsed(TreeNode node, boolean oldValue) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener listener = (TreeListener) it.next();
-            listener.nodeCollapsed(this, node, getContext(), oldValue);
+            TreeListener l = (TreeListener) it.next();
+            l.nodeCollapsed(this, node, getContext(), oldValue);
         }
     }
 
@@ -1243,8 +1245,8 @@ public class Tree extends AbstractControl {
      */
     protected void fireNodeSelected(TreeNode node, boolean oldValue) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener listener = (TreeListener) it.next();
-            listener.nodeSelected(this, node, getContext(), oldValue);
+            TreeListener l = (TreeListener) it.next();
+            l.nodeSelected(this, node, getContext(), oldValue);
         }
     }
 
@@ -1257,8 +1259,8 @@ public class Tree extends AbstractControl {
      */
     protected void fireNodeDeselected(TreeNode node, boolean oldValue) {
         for (Iterator it = listeners.iterator(); it.hasNext();) {
-            TreeListener listener = (TreeListener) it.next();
-            listener.nodeDeselected(this, node, getContext(), oldValue);
+            TreeListener l = (TreeListener) it.next();
+            l.nodeDeselected(this, node, getContext(), oldValue);
         }
     }
 
@@ -1686,13 +1688,12 @@ public class Tree extends AbstractControl {
     protected transient JavascriptHandler javascriptHandler;
 
     /**
-     * <strong>Please note</strong> this interface is only meant for
-     * developers of this control, not users.
+     * <b>Please note</b> this class is <b>not</b> meant for public use.
      * <p/>
      * Provides the contract for pluggable javascript renderers for
      * the Tree.
      */
-    interface JavascriptRenderer {
+    protected interface JavascriptRenderer {
 
         /**
          * Called to initialize the renderer.
@@ -1756,8 +1757,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * <strong>Please note</strong> this class is only meant for
-     * developers of this control, not users.
+     * <b>Please note</b> this class is <b>not</b> meant for public use.
      * <p/>
      * Provides a abstract implementation of JavascriptRenderer that
      * subclasses can extend from.
@@ -1897,8 +1897,7 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * <strong>Please note</strong> this class is <b>not</b> meant for public
-     * use.
+     * <b>Please note</b> this class is <b>not</b> meant for public use.
      * <p/>
      * Provides the contract for pluggable javascript handlers.
      * <p/>

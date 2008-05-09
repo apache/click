@@ -50,9 +50,9 @@ import net.sf.click.util.ClickUtils;
  * <h4>Credits</h4>
  * This control based on the <a href="http://www.greywyvern.com/code/js/keyboard.html">Greywyvern</a> JavaScript library.
  *
- * @author Ahmed Mohombe
+ * TODO: add support for password fields and textareas too.
  *
- * @todo: add support for password fields and textareas too.
+ * @author Ahmed Mohombe
  */
 public class VirtualKeyboard extends TextField {
 

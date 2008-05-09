@@ -390,7 +390,9 @@ public class FormTable extends Table {
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return (getColumnList().size() * 60) * (getRowList().size() + 1) + 256;
