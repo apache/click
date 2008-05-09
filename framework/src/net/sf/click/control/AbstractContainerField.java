@@ -27,7 +27,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * An internal {@link Container} implementation is used to delegate the
  * container methods to. The container can be accessed through
- * {@link getContainer()}.
+ * {@link #getContainer()}.
  * <p/>
  * Here is an example of a Border Control that can wrap a Button and render
  * a <tt>div</tt> border around it.
@@ -40,7 +40,7 @@ import net.sf.click.util.HtmlStringBuffer;
  *     public String getTag() {
  *         return "div";
  *     }
- * 
+ *
  *     public Control addControl(Button button) {
  *         return getContainer().addControl(button);
  *     }
@@ -76,6 +76,9 @@ public abstract class AbstractContainerField extends Field implements Container 
 
     /**
      * @see net.sf.click.control.Container#addControl(net.sf.click.Control).
+     *
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
      */
     public Control addControl(Control control) {
         return container.addControl(control);
@@ -83,20 +86,29 @@ public abstract class AbstractContainerField extends Field implements Container 
 
     /**
      * @see net.sf.click.control.Container#addControl(int, net.sf.click.Control).
+     *
+     * @param index the index at which the control is to be inserted
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
      */
     public Control addControl(int index, Control control) {
         return container.addControl(index, control);
     }
 
     /**
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control).
+     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)
+     *
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
      */
     public boolean removeControl(Control control) {
         return container.removeControl(control);
     }
 
     /**
-     * @see net.sf.click.control.Container#getControls()}.
+     * @see net.sf.click.control.Container#getControls()
+     *
+     * @return the sequential list of controls held by the container
      */
     public List getControls() {
         return container.getControls();
@@ -104,6 +116,9 @@ public abstract class AbstractContainerField extends Field implements Container 
 
     /**
      * @see net.sf.click.control.Container#getControl(java.lang.String)
+     *
+     * @param controlName the name of the control to get from the container
+     * @return the named control from the container if found or null otherwise
      */
     public Control getControl(String controlName) {
         return container.getControl(controlName);
@@ -111,6 +126,9 @@ public abstract class AbstractContainerField extends Field implements Container 
 
     /**
      * @see net.sf.click.control.Container#contains(net.sf.click.Control)
+     *
+     * @param control the control whose presence in this container is to be tested
+     * @return true if the container contains the specified control
      */
     public boolean contains(Control control) {
         return container.contains(control);
@@ -128,7 +146,9 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * @see net.sf.click.Control#onProcess()}.
+     * @see net.sf.click.Control#onProcess()
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
         return container.onProcess();
@@ -214,7 +234,10 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)}.
+     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param tagName the name of the tag to close
+     * @param buffer the buffer to append the output to
      */
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
@@ -233,7 +256,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
     /**
      * Render this container children to the specified buffer.
-     * 
+     *
      * @see AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
@@ -266,7 +289,9 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst() 
+     * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     protected int getControlSizeEst() {
         return container.getControlSizeEst();
@@ -292,7 +317,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the AbstractContainerField html tag.
-         * 
+         *
          * @return the AbstractContainerField html tag
          */
         public String getTag() {
@@ -301,7 +326,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Sets the AbstractContainerField parent.
-         * 
+         *
          * @param parent the parent of the AbstractContainerField
          */
         public void setParent(Object parent) {
@@ -319,7 +344,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Sets the listener of the AbstractContainerField.
-         * 
+         *
          * @param listener the listener object with the named method to invoke
          * @param method the name of the method to invoke
          */
@@ -329,7 +354,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the parent of the AbstractContainerField.
-         * 
+         *
          * @return the parent of the AbstractContainerField
          */
         public Object getParent() {
@@ -338,7 +363,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the name of the AbstractContainerField.
-         * 
+         *
          * @return the name of the AbstractContainerField
          */
         public String getName() {
@@ -347,7 +372,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the messages of the AbstractContainerField.
-         * 
+         *
          * @return the message of the AbstractContainerField
          */
         public Map getMessages() {
@@ -356,7 +381,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the id of the AbstractContainerField.
-         * 
+         *
          * @return the id of the AbstractContainerField
          */
         public String getId() {
@@ -365,7 +390,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the html imports of the AbstractContainerField.
-         * 
+         *
          * @return the html imports of the AbstractContainerField
          */
         public String getHtmlImports() {
@@ -374,7 +399,7 @@ public abstract class AbstractContainerField extends Field implements Container 
 
         /**
          * Return the Context of the AbstractContainerField.
-         * 
+         *
          * @return the Context of the AbstractContainerField
          */
         public Context getContext() {

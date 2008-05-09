@@ -96,9 +96,9 @@ public class Radio extends Field {
 
     /**
      * Return the radio's html tag: <tt>input</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {

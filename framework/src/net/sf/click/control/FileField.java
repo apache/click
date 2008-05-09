@@ -166,9 +166,9 @@ public class FileField extends Field {
 
     /**
      * Return the FileFields's html tag: <tt>input</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -243,6 +243,8 @@ public class FileField extends Field {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return 96;

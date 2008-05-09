@@ -192,9 +192,9 @@ public class TextField extends Field {
 
     /**
      * Return the textfield's html tag: <tt>input</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -282,6 +282,8 @@ public class TextField extends Field {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return 96;

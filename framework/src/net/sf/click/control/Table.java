@@ -345,9 +345,9 @@ public class Table extends AbstractControl {
 
     /**
      * Return the table's html tag: <tt>table</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
      public String getTag() {
@@ -985,6 +985,8 @@ public class Table extends AbstractControl {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         int bufferSize = 0;

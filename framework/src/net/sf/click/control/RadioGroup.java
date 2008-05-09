@@ -322,9 +322,9 @@ public class RadioGroup extends Field {
     }
 
     /**
-     * @see Field#setForm(Form)
+     * @see Field#setForm(BasicForm)
      *
-     * @param form Field's parent <tt>Form</tt>
+     * @param form Field's parent <tt>BasicForm</tt>
      */
     public void setForm(Form form) {
         super.setForm(form);
@@ -452,6 +452,8 @@ public class RadioGroup extends Field {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         return getRadioList().size() * 30;

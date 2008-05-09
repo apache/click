@@ -274,9 +274,9 @@ public class Select extends Field {
 
     /**
      * Return the select's html tag: <tt>select</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -635,6 +635,8 @@ public class Select extends Field {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     public int getControlSizeEst() {
         int bufferSize = 50;

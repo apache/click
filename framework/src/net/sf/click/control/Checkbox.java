@@ -109,9 +109,9 @@ public class Checkbox extends Field {
 
     /**
      * Return the checkbox's html tag: <tt>input</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -165,7 +165,7 @@ public class Checkbox extends Field {
      * @param value the Field value
      */
     public void setValue(String value) {
-        checked = Boolean.valueOf(value).booleanValue();;
+        checked = Boolean.valueOf(value).booleanValue();
      }
 
     /**

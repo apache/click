@@ -15,14 +15,20 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.*;
 import java.util.List;
+import net.sf.click.Control;
 
 /**
- * Container extends the notion of a {@link net.sf.click.Control} by enabling
- * the creation of nested controls.
+ * Container extends {@link net.sf.click.Control} and enables the creation of
+ * nested controls.
  * <p/>
- * TODO
+ * Container allows one to add, remove and retrieve controls.
+ * <p/>
+ * <b>Please note</b> {@link AbstractContainer} provides
+ * a default implementation of the Container interface and allows easy creation
+ * of new containers.
+ *
+ * @see net.sf.click.util.ContainerUtils
  *
  * @author Bob Schellink
  */
@@ -86,7 +92,7 @@ public interface Container extends Control {
     Control addControl(int index, Control control);
 
     /**
-     * Remove the given control from the container, returning true if the 
+     * Remove the given control from the container, returning true if the
      * control was found in the container and removed, or false if the control
      * was not found.
      * <p/>
@@ -107,7 +113,7 @@ public interface Container extends Control {
      *   {@link net.sf.click.Control#getParent()} returns <tt>null</tt>.
      *  </li>
      * </ul>
-     * 
+     *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
      */
@@ -115,14 +121,14 @@ public interface Container extends Control {
 
     /**
      * Return the sequential list of controls held by the container.
-     * 
+     *
      * @return the sequential list of controls held by the container
      */
     List getControls();
 
     /**
      * Return the named control from the container if found or null otherwise.
-     * 
+     *
      * @param controlName the name of the control to get from the container
      * @return the named control from the container if found or null otherwise
      */
@@ -130,7 +136,7 @@ public interface Container extends Control {
 
     /**
      * Return true if the container contains the specified control.
-     * 
+     *
      * @param control the control whose presence in this container is to be tested
      * @return true if the container contains the specified control
      */
@@ -138,7 +144,7 @@ public interface Container extends Control {
 
     /**
      * Returns true if this container has existing controls, false otherwise.
-     * 
+     *
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls();

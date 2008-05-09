@@ -45,10 +45,10 @@ import net.sf.click.util.HtmlStringBuffer;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author Bob Schellink
  */
-public abstract class AbstractContainer extends AbstractControl implements 
+public abstract class AbstractContainer extends AbstractControl implements
     Container {
 
     // -------------------------------------------------------- Constants
@@ -83,9 +83,10 @@ public abstract class AbstractContainer extends AbstractControl implements
     // ------------------------------------------------------ Public methods
 
     /**
-     * @see net.sf.click.control.Container#addControl(net.sf.click.Control)}.
+     * @see net.sf.click.control.Container#addControl(net.sf.click.Control).
      *
      * @param control the control to add to the container
+     * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, the container
      * already contains a control with the same name, or if the control's parent
      * is a Page
@@ -99,6 +100,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
+     * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, the container
      * already contains a control with the same name, or if the control's parent
      * is a Page
@@ -140,8 +142,10 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)}.
+     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control).
      *
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
     public boolean removeControl(Control control) {
@@ -165,7 +169,9 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#getControls()}.
+     * @see net.sf.click.control.Container#getControls().
+     *
+     * @return the sequential list of controls held by the container
      */
     public List getControls() {
         if (controls == null) {
@@ -176,6 +182,9 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * @see net.sf.click.control.Container#getControl(java.lang.String)
+     *
+     * @param controlName the name of the control to get from the container
+     * @return the named control from the container if found or null otherwise
      */
     public Control getControl(String controlName) {
         if (hasControls()) {
@@ -186,6 +195,9 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * @see net.sf.click.control.Container#contains(net.sf.click.Control)
+     *
+     * @param control the control whose presence in this container is to be tested
+     * @return true if the container contains the specified control
      */
     public boolean contains(Control control) {
         return getControls().contains(control);
@@ -193,7 +205,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * Returns true if this container has existing controls, false otherwise.
-     * 
+     *
      * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
@@ -201,7 +213,9 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.Control#onProcess()}.
+     * @see net.sf.click.Control#onProcess().
+     *
+     * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
 
@@ -340,7 +354,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()}.
+     * @see AbstractControl#getControlSizeEst().
      *
      * @return the estimated rendered control size in characters
      */
@@ -359,7 +373,10 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)}.
+     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer).
+     *
+     * @param tagName the name of the tag to close
+     * @param buffer the buffer to append the output to
      */
     protected void renderTagEnd(String tagName, HtmlStringBuffer buffer) {
         buffer.elementEnd(tagName);
@@ -376,7 +393,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * Render this container children to the specified buffer.
-     * 
+     *
      * @see #getControls()
      *
      * @param buffer the buffer to append the output to
@@ -407,7 +424,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
     /**
      * Log the event being processed for the specified control.
-     * 
+     *
      * TODO. Not sure if this method is useful. Logging out life cycles for
      * every container will be very noisy.
      *
@@ -418,8 +435,8 @@ public abstract class AbstractContainer extends AbstractControl implements
         String controlClassName = control.getClass().getName();
         controlClassName = controlClassName.substring(controlClassName.
             lastIndexOf('.') + 1);
-        String msg = "   invoked: '" + control.getName() + "' " +
-            controlClassName + "." + event + "()";
+        String msg = "   invoked: '" + control.getName() + "' "
+            + controlClassName + "." + event + "()";
         ClickUtils.getLogService().trace(msg);
     }
 }

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
-import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -144,9 +143,9 @@ public class HiddenField extends Field {
 
     /**
      * Return the hiddenfield's html tag: <tt>input</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -306,8 +305,8 @@ public class HiddenField extends Field {
 
     /**
      * Render the HTML representation of the HiddenField.
-     * 
-     * @see Control#render(net.sf.click.util.HtmlStringBuffer)
+     *
+     * @see net.sf.click.Control#render(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the specified buffer to render the control's output to
      */
@@ -319,15 +318,15 @@ public class HiddenField extends Field {
         buffer.appendAttribute("id", getId());
 
         String valueStr = null;
-        Class valueClass = getValueClass();
+        Class valueCls = getValueClass();
 
-        if (valueClass == String.class
-            || valueClass == Integer.class
-            || valueClass == Boolean.class
-            || valueClass == Double.class
-            || valueClass == Float.class
-            || valueClass == Long.class
-            || valueClass == Short.class) {
+        if (valueCls == String.class
+            || valueCls == Integer.class
+            || valueCls == Boolean.class
+            || valueCls == Double.class
+            || valueCls == Float.class
+            || valueCls == Long.class
+            || valueCls == Short.class) {
 
             valueStr = String.valueOf(getValue());
 
