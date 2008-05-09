@@ -252,7 +252,7 @@ import org.apache.commons.lang.StringUtils;
  * the fields using the named field notation:
  *
  * <pre class="codeHtml">
- * $form.{@link #fields}.usernameField </pre>
+ * $form.{@link #getFields fields}.usernameField </pre>
  *
  * Whenever including your own Form markup in a page template or Velocity macro
  * always specify:
@@ -615,11 +615,11 @@ public class Form extends BasicForm {
      * The Fields inside the FieldSet will be laid out by the Form.
      *
      * @see Container#addControl(net.sf.click.Control)
-     * 
+     *
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, the Field's name
-     * is not defined, the container already contains a control with the same 
+     * is not defined, the container already contains a control with the same
      * name, if the control's parent is a Page or if the control is neither a
      * Field nor FieldSet
      */
@@ -668,8 +668,8 @@ public class Form extends BasicForm {
             super.addControl(getControls().size(), fieldSet);
             fieldSet.setForm(this);
         } else {
-            throw new IllegalArgumentException("Only fields and FieldSets are" +
-                " allowed on this Form");
+            throw new IllegalArgumentException("Only fields and FieldSets are"
+                + " allowed on this Form");
         }
 
         return control;
@@ -680,11 +680,12 @@ public class Form extends BasicForm {
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
-     * @throws IllegalArgumentException if the control is null,
+     * @return the control that was added to the container
+     * @throws UnsupportedOperationException if invoked
      */
     public Control addControl(int index, Control control) {
-        throw new UnsupportedOperationException("This method is not supported" +
-            " for Form. Please use addControl(Control) instead.");
+        throw new UnsupportedOperationException("This method is not supported"
+            + " for Form. Please use addControl(Control) instead.");
     }
 
     /**
@@ -761,7 +762,7 @@ public class Form extends BasicForm {
      * @param fieldSet the fieldSet to add to the form
      * @param width the width of the fieldSet in table columns
      * @return the fieldSet added to this form
-     * @throws IllegalArgumentException if the fieldSet is null, the form 
+     * @throws IllegalArgumentException if the fieldSet is null, the form
      * already contains a control with the same name, if the fieldSet's parent
      * is a Page or the width &lt; 1
      */
@@ -783,6 +784,9 @@ public class Form extends BasicForm {
 
     /**
      * @see Container#removeControl(net.sf.click.Control)
+     *
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
      */
     public boolean removeControl(Control control) {
         if (control == null) {
@@ -827,7 +831,7 @@ public class Form extends BasicForm {
      * Remove the given field from the form.
      *
      * @param field the field to remove from the form
-     * 
+     *
      * @throws IllegalArgumentException if the field is null
      */
     public void remove(Field field) {
@@ -838,7 +842,7 @@ public class Form extends BasicForm {
      * Remove the given fieldSet from the form.
      *
      * @param fieldSet the fieldSet to remove from the form
-     * 
+     *
      * @throws IllegalArgumentException if the fieldSet is null
      */
     public void remove(FieldSet fieldSet) {
@@ -1305,44 +1309,7 @@ public class Form extends BasicForm {
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Copy the given object's attributes into the Form's field values. In other
-     * words automatically populate Forms field values with the given objects
-     * attributes.
-     * <p/>
-     * The following example populates the Form field with Customer objects
-     * attributes:
-     *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onGet() {
-     *     Long customerId = ..
-     *     Customer customer = CustomerDAO.findByPK(customerId);
-     *     form.copyFrom(customer);
-     *  }
-     * </pre>
-     *
-     * copyForm also supports <tt>java.util.Map</tt> as an argument.
-     * <p/>
-     * By specifying a map, the Form's field values will be populated by
-     * matching key/value pairs. A match occurs when the map's key is equal to
-     * a field's name.
-     * <p/>
-     * The following example populates the Form fields with a map's key/value
-     * pairs:
-     *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onInit() {
-     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
-     *  }
-     *
-     *  <span class="kw">public void</span> onGet() {
-     *     Map map = <span class="kw">new</span> HashMap();
-     *     map.put(<span class="st">"name"</span>, <span class="st">"Steve"</span>);
-     *     map.put(<span class="st">"address.street"</span>, <span class="st">"12 Long street"</span>);
-     *     form.copyFrom(map);
-     *  }
-     * </pre>
+     * @see BasicForm#copyFrom(java.lang.Object)
      *
      * @param object the object to obtain attribute values from
      * @throws IllegalArgumentException if the object parameter is null
@@ -1359,6 +1326,8 @@ public class Form extends BasicForm {
      * If the debug parameter is true, debugging messages will be
      * logged.
      *
+     * @see BasicForm#copyFrom(java.lang.Object)
+     *
      * @param object the object to obtain attribute values from
      * @param debug log debug statements when populating the form
      * @throws IllegalArgumentException if the object parameter is null
@@ -1368,48 +1337,7 @@ public class Form extends BasicForm {
     }
 
     /**
-     * Copy the Form's field values into the given object's attributes. In other
-     * words automatically populate Object attributes with the Forms field
-     * values.
-     * <p/>
-     * The following example populates the Customer object attributes with the
-     * Form's field values:
-     *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onPost() {
-     *      <span class="kw">if</span> (form.isValid()) {
-     *         Customer customer = <span class="kw">new</span> Customer();
-     *         form.copyTo(customer);
-     *         ..
-     *      }
-     *      <span class="kw">return true</span>;
-     *  }
-     * </pre>
-     *
-     * copyTo also supports <tt>java.util.Map</tt> as an argument.
-     * <p/>
-     * By specifying a map, the map's key/value pairs are populated from
-     * matching Form field names. A match occurs when a field's name is
-     * equal to a map's key.
-     * <p/>
-     * The following example populates the map with the Form field values:
-     *
-     * <pre class="codeJava">
-     *  <span class="kw">public void</span> onInit() {
-     *     form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
-     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
-     *  }
-     *
-     *  <span class="kw">public void</span> onGet() {
-     *     Map map = <span class="kw">new</span> HashMap();
-     *     map.put(<span class="st">"name"</span>, null);
-     *     map.put(<span class="st">"address.street"</span>, null);
-     *     form.copyTo(map);
-     *  }
-     * </pre>
-     * Note that the map acts as a template to specify which fields to populate
-     * from.
+     * @see BasicForm#copyTo(java.lang.Object)
      *
      * @param object the object to populate with field values
      * @throws IllegalArgumentException if the object parameter is null
@@ -1425,6 +1353,8 @@ public class Form extends BasicForm {
      * <p/>
      * If the debug parameter is true, debugging messages will be
      * logged.
+     *
+     * @see BasicForm#copyTo(java.lang.Object)
      *
      * @param object the object to populate with field values
      * @param debug log debug statements when populating the object
@@ -1493,7 +1423,7 @@ public class Form extends BasicForm {
         if (isFormSubmission()) {
 
             boolean continueProcessing = true;
-            for (Iterator it = getControls().iterator(); it.hasNext(); ) {
+            for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
                 if (control.getName() != null
                     && !control.getName().startsWith(SUBMIT_CHECK)) {
@@ -1734,9 +1664,9 @@ public class Form extends BasicForm {
     /**
      * Render the non hidden Form Fields to the string buffer.
      * <p/>
-     * This method delegates the rendering of the form fields to 
-     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map).
-     * 
+     * This method delegates the rendering of the form fields to
+     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map)}.
+     *
      * @param buffer the StringBuffer to render to
      */
     protected void renderFields(HtmlStringBuffer buffer) {
@@ -2166,8 +2096,8 @@ public class Form extends BasicForm {
      * Render the fieldsets form fields to the string buffer. This method will
      * apply the parent Forms properties to the layout and rendering of fields.
      * <p/>
-     * This method delegates the rendering of the fieldset fields to 
-     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map).
+     * This method delegates the rendering of the fieldset fields to
+     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map)}.
      *
      * @param buffer the StringBuffer to render to
      * @param fieldSet the fieldSet to render

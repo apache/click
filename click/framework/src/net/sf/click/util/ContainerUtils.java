@@ -161,7 +161,7 @@ public class ContainerUtils {
     }
 
     /**
-     * Populate the given object's attributes with the Containers's field values.
+     * Populate the given object's attributes with the Containers field values.
      * <p/>
      * The specified Object can either be a POJO (plain old java object) or
      * a {@link java.util.Map}. If a POJO is specified, its attributes are
@@ -237,9 +237,9 @@ public class ContainerUtils {
 
             } catch (Exception e) {
                 String msg =
-                    "Error incurred invoking " + objectClassname + "." +
-                    field.getName() + " with " + field.getValueObject() +
-                    " error: " + e.toString();
+                    "Error incurred invoking " + objectClassname + "."
+                    + field.getName() + " with " + field.getValueObject()
+                    + " error: " + e.toString();
 
                 logService.debug(msg);
             }
@@ -321,8 +321,8 @@ public class ContainerUtils {
                 }
 
             } catch (Exception e) {
-                String msg = "Error incurred invoking " + objectClassname + "." +
-                    field.getName() + " error: " + e.toString();
+                String msg = "Error incurred invoking " + objectClassname + "."
+                    + field.getName() + " error: " + e.toString();
 
                 logService.debug(msg);
             }
@@ -376,7 +376,7 @@ public class ContainerUtils {
 
     /**
      * Return true if the specified field's name is contained within the
-     * specified set of properties
+     * specified set of properties.
      *
      * @param field the field which name should be checked
      * @param properties set of properties to check
@@ -542,7 +542,7 @@ public class ContainerUtils {
      * to the specified includeSet.
      *
      * {@link net.sf.click.Control#getHtmlImports()}
-     * 
+     *
      * @param container the Container to obtain html head imports from
      * @param includeSet the set containing all the HTML head imports for the
      * container and its child controls
@@ -668,8 +668,8 @@ public class ContainerUtils {
             } else if (control instanceof Container) {
                 if (control instanceof Field) {
                     Field field = (Field) control;
-                    if (!field.isValid() && !field.isHidden() &&
-                       !field.isDisabled()) {
+                    if (!field.isValid() && !field.isHidden()
+                        && !field.isDisabled()) {
                         fields.add(control);
                     }
                 }
@@ -677,8 +677,8 @@ public class ContainerUtils {
                 addErrorFields(childContainer, fields);
             } else if (control instanceof Field) {
                 Field field = (Field) control;
-                if (!field.isValid() && !field.isHidden() &&
-                    !field.isDisabled()) {
+                if (!field.isValid() && !field.isHidden()
+                    && !field.isDisabled()) {
                     fields.add(control);
                 }
             }

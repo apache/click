@@ -189,7 +189,7 @@ public class Panel extends AbstractContainer {
      * Add the control to the panel and return the specified control.
      * <p/>
      * In addition to the requirements specified by
-     * {@link Container#addControl(net.sf.click.Control), note
+     * {@link Container#addControl(net.sf.click.Control)}, note
      * the following:
      * <ul>
      *  <li>
@@ -197,7 +197,7 @@ public class Panel extends AbstractContainer {
      *  </li>
      *  <li>
      *   The control will be added to the Panel model using the controls name as
-     *   the key and can be accessed through {@link #getModel()}. This allows 
+     *   the key and can be accessed through {@link #getModel()}. This allows
      *   one to reference the control in the Panels template.
      *  </li>
      *  <li>
@@ -209,6 +209,7 @@ public class Panel extends AbstractContainer {
      * @see net.sf.click.control.Container#addControl(net.sf.click.Control)
      *
      * @param control the control to add to the container
+     * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, if the name
      *     of the control is not defined, the container already contains a
      *     control with the same name, or if the control's parent is a Page
@@ -233,14 +234,14 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * Remove the control from the panel and returning true if the control was 
+     * Remove the control from the panel and returning true if the control was
      * found in the container and removed, or false if the control was not
      * found.
      * <p/>
      * In addition to the requirements specified by
-     * {@link Container#removeControl(net.sf.click.Control), the controls name
+     * {@link Container#removeControl(net.sf.click.Control)}, the controls name
      * must also be set.
-     * 
+     *
      * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)
      *
      * @param control the control to remove from the container
@@ -269,6 +270,8 @@ public class Panel extends AbstractContainer {
 
     /**
      * @see net.sf.click.control.Container#getControls()
+     *
+     * @return the sequential list of controls held by the container
      */
     public List getControls() {
         if (controls == null) {
@@ -279,6 +282,8 @@ public class Panel extends AbstractContainer {
 
     /**
      * @see AbstractContainer#hasControls()
+     *
+     * @return true if the container has existing controls, false otherwise.
      */
     public boolean hasControls() {
         return (controls == null) ? false : !controls.isEmpty();

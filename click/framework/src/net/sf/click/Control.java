@@ -25,6 +25,10 @@ import net.sf.click.util.HtmlStringBuffer;
  * Provides the interface for Page controls. Controls are sometimes referred to
  * as components or widgets.
  * <p/>
+ * <b>Please note</b> {@link net.sf.click.control.AbstractControl} provides
+ * a default implementation of the Control interface and allows easy creation
+ * of new controls.
+ * <p/>
  * When a Page request event is processed Controls may perform server side event
  * processing through their {@link #onProcess()} method. Controls are generally
  * rendered in a Page by calling their <tt>toString()</tt> method.
@@ -121,7 +125,7 @@ public interface Control extends Serializable {
      *
      * @deprecated getContext() is now obsolete on the Control interface,
      * but it is still available on AbstractControl:
-     * {@link AbstractControl#getContext()}
+     * {@link net.sf.click.control.AbstractControl#getContext()}
      *
      * @return the Page request Context
      */
@@ -159,7 +163,7 @@ public interface Control extends Serializable {
      *
      * @deprecated getId() is now obsolete on the Control interface,
      * but it is still available on AbstractControl:
-     * {@link AbstractControl#getId()}
+     * {@link net.sf.click.control.AbstractControl#getId()}
      *
      * @return HTML element identifier attribute "id" value
      */
@@ -187,7 +191,7 @@ public interface Control extends Serializable {
      *
      * @deprecated this method is now obsolete on the Control interface, but it
      * is still available on AbstractControl:
-     * {@link AbstractControl#setListener(java.lang.Object, java.lang.String)}
+     * {@link net.sf.click.control.AbstractControl#setListener(java.lang.Object, java.lang.String)}
      */
     public void setListener(Object listener, String method);
 
@@ -240,6 +244,9 @@ public interface Control extends Serializable {
      *     ClickUtils.deployFile
      *         (servletContext, <span class="st">"/com/mycorp/control/custom.js"</span>, <span class="st">"click"</span>);
      * } </pre>
+     * <b>Please note:</b> a common problem when overriding onDeploy in
+     * subclasses is forgetting to call <em>super.onDeploy</em>. Consider
+     * carefully whether you should call <em>super.onDeploy</em> or not.
      *
      * @param servletContext the servlet context
      */
@@ -249,9 +256,15 @@ public interface Control extends Serializable {
      * The on initialize event handler. Each control will be initialized
      * before its {@link #onProcess()} method is called.
      * <p/>
-     * {@link Container} implementations should recursively invoke the onInit
-     * method on each of their child controls ensuring that all controls receive
-     * this event.
+     * {@link net.sf.click.control.Container} implementations should recursively
+     * invoke the onInit method on each of their child controls ensuring that
+     * all controls receive this event.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onInit in
+     * subclasses is forgetting to call <em>super.onInit()</em>. Consider
+     * carefully whether you should call <em>super.onInit()</em> or not,
+     * especially for {@link net.sf.click.control.Container}s which by default
+     * call <em>onInit</em> on all their child controls as well.
      */
     public void onInit();
 
@@ -262,15 +275,21 @@ public interface Control extends Serializable {
      * ClickServlet will process all Page controls in the order they were added
      * to the Page.
      * <p/>
-     * {@link Container} implementations should recursively invoke the onProcess
-     * method on each of their child controls ensuring that all controls receive
-     * this event. However when a control onProcess method return false,
-     * no other controls onProcess method should be invoked.
+     * {@link net.sf.click.control.Container} implementations should recursively
+     * invoke the onProcess method on each of their child controls ensuring that
+     * all controls receive this event. However when a control onProcess method
+     * return false, no other controls onProcess method should be invoked.
      * <p/>
      * When a control is processed it should return true if the Page should
      * continue event processing, or false if no other controls should be
      * processed and the {@link Page#onGet()} or {@link Page#onPost()} methods
      * should not be invoked.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onProcess in
+     * subclasses is forgetting to call <em>super.onProcess()</em>. Consider
+     * carefully whether you should call <em>super.onProcess()</em> or not,
+     * especially for {@link net.sf.click.control.Container}s which by default
+     * call <em>onProcess</em> on all their child controls as well.
      *
      * @return true to continue Page event processing or false otherwise
      */
@@ -285,9 +304,15 @@ public interface Control extends Serializable {
      * on render method they will not be performed if the user navigates away
      * to a different page.
      * <p/>
-     * {@link Container} implementations should recursively invoke the onRender
-     * method on each of their child controls ensuring that all controls receive
-     * this event.
+     * {@link net.sf.click.control.Container} implementations should recursively
+     * invoke the onRender method on each of their child controls ensuring that
+     * all controls receive this event.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onRender in
+     * subclasses is forgetting to call <em>super.onRender()</em>. Consider
+     * carefully whether you should call <em>super.onRender()</em> or not,
+     * especially for {@link net.sf.click.control.Container}s which by default
+     * call <em>onRender</em> on all their child controls as well.
      */
     public void onRender();
 
@@ -298,9 +323,15 @@ public interface Control extends Serializable {
      * This method is guaranteed to be called before the Page object reference
      * goes out of scope and is available for garbage collection.
      * <p/>
-     * {@link Container} implementations should recursively invoke the onDestroy
-     * method on each of their child controls ensuring that all controls receive
-     * this event.
+     * {@link net.sf.click.control.Container} implementations should recursively
+     * invoke the onDestroy method on each of their child controls ensuring that
+     * all controls receive this event.
+     * <p/>
+     * <b>Please note:</b> a common problem when overriding onDestroy in
+     * subclasses is forgetting to call <em>super.onDestroy()</em>. Consider
+     * carefully whether you should call <em>super.onDestroy()</em> or not,
+     * especially for {@link net.sf.click.control.Container}s which by default
+     * call <em>onDestroy</em> on all their child controls as well.
      */
     public void onDestroy();
 

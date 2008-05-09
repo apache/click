@@ -139,7 +139,7 @@ public class Option implements Serializable {
 
     /**
      * Return the Options's html tag: <tt>option</tt>.
-     * 
+     *
      * @return the Option's html tag
      */
      public String getTag() {
@@ -208,7 +208,7 @@ public class Option implements Serializable {
     /**
      * Return a HTML rendered Option string.
      *
-     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)
+     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)}
      * instead
      *
      * @param select the parent Select

@@ -43,35 +43,64 @@ import net.sf.click.util.MessagesMap;
  * {@link #render(net.sf.click.util.HtmlStringBuffer)} for complete control
  * over the output.
  * <p/>
- * Below is an example of creating a new control:
+ * Below is an example of creating a new control called MyField:
  * <pre class="prettyprint">
  * public class MyField extends AbstractControl {
- * 
+ *
  *     private String value;
- * 
+ *
  *     public void setValue(String value) {
  *         this.value = value;
  *     }
- * 
+ *
  *     public String getValue() {
  *         return value;
  *     }
- * 
+ *
  *     public String getTag() {
  *         // Return the HTML tag
  *         return "input";
  *     }
- * 
+ *
  *     public boolean onProcess() {
  *         // Bind the request parameter to the field value
  *         String requestValue = getContext().getRequestParamter(getName());
  *         setValue(requestValue);
- *         
+ *
  *         // Invoke any listener of MyField
  *         return invokeListener();
  *     }
  * }
  * </pre>
+ * By overriding {@link #getTag()} one can specify the html tag to render.
+ * <p/>
+ * Overriding {@link #onProcess()} allows one to bind the servlet request
+ * parameter to MyField value. The {@link #invokeListener()} method is invoked
+ * to trigger the action listener callback on MyField.
+ * <p/>
+ * To view the html rendered by MyField invoke the control's {@link #toString()}
+ * method:
+ *
+ * <pre class="prettyprint">
+ * public class Test {
+ *     public static void main (String args[]) {
+ *         // Create mock context in which to test the control.
+ *         MockContext.initContext();
+ *
+ *         String fieldName = "myfield";
+ *         MyField myfield = new MyField(fieldName);
+ *         String output = myfield.toString();
+ *         System.out.println(output);
+ *     }
+ * } </pre>
+ *
+ * Executing the above test results in the following output:
+ *
+ * <pre class="prettyprint">
+ * &lt;input name="myfield" id="myfield"/&gt;</pre>
+ *
+ * Also see {@link net.sf.click.Control} javadoc for an explanation of the
+ * Control execution sequence.
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
@@ -266,14 +295,14 @@ public abstract class AbstractControl implements Control {
         //If control has a parent control, it cannot change its name.
         //To change a fields name, it must be removed from its parent first,
         //and reattached. The reason is that controls added to parents
-        //are added to a hashMap keyed on their name. So changing the field's 
+        //are added to a hashMap keyed on their name. So changing the field's
         //name while its inside the map, will make it irretrievable.
         if (getParent() == null) {
             this.name = name;
         } else {
             throw new IllegalStateException("You cannot change the name of "
                 + "a control that has a parent. To change the name, first remove "
-                + "the control from its parent, change its name, then add it " 
+                + "the control from its parent, change its name, then add it "
                 + "again.");
         }
     }
@@ -410,7 +439,7 @@ public abstract class AbstractControl implements Control {
 
    /**
     * @see net.sf.click.Control#onProcess()
-    * 
+    *
     * @return true to continue Page event processing or false otherwise
     */
     public boolean onProcess() {
@@ -707,7 +736,7 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Render the control's output to the specified buffer. 
+     * Render the control's output to the specified buffer.
      * <p/>
      * If {@link #getTag()} returns null, this method will return an empty
      * string.

@@ -27,7 +27,7 @@ import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a FieldSet container control: &nbsp; &lt;fieldset&gt;.
- * 
+ *
  * <table style='margin-bottom: 1.25em'>
  * <tr>
  * <td>
@@ -53,12 +53,26 @@ import org.apache.commons.lang.StringUtils;
  * </table>
  *
  * FieldSet provides a container for laying out form <tt>Field</tt> controls.
- * The FieldSet will use the properties of its parent Form for laying out and
- * rendering of its Fields. To further customize the rendering of a FieldSet
- * override the {@link #renderFields(HtmlStringBuffer)} method.
  * <p/>
- * A FieldSet can contain any Field controls except for <tt>Button</tt> and
- * <tt>FieldSet</tt> controls.
+ * One can use FieldSet with both {@link Form} and {@link BasicForm}, however
+ * the behavior of FieldSet differs for each.
+ * <p/>
+ * <ul>
+ *  <li>BasicForm - when adding FieldSet to a BasicForm, it will behave exactly
+ *   like a normal container. The fields will be rendered next to each other in
+ *   the order they were added to the fieldset.
+ *  </li>
+ *  <li>Field - When adding FieldSet to a Form, it will delegate rendering to
+ *   {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}
+ *   thus using the properties of its parent Form for laying out and rendering of
+ *   its fields.
+ *   <p/>
+ *   A FieldSet can contain any Control, but when used in conjuction
+ *   with a {@link Form}, it is recommended to only add non-button fields.
+ *   Form's auto-layout works best with fields, however nothing stops you from
+ *   adding other controls to the fieldset.
+ *  </li>
+ * </ul>
  *
  * <h3>FieldSet Example</h3>
  *
@@ -127,7 +141,7 @@ public class FieldSet extends AbstractContainer {
 
     /**
      * Create a FieldSet with the given name.
-     * 
+     *
      * @param name the fieldset name element value
      */
     public FieldSet(String name) {
@@ -162,11 +176,12 @@ public class FieldSet extends AbstractContainer {
      * Fields inside the FieldSet will be laid out by the Form.
      *
      * @see Container#addControl(net.sf.click.Control)
-     * 
+     *
+     * @param index the index at which the control is to be inserted
      * @param control the control to add to the FieldSet and return
      * @return the control that was added to the FieldSet
      * @throws IllegalArgumentException if the control is null, the Field's name
-     * is not defined, the container already contains a control with the same 
+     * is not defined, the container already contains a control with the same
      * name, if the control's parent is a Page or if the control is neither a
      * Field nor FieldSet
      */
@@ -266,6 +281,8 @@ public class FieldSet extends AbstractContainer {
     /**
      * @see Container#removeControl(net.sf.click.Control)
      *
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
     public boolean removeControl(Control control) {
@@ -283,7 +300,7 @@ public class FieldSet extends AbstractContainer {
      * Remove the given field from the fieldset.
      *
      * @param field the field to remove from the fieldset
-     * 
+     *
      * @throws IllegalArgumentException if the field is null
      */
     public void remove(Field field) {
@@ -379,7 +396,7 @@ public class FieldSet extends AbstractContainer {
 
         // Set the specified form on the fieldsSets children. This call is not
         // recursive to childrens children
-        for (Iterator it = getControls().iterator(); it.hasNext(); ) {
+        for (Iterator it = getControls().iterator(); it.hasNext();) {
             Control control = (Control) it.next();
             if (control instanceof Field) {
                 ((Field) control).setForm(form);
@@ -389,7 +406,7 @@ public class FieldSet extends AbstractContainer {
 
     /**
      * Return the fieldSet display label.
-     * 
+     *
      * @see Field#getLabel()
      *
      * @return the display label of the Field
@@ -604,9 +621,11 @@ public class FieldSet extends AbstractContainer {
 
     /**
      * @see AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param tagName the name of the tag to render
+     * @param buffer the buffer to append the output to
      */
-    protected void renderTagBegin(String tagName,
-      HtmlStringBuffer buffer) {
+    protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
         if (tagName == null) {
             throw new IllegalStateException("Tag cannot be null");
         }

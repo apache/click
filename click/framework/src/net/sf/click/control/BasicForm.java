@@ -33,15 +33,22 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
+ * Provides a Basic Form control for performing manual form layout:
+ * &nbsp; &lt;form method='post'&gt;.
+ * <p/>
+ * BasicForm allows you to specify your own form layout and error reporting.
+ * <p/>
+ * <b>Please note</b>, for most cases {@link Form} is a better option since
+ * it provides auto layout and error reporting.
  *
  * @author Bob Schellink
  */
 public class BasicForm extends AbstractContainer {
-    
+
     // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * The form name parameter for multiple forms: &nbsp; <tt>"form_name"</tt>.
      */
@@ -105,12 +112,12 @@ public class BasicForm extends AbstractContainer {
     }
 
     // -------------------------------------------------------- Public Attributes
-    
+
     /**
      * Return the form's html tag: <tt>form</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {
@@ -215,8 +222,8 @@ public class BasicForm extends AbstractContainer {
     public String getError() {
         return error;
     }
-    
-    
+
+
     /**
      * Set the form level validation error message. If the error message is not
      * null the form is invalid.
@@ -243,7 +250,7 @@ public class BasicForm extends AbstractContainer {
      *
      * @param name the name of the field
      * @return the named field if contained in the form
-     * 
+     *
      * @throws IllegalStateException if a non-field control is found with the
      * specified name
      */
@@ -308,7 +315,7 @@ public class BasicForm extends AbstractContainer {
 
         return getName().equals(getContext().getRequestParameter(FORM_NAME));
     }
-    
+
     /**
      * Return the HTML head import statements for the CSS stylesheet
      * (<tt>click/control.css</tt>) and JavaScript
@@ -455,16 +462,111 @@ public class BasicForm extends AbstractContainer {
                 field.setValue(null);
             }
         }
-    }  
+    }
 
+    /**
+     * Copy the given object's attributes into the BasicForm's field values. In
+     * other words automatically populate BasicForm's field values with the
+     * given objects attributes.
+     * <p/>
+     * The following example populates the BasicForm field with Customer
+     * attributes:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onGet() {
+     *     Long customerId = ..
+     *     Customer customer = CustomerDAO.findByPK(customerId);
+     *     form.copyFrom(customer);
+     *  }
+     * </pre>
+     *
+     * copyForm also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * By specifying a map, the BasicForm's field values will be populated by
+     * matching key/value pairs. A match occurs when the map's key is equal to
+     * a field's name.
+     * <p/>
+     * The following example populates the BasicForm fields with a map's
+     * key/value pairs:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onInit() {
+     *     form = <span class="kw">new</span> BasicForm(<span class="st">"form"</span>);
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
+     *  }
+     *
+     *  <span class="kw">public void</span> onGet() {
+     *     Map map = <span class="kw">new</span> HashMap();
+     *     map.put(<span class="st">"name"</span>, <span class="st">"Steve"</span>);
+     *     map.put(<span class="st">"address.street"</span>, <span class="st">"12 Long street"</span>);
+     *     form.copyFrom(map);
+     *  }
+     * </pre>
+     *
+     * @param object the object to obtain attribute values from
+     * @throws IllegalArgumentException if the object parameter is null
+     */
     public void copyFrom(Object object) {
         ContainerUtils.copyObjectToContainer(object, this);
     }
 
+    /**
+     * Copy the BasicForm's field values into the given object's attributes. In
+     * other words automatically populate Object attributes with the BasicForm's
+     * field values.
+     * <p/>
+     * The following example populates the Customer attributes with the
+     * BasicForm's field values:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onPost() {
+     *      <span class="kw">if</span> (form.isValid()) {
+     *         Customer customer = <span class="kw">new</span> Customer();
+     *         form.copyTo(customer);
+     *         ..
+     *      }
+     *      <span class="kw">return true</span>;
+     *  }
+     * </pre>
+     *
+     * copyTo also supports <tt>java.util.Map</tt> as an argument.
+     * <p/>
+     * By specifying a map, the map's key/value pairs are populated from
+     * matching BasicForm field names. A match occurs when a field's name is
+     * equal to a map's key.
+     * <p/>
+     * The following example populates the map with the BasicForm field values:
+     *
+     * <pre class="codeJava">
+     *  <span class="kw">public void</span> onInit() {
+     *     form = <span class="kw">new</span> BasicForm(<span class="st">"form"</span>);
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"name"</span>));
+     *     form.add(<span class="kw">new</span> TextField(<span class="st">"address.street"</span>));
+     *  }
+     *
+     *  <span class="kw">public void</span> onGet() {
+     *     Map map = <span class="kw">new</span> HashMap();
+     *     map.put(<span class="st">"name"</span>, null);
+     *     map.put(<span class="st">"address.street"</span>, null);
+     *     form.copyTo(map);
+     *  }
+     * </pre>
+     * Note that the map acts as a template to specify which fields to populate
+     * from.
+     *
+     * @param object the object to populate with field values
+     * @throws IllegalArgumentException if the object parameter is null
+     */
     public void copyTo(Object object) {
         ContainerUtils.copyContainerToObject(this, object);
     }
 
+    /**
+     * @see net.sf.click.Control#onProcess().
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
     public boolean onProcess() {
 
         if (getValidate()) {
@@ -484,7 +586,7 @@ public class BasicForm extends AbstractContainer {
         if (isFormSubmission()) {
 
             if (hasControls()) {
-                for (Iterator it = getControls().iterator(); it.hasNext(); ) {
+                for (Iterator it = getControls().iterator(); it.hasNext();) {
                     Control control = (Control) it.next();
                     String controlName = control.getName();
                     if (controlName == null || !controlName.startsWith(SUBMIT_CHECK)) {
@@ -563,7 +665,7 @@ public class BasicForm extends AbstractContainer {
             setError(getMessage(key, args));
         }
     }
-    
+
     /**
      * Destroy the fields and buttons contained in the Form and clear any form
      * error message.
@@ -575,7 +677,7 @@ public class BasicForm extends AbstractContainer {
         setError(null);
     }
 
-    
+
     /**
      * Perform a form submission check ensuring the user has not replayed the
      * form submission by using the browser back button. If the form submit
@@ -834,6 +936,9 @@ public class BasicForm extends AbstractContainer {
 
     /**
      * @see AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param tagName the name of the tag to render
+     * @param buffer the buffer to append the output to
      */
     protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
         if (tagName == null) {
@@ -852,11 +957,13 @@ public class BasicForm extends AbstractContainer {
 
     /**
      * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the buffer to append the output to
      */
     protected void renderContent(HtmlStringBuffer buffer) {
         // Render hidden fields
         List fields = ContainerUtils.getFields(this);
-        for (Iterator it = fields.iterator(); it.hasNext(); ) {
+        for (Iterator it = fields.iterator(); it.hasNext();) {
             Field field = (Field) it.next();
             if (field.isHidden()) {
                 field.render(buffer);
@@ -868,6 +975,8 @@ public class BasicForm extends AbstractContainer {
 
     /**
      * @see AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
+     *
+     * @param buffer the buffer to append the output to
      */
     protected void renderChildren(HtmlStringBuffer buffer) {
         if (hasControls()) {
@@ -893,6 +1002,8 @@ public class BasicForm extends AbstractContainer {
 
     /**
      * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
      */
     protected int getControlSizeEst() {
         return 400 + (getControls().size() * 350);

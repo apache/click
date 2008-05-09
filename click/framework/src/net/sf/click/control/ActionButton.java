@@ -476,7 +476,7 @@ public class ActionButton extends Button {
     /**
      * Render the HTML representation of the ActionButton. Note the button label
      * is rendered as the HTML "value" attribute.
-     * 
+     *
      * @see #toString()
      *
      * @param buffer the specified buffer to render the control's output to

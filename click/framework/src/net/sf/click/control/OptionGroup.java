@@ -66,7 +66,7 @@ public class OptionGroup implements Serializable {
 
    /**
      * Return the OptionGroups's html tag: <tt>optgroup</tt>.
-     * 
+     *
      * @return the OptionGroup's html tag
      */
     public String getTag() {
@@ -119,11 +119,11 @@ public class OptionGroup implements Serializable {
 
             if (object instanceof Option) {
                 Option option = (Option) object;
-                buffer.append(option.renderHTML(select));
+                option.render(select, buffer);
 
             } else if (object instanceof OptionGroup) {
                 OptionGroup optionGroup = (OptionGroup) object;
-                buffer.append(optionGroup.renderHTML(select));
+                optionGroup.render(select, buffer);
 
             } else {
                 String msg = "Select option class not instance of Option"
@@ -138,7 +138,7 @@ public class OptionGroup implements Serializable {
     /**
      * Return a HTML rendered OptionGroup string.
      *
-     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)
+     * @deprecated use {@link #render(net.sf.click.control.Select, net.sf.click.util.HtmlStringBuffer)}
      * instead
      *
      * @param select the parent Select
