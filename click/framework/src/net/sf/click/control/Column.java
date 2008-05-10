@@ -209,9 +209,6 @@ public class Column implements Serializable {
      */
     protected boolean autolink;
 
-    /** The column comparator object, which is used to sort column row values. */
-    protected Comparator comparator;
-
     /** The column table data &lt;td&gt; CSS class attribute. */
     protected String dataClass;
 
@@ -272,6 +269,9 @@ public class Column implements Serializable {
 
     /** The column HTML &lt;td&gt; width attribute. */
     protected String width;
+
+    /** The column comparator object, which is used to sort column row values. */
+    Comparator comparator;
 
     // ----------------------------------------------------------- Constructors
 
@@ -1415,7 +1415,7 @@ public class Column implements Serializable {
      *
      * @author Malcolm Edgar
      */
-    public static class Comparator implements java.util.Comparator {
+    static class Comparator implements java.util.Comparator {
 
         /** The sort ascending flag. */
         protected int ascendingSort;
