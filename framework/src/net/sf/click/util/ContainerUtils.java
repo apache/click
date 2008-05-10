@@ -152,7 +152,10 @@ public class ContainerUtils {
 
                 if (childControl instanceof Container) {
                     Container childContainer = (Container) childControl;
-                    return findControlByName(childContainer, name);
+                    Control found = findControlByName(childContainer, name);
+                    if (found != null) {
+                        return found;
+                    }
                 }
 
             }
