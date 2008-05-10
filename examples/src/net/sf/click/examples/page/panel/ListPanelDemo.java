@@ -20,9 +20,9 @@ public class ListPanelDemo extends BorderPage {
     public List customers;
 
     public ListPanelDemo() {
-        listPanel.addControl(new Panel("panel1", "/panel/customersPanel1.htm"));
-        listPanel.addControl(new Panel("panel2", "/panel/customersPanel2.htm"));
-        listPanel.addControl(new Panel("panel3", "/panel/customersPanel3.htm"));
+        listPanel.add(new Panel("panel1", "/panel/customersPanel1.htm"));
+        listPanel.add(new Panel("panel2", "/panel/customersPanel2.htm"));
+        listPanel.add(new Panel("panel3", "/panel/customersPanel3.htm"));
     }
 
     /**
