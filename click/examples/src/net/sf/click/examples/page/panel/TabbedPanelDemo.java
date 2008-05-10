@@ -19,15 +19,15 @@ public class TabbedPanelDemo extends BorderPage {
     public TabbedPanelDemo() {
         Panel panel1 = new Panel("panel1", "panel/customersPanel1.htm");
         panel1.setLabel("The First Panel");
-        tabbedPanel.addControl(panel1);
+        tabbedPanel.add(panel1);
 
         Panel panel2 = new Panel("panel2", "panel/customersPanel2.htm");
         panel2.setLabel("The Second Panel");
-        tabbedPanel.addControl(panel2);
+        tabbedPanel.add(panel2);
 
         Panel panel3 = new Panel("panel3", "panel/customersPanel3.htm");
         panel3.setLabel("The Third Panel");
-        tabbedPanel.addControl(panel3);
+        tabbedPanel.add(panel3);
     }
 
     /**
