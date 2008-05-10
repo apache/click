@@ -212,9 +212,6 @@ public class Tree extends AbstractControl {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The list of tree controls. */
-    protected List controls;
-
     /** The tree's hierarchical data model. */
     protected TreeNode rootNode;
 
