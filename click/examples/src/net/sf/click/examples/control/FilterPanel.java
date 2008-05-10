@@ -32,7 +32,7 @@ public class FilterPanel extends Panel {
         filterForm.add(startDate);
         filterForm.add(endDate);
 
-        addControl(filterForm);
+        add(filterForm);
     }
 
     public Date getEndDate() {
