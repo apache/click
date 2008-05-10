@@ -75,34 +75,34 @@ public abstract class AbstractContainerField extends Field implements Container 
     // ------------------------------------------------------ Public methods
 
     /**
-     * @see net.sf.click.control.Container#addControl(net.sf.click.Control).
+     * @see net.sf.click.control.Container#add(net.sf.click.Control).
      *
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      */
-    public Control addControl(Control control) {
-        return container.addControl(control);
+    public Control add(Control control) {
+        return container.add(control);
     }
 
     /**
-     * @see net.sf.click.control.Container#addControl(int, net.sf.click.Control).
+     * @see net.sf.click.control.Container#add(int, net.sf.click.Control).
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      */
-    public Control addControl(int index, Control control) {
-        return container.addControl(index, control);
+    public Control add(int index, Control control) {
+        return container.add(index, control);
     }
 
     /**
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)
+     * @see net.sf.click.control.Container#remove(net.sf.click.Control)
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
      */
-    public boolean removeControl(Control control) {
-        return container.removeControl(control);
+    public boolean remove(Control control) {
+        return container.remove(control);
     }
 
     /**

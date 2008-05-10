@@ -175,7 +175,7 @@ public class FieldSet extends AbstractContainer {
      * <b>Please note</b> if the FieldSet's parent is a {@link Form}, the
      * Fields inside the FieldSet will be laid out by the Form.
      *
-     * @see Container#addControl(net.sf.click.Control)
+     * @see Container#add(net.sf.click.Control)
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the FieldSet and return
@@ -185,7 +185,7 @@ public class FieldSet extends AbstractContainer {
      * name, if the control's parent is a Page or if the control is neither a
      * Field nor FieldSet
      */
-    public Control addControl(int index, Control control) {
+    public Control add(int index, Control control) {
          if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -223,7 +223,7 @@ public class FieldSet extends AbstractContainer {
             }
 
         } else {
-            super.addControl(index, control);
+            super.add(index, control);
         }
 
         return control;
@@ -235,7 +235,7 @@ public class FieldSet extends AbstractContainer {
      * <p/>
      * Field instances will be add to {@link #getControls()}.
      *
-     * @see #addControl(net.sf.click.Control)
+     * @see #add(net.sf.click.Control)
      *
      * @param field the field to add to the form
      * @return the field added to this form
@@ -244,7 +244,7 @@ public class FieldSet extends AbstractContainer {
      * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        addControl(getControls().size(), field);
+        add(getControls().size(), field);
         return field;
     }
 
@@ -279,14 +279,14 @@ public class FieldSet extends AbstractContainer {
     }
 
     /**
-     * @see Container#removeControl(net.sf.click.Control)
+     * @see Container#remove(net.sf.click.Control)
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
-    public boolean removeControl(Control control) {
-        boolean removed = super.removeControl(control);
+    public boolean remove(Control control) {
+        boolean removed = super.remove(control);
 
         if (control instanceof Field) {
             Field field = (Field) control;
@@ -304,7 +304,7 @@ public class FieldSet extends AbstractContainer {
      * @throws IllegalArgumentException if the field is null
      */
     public void remove(Field field) {
-        removeControl(field);
+        remove(field);
     }
 
     /**
