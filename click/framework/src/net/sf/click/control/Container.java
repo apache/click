@@ -60,7 +60,7 @@ public interface Container extends Control {
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      */
-    Control addControl(Control control);
+    Control add(Control control);
 
     /**
      * Add the control to the container at the specified index, and return the
@@ -89,7 +89,7 @@ public interface Container extends Control {
      * @param control the control to add to the container and return
      * @return the control that was added to the container
      */
-    Control addControl(int index, Control control);
+    Control add(int index, Control control);
 
     /**
      * Remove the given control from the container, returning true if the
@@ -117,7 +117,7 @@ public interface Container extends Control {
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
      */
-    boolean removeControl(Control control);
+    boolean remove(Control control);
 
     /**
      * Return the sequential list of controls held by the container.

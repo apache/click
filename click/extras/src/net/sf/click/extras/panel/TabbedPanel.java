@@ -130,7 +130,7 @@ public class TabbedPanel extends Panel {
      */
     public TabbedPanel(String name) {
         super(name);
-        addControl(tabLink);
+        add(tabLink);
     }
 
     /**
@@ -141,7 +141,7 @@ public class TabbedPanel extends Panel {
      */
     public TabbedPanel(String name, String template) {
         super(name, template);
-        addControl(tabLink);
+        add(tabLink);
     }
 
     /**
@@ -153,7 +153,7 @@ public class TabbedPanel extends Panel {
      */
     public TabbedPanel(String name, String template, String id) {
         super(name, template, id);
-        addControl(tabLink);
+        add(tabLink);
     }
 
     /**
@@ -163,17 +163,13 @@ public class TabbedPanel extends Panel {
      */
     public TabbedPanel() {
         super();
-        addControl(tabLink);
+        add(tabLink);
     }
 
     // --------------------------------------------------------- Public Methods
 
     /**
-     * Add the control to the panel.
-     * <p/>
-     * If the control added is the first panel it will be made the active panel.
-     *
-     * @see net.sf.click.control.Panel#addControl(net.sf.click.Control)
+     * @see #add(net.sf.click.Control)
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
@@ -182,7 +178,24 @@ public class TabbedPanel extends Panel {
      *     control with the same name, or if the control's parent is a Page
      */
     public Control addControl(Control control) {
-        super.addControl(control);
+        return add(control);
+     }
+
+    /**
+     * Add the control to the panel.
+     * <p/>
+     * If the control added is the first panel it will be made the active panel.
+     *
+     * @see net.sf.click.control.Panel#add(net.sf.click.Control)
+     *
+     * @param control the control to add to the container
+     * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null, if the name
+     *     of the control is not defined, the container already contains a
+     *     control with the same name, or if the control's parent is a Page
+     */
+    public Control add(Control control) {
+        super.add(control);
 
         if (control instanceof Panel && getPanels().size() == 1) {
             setActivePanel((Panel) control);

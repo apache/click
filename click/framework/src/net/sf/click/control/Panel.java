@@ -186,10 +186,23 @@ public class Panel extends AbstractContainer {
     // ------------------------------------------------------------- Properties
 
     /**
+     * @see #add(net.sf.click.Control)
+     *
+     * @param control the control to add to the container
+     * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null, if the name
+     *     of the control is not defined, the container already contains a
+     *     control with the same name, or if the control's parent is a Page
+     */
+    public Control addControl(Control control) {
+        return add(control);
+    }
+
+    /**
      * Add the control to the panel and return the specified control.
      * <p/>
      * In addition to the requirements specified by
-     * {@link Container#addControl(net.sf.click.Control)}, note
+     * {@link Container#add(net.sf.click.Control)}, note
      * the following:
      * <ul>
      *  <li>
@@ -206,7 +219,7 @@ public class Panel extends AbstractContainer {
      *   {@link #getPanels()}.
      *  </li>
      * </ul>
-     * @see net.sf.click.control.Container#addControl(net.sf.click.Control)
+     * @see net.sf.click.control.Container#add(net.sf.click.Control)
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
@@ -214,7 +227,7 @@ public class Panel extends AbstractContainer {
      *     of the control is not defined, the container already contains a
      *     control with the same name, or if the control's parent is a Page
      */
-    public Control addControl(Control control) {
+    public Control add(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -222,7 +235,7 @@ public class Panel extends AbstractContainer {
             throw new IllegalArgumentException("Control name not defined");
         }
 
-        super.addControl(control);
+        super.add(control);
 
         addModel(control.getName(), control);
 
@@ -234,15 +247,7 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * Remove the control from the panel and returning true if the control was
-     * found in the container and removed, or false if the control was not
-     * found.
-     * <p/>
-     * In addition to the requirements specified by
-     * {@link Container#removeControl(net.sf.click.Control)}, the controls name
-     * must also be set.
-     *
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control)
+     * @see #remove(net.sf.click.Control)
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
@@ -250,6 +255,26 @@ public class Panel extends AbstractContainer {
      *     the control is not defined
      */
     public boolean removeControl(Control control) {
+        return remove(control);
+    }
+
+    /**
+     * Remove the control from the panel and returning true if the control was
+     * found in the container and removed, or false if the control was not
+     * found.
+     * <p/>
+     * In addition to the requirements specified by
+     * {@link Container#remove(net.sf.click.Control)}, the controls name
+     * must also be set.
+     *
+     * @see net.sf.click.control.Container#remove(net.sf.click.Control)
+     *
+     * @param control the control to remove from the container
+     * @return true if the control was removed from the container
+     * @throws IllegalArgumentException if the control is null or if the name of
+     *     the control is not defined
+     */
+    public boolean remove(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -257,7 +282,7 @@ public class Panel extends AbstractContainer {
             throw new IllegalArgumentException("Control name not defined");
         }
 
-        boolean contains = super.removeControl(control);
+        boolean contains = super.remove(control);
 
         getModel().remove(control.getName());
 
@@ -457,7 +482,7 @@ public class Panel extends AbstractContainer {
 
     /**
      * Return the list of sub panels associated with this panel. Do not
-     * add sub panels using this method, use {@link #addControl(Control)} instead.
+     * add sub panels using this method, use {@link #add(Control)} instead.
      *
      * @return the list of sub-panels, if any
      */

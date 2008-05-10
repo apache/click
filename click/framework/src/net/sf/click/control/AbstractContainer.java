@@ -83,7 +83,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     // ------------------------------------------------------ Public methods
 
     /**
-     * @see net.sf.click.control.Container#addControl(net.sf.click.Control).
+     * @see net.sf.click.control.Container#add(net.sf.click.Control).
      *
      * @param control the control to add to the container
      * @return the control that was added to the container
@@ -91,12 +91,12 @@ public abstract class AbstractContainer extends AbstractControl implements
      * already contains a control with the same name, or if the control's parent
      * is a Page
      */
-    public Control addControl(Control control) {
-        return addControl(getControls().size(), control);
+    public Control add(Control control) {
+        return add(getControls().size(), control);
     }
 
     /**
-     * @see net.sf.click.control.Container#addControl(int, net.sf.click.Control)
+     * @see net.sf.click.control.Container#add(int, net.sf.click.Control)
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
@@ -105,7 +105,7 @@ public abstract class AbstractContainer extends AbstractControl implements
      * already contains a control with the same name, or if the control's parent
      * is a Page
      */
-    public Control addControl(int index, Control control) {
+    public Control add(int index, Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
@@ -127,7 +127,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
             } else if (control instanceof Container) {
                 //remove control from parent
-                ((Container) control.getParent()).removeControl(control);
+                ((Container) control.getParent()).remove(control);
             }
         }
 
@@ -142,13 +142,13 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#removeControl(net.sf.click.Control).
+     * @see net.sf.click.control.Container#remove(net.sf.click.Control).
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
      * @throws IllegalArgumentException if the control is null
      */
-    public boolean removeControl(Control control) {
+    public boolean remove(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Control cannot be null");
         }

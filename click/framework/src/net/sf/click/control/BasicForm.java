@@ -258,9 +258,9 @@ public class BasicForm extends AbstractContainer {
         Control control = ContainerUtils.findControlByName(this, name);
 
         if (control != null && !(control instanceof Field)) {
-            throw new IllegalStateException("The control called " + name
-                + " is of type " + control.getClass().getName()
-                + ", not " + Field.class.getName());
+            throw new IllegalStateException("The control named " + name
+                + " is an instance of the class " + control.getClass().getName()
+                + ", which is not a " + Field.class.getName() + " subclass.");
         }
         return (Field) control;
     }
@@ -347,7 +347,7 @@ public class BasicForm extends AbstractContainer {
         HiddenField nameField = (HiddenField) getField(FORM_NAME);
         if (nameField == null) {
             nameField = new HiddenField(FORM_NAME, String.class);
-            addControl(nameField);
+            add(nameField);
         }
         nameField.setValue(name);
     }
@@ -917,7 +917,7 @@ public class BasicForm extends AbstractContainer {
         HiddenField field = (HiddenField) getField(submitTokenName);
         if (field == null) {
             field = new HiddenField(submitTokenName, Long.class);
-            addControl(field);
+            add(field);
         }
 
         // Save state info to form and session

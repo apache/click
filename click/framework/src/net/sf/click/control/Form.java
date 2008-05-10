@@ -609,12 +609,19 @@ public class Form extends BasicForm {
      * Add a Field or FieldSet to the container and return the added instance.
      * <p/>
      * <b>Please note</b> only {@link Field} and {@link FieldSet} instances can
-     * be added to a Form. Trying to add any other control with throw an
-     * exception.
+     * be added to a Form. Trying to add any other control will throw an
+     * exception. This restriction allows Form to automatically layout its
+     * controls. If you want to add other controls such as tables,
+     * rather use {@link BasicForm}.
      * <p/>
-     * The Fields inside the FieldSet will be laid out by the Form.
+     * The Fields inside a FieldSet will be laid out by the Form.
+     * <p/>
+     * Fields will be added to {@link #getFields() fields} using their name.
+     * <p/>
+     * Buttons will be added to {@link #getButtonList() buttonList} while
+     * all others field types will be added to {@link #getFieldList() fieldList}.
      *
-     * @see Container#addControl(net.sf.click.Control)
+     * @see Container#add(net.sf.click.Control)
      *
      * @param control the control to add to the container and return
      * @return the control that was added to the container
@@ -623,7 +630,7 @@ public class Form extends BasicForm {
      * name, if the control's parent is a Page or if the control is neither a
      * Field nor FieldSet
      */
-    public Control addControl(Control control) {
+    public Control add(Control control) {
          if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -665,7 +672,7 @@ public class Form extends BasicForm {
             }
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
-            super.addControl(getControls().size(), fieldSet);
+            super.add(getControls().size(), fieldSet);
             fieldSet.setForm(this);
         } else {
             throw new IllegalArgumentException("Only fields and FieldSets are"
@@ -676,26 +683,27 @@ public class Form extends BasicForm {
     }
 
     /**
-     * This method is not supported for Form.
+     * This method is not supported by Form.
      *
      * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
      * @return the control that was added to the container
      * @throws UnsupportedOperationException if invoked
      */
-    public Control addControl(int index, Control control) {
+    public Control add(int index, Control control) {
         throw new UnsupportedOperationException("This method is not supported"
-            + " for Form. Please use addControl(Control) instead.");
+            + " by Form. Please use add(Control) instead.");
     }
 
     /**
      * Add the field to the form, and set the fields form property. The field
-     * will be added to {@link #getControlMap()} using its name.
+     * will be added to {@link #getFields() fields} using its name.
      * <p/>
-     * Button instances will be add to {@link #getButtonList()} while
-     * all others field types will be added to the {@link #getFieldList()}.
+     * Button instances will be add to {@link #getButtonList() buttonList} while
+     * all others field types will be added to the
+     * {@link #getFieldList() fieldList}.
      *
-     * @see #addControl(net.sf.click.Control)
+     * @see #add(net.sf.click.Control)
      *
      * @param field the field to add to the form
      * @return the field added to this form
@@ -704,29 +712,13 @@ public class Form extends BasicForm {
      * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        addControl(field);
+        add((Control) field);
         return field;
     }
 
     /**
-     * Add the field to the form, and set the fields form property. The field
-     * will be added to {@link #getControlMap()} using its name.
-     *
-     * @see #addControl(net.sf.click.Control)
-     *
-     * @param fieldSet the fieldSet to add to the form
-     * @return the fieldSet added to this form
-     * @throws IllegalArgumentException if the fieldSet is null, the form
-     * already contains a control with the same name or if the fieldSet's parent
-     * is a Page
-     */
-    public FieldSet add(FieldSet fieldSet) {
-        addControl(fieldSet);
-        return fieldSet;
-    }
-
-    /**
-     * Add the field to the form and specify the field's width in columns.
+     * Add the field to the form and specify the field's width in columns. The
+     * field will be added to {@link #getFields() fields} using its name.
      * <p/>
      * Note Button or HiddenFields types are not valid arguments for this method.
      *
@@ -783,12 +775,13 @@ public class Form extends BasicForm {
     }
 
     /**
-     * @see Container#removeControl(net.sf.click.Control)
+     * @see Container#remove(net.sf.click.Control)
      *
      * @param control the control to remove from the container
      * @return true if the control was removed from the container
+     * @throws IllegalArgumentException if the control is null
      */
-    public boolean removeControl(Control control) {
+    public boolean remove(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -817,42 +810,21 @@ public class Form extends BasicForm {
             return contains;
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
-            boolean contains = super.removeControl(fieldSet);
+            boolean contains = super.remove(fieldSet);
 
             fieldSet.setForm(null);
 
             return contains;
         } else {
-            throw new IllegalArgumentException("Only fields are allowed on this Form");
+            return false;
         }
-    }
-
-    /**
-     * Remove the given field from the form.
-     *
-     * @param field the field to remove from the form
-     *
-     * @throws IllegalArgumentException if the field is null
-     */
-    public void remove(Field field) {
-        removeControl(field);
-    }
-
-    /**
-     * Remove the given fieldSet from the form.
-     *
-     * @param fieldSet the fieldSet to remove from the form
-     *
-     * @throws IllegalArgumentException if the fieldSet is null
-     */
-    public void remove(FieldSet fieldSet) {
-        removeControl(fieldSet);
     }
 
     /**
      * Remove the named field from the form.
      *
      * @param name the name of the field to remove from the form
+     * @throws IllegalArgumentException if the field is null
      */
     public void removeField(String name) {
         remove(getField(name));
@@ -862,6 +834,7 @@ public class Form extends BasicForm {
      * Remove the list of named fields from the form.
      *
      * @param fieldNames the list of field names to remove from the form
+     * @throws IllegalArgumentException if any of the fields is null
      */
     public void removeFields(List fieldNames) {
         if (fieldNames != null) {
@@ -1029,11 +1002,13 @@ public class Form extends BasicForm {
     }
 
     /**
-     * Return the named field if contained in the form or the forms fieldsets,
-     * or null if not found.
+     * Return the named field if contained in the form or one of the form's
+     * fieldsets, or null if not found.
      *
      * @param name the name of the field
      * @return the named field if contained in the form
+     * @throws IllegalStateException if a non-field control is found with the
+     * specified name
      */
     public Field getField(String name) {
         return super.getField(name);

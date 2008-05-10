@@ -523,6 +523,17 @@ public class Table extends AbstractControl {
      * @return the added control
      */
     public Control addControl(Control control) {
+        return add(control);
+    }
+
+    /**
+     * Add the given Control to the table. The control will be processed when
+     * the Table is processed.
+     *
+     * @param control the Control to add to the table
+     * @return the added control
+     */
+    public Control add(Control control) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
