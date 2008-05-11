@@ -1,0 +1,61 @@
+/*
+* This css was copied from the following sitepoint article: http://www.sitepoint.com/print/fancy-form-design-css
+*/
+.error {
+    color: red;
+}
+span.required {
+    padding-right: 10px;
+    background: url(../images/star.gif) no-repeat right top;
+}
+input.required {
+    border-color: #CC0000;
+    background-color: #FFEEFF;
+}
+td.content{
+    padding-right:40px;
+}
+table {
+    font-size: 90%;
+}
+fieldset li {  
+    float: left;  
+    clear: left;  
+    width: 100%;  
+    padding-bottom: 1em;
+}
+fieldset {  
+    float: left;  
+    clear: both;  
+    width: 100%;  
+    margin: 0 0 1.5em 0;  
+    padding: 0;  
+    border: 1px solid #BFBAB0;  
+    background-color: #F2EFE9;  
+}
+legend {  
+    margin-left: 1em;  
+    padding: 0;  
+    color: #000;  
+    font-weight: bold;
+}
+fieldset ol {
+    margin: 0;
+    padding: 1em 1em 0 1em;
+    list-style: none;
+}
+fieldset.submit {  
+    float: none;  
+    width: auto;  
+    border-style: none;  
+    padding-left: 12em;  
+    background-color: transparent;
+}
+label {  
+    float: left;  
+    width: 10em;  
+    margin-right: 1em;
+}
+input.text {
+    width: 10.5em;
+}
