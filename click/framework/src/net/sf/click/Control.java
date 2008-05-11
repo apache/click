@@ -124,7 +124,7 @@ public interface Control extends Serializable {
      * Return the Page request Context of the Control.
      *
      * @deprecated getContext() is now obsolete on the Control interface,
-     * but it is still available on AbstractControl:
+     * but will still be available on AbstractControl:
      * {@link net.sf.click.control.AbstractControl#getContext()}
      *
      * @return the Page request Context
@@ -162,7 +162,7 @@ public interface Control extends Serializable {
      * Return HTML element identifier attribute "id" value.
      *
      * @deprecated getId() is now obsolete on the Control interface,
-     * but it is still available on AbstractControl:
+     * but will still be available on AbstractControl:
      * {@link net.sf.click.control.AbstractControl#getId()}
      *
      * @return HTML element identifier attribute "id" value
@@ -189,8 +189,8 @@ public interface Control extends Serializable {
      * @param listener the listener object with the named method to invoke
      * @param method the name of the method to invoke
      *
-     * @deprecated this method is now obsolete on the Control interface, but it
-     * is still available on AbstractControl:
+     * @deprecated this method is now obsolete on the Control interface, but
+     * will still be available on AbstractControl:
      * {@link net.sf.click.control.AbstractControl#setListener(java.lang.Object, java.lang.String)}
      */
     public void setListener(Object listener, String method);
