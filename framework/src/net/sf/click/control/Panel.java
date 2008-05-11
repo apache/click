@@ -49,6 +49,14 @@ import org.apache.commons.lang.StringUtils;
  *
  * The Panel class uses a Velocity template for rendering any model data or
  * controls you have added to the Page.
+ * <p/>
+ * Panel is a very powerful component and provides the same capability as a
+ * Page, since they have their own associated template.
+ * <p/>
+ * This allows you to create very modular components. For example, if you add
+ * a tab control to your Page, each tab could refer to a separate Panel.
+ * Each Panel template could then render its own {@link Form} or {@link Table}
+ * controls.
  *
  * <h3>Panel Example</h3>
  *
