@@ -9,8 +9,8 @@
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
  <style type="text/css">
-  dl { 
-    margin-left: 2em; 
+  dl {
+    margin-left: 2em;
   }
   dt { 
     font-weight: 700;
@@ -30,7 +30,7 @@
     padding-left: 8px;
     border: 1px solid #99A4DF;
   }
-  blockquote {
+  pre {
     background: #EEEEEE;
     padding: 4px;
     border: 1px solid #99A4DF;
@@ -53,23 +53,23 @@ new features including Module support, bug fixes, documentation and example upda
   <dt><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">		  
+      <li class="change">
 		Fixed ExcludePage should be a public class
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-346">346</a>].
       </li>
-      <li class="change">		  
+      <li class="change">
 		Fixed Maven artifacts packaging
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-348">348</a>].
       </li>
-      <li class="change">		  
+      <li class="change">
 		Fixed slight performance degradation
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-349">349</a>].
       </li>
-      <li class="change">		  
+      <li class="change">
       	Fixed PageLink to change extension <tt>jsp</tt> to <tt>htm</tt>
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-352">352</a>].
       </li>
-      <li class="change">		  
+      <li class="change">
       	Fix DateField and ChartFields to include the javascript <tt>control.js</tt>
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-354">354</a>].
       </li>
@@ -81,11 +81,79 @@ new features including Module support, bug fixes, documentation and example upda
   </dd>
   <dt><div class="release-header">Latest Development Release - Version 1.5 M1 - 11 May 2008</div></dt>
   <dd>
+   <div style="margin-left:-2em;margin-bottom:1em;">
+    <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from a previous version.
+    <p/>
+    Click 1.5 (currently in development) introduces important new features including:
+    <p/>
+    <ul style="margin-top:0.5em;">
+     <li class="item"><a href="testing.html">Test Support</a> - Unit and Functional Testing.</li>
+     <li class="item"><a href="click-api/net/sf/click/service/package-summary.html#services">Services</a> - Click core has been refactored into pluggable services.</li>
+     <li class="item"><a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>
+     - AbstractControl was extended to implement all Control methods, making it easier to create custom controls.</li>
+     <li class="item"><a href="controls.html#container">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
+    </ul>
+    <div style="margin-top:1.5em;margin-bottom:1em;">
+    New examples and documentation were added:
+    </div>
+    <ul>
+     <li class="change">New examples:
+      <ul style="padding-top: 5px;">
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">Custom Form Layout using Containers</a>
+         </li>
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/form/extra-controls-form.htm">Virtual Keyboard field</a>
+         </li>
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/general/excel-export.htm">Excel Export Demo</a>
+         </li>
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/jsp/edit-customer.htm">JSP - Edit Customer</a>
+         </li>
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/jsp/navigation-a.htm">JSP - Navigation</a>
+         </li>
+         <li>
+             <a target="_blank" href="http://www.avoka.com/click-examples/jsp/multi-path-demo.htm">JSP - Multi Path Demo</a>
+         </li>
+      </ul>
+     </li>
+     <li class="change">New documentation:
+     <ul style="padding-top: 5px;">
+         <li class="change">
+             <a href="control.html#container">Container</a>
+         </li>
+         <li class="change">
+             <a href="control.html#layout">Template vs Container layout</a>
+         </li>
+         <li class="change">
+             <a href="click-api/net/sf/click/service/package-summary.html">Click Runtime Services</a>
+         </li>
+         <li class="change">
+             <a href="testing.html">Testing support</a>
+         </li>
+     </ul>
+    </li>
+   </ul>
+  </div>
+  <p/>
+  <div style="margin-left:-2em;margin-top:1.5em;margin-bottom:1em;">
+   A new <a href="click-online.html#powered">Powered by Click</a> section was added.
+   If you want to enlist your site, please send a mail to one of our 
+   <a href="http://sourceforge.net/mail/?group_id=82095">Mailing Lists</a> or directly to "sabob1 at gmail.com".
+   <p/>
+   The following is a list of enhancements and bugsfixes:
+  </div>
     <ul style="padding: 0em; margin-left:0em;">
-      <li class="change">
-        Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
-        control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
-      </li>
+    <li class="change">
+      New <a href="extras-api/net/sf/click/extras/service/FreemarkerTemplateService.html">Freemarker support</a>
+      added as an alternative template engine to Velocity and JSP.
+    </li>
+    <li class="change">
+      Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
+      control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
+    </li>
 	  <li class="change">
 	    Added support for setting Form  
 		<a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
@@ -131,70 +199,120 @@ new features including Module support, bug fixes, documentation and example upda
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
 	  </li>
 	  <li class="change">Removed support for Cayenne 1.2.x.</li>
-    <li class="change">New examples:
-     <ul style="padding-top: 5px;">
-         <li>
-             <a href="http://www.avoka.com/click-examples/general/excel-export.htm">Excel Export Demo</a>
-         </li>
-         <li>
-             <a href="http://www.avoka.com/click-examples/jsp/edit-customer.htm">JSP - Edit Customer</a>
-         </li>
-         <li>
-             <a href="http://www.avoka.com/click-examples/jsp/navigation-a.htm">JSP - Navigation</a>
-         </li>
-         <li>
-             <a href="http://www.avoka.com/click-examples/jsp/multi-path-demo.htm">JSP - Multi Path Demo</a>
-         </li>
-         <li>
-             <a href="http://www.avoka.com/click-examples/form/extra-controls-form.htm">Virtual Keyboard field</a>
-         </li>
-     </ul>
-    </li>
-    <li class="change">New documentation:
-     <ul style="padding-top: 5px;">
-         <li class="change">
-             <a href="click-api/net/sf/click/service/package-summary.html">New Click Runtime Services</a>
-         </li>
-     </ul>
-    </li>
-     <a name="1.5-upgrade-path" href="#"></a>
-      <span style="color:brown;font-weight:bold">Upgrade Path</span>
-      <dd>
-       <ul style="padding: 0em; margin-left:0em;">
-         <li class="upgrade">
-          1.5 is not binary compatible with 1.4. What this means is that in order
-          to use 1.5, you will have to recompile your application against the 1.5
-          release. Note that Click 1.5 still runs on any <strong>JDK >= 1.4</strong>.
-         </li>
-         <li class="upgrade">
-          1.5 M1 introduces two new properties: <span style="font-weight:bold;color:navy;">file-size-limit-exceeded-error</span>
-          and <span style="font-weight:bold;color:navy;">post-size-limit-exceeded-error</span>.
-          For those building i18n applications please remember to add these two properties
-          to your <span style="font-weight:bold;color:navy;">click-control&lt;lang&gt;.properties.</span>
-          <br>Please send us patches for your preferred language.
-         </li>
-         <li class="upgrade">
-          ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
-          LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
-          There are alternative implmentations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
-          and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).<br>
-          To retrieve a LogService instance a new utility method was introduced, <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">ClickUtils.getLogService()</a>.
-          <p/>
-          It is possible to write your own LogService instance or extend from
-          an existing implementation. To setup Click to use an alternative instance you have to
-          specify the LogService implementation in <em>click.xml</em>:
-          <blockquote>&lt;click-app charset="UTF-8"&gt;
-          <br>
-          &nbsp;&nbsp; &lt;pages package="net.sf.click.examples.page"/&gt;
-          <br>
-          &nbsp;&nbsp; &lt;<span style="font-weight:bold;color:#000099">log-service</span> <span style="color:#009900">classname</span>="net.sf.click.extras.service.JdkLogService"/&gt;
-          <br>
-          &lt;/click-app&gt;
-          </blockquote>
-         </li>
-       </ul>
-      </dd>
   	</ul>
+    <br/>
+    <a name="1.5-upgrade-path" href="#"></a>
+    <span style="margin-left:-2em;margin-bottom:1em; color:brown; font-weight:bold">Upgrade Path</span>
+    <ul style="padding: 0em; margin-left:0em;">
+      <li class="upgrade">
+       1.5 is not binary compatible with 1.4. What this means is that in order
+       to use 1.5, you will have to recompile your application against the 1.5
+       release. Note that Click 1.5 still runs on any <b>JDK >= 1.4</b>.
+      </li>
+      <li class="upgrade">
+       <b>Deprecated methods:</b> <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a>,
+       <a href="click-api/net/sf/click/Control.html#getId()">Control.getId</a> and
+       <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>
+       have been deprecated as recent refactoring have rendered them redundant on
+       this interface.
+       <p/>
+       We are trying to make the Control interface as small as possible, which 
+       allows more flexibility in future releases.
+       <p/>
+       <b>Please note:</b> these methods will still be available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>
+       so should have minimal impact on existing code bases.
+      </li>
+      <li class="upgrade">
+       1.5 M1 introduces two new properties: <span style="font-weight:bold;color:navy;">file-size-limit-exceeded-error</span>
+       and <span style="font-weight:bold;color:navy;">post-size-limit-exceeded-error</span>.
+       For those building i18n applications remember to add these two properties
+       to your <span style="font-weight:bold;color:navy;">click-control&lt;lang&gt;.properties.</span>
+       <br>If you send us patches for your preferred language we will include them in the distribution.
+      </li>
+      <li class="upgrade">
+       ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
+       LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
+       There are alternative implementations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
+       and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).<br>
+       To retrieve a LogService instance a new utility method was introduced,
+       <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">ClickUtils.getLogService()</a>.
+       <p/>
+       It is possible to write your own LogService instance or extend from
+       an existing implementation. To setup Click to use an alternative instance you have to
+       specify the LogService implementation in <em>click.xml</em>:
+       <pre>
+&lt;click-app charset="UTF-8"&gt;
+    &lt;pages package="net.sf.click.examples.page"/&gt;
+    &lt;<span style="font-weight:bold;color:#000099">log-service</span> <span style="color:#009900">classname</span>="net.sf.click.extras.service.JdkLogService"/&gt;
+&lt;/click-app&gt; </pre>
+      </li>
+      <li class="upgrade">
+       Certain controls were retrofitted as containers including <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>.
+       Unfortunately this change breaks backwards compatibility because FieldSet does not extend from Field anymore.
+       <p/>
+       If FieldSet is added to a Form, that Form will render the FieldSet fields.
+       This allows the Form to apply its properties to the FieldSet fields. For example the Form's column
+       count will be applied FieldSet fields as well.
+       <p/>
+       If FieldSet is added to a BasicForm however, FieldSet will layout its own contents.
+      </li>
+      <li class="upgrade">
+       The last change to be aware of is the new <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       method. This method allows improved rendering performance, because all controls can be
+       rendered from a single buffer that is created when rendering starts.
+       <p/>
+       If you created custom controls, and override <em>toString()</em>, please adapt it to the following pattern. From this:
+       <pre>
+public class HtmlTable extends AbstractControl {
+    ...
+
+public String toString() {
+     int estimatedControlSize = 1000;
+     HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+
+     <span style="color:green">// Rendering Start</span>
+     buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+     appendAttributes(buffer);
+     buffer.elementClose();
+    
+     renderRows(buffer);
+
+     buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+     <span style="color:green">// Rendering End</span>
+     
+     return buffer.toString();
+} </pre>
+       to this:
+       <pre>
+public class HtmlTable extends AbstractControl {
+    ...
+
+public void render(HtmlStringBuffer buffer) {
+    <span style="color:green">// Rendering Start</span>
+    buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+    appendAttributes(buffer);
+    buffer.elementClose();
+    
+    renderRows(buffer);
+
+    buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+    <span style="color:green">// Rendering End</span>
+}
+
+public String toString() {
+     int estimatedControlSize = 1000;
+     HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+     render(buffer);
+     return buffer.toString();
+} </pre>
+       Note, the code between the commented section, was moved from <em>toString</em> to the <em>render</em> method.
+       <p/>
+       <b>Also note</b> that invoking a Control's <a href="click-api/net/sf/click/control/AbstractControl.html#toString()">toString()</a>
+       method still outputs the same HTML representation, as toString() delegates to the
+       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       method.
+      </li>
+    </ul>
   </dd>
   <p/>
   <dt><div class="release-header">Archives</div></dt>
