@@ -2,12 +2,14 @@
  "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+ <!-- saved from url=(0014)about:internet -->
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <meta name="description" lang="en" content="Click Java web application framework"/>
  <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
 </head>
 <style type="text/css">
 dt {
@@ -16,7 +18,9 @@ dt {
 	margin-top: 0.5em;
 }
 </style>
-<body>
+<script type="text/javascript" src="../syntax-highlighter.js"></script>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
   
 <h1>Controls</h1>
 <p/>
@@ -30,7 +34,13 @@ server side processing. This section covers the following topics:
   <li><a href="#control-class">Control Classes</a> - control Java classes
   </li>
   <li><a href="#message-properties">Message Properties</a> - control message properties
-  </li> 
+  </li>
+  <li><a href="#container">Container</a> - describes the Container interface
+  which extends Control and allows hierarchical components.
+  </li>
+  <li><a href="#layout">Layouts</a> - describes layout options and how to create
+  custom layouts.
+  </li>
 </ul>
 <p>&nbsp;</p>
 
@@ -315,8 +325,452 @@ accessed through the Field methods:
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String, java.lang.Object)">setErrorMessage(String, Object)</a></li>
 </ul>
 
-These methods use the <tt>Locale</tt> of the request to lookup the string resource 
+These methods use the <tt>Locale</tt> of the request to lookup the string resource
 bundle, and use <tt>MessageFormat</tt> for any string formatting.
+
+<a name="container" class="heading"></a><h2>Container</h2>
+The concept of Container extends the <a href="click-api/net/sf/click/Control.html">Control</a>
+interface, and enables construction of complex component hierarchies.
+<p/>
+Container enables components to add, remove and retrieve other controls and containers.
+<p/>
+The following Click Controls are example Containers:
+<ul style="margin-top:0.5em;">
+   <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>
+   - allows any control or container to be added.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
+   - allows only Field and FieldSet controls to be added, allowing Form to automatically layout its content.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a></li>
+   <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a></li>
+</ul>
+<br/>
+The following convenient classes is available to work with and create custom Containers:
+<ul style="margin-top:0.5em;">
+  <li class="item"><a href="click-api/net/sf/click/control/AbstractContainer.html">AbstractContainer</a></li>
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a></li>
+  <li class="item"><a href="click-api/net/sf/click/control/AbstractContainerField.html">AbstractContainerField</a></li>
+</ul>
+
+Lets cover each of them here.
+<p/>
+
+<b>AbstractContainer</b>
+
+<p/>
+Enables easy creation of custom Containers for example a html div or span tag.
+
+<p/>
+For example:
+
+<pre class="prettyprint">
+public class Div extends AbstractContainer {
+    
+    public Div(String name) {
+        super(name);
+    }
+
+    public String getTag() {
+        // Return the controls HTML tag.
+        return "div";
+    }
+} </pre>
+
+Lets test the Div:
+   
+<pre class="prettyprint">
+public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a div instance called "mydiv"
+        String containerName = "mydiv";
+        Div mydiv = new Div(containerName);
+        
+        // Add a control to the container
+        mydiv.add(new TextField("myfield"));
+
+        System.out.println(mydiv);
+    }
+} </pre>
+
+<p/>
+Executing the above example results in the following output:
+
+<pre class="prettyprint">
+&lt;div name="mydiv" id="mydiv"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
+&lt;/div&gt; </pre>
+
+<br/>
+
+<b>BasicForm</b>
+
+<p/>
+As mentioned earlier Form only allow Field and FieldSet controls to be added. Having this
+restriction enables the Form to layout its contents automatically and in a predictable way.
+
+<p/>
+Form also provides automatic error handling, which when combined with auto-layout, allows
+you to quickly assemble input screens.
+
+<p/>
+<a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a> on the other hand allows you to
+manually layout controls and errors. Any control can be added including tables, trees, panels and lists.
+
+<p/>
+BasicForm provides everything you need to work with html forms, including the following
+helpful methods:
+
+<ul style="margin-top:0.5em;">
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#getFieldList()">getFieldList()</a> - return all fields found inside BasicForm, even if those fields are inside other containers.</li>
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#getErrorFields()">getErrorFields()</a> - return all invalid fields found inside BasicForm, even if those fields are inside other containers.</li>
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#isValid()">isValid()</a> - checks if the form or any fields contain any error.</li>
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#isFormSubmission()">isFormSubmission()</a> - useful when Page contains multiple forms.</li>
+  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#onSubmitCheck(net.sf.click.Page, java.lang.Class)">onSubmitCheck(Page page, Class pageClass)</a> - protects against duplicate form submissions.</li>
+</ul>
+
+<br/>
+
+<b>AbstractContainerField</b>
+
+<p/>
+AbstractContainerField extends Field and implements the Container interface. This provides
+a convenient base class for those cases where you need both a Field and Container.
+
+<p/>
+Since Form only works with Fields, AbstractContainerField is useful when you want to adapt
+a container to a field. For example:
+
+<pre class="prettyprint">
+public class FieldContainer extends AbstractContainerField {
+
+    public FieldContainer(String name) {
+        super(name);
+    }
+
+    // Return the html tag to render
+    public String getTag() {
+        return "div";
+    }
+} </pre>
+
+FieldContainer can safely be used with Form, since FieldContainer <em>is a</em> field.
+
+<p/>
+Please note that FieldContainer is just a normal container and any control can be added 
+to it including tables, trees and panels. This circumvents the restriction placed on Form
+which can only accept fields as children. Its up to you to decide whether its a good idea
+to add non-field controls inside a Form. Normally it would be better to resort to BasicForm
+for these situations as you will have full control over the form layout.
+
+<p/>
+To test the new class we use the following snippet:
+
+<pre class="prettyprint">
+public class Test {
+    public static void main (String args[]) {
+        // Create mock context in which to test the container.
+        MockContext.initContext();
+
+        // Create a FieldContainer instance called "field_container"
+        String containerName = "field_container";
+        FieldContainer fieldContainer = new FieldContainer(containerName);
+        
+        // Add a couple of fields to the container
+        fieldContainer.add(new TextField("myfield"));
+        fieldContainer.add(new TextArea("myarea"));
+
+        System.out.println(fieldContainer);
+    }
+} </pre>
+
+Executing the snippet produces the output:
+
+<pre class="prettyprint">
+&lt;div name="field_container" id="field_container"&gt;
+    &lt;input type="text" name="myfield" id="myfield" value="" size="20"/&gt;
+    &lt;textarea name="myarea" id="myarea" rows="3" cols="20"&gt;&lt;/textarea&gt;
+&lt;/div&gt; </pre>
+
+
+<a name="layout" class="heading"></a><h2>Layout</h2>
+
+Controls such as <a href="click-api/net/sf/click/control/Form.html">Form</a>
+take care of layout and error reporting automatically, and for many use cases this
+auto-layout is good enough.
+
+<p/>
+However for custom or complex layouts, Form is not well suited.
+
+<p/>There are two options for creating manual layouts.
+<ul style="margin-top:0.5em;">
+  <li class="item">
+    <a href="click-api/net/sf/click/control/Form.html#manual-layout">Templates</a> - use a template engine
+    such as Velocity, Freemarker or JSP to create the layout with HTML markup</li>
+  <li class="item">
+    <a href="#container">Container</a> - add controls to a container and build up the layout using Java.
+    This option is covered below.</li>
+</ul>
+<br/>
+
+<a name="template-layout" class="heading"></a>
+<b>Template layouts</b>
+<p/>
+Taking the <a href="click-api/net/sf/click/control/Form.html#manual-layout">Template</a>
+approach works well and does separate the Page and layout logic. For example:
+<pre class="prettyprint">
+//EmployeePage.java
+public EmployeePage extends Page {
+
+    private Form form;
+    
+    public void onInit() {
+        // Create form
+        Form form = new Form("form");
+        
+        // Add a couple of fields to the form
+        form.add(new TextField("firstname"));
+        form.add(new TextField("lastname"));
+        form.add(new IntegerField("age"));
+        form.add(new DoubleField("salary"));
+
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add form the page
+        addControl(form);
+    }
+} </pre>
+
+Lets imagine we want to use a CSS layout using Div &lt;div&gt; and List &lt;ol&gt; tags.
+
+<p/>
+We could provide the markup as shown below, using a template engine like Velocity:
+
+<pre class="prettyprint">
+&lt;!--employee.htm--&gt;
+${form.startTag()}
+    &lt;div style="margin: 1em;"&gt;
+        &lt;ol&gt;
+            &lt;li&gt;
+                &lt;label for="firstname"&gt;Firstname:&lt;/label>
+                ${form.fields.firstname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="lastname"&gt;Lastname:&lt;/label>
+                ${form.fields.lastname}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="age"&gt;Age:&lt;/label&gt;
+                ${form.fields.age}
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+                ${form.fields.salary}
+            &lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+    ${form.fields.submit}
+${form.endTag()} </pre>
+
+Using a CSS stylesheet, this markup can be transformed into a great looking form as shown 
+in this <a target="_blank" href="http://www.sitepoint.com/print/fancy-form-design-css">article</a>.
+
+<p/>
+There are pros and cons to using the template layout approach.
+
+<p/>
+One of the advantages of the Template layout, is that the layout is explicit and one can easily
+change it to something else. For example instead of using divs and ordered lists, one can
+use a table layout.
+
+<p/>
+A disadvantage of the Template layout is it introduces redundancy.
+
+<p/>
+In the example above one needed to create the fields in java, and laid them out using html markup
+in the template.
+
+<p/>
+If the requirements change and a new field has to be added, one will have to add the
+field in the Page as well as the template. Of course it is possible to "generify"
+the layout using template engines like Velocity, Freemarker or JSP, since they provide
+constructs such as iterators and conditional logic. <a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
+is an example of a generic form layout using Velocity.
+<p/>
+
+<a name="container-layout" class="heading"></a>
+
+<b>Container layouts</b>
+
+<p/>
+To combat the redundency instroduced by the Template approach, you can use Containers
+for layout purposes.
+
+<p/>
+By using containers, the form and fields could be created and laid out in Java.
+
+<p/>
+Containers such as Div, Span, List, HorizontalPanel and VerticalPanel are ideal for layouts.
+Click does not yet provide these containers out of the box, but we can put some together as
+shown below:
+
+<pre class="prettyprint">
+// Div.java
+// Create a html &lt;div&gt; element
+public class Div extends AbstractContainer {
+
+    public String getTag() {
+        return "div";
+    }
+} </pre>
+
+<pre class="prettyprint">
+// List.java
+// Create a list &lt;ol&gt; html element, that accepts &lt;li&gt; elements as children
+public class List extends AbstractContainer {
+
+    public String getTag() {
+        return "ol";
+    }
+
+    // Can only add ListItems: &lt;li&gt; tags
+    public Control add(Control control) {
+        if (!(control instanceof ListItem)) {
+            throw new IllegalArgumentException("Only list items can be added.");
+        }
+        return super.add(control);
+    }
+} </pre>
+
+<pre class="prettyprint">
+// ListItem.java
+// Create a listItem &lt;li&gt; element
+public class ListItem extends AbstractContainer {
+
+    public String getTag() {
+        return "li";
+    }
+} </pre>
+
+After creating all the needed containers the form can be assembled.
+<p/>
+Continuing with the employee example from the <a href="#template-layout">template layout</a>
+section, the form can be created as follows (note BasicForm is used instead of Form):
+
+<pre class="prettyprint">
+// EmployeePage.java
+public class EmployeePage extends BasicForm {
+    // A form instance variable
+    private BasicForm form;
+
+    // Build the form when the page is initialized
+    public void onInit() {
+        // Create a BasicForm for manual layout
+        form = new BasicForm("form");
+        
+        // Create a list and add it to the form. 
+        List list = new List();
+        form.add(list);
+        
+        // Add firstname field and pass in its name, label and the list to add the field to
+        addTextField("firstname", "Firstname:", list);
+        addTextField("lastname", "Lastname:", list);
+        addTextField("age", "Age:", list);
+        addTextField("salary", "Salary:", list);
+        
+        // Add a submit button to form
+        form.add(new Submit("submit", "Add Employee"));
+
+        // Add the form to the page
+        addControl(form);
+    }
+    
+    // Provide a helper method to add fields to the form
+    private void addTextField(String nameStr, String labelStr, List list) {
+        // Create a new ListItem &lt;li&gt; and add it to the List
+        ListItem item = new ListItem();
+        list.add(item);
+
+        // Create a textfield with the specified name
+        Field field = new TextField(nameStr);
+        
+        // Create a field label, which associates the label with the field id.
+        // label.toString would output: &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        FieldLabel label = new FieldLabel(field, labelStr);
+
+        // Add the label and field to the list item.
+        // item.toString would then produce:
+        // &lt;li&gt;
+        //   &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
+        //   &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        // &lt;/li&gt;
+        //
+        item.add(label);
+        item.add(field);
+    }
+} </pre>
+    
+Now the <em>employee.htm</em> template would only need to specify the name of the 
+top level container, in this case <em>form</em>.
+
+<pre class="prettyprint">
+//employee.htm
+${form}
+</pre>
+    
+which produces the following markup:
+    
+<pre class="prettyprint">
+&lt;!--employee.htm--&gt;
+&lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
+&lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
+    &lt;div style="margin: 1em;"&gt;
+        &lt;ol&gt;
+            &lt;li&gt;
+                &lt;label for="firstname"&gt;Firstname:&lt;/label>
+                &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="lastname"&gt;Lastname:&lt;/label>
+                &lt;input type="text" name="lastname" id="form_lastname" value="" size="20"/&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="age"&gt;Age:&lt;/label&gt;
+                &lt;input type="text" name="age" id="form_age" value="" size="20"/&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+                &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
+            &lt;/li&gt;
+        &lt;/ol&gt;
+    &lt;/div&gt;
+    &lt;input type="submit" name="submit" id="form_submit" value="Add Employee"/&gt;
+&lt;/form&gt; </pre>
+
+Again using a CSS stylesheet, the markup above can be transformed into a great looking form as shown 
+in this <a target="_blank" href="http://www.sitepoint.com/print/fancy-form-design-css">article</a>.
+
+<p/>
+You can see a <a target="_blank" href="http://www.avoka.com/click-examples/form/contact-details.htm">live demo</a>
+of the above example. Note that the demo adds a couple of features, including error reporting,
+not covered here.
+
+<p/>
+The advantage of the container approach is that there is no redundancy. Each field is
+created and added to its container in Java. If new fields are added they will be added
+to their container in the page. No need to change the template as the layout is taken
+care of by a combination of markup produced by the container and CSS stylesheets.
+
+<p/>
+A disadvantage is that it is harder to <em>see</em> what output would be rendered by the containers.
+
+<p/>
+Whether you use the <a href="#template-layout">template</a> or <a href="#container-layout">container</a>
+layout approach, is up to you. Both work well and have advantages and disadvantages
+over the other.
+
 
 </body>
 </html>
