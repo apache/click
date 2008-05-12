@@ -53,7 +53,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     // -------------------------------------------------------- Instance Variables
 
     /** Internal container instance. */
-    private AbstractContainer container = new InnerContainerField();
+    protected AbstractContainer container = new InnerContainerField();
 
     // ------------------------------------------------------ Constructorrs
 
