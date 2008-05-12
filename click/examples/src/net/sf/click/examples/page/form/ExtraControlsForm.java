@@ -54,6 +54,7 @@ public class ExtraControlsForm extends BorderPage {
         form.add(new RegexField("regexField"));
         form.add(new TelephoneField("telephoneField"));
         form.add(new VirtualKeyboard("keyboardField"));
+        form.add(new CountrySelect("countrySelect"));
 
         form.add(new Submit("submit"));
         form.add(new PageSubmit("cancel", HomePage.class));
