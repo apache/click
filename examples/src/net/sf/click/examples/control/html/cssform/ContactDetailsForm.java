@@ -1,14 +1,13 @@
 package net.sf.click.examples.control.html.cssform;
 
 import net.sf.click.examples.control.html.FeedbackBorder;
-import javax.servlet.ServletContext;
 import net.sf.click.control.BasicForm;
 import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.html.FieldLabel;
-import net.sf.click.examples.control.html.list.List;
+import net.sf.click.examples.control.html.list.HtmlList;
 import net.sf.click.examples.control.html.list.ListItem;
 import net.sf.click.extras.control.DoubleField;
 import net.sf.click.extras.control.IntegerField;
@@ -24,7 +23,7 @@ import net.sf.click.util.ClickUtils;
  */
 public class ContactDetailsForm extends BasicForm {
 
-    private List list;
+    private HtmlList htmlList;
 
     public ContactDetailsForm(String name) {
         super(name);
@@ -38,32 +37,32 @@ public class ContactDetailsForm extends BasicForm {
     public void buildForm() {
         FieldSet fieldset = new FieldSet();
         fieldset.setLegend("Contact Details");
-        list = new List(List.ORDERED_LIST);
+        htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
-        addTextField("name", list).setRequired(true);
+        addTextField("name", htmlList).setRequired(true);
 
-        addTextField("email", "Email Address", list);
+        addTextField("email", "Email Address", htmlList);
 
-        addTextField("phone", "Telephone", list).setRequired(true);
+        addTextField("phone", "Telephone", htmlList).setRequired(true);
 
-        fieldset.add(list);
+        fieldset.add(htmlList);
         add(fieldset);
 
         fieldset = new FieldSet();
         fieldset.setLegend("Delivery Address");
-        list = new List(List.ORDERED_LIST);
+        htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
-        addTextField("address1", list);
+        addTextField("address1", htmlList);
 
-        addTextField("address2", list);
+        addTextField("address2", htmlList);
 
-        addTextField("suburb", "Suburb/Town", list);
+        addTextField("suburb", "Suburb/Town", htmlList);
 
-        addTextField("postcode", list, Integer.class).setRequired(true);
+        addTextField("postcode", htmlList, Integer.class).setRequired(true);
 
-        addTextField("country", list);
+        addTextField("country", htmlList);
 
-        fieldset.add(list);
+        fieldset.add(htmlList);
         add(fieldset);
 
         fieldset = new FieldSet();
@@ -78,21 +77,21 @@ public class ContactDetailsForm extends BasicForm {
         return ClickUtils.createHtmlImport(imports, getContext());
     }
 
-    private Field addTextField(String nameStr, List list) {
-        return addTextField(nameStr, null, list);
+    private Field addTextField(String nameStr, HtmlList htmlList) {
+        return addTextField(nameStr, null, htmlList);
     }
     
-    private Field addTextField(String nameStr, List list, Class fieldType) {
-        return addTextField(nameStr, null, list, fieldType);
+    private Field addTextField(String nameStr, HtmlList htmlList, Class fieldType) {
+        return addTextField(nameStr, null, htmlList, fieldType);
     }
     
-    private Field addTextField(String nameStr, String labelStr, List list) {
-        return addTextField(nameStr, labelStr, list, String.class);
+    private Field addTextField(String nameStr, String labelStr, HtmlList htmlList) {
+        return addTextField(nameStr, labelStr, htmlList, String.class);
     }
 
-    private Field addTextField(String nameStr, String labelStr, List list, Class fieldType) {
+    private Field addTextField(String nameStr, String labelStr, HtmlList htmlList, Class fieldType) {
         ListItem item = new ListItem();
-        list.add(item);
+        htmlList.add(item);
 
         Field field = createField(fieldType);
         field.setName(nameStr);

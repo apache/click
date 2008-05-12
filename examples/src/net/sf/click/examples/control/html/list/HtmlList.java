@@ -8,7 +8,7 @@ import net.sf.click.control.AbstractContainer;
  *
  * @author Bob Schellink
  */
-public class List extends AbstractContainer {
+public class HtmlList extends AbstractContainer {
 
     public static final int UNORDERED_LIST = 0;
 
@@ -16,18 +16,18 @@ public class List extends AbstractContainer {
 
     private int listMode = UNORDERED_LIST;
 
-    public List() {
+    public HtmlList() {
     }
 
-    public List(int listMode) {
+    public HtmlList(int listMode) {
         this.listMode = listMode;
     }
     
-    public List(String name) {
+    public HtmlList(String name) {
         super(name);
     }
 
-    public List(String name, int listMode) {
+    public HtmlList(String name, int listMode) {
         this(name);
         this.listMode = listMode;
     }
