@@ -336,9 +336,9 @@ public interface Control extends Serializable {
     public void onDestroy();
 
     /**
-     * Render the control's output to the specified buffer. The control's
-     * {@link java.lang.Object#toString()} method should delegate the rendering
-     * to the render method for improved performance.
+     * Render the control's HTML representation to the specified buffer. The
+     * control's {@link java.lang.Object#toString()} method should delegate the
+     * rendering to the render method for improved performance.
      * <p/>
      * An example implementation:
      * <pre class="prettyprint">
