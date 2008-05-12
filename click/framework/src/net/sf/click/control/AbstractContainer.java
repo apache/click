@@ -58,10 +58,10 @@ public abstract class AbstractContainer extends AbstractControl implements
     // -------------------------------------------------------------- Instance Variables
 
     /** The list of controls. */
-    private List controls;
+    protected List controls;
 
     /** The map of controls keyed by field name. */
-    private Map controlMap;
+    protected Map controlMap;
 
     // ------------------------------------------------------ Constructorrs
 
