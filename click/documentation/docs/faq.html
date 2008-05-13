@@ -53,7 +53,7 @@
   </li>  
   <li><a href="#logging">Why doesn't Click use Commons Logging / Log4J for logging?</a>
   </li>
-  <li><a href="#why-velocity">Why doesn't Click use FreeMarker for rendering?</a>
+  <li><a href="#why-velocity">Why doesn't Click use FreeMarker as the default rendering engine?</a>
   </li>  
   <li><a href="#why-click">Why develop a new Web Application Framework?</a>
   </li> 
@@ -592,12 +592,12 @@ public interface Controller {
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>Why doesn't Click use FreeMarker instead of Velocity?</b></dt>
+  <dt><b>Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
-   features Velocity doesn't, Velocity was chosen because it easier to learn
-   and doesn't use an XML style markup syntax.
+   features Velocity lacks, Velocity was chosen as the default engine because 
+   it is easier to learn and doesn't use an XML style markup syntax.
    <p/>
    One of FreeMarker's strong points compared to Velocity is error reporting.
    This issue is addressed in Click by using the new enhanced error reporting
