@@ -51,6 +51,8 @@ components being defined in page elements of the
 The path attribute specifies the location of the page Velocity template, and the classname
 attribute specifies the page Java class name. 
 <p/>
+If you use an alternative template engine such as Freemarker, the setup above is the same.
+<p/>
 Alternatively you can also configure Click to use JSP pages for rendering.
 
 <pre class="codeConfig">
@@ -71,8 +73,9 @@ below in Figure 1.
 - <span class="sparx">created with Enterprise Architect courtesy <a target="blank" href="http://www.sparxsystems.com.au">Sparx Systems</a></span>
 </p>
 
-The Page class provides a model attribute which is used to hold all the objects that
-are rendered in the page's Velocity template. The model may also contain
+The Page class provides a <a href="click-api/net/sf/click/Page.html#model">model</a>
+attribute which is used to hold all the objects that are rendered in the page's 
+Velocity template. The model may also contain
 <a target="topic" href="click-api/net/sf/click/Control.html">Control</a> objects, which
 provide user interface controls on the Page.
 <p/>
@@ -108,17 +111,21 @@ The GET request execution sequence for Pages is summarized below in the Figure 2
 </p>
 
 Stepping through this GET request sequence, a new Page instance is created and the 
-attributes for the Page are set (context, format, headers, path). Next request
-parameter values are then bound to any matching public Page fields. 
+attributes for the Page are set (context, format, headers, path). Next, request
+parameter values are bound to any matching public Page fields. 
 <p/>
-Then the <tt>onSecurityCheck()</tt> handler. This method can used to 
-ensure the user is authorized to access the page, and if necessary can abort any 
+Then the <tt>onSecurityCheck()</tt> handler is executed. This method can be used to 
+ensure the user is authorized to access the page, and if necessary abort any 
 further processing.
 <p/>
-The next method invoked is the <tt>onInit()</tt>, this is where you place any 
-post constructor initialization code.
+The next method invoked is <tt>onInit()</tt>, this is where you place any 
+post constructor initialization code. <tt>onInit()</tt> is the ideal place to
+create controls such as Forms, Fields and Tables. As illustrated by the diagram,
+after a Page's <tt>onInit()</tt> is called, each Control, available at that stage,
+will have their <tt>onInit()</tt> method called.
 <p/>
-The next step is the processing of the Page's controls. The ClickSerlvet gets the list of 
+The next step is the processing of the Page's <a href="click-api/net/sf/click/Page.html#controls">controls</a>.
+The ClickSerlvet gets the list of 
 Controls from the page and then iterates through the list calling <tt>onProcess()</tt>. 
 If any of the Control's <tt>onProcess()</tt> methods return false, processing of 
 subsequent controls and the Page's <tt>onGet()</tt> method is aborted.
@@ -180,10 +187,11 @@ It then merges the template with the page model and writes out results to the Ht
 When the model is being merged with the template, any Controls in the model may be
 rendered using their <tt>toString()</tt> method.
 <p/>
-The final step in this sequence is invoking the Page's <tt>onDestroy()</tt> method. This 
-method can be used to clean up resource associated with the Page before it is garbage
-collected. The <tt>onDestroy()</tt> method is guaranteed to be called even if an exception
-occurs in the previous steps.
+The final step in this sequence is invoking each control's <tt>onDestroy()</tt> method
+and lastly invoke the Page's <tt>onDestroy()</tt> method. This 
+method can be used to clean up resource associated with the Control or Page before
+it is garbage collected. The <tt>onDestroy()</tt> method is guaranteed to be called
+even if an exception occurs in the previous steps.
 <p/>
 The execution sequence for POST requests is almost identical, except the <tt>onPost()</tt>
 method is invoked instead on <tt>onGet()</tt>. See the 
@@ -292,8 +300,8 @@ This type converter would handle the following request:
  http://localhost:8080/mycorp/customer-details.htm?<span class="blue">customer</span>=<span class="red">7203</span>
 </pre>
 
-Loading the customer object from the database using given the "7203" customer id value. The ClickServlet would 
-then assign this customer object to the matching page field:
+This request will load the customer object from the database using "7203" as the customer id value.
+The ClickServlet would then assign this customer object to the matching page field:
 
 <pre class="codeJava">
 <span class="kw">package</span> com.mycorp.page;
@@ -330,7 +338,7 @@ page template path.
 <a name="page-foward" class="heading"><h3>Forward</h3></a>
 
 To forward to another page using the servlet 
-<a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>
+<a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>,
 set the Page's forward property. For example to forward to a page with a path 
 <span class="html">index.htm</span>:
 
@@ -347,22 +355,25 @@ set the Page's forward property. For example to forward to a page with a path
 </pre>
 
 This will invoke a new Page class instance mapped to the path 
-<span class="html">index.htm</span>. Note when a request is forwarded to another Page, 
+<span class="html">index.htm</span>.
+<p/>
+<b>Please note</b> when a request is forwarded to another Page, 
 the controls on the second page will not be processed. This prevents confusion and bugs,
 like a form on the second page trying to process a POST request from the first page.
 
 <h4>Forward Parameter Passing</h4>
 
 When you forward to another page the request parameters are maintained. This is a handy way
-of passing through state information through with the request. For example to you could
-add a customer object as request parameter which is displayed in the template of the 
+of passing through state information with the request. For example you could
+add a customer object as a request parameter which is displayed in the template of the 
 forwarded page.
 
 <pre class="codeJava">
 <span class="kw">public boolean</span> onViewClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDAO.findByPK(id); 
-    
+   
+   <span class="cm">// Set the customer object as a request parameter</span>
    getContext().setRequestAttribute(<span class="st">"customer"</span>, customer);
    setForward(<span class="st">"view-customer.htm"</span>);
    
@@ -370,7 +381,7 @@ forwarded page.
 } 
 </pre>
 
-Forwarded to page template <span class="html">view-customer.htm</span>:
+The snippet above forwards to the page template <span class="html">view-customer.htm</span>:
 
 <pre class="codeHtml">
 &lt;html&gt;
@@ -404,6 +415,7 @@ Finally set this page as the page to forward the request to. For example:
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDAO.findByPK(id); 
    
+   <span class="cm">// Create a new EditPage instance based on the specified path</span>
    EditPage editPage = (EditPage) getContext().createPage(<span class="st">"/edit-customer.htm"</span>);
    editPage.setCustomer(customer);
    setForward(editPage);
@@ -416,13 +428,18 @@ When creating a page with the <tt>createPage()</tt> method ensure you prefix
 the page path with the <tt class="st">"/"</tt> character.
 <p/>
 You can also specify the target page using its class as long as the Page has
-a unique path. Using this technique the above code becomes:
+a unique path. (Although uncommon it is possible to map more than one path to the
+same class. In these cases invoking <span class="st">Context.createPage</span> will
+throw an exception, because Click will not be able to determine which path to use).
+<p/>
+Using this technique the above code becomes:
 
 <pre class="codeJava">
 <span class="kw">public boolean</span> onEditClick() {
    Long id = viewLink.getValueLong();
    Customer customer = CustomerDAO.findByPK(id); 
    
+   <span class="cm">// Create a new EditPage instance based on its class</span>
    EditPage editPage = (EditPage) getContext().createPage(EditPage.<span class="kw">class</span>);
    editPage.setCustomer(customer);
    setForward(editPage);
@@ -439,9 +456,9 @@ inject Page dependencies.
 
 <a name="page-template-path" class="heading"><h3>Template Path</h3></a>
 
-An alternative to forwarding to a new page is to simply set the path to the new
-page template to render. With this approach the page template  being rendered must have 
-everything it needs without having its associated Page object being created. Our modified 
+An alternative method of forwarding to a new page is to simply set the current Page's path
+to the new page template to render. With this approach the page template being rendered
+must have everything it needs without having its associated Page object created. Our modified 
 example would be:
 
 <pre class="codeJava">
@@ -450,6 +467,8 @@ example would be:
    Customer customer = CustomerDAO.findByPK(id); 
     
    addModel(<span class="st">"customer"</span>, customer);
+   
+   <span class="cm">// Set the Page's path to a new value</span>
    setPath(<span class="st">"view-customer.htm"</span>);
    
    <span class="kw">return false</span>;
@@ -484,7 +503,7 @@ page is provided below:
 } 
 </pre>
 
-If the redirect location is begins with a <span class="wr">"/"</span> 
+If the redirect location begins with a <span class="wr">"/"</span> 
 character the redirect location will be prefixed with the web applications 
 context path. 
 <p/>
@@ -520,8 +539,7 @@ the redirect method. For example:
 
 You can pass information between redirected pages using URL request parameters. 
 The ClickServlet will encode the URL for you using
-HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url)
-method. 
+HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#encodeRedirectURL(java.lang.String)">encodeRedirectURL</a>(url). 
 <p/>
 In the example below a user will click on an OK button to confirm a payment. The 
 <tt>onOkClick()</tt> button handler processes the payment, gets the payment transaction id, and then 
@@ -663,7 +681,7 @@ merge the <span class="blue">border.htm</span> page and
    &lt;/body&gt;
  &lt;/html&gt; </pre>
  
-Which may be rendered:
+Which may be rendered as:
  
 <table class="htmlExample" cellspacing="12">
 <tr>
@@ -689,7 +707,7 @@ see the Click Examples application for a demonstration.
 
 Pages provide an 
 <a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
-event handler which application pages can override to implement programmatic security 
+event handler which application pages can override to implement a programmatic security 
 model. 
 <p/>
 Please note you generally don't need to use this capability, and where possible
@@ -793,10 +811,10 @@ invalidate the session.
 Click supports stateful pages where the state of the page is saved between the 
 users requests. Stateful pages are useful in a number of scenarios including:
 <ul>
-<li>Search page and edit page interactions, in this scenario you navigage from a 
+<li>Search page and edit page interactions. In this scenario you navigage from a 
 stateful search page which may have filter criteria applied to an object edit page.
 Once object update has been completed on the edit page, the user is redirected to
-the search page and the stateful filter criteria still applied.
+the search page and the stateful filter criteria still applies.
 </li>
 <li>Complex pages with multiple forms and or tables which need to maintain their
 state between interactions.
@@ -805,7 +823,7 @@ state between interactions.
 
 To make a page stateful you simply need to set the page
 <a target="topic" href="click-api/net/sf/click/Page.html#stateful">stateful</a> 
-property to be true and have the page implement the <tt>Serializable</tt> interface. For example:
+property to true and have the page implement the <tt>Serializable</tt> interface. For example:
 
 <pre class="codeJava">
 <span class="kw">package</span> com.mycorp.page;
@@ -831,20 +849,20 @@ the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
 <h4>Page Creation</h4>
 
 With stateful pages they are only created once, after which they are retrieved from the session.
-However page event handlers are invoked for each request, including the the <tt>onInit()</tt> method.
+However page event handlers are invoked for each request, including the <tt>onInit()</tt> method.
 <p/>
 When you are creating stateful pages you typically place all your control creation code in the Pages 
-constructor so it is invoked only once, and don't put this code in the <tt>onInit()</tt> method which 
-will be invoked with each request.
+constructor so it is invoked only once. It is important not to place control creation code in the
+<tt>onInit()</tt> method which will be invoked with each request.
 <p/>
-If you have dynamic control creation code you would typically place this <tt>onInit()</tt> method, but 
-you will need to take care that controls and or models are not already present in the page.
+If you have dynamic control creation code you would typically place this in the <tt>onInit()</tt> method,
+but you will need to take care that controls and or models are not already present in the page.
 
 <h4>Page Execution</h4>
 
 The default Click page execution model is thread safe as a new Page instance is created
 for each request and thread. With stateful pages a user will have a single page instance which is
-reused in multiple requests and threads. To ensure page execution is thread safe, a users
+reused in multiple requests and threads. To ensure page execution is thread safe, users
 page instances are synchronized so only one request thread can execute a page instance at 
 any one time. 
 
@@ -852,7 +870,7 @@ any one time.
 
 After normal page instances have been executed, they are de-referenced and garbage 
 collected by the JVM. However with stateful pages they are stored in the users 
-<tt>HttpSession</tt> so care needs to be take not store too many objects in stateful 
+<tt>HttpSession</tt> so care needs to be take not to store too many objects in stateful 
 page instances which may cause memory and performance issues.
 <p/>
 When pages have completed their execution, all the Page's controls <tt>onDestroy()</tt>
@@ -929,7 +947,7 @@ So for example if you had a page title message you would access it in your page 
 <pre class="codeHtml">
     &lt;h1&gt; <span class="red">$</span><span class="blue">messages.title</span> &lt;/h1&gt; </pre>
 
-This messages map is loaded from the page classes property bundle. For example
+This messages map is loaded from the page class property bundle. For example
 if you had a page class <tt>com.mycorp.page.CustomerList</tt> you could have
 an associated property file containing the pages localized messages:
 
@@ -941,7 +959,7 @@ You can also defined a application global page messages properties file:
 <pre class="codeConfig">
 /click-page.properties </pre>
 
-Messages defined in this file will be available to all pages through out your
+Messages defined in this file will be available to all pages throughout your
 application. Note messages defined in your page class properties file will 
 override any messages defined in the application global page properties file.
 <p/>

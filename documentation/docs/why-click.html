@@ -23,15 +23,15 @@ another Java web application framework.
 <br/>
 
 
-Click is modern JEE web application framework, providing a natural rich client
+Click is a modern JEE web application framework, providing a natural rich client
 style programming model. &nbsp; Key features of Click include:
 
 <h2>Simple to Learn</h2>
-Click is designed to be simple learn so that new developers can get up and running in a day.  This is very important 
+Click is designed to be simple to learn so that new developers can get up and running in a day.  This is very important 
 with commercial development teams where you have a wide range of skill levels and motivation.
 <p/>
 My experience introducing Tapestry (2.3) to development teams was that it is too complex and difficult to learn for the
-average developer. The two development teams I introduced to Tapestry eventually dropped it and revert to Struts.
+average developer. The two development teams I introduced to Tapestry eventually dropped it and reverted to Struts.
 <p/>
 Click is also significantly easier to learn than Struts. The Struts framework, while essentially a simple command 
 pattern design, has quite a convoluted and confusing design. 
@@ -45,7 +45,7 @@ If you have done traditional GUI programming with Swing, VB or Delphi you will k
 with JEE web development. JEE web development is painfully slow, complex and error prone.
 <p/>
 One of the first generation JEE web frameworks was Struts, which provides a command pattern design and a set of JSP 
-tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions working with primitive 
+tag libs. Unfortunately with Struts you are still down in the weeds, mapping URLs to Actions and working with primitive 
 ActionForms.  Its not giving you much leverage at all.
 <p/>
 Tapestry was one of the first component based JEE web frameworks, introducing component hierarchies, pages and an 
@@ -67,7 +67,7 @@ Click is JSP and MVC Free. This is a good thing!
 JSP's combined with the miss application of the MVC pattern have been holding back JEE web development for many years. 
 It's a big statement I know, please let me explain.
 <p/>
-MVC is a desktop GUI design pattern, which supports a separation of  roles in UI design. Model is the data, the 
+MVC is a desktop GUI design pattern, which supports a separation of roles in UI design. Model is the data, the 
 View does the rendering and the Control is for modifying the data.  Now MVC is a fairly sophisticated UI pattern 
 which solves the problem of multiple views and controls sharing the same data.  
 <p/>
@@ -132,7 +132,7 @@ You become responsible for wiring up the numerous pieces to make it work. In Str
    <li>specifying the &lt;htm:form&gt; and &lt;html&gt; field tag XML elements and attributes correctly in the JSP file</li>
 </ul>
 
-In development of large applications this becomes a volumous, tedious and error prone task. 
+In development of large applications this becomes a voluminous, tedious and error prone task. 
 <p/>
 Another aspect of these designs is the transfer of logic from Java code into XML configuration files. Tapestry and Spring MVC
 also make extensive use of XML. The problem with this is compile time errors now only become apparent at runtime.
@@ -146,7 +146,7 @@ or aggregation to build more sophisticated UI components. For example the Click 
 
 <h2>Velocity</h2>
 
-For rendering HTML Click uses the Velocity templating engine. Velocity has a simple 
+For rendering HTML Click uses the Velocity template engine. Velocity has a simple 
 instruction set which is very easy to learn and use. 
 For example take a look at the template below.
 
@@ -174,9 +174,10 @@ documentation. Velocity's ease of use made it the ideal choice for Click.
 <p/>
 The one tricky part of Velocity, <i>configuration</i> is handled automatically by Click.
 <p/>
-Please note you can also use JSPs for rendering in Click. It should be said that 
-JSP 2.0 and the JSP Expression Language has improved the usability of JSP 
-in recent years.
+Please note that Click's template service is pluggable so you can also use 
+<a href="http://freemarker.sourceforge.net/">Freemarker</a> or JSPs for rendering
+in Click. It should be said that JSP 2.0 and the JSP Expression Language has
+improved the usability of JSP in recent years.
 
 </body>
 </html>

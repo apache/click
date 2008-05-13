@@ -20,22 +20,23 @@
 <h1>Introduction</h1>
 Click is a simple JEE web application framework for commercial Java developers.
 <p>
-Click is an open source project, licensed using the 
+Click is an open source project, licensed under the 
 <a href="LICENSE.txt">Apache</a> license.
 <p>
-Click uses the event based programming model for processing Servlet requests and 
+Click uses an event based programming model for processing Servlet requests and 
 <a target='topic' href='velocity/velocity.html'>Velocity</a> for rendering 
-the response.  
+the response. (Note other template engines such as <a target="_blank" href="http://java.sun.com/products/jsp/">JSP</a>
+and <a target="_blank" href="http://freemarker.sourceforge.net/">Freemarker</a> are also supported)
 <p>
 This framework uses a single servlet, called
 <a target="topic" href="click-api/net/sf/click/ClickServlet.html">ClickServlet</a>, to
 act as a request dispatcher. When a request arrives ClickServlet creates a 
 <a target="topic" href="click-api/net/sf/click/Page.html">Page</a> object to 
-processes the request and then uses the page's Velocity template to render the 
+process the request and then uses the page's Velocity template to render the 
 results.
 <p>
 Pages provide a simple thread safe programming environment, with a new
-page instance is created for each servlet request.
+page instance created for each servlet request.
 <p>
 Possibly the best way to see how Click works is to dive right in and look at some 
 examples:
@@ -60,7 +61,7 @@ examples:
 <a name="hello-world" class="heading"><h2>Hello World Example</h2></a>
 A Hello World example in Click would look something like this. 
 <p/>
-First we would have a <tt>HelloWorld</tt> page class:
+First we create a <tt>HelloWorld</tt> page class:
 
 <pre class="codeJava">
 <span class="kw">package</span> <span class="red">examples.page</span>;
@@ -124,7 +125,7 @@ Velocity then renders the merged template which looks something like
 
 <a name="control-listener" class="heading"/><h2>Control Listener Example</h2>
 
-Click includes a library <a target="topic" href="controls.html">Controls</a> which 
+Click includes a library of <a target="topic" href="controls.html">Controls</a> which 
 provide user interface functionality. 
 <p/>
 One of the commonly used controls is the 
@@ -167,7 +168,7 @@ listener method <tt>onMyLinkClick()</tt>.
 <p/>
 In Click a control listener method can have any name but it must return a boolean value. 
 The boolean return value specifies whether processing of page events should continue.
-This control listener pattern provides a short hand way wiring up action listener methods
+This control listener pattern provides a short hand way for wiring up action listener methods
 without having to define anonymous inner classes.
 
 <p/>
@@ -255,7 +256,7 @@ An example usage of the Table control in a customers Page is provided below:
 } </pre>
 
 In this Page code example a Table control is declared, we set the table's HTML class,
-and then define number of table <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
+and then define a number of table <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
 objects. In the column definitions we specify the name of the column in the constructor,
 which is used for the table column header and also to specify the row object property 
 to render.
@@ -284,7 +285,7 @@ which is rendered when its <tt>toString()</tt> method is called.
 
 Note above we also specify the <span class="blue">$cssImports</span> reference so the table can include any
 CSS imports or styles in the header, and the <span class="blue">$jsImports</span> reference 
-so any JavaScript imports or scripts at the bottom.
+any JavaScript imports or scripts at the bottom.
 <p/>
 At runtime the Table would be rendered in the page as:
 
@@ -378,7 +379,7 @@ In this Page code example a Table control is declared and a number of
 <a target="topic" href="click-api/net/sf/click/control/Column.html">Column</a>
 objects are added. A deleteLink 
 <a target="topic" href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
-control is used a decorator for the "Action" column. This control will invoke the
+control is used as a decorator for the "Action" column. This control will invoke the
 Page <tt>onDeleteClick()</tt> method when it is clicked. Finally we have the 
 Page <tt>onRender()</tt> method which is used to populate the Table control with
 rows before it is rendered.
@@ -516,11 +517,11 @@ automatically render itself as:
 </tr>
 </table>
 
-Now if the user does not enter their name and presses the OK button to submit the form. 
+Say the user does not enter their name and presses the OK button to submit the form. 
 The ClickServlet creates a new SimpleForm page and processes the form control. 
 <p/>
 The form control processes its fields and determines that it is invalid. The form
-then invokes the listener method <tt>onSubmit()</tt> method. As the form is not
+then invokes the listener method <tt>onSubmit()</tt>. As the form is not
 valid this method simply returns true and the form renders the field validation errors. 
 
 <table class="htmlExample" cellspacing="12">
@@ -555,11 +556,11 @@ valid this method simply returns true and the form renders the field validation 
 </tr>
 </table>
 
-Note the form will automatically maintains the entered state during the 
+Note the form will automatically maintain the entered state during the 
 post and validate cycle.
 <p/>
 Now if the user enters their name and clicks the OK button, the form will be
-valid and the <tt>onSubmit()</tt> add a <span color="blue">msg</span> to the Pages
+valid and the <tt>onSubmit()</tt> add a <span class="blue">msg</span> to the Pages
 model. This will be rendered as:
 
 <table class="htmlExample" cellspacing="12">
@@ -601,9 +602,9 @@ model. This will be rendered as:
 The <tt>AdvancedForm</tt> page below provides a more advanced demonstration 
 of using Form, Field and FielsSet controls.
 <p/>
-First we have a <tt>AdvancedForm</tt> class which setups up a 
+First we have an <tt>AdvancedForm</tt> class which setups up a 
 <a href="click-api/net/sf/click/control/Form.html">Form</a>
-in the constructor. 
+in its constructor. 
 The form's investment 
 <a href="click-api/net/sf/click/control/Select.html">Select</a> list is populated
 in the page's <tt>onInit()</tt> method. At this point any page dependencies such
@@ -771,7 +772,7 @@ method. The customer object is then saved, the form's field values are cleared a
 info message is presented to the user.
 <p/>
 If the user clicks on the Cancel button the request is redirected to the applications
-HopePage.
+HomePage.
 
 <h4>Form Layout</h4>
 
@@ -781,9 +782,11 @@ provides a number of layout options. See the Click <a href="examples.html">Examp
 interactive Form Properties demo.
 <p/>
 For fine grained page design you can specifically layout form and fields in 
-your page template. See the 
-<a target="topic" href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
+your page template. See the <a href="controls.html#template-layout">Template Layout</a>
+section and <a href="click-api/net/sf/click/control/Form.html#form-layout">Form</a>
 Javadoc for more details.
-
+<p/>
+An alternative approach to page template design is using <a href="controls.html#container">Containers</a>.
+See the <a href="controls.html#container-layout">Container Layout</a> section for more details.
 </body>
 </html>

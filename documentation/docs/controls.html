@@ -46,18 +46,17 @@ server side processing. This section covers the following topics:
 
 
 While this section provides an overview how Controls work please see the 
-<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>. 
+<a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>,
 which provides extensive information and examples.
-Javadoc 
 
 <a name="control-interface" class="heading"><h2>Control Interface</h2></a>
-In Click Controls provide the server side components that process user input, and render their
+Controls provide the server side components that process user input, and render their
 display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
 <p/>
-Controls handle the processing of user input with the 
+Controls handle the processing of user input in the 
 <a target="topic" href="click-api/net/sf/click/Control.html#onProcess()">onProcess</a>
-method and rendering their HTML display using the toString() method. The execution
-sequence for Control being processed and rendered is illustrated below in Figure 1.
+method and render their HTML display using the toString() method. The execution
+sequence for a Control being processed and rendered is illustrated below in Figure 1.
 <p/>
 
 <img src="../images/control-post-sequence-diagram.png"/>
@@ -124,11 +123,15 @@ Methods on the Control interface include:
    <a href="click-api/net/sf/click/Control.html#onDestroy()">onDestroy()</a>
    &nbsp; - &nbsp; on destroy event handler.
   </li>
+  <li>
+   <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+   &nbsp; - &nbsp; generate the control's HTML representation.
+  </li>
 </ul>
 
 <a name="control-callback" class="heading"><h2>Control Callback</h2></a>
 
-Click Controls provide an event callback mechanism similar the java.awt.ActionListener callback.
+Click Controls provide an event callback mechanism similar to a java.awt.ActionListener callback.
 <p/>
 To define a control listener, simply set the listener object instance and the name of the
 listener method to be invoked. For example:
@@ -138,6 +141,8 @@ listener method to be invoked. For example:
 
     <span class="kw">public</span> SimpleCallback() {
         ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
+
+        <span class="cm">// Set the link's listener to callback this page's onClick method.</span>
         clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
         addControl(clickLink);    
     }
@@ -152,13 +157,14 @@ The listener method can have any name but it must have take no parameters and mu
 java.lang.Boolean value. 
 <p/>
 When a callback method returns true the processing of other Controls will continue and the Pages onGet() 
-or onPost() event handler will be called. If a controls returns false not further Control processing
+or onPost() event handler will be called. If a callback method returns false no further Control processing
 will be performed and neither of the Page onGet() or onPost() methods will be invoked. This execution
 logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
 <p/>
 Being able to stop further processing and do something else can be very handy. For example your 
-Pages onGet() or onPost() method may perform an expensive database operation. By using 
-returning false in a event handler you can skip this step and forward to the next page.
+Pages onGet() or onPost() method may perform an expensive database operation. By returning
+false in an event handler you can skip this step and render the template or forward to the
+next page.
 
 <a name="control-class" class="heading"><h2>Control Classes</h2></a>
 
@@ -183,7 +189,7 @@ A subset of these control classes are depicted below in Figure 3.
 The key control classes include:
 <ul>
 <li><a href="click-api/net/sf/click/control/ActionLink.html">ActionLink</a>
-- provides a anchor link which can invoke callback listeners. 
+- provides an anchor link which can invoke callback listeners. 
 <p></li>
 <li><a href="click-api/net/sf/click/control/Field.html">Field</a>
 - provides the abstract form field control.
@@ -192,10 +198,10 @@ The key control classes include:
 - provides a form control for processing, validation and rendering.   
 <p></li>
 <li><a href="click-api/net/sf/click/control/Submit.html">Submit</a>
-- provides a input type submit control which can invoke callback listeners.  
+- provides an input type submit control which can invoke callback listeners.  
 <p></li>
 <li><a href="click-api/net/sf/click/control/TextField.html">TextField</a>
-- provides a input type text control which can invoke callback listeners.  
+- provides an input type text control which can invoke callback listeners.  
 <p></li>
 </ul> 
 
@@ -218,7 +224,7 @@ localize a Click application for your particular language and dialect.
 
 Messages are looked up in a particular order enabling taylor specific messages,
 for your controls, individual pages or across your entire application.
-The order in which localized messages are resolve is:
+The order in which localized messages are resolved is:
 <dl>
  <dt style="font-weight:bold">Page scope messages</dt>
  <dd>Message lookups are first resolved to the Page classes message bundle if it
@@ -253,7 +259,7 @@ The order in which localized messages are resolve is:
  
  <dt style="font-weight:bold;margin-top:1em;">Global control scope messages</dt>
  <dd>Finally message lookups are resolved to the global application control 
- message bundle if the message has not already found. The global control
+ message bundle if the message has not already been found. The global control
  properties file is:
  
  <pre class="codeConfig">
@@ -317,10 +323,10 @@ validation error messages and display messages. These localized messages can be
 accessed through the Field methods:
 
 <ul>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String)">getMessage(String)</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a></li>
- <li><a href="click-api/net/sf/click/control/Field.html#getMessages()">getMessages()</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String)">getMessage(String)</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String, java.lang.Object)">getMessage(String, Object)</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessage(java.lang.String, java.lang.Object[])">getMessage(String, Object[])</a></li>
+ <li><a href="click-api/net/sf/click/control/AbstractControl.html#getMessages()">getMessages()</a></li>
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String)">setErrorMessage(String)</a></li>
  <li><a href="click-api/net/sf/click/control/Field.html#setErrorMessage(java.lang.String, java.lang.Object)">setErrorMessage(String, Object)</a></li>
 </ul>
@@ -339,7 +345,7 @@ The following Click Controls are example Containers:
    <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>
    - allows any control or container to be added.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
-   - allows only Field and FieldSet controls to be added, allowing Form to automatically layout its content.</li>
+   - allows only Field and FieldSet controls to be added, enabling Form to automatically layout its content.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a></li>
    <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a></li>
 </ul>
@@ -357,7 +363,7 @@ Lets cover each of them here.
 <b>AbstractContainer</b>
 
 <p/>
-Enables easy creation of custom Containers for example a html div or span tag.
+Enables easy creation of custom Containers for example a html div or span element.
 
 <p/>
 For example:
@@ -370,12 +376,13 @@ public class Div extends AbstractContainer {
     }
 
     public String getTag() {
-        // Return the controls HTML tag.
+        // Return the control's HTML tag.
         return "div";
     }
 } </pre>
 
-Lets test the Div:
+Lets test the Div: (note the MockContext used in this test is described in the
+<a href="testing.html">Test Support</a> documentation)
    
 <pre class="prettyprint">
 public class Test {
@@ -507,10 +514,9 @@ However for custom or complex layouts, Form is not well suited.
 <ul style="margin-top:0.5em;">
   <li class="item">
     <a href="click-api/net/sf/click/control/Form.html#manual-layout">Templates</a> - use a template engine
-    such as Velocity, Freemarker or JSP to create the layout with HTML markup</li>
+    such as Velocity, Freemarker or JSP to create the layout using HTML markup.</li>
   <li class="item">
-    <a href="#container">Container</a> - add controls to a container and build up the layout using Java.
-    This option is covered below.</li>
+    <a href="#container">Container</a> - add controls to a container and build up the layout using normal Java. This option is very similar to building components using Swing.</li>
 </ul>
 <br/>
 
@@ -543,10 +549,11 @@ public EmployeePage extends Page {
     }
 } </pre>
 
-Lets imagine we want to use a CSS layout using Div &lt;div&gt; and List &lt;ol&gt; tags.
+Lets imagine we want to use a CSS layout using Div &lt;div&gt; and html List &lt;ol&gt; tags.
 
 <p/>
-We could provide the markup as shown below, using a template engine like Velocity:
+We could provide the markup for the <span class="st">employee.htm</span> template as shown below,
+using a template engine like Velocity:
 
 <pre class="prettyprint">
 &lt;!--employee.htm--&gt;
@@ -583,17 +590,17 @@ There are pros and cons to using the template layout approach.
 <p/>
 One of the advantages of the Template layout, is that the layout is explicit and one can easily
 change it to something else. For example instead of using divs and ordered lists, one can
-use a table layout.
+change the template to leverage a table layout.
 
 <p/>
 A disadvantage of the Template layout is it introduces redundancy.
 
 <p/>
-In the example above one needed to create the fields in java, and laid them out using html markup
+In the example above you needed to create the fields in Java, and lay them out using html markup
 in the template.
 
 <p/>
-If the requirements change and a new field has to be added, one will have to add the
+If the requirements change to add a new field for example, one will have to add the
 field in the Page as well as the template. Of course it is possible to "generify"
 the layout using template engines like Velocity, Freemarker or JSP, since they provide
 constructs such as iterators and conditional logic. <a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
@@ -627,9 +634,9 @@ public class Div extends AbstractContainer {
 } </pre>
 
 <pre class="prettyprint">
-// List.java
+// HtmlList.java
 // Create a list &lt;ol&gt; html element, that accepts &lt;li&gt; elements as children
-public class List extends AbstractContainer {
+public class HtmlList extends AbstractContainer {
 
     public String getTag() {
         return "ol";
@@ -671,7 +678,7 @@ public class EmployeePage extends BasicForm {
         form = new BasicForm("form");
         
         // Create a list and add it to the form. 
-        List list = new List();
+        HtmlList list = new HtmlList();
         form.add(list);
         
         // Add firstname field and pass in its name, label and the list to add the field to
@@ -712,11 +719,11 @@ public class EmployeePage extends BasicForm {
     }
 } </pre>
     
-Now the <em>employee.htm</em> template would only need to specify the name of the 
+Now the <span class="st">employee.htm</span> template would only need to specify the name of the 
 top level container, in this case <em>form</em>.
 
 <pre class="prettyprint">
-//employee.htm
+&lt;!--employee.htm--&gt;
 ${form}
 </pre>
     
