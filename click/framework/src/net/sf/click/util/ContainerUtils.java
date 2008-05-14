@@ -332,6 +332,22 @@ public class ContainerUtils {
         }
     }
 
+    /**
+     * Return how deep the control is in the container hierarchy.
+     *
+     * @param control the control which depth to return
+     * @return the depth of the control in the container hierarchy
+     */
+    protected int getDepth(Control control) {
+        int depth = 1;
+
+        while (control.getParent() != null && !(control.getParent() instanceof Page)) {
+            control = (Control) control.getParent();
+            depth++;
+        }
+        return depth;
+    }
+
     // -------------------------------------------------------- Private Methods
 
     /**
