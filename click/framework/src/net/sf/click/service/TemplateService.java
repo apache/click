@@ -25,6 +25,22 @@ import net.sf.click.Page;
 /**
  * Provides a templating service interface.
  *
+ * <h3>Configuration</h3>
+ * The default TemplateService is {@link VelocityTemplateService}.
+ * <p/>
+ * However you can instruct Click to use a different implementation by adding
+ * the following element to your <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;click-app charset="UTF-8"&gt;
+ *
+ *     &lt;pages package="net.sf.click.examples.page"/&gt;
+ *
+ *     &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
+ *
+ * &lt;/click-app&gt; </pre>
+ *
  * @author Malcolm Edgar
  */
 public interface TemplateService {

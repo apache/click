@@ -148,7 +148,8 @@ public class Context {
      * @param response the servlet response
      */
     Context(HttpServletRequest request, HttpServletResponse response) {
-        // TODO M.E. - should we remove this constructor?
+        // This method should be removed once the deprecated MockContext
+        // constructor is removed
         this.request = request;
         this.response = response;
         this.clickServlet = null;

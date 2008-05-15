@@ -30,6 +30,63 @@ import net.sf.click.util.Format;
  * startup. Once the ConfigService has been initialized it is stored in the
  * ServletContext using the key "<tt>net.sf.click.service.ConfigService</tt>".
  *
+ * <h3>Configuration</h3>
+ * The default ConfigService is {@link XmlConfigService}.
+ * <p/>
+ * However it is possible to specify a different implementation.
+ * <p/>
+ * For example you can subclass XmlConfigService and override methods such as
+ * {@link #onInit(javax.servlet.ServletContext)} to alter initialization
+ * behavior.
+ * <p/>
+ * For Click to recognize your custom service class you must set the
+ * context initialization parameter,
+ * {@link net.sf.click.ClickServlet#CONFIG_SERVICE_CLASS config-service-class}
+ * in your <tt>web.xml</tt> file.
+ * <p/>
+ * Below is an example of a custom service class
+ * <tt>com.mycorp.service.CustomConfigSerivce</tt>:
+ *
+ * <pre class="prettyprint">
+ * package com.mycorp.service;
+ *
+ * public class CustomConfigService extends XmlConfigService {
+ *
+ *     public CustomConfigService() {
+ *     }
+ *
+ *     public void onInit(ServletContext servletContext) throws Exception {
+ *         // Add your logic here
+ *         ...
+ *
+ *         // Call super to resume initialization
+ *         super.onInit(servletContext);
+ *     }
+ * }
+ * </pre>
+ *
+ * <b>Please note</b> that the custom ConfigService implementation must have a
+ * no-argument constructor so Click can instantiate the service.
+ * <p/>
+ * Also define the new service in your <tt>web.xml</tt> as follows:
+ *
+ * <pre class="prettyprint">
+ * &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+ *   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ *   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+ *   version="2.4"&gt;
+ *
+ * ...
+ *
+ *     &lt;context-param&gt;
+ *         &lt;param-name&gt;config-service-class&lt;/param-name&gt;
+ *         &lt;param-value&gt;com.mycorp.service.CustomConfigSerivce&lt;/param-value&gt;
+ *     &lt;/context-param&gt;
+ *
+ * ...
+ *
+ * &lt;/web-app&gt; </pre>
+ *
  * @author Malcolm Edgar
  */
 public interface ConfigService {

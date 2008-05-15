@@ -51,7 +51,7 @@ import org.apache.commons.lang.StringUtils;
  * controls you have added to the Page.
  * <p/>
  * Panel is a very powerful component and provides the same capability as a
- * Page, since they have their own associated template.
+ * Page, since it has its own associated {@link #template} and {@link #model}.
  * <p/>
  * This allows you to create very modular components. For example, if you add
  * a tab control to your Page, each tab could refer to a separate Panel.
@@ -126,9 +126,6 @@ public class Panel extends AbstractContainer {
     private static final long serialVersionUID = 1L;
 
     // ----------------------------------------------------- Instance Variables
-
-    /** The list of panel controls. */
-    protected List controls;
 
     /** The panel disabled value. */
     protected boolean disabled;

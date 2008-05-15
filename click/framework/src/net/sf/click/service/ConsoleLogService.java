@@ -22,6 +22,11 @@ import net.sf.click.util.HtmlStringBuffer;
 /**
  * Provides a Log Service class which will log messages to the console or
  * <tt>System.out</tt>.
+ * <p/>
+ * ConsoleLogService is the default {@link LogService} for Click.
+ * <p/>
+ * However you can instruct Click to use a different log service implementation.
+ * Please see {@link LogService} for more details.
  *
  * @author Malcolm Edgar
  */

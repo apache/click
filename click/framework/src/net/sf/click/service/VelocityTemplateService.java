@@ -52,6 +52,9 @@ import org.apache.velocity.util.SimplePool;
  * Velocity is the default templating engine used by Click and the Velocity class
  * dependencies are included in the standard Click JAR file.
  * <p/>
+ * You can also instruct Click to use a different template service implementation.
+ * Please see {@link TemplateService} for more details.
+ * <p/>
  * To see how to use the Velocity templating language please see the
  * <a target="blank" href="../../../../../velocity/VelocityUsersGuide.pdf">Velocity Users Guide</a>.
  *
