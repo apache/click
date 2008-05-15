@@ -50,6 +50,17 @@ import org.xml.sax.SAXException;
 
 /**
  * Provides a Click XML configuration service class.
+ * <p/>
+ * This class reads Click configuration information from a file named
+ * <tt>click.xml</tt>. The service will first lookup the <tt>click.xml</tt>
+ * under the applications <tt>WEB-INF</tt> directory, and if not found
+ * attempt to load the configuration file from the classpath root.
+ * <p/>
+ * Configuring Click through the <tt>click.xml</tt> file is the most common
+ * technique.
+ * <p/>
+ * However you can instruct Click to use a different service implementation.
+ * Please see {@link ConfigService} for more details.
  *
  * @author Malcolm Edgar
  */
@@ -123,6 +134,23 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         DEFAULT_HEADERS.put("Expires", new Date(1L));
     }
 
+    // -------------------------------------------------------- Package Private Members
+
+    /** The Map of global page headers. */
+    Map commonHeaders;
+
+    /** The page automapping override page class for path list. */
+    final List excludesList = new ArrayList();
+
+    /** The map of ClickApp.PageElm keyed on path. */
+    final Map pageByPathMap = new HashMap();
+
+    /** The map of ClickApp.PageElm keyed on class. */
+    final Map pageByClassMap = new HashMap();
+
+    /** The pages package prefix. */
+    String pagesPackage;
+
     // -------------------------------------------------------- Private Members
 
     /** The automatically bind controls, request parameters and models flag. */
@@ -137,9 +165,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The charcter encoding of this application. */
     private String charset;
 
-    /** The Map of global page headers. */
-    private Map commonHeaders;
-
     /** The default application locale.*/
     private Locale locale;
 
@@ -151,18 +176,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * [ PRODUCTION | PROFILE | DEVELOPMENT | DEBUG | TRACE ].
      */
     private int mode;
-
-    /** The page automapping override page class for path list. */
-    private final List excludesList = new ArrayList();
-
-    /** The map of ClickApp.PageElm keyed on path. */
-    private final Map pageByPathMap = new HashMap();
-
-    /** The map of ClickApp.PageElm keyed on class. */
-    private final Map pageByClassMap = new HashMap();
-
-    /** The pages package prefix. */
-    private String pagesPackage;
 
     /** The ServletContext instance. */
     private ServletContext servletContext;
@@ -595,6 +608,338 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         }
     }
 
+    // -------------------------------------------------------- Package Private Methods
+
+    /**
+     * Loads all Click Pages defined in the <tt>click.xml</tt> file, including
+     * manually defined Pages, auto mapped Pages and excluded Pages.
+     *
+     * @param rootElm the root xml element containing the configuration
+     * @throws java.lang.ClassNotFoundException if the specified Page class can
+     * not be found on the classpath
+     */
+    void loadPages(Element rootElm) throws ClassNotFoundException {
+        Element pagesElm = ClickUtils.getChild(rootElm, "pages");
+
+        if (pagesElm == null) {
+            String msg = "required configuration 'pages' element missing.";
+            throw new RuntimeException(msg);
+        }
+
+        pagesPackage = pagesElm.getAttribute("package");
+        if (StringUtils.isBlank(pagesPackage)) {
+            pagesPackage = "";
+        }
+
+        pagesPackage = pagesPackage.trim();
+        if (pagesPackage.endsWith(".")) {
+            pagesPackage =
+                pagesPackage.substring(0, pagesPackage.length() - 2);
+        }
+
+        boolean automap = true;
+        String automapStr = pagesElm.getAttribute("automapping");
+        if (StringUtils.isBlank(automapStr)) {
+            automapStr = "true";
+        }
+
+        if ("true".equalsIgnoreCase(automapStr)) {
+            automap = true;
+        } else if ("false".equalsIgnoreCase(automapStr)) {
+            automap = false;
+        } else {
+            String msg = "Invalid pages automapping attribute: " + automapStr;
+            throw new RuntimeException(msg);
+        }
+
+        String autobindingStr = pagesElm.getAttribute("autobinding");
+        if (StringUtils.isBlank(autobindingStr)) {
+            autobindingStr = "true";
+        }
+
+        if ("true".equalsIgnoreCase(autobindingStr)) {
+            autobinding = true;
+        } else if ("false".equalsIgnoreCase(autobindingStr)) {
+            autobinding = false;
+        } else {
+            String msg = "Invalid pages autobinding attribute: " + autobindingStr;
+            throw new RuntimeException(msg);
+        }
+
+        buildManualPageMapping(pagesElm);
+
+        if (automap) {
+            buildAutoPageMapping(pagesElm);
+        }
+        buildClassMap();
+    }
+
+    /**
+     * Add manually defined Pages to the {@link #pageByPathMap}.
+     *
+     * @param pagesElm the xml element containing manually defined Pages
+     * @throws java.lang.ClassNotFoundException if the specified Page class can
+     * not be found on the classpath
+     */
+    void buildManualPageMapping(Element pagesElm) throws ClassNotFoundException {
+
+        List pageList = ClickUtils.getChildren(pagesElm, "page");
+
+        if (!pageList.isEmpty() && logService.isDebugEnabled()) {
+            logService.debug("click.xml pages:");
+        }
+
+        for (int i = 0; i < pageList.size(); i++) {
+            Element pageElm = (Element) pageList.get(i);
+
+            XmlConfigService.PageElm page =
+                new XmlConfigService.PageElm(pageElm, pagesPackage, commonHeaders);
+
+            pageByPathMap.put(page.getPath(), page);
+
+            if (logService.isDebugEnabled()) {
+                String msg =
+                    page.getPath() + " -> " + page.getPageClass().getName();
+                logService.debug(msg);
+            }
+        }
+    }
+
+    /**
+     * Build the {@link #pageByPathMap} by associating template files with
+     * matching Java classes found on the classpath.
+     * <p/>
+     * This method also rebuilds the {@link #excludesList}. This list contains
+     * URL paths that should not be auto-mapped.
+     *
+     * @param pagesElm the xml element containing the excluded URL paths
+     */
+    void buildAutoPageMapping(Element pagesElm) throws ClassNotFoundException {
+
+        // Build list of automap path page class overrides
+        excludesList.clear();
+        for (Iterator i = ClickUtils.getChildren(pagesElm, "excludes").iterator();
+             i.hasNext();) {
+
+            excludesList.add(new XmlConfigService.ExcludesElm((Element) i.next()));
+        }
+
+        if (logService.isDebugEnabled()) {
+            logService.debug("automapped pages:");
+        }
+
+        List templates = getTemplateFiles();
+
+        for (int i = 0; i < templates.size(); i++) {
+            String pagePath = (String) templates.get(i);
+
+            if (!pageByPathMap.containsKey(pagePath)) {
+
+                Class pageClass = getPageClass(pagePath, pagesPackage);
+
+                if (pageClass != null) {
+                    XmlConfigService.PageElm page = new XmlConfigService.PageElm(pagePath,
+                            pageClass,
+                            commonHeaders);
+
+                    pageByPathMap.put(page.getPath(), page);
+
+                    if (logService.isDebugEnabled()) {
+                        String msg =
+                            pagePath + " -> " + pageClass.getName();
+                        logService.debug(msg);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Build the {@link #pageByClassMap} where key is the Page class, and
+     * value is the {@link PageElm}.
+     */
+    void buildClassMap() {
+
+        // Build pages by class map
+        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
+            XmlConfigService.PageElm page = (XmlConfigService.PageElm) i.next();
+            Object value = pageByClassMap.get(page.pageClass);
+
+            if (value == null) {
+                pageByClassMap.put(page.pageClass, page);
+
+            } else if (value instanceof List) {
+                ((List) value).add(value);
+
+            } else if (value instanceof XmlConfigService.PageElm) {
+                List list = new ArrayList();
+                list.add(value);
+                list.add(page);
+                pageByClassMap.put(page.pageClass, list);
+
+            } else {
+                // should never occur
+                throw new IllegalStateException();
+            }
+        }
+    }
+
+    /**
+     * Load the Page headers from the specified xml element.
+     *
+     * @param parentElm the element to load the headers from
+     * @return the map of Page headers
+     */
+    static Map loadHeadersMap(Element parentElm) {
+        Map headersMap = new HashMap();
+
+        List headerList = ClickUtils.getChildren(parentElm, "header");
+
+        for (int i = 0, size = headerList.size(); i < size; i++) {
+            Element header = (Element) headerList.get(i);
+
+            String name = header.getAttribute("name");
+            String type = header.getAttribute("type");
+            String propertyValue = header.getAttribute("value");
+
+            Object value = null;
+
+            if ("".equals(type) || "String".equalsIgnoreCase(type)) {
+                value = propertyValue;
+            } else if ("Integer".equalsIgnoreCase(type)) {
+                value = Integer.valueOf(propertyValue);
+            } else if ("Date".equalsIgnoreCase(type)) {
+                value = new Date(Long.parseLong(propertyValue));
+            } else {
+                value = null;
+                String message =
+                    "Invalid property type [String|Integer|Date]: "
+                    + type;
+                throw new IllegalArgumentException(message);
+            }
+
+            headersMap.put(name, value);
+        }
+
+        return headersMap;
+    }
+
+    /**
+     * Find and return the page class for the specified pagePath and
+     * pagesPackage.
+     * <p/>
+     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
+     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
+     * <p/>
+     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
+     * <tt>'com.mycorp'</tt>, the matching page class will be:
+     * <tt>com.mycorp.admin.AddCustomer</tt> or
+     * <tt>com.mycorp.admin.AddCustomerPage</tt>.
+     *
+     * @param pagePath the path used for matching against a page class name
+     * @param pagesPackage the package of the page class
+     * @return the page class for the specified pagePath and pagesPackage
+     */
+    Class getPageClass(String pagePath, String pagesPackage) {
+        // To understand this method lets walk through an example as the
+        // code plays out. Imagine this method is called with the arguments:
+        // pagePath='/pages/edit-customer.htm'
+        // pagesPackage='net.sf.click'
+
+        // Add period at end.
+        // packageName = 'net.sf.click.'
+        String packageName = pagesPackage + ".";
+        String className = "";
+
+        // Strip off extension.
+        // path = '/pages/edit-customer'
+        String path = pagePath.substring(0, pagePath.lastIndexOf("."));
+
+        // If page is excluded return the excluded class
+        Class excludePageClass = getExcludesPageClass(path);
+        if (excludePageClass != null) {
+            return excludePageClass;
+        }
+
+        // Build complete packageName.
+        // packageName = 'net.sf.click.pages.'
+        // className = 'edit-customer'
+        if (path.indexOf("/") != -1) {
+            StringTokenizer tokenizer = new StringTokenizer(path, "/");
+            while (tokenizer.hasMoreTokens()) {
+                String token = tokenizer.nextToken();
+                if (tokenizer.hasMoreTokens()) {
+                    packageName = packageName + token + ".";
+                } else {
+                    className = token;
+                }
+            }
+        } else {
+            className = path;
+        }
+
+        // CamelCase className.
+        // className = 'EditCustomer'
+        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
+        className = "";
+        while (tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
+            className += token;
+        }
+
+        // className = 'net.sf.click.pages.EditCustomer'
+        className = packageName + className;
+
+        Class pageClass = null;
+        try {
+            // Attempt to load class.
+            pageClass = ClickUtils.classForName(className);
+
+            if (!Page.class.isAssignableFrom(pageClass)) {
+                String msg = "Automapped page class " + className
+                             + " is not a subclass of net.sf.click.Page";
+                throw new RuntimeException(msg);
+            }
+
+        } catch (ClassNotFoundException cnfe) {
+
+            boolean classFound = false;
+
+            // Append "Page" to className and attempt to load class again.
+            // className = 'net.sf.click.pages.EditCustomerPage'
+            if (!className.endsWith("Page")) {
+                String classNameWithPage = className + "Page";
+                try {
+                    // Attempt to load class.
+                    pageClass = ClickUtils.classForName(classNameWithPage);
+
+                    if (!Page.class.isAssignableFrom(pageClass)) {
+                        String msg = "Automapped page class " + classNameWithPage
+                                     + " is not a subclass of net.sf.click.Page";
+                        throw new RuntimeException(msg);
+                    }
+
+                    classFound = true;
+
+                } catch (ClassNotFoundException cnfe2) {
+                }
+            }
+
+            if (!classFound) {
+                if (logService.isDebugEnabled()) {
+                    logService.debug(pagePath + " -> CLASS NOT FOUND");
+                }
+                if (logService.isTraceEnabled()) {
+                    logService.trace("class not found: " + className);
+                }
+            }
+        }
+
+        return pageClass;
+    }
+
     // -------------------------------------------------------- Private Methods
 
     private Element getResourceRootElement(String path) throws IOException {
@@ -926,141 +1271,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         return propertyMap;
     }
 
-    private void loadPages(Element rootElm) throws ClassNotFoundException {
-        Element pagesElm = ClickUtils.getChild(rootElm, "pages");
-
-        if (pagesElm == null) {
-            String msg = "required configuration 'pages' element missing.";
-            throw new RuntimeException(msg);
-        }
-
-        pagesPackage = pagesElm.getAttribute("package");
-        if (StringUtils.isBlank(pagesPackage)) {
-            pagesPackage = "";
-        }
-
-        pagesPackage = pagesPackage.trim();
-        if (pagesPackage.endsWith(".")) {
-            pagesPackage =
-                pagesPackage.substring(0, pagesPackage.length() - 2);
-        }
-
-        boolean automap = true;
-        String automapStr = pagesElm.getAttribute("automapping");
-        if (StringUtils.isBlank(automapStr)) {
-            automapStr = "true";
-        }
-
-        if ("true".equalsIgnoreCase(automapStr)) {
-            automap = true;
-        } else if ("false".equalsIgnoreCase(automapStr)) {
-            automap = false;
-        } else {
-            String msg = "Invalid pages automapping attribute: " + automapStr;
-            throw new RuntimeException(msg);
-        }
-
-
-        String autobindingStr = pagesElm.getAttribute("autobinding");
-        if (StringUtils.isBlank(autobindingStr)) {
-            autobindingStr = "true";
-        }
-
-        if ("true".equalsIgnoreCase(autobindingStr)) {
-            autobinding = true;
-        } else if ("false".equalsIgnoreCase(autobindingStr)) {
-            autobinding = false;
-        } else {
-            String msg = "Invalid pages autobinding attribute: " + autobindingStr;
-            throw new RuntimeException(msg);
-        }
-
-
-        List pageList = ClickUtils.getChildren(pagesElm, "page");
-
-        if (!pageList.isEmpty() && logService.isDebugEnabled()) {
-            logService.debug("click.xml pages:");
-        }
-
-        for (int i = 0; i < pageList.size(); i++) {
-            Element pageElm = (Element) pageList.get(i);
-
-            XmlConfigService.PageElm page =
-                new XmlConfigService.PageElm(pageElm, pagesPackage, commonHeaders);
-
-            pageByPathMap.put(page.getPath(), page);
-
-            if (logService.isDebugEnabled()) {
-                String msg =
-                    page.getPath() + " -> " + page.getPageClass().getName();
-                logService.debug(msg);
-            }
-        }
-
-        if (automap) {
-
-            // Build list of automap path page class overrides
-            excludesList.clear();
-            for (Iterator i = ClickUtils.getChildren(pagesElm, "excludes").iterator();
-                 i.hasNext();) {
-
-                excludesList.add(new XmlConfigService.ExcludesElm((Element) i.next()));
-            }
-
-            if (logService.isDebugEnabled()) {
-                logService.debug("automapped pages:");
-            }
-
-            List templates = getTemplateFiles();
-
-            for (int i = 0; i < templates.size(); i++) {
-                String pagePath = (String) templates.get(i);
-
-                if (!pageByPathMap.containsKey(pagePath)) {
-
-                    Class pageClass = getPageClass(pagePath, pagesPackage);
-
-                    if (pageClass != null) {
-                        XmlConfigService.PageElm page = new XmlConfigService.PageElm(pagePath,
-                                pageClass,
-                                commonHeaders);
-
-                        pageByPathMap.put(page.getPath(), page);
-
-                        if (logService.isDebugEnabled()) {
-                            String msg =
-                                pagePath + " -> " + pageClass.getName();
-                            logService.debug(msg);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Build pages by class map
-        for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
-            XmlConfigService.PageElm page = (XmlConfigService.PageElm) i.next();
-            Object value = pageByClassMap.get(page.pageClass);
-
-            if (value == null) {
-                pageByClassMap.put(page.pageClass, page);
-
-            } else if (value instanceof List) {
-                ((List) value).add(value);
-
-            } else if (value instanceof XmlConfigService.PageElm) {
-                List list = new ArrayList();
-                list.add(value);
-                list.add(page);
-                pageByClassMap.put(page.pageClass, list);
-
-            } else {
-                // should never occur
-                throw new IllegalStateException();
-            }
-        }
-    }
-
     private void loadCharset(Element rootElm) {
         String charset = rootElm.getAttribute("charset");
         if (charset != null && charset.length() > 0) {
@@ -1081,40 +1291,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 locale = new Locale(language, country);
             }
         }
-    }
-
-    private static Map loadHeadersMap(Element parentElm) {
-        Map headersMap = new HashMap();
-
-        List headerList = ClickUtils.getChildren(parentElm, "header");
-
-        for (int i = 0, size = headerList.size(); i < size; i++) {
-            Element header = (Element) headerList.get(i);
-
-            String name = header.getAttribute("name");
-            String type = header.getAttribute("type");
-            String propertyValue = header.getAttribute("value");
-
-            Object value = null;
-
-            if ("".equals(type) || "String".equalsIgnoreCase(type)) {
-                value = propertyValue;
-            } else if ("Integer".equalsIgnoreCase(type)) {
-                value = Integer.valueOf(propertyValue);
-            } else if ("Date".equalsIgnoreCase(type)) {
-                value = new Date(Long.parseLong(propertyValue));
-            } else {
-                value = null;
-                String message =
-                    "Invalid property type [String|Integer|Date]: "
-                    + type;
-                throw new IllegalArgumentException(message);
-            }
-
-            headersMap.put(name, value);
-        }
-
-        return headersMap;
     }
 
     private List getTemplateFiles() {
@@ -1155,122 +1331,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 }
             }
         }
-    }
-
-    /**
-     * Find and return the page class for the specified pagePath and
-     * pagesPackage.
-     * <p/>
-     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
-     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
-     * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
-     * <p/>
-     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
-     * <tt>'com.mycorp'</tt>, the matching page class will be:
-     * <tt>com.mycorp.admin.AddCustomer</tt> or
-     * <tt>com.mycorp.admin.AddCustomerPage</tt>.
-     *
-     * @param pagePath the path used for matching against a page class name
-     * @param pagesPackage the package of the page class
-     * @return the page class for the specified pagePath and pagesPackage
-     */
-    Class getPageClass(String pagePath, String pagesPackage) {
-        // To understand this method lets walk through an example as the
-        // code plays out. Imagine this method is called with the arguments:
-        // pagePath='/pages/edit-customer.htm'
-        // pagesPackage='net.sf.click'
-
-        // Add period at end.
-        // packageName = 'net.sf.click.'
-        String packageName = pagesPackage + ".";
-        String className = "";
-
-        // Strip off extension.
-        // path = '/pages/edit-customer'
-        String path = pagePath.substring(0, pagePath.lastIndexOf("."));
-
-        // If page is excluded return the excluded class
-        Class excludePageClass = getExcludesPageClass(path);
-        if (excludePageClass != null) {
-            return excludePageClass;
-        }
-
-        // Build complete packageName.
-        // packageName = 'net.sf.click.pages.'
-        // className = 'edit-customer'
-        if (path.indexOf("/") != -1) {
-            StringTokenizer tokenizer = new StringTokenizer(path, "/");
-            while (tokenizer.hasMoreTokens()) {
-                String token = tokenizer.nextToken();
-                if (tokenizer.hasMoreTokens()) {
-                    packageName = packageName + token + ".";
-                } else {
-                    className = token;
-                }
-            }
-        } else {
-            className = path;
-        }
-
-        // CamelCase className.
-        // className = 'EditCustomer'
-        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
-        className = "";
-        while (tokenizer.hasMoreTokens()) {
-            String token = tokenizer.nextToken();
-            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
-            className += token;
-        }
-
-        // className = 'net.sf.click.pages.EditCustomer'
-        className = packageName + className;
-
-        Class pageClass = null;
-        try {
-            // Attempt to load class.
-            pageClass = ClickUtils.classForName(className);
-
-            if (!Page.class.isAssignableFrom(pageClass)) {
-                String msg = "Automapped page class " + className
-                             + " is not a subclass of net.sf.click.Page";
-                throw new RuntimeException(msg);
-            }
-
-        } catch (ClassNotFoundException cnfe) {
-
-            boolean classFound = false;
-
-            // Append "Page" to className and attempt to load class again.
-            // className = 'net.sf.click.pages.EditCustomerPage'
-            if (!className.endsWith("Page")) {
-                String classNameWithPage = className + "Page";
-                try {
-                    // Attempt to load class.
-                    pageClass = ClickUtils.classForName(classNameWithPage);
-
-                    if (!Page.class.isAssignableFrom(pageClass)) {
-                        String msg = "Automapped page class " + classNameWithPage
-                                     + " is not a subclass of net.sf.click.Page";
-                        throw new RuntimeException(msg);
-                    }
-
-                    classFound = true;
-
-                } catch (ClassNotFoundException cnfe2) {
-                }
-            }
-
-            if (!classFound) {
-                if (logService.isDebugEnabled()) {
-                    logService.debug(pagePath + " -> CLASS NOT FOUND");
-                }
-                if (logService.isTraceEnabled()) {
-                    logService.trace("class not found: " + className);
-                }
-            }
-        }
-
-        return pageClass;
     }
 
     private Class getExcludesPageClass(String path) {
@@ -1453,6 +1513,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     /**
      * Provide an Excluded Page class.
+     * <p/>
+     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use.
      *
      * @author Malcolm Edgar
      */
