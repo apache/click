@@ -40,7 +40,14 @@ import org.apache.commons.lang.Validate;
  * <tt>click.xml</tt> configuration file.
  *
  * <pre class="codeConfig">
- * &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;click-app charset="UTF-8"&gt;
+ *
+ *     &lt;pages package="net.sf.click.examples.page"/&gt;
+ *
+ *     &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
+ *
+ * &lt;/click-app&gt; </pre>
  *
  * @author Malcolm Edgar
  */
