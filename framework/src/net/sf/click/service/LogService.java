@@ -18,7 +18,38 @@ package net.sf.click.service;
 import javax.servlet.ServletContext;
 
 /**
- * Provides a log service.
+ * Provides a logging service for the Click runtime.
+ *
+ * <h3>Configuration</h3>
+ * The default {@link LogService} implementation is {@link ConsoleLogService}.
+ * <p/>
+ * You can instruct Click to use a different implementation by adding
+ * the following element to your <tt>click.xml</tt> configuration file.
+ *
+ * <pre class="codeConfig">
+ * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
+ * &lt;click-app charset="UTF-8"&gt;
+ *
+ *     &lt;pages package="net.sf.click.examples.page"/&gt;
+ *
+ *     &lt;<span class="red">log-service</span> classname="<span class="blue">com.mycorp.CustomLogService</span>"/&gt;
+ *
+ * &lt;/click-app&gt; </pre>
+ *
+ * The class <tt>com.mycorp.CustomLogService</tt> might be defined as follows:
+ *
+ * <pre class="prettyprint">
+ * package com.mycorp;
+ * 
+ * public class CustomLogService extends ConsoleLogService {
+ *
+ *     protected void log(int level, String message, Throwable error) {
+ *         // Add custom logic
+ *         ...
+ *
+ *         super.log(level, message, error);
+ *     }
+ * } </pre>
  *
  * @author Malcolm Edgar
  */

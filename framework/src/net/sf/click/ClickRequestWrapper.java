@@ -81,8 +81,6 @@ class ClickRequestWrapper extends HttpServletRequestWrapper {
                     itemsList = fileUploadService.parseRequest(request);
 
                 } catch (FileUploadException fue) {
-                    // TODO: review
-                    //ClickLogger.getInstance().info(fue.getMessage());
                     request.setAttribute(FileUploadService.UPLOAD_EXCEPTION, fue);
                 }
 
