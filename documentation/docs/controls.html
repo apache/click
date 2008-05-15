@@ -343,13 +343,27 @@ Container enables components to add, remove and retrieve other controls and cont
 The following Click Controls are example Containers:
 <ul style="margin-top:0.5em;">
    <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>
-   - allows any control or container to be added.</li>
+   - a form which allows any control or container to be added.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
-   - allows only Field and FieldSet controls to be added, enabling Form to automatically layout its content.</li>
-   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a></li>
-   <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a></li>
+   - a form which allows only Field and FieldSet controls to be added, enabling Form to automatically
+   layout its content.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a> - like
+   <a href="click-api/net/sf/click/Page.html">Page</a> this powerful container provides
+   its own template and model.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a> - draws
+   a legend (border) around its child controls.</li>
 </ul>
 <br/>
+These containers are depicted below in Figure 4.
+
+<p/>
+
+<img src="../images/container-package-class-diagram.png"/>
+<p class="diagram">
+<b>Figure 4. &nbsp; Containers Class Diagram</b>
+
+</p>
+
 The following convenient classes is available to work with and create custom Containers:
 <ul style="margin-top:0.5em;">
   <li class="item"><a href="click-api/net/sf/click/control/AbstractContainer.html">AbstractContainer</a></li>
