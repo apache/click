@@ -23,7 +23,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * 
+ *
  * @author Bob Schellink
  */
 public class BasicFieldSet extends AbstractContainerField {
@@ -44,7 +44,7 @@ public class BasicFieldSet extends AbstractContainerField {
 
     /**
      * Create a basic fieldset with the specified name.
-     * 
+     *
      * @param name the fieldset name
      */
     public BasicFieldSet(String name) {
@@ -61,7 +61,7 @@ public class BasicFieldSet extends AbstractContainerField {
         super(name);
         setLegend(legend);
     }
-    
+
     /**
      * Create a basic fieldset with no name.
      */
@@ -72,9 +72,9 @@ public class BasicFieldSet extends AbstractContainerField {
 
     /**
      * Return the fieldsets's html tag: <tt>fieldset</tt>.
-     * 
+     *
      * @see AbstractControl#getTag()
-     * 
+     *
      * @return this controls html tag
      */
     public String getTag() {

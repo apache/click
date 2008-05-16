@@ -107,11 +107,11 @@ import net.sf.click.util.MessagesMap;
  */
 public abstract class AbstractControl implements Control {
 
-    // -------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
     private static final long serialVersionUID = 1L;
 
-    // -------------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** The Field attributes Map. */
     protected Map attributes;
@@ -139,7 +139,7 @@ public abstract class AbstractControl implements Control {
     /** The listener method name. */
     protected String listenerMethod;
 
-    // ------------------------------------------------------ Public Constructors
+    // ---------------------------------------------------- Public Constructors
 
     /**
      * Create a control with no name defined.
@@ -158,7 +158,7 @@ public abstract class AbstractControl implements Control {
         }
     }
 
-    // ------------------------------------------------------ Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Returns the controls html tag.
@@ -688,13 +688,13 @@ public abstract class AbstractControl implements Control {
      * @param value the CSS class attribute
      */
     public void removeStyleClass(String value) {
-        //If vaule is null, exit early
+        // If vaule is null, exit early
         if (value == null) {
             return;
         }
 
-        //If any class attributes already exist, check if the specified class
-        //exists in the current set of classes.
+        // If any class attributes already exist, check if the specified class
+        // exists in the current set of classes.
         if (hasAttribute("class")) {
             String oldStyleClasses = getAttribute("class").trim();
 
@@ -706,22 +706,22 @@ public abstract class AbstractControl implements Control {
                 return;
             }
 
-            //If the class does exist, parse the class attributes into a set
-            //and remove the specified class
+            // If the class does exist, parse the class attributes into a set
+            // and remove the specified class
             Set styleClassSet = parseStyleClasses(oldStyleClasses);
             styleClassSet.remove(value);
 
             if (styleClassSet.isEmpty()) {
-                //If there are no more styleClasses left, remove the class
-                //attribute from the attributes list
+                // If there are no more styleClasses left, remove the class
+                // attribute from the attributes list
                 getAttributes().remove("class");
             } else {
-                //Otherwise render the styleClasses.
-                //Create buffer and estimate the new size
+                // Otherwise render the styleClasses.
+                // Create buffer and estimate the new size
                 HtmlStringBuffer buffer = new HtmlStringBuffer(
                     oldStyleClasses.length() + value.length());
 
-                //Iterate over the styleClassSet appending each entry to buffer
+                // Iterate over the styleClassSet appending each entry to buffer
                 Iterator it = styleClassSet.iterator();
                 while (it.hasNext()) {
                     String entry = (String) it.next();
