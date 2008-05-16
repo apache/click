@@ -72,7 +72,7 @@
 		<menu label="Search Form" path="form/search-form.htm"/>
 		<menu separator="true"/>
 		<menu label="Tabbed Form" path="form/tabbed-form-demo.htm"/>
-    <menu label="Custom Form Layout" path="form/contact-details.htm"/>
+        <menu label="Custom Form Layout" path="form/contact-details.htm"/>
    	</menu>
    
    	<menu label=" Table" path="#" imageSrc="/assets/images/icons-16px/table.png">
