@@ -10,6 +10,7 @@ import net.sf.click.control.Select;
 import net.sf.click.control.Submit;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.HomePage;
+import net.sf.click.extras.control.CountrySelect;
 import net.sf.click.extras.control.PageSubmit;
 
 /**
@@ -24,6 +25,7 @@ public class SelectDemo extends BorderPage {
     private Select genderSelect;
     private Select investmentSelect;
     private Select locationSelect;
+    private Select countrySelect;
 
     public SelectDemo() {
         form.setErrorsPosition(Form.POSITION_TOP);
@@ -58,7 +60,7 @@ public class SelectDemo extends BorderPage {
         form.add(investmentSelect);
 
         // Location Select
-        locationSelect = new Select("location");
+        locationSelect = new Select("location", true);
         locationSelect.add("QLD");
         locationSelect.add("NSW");
         locationSelect.add("NT");
@@ -67,6 +69,9 @@ public class SelectDemo extends BorderPage {
         locationSelect.add("VIC");
         locationSelect.add("WA");
         form.add(locationSelect);
+
+        countrySelect = new CountrySelect("country", true);
+        form.add(countrySelect);
 
         form.add(new Submit("ok", "  OK  "));
         form.add(new PageSubmit("canel", HomePage.class));
@@ -80,6 +85,7 @@ public class SelectDemo extends BorderPage {
             addModel("gender", genderSelect.getValue());
             addModel("investment", investmentSelect.getSelectedValues());
             addModel("location", locationSelect.getValue());
+            addModel("country", countrySelect.getValue());
         }
     }
 }
