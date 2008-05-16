@@ -193,7 +193,6 @@ public class Option implements Serializable {
 
         } else {
             if (getValue().equals(select.getValue())) {
-            	System.out.println(getValue() + "=" + select.getValue());
                 buffer.appendAttribute("selected", "selected");
             }
         }
