@@ -37,7 +37,7 @@ import net.sf.click.Page;
  *
  *     &lt;pages package="net.sf.click.examples.page"/&gt;
  *
- *     &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt; </pre>
+ *     &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt;
  *
  * &lt;/click-app&gt; </pre>
  *

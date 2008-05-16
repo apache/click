@@ -40,7 +40,7 @@ import javax.servlet.ServletContext;
  *
  * <pre class="prettyprint">
  * package com.mycorp;
- * 
+ *
  * public class CustomLogService extends ConsoleLogService {
  *
  *     protected void log(int level, String message, Throwable error) {
