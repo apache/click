@@ -701,11 +701,10 @@ public class ClickUtils {
 
         } else {
             String msg =
-                "could not find ConfigService in the SerlvetContext, please "
-                + "ensure the ClickConfigListener is defined in WEB-INF/web.xml, for example:\n"
-                + "    <listener>\n"
-                + "        <listener-class>net.sf.click.ClickConfigListener</listener-class>\n"
-                + "    </listener>";
+                "could not find ConfigService in the SerlvetContext under the"
+                + " name '" + ConfigService.CONTEXT_NAME + "'. This can occur"
+                + " if ClickUtils.getConfigService() is called before"
+                + " ClickServlet is initialized by the servlet container.";
             throw new RuntimeException(msg);
         }
     }
@@ -815,8 +814,7 @@ public class ClickUtils {
      * @return a version indicator for web resources
      */
     public static String getResourceVersionIndicator(Context context) {
-        ConfigService configService = (ConfigService)
-            context.getServletContext().getAttribute(ConfigService.CONTEXT_NAME);
+        ConfigService configService = getConfigService(context.getServletContext());
 
         boolean isProductionModes = configService.isProductionMode()
             || configService.isProfileMode();

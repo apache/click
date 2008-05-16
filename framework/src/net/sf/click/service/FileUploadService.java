@@ -31,12 +31,15 @@ import org.apache.commons.fileupload.FileUploadException;
 public interface FileUploadService {
 
     /** The attribute key used for storing an upload exception. */
-    public static final String UPLOAD_EXCEPTION = "_upload_exception";
+    public static final String UPLOAD_EXCEPTION = "net.sf.click.service.upload_exception";
 
     /**
      * Initialize the FileUploadService with the given application servlet context.
      * <p/>
      * This method is invoked after the FileUploadService has been constructed.
+     * <p/>
+     * Note you can access {@link ConfigService} by invoking
+     * {@link net.sf.click.util.ClickUtils#getConfigService(javax.servlet.ServletContext)}
      *
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the FileUploadService
