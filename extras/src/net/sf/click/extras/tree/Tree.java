@@ -736,9 +736,15 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * TreeNode callback interface.
+     * Provides a TreeNode callback interface.
      */
     protected interface Callback {
+
+        /**
+         * Callback on the provided tree node.
+         *
+         * @param node the TreeNode to callback
+         */
         public void callback(final TreeNode node);
     }
 
