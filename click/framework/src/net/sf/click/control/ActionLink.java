@@ -476,13 +476,7 @@ public class ActionLink extends AbstractLink {
         bindRequestValue();
 
         if (clicked) {
-
-            if (listener != null && listenerMethod != null) {
-                return ClickUtils.invokeListener(listener, listenerMethod);
-
-            } else {
-                return true;
-            }
+            return invokeListener();
 
         } else {
             return true;

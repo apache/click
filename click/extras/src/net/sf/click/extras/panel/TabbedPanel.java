@@ -379,13 +379,7 @@ public class TabbedPanel extends Panel {
             }
         }
 
-        // If a listener has been explicitely set to handle a tab switch,
-        // then invoke it
-        if (listener != null && listenerMethod != null) {
-            return ClickUtils.invokeListener(listener, listenerMethod);
-        }
-
-        return true;
+        return invokeListener();
     }
 
 }
