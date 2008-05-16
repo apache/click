@@ -19,7 +19,7 @@ public class FieldLabel extends AbstractControl {
     public FieldLabel(Field target) {
         this(target, ClickUtils.toLabel(target.getName()), null);
     }
-    
+
     public FieldLabel(Field target, String label) {
         this(target, label, null);
     }
@@ -41,16 +41,16 @@ public class FieldLabel extends AbstractControl {
     public void render(HtmlStringBuffer buffer) {
         // Open tag: <label
         buffer.elementStart(getTag());
-        
+
         // Set attribute to target field's id
         setAttribute("for", target.getId());
-        
+
         // Render all the labels attributes
         appendAttributes(buffer);
 
         // Close tag: <label for="firstname">
         buffer.closeTag();
-        
+
         // Add label text: <label for="firstname">Firstname:
         buffer.append(label);
 
