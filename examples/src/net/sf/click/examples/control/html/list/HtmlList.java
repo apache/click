@@ -22,7 +22,7 @@ public class HtmlList extends AbstractContainer {
     public HtmlList(int listMode) {
         this.listMode = listMode;
     }
-    
+
     public HtmlList(String name) {
         super(name);
     }

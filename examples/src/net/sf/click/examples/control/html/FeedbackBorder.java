@@ -10,7 +10,7 @@ import net.sf.click.control.Field;
  * If the field is required, FeedbackBorder will add a "required" css class.
  * <p/>
  * If the field is invalid, FeedbackBorder will display the field error message.
- * 
+ *
  * @author Bob Schellink
  */
 public class FeedbackBorder extends AbstractContainerField {
@@ -39,7 +39,7 @@ public class FeedbackBorder extends AbstractContainerField {
 
     public void onRender() {
         Field field = (Field) getControls().get(0);
-        
+
         // Add required css class
         if (field.isRequired()) {
             field.addStyleClass("required");

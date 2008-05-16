@@ -13,7 +13,7 @@ public class Text extends AbstractControl {
     private Object text;
 
     public Text() {
-        
+
     }
 
     public Text(Object text) {
@@ -33,7 +33,7 @@ public class Text extends AbstractControl {
         render(buffer);
         return buffer.toString();
     }
-    
+
     public void render(HtmlStringBuffer buffer) {
         if(getText() != null) {
             buffer.append(getText());

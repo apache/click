@@ -15,7 +15,7 @@ import net.sf.click.util.ClickUtils;
 
 /**
  * This page demonstrates how to manually layout a form using Java.
- * 
+ *
  * The form is laid out as specified by the article:
  * http://www.sitepoint.com/print/fancy-form-design-css
  *
@@ -80,11 +80,11 @@ public class ContactDetailsForm extends BasicForm {
     private Field addTextField(String nameStr, HtmlList htmlList) {
         return addTextField(nameStr, null, htmlList);
     }
-    
+
     private Field addTextField(String nameStr, HtmlList htmlList, Class fieldType) {
         return addTextField(nameStr, null, htmlList, fieldType);
     }
-    
+
     private Field addTextField(String nameStr, String labelStr, HtmlList htmlList) {
         return addTextField(nameStr, labelStr, htmlList, String.class);
     }
@@ -117,6 +117,6 @@ public class ContactDetailsForm extends BasicForm {
             return new DoubleField();
         } else {
             return new TextField();
-        }        
+        }
     }
 }
