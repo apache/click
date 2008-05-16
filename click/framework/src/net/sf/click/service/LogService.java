@@ -59,6 +59,9 @@ public interface LogService {
      * Initialize the LogService with the given application servlet context.
      * <p/>
      * This method is invoked after the LogService has been constructed.
+     * <p/>
+     * Note you can access {@link ConfigService} by invoking
+     * {@link net.sf.click.util.ClickUtils#getConfigService(javax.servlet.ServletContext)}
      *
      * @param servletContext the application servlet context
      * @throws Exception if an error occurs initializing the LogService
