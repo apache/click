@@ -57,7 +57,7 @@ public class ExcelExportPage extends SpringPage {
             ClickUtils.close(outputStream);
         }
     }
-    
+
     // -------------------------------------------------------- Private Methods
 
     private HSSFWorkbook createWorkbook() {
