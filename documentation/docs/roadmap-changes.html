@@ -50,7 +50,7 @@ new features including Module support, bug fixes, documentation and example upda
 <h2>Changes</h2>
 
 <dl>
-  <dt><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
+  <dt><a name="1.4.2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Stable Release - Version 1.4.2 - 12 April 2008</div></dt>
   <dd>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
@@ -79,10 +79,10 @@ new features including Module support, bug fixes, documentation and example upda
       </li>
     </ul>
   </dd>
-  <dt><div class="release-header">Latest Development Release - Version 1.5 M1 - 18 May 2008</div></dt>
+  <dt><a name="1.5-M1"></a><div class="release-header">Latest Development Release - Version 1.5 M1 - 18 May 2008</div></dt>
   <dd>
    <div style="margin-left:-2em;margin-bottom:1em;">
-    <b>IMPORTANT</b> be sure to read the <a href="#1.5-upgrade-path">upgrade path</a> when upgrading from a previous version.
+    <b>IMPORTANT</b> be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from a previous version.
     <p/>
     Click 1.5 (currently in development) introduces important new features including:
     <p/>
@@ -209,6 +209,9 @@ new features including Module support, bug fixes, documentation and example upda
      <b>Upgraded the following libraries:</b>
      <ul style="padding-top: 5px">
        <li>
+         commons-lang 2.1 -> commons-io 2.4
+       </li>
+       <li>
          commons-io 1.3 -> commons-io 1.4
        </li>
        <li>
@@ -225,7 +228,7 @@ new features including Module support, bug fixes, documentation and example upda
 	  <li class="change">Removed support for Cayenne 1.2.x.</li>
   	</ul>
     <br/>
-    <a name="1.5-upgrade-path" href="#"></a>
+    <a name="1.5-M1-upgrade-path" href="#"></a>
     <span style="margin-left:-2em;margin-bottom:1em; color:brown; font-weight:bold">Upgrade Path</span>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="upgrade">
@@ -276,9 +279,9 @@ new features including Module support, bug fixes, documentation and example upda
        <p/>
        If FieldSet is added to a Form, that Form will render the FieldSet fields.
        This allows the Form to apply its properties to the FieldSet fields. For example the Form's column
-       count will be applied FieldSet fields as well.
+       count will be applied to the FieldSet fields as well.
        <p/>
-       If FieldSet is added to a BasicForm however, FieldSet will layout its own contents.
+       If FieldSet is added to a BasicForm however, FieldSet will layout its own child controls.
       </li>
       <li class="upgrade">
        The last change to be aware of is the new <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
