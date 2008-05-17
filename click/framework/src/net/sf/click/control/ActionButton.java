@@ -53,7 +53,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <b>Please Note</b> do not add ActionButton instances to the Form object, as
  * the GET request it generates will never be processed by the Form, and in turn
- * the Form will invoke the ActionButton's <tt>onProcess()</tt> method.
+ * the Form will not invoke the ActionButton's <tt>onProcess()</tt> method.
  *
  * @see net.sf.click.control.ActionLink
  *
