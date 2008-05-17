@@ -1418,7 +1418,7 @@ public class Form extends BasicForm {
                 }
             }
 
-            invokeListener();
+            return invokeListener();
         }
 
         return true;
