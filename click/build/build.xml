@@ -533,10 +533,12 @@ Please ensure you have configured build.properties</echo>
                     destdir="documentation/docs/click-api"
                     windowtitle="Click Framework API"
                     doctitle="Click API"
-                    classpath="classpath.framework"/>
+                    classpath="classpath.framework"
+      	            overview=""/>
 
       <copy file="framework/src/net/sf/click/control/image-submit.gif"
             todir="documentation/docs/click-api/net/sf/click/control"/>
+   	
       <!-- Extras -->
       <delete quiet="false" failonerror="false">
           <fileset dir="documentation/docs/extras-api" includes="**/*"/>
@@ -546,7 +548,8 @@ Please ensure you have configured build.properties</echo>
                     destdir="documentation/docs/extras-api"
                     windowtitle="Click Extras API"
                     doctitle="Click Extras API"
-                    classpath="classpath.extras"/>
+                    classpath="classpath.extras"
+                    overview="documentation/docs/extras-overview.html"/>
 
       <!-- Mock -->
       <delete quiet="false" failonerror="false">
@@ -557,7 +560,8 @@ Please ensure you have configured build.properties</echo>
                     destdir="documentation/docs/mock-api"
                     windowtitle="Click Mock API"
                     doctitle="Click Mock API"
-                    classpath="classpath.mock"/>
+                    classpath="classpath.mock"
+    				overview="documentation/docs/mock-overview.html"/>
 
       <copy file="documentation/images/post-sequence-diagram.png"
             todir="documentation/docs/click-api/net/sf/click/"/>
@@ -591,18 +595,18 @@ Please ensure you have configured build.properties</echo>
              todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
       <copy file="documentation/images/pie-chart.png"
              todir="documentation/docs/extras-api/net/sf/click/extras/graph"/>
-      <copy file="framework/stylesheet.css"
+      <copy file="documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
-            todir="documentation/docs/click-api"/>
-      <copy file="framework/stylesheet.css"  
+      	    tofile="documentation/docs/click-api/stylesheet.css"/>
+      <copy file="documentation/docs/javadoc-stylesheet.css"  
             overwrite="true"
-            todir="documentation/docs/extras-api"/>
-      <copy file="framework/stylesheet.css"
+  	        tofile="documentation/docs/extras-api/stylesheet.css"/>
+      <copy file="documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
-            todir="documentation/docs/mock-api"/>
-      <copy file="framework/stylesheet.css"
+	        tofile="documentation/docs/mock-api/stylesheet.css"/>
+      <copy file="documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
-            todir="documentation/docs/servlet-api"/>
+            tofile="documentation/docs/servlet-api/stylesheet.css"/>
    </target>
 
    
@@ -807,6 +811,7 @@ Please ensure you have configured build.properties</echo>
       <attribute name="windowtitle"/>
       <attribute name="doctitle"/>
       <attribute name="classpath"/>
+      <attribute name="overview"/>
       <sequential>
          <javadoc sourcepath="@{src}"
                destdir="@{destdir}"
@@ -815,6 +820,7 @@ Please ensure you have configured build.properties</echo>
                verbose="false"
                windowtitle="@{windowtitle}"
       	       packagenames="net.*"
+         	   overview="@{overview}"
                doctitle="@{doctitle}">
             <classpath refid="@{classpath}"/>
             <link href="http://java.sun.com/j2se/1.4.2/docs/api/"/>
