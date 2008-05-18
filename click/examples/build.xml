@@ -80,7 +80,7 @@
          <link href="http://click.sourceforge.net/docs/click-api/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
-      <copy file="../framework/stylesheet.css"  
+      <copy file="../documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
             todir="${dir.webapp}/javadoc"/>
       <delete file="${dir.deploy}/${name}.war"/>
