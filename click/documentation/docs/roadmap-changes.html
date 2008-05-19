@@ -8,6 +8,7 @@
  <meta name="keywords" lang="en" content="Click Framework, Java, JEEE, web application framework, open source"/>
  <title>Click Framework</title>
  <link rel="stylesheet" type="text/css" href="../help.css"/>
+ <link rel="stylesheet" type="text/css" href="../syntax-highlighter.css"/>
  <style type="text/css">
   dl {
     margin-left: 2em;
@@ -36,8 +37,10 @@
     border: 1px solid #99A4DF;
   }
  </style>
+<script type="text/javascript" src="../syntax-highlighter.js"></script>
 </head>
-<body>
+<!--Activate syntax highlighting-->
+ <body onload="prettyPrint();">
 
 <h1>Road Map and Changes</h1>
 
@@ -206,23 +209,13 @@ new features including Module support, bug fixes, documentation and example upda
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-342">342</a>].
 	  </li>
     <li class="change">
-     <b>Upgraded the following libraries:</b>
-     <ul style="padding-top: 5px">
-       <li>
-         commons-lang 2.1 -> commons-io 2.4
-       </li>
-       <li>
-         commons-io 1.3 -> commons-io 1.4
-       </li>
-       <li>
-         commons-fileupload 1.2 -> commons-fileupload 1.2.1
-       </li>
-       <li>
-         Hibernate 3.1.3 -> Hibernate 3.2.6
-       </li>
-       <li>
-           Spring 1.2.9 -> Spring 2.5.4
-       </li>
+     <b>Upgraded</b> the following libraries:
+     <ul style="margin-top:1em;">
+       <li>commons-lang 2.1 -> commons-io 2.4</li>
+       <li>commons-io 1.3 -> commons-io 1.4</li>
+       <li>commons-fileupload 1.2 -> commons-fileupload 1.2.1</li>
+       <li>Hibernate 3.1.3 -> Hibernate 3.2.6</li>
+       <li>Spring 1.2.9 -> Spring 2.5.4</li>
      </ul>
     </li>
 	  <li class="change">Removed support for Cayenne 1.2.x.</li>
@@ -232,46 +225,87 @@ new features including Module support, bug fixes, documentation and example upda
     <span style="margin-left:-2em;margin-bottom:1em; color:brown; font-weight:bold">Upgrade Path</span>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="upgrade">
-       1.5 is not binary compatible with 1.4. What this means is that in order
-       to use 1.5, you will have to recompile your application against the 1.5
-       release. Note that Click 1.5 still runs on any <b>JDK >= 1.4</b>.
+       <b>Please Note</b> Click version 1.5 is <b>not</b> binary compatible with version 1.4. To upgrade your
+       applications to use version Click 1.5 you will need to:
+       <ol style="margin-top:1em;">
+        <li>Recompile your application with the 1.5 Click libraries.</li>
+        <li>Retrofit the new Control 
+        <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+        method to any on your custom controls.</li>
+        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a> method.</li>
+       </ol>
+       Note that Click 1.5 is still compatible with Java JDK 1.4 or latter.
       </li>
       <li class="upgrade">
-       <b>Deprecated methods:</b> <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a>,
+       Deprecated methods: <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a>,
        <a href="click-api/net/sf/click/Control.html#getId()">Control.getId</a> and
        <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>
        have been deprecated as recent refactoring have rendered them redundant on
        this interface.
-       <p/>
        We are trying to make the Control interface as small as possible, which 
        allows more flexibility in future releases.
        <p/>
-       <b>Please note:</b> these methods will still be available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>
-       so should have minimal impact on existing code bases.
+       Note these methods are still be available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
+       so this change should have minimal impact on existing code bases.
       </li>
       <li class="upgrade">
-       1.5 M1 introduces two new properties: <span style="font-weight:bold;color:navy;">file-size-limit-exceeded-error</span>
-       and <span style="font-weight:bold;color:navy;">post-size-limit-exceeded-error</span>.
-       For those building i18n applications remember to add these two properties
-       to your <span style="font-weight:bold;color:navy;">click-control&lt;lang&gt;.properties.</span>
-       <br>If you send us patches for your preferred language we will include them in the distribution.
-      </li>
-      <li class="upgrade">
-       ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
-       LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
-       There are alternative implementations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
-       and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).<br>
-       To retrieve a LogService instance a new utility method was introduced,
-       <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">ClickUtils.getLogService()</a>.
+       Upgrade custom Control rendering code to use new 
+       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       method. This method allows improved rendering performance, because all controls can be
+       rendered from a single buffer that is created when rendering starts.
        <p/>
-       It is possible to write your own LogService instance or extend from
-       an existing implementation. To setup Click to use an alternative instance you have to
-       specify the LogService implementation in <em>click.xml</em>:
-       <pre>
-&lt;click-app charset="UTF-8"&gt;
-    &lt;pages package="net.sf.click.examples.page"/&gt;
-    &lt;<span style="font-weight:bold;color:#000099">log-service</span> <span style="color:#009900">classname</span>="net.sf.click.extras.service.JdkLogService"/&gt;
-&lt;/click-app&gt; </pre>
+       If your created custom controls override <em>toString()</em>, please adapt it to the following pattern. From this:
+       <pre class="prettyprint">
+public class HtmlTable extends AbstractControl {
+    ...
+
+    public String toString() {
+        int estimatedControlSize = 1000;
+        HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+
+        // Rendering Start
+        buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+        appendAttributes(buffer);
+        buffer.elementClose();
+    
+        renderRows(buffer);
+
+        buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+        // Rendering End
+     
+        return buffer.toString();
+    } 
+} </pre>
+       to this:
+<pre class="prettyprint">
+public class HtmlTable extends AbstractControl {
+    ...
+
+    public void render(HtmlStringBuffer buffer) {
+        // Rendering Start
+        buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
+        appendAttributes(buffer);
+        buffer.elementClose();
+    
+        renderRows(buffer);
+
+        buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
+        <span style="color:green">// Rendering End</span>
+    }
+
+    public String toString() {
+        int estimatedControlSize = 1000;
+        HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
+        render(buffer);
+        return buffer.toString();
+    } 
+} </pre>
+       Note, the code between the commented section, was moved from <em>toString</em> to the <em>render</em> method.
+       <p/>
+       Also note that invoking a Control's <a href="click-api/net/sf/click/control/AbstractControl.html#toString()">toString()</a>
+       method still outputs the same HTML representation, as toString() delegates to the
+       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
+       method.
       </li>
       <li class="upgrade">
        Certain controls were retrofitted as containers including <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>.
@@ -284,64 +318,34 @@ new features including Module support, bug fixes, documentation and example upda
        If FieldSet is added to a BasicForm however, FieldSet will layout its own child controls.
       </li>
       <li class="upgrade">
-       The last change to be aware of is the new <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
-       method. This method allows improved rendering performance, because all controls can be
-       rendered from a single buffer that is created when rendering starts.
+       Click 1.5 M1 introduces two new properties: <span style="color:navy;">file-size-limit-exceeded-error</span>
+       and <span style="color:navy;">post-size-limit-exceeded-error</span>.
+       For those building i18n applications remember to add these two properties
+       to your <span style="color:navy;">click-control_&lt;lang&gt;.properties.</span>
+       <br>If you send us patches for your preferred language we will include them in the distribution.
+      </li>
+      <li class="upgrade">
+       ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
+       LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
+       There are alternative implementations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
+       and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).
        <p/>
-       If you created custom controls, and override <em>toString()</em>, please adapt it to the following pattern. From this:
-       <pre>
-public class HtmlTable extends AbstractControl {
-    ...
-
-public String toString() {
-     int estimatedControlSize = 1000;
-     HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
-
-     <span style="color:green">// Rendering Start</span>
-     buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
-     appendAttributes(buffer);
-     buffer.elementClose();
-    
-     renderRows(buffer);
-
-     buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
-     <span style="color:green">// Rendering End</span>
-     
-     return buffer.toString();
-} </pre>
-       to this:
-       <pre>
-public class HtmlTable extends AbstractControl {
-    ...
-
-public void render(HtmlStringBuffer buffer) {
-    <span style="color:green">// Rendering Start</span>
-    buffer.elementStart(<span style="font-weight:bold;color:#000099">"table"</span>);
-    appendAttributes(buffer);
-    buffer.elementClose();
-    
-    renderRows(buffer);
-
-    buffer.closeElement(<span style="font-weight:bold;color:#000099">"table"</span>);
-    <span style="color:green">// Rendering End</span>
-}
-
-public String toString() {
-     int estimatedControlSize = 1000;
-     HtmlStringBuffer buffer = new HtmlStringBuffer(estimatedControlSize);
-     render(buffer);
-     return buffer.toString();
-} </pre>
-       Note, the code between the commented section, was moved from <em>toString</em> to the <em>render</em> method.
+       It is possible to write your own LogService instance or extend from
+       an existing implementation. To setup Click to use an alternative instance you have to
+       specify the LogService implementation in <em>click.xml</em>:
+       <pre class="prettyprint">
+&lt;click-app charset="UTF-8"&gt;
+    &lt;pages package="net.sf.click.examples.page"/&gt;
+    &lt;log-service classname="net.sf.click.extras.service.JdkLogService"/&gt;
+&lt;/click-app&gt; </pre>
        <p/>
-       <b>Also note</b> that invoking a Control's <a href="click-api/net/sf/click/control/AbstractControl.html#toString()">toString()</a>
-       method still outputs the same HTML representation, as toString() delegates to the
-       <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render</a>
-       method.
+       While it is generally not recommended to use the Click LogService in your application code, you can retrieve it using the ClickUtils method
+       <a href="click-api/net/sf/click/util/ClickUtils.html#getLogService()">getLogService()</a>.
       </li>
     </ul>
   </dd>
   <p/>
+  
   <dt><div class="release-header">Archives</div></dt>
   <dt>Version 1.4.1 - 30 March 2008</dt>
   <dd>
