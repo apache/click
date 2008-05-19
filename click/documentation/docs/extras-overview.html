@@ -47,7 +47,7 @@ When developing Click Extras contributions please follow these principles.
 
 Components and controls should have minimal dependencies. This is to support easy 
 deployment of the click-examples and keeps the click build process simple. 
-See <a href="building.html#extras-dependencies">Extras Dependencies</a> for 
+See <a href="../building.html#extras-dependencies">Extras Dependencies</a> for 
 details.
 <p/>
 Please Note the Cayenne and Spring dependencies are only required if you use these particular features.
@@ -66,7 +66,7 @@ Click automatically deploys configured classpath resources to the <tt class="blu
 directory at startup (existing files will not be overwritten).
 <p/>
 To enable your controls to deploy resources on startup it should use the Control
-<a href="click-api/net/sf/click/Control.html#on-deploy">onDeploy()</a> method.
+<a href="../click-api/net/sf/click/Control.html#on-deploy">onDeploy()</a> method.
 Click extra controls which use this method should be registered in Click Extras
 JAR <tt>extras-controls.xml</tt> file.
 
