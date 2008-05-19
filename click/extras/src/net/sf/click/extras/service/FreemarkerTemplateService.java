@@ -39,13 +39,13 @@ import org.apache.commons.lang.Validate;
  * To configure the Freemarker TemplateService add the following element to your
  * <tt>click.xml</tt> configuration file.
  *
- * <pre class="codeConfig">
+ * <pre class="prettyprint">
  * &lt;?xml version="1.0" encoding="UTF-8" standalone="yes"?&gt;
  * &lt;click-app charset="UTF-8"&gt;
  *
  *     &lt;pages package="net.sf.click.examples.page"/&gt;
  *
- *     &lt;<span class="red">template-service</span> classname="<span class="blue">net.sf.click.extras.service.FreemarkerTemplateService</span>"&gt;
+ *     &lt;template-service classname="net.sf.click.extras.service.FreemarkerTemplateService"&gt;
  *
  * &lt;/click-app&gt; </pre>
  *
