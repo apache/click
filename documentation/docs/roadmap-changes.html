@@ -137,7 +137,7 @@ new features including Module support, bug fixes, documentation and example upda
              <a href="click-api/net/sf/click/service/package-summary.html">Click Runtime Services</a>
          </li>
          <li class="change">
-             <a href="testing.html">Testing support</a>
+             <a href="mock-api/overview-summary.html">Testing support</a>
          </li>
      </ul>
     </li>
@@ -152,42 +152,43 @@ new features including Module support, bug fixes, documentation and example upda
    The following is a list of enhancements and bugsfixes:
   </div>
     <ul style="padding: 0em; margin-left:0em;">
-    <li class="change">
-       Added a <a href="extras-api/net/sf/click/extras/control/CountrySelect.html">Country Select</a>
-       control based on the JDK's own built in Country/Locale support.
-    </li>
-    <li class="change">
-      New <a href="extras-api/net/sf/click/extras/service/FreemarkerTemplateService.html">Freemarker support</a>
-      added as an alternative template engine to Velocity and JSP.
-    </li>
-    <li class="change">
-      Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
-      control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
-    </li>
+      <li class="change">
+	    Added <a class="external" target="_blank" href="http://www.freemarker.org">Freemarker</a> support as an 
+	    alternative templating engine to Velocity, with new 
+	    <a href="extras-api/net/sf/click/extras/service/FreemarkerTemplateService.html">FreemarkerTemplateService</a>.
+      </li>
+      <li class="change">
+	    Added a <a href="extras-api/net/sf/click/extras/control/CountrySelect.html">Country Select</a>
+	    control based on the JDK's own built in Country/Locale support.
+      </li>
+      <li class="change">
+	    Added a <a href="extras-api/net/sf/click/extras/control/VirtualKeyboard.html">Virtual Keyboard</a> 
+	    control using <a href="http://www.greywyvern.com/code/js/keyboard.html">GreyWyvern</a> JavaScript library.
+      </li>
 	  <li class="change">
 	    Added support for setting Form  
-		<a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
-		URL attribute. This issue was raised by Erdem Gunay
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-319">319</a>].
+	    <a href="click-api/net/sf/click/control/Form.html#getActionURL()">action</a> 
+	    URL attribute. This issue was raised by Erdem Gunay
+	    [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-319">319</a>].
 	  </li>
 	  <li class="change">
-		Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
-		method. This enables Pages to programatically define HTML imports which
-		will be included in a border template using the PageImports object.
-		This issue was raised by David Frizelle
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
+	    Added support for Page HTML	imports with a new <tt>getHtmlImports()</tt> 
+	    method. This enables Pages to programatically define HTML imports which
+	    will be included in a border template using the PageImports object.
+	    This issue was raised by David Frizelle
+	    [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-329">329</a>].
 	  </li>
-    <li class="change">
+      <li class="change">
         Add Page <a href="click-api/net/sf/click/Page.html#setTemplate(java.lang.String)">setTemplate(String)</a>
         method to enable dynamic changing of a page border template. This issue
         was raised by Huy Do 
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-353">353</a>].
 	  </li>
-    <li class="change">
+      <li class="change">
         Updated <a href="click-api/net/sf/click/Page.html#setPath(java.lang.String)">Page.setPath</a> to handle JSP resources. This issue was raised and fixed by Huy Do.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-141">141</a>].
 	  </li>
-    <li class="change">
+      <li class="change">
         Added support for Hibernate AnnocationConfiguration. This issue was fixed by Jean-Francois.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-355">355</a>].
 	  </li>
@@ -239,11 +240,10 @@ new features including Module support, bug fixes, documentation and example upda
       <li class="upgrade">
        Deprecated methods: <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a>,
        <a href="click-api/net/sf/click/Control.html#getId()">Control.getId</a> and
-       <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>
-       have been deprecated as recent refactoring have rendered them redundant on
-       this interface.
-       We are trying to make the Control interface as small as possible, which 
-       allows more flexibility in future releases.
+       <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>.
+       These methods have been deprecated on the Control interface as they are not required for ClickServlet -> Control API. 
+       This refactoring is part of make the Control interface as small as possible, 
+       which  allows more flexibility in future releases.
        <p/>
        Note these methods are still be available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
        so this change should have minimal impact on existing code bases.
@@ -327,8 +327,8 @@ public class HtmlTable extends AbstractControl {
       <li class="upgrade">
        ClickLogger has been replaced with <a href="click-api/net/sf/click/service/LogService.html">LogService</a>.
        LogService is an interface with a default implementation <a href="click-api/net/sf/click/service/ConsoleLogService.html">ConsoleLogService</a>.
-       There are alternative implementations for Log4J (<a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>)
-       and JDK Logger (<a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>).
+       There are also alternative implementations <a href="extras-api/net/sf/click/extras/service/Log4JLogService.html">Log4JLogService</a>
+       and <a href="extras-api/net/sf/click/extras/service/JdkLogService.html">JdkLogService</a>.
        <p/>
        It is possible to write your own LogService instance or extend from
        an existing implementation. To setup Click to use an alternative instance you have to
