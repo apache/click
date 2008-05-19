@@ -27,7 +27,7 @@ Release Procedures
 3. ant build-distribution
 4. clean deploy to Tomcat and test click-examples
 5. tag release, e.g. click-1.4-RC3
-6. ftp upload click-xxx.zip to sourceforge -> http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download
+6. sftp upload click-xxx.zip to sourceforge -> http://alexandria.wiki.sourceforge.net/File+Release+System+-+Offering+Files+for+Download
 7. release file at sourceforge
 8. upload web site
 9. add sourceforge release notes
