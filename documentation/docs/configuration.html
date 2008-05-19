@@ -653,39 +653,6 @@ class you would add the following elements to your <tt>click.xml</tt> file:
 
 
 
-<a name="application-file-item-factory" class="heading"><h3>File Item Factory</h3></a>
-
-The optional <tt>file-item-factory</tt> element defines the 
-<a href="http://commons.apache.org/fileupload/">Commons FileUpload</a> 
-<a href="http://commons.apache.org/fileupload/apidocs/org/apache/commons/fileupload/FileItemFactory.html">FileItemFactory</a>
-object to be used for processing multipart file upload requests.
-
-<pre class="codeDtd">
-&lt;!ELEMENT <span class="blue">file-item-factory</span> (<span class="red">property</span>*)&gt;
-    &lt;ATTLIST file-item-factory <span class="blue">classname</span> CDATA #FIXED "<span class="green">org.apache.commons.fileupload.disk.DiskFileItemFactory</span>"&gt; 
-    
-    &lt;!-- FileItem Factory property set after factory creation. --&gt;
-    &lt;!ELEMENT <span class="red">property</span> (#PCDATA)&gt;
-      &lt;!ATTLIST property <span class="blue">name</span> CDATA #REQUIRED&gt;
-      &lt;!ATTLIST property <span class="blue">value</span> CDATA #REQUIRED&gt;
-</pre>
-
-By default file upload requests are processed using the 
-<a target="topic" href="http://commons.apache.org/fileupload/apidocs/org/apache/commons/fileupload/disk/DiskFileItemFactory.html">DiskFileItemFactory</a>. 
-<p/>
-Factory properties can also be set by specifying property elements. These property 
-values will be applied to the FileItemFactory using OGNL type coercion. For example:
-
-<pre class="codeConfig">
-&lt;click-app&gt; 
-  ..
-  &lt;file-item-factory classname="<span class="green">org.apache.commons.fileupload.disk.DiskFileItemFactory</span>"&gt;
-     &lt;property name=<span class="blue">"sizeThreshold"</span> value=<span class="red">"524288"</span>/&gt;
-  &lt;/file-item-factory&gt;
-&lt;/click-app&gt; 
-</pre>
-
-
 <a name="auto-deployed-files" class="heading"><h2>Auto Deployed Files</h2></a> 
 
 To make pre-configured resources (templates, stylesheets, etc.) available to web applications,
