@@ -351,6 +351,9 @@ public interface Control extends Serializable {
      *         return buffer.toString();
      *     }
      *
+     *     &#47;**
+     *      * &#64;see Control#render(HtmlStringBuffer)
+     *      *&#47;
      *     public void render(HtmlStringBuffer buffer) {
      *         buffer.elementStart("div");
      *         buffer.appendAttribute("name", getName());
