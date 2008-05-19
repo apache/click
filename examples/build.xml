@@ -15,7 +15,7 @@
    <property name="jar.jstl" value="jstl-1.1.2.jar"/>
    <property name="jar.log4j" value="log4j-1.2.14.jar"/>
    <property name="jar.logging" value="commons-logging-1.0.4.jar"/>
-   <property name="jar.poi" value="poi-3.0-FINAL.jar "/>
+   <property name="jar.poi" value="poi-3.0-FINAL.jar"/>
    <property name="jar.oro" value="oro-2.0.8.jar"/>
    <property name="jar.servlet" value="servlet-api-2.3.jar"/>
    <property name="jar.spring-beans" value="spring-beans-2.5.4.jar"/>
@@ -80,7 +80,7 @@
          <link href="http://click.sourceforge.net/docs/click-api/"/>
          <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
       </javadoc>
-      <copy file="../framework/stylesheet.css"  
+      <copy file="../documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
             todir="${dir.webapp}/javadoc"/>
       <delete file="${dir.deploy}/${name}.war"/>
