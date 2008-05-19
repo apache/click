@@ -129,10 +129,10 @@ new features including Module support, bug fixes, documentation and example upda
      <li class="change">New documentation:
      <ul style="padding-top: 5px;">
          <li class="change">
-             <a href="control.html#container">Container</a>
+             <a href="controls.html#container">Container</a>
          </li>
          <li class="change">
-             <a href="control.html#layout">Template vs Container layout</a>
+             <a href="controls.html#layout">Template vs Container layout</a>
          </li>
          <li class="change">
              <a href="click-api/net/sf/click/service/package-summary.html">Click Runtime Services</a>
@@ -234,16 +234,17 @@ new features including Module support, bug fixes, documentation and example upda
         <li>Retrofit the new Control 
         <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
         method to any on your custom controls.</li>
-        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a> method.</li>
+        <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
+        method. For further details see the example below.</li>
        </ol>
-       Note that Click 1.5 is still compatible with Java JDK 1.4 or latter.
+       Note that Click 1.5 is still compatible with Java JDK 1.4 or later.
       </li>
       <li class="upgrade">
        Deprecated methods: <a href="click-api/net/sf/click/Control.html#setListener(java.lang.Object, java.lang.String)">Control.setListener(Object, String)</a>,
        <a href="click-api/net/sf/click/Control.html#getId()">Control.getId</a> and
        <a href="click-api/net/sf/click/Control.html#getContext()">Control.getContext()</a>.
        These methods have been deprecated on the Control interface as they are not required for ClickServlet -> Control API. 
-       This refactoring is part of make the Control interface as small as possible, 
+       This refactoring is part of making the Control interface as small as possible, 
        which  allows more flexibility in future releases.
        <p/>
        Note these methods are still available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
