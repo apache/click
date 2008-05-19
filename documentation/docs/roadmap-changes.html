@@ -2,6 +2,7 @@
  "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+ <!-- saved from url=(0014)about:internet -->
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
  <meta name="Author" content="Malcolm Edgar"/>
  <meta name="description" lang="en" content="Click Java web application framework"/>
@@ -90,11 +91,11 @@ new features including Module support, bug fixes, documentation and example upda
     Click 1.5 (currently in development) introduces important new features including:
     <p/>
     <ul style="margin-top:0.5em;">
-     <li class="item"><a href="mock-api/overview-summary.html">Test Support</a> - Unit and Functional Testing.</li>
+     <li class="item"><a href="controls.html#container">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
      <li class="item"><a href="click-api/net/sf/click/service/package-summary.html#services">Services</a> - Click core has been refactored into pluggable services.</li>
+     <li class="item"><a href="mock-api/overview-summary.html">Mock Test Support</a> - Unit and Functional Testing.</li>
      <li class="item"><a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>
      - AbstractControl was extended to implement all Control methods, making it easier to create custom controls.</li>
-     <li class="item"><a href="controls.html#container">Container</a> - new interface for building arbitrary complex, hierarchical Controls.</li>
     </ul>
     <div style="margin-top:1.5em;margin-bottom:1em;">
     New examples and documentation were added:
@@ -137,7 +138,7 @@ new features including Module support, bug fixes, documentation and example upda
              <a href="click-api/net/sf/click/service/package-summary.html">Click Runtime Services</a>
          </li>
          <li class="change">
-             <a href="mock-api/overview-summary.html">Testing support</a>
+             <a href="mock-api/overview-summary.html">Mock Test Support</a>
          </li>
      </ul>
     </li>
@@ -245,7 +246,7 @@ new features including Module support, bug fixes, documentation and example upda
        This refactoring is part of make the Control interface as small as possible, 
        which  allows more flexibility in future releases.
        <p/>
-       Note these methods are still be available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
+       Note these methods are still available on <a href="click-api/net/sf/click/control/AbstractControl.html">AbstractControl</a>,
        so this change should have minimal impact on existing code bases.
       </li>
       <li class="upgrade">
