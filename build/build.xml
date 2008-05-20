@@ -88,8 +88,13 @@
     <macrodef name="digestMacro">
         <attribute name="file"/>
         <sequential>
+            <!--
+            Calculating checksum currently not very useful
+            -->
+            <!--
             <checksum file="@{file}" forceOverwrite="true" />
             <checksum file="@{file}" forceOverwrite="true" algorithm="SHA1" />
+            -->
         </sequential>
     </macrodef>
 
