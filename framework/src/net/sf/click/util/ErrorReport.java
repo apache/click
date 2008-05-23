@@ -234,7 +234,9 @@ public class ErrorReport {
         buffer.append("<table border='1' cellspacing='1' cellpadding='4' width='100%' style='background-color: white;'>");
         buffer.append("<tr><td colspan='2' style='color:white; background-color: navy; font-weight: bold'>Page</td></tr>");
         buffer.append("<tr><td width='12%'><b>Classname</b></td><td>");
-        buffer.append(pageClass.getName());
+        if (pageClass != null) {
+            buffer.append(pageClass.getName());
+        }
         buffer.append("</td></tr>");
         buffer.append("<tr><td width='12%'><b>Path</b></td><td>");
         buffer.append(ClickUtils.getResourcePath(request));
@@ -459,6 +461,10 @@ public class ErrorReport {
      */
     protected LineNumberReader getJavaSourceReader(String filename)
         throws FileNotFoundException {
+
+        if (pageClass == null) {
+            return null;
+        }
 
         // Look for source file on classpath
         InputStream is = pageClass.getResourceAsStream(filename);
