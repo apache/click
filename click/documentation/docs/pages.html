@@ -22,11 +22,13 @@ and covers to following topics:
   </li>
   <li><a href="#page-param-auto-binding">Request Param Auto Binding</a> - request parameter to page field auto binding
   </li> 
+  <li><a href="#page-security">Security</a> - page security model
+  </li>
   <li><a href="#page-navigation">Navigation</a> - navigation between pages
   </li>
   <li><a href="#page-templating">Page Templating</a> - templating common page content
   </li>
-  <li><a href="#page-security">Security</a> - page security model
+  <li><a href="#page-direct-rendering">Direct Rendering</a> - page direct rendering
   </li>
   <li><a href="#page-stateful">Stateful</a> - stateful pages
   </li>
@@ -328,6 +330,109 @@ To make your custom type converter available you will need to subclass ClickServ
         <span class="kw">return</span> typeConverter;
     }
 } </pre>
+
+
+<a name="page-security" class="heading"><h2>Security</h2></a>
+
+Pages provide an 
+<a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
+event handler which application pages can override to implement a programmatic security 
+model. 
+<p/>
+Please note you generally don't need to use this capability, and where possible
+you should use the declarative JEE security model. See the Best Practices 
+<a href="best-practices.html#security">Security</a> topic for more details.
+
+<h4>Application Authentication</h4>
+Applications can use the <tt>onSecurityCheck()</tt> method to implement their own security model. The example 
+class below provides a base Secure page class which other pages can extend
+to ensure the user is logged in. In this example the login page creates a session 
+when a user successfully authenticates. This Secure page then checks to make sure
+the user has a session, otherwise the request is redirected to the login page.
+
+<pre class="codeJava">
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().hasSession()) {
+            <span class="kw">return true</span>;
+            
+        } <span class="kw">else</span> {
+            setRedirect(LoginPage.<span class="kw">class</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+} 
+</pre>
+
+<h4>Container Authentication</h4>
+Alternatively you can also use the security services provided by the JEE Servlet 
+Container. For instance to ensure users have been authenticated by the Serlvet Container
+you could use a Secure page of:
+
+<pre class="codeJava">
+<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
+            <span class="kw">return true</span>;
+            
+        } <span class="kw">else</span> {
+            setRedirect(LoginPage.<span class="kw">class</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+}
+</pre>
+
+<h4>Container Access Control</h4>
+The Servlet Container also provides facilities to enforce role based access control 
+(authorization). The example below is a base page to ensure only users
+in the "admin" role can access the page, otherwise users are redirected to the login page.
+Application Admin pages would extend this secure page to provide their functionality.
+
+<pre class="codeJava">
+<span class="kw">public class</span> AdminPage <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onSecurityCheck()
+     */</span>
+    <span class="kw">public boolean</span> onSecurityCheck() {
+    
+        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
+            <span class="kw">return true</span>;
+
+        } <span class="kw">else</span> {
+            setRedirect(LoginPage.<span class="kw">class</span>);
+            <span class="kw">return false</span>;
+        }
+    }
+}
+</pre>
+
+<h4>Logging Out</h4>
+To logout using the application or container based security models you would simply 
+invalidate the session.
+
+<pre class="codeJava">
+<span class="kw">public class</span> Logout <span class="kw">extends</span> Page {
+
+    <span class="jd">/**
+     * @see Page#onInit()
+     */</span>
+    <span class="kw">public void</span> onInit() {
+        getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
+    }
+} 
+</pre>
 
 
 <a name="page-navigation" class="heading"><h2>Navigation</h2></a>
@@ -703,107 +808,66 @@ Each bordered page can define their own title which is rendered in this template
 Templating with JSP pages is also supported using the same pattern. Please
 see the Click Examples application for a demonstration.
 
-<a name="page-security" class="heading"><h2>Security</h2></a>
 
-Pages provide an 
-<a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
-event handler which application pages can override to implement a programmatic security 
-model. 
-<p/>
-Please note you generally don't need to use this capability, and where possible
-you should use the declarative JEE security model. See the Best Practices 
-<a href="best-practices.html#security">Security</a> topic for more details.
+<a name="page-direct-rendering" class="heading"><h2>Direct Rendering</h2></a>
 
-<h4>Application Authentication</h4>
-Applications can use the <tt>onSecurityCheck()</tt> method to implement their own security model. The example 
-class below provides a base Secure page class which other pages can extend
-to ensure the user is logged in. In this example the login page creates a session 
-when a user successfully authenticates. This Secure page then checks to make sure
-the user has a session, otherwise the request is redirected to the login page.
+Pages support a direct rendering mode for where can render directly to the
+servlet response and bypass the page template rendering. This is useful for 
+scenarios where you want to render non HTML content to the response, such as a
+PDF or Excel document. To do this:
+<ul>
+<li>get the servlet response object</li>
+<li>set the content type on the response</li>
+<li>get the response output stream</li>
+<li>write to the output stream</li>
+<li>close the output stream</li>
+<li>set the page path to null to inform the ClickServlet that rendering has been completed</li>
+</ul>
+
+An direct rendering example is provided below.
 
 <pre class="codeJava">
-<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
-
-    <span class="jd">/**
-     * @see Page#onSecurityCheck()
-     */</span>
-    <span class="kw">public boolean</span> onSecurityCheck() {
     
-        <span class="kw">if</span> (getContext().hasSession()) {
-            <span class="kw">return true</span>;
+    <span class="cm">/**
+     * Render the Java source file as "text/plain".
+     *
+     * @see Page#onGet()
+     */</span>
+    <span class="kw">public void</span> onGet() {
+        String filename = ..
+
+        HttpServletResponse response = getContext().getResponse();
+
+        response.setContentType(<span class="st">"text/plain"</span>);
+        response.setHeader(<span class="st">"Pragma"</span>, <span class="st">"no-cache"</span>);
+
+        ServletContext context = getContext().getServletContext();
+
+        InputStream inputStream = <span class="kw">null</span>;
+        <span class="kw">try</span> {
+            inputStream = context.getResourceAsStream(filename);
+
+            PrintWriter writer = response.getWriter();
+
+            BufferedReader reader =
+                <span class="kw">new</span> BufferedReader(new InputStreamReader(inputStream));
+
+            String line = reader.readLine();
+
+            <span class="kw">while</span> (line != <span class="kw">null</span>) {
+                writer.println(line);
+                line = reader.readLine();
+            }
             
-        } <span class="kw">else</span> {
-            setRedirect(LoginPage.<span class="kw">class</span>);
-            <span class="kw">return false</span>;
+            setPath(<span class="kw">null</span>);
+
+        } <span class="kw">catch</span> (IOException ioe) {
+            ioe.printStackTrace();
+
+        } <span class="kw">finally</span> {
+            ClickUtils.close(inputStream);
         }
-    }
-} 
-</pre>
-
-<h4>Container Authentication</h4>
-Alternatively you can also use the security services provided by the JEE Servlet 
-Container. For instance to ensure users have been authenticated by the Serlvet Container
-you could use a Secure page of:
-
-<pre class="codeJava">
-<span class="kw">public class</span> Secure <span class="kw">extends</span> Page {
-
-    <span class="jd">/**
-     * @see Page#onSecurityCheck()
-     */</span>
-    <span class="kw">public boolean</span> onSecurityCheck() {
-    
-        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#getRemoteUser()">getRemoteUser</a>() != <span class="kw">null</span>) {
-            <span class="kw">return true</span>;
-            
-        } <span class="kw">else</span> {
-            setRedirect(LoginPage.<span class="kw">class</span>);
-            <span class="kw">return false</span>;
-        }
-    }
-}
-</pre>
-
-<h4>Container Access Control</h4>
-The Servlet Container also provides facilities to enforce role based access control 
-(authorization). The example below is a base page to ensure only users
-in the "admin" role can access the page, otherwise users are redirected to the login page.
-Application Admin pages would extend this secure page to provide their functionality.
-
-<pre class="codeJava">
-<span class="kw">public class</span> AdminPage <span class="kw">extends</span> Page {
-
-    <span class="jd">/**
-     * @see Page#onSecurityCheck()
-     */</span>
-    <span class="kw">public boolean</span> onSecurityCheck() {
-    
-        <span class="kw">if</span> (getContext().getRequest().<a target="topic" href="servlet-api/javax/servlet/http/HttpServletRequest.html#isUserInRole(java.lang.String)">isUserInRole</a>(<span class="st">"admin"</span>)) {
-            <span class="kw">return true</span>;
-
-        } <span class="kw">else</span> {
-            setRedirect(LoginPage.<span class="kw">class</span>);
-            <span class="kw">return false</span>;
-        }
-    }
-}
-</pre>
-
-<h4>Logging Out</h4>
-To logout using the application or container based security models you would simply 
-invalidate the session.
-
-<pre class="codeJava">
-<span class="kw">public class</span> Logout <span class="kw">extends</span> Page {
-
-    <span class="jd">/**
-     * @see Page#onInit()
-     */</span>
-    <span class="kw">public void</span> onInit() {
-        getContext().getSession().<a target="topic" href="servlet-api/javax/servlet/http/HttpSession.html#invalidate()">invalidate</a>();
-    }
-} 
-</pre>
+    } </pre>
 
 
 <a name="page-stateful" class="heading"><h2>Stateful Pages</h2></a>
