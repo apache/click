@@ -304,7 +304,7 @@ public class FieldSet extends AbstractContainer {
      * @throws IllegalArgumentException if the field is null
      */
     public void remove(Field field) {
-        super.remove(field);
+        remove((Control) field);
     }
 
     /**
