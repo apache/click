@@ -118,24 +118,24 @@ public class FieldSet extends AbstractContainer {
     private static final long serialVersionUID = 1L;
 
     // -------------------------------------------------------- Instance Variables
+    
+    /** The map of field width values. */
+    protected Map fieldWidths;
 
     /** The parent BasicForm. */
     protected BasicForm form;
+    
+    /** The FieldSet label. */
+    protected String label;
 
     /** The FieldSet legend. */
     protected String legend;
 
     /** The FieldSet legend attributes map. */
     protected Map legendAttributes;
-
-    /** The map of field width values. */
-    protected Map fieldWidths;
-
+    
     /** The render the fieldset border flag, default value is true. */
     protected boolean showBorder = true;
-
-    /** The FieldSet label. */
-    protected String label;
 
     // ------------------------------------------------------ Constructorrs
 
@@ -209,17 +209,19 @@ public class FieldSet extends AbstractContainer {
 
             field.setParent(this);
 
-            Form form = (Form) getForm();
-            if (form != null && form.getDefaultFieldSize() > 0) {
-                if (field instanceof TextField) {
-                    ((TextField) field).setSize(form.getDefaultFieldSize());
+            if (getForm() instanceof Form) {
+            	Form form = (Form) getForm();
+            	if (form != null && form.getDefaultFieldSize() > 0) {
+            		if (field instanceof TextField) {
+            			((TextField) field).setSize(form.getDefaultFieldSize());
 
-                } else if (field instanceof FileField) {
-                    ((FileField) field).setSize(form.getDefaultFieldSize());
+            		} else if (field instanceof FileField) {
+            			((FileField) field).setSize(form.getDefaultFieldSize());
 
-                } else if (field instanceof TextArea) {
-                    ((TextArea) field).setCols(form.getDefaultFieldSize());
-                }
+            		} else if (field instanceof TextArea) {
+            			((TextArea) field).setCols(form.getDefaultFieldSize());
+            		}
+            	}
             }
 
         } else {
@@ -377,6 +379,7 @@ public class FieldSet extends AbstractContainer {
     public BasicForm getForm() {
         if (form != null) {
             return form;
+            
         } else {
             // Find form in parent hierarchy
             return ContainerUtils.findForm(this);
@@ -389,10 +392,11 @@ public class FieldSet extends AbstractContainer {
      * @param form FieldSet's parent <tt>Form</tt>
      */
     public void setForm(BasicForm form) {
+    	if (form == null) {
+    		throw new IllegalArgumentException("Cannot set the FieldSet's form to null");
+    	}
+    	
         this.form = form;
-        if (form == null) {
-            throw new IllegalArgumentException("Cannot set the FieldSet's form to null");
-        }
 
         // Set the specified form on the fieldsSets children. This call is not
         // recursive to childrens children
