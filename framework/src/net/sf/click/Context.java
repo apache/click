@@ -79,9 +79,6 @@ public class Context {
     /** The servlet response. */
     protected final HttpServletResponse response;
 
-    /** The http session. */
-    protected HttpSession session;
-
     /** The click services interface. */
     final ClickServlet clickServlet;
 
@@ -206,15 +203,12 @@ public class Context {
     }
 
     /**
-     * Return the user's HttpSession, creating one if neccessary.
+     * Return the user's HttpSession, creating one if necessary.
      *
-     * @return the user's HttpSession, creating one if neccessary.
+     * @return the user's HttpSession, creating one if necessary.
      */
     public HttpSession getSession() {
-        if (session == null) {
-            session = request.getSession();
-        }
-        return session;
+        return request.getSession();
     }
 
     /**
