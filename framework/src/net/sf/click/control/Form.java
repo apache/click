@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -485,29 +484,6 @@ public class Form extends BasicForm {
         + "if (field && field.focus && field.type != 'hidden' && field.disabled != true) { field.focus(); };\n"
         + "//--></script>\n";
 
-    // -------------------------------------------------------- Class Variables
-
-    /** The label-required-prefix resource property. */
-    protected static String LABEL_REQUIRED_PREFIX = "";
-
-    /** The label-required-suffix resource property. */
-    protected static String LABEL_REQUIRED_SUFFIX = "";
-
-    /** The label-not-required-prefix resource property. */
-    protected static String LABEL_NOT_REQUIRED_PREFIX = "";
-
-    /** The label-not-required-suffix resource property. */
-    protected static String LABEL_NOT_REQUIRED_SUFFIX = "";
-
-    static {
-        ResourceBundle bundle = ClickUtils.getBundle(CONTROL_MESSAGES);
-
-        LABEL_REQUIRED_PREFIX = bundle.getString("label-required-prefix");
-        LABEL_REQUIRED_SUFFIX = bundle.getString("label-required-suffix");
-        LABEL_NOT_REQUIRED_PREFIX = bundle.getString("label-not-required-prefix");
-        LABEL_NOT_REQUIRED_SUFFIX = bundle.getString("label-not-required-suffix");
-    }
-
     // ----------------------------------------------------- Instance Variables
 
     /** The button align, default value is "<tt>left</tt>". */
@@ -756,7 +732,7 @@ public class Form extends BasicForm {
      * @return the fieldSet added to this form
      * @throws IllegalArgumentException if the fieldSet is null, the form
      * already contains a control with the same name, if the fieldSet's parent
-     * is a Page or the width &lt; 1
+     * is a Page or the width &lt;
      */
     public FieldSet add(FieldSet fieldSet, int width) {
         if (fieldSet == null) {
@@ -1157,96 +1133,6 @@ public class Form extends BasicForm {
         } else {
             throw new IllegalArgumentException("Invalid position: " + position);
         }
-    }
-
-    /**
-     * Return the field required label prefix. If the value is null it will
-     * be initialized with the <tt>label-required-prefix</tt> resource property.
-     *
-     * @return the field required label prefix
-     */
-    public String getLabelRequiredPrefix() {
-        if (labelRequiredPrefix == null) {
-            labelRequiredPrefix = LABEL_REQUIRED_PREFIX;
-        }
-        return labelRequiredPrefix;
-    }
-
-    /**
-     * Set the field required label prefix.
-     *
-     * @param value the field required label prefix
-     */
-    public void setLabelRequiredPrefix(String value) {
-        this.labelRequiredPrefix = value;
-    }
-
-    /**
-     * Return the field not required label prefix. If the value is null it will
-     * be initialized with the <tt>label-not-required-prefix</tt> resource
-     * property.
-     *
-     * @return the field not required label prefix
-     */
-    public String getLabelNotRequiredPrefix() {
-        if (labelNotRequiredPrefix == null) {
-            labelNotRequiredPrefix = LABEL_NOT_REQUIRED_PREFIX;
-        }
-        return labelNotRequiredPrefix;
-    }
-
-    /**
-     * Set the field not required label prefix.
-     *
-     * @param value the field not required label prefix
-     */
-    public void setLabelNotRequiredPrefix(String value) {
-        this.labelNotRequiredPrefix = value;
-    }
-
-    /**
-     * Return the field required label suffix. If the value is null it will
-     * be initialized with the <tt>label-required-suffix</tt> resource property.
-     *
-     * @return the field required label suffix
-     */
-    public String getLabelRequiredSuffix() {
-        if (labelRequiredSuffix == null) {
-            labelRequiredSuffix = LABEL_REQUIRED_SUFFIX;
-        }
-        return labelRequiredSuffix;
-    }
-
-    /**
-     * Set the field required label suffix.
-     *
-     * @param value the field required label suffix
-     */
-    public void setLabelRequiredSuffix(String value) {
-        this.labelRequiredSuffix = value;
-    }
-
-    /**
-     * Return the field not required label suffix. If the value is null it will
-     * be initialized with the <tt>label-not-required-suffix</tt> resource
-     * property.
-     *
-     * @return the field not required label suffix
-     */
-    public String getLabelNotRequiredSuffix() {
-        if (labelNotRequiredSuffix == null) {
-            labelNotRequiredSuffix = LABEL_NOT_REQUIRED_SUFFIX;
-        }
-        return labelNotRequiredSuffix;
-    }
-
-    /**
-     * Set the field not required label suffix.
-     *
-     * @param value the field not required label suffix
-     */
-    public void setLabelNotRequiredSuffix(String value) {
-        this.labelNotRequiredSuffix = value;
     }
 
     /**
@@ -1761,9 +1647,9 @@ public class Form extends BasicForm {
                     }
 
                     if (field.isRequired()) {
-                        buffer.append(getLabelRequiredPrefix());
+                        buffer.append(getMessage("label-required-prefix"));
                     } else {
-                        buffer.append(getLabelNotRequiredPrefix());
+                        buffer.append(getMessage("label-not-required-prefix"));
                     }
                     buffer.elementStart("label");
                     buffer.appendAttribute("for", field.getId());
@@ -1777,9 +1663,9 @@ public class Form extends BasicForm {
                     buffer.append(field.getLabel());
                     buffer.elementEnd("label");
                     if (field.isRequired()) {
-                        buffer.append(getLabelRequiredSuffix());
+                        buffer.append(getMessage("label-required-suffix"));
                     } else {
-                        buffer.append(getLabelNotRequiredSuffix());
+                        buffer.append(getMessage("label-not-required-suffix"));
                     }
 
                     if (POSITION_LEFT.equals(getLabelsPosition())) {

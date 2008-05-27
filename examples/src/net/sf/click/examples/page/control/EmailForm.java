@@ -22,8 +22,6 @@ public class EmailForm extends BorderPage {
 
     public EmailForm() {
         form.setLabelsPosition(Form.POSITION_TOP);
-        form.setLabelRequiredPrefix("<b>");
-        form.setLabelRequiredSuffix("</b>");
         form.setErrorsPosition(Form.POSITION_TOP);
 
         EmailField addressField = new EmailField("address", "To:");
