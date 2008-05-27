@@ -963,24 +963,6 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
-     * Perform a action listener callback if a listener object and listener
-     * method is defined, otherwise returns true.
-     *
-     * @see ClickUtils#invokeListener(Object, String)
-     *
-     * @return true if the invoked listener returns true, or if not listener
-     * is defined
-     */
-    protected boolean invokeListener() {
-        if (listener != null && listenerMethod != null) {
-            return ClickUtils.invokeListener(listener, listenerMethod);
-
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Return the field's value from the request.
      *
      * @return the field's value from the request
