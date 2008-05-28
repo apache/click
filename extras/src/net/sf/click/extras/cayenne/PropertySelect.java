@@ -545,7 +545,10 @@ public class PropertySelect extends Select {
             if (getSelectQuery() != null) {
                 SelectQuery query = getSelectQuery();
 
-                if (getOrdering() != null && !orderingApplied) {
+                if (!query.getOrderings().isEmpty()) {
+                    orderingApplied = true;
+
+                } else if (getOrdering() != null && !orderingApplied) {
                     query.addOrdering(getOrdering());
                     orderingApplied = true;
 
