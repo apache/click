@@ -113,6 +113,9 @@ public abstract class AbstractControl implements Control {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The control's action listener. */
+    protected ActionListener actionListener;
+
     /** The Field attributes Map. */
     protected Map attributes;
 
@@ -174,6 +177,24 @@ public abstract class AbstractControl implements Control {
      */
     public String getTag() {
         return null;
+    }
+
+    /**
+     * Return the control's action listener.
+     *
+     * @return the control's action listener
+     */
+    public ActionListener getActionListener() {
+        return actionListener;
+    }
+
+    /**
+     * Set the control's action listener.
+     *
+     * @param listener the control's action listener
+     */
+    public void setActionListener(ActionListener listener) {
+        actionListener = listener;
     }
 
     /**
@@ -776,8 +797,9 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Perform a action listener callback if a listener object and listener
-     * method is defined, otherwise returns true.
+     * Perform a action listener callback if an ActionListener is defined,
+     * or if a listener object and listener method is defined, otherwise
+     * returns true.
      *
      * @see ClickUtils#invokeListener(Object, String)
      *
@@ -785,11 +807,16 @@ public abstract class AbstractControl implements Control {
      * is defined
      */
     protected boolean invokeListener() {
-        if (listener != null && listenerMethod != null) {
-            return ClickUtils.invokeListener(listener, listenerMethod);
+        if (getActionListener() != null) {
+            return getActionListener().onAction(this);
 
         } else {
-            return true;
+            if (listener != null && listenerMethod != null) {
+                return ClickUtils.invokeListener(listener, listenerMethod);
+
+            } else {
+                return true;
+            }
         }
     }
 
