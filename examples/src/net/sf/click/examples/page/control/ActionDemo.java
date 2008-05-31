@@ -2,8 +2,10 @@ package net.sf.click.examples.page.control;
 
 import java.util.Date;
 
+import net.sf.click.Control;
 import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
+import net.sf.click.control.ActionListener;
 import net.sf.click.examples.page.BorderPage;
 
 /**
@@ -17,14 +19,23 @@ import net.sf.click.examples.page.BorderPage;
  */
 public class ActionDemo extends BorderPage {
 
-    public ActionLink link = new ActionLink(this, "onLinkClick");
-    public ActionButton button = new ActionButton(this, "onButtonClick");
+    public ActionLink link = new ActionLink();
+    public ActionButton button = new ActionButton();
     public String clicked;
 
-    public boolean onLinkClick() {
-        clicked = getClass().getName() + ".onLinkClick invoked at " + (new Date());
-        return true;
+    public ActionDemo() {
+
+        link.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                clicked = source.getClass().getName() + ".onAction invoked at " + (new Date());
+                return true;
+            }
+        });
+
+        button.setListener(this, "onButtonClick");
     }
+
+    // --------------------------------------------------------- Event Handlers
 
     public boolean onButtonClick() {
         clicked = getClass().getName() + ".onButtonClick invoked at " + (new Date());

@@ -8,22 +8,50 @@ process. These container controls include Form, FieldSet, Panel and Table.
 Using these controls is similar to traditional Swing GUI programming. While these 
 controls do not provide a full Swing style MVC implementation, they provided a
 simplified programming model and high performance.
+
+<h3>Action Listeners</h3>
+
+Controls extending {@link net.sf.click.control.AbstractControl} can use an action
+listener event callback mechanism similar the <tt>java.awt.ActionListener</tt> callback.
 <p/>
-Click Controls provide an event callback mechanism similar the 
-<tt>java.awt.ActionListener</tt> callback. 
+Click supports two styles of action listeners, the first is using the
+{@link net.sf.click.control.ActionListener} interface which provides compile time safety.
+The second is to register the action listener via the <tt>setListener(Object, String)</tt>
+method where you specify the call back method via its name. This second style uses
+less lines of code, but has no compile time safety.
+<p/>
+Examples of these two action listener styles are provided below:
 
-<pre class="codeJava">
-<span class="kw">public class</span> MyPage <span class="kw">extends</span> Page {
+<pre class="prettyprint">
+public class ActionDemo extends BorderPage {
 
-    <span class="kw">public</span> ActionLink actionLink = <span class="kw">new</span> ActionLink();
+	// Uses listener style 1
+    public ActionLink link = new ActionLink();
 
-    <span class="kw">public</span> MyPage() {
-        actionLink.setListener(<span class="kw">this</span>, <span class="st">"onLinkClick"</span>);
+	// Uses listener style 2
+    public ActionButton button = new ActionButton();
+
+    public ActionDemo() {
+
+        link.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                return onLinkClick(source);
+            }
+        });
+
+        button.setListener(this, "onButtonClick");
     }
-    
-    <span class="kw">public boolean</span> onLinkClick() {
-        System.out.println(<span class="st">"onLinkClick invoked"</span>);
-        <span class="kw">return true</span>;
+
+    // --------------------------------------------------------- Event Handlers
+
+    public boolean onLinkClick(Control source) {
+        ..
+        return true;
+    }
+
+    public boolean onButtonClick() {
+        ..
+        return true;
     }
 } </pre>
 
