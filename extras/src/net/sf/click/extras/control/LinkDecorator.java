@@ -19,10 +19,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import net.sf.click.Context;
-import net.sf.click.Control;
+import net.sf.click.control.AbstractControl;
 import net.sf.click.control.AbstractLink;
 import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
@@ -410,7 +408,7 @@ public class LinkDecorator implements Decorator, Serializable {
      *
      * @author Malcolm Edgar
      */
-    class PageNumberControl implements Control {
+    class PageNumberControl extends AbstractControl {
 
         private static final long serialVersionUID = 1L;
 
@@ -424,78 +422,6 @@ public class LinkDecorator implements Decorator, Serializable {
          */
         PageNumberControl(Table table) {
             this.table = table;
-        }
-
-        /**
-         * @see net.sf.click.Control#getContext()
-         */
-        public Context getContext() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#getHtmlImports()
-         */
-        public String getHtmlImports() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#getId()
-         */
-        public String getId() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#setListener(java.lang.Object, java.lang.String)
-         */
-        public void setListener(Object listener, String method) {
-        }
-
-        /**
-         * @see net.sf.click.Control#getMessages()
-         */
-        public Map getMessages() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#getName()
-         */
-        public String getName() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#setName(java.lang.String)
-         */
-        public void setName(String name) {
-        }
-
-        /**
-         * @see net.sf.click.Control#getParent()
-         */
-        public Object getParent() {
-            return null;
-        }
-
-        /**
-         * @see net.sf.click.Control#setParent(java.lang.Object)
-         */
-        public void setParent(Object parent) {
-        }
-
-        /**
-         * @see net.sf.click.Control#onDeploy(javax.servlet.ServletContext)
-         */
-        public void onDeploy(ServletContext servletContext) {
-        }
-
-        /**
-         * @see net.sf.click.Control#onInit()
-         */
-        public void onInit() {
         }
 
         /**
@@ -525,24 +451,6 @@ public class LinkDecorator implements Decorator, Serializable {
                 }
             }
             return true;
-        }
-
-        /**
-         * @see net.sf.click.Control#onRender()
-         */
-        public void onRender() {
-        }
-
-        /**
-         * @see net.sf.click.Control#onDestroy()
-         */
-        public void onDestroy() {
-        }
-
-        /**
-         * @see net.sf.click.Control#render(net.sf.click.util.HtmlStringBuffer)
-         */
-        public void render(HtmlStringBuffer buffer) {
         }
 
         /**
