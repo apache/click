@@ -671,34 +671,6 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * additional initialization.
-     *
-     * @see net.sf.click.Control#onInit()
-     */
-    public void onInit() {
-    }
-
-    /**
-     * This method performs no processing and returns true.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return true
-     */
-    public boolean onProcess() {
-        return true;
-    }
-
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-    }
-
-    /**
      * This sets the parent to be null.
      *
      * @see net.sf.click.Control#onDestroy()
