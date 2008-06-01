@@ -296,6 +296,12 @@ public interface Control extends Serializable {
     public boolean onProcess();
 
     /**
+     * TODO
+     * @return
+     */
+    public boolean invokeListener();
+
+    /**
      * The on render event handler. This event handler is invoked prior to the
      * control being rendered, and is useful for providing pre rendering logic.
      * <p/>

@@ -379,7 +379,8 @@ public class TabbedPanel extends Panel {
             }
         }
 
-        return invokeListener();
+        registerListener();
+        return true;
     }
 
 }
