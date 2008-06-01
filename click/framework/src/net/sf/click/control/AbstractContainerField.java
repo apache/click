@@ -343,6 +343,15 @@ public abstract class AbstractContainerField extends Field implements Container 
         }
 
         /**
+         * Sets the action listener of the AbstractContainerField.
+         *
+         * @param actionListener the action listener object to invoke
+         */
+        public void setActionListener(ActionListener actionListener) {
+            AbstractContainerField.this.setActionListener(actionListener);
+        }
+
+        /**
          * Sets the listener of the AbstractContainerField.
          *
          * @param listener the listener object with the named method to invoke
