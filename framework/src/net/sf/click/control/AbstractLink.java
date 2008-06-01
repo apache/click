@@ -18,8 +18,6 @@ package net.sf.click.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
-
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.ClickUtils;
@@ -410,43 +408,6 @@ public abstract class AbstractLink extends AbstractControl {
     }
 
     // --------------------------------------------------------- Public Methods
-
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#onDeploy(ServletContext)
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * additional initialization.
-     *
-     * @see net.sf.click.Control#onInit()
-     */
-    public void onInit() {
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * pre rendering logic.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * clean up any resources.
-     *
-     * @see net.sf.click.Control#onDestroy()
-     */
-    public void onDestroy() {
-    }
 
     /**
      * Render the HTML representation of the anchor link. This method
