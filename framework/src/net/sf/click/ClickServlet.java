@@ -470,9 +470,10 @@ public class ClickServlet extends HttpServlet {
      */
     protected void processPage(Page page) throws Exception {
 
-        final HttpServletRequest request = page.getContext().getRequest();
-        final HttpServletResponse response = page.getContext().getResponse();
-        final boolean isPost = page.getContext().isPost();
+        final Context context = page.getContext();
+        final HttpServletRequest request = context.getRequest();
+        final HttpServletResponse response = context.getResponse();
+        final boolean isPost = context.isPost();
 
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
@@ -518,26 +519,35 @@ public class ClickServlet extends HttpServlet {
             }
 
             // Make sure dont process a forwarded request
-            if (page.hasControls() && !page.getContext().isForward()) {
+            if (page.hasControls() && !context.isForward()) {
                 List controls = page.getControls();
 
                 for (int i = 0, size = controls.size(); i < size; i++) {
                     Control control = (Control) controls.get(i);
 
-                    continueProcessing = control.onProcess();
+                    boolean onProcessResult = control.onProcess();
+                    if (!onProcessResult) {
+                        continueProcessing = false;
+                    }
 
                     if (logger.isTraceEnabled()) {
                         String controlClassName = control.getClass().getName();
                         controlClassName = controlClassName.substring(controlClassName.lastIndexOf('.') + 1);
 
                         String msg =  "   invoked: '" + control.getName() + "' "
-                            + controlClassName + ".onProcess() : " + continueProcessing;
+                            + controlClassName + ".onProcess() : " + onProcessResult;
                         logger.trace(msg);
                     }
+                }
 
-                    if (!continueProcessing) {
-                        break;
-                    }
+                // Fire all listeners registered with the Context
+                if (!invokeListeners(context)) {
+                    continueProcessing = false;
+                }
+
+                if (logger.isTraceEnabled()) {
+                    String msg =  "   invoked: Control listeners : " + continueProcessing;
+                    logger.trace(msg);
                 }
             }
 
@@ -1533,6 +1543,30 @@ public class ClickServlet extends HttpServlet {
     }
 
     // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Invoke all the listeners registered on this context.
+     *
+     * @param context the request context
+     *
+     * @return true if processing must continue, false otherwise
+     */
+    boolean invokeListeners(Context context) {
+
+        boolean continueProcessing = true;
+
+        for (Iterator it = context.getListeners().iterator(); it.hasNext(); ) {
+            Control control = (Control) it.next();
+
+            // Invoke all registered listeners. If any listener returns false,
+            // this method must return false.
+            if (!control.invokeListener()) {
+                continueProcessing = false;
+            }
+        }
+
+        return continueProcessing;
+    }
 
    /**
     * Create a Click application ConfigService instance.
