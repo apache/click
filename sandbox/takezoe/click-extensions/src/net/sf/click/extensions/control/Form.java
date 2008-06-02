@@ -141,11 +141,12 @@ public class Form extends net.sf.click.control.Form {
 	 * (non-Javadoc)
 	 * @see net.sf.click.control.Form#add(net.sf.click.control.Field)
 	 */
-	@Override public void add(Field field) {
+	@Override public Field add(Field field) {
 		super.add(field);
 		if(field instanceof Submit){
 			field.setAttribute("onclick", getName() + ".action.value='" + field.getName() + "'");
 		}
+		return field;
 	}
 	
 	/*
