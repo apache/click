@@ -326,6 +326,10 @@
                   type="org.eclipse.core.resources.IProject">
             </adapt>
          </enabledWhen>
+         <filter
+               name="nature"
+               value="net.sf.clickide.ClickProjectNature">
+         </filter>
       </page>
   </extension>
 </plugin>
