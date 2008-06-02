@@ -42,7 +42,9 @@ public class ClickProjectBuilder extends IncrementalProjectBuilder {
 	
 	protected void fullBuild(final IProgressMonitor monitor) throws CoreException {
 		IFile file = ClickUtils.getClickConfigFile(getProject());
-		validator.validate(file, monitor);
+		if(file != null){
+			validator.validate(file, monitor);
+		}
 	}
 
 	protected void incrementalBuild(IResourceDelta delta, 
