@@ -8,6 +8,7 @@ import net.sf.clickide.ClickPlugin;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -176,7 +177,11 @@ public class ClickProjectPropertyPage extends PropertyPage {
 	}
 	
 	private IProject getProject(){
-		return (IProject)getElement();
+		IAdaptable adaptable = getElement();
+		if(adaptable instanceof IProject){
+			return (IProject) adaptable;
+		}
+		return (IProject) adaptable.getAdapter(IProject.class);
 	}
 	
 	protected void performDefaults() {
