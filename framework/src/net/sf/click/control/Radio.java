@@ -285,9 +285,11 @@ public class Radio extends Field {
         bindRequestValue();
 
         if (isChecked()) {
-            registerListener();
+            return invokeListener();
+
+        } else {
+            return true;
         }
-        return true;
     }
 
     /**

@@ -860,8 +860,7 @@ public abstract class Field extends AbstractControl {
             validate();
         }
 
-        registerListener();
-        return true;
+        return invokeListener();
     }
 
     /**

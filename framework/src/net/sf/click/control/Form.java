@@ -732,7 +732,7 @@ public class Form extends BasicForm {
      * @return the fieldSet added to this form
      * @throws IllegalArgumentException if the fieldSet is null, the form
      * already contains a control with the same name, if the fieldSet's parent
-     * is a Page or the width &lt; 1
+     * is a Page or the width &lt;
      */
     public FieldSet add(FieldSet fieldSet, int width) {
         if (fieldSet == null) {
@@ -1281,31 +1281,33 @@ public class Form extends BasicForm {
             }
         }
 
-        boolean continueProcessing = true;
         if (isFormSubmission()) {
 
+            boolean continueProcessing = true;
             for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
                 if (control.getName() != null
                     && !control.getName().startsWith(SUBMIT_CHECK)) {
 
-                    if (!control.onProcess()) {
-                        continueProcessing = false;
+                    continueProcessing = control.onProcess();
+                    if (!continueProcessing) {
+                        return false;
                     }
                 }
             }
 
             for (int i = 0, size = getButtonList().size(); i < size; i++) {
                 Button button = (Button) getButtonList().get(i);
-                if (!button.onProcess()) {
-                    continueProcessing = false;
+                continueProcessing = button.onProcess();
+                if (!continueProcessing) {
+                    return false;
                 }
             }
 
-            registerListener();
+            return invokeListener();
         }
 
-        return continueProcessing;
+        return true;
     }
 
     /**

@@ -403,7 +403,6 @@ public class RadioGroup extends Field {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        super.onInit();
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
             radio.onInit();
@@ -424,8 +423,9 @@ public class RadioGroup extends Field {
         boolean continueProcessing = true;
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
-            if (!radio.onProcess()) {
-                continueProcessing = false;
+            continueProcessing = radio.onProcess();
+            if (!continueProcessing) {
+                return false;
             }
         }
 
@@ -433,8 +433,7 @@ public class RadioGroup extends Field {
             validate();
         }
 
-        registerListener();
-        return continueProcessing;
+        return invokeListener();
     }
 
     /**

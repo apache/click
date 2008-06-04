@@ -583,8 +583,6 @@ public class BasicForm extends AbstractContainer {
             }
         }
 
-        boolean continueProcessing = true;
-
         if (isFormSubmission()) {
 
             if (hasControls()) {
@@ -592,18 +590,18 @@ public class BasicForm extends AbstractContainer {
                     Control control = (Control) it.next();
                     String controlName = control.getName();
                     if (controlName == null || !controlName.startsWith(SUBMIT_CHECK)) {
-
-                        if (!control.onProcess()) {
-                            continueProcessing = false;
+                        boolean continueProcessing = control.onProcess();
+                        if (!continueProcessing) {
+                            return false;
                         }
                     }
                 }
             }
 
-            registerListener();
+            return invokeListener();
         }
 
-        return continueProcessing;
+        return true;
     }
 
     /**

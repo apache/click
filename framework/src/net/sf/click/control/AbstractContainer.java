@@ -219,22 +219,24 @@ public abstract class AbstractContainer extends AbstractControl implements
      */
     public boolean onProcess() {
 
-        boolean continueProcessing = true;
-
         if (hasControls()) {
             for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
-                if (!control.onProcess()) {
-                    continueProcessing = false;
-                }
+                boolean continueProcessing = control.onProcess();
                 if (ClickUtils.getLogService().isTraceEnabled()) {
                     logEvent(control, "onProcess");
+                }
+                if (!continueProcessing) {
+                    return false;
                 }
             }
         }
 
-        registerListener();
-        return continueProcessing;
+        //TODO should invokeListener have its own callback? Then all controls can be
+        //processed first, and invokeListener can be called afterwards once all
+        //request values are available. This ensures that when a listener fires,
+        //all controls have been bound to their request value.
+        return invokeListener();
     }
 
     /**

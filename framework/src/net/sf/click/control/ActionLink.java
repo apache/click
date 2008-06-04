@@ -476,9 +476,11 @@ public class ActionLink extends AbstractLink {
         bindRequestValue();
 
         if (clicked) {
-            registerListener();
+            return invokeListener();
+
+        } else {
+            return true;
         }
-        return true;
     }
 
 }
