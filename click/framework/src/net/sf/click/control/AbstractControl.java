@@ -68,16 +68,15 @@ import net.sf.click.util.MessagesMap;
  *         setValue(requestValue);
  *
  *         // Invoke any listener of MyField
- *         return registerListener();
+ *         return invokeListener();
  *     }
  * }
  * </pre>
  * By overriding {@link #getTag()} one can specify the html tag to render.
  * <p/>
  * Overriding {@link #onProcess()} allows one to bind the servlet request
- * parameter to MyField value. The {@link #registerListener()} method
- * registers the listener for this control on the Context. Once the onProcess
- * event has finished, all registered listeners will be fired.
+ * parameter to MyField value. The {@link #invokeListener()} method is invoked
+ * to trigger the action listener callback on MyField.
  * <p/>
  * To view the html rendered by MyField invoke the control's {@link #toString()}
  * method:
@@ -465,8 +464,7 @@ public abstract class AbstractControl implements Control {
     * @return true to continue Page event processing or false otherwise
     */
     public boolean onProcess() {
-        registerListener();
-        return true;
+        return invokeListener();
     }
 
     /**
@@ -796,6 +794,8 @@ public abstract class AbstractControl implements Control {
         return buffer.toString();
     }
 
+    // ------------------------------------------------------ Protected Methods
+
     /**
      * Perform a action listener callback if an ActionListener is defined,
      * or if a listener object and listener method is defined, otherwise
@@ -803,32 +803,20 @@ public abstract class AbstractControl implements Control {
      *
      * @see ClickUtils#invokeListener(Object, String)
      *
-     * @return true if the invoked listener returns true, or if no listener
+     * @return true if the invoked listener returns true, or if not listener
      * is defined
      */
-    public boolean invokeListener() {
+    protected boolean invokeListener() {
         if (getActionListener() != null) {
             return getActionListener().onAction(this);
-        }
-        if (listener != null && listenerMethod != null) {
-            return ClickUtils.invokeListener(listener, listenerMethod);
-        }
-        // TODO Ajax support
-        return true;
-    }
 
-    // ------------------------------------------------------ Protected Methods
+        } else {
+            if (listener != null && listenerMethod != null) {
+                return ClickUtils.invokeListener(listener, listenerMethod);
 
-    /**
-     * Register this control's listener with the Context.
-     *
-     * @see Context#registerListener(net.sf.click.Control)
-     */
-    protected void registerListener() {
-        if (getActionListener() != null
-            || listener != null && listenerMethod != null) {
-            // TODO Ajax support
-            getContext().registerListener(this);
+            } else {
+                return true;
+            }
         }
     }
 

@@ -460,9 +460,11 @@ public class ActionButton extends Button {
         bindRequestValue();
 
         if (clicked) {
-            registerListener();
+            return invokeListener();
+
+        } else {
+            return true;
         }
-        return true;
     }
 
     /**

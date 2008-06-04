@@ -18,7 +18,6 @@ package net.sf.click;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -31,7 +30,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.click.control.ActionListener;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.service.LogService;
 import net.sf.click.service.TemplateService;
@@ -86,9 +84,6 @@ public class Context {
 
     /** The servlet request. */
     final HttpServletRequest request;
-
-    /** List of registered listeners. */
-    List listeners;
 
     // ----------------------------------------------------------- Constructors
 
@@ -741,40 +736,7 @@ public class Context {
         return stringWriter.toString();
     }
 
-    /**
-     * Register the specified control, which listener must be invoked,
-     * with this context.
-     * <p/>
-     * Registered listeners will be fired immediately after the
-     * {@link net.sf.click.Control#onProcess()} event. This ensures the
-     * listeners are fired after all controls have their request values set.
-     *
-     * @param control the control which listener must be invoked
-     *
-     * @throws IllegalArgumentException if the control argument is null
-     */
-    public void registerListener(Control control) {
-        if (control == null) {
-            throw new IllegalArgumentException("Null control parameter");
-        }
-
-        getListeners().add(control);
-    }
-
     // ------------------------------------------------ Package Private Methods
-
-    /**
-     * Return the list of registered Control
-     * {@link net.sf.click.control.ActionListener}s.
-     *
-     * @return list of listeners
-     */
-    List getListeners() {
-        if (listeners == null) {
-            listeners = new ArrayList();
-        }
-        return listeners;
-    }
 
     /**
      * Return the stack data structure where Context's are stored.
