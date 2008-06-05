@@ -732,7 +732,7 @@ public class Form extends BasicForm {
      * @return the fieldSet added to this form
      * @throws IllegalArgumentException if the fieldSet is null, the form
      * already contains a control with the same name, if the fieldSet's parent
-     * is a Page or the width &lt;
+     * is a Page or the width &lt; 1
      */
     public FieldSet add(FieldSet fieldSet, int width) {
         if (fieldSet == null) {
@@ -784,6 +784,7 @@ public class Form extends BasicForm {
             }
 
             return contains;
+
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
             boolean contains = super.remove(fieldSet);
@@ -791,19 +792,28 @@ public class Form extends BasicForm {
             fieldSet.setForm(null);
 
             return contains;
+
         } else {
             return false;
         }
     }
 
     /**
-     * Remove the named field from the form.
+     * Remove the named field from the form, returning true if removed
+     * or false if not found.
      *
      * @param name the name of the field to remove from the form
-     * @throws IllegalArgumentException if the field is null
+     * @return true if the named field was removed or false otherwise
      */
-    public void removeField(String name) {
-        remove(getField(name));
+    public boolean removeField(String name) {
+        Control control = ContainerUtils.findControlByName(this, name);
+
+        if (control != null) {
+            return remove(control);
+
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -1968,11 +1978,9 @@ public class Form extends BasicForm {
             return;
         }
 
-        // TODO should we render all controls or only Fields???
-        // List fieldSetFields = fieldSet.getControl();
-        List fieldSetFields = ContainerUtils.getFields(fieldSet);
-        renderControls(buffer, fieldSet, fieldSetFields,
-            fieldSet.getFieldWidths());
+        // Only render Fields and Labels
+        List fieldSetFields = ContainerUtils.getFieldsAndLabels(fieldSet);
+        renderControls(buffer, fieldSet, fieldSetFields, fieldSet.getFieldWidths());
     }
 
     // -------------------------------------------------------- Private Methods
