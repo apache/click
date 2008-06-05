@@ -278,6 +278,29 @@ public class TabbedPanel extends Panel {
         return tabLink;
     }
 
+    /**
+     * Return the tabbed panel content table HTML width attribute if defined.
+     *
+     * @return the tabbed panel content table HTML width attribute if defined
+     */
+    public String getWidth() {
+        return (String) getModel().get("width");
+    }
+
+    /**
+     * Set the tabbed panel content table HTML width attribute if defined.
+     *
+     * @param width the tabbed panel content table HTML width attribute
+     */
+    public void setWidth(String width) {
+        if (width != null) {
+            getModel().put("width", width);
+
+        } else {
+            getModel().remove("width");
+        }
+    }
+
     // --------------------------------------------------------- Public Methods
 
     /**

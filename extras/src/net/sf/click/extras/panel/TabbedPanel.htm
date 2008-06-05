@@ -22,9 +22,9 @@
         #end
         </tr>
     </table>
-    <table class="tp_content">
+    <table class="tp_content" #if(${width})width="${width}"#end>
         <tr class="tp_content">
-            <td class="tp_content">
+            <td class="tp_content" #if(${width})width="${width}"#end>
                 $this.activePanel
             </td>
         </tr>
