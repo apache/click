@@ -322,8 +322,9 @@ public abstract class AbstractControl implements Control {
             this.name = name;
         } else {
             throw new IllegalStateException("You cannot change the name of "
-                + "a control that has a parent. To change the name, first remove "
-                + "the control from its parent, change its name, then add it "
+                + "a control that is already attached to its parent control. "
+                + "To change the name of an attached control, first remove "
+                + "the control from its parent, change its name, then re-add it "
                 + "again.");
         }
     }
@@ -377,11 +378,7 @@ public abstract class AbstractControl implements Control {
 
         String message = null;
 
-        Map parentMessages = ClickUtils.getParentMessages(this);
-        if (parentMessages.containsKey(name)) {
-
-            message = (String) parentMessages.get(name);
-        }
+        message = ClickUtils.getParentMessage(this, name);
 
         if (message == null && getMessages().containsKey(name)) {
             message = (String) getMessages().get(name);
