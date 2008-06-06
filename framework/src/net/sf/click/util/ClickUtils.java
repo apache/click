@@ -1581,6 +1581,106 @@ public class ClickUtils {
     }
 
     /**
+     * Return the given control's top level parent's localized message for the
+     * specified name.
+     * <p/>
+     * This method will walk up to the control's parent page object and for each
+     * parent control found, look for a message of the specified name. A
+     * message found in a parent control will override the message of a child
+     * control.
+     * <p/>
+     * Given the following property files:
+     * <p/>
+     * MyPage.properties
+     * <pre class="prettyprint">
+     * myfield.label=Page </pre>
+     *
+     * and MyForm.properties
+     * <pre class="prettyprint">
+     * myfield.label=Form </pre>
+     *
+     * and a the following snippet:
+     *
+     * <pre class="prettyprint">
+     * public MyPage extends Page {
+     *     public void onInit() {
+     *         MyForm form = new MyForm("form");
+     *         TextField field = new TextField("myfield");
+     *         form.add(field);
+     *
+     *         //1.
+     *         System.out.println(ClickUtils.getParentMessage(field, "myfield.label"));
+     *
+     *         addControl(form);
+     *
+     *         //2.
+     *         System.out.println(ClickUtils.getParentMessage(field, "myfield.label"));
+     *     }
+     * }
+     * </pre>
+     * 
+     * The first (1.) println statement above will output <tt>Form</tt> because
+     * at that stage MyForm is the highest level parent of field.
+     * <tt>getParentMessage</tt> will find the property <tt>myfield.label</tt>
+     * in the MyForm message properties and return <tt>Form</tt>
+     * <p/>
+     * The second (2.) println statement will output <tt>Page</tt> as now
+     * MyPage is the highest level parent. On its first pass up the hierarchy,
+     * <tt>getParentMessage</tt> will find the property <tt>myfield.label</tt>
+     * in the MyForm message properties and on its second pass will find the
+     * same property in MyPage message properties. As MyPage is higher up the
+     * hierarchy than MyForm, MyPage will override MyForm and the property value
+     * will be <tt>Page</tt>.
+     *
+     * @param control the control to get the parent message for
+     * @param name the specific property name to find
+     * @return the top level parent's Map of localized messages
+     */
+    public static String getParentMessage(Control control, String name) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        Object parent = control.getParent();
+        if (parent == null) {
+            return null;
+
+        } else {
+            String message = null;
+            while (parent != null) {
+                if (parent instanceof Control) {
+                    control = (Control) parent;
+                    if (control != null) {
+                        if (control.getMessages().containsKey(name)) {
+                            message = (String) control.getMessages().get(name);
+                        }
+                    }
+
+                    parent = control.getParent();
+                    if (parent == null) {
+                        return message;
+                    }
+
+                } else if (parent instanceof Page) {
+                    Page page = (Page) parent;
+                    if (page.getMessages().containsKey(name)) {
+                        message = (String) page.getMessages().get(name);
+                    }
+                    return message;
+
+                } else if (parent != null) {
+                    // Unknown parent class
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get the parent page of the given control. This method will walk up
      * the control's parent hierarchy to find its parent page.
      *
