@@ -96,7 +96,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
-     * @see net.sf.click.control.Container#add(int, net.sf.click.Control)
+     * @see net.sf.click.control.Container#insert(net.sf.click.Control, int)
      *
      * @param control the control to add to the container
      * @param index the index at which the control is to be inserted
