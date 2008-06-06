@@ -92,6 +92,16 @@ new features including Module support, bug fixes, documentation and example upda
         Instead, please use the existing control message bundle properties: <tt>label-required-prefix, label-required-suffix, label-not-required-prefix label-not-required-suffix</tt>.
       </li>
       <li class="change">
+		Renamed Container.add(int, Control) to Container.insert(Control, int) to better
+    reflect the intention.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-381">381</a>].
+      </li>
+      <li class="change">
+		Add static method <a href="click-api/net/sf/click/Context.html#hasThreadLocalContext()">Context.hasThreadLocalContext()</a>
+    to query if a Context is available on the Context stack.
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-382">382</a>].
+      </li>
+      <li class="change">
 		Add width support to TabbedPanel control
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-376">376</a>].
       </li>
@@ -110,6 +120,10 @@ new features including Module support, bug fixes, documentation and example upda
       <li class="change">
 		Fixed Form removeField throws IllegalArgumentException bug
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-378">378</a>].
+      </li>
+      <li class="change">
+		Fixed bug when manually invalidating HttpSession
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-371">371</a>].
       </li>
     </ul>
   </dd>
