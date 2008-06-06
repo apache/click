@@ -91,7 +91,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
      */
-    public Control insert(int index, Control control) {
+    public Control insert(Control control, int index) {
         return container.insert(control, index);
     }
 

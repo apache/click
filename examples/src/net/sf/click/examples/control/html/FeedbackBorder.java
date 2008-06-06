@@ -15,7 +15,9 @@ import net.sf.click.control.Field;
  */
 public class FeedbackBorder extends AbstractContainerField {
 
-    public Control add(int index, Control control) {
+    private static final long serialVersionUID = 1L;
+
+    public Control insert(Control control, int index) {
 
         // Enforce rule that only 1 control can be added
         if (getControls().size() > 0) {
@@ -32,7 +34,7 @@ public class FeedbackBorder extends AbstractContainerField {
                 "Only fields are allowed on FeedbackBorder.");
         }
 
-        super.add(0, control);
+        super.insert(control, 0);
 
         return control;
     }
