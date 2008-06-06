@@ -831,7 +831,7 @@ Please ensure you have configured build.properties</echo>
             <link href="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
             <link href="http://click.sourceforge.net/docs/click-api/"/>
             <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
-            <link href="http://static.springframework.org/spring/docs/1.2.x/api/"/>
+            <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
             <bottom>${root.properties.highlighter}</bottom>
          </javadoc>
       
