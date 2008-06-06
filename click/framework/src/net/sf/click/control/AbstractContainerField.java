@@ -87,12 +87,12 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * @see net.sf.click.control.Container#add(int, net.sf.click.Control).
      *
-     * @param index the index at which the control is to be inserted
      * @param control the control to add to the container and return
+     * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
      */
-    public Control add(int index, Control control) {
-        return container.add(index, control);
+    public Control insert(int index, Control control) {
+        return container.insert(control, index);
     }
 
     /**

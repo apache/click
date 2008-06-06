@@ -177,15 +177,15 @@ public class FieldSet extends AbstractContainer {
      *
      * @see Container#add(net.sf.click.Control)
      *
-     * @param index the index at which the control is to be inserted
      * @param control the control to add to the FieldSet and return
+     * @param index the index at which the control is to be inserted
      * @return the control that was added to the FieldSet
      * @throws IllegalArgumentException if the control is null, the Field's name
      * is not defined, the container already contains a control with the same
      * name, if the control's parent is a Page or if the control is neither a
      * Field nor FieldSet
      */
-    public Control add(int index, Control control) {
+    public Control insert(Control control, int index) {
          if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
@@ -205,12 +205,13 @@ public class FieldSet extends AbstractContainer {
 
             getControlMap().put(field.getName(), field);
 
-            field.setForm(getForm());
+            BasicForm basicForm = getForm();
+            field.setForm(basicForm);
 
             field.setParent(this);
 
-            if (getForm() instanceof Form) {
-                Form form = (Form) getForm();
+            if (basicForm instanceof Form) {
+                Form form = (Form) basicForm;
                 if (form != null && form.getDefaultFieldSize() > 0) {
                     if (field instanceof TextField) {
                         ((TextField) field).setSize(form.getDefaultFieldSize());
@@ -225,7 +226,7 @@ public class FieldSet extends AbstractContainer {
             }
 
         } else {
-            super.add(index, control);
+            super.insert(control, index);
         }
 
         return control;
@@ -246,7 +247,7 @@ public class FieldSet extends AbstractContainer {
      * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        add(getControls().size(), field);
+        insert(field, getControls().size());
         return field;
     }
 

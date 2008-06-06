@@ -648,7 +648,7 @@ public class Form extends BasicForm {
             }
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
-            super.add(getControls().size(), fieldSet);
+            super.insert(fieldSet, getControls().size());
             fieldSet.setForm(this);
         } else {
             throw new IllegalArgumentException("Only fields and FieldSets are"
@@ -661,12 +661,12 @@ public class Form extends BasicForm {
     /**
      * This method is not supported by Form.
      *
-     * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
+     * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
      * @throws UnsupportedOperationException if invoked
      */
-    public Control add(int index, Control control) {
+    public Control insert(Control control, int index) {
         throw new UnsupportedOperationException("This method is not supported"
             + " by Form. Please use add(Control) instead.");
     }

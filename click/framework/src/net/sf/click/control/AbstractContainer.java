@@ -92,42 +92,51 @@ public abstract class AbstractContainer extends AbstractControl implements
      * is a Page
      */
     public Control add(Control control) {
-        return add(getControls().size(), control);
+        return insert(control, getControls().size());
     }
 
     /**
      * @see net.sf.click.control.Container#add(int, net.sf.click.Control)
      *
-     * @param index the index at which the control is to be inserted
      * @param control the control to add to the container
+     * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
      * @throws IllegalArgumentException if the control is null, the container
      * already contains a control with the same name, or if the control's parent
      * is a Page
+     * @throws IndexOutOfBoundsException if index is out of range
+     * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
      */
-    public Control add(int index, Control control) {
+    public Control insert(Control control, int index) {
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
 
+        int size = getControls().size();
+        if (index > size || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
+                + size);
+        }
+
         // Check if container already contains the control
         if (getControlMap().containsKey(control.getName())) {
-
             throw new IllegalArgumentException(
                 "Container already contains control named: " + control.getName());
         }
 
         // Check if control already has parent
-        if (control.getParent() != null) {
+        // If parent references *this* container, there is no need to remove it
+        Object parentControl = control.getParent();
+        if (parentControl != null && parentControl != this) {
 
             // TODO perhaps throw exception instead of removing from parent
-            if (control.getParent() instanceof Page) {
+            if (parentControl instanceof Page) {
                 throw new IllegalArgumentException("This control's parent is"
                     + " already set to a Page.");
 
-            } else if (control instanceof Container) {
+            } else if (parentControl instanceof Container) {
                 //remove control from parent
-                ((Container) control.getParent()).remove(control);
+                ((Container) parentControl).remove(control);
             }
         }
 
