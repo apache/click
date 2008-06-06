@@ -161,9 +161,47 @@ public class Context {
      * Return the thread local request context instance.
      *
      * @return the thread local request context instance.
+     * @throws RuntimeException if a Context is not available on the thread.
      */
     public static Context getThreadLocalContext() {
         return getContextStack().peek();
+    }
+
+    /**
+     * Returns true if a Context instance is available on the current thread,
+     * false otherwise. Unlike {@link #getThreadLocalContext()} this method
+     * can safely be used and will not throw an exception if Context is not
+     * available on the current thread.
+     * <p/>
+     * This method is very useful inside a {@link Control} constructor which
+     * might need access to the Context. As Controls could potentially be
+     * instantiated during Click startup (in order to deploy their resources),
+     * this check can be used to determine whether Context is available or not.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractControl {
+     *     public MyControl(String name) {
+     *         if (Context.hasThreadLocalContext()) {
+     *             // Context is available, meaning a user initiated a web
+     *             // request
+     *             Context context = getContext();
+     *             String state = (String) context.getSessionAttribute(name);
+     *             setValue(state);
+     *         } else {
+     *             // No Context is available, meaning this is most probably
+     *             // the application startup and deployment phase.
+     *         }
+     *     }
+     * }
+     * </pre>
+     *
+     * @return true if a Context instance is available on the current thread,
+     * false otherwise
+     */
+    public static boolean hasThreadLocalContext() {
+        return !getContextStack().isEmpty();
     }
 
     /**
