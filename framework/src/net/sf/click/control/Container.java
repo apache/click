@@ -85,11 +85,13 @@ public interface Container extends Control {
      *  </li>
      * </ul>
      *
-     * @param index the index at which the control is to be inserted
      * @param control the control to add to the container and return
+     * @param index the index at which the control is to be inserted
      * @return the control that was added to the container
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *     (index &lt; 0 || index &gt; getControls().size()).
      */
-    Control add(int index, Control control);
+    Control insert(Control control, int index);
 
     /**
      * Remove the given control from the container, returning true if the
