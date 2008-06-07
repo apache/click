@@ -1228,33 +1228,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         PageImports pageImports = createPageImports(page);
-
-        pop = model.put("imports", pageImports.getAllIncludes());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                         + " model contains an object keyed with reserved "
-                         + "name \"imports\". The page model object "
-                         + pop + " has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
-
-        pop = model.put("cssImports", pageImports.getCssImports());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-            + " model contains an object keyed with reserved "
-            + "name \"cssImports\". The page model object "
-            + pop + " has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
-
-        pop = model.put("jsImports", pageImports.getJsImports());
-        if (pop != null && !page.isStateful()) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-            + " model contains an object keyed with reserved "
-            + "name \"jsImports\". The page model object "
-            + pop + " has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
+        pageImports.popuplateTemplateModel(model, logger);
 
         return model;
     }
@@ -1379,34 +1353,7 @@ public class ClickServlet extends HttpServlet {
         }
 
         PageImports pageImports = createPageImports(page);
-
-        request.setAttribute("imports", pageImports.getAllIncludes());
-        if (model.containsKey("imports")) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                             + " model contains an object keyed with reserved "
-                             + "name \"imports\". The request attribute "
-                             + "has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
-
-        request.setAttribute("cssImports", pageImports.getCssImports());
-        if (model.containsKey("cssImports")) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                             + " model contains an object keyed with reserved "
-                             + "name \"cssImports\". The request attribute "
-                             + "has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
-
-        request.setAttribute("jsImports", pageImports.getJsImports());
-        if (model.containsKey("jsImports")) {
-            String msg = page.getClass().getName() + " on " + page.getPath()
-                             + " model contains an object keyed with reserved "
-                             + "name \"jsImports\". The request attribute "
-                             + "has been replaced with a PageImports object";
-            logger.warn(msg);
-        }
-
+        pageImports.popuplateRequest(request, model, logger);
     }
 
     /**

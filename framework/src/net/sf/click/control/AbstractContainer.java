@@ -24,6 +24,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PageImports;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
@@ -292,6 +293,28 @@ public abstract class AbstractContainer extends AbstractControl implements
                 control.onRender();
                 if (ClickUtils.getLogService().isTraceEnabled()) {
                     logEvent(control, "onRender");
+                }
+            }
+        }
+    }
+
+   /**
+    * @see net.sf.click.control.AbstractControl#onHtmlImports(net.sf.click.util.PageImports)
+    *
+    * @param pageImports the PageImports instance to add imports to
+    */
+    public void onHtmlImports(PageImports pageImports) {
+        if (hasControls()) {
+            for(Iterator it = getControls().iterator(); it.hasNext(); ) {
+                Control control = (Control) it.next();
+
+                if (control instanceof AbstractControl) {
+                    AbstractControl abstractControl = (AbstractControl) control;
+                    abstractControl.onHtmlImports(pageImports);
+
+                    if (ClickUtils.getLogService().isTraceEnabled()) {
+                       logEvent(control, "onHtmlImports");
+                    }
                 }
             }
         }
