@@ -32,6 +32,7 @@ import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
+import net.sf.click.util.PageImports;
 
 /**
  * Provides a default implementation of the {@link Control} interface,
@@ -524,6 +525,26 @@ public abstract class AbstractControl implements Control {
      */
     public String getHtmlImports() {
         return null;
+    }
+
+    /**
+     * Called when html imports can be contributed to the page head section.
+     * <p/>
+     * The specified {@link net.sf.click.util.PageImports} exposes methods to
+     * add JavaScript and CSS imports as well as JavaScript and CSS scripts.
+     * <p/>
+     * <b>Please note</b> a common problem when overriding onHtmlImports in
+     * subclasses is forgetting to call <tt>super.onHtmlImports</tt>. Consider
+     * carefully whether you should call <tt>super.onHtmlImports</tt> or not.
+     * <p/>
+     * <b>Also note</b> this class acts as a replacement for the
+     * {@link #getHtmlImports()} method since onHtmlImports is more powerful
+     * and flexible than {@link #getHtmlImports()}. However these two methods
+     * can be used in conjuction.
+     *
+     * @param pageImports the PageImports instance to add imports to
+     */
+    public void onHtmlImports(PageImports pageImports) {
     }
 
     /**

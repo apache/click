@@ -16,13 +16,17 @@
 package net.sf.click.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.control.Container;
 import net.sf.click.control.Table;
 
+import net.sf.click.service.LogService;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -84,11 +88,26 @@ public class PageImports {
     /** The list of CSS import lines. */
     protected List cssImports = new ArrayList();
 
+    /** The buffer of CSS import lines. */
+    protected HtmlStringBuffer cssBuffer = new HtmlStringBuffer();
+
     /** The list of JS import lines. */
     protected List jsImports = new ArrayList();
 
-    /** The list of JS script block lines. */
+    /** 
+     * TODO jsScript is probably redundant.
+     * The list of JS script block lines.
+     */
     protected List jsScripts = new ArrayList();
+
+    /** The buffer of JS script block lines. */
+    protected HtmlStringBuffer jsBuffer = new HtmlStringBuffer();
+
+    /** The list of JS import lines to be included at bottom of html page. */
+    protected List jsImportsBottom = new ArrayList();
+
+    /** The buffer of JS script block lines to be included at bottom of html page.*/
+    protected HtmlStringBuffer jsBottomBuffer = new HtmlStringBuffer();
 
     /** The page instance. */
     protected final Page page;
@@ -107,88 +126,357 @@ public class PageImports {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Populate the specified model with html import keys.
+     *
+     * @param model the model to populate with html import keys
+     * @param logger where warnings are logged if keys are replaced
+     */
+    public void popuplateTemplateModel(Map model, LogService logger) {
+        Object pop = model.put("imports", new Imports());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                         + " model contains an object keyed with reserved "
+                         + "name \"imports\". The page model object "
+                         + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        pop = model.put("cssImports", new CssImports());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+            + " model contains an object keyed with reserved "
+            + "name \"cssImports\". The page model object "
+            + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        pop = model.put("jsImports", new JsImports());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+            + " model contains an object keyed with reserved "
+            + "name \"jsImports\". The page model object "
+            + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        pop = model.put("jsImportsTop", new JsImportsTop());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+            + " model contains an object keyed with reserved "
+            + "name \"jsImportsTop\". The page model object "
+            + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        pop = model.put("jsImportsBottom", new JsImportsBottom());
+        if (pop != null && !page.isStateful()) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+            + " model contains an object keyed with reserved "
+            + "name \"jsImportsBottom\". The page model object "
+            + pop + " has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+    }
+
+    /**
+     * Populate the specified request with html import keys.
+     *
+     * @param request the http request to populate
+     * @param model the model to populate with html import keys
+     * @param logger where warnings are logged if keys are replaced
+     */
+    public void popuplateRequest(HttpServletRequest request, Map model, LogService logger) {
+        request.setAttribute("imports", new Imports());
+        if (model.containsKey("imports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"imports\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("cssImports", new CssImports());
+        if (model.containsKey("cssImports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"cssImports\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("jsImports", new JsImports());
+        if (model.containsKey("jsImports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"jsImports\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("jsImports", new JsImportsTop());
+        if (model.containsKey("jsImports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"jsImportsTop\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+
+        request.setAttribute("jsImports", new JsImportsBottom());
+        if (model.containsKey("jsImports")) {
+            String msg = page.getClass().getName() + " on " + page.getPath()
+                             + " model contains an object keyed with reserved "
+                             + "name \"jsImportsBottom\". The request attribute "
+                             + "has been replaced with a PageImports object";
+            logger.warn(msg);
+        }
+    }
+
+    /**
+     * Add the specified css script to the <em>css</em> imports.
+     * <p/>
+     * <b>Please note</b> Click will automatically enclose the scripts inside a
+     * &lt;style&gt; element, so no need to do this yourself.
+     * <p/>
+     * The css will be made available in your template under the key
+     * <em>css</em>.
+     *
+     * @param script the css to add
+     */
+    public void addCssScript(String script) {
+        cssBuffer.append(script);
+        cssBuffer.append('\n');
+    }
+
+    /**
+     * Add the specified css import to the <em>cssImports</em> imports.
+     * <p/>
+     * The css import will be made available in your template under the key
+     * <em>cssImports</em>.
+     *
+     * @param cssImport the css import to add
+     */
+    public void addCssImport(String cssImport) {
+        processLine(cssImport, cssImports);
+    }
+
+    /**
+     * Add the specified javascript import to the <em>jsImports</em> list.
+     * <p/>
+     * The javascript imports will be made available in your template under the
+     * key <em>jsImports</em>.
+     *
+     * @param jsImport the javascript import to add
+     */
+    public void addJsImport(String jsImport) {
+        processLine(jsImport, jsImports);
+    }
+
+    /**
+     * Add the specified javascript script to the <em>jsScripts</em> list.
+     * <p/>
+     * <b>Please note</b> Click will automatically enclose the scripts inside a
+     * &lt;srcipt&gt; element, so no need to do this yourself.
+     * <p/>
+     * The javascript will be made available in your template under the
+     * key <em>jsScripts</em>.
+     *
+     * @param script the javascript script to add
+     */
+    public void addJsScript(String script) {
+        jsBuffer.append(script);
+        jsBuffer.append('\n');
+    }
+
+    /**
+     * Add the specified javascript import to the <em>jsImportsBottom</em> list.
+     * <p/>
+     * The javascript import will be made available in your template under the
+     * key <em>jsImportsBottom</em>.
+     *
+     * @param jsImport the javascript import to add
+     */
+    public void addJsImportAtBottom(String jsImport) {
+        processLine(jsImport, jsImportsBottom);
+    }
+
+    /**
+     * Add the specified javascript to the <em>jsBottom</em> buffer.
+     * <p/>
+     * <b>Please note</b> Click will automatically enclose the scripts inside a
+     * &lt;srcipt&gt; element, so no need to do this yourself.
+     * <p/>
+     * The javascript will be made available in your template under the
+     * key <em>jsBottom</em>.
+     *
+     * @param script the javascript script to add
+     */
+    public void addJsScriptAtBottom(String script) {
+        jsBottomBuffer.append(script);
+        jsBottomBuffer.append('\n');
+    }
+
+    // ------------------------------------------------------ Protected Methods
+
+    /**
      * Return a HTML string of all the page's HTML imports, including:
      * CSS imports, JS imports and JS script blocks.
      *
      * @return a HTML string of all the page's HTML imports, including:
      * CSS imports, JS imports and JS script blocks.
      */
-    public String getAllIncludes() {
+    protected String getAllIncludes() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * cssImports.size()
-            + jsImports.size() + jsScripts.size());
+        HtmlStringBuffer buffer = new HtmlStringBuffer(
+              80 * jsImports.size()
+            + 80 * jsImportsBottom.size()
+            + 80 * jsScripts.size()
+            + jsBuffer.length()
+            + jsBottomBuffer.length()
+            + 80 * cssImports.size()
+            + cssBuffer.length());
 
-        for (int i = 0; i  < cssImports.size(); i++) {
-            String line = cssImports.get(i).toString();
-            buffer.append(line);
-            buffer.append('\n');
-        }
-        for (int i = 0; i  < jsImports.size(); i++) {
-            String line = jsImports.get(i).toString();
-            buffer.append(line);
-            buffer.append('\n');
-        }
-        for (int i = 0; i  < jsScripts.size(); i++) {
-            String line = jsScripts.get(i).toString();
-            buffer.append(line);
-            buffer.append('\n');
-        }
+        buffer.append(getCssImports());
+        buffer.append(getJsImports());
 
         return buffer.toString();
     }
 
     /**
-     * Return a HTML string of all the page's HTML CSS imports.
+     * Return a HTML string of all the page's HTML CSS
+     * {@link #cssImports imports} and {@link #cssBuffer scripts}.
      *
-     * @return a HTML string of all the page's HTML CSS imports.
+     * @return only css imports and scripts
      */
-    public String getCssImports() {
+    protected String getCssImports() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * cssImports.size());
-
-        for (int i = 0; i  < cssImports.size(); i++) {
-            String line = cssImports.get(i).toString();
-            buffer.append(line);
-            if (i < cssImports.size() - 1) {
-                buffer.append('\n');
-            }
+        // If cssImports is empty, return only cssScripts.
+        if (cssImports.size() == 0) {
+            return cssBuffer.toString();
         }
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(
+            80 * cssImports.size() + cssBuffer.length());
+
+        for (Iterator it = cssImports.iterator(); it.hasNext();) {
+            String line = it.next().toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+
+        // Lastly include the css buffers e.g. styles not contained
+        // inside a <style> element
+        wrapInStyle(buffer, cssBuffer.toString());
 
         return buffer.toString();
     }
 
     /**
      * Return a HTML string of all the page's HTML JS imports and scripts.
+     * <p/>
+     * This includes {@link #jsImports}, {@link #jsImportsBottom},
+     * {@link #jsScripts}, {@link #jsBuffer} and {@link #jsBottomBuffer}.
      *
-     * @return a HTML string of all the page's HTML JS imports and scripts.
+     * @return all javascript imports and scripts
      */
-    public String getJsImports() {
+    protected String getJsImports() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * jsImports.size());
+        HtmlStringBuffer buffer = new HtmlStringBuffer(
+              80 * jsImports.size()
+            + 80 * jsImportsBottom.size()
+            + 80 * jsScripts.size()
+            + 80 * jsBuffer.length()
+            + 80 * jsBottomBuffer.length());
 
-        for (int i = 0; i  < jsImports.size(); i++) {
-            String line = jsImports.get(i).toString();
+        // First include all the imports e.g. <script src="...">
+        for (Iterator it = jsImports.iterator(); it.hasNext();) {
+            String line = it.next().toString();
             buffer.append(line);
-            if (i < jsImports.size() - 1 || !jsScripts.isEmpty()) {
-                buffer.append('\n');
-            }
+            buffer.append('\n');
         }
 
-        for (int i = 0; i  < jsScripts.size(); i++) {
-            String line = jsScripts.get(i).toString();
+        for (Iterator it = jsImportsBottom.iterator(); it.hasNext();) {
+            String line = it.next().toString();
             buffer.append(line);
-            if (i < jsScripts.size() - 1) {
-                buffer.append('\n');
-            }
+            buffer.append('\n');
         }
+
+        // Then include all the scripts e.g. <script>...</script>
+        for (Iterator it = jsScripts.iterator(); it.hasNext();) {
+            String line = it.next().toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+
+        // Lastly include all javascript buffers e.g. scripts not contained
+        // inside a <script> element
+        String[] scripts = new String[] {jsBuffer.toString(),
+            jsBottomBuffer.toString()};
+        wrapInScript(buffer, scripts);
 
         return buffer.toString();
     }
 
-    // ------------------------------------------------------ Protected Methods
+    /**
+     * Return a string containing {@link #jsImports}, {@link #jsScripts} and
+     * {@link #jsBuffer}.
+     *
+     * @return all top javascript imports and scripts
+     */
+    protected String getJsImportsTop() {
+        processPageControls();
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(
+            80 * jsImports.size() + 80 * jsScripts.size() + jsBuffer.length());
+
+        // First include all the imports e.g. <script src="...">
+        for (Iterator it = jsImports.iterator(); it.hasNext();) {
+            String line = it.next().toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+
+        // Then include all the scripts e.g. <script>...</script>
+        for (Iterator it = jsScripts.iterator(); it.hasNext();) {
+            String line = it.next().toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+
+        // Lastly include top javascript buffers e.g. scripts not contained
+        // inside a <script> element
+        wrapInScript(buffer, jsBuffer.toString());
+
+        return buffer.toString();
+    }
+
+    /**
+     * Return a string containing {@link #jsImportsBottom} and {@link #jsBottomBuffer}.
+     *
+     * @return all bottom javascript imports and scripts
+     */
+    protected String getJsImportsBottom() {
+        processPageControls();
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(
+            80 * jsImportsBottom.size() + jsBottomBuffer.length());
+
+        // First include all the bottom imports e.g. <script src="...">
+        for (Iterator it = jsImportsBottom.iterator(); it.hasNext();) {
+            String line = it.next().toString();
+            buffer.append(line);
+            buffer.append('\n');
+        }
+
+        // Then include bottom javascript buffers e.g. scripts not contained
+        // inside a <script> element
+        wrapInScript(buffer, jsBottomBuffer.toString());
+
+        return buffer.toString();
+    }
 
     /**
      * Process the Page's set of control HTML head imports.
@@ -199,6 +487,9 @@ public class PageImports {
         }
 
         initialize = true;
+
+        // Allow Page and its Controls to contribute header imports
+        page.onHtmlImports(this);
 
         if (page.hasControls()) {
             for (int i = 0; i < page.getControls().size(); i++) {
@@ -294,5 +585,114 @@ public class PageImports {
         if (!found) {
             list.add(item);
         }
+    }
+
+    /**
+     * Add the new value to the specified list of values.
+     *
+     * @param value new value to add
+     * @param list the list to add the new value to
+     */
+    protected void processLine(String value, List list) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
+
+        String[] lines = StringUtils.split(value, '\n');
+
+        for (int i = 0; i  < lines.length; i++) {
+            addToList(lines[i], list);
+        }
+    }
+
+    // -------------------------------------------------------- Internal Classes
+
+    /**
+     * This class enables lazy, on demand importing for {@link #getAllIncludes()}.
+     */
+    class Imports {
+        public String toString() {
+            return PageImports.this.getAllIncludes();
+        }
+    }
+
+    /**
+     * This class enables lazy, on demand importing for {@link #getJsImports()}.
+     */
+    class JsImports {
+        public String toString() {
+            return PageImports.this.getJsImports();
+        }
+    }
+
+    /**
+     * This class enables lazy, on demand importing for {@link #getJsImportsTop()}.
+     */
+    class JsImportsTop {
+        public String toString() {
+            return PageImports.this.getJsImportsTop();
+        }
+    }
+
+    /**
+     * This class enables lazy, on demand importing for {@link #getJsImportsBottom()}.
+     */
+    class JsImportsBottom {
+        public String toString() {
+            return PageImports.this.getJsImportsBottom();
+        }
+    }
+
+    /**
+     * This class enables lazy, on demand importing for {@link #getCssImports()}.
+     */
+    class CssImports {
+        public String toString() {
+            return PageImports.this.getCssImports();
+        }
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Wrap the specified text in a script element and append it to the buffer.
+     *
+     * @param buffer buffer to append wrapped script to
+     * @param text the text to wrap in a script element
+     */
+    private void wrapInScript(HtmlStringBuffer buffer, String text) {
+        wrapInScript(buffer, new String[] {text});
+    }
+
+    /**
+     * Wrap the specified scripts in a script element and append it to the buffer.
+     *
+     * @param buffer buffer to append wrapped script to
+     * @param scripts the scripts to wrap in a script element
+     */
+    private void wrapInScript(HtmlStringBuffer buffer, String[] scripts) {
+        buffer.elementStart("script");
+        // TODO should users be able to set <script> attributes e.g. charset?
+        buffer.appendAttribute("type", "text/javascript");
+        buffer.closeTag();
+        for (int i = 0; i < scripts.length; i++) {
+            buffer.append(scripts[i]);
+        }
+        buffer.elementEnd("script");
+    }
+
+    /**
+     * Wrap the specified text in a style element and append it to the buffer.
+     *
+     * @param buffer buffer to append wrapped style to
+     * @param text the text to wrap in a style element
+     */
+    private void wrapInStyle(HtmlStringBuffer buffer, String text) {
+        buffer.elementStart("style");
+        // TODO should users be able to set <style> attributes e.g. media?
+        buffer.appendAttribute("type", "text/css");
+        buffer.closeTag();
+        buffer.append(text);
+        buffer.elementEnd("style");
     }
 }
