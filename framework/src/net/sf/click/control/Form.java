@@ -414,7 +414,7 @@ import org.apache.commons.lang.StringUtils;
  * article for more information on this topic.
  * <p/>
  * To prevent multiple form posts from use of the browser back button use one
- * of the Form {@link #onSubmitCheck(Page, String)} methods. For example:
+ * of the Form {@link #onSubmitCheck(net.sf.click.Page, String)} methods. For example:
  *
  * <pre class="codeJava">
  * <span class="kw">public class</span> Purchase <span class="kw">extends</span> Page {
@@ -607,26 +607,75 @@ public class Form extends BasicForm {
      * Field nor FieldSet
      */
     public Control add(Control control) {
-         if (control == null) {
+        if (control == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
+
+        int size = getControls().size();
+        if (control instanceof Button) {
+            size = getButtonList().size();
+        }
+
+        return insert(control, size);
+    }
+
+    /**
+     * @see net.sf.click.control.Container#insert(net.sf.click.Control, int)
+     *
+     * @param control the control to add to the container
+     * @param index the index at which the control is to be inserted
+     * @return the control that was added to the container
+     * @throws IllegalArgumentException if the control is null, the container
+     *     already contains a control with the same name, or if the control's parent
+     *     is a Page
+     * @throws IndexOutOfBoundsException if index is out of range
+     * <tt>(index &lt; 0 || index &gt; getControls().size())</tt>
+     */
+    public Control insert(Control control, int index) {
+        if (control == null) {
+            throw new IllegalArgumentException("Control parameter cannot be null");
+        }
+
+        int size = getControls().size();
+        if (control instanceof Button) {
+            size = getButtonList().size();
+        }
+
+        if (index > size || index < 0) {
+            String msg = "Index: " + index + ", Size: " + size;
+            throw new IndexOutOfBoundsException(msg);
+        }
+
         if (control instanceof Field) {
             Field field = (Field) control;
             if (StringUtils.isBlank(field.getName())) {
                String msg = "Field name not defined: " + field.getClass().getName();
                 throw new IllegalArgumentException(msg);
             }
+
             if (getControlMap().containsKey(field.getName())
                 && !(field instanceof Label)) {
-
-                throw new IllegalArgumentException(
-                    "Form already contains field named: " + field.getName());
+                String msg = "Form already contains field named: " + field.getName();
+                throw new IllegalArgumentException(msg);
             }
 
             if (field instanceof Button) {
-                getButtonList().add(field);
+                getButtonList().add(index, field);
+
+            } else if (field instanceof HiddenField) {
+                getControls().add(index, field);
+
             } else {
-                getControls().add(field);
+                // Step over hidden fields, incrementing in the insert index
+                int visualIndex = index;
+                for (int i = 0; i < index; i++) {
+                    Control peek = (Control) getControls().get(i);
+                    if (peek instanceof HiddenField) {
+                        visualIndex++;
+                    }
+                }
+                visualIndex = Math.min(visualIndex, getControls().size());
+                getControls().add(visualIndex, field);
             }
 
             getControlMap().put(field.getName(), field);
@@ -646,29 +695,19 @@ public class Form extends BasicForm {
                     ((TextArea) field).setCols(getDefaultFieldSize());
                 }
             }
+
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
             super.insert(fieldSet, getControls().size());
             fieldSet.setForm(this);
+
         } else {
-            throw new IllegalArgumentException("Only fields and FieldSets are"
-                + " allowed on this Form");
+            String msg = "Only Fields and FieldSets can be added to the Form "
+                + "control. See BasicForm for a more flexibile container";
+            throw new IllegalArgumentException(msg);
         }
 
         return control;
-    }
-
-    /**
-     * This method is not supported by Form.
-     *
-     * @param control the control to add to the container
-     * @param index the index at which the control is to be inserted
-     * @return the control that was added to the container
-     * @throws UnsupportedOperationException if invoked
-     */
-    public Control insert(Control control, int index) {
-        throw new UnsupportedOperationException("This method is not supported"
-            + " by Form. Please use add(Control) instead.");
     }
 
     /**
