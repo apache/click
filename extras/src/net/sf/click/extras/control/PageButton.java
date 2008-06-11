@@ -91,17 +91,24 @@ public class PageButton extends PageLink {
     }
 
     /**
-     * Return a HTML rendered Button string. Note the button label is rendered
-     * as the HTML "value" attribute.
+     * Return the links html tag: <tt>input</tt>.
      *
-     * @see Object#toString()
+     * @see AbstractControl#getTag()
      *
-     * @return a HTML rendered Button string
+     * @return this controls html tag
      */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
+    public String getTag() {
+        return "input";
+    }
 
-        buffer.elementStart("input");
+    /**
+     * Render the HTML representation of the button. Note the button label is
+     * rendered as the HTML "value" attribute.
+     *
+     * @param buffer the specified buffer to render the control's output to
+     */
+    public void render(HtmlStringBuffer buffer) {
+        buffer.elementStart(getTag());
 
         buffer.appendAttribute("type", "button");
         buffer.appendAttribute("name", getName());
@@ -122,7 +129,19 @@ public class PageButton extends PageLink {
         }
 
         buffer.elementEnd();
+    }
 
+    /**
+     * Return a HTML rendered Button string. Note the button label is rendered
+     * as the HTML "value" attribute.
+     *
+     * @see Object#toString()
+     *
+     * @return a HTML rendered Button string
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(40);
+        render(buffer);
         return buffer.toString();
     }
 
