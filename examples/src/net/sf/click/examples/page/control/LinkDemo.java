@@ -7,6 +7,7 @@ import net.sf.click.control.PageLink;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.ExternalLink;
+import net.sf.click.extras.control.PageButton;
 
 /**
  * Provides an ActionLink, ExternalLink and PageLink control examples Page.
@@ -18,6 +19,7 @@ public class LinkDemo extends BorderPage {
     public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
     public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
     public PageLink pageLink = new PageLink("PageLink", HomePage.class);
+    public PageButton pageButton = new PageButton("PageButton", HomePage.class); 
 
     public String clicked;
 
