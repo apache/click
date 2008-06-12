@@ -29,9 +29,11 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import org.apache.commons.lang.Validate;
 
 import net.sf.click.Context;
+import net.sf.click.service.ConfigService;
 
 /**
  * Provides a localized read only messages Map for Page and Control classes.
@@ -281,7 +283,11 @@ public class MessagesMap implements Map {
 
                 messages = Collections.unmodifiableMap(messages);
 
-                MESSAGES_CACHE.put(resourceKey, messages);
+                ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
+                ConfigService configService = ClickUtils.getConfigService(servletContext);
+                if (configService.isProductionMode() || configService.isProfileMode()) {
+                    MESSAGES_CACHE.put(resourceKey, messages);
+                }
             }
         }
     }
