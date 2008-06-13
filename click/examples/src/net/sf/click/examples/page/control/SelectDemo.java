@@ -60,7 +60,7 @@ public class SelectDemo extends BorderPage {
         form.add(investmentSelect);
 
         // Location Select
-        locationSelect = new Select("location", true);
+        locationSelect = new Select("location");
         locationSelect.add("QLD");
         locationSelect.add("NSW");
         locationSelect.add("NT");
