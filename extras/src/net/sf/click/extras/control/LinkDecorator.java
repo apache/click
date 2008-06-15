@@ -1,5 +1,5 @@
 /*
- * Copyright 2006 Malcolm A. Edgar
+ * Copyright 2006-2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package net.sf.click.extras.control;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.click.Context;
@@ -199,7 +200,7 @@ public class LinkDecorator implements Decorator, Serializable {
     }
 
     /**
-     * Create a new AbstractLink table column Decorator with the given
+     * Create a new ActionButton table column Decorator with the given
      * ActionButtons array and row object identifier property name.
      * The default linkSeparator for buttons is <tt>" "</tt>.
      *
@@ -221,6 +222,68 @@ public class LinkDecorator implements Decorator, Serializable {
         this.buttonsArray = buttons;
         this.idProperty = idProperty;
         this.linkSeparator = " ";
+
+        table.addControl(new LinkDecorator.PageNumberControl(table));
+    }
+
+    /**
+     * Create a new table column Decorator with the given list of AbstractLinks
+     * or ActionButtons and row object identifier property name.
+     * The default linkSeparator for buttons is <tt>" "</tt>.
+     * <p/>
+     * Please note you must provide either AbstractLink objects or ActionButton
+     * objects in the controls array, but not a mixture of both.
+     *
+     * @param table the table to render the links for
+     * @param controls the list of AbstractLink or ActionButtons to render
+     * @param idProperty the row object identifier property name
+     */
+    public LinkDecorator(Table table, List controls, String idProperty) {
+        if (table == null) {
+            throw new IllegalArgumentException("Null table parameter");
+        }
+        if (controls == null) {
+            throw new IllegalArgumentException("Null controls parameter");
+        }
+        if (idProperty == null) {
+            throw new IllegalArgumentException("Null idProperty parameter");
+        }
+        this.table = table;
+        this.idProperty = idProperty;
+        this.linkSeparator = " ";
+
+        if (!controls.isEmpty()) {
+            Object object = controls.get(0);
+
+            if (object instanceof AbstractLink) {
+                linksArray = new AbstractLink[controls.size()];
+                for (int i = 0; i < controls.size(); i++) {
+                    Object control = controls.get(i);
+                    if (control instanceof AbstractLink) {
+                        linksArray[i] = (AbstractLink) control;
+                    } else {
+                        String msg = "Unsupported control type: " + object.getClass();
+                        throw new RuntimeException(msg);
+                    }
+                }
+
+            } else if (object instanceof ActionButton) {
+                buttonsArray = new ActionButton[controls.size()];
+                for (int i = 0; i < controls.size(); i++) {
+                    Object control = controls.get(i);
+                    if (control instanceof ActionButton) {
+                        buttonsArray[i] = (ActionButton) control;
+                    } else {
+                        String msg = "Unsupported control type: " + object.getClass();
+                        throw new RuntimeException(msg);
+                    }
+                }
+
+            } else {
+                String msg = "Unsupported control type: " + object.getClass();
+                throw new RuntimeException(msg);
+            }
+        }
 
         table.addControl(new LinkDecorator.PageNumberControl(table));
     }
@@ -265,8 +328,7 @@ public class LinkDecorator implements Decorator, Serializable {
             return renderActionButtons(row, context);
 
         } else {
-            // Should never occur
-            throw new IllegalStateException("No ActionLinks or ActionButtons defined");
+            return "";
         }
     }
 
