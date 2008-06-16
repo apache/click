@@ -533,6 +533,24 @@ public abstract class AbstractControl implements Control {
      * The specified {@link net.sf.click.util.PageImports} exposes methods to
      * add JavaScript and CSS imports as well as JavaScript and CSS scripts.
      * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public HomePage extends Page {
+     *     ...
+     *     public void onHtmlImports(PageImports pageImports) {
+     *         String globalJs = "&lt;script type='text/javascript' src='myapp/assets/global.js'&gt;&lt;/script&gt;";
+     *         String globalCss = "&lt;link type='text/css' rel='stylesheet' href='myapp/assets/global.css'/&gt;"
+     *         pageImports.addJsImport(globalJs);
+     *         pageImports.addCssImport(globalCss);
+     *
+     *         // Important to call super here so that Page Controls have
+     *         // opportunity to contribute their own javascript and css
+     *         // resources.
+     *         super.onHtmlImports(pageImports);
+     *     }
+     * } </pre>
+     * <p/>
      * <b>Please note</b> a common problem when overriding onHtmlImports in
      * subclasses is forgetting to call <tt>super.onHtmlImports</tt>. Consider
      * carefully whether you should call <tt>super.onHtmlImports</tt> or not.
@@ -541,6 +559,8 @@ public abstract class AbstractControl implements Control {
      * {@link #getHtmlImports()} method since onHtmlImports is more powerful
      * and flexible than {@link #getHtmlImports()}. However these two methods
      * can be used in conjuction.
+     *
+     * @see net.sf.click.Page#onHtmlImports(net.sf.click.util.PageImports)
      *
      * @param pageImports the PageImports instance to add imports to
      */
