@@ -423,9 +423,8 @@ public class RadioGroup extends Field {
         boolean continueProcessing = true;
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
-            continueProcessing = radio.onProcess();
-            if (!continueProcessing) {
-                return false;
+            if (!radio.onProcess()) {
+                continueProcessing = false;
             }
         }
 
@@ -433,7 +432,8 @@ public class RadioGroup extends Field {
             validate();
         }
 
-        return invokeListener();
+        registerListener();
+        return continueProcessing;
     }
 
     /**

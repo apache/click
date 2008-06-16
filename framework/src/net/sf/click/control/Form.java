@@ -1330,33 +1330,31 @@ public class Form extends BasicForm {
             }
         }
 
+        boolean continueProcessing = true;
         if (isFormSubmission()) {
 
-            boolean continueProcessing = true;
             for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
                 if (control.getName() != null
                     && !control.getName().startsWith(SUBMIT_CHECK)) {
 
-                    continueProcessing = control.onProcess();
-                    if (!continueProcessing) {
-                        return false;
+                    if (!control.onProcess()) {
+                        continueProcessing = false;
                     }
                 }
             }
 
             for (int i = 0, size = getButtonList().size(); i < size; i++) {
                 Button button = (Button) getButtonList().get(i);
-                continueProcessing = button.onProcess();
-                if (!continueProcessing) {
-                    return false;
+                if (!button.onProcess()) {
+                    continueProcessing = false;
                 }
             }
 
-            return invokeListener();
+            registerListener();
         }
 
-        return true;
+        return continueProcessing;
     }
 
     /**
