@@ -202,11 +202,9 @@ public class Submit extends Button {
         bindRequestValue();
 
         if (isClicked()) {
-            return invokeListener();
-
-        } else {
-            return true;
+            registerListener();
         }
+        return true;
     }
 
 }
