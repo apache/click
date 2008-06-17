@@ -33,6 +33,7 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 import net.sf.click.util.PageImports;
+import net.sf.click.util.Partial;
 
 /**
  * Provides a default implementation of the {@link Control} interface,
@@ -197,6 +198,11 @@ public abstract class AbstractControl implements Control {
      */
     public void setActionListener(ActionListener listener) {
         actionListener = listener;
+
+        // To enable ajax, register the control
+        if (listener instanceof AjaxListener) {
+            getContext().registerAjaxControl(this);
+        }
     }
 
     /**
@@ -841,17 +847,31 @@ public abstract class AbstractControl implements Control {
      *
      * @see ClickUtils#invokeListener(Object, String)
      *
-     * @return true if the invoked listener returns true, or if not listener
+     * @return true if the invoked listener returns true, or if no listener
      * is defined
      */
     public boolean invokeListener() {
-        if (getActionListener() != null) {
-            return getActionListener().onAction(this);
+        ActionListener l = getActionListener();
+        if (l != null) {
+            Context context = getContext();
+            if (context.isAjaxRequest() && l instanceof AjaxListener) {
+
+                Partial partial = ((AjaxListener) l).onAjaxAction(this);
+                if (partial != null) {
+                    // Have to process Partial here
+                    partial.process(context);
+                }
+
+                // Ajax requests stops further processing
+                return false;
+            } else {
+                return l.onAction(this);
+            }
+
         } else {
             if (listener != null && listenerMethod != null) {
                 return ClickUtils.invokeListener(listener, listenerMethod);
             } else {
-                // TODO Ajax support
                 return true;
             }
         }
@@ -867,7 +887,6 @@ public abstract class AbstractControl implements Control {
     protected void registerListener() {
         if (getActionListener() != null
             || listener != null && listenerMethod != null) {
-            // TODO Ajax support
             getContext().registerListener(this);
         }
     }

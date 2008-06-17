@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -516,6 +517,18 @@ public class ClickServlet extends HttpServlet {
                         logger.trace(msg);
                     }
                 }
+            }
+
+            // Ajax requests are processed separately
+            if (context.isAjaxRequest() && !context.isForward()) {
+                if (!(context.getAjaxControls().isEmpty())) {
+                    processAjaxControls(context);
+
+                    // As Ajax Controls was registered, stop further processing
+                    return;
+                }
+                // If no Ajax Controls was reigstered, continue processing (for
+                // backwards compatibility)
             }
 
             // Make sure dont process a forwarded request
@@ -1513,6 +1526,26 @@ public class ClickServlet extends HttpServlet {
         }
 
         return continueProcessing;
+    }
+
+    /**
+     * Invoke <tt>onProcess</tt> on all the registered Controls of this context.
+     *
+     * @param context the request context
+     */
+    void processAjaxControls(Context context) {
+
+        for (Iterator it = context.getAjaxControls().iterator(); it.hasNext();) {
+            Control control = (Control) it.next();
+
+            // Check if control is targeted by this request
+            if (context.getRequestParameter(control.getId()) != null) {
+                control.onProcess();
+           }
+        }
+
+        // Fire the registered listeners
+        invokeListeners(context);
     }
 
    /**
