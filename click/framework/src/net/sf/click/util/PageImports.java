@@ -213,8 +213,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        request.setAttribute("jsImports", new JsImportsTop());
-        if (model.containsKey("jsImports")) {
+        request.setAttribute("jsImportsTop", new JsImportsTop());
+        if (model.containsKey("jsImportsTop")) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                              + " model contains an object keyed with reserved "
                              + "name \"jsImportsTop\". The request attribute "
@@ -222,8 +222,8 @@ public class PageImports {
             logger.warn(msg);
         }
 
-        request.setAttribute("jsImports", new JsImportsBottom());
-        if (model.containsKey("jsImports")) {
+        request.setAttribute("jsImportsBottom", new JsImportsBottom());
+        if (model.containsKey("jsImportsBottom")) {
             String msg = page.getClass().getName() + " on " + page.getPath()
                              + " model contains an object keyed with reserved "
                              + "name \"jsImportsBottom\". The request attribute "
@@ -239,7 +239,7 @@ public class PageImports {
      * &lt;style&gt; element, so no need to do this yourself.
      * <p/>
      * The css will be made available in your template under the key
-     * <em>css</em>.
+     * <em>cssImports</em>.
      *
      * @param script the css to add
      */
@@ -264,7 +264,7 @@ public class PageImports {
      * Add the specified javascript import to the <em>jsImports</em> list.
      * <p/>
      * The javascript imports will be made available in your template under the
-     * key <em>jsImports</em>.
+     * keys <em>jsImports</em> and <em>jsImportsTop</em>.
      *
      * @param jsImport the javascript import to add
      */
@@ -279,7 +279,7 @@ public class PageImports {
      * &lt;srcipt&gt; element, so no need to do this yourself.
      * <p/>
      * The javascript will be made available in your template under the
-     * key <em>jsScripts</em>.
+     * keys <em>jsImports</em> and <em>jsImportsTop</em>.
      *
      * @param script the javascript script to add
      */
@@ -292,7 +292,7 @@ public class PageImports {
      * Add the specified javascript import to the <em>jsImportsBottom</em> list.
      * <p/>
      * The javascript import will be made available in your template under the
-     * key <em>jsImportsBottom</em>.
+     * keys <em>jsImportsBottom</em> and <em>jsImports</em>.
      *
      * @param jsImport the javascript import to add
      */
@@ -307,7 +307,7 @@ public class PageImports {
      * &lt;srcipt&gt; element, so no need to do this yourself.
      * <p/>
      * The javascript will be made available in your template under the
-     * key <em>jsBottom</em>.
+     * keys <em>jsImportsBottom</em> and <em>jsImports</em>.
      *
      * @param script the javascript script to add
      */
