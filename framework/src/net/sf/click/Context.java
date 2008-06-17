@@ -18,10 +18,11 @@ package net.sf.click;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 
+import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
@@ -87,8 +88,11 @@ public class Context {
     /** The servlet request. */
     final HttpServletRequest request;
 
-    /** List of registered listeners. */
-    List listeners;
+    /** Set of registered listeners. */
+    Set listeners;
+
+    /** Set of registered Ajax Controls. */
+    Set ajaxControls;
 
     // ----------------------------------------------------------- Constructors
 
@@ -780,8 +784,7 @@ public class Context {
     }
 
     /**
-     * Register the specified control, which listener must be invoked,
-     * with this context.
+     * Register the specified control, which listener must be invoked.
      * <p/>
      * Registered listeners will be fired immediately after the
      * {@link net.sf.click.Control#onProcess()} event. This ensures the
@@ -799,19 +802,48 @@ public class Context {
         getListeners().add(control);
     }
 
+    /**
+     * Register the specified Ajax control, which
+     * {@link net.sf.click.Control#onProcess()} method must be invoked for
+     * Ajax requests.
+     *
+     * @param control the Ajax control which must be registered
+     *
+     * @throws IllegalArgumentException if the control argument is null
+     */
+    public void registerAjaxControl(Control control) {
+        if (control == null) {
+            throw new IllegalArgumentException("Null control parameter");
+        }
+
+        getAjaxControls().add(control);
+    }
+
     // ------------------------------------------------ Package Private Methods
 
     /**
-     * Return the list of registered Control
+     * Return the set of registered Control
      * {@link net.sf.click.control.ActionListener}s.
      *
      * @return list of listeners
      */
-    List getListeners() {
+    Set getListeners() {
         if (listeners == null) {
-            listeners = new ArrayList();
+            listeners = new LinkedHashSet();
         }
         return listeners;
+    }
+
+    /**
+     * Return the set of registered Ajax {@link net.sf.click.Control}s.
+     *
+     * @return list of Ajax controls
+     */
+    Set getAjaxControls() {
+        if (ajaxControls == null) {
+            ajaxControls = new LinkedHashSet();
+        }
+        return ajaxControls;
     }
 
     /**
