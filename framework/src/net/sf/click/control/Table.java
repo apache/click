@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -982,28 +983,29 @@ public class Table extends AbstractControl {
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
+        Context context = getContext();
         controlLink.onProcess();
 
         if (controlLink.isClicked()) {
-            String page = getContext().getRequestParameter(PAGE);
+            String page = context.getRequestParameter(PAGE);
             if (NumberUtils.isNumber(page)) {
                 setPageNumber(Integer.parseInt(page));
             } else {
                 setPageNumber(0);
             }
 
-            String column = getContext().getRequestParameter(COLUMN);
+            String column = context.getRequestParameter(COLUMN);
             if (column != null) {
                 setSortedColumn(column);
             }
 
-            String ascending = getContext().getRequestParameter(ASCENDING);
+            String ascending = context.getRequestParameter(ASCENDING);
             if (ascending != null) {
                 setSortedAscending("true".equals(ascending));
             }
 
             // Flip sorting order
-            if ("true".equals(getContext().getRequestParameter(SORT))) {
+            if ("true".equals(context.getRequestParameter(SORT))) {
                 setSortedAscending(!isSortedAscending());
             }
         }
