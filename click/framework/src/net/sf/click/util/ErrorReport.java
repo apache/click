@@ -70,7 +70,7 @@ public class ErrorReport {
     /** The error is Velocity parsing exception. */
     protected final boolean isParseError;
 
-    /** The applicaiton is in "production" mode flag. */
+    /** The application is in "production" mode flag. */
     protected final boolean isProductionMode;
 
     /** The page class which caused the error. */
