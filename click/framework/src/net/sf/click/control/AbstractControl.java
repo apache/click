@@ -26,9 +26,13 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
+
+import net.sf.click.ActionEvents;
+import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
+import net.sf.click.util.ActionListenerAdaptor;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
@@ -188,6 +192,9 @@ public abstract class AbstractControl implements Control {
      * @return the control's action listener
      */
     public ActionListener getActionListener() {
+        if (actionListener == null && listener != null && listenerMethod != null) {
+            actionListener = new ActionListenerAdaptor(listener, listenerMethod);
+        }
         return actionListener;
     }
 
@@ -200,9 +207,9 @@ public abstract class AbstractControl implements Control {
         actionListener = listener;
 
         // To enable ajax, register the control
-        if (listener instanceof AjaxListener) {
-            getContext().registerAjaxControl(this);
-        }
+//        if (listener instanceof AjaxListener) {
+//            getContext().registerAjaxControl(this);
+//        }
     }
 
     /**
@@ -469,7 +476,7 @@ public abstract class AbstractControl implements Control {
     * @return true to continue Page event processing or false otherwise
     */
     public boolean onProcess() {
-        registerListener();
+        registerActionEvent();
         return true;
     }
 
@@ -884,10 +891,9 @@ public abstract class AbstractControl implements Control {
      *
      * @see Context#registerListener(net.sf.click.Control)
      */
-    protected void registerListener() {
-        if (getActionListener() != null
-            || listener != null && listenerMethod != null) {
-            getContext().registerListener(this);
+    protected void registerActionEvent() {
+        if (getActionListener() != null) {
+            ActionEvents.registerActionEvent(this, getActionListener());
         }
     }
 

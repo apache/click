@@ -432,7 +432,8 @@ public class RadioGroup extends Field {
             validate();
         }
 
-        registerListener();
+        registerActionEvent();
+
         return continueProcessing;
     }
 

@@ -22,12 +22,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.control.AbstractContainer;
 import net.sf.click.control.AbstractControl;
 import net.sf.click.util.Format;
 import net.sf.click.util.MessagesMap;
-
 import net.sf.click.util.PageImports;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -600,7 +599,7 @@ public class Page {
      * The specified {@link net.sf.click.util.PageImports} exposes methods to
      * add JavaScript and CSS imports as well as JavaScript and CSS scripts.
      * <p/>
-     * <b>Please note</b> by default this method will invoke 
+     * <b>Please note</b> by default this method will invoke
      * <tt>onHtmlImports</tt> on all the Page Controls. When overriding this
      * method, to include your own imports, it is important to remember to
      * invoke <tt>super.onHtmlImports</tt> so that all Controls have a chance to
@@ -663,7 +662,7 @@ public class Page {
      */
     public void onHtmlImports(PageImports pageImports) {
         if (hasControls()) {
-            for(Iterator it = getControls().iterator(); it.hasNext(); ) {
+            for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
 
                 // TODO ties Page to AbstractControl.

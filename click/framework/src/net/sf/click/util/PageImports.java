@@ -94,7 +94,7 @@ public class PageImports {
     /** The list of JS import lines. */
     protected List jsImports = new ArrayList();
 
-    /** 
+    /**
      * TODO jsScript is probably redundant.
      * The list of JS script block lines.
      */

@@ -243,7 +243,8 @@ public abstract class AbstractContainer extends AbstractControl implements
             }
         }
 
-        registerListener();
+        registerActionEvent();
+
         return continueProcessing;
     }
 
@@ -303,7 +304,7 @@ public abstract class AbstractContainer extends AbstractControl implements
     */
     public void onHtmlImports(PageImports pageImports) {
         if (hasControls()) {
-            for(Iterator it = getControls().iterator(); it.hasNext(); ) {
+            for (Iterator it = getControls().iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
 
                 if (control instanceof AbstractControl) {

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.control;
-
-import net.sf.click.Control;
+package net.sf.click;
 
 /**
  * Provides a listener interface for receiving Control action events.

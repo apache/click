@@ -459,8 +459,8 @@ public class ActionButton extends Button {
     public boolean onProcess() {
         bindRequestValue();
 
-        if (clicked) {
-            registerListener();
+        if (isClicked()) {
+            registerActionEvent();
         }
         return true;
     }

@@ -600,7 +600,7 @@ public class BasicForm extends AbstractContainer {
                 }
             }
 
-            registerListener();
+            registerActionEvent();
         }
 
         return continueProcessing;

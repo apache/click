@@ -1351,7 +1351,7 @@ public class Form extends BasicForm {
                 }
             }
 
-            registerListener();
+            registerActionEvent();
         }
 
         return continueProcessing;

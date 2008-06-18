@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -363,6 +362,8 @@ public class ClickServlet extends HttpServlet {
                     Context.popThreadLocalContext();
                 }
             }
+
+            ActionEvents.clearActionEvents();
         }
     }
 
@@ -519,17 +520,17 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
-            // Ajax requests are processed separately
-            if (context.isAjaxRequest() && !context.isForward()) {
-                if (!(context.getAjaxControls().isEmpty())) {
-                    processAjaxControls(context);
-
-                    // As Ajax Controls was registered, stop further processing
-                    return;
-                }
-                // If no Ajax Controls was reigstered, continue processing (for
-                // backwards compatibility)
-            }
+//            // Ajax requests are processed separately
+//            if (context.isAjaxRequest() && !context.isForward()) {
+//                if (!(context.getAjaxControls().isEmpty())) {
+//                    processAjaxControls(context);
+//
+//                    // As Ajax Controls was registered, stop further processing
+//                    return;
+//                }
+//                // If no Ajax Controls was reigstered, continue processing (for
+//                // backwards compatibility)
+//            }
 
             // Make sure dont process a forwarded request
             if (page.hasControls() && !context.isForward()) {
@@ -553,10 +554,8 @@ public class ClickServlet extends HttpServlet {
                     }
                 }
 
-                // Fire all listeners registered with the Context
-                if (!invokeListeners(context)) {
-                    continueProcessing = false;
-                }
+                // Fire all the registered action events
+                continueProcessing = ActionEvents.fireActionEvents();
 
                 if (logger.isTraceEnabled()) {
                     String msg =  "   invoked: Control listeners : " + continueProcessing;
@@ -1504,49 +1503,25 @@ public class ClickServlet extends HttpServlet {
 
     // ------------------------------------------------ Package Private Methods
 
-    /**
-     * Invoke all the listeners registered on this context.
-     *
-     * @param context the request context
-     *
-     * @return true if processing must continue, false otherwise
-     */
-    boolean invokeListeners(Context context) {
-
-        boolean continueProcessing = true;
-
-        for (Iterator it = context.getListeners().iterator(); it.hasNext(); ) {
-            Control control = (Control) it.next();
-
-            // Invoke all registered listeners. If any listener returns false,
-            // this method must return false.
-            if (!control.invokeListener()) {
-                continueProcessing = false;
-            }
-        }
-
-        return continueProcessing;
-    }
-
-    /**
-     * Invoke <tt>onProcess</tt> on all the registered Controls of this context.
-     *
-     * @param context the request context
-     */
-    void processAjaxControls(Context context) {
-
-        for (Iterator it = context.getAjaxControls().iterator(); it.hasNext();) {
-            Control control = (Control) it.next();
-
-            // Check if control is targeted by this request
-            if (context.getRequestParameter(control.getId()) != null) {
-                control.onProcess();
-           }
-        }
-
-        // Fire the registered listeners
-        invokeListeners(context);
-    }
+//    /**
+//     * Invoke <tt>onProcess</tt> on all the registered Controls of this context.
+//     *
+//     * @param context the request context
+//     */
+//    void processAjaxControls(Context context) {
+//
+//        for (Iterator it = context.getAjaxControls().iterator(); it.hasNext();) {
+//            Control control = (Control) it.next();
+//
+//            // Check if control is targeted by this request
+//            if (context.getRequestParameter(control.getId()) != null) {
+//                control.onProcess();
+//           }
+//        }
+//
+//        // Fire the registered listeners
+//        invokeListeners(context);
+//    }
 
    /**
     * Create a Click application ConfigService instance.

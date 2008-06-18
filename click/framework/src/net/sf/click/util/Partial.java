@@ -69,7 +69,7 @@ import org.apache.commons.io.IOUtils;
 public class Partial {
 
     // -------------------------------------------------------- Constants
-    
+
     // The plain text content type constant <tt>text/plain</tt>.
     public static final String TEXT = "text/plain";
 
@@ -146,7 +146,7 @@ public class Partial {
     }
 
     /**
-     * Construct the Partial for the given content. The 
+     * Construct the Partial for the given content. The
      * <tt>{@link javax.servlet.http.HttpServletResponse#setContentType(java.lang.String) response content type}</tt>
      * will default to {@link #TEXT}.
      * <p/>
@@ -186,7 +186,7 @@ public class Partial {
             if (content != null) {
                 this.reader = new StringReader(content.toString());
             }
-           
+
             if (reader != null) {
                 PrintWriter writer = response.getWriter();
                 char[] buffer = new char[WRITER_BUFFER_SIZE];
