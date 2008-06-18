@@ -2,10 +2,10 @@ package net.sf.click.examples.page.control;
 
 import java.util.Date;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Control;
 import net.sf.click.control.ActionButton;
 import net.sf.click.control.ActionLink;
-import net.sf.click.control.ActionListener;
 import net.sf.click.examples.page.BorderPage;
 
 /**

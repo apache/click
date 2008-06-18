@@ -19,7 +19,7 @@ public class LinkDemo extends BorderPage {
     public ActionLink actionLink = new ActionLink("ActionLink", this, "onLinkClick");
     public ExternalLink externalLink = new ExternalLink("ExternalLink", "http://www.google.com/search");
     public PageLink pageLink = new PageLink("PageLink", HomePage.class);
-    public PageButton pageButton = new PageButton("PageButton", HomePage.class); 
+    public PageButton pageButton = new PageButton("PageButton", HomePage.class);
 
     public String clicked;
 
