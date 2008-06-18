@@ -12,9 +12,9 @@ import net.sf.click.Control;
  */
 public class ActionListenerAdaptor implements ActionListener, Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/** The target listener object. */
+    /** The target listener object. */
     protected final Object listener;
 
     /** The target listener method name. */
