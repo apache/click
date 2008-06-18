@@ -475,8 +475,8 @@ public class ActionLink extends AbstractLink {
     public boolean onProcess() {
         bindRequestValue();
 
-        if (clicked) {
-            registerListener();
+        if (isClicked()) {
+            registerActionEvent();
         }
         return true;
     }

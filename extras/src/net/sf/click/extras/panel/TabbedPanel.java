@@ -402,7 +402,8 @@ public class TabbedPanel extends Panel {
             }
         }
 
-        registerListener();
+        registerActionEvent();
+
         return true;
     }
 

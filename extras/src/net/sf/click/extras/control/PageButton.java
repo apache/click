@@ -10,7 +10,7 @@ import net.sf.click.util.HtmlStringBuffer;
  * <p/>
  * <b>Note:</b> this control is not related at all to {@link net.sf.click.extras.control.PageSubmit} but
  * to {@link PageLink}.
- * <p/> 
+ * <p/>
  * <b>Advantages:</b>
  * <ul>
  *      <li>over {@link net.sf.click.control.Button Button} + direct javascript trick:

@@ -17,6 +17,8 @@ package net.sf.click.control;
 
 import java.util.List;
 import java.util.Map;
+
+import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;

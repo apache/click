@@ -15,11 +15,12 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Control;
 import net.sf.click.util.Partial;
 
 /**
- * TODO
+ * Provides an Ajax ActionListener.
  *
  * @author Bob Schellink
  */
@@ -53,4 +54,6 @@ public class AjaxListener implements ActionListener {
     public Partial onAjaxAction(Control source) {
         return null;
     }
+
 }
+

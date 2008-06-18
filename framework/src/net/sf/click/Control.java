@@ -121,6 +121,21 @@ public interface Control extends Serializable {
     public static final String CONTROL_MESSAGES = "click-control";
 
     /**
+     * Return the control's ActionListener instance if defined, or null
+     * otherwise.
+     *
+     * @return the control's ActionListener instance if defined
+     */
+    public ActionListener getActionListener();
+
+    /**
+     * Set the control's ActionListener instance.
+     *
+     * @param actionListener the control's ActionListener instance to set
+     */
+    public void setActionListener(ActionListener actionListener);
+
+    /**
      * Return the Page request Context of the Control.
      *
      * @deprecated getContext() is now obsolete on the Control interface,
@@ -296,12 +311,6 @@ public interface Control extends Serializable {
     public boolean onProcess();
 
     /**
-     * TODO
-     * @return
-     */
-    public boolean invokeListener();
-
-    /**
      * The on render event handler. This event handler is invoked prior to the
      * control being rendered, and is useful for providing pre rendering logic.
      * <p/>
@@ -372,5 +381,5 @@ public interface Control extends Serializable {
      *
      * @param buffer the specified buffer to render the control's output to
      */
-    void render(HtmlStringBuffer buffer);
+    public void render(HtmlStringBuffer buffer);
 }
