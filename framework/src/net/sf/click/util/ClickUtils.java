@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -421,6 +422,89 @@ public class ClickUtils {
         "_" + getClickVersion();
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Perform an auto post redirect to the specified target using the given
+     * response. If the params Map is defined then the form will post these
+     * values as name value pairs. If the compress value is true, this method
+     * will attempt to gzip compress the response content if requesting
+     * browser accepts "gzip" encoding.
+     * <p/>
+     * Once this method has returned you should not attempt to write to the
+     * servlet response.
+     *
+     * @param request the servlet request
+     * @param response the servlet response
+     * @param target the target URL to send the auto post redirect to
+     * @param params the map of parameter values to post
+     * @param compress the flag to specify whether to attempt gzip compression
+     *         of the response content
+     */
+    public static void autoPostRedirect(HttpServletRequest request,
+            HttpServletResponse response, String target, Map params,
+            boolean compress) {
+
+        Validate.notNull(request, "Null response parameter");
+        Validate.notNull(response, "Null response parameter");
+        Validate.notNull(target, "Null target parameter");
+
+        HtmlStringBuffer buffer = new HtmlStringBuffer(1024);
+        buffer.append("<html><body onload=\"document.forms[0].submit();\">");
+        buffer.append("<form name=\"form\" method=\"post\" style=\"{display:none;}\" action=\"");
+        buffer.append(target);
+        buffer.append("\">");
+        for (Iterator i = params.keySet().iterator(); i.hasNext();) {
+            String name = i.next().toString();
+            String value = params.get(name).toString();
+            buffer.elementStart("textarea");
+            buffer.appendAttribute("name", name);
+            buffer.elementEnd();
+            buffer.append(value);
+            buffer.elementEnd("textarea");
+        }
+        buffer.append("</form></body></html>");
+
+        // Determine whether browser will accept gzip compression
+        if (compress) {
+            compress = false;
+            Enumeration e = request.getHeaders("Accept-Encoding");
+
+            while (e.hasMoreElements()) {
+                String name = (String) e.nextElement();
+                if (name.indexOf("gzip") != -1) {
+                    compress = true;
+                    break;
+                }
+            }
+        }
+
+        OutputStream os = null;
+        GZIPOutputStream gos = null;
+        try {
+            response.setContentType("text/html");
+
+            if (compress) {
+                response.setHeader("Content-Encoding", "gzip");
+
+                os = response.getOutputStream();
+                gos = new GZIPOutputStream(os);
+                gos.write(buffer.toString().getBytes());
+
+            } else {
+                response.setContentLength(buffer.length());
+
+                os = response.getOutputStream();
+                os.write(buffer.toString().getBytes());
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+
+        } finally {
+            ClickUtils.close(gos);
+            ClickUtils.close(os);
+        }
+    }
 
     /**
      * Return a new XML Document for the given input stream.
