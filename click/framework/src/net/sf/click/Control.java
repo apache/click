@@ -121,21 +121,6 @@ public interface Control extends Serializable {
     public static final String CONTROL_MESSAGES = "click-control";
 
     /**
-     * Return the control's ActionListener instance if defined, or null
-     * otherwise.
-     *
-     * @return the control's ActionListener instance if defined
-     */
-    public ActionListener getActionListener();
-
-    /**
-     * Set the control's ActionListener instance.
-     *
-     * @param actionListener the control's ActionListener instance to set
-     */
-    public void setActionListener(ActionListener actionListener);
-
-    /**
      * Return the Page request Context of the Control.
      *
      * @deprecated getContext() is now obsolete on the Control interface,
