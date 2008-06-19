@@ -66,7 +66,7 @@ public final class ActionEvents {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    protected static boolean fireActionEvents() {
+    static boolean fireActionEvents() {
         List eventSourceList = (List) eventSources.get();
         List eventListenerList = (List) eventListeners.get();
 
@@ -95,7 +95,7 @@ public final class ActionEvents {
     /**
      * Clear all the registered action events.
      */
-    protected static void clearActionEvents() {
+    static void clearActionEvents() {
         eventSources.set(null);
         eventListeners.set(null);
     }
