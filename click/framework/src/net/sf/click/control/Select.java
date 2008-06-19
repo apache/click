@@ -334,11 +334,13 @@ public class Select extends Field {
     }
 
     /**
-     * Add the given Option/OptionGroup/String/Number collection to the Select.
+     * Add the given Option/OptionGroup/String/Number/Boolean collection to the
+     * Select.
      *
-     * @param options the collection of Option/OptionGroup/String/Number objects
-     *         to add
-     * @throws IllegalArgumentException if options is null
+     * @param options the collection of Option/OptionGroup/String/Number/Boolean
+     *     objects to add
+     * @throws IllegalArgumentException if options is null, or the collection
+     *     contains an unsupported class
      */
     public void addAll(Collection options) {
         if (options == null) {
@@ -360,6 +362,15 @@ public class Select extends Field {
 
                 } else if (value instanceof Number) {
                     getOptionList().add(new Option(value.toString()));
+
+                } else if (value instanceof Boolean) {
+                    getOptionList().add(new Option(value.toString()));
+
+                } else {
+                    String message = "Unsupported options class "
+                        + value.getClass().getName() + ". Please use method "
+                        + "Select.addAll(Collection, String, String) instead.";
+                    throw new IllegalArgumentException(message);
                 }
             }
             setInitialValue();
