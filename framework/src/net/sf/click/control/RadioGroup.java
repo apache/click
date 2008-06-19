@@ -403,6 +403,7 @@ public class RadioGroup extends Field {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        super.onInit();
         for (int i = 0, size = getRadioList().size(); i < size; i++) {
             Radio radio = (Radio) getRadioList().get(i);
             radio.onInit();

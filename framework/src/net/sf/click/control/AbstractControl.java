@@ -31,6 +31,7 @@ import net.sf.click.ActionEvents;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.ControlRegistry;
 import net.sf.click.Page;
 import net.sf.click.util.ActionListenerAdaptor;
 import net.sf.click.util.ClickUtils;
@@ -205,11 +206,6 @@ public abstract class AbstractControl implements Control {
      */
     public void setActionListener(ActionListener listener) {
         actionListener = listener;
-
-        // To enable ajax, register the control
-//        if (listener instanceof AjaxListener) {
-//            getContext().registerAjaxControl(this);
-//        }
     }
 
     /**
@@ -506,18 +502,40 @@ public abstract class AbstractControl implements Control {
     }
 
    /**
+    * This method currently performs the following initialization functionality:
+    * <ul>
+    *  <li>register this Control with {@link net.sf.click.ControlRegistry} if
+    *  the listener is an instance of {@link net.sf.click.control.AjaxListener}
+    *  </li>
+    * </ul>
+    * Subclasses may override this method to perform additional initialization.
+    * <p/>
+    * <b>Please note</b> that when overriding this method to carefully consider
+    * calling <tt>super.onInit()</tt> otherwise any initializing done by
+    * AbstractControl will be lost.
+    *
     * @see net.sf.click.Control#onInit()
     */
     public void onInit() {
+        // Check whether this control should be registered as Ajax control
+        if (getActionListener() instanceof AjaxListener) {
+            ControlRegistry.registerAjaxControl(this);
+        }
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to perform
+     * clean up any resources.
+     *
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
     }
 
     /**
+     * This method does nothing. Subclasses may override this method to deploy
+     * static web resources.
+     *
      * @see net.sf.click.Control#onDeploy(ServletContext)
      *
      * @param servletContext the servlet context
@@ -527,6 +545,9 @@ public abstract class AbstractControl implements Control {
     }
 
    /**
+    * This method does nothing. Subclasses may override this method to perform
+    * pre rendering logic.
+    *
     * @see net.sf.click.Control#onRender()
     */
     public void onRender() {
@@ -847,49 +868,13 @@ public abstract class AbstractControl implements Control {
         return buffer.toString();
     }
 
-    /**
-     * Perform a action listener callback if an ActionListener is defined,
-     * or if a listener object and listener method is defined, otherwise
-     * returns true.
-     *
-     * @see ClickUtils#invokeListener(Object, String)
-     *
-     * @return true if the invoked listener returns true, or if no listener
-     * is defined
-     */
-    public boolean invokeListener() {
-        ActionListener l = getActionListener();
-        if (l != null) {
-            Context context = getContext();
-            if (context.isAjaxRequest() && l instanceof AjaxListener) {
-
-                Partial partial = ((AjaxListener) l).onAjaxAction(this);
-                if (partial != null) {
-                    // Have to process Partial here
-                    partial.process(context);
-                }
-
-                // Ajax requests stops further processing
-                return false;
-            } else {
-                return l.onAction(this);
-            }
-
-        } else {
-            if (listener != null && listenerMethod != null) {
-                return ClickUtils.invokeListener(listener, listenerMethod);
-            } else {
-                return true;
-            }
-        }
-    }
-
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Register this control's listener with the Context.
+     * Register this control's listener with the {@link net.sf.click.ActionEvents}
+     * registry.
      *
-     * @see Context#registerListener(net.sf.click.Control)
+     * @see net.sf.click.ActionEvents#registerActionEvent(net.sf.click.Control, net.sf.click.ActionListener)
      */
     protected void registerActionEvent() {
         if (getActionListener() != null) {

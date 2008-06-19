@@ -956,6 +956,7 @@ public class Table extends AbstractControl {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        super.onInit();
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             control.onInit();

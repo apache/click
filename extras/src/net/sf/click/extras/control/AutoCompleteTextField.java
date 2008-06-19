@@ -235,6 +235,7 @@ public abstract class AutoCompleteTextField extends TextField {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        super.onInit();
         // See whether control has been registered at Page level.
         Object control = getPage().getModel().get(getName());
 
