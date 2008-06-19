@@ -96,39 +96,49 @@ public class HtmlStringBuffer {
      * Append the char value to the buffer.
      *
      * @param value the char value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void append(char value) {
+    public HtmlStringBuffer append(char value) {
         int newcount = count + 1;
         if (newcount > characters.length) {
             expandCapacity(newcount);
         }
         characters[count++] = value;
+
+        return this;
     }
 
     /**
      * Append the integer value to the buffer.
      *
      * @param value the integer value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void append(int value) {
+    public HtmlStringBuffer append(int value) {
         append(String.valueOf(value));
+
+        return this;
     }
 
     /**
      * Append the long value to the buffer.
      *
      * @param value the long value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void append(long value) {
+    public HtmlStringBuffer append(long value) {
         append(String.valueOf(value));
+
+        return this;
     }
 
     /**
      * Append the raw object value of the given object to the buffer.
      *
      * @param value the object value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void append(Object value) {
+    public HtmlStringBuffer append(Object value) {
         String string = String.valueOf(value);
         int length = string.length();
 
@@ -138,14 +148,17 @@ public class HtmlStringBuffer {
         }
         string.getChars(0, length, characters, count);
         count = newCount;
+
+        return this;
     }
 
     /**
      * Append the raw string value of the given object to the buffer.
      *
      * @param value the string value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void append(String value) {
+    public HtmlStringBuffer append(String value) {
         String string = (value != null) ? value : "null";
         int length = string.length();
 
@@ -155,15 +168,18 @@ public class HtmlStringBuffer {
         }
         string.getChars(0, length, characters, count);
         count = newCount;
+
+        return this;
     }
 
     /**
      * Append the given value to the buffer and escape its HMTL value.
      *
      * @param value the object value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if the value is null
      */
-    public void appendEscaped(Object value) {
+    public HtmlStringBuffer appendEscaped(Object value) {
         if (value == null) {
             throw new IllegalArgumentException("Null value parameter");
         }
@@ -181,6 +197,8 @@ public class HtmlStringBuffer {
                 append(aChar);
             }
         }
+
+        return this;
     }
 
     /**
@@ -196,9 +214,10 @@ public class HtmlStringBuffer {
      *
      * @param name the HTML attribute name
      * @param value the object value to append
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if name is null
      */
-    public void appendAttribute(String name, Object value) {
+    public HtmlStringBuffer appendAttribute(String name, Object value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
@@ -213,6 +232,8 @@ public class HtmlStringBuffer {
             }
             append("\"");
         }
+
+        return this;
     }
 
     /**
@@ -224,9 +245,10 @@ public class HtmlStringBuffer {
      *
      * @param name the HTML attribute name
      * @param value the HTML attribute value
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if name is null
      */
-    public void appendAttribute(String name, int value) {
+    public HtmlStringBuffer appendAttribute(String name, int value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
@@ -235,6 +257,8 @@ public class HtmlStringBuffer {
         append("=\"");
         append(value);
         append("\"");
+
+        return this;
     }
 
     /**
@@ -243,9 +267,13 @@ public class HtmlStringBuffer {
      * For example:
      * <pre class="javaCode">
      *    appendAttributeDisabled()  <span class="green">-></span>  <span class="st">disabled="disabled"</span> </pre>
+     *
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void appendAttributeDisabled() {
+    public HtmlStringBuffer appendAttributeDisabled() {
         append(" disabled=\"disabled\"");
+
+        return this;
     }
 
     /**
@@ -254,18 +282,23 @@ public class HtmlStringBuffer {
      * For example:
      * <pre class="javaCode">
      *    appendAttributeReadonly()  <span class="green">-></span>  <span class="st">readonly="readonly"</span> </pre>
+     *
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void appendAttributeReadonly() {
+    public HtmlStringBuffer appendAttributeReadonly() {
         append(" readonly=\"readonly\"");
+
+        return this;
     }
 
     /**
      * Append the given map of attribute names and values to the string buffer.
      *
      * @param attributes the map of attribute names and values
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if attributes is null
      */
-    public void appendAttributes(Map attributes) {
+    public HtmlStringBuffer appendAttributes(Map attributes) {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
@@ -278,6 +311,8 @@ public class HtmlStringBuffer {
                 appendAttribute(name, value);
             }
         }
+
+        return this;
     }
 
     /**
@@ -285,9 +320,10 @@ public class HtmlStringBuffer {
      * attribute to the string buffer.
      *
      * @param attributes the map of CSS style names and values
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if attributes is null
      */
-    public void appendStyleAttributes(Map attributes) {
+    public HtmlStringBuffer appendStyleAttributes(Map attributes) {
         if (attributes == null) {
             throw new IllegalArgumentException("Null attributes parameter");
         }
@@ -308,6 +344,8 @@ public class HtmlStringBuffer {
 
             append("\"");
         }
+
+        return this;
     }
 
     /**
@@ -318,15 +356,18 @@ public class HtmlStringBuffer {
      *    elementEnd(<span class="st">"textarea"</span>)  <span class="green">-></span>  <span class="st">&lt;/textarea&gt;</span> </pre>
      *
      * @param name the HTML element name to end
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if name is null
      */
-    public void elementEnd(String name) {
+    public HtmlStringBuffer elementEnd(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
         append("</");
         append(name);
         append(">");
+
+        return this;
     }
 
     /**
@@ -336,9 +377,12 @@ public class HtmlStringBuffer {
      * <pre class="javaCode">
      *    closeTag()  <span class="green">-></span>  <span class="st">&gt;</span> </pre>
      *
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void closeTag() {
+    public HtmlStringBuffer closeTag() {
         append(">");
+
+        return this;
     }
 
     /**
@@ -348,9 +392,12 @@ public class HtmlStringBuffer {
      * <pre class="javaCode">
      *    elementEnd()  <span class="green">-></span>  <span class="st">/&gt;</span> </pre>
      *
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void elementEnd() {
+    public HtmlStringBuffer elementEnd() {
         append("/>");
+
+        return this;
     }
 
     /**
@@ -361,10 +408,13 @@ public class HtmlStringBuffer {
      *    elementStart(<span class="st">"input"</span>)  <span class="green">-></span>  <span class="st">&lt;input</span> </pre>
      *
      * @param name the HTML element name to start
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      */
-    public void elementStart(String name) {
+    public HtmlStringBuffer elementStart(String name) {
         append("<");
         append(name);
+
+        return this;
     }
 
     /**
