@@ -18,10 +18,36 @@ package net.sf.click;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.click.control.AjaxListener;
+import net.sf.click.util.Partial;
 import org.apache.commons.lang.Validate;
 
 /**
  * Provides a thread local registry for managing control action events.
+ * <p/>
+ * Developers who implement their own controls, would be interested in the
+ * following example <tt>onProcess</tt> implementation. Note the call to
+ * {@link net.sf.click.control.AbstractControl#registerActionEvent()} which
+ * registers the Control listener with ActionEvents.
+ *
+ * <pre class="prettyprint">
+ * public class MyLink extends AbstractControl {
+ *
+ *     ...
+ *     public boolean onProcess() {
+ *         bindRequestValue();
+ *
+ *         if (isClicked()) {
+ *             // Register this controls listener for invocation after process
+ *             // finish
+ *             registerActionEvent();
+ *         }
+ *
+ *         return true;
+ *     }
+ *     ...
+ *
+ * } </pre>
  *
  * @author Malcolm Edgar
  */
@@ -66,30 +92,42 @@ public final class ActionEvents {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    static boolean fireActionEvents() {
+    static boolean fireActionEvents(Context context) {
         List eventSourceList = (List) eventSources.get();
         List eventListenerList = (List) eventListeners.get();
+        boolean continueProcessing = true;
 
         if (eventSourceList != null && eventListenerList != null) {
             for (int i = 0, size = eventSourceList.size(); i < size; i++) {
                 Control source = (Control) eventSourceList.get(i);
                 ActionListener listener = (ActionListener) eventListenerList.get(i);
 
-                boolean continueProcessing = listener.onAction(source);
-                if (!continueProcessing) {
-                    return false;
+                if (context.isAjaxRequest() && listener instanceof AjaxListener) {
+
+                    Partial partial = ((AjaxListener) listener).onAjaxAction(source);
+                    if (partial != null) {
+                        // Have to process Partial here
+                        partial.process(context);
+                    }
+
+                    // Ajax requests stops further processing
+                    continueProcessing = false;
+                } else {
+                    if(!listener.onAction(source)) {
+                        continueProcessing = false;
+                    }
                 }
             }
 
         } else if (eventSourceList == null && eventListenerList == null) {
-            return true;
+            continueProcessing = true;
 
         } else {
             // This should never happen
             throw new IllegalStateException("ActionEvents registry invalid");
         }
 
-        return true;
+        return continueProcessing;
     }
 
     /**

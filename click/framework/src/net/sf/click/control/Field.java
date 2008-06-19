@@ -813,21 +813,13 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to deploy
-     * static web resources.
-     *
-     * @param servletContext the servlet context
-     */
-    public void onDeploy(ServletContext servletContext) {
-    }
-
-    /**
      * This method does nothing. Subclasses may override this method to perform
      * additional initialization.
      *
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        super.onInit();
     }
 
     /**
@@ -863,24 +855,6 @@ public abstract class Field extends AbstractControl {
         registerActionEvent();
 
         return true;
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * pre rendering logic.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-    }
-
-    /**
-     * This method does nothing. Subclasses may override this method to perform
-     * clean up any resources.
-     *
-     * @see net.sf.click.Control#onDestroy()
-     */
-    public void onDestroy() {
     }
 
     /**

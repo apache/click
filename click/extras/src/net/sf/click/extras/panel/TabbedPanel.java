@@ -18,7 +18,9 @@ package net.sf.click.extras.panel;
 import javax.servlet.ServletContext;
 
 import net.sf.click.Control;
+import net.sf.click.ControlRegistry;
 import net.sf.click.control.ActionLink;
+import net.sf.click.control.AjaxListener;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
 
@@ -324,6 +326,10 @@ public class TabbedPanel extends Panel {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
+        // Check whether this control should be registered as Ajax control
+        if (listener instanceof AjaxListener) {
+            ControlRegistry.registerAjaxControl(this);
+        }
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             if (control instanceof Panel) {
