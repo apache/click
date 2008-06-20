@@ -1,8 +1,15 @@
 package net.sf.clickide;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import net.sf.clickide.core.config.DefaultClickConfigurationProvider;
+import net.sf.clickide.core.config.IClickConfigurationProvider;
+import net.sf.clickide.core.config.S2ClickConfigurationProvider;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -24,6 +31,8 @@ public class ClickPlugin extends AbstractUIPlugin {
 	private static ClickPlugin plugin;
 	private ResourceBundle resource;
 	private ColorManager colorManager;
+	
+	private List configProviders = new ArrayList();
 	
 	public static final String CLICK_PAGE_CLASS = "net.sf.click.Page";
 	public static final String CLICK_CONTROL_IF = "net.sf.click.Control";
@@ -69,6 +78,9 @@ public class ClickPlugin extends AbstractUIPlugin {
 	public ClickPlugin() {
 		plugin = this;
 		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
+		
+		configProviders.add(new S2ClickConfigurationProvider());
+		configProviders.add(new DefaultClickConfigurationProvider());
 	}
 	
 	public ColorManager getColorManager(){
@@ -153,5 +165,16 @@ public class ClickPlugin extends AbstractUIPlugin {
 		} catch(Exception ex){
 			// ignore
 		}
+	}
+	
+	public IClickConfigurationProvider getConfigurationProvider(IProject project){
+		for(int i=0;i<configProviders.size();i++){
+			IClickConfigurationProvider configProvider 
+				= (IClickConfigurationProvider) configProviders.get(i);
+			if(configProvider.isSupportedProject(project)){
+				return configProvider;
+			}
+		}
+		throw new RuntimeException("Can not find the configuration provider!");
 	}
 }
