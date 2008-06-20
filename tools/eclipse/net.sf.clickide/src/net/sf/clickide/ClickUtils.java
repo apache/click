@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -53,8 +52,6 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 
@@ -69,6 +66,7 @@ public class ClickUtils {
 	public static final String CLICK_SERVLET_CLASS = "net.sf.click.ClickServlet";
 	public static final String CLICK_SPRING_SERVLET_CLASS = "net.sf.click.extras.spring.SpringClickServlet";
 	public static final String CAYENNE_FILTER_CLASS = "net.sf.click.extras.cayenne.DataContextFilter";
+	public static final String DEFAULT_FORMAT_CLASS = "net.sf.click.util.Format";
 	
 	/**
 	 * Creates <code>GridData</code>.
@@ -463,59 +461,25 @@ public class ClickUtils {
 	}
 	
 	/**
-	 * Returns the charset which is defined in <tt>click.xml</tt>.
-	 * If <tt>click.xml</tt> doesn't has the charset, returns <code>null</code>.
+	 * Returns the charset.
+	 * If the charset is not specified, returns <code>null</code>.
 	 * 
 	 * @param project the project
 	 * @return the charset
 	 */
 	public static String getCharset(IProject project){
-		IStructuredModel model = getClickXMLModel(project);
-		String charset = null;
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_CLICK_APP);
-			if(list.getLength()==1){
-				Element format = (Element)list.item(0);
-				charset = format.getAttribute(ClickPlugin.ATTR_CHARSET);
-			}
-		} catch(Exception ex){
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return charset;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getCharset(project);
 	}
 	
 	/**
-	 * Returns <code>IType</code> of the format object which is specified in <tt>click.xml</tt>.
+	 * Returns <code>IType</code> of the format object.
 	 * If format element is not defined, this method returns <code>net.sf.click.util.Format</code>.
 	 * 
 	 * @param project the project
 	 * @return IType of the format object
 	 */
 	public static IType getFormat(IProject project){
-		IStructuredModel model = getClickXMLModel(project);
-		IJavaProject javaProject = JavaCore.create(project);
-		IType formatType = null;
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_FORMAT);
-			String className = null;
-			if(list.getLength()==1){
-				Element format = (Element)list.item(0);
-				className = format.getAttribute(ClickPlugin.ATTR_CLASSNAME);
-			}
-			if(className==null){
-				className = "net.sf.click.util.Format";
-			}
-			formatType = javaProject.findType(className);
-		} catch(Exception ex){
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return formatType;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getFormat(project);
 	}
 	
 	/**
@@ -528,52 +492,18 @@ public class ClickUtils {
 	 * @return true if the auto mapping is enable; false otherwise
 	 */
 	public static boolean getAutoMapping(IProject project){
-		IStructuredModel model = getClickXMLModel(project);
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
-			if(list.getLength()==1){
-				Element pages = (Element)list.item(0);
-				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
-					String autoMapping = pages.getAttribute(ClickPlugin.ATTR_AUTO_MAPPING);
-					if("false".equals(autoMapping)){
-						return false;
-					}
-					return true;
-				}
-			}
-		} catch(Exception ex){
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return true;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getAutoMapping(project);
 	}
 	
 	/**
-	 * Returns the package name of page classes which is specified at click.xml.
+	 * Returns the package name of page classes.
 	 * If the package name is not specified, thie method returns <code>null</code>.
 	 * 
 	 * @param project the project
 	 * @return the package name of page classes or <code>null</code>
 	 */
 	public static String getPagePackageName(IProject project){
-		IStructuredModel model = getClickXMLModel(project);
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGES);
-			if(list.getLength()==1){
-				Element pages = (Element)list.item(0);
-				if(pages.hasAttribute(ClickPlugin.ATTR_PACKAGE)){
-					return pages.getAttribute(ClickPlugin.ATTR_PACKAGE);
-				}
-			}
-		} catch(Exception ex){
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return null;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getPagePackageName(project);
 	}
 	
 	/**
@@ -581,66 +511,11 @@ public class ClickUtils {
 	 *  
 	 * @param project the project
 	 * @param className the classname
-	 * @return the HTML file path which registered in the click.xml.
+	 * @return the HTML file path.
 	 *     If unable to find the paired HTML, returns <code>null</code>.
 	 */
 	public static String getHTMLfromClass(IProject project, String className){
-		
-		String packageName = getPagePackageName(project);
-		IStructuredModel model = getClickXMLModel(project);
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
-			for(int i=0;i<list.getLength();i++){
-				Element element = (Element)list.item(i);
-				String clazz = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
-				if(clazz!=null){
-					if(packageName!=null && packageName.length()>0){
-						clazz = packageName + "." + clazz;
-					}
-					if(clazz.equals(className)){
-						return element.getAttribute(ClickPlugin.ATTR_PATH);
-					}
-				}
-			}
-			
-			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
-				String root = getWebAppRootFolder(project);
-				if(className.startsWith(packageName + ".")){
-					String dir = null;
-					String path = className.substring(packageName.length() + 1);
-					
-					path = path.replaceAll("\\.", "/");
-					
-					int index = path.lastIndexOf('/');
-					if(index >= 0){
-						dir =  path.substring(0, index);
-						path = path.substring(index + 1);;
-					}
-					path = path.replaceFirst("Page$", "");
-					String[] templateProposals = getTempleteProposals(path);
-					
-					IFolder folder = project.getFolder(root);
-					for(int i=0;i<templateProposals.length;i++){
-						IResource resource = null;
-						if(dir!=null){
-							templateProposals[i] = dir + "/" + templateProposals[i];
-						}
-						resource = folder.findMember(templateProposals[i]);
-						if(resource!=null && resource.exists() && resource instanceof IFile){
-							return templateProposals[i];
-						}
-					}
-				}
-			}
-
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return null;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getHTMLfromClass(project, className);
 	}
 	
 	/**
@@ -661,7 +536,7 @@ public class ClickUtils {
 	 *   Also, &quot;Page&quot; postfix should be removed.
 	 * @return proposals of template filenames.
 	 */
-	private static String[] getTempleteProposals(String path){
+	public static String[] getTempleteProposals(String path){
 		String lower = path.substring(0, 1).toLowerCase() + path.substring(1);
 		String hifun = path.replaceAll("([a-z])([A-Z])", "$1-$2").toLowerCase();
 		String under = path.replaceAll("([a-z])([A-Z])", "$1_$2").toLowerCase();
@@ -690,67 +565,7 @@ public class ClickUtils {
 	 *   If unable to find the paired class, returns <code>null</code>.
 	 */
 	public static String getClassfromHTML(IProject project, String htmlName){
-		
-		String packageName = getPagePackageName(project);
-		
-		IStructuredModel model = getClickXMLModel(project);
-		try {
-			NodeList list = (((IDOMModel)model).getDocument()).getElementsByTagName(ClickPlugin.TAG_PAGE);
-			for(int i=0;i<list.getLength();i++){
-				Element element = (Element)list.item(i);
-				String path = element.getAttribute(ClickPlugin.ATTR_PATH);
-				if(path!=null && path.equals(htmlName)){
-					String className = element.getAttribute(ClickPlugin.ATTR_CLASSNAME);
-					if(className!=null && className.length()>0 && 
-							packageName!=null && packageName.length()>0){
-						className = packageName + "." + className;
-					}
-					return className;
-				}
-			}
-			
-			if(getAutoMapping(project) && packageName!=null && packageName.length()>0){
-				
-				String className = "";
-				
-		        if (htmlName.indexOf("/") != -1) {
-		            StringTokenizer tokenizer = new StringTokenizer(htmlName, "/");
-		            while (tokenizer.hasMoreTokens()) {
-		                String token = tokenizer.nextToken();
-		                if (tokenizer.hasMoreTokens()) {
-		                	if(packageName.length()!=0){
-		                		packageName += ".";
-		                	}
-		                    packageName = packageName + token;
-		                } else {
-		                    className = token.replaceFirst("\\.htm$", "");
-		                }
-		            }
-		        } else {
-		            className = htmlName.substring(0, htmlName.lastIndexOf('.'));
-		        }
-		        
-		        StringTokenizer tokenizer = new StringTokenizer(className, "_-");
-		        className = "";
-		        while (tokenizer.hasMoreTokens()) {
-		            String token = tokenizer.nextToken();
-		            token = Character.toUpperCase(token.charAt(0)) + token.substring(1);
-		            className += token;
-		        }
-
-		        className = packageName + "." + className;
-		        
-		        return className;
-			}
-			
-		} catch(Exception ex){
-			ClickPlugin.log(ex);
-		} finally {
-			if(model!=null){
-				model.releaseFromRead();
-			}
-		}
-		return null;
+		return ClickPlugin.getDefault().getConfigurationProvider(project).getClassfromHTML(project, htmlName);
 	}
 	
 	/**
