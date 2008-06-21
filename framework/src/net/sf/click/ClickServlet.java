@@ -363,7 +363,6 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
-            ActionEvents.clearActionEvents();
             ControlRegistry.clearRegistry();
         }
     }
@@ -556,7 +555,7 @@ public class ClickServlet extends HttpServlet {
                 }
 
                 // Fire all the registered action events
-                continueProcessing = ActionEvents.fireActionEvents(context);
+                continueProcessing = ControlRegistry.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
                     String msg =  "   invoked: Control listeners : " + continueProcessing;

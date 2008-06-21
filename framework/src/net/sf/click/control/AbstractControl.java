@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.AjaxListener;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +28,6 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.ActionEvents;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
@@ -38,7 +38,6 @@ import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
 import net.sf.click.util.PageImports;
-import net.sf.click.util.Partial;
 
 /**
  * Provides a default implementation of the {@link Control} interface,
@@ -878,7 +877,7 @@ public abstract class AbstractControl implements Control {
      */
     protected void registerActionEvent() {
         if (getActionListener() != null) {
-            ActionEvents.registerActionEvent(this, getActionListener());
+            ControlRegistry.registerActionEvent(this, getActionListener());
         }
     }
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.control;
+package net.sf.click;
 
 import net.sf.click.ActionListener;
 import net.sf.click.Control;
