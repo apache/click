@@ -161,8 +161,6 @@ public interface Control extends Serializable {
     /**
      * Return HTML element identifier attribute "id" value.
      *
-     * @deprecated getId() is now obsolete on the Control interface,
-     * but will still be available on AbstractControl:
      * {@link net.sf.click.control.AbstractControl#getId()}
      *
      * @return HTML element identifier attribute "id" value

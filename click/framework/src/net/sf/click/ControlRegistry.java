@@ -15,16 +15,43 @@
  */
 package net.sf.click;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
+import java.util.List;
 import java.util.Set;
+import net.sf.click.util.Partial;
 import org.apache.commons.lang.Validate;
 
 /**
  * Provides a thread local registry for managing controls in various scenarios.
  * <p/>
- * Registering Ajax Controls for processing is a common usage of this class.
+ * Developers who implement their own controls, should look at the following
+ * example <tt>onProcess</tt> implementation. Note the call to
+ * {@link net.sf.click.control.AbstractControl#registerActionEvent()} which
+ * registers the Control listener with ControlRegistry.
+ *
+ * <pre class="prettyprint">
+ * public class MyLink extends AbstractControl {
+ *
+ *     ...
+ *     public boolean onProcess() {
+ *         bindRequestValue();
+ *
+ *         if (isClicked()) {
+ *             // Register this controls listener for invocation after process
+ *             // finish
+ *             registerActionEvent();
+ *         }
+ *
+ *         return true;
+ *     }
+ *     ...
+ *
+ * } </pre>
+ * <p/>
+ * Registering Ajax Controls for processing is another common use case:
  *
  * <pre class="prettyprint">
  * public void onInit() {
@@ -36,20 +63,8 @@ import org.apache.commons.lang.Validate;
  *     Submit submit = new Submit("submit");
  *     submit.setListener(new AjaxListener() {
  *
- *         public boolean onAction(Control control) {
- *             actionPerformed();
- *             return true;
- *         }
- *
- *         public void onAjaxAction(Control control) {
- *             actionPerformed();
+ *         public Partial onAjaxAction(Control control) {
  *             return new Partial("Hello World!");
- *         }
- *
- *         private void actionPerformed() {
- *             if (form.isValid()) {
- *                 //Save data to database
- *             }
  *         }
  *     });
  * } </pre>
@@ -59,11 +74,26 @@ import org.apache.commons.lang.Validate;
  */
 public final class ControlRegistry {
 
+    // -------------------------------------------------------- Constants
+
+    // TODO investigate using a Stack of Registries instead of single ControlRegistry
+    // in case of forwarding to another Page.
+
     /** The thread local registry holder. */
     private static final ThreadLocal THREAD_LOCAL_REGISTRY = new ThreadLocal();
 
-    /** The list of registered Ajax Controls. */
+    // -------------------------------------------------------- Variables
+
+    /** The set of unique registered Ajax Controls. */
     private Set ajaxControlList;
+
+    /** The list of registered event sources. */
+    private List eventSourceList;
+
+    /** The list of registered event listeners. */
+    private List eventListenerList;
+
+    // -------------------------------------------------------- Public Methods
 
     /**
      * Register the control to be processed by the ClickServlet for Ajax
@@ -74,20 +104,94 @@ public final class ControlRegistry {
     public static void registerAjaxControl(Control control) {
         Validate.notNull(control, "Null control parameter");
 
+        ControlRegistry instance = getThreadLocalRegistry();
+        Set controlList = instance.getAjaxControls();
+        controlList.add(control);
+    }
+
+    /**
+     * Register the event source and event ActionListener to be fired by the
+     * ClickServlet once all the controls have been processed.
+     *
+     * @param source the action event source
+     * @param listener the event action listener
+     */
+    public static void registerActionEvent(Control source, ActionListener listener) {
+        Validate.notNull(source, "Null source parameter");
+        Validate.notNull(listener, "Null listener parameter");
+
+        ControlRegistry instance = getThreadLocalRegistry();
+        List eventSourceList = (List) instance.getEventSourceList();
+        List eventListenerList = (List) instance.getEventListenerList();
+        eventSourceList.add(source);
+        eventListenerList.add(listener);
+    }
+
+    // -------------------------------------------------------- Package Private Methods
+
+    /**
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     */
+    static ControlRegistry getThreadLocalRegistry() {
         ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
         if (instance == null) {
             instance = new ControlRegistry();
             THREAD_LOCAL_REGISTRY.set(instance);
         }
-        Set controlList = instance.getAjaxControls();
-        controlList.add(control);
+        return instance;
     }
 
+    /**
+     * Return the set of unique Ajax Controls.
+     *
+     * @return set of unique Ajax Controls
+     */
     Set getAjaxControls() {
         if (ajaxControlList == null) {
             ajaxControlList = new LinkedHashSet();
         }
         return ajaxControlList;
+    }
+
+    /**
+     * Checks if any Ajax controls have been registered.
+     */
+    static boolean hasAjaxControls() {
+        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
+        if (instance == null) {
+            return false;
+        }
+
+        if (instance.ajaxControlList == null || instance.ajaxControlList.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Return the list of event listeners.
+     *
+     * @return list of event listeners
+     */
+    List getEventListenerList() {
+        if (eventListenerList == null) {
+            eventListenerList = new ArrayList();
+        }
+        return eventListenerList;
+    }
+
+    /**
+     * Return the list of event sources.
+     *
+     * @return list of event sources
+     */
+    List getEventSourceList() {
+        if (eventSourceList == null) {
+            eventSourceList = new ArrayList();
+        }
+        return eventSourceList;
     }
 
     /**
@@ -117,7 +221,7 @@ public final class ControlRegistry {
             }
 
             // Fire the registered listeners
-            return ActionEvents.fireActionEvents(context);
+            return fireActionEvents(context);
 
         } else {
             return true;
@@ -125,22 +229,53 @@ public final class ControlRegistry {
     }
 
     /**
-     * Checks if any Ajax controls have been registered.
+     * Fire all the registered action events and return true if the page should
+     * continue processing.
+     *
+     * @return true if the page should continue processing or false otherwise
      */
-    static boolean hasAjaxControls() {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
-        if (instance == null) {
-            return false;
+    static boolean fireActionEvents(Context context) {
+        ControlRegistry instance = getThreadLocalRegistry();
+        List eventSourceList = (List) instance.getEventSourceList();
+        List eventListenerList = (List) instance.getEventListenerList();
+
+        boolean continueProcessing = true;
+
+        if (eventSourceList != null && eventListenerList != null) {
+            for (int i = 0, size = eventSourceList.size(); i < size; i++) {
+                Control source = (Control) eventSourceList.get(i);
+                ActionListener listener = (ActionListener) eventListenerList.get(i);
+
+                if (context.isAjaxRequest() && listener instanceof AjaxListener) {
+
+                    Partial partial = ((AjaxListener) listener).onAjaxAction(source);
+                    if (partial != null) {
+                        // Have to process Partial here
+                        partial.process(context);
+                    }
+
+                    // Ajax requests stops further processing
+                    continueProcessing = false;
+                } else {
+                    if(!listener.onAction(source)) {
+                        continueProcessing = false;
+                    }
+                }
+            }
+
+        } else if (eventSourceList == null && eventListenerList == null) {
+            continueProcessing = true;
+
+        } else {
+            // This should never happen
+            throw new IllegalStateException("ControlRegistry is invalid");
         }
 
-        if (instance.ajaxControlList == null || instance.ajaxControlList.isEmpty()) {
-            return false;
-        }
-        return true;
+        return continueProcessing;
     }
 
     /**
-     * Clear all the registered controls.
+     * Clear the registry.
      */
     static void clearRegistry() {
         THREAD_LOCAL_REGISTRY.set(null);
