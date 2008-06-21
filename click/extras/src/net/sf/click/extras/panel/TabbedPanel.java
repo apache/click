@@ -20,7 +20,7 @@ import javax.servlet.ServletContext;
 import net.sf.click.Control;
 import net.sf.click.ControlRegistry;
 import net.sf.click.control.ActionLink;
-import net.sf.click.control.AjaxListener;
+import net.sf.click.AjaxListener;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
 
