@@ -69,8 +69,8 @@ import org.apache.commons.lang.Validate;
  *     });
  * } </pre>
  *
- * @author Malcolm Edgar
  * @author Bob Schellink
+ * @author Malcolm Edgar
  */
 public final class ControlRegistry {
 
