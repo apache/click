@@ -17,6 +17,8 @@ package net.sf.click.extras.panel;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.math.NumberUtils;
+
 import net.sf.click.Control;
 import net.sf.click.ControlRegistry;
 import net.sf.click.control.ActionLink;
@@ -330,6 +332,20 @@ public class TabbedPanel extends Panel {
         if (listener instanceof AjaxListener) {
             ControlRegistry.registerAjaxControl(this);
         }
+
+        // TODO: document this change
+        // Select panel specified by tabPanelIndex if defined
+        String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
+        if (NumberUtils.isNumber(tabPanelIndex)) {
+            int tabIndex = Integer.parseInt(tabPanelIndex);
+            if (tabIndex >= 0 && tabIndex < getPanels().size()) {
+                Panel panel = (Panel) getPanels().get(tabIndex);
+                if (!panel.isDisabled()) {
+                    setActivePanel(panel);
+                }
+            }
+        }
+
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
             if (control instanceof Panel) {
