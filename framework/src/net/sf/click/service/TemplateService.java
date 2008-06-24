@@ -84,7 +84,6 @@ public interface TemplateService {
      * @param context the request context
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer,
-        Context context) throws Exception;
+    public void renderTemplate(String templatePath, Map model, Writer writer) throws Exception;
 
 }

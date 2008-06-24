@@ -359,8 +359,7 @@ public class VelocityTemplateService implements TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer,
-        Context context) throws Exception {
+    public void renderTemplate(String templatePath, Map model, Writer writer) throws Exception {
 
         final VelocityContext velocityContext = new VelocityContext(model);
 
@@ -397,7 +396,7 @@ public class VelocityTemplateService implements TemplateService {
                 new ErrorReport(error,
                                 null,
                                 configService.isProductionMode(),
-                                context.getRequest(),
+                                Context.getThreadLocalContext().getRequest(),
                                 configService.getServletContext());
 
             if (velocityWriter == null) {

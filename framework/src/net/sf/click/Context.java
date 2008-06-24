@@ -761,8 +761,7 @@ public class Context {
             clickServlet.getConfigService().getTemplateService();
 
         try {
-            templateService.renderTemplate(templatePath, model, stringWriter,
-                this);
+            templateService.renderTemplate(templatePath, model, stringWriter);
 
         } catch (Exception e) {
             String msg = "Error occured rendering template: "
