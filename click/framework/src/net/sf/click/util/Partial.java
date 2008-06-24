@@ -106,14 +106,13 @@ public class Partial {
     private String contentType;
 
     /** The resposne character encoding. */
-    // TODO: should we be getting the character encoding from the context ?
     private String characterEncoding;
 
     /** The response headers. */
     private Map headers;
 
     /** Indicates whether the Partial should be cached by browser. */
-    private boolean cachePartial;
+    private boolean cachePartial = false;
 
     // ----------------------------------------------------------- Constructors
 
@@ -172,9 +171,19 @@ public class Partial {
     // ---------------------------------------------------------- Public Methds
 
     /**
-     * Set the cached partial.
+     * Indicates whether the partial should be cached by the clients browser
+     * or not, defaults to false.
+     * <p/>
+     * If false, Click will set the following headers to prevent browsers
+     * from caching the result:
+     * <pre class="prettyprint">
+     * response.setHeader("Pragma", "no-cache");
+     * response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+     * response.setDateHeader("Expires", new Date(1L).getTime());
+     * </pre>
      *
-     * @param cachePartial the partial to cache
+     * @param cachePartial indicates whether the partial should be cached
+     * by clients browser or not
      */
     public void setCachePartial(boolean cachePartial) {
         this.cachePartial = cachePartial;
@@ -262,19 +271,19 @@ public class Partial {
     // -------------------------------------------------------- Private Methods
 
     private void applyHeaders(HttpServletResponse response) {
-    	// TODO: should this be if (!cachePartial)
-        if (cachePartial) {
+
+        if (!cachePartial) {
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
             response.setDateHeader("Expires", new Date(1L).getTime());
         }
+
         if (headers != null) {
             setResponseHeaders(response, getHeaders());
         }
     }
 
-    private void setResponseHeaders(HttpServletResponse response,
-            Map headers) {
+    private void setResponseHeaders(HttpServletResponse response, Map headers) {
 
         for (Iterator i = headers.entrySet().iterator(); i.hasNext();) {
             Map.Entry entry = (Map.Entry) i.next();
@@ -303,8 +312,15 @@ public class Partial {
         applyHeaders(response);
 
         if (getCharacterEncoding() == null) {
-            response.setContentType(this.contentType);
-            
+
+            // Fallback to request character encoding
+            if (context.getRequest().getCharacterEncoding() != null) {
+                response.setContentType(contentType + "; charset="
+                    + context.getRequest().getCharacterEncoding());
+            } else {
+                response.setContentType(this.contentType);
+            }
+
         } else {
             response.setContentType(contentType + "; charset=" + getCharacterEncoding());
         }
