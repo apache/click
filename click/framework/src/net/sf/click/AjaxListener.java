@@ -15,8 +15,6 @@
  */
 package net.sf.click;
 
-import net.sf.click.ActionListener;
-import net.sf.click.Control;
 import net.sf.click.util.Partial;
 
 /**
@@ -29,9 +27,9 @@ public class AjaxListener implements ActionListener {
     /**
      * This method is only invoked for non-ajax requests.
      * <p/>
-     * For ajax requests {@link #onAjaxAction(net.sf.click.Control)} is invoked.
+     * For ajax requests {@link #onAjaxAction(Control)} is invoked.
      *
-     * @see ActionListener#onAction(net.sf.click.Control)
+     * @see ActionListener#onAction(Control)
      *
      * @param source the source of the action event
      * @return true if control and page processing should continue or false
@@ -56,4 +54,5 @@ public class AjaxListener implements ActionListener {
     }
 
 }
+
 

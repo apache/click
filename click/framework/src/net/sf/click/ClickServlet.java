@@ -481,6 +481,9 @@ public class ClickServlet extends HttpServlet {
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
+
+            // Clear any registered action listeners or ajax controls
+            ControlRegistry.clearRegistry();
         }
 
         boolean continueProcessing = page.onSecurityCheck();
