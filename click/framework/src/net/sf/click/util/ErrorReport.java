@@ -482,15 +482,17 @@ public class ErrorReport {
         File webInfDir = new File(webInfPath);
         if (webInfDir.isDirectory() && webInfDir.canRead()) {
             File[] dirList = webInfDir.listFiles();
-            for (int i = 0; i < dirList.length; i++) {
-                File file = dirList[i];
-                if (file.isDirectory() && file.canRead()) {
-                    String sourcePath = file.toString() + filename;
-                    sourceFile = new File(sourcePath);
-                    if (sourceFile.isFile() && sourceFile.canRead()) {
+            if (dirList != null) {
+                for (int i = 0; i < dirList.length; i++) {
+                    File file = dirList[i];
+                    if (file.isDirectory() && file.canRead()) {
+                        String sourcePath = file.toString() + filename;
+                        sourceFile = new File(sourcePath);
+                        if (sourceFile.isFile() && sourceFile.canRead()) {
 
-                        FileInputStream fis = new FileInputStream(sourceFile);
-                        return new LineNumberReader(new InputStreamReader(fis));
+                            FileInputStream fis = new FileInputStream(sourceFile);
+                            return new LineNumberReader(new InputStreamReader(fis));
+                        }
                     }
                 }
             }
