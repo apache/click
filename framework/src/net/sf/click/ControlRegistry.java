@@ -25,7 +25,8 @@ import net.sf.click.util.Partial;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a thread local registry for managing controls in various scenarios.
+ * Provides a thread local register for managing Ajax controls and ActionListener
+ * events.
  * <p/>
  * Developers who implement their own controls, should look at the following
  * example <tt>onProcess</tt> implementation. Note the call to
@@ -93,7 +94,7 @@ public final class ControlRegistry {
     /** The list of registered event listeners. */
     private List eventListenerList;
 
-    // -------------------------------------------------------- Public Methods
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Register the control to be processed by the ClickServlet for Ajax
@@ -127,33 +128,7 @@ public final class ControlRegistry {
         eventListenerList.add(listener);
     }
 
-    // -------------------------------------------------------- Package Private Methods
-
-    /**
-     * Return the thread local registry instance.
-     *
-     * @return the thread local registry instance.
-     */
-    static ControlRegistry getThreadLocalRegistry() {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
-        if (instance == null) {
-            instance = new ControlRegistry();
-            THREAD_LOCAL_REGISTRY.set(instance);
-        }
-        return instance;
-    }
-
-    /**
-     * Return the set of unique Ajax Controls.
-     *
-     * @return set of unique Ajax Controls
-     */
-    Set getAjaxControls() {
-        if (ajaxControlList == null) {
-            ajaxControlList = new LinkedHashSet();
-        }
-        return ajaxControlList;
-    }
+    // ------------------------------------------------ Package Private Methods
 
     /**
      * Checks if any Ajax controls have been registered.
@@ -168,30 +143,6 @@ public final class ControlRegistry {
             return false;
         }
         return true;
-    }
-
-    /**
-     * Return the list of event listeners.
-     *
-     * @return list of event listeners
-     */
-    List getEventListenerList() {
-        if (eventListenerList == null) {
-            eventListenerList = new ArrayList();
-        }
-        return eventListenerList;
-    }
-
-    /**
-     * Return the list of event sources.
-     *
-     * @return list of event sources
-     */
-    List getEventSourceList() {
-        if (eventSourceList == null) {
-            eventSourceList = new ArrayList();
-        }
-        return eventSourceList;
     }
 
     /**
@@ -211,7 +162,7 @@ public final class ControlRegistry {
         Set controlList = instance.getAjaxControls();
 
         if (!controlList.isEmpty()) {
-            for (Iterator it = controlList.iterator(); it.hasNext(); ) {
+            for (Iterator it = controlList.iterator(); it.hasNext();) {
                 Control control = (Control) it.next();
 
                 // Check if control is targeted by this request
@@ -256,8 +207,9 @@ public final class ControlRegistry {
 
                     // Ajax requests stops further processing
                     continueProcessing = false;
+
                 } else {
-                    if(!listener.onAction(source)) {
+                    if (!listener.onAction(source)) {
                         continueProcessing = false;
                     }
                 }
@@ -280,4 +232,57 @@ public final class ControlRegistry {
     static void clearRegistry() {
         THREAD_LOCAL_REGISTRY.set(null);
     }
+
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     */
+    private static ControlRegistry getThreadLocalRegistry() {
+        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
+        if (instance == null) {
+            instance = new ControlRegistry();
+            THREAD_LOCAL_REGISTRY.set(instance);
+        }
+        return instance;
+    }
+
+    /**
+     * Return the list of event listeners.
+     *
+     * @return list of event listeners
+     */
+    private List getEventListenerList() {
+        if (eventListenerList == null) {
+            eventListenerList = new ArrayList();
+        }
+        return eventListenerList;
+    }
+
+    /**
+     * Return the list of event sources.
+     *
+     * @return list of event sources
+     */
+    private List getEventSourceList() {
+        if (eventSourceList == null) {
+            eventSourceList = new ArrayList();
+        }
+        return eventSourceList;
+    }
+
+    /**
+     * Return the set of unique Ajax Controls.
+     *
+     * @return set of unique Ajax Controls
+     */
+    private Set getAjaxControls() {
+        if (ajaxControlList == null) {
+            ajaxControlList = new LinkedHashSet();
+        }
+        return ajaxControlList;
+    }
+
 }
