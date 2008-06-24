@@ -68,45 +68,54 @@ import org.apache.commons.io.IOUtils;
  */
 public class Partial {
 
-    // -------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
-    // The plain text content type constant <tt>text/plain</tt>.
+    /** The plain text content type constant <tt>text/plain</tt>. */
     public static final String TEXT = "text/plain";
 
-    // The html content type constant <tt>text/html</tt>.
+    /** The html content type constant <tt>text/html</tt>. */
     public static final String HTML = "text/html";
 
-    // The xhtml content type constant <tt>application/xhtml+xml</tt>.
+    /** The The xhtml content type constant <tt>application/xhtml+xml</tt>. */
     public static final String XHTML = "application/xhtml+xml";
 
-    // The json content type constant <tt>text/json</tt>.
+    /** The json content type constant <tt>text/json</tt>. */
     public static final String JSON = "text/json";
 
-    // The javascript content type constant <tt>text/javascript</tt>.
+    /** The javascript content type constant <tt>text/javascript</tt>. */
     public static final String JAVASCRIPT = "text/javascript";
 
-    // The xml content type constant <tt>text/xml</tt>.
+    /** The xml content type constant <tt>text/xml</tt>. */
     public static final String XML = "text/xml";
+    
+    /** The Partial writer buffer size. */
+    private static final int WRITER_BUFFER_SIZE = 256;
 
     // -------------------------------------------------------- Variables
 
+    /** The content to render. */
     private Object content;
 
+    /** The servlet response reader. */
     private Reader reader;
 
+    /** The servlet response input stream. */
     private InputStream inputStream;
 
+    /** The response content type. */
     private String contentType;
 
+    /** The resposne character encoding. */
+    // TODO: should we be getting the character encoding from the context ?
     private String characterEncoding;
 
+    /** The response headers. */
     private Map headers;
 
     /** Indicates whether the Partial should be cached by browser. */
     private boolean cachePartial;
 
-    /** The Partial writer buffer size. */
-    private static final int WRITER_BUFFER_SIZE = 256;
+    // ----------------------------------------------------------- Constructors
 
     /**
      * Construct the Partial for the given reader and content type.
@@ -160,14 +169,40 @@ public class Partial {
         this.contentType = TEXT;
     }
 
+    // ---------------------------------------------------------- Public Methds
+
+    /**
+     * Set the cached partial.
+     *
+     * @param cachePartial the partial to cache
+     */
+    public void setCachePartial(boolean cachePartial) {
+        this.cachePartial = cachePartial;
+    }
+
+    /**
+     * Return the partial character encoding.
+     *
+     * @return the partial character encoding.
+     */
     public String getCharacterEncoding() {
         return characterEncoding;
     }
 
+    /**
+     * Set the partial character encoding.
+     *
+     * @param characterEncoding the partial character encoding
+     */
     public void setCharacterEncoding(String characterEncoding) {
         this.characterEncoding = characterEncoding;
     }
 
+    /**
+     * Return the map of response header values.
+     *
+     * @return the map of response header values
+     */
     public Map getHeaders() {
         if (headers == null) {
             return new HashMap();
@@ -175,11 +210,22 @@ public class Partial {
         return headers;
     }
 
+    /**
+     * Process the partial with the given context.
+     *
+     * @param context the request context to use
+     */
     public final void process(Context context) {
         init(context);
         render(context.getRequest(), context.getResponse());
     }
 
+    /**
+     * Render the partial to the specified response.
+     *
+     * @param request the page servlet request
+     * @param response the page servlet response
+     */
     public void render(HttpServletRequest request, HttpServletResponse response) {
 
         try {
@@ -203,6 +249,7 @@ public class Partial {
                     outputStream.write(buffer, 0, len);
                 }
             }
+
         } catch (Exception e) {
             throw new RuntimeException(e);
 
@@ -212,13 +259,10 @@ public class Partial {
         }
     }
 
-    public void setCachePartial(boolean cachePartial) {
-        this.cachePartial = cachePartial;
-    }
-
     // -------------------------------------------------------- Private Methods
 
     private void applyHeaders(HttpServletResponse response) {
+    	// TODO: should this be if (!cachePartial)
         if (cachePartial) {
             response.setHeader("Pragma", "no-cache");
             response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
@@ -260,6 +304,7 @@ public class Partial {
 
         if (getCharacterEncoding() == null) {
             response.setContentType(this.contentType);
+            
         } else {
             response.setContentType(contentType + "; charset=" + getCharacterEncoding());
         }
