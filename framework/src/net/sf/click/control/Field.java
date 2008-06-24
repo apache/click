@@ -15,8 +15,6 @@
  */
 package net.sf.click.control;
 
-import javax.servlet.ServletContext;
-
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.ClickUtils;
