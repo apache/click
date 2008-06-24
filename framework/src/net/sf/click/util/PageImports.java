@@ -16,16 +16,22 @@
 package net.sf.click.util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import net.sf.click.Control;
 import net.sf.click.Page;
+import net.sf.click.control.AbstractControl;
 import net.sf.click.control.Container;
+import net.sf.click.control.CssImport;
+import net.sf.click.control.CssInclude;
+import net.sf.click.control.JavascriptImport;
+import net.sf.click.control.JavascriptInclude;
 import net.sf.click.control.Table;
-
 import net.sf.click.service.LogService;
 import org.apache.commons.lang.StringUtils;
 
@@ -82,37 +88,39 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PageImports {
 
+    // -------------------------------------------------------- Variables
+
     /** The page imports initialized flag. */
     protected boolean initialize = false;
-
-    /** The list of CSS import lines. */
-    protected List cssImports = new ArrayList();
-
-    /** The buffer of CSS import lines. */
-    protected HtmlStringBuffer cssBuffer = new HtmlStringBuffer();
-
-    /** The list of JS import lines. */
-    protected List jsImports = new ArrayList();
-
-    /**
-     * TODO jsScript is probably redundant.
-     * The list of JS script block lines.
-     */
-    protected List jsScripts = new ArrayList();
-
-    /** The buffer of JS script block lines. */
-    protected HtmlStringBuffer jsBuffer = new HtmlStringBuffer();
-
-    /** The list of JS import lines to be included at bottom of html page. */
-    protected List jsImportsBottom = new ArrayList();
-
-    /** The buffer of JS script block lines to be included at bottom of html page.*/
-    protected HtmlStringBuffer jsBottomBuffer = new HtmlStringBuffer();
 
     /** The page instance. */
     protected final Page page;
 
-    // ------------------------------------------------------------ Constructor
+    /** The list of CSS imports. */
+    private List cssImports = new ArrayList();
+
+    /** The list of CSS includes. */
+    private List cssIncludes = new ArrayList();
+
+    /** The set of unique CSS imports and includes. */
+    private Set cssUniqueSet = new HashSet();
+
+    /** The global CSS include. */
+    private CssInclude cssGlobalInclude;
+
+    /** The global Javascript include. */
+    private JavascriptInclude javascriptGlobalInclude;
+
+    /** The set of unique Javascript imports and includes. */
+    private Set javascriptUniqueSet = new HashSet();
+
+    /** The list of Javascript imports. */
+    private List javascriptImports = new ArrayList();
+
+    /** The list of Javascript includes. */
+    private List javascriptIncludes = new ArrayList();
+
+    // -------------------------------------------------------- Public Constructors
 
     /**
      * Create a page control HTML includes object.
@@ -232,143 +240,123 @@ public class PageImports {
         }
     }
 
-    /**
-     * Add the specified css script to the <em>css</em> imports.
-     * <p/>
-     * <b>Please note</b> Click will automatically enclose the scripts inside a
-     * &lt;style&gt; element, so no need to do this yourself.
-     * <p/>
-     * The css will be made available in your template under the key
-     * <em>cssImports</em>.
-     *
-     * @param script the css to add
-     */
-    public void addCssScript(String script) {
-        cssBuffer.append(script);
-        cssBuffer.append('\n');
+    public void add(CssImport cssImport) {
+        if (cssUniqueSet.contains(cssImport.getHref())) {
+            // Already contain this import source
+            return;
+        }
+        cssUniqueSet.add(cssImport.getHref());
+        cssImports.add(cssImport);
     }
 
-    /**
-     * Add the specified css import to the <em>cssImports</em> imports.
-     * <p/>
-     * The css import will be made available in your template under the key
-     * <em>cssImports</em>.
-     *
-     * @param cssImport the css import to add
-     */
-    public void addCssImport(String cssImport) {
-        processLine(cssImport, cssImports);
+    public void add(CssInclude cssInclude) {
+        if (cssInclude.isUnique()) {
+            if (cssUniqueSet.contains(cssInclude.getInclude().toString())) {
+                // Already contain this css include
+                return;
+            }
+            cssUniqueSet.add(cssInclude.getInclude().toString());
+        }
+        cssIncludes.add(cssInclude);
     }
 
-    /**
-     * Add the specified javascript import to the <em>jsImports</em> list.
-     * <p/>
-     * The javascript imports will be made available in your template under the
-     * keys <em>jsImports</em> and <em>jsImportsTop</em>.
-     *
-     * @param jsImport the javascript import to add
-     */
-    public void addJsImport(String jsImport) {
-        processLine(jsImport, jsImports);
+    public void add(JavascriptImport javaScriptImport) {
+        if (javascriptUniqueSet.contains(javaScriptImport.getSource())) {
+            // Already contain this import source
+            return;
+        }
+        javascriptUniqueSet.add(javaScriptImport.getSource());
+        javascriptImports.add(javaScriptImport);
     }
 
-    /**
-     * Add the specified javascript script to the <em>jsScripts</em> list.
-     * <p/>
-     * <b>Please note</b> Click will automatically enclose the scripts inside a
-     * &lt;srcipt&gt; element, so no need to do this yourself.
-     * <p/>
-     * The javascript will be made available in your template under the
-     * keys <em>jsImports</em> and <em>jsImportsTop</em>.
-     *
-     * @param script the javascript script to add
-     */
-    public void addJsScript(String script) {
-        jsBuffer.append(script);
-        jsBuffer.append('\n');
+    public void add(JavascriptInclude javaScriptInclude) {
+        if (javaScriptInclude.isUnique()) {
+            if (javascriptUniqueSet.contains(javaScriptInclude.getInclude().toString())) {
+                // Already contain this JavaScript include
+                return;
+            }
+            javascriptUniqueSet.add(javaScriptInclude.getInclude().toString());
+        }
+        javascriptIncludes.add(javaScriptInclude);
     }
 
-    /**
-     * Add the specified javascript import to the <em>jsImportsBottom</em> list.
-     * <p/>
-     * The javascript import will be made available in your template under the
-     * keys <em>jsImportsBottom</em> and <em>jsImports</em>.
-     *
-     * @param jsImport the javascript import to add
-     */
-    public void addJsImportAtBottom(String jsImport) {
-        processLine(jsImport, jsImportsBottom);
+    public void appendToGlobalScript(String script) {
+        getGlobalScript().append(script);
     }
 
-    /**
-     * Add the specified javascript to the <em>jsBottom</em> buffer.
-     * <p/>
-     * <b>Please note</b> Click will automatically enclose the scripts inside a
-     * &lt;srcipt&gt; element, so no need to do this yourself.
-     * <p/>
-     * The javascript will be made available in your template under the
-     * keys <em>jsImportsBottom</em> and <em>jsImports</em>.
-     *
-     * @param script the javascript script to add
-     */
-    public void addJsScriptAtBottom(String script) {
-        jsBottomBuffer.append(script);
-        jsBottomBuffer.append('\n');
+    public JavascriptInclude getGlobalScript() {
+        if (javascriptGlobalInclude == null) {
+            javascriptGlobalInclude = new JavascriptInclude();
+        }
+        return javascriptGlobalInclude;
     }
 
-    // ------------------------------------------------------ Protected Methods
+    public void appendToGlobalStyle(String style) {
+        getGlobalStyle().append(style);
+    }
+
+    public CssInclude getGlobalStyle() {
+        if (cssGlobalInclude == null) {
+            cssGlobalInclude = new CssInclude();
+        }
+        return cssGlobalInclude;
+    }
+
+    // -------------------------------------------------------- Protected Methods
 
     /**
      * Return a HTML string of all the page's HTML imports, including:
-     * CSS imports, JS imports and JS script blocks.
+     * CSS imports, CSS includes, JS imports and JS includes.
      *
      * @return a HTML string of all the page's HTML imports, including:
-     * CSS imports, JS imports and JS script blocks.
+     * CSS imports, CSS includes, JS imports and JS includes.
      */
-    protected String getAllIncludes() {
+    String getAllImports() {
         processPageControls();
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-              80 * jsImports.size()
-            + 80 * jsImportsBottom.size()
-            + 80 * jsScripts.size()
-            + jsBuffer.length()
-            + jsBottomBuffer.length()
+              80 * javascriptImports.size()
+            + 80 * javascriptIncludes.size()
             + 80 * cssImports.size()
-            + cssBuffer.length());
+            + 80 * cssIncludes.size());
 
         buffer.append(getCssImports());
-        buffer.append(getJsImports());
+        buffer.append(getJavascriptImports());
 
         return buffer.toString();
     }
 
     /**
      * Return a HTML string of all the page's HTML CSS
-     * {@link #cssImports imports} and {@link #cssBuffer scripts}.
+     * {@link #cssImports imports}, {@link #cssIncludes scripts} and
+     * {@link #cssGlobalInclude}.
      *
      * @return only css imports and scripts
      */
-    protected String getCssImports() {
+    String getCssImports() {
         processPageControls();
 
-        // If cssImports is empty, return only cssScripts.
-        if (cssImports.size() == 0) {
-            return cssBuffer.toString();
-        }
-
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-            80 * cssImports.size() + cssBuffer.length());
+            80 * cssImports.size() + 80 * cssIncludes.size());
 
+        // First include all the imports e.g. <link href="...">
         for (Iterator it = cssImports.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
+            CssImport cssImport = (CssImport) it.next();
+            buffer.append(cssImport.toString());
             buffer.append('\n');
         }
 
-        // Lastly include the css buffers e.g. styles not contained
-        // inside a <style> element
-        wrapInStyle(buffer, cssBuffer.toString());
+        // Then include all the styles e.g. <style>...</style>
+        for (Iterator it = cssIncludes.iterator(); it.hasNext();) {
+            CssInclude cssInclude = (CssInclude) it.next();
+            buffer.append(cssInclude.toString());
+            buffer.append('\n');
+        }
+
+        // Lastly include the global css include
+        if (cssGlobalInclude != null) {
+            buffer.append(cssGlobalInclude.toString());
+        }
 
         return buffer.toString();
     }
@@ -376,104 +364,118 @@ public class PageImports {
     /**
      * Return a HTML string of all the page's HTML JS imports and scripts.
      * <p/>
-     * This includes {@link #jsImports}, {@link #jsImportsBottom},
-     * {@link #jsScripts}, {@link #jsBuffer} and {@link #jsBottomBuffer}.
+     * This includes {@link #javascriptImports}, {@link #javascriptIncludes} and
+     * {@link #javascriptGlobalInclude}.
      *
      * @return all javascript imports and scripts
      */
-    protected String getJsImports() {
+    String getJavascriptImports() {
         processPageControls();
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-              80 * jsImports.size()
-            + 80 * jsImportsBottom.size()
-            + 80 * jsScripts.size()
-            + 80 * jsBuffer.length()
-            + 80 * jsBottomBuffer.length());
+              80 * javascriptImports.size() + 80 * javascriptIncludes.size());
 
         // First include all the imports e.g. <script src="...">
-        for (Iterator it = jsImports.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
-            buffer.append('\n');
-        }
-
-        for (Iterator it = jsImportsBottom.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
+        for (Iterator it = javascriptImports.iterator(); it.hasNext();) {
+            JavascriptImport javascriptImport = (JavascriptImport) it.next();
+            buffer.append(javascriptImport.toString());
             buffer.append('\n');
         }
 
         // Then include all the scripts e.g. <script>...</script>
-        for (Iterator it = jsScripts.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
+        for (Iterator it = javascriptIncludes.iterator(); it.hasNext();) {
+            JavascriptInclude javascriptInclude = (JavascriptInclude) it.next();
+            buffer.append(javascriptInclude.toString());
             buffer.append('\n');
         }
 
-        // Lastly include all javascript buffers e.g. scripts not contained
-        // inside a <script> element
-        String[] scripts = new String[] {jsBuffer.toString(),
-            jsBottomBuffer.toString()};
-        wrapInScript(buffer, scripts);
+        // Lastly include global javascript
+        if (javascriptGlobalInclude != null) {
+            buffer.append(javascriptGlobalInclude.toString());
+        }
 
         return buffer.toString();
     }
 
     /**
-     * Return a string containing {@link #jsImports}, {@link #jsScripts} and
-     * {@link #jsBuffer}.
+     * Return a string containing javascript imports and includes which should
+     * be included at top of the Page. This includes {@link #javascriptImports},
+     * {@link #javascriptIncludes} and {@link #javascriptGlobalInclude}.
      *
      * @return all top javascript imports and scripts
      */
-    protected String getJsImportsTop() {
+    String getJavascriptImportsTop() {
         processPageControls();
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-            80 * jsImports.size() + 80 * jsScripts.size() + jsBuffer.length());
+            80 * javascriptImports.size() + 80 * javascriptIncludes.size());
 
         // First include all the imports e.g. <script src="...">
-        for (Iterator it = jsImports.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
-            buffer.append('\n');
+        for (Iterator it = javascriptImports.iterator(); it.hasNext();) {
+            JavascriptImport javascriptImport = (JavascriptImport) it.next();
+            if (javascriptImport.getPosition() == JavascriptImport.TOP) {
+                buffer.append(javascriptImport.toString());
+                buffer.append('\n');
+            }
         }
 
         // Then include all the scripts e.g. <script>...</script>
-        for (Iterator it = jsScripts.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
-            buffer.append('\n');
+        for (Iterator it = javascriptIncludes.iterator(); it.hasNext();) {
+            JavascriptImport javascriptInclude = (JavascriptImport) it.next();
+            if (javascriptInclude.getPosition() == JavascriptImport.TOP) {
+                buffer.append(javascriptInclude.toString());
+                buffer.append('\n');
+            }
         }
 
-        // Lastly include top javascript buffers e.g. scripts not contained
-        // inside a <script> element
-        wrapInScript(buffer, jsBuffer.toString());
+        // Lastly include global javascript if targeted for top of Page
+        if (javascriptGlobalInclude != null) {
+            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.TOP) {
+                buffer.append(javascriptGlobalInclude.toString());
+            }
+        }
 
         return buffer.toString();
     }
 
     /**
-     * Return a string containing {@link #jsImportsBottom} and {@link #jsBottomBuffer}.
+     * Return a string containing javascript imports and includes which should
+     * be included at bottom of the Page. This includes {@link #javascriptImports},
+     * {@link #javascriptIncludes} and {@link #javascriptGlobalInclude}.
      *
-     * @return all bottom javascript imports and scripts
+     * @return all top javascript imports and scripts
      */
-    protected String getJsImportsBottom() {
+    String getJavascriptImportsBottom() {
         processPageControls();
 
         HtmlStringBuffer buffer = new HtmlStringBuffer(
-            80 * jsImportsBottom.size() + jsBottomBuffer.length());
+            80 * javascriptImports.size() + 80 * javascriptIncludes.size());
 
         // First include all the bottom imports e.g. <script src="...">
-        for (Iterator it = jsImportsBottom.iterator(); it.hasNext();) {
-            String line = it.next().toString();
-            buffer.append(line);
-            buffer.append('\n');
+        for (Iterator it = javascriptImports.iterator(); it.hasNext();) {
+            JavascriptImport javascriptImport = (JavascriptImport) it.next();
+            if (javascriptImport.getPosition() == JavascriptImport.BOTTOM) {
+                buffer.append(javascriptImport.toString());
+                buffer.append('\n');
+            }
         }
 
-        // Then include bottom javascript buffers e.g. scripts not contained
-        // inside a <script> element
-        wrapInScript(buffer, jsBottomBuffer.toString());
+        
+        // Then include all the scripts e.g. <script>...</script>
+        for (Iterator it = javascriptIncludes.iterator(); it.hasNext();) {
+            JavascriptImport javascriptInclude = (JavascriptImport) it.next();
+            if (javascriptInclude.getPosition() == JavascriptImport.BOTTOM) {
+                buffer.append(javascriptInclude.toString());
+                buffer.append('\n');
+            }
+        }
+
+        // Lastly include global javascript if targeted for top of Page
+        if (javascriptGlobalInclude != null) {
+            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.BOTTOM) {
+                buffer.append(javascriptGlobalInclude.toString());
+            }
+        }
 
         return buffer.toString();
     }
@@ -481,7 +483,7 @@ public class PageImports {
     /**
      * Process the Page's set of control HTML head imports.
      */
-    protected void processPageControls() {
+    void processPageControls() {
         if (initialize) {
             return;
         }
@@ -507,7 +509,7 @@ public class PageImports {
      *
      * @param control the control to process
      */
-    protected void processControl(Control control) {
+    void processControl(Control control) {
         processLine(control.getHtmlImports());
 
         if (control instanceof Container) {
@@ -535,7 +537,7 @@ public class PageImports {
      *
      * @param value the HTML import line to process
      */
-    protected void processLine(String value) {
+    void processLine(String value) {
         if (value == null || value.length() == 0) {
             return;
         }
@@ -545,17 +547,23 @@ public class PageImports {
         for (int i = 0; i  < lines.length; i++) {
             String line = lines[i].trim().toLowerCase();
             if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
-                addToList(lines[i], cssImports);
+                CssImport cssImport = asCssImport(lines[i]);
+                add(cssImport);
 
             } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
-                addToList(lines[i], cssImports);
+                CssInclude cssInclude = asCssInclude(lines[i]);
+                cssInclude.setUnique(true);
+                add(cssInclude);
 
             } else if (line.startsWith("<script")) {
                 if (line.indexOf(" src=") != -1) {
-                    addToList(lines[i], jsImports);
+                    JavascriptImport javascriptImport = asJavascriptImport(lines[i]);
+                    add(javascriptImport);
 
                 } else {
-                    addToList(lines[i], jsScripts);
+                    JavascriptInclude javascriptInclude = asJavascriptInclude(lines[i]);
+                    javascriptInclude.setUnique(true);
+                    add(javascriptInclude);
 
                 }
             } else {
@@ -570,7 +578,7 @@ public class PageImports {
      * @param item the line item to add
      * @param list the list to add the item to
      */
-    protected void addToList(String item, List list) {
+    void addToList(String item, List list) {
         item = item.trim();
 
         boolean found = false;
@@ -587,24 +595,6 @@ public class PageImports {
         }
     }
 
-    /**
-     * Add the new value to the specified list of values.
-     *
-     * @param value new value to add
-     * @param list the list to add the new value to
-     */
-    protected void processLine(String value, List list) {
-        if (value == null || value.length() == 0) {
-            return;
-        }
-
-        String[] lines = StringUtils.split(value, '\n');
-
-        for (int i = 0; i  < lines.length; i++) {
-            addToList(lines[i], list);
-        }
-    }
-
     // -------------------------------------------------------- Internal Classes
 
     /**
@@ -612,34 +602,34 @@ public class PageImports {
      */
     class Imports {
         public String toString() {
-            return PageImports.this.getAllIncludes();
+            return PageImports.this.getAllImports();
         }
     }
 
     /**
-     * This class enables lazy, on demand importing for {@link #getJsImports()}.
+     * This class enables lazy, on demand importing for {@link #getJavascriptImports()}.
      */
     class JsImports {
         public String toString() {
-            return PageImports.this.getJsImports();
+            return PageImports.this.getJavascriptImports();
         }
     }
 
     /**
-     * This class enables lazy, on demand importing for {@link #getJsImportsTop()}.
+     * This class enables lazy, on demand importing for {@link #getJavascriptImportsTop()}.
      */
     class JsImportsTop {
         public String toString() {
-            return PageImports.this.getJsImportsTop();
+            return PageImports.this.getJavascriptImportsTop();
         }
     }
 
     /**
-     * This class enables lazy, on demand importing for {@link #getJsImportsBottom()}.
+     * This class enables lazy, on demand importing for {@link #getJavascriptImportsBottom()}.
      */
     class JsImportsBottom {
         public String toString() {
-            return PageImports.this.getJsImportsBottom();
+            return PageImports.this.getJavascriptImportsBottom();
         }
     }
 
@@ -654,45 +644,80 @@ public class PageImports {
 
     // -------------------------------------------------------- Private Methods
 
-    /**
-     * Wrap the specified text in a script element and append it to the buffer.
-     *
-     * @param buffer buffer to append wrapped script to
-     * @param text the text to wrap in a script element
-     */
-    private void wrapInScript(HtmlStringBuffer buffer, String text) {
-        wrapInScript(buffer, new String[] {text});
+    private CssImport asCssImport(String line) {
+        CssImport cssImport = new CssImport();
+        setAttributes(cssImport, line);
+        return cssImport;
     }
 
-    /**
-     * Wrap the specified scripts in a script element and append it to the buffer.
-     *
-     * @param buffer buffer to append wrapped script to
-     * @param scripts the scripts to wrap in a script element
-     */
-    private void wrapInScript(HtmlStringBuffer buffer, String[] scripts) {
-        buffer.elementStart("script");
-        // TODO should users be able to set <script> attributes e.g. charset?
-        buffer.appendAttribute("type", "text/javascript");
-        buffer.closeTag();
-        for (int i = 0; i < scripts.length; i++) {
-            buffer.append(scripts[i]);
+    private CssInclude asCssInclude(String line) {
+        CssInclude cssInclude = new CssInclude();
+        setAttributes(cssInclude, line);
+        cssInclude.append(extractContent(line));
+        return cssInclude;
+    }
+
+    private JavascriptImport asJavascriptImport(String line) {
+        JavascriptImport javascriptInclude = new JavascriptImport();
+        setAttributes(javascriptInclude, line);
+        return javascriptInclude;
+    }
+
+    private JavascriptInclude asJavascriptInclude(String line) {
+        JavascriptInclude javascriptInclude = new JavascriptInclude();
+        setAttributes(javascriptInclude, line);
+        javascriptInclude.append(extractContent(line));
+        return javascriptInclude;
+    }
+
+    private String extractContent(String line) {
+        if (line.endsWith("/>")) {
+            // If tag has no content, exit early
+            return "";
         }
-        buffer.elementEnd("script");
+
+        // Find index where tag ends
+        int start = line.indexOf('>');
+        if (start == -1) {
+            throw new IllegalArgumentException(line + " is not a valid element");
+        }
+        int end = line.indexOf('<', start);
+        if (end == -1) {
+            return "";
+        }
+        return line.substring(start + 1, end);
     }
 
     /**
-     * Wrap the specified text in a style element and append it to the buffer.
-     *
-     * @param buffer buffer to append wrapped style to
-     * @param text the text to wrap in a style element
+     * input -> style="moo:ok;param:value" hello="ok"
+     * @param line
+     * @return
      */
-    private void wrapInStyle(HtmlStringBuffer buffer, String text) {
-        buffer.elementStart("style");
-        // TODO should users be able to set <style> attributes e.g. media?
-        buffer.appendAttribute("type", "text/css");
-        buffer.closeTag();
-        buffer.append(text);
-        buffer.elementEnd("style");
+    private void setAttributes(AbstractControl control, String line) {
+        // Find index where attributes start -> first space char
+        int start = line.indexOf(' ');
+        if (start == -1) {
+            // If no attributes found, exit early
+            return;
+        }
+
+        // Find index where attributes end -> closing tag
+        int end = line.indexOf("/>");
+        if (end == -1) {
+            end = line.indexOf(">");
+        }
+        if (end == -1) {
+            throw new IllegalArgumentException(line + " is not a valid css import");
+        }
+
+        line = line.substring(start, end);
+        StringTokenizer tokens = new StringTokenizer(line, " ");
+        while (tokens.hasMoreTokens()) {
+            String token = tokens.nextToken();
+            StringTokenizer attribute = new StringTokenizer(token, "=");
+            String key = attribute.nextToken();
+            String value = attribute.nextToken();
+            control.setAttribute(key, StringUtils.strip(value, "'\""));
+        }
     }
 }
