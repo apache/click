@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ErrorReport;
@@ -227,7 +228,7 @@ public class VelocityTemplateService implements TemplateService {
     /**
      * @see TemplateService#onInit(ServletContext)
      *
-     * @param servletContext the application servlet context
+     * @param servletContext the application servlet velocityContext
      * @throws Exception if an error occurs initializing the Template Service
      */
     public void onInit(ServletContext servletContext) throws Exception {
@@ -358,10 +359,10 @@ public class VelocityTemplateService implements TemplateService {
      * @param writer the writer to send the merged template and model data to
      * @throws Exception if an error occurs
      */
-    public void renderTemplate(String templatePath, Map model, Writer writer)
-        throws Exception {
+    public void renderTemplate(String templatePath, Map model, Writer writer,
+        Context context) throws Exception {
 
-        final VelocityContext context = new VelocityContext(model);
+        final VelocityContext velocityContext = new VelocityContext(model);
 
         // May throw parsing error if template could not be obtained
         Template template = null;
@@ -386,7 +387,7 @@ public class VelocityTemplateService implements TemplateService {
                 velocityWriter.recycle(writer);
             }
 
-            template.merge(context, velocityWriter);
+            template.merge(velocityContext, velocityWriter);
 
         } catch (Exception error) {
             // Exception occured merging template and model. It is possible
@@ -396,7 +397,7 @@ public class VelocityTemplateService implements TemplateService {
                 new ErrorReport(error,
                                 null,
                                 configService.isProductionMode(),
-                                null,
+                                context.getRequest(),
                                 configService.getServletContext());
 
             if (velocityWriter == null) {
