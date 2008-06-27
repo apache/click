@@ -33,10 +33,28 @@ import net.sf.click.service.LogService;
 import org.apache.commons.lang.ClassUtils;
 
 /**
+ * Provides Container access and copy utilities.
  *
  * @author Bob Schellink
  */
 public class ContainerUtils {
+    
+    /**
+     * Return the list of Buttons for the given Container, recursively including
+     * any Fields contained in child containers.
+     *
+     * @param container the container to obtain the buttons from
+     * @return the list of contained buttons
+     */
+    public static List getButtons(final Container container) {
+        if (container == null) {
+            throw new IllegalArgumentException("Null container parameter");
+        }
+
+        final List buttons = new ArrayList();
+        addButtons(container, buttons);
+        return buttons;
+    }
 
     /**
      * Return the list of Fields for the given Container, recursively including
@@ -583,6 +601,31 @@ public class ContainerUtils {
                 if (include != null) {
                     includeSet.add(include);
                 }
+            }
+        }
+    }
+
+    /**
+     * Add buttons for the given Container to the specified buttons list,
+     * recursively including any Fields contained in child containers. The list
+     * of returned buttons will exclude any <tt>Button</tt> or <tt>Label</tt>
+     * fields.
+     *
+     * @param container the container to obtain the fields from
+     * @param buttons the list of contained fields
+     */
+    private static void addButtons(final Container container, final List buttons) {
+        for (int i = 0; i < container.getControls().size(); i++) {
+            Control control = (Control) container.getControls().get(i);
+            if (control instanceof Button) {
+                buttons.add(control);
+
+            } else if (control instanceof Container) {
+                if (control instanceof Button) {
+                    buttons.add(control);
+                }
+                Container childContainer = (Container) control;
+                addButtons(childContainer, buttons);
             }
         }
     }
