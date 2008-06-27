@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 
 import net.sf.click.Context;
 import net.sf.click.control.AbstractControl;
+import net.sf.click.service.ConfigService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -325,10 +326,22 @@ public class Menu extends AbstractControl {
      * in the root classpath
      */
     public static Menu getRootMenu() {
-        if (rootMenu == null) {
-            rootMenu = loadRootMenu();
+        // If menu is cached return it
+        if (rootMenu != null) {
+            return rootMenu;
         }
-        return rootMenu;
+
+        Menu loadedMenu = loadRootMenu();
+
+        ServletContext servletContext = Context.getThreadLocalContext().getServletContext();
+        ConfigService configService = ClickUtils.getConfigService(servletContext);
+
+        if (configService.isProductionMode() || configService.isProfileMode()) {
+            // Cache menu in production modes
+            rootMenu = loadedMenu;
+        }
+
+        return loadedMenu;
     }
 
     // ------------------------------------------------------ Public Attributes
