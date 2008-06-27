@@ -15,17 +15,19 @@
  */
 package net.sf.click.extras.control;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.AjaxListener;
+import net.sf.click.Context;
+import net.sf.click.Control;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.Partial;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides an Auto Complete Text Field control: &nbsp; &lt;input type='text'&gt;.
@@ -87,9 +89,16 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * The JavaScript 'script.aculo.us' Autocompleter initialization options,
-     * default value is: <tt>{minChars:1}</tt>.
+     * default value is: <tt>minChars:1</tt>.
      */
-    protected String autoCompleteOptions = "{minChars:1}";
+    protected String autoCompleteOptions = "minChars:1";
+
+    /**
+     * Additional parameters to send to server. The default value is "".
+     * Note however that the AutoCompleteTextField's {@link #getId() id} is
+     * always sent as a parameter to the server.
+     */
+    protected String parameters = "";
 
     // ----------------------------------------------------------- Constructors
 
@@ -172,8 +181,49 @@ public abstract class AutoCompleteTextField extends TextField {
     // --------------------------------------------------------- Public Methods
 
     /**
+     * Return the parameters to send to server when Autocompleter sends Ajax
+     * request.
+     * <p/>
+     * The default value is "", however the AutoCompleteTextField's
+     * {@link #getId() id} is always sent as a parameter to the server.
+     *
+     * @return the Autocompleter parameters to send to server
+     */
+    public String getParameters() {
+        return parameters;
+    }
+
+    /**
+     * Set the extra parameters Autocompleter must send to the server when it
+     * makes an Ajax request.
+     * <p/>
+     * The default value is "", however the AutoCompleteTextField's
+     * {@link #getId() id} is always sent as a parameter to the server.
+     * <p/>
+     * The format of the parameters is the same as for a URL ->
+     * key1=value1&key2=value2
+     * <p/>
+     * For example:
+     * <pre class="prettyprint">
+     * AutoCompleteTextField cityField = new AutoCompleteTextField("cityField");
+     * HtmlStringBuffer buffer = new HtmlStringBuffer();
+     * buffer.append(stateField.getName());
+     * buffer.append("=");
+     * buffer.append(stateField.getValue());
+     * buffer.append("&");
+     * ...
+     * field.setParameters(buffer.toString());
+     * </pre>
+     *
+     * @param parameters the extra parameters Autocompleter must send to server
+     */
+    public void setParameters(String parameters) {
+        this.parameters = parameters;
+    }
+
+    /**
      * Return the JavaScript 'script.aculo.us' Autocompleter initialization
-     * options, default value is: <tt>{}</tt>.
+     * options, default value is: <tt>minChars:1</tt>.
      *
      * @return the JavaScript Autocompleter initialization options
      */
@@ -183,7 +233,31 @@ public abstract class AutoCompleteTextField extends TextField {
 
     /**
      * Set the JavaScript 'script.aculo.us' Autocompleter initialization
-     * options, default value is: <tt>{}</tt>.
+     * options, default value is: <tt>minChars:1</tt>.
+     * <p/>
+     * <b>Please note</b> when setting options, Click will automatically add
+     * curly brackets {} for you.
+     * <p/>
+     * <b>Further note</b> if you want to send additional parameters use
+     * {@link #setParameters(java.lang.String)} instead.
+     * Example options:
+     * <pre class="prettyprint">
+     * AutoCompleteTextField field = new AutoCompleteTextField("field");
+     * // Add extra options
+     * HtmlStringBuffer buffer = new HtmlStringBuffer();
+     * buffer.append("paramName: 'value'");
+     * buffer.append(",minChars: 2");
+     * buffer.append(",updateElement: addItemToList");
+     * buffer.append(",indicator: 'indicator1'");
+     * field.setAutoCompleteOptions(options);
+     *
+     * // To add additional parameters use setParameters(String)
+     * buffer = new HtmlStringBuffer();
+     * buffer.append(stateField.getName());
+     * buffer.append("=");
+     * buffer.append(stateField.getValue());
+     * field.setParameters(buffer.toString());
+     * </pre>
      *
      * @param options the JavaScript Autocompleter initialization options
      */
@@ -199,12 +273,28 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return the HTML CSS and JavaScript includes
      */
     public String getHtmlImports() {
+        Context context = getContext();
+        String id = getId();
+        HtmlStringBuffer options = new HtmlStringBuffer();
+
+        // Include the field's id as a parameter
+        options.append("{parameters: '" + id + "=1");
+        if (StringUtils.isNotEmpty(getParameters())) {
+            // Add additional parameters
+            options.append("&").append(getParameters());
+        }
+        options.append("'");
+        if (StringUtils.isNotEmpty(getAutoCompleteOptions())) {
+            options.append(",").append(getAutoCompleteOptions());
+        }
+        options.append("}");
+
         String[] args = {
-            getContext().getRequest().getContextPath(),
-            ClickUtils.getResourceVersionIndicator(getContext()),
-            getId(),
+            context.getRequest().getContextPath(),
+            ClickUtils.getResourceVersionIndicator(context),
+            id,
             getPage().getPath(),
-            getAutoCompleteOptions()
+            options.toString()
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -235,48 +325,19 @@ public abstract class AutoCompleteTextField extends TextField {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        super.onInit();
-        // See whether control has been registered at Page level.
-        Object control = getPage().getModel().get(getName());
+        setActionListener(new AjaxListener() {
 
-        // If not registered, then register control
-        if (control == null) {
-            getPage().addControl(this);
-
-        } else if (!(control instanceof AutoCompleteTextField)) {
-            String message =
-                "Non AutoCompleteTextField object '"
-                + control.getClass().toString()
-                + "' already registered in Page as: "
-                + getName();
-            throw new IllegalStateException(message);
-        }
-    }
-
-    /**
-     * Process the page request and if an auto completion POST request then
-     * render an list of suggested values.
-     *
-     * @see net.sf.click.Control#onProcess()
-     *
-     * @return false if an auto complete request, otherwise returns true
-     */
-    public boolean onProcess() {
-        if (getContext().isPost()) {
-            // If an auto complete POST request then render suggested list,
-            // otherwise continue as normal
-            if (getForm().isFormSubmission()) {
-                return super.onProcess();
-            } else if (getContext().isAjaxRequest()) {
+            public Partial onAjaxAction(Control source) {
                 String criteria = getContext().getRequestParameter(getName());
                 if (criteria != null) {
                     List autoCompleteList = getAutoCompleteList(criteria);
-                    renderAutoCompleteList(autoCompleteList);
-                    return false;
+                    return createPartial(autoCompleteList);
                 }
+                return null;
             }
-        }
-        return true;
+        });
+
+        super.onInit();
     }
 
     /**
@@ -302,7 +363,7 @@ public abstract class AutoCompleteTextField extends TextField {
      *
      * @param autoCompleteList the suggested list of auto completion values
      */
-    protected void renderAutoCompleteList(List autoCompleteList) {
+    protected Partial createPartial(List autoCompleteList) {
         HtmlStringBuffer buffer = new HtmlStringBuffer(10 + (autoCompleteList.size() * 20));
 
         buffer.append("<ul>");
@@ -316,22 +377,7 @@ public abstract class AutoCompleteTextField extends TextField {
 
         buffer.append("</ul>");
 
-        HttpServletResponse response = getContext().getResponse();
-
-        response.setContentType(getPage().getContentType());
-
-        try {
-            PrintWriter writer = response.getWriter();
-            writer.print(buffer.toString());
-            writer.flush();
-            writer.close();
-
-            getPage().setPath(null);
-
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
+        Partial partial = new Partial(buffer.toString(), getPage().getContentType());
+        return partial;
     }
-
-
 }
