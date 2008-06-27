@@ -133,13 +133,18 @@ public final class ControlRegistry {
     /**
      * Checks if any Ajax controls have been registered.
      */
-    static boolean hasAjaxControls() {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
-        if (instance == null) {
+    boolean hasAjaxControls() {
+        if (ajaxControlList == null || ajaxControlList.isEmpty()) {
             return false;
         }
+        return true;
+    }
 
-        if (instance.ajaxControlList == null || instance.ajaxControlList.isEmpty()) {
+    /**
+     * Checks if any Action Events have been registered.
+     */
+    boolean hasActionEvents() {
+        if (eventListenerList == null || eventListenerList.isEmpty()) {
             return false;
         }
         return true;
@@ -151,32 +156,23 @@ public final class ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    static boolean processAjaxControls(Context context) {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
+    boolean processAjaxControls(Context context) {
 
-        // If no instance is available exit early
-        if (instance == null) {
+        if (!hasAjaxControls()) {
             return true;
         }
 
-        Set controlList = instance.getAjaxControls();
+        for (Iterator it = ajaxControlList.iterator(); it.hasNext();) {
+            Control control = (Control) it.next();
 
-        if (!controlList.isEmpty()) {
-            for (Iterator it = controlList.iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
-
-                // Check if control is targeted by this request
-                if (context.getRequestParameter(control.getId()) != null) {
-                    control.onProcess();
-                }
+            // Check if control is targeted by this request
+            if (context.getRequestParameter(control.getId()) != null) {
+                control.onProcess();
             }
-
-            // Fire the registered listeners
-            return fireActionEvents(context);
-
-        } else {
-            return true;
         }
+
+        // Fire the registered listeners
+        return fireActionEvents(context);
     }
 
     /**
@@ -185,45 +181,50 @@ public final class ControlRegistry {
      *
      * @return true if the page should continue processing or false otherwise
      */
-    static boolean fireActionEvents(Context context) {
-        ControlRegistry instance = getThreadLocalRegistry();
-        List eventSourceList = (List) instance.getEventSourceList();
-        List eventListenerList = (List) instance.getEventListenerList();
-
+    boolean fireActionEvents(Context context) {
         boolean continueProcessing = true;
 
-        if (eventSourceList != null && eventListenerList != null) {
-            for (int i = 0, size = eventSourceList.size(); i < size; i++) {
-                Control source = (Control) eventSourceList.get(i);
-                ActionListener listener = (ActionListener) eventListenerList.get(i);
+        if (!hasActionEvents()) {
+            return true;
+        }
 
-                if (context.isAjaxRequest() && listener instanceof AjaxListener) {
+        for (int i = 0, size = eventSourceList.size(); i < size; i++) {
+            Control source = (Control) eventSourceList.get(i);
+            ActionListener listener = (ActionListener) eventListenerList.get(i);
 
-                    Partial partial = ((AjaxListener) listener).onAjaxAction(source);
-                    if (partial != null) {
-                        // Have to process Partial here
-                        partial.process(context);
-                    }
+            if (context.isAjaxRequest() && listener instanceof AjaxListener) {
 
-                    // Ajax requests stops further processing
+                Partial partial = ((AjaxListener) listener).onAjaxAction(source);
+                if (partial != null) {
+                    // Have to process Partial here
+                    partial.process(context);
+                }
+
+                // Ajax requests stops further processing
+                continueProcessing = false;
+
+            } else {
+                if (!listener.onAction(source)) {
                     continueProcessing = false;
-
-                } else {
-                    if (!listener.onAction(source)) {
-                        continueProcessing = false;
-                    }
                 }
             }
-
-        } else if (eventSourceList == null && eventListenerList == null) {
-            continueProcessing = true;
-
-        } else {
-            // This should never happen
-            throw new IllegalStateException("ControlRegistry is invalid");
         }
 
         return continueProcessing;
+    }
+
+    /**
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     */
+    static ControlRegistry getThreadLocalRegistry() {
+        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
+        if (instance == null) {
+            instance = new ControlRegistry();
+            THREAD_LOCAL_REGISTRY.set(instance);
+        }
+        return instance;
     }
 
     /**
@@ -234,20 +235,6 @@ public final class ControlRegistry {
     }
 
     // -------------------------------------------------------- Private Methods
-
-    /**
-     * Return the thread local registry instance.
-     *
-     * @return the thread local registry instance.
-     */
-    private static ControlRegistry getThreadLocalRegistry() {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
-        if (instance == null) {
-            instance = new ControlRegistry();
-            THREAD_LOCAL_REGISTRY.set(instance);
-        }
-        return instance;
-    }
 
     /**
      * Return the list of event listeners.

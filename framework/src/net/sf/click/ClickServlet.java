@@ -523,10 +523,12 @@ public class ClickServlet extends HttpServlet {
                 }
             }
 
+            ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
+
             // Ajax requests are processed separately
             if (context.isAjaxRequest() && !context.isForward()) {
-                if (ControlRegistry.hasAjaxControls()) {
-                    ControlRegistry.processAjaxControls(context);
+                if (controlRegistry.hasAjaxControls()) {
+                    controlRegistry.processAjaxControls(context);
 
                     // As Ajax Controls was registered, stop further processing
                     return;
@@ -558,7 +560,7 @@ public class ClickServlet extends HttpServlet {
                 }
 
                 // Fire all the registered action events
-                continueProcessing = ControlRegistry.fireActionEvents(context);
+                continueProcessing = controlRegistry.fireActionEvents(context);
 
                 if (logger.isTraceEnabled()) {
                     String msg =  "   invoked: Control listeners : " + continueProcessing;
