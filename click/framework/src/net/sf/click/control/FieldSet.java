@@ -66,11 +66,6 @@ import org.apache.commons.lang.StringUtils;
  *   {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}
  *   thus using the properties of its parent Form for laying out and rendering of
  *   its fields.
- *   <p/>
- *   A FieldSet can contain any Control, but when used in conjuction
- *   with a {@link Form}, it is recommended to only add non-button fields.
- *   Form's auto-layout works best with fields, however nothing stops you from
- *   adding other controls to the fieldset.
  *  </li>
  * </ul>
  *
@@ -254,21 +249,20 @@ public class FieldSet extends AbstractContainer {
     /**
      * Add the field to the fieldset and specify the field's width in columns.
      * <p/>
-     * Note Button or HiddenFields types are not valid arguments for this method.
+     * Note HiddenFields types are not valid arguments for this method.
      *
      * @param field the field to add to the fieldset
      * @param width the width of the field in table columns
      * @return the field added to this fieldset
      * @throws IllegalArgumentException if the field is null, field's name is
-     * not defined, field is a Button or HiddenField, the fieldset already
-     * contains a control with the same name, if the field's parent is a Page or
-     * the width &lt; 1
+     * not defined, a HiddenField, the fieldset already contains a control with
+     * the same name, if the field's parent is a Page or the width &lt; 1
      */
     public Field add(Field field, int width) {
         if (field == null) {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
-        if (field instanceof Button || field instanceof HiddenField) {
+        if (field instanceof HiddenField) {
             String msg = "Not valid a valid field type: " + field.getClass().getName();
             throw new IllegalArgumentException(msg);
         }
@@ -308,6 +302,24 @@ public class FieldSet extends AbstractContainer {
      */
     public void remove(Field field) {
         remove((Control) field);
+    }
+
+    /**
+     * Remove the named field from the fieldset, returning true if removed
+     * or false if not found.
+     *
+     * @param name the name of the field to remove from the fieldset
+     * @return true if the named field was removed or false otherwise
+     */
+    public boolean removeField(String name) {
+        Control control = ContainerUtils.findControlByName(this, name);
+
+        if (control != null) {
+            return remove(control);
+
+        } else {
+            return false;
+        }
     }
 
     /**
