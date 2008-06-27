@@ -621,9 +621,6 @@ public class ContainerUtils {
                 buttons.add(control);
 
             } else if (control instanceof Container) {
-                if (control instanceof Button) {
-                    buttons.add(control);
-                }
                 Container childContainer = (Container) control;
                 addButtons(childContainer, buttons);
             }
