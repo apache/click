@@ -1679,6 +1679,7 @@ public class Form extends BasicForm {
                     renderFieldSet(buffer, fieldSet);
 
                     buffer.append("</td>\n");
+
                 } else {
                     Field field = (Field) control;
                     // Write out label
@@ -1839,7 +1840,7 @@ public class Form extends BasicForm {
     }
 
     /**
-     * Render the Form Buttons to the string buffer.
+     * Render the given list of Buttons to the string buffer.
      *
      * @param buffer the StringBuffer to render to
      */
@@ -1872,6 +1873,36 @@ public class Form extends BasicForm {
         }
     }
 
+    /**
+     * Render the given list of Buttons to the string buffer.
+     *
+     * @param buffer the StringBuffer to render to
+     * @param buttons the list of buttons to render
+     */
+    protected void renderFieldSetButtons(HtmlStringBuffer buffer, List buttons) {
+
+        if (!buttons.isEmpty()) {
+            buffer.append("<table class=\"buttons\" id=\"");
+            buffer.append(getId());
+            buffer.append("-buttons\">\n");
+            buffer.append("<tr class=\"buttons\">");
+
+            for (int i = 0, size = buttons.size(); i < size; i++) {
+                buffer.append("<td class=\"buttons\"");
+                buffer.appendAttribute("style", getButtonStyle());
+                buffer.closeTag();
+
+                Button button = (Button) buttons.get(i);
+                button.render(buffer);
+
+                buffer.append("</td>");
+            }
+
+            buffer.append("</tr>\n");
+            buffer.append("</table>\n");
+        }
+    }
+    
     /**
      * Close the form tag and render any additional content after the Form.
      * <p/>
@@ -2015,9 +2046,13 @@ public class Form extends BasicForm {
             return;
         }
 
-        // Only render Fields and Labels
+        // Render Fields and Labels
         List fieldSetFields = ContainerUtils.getFieldsAndLabels(fieldSet);
         renderControls(buffer, fieldSet, fieldSetFields, fieldSet.getFieldWidths());
+
+        // Render Buttons
+        List fieldSetButtons = ContainerUtils.getButtons(fieldSet);
+        renderFieldSetButtons(buffer, fieldSetButtons);
     }
 
     // -------------------------------------------------------- Private Methods

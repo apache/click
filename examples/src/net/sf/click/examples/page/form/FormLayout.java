@@ -4,6 +4,7 @@ import net.sf.click.control.Field;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.control.Label;
+import net.sf.click.control.Reset;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
@@ -64,9 +65,9 @@ public class FormLayout extends BorderPage {
 
         // Row 4
         fieldSet.add(new TelephoneField("telephone"));
-
-        form2.add(new Submit("ok", " OK "));
-        form2.add(new PageSubmit("cancel", HomePage.class));
+        
+        fieldSet.add(new Submit("ok", " OK "));
+        fieldSet.add(new PageSubmit("cancel", HomePage.class));
     }
 
 }
