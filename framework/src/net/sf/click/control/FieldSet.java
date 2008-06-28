@@ -62,11 +62,14 @@ import org.apache.commons.lang.StringUtils;
  *   like a normal container. The fields will be rendered next to each other in
  *   the order they were added to the fieldset.
  *  </li>
- *  <li>Field - When adding FieldSet to a Form, it will delegate rendering to
+ *  <li>Form - When adding FieldSet to a Form, FieldSet will delegate rendering to
  *   {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}
  *   thus using the properties of its parent Form for laying out and rendering of
  *   its fields.
- *  </li>
+ *   <p/>
+ *   A FieldSet can contain any Control, <tt>however</tt> when used in conjuction
+ *   with {@link Form}, it is recommended to only add fields since Form's
+ *   auto-layout is geared towards the layout of fields.
  * </ul>
  *
  * <h3>FieldSet Example</h3>
