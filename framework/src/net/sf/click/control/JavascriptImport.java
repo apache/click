@@ -23,17 +23,17 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class JavascriptImport extends AbstractControl {
 
-    public static final int TOP = 0;
-    public static final int BOTTOM = 1;
+    public static final int HEAD = 0;
+    public static final int BODY = 1;
 
-    private int position = BOTTOM;
+    private int position = BODY;
 
     public JavascriptImport() {
-        this(null, BOTTOM);
+        this(null, BODY);
     }
 
     public JavascriptImport(String source) {
-        this(source, BOTTOM);
+        this(source, BODY);
     }
 
     public JavascriptImport(String source, int position) {

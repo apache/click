@@ -25,19 +25,19 @@ public class JavascriptInclude extends AbstractControl {
     
     private HtmlStringBuffer include = new HtmlStringBuffer();
 
-    public static final int TOP = 0;
-    public static final int BOTTOM = 1;
+    public static final int HEAD = 0;
+    public static final int BODY = 1;
 
-    private int position = BOTTOM;
+    private int position = BODY;
 
     private boolean unique = false;
 
     public JavascriptInclude() {
-        this(null, BOTTOM, false);
+        this(null, BODY, false);
     }
 
     public JavascriptInclude(String include) {
-        this(include, BOTTOM, false);
+        this(include, BODY, false);
     }
     
     public JavascriptInclude(String include, int position) {
@@ -45,7 +45,7 @@ public class JavascriptInclude extends AbstractControl {
     }
 
      public JavascriptInclude(String include, boolean unique) {
-        this(include, BOTTOM, unique);
+        this(include, BODY, unique);
     }
 
     public JavascriptInclude(String include, int position, boolean unique) {

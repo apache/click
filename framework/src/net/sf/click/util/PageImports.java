@@ -413,7 +413,7 @@ public class PageImports {
         // First include all the imports e.g. <script src="...">
         for (Iterator it = javascriptImports.iterator(); it.hasNext();) {
             JavascriptImport javascriptImport = (JavascriptImport) it.next();
-            if (javascriptImport.getPosition() == JavascriptImport.TOP) {
+            if (javascriptImport.getPosition() == JavascriptImport.HEAD) {
                 buffer.append(javascriptImport.toString());
                 buffer.append('\n');
             }
@@ -422,7 +422,7 @@ public class PageImports {
         // Then include all the scripts e.g. <script>...</script>
         for (Iterator it = javascriptIncludes.iterator(); it.hasNext();) {
             JavascriptImport javascriptInclude = (JavascriptImport) it.next();
-            if (javascriptInclude.getPosition() == JavascriptImport.TOP) {
+            if (javascriptInclude.getPosition() == JavascriptImport.HEAD) {
                 buffer.append(javascriptInclude.toString());
                 buffer.append('\n');
             }
@@ -430,7 +430,7 @@ public class PageImports {
 
         // Lastly include global javascript if targeted for top of Page
         if (javascriptGlobalInclude != null) {
-            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.TOP) {
+            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.HEAD) {
                 buffer.append(javascriptGlobalInclude.toString());
             }
         }
@@ -454,7 +454,7 @@ public class PageImports {
         // First include all the bottom imports e.g. <script src="...">
         for (Iterator it = javascriptImports.iterator(); it.hasNext();) {
             JavascriptImport javascriptImport = (JavascriptImport) it.next();
-            if (javascriptImport.getPosition() == JavascriptImport.BOTTOM) {
+            if (javascriptImport.getPosition() == JavascriptImport.BODY) {
                 buffer.append(javascriptImport.toString());
                 buffer.append('\n');
             }
@@ -464,7 +464,7 @@ public class PageImports {
         // Then include all the scripts e.g. <script>...</script>
         for (Iterator it = javascriptIncludes.iterator(); it.hasNext();) {
             JavascriptImport javascriptInclude = (JavascriptImport) it.next();
-            if (javascriptInclude.getPosition() == JavascriptImport.BOTTOM) {
+            if (javascriptInclude.getPosition() == JavascriptImport.BODY) {
                 buffer.append(javascriptInclude.toString());
                 buffer.append('\n');
             }
@@ -472,7 +472,7 @@ public class PageImports {
 
         // Lastly include global javascript if targeted for top of Page
         if (javascriptGlobalInclude != null) {
-            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.BOTTOM) {
+            if (javascriptGlobalInclude.getPosition() == JavascriptInclude.BODY) {
                 buffer.append(javascriptGlobalInclude.toString());
             }
         }
