@@ -86,7 +86,79 @@ new features including Module support, bug fixes, documentation and example upda
   <p/>
     <dt><a name="1.5-M2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Development Release - Version 1.5 M2 - ?? ?? 2008</div></dt>
   <dd>
+    <p/>
+    Click 1.5 M2 introduced major enhancements to Ajax and Control listener support.
+    <p/>
     <ul style="padding: 0em; margin-left:0em;">
+      <li class="change">
+        New Control listener support through the <a href="click-api/net/sf/click/ActionListener.html">ActionListener</a> interface.
+        ActionListener supercedes the old String based listener approach. Here is an example of the old
+        String based approach:
+        <pre class="prettyprint">
+public class MyPage extends Page {
+    public void onInit() {
+        Submit submit = new Submit("submit");
+        submit.setListener(this, "onSubmit");
+    }
+
+    public boolean onSubmit() {
+        // Perform submit action and return true to continue processing
+        return true;
+    } 
+} </pre>
+      and here is the new ActionListener approach:
+      <pre class="prettyprint">
+public class MyPage extends Page {
+    public void onInit() {
+        Submit submit = new Submit("submit");
+        submit.setActionListener(new ActionListener() {
+
+            public boolean onAction(Control source) {
+                // Perform submit action and return true to continue processing
+                return true;
+            }
+        });
+    }
+} </pre>
+      Note that the source Control is passed in as an argument to the onAction method. 
+      For very complex scenarios it is useful to know which Control triggered the event.
+      [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-369">369</a>].
+      </li>
+      <li class="change">
+        New first class Ajax support built on top of the ActionListener interface above.
+        A new <a href="click-api/net/sf/click/AjaxListener.html">AjaxListener</a> was introduced which
+        can be set as a Control's Listener:
+         <pre class="prettyprint">
+public class MyPage extends Page {
+    public void onInit() {
+        Submit submit = new Submit("submit");
+        submit.setActionListener(new AjaxListener() {
+            public boolean onAction(Control source) {
+                // This method is invoked for normal (non-ajax) requests
+                return true;
+            }
+
+            public Partial onAjaxAction(Control source) {
+                // This method is invoked for ajax requests
+                return new Partial("&lt;div&gt;Hello World!&lt;/div&gt;");
+            }
+        });
+    }
+} </pre>
+        Note that onAjaxAction returns an instance of <a href="click-api/net/sf/click/util/Partial.html">Partial</a>
+        which encapsulates the Ajax response. The response can consist of either a string
+        of characters (JSON, xml, html) or bytes (pdf, image).
+        Since AjaxListener implements ActionListener, onAction will be invoked
+        for normal (non-ajax) requests.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-370">370</a>].
+      </li>
+      <li class="change">
+        Introduce a two phase listener dispatch mechanism. During the onProcess event,
+        Control listeners will be registered on the <a href="click-api/net/sf/click/ControlRegistry.html">ControlRegistry</a>
+        and triggered after the onProcess event finish. The net effect of this change
+        is that when Control listeners are triggered, all request values have been bound to Controls,
+        and can safely be referred to from listener.[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
+      </li>
       <li class="change">
         Added a new <a href="extras-api/net/sf/click/extras/control/PageButton.html">PageButton</a> control
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-392">392</a>].
@@ -106,8 +178,8 @@ new features including Module support, bug fixes, documentation and example upda
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-381">381</a>].
       </li>
       <li class="change">
-		Add static method <a href="click-api/net/sf/click/Context.html#hasThreadLocalContext()">Context.hasThreadLocalContext()</a>
-        to query if a Context is available on the Context stack
+		Add static method <a href="click-api/net/sf/click/Context.html#hasThreadLocalContext()">Context.hasThreadLocalContext().</a>
+        Useful for checking if a Context is available on the Context stack
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-382">382</a>].
       </li>
       <li class="change">
