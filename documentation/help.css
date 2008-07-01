@@ -96,19 +96,19 @@ span.sparx {
 
 a.navLinkSection {
   background: url(images/book.gif) center left no-repeat;
-  color: 000080;
+  color: #000080;
   text-decoration: none;
   padding-left: 22px;
   padding-bottom: 1px;
 }
 
 a.navLinkSection:visited {
-  color: 000080;
+  color: #000080;
 }
 
 a.navLinkTopic {
   background: url(images/page.gif) center left no-repeat; 
-  color: 000080;
+  color: #000080;
   margin-left: 22px;
   text-decoration: none;
   padding-left: 24px;
@@ -116,7 +116,7 @@ a.navLinkTopic {
 }
 
 a.navLinkTopic:visited {
-  color: 000080;
+  color: #000080;
 }
 
 .code, .codeConfig, .codeDtd, .codeJava, .codeHtml, .codeLog {
