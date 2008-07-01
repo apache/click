@@ -564,36 +564,6 @@ public class Page {
     }
 
     /**
-     * Return the HTML import string to include in the page, by default
-     * this method returns null.
-     * <p/>
-     * Override this method to specify JavaScript and CSS includes for the
-     * page. For example:
-     *
-     * <pre class="codeJava">
-     * <span class="kw">protected static final</span> String HTML_IMPORT =
-     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
-     *
-     * <span class="kw">public</span> String getHtmlImports() {
-     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
-     * } </pre>
-     *
-     * <b>Note</b> multiple import lines should be separated by a
-     * <tt>'\n'</tt> char, as the {@link net.sf.click.util.PageImports} will
-     * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
-     * imports are not included twice.
-     * <p/>
-     * The order in which JS and CSS files are include will be preserved in the
-     * page.
-     *
-     * @return the HTML includes statements for the control stylesheet and
-     * JavaScript files, by default this method returns null
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
      * Called when html imports can be contributed to the page head section.
      * <p/>
      * The specified {@link net.sf.click.util.PageImports} exposes methods to
@@ -652,11 +622,6 @@ public class Page {
      * For more information on this topic as well as compression of javascript
      * and css resources see the section
      * <a href="../best-practices.html#performance">Performance Best Practices</a>.
-     * <p/>
-     * <b>Note</b> this class acts as a replacement for the
-     * {@link #getHtmlImports()} method since onHtmlImports is more powerful
-     * and flexible than {@link #getHtmlImports()}. However these two methods
-     * can be used in conjuction.
      *
      * @param pageImports the PageImports instance to add imports to
      */
