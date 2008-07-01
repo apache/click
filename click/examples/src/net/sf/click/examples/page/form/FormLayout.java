@@ -65,7 +65,7 @@ public class FormLayout extends BorderPage {
 
         // Row 4
         fieldSet.add(new TelephoneField("telephone"));
-        
+
         fieldSet.add(new Submit("ok", " OK "));
         fieldSet.add(new PageSubmit("cancel", HomePage.class));
     }
