@@ -500,8 +500,6 @@ public class PageImports {
                 processControl(control);
             }
         }
-
-        processLine(page.getHtmlImports());
     }
 
     /**
