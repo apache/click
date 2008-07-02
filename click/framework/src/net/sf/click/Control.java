@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PageImports;
 
 /**
  * Provides the interface for Page controls. Controls are sometimes referred to
@@ -152,11 +153,57 @@ public interface Control extends Serializable {
      * <p/>
      * The order in which JS and CSS files are include will be preserved in the
      * page.
+     * <p/>
+     * <b>Please note</b> this method has been superceded by
+     * {@link #onHtmlImports(net.sf.click.util.PageImports)}, since
+     * onHtmlImports is more powerful and flexible. However these two methods
+     * can be used in conjuction.
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files
      */
     public String getHtmlImports();
+
+    /**
+     * Allows Pages and Controls to contribute JavaScript and CSS imports
+     * and includes to the HTML head section through the specified PageImports
+     * instance.
+     * <p/>
+     * The specified {@link net.sf.click.util.PageImports} exposes methods to
+     * add JavaScript and CSS imports and includes.
+     * <p/>
+     * For example:
+     *
+     * <pre class="prettyprint">
+     * public MyControl extends AbstractContainer {
+     *     ...
+     *     public void onHtmlImports(PageImports pageImports) {
+     *         String globalJs = "&lt;script type='text/javascript' src='myapp/assets/global.js'&gt;&lt;/script&gt;";
+     *         String globalCss = "&lt;link type='text/css' rel='stylesheet' href='myapp/assets/global.css'/&gt;"
+     *         pageImports.addJsImport(globalJs);
+     *         pageImports.addCssImport(globalCss);
+     *
+     *         // Important to call super here so that the Container children have
+     *         // opportunity to contribute their own javascript and css
+     *         // resources.
+     *         super.onHtmlImports(pageImports);
+     *     }
+     * } </pre>
+     * <p/>
+     * <b>Please note</b> a common problem when overriding onHtmlImports in
+     * subclasses, especially {@link net.sf.click.control.Container}s, 
+     * is forgetting to invoke <tt>super.onHtmlImports</tt>. Consider
+     * carefully whether you should call <tt>super.onHtmlImports</tt> or not.
+     * <p/>
+     * <b>Also note</b> this method supercedes {@link #getHtmlImports()}, since
+     * onHtmlImports is more powerful and flexible. However these two methods
+     * can be used in conjuction.
+     *
+     * @see net.sf.click.Page#onHtmlImports(net.sf.click.util.PageImports)
+     *
+     * @param pageImports the PageImports instance to add imports to
+     */
+    public void onHtmlImports(PageImports pageImports);
 
     /**
      * Return HTML element identifier attribute "id" value.

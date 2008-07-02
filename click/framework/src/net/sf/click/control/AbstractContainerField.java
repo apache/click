@@ -22,6 +22,7 @@ import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;
+import net.sf.click.util.PageImports;
 
 /**
  * Provides an abstract convenience class that implements {@link Container} and
@@ -406,6 +407,15 @@ public abstract class AbstractContainerField extends Field implements Container 
          */
         public String getHtmlImports() {
             return AbstractContainerField.this.getHtmlImports();
+        }
+
+        /**
+         * Contribute html imports and includes to the AbstractContainerField.
+         *
+         * @param pageImports the PageImports instance to add imports to
+         */
+        public void onHtmlImports(PageImports pageImports) {
+            AbstractContainerField.this.onHtmlImports(pageImports);
         }
 
         /**
