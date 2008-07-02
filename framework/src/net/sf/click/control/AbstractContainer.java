@@ -30,13 +30,10 @@ import net.sf.click.util.PageImports;
  * Provides a default implementation of the {@link Container} interface,
  * to make it easier for developers to implement their own containers.
  * <p/>
- * Subclasses are expected to at least override {@link #getTag()}
- * to differentiate the container. However some containers does not map cleanly
- * to a html <em>tag</em>, in which case you can override
- * {@link #render(net.sf.click.util.HtmlStringBuffer)} for complete control
- * over the output.
+ * Subclasses can override {@link #getTag()} to return a specific HTML element.
  * <p/>
- * Below is an example of creating a new container:
+ * The following example shows how to create an HTML <tt>div</tt> element:
+ *
  * <pre class="prettyprint">
  * public class Div extends AbstractContainer {
  *
