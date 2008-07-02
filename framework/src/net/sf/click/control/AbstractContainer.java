@@ -299,7 +299,19 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
    /**
-    * @see net.sf.click.control.AbstractControl#onHtmlImports(net.sf.click.util.PageImports)
+    * Allows Pages and Controls to contribute JavaScript and CSS imports
+    * and includes to the HTML head section through the specified PageImports
+    * instance.
+    * <p/>
+    * <b>Please note</b> a common problem when overriding onHtmlImports in
+    * subclasses is forgetting to call <tt>super.onHtmlImports</tt>. The default
+    * implementation of this method processes all the Container's child
+    * Controls. If you do not invoke <tt>super.onHtmlImports</tt>, the child
+    * Control's will not have an opportunity to contribute their JavaScript and
+    * CSS. Consider carefully whether you should call
+    * <tt>super.onHtmlImports</tt> or not.
+    *
+    * @see net.sf.click.Control#onHtmlImports(net.sf.click.util.PageImports)
     *
     * @param pageImports the PageImports instance to add imports to
     */

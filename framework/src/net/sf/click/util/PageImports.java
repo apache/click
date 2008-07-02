@@ -490,8 +490,16 @@ public class PageImports {
 
         initialize = true;
 
-        // Allow Page and its Controls to contribute header imports
+        // Allow Page to contribute header imports
         page.onHtmlImports(this);
+
+        // Allow Controls to contribute header imports
+         if (page.hasControls()) {
+            for (Iterator it = page.getControls().iterator(); it.hasNext();) {
+                Control control = (Control) it.next();
+                control.onHtmlImports(this);
+            }
+        }
 
         if (page.hasControls()) {
             for (int i = 0; i < page.getControls().size(); i++) {
