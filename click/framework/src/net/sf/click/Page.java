@@ -569,12 +569,6 @@ public class Page {
      * The specified {@link net.sf.click.util.PageImports} exposes methods to
      * add JavaScript and CSS imports as well as JavaScript and CSS scripts.
      * <p/>
-     * <b>Please note</b> by default this method will invoke
-     * <tt>onHtmlImports</tt> on all the Page Controls. When overriding this
-     * method, to include your own imports, it is important to remember to
-     * invoke <tt>super.onHtmlImports</tt> so that all Controls have a chance to
-     * contribute javascript and css resources.
-     * <p/>
      *
      * For example:
      *
@@ -594,15 +588,10 @@ public class Page {
      *     }
      * } </pre>
      *
-     * <b>Remember</b> a common problem when overriding onHtmlImports in
-     * subclasses is forgetting to call <tt>super.onHtmlImports</tt>. Consider
-     * carefully whether you should call <tt>super.onHtmlImports</tt> or not.
-     * <p/>
      * Sometimes for performance reasons it might be useful to have a single
      * externally linked javascript or stylesheet instead of multiple resources.
      * This saves round trips to the server as less connections have to be made.
-     * In cases where all javascript and stylesheets are served from a single
-     * resource, one should not invoke <tt>super.onHtmlImports</tt>.
+     * TODO
      * <p/>
      * A home page is a common example of this scenario:
      *
@@ -626,17 +615,6 @@ public class Page {
      * @param pageImports the PageImports instance to add imports to
      */
     public void onHtmlImports(PageImports pageImports) {
-        if (hasControls()) {
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
-
-                // TODO ties Page to AbstractControl.
-                if (control instanceof AbstractControl) {
-                    AbstractControl abstractControl = (AbstractControl) control;
-                    abstractControl.onHtmlImports(pageImports);
-                }
-            }
-        }
     }
 
     /**
