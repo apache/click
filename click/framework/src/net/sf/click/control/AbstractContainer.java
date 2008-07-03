@@ -234,9 +234,6 @@ public abstract class AbstractContainer extends AbstractControl implements
                 if (!control.onProcess()) {
                     continueProcessing = false;
                 }
-                if (ClickUtils.getLogService().isTraceEnabled()) {
-                    logEvent(control, "onProcess");
-                }
             }
         }
 
@@ -257,9 +254,6 @@ public abstract class AbstractContainer extends AbstractControl implements
                 } catch (Throwable t) {
                     ClickUtils.getLogService().error("onDestroy error", t);
                 }
-                if (ClickUtils.getLogService().isTraceEnabled()) {
-                    logEvent(control, "onDestroy");
-                }
             }
         }
     }
@@ -273,9 +267,6 @@ public abstract class AbstractContainer extends AbstractControl implements
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 control.onInit();
-                if (ClickUtils.getLogService().isTraceEnabled()) {
-                    logEvent(control, "onInit");
-                }
             }
         }
     }
@@ -288,9 +279,6 @@ public abstract class AbstractContainer extends AbstractControl implements
             for (int i = 0, size = getControls().size(); i < size; i++) {
                 Control control = (Control) getControls().get(i);
                 control.onRender();
-                if (ClickUtils.getLogService().isTraceEnabled()) {
-                    logEvent(control, "onRender");
-                }
             }
         }
     }
@@ -320,10 +308,6 @@ public abstract class AbstractContainer extends AbstractControl implements
                 if (control instanceof AbstractControl) {
                     AbstractControl abstractControl = (AbstractControl) control;
                     abstractControl.onHtmlImports(pageImports);
-
-                    if (ClickUtils.getLogService().isTraceEnabled()) {
-                       logEvent(control, "onHtmlImports");
-                    }
                 }
             }
         }
@@ -446,13 +430,7 @@ public abstract class AbstractContainer extends AbstractControl implements
 
                 int before = buffer.length();
                 control.render(buffer);
-//                if (control instanceof Container) {
-//                    ((Container) control).render(buffer);
-//                } else if (control instanceof AbstractControl) {
-//                    ((AbstractControl) control).render(buffer);
-//                } else {
-//                    buffer.append(control.toString());
-//                }
+
                 int after = buffer.length();
                 if (before != after) {
                     buffer.append("\n");
@@ -462,22 +440,4 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     // -------------------------------------------------------- Private Methods
-
-    /**
-     * Log the event being processed for the specified control.
-     *
-     * TODO. Not sure if this method is useful. Logging out life cycles for
-     * every container will be very noisy.
-     *
-     * @param control the control which event is logged
-     * @param event the current event being processed
-     */
-    private void logEvent(Control control, String event) {
-        String controlClassName = control.getClass().getName();
-        controlClassName = controlClassName.substring(controlClassName.
-            lastIndexOf('.') + 1);
-        String msg = "   invoked: '" + control.getName() + "' "
-            + controlClassName + "." + event + "()";
-        ClickUtils.getLogService().trace(msg);
-    }
 }
