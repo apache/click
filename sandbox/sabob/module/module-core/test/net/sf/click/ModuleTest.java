@@ -12,9 +12,9 @@ import net.sf.click.servlet.MockServletContext;
  *
  * @author Bob Schellink
  */
-public class PluginTest extends TestCase {
+public class ModuleTest extends TestCase {
 
-    public void testPlugin() {
+    public void testModule() {
 
         try {
             MockRequest request = new MockRequest();
@@ -37,7 +37,7 @@ public class PluginTest extends TestCase {
         }
     }
 
-    public void testPluginInContainer() {
+    public void testModuleInContainer() {
         MockContainer container = new MockContainer("test/web");
         container.setServletContext(new MockServletContext());
         container.getServletContext().addInitParameter("config-service-class", ModuleConfigService.class.getName());

@@ -23,13 +23,13 @@ import java.util.Map;
  */
 public interface ModuleService {
     
-    public void loadPlugins(ConfigService configService) throws Exception;
+    public void loadModules(ConfigService configService) throws Exception;
 
     public void onInit(ConfigService configService);
     
-    public void deployPlugin(ConfigService configService, String pluginName);
+    public void deployModules(ConfigService configService, String moduleName);
     
-    public void loadPlugin(ConfigService configService, String pluginName);
+    public void loadModule(ConfigService configService, String moduleName);
 
     public void onDestroy(ConfigService configService);
     

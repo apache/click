@@ -32,8 +32,8 @@ public class ModuleConfigService extends XmlConfigService {
 
     private ServletContext servletContext;
 
-    /** The application PluginService. */
-    private ModuleService pluginService;
+    /** The application ModuleService. */
+    private ModuleService moduleService;
 
     private LogService logService;
 
@@ -42,7 +42,7 @@ public class ModuleConfigService extends XmlConfigService {
     }
 
     public void onInit(ServletContext servletContext) throws Exception {
-        // Load plugins first so ClickApp can process them
+        // Load modules first so ClickApp can process them
 
         // Set default logService early to log errors when services fail.
         logService = new ConsoleLogService();
@@ -62,11 +62,11 @@ public class ModuleConfigService extends XmlConfigService {
         //TODO Workaround setting servletContext for now
         this.servletContext = servletContext;
 
-        pluginService.loadPlugins(this);
+        moduleService.loadModules(this);
 
         super.onInit(servletContext);
 
-        for (Iterator it = pluginService.getModules().values().iterator(); it.hasNext();) {
+        for (Iterator it = moduleService.getModules().values().iterator(); it.hasNext();) {
             ClickModule clickModule = (ClickModule) it.next();
             clickModule.onInit();
         }
@@ -76,63 +76,63 @@ public class ModuleConfigService extends XmlConfigService {
         return servletContext;
     }
     
-    public ModuleService getPluginService() {
-        return pluginService;
+    public ModuleService getModuleService() {
+        return moduleService;
     }
 
     private void loadModuleService(Element rootElm) throws Exception {
 
-        Element pluginServiceElm = ClickUtils.getChild(rootElm, "plugin-service");
+        Element moduleServiceElm = ClickUtils.getChild(rootElm, "module-service");
 
-        if (pluginServiceElm != null) {
-            Class pluginServiceClass = ConsoleLogService.class;
+        if (moduleServiceElm != null) {
+            Class moduleServiceClass = ConsoleLogService.class;
 
-            String classname = pluginServiceElm.getAttribute("classname");
+            String classname = moduleServiceElm.getAttribute("classname");
 
             if (StringUtils.isNotBlank(classname)) {
-                pluginServiceClass = ClickUtils.classForName(classname);
+                moduleServiceClass = ClickUtils.classForName(classname);
             }
 
-            pluginService = (ModuleService) pluginServiceClass.newInstance();
+            moduleService = (ModuleService) moduleServiceClass.newInstance();
 
         } else {
-            pluginService = new DefaultModuleService();
+            moduleService = new DefaultModuleService();
         }
 
         if (getLogService().isDebugEnabled()) {
-            String msg = "initializing PluginService: " + pluginService.getClass().
+            String msg = "initializing ModuleService: " + moduleService.getClass().
                 getName();
             getLogService().debug(msg);
         }
 
-        pluginService.onInit(this);
+        moduleService.onInit(this);
     }
 
     /**
      * Note: need to override getPageClass and check not only in the default
-     * package, but also every plugin and their respective package.
+     * package, but also every module and their respective package.
      */
     public Class getPageClass(String pagePath, String packageName) {
         // First check if default packageName and pagePath maps to a class
         // in the web application
         Class cls = super.getPageClass(pagePath, packageName);
         if (cls == null) {
-            // Otherwise check the available plugins for a class that can be
+            // Otherwise check the available modules for a class that can be
             // mapped to the pagePath
-            for (Iterator it = pluginService.getModules().values().iterator(); it.hasNext();) {
-                ClickModule plugin = (ClickModule) it.next();
-                String pluginPagePath = pagePath;
-                if (StringUtils.isNotBlank(plugin.getModulePath())) {
-                    if (!pagePath.startsWith(plugin.getModulePath())) {
-                        // The plugin templates lives in a different webPath
+            for (Iterator it = moduleService.getModules().values().iterator(); it.hasNext();) {
+                ClickModule module = (ClickModule) it.next();
+                String modulePagePath = pagePath;
+                if (StringUtils.isNotBlank(module.getModulePath())) {
+                    if (!pagePath.startsWith(module.getModulePath())) {
+                        // The module templates lives in a different webPath
                         // than the specified pagePath
                         continue;
                     }
-                    pluginPagePath = pluginPagePath.substring(plugin.getModulePath().
+                    modulePagePath = modulePagePath.substring(module.getModulePath().
                         length());
                 }
 
-                cls = getPageClass(pluginPagePath, plugin.getModulePackage());
+                cls = getPageClass(modulePagePath, module.getModulePackage());
                 if (cls != null) {
                     break;
                 }

@@ -55,9 +55,9 @@ public class ClickModule {
 
     public String toString() {
         return new ToStringBuilder(this)
-            .append("pluginName", getModuleName())
-            .append("pluginPackage", getModulePackage())
-            .append("pluginPath", getModulePath())
+            .append("moduleName", getModuleName())
+            .append("modulePackage", getModulePackage())
+            .append("modulePath", getModulePath())
             .toString();
     }
 }

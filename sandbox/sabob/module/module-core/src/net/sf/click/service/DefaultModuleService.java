@@ -37,7 +37,7 @@ import net.sf.click.util.ClickUtils;
  */
 public class DefaultModuleService implements ModuleService {
 
-    private Map plugins = new LinkedHashMap();
+    private Map modules = new LinkedHashMap();
     
     private Set loaded = new HashSet();
     
@@ -49,23 +49,23 @@ public class DefaultModuleService implements ModuleService {
         
     }
 
-    public void onDeploy(ConfigService configService, String pluginName) {
+    public void onDeploy(ConfigService configService, String moduleName) {
         
     }
 
-    public void loadPlugin(ConfigService configService, String pluginName) {
+    public void loadModule(ConfigService configService, String moduleName) {
         
     }
 
-    public void deployPlugin(ConfigService configService, String pluginName) {
+    public void deployModules(ConfigService configService, String moduleName) {
         
     }
 
     public Map getModules() {
-        return plugins;
+        return modules;
     }
 
-    public void loadPlugins(ConfigService configService) throws Exception {
+    public void loadModules(ConfigService configService) throws Exception {
         InputStream inputStream = null;
         try {
             //Find all jars under WEB-INF/lib
@@ -73,10 +73,10 @@ public class DefaultModuleService implements ModuleService {
 
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-            // Find all click-plugin.properties files on the classpath.
-            // Load each properties file, get the plugin "class" property and
-            // instantiate the plugin.
-            Enumeration en = classLoader.getResources("click-plugin.properties");
+            // Find all click-module.properties files on the classpath.
+            // Load each properties file, get the module "class" property and
+            // instantiate the module.
+            Enumeration en = classLoader.getResources("click-module.properties");
             while (en.hasMoreElements()) {
                 URL url = (URL) en.nextElement();
                 inputStream = url.openStream();
@@ -85,22 +85,22 @@ public class DefaultModuleService implements ModuleService {
                 Properties properties = new Properties();
                 properties.load(inputStream);
 
-                // if url is: jar:file:/C:/dev/os/click/click-plugin/test/web/WEB-INF/lib/click-plugin-example1.jar!/click-plugin.properties
-                // jarName would be: click-plugin-example1.jar 
+                // if url is: jar:file:/C:/dev/os/click/click-module/test/web/WEB-INF/lib/click-module-example1.jar!/click-module.properties
+                // jarName would be: click-module-example1.jar 
                 String jarName = ModuleUtils.extractJarNameFromURL(url);
                 
-                // Ensure the click-plugin.properties is in one of the 
+                // Ensure the click-module.properties is in one of the 
                 // WEB-INF/lib jars.
                 if (webJars.containsKey(jarName)) {
-                    String pluginClassName = properties.getProperty("class");
-                    ClickModule plugin = createPlugin(pluginClassName);
-                    plugins.put(plugin.getModuleName(), plugin);
+                    String moduleClassName = properties.getProperty("class");
+                    ClickModule module = createModule(moduleClassName);
+                    modules.put(module.getModuleName(), module);
 
-                    // Deploy plugin resources.
+                    // Deploy module resources.
                     String jarLocation = (String) webJars.get(jarName);
                     InputStream is = configService.getServletContext()
                         .getResourceAsStream(jarLocation);
-                    deployPluginResources(configService, is, jarLocation, plugin);
+                    deployModuleResources(configService, is, jarLocation, module);
                 }
             }
         } finally {
@@ -108,7 +108,7 @@ public class DefaultModuleService implements ModuleService {
         }
     }
 
-    public void deployPluginResources(ConfigService configService, InputStream jarInputStream, String jarLocation, ClickModule plugin) {
+    public void deployModuleResources(ConfigService configService, InputStream jarInputStream, String jarLocation, ClickModule module) {
         try {
             if (jarInputStream == null) {
                 jarInputStream = new FileInputStream(jarLocation);
@@ -131,9 +131,9 @@ public class DefaultModuleService implements ModuleService {
 
                 if (pathIndex != -1) {
                     String resourceName = jarEntryName.substring(pathIndex);
-                    String path = plugin.getModulePath();
-                    if (resourceName.startsWith(plugin.getModulePackageAsPath())) {
-                        String pagePath = resourceName.substring(plugin.getModulePackageAsPath().length());
+                    String path = module.getModulePath();
+                    if (resourceName.startsWith(module.getModulePackageAsPath())) {
+                        String pagePath = resourceName.substring(module.getModulePackageAsPath().length());
                         pagePath = pagePath.indexOf('/') == 0 ? pagePath.substring(1) : pagePath;
 
                         // Add trailing slash '/'
@@ -165,18 +165,18 @@ public class DefaultModuleService implements ModuleService {
         }
     }
 
-    ClickModule createPlugin(String pluginClassName) {
+    ClickModule createModule(String moduleClassName) {
         try {
-            Class pluginClass = ClickUtils.classForName(pluginClassName);
-            if (!(ClickModule.class.isAssignableFrom(pluginClass))) {
-                throw new IllegalArgumentException(pluginClassName + " must be "
+            Class moduleClass = ClickUtils.classForName(moduleClassName);
+            if (!(ClickModule.class.isAssignableFrom(moduleClass))) {
+                throw new IllegalArgumentException(moduleClassName + " must be "
                     + "a subclass of net.sf.click.ClickModule.");
             }
 
-            ClickModule clickModule = (ClickModule) pluginClass.newInstance();
-            validateCommonPluginErrors(clickModule);
+            ClickModule clickModule = (ClickModule) moduleClass.newInstance();
+            validateCommonModuleErrors(clickModule);
 
-            // TODO check if plugin has been overridden in click.xml.
+            // TODO check if module has been overridden in click.xml.
             //if (clickModule.getModuleName().equals(TODO)) {
                // clickModule = TODO 
             //}
@@ -187,12 +187,12 @@ public class DefaultModuleService implements ModuleService {
         }
     }
 
-    void validateCommonPluginErrors(ClickModule plugin) {
-        // Ensure pluginPath must starts with a '/' character
-        if (plugin.getModulePath().indexOf('/') != 0) {
-            throw new IllegalStateException("Plugin [" + plugin.getModuleName()
-                + "] path must start with a '/' character. Plugin path current "
-                + "value is [" + plugin.getModulePath() + "]");
+    void validateCommonModuleErrors(ClickModule module) {
+        // Ensure modulePath must starts with a '/' character
+        if (module.getModulePath().indexOf('/') != 0) {
+            throw new IllegalStateException("Module [" + module.getModuleName()
+                + "] path must start with a '/' character. Module path current "
+                + "value is [" + module.getModulePath() + "]");
         }
     }
 }

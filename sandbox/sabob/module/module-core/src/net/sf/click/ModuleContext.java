@@ -34,9 +34,9 @@ public class ModuleContext extends Context {
         super(context, config, request, response, isPost, clickServlet);
     }
 
-    public String getModuleRoot(String pluginName) {
-        Map modules = getModuleConfigService().getPluginService().getModules();
-        ClickModule module = (ClickModule) modules.get(pluginName);
+    public String getModuleRoot(String moduleName) {
+        Map modules = getModuleConfigService().getModuleService().getModules();
+        ClickModule module = (ClickModule) modules.get(moduleName);
         if (module != null) {
             return module.getModulePath();
         }
