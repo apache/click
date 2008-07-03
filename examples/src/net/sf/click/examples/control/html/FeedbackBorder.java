@@ -5,7 +5,7 @@ import net.sf.click.control.AbstractContainerField;
 import net.sf.click.control.Field;
 
 /**
- * This control provides feedback for any a field.
+ * This control provides feedback for a Field.
  * <p/>
  * If the field is required, FeedbackBorder will add a "required" css class.
  * <p/>
@@ -34,6 +34,7 @@ public class FeedbackBorder extends AbstractContainerField {
                 "Only fields are allowed on FeedbackBorder.");
         }
 
+        // Always insert the control in the first position
         super.insert(control, 0);
 
         return control;
