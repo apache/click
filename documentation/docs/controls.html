@@ -35,8 +35,8 @@ server side processing. This section covers the following topics:
   </li>
   <li><a href="#message-properties">Message Properties</a> - control message properties
   </li>
-  <li><a href="#container">Container</a> - describes the Container interface
-  which extends Control and allows hierarchical components.
+  <li><a href="#container">Container</a> - a Container is a Control that can
+  contain other Controls.
   </li>
   <li><a href="#layout">Layouts</a> - describes layout options and how to create
   custom layouts.
@@ -323,26 +323,26 @@ These methods use the <tt>Locale</tt> of the request to lookup the string resour
 bundle, and use <tt>MessageFormat</tt> for any string formatting.
 
 <a name="container" class="heading"></a><h2>Container</h2>
-The concept of Container extends the <a href="click-api/net/sf/click/Control.html">Control</a>
-interface, and enables construction of complex component hierarchies.
+The Container is a Control that can contain other Controls, thus forming a
+hierarchy of components.
 <p/>
-Container enables components to add, remove and retrieve other controls and containers.
+Container enables components to add, remove and retrieve other controls.
 <p/>
-The following Click Controls are example Containers:
+Listed below are example Containers:
 <ul style="margin-top:0.5em;">
    <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>
-   - a form which allows any control or container to be added.</li>
+   - a form which allows any Control to be added.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
-   - a form which allows only Field and FieldSet controls to be added, enabling Form to automatically
-   layout its content.</li>
-   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a> - like
-   <a href="click-api/net/sf/click/Page.html">Page</a> this powerful container provides
+   - a form which only allows Field and FieldSet Controls to be added. This restriction allows
+   Form to automatically layout its content.</li>
+   <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a> - similar to
+   <a href="click-api/net/sf/click/Page.html">Page</a>, this Container provides
    its own template and model.</li>
    <li class="item"><a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a> - draws
-   a legend (border) around its child controls.</li>
+   a legend (border) around its child Controls.</li>
 </ul>
 <br/>
-These containers are depicted below in Figure 4.
+These Containers are depicted below in Figure 4.
 
 <p/>
 
@@ -352,7 +352,7 @@ These containers are depicted below in Figure 4.
 
 </p>
 
-The following convenient classes is available to work with and create custom Containers:
+The following convenient classes form the basis to create custom Containers:
 <ul style="margin-top:0.5em;">
   <li class="item"><a href="click-api/net/sf/click/control/AbstractContainer.html">AbstractContainer</a></li>
   <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a></li>
@@ -365,10 +365,7 @@ Lets cover each of them here.
 <b>AbstractContainer</b>
 
 <p/>
-Enables easy creation of custom Containers for example a html div or span element.
-
-<p/>
-For example:
+Enables easy creation of custom Containers, for example an html <em>div</em> or <em>span</em> element:
 
 <pre class="prettyprint">
 public class Div extends AbstractContainer {
@@ -383,7 +380,7 @@ public class Div extends AbstractContainer {
     }
 } </pre>
 
-Lets test the Div: (note the MockContext used in this test is described in the
+Lets try out the newly created Container above: (note the MockContext used in this test is described in the
 <a href="mock-api/overview-summary.html">Mock Test Support</a> documentation)
    
 <pre class="prettyprint">
@@ -421,11 +418,11 @@ restriction enables the Form to layout its contents automatically and in a predi
 
 <p/>
 Form also provides automatic error handling, which when combined with auto-layout, allows
-you to quickly assemble input screens.
+for the quick assembling of input screens.
 
 <p/>
 <a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a> on the other hand allows you to
-manually layout controls and errors. Any control can be added including tables, trees, panels and lists.
+manually layout its child Controls and errors. Any control can be added including tables, trees, panels and lists.
 
 <p/>
 BasicForm provides everything you need to work with html forms, including the following
@@ -506,19 +503,22 @@ Executing the snippet produces the output:
 <a name="layout" class="heading"></a><h2>Layout</h2>
 
 Controls such as <a href="click-api/net/sf/click/control/Form.html">Form</a>
-take care of layout and error reporting automatically, and for many use cases this
+takes care of layout and error reporting automatically, and for many use cases
 auto-layout is good enough.
 
 <p/>
 However for custom or complex layouts, Form is not well suited.
 
-<p/>There are two options for creating manual layouts.
+<p/>There are two approaches for creating manual layouts.
 <ul style="margin-top:0.5em;">
   <li class="item">
-    <a href="click-api/net/sf/click/control/Form.html#manual-layout">Templates</a> - use a template engine
-    such as Velocity, Freemarker or JSP to create the layout using HTML markup.</li>
+    Template approach - use a template engine such as Velocity, Freemarker or JSP to
+    declare the layout as HTML markup.
+  </li>
   <li class="item">
-    <a href="#container">Container</a> - add controls to a container and build up the layout using normal Java. This option is very similar to building components using Swing.</li>
+    Programmatic approach - build custom layout components using Java. This option
+    is very similar to building components using Swing.
+  </li>
 </ul>
 <br/>
 
@@ -526,7 +526,7 @@ However for custom or complex layouts, Form is not well suited.
 <b>Template layouts</b>
 <p/>
 Taking the <a href="click-api/net/sf/click/control/Form.html#manual-layout">Template</a>
-approach works well and does separate the Page and layout logic. For example:
+approach works well and it separates the Page and layout logic. For example:
 <pre class="prettyprint">
 //EmployeePage.java
 public EmployeePage extends Page {
@@ -551,11 +551,11 @@ public EmployeePage extends Page {
     }
 } </pre>
 
-Lets imagine we want to use a CSS layout using Div &lt;div&gt; and html List &lt;ol&gt; tags.
+Lets imagine we want to create a layout using Div &lt;div&gt; and HTML List &lt;ol&gt; tags.
 
 <p/>
 We could provide the markup for the <span class="st">employee.htm</span> template as shown below,
-using a template engine like Velocity:
+using a template engine such as Velocity:
 
 <pre class="prettyprint">
 &lt;!--employee.htm--&gt;
@@ -583,47 +583,50 @@ ${form.startTag()}
     ${form.fields.submit}
 ${form.endTag()} </pre>
 
-Using a CSS stylesheet, this markup can be transformed into a great looking form as shown 
+Using a CSS stylesheet, the markup above can be transformed into a great looking form as shown 
 in this <a target="_blank" href="http://www.sitepoint.com/print/fancy-form-design-css">article</a>.
 
 <p/>
-There are pros and cons to using the template layout approach.
+There are pros and cons to using the template approach.
 
 <p/>
-One of the advantages of the Template layout, is that the layout is explicit and one can easily
-change it to something else. For example instead of using divs and ordered lists, one can
+One of the advantages of the Template approach, is that the layout is explicit and one can easily
+tweak it if needed. For example instead of using divs and ordered lists, one can
 change the template to leverage a table layout.
 
 <p/>
-A disadvantage of the Template layout is it introduces redundancy.
+A disadvantage of the Template approach, is added redundancy.
 
 <p/>
-In the example above you needed to create the fields in Java, and lay them out using html markup
+In the example above we created the fields in Java, and laid them out using markup
 in the template.
 
 <p/>
-If the requirements change to add a new field for example, one will have to add the
-field in the Page as well as the template. Of course it is possible to "generify"
-the layout using template engines like Velocity, Freemarker or JSP, since they provide
-constructs such as iterators and conditional logic. <a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
+If the requirements should change to add a new field for example, one will have to add the
+field in the Page as well as the template.
+
+<p/>
+It is also possible to "generify" the layout using template engines.
+<a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
 is an example of a generic form layout using Velocity.
+
+<p/><br>
+<a name="programmatic-layout" class="heading"></a>
+
+<b>Programmatic layouts</b>
+
 <p/>
-
-<a name="container-layout" class="heading"></a>
-
-<b>Container layouts</b>
+To combat the redundancy introduced by the Template approach, you can take a
+programmatic approach and use normal Java and some Click classes to build custom
+layouts.
 
 <p/>
-To combat the redundency instroduced by the Template approach, you can use Containers
+Components such as Div, Span, List, HorizontalPanel and VerticalPanel are ideal
 for layout purposes.
 
 <p/>
-By using containers, the form and fields could be created and laid out in Java.
-
-<p/>
-Containers such as Div, Span, List, HorizontalPanel and VerticalPanel are ideal for layouts.
-Click does not yet provide these containers out of the box, but we can put some together as
-shown below:
+Since Click does not provide these components out of the box, lets create some
+of them as shown below:
 
 <pre class="prettyprint">
 // Div.java
@@ -663,14 +666,16 @@ public class ListItem extends AbstractContainer {
     }
 } </pre>
 
-After creating all the needed containers the form can be assembled.
+After creating some components needed for the layout, the Form and Fields can
+be assembled.
+
 <p/>
-Continuing with the employee example from the <a href="#template-layout">template layout</a>
-section, the form can be created as follows (note BasicForm is used instead of Form):
+Continuing with the employee example from the <a href="#template-layout">template approach</a>,
+we again create an EmployeePage:
 
 <pre class="prettyprint">
 // EmployeePage.java
-public class EmployeePage extends BasicForm {
+public class EmployeePage extends Page {
     // A form instance variable
     private BasicForm form;
 
@@ -722,7 +727,7 @@ public class EmployeePage extends BasicForm {
 } </pre>
     
 Now the <span class="st">employee.htm</span> template would only need to specify the name of the 
-top level container, in this case <em>form</em>.
+top level component, in this case <em>form</em>.
 
 <pre class="prettyprint">
 &lt;!--employee.htm--&gt;
@@ -767,16 +772,20 @@ of the above example. Note that the demo adds a couple of features, including er
 not covered here.
 
 <p/>
-The advantage of the container approach is that there is no redundancy. Each field is
-created and added to its container in Java. If new fields are added they will be added
-to their container in the page. No need to change the template as the layout is taken
-care of by a combination of markup produced by the container and CSS stylesheets.
+The advantage of the programmatic approach is that there is no redundancy. Each Field is
+created and added using normal Java. There is no need to specify where the Field
+must reside in the markup.
 
 <p/>
-A disadvantage is that it is harder to <em>see</em> what output would be rendered by the containers.
+If new requirements arrive and more fields added, only the Page has to be updated.
+No need to change the template as the layout is taken care of by markup produced
+by the components.
 
 <p/>
-Whether you use the <a href="#template-layout">template</a> or <a href="#container-layout">container</a>
+A disadvantage is that it is harder to <em>visualize</em> what output would be rendered by the containers.
+
+<p/>
+Whether you use the <a href="#template-layout">template</a> or <a href="#programmatic-layout">programmatic</a>
 layout approach, is up to you. Both work well and have advantages and disadvantages
 over the other.
 
