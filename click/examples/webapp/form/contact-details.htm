@@ -1,31 +1,34 @@
-This page demonstrates how to use Click's <a href="http://click.sourceforge.net/docs/controls.html#container" target="_blank">Container</a> concept to manually
-layout a form.
+This page demonstrates a Java centric approach to manually layout Fields inside a Form.
 <p/>
 The form below is laid out as specified by the article: <a href="http://www.sitepoint.com/print/fancy-form-design-css">http://www.sitepoint.com/print/fancy-form-design-css</a>
 <p/>
 In short the form fields are laid out using a combination of FieldSet and Html List tags; &lt;ol&gt; &lt;li&gt;.
 <p/>
-The form does not have any functionality except to show how manual layouts can be specified using Click Containers.
-<p/>
 This demo consists of the following classes: (Note these classes are not part of Click, they were created specifically for this demo).
 <ul>
     <li>
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/control/html/cssform/ContactDetailsForm.java" target="_blank">ContactDetailsForm.java</a>
+        - encapsulates the contact details in a component.
     </li>
     <li>
         <a href="$context/source-viewer.htm?filename=assets/css/cssform.css" target="_blank">cssform.css</a>
+        - the stylesheet used to layout the fields.
     </li>
     <li>
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/control/html/list/HtmlList.java" target="_blank">HtmlList.java</a>
+        - a component that mimics an HTML list: &lt;ol&gt;
     </li>
-    <li>
+    <li>!
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/control/html/list/ListItem.java" target="_blank">ListItem.java</a>
+        - a component that mimics an HTML list item: &lt;li&gt;
     </li>
     <li>
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/control/html/FeedbackBorder.java" target="_blank">FeedbackBorder.java</a>
+        - a component which decorates a Field with different borders, based on the Field's state.
     </li>
     <li>
         <a href="$context/source-viewer.htm?filename=WEB-INF/classes/net/sf/click/examples/control/html/FieldLabel.java" target="_blank">FieldLabel.java</a>
+        - provides a convenient class that generates an HTML Label for a Field.
     </li>
 </ul>
 
