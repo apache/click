@@ -1591,7 +1591,7 @@ public class Form extends BasicForm {
         }
 
         buffer.append("<tr><td>\n");
-        renderControls(buffer, this, getControls(), getFieldWidths());
+        renderControls(buffer, this, getControls(), getFieldWidths(), getColumns());
         buffer.append("</td></tr>\n");
     }
 
@@ -1605,9 +1605,10 @@ public class Form extends BasicForm {
      * @param container the container which controls to render
      * @param controls the controls to render
      * @param fieldWidths a map of field widths keyed on field name
+     * @param columns the number of form layout table columns
      */
     protected void renderControls(HtmlStringBuffer buffer,
-        AbstractContainer container, List controls, Map fieldWidths) {
+        AbstractContainer container, List controls, Map fieldWidths, int columns) {
 
         buffer.append("<table class=\"fields\"");
         String containerId = container.getId();
@@ -1745,7 +1746,7 @@ public class Form extends BasicForm {
                     }
                 }
 
-                if (column >= getColumns()) {
+                if (column >= columns) {
                     buffer.append("</tr>\n");
                     openTableRow = false;
                     column = 1;
@@ -2048,7 +2049,8 @@ public class Form extends BasicForm {
 
         // Render Fields and Labels
         List fieldSetFields = ContainerUtils.getFieldsAndLabels(fieldSet);
-        renderControls(buffer, fieldSet, fieldSetFields, fieldSet.getFieldWidths());
+        renderControls(buffer, fieldSet, fieldSetFields, fieldSet.getFieldWidths(),
+            fieldSet.getColumns());
 
         // Render Buttons
         List fieldSetButtons = ContainerUtils.getButtons(fieldSet);

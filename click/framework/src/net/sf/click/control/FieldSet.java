@@ -135,6 +135,14 @@ public class FieldSet extends AbstractContainer {
     /** The render the fieldset border flag, default value is true. */
     protected boolean showBorder = true;
 
+    /**
+     * This property serves as a hint to the number of table columns the fieldset
+     * is rendered with.
+     *<p/>
+     * Currently only {@link Form} acts upon this property.
+     */
+    protected Integer columns;
+
     // ------------------------------------------------------ Constructorrs
 
     /**
@@ -334,6 +342,42 @@ public class FieldSet extends AbstractContainer {
      */
     public String getTag() {
         return "fieldset";
+    }
+
+    /**
+     * Return the number of fieldset layout table columns. This property supplies
+     * a hint to the number of table columns the fieldset should be rendered with.
+     * <p/>
+     * <b>Note</b> currently only {@link Form} acts upon the column value.
+     * <p/>
+     * By default this property inherits its value from the parent Form, but
+     * can be specified to override the form value.
+     *
+     * @return the number of fieldset layout table columns
+     */
+    public int getColumns() {
+        if (columns != null) {
+            return columns.intValue();
+        } else {
+            BasicForm parentForm = getForm();
+            if (parentForm instanceof Form) {
+                return ((Form) parentForm).getColumns();
+            }
+            // Defaults to 1
+            return 1;
+        }
+    }
+
+    /**
+     * Set the number of fieldset layout table columns. This property supplies
+     * a hint to the number of table columns the fieldset should be rendered with.
+     * <p/>
+     * <b>Note</b> currently only {@link Form} acts upon the column value.
+     *
+     * @param columns the number of fieldset layout table columns
+     */
+    public void setColumns(int columns) {
+        this.columns = new Integer(columns);
     }
 
     /**
