@@ -28,7 +28,7 @@ import javax.servlet.ServletContext;
  */
 public class ModuleUtils {
 
-    public static Map findAllJars(ServletContext context) {
+    public static Map findWarJars(ServletContext context) {
         Map map = new HashMap();
         Set jars = context.getResourcePaths("/WEB-INF/lib");
         if (jars == null) {
@@ -36,7 +36,7 @@ public class ModuleUtils {
         }
         for (Iterator it = jars.iterator(); it.hasNext();) {
             String jar = (String) it.next();
-            if (canAddJar(jar)) {
+            if (acceptJar(jar)) {
                 map.put(normalizeJarName(jar), jar);
             }
         }
@@ -54,15 +54,15 @@ public class ModuleUtils {
         return path.substring(start + 1);
     }
 
-    public static boolean canAddJar(String path) {
+    public static boolean acceptJar(String path) {
         if (path == null) {
             return false;
         }
-        // Skip click-core.jar
-        if (path.indexOf("click-core") >= 0) {
-            return false;
+        // Only accept jar files
+        if (path.endsWith(".jar")) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     public static String extractJarNameFromURL(URL url) {

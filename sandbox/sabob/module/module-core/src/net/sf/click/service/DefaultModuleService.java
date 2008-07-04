@@ -38,27 +38,22 @@ import net.sf.click.util.ClickUtils;
 public class DefaultModuleService implements ModuleService {
 
     private Map modules = new LinkedHashMap();
-    
+
     private Set loaded = new HashSet();
-    
+
     public void onInit(ConfigService configService) {
-        
     }
-    
+
     public void onDestroy(ConfigService configService) {
-        
     }
 
     public void onDeploy(ConfigService configService, String moduleName) {
-        
     }
 
     public void loadModule(ConfigService configService, String moduleName) {
-        
     }
 
     public void deployModules(ConfigService configService, String moduleName) {
-        
     }
 
     public Map getModules() {
@@ -69,7 +64,7 @@ public class DefaultModuleService implements ModuleService {
         InputStream inputStream = null;
         try {
             //Find all jars under WEB-INF/lib
-            Map webJars = ModuleUtils.findAllJars(configService.getServletContext());
+            Map warJars = ModuleUtils.findWarJars(configService.getServletContext());
 
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
@@ -86,18 +81,18 @@ public class DefaultModuleService implements ModuleService {
                 properties.load(inputStream);
 
                 // if url is: jar:file:/C:/dev/os/click/click-module/test/web/WEB-INF/lib/click-module-example1.jar!/click-module.properties
-                // jarName would be: click-module-example1.jar 
+                // jarName would be: click-module-example1.jar
                 String jarName = ModuleUtils.extractJarNameFromURL(url);
-                
-                // Ensure the click-module.properties is in one of the 
+
+                // Ensure the click-module.properties is in one of the
                 // WEB-INF/lib jars.
-                if (webJars.containsKey(jarName)) {
+                if (warJars.containsKey(jarName)) {
                     String moduleClassName = properties.getProperty("class");
                     ClickModule module = createModule(moduleClassName);
                     modules.put(module.getModuleName(), module);
 
                     // Deploy module resources.
-                    String jarLocation = (String) webJars.get(jarName);
+                    String jarLocation = (String) warJars.get(jarName);
                     InputStream is = configService.getServletContext()
                         .getResourceAsStream(jarLocation);
                     deployModuleResources(configService, is, jarLocation, module);
@@ -108,7 +103,8 @@ public class DefaultModuleService implements ModuleService {
         }
     }
 
-    public void deployModuleResources(ConfigService configService, InputStream jarInputStream, String jarLocation, ClickModule module) {
+    public void deployModuleResources(ConfigService configService,
+        InputStream jarInputStream, String jarLocation, ClickModule module) {
         try {
             if (jarInputStream == null) {
                 jarInputStream = new FileInputStream(jarLocation);
@@ -126,17 +122,19 @@ public class DefaultModuleService implements ModuleService {
 
                 if (pathIndex != -1) {
                     String resourceName = jarEntryName.substring(pathIndex);
-                    
+
                     // example -> /module1
                     String path = module.getModulePath();
-                    
+
                     // resourceName -> /com/corp/pages/customers/customer.htm
                     if (resourceName.startsWith(module.getModulePackageAsPath())) {
                         // pagePath -> /customers/customer.htm
-                        String pagePath = resourceName.substring(module.getModulePackageAsPath().length());
-                        
+                        String pagePath = resourceName.substring(module.
+                            getModulePackageAsPath().length());
+
                         // pagePath -> customers/customer.htm
-                        pagePath = pagePath.indexOf('/') == 0 ? pagePath.substring(1) : pagePath;
+                        pagePath = pagePath.indexOf('/') == 0 ? pagePath.
+                            substring(1) : pagePath;
 
                         // Add trailing slash '/module1/'
                         path = path.endsWith("/") ? path : path + "/";
@@ -158,8 +156,8 @@ public class DefaultModuleService implements ModuleService {
 
                     // Copy resources to web folder
                     ClickUtils.deployFile(configService.getServletContext(),
-                      jarEntryName,
-                      path);
+                        jarEntryName,
+                        path);
                 }
             }
 
@@ -172,8 +170,8 @@ public class DefaultModuleService implements ModuleService {
         try {
             Class moduleClass = ClickUtils.classForName(moduleClassName);
             if (!(ClickModule.class.isAssignableFrom(moduleClass))) {
-                throw new IllegalArgumentException(moduleClassName + " must be "
-                    + "a subclass of net.sf.click.ClickModule.");
+                throw new IllegalArgumentException(moduleClassName + " must be " +
+                    "a subclass of net.sf.click.ClickModule.");
             }
 
             ClickModule clickModule = (ClickModule) moduleClass.newInstance();
@@ -181,7 +179,7 @@ public class DefaultModuleService implements ModuleService {
 
             // TODO check if module has been overridden in click.xml.
             //if (clickModule.getModuleName().equals(TODO)) {
-               // clickModule = TODO 
+            // clickModule = TODO 
             //}
 
             return clickModule;
@@ -193,9 +191,9 @@ public class DefaultModuleService implements ModuleService {
     void validateCommonModuleErrors(ClickModule module) {
         // Ensure modulePath must starts with a '/' character
         if (module.getModulePath().indexOf('/') != 0) {
-            throw new IllegalStateException("Module [" + module.getModuleName()
-                + "] path must start with a '/' character. Module path current "
-                + "value is [" + module.getModulePath() + "]");
+            throw new IllegalStateException("Module [" + module.getModuleName() +
+                "] path must start with a '/' character. Module path current " +
+                "value is [" + module.getModulePath() + "]");
         }
     }
 }

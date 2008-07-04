@@ -111,6 +111,10 @@ public class ModuleConfigService extends XmlConfigService {
     /**
      * Note: need to override getPageClass and check not only in the default
      * package, but also every module and their respective package.
+     *
+     * @param pagePath
+     * @param packageName 
+     * 
      */
     public Class getPageClass(String pagePath, String packageName) {
         // First check if default packageName and pagePath maps to a class
