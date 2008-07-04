@@ -118,29 +118,32 @@ public class DefaultModuleService implements ModuleService {
             while ((jarEntry = jis.getNextJarEntry()) != null) {
                 String jarEntryName = jarEntry.getName();
 
-                // Deploy all resources under "META-INF/web/" or "META-INF/webapp/"
+                // Deploy all resources under "META-INF/web/"
                 int pathIndex = jarEntryName.indexOf("META-INF/web/");
                 if (pathIndex == 0) {
                     pathIndex += "META-INF/web/".length();
-                } else {
-                    pathIndex = jarEntryName.indexOf("META-INF/webapp/");
-                    if (pathIndex == 0) {
-                        pathIndex += "META-INF/webapp/".length();
-                    }
                 }
 
                 if (pathIndex != -1) {
                     String resourceName = jarEntryName.substring(pathIndex);
+                    
+                    // example -> /module1
                     String path = module.getModulePath();
+                    
+                    // resourceName -> /com/corp/pages/customers/customer.htm
                     if (resourceName.startsWith(module.getModulePackageAsPath())) {
+                        // pagePath -> /customers/customer.htm
                         String pagePath = resourceName.substring(module.getModulePackageAsPath().length());
+                        
+                        // pagePath -> customers/customer.htm
                         pagePath = pagePath.indexOf('/') == 0 ? pagePath.substring(1) : pagePath;
 
-                        // Add trailing slash '/'
+                        // Add trailing slash '/module1/'
                         path = path.endsWith("/") ? path : path + "/";
 
                         int index = pagePath.lastIndexOf('/');
                         if (index != -1) {
+                            // path -> /module1/customers
                             path += pagePath.substring(0, index);
                         }
                     } else {
