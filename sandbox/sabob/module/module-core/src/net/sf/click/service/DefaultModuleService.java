@@ -63,9 +63,6 @@ public class DefaultModuleService implements ModuleService {
     public void loadModules(ConfigService configService) throws Exception {
         InputStream inputStream = null;
         try {
-            //Find all jars under WEB-INF/lib
-            Map warJars = ModuleUtils.findWarJars(configService.getServletContext());
-
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
             // Find all click-module.properties files on the classpath.
@@ -81,18 +78,17 @@ public class DefaultModuleService implements ModuleService {
                 properties.load(inputStream);
 
                 // if url is: jar:file:/C:/dev/os/click/click-module/test/web/WEB-INF/lib/click-module-example1.jar!/click-module.properties
-                // jarName would be: click-module-example1.jar
-                String jarName = ModuleUtils.extractJarNameFromURL(url);
+                // jarLocation would be: WEB-INF/lib/click-module-example1.jar
+                String jarLocation = ModuleUtils.extractJarPathFromURL(url);
 
-                // Ensure the click-module.properties is in one of the
-                // WEB-INF/lib jars.
-                if (warJars.containsKey(jarName)) {
+                // Ensure the jar containing click-module.properties, is in the WEB-INF/lib folder
+                if (jarLocation.indexOf("WEB-INF/lib") >= 0) {
                     String moduleClassName = properties.getProperty("class");
                     ClickModule module = createModule(moduleClassName);
                     modules.put(module.getModuleName(), module);
 
                     // Deploy module resources.
-                    String jarLocation = (String) warJars.get(jarName);
+                    System.out.println("location: " + jarLocation);
                     InputStream is = configService.getServletContext()
                         .getResourceAsStream(jarLocation);
                     deployModuleResources(configService, is, jarLocation, module);

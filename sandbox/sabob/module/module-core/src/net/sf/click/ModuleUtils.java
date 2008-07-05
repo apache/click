@@ -16,11 +16,6 @@
 package net.sf.click;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.ServletContext;
 
 /**
  *
@@ -28,44 +23,7 @@ import javax.servlet.ServletContext;
  */
 public class ModuleUtils {
 
-    public static Map findWarJars(ServletContext context) {
-        Map map = new HashMap();
-        Set jars = context.getResourcePaths("/WEB-INF/lib");
-        if (jars == null) {
-            return map;
-        }
-        for (Iterator it = jars.iterator(); it.hasNext();) {
-            String jar = (String) it.next();
-            if (acceptJar(jar)) {
-                map.put(normalizeJarName(jar), jar);
-            }
-        }
-        return map;
-    }
-
-    public static String normalizeJarName(String path) {
-        if (path == null) {
-            return null;
-        }
-        int start = path.lastIndexOf("/");
-        if (start < 0) {
-            return path;
-        }
-        return path.substring(start + 1);
-    }
-
-    public static boolean acceptJar(String path) {
-        if (path == null) {
-            return false;
-        }
-        // Only accept jar files
-        if (path.endsWith(".jar")) {
-            return true;
-        }
-        return false;
-    }
-
-    public static String extractJarNameFromURL(URL url) {
+    public static String extractJarPathFromURL(URL url) {
         if (url == null) {
             return null;
         }
@@ -74,10 +32,10 @@ public class ModuleUtils {
         if (end < 0) {
             return null;
         }
-        int start = urlStr.lastIndexOf("/", end);
+        int start = urlStr.lastIndexOf("/WEB-INF/lib", end);
         if (start < 0) {
             return null;
         }
-        return urlStr.substring(start + 1, end + 4);
+        return urlStr.substring(start, end + 4);
     }
 }
