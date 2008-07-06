@@ -38,6 +38,7 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.Format;
+import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
 
 import org.apache.commons.lang.StringUtils;
@@ -457,9 +458,19 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return page.getPath();
 
         } else if (object instanceof List) {
-            String msg =
-                "Page class resolves to multiple paths: " + pageClass.getName();
-            throw new IllegalArgumentException(msg);
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append("Page class resolves to multiple paths: ");
+            buffer.append(pageClass.getName());
+            buffer.append(" -> [");
+            for (Iterator it = ((List) object).iterator(); it.hasNext(); ) {
+                PageElm pageElm = (PageElm) it.next();
+                buffer.append(pageElm.getPath());
+                if (it.hasNext()) {
+                    buffer.append(", ");
+                }
+            }
+            buffer.append("]");
+            throw new IllegalArgumentException(buffer.toString());
 
         } else {
             return null;
