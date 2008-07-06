@@ -594,15 +594,19 @@ public class MockServletContext implements ServletContext {
      *
      * @param name The starting name
      * @return The set of resource paths at this location
+     * @throws IllegalArgumentException if the specified name does not start
+     * with a "/" character
      */
     public Set getResourcePaths(String name) {
+        if (!name.startsWith("/")) {
+            throw new IllegalArgumentException("Path " + name
+                + " does not start with a \"/\" character");
+        }
         if (webappRoot == null) {
             return new HashSet();
         }
 
-        if (name.startsWith("/")) {
-            name = name.substring(1);
-        }
+        name = name.substring(1);
         if (name.endsWith("/")) {
             name = name.substring(0, name.length() - 1);
         }
