@@ -77,9 +77,6 @@ public final class ControlRegistry {
 
     // -------------------------------------------------------- Constants
 
-    // TODO investigate using a Stack of Registries instead of single ControlRegistry
-    // in case of forwarding to another Page.
-
     /** The thread local registry holder. */
     private static final ThreadLocal THREAD_LOCAL_REGISTRY = new ThreadLocal();
 
@@ -214,24 +211,69 @@ public final class ControlRegistry {
     }
 
     /**
-     * Return the thread local registry instance.
-     *
-     * @return the thread local registry instance.
+     * Clear the registry.
      */
-    static ControlRegistry getThreadLocalRegistry() {
-        ControlRegistry instance = (ControlRegistry) THREAD_LOCAL_REGISTRY.get();
-        if (instance == null) {
-            instance = new ControlRegistry();
-            THREAD_LOCAL_REGISTRY.set(instance);
+    void clearRegistry() {
+        if (hasAjaxControls()) {
+            ajaxControlList.clear();
         }
-        return instance;
+        if (hasActionEvents()) {
+            eventListenerList.clear();
+            eventSourceList.clear();
+        }
     }
 
     /**
-     * Clear the registry.
+     * Return the thread local registry instance.
+     *
+     * @return the thread local registry instance.
+     * @throws RuntimeException if a ControlRegistry is not available on the
+     * thread.
      */
-    static void clearRegistry() {
-        THREAD_LOCAL_REGISTRY.set(null);
+    public static ControlRegistry getThreadLocalRegistry() {
+        return getRegistryStack().peek();
+    }
+
+    /**
+     * Adds the specified ControlRegistry on top of the Registry stack.
+     *
+     * @param controlRegistry the ControlRegistry to add
+     */
+    static void pushThreadLocalRegistry(ControlRegistry controlRegistry) {
+        getRegistryStack().push(controlRegistry);
+    }
+
+    /**
+     * Remove and return the controlRegistry instance on top of the
+     * registry stack.
+     *
+     * @return the controlRegistry instance on top of the registry stack
+     */
+    static ControlRegistry popThreadLocalRegistry() {
+        RegistryStack registryStack = getRegistryStack();
+        ControlRegistry controlRegistry = registryStack.pop();
+
+        if (registryStack.isEmpty()) {
+            THREAD_LOCAL_REGISTRY.set(null);
+        }
+
+        return controlRegistry;
+    }
+
+    /**
+     * Return the stack data structure where Context's are stored.
+     *
+     * @return stack data structure where Context's are stored
+     */
+    static RegistryStack getRegistryStack() {
+        RegistryStack registryStack = (RegistryStack) THREAD_LOCAL_REGISTRY.get();
+
+        if (registryStack == null) {
+            registryStack = new RegistryStack(2);
+            THREAD_LOCAL_REGISTRY.set(registryStack);
+        }
+
+        return registryStack;
     }
 
     // -------------------------------------------------------- Private Methods
@@ -272,4 +314,42 @@ public final class ControlRegistry {
         return ajaxControlList;
     }
 
+    // -------------------------------------------------- Inner Classes
+
+    /**
+     * Provides an unsynchronized Stack.
+     */
+    static class RegistryStack extends ArrayList {
+
+        private static final long serialVersionUID = 1L;
+
+        private RegistryStack(int initialCapacity) {
+            super(initialCapacity);
+        }
+
+        private ControlRegistry push(ControlRegistry controlRegistry) {
+            add(controlRegistry);
+
+            return controlRegistry;
+        }
+
+        private ControlRegistry pop() {
+            ControlRegistry controlRegistry = peek();
+
+            remove(size() - 1);
+
+            return controlRegistry;
+        }
+
+        private ControlRegistry peek() {
+            int length = size();
+
+            if (length == 0) {
+                String msg = "No ControlRegistry available on ThreadLocal Registry Stack";
+                throw new RuntimeException(msg);
+            }
+
+            return (ControlRegistry) get(length - 1);
+        }
+    }
 }
