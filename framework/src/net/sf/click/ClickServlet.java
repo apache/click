@@ -313,6 +313,10 @@ public class ClickServlet extends HttpServlet {
                 throw exception;
             }
 
+            ControlRegistry controlRegistry = createControlRegistry();
+            // Bind ControlRegistry to current thread
+            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
+
             page = createPage(request);
 
             if (page.isStateful()) {
@@ -361,9 +365,8 @@ public class ClickServlet extends HttpServlet {
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
+                ControlRegistry.popThreadLocalRegistry();
             }
-
-            ControlRegistry.clearRegistry();
         }
     }
 
@@ -482,8 +485,8 @@ public class ClickServlet extends HttpServlet {
             ErrorPage errorPage = (ErrorPage) page;
             errorPage.setMode(configService.getApplicationMode());
 
-            // Clear any registered action listeners or ajax controls
-            ControlRegistry.clearRegistry();
+            // Clear the control registry
+            ControlRegistry.getThreadLocalRegistry().clearRegistry();
         }
 
         boolean continueProcessing = page.onSecurityCheck();
@@ -1431,6 +1434,15 @@ public class ClickServlet extends HttpServlet {
      */
     protected PageImports createPageImports(Page page) {
         return new PageImports(page);
+    }
+
+    /**
+     * Creates and returns a new ControlRegistry instance.
+     *
+     * @return the new ControlRegistry instance
+     */
+    protected ControlRegistry createControlRegistry() {
+        return new ControlRegistry();
     }
 
     /**
