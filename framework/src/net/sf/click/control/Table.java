@@ -137,6 +137,14 @@ import org.apache.commons.lang.math.NumberUtils;
  *     ..
  * } </pre>
  *
+ * An alternative method of specifying the table class to use globally for your
+ * application is to define a <tt>table-default-class</tt> message property
+ * in your applications <tt>click-pages.properties</tt> file. For example:
+ *
+ * <pre class="codeConfig">
+ * table-default-class=blue2
+ * </pre>
+ *
  * <a name="paging-and-sorting"/>
  * <h4>Paging and Sorting</h4>
  *
@@ -1083,6 +1091,16 @@ public class Table extends AbstractControl {
         // Render table start.
         buffer.elementStart(getTag());
         buffer.appendAttribute("id", getId());
+
+        // If table class not specified, look for message property
+        // 'table-default-class' in the global click-page.properties messages bundle.
+        if (!hasAttribute("class") && getPage() != null) {
+            Map messages = getPage().getMessages();
+            if (messages.containsKey("table-default-class")) {
+                String htmlClass = (String) messages.get("table-default-class");
+                setAttribute("class", htmlClass);
+            }
+        }
 
         appendAttributes(buffer);
 
