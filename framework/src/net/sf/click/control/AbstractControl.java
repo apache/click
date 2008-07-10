@@ -15,7 +15,6 @@
  */
 package net.sf.click.control;
 
-import net.sf.click.AjaxListener;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -500,26 +499,13 @@ public abstract class AbstractControl implements Control {
         this.listenerMethod = method;
     }
 
-   /**
-    * This method currently performs the following initialization functionality:
-    * <ul>
-    *  <li>register this Control with {@link net.sf.click.ControlRegistry} if
-    *  the listener is an instance of {@link net.sf.click.control.AjaxListener}
-    *  </li>
-    * </ul>
-    * Subclasses may override this method to perform additional initialization.
-    * <p/>
-    * <b>Please note</b> that when overriding this method to carefully consider
-    * calling <tt>super.onInit()</tt> otherwise any initializing done by
-    * AbstractControl will be lost.
-    *
-    * @see net.sf.click.Control#onInit()
-    */
+    /**
+     * This method does nothing. Subclasses may override this method to perform
+     * initialization.
+     *
+     * @see net.sf.click.Control#onInit()
+     */
     public void onInit() {
-        // Check whether this control should be registered as Ajax control
-        if (getActionListener() instanceof AjaxListener) {
-            ControlRegistry.registerAjaxControl(this);
-        }
     }
 
     /**

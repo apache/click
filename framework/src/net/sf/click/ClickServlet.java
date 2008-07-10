@@ -528,16 +528,9 @@ public class ClickServlet extends HttpServlet {
 
             ControlRegistry controlRegistry = ControlRegistry.getThreadLocalRegistry();
 
-            // Ajax requests are processed separately
-            if (context.isAjaxRequest() && !context.isForward()) {
-                if (controlRegistry.hasAjaxControls()) {
-                    controlRegistry.processAjaxControls(context);
-
-                    // As Ajax Controls was registered, stop further processing
-                    return;
-                }
-                // If no Ajax Controls was reigstered, continue processing (for
-                // backwards compatibility)
+            // Check if processing can continue
+            if (!onProcessCheck(page, context, controlRegistry)) {
+                return;
             }
 
             // Make sure dont process a forwarded request
@@ -1633,6 +1626,21 @@ public class ClickServlet extends HttpServlet {
                 }
             }
         }
+    }
+
+    /**
+     * Returns true if the Click onProcess event should start, false otherwise.
+     * <p/>
+     * This method act as a hook for subclasses to determine if onProcess should
+     * fire or not.
+     *
+     * @param page the page to process
+     * @param context the request context
+     * @param controlRegistry the request control registry
+     * @return true if processing should continue, false otherwise
+     */
+    boolean onProcessCheck(Page page, Context context, ControlRegistry controlRegistry) {
+        return true;
     }
 
     // ---------------------------------------------------------- Inner Classes
