@@ -191,7 +191,7 @@ public interface Control extends Serializable {
      * } </pre>
      * <p/>
      * <b>Please note</b> a common problem when overriding onHtmlImports in
-     * subclasses, especially {@link net.sf.click.control.Container}s, 
+     * subclasses, especially {@link net.sf.click.control.Container}s,
      * is forgetting to invoke <tt>super.onHtmlImports</tt>. Consider
      * carefully whether you should call <tt>super.onHtmlImports</tt> or not.
      * <p/>
