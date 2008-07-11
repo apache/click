@@ -15,6 +15,7 @@
  */
 package net.sf.click.service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -32,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import javax.servlet.ServletContext;
 
 import net.sf.click.Control;
@@ -214,6 +217,18 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the application mode and set the logger levels
             loadMode(rootElm);
 
+            // Deploy application files if they are not already present.
+            // Only deploy if servletContext.getRealPath() returns a valid path.
+            if (servletContext.getRealPath("/") != null) {
+                deployFiles(rootElm);
+
+            } else {
+                String msg = "Could not auto deploy files to 'click' web folder."
+                    + " You may need to manually include click resources in your"
+                    + " web application.";
+                getLogService().warn(msg);
+            }
+
             // Load the format class
             loadFormatClass(rootElm);
 
@@ -237,18 +252,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
             // Load the Templating service
             loadTemplateService(rootElm);
-
-            // Deploy the application files if not present.
-            // Only deploy if servletContext.getRealPath() returns a valid path.
-            if (servletContext.getRealPath("/") != null) {
-                deployFiles(rootElm);
-
-            } else {
-                String msg = "Could not auto deploy files to 'click' web folder."
-                    + " You may need to manually include click resources in your"
-                    + " web application.";
-                getLogService().warn(msg);
-            }
 
         } finally {
             ClickUtils.close(inputStream);
@@ -1032,7 +1035,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
     }
 
+    /**
+     * Deploy files from jars and Controls.
+     *
+     * @param rootElm the click.xml configuration DOM element
+     * @throws java.lang.Exception if files cannot be deployed
+     */
     private void deployFiles(Element rootElm) throws Exception {
+
+        deployFilesInJars();
 
         ClickUtils.deployFile(servletContext,
                               "/net/sf/click/control/control.css",
@@ -1058,6 +1069,104 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         deployControls(getResourceRootElement("/extras-controls.xml"));
         deployControls(rootElm);
         deployControlSets(rootElm);
+    }
+
+    /**
+     * Deploy from jars, files that are specified in the folder 'META-INF/web'.
+     * <p/>
+     * Only jars under the web folder 'WEB-INF/lib' are scanned.
+     *
+     * @throws java.lang.Exception if the files cannot be deployed
+     */
+    private void deployFilesInJars() throws Exception {
+
+        // Find all jars under WEB-INF/lib and deploy all resources from these jars
+        long startTime = System.currentTimeMillis();
+
+        Set jars = servletContext.getResourcePaths("/WEB-INF/lib");
+
+        if (jars == null) {
+            // exit early
+            return;
+        }
+
+        for(Iterator it = jars.iterator(); it.hasNext(); ) {
+            String resourceLocation = (String) it.next();
+            if (resourceLocation != null) {
+                if (resourceLocation.endsWith(".jar")) {
+                    deployFilesInJar(resourceLocation);
+                }
+            }
+        }
+
+        if (logService.isTraceEnabled()) {
+            logService.trace("deployed files from jars - "
+                + (System.currentTimeMillis() - startTime) + " ms");
+        }
+    }
+
+    /**
+     * Deploy files from the jar specified by the jarLocation.
+     * <p/>
+     * Only files specified in the folder 'META-INF/web' will be deployed.
+     *
+     * @throws java.lang.Exception if for some reason the files cannot be
+     * deployed
+     */
+    private void deployFilesInJar(String jarLocation) throws Exception {
+        if (jarLocation == null) {
+            throw new IllegalArgumentException("Jar location cannot be null");
+        }
+
+        InputStream is = servletContext.getResourceAsStream(jarLocation);
+        if (is == null) {
+            is = new FileInputStream(jarLocation);
+        }
+
+        if (is == null) {
+            throw new IllegalArgumentException("Jar location, '" + jarLocation
+                + "', cannot be converted into an InputStream");
+        }
+
+        JarInputStream jarInputStream = new JarInputStream(is);
+        JarEntry jarEntry = null;
+
+        // indicates whether feedback should be logged about the files deployed
+        // from jar
+        boolean logFeedback = true;
+        while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
+            // jarEntryName example -> META-INF/web/click/table.css
+            String jarEntryName = jarEntry.getName();
+
+            // Deploy all resources under "META-INF/web/"
+            int pathIndex = jarEntryName.indexOf("META-INF/web/");
+            if (pathIndex == 0) {
+                if (logFeedback && logService.isTraceEnabled()) {
+                    logService.trace("deploy files from jar -> " + jarLocation);
+
+                    // only provide feedback once per jar
+                    logFeedback = false;
+                }
+                pathIndex += "META-INF/web/".length();
+
+                // By default deploy to the web root dir
+                String targetDir = "";
+
+                // resourceName example -> click/table.css
+                String resourceName = jarEntryName.substring(pathIndex);
+                int index = resourceName.lastIndexOf('/');
+
+                if (index != -1) {
+                    // targetDir example -> click
+                    targetDir = resourceName.substring(0, index);
+                }
+
+                // Copy resources to web folder
+                ClickUtils.deployFile(servletContext,
+                    jarEntryName,
+                    targetDir);
+            }
+        }
     }
 
     private void loadMode(Element rootElm) {
