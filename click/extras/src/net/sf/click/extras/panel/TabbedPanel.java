@@ -17,14 +17,12 @@ package net.sf.click.extras.panel;
 
 import javax.servlet.ServletContext;
 
-import org.apache.commons.lang.math.NumberUtils;
-
 import net.sf.click.Control;
-import net.sf.click.ControlRegistry;
 import net.sf.click.control.ActionLink;
-import net.sf.click.AjaxListener;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
+
+import org.apache.commons.lang.math.NumberUtils;
 
 /**
  * Provides a tabbed panel with multiple sub-panels in 'tabs'.
@@ -328,12 +326,8 @@ public class TabbedPanel extends Panel {
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        // Check whether this control should be registered as Ajax control
-        if (listener instanceof AjaxListener) {
-            ControlRegistry.registerAjaxControl(this);
-        }
-
         // TODO: document this change
+
         // Select panel specified by tabPanelIndex if defined
         String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
         if (NumberUtils.isNumber(tabPanelIndex)) {
