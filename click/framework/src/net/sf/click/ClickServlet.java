@@ -1215,9 +1215,9 @@ public class ClickServlet extends HttpServlet {
         }
 
         Format format = page.getFormat();
-        if (format != null && !page.isStateful()) {
-           pop = model.put("format", format);
-            if (pop != null) {
+        if (format != null) {
+            pop = model.put("format", format);
+            if (pop != null && !page.isStateful()) {
                 String msg = page.getClass().getName() + " on "
                         + page.getPath()
                         + " model contains an object keyed with reserved "
