@@ -18,11 +18,9 @@ package net.sf.click;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.click.control.AbstractControl;
 import net.sf.click.util.Format;
 import net.sf.click.util.MessagesMap;
 import net.sf.click.util.PageImports;
@@ -188,6 +186,9 @@ public class Page {
 
     /** The path of the page border template to render.*/
     protected String template;
+
+    /** The Page header imports. */
+    protected PageImports pageImports;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -564,57 +565,33 @@ public class Page {
     }
 
     /**
-     * Called when html imports can be contributed to the page head section.
+     * Return the HTML import string to include in the page, by default
+     * this method returns null.
      * <p/>
-     * The specified {@link net.sf.click.util.PageImports} exposes methods to
-     * add JavaScript and CSS imports as well as JavaScript and CSS scripts.
-     * <p/>
+     * Override this method to specify JavaScript and CSS includes for the
+     * page. For example:
      *
-     * For example:
+     * <pre class="codeJava">
+     * <span class="kw">protected static final</span> String HTML_IMPORT =
+     *     <span class="st">"&lt;script type=\"text/javascript\" src=\"{0}/click/custom.js\"&gt;&lt;/script&gt;"</span>;
      *
-     * <pre class="prettyprint">
-     * public HomePage extends Page {
-     *     ...
-     *     public void onHtmlImports(PageImports pageImports) {
-     *         String globalJs = "&lt;script type='text/javascript' src='myapp/assets/global.js'&gt;&lt;/script&gt;";
-     *         String globalCss = "&lt;link type='text/css' rel='stylesheet' href='myapp/assets/global.css'/&gt;"
-     *         pageImports.addJsImport(globalJs);
-     *         pageImports.addCssImport(globalCss);
-     *
-     *         // Important to call super here so that Page Controls have
-     *         // opportunity to contribute their own javascript and css
-     *         // resources.
-     *         super.onHtmlImports(pageImports);
-     *     }
+     * <span class="kw">public</span> String getHtmlImports() {
+     *     <span class="kw">return</span> ClickUtils.createHtmlImport(HTML_IMPORTS, getResourceVersionIndicator(), getContext());
      * } </pre>
      *
-     * Sometimes for performance reasons it might be useful to have a single
-     * externally linked javascript or stylesheet instead of multiple resources.
-     * This saves round trips to the server as less connections have to be made.
-     * TODO
+     * <b>Note</b> multiple import lines should be separated by a
+     * <tt>'\n'</tt> char, as the {@link net.sf.click.util.PageImports} will
+     * parse multiple import lines on the <tt>'\n'</tt> char and ensure that
+     * imports are not included twice.
      * <p/>
-     * A home page is a common example of this scenario:
+     * The order in which JS and CSS files are include will be preserved in the
+     * page.
      *
-     * <pre class="prettyprint">
-     * public HomePage extends Page {
-     *     ...
-     *     public void onHtmlImports(PageImports pageImports) {
-     *         // By not calling super.onHtmlImports, Controls will not import
-     *         // extra javascript and stylesheets
-     *         String globalJs = "&lt;script type='text/javascript' src='myapp/assets/global.js'&gt;&lt;/script&gt;";
-     *         String globalCss = "&lt;link type='text/css' rel='stylesheet' href='myapp/assets/global.css'/&gt;"
-     *         pageImports.addJsImport(globalJs);
-     *         pageImports.addCssImport(globalCss);
-     *     }
-     * } </pre>
-     *
-     * For more information on this topic as well as compression of javascript
-     * and css resources see the section
-     * <a href="../best-practices.html#performance">Performance Best Practices</a>.
-     *
-     * @param pageImports the PageImports instance to add imports to
+     * @return the HTML includes statements for the control stylesheet and
+     * JavaScript files, by default this method returns null
      */
-    public void onHtmlImports(PageImports pageImports) {
+    public String getHtmlImports() {
+        return null;
     }
 
     /**
@@ -946,5 +923,25 @@ public class Page {
      */
     public void setTemplate(String template) {
         this.template = template;
+    }
+
+    /**
+     * Return the Page header imports.
+     *
+     * @return the Page header imports
+     */
+    public PageImports getPageImports() {
+        return pageImports;
+    }
+
+    // ------------------------------------------------ Package Private Methods
+
+    /**
+     * Set the Page header imports.
+     *
+     * @param pageImports the new pageImprots instance to set
+     */
+    void setPageImports(PageImports pageImports) {
+        this.pageImports = pageImports;
     }
 }

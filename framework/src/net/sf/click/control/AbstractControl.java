@@ -548,14 +548,6 @@ public abstract class AbstractControl implements Control {
         return null;
     }
 
-   /**
-    * @see net.sf.click.Control#onHtmlImports(net.sf.click.util.PageImports)
-    *
-    * @param pageImports the PageImports instance to add imports to
-    */
-    public void onHtmlImports(PageImports pageImports) {
-    }
-
     /**
      * Return the parent page of this control, or null if not defined.
      *

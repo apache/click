@@ -831,6 +831,9 @@ public class ClickServlet extends HttpServlet {
             page.setFormat(configService.createFormat());
         }
 
+        PageImports pageImports = createPageImports(page);
+        page.setPageImports(pageImports);
+
         return page;
     }
 
@@ -908,6 +911,9 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Throwable error) {
             logger.error(error.toString(), error);
+        } finally {
+            // nullify PageImports
+            page.setPageImports(null);
         }
     }
 
@@ -1250,8 +1256,8 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        PageImports pageImports = createPageImports(page);
-        pageImports.popuplateTemplateModel(model, logger);
+        PageImports pageImports = page.getPageImports();
+        pageImports.popuplateTemplateModel(model);
 
         return model;
     }
@@ -1375,8 +1381,8 @@ public class ClickServlet extends HttpServlet {
             logger.warn(msg);
         }
 
-        PageImports pageImports = createPageImports(page);
-        pageImports.popuplateRequest(request, model, logger);
+        PageImports pageImports = page.getPageImports();
+        pageImports.popuplateRequest(request, model);
     }
 
     /**

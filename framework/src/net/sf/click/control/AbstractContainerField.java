@@ -410,15 +410,6 @@ public abstract class AbstractContainerField extends Field implements Container 
         }
 
         /**
-         * Contribute html imports and includes to the AbstractContainerField.
-         *
-         * @param pageImports the PageImports instance to add imports to
-         */
-        public void onHtmlImports(PageImports pageImports) {
-            AbstractContainerField.this.onHtmlImports(pageImports);
-        }
-
-        /**
          * Return the Context of the AbstractContainerField.
          *
          * @return the Context of the AbstractContainerField
