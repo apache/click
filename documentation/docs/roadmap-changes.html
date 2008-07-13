@@ -125,34 +125,6 @@ public class MyPage extends Page {
       [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-369">369</a>].
       </li>
       <li class="change">
-        New first class Ajax support built on top of the ActionListener interface above.
-        A new <a href="click-api/net/sf/click/AjaxListener.html">AjaxListener</a> was introduced which
-        can be set as a Control's Listener:
-         <pre class="prettyprint">
-public class MyPage extends Page {
-    public void onInit() {
-        Submit submit = new Submit("submit");
-        submit.setActionListener(new AjaxListener() {
-            public boolean onAction(Control source) {
-                // This method is invoked for normal (non-ajax) requests
-                return true;
-            }
-
-            public Partial onAjaxAction(Control source) {
-                // This method is invoked for ajax requests
-                return new Partial("&lt;div&gt;Hello World!&lt;/div&gt;");
-            }
-        });
-    }
-} </pre>
-        Note that onAjaxAction returns an instance of <a href="click-api/net/sf/click/util/Partial.html">Partial</a>
-        which encapsulates the Ajax response. The response can consist of either a string
-        of characters (JSON, xml, html) or bytes (pdf, image).
-        Since AjaxListener implements ActionListener, onAction will be invoked
-        for normal (non-ajax) requests.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-370">370</a>].
-      </li>
-      <li class="change">
         Introduce a two phase listener dispatch mechanism. During the onProcess event,
         Control listeners will be registered on the <a href="click-api/net/sf/click/ControlRegistry.html">ControlRegistry</a>
         and triggered after the onProcess event finish. The net effect of this change
