@@ -22,7 +22,6 @@ import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
 
 /**
  * Provides an abstract convenience class that implements {@link Container} and

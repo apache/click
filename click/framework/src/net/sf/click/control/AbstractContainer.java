@@ -20,11 +20,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
 
 /**
  * Provides a default implementation of the {@link Container} interface,
