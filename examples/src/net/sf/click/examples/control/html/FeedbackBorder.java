@@ -1,8 +1,8 @@
 package net.sf.click.examples.control.html;
 
 import net.sf.click.Control;
-import net.sf.click.control.AbstractContainerField;
 import net.sf.click.control.Field;
+import net.sf.click.extras.control.AbstractContainerField;
 
 /**
  * This control provides feedback for a Field.
