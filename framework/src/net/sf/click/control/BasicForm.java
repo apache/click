@@ -169,6 +169,15 @@ public class BasicForm extends AbstractContainer {
     }
 
     /**
+     * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
+     */
+    public int getControlSizeEst() {
+        return 400 + (getControls().size() * 350);
+    }
+
+    /**
      * Return true if the form is a disabled.
      *
      * @return true if the form is a disabled
@@ -1000,15 +1009,6 @@ public class BasicForm extends AbstractContainer {
                 }
             }
         }
-    }
-
-    /**
-     * @see AbstractControl#getControlSizeEst()
-     *
-     * @return the estimated rendered control size in characters
-     */
-    protected int getControlSizeEst() {
-        return 400 + (getControls().size() * 350);
     }
 
     /**
