@@ -913,7 +913,7 @@ public class ClickServlet extends HttpServlet {
             logger.error(error.toString(), error);
         } finally {
             // nullify PageImports
- 		        page.setPageImports(null);
+                 page.setPageImports(null);
         }
     }
 
@@ -1509,11 +1509,11 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Creates and returns a new PageImports instance for the specified page.
- 	   *
- 		 * @param page the page to create a new PageImports instance for
- 	   * @return the new PageImports instance
- 	   */
- 	  protected PageImports createPageImports(Page page) {
+        *
+          * @param page the page to create a new PageImports instance for
+        * @return the new PageImports instance
+        */
+       protected PageImports createPageImports(Page page) {
         return new PageImports(page);
     }
 
