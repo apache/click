@@ -121,36 +121,57 @@ Methods on the Control interface include:
 
 Click Controls provide an event callback mechanism similar to a java.awt.ActionListener callback.
 <p/>
-To define a control listener, simply set the listener object instance and the name of the
-listener method to be invoked. For example:
+Click supports two styles of action listeners, the first is using the ActionListener 
+interface which provides compile time safety. The second is to register the action 
+listener via the setListener(Object, String) method where you specify the call back 
+method via its name. This second style uses less lines of code, but has no compile time safety. 
+<p/>
+Examples of these two action listener styles are provided below: 
 
-<pre class="codeJava">
-<span class="kw">public class</span> SimpleCallback <span class="kw">extends</span> Page {
+<pre class="prettyprint">
+public class ActionDemo extends BorderPage {
 
-    <span class="kw">public</span> SimpleCallback() {
-        ActionLink clickLink = <span class="kw">new</span> ActionLink(<span class="st">"clickLink"</span>);
+    // Uses listener style 1
+    public ActionLink link = new ActionLink();
 
-        <span class="cm">// Set the link's listener to callback this page's onClick method.</span>
-        clickLink.setListener(<span class="kw">this</span>, <span class="st">"onClick"</span>);
-        addControl(clickLink);    
+    // Uses listener style 2
+    public ActionButton button = new ActionButton();
+
+    public ActionDemo() {
+
+        // Verbose but provides compile time safety
+        link.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                return onLinkClick(source);
+            }
+        });
+
+        // Succinct but typos will cause runtime errors
+        button.setListener(this, "onButtonClick");
     }
-    
-    <span class="kw">public boolean</span> onClick() {
-        System.out.println(<span class="st">"onClick invoked"</span>);
-        <span class="kw">return true</span>;
+
+    // Event Handlers --------------------------------------------------------- 
+
+    public boolean onLinkClick(Control source) {
+        ..
+        return true;
+    }
+
+    public boolean onButtonClick() {
+        ..
+        return true;
     }
 } </pre>
 
-The listener method can have any name but it must have take no parameters and must return a boolean or 
-java.lang.Boolean value. 
-<p/>
-When a callback method returns true the processing of other Controls will continue and the Pages onGet() 
-or onPost() event handler will be called. If a callback method returns false no further Control processing
-will be performed and neither of the Page onGet() or onPost() methods will be invoked. This execution
-logic is illustrated in the <a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
+All call back listener methods must return a boolean value. If they return true 
+the the further processing of other controls and page methods should continue. 
+Otherwise if they return false, then any further processing should be aborted. 
+By returning false you can effectively exit at this point and redirect or forward 
+to another page.  This execution logic is illustrated in the 
+<a href="pages.html#activity-diagram">Page Execution Activity Diagram</a>.
 <p/>
 Being able to stop further processing and do something else can be very handy. For example your 
-Pages onGet() or onPost() method may perform an expensive database operation. By returning
+Pages onRender() method may perform an expensive database operation. By returning
 false in an event handler you can skip this step and render the template or forward to the
 next page.
 
