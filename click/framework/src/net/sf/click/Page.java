@@ -738,6 +738,16 @@ public class Page {
 
     /**
      * Return the Page header imports.
+     * <p/>
+     * PageImports are used define the CSS and JavaScript imports and blocks
+     * to be included in the page template.
+     * <p/>
+     * The PageImports object will be included in the Page template when the
+     * {@link ClickServlet#createTemplateModel(Page)} or
+     * {@link ClickServlet#setRequestAttributes(Page)} method is invoked.
+     * <p/>
+     * If you need to tailor the page imports rendered, override this method and
+     * modify the PageImports object returned.
      *
      * @return the Page header imports
      */
@@ -747,6 +757,17 @@ public class Page {
 
     /**
      * Set the Page header imports.
+     * <p/>
+     * PageImports are used define the CSS and JavaScript imports and blocks
+     * to be included in the page template.
+     * <p/>
+     * The PageImports object will be included in the Page template when the
+     * {@link ClickServlet#createTemplateModel(Page)} or
+     * {@link ClickServlet#setRequestAttributes(Page)} method is invoked.
+     * <p/>
+     * If you need to tailor the page imports rendered, override the
+     * {@link #getPageImports()} method and modify the PageImports object
+     * returned.
      *
      * @param pageImports the new pageImports instance to set
      */
