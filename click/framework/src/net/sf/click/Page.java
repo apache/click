@@ -737,6 +737,18 @@ public class Page {
     }
 
     /**
+     * Return the Page header imports.
+     *
+     * @return the Page header imports
+     */
+    public PageImports getPageImports() {
+        if (pageImports == null) {
+            pageImports = new PageImports(this);
+        }
+        return pageImports;
+    }
+
+    /**
      * Return the path of the Template or JSP to render.
      * <p/>
      * If this method returns <tt>null</tt>, Click will not perform any rendering.
@@ -925,23 +937,4 @@ public class Page {
         this.template = template;
     }
 
-    /**
-     * Return the Page header imports.
-     *
-     * @return the Page header imports
-     */
-    public PageImports getPageImports() {
-        return pageImports;
-    }
-
-    // ------------------------------------------------ Package Private Methods
-
-    /**
-     * Set the Page header imports.
-     *
-     * @param pageImports the new pageImprots instance to set
-     */
-    void setPageImports(PageImports pageImports) {
-        this.pageImports = pageImports;
-    }
 }
