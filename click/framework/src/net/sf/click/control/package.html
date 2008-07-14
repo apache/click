@@ -33,16 +33,18 @@ public class ActionDemo extends BorderPage {
 
     public ActionDemo() {
 
+        // Verbose but provides compile time safety
         link.setActionListener(new ActionListener() {
             public boolean onAction(Control source) {
                 return onLinkClick(source);
             }
         });
 
+        // Succinct but typos will cause runtime errors
         button.setListener(this, "onButtonClick");
     }
 
-    // --------------------------------------------------------- Event Handlers
+    // Event Handlers --------------------------------------------------------- 
 
     public boolean onLinkClick(Control source) {
         ..
