@@ -831,9 +831,6 @@ public class ClickServlet extends HttpServlet {
             page.setFormat(configService.createFormat());
         }
 
-        PageImports pageImports = createPageImports(page);
-        page.setPageImports(pageImports);
-
         return page;
     }
 
@@ -911,9 +908,6 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Throwable error) {
             logger.error(error.toString(), error);
-        } finally {
-            // nullify PageImports
-            page.setPageImports(null);
         }
     }
 
@@ -1423,16 +1417,6 @@ public class ClickServlet extends HttpServlet {
                                       isPost,
                                       this);
         return context;
-    }
-
-    /**
-     * Creates and returns a new PageImports instance for the specified page.
-     *
-     * @param page the page to create a new PageImports instance for
-     * @return the new PageImports instance
-     */
-    protected PageImports createPageImports(Page page) {
-        return new PageImports(page);
     }
 
     /**

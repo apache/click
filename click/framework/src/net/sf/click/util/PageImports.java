@@ -192,8 +192,8 @@ public class PageImports {
     protected String getAllIncludes() {
         processPageControls();
 
-        HtmlStringBuffer buffer = new HtmlStringBuffer(80 * cssImports.size()
-            + jsImports.size() + jsScripts.size());
+        int size = 80 * cssImports.size() + jsImports.size() + jsScripts.size();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(size);
 
         for (int i = 0; i  < cssImports.size(); i++) {
             String line = cssImports.get(i).toString();
@@ -370,7 +370,7 @@ public class PageImports {
         }
     }
 
-    // -------------------------------------------------------- Internal Classes
+    // ------------------------------------------------------- Internal Classes
 
     /**
      * This class enables lazy, on demand importing for {@link #getAllIncludes()}.
