@@ -465,7 +465,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             buffer.append("Page class resolves to multiple paths: ");
             buffer.append(pageClass.getName());
             buffer.append(" -> [");
-            for (Iterator it = ((List) object).iterator(); it.hasNext(); ) {
+            for (Iterator it = ((List) object).iterator(); it.hasNext();) {
                 PageElm pageElm = (PageElm) it.next();
                 buffer.append(pageElm.getPath());
                 if (it.hasNext()) {
@@ -1090,7 +1090,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return;
         }
 
-        for(Iterator it = jars.iterator(); it.hasNext(); ) {
+        for (Iterator it = jars.iterator(); it.hasNext();) {
             String resourceLocation = (String) it.next();
             if (resourceLocation != null) {
                 if (resourceLocation.endsWith(".jar")) {
