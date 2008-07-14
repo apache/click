@@ -20,7 +20,6 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-import net.sf.click.Context;
 import net.sf.click.Page;
 
 /**
@@ -81,7 +80,6 @@ public interface TemplateService {
      * @param templatePath the path of the template to render
      * @param model the model to merge with the template and render
      * @param writer the writer to send the merged template and model data to
-     * @param context the request context
      * @throws Exception if an error occurs
      */
     public void renderTemplate(String templatePath, Map model, Writer writer) throws Exception;
