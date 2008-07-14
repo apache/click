@@ -82,7 +82,7 @@
       </javadoc>
       <copy file="../documentation/docs/javadoc-stylesheet.css"  
       	    overwrite="true"
-            todir="${dir.webapp}/javadoc"/>
+      	    tofile="${dir.webapp}/javadoc/stylesheet.css"/>
       <delete file="${dir.deploy}/${name}.war"/>
       <mkdir dir="${dir.deploy}"/>
       <war destfile="${dir.deploy}/${name}.war"
