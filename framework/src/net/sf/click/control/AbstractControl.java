@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletContext;
 
@@ -36,7 +36,6 @@ import net.sf.click.util.ActionListenerAdaptor;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 import net.sf.click.util.MessagesMap;
-import net.sf.click.util.PageImports;
 
 /**
  * Provides a default implementation of the {@link Control} interface,
