@@ -737,22 +737,22 @@ public class Page {
     }
 
     /**
- 	   * Return the Page header imports.
- 	   *
- 	   * @return the Page header imports
- 	   */
- 	  public PageImports getPageImports() {
- 	      return pageImports;
- 	  }
+     * Return the Page header imports.
+     *
+     * @return the Page header imports
+     */
+    public PageImports getPageImports() {
+        return pageImports;
+    }
 
- 	 /**
- 	  * Set the Page header imports.
- 	  *
- 	  * @param pageImports the new pageImports instance to set
- 	  */
- 	  public void setPageImports(PageImports pageImports) {
- 	     this.pageImports = pageImports;
- 	  }
+    /**
+     * Set the Page header imports.
+     *
+     * @param pageImports the new pageImports instance to set
+     */
+    public void setPageImports(PageImports pageImports) {
+        this.pageImports = pageImports;
+    }
 
     /**
      * Return the path of the Template or JSP to render.
