@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2008 Malcolm A. Edgar
+ * Copyright 2008 Malcolm A. Edgar
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -220,6 +220,41 @@ public abstract class AbstractContainer extends AbstractControl implements
     }
 
     /**
+     * Return the map of controls where each map's key / value pair will consist
+     * of the control name and instance.
+     * <p/>
+     * Controls added to the container that did not specify a {@link #name},
+     * will not be included in the returned map.
+     *
+     * @return the map of controls
+     */
+    public Map getControlMap() {
+        if (controlMap == null) {
+            controlMap = new HashMap();
+        }
+        return controlMap;
+    }
+
+    /**
+     * @see AbstractControl#getControlSizeEst().
+     *
+     * @return the estimated rendered control size in characters
+     */
+    public int getControlSizeEst() {
+        int size = 20;
+
+        if (getTag() != null && hasAttributes()) {
+            size += 20 * getAttributes().size();
+        }
+
+        if (hasControls()) {
+            size += getControls().size() * size;
+        }
+
+        return size;
+    }
+
+    /**
      * @see net.sf.click.Control#onProcess().
      *
      * @return true to continue Page event processing or false otherwise
@@ -330,42 +365,7 @@ public abstract class AbstractContainer extends AbstractControl implements
         return buffer.toString();
     }
 
-    //-------------------------------------------- protected methods
-
-    /**
-     * Return the map of controls where each map's key / value pair will consist
-     * of the control name and instance.
-     * <p/>
-     * Controls added to the container that did not specify a {@link #name},
-     * will not be included in the returned map.
-     *
-     * @return the map of controls
-     */
-    protected Map getControlMap() {
-        if (controlMap == null) {
-            controlMap = new HashMap();
-        }
-        return controlMap;
-    }
-
-    /**
-     * @see AbstractControl#getControlSizeEst().
-     *
-     * @return the estimated rendered control size in characters
-     */
-    protected int getControlSizeEst() {
-        int size = 20;
-
-        if (getTag() != null && hasAttributes()) {
-            size += 20 * getAttributes().size();
-        }
-
-        if (hasControls()) {
-            size += getControls().size() * size;
-        }
-
-        return size;
-    }
+    // ------------------------------------------------------ Protected Methods
 
     /**
      * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer).
