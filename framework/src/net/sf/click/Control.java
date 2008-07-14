@@ -19,8 +19,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+
 import net.sf.click.util.HtmlStringBuffer;
-import net.sf.click.util.PageImports;
 
 /**
  * Provides the interface for Page controls. Controls are sometimes referred to
