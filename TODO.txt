@@ -20,7 +20,7 @@ BUILD
 
 Release Procedures
 ------------------
-1. ensure documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties has correct version
+1. ensure documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties, examples/src/click-page_cs.properties has correct version
 1.1 ensure third-party library versions are correct: build/build.xml, examples/build.xml, documentation/docs/building.html.
 1.2 add upgraded libraries to documentation/docs/roadmap-changes.html
 2. finalize Roadmap and Changes
