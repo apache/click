@@ -27,8 +27,7 @@ import net.sf.click.control.Field;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * Provides an abstract convenience class that implements {@link Container} and
- * extend {@link Field}.
+ * Provides an abstract convenience class that implements Container and extend Field.
  * <p/>
  * An internal {@link Container} implementation is used to delegate the
  * container methods to. The container can be accessed through

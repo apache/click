@@ -27,7 +27,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * <table class='htmlHeader' cellspacing='6'>
  * <tr><td>
- * <a href='' title='PageLink Control'>Page Link</a>
+ * <a href='' style='{text-decoration:underline;}' title='PageLink Control'>Page Link</a>
  * </td></tr>
  * </table>
  *

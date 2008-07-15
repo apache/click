@@ -4,41 +4,54 @@ import net.sf.click.control.PageLink;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
- * PageButton Control, representing a <i>link</i> to a Page that is rendered in form of a <code>button</code>
- * (an <code>input</code> HTML element with the <code>type="button"</code> more precisely) plus javascript
- * getting the borwser to the location of that Page.
- * <p/>
- * <b>Note:</b> this control is not related at all to {@link net.sf.click.extras.control.PageSubmit} but
- * to {@link PageLink}.
- * <p/>
- * <b>Advantages:</b>
+ * Provides a Page link Button control: &nbsp; &lt;input type='button'&gt;.
+ *
+ * <table class='htmlHeader cellspacing='6'>
+ * <tr>
+ * <td><input type='button' value='Page Button' title='PageButton Control'/></td>
+ * </tr>
+ * </table>
+ *
+ * The PageButton is provides link style navigation button to a Page that is 
+ * rendered in form of a <code>button</code> (an <code>input</code> HTML element 
+ * with the <code>type="button"</code> more precisely) plus javascript getting 
+ * the borwser to the location of that Page.
+ *
+ * <h4>PageButton Advantages</h4>
  * <ul>
- *      <li>over {@link net.sf.click.control.Button Button} + direct javascript trick:
+ *      <li>Over {@link net.sf.click.control.Button Button} + direct javascript trick:
  *          <ul>
  *               <li>encoding of parameters works correctly due to the {@link PageLink} it extends.</li>
  *          </ul>
  *      </li>
- *      <li>over {@link PageLink}:
+ *      <li>Over {@link PageLink}:
  *          <ul>
  *               <li>crawlers/spiders (or other browser plug-ins) won't follow the target since it's a button.</li>
  *               <li>the look and feel is native - much better than half-working CSS hacks
  *                  to simulate buttons with <code>Link</code> elements.</li>
  *          </ul>
  *      </li>
- *      <li>over {@link net.sf.click.control.ActionButton ActionButton} + forward/redirect trick:
+ *      <li>Over {@link net.sf.click.control.ActionButton ActionButton} + forward/redirect trick:
  *          <ul>
  *               <li>there's no roundtrip to the server.</li>
- *               <li><code>Page#redirect(Class) does not support parameters</code> and <code>Page#redirect(String)</code> is
- *                   prone to errors when hardcoding them in the <code>String</code>.</li>
+ *               <li><code>net.sf.click.Page#redirect(Class) does not support parameters</code> and 
+ *               <code>net.sf.click.Page#redirect(String)</code> is prone to errors when hardcoding 
+ *               them in the <code>String</code>.</li>
  *          </ul>
  *      </li>
  * </ul>
+ * <p/>
+ * <b>Note:</b> this control is related to {@link PageLink} and not to {@link net.sf.click.extras.control.PageSubmit}.
  *
  * @author Ahmed Mohombe
  */
 public class PageButton extends PageLink {
 
-    /**
+	private static final long serialVersionUID = 1L;
+    
+    // ----------------------------------------------------------- Constructors 
+
+	/**
      * Create a PageButton for the given name.
      *
      * @param name the page button name
@@ -89,11 +102,13 @@ public class PageButton extends PageLink {
      */
     public PageButton() {
     }
+    
+    // --------------------------------------------------------- Public Methods 
 
     /**
      * Return the links html tag: <tt>input</tt>.
      *
-     * @see AbstractControl#getTag()
+     * @see net.sf.click.control.AbstractControl#getTag()
      *
      * @return this controls html tag
      */
