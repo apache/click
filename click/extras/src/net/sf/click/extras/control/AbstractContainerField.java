@@ -197,7 +197,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * Render the container and all its child controls to the specified buffer.
      * <p/>
-     * If {@link net.sf.click.control.AbstractControl#getTag()} returns null, 
+     * If {@link net.sf.click.control.AbstractControl#getTag()} returns null,
      * this method will render only its child controls.
      * <p/>
      * @see net.sf.click.control.AbstractControl#render(net.sf.click.util.HtmlStringBuffer)
