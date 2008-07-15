@@ -116,6 +116,7 @@ public class ControlRegistry {
 
             if (!listener.onAction(source)) {
                 continueProcessing = false;
+                break;
             }
         }
 
