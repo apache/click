@@ -586,6 +586,9 @@ public class Page {
      * <p/>
      * The order in which JS and CSS files are include will be preserved in the
      * page.
+     * <p/>
+     * If you need to customize the HTML imports included in your page override
+     * the method {@link #getPageImports()}.
      *
      * @return the HTML includes statements for the control stylesheet and
      * JavaScript files, by default this method returns null
@@ -743,8 +746,11 @@ public class Page {
      * to be included in the page template.
      * <p/>
      * The PageImports object will be included in the Page template when the
-     * {@link ClickServlet#createTemplateModel(Page)} or
-     * {@link ClickServlet#setRequestAttributes(Page)} method is invoked.
+     * following methods are invoked:
+     * <ul>
+     * <li>{@link ClickServlet#createTemplateModel(Page)} - for template pages</li>
+     * <li>{@link ClickServlet#setRequestAttributes(Page)} - for JSP pages</li>
+     * </ul>
      * <p/>
      * If you need to tailor the page imports rendered, override this method and
      * modify the PageImports object returned.
@@ -761,9 +767,12 @@ public class Page {
      * PageImports are used define the CSS and JavaScript imports and blocks
      * to be included in the page template.
      * <p/>
-     * The PageImports object will be included in the Page template when the
-     * {@link ClickServlet#createTemplateModel(Page)} or
-     * {@link ClickServlet#setRequestAttributes(Page)} method is invoked.
+     * The PageImports references will be included in the Page model when the
+     * following methods are invoked:
+     * <ul>
+     * <li>{@link ClickServlet#createTemplateModel(Page)} - for template pages</li>
+     * <li>{@link ClickServlet#setRequestAttributes(Page)} - for JSP pages</li>
+     * </ul>
      * <p/>
      * If you need to tailor the page imports rendered, override the
      * {@link #getPageImports()} method and modify the PageImports object

@@ -48,7 +48,9 @@ import net.sf.click.util.HtmlStringBuffer;
  *         validate();
  *     }
  *
- *     <span class="kw">return</span> invokeListener();
+ *     registerActionEvent();
+ *
+ *     <span class="kw">return true</span>;
  * } </pre>
  *
  * The Field methods called by <tt>onProcess()</tt> include:
@@ -67,9 +69,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * value is not valid this method should set the Field {@link #error} property,
  * which can be rendered by the Form.
  * </dd>
- * <dt>{@link #invokeListener()}</dt>
- * <dd>This method will invoke any Control listener method which has be defined
- * for the Field. If no listener is defined this method will return null.
+ * <dt>{@link #registerActionEvent()}</dt>
+ * <dd>This method will register any Control action listener method which has be
+ * defined for the Field.
  * </dd>
  * </dl>
  *
@@ -838,7 +840,9 @@ public abstract class Field extends AbstractControl {
      *         validate();
      *     }
      *
-     *     <span class="kw">return</span> invokeListener();
+     *     registerActionEvent();
+     *
+     *     <span class="kw">return true</span>
      * } </pre>
      *
      * @return true to continue Page event processing or false otherwise

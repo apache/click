@@ -43,6 +43,10 @@ a {
 	text-decoration: none;
 }
 
+a {
+  color: blue;
+}
+
 a:visited {
   color: blue;
 }

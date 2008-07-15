@@ -911,9 +911,10 @@ public class ClickServlet extends HttpServlet {
 
         } catch (Throwable error) {
             logger.error(error.toString(), error);
+
         } finally {
-            // nullify PageImports
-                 page.setPageImports(null);
+            // Nullify PageImports
+            page.setPageImports(null);
         }
     }
 

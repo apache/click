@@ -1573,7 +1573,7 @@ public class Form extends BasicForm {
      * Render the non hidden Form Fields to the string buffer.
      * <p/>
      * This method delegates the rendering of the form fields to
-     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map)}.
+     * {@link #renderControls(HtmlStringBuffer, AbstractContainer, List, Map, int)}.
      *
      * @param buffer the StringBuffer to render to
      */
@@ -2037,7 +2037,7 @@ public class Form extends BasicForm {
      * apply the parent Forms properties to the layout and rendering of fields.
      * <p/>
      * This method delegates the rendering of the fieldset fields to
-     * {@link #renderControls(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.AbstractContainer, java.util.List, java.util.Map)}.
+     * {@link #renderControls(HtmlStringBuffer, AbstractContainer, List, Map, int)}.
      *
      * @param buffer the StringBuffer to render to
      * @param fieldSet the fieldSet to render
