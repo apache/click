@@ -238,6 +238,12 @@ public class PerformanceFilter implements Filter {
     /** The cachable-path include files. */
     protected List includeFiles = new ArrayList();
 
+    /** The cachable-path exclude directories. */
+    protected List excludeDirs = new ArrayList();
+
+    /** The cachable-path exclude files. */
+    protected List excludeFiles = new ArrayList();
+
     // --------------------------------------------------------- Public Methods
 
     /**
@@ -416,6 +422,27 @@ public class PerformanceFilter implements Filter {
                 } else {
                     String message = "cachable-path '" + path + "' ignored, "
                         + "path must start or end with a wildcard character: *";
+                    getConfigService().getLogService().warn(message);
+                }
+            }
+        }
+
+        param = filterConfig.getInitParameter("exclude-paths");
+        if (param != null) {
+            String[] paths = StringUtils.split(param, ',');
+
+            for (int i = 0; i  < paths.length; i++) {
+                String path = paths[i].trim();
+
+                if (path.endsWith("*")) {
+                    excludeDirs.add(path.substring(0, path.length() - 1));
+
+                } else if (path.startsWith("*")) {
+                    excludeFiles.add(path.substring(1));
+
+                } else {
+                    String message = "cachable-path '" + path + "' ignored, "
+                    + "path must start or end with a wildcard character: *";
                     getConfigService().getLogService().warn(message);
                 }
             }

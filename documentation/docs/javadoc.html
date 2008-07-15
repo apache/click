@@ -18,33 +18,48 @@
 <body>
 
 <h1>Click Javadoc</h1>
+
 <p/>
-Click is distributed as three separate libraries <em>click-core.jar</em>, <em>click-extras.jar</em> and <em>click-mock.jar</em>.
+Click is distributed as three separate libraries <em>click.jar</em>, <em>click-extras.jar</em> and <em>click-mock.jar</em>.
 <p/>
-You can find these libraries under the <em>dist</em> folder in the Click distribution you downloaded.
+The Javadoc API of these libraries is provided below:
+
+<ul style="margin-bottom:3em;">
+    <li class="change" style="padding-bottom:0.25em;">
+        <a  target='topic' href='click-api/overview-summary.html' title=' Click Javadoc API'>Click API</a> 
+        &nbsp; - &nbsp; <i>(click.jar)</i>
+        <p> 
+        Provides the Core API and consists of everything you need to build a Click web application. 
+        </p>
+    </li>
+    <li class="change" style="padding-bottom:0.25em;">
+        <a target='topic' href='click-api/net/sf/click/control/package-summary.html' title=' Controls Javadoc API'>Controls API</a>
+        &nbsp; - &nbsp;  <i>(click.jar)</i>
+        <p> 
+        Provides the Core Controls, and provides a short description of each control and corresponding HTML element. 
+        </p>
+    </li>
+    <li class="change" style="padding-bottom:0.25em;">
+        <a  target='topic' href='extras-api/overview-summary.html' title=' Click Extras Javadoc API'>Extras API</a>
+        &nbsp; - &nbsp;  <i>(click-extras.jar)</i>
+        <p> 
+        Provides components that are tailored to specific technologies, such as a Hibernate, Spring and Cayenne.
+        Extras also include many Controls including IntegerField, DoubleField and DateField. You will also find Filters which 
+        can improve your application performance.
+        </p>
+    </li style="padding-bottom:0.25em;">
+        <li class="change">
+        <a target='topic' href='mock-api/net/sf/click/package-summary.html' title=' Mock Javadoc API'>Mock API</a>
+        &nbsp; - &nbsp;  <i>(click-mock.jar)</i>
+        <p>
+        Provides a library for testing Click Pages and Controls, independent of a Servlet container such as Tomcat or Jetty.
+        </p>
+    </li>
+</ul>
+
+You can find these libraries under the <em>/dist</em> folder in the Click distribution you downloaded.
 <p/>
 These jars are also available from <a href="http://repo1.maven.org/maven/net.sf.click/jars/">maven 1</a>
 and <a href="http://repo1.maven.org/maven2/net/sf/click/">maven 2</a> repositories. (For some reason the <em>maven 1</em> 
 repository does not list Click jars > 1.4. However the jars are available for download, just change the url to the version you need and the download starts.)
 <p/>
-Below are links to each library's Javadoc:
-
-<ul>
-    <li class="change">
-        <a href='click-api/index.html' target="_blank" title=' Click Javadoc API'>Click API</a>
-        - this is the Core API and consists of everything you need to build a successful website.
-    </li>
-    <li class="change">
-        <a href='click-api/net/sf/click/control/package-summary.html' target="_blank" title=' Controls Javadoc API'>Controls API</a>
-        - lists the Core Controls, and provides a short description of each control and corresponding HTML element.
-    </li>
-    <li class="change">
-        <a href='extras-api/index.html' target="_blank" title=' Click Extras Javadoc API'>Extras API</a>
-        - provides components that are tailored to specific technologies, such as a Hibernate, Spring and Cayenne.
-        Extras also include many Controls including IntegerField, DoubleField and DateField. You will also find Filters which can improve your application performance.
-    </li>
-        <li class="change">
-        <a href='mock-api/index.html?net/sf/click/package-summary.html' target="_blank" title=' Mock Javadoc API'>Mock API</a>
-        - provides a library for testing Click Pages and Controls, independent of a Servlet container such as Tomcat or Jetty.
-    </li>
-</ul>

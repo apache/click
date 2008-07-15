@@ -72,14 +72,14 @@ import net.sf.click.util.MessagesMap;
  *         setValue(requestValue);
  *
  *         // Invoke any listener of MyField
- *         return registerListener();
+ *         return registerActionEvent();
  *     }
  * }
  * </pre>
  * By overriding {@link #getTag()} one can specify the html tag to render.
  * <p/>
  * Overriding {@link #onProcess()} allows one to bind the servlet request
- * parameter to MyField value. The {@link #registerListener()} method
+ * parameter to MyField value. The {@link #registerActionEvent()} method
  * registers the listener for this control on the Context. Once the onProcess
  * event has finished, all registered listeners will be fired.
  * <p/>

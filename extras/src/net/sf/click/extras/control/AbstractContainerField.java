@@ -198,8 +198,8 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * Render the container and all its child controls to the specified buffer.
      * <p/>
-     * If {@link #getTag()} returns null, this method will render only its
-     * child controls.
+     * If {@link net.sf.click.control.AbstractControl#getTag()} returns null, 
+     * this method will render only its child controls.
      * <p/>
      * @see net.sf.click.control.AbstractControl#render(net.sf.click.util.HtmlStringBuffer)
      *
@@ -239,7 +239,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * @see AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)
      *
      * @param tagName the name of the tag to close
      * @param buffer the buffer to append the output to
@@ -251,7 +251,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * Render this container content to the specified buffer.
      *
-     * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
      */
@@ -262,7 +262,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     /**
      * Render this container children to the specified buffer.
      *
-     * @see AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
+     * @see net.sf.click.control.AbstractContainer#renderChildren(net.sf.click.util.HtmlStringBuffer)
      *
      * @param buffer the buffer to append the output to
      */
@@ -285,7 +285,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * Return the map of controls where each map's key / value pair will consist
      * of the control name and instance.
      *
-     * @see AbstractContainer#getControlMap()
+     * @see net.sf.click.control.AbstractContainer#getControlMap()
      *
      * @return the map of controls
      */
@@ -294,7 +294,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * @see AbstractControl#getControlSizeEst()
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
      *
      * @return the estimated rendered control size in characters
      */
