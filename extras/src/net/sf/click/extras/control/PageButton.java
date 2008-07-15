@@ -12,9 +12,9 @@ import net.sf.click.util.HtmlStringBuffer;
  * </tr>
  * </table>
  *
- * The PageButton is provides link style navigation button to a Page that is 
- * rendered in form of a <code>button</code> (an <code>input</code> HTML element 
- * with the <code>type="button"</code> more precisely) plus javascript getting 
+ * The PageButton is provides link style navigation button to a Page that is
+ * rendered in form of a <code>button</code> (an <code>input</code> HTML element
+ * with the <code>type="button"</code> more precisely) plus javascript getting
  * the borwser to the location of that Page.
  *
  * <h4>PageButton Advantages</h4>
@@ -34,8 +34,8 @@ import net.sf.click.util.HtmlStringBuffer;
  *      <li>Over {@link net.sf.click.control.ActionButton ActionButton} + forward/redirect trick:
  *          <ul>
  *               <li>there's no roundtrip to the server.</li>
- *               <li><code>net.sf.click.Page#redirect(Class) does not support parameters</code> and 
- *               <code>net.sf.click.Page#redirect(String)</code> is prone to errors when hardcoding 
+ *               <li><code>net.sf.click.Page#redirect(Class) does not support parameters</code> and
+ *               <code>net.sf.click.Page#redirect(String)</code> is prone to errors when hardcoding
  *               them in the <code>String</code>.</li>
  *          </ul>
  *      </li>
@@ -47,11 +47,11 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public class PageButton extends PageLink {
 
-	private static final long serialVersionUID = 1L;
-    
-    // ----------------------------------------------------------- Constructors 
+    private static final long serialVersionUID = 1L;
 
-	/**
+    // ----------------------------------------------------------- Constructors
+
+    /**
      * Create a PageButton for the given name.
      *
      * @param name the page button name
@@ -102,8 +102,8 @@ public class PageButton extends PageLink {
      */
     public PageButton() {
     }
-    
-    // --------------------------------------------------------- Public Methods 
+
+    // --------------------------------------------------------- Public Methods
 
     /**
      * Return the links html tag: <tt>input</tt>.
