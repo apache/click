@@ -52,18 +52,18 @@ import org.apache.commons.lang.Validate;
  */
 public class ControlRegistry {
 
-    // -------------------------------------------------------- Constants
+    // -------------------------------------------------------------- Constants
 
     /** The thread local registry holder. */
     private static final ThreadLocal THREAD_LOCAL_REGISTRY = new ThreadLocal();
 
-    // -------------------------------------------------------- Variables
+    // -------------------------------------------------------------- Variables
 
     /** The list of registered event sources. */
-    List eventSourceList;
+    private List eventSourceList;
 
     /** The list of registered event listeners. */
-    List eventListenerList;
+    private List eventListenerList;
 
     // --------------------------------------------------------- Public Methods
 
@@ -140,7 +140,7 @@ public class ControlRegistry {
      * @throws RuntimeException if a ControlRegistry is not available on the
      * thread.
      */
-    public static ControlRegistry getThreadLocalRegistry() {
+    static ControlRegistry getThreadLocalRegistry() {
         return getRegistryStack().peek();
     }
 
@@ -212,7 +212,7 @@ public class ControlRegistry {
         return eventSourceList;
     }
 
-    // -------------------------------------------------- Inner Classes
+    // ---------------------------------------------------------- Inner Classes
 
     /**
      * Provides an unsynchronized Stack.
