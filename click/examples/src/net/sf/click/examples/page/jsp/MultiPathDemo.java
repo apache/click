@@ -2,8 +2,8 @@
 package net.sf.click.examples.page.jsp;
 
 import net.sf.click.control.ActionLink;
+import net.sf.click.control.PageLink;
 import net.sf.click.examples.page.BorderPage;
-import net.sf.click.extras.control.PageLink;
 
 /**
  *
