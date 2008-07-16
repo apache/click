@@ -6,11 +6,11 @@ import net.sf.click.Context;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Column;
 import net.sf.click.control.Decorator;
-import net.sf.click.control.PageLink;
 import net.sf.click.control.Table;
 import net.sf.click.examples.domain.Customer;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.EditCustomer;
+import net.sf.click.extras.control.PageLink;
 
 /**
  * Provides an demonstration of Table control paging.
