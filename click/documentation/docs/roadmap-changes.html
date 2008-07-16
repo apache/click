@@ -96,8 +96,10 @@ new features including Module support, bug fixes, documentation and example upda
         String based approach:
         <pre class="prettyprint">
 public class MyPage extends Page {
+
     public void onInit() {
         Submit submit = new Submit("submit");
+        
         submit.setListener(this, "onSubmit");
     }
 
@@ -109,10 +111,11 @@ public class MyPage extends Page {
       and here is the new ActionListener approach:
       <pre class="prettyprint">
 public class MyPage extends Page {
+
     public void onInit() {
         Submit submit = new Submit("submit");
+        
         submit.setActionListener(new ActionListener() {
-
             public boolean onAction(Control source) {
                 // Perform submit action and return true to continue processing
                 return true;
@@ -136,11 +139,6 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-392">392</a>].
       </li>
       <li class="change">
-        Menu is now only cached in production modes. In development modes, changes
-        to menu.xml is seen immediately.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-408">408</a>].
-      </li>
-      <li class="change">
         Added property files with translation for the Romanian language.
         This issue was raised and fixed by Marius Petrus
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-361">361</a>].
@@ -150,12 +148,7 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-376">376</a>].
       </li>
       <li class="change">
-		Renamed Container.add(int, Control) to Container.insert(Control, int) to better
-        reflect the intention
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-381">381</a>].
-      </li>
-      <li class="change">
-		Add static method <a href="click-api/net/sf/click/Context.html#hasThreadLocalContext()">Context.hasThreadLocalContext().</a>
+		Add static method Context.hasThreadLocalContext().
         Useful for checking if a Context is available on the Context stack
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-382">382</a>].
       </li>
@@ -171,6 +164,11 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-401">401</a>].
       </li>
       <li class="change">
+		Updated Container renaming method Container.add(int, Control) to Container.insert(Control, int) 
+		to better reflect the intention
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-381">381</a>].
+      </li>
+      <li class="change">
         Update Form to use control message bundles for label required prefix/suffix
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-383">383</a>].
       </li>
@@ -180,12 +178,29 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-396">396</a>].
       </li>
       <li class="change">
+        Updated Menu so that it is now only cached in production or profile modes. 
+        In other development modes, changes to menu.xml is seen immediately.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-408">408</a>].
+      </li>
+      <li class="change">
+        Updated AbstractContainerField and PageLink controls moving them to Click Extras.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-410">410</a>].
+      </li>
+      <li class="change">
 		Fixed FieldSet recursive remove bug
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-367">367</a>].
       </li>
       <li class="change">
+		Fixed bug when manually invalidating HttpSession
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-371">371</a>].
+      </li>
+      <li class="change">
 		Fixed PropertySelect add ordering to query bug
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-372">372</a>].
+      </li>
+      <li class="change">
+		Fixed message properties to resolve all parent messages
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-373">373</a>].
       </li>
       <li class="change">
 		Fixed Labels not rendering in a FieldSet bug
@@ -196,21 +211,13 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-378">378</a>].
       </li>
       <li class="change">
-		Fixed bug when manually invalidating HttpSession
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-371">371</a>].
-      </li>
-      <li class="change">
-		Fixed message properties to resolve all parent messages
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-373">373</a>].
+		Fixed FieldSet restoring FieldSet ability to set number of table columns 
+		the FieldSet is rendered with
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-379">379</a>].
       </li>
       <li class="change">
 		Fixed bug where Format is not available in template of stateful pages.
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-409">409</a>].
-      </li>
-      <li class="change">
-		    Restored FieldSet ability to set number of table columns the FieldSet is
-        rendered with
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-379">379</a>].
       </li>
     </ul>
   </dd>
