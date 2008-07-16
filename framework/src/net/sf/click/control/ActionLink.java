@@ -140,7 +140,6 @@ import org.apache.commons.lang.StringUtils;
  *    href="../../../../../html/struct/links.html#h-12.2">A Links</a>
  *
  * @see AbstractLink
- * @see PageLink
  * @see Submit
  *
  * @author Malcolm Edgar

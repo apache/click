@@ -1,6 +1,5 @@
 package net.sf.click.extras.control;
 
-import net.sf.click.control.PageLink;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**

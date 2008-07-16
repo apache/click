@@ -18,10 +18,10 @@ package net.sf.click.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a Abstract Link control: &nbsp; &lt;a href=""&gt;&lt;/a&gt;.
@@ -31,7 +31,6 @@ import net.sf.click.util.HtmlStringBuffer;
  *    href="../../../../../html/struct/links.html#h-12.2">A Links</a>
  *
  * @see ActionLink
- * @see PageLink
  * @see Submit
  *
  * @author Malcolm Edgar
