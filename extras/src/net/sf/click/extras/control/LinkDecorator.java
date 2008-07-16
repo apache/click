@@ -94,7 +94,7 @@ import org.apache.commons.lang.StringUtils;
  * pattern.
  *
  * @see net.sf.click.control.ActionLink
- * @see net.sf.click.extras.control.PageLink
+ * @see net.sf.click.control.PageLink
  *
  * @author Malcolm Edgar
  */
