@@ -685,10 +685,10 @@ public class Table extends AbstractControl {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
 
         // Flag indicating which import style to return
         boolean useDarkStyle = false;
-
         if (hasAttribute("class")) {
 
             String styleClasses = getAttribute("class");
@@ -704,13 +704,23 @@ public class Table extends AbstractControl {
         }
 
         if (useDarkStyle) {
-            return ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK,
-                getContext());
+            buffer.append(ClickUtils.createHtmlImport(TABLE_IMPORTS_DARK, getContext()));
 
         } else {
-            return ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT,
-                getContext());
+            buffer.append(ClickUtils.createHtmlImport(TABLE_IMPORTS_LIGHT, getContext()));
         }
+
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                String htmlImports = control.getHtmlImports();
+                if (htmlImports != null) {
+                    buffer.append(htmlImports);
+                }
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**

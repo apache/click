@@ -380,14 +380,27 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * This method returns null.
+     * Return the HTML head import statements for contained controls.
      *
      * @see net.sf.click.Control#getHtmlImports()
      *
-     * @return null
+     * @return the HTML includes statements for the contained control stylesheet
+     * and JavaScript files
      */
     public String getHtmlImports() {
-        return null;
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                String htmlImports = control.getHtmlImports();
+                if (htmlImports != null) {
+                    buffer.append(htmlImports);
+                }
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**
