@@ -7,6 +7,7 @@ import net.sf.click.control.AbstractLink;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Column;
 import net.sf.click.control.Form;
+import net.sf.click.control.PageLink;
 import net.sf.click.control.Submit;
 import net.sf.click.control.Table;
 import net.sf.click.control.TextField;
@@ -16,7 +17,6 @@ import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.EditCustomer;
 import net.sf.click.extras.control.DateField;
 import net.sf.click.extras.control.LinkDecorator;
-import net.sf.click.extras.control.PageLink;
 
 /**
  * Provides an demonstration of Table control paging.
