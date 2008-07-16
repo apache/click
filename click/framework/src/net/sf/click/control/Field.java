@@ -405,21 +405,6 @@ public abstract class Field extends AbstractControl {
     }
 
     /**
-     * Return the HTML head element import string. This method returns null.
-     * <p/>
-     * Override this method to specify JavaScript and CSS includes for the
-     * HTML head element. This value will rendered by the Form
-     * {@link Form#getHtmlImports()} method.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     *
-     * @return null value
-     */
-    public String getHtmlImports() {
-        return null;
-    }
-
-    /**
      * Return true if the Field type is hidden (&lt;input type="hidden"/&gt;) or
      * false otherwise. By default this method returns false.
      *

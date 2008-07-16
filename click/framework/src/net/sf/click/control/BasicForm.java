@@ -18,8 +18,10 @@ package net.sf.click.control;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.service.FileUploadService;
@@ -27,9 +29,10 @@ import net.sf.click.service.LogService;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -293,6 +296,34 @@ public class BasicForm extends AbstractContainer {
     }
 
     /**
+     * Return the HTML head import statements for the CSS stylesheet
+     * (<tt>click/control.css</tt>) and JavaScript
+     * (<tt>click/control.js</tt>) files.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the control stylesheet and
+     * JavaScript files
+     */
+    public String getHtmlImports() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                String htmlImports = control.getHtmlImports();
+                if (htmlImports != null) {
+                    buffer.append(htmlImports);
+                }
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
      * Return the form method <tt>["post" | "get"]</tt>.
      *
      * @return the form method
@@ -323,20 +354,6 @@ public class BasicForm extends AbstractContainer {
         }
 
         return getName().equals(getContext().getRequestParameter(FORM_NAME));
-    }
-
-    /**
-     * Return the HTML head import statements for the CSS stylesheet
-     * (<tt>click/control.css</tt>) and JavaScript
-     * (<tt>click/control.js</tt>) files.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     *
-     * @return the HTML head import statements for the control stylesheet and
-     * JavaScript files
-     */
-    public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
     }
 
     /**
