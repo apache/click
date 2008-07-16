@@ -3,11 +3,11 @@ package net.sf.click.examples.page.control;
 import java.util.Date;
 
 import net.sf.click.control.ActionLink;
+import net.sf.click.control.PageLink;
 import net.sf.click.examples.page.BorderPage;
 import net.sf.click.examples.page.HomePage;
 import net.sf.click.extras.control.ExternalLink;
 import net.sf.click.extras.control.PageButton;
-import net.sf.click.extras.control.PageLink;
 
 /**
  * Provides an ActionLink, ExternalLink and PageLink control examples Page.
