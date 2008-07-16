@@ -469,6 +469,30 @@ public class FieldSet extends AbstractContainer {
     }
 
     /**
+     * Return the HTML head import statements for contained fields.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     *
+     * @return the HTML head import statements for the contained field stylesheet
+     * and JavaScript files
+     */
+    public String getHtmlImports() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+                String htmlImports = control.getHtmlImports();
+                if (htmlImports != null) {
+                    buffer.append(htmlImports);
+                }
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
      * Return the fieldSet display label.
      *
      * @see Field#getLabel()

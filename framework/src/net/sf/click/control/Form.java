@@ -17,11 +17,9 @@ package net.sf.click.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
@@ -1085,42 +1083,6 @@ public class Form extends BasicForm {
      */
     public Map getFieldWidths() {
         return fieldWidths;
-    }
-
-    /**
-     * Return the HTML head imports for the form and all its controls.
-     *
-     * {@link net.sf.click.Control#getHtmlImports()}
-     *
-     * @deprecated this method is not very useful and has been deprecated
-     *
-     * @return all the HTML head imports for the form and all its controls
-     */
-    public String getHtmlImportsAll() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(200);
-
-        buffer.append(getHtmlImports());
-
-        Set includeSet = null;
-
-        List list = ClickUtils.getFormFields(this);
-        for (int i = 0, size = list.size(); i < size; i++) {
-            if (includeSet == null) {
-                includeSet = new HashSet();
-            }
-
-            Field field = (Field) list.get(i);
-
-            String include = field.getHtmlImports();
-            if (!includeSet.contains(include)) {
-                if (include != null) {
-                    buffer.append(include);
-                    includeSet.add(include);
-                }
-            }
-        }
-
-        return buffer.toString();
     }
 
     /**
