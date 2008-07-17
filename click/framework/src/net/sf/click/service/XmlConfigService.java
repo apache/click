@@ -1032,7 +1032,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
             deployControls(getResourceRootElement("/" + name));
         }
-
     }
 
     /**
@@ -1043,32 +1042,22 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
-        deployFilesInJars();
+        String[] resources = {
+                "/net/sf/click/control/control.css",
+                "/net/sf/click/control/control.js",
+                "/net/sf/click/util/error.htm",
+                "/net/sf/click/not-found.htm",
+                "/net/sf/click/control/VM_global_library.vm"
+        };
 
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/control/control.css",
-                              "click");
-
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/control/control.js",
-                              "click");
-
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/util/error.htm",
-                              "click");
-
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/not-found.htm",
-                              "click");
-
-        ClickUtils.deployFile(servletContext,
-                              "/net/sf/click/control/VM_global_library.vm",
-                              "click");
+        ClickUtils.deployFiles(servletContext, resources, "click");
 
         deployControls(getResourceRootElement("/click-controls.xml"));
         deployControls(getResourceRootElement("/extras-controls.xml"));
         deployControls(rootElm);
         deployControlSets(rootElm);
+
+        deployFilesInJars();
     }
 
     /**
