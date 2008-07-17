@@ -21,31 +21,37 @@ import java.util.List;
 import org.apache.commons.lang.Validate;
 
 /**
- * Provides a thread local register for ActionListener events.
- * <p/>
+ * Provides a thread local register for ActionListener events. The ClickServlet
+ * will fire any ActionListeners registered after processing all the page's
+ * controls.
+ *
+ * <h4>Example Usage</h4>
  * Developers who implement their own controls, should look at the following
- * example <tt>onProcess</tt> implementation. Note the call to
- * {@link net.sf.click.control.AbstractControl#registerActionEvent()} which
- * registers the Control listener with ControlRegistry.
+ * example control <tt>onProcess</tt> implementation.
  *
  * <pre class="prettyprint">
  * public class MyLink extends AbstractControl {
- *
  *     ...
+ *
  *     public boolean onProcess() {
  *         bindRequestValue();
  *
  *         if (isClicked()) {
- *             // Register this controls listener for invocation after process
- *             // finish
+ *             // Register this controls listener for invocation after
+ *             // control processing has finished
  *             registerActionEvent();
  *         }
  *
  *         return true;
  *     }
- *     ...
- *
  * } </pre>
+ *
+ * In this example if the link is clicked, it then calls
+ * {@link net.sf.click.control.AbstractControl#registerActionEvent()}.
+ * This method registers the Control's action listener with ControlRegistry.
+ * The ClickServlet will subsequently invoke the registered
+ * {@link ActionListener#onAction(Control)} methods after all the Page's control
+ * <tt>onProcess()</tt> methods have been invoked.
  *
  * @author Bob Schellink
  * @author Malcolm Edgar
