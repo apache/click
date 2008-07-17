@@ -33,7 +33,6 @@
     border: 1px solid #99A4DF;
   }
   pre {
-    background: #EEEEEE;
     padding: 4px;
     border: 1px solid #99A4DF;
   }
@@ -84,31 +83,16 @@ new features including Module support, bug fixes, documentation and example upda
     </ul>
   </dd>
   <p/>
-    <dt><a name="1.5-M2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Development Release - Version 1.5 M2 - ?? ?? 2008</div></dt>
+    <dt><a name="1.5-M2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Development Release - Version 1.5 M2 - ?? July 2008</div></dt>
   <dd>
-    <p/>
-    Click 1.5 M2 introduced major enhancements to Ajax and Control listener support.
-    <p/>
+    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    Click 1.5 M2 introduced major enhancements to Control listener support.
+    </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         New Control listener support through the <a href="click-api/net/sf/click/ActionListener.html">ActionListener</a> interface.
-        ActionListener supercedes the old String based listener approach. Here is an example of the old
-        String based approach:
-        <pre class="prettyprint">
-public class MyPage extends Page {
-
-    public void onInit() {
-        Submit submit = new Submit("submit");
+        This control listener style provides compile time safety and supports code refactoring tools.
         
-        submit.setListener(this, "onSubmit");
-    }
-
-    public boolean onSubmit() {
-        // Perform submit action and return true to continue processing
-        return true;
-    } 
-} </pre>
-      and here is the new ActionListener approach:
       <pre class="prettyprint">
 public class MyPage extends Page {
 
@@ -124,7 +108,7 @@ public class MyPage extends Page {
     }
 } </pre>
       Note that the source Control is passed in as an argument to the onAction method. 
-      For very complex scenarios it is useful to know which Control triggered the event.
+      For very complex scenarios it is useful to know which Control triggered the event
       [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-369">369</a>].
       </li>
       <li class="change">
@@ -132,8 +116,19 @@ public class MyPage extends Page {
         Control listeners will be registered on the <a href="click-api/net/sf/click/ControlRegistry.html">ControlRegistry</a>
         and triggered after the onProcess event finish. The net effect of this change
         is that when Control listeners are triggered, all request values have been bound to Controls,
-        and can safely be referred to from listener.[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
+        and can safely be referred to from listener [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
       </li>
+      <li class="change">
+        Added button support to FieldSet, so that buttons can be rendered inside
+        FieldSets. This change has been enabled by two phase processing which
+        ensures all FieldSet fields are processed before button listeners are invoked
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-401">401</a>].
+      </li>
+     </ul>
+    <div style="margin-left:-2em;margin-bottom:1em;"> 
+    The following is a list of enhancements and bugs fixes: 
+    </div>
+	<ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Added a new <a href="extras-api/net/sf/click/extras/control/PageButton.html">PageButton</a> control
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-392">392</a>].
@@ -159,11 +154,6 @@ public class MyPage extends Page {
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-398">398</a>].
       </li>
       <li class="change">
-        Added button support to FieldSet, so that buttons can be rendered inside
-        FieldSets 
-		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-401">401</a>].
-      </li>
-      <li class="change">
 		Updated Container renaming method Container.add(int, Control) to Container.insert(Control, int) 
 		to better reflect the intention
 		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-381">381</a>].
@@ -183,8 +173,12 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-408">408</a>].
       </li>
       <li class="change">
-        Updated AbstractContainerField and PageLink controls moving them to Click Extras.
+        Updated AbstractContainerField control moving it to Click Extras.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-410">410</a>].
+      </li>
+      <li class="change">
+		Fixed TabbedPanel bug whereby inactive panel HTML imports are included in page
+		[<a target='blank' href="http://www.avoka.com/jira/browse/CLK-366">366</a>].
       </li>
       <li class="change">
 		Fixed FieldSet recursive remove bug
@@ -292,7 +286,7 @@ public class MyPage extends Page {
    If you want to enlist your site, please send a mail to one of our 
    <a href="http://sourceforge.net/mail/?group_id=82095">Mailing Lists</a> or directly to "sabob1 at gmail.com".
    <p/>
-   The following is a list of enhancements and bugsfixes:
+   The following is a list of enhancements and bugs fixes:
   </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
