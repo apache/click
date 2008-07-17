@@ -185,7 +185,9 @@ public abstract class AbstractControl implements Control {
     }
 
     /**
-     * Return the control's action listener.
+     * Return the control's action listener. If the control has a listener
+     * target and listener method defined, this method will return an
+     * {@link ActionListenerAdaptor} instance.
      *
      * @return the control's action listener
      */
@@ -815,10 +817,10 @@ public abstract class AbstractControl implements Control {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Register this control's listener with the {@link net.sf.click.ActionEvents}
+     * Register this control's listener with the {@link net.sf.click.ControlRegistry}
      * registry.
      *
-     * @see net.sf.click.ActionEvents#registerActionEvent(net.sf.click.Control, net.sf.click.ActionListener)
+     * @see net.sf.click.ControlRegistry#registerActionEvent(net.sf.click.Control, net.sf.click.ActionListener)
      */
     protected void registerActionEvent() {
         if (getActionListener() != null) {
