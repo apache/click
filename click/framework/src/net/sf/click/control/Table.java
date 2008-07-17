@@ -458,12 +458,15 @@ public class Table extends AbstractControl {
      * @param column the column to add to the table
      * @return the added column
      * @throws IllegalArgumentException if the table already contains a column
-     * with the same name
+     * with the same name, or the column name is not defined
      */
     public Column addColumn(Column column) {
         if (column == null) {
             String msg = "column parameter cannot be null";
             throw new IllegalArgumentException(msg);
+        }
+        if (StringUtils.isBlank(column.getName())) {
+            throw new IllegalArgumentException("Column name is not defined");
         }
         if (getColumns().containsKey(column.getName())) {
             String msg =
