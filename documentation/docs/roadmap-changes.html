@@ -134,6 +134,17 @@ public class MyPage extends Page {
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-392">392</a>].
       </li>
       <li class="change">
+        Introduced a new resource deployment strategy for <em>Jars</em> containing
+        Page and Control resources. When Click starts up, it scans each Jar found
+        in the web lib folder (webapp/WEB-INF/lib) for entries starting with 'META-INF/web/'.
+        All files found under 'META-INF/web/' will be copied verbatim to the web
+        application folder.
+        <p/>
+        See the section <a href="configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+        for more detail.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-393">393</a>].
+      </li>
+      <li class="change">
         Added property files with translation for the Romanian language.
         This issue was raised and fixed by Marius Petrus
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-361">361</a>].

@@ -32,6 +32,9 @@ covers the following topics:
   </li>
   <li><a href="#auto-deployed-files">Auto Deployed Files</a> - automatically deployed Click files
   </li>
+  <li><a href="#deploying-custom-resources">Deploying Custom Resources</a> - automatically deploy your own
+  custom resources
+  </li>
 </ul>
 
 <p>&nbsp;</p>
@@ -639,8 +642,9 @@ method invoked when the click application starts.
    &lt;!ATTLIST control <span class="blue">classname</span> CDATA #REQUIRED&gt;
 </pre>
 
-For example to register a <tt>CustomField</tt> control
-class you would add the following elements to your <tt>click.xml</tt> file:
+For example to have a <tt>CustomField</tt> control deploy its resources on
+application startup, you would add the following elements to your
+<tt>click.xml</tt> file:
 
 <pre class="codeConfig">
 &lt;click-app&gt;
@@ -677,6 +681,52 @@ If your application server has restricted permissions, you will need to package
 up these auto deployed files in your web applications WAR file. To do this you
 should run you application on a development machine without these restricted 
 permissions and then package up the deployed files.
+
+<a name="deploying-custom-resources" class="heading"><h2>Deploying Custom Resources</h2></a> 
+
+<p/>
+Click supports two ways of deploying pre-configured resources (templates,
+stylesheets, JavaScript etc.) from a Jar to a web applications.
+<ol>
+    <li>
+        Through a Control's <a href="click-api/net/sf/click/Control.html#onDeploy(javax.servlet.ServletContext)">onDeploy()</a>
+        event handler. See the <a href="#application-controls">Controls</a> section above.
+    </li>
+    <li>
+        By packaging the resources (stylesheets, JavaScript, Images etc.) into a special folder called <em>'META-INF/web'</em>.
+    </li>
+</ol>
+
+As option #1 was already discussed above, lets look at option #2.
+<p/>
+
+When Click starts up, it scans each Jar in web lib (WEB-INF/lib) for specially
+marked entries starting with 'META-INF/web/'.
+<p/>
+Click will then copy all files found under 'META-INF/web/' to the web application
+folder.
+<p/>
+For example, given a Jar file with the following entries:
+<ul>
+  <li>
+    META-INF/web/mycorp/edit_customer.js
+  </li>
+  <li>
+    META-INF/web/mycorp/edit_customer.css
+  </li>
+  <li>
+    mycorp/pages/EditCustomerPage.class
+  </li>
+</ul>
+Click will copy the files <em>'/mycorp/edit_customer.js'</em> and <em>'/mycorp/edit_customer.css'</em>
+to the web application folder.
+<p/>
+Thus if the web application is called 'webapp', the files will be deployed as
+<em>'webapp/mycorp/edit_customer.js'</em> and <em>'webapp/mycorp/edit_customer.css'</em>.
+<p/>
+Option #2 is especially useful when you need to deploy a large number of
+resources from a Jar. Note, only Jars placed under the <em>'WEB-INF/lib'</em> folder will
+be deployed.
 
 </body>
 </html>
