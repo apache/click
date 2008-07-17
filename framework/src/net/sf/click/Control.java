@@ -109,6 +109,12 @@ import net.sf.click.util.HtmlStringBuffer;
  *  <li><tt>/extras-controls.xml</tt>
  *  <li><tt>WEB-INF/click.xml</tt>
  * </ul>
+ * <p/>
+ * Click also supports an alternative deployment strategy which relies on
+ * packaging resource (stylesheets, JavaScript, images etc.) following a
+ * specific convention. See the section
+ * <a href="../../../../configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+ * for further details.
  *
  * @see net.sf.click.util.PageImports
  *
@@ -153,6 +159,7 @@ public interface Control extends Serializable {
      * <p/>
      * The order in which JS and CSS files are include will be preserved in the
      * page.
+     * <p/>
      * <b>Also note:</b> a common problem when overriding getHtmlImports in
      * subclasses is forgetting to call <em>super.getHtmlImports</em>. Consider
      * carefully whether you should call <em>super.getHtmlImports</em> or not.
@@ -249,6 +256,12 @@ public interface Control extends Serializable {
      * <b>Please note:</b> a common problem when overriding onDeploy in
      * subclasses is forgetting to call <em>super.onDeploy</em>. Consider
      * carefully whether you should call <em>super.onDeploy</em> or not.
+     * <p/>
+     * Click also supports an alternative deployment strategy which relies on
+     * packaging resource (stylesheets, JavaScript, images etc.) following a
+     * specific convention. See the section
+     * <a href="../../../../configuration.html#deploying-custom-resources">Deploying Custom Resources</a>
+     * for further details.
      *
      * @param servletContext the servlet context
      */
