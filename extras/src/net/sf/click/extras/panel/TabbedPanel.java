@@ -21,6 +21,7 @@ import net.sf.click.Control;
 import net.sf.click.control.ActionLink;
 import net.sf.click.control.Panel;
 import net.sf.click.util.ClickUtils;
+import net.sf.click.util.HtmlStringBuffer;
 
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -231,7 +232,33 @@ public class TabbedPanel extends Panel {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
-        return ClickUtils.createHtmlImport(HTML_IMPORTS, getContext());
+        HtmlStringBuffer buffer = new HtmlStringBuffer(512);
+
+        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+
+        if (hasControls()) {
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
+
+                if (control instanceof Panel) {
+                    Panel panel = (Panel) control;
+                    if (panel == getActivePanel()) {
+                        String htmlImports = panel.getHtmlImports();
+                        if (htmlImports != null) {
+                            buffer.append(htmlImports);
+                        }
+                    }
+
+                } else {
+                    String htmlImports = control.getHtmlImports();
+                    if (htmlImports != null) {
+                        buffer.append(htmlImports);
+                    }
+                }
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**
@@ -322,12 +349,13 @@ public class TabbedPanel extends Panel {
     /**
      * Initialize the child controls contained in the panel. Note with the child
      * panels only the active panel will be initialized.
+     * <p/>
+     * If <tt>tabPanelIndex</tt> request parameter present this value will be
+     * used to specify the active panel. The panel index is a zero based integer.
      *
      * @see net.sf.click.Control#onInit()
      */
     public void onInit() {
-        // TODO: document this change
-
         // Select panel specified by tabPanelIndex if defined
         String tabPanelIndex = getContext().getRequestParameter("tabPanelIndex");
         if (NumberUtils.isNumber(tabPanelIndex)) {
