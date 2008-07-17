@@ -10,6 +10,9 @@ import net.sf.click.control.TextArea;
  */
 public class MockRequestTest extends TestCase {
 
+    // Indicates that the textArea actionListener was invoked
+    private boolean actionCalled = false;
+    
     public void testDynamicRequest() {
         MockContext context = MockContext.initContext();
         MockRequest request = (MockRequest) context.getMockRequest();
@@ -20,7 +23,19 @@ public class MockRequestTest extends TestCase {
         request.setParameter("param", "value");
         request.getParameterMap().put("text", "textvalue");
 
+        // Registry a listener which must be invoked
+        textArea.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                // When action is invoked, set flag to true
+                return actionCalled = true;
+            }
+        });
         assertTrue(textArea.onProcess());
+
+        // Fire all action events that was registered in the onProcess method
+        context.fireActionEvents();
+
+        assertTrue("TextArea action was not invoked", actionCalled);
         assertTrue(textArea.isValid());
         assertEquals("textvalue", textArea.getValue());
         assertEquals("textvalue", textArea.getValueObject());
