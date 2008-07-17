@@ -683,7 +683,7 @@ public class VelocityTemplateService implements TemplateService {
                 logger.error(MSG_PREFIX + message);
 
             } else {
-                // TODO:
+                throw new IllegalArgumentException("Invalid log level: " + level);
             }
         }
 
@@ -720,7 +720,7 @@ public class VelocityTemplateService implements TemplateService {
                 logger.error(MSG_PREFIX + message, error);
 
             } else {
-                // TODO:
+                throw new IllegalArgumentException("Invalid log level: " + level);
             }
         }
 
