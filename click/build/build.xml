@@ -228,41 +228,6 @@
    </target>
 
 
-   <target name="build-mock" description="build mock JAR file">
-      <available file="dist/click-${version}.jar" property="isClickAvail"/>
-      <fail message="Build framework first with 'build-framework'">
-         <condition>
-  	        <or><isfalse value="${isClickAvail}"/></or>
-  	     </condition>
-      </fail>
-      <delete file="dist/click-mock-${version}.jar" quiet="false"/>
-      <delete dir="mock/classes" quiet="false"/>
-      <mkdir dir="mock/classes"/>
-      <copy todir="mock/classes">
-         <fileset dir="mock/src">
-            <exclude name="**/package.html"/>
-         </fileset>
-      </copy>
-      <javac srcdir="mock/src"
-             destdir="mock/classes"
-             debug="true"
-             excludes="**/Test*"
-             encoding="ISO-8859-1"
-             source="${javac.source}">
-         <classpath refid="classpath.mock"/>
-      </javac>
-      <jar destfile="dist/click-mock-${version}.jar">
-         <manifest>
-           <attribute name="Click-Version" value="${version}"/>
-           <attribute name="Package" value="net.sf.click"/>
-           <attribute name="Built-By" value="${user.name}"/>
-         </manifest>
-         <fileset dir="mock/classes"/>
-      </jar>  
-      <digestMacro file="dist/click-mock-${version}.jar"/>
-   </target>
-
-
    <target name="build-extras" description="build extras JAR file">
       <available file="dist/click-${version}.jar" property="isClickAvail"/>
       <fail message="Build framework first with 'build-framework'">
@@ -278,6 +243,8 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
+ 	  <copy file="LICENSE.txt" todir="extras/classes/META-INF"/>
+ 	  <copy file="NOTICE.txt" todir="extras/classes/META-INF"/>
       <javac srcdir="extras/src"
              destdir="extras/classes"
              debug="true"
@@ -318,6 +285,8 @@
             <exclude name="**/package.html"/>
          </fileset>
       </copy>
+ 	  <copy file="LICENSE.txt" todir="${dir.classes}/META-INF"/>
+ 	  <copy file="NOTICE.txt" todir="${dir.classes}/META-INF"/>
       <!-- No Dependencies -->
       <javac srcdir="${dir.source}"
              destdir="${dir.classes}"
@@ -326,7 +295,7 @@
              source="${javac.source}">
          <classpath refid="classpath.framework"/>
       </javac>  
-      <jar destfile="dist/click-nodeps-${version}.jar">
+   	  <jar destfile="dist/click-nodeps-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
            <attribute name="Package" value="net.sf.click"/>
@@ -343,12 +312,19 @@
           <exclude name="**/*.html"/>
         </patternset>
       </unzip>
-      <unzip src="lib/${jar.collections}" dest="${dir.classes}"/>
-      <unzip src="lib/${jar.io}" dest="${dir.classes}"/>
-      <unzip src="lib/${jar.lang}" dest="${dir.classes}"/> 
-      <unzip src="lib/${jar.ognl}" dest="${dir.classes}"/> 
-      <unzip src="lib/${jar.upload}" dest="${dir.classes}"/> 
-      <unzip src="lib/${jar.velocity}" dest="${dir.classes}"/> 
+	  <delete dir="temp" quiet="false"/>
+   	  <unzip src="lib/${jar.collections}" dest="temp"/>
+      <unzip src="lib/${jar.io}" dest="temp"/>
+      <unzip src="lib/${jar.lang}" dest="temp"/> 
+      <unzip src="lib/${jar.ognl}" dest="temp"/> 
+      <unzip src="lib/${jar.upload}" dest="temp"/>
+      <unzip src="lib/${jar.velocity}" dest="temp"/> 
+      <copy todir="${dir.classes}">
+         <fileset dir="temp">
+            <exclude name="META-INF/**"/>
+         </fileset>
+      </copy>
+	  <delete dir="temp" quiet="false"/>
       <jar destfile="dist/click-${version}.jar">
          <manifest>
            <attribute name="Click-Version" value="${version}"/>
@@ -362,6 +338,43 @@
          </fileset>
       </jar>
       <digestMacro file="dist/click-${version}.jar"/> 
+   </target>
+
+
+   <target name="build-mock" description="build mock JAR file">
+      <available file="dist/click-${version}.jar" property="isClickAvail"/>
+      <fail message="Build framework first with 'build-framework'">
+         <condition>
+  	        <or><isfalse value="${isClickAvail}"/></or>
+  	     </condition>
+      </fail>
+      <delete file="dist/click-mock-${version}.jar" quiet="false"/>
+      <delete dir="mock/classes" quiet="false"/>
+      <mkdir dir="mock/classes"/>
+      <copy todir="mock/classes">
+         <fileset dir="mock/src">
+            <exclude name="**/package.html"/>
+         </fileset>
+      </copy>
+ 	  <copy file="LICENSE.txt" todir="mock/classes/META-INF"/>
+ 	  <copy file="NOTICE.txt" todir="mock/classes/META-INF"/>
+      <javac srcdir="mock/src"
+             destdir="mock/classes"
+             debug="true"
+             excludes="**/Test*"
+             encoding="ISO-8859-1"
+             source="${javac.source}">
+         <classpath refid="classpath.mock"/>
+      </javac>
+      <jar destfile="dist/click-mock-${version}.jar">
+         <manifest>
+           <attribute name="Click-Version" value="${version}"/>
+           <attribute name="Package" value="net.sf.click"/>
+           <attribute name="Built-By" value="${user.name}"/>
+         </manifest>
+         <fileset dir="mock/classes"/>
+      </jar>  
+      <digestMacro file="dist/click-mock-${version}.jar"/>
    </target>
 
 
