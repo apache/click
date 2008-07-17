@@ -575,37 +575,6 @@ public class ContainerUtils {
     }
 
     /**
-     * Adds the HTML head imports for the container and all its child controls
-     * to the specified includeSet.
-     *
-     * {@link net.sf.click.Control#getHtmlImports()}
-     *
-     * @param container the Container to obtain html head imports from
-     * @param includeSet the set containing all the HTML head imports for the
-     * container and its child controls
-     */
-    private static void addAllHtmlImports(Container container, Set includeSet) {
-        List list = container.getControls();
-
-        String thisInclude = container.getHtmlImports();
-        if (thisInclude != null) {
-            includeSet.add(thisInclude);
-        }
-
-        for (int i = 0,  size = list.size(); i < size; i++) {
-            Control control = (Control) list.get(i);
-            if (control instanceof Container) {
-                addAllHtmlImports((Container) control, includeSet);
-            } else {
-                String include = control.getHtmlImports();
-                if (include != null) {
-                    includeSet.add(include);
-                }
-            }
-        }
-    }
-
-    /**
      * Add buttons for the given Container to the specified buttons list,
      * recursively including any Fields contained in child containers. The list
      * of returned buttons will exclude any <tt>Button</tt> or <tt>Label</tt>
