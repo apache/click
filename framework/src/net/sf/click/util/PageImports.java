@@ -17,26 +17,27 @@ package net.sf.click.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.Container;
-import net.sf.click.control.Table;
-
 import net.sf.click.service.LogService;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
  * Provides a utility object for rendering a Page's HTML header imports and its
  * control HTML header imports.
  * <p/>
- * A <tt>PageImports</tt> instance is automatically added to the Velocity Context
+ * A PageImports instance is automatically added to the Velocity Context
  * for Velocity templates, or as a request attribute for JSP pages using the key
  * name "<span class="blue">imports</span>".
- * <p/>
- * To use the <tt>PageImports</tt> object simply reference it your page header
+ *
+ * <h3>PageImports Examples</h3>
+ *
+ * To use the PageImports object simply reference it your page header
  * section. For example:
  * <pre class="codeHtml">
  * &lt;html&gt;
@@ -278,39 +279,11 @@ public class PageImports {
             for (int i = 0; i < page.getControls().size(); i++) {
                 Control control = (Control) page.getControls().get(i);
 
-                processControl(control);
+                processLine(control.getHtmlImports());
             }
         }
 
         processLine(page.getHtmlImports());
-    }
-
-    /**
-     * Process the given control HTML imports.
-     *
-     * @param control the control to process
-     */
-    protected void processControl(Control control) {
-        processLine(control.getHtmlImports());
-
-        if (control instanceof Container) {
-            Container container = (Container) control;
-            if (container.hasControls()) {
-                List controls = container.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-
-        } else if (control instanceof Table) {
-            Table table = (Table) control;
-            if (table.hasControls()) {
-                List controls = table.getControls();
-                for (int i = 0, size = controls.size(); i < size; i++) {
-                    processControl((Control) controls.get(i));
-                }
-            }
-        }
     }
 
     /**
