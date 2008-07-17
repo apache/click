@@ -219,6 +219,27 @@ public class MockContext extends Context {
      */
     public static MockContext initContext(MockServletConfig servletConfig,
         MockRequest request, MockResponse response, ClickServlet clickServlet) {
+        ControlRegistry controlRegistry = new ControlRegistry();
+        return initContext(servletConfig, request, response, clickServlet,
+            controlRegistry);
+    }
+    
+    
+    /**
+     * Creates and returns a new Context instance for the specified mock
+     * objects.
+     *
+     * @param servletConfig the mock servletConfig
+     * @param request the mock request
+     * @param response the mock response
+     * @param clickServlet the mock clickServlet
+     * @param controlRegistry the controlRegistry instance
+     * @return new Context instance
+     */
+    public static MockContext initContext(MockServletConfig servletConfig,
+        MockRequest request, MockResponse response, ClickServlet clickServlet,
+        ControlRegistry controlRegistry) {
+
         try {
             //Sanity checks
             if (servletConfig == null) {
@@ -254,6 +275,7 @@ public class MockContext extends Context {
             MockContext mockContext = new MockContext(servletConfig, request,
                 response, isPost, clickServlet);
 
+            ControlRegistry.pushThreadLocalRegistry(controlRegistry);
             Context.pushThreadLocalContext(mockContext);
 
             ConsoleLogService logService = (ConsoleLogService) ClickUtils.getLogService();
@@ -262,5 +284,14 @@ public class MockContext extends Context {
         } catch (Exception e) {
             throw new MockContainer.CleanRuntimeException(e);
         }
+    }
+
+    /**
+     * Fire all action events that was registered by the processed Controls.
+     *
+     * @return true if all listeners returned true, false otherwise
+     */
+    public boolean fireActionEvents() {
+        return ControlRegistry.getThreadLocalRegistry().fireActionEvents(this);
     }
 }

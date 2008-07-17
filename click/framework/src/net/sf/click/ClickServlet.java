@@ -361,7 +361,7 @@ public class ClickServlet extends HttpServlet {
                 }
 
             } finally {
-                // Only clear the context and logger when running in normal mode.
+                // Only clear the context when running in normal mode.
                 if (request.getAttribute(MOCK_MODE_ENABLED) == null) {
                     Context.popThreadLocalContext();
                 }
