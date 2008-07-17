@@ -153,9 +153,12 @@ public interface Control extends Serializable {
      * <p/>
      * The order in which JS and CSS files are include will be preserved in the
      * page.
+     * <b>Also note:</b> a common problem when overriding getHtmlImports in
+     * subclasses is forgetting to call <em>super.getHtmlImports</em>. Consider
+     * carefully whether you should call <em>super.getHtmlImports</em> or not.
      *
      * @return the HTML includes statements for the control stylesheet and
-     * JavaScript files
+     * JavaScript files, or null if no includes are available
      */
     public String getHtmlImports();
 
