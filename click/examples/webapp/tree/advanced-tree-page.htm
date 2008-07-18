@@ -1,5 +1,5 @@
 <!--A velocity macro which prints all nodes in specified list-->
-#macro (printList $list)    
+#macro (printState $list)    
     #if($list)
         #foreach ($node in $list)
             $node<br>
@@ -9,25 +9,30 @@
 
 This page provides advanced options available with the Tree component.
 <p/>
-In this example the Page is a TreeListener. The section below will display any events triggered by the tree:
+In this example the Page is a TreeListener and in the Log below it will print all
+events recorded.
 <br><br>
 
 $advancedTree
 
 <br>
-<div style="width:55em; border:1px solid #CCCCCC">
-    <dl>
+
+<div style="width:55em; border:1px solid #CCCCCC; margin-top: 10px;">
+    <div style="border-bottom: 1px solid #CCC; background-color: #C0C0C0; padding: 5px">
+        <b>Log</b>
+    </div>
+    <dl style="padding-left: 5px">
         <dt><strong>Selected</strong></dt>
-        <dd>#printList($selected)</dd>
+        <dd>#printState($selected)</dd>
 
         <dt><strong>Deselected</strong></dt>
-        <dd>#printList($deselected)</dd>
+        <dd>#printState($deselected)</dd>
 
         <dt><strong>Expanded</strong></dt>
-        <dd>#printList($expanded)</dd>
+        <dd>#printState($expanded)</dd>
 
         <dt><strong>Collapsed</strong></dt>    
-        <dd>#printList($collapsed)</dd>
+        <dd>#printState($collapsed)</dd>
     </dl>            
 </div>
 
