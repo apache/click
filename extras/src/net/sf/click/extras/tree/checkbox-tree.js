@@ -32,7 +32,7 @@ function replaceOrAddClass(object, class1 ,class2) {
  * element's class value is "selected" or "unselected", before
  * swapping the value.
  */
-function handleNodeSelection(objectArg, event, selectId, checkboxId) {
+function handleNodeSelection(objectArg, event, selectId, checkboxId, selectChildren) {
     stopPropagation(event);
     
     var span = document.getElementById(selectId);
@@ -41,10 +41,7 @@ function handleNodeSelection(objectArg, event, selectId, checkboxId) {
     if(classExists(span,selectionArray[1])) {
         index = 1;
     }
-    removeClass(span, selectionArray[index]);
-    addClass(span, selectionArray[1 - index]);
-
-    handleCheckboxSelection(checkboxId, index);
+    handleCheckboxSelection(checkboxId, index, selectChildren);
 }
 
 /*
@@ -52,10 +49,17 @@ function handleNodeSelection(objectArg, event, selectId, checkboxId) {
  * retrieves the specified checkbox with checkboxId
  * and check/unchecks based on the index value.
  */
-function handleCheckboxSelection(checkboxId, index) {
-    var checkbox = document.getElementById(checkboxId);    
-    checkbox.checked = (index == 1) ? true : false;
-     return;
+function handleCheckboxSelection(checkboxId, index, selectChildren) {
+    var checkbox = document.getElementById(checkboxId);
+    var checked = (index == 1) ? true : false;
+    
+    var elements = null;
+    if(selectChildren) {
+        elements = checkbox.parentNode.getElementsByTagName("input");
+    } else {        
+        elements = new Array(checkbox);
+    }
+    handleCheckboxesSelection(elements, checked);
 }
 
 /*
@@ -63,14 +67,40 @@ function handleCheckboxSelection(checkboxId, index) {
  * finds the <span> holding the selection state and swaps
  * the classes
  */
-function checkboxClicked(objectArg, event, selectId) {
+function onCheckboxClick(checkbox, event, selectId, selectChildren) {
     stopPropagation(event);
-    
-    var span = document.getElementById(selectId);
 
-    if(objectArg.checked) {
-        replaceOrAddClass(span, selectionArray[1], selectionArray[0]);
+    var elements = null;
+    if(selectChildren) {
+        elements = checkbox.parentNode.getElementsByTagName("input");
     } else {
-        replaceOrAddClass(span, selectionArray[0], selectionArray[1]);
+        elements = new Array(checkbox);
+    }
+    handleCheckboxesSelection(elements, checkbox.checked);
+}
+
+/*
+ * Selects/deselects all the specified checkboxes. 
+ */
+function handleCheckboxesSelection(checkboxes, checked) {
+    for (var i=0; i<checkboxes.length; i++) {
+        var input = checkboxes[i];
+        if(input.type=='checkbox') {
+            input.checked = checked;
+            handleCheckboxSibling(input);
+        }
+    }
+}
+
+/*
+ * Select/unselect the specified checkbox sibling element.
+ */
+function handleCheckboxSibling(checkbox) {
+    //TODO get next sibling
+    var text = checkbox.nextSibling;
+    if(checkbox.checked) {
+        replaceOrAddClass(text, selectionArray[1], selectionArray[0]);
+    } else {
+        replaceOrAddClass(text, selectionArray[0], selectionArray[1]);
     }
 }

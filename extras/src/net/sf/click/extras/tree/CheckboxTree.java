@@ -30,6 +30,7 @@ import net.sf.click.Context;
 import net.sf.click.control.Decorator;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Implementation of a tree control that provides checkboxes to enable selection
@@ -118,6 +119,14 @@ public class CheckboxTree extends Tree {
     /** default serial version id. */
     private static final long serialVersionUID = 1L;
 
+    // ---------------------------------------------------- Private variables
+
+    /**
+     * Determines if the checkboxes of child nodes should also be
+     * selected/deselected, when a parent checkbox is selected/deselected.
+     */
+    private boolean selectChildNodes = false;
+
    // ---------------------------------------------------- Public Constructors
 
     /**
@@ -138,6 +147,26 @@ public class CheckboxTree extends Tree {
      */
     public CheckboxTree() {
         setDecorator(new DecoratorFactory().createDecorator());
+    }
+
+    // --------------------------------------------------------- Public getters and setters
+
+    /**
+     * Returns true if child nodes will also be selected/deselected.
+     *
+     * @return true if child nodes will be selected, false otherwise
+     */
+    public boolean isSelectChildNodes() {
+        return selectChildNodes;
+    }
+
+    /**
+     * Sets whether child nodes will also be selected/deselected.
+     *
+     * @param selectChildNodes determines if child nodes will be selected/deselected
+     */
+    public void setSelectChildNodes(boolean selectChildNodes) {
+        this.selectChildNodes = selectChildNodes;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -180,22 +209,43 @@ public class CheckboxTree extends Tree {
 
     /**
      * This method binds the users request of selected nodes to the tree's nodes.
-     * <p>
-     * With html forms, only "checked" checkbox values are submitted
-     * to the server. So the request does not supply us the information needed to calculate
-     * the nodes to be deselected. To find the nodes to deselect,
-     * the newly selected nodes are subtracted from the currently selected nodes. This
-     * implies that the tree's model is stored between http requests.
-     * <p>
-     * Note: to find the collection of selected nodes, the HttpServletRequest is
-     * checked against the value of the field {@link #SELECT_TREE_NODE_PARAM}.
+     * <p/>
+     * This method must be manually invoked by the user when the Form is
+     * submitted. For example:
+     *
+     * <pre class="prettyprint">
+     * public void onInit() {
+     *   Tree tree = new Tree("tree");
+     *   BasicForm form = new BasicForm("form");
+     *   form.add(tree);
+     *   Submit submit = new Submit("submit");
+     *   form.add(submit);
+     *   submit.setActionListener(new ActionListener() {
+     *       public boolean onAction(Control source) {
+     *           tree.bindSelectOrDeselectValues();
+     *           return true;
+     *       }
+     *   });
+     *   addControl(form);
+     * } </pre>
      */
     public void bindSelectOrDeselectValues() {
+        // With html forms, only "checked" checkbox values are submitted
+        // to the server. So the request does not supply us the information 
+        // needed to calculate the nodes to be deselected. To find the nodes to
+        // deselect, the newly selected nodes are subtracted from the currently
+        // selected nodes. This implies that the tree's model is stored between
+        // http requests.
+
+        // To find the collection of selected nodes, the HttpServletRequest is
+        // checked against the value of the field {@link #SELECT_TREE_NODE_PARAM}.
+
         //find id's of all the new selected node's'
         String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
 
         //find currently selected nodes
-        Collection currentlySelected = getSelectedNodes(false);
+        boolean includeInvisibleNodes = isSelectChildNodes();
+        Collection currentlySelected = getSelectedNodes(includeInvisibleNodes);
 
         //is there any new selected node's
         if (nodeIds == null || nodeIds.length == 0) {
@@ -228,15 +278,30 @@ public class CheckboxTree extends Tree {
     }
 
     /**
-     * Overridden onProcess() to remove call to {@link #bindSelectOrDeselectValues()}.
+     * This method binds any expand/collapse changes from the request parameters.
      * <p/>
-     * For this tree implementation {@link #bindSelectOrDeselectValues()} should
-     * only be called once the user submits the form and not on each request.
+     * In other words the node id's of expanded and collapsed nodes are
+     * retrieved from the request.
      *
-     * @return true if processing of the page should continue, false otherwise
+     * @see #bindExpandOrCollapseValues()
      */
-    public boolean onProcess() {
+    public void bindRequestValue() {
         bindExpandOrCollapseValues();
+    }
+
+    /**
+     * Expand / collapse the tree nodes.
+     *
+     * @return true to continue Page event processing or false otherwise
+     */
+    public boolean postProcess() {
+        if (isJavascriptEnabled()) {
+            javascriptHandler.init(getContext());
+        }
+
+        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
+            expandOrCollapse(expandOrCollapseNodeIds);
+        }
         return true;
     }
 
@@ -364,7 +429,7 @@ public class CheckboxTree extends Tree {
          * renderer to add attributes needed by javascript functionality
          * for example:
          * <pre class="codeJava">
-         *     buffer.append(<span class="st">" onclick=\"checkboxClicked(this,event);\""</span>);
+         *     buffer.append(<span class="st">" onclick=\"onCheckboxClick(this,event);\""</span>);
          * </pre>
          * The code above adds a javascript function call to the element.
          * <p/>
@@ -454,10 +519,21 @@ public class CheckboxTree extends Tree {
             selectId = buildString("s_", treeNode.getId(), "");
             checkboxId = buildString("c_", treeNode.getId(), "");
 
-            String tmp = buildString(" onclick=\"handleNodeSelection(this,event,'", selectId, "','");
-            nodeSelectionString = buildString(tmp, checkboxId, "'); return false;\"");
+            HtmlStringBuffer buffer = new HtmlStringBuffer();
+            buffer.append(" onclick=\"handleNodeSelection(this, event,'");
+            buffer.append(selectId);
+            buffer.append("','");
+            buffer.append(checkboxId);
+            buffer.append("',false); return false;\"");
+            nodeSelectionString = buffer.toString();
 
-            checkboxOnClickString = buildString(" onclick=\"checkboxClicked(this,event,'", selectId, "');\"");
+            buffer = new HtmlStringBuffer();
+            buffer.append(" onclick=\"onCheckboxClick(this,event,'");
+            buffer.append(selectId);
+            buffer.append("',");
+            buffer.append(Boolean.toString(isSelectChildNodes()));
+            buffer.append(");\"");
+            checkboxOnClickString = buffer.toString();
         }
     }
 
