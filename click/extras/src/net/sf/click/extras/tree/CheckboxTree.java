@@ -56,12 +56,12 @@ import org.apache.commons.lang.ArrayUtils;
  *
  *     <span class="kw">protected</span> Submit okSubmit;
  *     <span class="kw">protected</span> Submit cancelSubmit;
- *     <span class="kw">protected</span> Form form;
+ *     <span class="kw">protected</span> BasicForm form;
  *
  *     <span class="kw">public</span> PlainTreePage() {
  *         Tree tree = buildTree();
- *         addControl(tree);
  *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *         form.add(tree);
  *         addControl(form);
  *         okSubmit = <span class="kw">new</span> Submit(<span class="st">"okSubmit"</span>, <span class="st">"Select"</span>, <span class="kw">this</span>, <span class="st">"onSubmitClick"</span>);
  *         cancelSubmit = <span class="kw">new</span> Submit(<span class="st">"cancelSubmit"</span>, <span class="st">"Cancel"</span>,  <span class="kw">this</span>, <span class="st">"onCancelClick"</span>);
