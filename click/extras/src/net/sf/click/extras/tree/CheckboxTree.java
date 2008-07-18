@@ -60,7 +60,7 @@ import org.apache.commons.lang.ArrayUtils;
  *
  *     <span class="kw">public</span> PlainTreePage() {
  *         Tree tree = buildTree();
- *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
+ *         form = <span class="kw">new</span> BasicForm(<span class="st">"form"</span>);
  *         form.add(tree);
  *         addControl(form);
  *         okSubmit = <span class="kw">new</span> Submit(<span class="st">"okSubmit"</span>, <span class="st">"Select"</span>, <span class="kw">this</span>, <span class="st">"onSubmitClick"</span>);
