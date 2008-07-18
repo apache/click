@@ -162,8 +162,12 @@ public class CheckboxTree extends Tree {
 
     /**
      * Sets whether child nodes will also be selected/deselected.
+     * <p/>
+     * <b>Please note:</b> this feature only works if
+     * {@link #setJavascriptEnabled(boolean) JavaScript} support is enabled.
      *
-     * @param selectChildNodes determines if child nodes will be selected/deselected
+     * @param selectChildNodes determines if child nodes will be
+     * selected/deselected
      */
     public void setSelectChildNodes(boolean selectChildNodes) {
         this.selectChildNodes = selectChildNodes;

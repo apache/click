@@ -44,9 +44,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         // The checkbox tree needs to be placed inside a form so all the
         // checkbox values can be submitted to the server when we submit
         // the form.
-        // We create a BasicForm instead of a Form, because Form only works with
-        // Fields and in this example we want to add a Tree to the form.
-        form = new BasicForm("form");
+        form = new CheckboxTreeForm("form");
 
         //Create the tree and tree model and add it to the page
         tree = buildTree();
@@ -70,26 +68,6 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         //Build the options user interface for users to interactively
         //change the tree values.
         buildOptionsUI();
-    }
-
-    /**
-     * Called when user submits the options form.
-     */
-    public boolean onApplyOptionsClick() {
-        //Reset the tree and nodes to default values
-        resetTree();
-
-        //Store the users options in the session
-        CheckboxTreeOptions options = new CheckboxTreeOptions();
-        options.javascriptEnabled = jsEnabled.isChecked();
-        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
-        options.selectChildNodes = selectChildNodes.isChecked();
-        setSessionObject(options);
-
-        //Apply users new options
-        applyOptions();
-
-        return true;
     }
 
     /**
@@ -180,7 +158,29 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return tree;
     }
 
-     // -------------------------------------------------- TreeListener Support
+    // Custom form that handles the processing of the tree
+    class CheckboxTreeForm extends BasicForm {
+
+        public CheckboxTreeForm(String name) {
+            super(name);
+        }
+
+        // Add check if Tree node is expanded or collapsed so the Tree can
+        // be processed
+        public boolean onProcess() {
+            boolean wasTreeExpanded = getContext().getRequestParameter(Tree.EXPAND_TREE_NODE_PARAM) != null;
+            // If tree was expanded or collapsed, the Tree should be processed
+            if (wasTreeExpanded) {
+                tree.onProcess();
+                return true;
+            } else {
+                // Perform normal Form processing
+                return super.onProcess();
+            }
+        }
+    }
+
+    // -------------------------------------------------- TreeListener Support
 
     /**
      * This method, which implements TreeListener, is called when a node is selected
@@ -235,6 +235,26 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     private Checkbox rootNodeDisplayed = new Checkbox("rootNodeDisplayed", "Display root node");
     private Checkbox selectChildNodes = new Checkbox("selectChildNodes", "Select child nodes");
     private Submit applyOptions = new Submit("apply", "Apply Options", this, "onApplyOptionsClick");
+
+    /**
+     * Called when user submits the options form.
+     */
+    public boolean onApplyOptionsClick() {
+        //Reset the tree and nodes to default values
+        resetTree();
+
+        //Store the users options in the session
+        CheckboxTreeOptions options = new CheckboxTreeOptions();
+        options.javascriptEnabled = jsEnabled.isChecked();
+        options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
+        options.selectChildNodes = selectChildNodes.isChecked();
+        setSessionObject(options);
+
+        //Apply users new options
+        applyOptions();
+
+        return true;
+    }
 
     /**
      * Builds the user interface for users to change the tree options interactively.
