@@ -31,12 +31,16 @@ import java.util.StringTokenizer;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Context;
+import net.sf.click.Control;
+import net.sf.click.ControlRegistry;
 import net.sf.click.control.AbstractControl;
 import net.sf.click.control.Decorator;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -156,9 +160,6 @@ public class Tree extends AbstractControl {
     /** The tree's select/deselect parameter name: <tt>"selectTreeNode"</tt>. */
     public static final String SELECT_TREE_NODE_PARAM = "selectTreeNode";
 
-    /** The tree's bookmark for scrolling to the last expanded/collapsed node. */
-    public static final String TREE_BOOKMARK = "tbm";
-
     /** The tree.css style sheet import link. */
     public static final String TREE_IMPORTS =
             "<link type=\"text/css\" rel=\"stylesheet\" href=\"{0}/click/tree/tree{1}.css\"/>\n";
@@ -214,6 +215,10 @@ public class Tree extends AbstractControl {
 
     /** The tree's hierarchical data model. */
     protected TreeNode rootNode;
+
+    protected String[] selectOrDeselectNodeIds = null;
+
+    protected String[] expandOrCollapseNodeIds = null;
 
     /** Callback provider for users to decorate tree nodes. */
     private transient Decorator decorator;
@@ -364,34 +369,35 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * Sets whether javascript functionality is enabled or not. If true the
-     * tree will be navigatable in the browser using javascript, instead
-     * of doing round trips to the server on each operation.
+     * Enables javascript functionality.
      * <p/>
-     * With javascript enabled you need to store the values from the
+     * If true the tree will be navigatable in the browser using javascript,
+     * instead of doing round trips to the server on each operation.
+     * <p/>
+     * With javascript enabled you need to store the values passed from the
      * browser between requests. The tree currently supports the
-     * following policies:
+     * following options:
      * <ul>
      *     <li>{@link #JAVASCRIPT_COOKIE_POLICY}
      *     <li>{@link #JAVASCRIPT_SESSION_POLICY}
      * </ul>
      * This method will try and determine which policy should be applied
-     * to the current request using
-     * {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}. If
-     * {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}
-     * returns true the policy selected will be
-     * {@link #JAVASCRIPT_COOKIE_POLICY} otherwise
-     *{@link #JAVASCRIPT_SESSION_POLICY}.
+     * to the current request by checking the value
+     * {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}.
+     * If {@link javax.servlet.http.HttpServletRequest#isRequestedSessionIdFromCookie()}
+     * returns true, {@link #JAVASCRIPT_COOKIE_POLICY} will be used, otherwise
+     * {@link #JAVASCRIPT_SESSION_POLICY}.
      * <p/>
      * <strong>Note:</strong> if javascript is enabled, then the entire
      * tree is rendered even if some nodes are in a collapsed state. This
      * enables the tree to still be fully navigatable in the browser. However
      * nodes that are in a collapsed state are still displayed as collapsed
-     * using the <tt>"display:none"</tt> idiom.
+     * using the style <tt>"display:none"</tt>.
+     *
+     * @see #setJavascriptEnabled(boolean, int)
      *
      * @param newValue the value to set the javascriptEnabled property to
      * @throws IllegalArgumentException if the context is null
-     * @see #setJavascriptEnabled(boolean, int)
      */
     public void setJavascriptEnabled(boolean newValue) {
         if (getContext().getRequest().isRequestedSessionIdFromCookie()) {
@@ -405,10 +411,11 @@ public class Tree extends AbstractControl {
      * Overloads {@link #setJavascriptEnabled(boolean)}. Enables one
      * to select the javascript policy to apply.
      *
+     * @see #setJavascriptEnabled(boolean)
+     *
      * @param newValue the value to set the javascriptEnabled property to
      * @param javascriptPolicy the current javascript policy
      * @throws IllegalArgumentException if the context is null
-     * @see #setJavascriptEnabled(boolean)
      */
     public void setJavascriptEnabled(boolean newValue, int javascriptPolicy) {
 
@@ -418,9 +425,6 @@ public class Tree extends AbstractControl {
             addListener(javascriptHandler);
             this.javascriptPolicy = javascriptPolicy;
 
-            //Populate the javascript handler with its state. This call will notify
-            //any tree listeners about new values.
-            javascriptHandler.init(getContext());
         } else {
             removeListener(javascriptHandler);
             this.javascriptPolicy = 0;
@@ -454,32 +458,17 @@ public class Tree extends AbstractControl {
 
     /**
      * This method binds the users request of expanded and collapsed nodes to
-     * the tree's nodes. The behavior of this method is to swap the value of the
-     * expanded state. Thus expanded nodes will be collapsed and collapsed
-     * nodes will be expanded.
+     * the tree's nodes.
      */
     public void bindExpandOrCollapseValues() {
-        String[] nodeIds = getRequestValues(EXPAND_TREE_NODE_PARAM);
-        if (nodeIds == null || nodeIds.length <= 0) {
-            return;
-        }
-
-        expandOrCollapse(nodeIds);
+        expandOrCollapseNodeIds = getRequestValues(EXPAND_TREE_NODE_PARAM);
     }
 
     /**
      * This method binds the users request of selected nodes to the tree's nodes.
-     *
-     * <p/>The behavior of this method is to swap the value of the selected state.
-     * Thus selected nodes will be deselected and deselected nodes will be selected.
      */
     public void bindSelectOrDeselectValues() {
-        String[] nodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
-        if (nodeIds == null || nodeIds.length <= 0) {
-            return;
-        }
-
-        selectOrDeselect(nodeIds);
+        selectOrDeselectNodeIds = getRequestValues(SELECT_TREE_NODE_PARAM);
     }
 
     /**
@@ -786,46 +775,66 @@ public class Tree extends AbstractControl {
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * additional initialization.
+     * This method binds any expand/collapse and select/deselect changes from
+     * the request parameters.
+     * <p/>
+     * In other words the node id's of expanded, collapsed, selected and
+     * deselected nodes are retrieved from the request.
      *
-     * @see net.sf.click.Control#onInit()
+     * @see #bindExpandOrCollapseValues()
+     * @see #bindSelectOrDeselectValues()
      */
-    public void onInit() {
+    public void bindRequestValue() {
+        bindExpandOrCollapseValues();
+        bindSelectOrDeselectValues();
     }
 
     /**
      * Processes user request to change state of the tree.
      * This implementation processes any expand/collapse and select/deselect
      * changes as requested.
+     * <p/>
+     * Thus expanded nodes will be collapsed and collapsed nodes will be
+     * expanded. Similarly selected nodes will be deselected and deselected
+     * nodes will be selected.
      *
      * @see net.sf.click.Control#onProcess()
-     * @see #bindExpandOrCollapseValues()
-     * @see #bindSelectOrDeselectValues()
+     * @see #expandOrCollapse(java.lang.String[])
+     * @see #selectOrDeselect(java.lang.String[])
      *
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        bindExpandOrCollapseValues();
-        bindSelectOrDeselectValues();
+        bindRequestValue();
+
+        ControlRegistry.registerActionEvent(this, new ActionListener() {
+            public boolean onAction(Control source) {
+                return postProcess();
+            }
+        });
         return true;
     }
 
     /**
-     * This method does nothing. Subclasses may override this method to perform
-     * pre rendering logic.
+     * Expand / collapse and select / deselect the tree nodes.
      *
-     * @see net.sf.click.Control#onRender()
+     * @return true to continue Page event processing or false otherwise
      */
-    public void onRender() {
-    }
+    boolean postProcess() {
+        if (isJavascriptEnabled()) {
+            // Populate the javascript handler with its state. This call will
+            // notify any tree listeners about new values.
+            javascriptHandler.init(getContext());
+        }
 
-    /**
-     * This method does nothing.
-     *
-     * @see net.sf.click.Control#onDestroy()
-     */
-    public void onDestroy() {
+        if (!ArrayUtils.isEmpty(expandOrCollapseNodeIds)) {
+            expandOrCollapse(expandOrCollapseNodeIds);
+        }
+
+        if (!ArrayUtils.isEmpty(selectOrDeselectNodeIds)) {
+            selectOrDeselect(selectOrDeselectNodeIds);
+        }
+        return true;
     }
 
     /**
@@ -839,6 +848,19 @@ public class Tree extends AbstractControl {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
+        // Does nothing
+    }
+
+    /**
+     * This method does nothing.
+     * <p/>
+     * Please use the {@link #addListener(TreeListener)} method instead.
+     *
+     * @see net.sf.click.Control#setListener(Object, String)
+     *
+     * @param listener the control's action listener
+     */
+    public void setActionListener(ActionListener listener) {
         // Does nothing
     }
 
@@ -904,6 +926,20 @@ public class Tree extends AbstractControl {
         if (isJavascriptEnabled()) {
             //Complete the lifecycle of the javascript handler.
             javascriptHandler.destroy();
+        }
+    }
+
+    /**
+     * Utility method that force the Tree to remove any entries it made in the
+     * HttpSession.
+     * <p/>
+     * <b>Note</b> Tree only stores a value in the Session when JavaScript
+     * is enabled and set to {@link #JAVASCRIPT_SESSION_POLICY}.
+     */
+    public void cleanupSession() {
+        Context context = getContext();
+        if (context.hasSession()) {
+            context.getSession().removeAttribute(SessionHandler.JS_HANDLER_SESSION_KEY);
         }
     }
 
@@ -2443,7 +2479,17 @@ public class Tree extends AbstractControl {
             for (int i = 0; i < nodes.length; i++) {
                 TreeNode currentNode = nodes[i];
                 if (i > 0 && !currentNode.isExpanded()) {
-                    expand(currentNode);
+
+                    // If the node to expand is root and isRootNodeDisplayed is
+                    // false, don't notify listeners
+                    if (currentNode.isRoot() && !isRootNodeDisplayed()
+                        && isNotifyListeners()) {
+                        setNotifyListeners(false);
+                        expand(currentNode);
+                        setNotifyListeners(true);
+                    } else {
+                        expand(currentNode);
+                    }
                 }
                 String id = currentNode.getId();
                 Entry entry = (Entry) selectTracker.get(id);
@@ -2502,7 +2548,16 @@ public class Tree extends AbstractControl {
                     }
                 } else {
                     if (currentNode.isExpanded()) {
-                        collapse(currentNode);
+                        // If the node to collapse is root and isRootNodeDisplayed
+                        // is false, don't notify listeners
+                        if (currentNode.isRoot() && !isRootNodeDisplayed()
+                            && isNotifyListeners()) {
+                            setNotifyListeners(false);
+                            collapse(currentNode);
+                            setNotifyListeners(true);
+                        } else {
+                            collapse(currentNode);
+                        }
                     }
                     selectTracker.remove(id);
                 }

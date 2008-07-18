@@ -23,7 +23,7 @@
  border: 0;
  margin: 0;
  padding: 0;
- width: 0; 
+ width: 0;
 }
 .treestyle ul.level1{
    margin-left: 0px;
@@ -65,7 +65,7 @@
 }
 .treestyle span.leafIcon {
     background: url(images/item.png) 0 50% no-repeat;
-    padding-left: 18px;
+    padding-left: 0.9em;
 }
 .treestyle span.expandedIcon {
     background: url(images/folder-open.png) 0 50% no-repeat;
@@ -80,14 +80,17 @@
     min-height: 18px;
     padding-left: 18px;
 }
-.treestyle .selected a,
-.treestyle .selected {
-    background-color: #0A246A;
+.treestyle .selected a {
     color: white;
+}
+.treestyle .selected {
     border: 1px solid #000000;
+    margin-left: 1px;
+    background-color: #0A246A;
+    color: #FFFFFF;
 }
 .treestyle .unselected {
-
+    margin-left: 1px;
 }
  
 /*needed for client side */
