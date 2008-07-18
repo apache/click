@@ -10,48 +10,16 @@
 This page provides a demonstration of the CheckboxTree component.
 
 <p/>
-In this example the Page is a TreeListener. The section below will display any events triggered by the tree:
+In this example the Page is a TreeListener and in the Log below it will print all
+events recorded.
 
-$form.startTag()
+$form
 
-<table style="margin: 1em;">
-    
-    #if ($form.error)
-    <tr>
-        <td colspan="2" style="color: red;"> $form.error </td>
-    </tr>
-    #end
-    <tr>
-        <td>
-            $checkboxTree
-        </td>
-    </tr>     
-     #foreach ($field in $form.fieldList)
-   #if (!$field.hidden)
-     #if (!$field.valid)
-     <tr>
-       <td colspan="2"> $field.error </td>
-     </tr>
-     #end
-
-   <tr>
-     <td> $field.label: </td><td> $field </td>
-   </tr>
-   #end
- #end
-    <tr>
-        <td>
-            $form.fields.select
-            $form.fields.reset
-        </td>
-    </tr>
-    
-</table>
-
-$form.endTag()
-
-<div style="width:55em; border:1px solid #CCCCCC">
-    <dl>
+<div style="width:55em; border:1px solid #CCCCCC; margin-top: 20px;">
+    <div style="border-bottom: 1px solid #CCC; background-color: #C0C0C0; padding: 5px">
+        <b>Log</b>
+    </div>
+    <dl style="padding-left: 5px">
         <dt><strong>Selected</strong></dt>
         <dd>#printState($selected)</dd>
 

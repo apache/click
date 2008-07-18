@@ -235,6 +235,8 @@ public class AdvancedTreePage extends BorderPage implements TreeListener {
      * Reset the tree to initial state
      */
     private void resetTree() {
+        // Remove any Session entries made by Tree
+        tree.cleanupSession();
 
         //Temporarily disable notification to any tree listeners while we reset the tree
         tree.setNotifyListeners(false);

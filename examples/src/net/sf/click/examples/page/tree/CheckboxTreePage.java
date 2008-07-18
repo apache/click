@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sf.click.ActionListener;
 import net.sf.click.Context;
+import net.sf.click.Control;
+import net.sf.click.control.BasicForm;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -25,8 +28,8 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
 
     public static final String TREE_NODES_SESSION_KEY = "checkboxTreeNodes";
 
-    private Tree tree;
-    private Form form;
+    private CheckboxTree tree;
+    private BasicForm form;
     private Submit okSubmit;
     private Reset resetBtn;
 
@@ -38,21 +41,31 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     public void onInit() {
         super.onInit();
 
+        // The checkbox tree needs to be placed inside a form so all the
+        // checkbox values can be submitted to the server when we submit
+        // the form.
+        // We create a BasicForm instead of a Form, because Form only works with
+        // Fields and in this example we want to add a Tree to the form.
+        form = new BasicForm("form");
+
         //Create the tree and tree model and add it to the page
         tree = buildTree();
         tree.addListener(this);
-        addControl(tree);
 
-        //The checkbox tree needs to be placed inside a form so all the
-        //checkbox values can be submitted to the server when we submit
-        //the form
-        form = new Form("form");
-        addControl(form);
+        // Add the tree to the form.
+        form.add(tree);
 
-        okSubmit = new Submit("select", "Select", this, "onSelectClick");
+        okSubmit = new Submit("select", "Select");
+        okSubmit.setActionListener(new ActionListener() {
+            public boolean onAction(Control source) {
+                return onSelectClick();
+            }
+        });
         resetBtn = new Reset("reset", "Reset");
         form.add(okSubmit);
         form.add(resetBtn);
+
+        addControl(form);
 
         //Build the options user interface for users to interactively
         //change the tree values.
@@ -70,6 +83,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         CheckboxTreeOptions options = new CheckboxTreeOptions();
         options.javascriptEnabled = jsEnabled.isChecked();
         options.rootNodeDisplayed = rootNodeDisplayed.isChecked();
+        options.selectChildNodes = selectChildNodes.isChecked();
         setSessionObject(options);
 
         //Apply users new options
@@ -86,34 +100,19 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         return true;
     }
 
-    /**
-     * @see net.sf.click.Page#onRender()
-     */
-    public void onRender() {
-        if(tree.isJavascriptEnabled()) {
-            //TODO remove
-            //Expand all nodes so that the entire tree is available on browser.
-            //The argument is false, because we do not want to notify the
-            //listeners of the expansion.
-            //The expandAll call should be made as late as possible because
-            //it is a dummy call with no value.
-            //tree.expandAll(false);
-        }
-    }
-
     // --------------------------------------------------------- Public Methods
 
     /**
      * Creates and return a new tree instance.
      */
-    public Tree createTree() {
+    public CheckboxTree createTree() {
         return new CheckboxTree("checkboxTree" );
     }
 
     /**
      * Build the tree model and stores it in the session.
      */
-    public Tree buildTree() {
+    public CheckboxTree buildTree() {
         tree = createTree();
 
         //Try and load the already stored nodes from the session.
@@ -229,12 +228,12 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     }
 
     // ------------------------------------------------------------------- NOTE
-    //The code below is not specific to the tree control. It was moved here
-    //so as not to distract the user from the use of the tree control.
+    //The code below is not specific to tree control usage.
 
     private Form optionsForm;
     private Checkbox jsEnabled = new Checkbox("jsEnabled", "JavaScript Enabled");
     private Checkbox rootNodeDisplayed = new Checkbox("rootNodeDisplayed", "Display root node");
+    private Checkbox selectChildNodes = new Checkbox("selectChildNodes", "Select child nodes");
     private Submit applyOptions = new Submit("apply", "Apply Options", this, "onApplyOptionsClick");
 
     /**
@@ -246,6 +245,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         FieldSet fieldSet = new FieldSet("options", "Form Options");
         fieldSet.add(jsEnabled);
         fieldSet.add(rootNodeDisplayed);
+        fieldSet.add(selectChildNodes);
         optionsForm.add(fieldSet);
 
         addControl(optionsForm);
@@ -260,12 +260,15 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         private static final long serialVersionUID = 1L;
         boolean javascriptEnabled= false;
         boolean rootNodeDisplayed = false;
+        boolean selectChildNodes = false;
     }
 
     /**
      * Reset the tree to initial state
      */
     private void resetTree() {
+        // Remove any Session entries made by Tree
+        tree.cleanupSession();
 
         //Temporarily disable notification to any tree listeners while we reset the tree
         tree.setNotifyListeners(false);
@@ -322,12 +325,16 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
         CheckboxTreeOptions options = (CheckboxTreeOptions) getSessionObject(CheckboxTreeOptions.class);
         jsEnabled.setChecked(options.javascriptEnabled);
         rootNodeDisplayed.setChecked(options.rootNodeDisplayed);
+        selectChildNodes.setChecked(options.selectChildNodes);
 
         //Enable or disable javascript functionality based on users current option
         enableJavascript(options.javascriptEnabled);
 
         //Indicates if we want to display the root node or not.
         tree.setRootNodeDisplayed(options.rootNodeDisplayed);
+
+        //Indicates if the tree should recursively select child nodes.
+        tree.setSelectChildNodes(options.selectChildNodes);
     }
 
     /**
