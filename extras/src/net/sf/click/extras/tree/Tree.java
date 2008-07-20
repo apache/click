@@ -216,8 +216,10 @@ public class Tree extends AbstractControl {
     /** The tree's hierarchical data model. */
     protected TreeNode rootNode;
 
+    /** Array of ids that must be selected or deselected. */
     protected String[] selectOrDeselectNodeIds = null;
 
+    /** Array of ids that must be expanded or collapsed. */
     protected String[] expandOrCollapseNodeIds = null;
 
     /** Callback provider for users to decorate tree nodes. */

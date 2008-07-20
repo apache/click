@@ -235,7 +235,7 @@ public class CheckboxTree extends Tree {
      */
     public void bindSelectOrDeselectValues() {
         // With html forms, only "checked" checkbox values are submitted
-        // to the server. So the request does not supply us the information 
+        // to the server. So the request does not supply us the information
         // needed to calculate the nodes to be deselected. To find the nodes to
         // deselect, the newly selected nodes are subtracted from the currently
         // selected nodes. This implies that the tree's model is stored between
