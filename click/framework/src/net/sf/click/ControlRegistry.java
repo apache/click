@@ -66,10 +66,10 @@ public class ControlRegistry {
     // -------------------------------------------------------------- Variables
 
     /** The list of registered event sources. */
-    protected List eventSourceList;
+    private List eventSourceList;
 
     /** The list of registered event listeners. */
-    protected List eventListenerList;
+    private List eventListenerList;
 
     // --------------------------------------------------------- Public Methods
 
@@ -101,6 +101,30 @@ public class ControlRegistry {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Return the list of event listeners.
+     *
+     * @return list of event listeners
+     */
+    List getEventListenerList() {
+        if (eventListenerList == null) {
+            eventListenerList = new ArrayList();
+        }
+        return eventListenerList;
+    }
+
+    /**
+     * Return the list of event sources.
+     *
+     * @return list of event sources
+     */
+    List getEventSourceList() {
+        if (eventSourceList == null) {
+            eventSourceList = new ArrayList();
+        }
+        return eventSourceList;
     }
 
     /**
@@ -189,32 +213,6 @@ public class ControlRegistry {
         }
 
         return registryStack;
-    }
-
-    // -------------------------------------------------------- Private Methods
-
-    /**
-     * Return the list of event listeners.
-     *
-     * @return list of event listeners
-     */
-    private List getEventListenerList() {
-        if (eventListenerList == null) {
-            eventListenerList = new ArrayList();
-        }
-        return eventListenerList;
-    }
-
-    /**
-     * Return the list of event sources.
-     *
-     * @return list of event sources
-     */
-    private List getEventSourceList() {
-        if (eventSourceList == null) {
-            eventSourceList = new ArrayList();
-        }
-        return eventSourceList;
     }
 
     // ---------------------------------------------------------- Inner Classes
