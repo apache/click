@@ -88,6 +88,9 @@ public class EditCustomer extends BorderPage {
             Integer id = (Integer) idField.getValueObject();
             Customer customer = getCustomerService().getCustomerForID(id);
 
+            if (customer == null) {
+                customer = new Customer();
+            }
             form.copyTo(customer);
 
             getCustomerService().saveCustomer(customer);

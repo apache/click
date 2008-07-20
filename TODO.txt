@@ -1,4 +1,4 @@
-Click 1.5-M1 Release
+Click 1.5-M2 Release
 --------------------
 BUGS
 * 

@@ -845,14 +845,20 @@ Please ensure you have configured build.properties</echo>
             <link href="http://click.sourceforge.net/docs/click-api/"/>
             <link href="http://www.hibernate.org/hib_docs/v3/api/"/>
             <link href="http://static.springframework.org/spring/docs/2.5.x/api/"/>
-            <bottom>${root.properties.highlighter}</bottom>
          </javadoc>
-      
+
+         <!-- Add syntax highlighter to each javadoc page -->
+         <replace dir="@{destdir}" value="${root.properties.highlighter}&lt;/BODY&gt;">
+            <include name="**/*.html"/>
+            <replacetoken>&lt;/BODY&gt;</replacetoken>
+         </replace>
+
          <!-- Add IE Mark of the Web to each javadoc page -->
          <replace dir="@{destdir}" value="&lt;!-- saved from url=(0014)about:internet --&gt;">
             <include name="**/*.html"/>
             <replacetoken>&lt;!--NewPage--&gt;</replacetoken>
          </replace>
+
          <!-- 
          IE throws exception when trying to access parent frame and Mark of the Web is active.
          Disable setting of window title, which needs to access the parent frame.

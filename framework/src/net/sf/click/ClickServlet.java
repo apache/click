@@ -480,6 +480,9 @@ public class ClickServlet extends HttpServlet {
         final HttpServletResponse response = context.getResponse();
         final boolean isPost = context.isPost();
 
+        PageImports pageImports = createPageImports(page);
+        page.setPageImports(pageImports);
+
         // Support direct access of click-error.htm
         if (page instanceof ErrorPage) {
             ErrorPage errorPage = (ErrorPage) page;
@@ -832,9 +835,6 @@ public class ClickServlet extends HttpServlet {
         if (page.getFormat() == null) {
             page.setFormat(configService.createFormat());
         }
-
-        PageImports pageImports = createPageImports(page);
-        page.setPageImports(pageImports);
 
         return page;
     }
@@ -1512,11 +1512,11 @@ public class ClickServlet extends HttpServlet {
 
     /**
      * Creates and returns a new PageImports instance for the specified page.
-        *
-          * @param page the page to create a new PageImports instance for
-        * @return the new PageImports instance
-        */
-       protected PageImports createPageImports(Page page) {
+     *
+     * @param page the page to create a new PageImports instance for
+     * @return the new PageImports instance
+    */
+    protected PageImports createPageImports(Page page) {
         return new PageImports(page);
     }
 
