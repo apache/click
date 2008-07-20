@@ -83,9 +83,11 @@ new features including Module support, bug fixes, documentation and example upda
     </ul>
   </dd>
   <p/>
-    <dt><a name="1.5-M2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Development Release - Version 1.5 M2 - ?? July 2008</div></dt>
+    <dt><a name="1.5-M2"></a><a name="stable-release" href="#"></a><div class="release-header">Latest Development Release - Version 1.5 M2 - 20 July 2008</div></dt>
   <dd>
     <div style="margin-left:-2em;margin-bottom:1em;"> 
+    <b>IMPORTANT</b> be sure to read the <a href="#1.5-M1-upgrade-path">upgrade path</a> when upgrading from Click 1.4 or earlier.
+    <p/>
     Click 1.5 M2 introduced major enhancements to Control listener support.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
@@ -116,7 +118,7 @@ public class MyPage extends Page {
         Control listeners will be registered on the <a href="click-api/net/sf/click/ControlRegistry.html">ControlRegistry</a>
         and triggered after the onProcess event finish. The net effect of this change
         is that when Control listeners are triggered, all request values have been bound to Controls,
-        and can safely be referred to from listener [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
+        and can safely be referred to from the listener [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-365">365</a>].
       </li>
       <li class="change">
         Added button support to FieldSet, so that buttons can be rendered inside
