@@ -66,10 +66,10 @@ public class ControlRegistry {
     // -------------------------------------------------------------- Variables
 
     /** The list of registered event sources. */
-    private List eventSourceList;
+    protected List eventSourceList;
 
     /** The list of registered event listeners. */
-    private List eventListenerList;
+    protected List eventListenerList;
 
     // --------------------------------------------------------- Public Methods
 
