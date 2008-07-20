@@ -223,8 +223,8 @@ public class MockContext extends Context {
         return initContext(servletConfig, request, response, clickServlet,
             controlRegistry);
     }
-    
-    
+
+
     /**
      * Creates and returns a new Context instance for the specified mock
      * objects.
