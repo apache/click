@@ -155,7 +155,7 @@ import org.apache.commons.lang.StringUtils;
  *  &lt;servlet-name&gt;<span class="green">ClickServlet</span>&lt;/servlet-name&gt;
  * .. </pre>
  *
- * This filter will automaitically set the configured click.xml charset as the
+ * This filter will automatically set the configured click.xml charset as the
  * requests character encoding.
  *
  * <h3>Frequently Asked Questions</h3>
@@ -165,7 +165,7 @@ import org.apache.commons.lang.StringUtils;
  * writing to the browser.  The browser will receive the gzipped content, unzip it,
  * and display the content in its original form.
  * <p/>
- * As the GZIP compresssion greatly reduces the size of HTML, CSS and JavaScript
+ * As the GZIP compression greatly reduces the size of HTML, CSS and JavaScript
  * content these resources are downloaded faster and displayed quicker in the
  * users browser.
  * <p/>
@@ -191,7 +191,7 @@ import org.apache.commons.lang.StringUtils;
  * simply edit a javascript or style sheet and the browser will pick up the
  * latest version.
  *
- * <h3>Acknowledgements</h3>
+ * <h3>Acknowledgments</h3>
  * This class is adapted from the Jakarta CompressionFilter from
  * <a href="http://jakarta.apache.org/tomcat">Tomcat</a>.
  * <p/>
