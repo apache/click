@@ -2107,19 +2107,21 @@ public class ClickUtils {
     }
 
     /**
-     * Return the HTML escaped string for the given character value.
+     * Append the HTML escaped string for the given character value to the
+     * buffer.
      *
      * @param aChar the character value to escape
+     * @param buffer the string buffer to append the escaped value to
      * @return the HTML escaped string for the given character value
      */
-    static String escapeChar(char aChar) {
+    static void appendEscapeChar(char aChar, HtmlStringBuffer buffer) {
         int index = aChar;
 
         if (index < HTML_ENTITIES.length - 1 && HTML_ENTITIES[index] != null) {
-            return HTML_ENTITIES[index];
+            buffer.append(HTML_ENTITIES[index]);
 
         } else {
-            return String.valueOf(aChar);
+            buffer.append(aChar);
         }
     }
 
