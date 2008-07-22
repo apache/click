@@ -1182,7 +1182,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         } else if (modeValue.equalsIgnoreCase("trace")) {
             mode = TRACE;
         } else {
-            logService.error("invalid application mode: " + mode);
+            logService.error("invalid application mode: " + modeValue);
             mode = DEBUG;
         }
 
