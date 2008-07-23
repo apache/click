@@ -20,6 +20,7 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -289,7 +290,8 @@ public class ActionLink extends AbstractLink {
      * @return the ActionLink HTML href attribute
      */
     public String getHref(Object value) {
-        String uri = ClickUtils.getRequestURI(getContext().getRequest());
+        Context context = getContext();
+        String uri = ClickUtils.getRequestURI(context.getRequest());
 
         HtmlStringBuffer buffer =
                 new HtmlStringBuffer(uri.length() + getName().length() + 40);
@@ -303,7 +305,7 @@ public class ActionLink extends AbstractLink {
             buffer.append("&");
             buffer.append(VALUE);
             buffer.append("=");
-            buffer.append(ClickUtils.encodeUrl(value, getContext()));
+            buffer.append(ClickUtils.encodeUrl(value, context));
         }
 
         if (hasParameters()) {
@@ -313,7 +315,7 @@ public class ActionLink extends AbstractLink {
                 if (!name.equals(ACTION_LINK) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue =
-                        ClickUtils.encodeUrl(paramValue, getContext());
+                        ClickUtils.encodeUrl(paramValue, context);
                     buffer.append("&");
                     buffer.append(name);
                     buffer.append("=");
@@ -322,7 +324,7 @@ public class ActionLink extends AbstractLink {
             }
         }
 
-        return getContext().getResponse().encodeURL(buffer.toString());
+        return context.getResponse().encodeURL(buffer.toString());
     }
 
     /**
@@ -442,14 +444,15 @@ public class ActionLink extends AbstractLink {
      * value.
      */
     public void bindRequestValue() {
-        if (getContext().isMultipartRequest()) {
+        Context context = getContext();
+        if (context.isMultipartRequest()) {
             return;
         }
 
-        clicked = getName().equals(getContext().getRequestParameter(ACTION_LINK));
+        clicked = getName().equals(context.getRequestParameter(ACTION_LINK));
 
         if (clicked) {
-            HttpServletRequest request = getContext().getRequest();
+            HttpServletRequest request = context.getRequest();
             Enumeration paramNames = request.getParameterNames();
 
             while (paramNames.hasMoreElements()) {

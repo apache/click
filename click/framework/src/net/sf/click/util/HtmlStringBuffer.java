@@ -185,13 +185,15 @@ public class HtmlStringBuffer {
         }
 
         String string = value.toString();
+        append(string);
+        /*
         int length = string.length();
         char aChar;
         for (int i = 0; i < length; i++) {
             aChar = string.charAt(i);
 
             ClickUtils.appendEscapeChar(aChar, this);
-        }
+        }*/
 
         return this;
     }

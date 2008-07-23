@@ -22,6 +22,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -229,7 +230,8 @@ public class ActionButton extends Button {
      * @return the ActionButton JavaScript href attribute
      */
     public String getOnClick(Object value) {
-        String uri = ClickUtils.getRequestURI(getContext().getRequest());
+        Context context = getContext();
+        String uri = ClickUtils.getRequestURI(context.getRequest());
 
         HtmlStringBuffer buffer =
             new HtmlStringBuffer(uri.length() + getName().length() + 40);
@@ -244,7 +246,7 @@ public class ActionButton extends Button {
             buffer.append("&");
             buffer.append(VALUE);
             buffer.append("=");
-            buffer.append(ClickUtils.encodeUrl(value, getContext()));
+            buffer.append(ClickUtils.encodeUrl(value, context));
         }
 
         if (hasParameters()) {
@@ -254,7 +256,7 @@ public class ActionButton extends Button {
                 if (!name.equals(ACTION_BUTTON) && !name.equals(VALUE)) {
                     Object paramValue = getParameters().get(name);
                     String encodedValue
-                        = ClickUtils.encodeUrl(paramValue, getContext());
+                        = ClickUtils.encodeUrl(paramValue, context);
                     buffer.append("&");
                     buffer.append(name);
                     buffer.append("=");
@@ -264,7 +266,7 @@ public class ActionButton extends Button {
         }
 
         return "javascript:document.location.href='"
-               + getContext().getResponse().encodeURL(buffer.toString())
+               + context.getResponse().encodeURL(buffer.toString())
                + "';";
     }
 
@@ -428,14 +430,15 @@ public class ActionButton extends Button {
      * value.
      */
     public void bindRequestValue() {
-        if (getContext().isMultipartRequest()) {
+        Context context = getContext();
+        if (context.isMultipartRequest()) {
             return;
         }
 
-        clicked = getName().equals(getContext().getRequestParameter(ACTION_BUTTON));
+        clicked = getName().equals(context.getRequestParameter(ACTION_BUTTON));
 
         if (clicked) {
-            HttpServletRequest request = getContext().getRequest();
+            HttpServletRequest request = context.getRequest();
 
             Enumeration paramNames = request.getParameterNames();
 

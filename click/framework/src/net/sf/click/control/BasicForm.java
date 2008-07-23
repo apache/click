@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.service.FileUploadService;
@@ -145,9 +146,10 @@ public class BasicForm extends AbstractContainer {
      * @return the form "action" attribute URL value.
      */
     public String getActionURL() {
-        HttpServletResponse response = getContext().getResponse();
+        Context context = getContext();
+        HttpServletResponse response = context.getResponse();
         if (actionURL == null) {
-            HttpServletRequest request = getContext().getRequest();
+            HttpServletRequest request = context.getRequest();
             return response.encodeURL(ClickUtils.getRequestURI(request));
 
         } else {
@@ -347,13 +349,14 @@ public class BasicForm extends AbstractContainer {
      * @return true if the page request is a submission from this form
      */
     public boolean isFormSubmission() {
-        String requestMethod = getContext().getRequest().getMethod();
+        Context context = getContext();
+        String requestMethod = context.getRequest().getMethod();
 
         if (!getMethod().equalsIgnoreCase(requestMethod)) {
             return false;
         }
 
-        return getName().equals(getContext().getRequestParameter(FORM_NAME));
+        return getName().equals(context.getRequestParameter(FORM_NAME));
     }
 
     /**
@@ -887,11 +890,12 @@ public class BasicForm extends AbstractContainer {
         }
 
         // CLK-333. Don't regenerate submit tokens for Ajax requests.
-        if (getContext().isAjaxRequest()) {
+        Context context = getContext();
+        if (context.isAjaxRequest()) {
             return true;
         }
 
-        String resourcePath = getContext().getResourcePath();
+        String resourcePath = context.getResourcePath();
         int slashIndex = resourcePath.indexOf('/');
         if (slashIndex != -1) {
             resourcePath = resourcePath.replace('/', '_');
@@ -903,25 +907,25 @@ public class BasicForm extends AbstractContainer {
             resourcePath = '_' + resourcePath;
         }
 
-        final HttpServletRequest request = getContext().getRequest();
+        final HttpServletRequest request = context.getRequest();
         final String submitTokenName =
             SUBMIT_CHECK + getName() + resourcePath;
 
         boolean isValidSubmit = true;
 
         // If not this form exit
-        String formName = getContext().getRequestParameter(FORM_NAME);
+        String formName = context.getRequestParameter(FORM_NAME);
 
         // Only test if submit for this form
-        if (!getContext().isForward()
+        if (!context.isForward()
             && request.getMethod().equalsIgnoreCase(getMethod())
             && getName().equals(formName)) {
 
             Long sessionTime =
-                (Long) getContext().getSessionAttribute(submitTokenName);
+                (Long) context.getSessionAttribute(submitTokenName);
 
             if (sessionTime != null) {
-                String value = getContext().getRequestParameter(submitTokenName);
+                String value = context.getRequestParameter(submitTokenName);
                 if (value == null || value.length() == 0) {
                     // CLK-289. If a session attribute exists for the
                     // SUBMIT_CHECK, but no request parameter, we assume the
@@ -952,7 +956,7 @@ public class BasicForm extends AbstractContainer {
         final Long time = new Long(System.currentTimeMillis());
         field.setValueObject(time);
 
-        getContext().setSessionAttribute(submitTokenName, time);
+        context.setSessionAttribute(submitTokenName, time);
 
         if (isValidSubmit) {
             return true;

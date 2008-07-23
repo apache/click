@@ -578,7 +578,9 @@ public class Panel extends AbstractContainer {
      */
     protected Map createTemplateModel() {
 
-        final HttpServletRequest request = getContext().getRequest();
+        Context context = getContext();
+
+        final HttpServletRequest request = context.getRequest();
 
         final Page page = ClickUtils.getParentPage(this);
 
@@ -607,7 +609,7 @@ public class Panel extends AbstractContainer {
 
         renderModel.put("request", request);
 
-        renderModel.put("response", getContext().getResponse());
+        renderModel.put("response", context.getResponse());
 
         renderModel.put("session", new SessionMap(request.getSession(false)));
 
