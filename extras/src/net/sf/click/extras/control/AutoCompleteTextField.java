@@ -23,6 +23,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.click.Context;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -199,9 +200,10 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return the HTML CSS and JavaScript includes
      */
     public String getHtmlImports() {
+        Context context = getContext();
         String[] args = {
-            getContext().getRequest().getContextPath(),
-            ClickUtils.getResourceVersionIndicator(getContext()),
+            context.getRequest().getContextPath(),
+            ClickUtils.getResourceVersionIndicator(context),
             getId(),
             getPage().getPath(),
             getAutoCompleteOptions()
@@ -262,13 +264,14 @@ public abstract class AutoCompleteTextField extends TextField {
      * @return false if an auto complete request, otherwise returns true
      */
     public boolean onProcess() {
-        if (getContext().isPost()) {
+        Context context = getContext();
+        if (context.isPost()) {
             // If an auto complete POST request then render suggested list,
             // otherwise continue as normal
             if (getForm().isFormSubmission()) {
                 return super.onProcess();
-            } else if (getContext().isAjaxRequest()) {
-                String criteria = getContext().getRequestParameter(getName());
+            } else if (context.isAjaxRequest()) {
+                String criteria = context.getRequestParameter(getName());
                 if (criteria != null) {
                     List autoCompleteList = getAutoCompleteList(criteria);
                     renderAutoCompleteList(autoCompleteList);

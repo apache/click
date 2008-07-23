@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.control.Field;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -292,11 +293,12 @@ public class ColorPicker extends Field {
      * @param buffer the specified buffer to render the control's output to
      */
     public void render(HtmlStringBuffer buffer) {
+        Context context = getContext();
         Map values = new HashMap();
 
         values.put("id", getId());
         values.put("field", this);
-        values.put("path", getContext().getRequest().getContextPath());
+        values.put("path", context.getRequest().getContextPath());
 
         if (isColor(getValue())) {
             values.put("back_color", getValue());
@@ -339,7 +341,7 @@ public class ColorPicker extends Field {
         values.put("noColorMsg", getMessage("no-color"));
         values.put("closeMsg", getMessage("close"));
 
-        buffer.append(getContext().renderTemplate(ColorPicker.class, values));
+        buffer.append(context.renderTemplate(ColorPicker.class, values));
     }
 
     /**
