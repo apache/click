@@ -18,6 +18,7 @@ package net.sf.click.control;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.sf.click.Context;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
 
@@ -133,11 +134,12 @@ public class PageLink extends AbstractLink {
             throw new IllegalStateException("target pageClass is not defined");
         }
 
+        Context context = getContext();
         HtmlStringBuffer buffer = new HtmlStringBuffer();
 
-        buffer.append(getContext().getRequest().getContextPath());
+        buffer.append(context.getRequest().getContextPath());
 
-        String pagePath = getContext().getPagePath(getPageClass());
+        String pagePath = context.getPagePath(getPageClass());
 
         if (pagePath != null && pagePath.endsWith(".jsp")) {
             pagePath = StringUtils.replace(pagePath, ".jsp", ".htm");
@@ -156,14 +158,14 @@ public class PageLink extends AbstractLink {
 
                 buffer.append(name);
                 buffer.append("=");
-                buffer.append(ClickUtils.encodeUrl(value, getContext()));
+                buffer.append(ClickUtils.encodeUrl(value, context));
                 if (i.hasNext()) {
                     buffer.append("&");
                 }
             }
         }
 
-        return getContext().getResponse().encodeURL(buffer.toString());
+        return context.getResponse().encodeURL(buffer.toString());
     }
 
     /**

@@ -15,6 +15,7 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.Context;
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.HtmlStringBuffer;
@@ -181,8 +182,10 @@ public class ImageSubmit extends Submit {
      */
     public void bindRequestValue() {
 
+        Context context = getContext();
+
         //  Note IE does not submit name
-        String xValue = getContext().getRequestParameter(getName() + ".x");
+        String xValue = context.getRequestParameter(getName() + ".x");
 
         if (xValue != null) {
             this.clicked = true;
@@ -193,7 +196,7 @@ public class ImageSubmit extends Submit {
                 nfe.printStackTrace();
             }
 
-            String yValue = getContext().getRequestParameter(getName() + ".y");
+            String yValue = context.getRequestParameter(getName() + ".y");
             try {
                 this.y = Integer.parseInt(yValue);
             } catch (NumberFormatException nfe) {

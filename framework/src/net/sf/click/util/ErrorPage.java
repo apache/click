@@ -15,6 +15,7 @@
  */
 package net.sf.click.util;
 
+import net.sf.click.Context;
 import net.sf.click.Page;
 
 /**
@@ -112,14 +113,14 @@ public class ErrorPage extends Page {
      */
     public void onInit() {
         addModel("mode", getMode());
-
+        Context context = getContext();
         if (getError() != null) {
             ErrorReport errorReport =
                 new ErrorReport(error,
                                 getPageClass(),
                                 false,
-                                getContext().getRequest(),
-                                getContext().getServletContext());
+                                context.getRequest(),
+                                context.getServletContext());
 
             addModel("errorReport", errorReport);
         }
