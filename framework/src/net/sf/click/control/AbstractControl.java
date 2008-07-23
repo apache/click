@@ -435,14 +435,7 @@ public abstract class AbstractControl implements Control {
      */
     public Map getMessages() {
         if (messages == null) {
-            if (getContext() != null) {
-                messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
-
-            } else {
-                String msg = "Cannot initialize messages as context not set "
-                    + "for link: " + getName();
-                throw new IllegalStateException(msg);
-            }
+            messages = new MessagesMap(getClass(), CONTROL_MESSAGES);
         }
         return messages;
     }
