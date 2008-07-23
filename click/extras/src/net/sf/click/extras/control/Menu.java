@@ -638,7 +638,8 @@ public class Menu extends AbstractControl {
             return getContext().getResponse().encodeURL(getPath());
 
         } else {
-            return getContext().getResponse().encodeURL(getContext().getRequest().getContextPath() + "/" + getPath());
+            Context context = getContext();
+            return context.getResponse().encodeURL(context.getRequest().getContextPath() + "/" + getPath());
         }
     }
 

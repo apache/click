@@ -490,25 +490,26 @@ public class LinkDecorator implements Decorator, Serializable {
          * @see net.sf.click.Control#onProcess()
          */
         public boolean onProcess() {
+            Context context = getContext();
             if (anyLinkOrButtonClicked()) {
-                String pageNumber = table.getContext().getRequestParameter(Table.PAGE);
+                String pageNumber = context.getRequestParameter(Table.PAGE);
 
                 if (StringUtils.isNotBlank(pageNumber)) {
                     table.setPageNumber(Integer.parseInt(pageNumber));
                 }
 
-                String column = table.getContext().getRequestParameter(Table.COLUMN);
+                String column = context.getRequestParameter(Table.COLUMN);
                 if (column != null) {
                     table.setSortedColumn(column);
                 }
 
-                String ascending = table.getContext().getRequestParameter(Table.ASCENDING);
+                String ascending = context.getRequestParameter(Table.ASCENDING);
                 if (ascending != null) {
                     table.setSortedAscending("true".equals(ascending));
                 }
 
                 // Flip sorting order
-                if ("true".equals(table.getContext().getRequestParameter(Table.SORT))) {
+                if ("true".equals(context.getRequestParameter(Table.SORT))) {
                     table.setSortedAscending(!table.isSortedAscending());
                 }
             }
@@ -524,6 +525,7 @@ public class LinkDecorator implements Decorator, Serializable {
          * false otherwise
          */
         protected boolean anyLinkOrButtonClicked() {
+            Context context = getContext();
             boolean clicked = false;
 
             //Loop over all links and check if any was clicked
@@ -535,7 +537,7 @@ public class LinkDecorator implements Decorator, Serializable {
 
                         String name = actionLink.getName();
                         if (name != null) {
-                            clicked = name.equals(table.getContext().getRequestParameter(ActionLink.ACTION_LINK));
+                            clicked = name.equals(context.getRequestParameter(ActionLink.ACTION_LINK));
                         } else {
                             throw new IllegalStateException("ActionLink name not defined");
                         }
@@ -554,7 +556,7 @@ public class LinkDecorator implements Decorator, Serializable {
 
                     String name = button.getName();
                     if (name != null) {
-                        clicked = name.equals(table.getContext().getRequestParameter(ActionButton.ACTION_BUTTON));
+                        clicked = name.equals(context.getRequestParameter(ActionButton.ACTION_BUTTON));
                     } else {
                         throw new IllegalStateException("ActionButton name not defined");
                     }

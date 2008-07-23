@@ -26,6 +26,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.control.Field;
 import net.sf.click.control.Option;
 import net.sf.click.util.ClickUtils;
@@ -481,13 +482,14 @@ public class CheckList extends Field {
      * @return the two import tags
      */
     public String getHtmlImports() {
+        Context context = getContext();
         HtmlStringBuffer buffer = new HtmlStringBuffer(400);
 
-        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, getContext()));
+        buffer.append(ClickUtils.createHtmlImport(HTML_IMPORTS, context));
 
         if (isSortable()) {
             buffer.append(ClickUtils.createHtmlImport(JS_SORT_HTML_IMPORTS,
-                getContext()));
+                context));
 
             // Script to execute
             HtmlStringBuffer script = new HtmlStringBuffer(50);
@@ -690,6 +692,8 @@ public class CheckList extends Field {
      */
     public void bindRequestValue() {
 
+        Context context = getContext();
+
         // Page developer has not initialized options, which are required
         // to support sorting
         if (getOptionList().isEmpty()) {
@@ -699,7 +703,7 @@ public class CheckList extends Field {
         // Load the selected items.
         this.selectedValues = new ArrayList();
 
-        String[] values = getContext().getRequestParameterValues(getName());
+        String[] values = context.getRequestParameterValues(getName());
 
         if (values != null) {
             for (int i = 0; i < values.length; i++) {
@@ -708,7 +712,7 @@ public class CheckList extends Field {
         }
 
         if (isSortable()) {
-            String[] order = getContext().getRequest().getParameterValues(
+            String[] order = context.getRequest().getParameterValues(
                     getName() + "_order");
             if (order != null) {
                 this.sortorder = new ArrayList(order.length);

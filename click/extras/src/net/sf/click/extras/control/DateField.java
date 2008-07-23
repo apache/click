@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
+import net.sf.click.Context;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
@@ -403,15 +404,17 @@ public class DateField extends TextField {
             return null;
         }
 
+        Context context = getContext();
+
         Object args[] = {
-                getContext().getRequest().getContextPath(),
+                context.getRequest().getContextPath(),
                 getStyle(),
                 getLocale().getLanguage(),
                 getId(),
                 getCalendarPattern(),
                 new Boolean(getShowTime()),
                 new Integer(getFirstDayOfWeek() - 1),
-                ClickUtils.getResourceVersionIndicator(getContext())
+                ClickUtils.getResourceVersionIndicator(context)
         };
 
         return MessageFormat.format(HTML_IMPORTS, args);
@@ -546,11 +549,12 @@ public class DateField extends TextField {
         super.render(buffer);
 
         if (!isReadonly() && !isDisabled()) {
+            Context context = getContext();
             buffer.append("<img align=\"top\" ");
             buffer.append("style=\"cursor:hand\" src=\"");
-            buffer.append(getContext().getRequest().getContextPath());
+            buffer.append(context.getRequest().getContextPath());
             buffer.append("/click/calendar/calendar");
-            buffer.append(ClickUtils.getResourceVersionIndicator(getContext()));
+            buffer.append(ClickUtils.getResourceVersionIndicator(context));
             buffer.append(".gif\"");
             String id = getId();
             if (id != null) {
@@ -642,16 +646,14 @@ public class DateField extends TextField {
     protected Locale getLocale() {
         Locale locale = null;
 
-        if (getContext() != null) {
-            locale = getContext().getLocale();
-            String lang = locale.getLanguage();
-            if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
-                return locale;
-            }
+        locale = getContext().getLocale();
+        String lang = locale.getLanguage();
+        if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
+            return locale;
         }
 
         locale = Locale.getDefault();
-        String lang = locale.getLanguage();
+        lang = locale.getLanguage();
         if (Arrays.binarySearch(SUPPORTTED_LANGUAGES, lang) >= 0) {
             return locale;
         }

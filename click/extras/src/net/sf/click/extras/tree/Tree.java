@@ -443,16 +443,17 @@ public class Tree extends AbstractControl {
      * @return the HTML head import statements for the control stylesheet
      */
     public String getHtmlImports() {
+        Context context = getContext();
         HtmlStringBuffer buffer = new HtmlStringBuffer(256);
         if (isJavascriptEnabled()) {
             buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_IMPORTS,
-                getContext()));
+                context));
             if (javascriptPolicy == JAVASCRIPT_COOKIE_POLICY) {
                 buffer.append(ClickUtils.createHtmlImport(JAVASCRIPT_COOKIE_IMPORTS,
-                    getContext()));
+                    context));
             }
         }
-        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS, getContext()));
+        buffer.append(ClickUtils.createHtmlImport(TREE_IMPORTS, context));
         return buffer.toString();
     }
 
@@ -1526,7 +1527,8 @@ public class Tree extends AbstractControl {
      * @return the HTML href attribute
      */
     protected String getHref(Map parameters) {
-        String uri = ClickUtils.getRequestURI(getContext().getRequest());
+        Context context = getContext();
+        String uri = ClickUtils.getRequestURI(context.getRequest());
 
         HtmlStringBuffer buffer =
                 new HtmlStringBuffer(uri.length() + (parameters.size() * 20));
@@ -1542,14 +1544,14 @@ public class Tree extends AbstractControl {
 
                 buffer.append(name);
                 buffer.append("=");
-                buffer.append(ClickUtils.encodeUrl(value, getContext()));
+                buffer.append(ClickUtils.encodeUrl(value, context));
                 if (i.hasNext()) {
                     buffer.append("&");
                 }
             }
         }
 
-        return getContext().getResponse().encodeURL(buffer.toString());
+        return context.getResponse().encodeURL(buffer.toString());
     }
 
     //----------------------------------------------------------- Inner classes
@@ -2206,11 +2208,12 @@ public class Tree extends AbstractControl {
          * @param name the cookie's name
          */
         protected void setCookie(String value, String name) {
+            Context context = getContext();
             if (value == null) {
-                ClickUtils.setCookie(getContext().getRequest(), getContext().getResponse(),
+                ClickUtils.setCookie(context.getRequest(), context.getResponse(),
                         name, value, 0, "/");
             } else {
-                ClickUtils.setCookie(getContext().getRequest(), getContext().getResponse(),
+                ClickUtils.setCookie(context.getRequest(), context.getResponse(),
                         name, value, -1, "/");
             }
         }

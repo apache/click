@@ -385,7 +385,7 @@ public class CayenneForm extends Form {
         if (classField.getValueObject() != null) {
             className = classField.getValue();
 
-        } else if (getContext() != null) {
+        } else {
             className = getContext().getRequestParameter(FO_CLASS);
         }
 

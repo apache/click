@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.click.Context;
 import net.sf.click.control.Button;
 import net.sf.click.control.Column;
 import net.sf.click.control.Field;
@@ -368,19 +369,20 @@ public class FormTable extends Table {
                 }
             }
         } else {
-            String page = getContext().getRequestParameter(PAGE);
+            Context context = getContext();
+            String page = context.getRequestParameter(PAGE);
             getForm().getField(PAGE).setValue(page);
 
-            String column = getContext().getRequestParameter(COLUMN);
+            String column = context.getRequestParameter(COLUMN);
             getForm().getField(COLUMN).setValue(column);
 
-            String ascending = getContext().getRequestParameter(ASCENDING);
+            String ascending = context.getRequestParameter(ASCENDING);
             getForm().getField(ASCENDING).setValue(ascending);
 
             // Flip sorting order
             // Table.onProcess() flips the sort order, so we apply a flip here as well so that
             // the value of ASCENDING field in the form is in sync with the table.
-            String sort = getContext().getRequestParameter(SORT);
+            String sort = context.getRequestParameter(SORT);
             if ("true".equals(sort) || ascending == null) {
                 getForm().getField(ASCENDING).setValue("true".equals(ascending) ? "false" : "true");
             }
