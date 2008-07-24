@@ -147,6 +147,9 @@ public class Page {
 
     // ----------------------------------------------------- Instance Variables
 
+    /** The thread local context. */
+    private transient Context context;
+
     /** The list of page controls. */
     protected List controls;
 
@@ -172,6 +175,9 @@ public class Page {
      */
     protected Map model = new HashMap();
 
+    /** The Page header imports. */
+    protected PageImports pageImports;
+
     /** The path of the page template to render. */
     protected String path;
 
@@ -186,9 +192,6 @@ public class Page {
 
     /** The path of the page border template to render.*/
     protected String template;
-
-    /** The Page header imports. */
-    protected PageImports pageImports;
 
     // --------------------------------------------------------- Event Handlers
 
@@ -337,6 +340,7 @@ public class Page {
      * the session.
      */
     public void onDestroy() {
+        context = null;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -392,7 +396,10 @@ public class Page {
      * @return the request context of the page
      */
     public Context getContext() {
-        return Context.getThreadLocalContext();
+        if (context == null) {
+            context = Context.getThreadLocalContext();
+        }
+        return context;
     }
 
     /**
@@ -757,8 +764,31 @@ public class Page {
      *
      * @return the Page header imports
      */
-    public final PageImports getPageImports() {
+    public PageImports getPageImports() {
         return pageImports;
+    }
+
+    /**
+     * Set the Page header imports.
+     * <p/>
+     * PageImports are used define the CSS and JavaScript imports and blocks
+     * to be included in the page template.
+     * <p/>
+     * The PageImports references will be included in the Page model when the
+     * following methods are invoked:
+     * <ul>
+     * <li>{@link ClickServlet#createTemplateModel(Page)} - for template pages</li>
+     * <li>{@link ClickServlet#setRequestAttributes(Page)} - for JSP pages</li>
+     * </ul>
+     * <p/>
+     * If you need to tailor the page imports rendered, override the
+     * {@link #getPageImports()} method and modify the PageImports object
+     * returned.
+     *
+     * @param pageImports the new pageImports instance to set
+     */
+    public void setPageImports(PageImports pageImports) {
+        this.pageImports = pageImports;
     }
 
     /**
@@ -950,28 +980,4 @@ public class Page {
         this.template = template;
     }
 
-    // ------------------------------------------------ Package Private Methods
-
-    /**
-     * Set the Page header imports.
-     * <p/>
-     * PageImports are used define the CSS and JavaScript imports and blocks
-     * to be included in the page template.
-     * <p/>
-     * The PageImports references will be included in the Page model when the
-     * following methods are invoked:
-     * <ul>
-     * <li>{@link ClickServlet#createTemplateModel(Page)} - for template pages</li>
-     * <li>{@link ClickServlet#setRequestAttributes(Page)} - for JSP pages</li>
-     * </ul>
-     * <p/>
-     * If you need to tailor the page imports rendered, override the
-     * {@link #getPageImports()} method and modify the PageImports object
-     * returned.
-     *
-     * @param pageImports the new pageImports instance to set
-     */
-    void setPageImports(PageImports pageImports) {
-        this.pageImports = pageImports;
-    }
 }
