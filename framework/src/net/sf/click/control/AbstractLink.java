@@ -447,7 +447,7 @@ public abstract class AbstractLink extends AbstractControl {
 
             buffer.appendAttribute("href", getHref());
             buffer.appendAttribute("id", getId());
-            buffer.appendAttribute("title", getTitle());
+            buffer.appendAttributeEscaped("title", getTitle());
             if (getTabIndex() > 0) {
                 buffer.appendAttribute("tabindex", getTabIndex());
             }
@@ -461,13 +461,13 @@ public abstract class AbstractLink extends AbstractControl {
 
             } else {
                 buffer.elementStart("img");
-                buffer.appendAttribute("border", "0");
+                buffer.appendAttribute("border", 0);
                 buffer.appendAttribute("class", "link");
 
                 if (getTitle() != null) {
-                    buffer.appendAttribute("alt", getTitle());
+                    buffer.appendAttributeEscaped("alt", getTitle());
                 } else {
-                    buffer.appendAttribute("alt", getLabel());
+                    buffer.appendAttributeEscaped("alt", getLabel());
                 }
 
                 String src = getImageSrc();
