@@ -2125,6 +2125,29 @@ public class ClickUtils {
         }
     }
 
+    /**
+     * Append the HTML escaped string for the given character value to the
+     * buffer.
+     *
+     * @param aChar the character value to escape
+     * @param buffer the string buffer to append the escaped value to
+     * @return the HTML escaped string for the given character value
+     */
+    static void appendEscapeString(String value, HtmlStringBuffer buffer) {
+        char aChar;
+        for (int i = 0, size = value.length(); i < size; i++) {
+            aChar = value.charAt(i);
+            int index = aChar;
+
+            if (index < HTML_ENTITIES.length - 1 && HTML_ENTITIES[index] != null) {
+                buffer.append(HTML_ENTITIES[index]);
+
+            } else {
+                buffer.append(aChar);
+            }
+        }
+    }
+
     // -------------------------------------------------------- Private Methods
 
     private static Set getObjectPropertyNames(Object object) {
