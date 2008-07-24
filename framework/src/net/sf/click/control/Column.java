@@ -1137,10 +1137,7 @@ public class Column implements Serializable {
 
         if (getTitleProperty() != null) {
             Object titleValue = getProperty(getTitleProperty(), row);
-            if (titleValue != null) {
-                String title = ClickUtils.escapeHtml(titleValue.toString());
-                buffer.appendAttribute("title", title);
-            }
+            buffer.appendAttributeEscaped("title", titleValue);
         }
         if (hasAttributes()) {
             buffer.appendAttributes(getAttributes());
