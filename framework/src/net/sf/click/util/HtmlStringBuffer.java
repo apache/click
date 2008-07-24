@@ -186,12 +186,48 @@ public class HtmlStringBuffer {
 
         String string = value.toString();
 
-        int length = string.length();
-        char aChar;
-        for (int i = 0; i < length; i++) {
-            aChar = string.charAt(i);
+        boolean requiresEscape = false;
+        for (int i = 0, size = string.length(); i < size; i++) {
+            if (ClickUtils.requiresEscape(string.charAt(i))) {
+                requiresEscape = true;
+                break;
+            }
+        }
 
-            ClickUtils.appendEscapeChar(aChar, this);
+        if (requiresEscape) {
+            ClickUtils.appendEscapeString(string, this);
+
+        } else {
+            append(value);
+        }
+
+        return this;
+    }
+
+    /**
+     * Append the given HTML attribute name and value to the string buffer, and
+     * do not escape the attribute value.
+     * <p/>
+     * For example:
+     * <pre class="javaCode">
+     *    appendAttribute(<span class="st">"size"</span>, 10)  <span class="green">-&gt;</span>  <span class="st">size="10"</span> </pre>
+     *
+     * @param name the HTML attribute name
+     * @param value the HTML attribute value
+     * @return  a reference to this <tt>HtmlStringBuffer</tt> object
+     * @throws IllegalArgumentException if name is null
+     */
+    public HtmlStringBuffer appendAttribute(String name, Object value) {
+        if (name == null) {
+            throw new IllegalArgumentException("Null name parameter");
+        }
+
+        if (value != null) {
+            append(" ");
+            append(name);
+            append("=\"");
+            append(value);
+            append("\"");
         }
 
         return this;
@@ -213,7 +249,7 @@ public class HtmlStringBuffer {
      * @return  a reference to this <tt>HtmlStringBuffer</tt> object
      * @throws IllegalArgumentException if name is null
      */
-    public HtmlStringBuffer appendAttribute(String name, Object value) {
+    public HtmlStringBuffer appendAttributeEscaped(String name, Object value) {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
@@ -304,7 +340,7 @@ public class HtmlStringBuffer {
 
             if (!name.equals("id")) {
                 Object value = entry.getValue();
-                appendAttribute(name, value);
+                appendAttributeEscaped(name, value);
             }
         }
 
