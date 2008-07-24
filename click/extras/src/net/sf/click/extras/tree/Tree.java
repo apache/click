@@ -20,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1093,8 +1094,8 @@ public class Tree extends AbstractControl {
      */
     protected void renderExpandAndCollapseAction(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
-        Map hrefParameters = new HashMap(1);
-        hrefParameters.put(EXPAND_TREE_NODE_PARAM, treeNode.getId());
+        Map hrefParameters =
+            Collections.singletonMap(EXPAND_TREE_NODE_PARAM, treeNode.getId());
         buffer.appendAttribute("href", getHref(hrefParameters));
 
         buffer.appendAttribute("class", "spacer");
@@ -1180,8 +1181,8 @@ public class Tree extends AbstractControl {
     protected void renderValue(HtmlStringBuffer buffer, TreeNode treeNode) {
         buffer.elementStart("a");
 
-        Map hrefParameters = new HashMap(1);
-        hrefParameters.put(SELECT_TREE_NODE_PARAM, treeNode.getId());
+        Map hrefParameters =
+            Collections.singletonMap(SELECT_TREE_NODE_PARAM, treeNode.getId());
         buffer.appendAttribute("href", getHref(hrefParameters));
 
         buffer.closeTag();
