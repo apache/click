@@ -356,6 +356,15 @@ public class Menu extends AbstractControl {
     }
 
     /**
+     * @see net.sf.click.Control#getContext()
+     *
+     * @return the Page request Context
+     */
+    public Context getContext() {
+        return Context.getThreadLocalContext();
+    }
+
+    /**
      * Return true if the menu path refers to an external resource.
      *
      * @return true if the menu path refers to an external resource
@@ -722,7 +731,7 @@ public class Menu extends AbstractControl {
             }
 
             if (getTitle() != null && getTitle().length() > 0) {
-                buffer.appendAttribute("title", getTitle());
+                buffer.appendAttributeEscaped("title", getTitle());
             }
 
             buffer.closeTag();
@@ -733,9 +742,9 @@ public class Menu extends AbstractControl {
                 buffer.appendAttribute("class", "link");
 
                 if (getTitle() != null) {
-                    buffer.appendAttribute("alt", getTitle());
+                    buffer.appendAttributeEscaped("alt", getTitle());
                 } else {
-                    buffer.appendAttribute("alt", getLabel());
+                    buffer.appendAttributeEscaped("alt", getLabel());
                 }
 
                 String src = getImageSrc();
