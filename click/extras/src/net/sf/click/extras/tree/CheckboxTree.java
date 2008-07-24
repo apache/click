@@ -17,7 +17,7 @@ package net.sf.click.extras.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +30,7 @@ import net.sf.click.Context;
 import net.sf.click.control.Decorator;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
 import org.apache.commons.lang.ArrayUtils;
 
 /**
@@ -379,8 +380,8 @@ public class CheckboxTree extends Tree {
                     if (isJavascriptEnabled()) {
                         //create a href to interact with the checkbox on browser
                         buffer.elementStart("a");
-                        Map hrefParameters = new HashMap(1);
-                        hrefParameters.put(SELECT_TREE_NODE_PARAM, treeNode.getId());
+                        Map hrefParameters =
+                            Collections.singletonMap(SELECT_TREE_NODE_PARAM, treeNode.getId());
                         buffer.appendAttribute("href", getHref(hrefParameters));
 
                         ((CheckboxJavascriptRenderer) javascriptHandler.getJavascriptRenderer()).renderValue(buffer);
@@ -390,6 +391,7 @@ public class CheckboxTree extends Tree {
                         }
                         buffer.elementEnd("a");
                         buffer.append("\n");
+
                     } else {
                         //just print normal value
                         if (treeNode.getValue() != null) {
