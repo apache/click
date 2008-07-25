@@ -356,15 +356,6 @@ public class Menu extends AbstractControl {
     }
 
     /**
-     * @see net.sf.click.Control#getContext()
-     *
-     * @return the Page request Context
-     */
-    public Context getContext() {
-        return Context.getThreadLocalContext();
-    }
-
-    /**
      * Return true if the menu path refers to an external resource.
      *
      * @return true if the menu path refers to an external resource
