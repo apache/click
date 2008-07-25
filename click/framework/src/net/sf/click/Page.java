@@ -147,9 +147,6 @@ public class Page {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The thread local context. */
-    private transient Context context;
-
     /** The list of page controls. */
     protected List controls;
 
@@ -340,7 +337,6 @@ public class Page {
      * the session.
      */
     public void onDestroy() {
-        context = null;
     }
 
     // --------------------------------------------------------- Public Methods
@@ -396,10 +392,7 @@ public class Page {
      * @return the request context of the page
      */
     public Context getContext() {
-        if (context == null) {
-            context = Context.getThreadLocalContext();
-        }
-        return context;
+        return Context.getThreadLocalContext();
     }
 
     /**
