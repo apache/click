@@ -752,6 +752,9 @@ public class Page {
      * <li>{@link ClickServlet#setRequestAttributes(Page)} - for JSP pages</li>
      * </ul>
      * <p/>
+     * If you need to tailor the page imports rendered, override this method
+     * and modify the PageImports object returned.
+     * <p/>
      * If you need to create a custom PageImports, override the method
      * {@link ClickServlet#createPageImports(net.sf.click.Page)}
      *
@@ -777,6 +780,9 @@ public class Page {
      * If you need to tailor the page imports rendered, override the
      * {@link #getPageImports()} method and modify the PageImports object
      * returned.
+     * <p/>
+     * If you need to create a custom PageImports, override the method
+     * {@link ClickServlet#createPageImports(net.sf.click.Page)}
      *
      * @param pageImports the new pageImports instance to set
      */

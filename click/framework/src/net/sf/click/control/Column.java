@@ -1013,10 +1013,22 @@ public class Column implements Serializable {
         }
     }
 
+    /**
+     * Set the column render id attribute status.
+     *
+     * @param value set the column render id attribute status
+     */
     public void setRenderId(boolean value) {
         renderId = Boolean.valueOf(value);
     }
 
+    /**
+     * Returns the column render id attribute status. If the column render id
+     * status is not defined the value will be inherited from the
+     * {@link Table#renderId} property.
+     *
+     * @return the column render id attribute status
+     */
     public boolean getRenderId() {
         if (renderId == null) {
             if (getTable() != null) {
