@@ -82,7 +82,37 @@ import org.xml.sax.EntityResolver;
  */
 public class ClickUtils {
 
+    // ------------------------------------------------------- Public Constants
+
+    /**
+     * The resource <tt>versioning</tt> request attribute: key: &nbsp;
+     * <tt>enable-resource-version</tt>.
+     * <p/>
+     * If this attribute is set to <tt>true</tt> and Click is running in
+     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
+     * {@link net.sf.click.Control#getHtmlImports()} will have a
+     * <tt>version indicator</tt> added to their path.
+     *
+     * @see net.sf.click.Control#getHtmlImports()
+     * @see net.sf.click.util.ClickUtils#createHtmlImport(String, Context)
+     * @see net.sf.click.util.ClickUtils#getResourceVersionIndicator(Context)
+     */
+    public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
+
+    /**
+     * The default Click configuration filename: &nbsp;
+     * "<tt>/WEB-INF/click.xml</tt>".
+     */
+    public static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
+
+    /** The static web resource version number indicator string. */
+    public static final String RESOURCE_VERSION_INDICATOR =
+        "_" + getClickVersion();
+
     // ------------------------------------------------------ Private Constants
+
+    /** The cached resource version indicator. */
+    private static String cachedResourceVersionIndicator;
 
     /**
      * Character used to separate username and password in persistent cookies.
@@ -393,33 +423,6 @@ public class ClickUtils {
         // <!-- rsaquo is proposed but not yet ISO standardized -->
         HTML_ENTITIES[8364] = "&euro;";   //  -- euro sign, U+20AC NEW -->
     };
-
-    // ------------------------------------------------------- Public Constants
-
-    /**
-     * The resource <tt>versioning</tt> request attribute: key: &nbsp;
-     * <tt>enable-resource-version</tt>.
-     * <p/>
-     * If this attribute is set to <tt>true</tt> and Click is running in
-     * <tt>production</tt> or <tt>profile</tt> mode, resources returned from
-     * {@link net.sf.click.Control#getHtmlImports()} will have a
-     * <tt>version indicator</tt> added to their path.
-     *
-     * @see net.sf.click.Control#getHtmlImports()
-     * @see net.sf.click.util.ClickUtils#createHtmlImport(String, Context)
-     * @see net.sf.click.util.ClickUtils#getResourceVersionIndicator(Context)
-     */
-    public static final String ENABLE_RESOURCE_VERSION = "enable-resource-version";
-
-    /**
-     * The default Click configuration filename: &nbsp;
-     * "<tt>/WEB-INF/click.xml</tt>".
-     */
-    public static final String DEFAULT_APP_CONFIG = "/WEB-INF/click.xml";
-
-    /** The static web resource version number indicator string. */
-    public static final String RESOURCE_VERSION_INDICATOR =
-        "_" + getClickVersion();
 
     // --------------------------------------------------------- Public Methods
 
@@ -898,6 +901,10 @@ public class ClickUtils {
      * @return a version indicator for web resources
      */
     public static String getResourceVersionIndicator(Context context) {
+        if (cachedResourceVersionIndicator != null) {
+            return cachedResourceVersionIndicator;
+        }
+
         ConfigService configService = getConfigService(context.getServletContext());
 
         boolean isProductionModes = configService.isProductionMode()
@@ -906,7 +913,8 @@ public class ClickUtils {
         if (isProductionModes
             && isEnableResourceVersion(context)) {
 
-            return RESOURCE_VERSION_INDICATOR;
+            cachedResourceVersionIndicator = RESOURCE_VERSION_INDICATOR;
+            return cachedResourceVersionIndicator;
 
         } else {
             return "";
