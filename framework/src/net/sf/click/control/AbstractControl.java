@@ -118,9 +118,6 @@ public abstract class AbstractControl implements Control {
 
     // ----------------------------------------------------- Instance Variables
 
-    /** The thread local context. */
-    private transient Context context;
-
     /** The control's action listener. */
     protected ActionListener actionListener;
 
@@ -304,10 +301,7 @@ public abstract class AbstractControl implements Control {
      * @return the Page request Context
      */
     public Context getContext() {
-        if (context == null) {
-            context = Context.getThreadLocalContext();
-        }
-        return context;
+        return Context.getThreadLocalContext();
     }
 
     /**
@@ -513,7 +507,6 @@ public abstract class AbstractControl implements Control {
      * @see net.sf.click.Control#onDestroy()
      */
     public void onDestroy() {
-        context = null;
     }
 
     /**
