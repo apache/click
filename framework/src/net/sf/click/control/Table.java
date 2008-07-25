@@ -812,10 +812,21 @@ public class Table extends AbstractControl {
         this.pageSize = pageSize;
     }
 
+    /**
+     * Returns the column render id attribute status. The default value
+     * is false.
+     *
+     * @return the column render id attribute status, default is false
+     */
     public boolean getRenderId() {
         return renderId;
     }
 
+    /**
+     * Set the column render id attribute status.
+     *
+     * @param renderId set the column render id attribute status
+     */
     public void setRenderId(boolean renderId) {
         this.renderId = renderId;
     }
