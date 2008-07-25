@@ -252,6 +252,9 @@ public class Column implements Serializable {
     /** The property name of the row object to render. */
     protected String name;
 
+    /** The column render id attribute status. The default value is false. */
+    protected Boolean renderId;
+
     /** The method cached for rendering column values. */
     protected transient Map methodCache;
 
@@ -1010,6 +1013,23 @@ public class Column implements Serializable {
         }
     }
 
+    public void setRenderId(boolean value) {
+        renderId = Boolean.valueOf(value);
+    }
+
+    public boolean getRenderId() {
+        if (renderId == null) {
+            if (getTable() != null) {
+                return getTable().getRenderId();
+            } else {
+                return false;
+            }
+
+        } else {
+            return renderId.booleanValue();
+        }
+    }
+
     /**
      * Set the column sortable status.
      *
@@ -1132,7 +1152,9 @@ public class Column implements Serializable {
         }
 
         buffer.elementStart("td");
-        buffer.appendAttribute("id", getId() + "_" + rowIndex);
+        if (getRenderId()) {
+            buffer.appendAttribute("id", getId() + "_" + rowIndex);
+        }
         buffer.appendAttribute("class", getDataClass());
 
         if (getTitleProperty() != null) {

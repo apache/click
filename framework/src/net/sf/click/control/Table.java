@@ -344,6 +344,12 @@ public class Table extends AbstractControl {
     protected int pageSize;
 
     /**
+     * The default column render id attribute status. The default value is
+     * false.
+     */
+    protected boolean renderId;
+
+    /**
      * The list Table rows. Please note the rowList is cleared in table
      * {@link #onDestroy()} method at the end of each request.
      */
@@ -804,6 +810,14 @@ public class Table extends AbstractControl {
      */
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public boolean getRenderId() {
+        return renderId;
+    }
+
+    public void setRenderId(boolean renderId) {
+        this.renderId = renderId;
     }
 
     /**
