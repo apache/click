@@ -121,13 +121,13 @@ public abstract class AbstractControl implements Control {
     /** The control's action listener. */
     protected ActionListener actionListener;
 
-    /** The Field attributes Map. */
+    /** The Control attributes Map. */
     protected Map attributes;
 
-    /** The Field localized messages Map. */
+    /** The Control localized messages Map. */
     protected transient Map messages;
 
-    /** The Field name. */
+    /** The Control name. */
     protected String name;
 
     /** The control's parent. */
@@ -324,9 +324,9 @@ public abstract class AbstractControl implements Control {
             throw new IllegalArgumentException("Null name parameter");
         }
         //If control has a parent control, it cannot change its name.
-        //To change a fields name, it must be removed from its parent first,
+        //To change a control name, it must be removed from its parent first,
         //and reattached. The reason is that controls added to parents
-        //are added to a hashMap keyed on their name. So changing the field's
+        //are added to a hashMap keyed on their name. So changing the control's
         //name while its inside the map, will make it irretrievable.
         if (getParent() == null) {
             this.name = name;
@@ -401,7 +401,7 @@ public abstract class AbstractControl implements Control {
      *
      * @param name resource name of the message
      * @param arg the message argument to format
-     * @return the named localized message for the field
+     * @return the named localized message for the control
      */
     public String getMessage(String name, Object arg) {
         Object[] args = new Object[] { arg };
