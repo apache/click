@@ -2,6 +2,7 @@ package net.sf.click.control;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import net.sf.click.MockContext;
 
 /**
  * Miscellaneous Control tests.
@@ -65,6 +66,20 @@ public class ControlTest extends TestCase {
                 + "setName(String) should throw an exception");
         } catch (IllegalStateException expected) {
             //success
+        }
+    }
+
+    /**
+     * CLK-414. Checks that Click vetoes the addition of a Container to itself.
+     */
+    public void testAddContainerToItself() {
+        MockContext context = MockContext.initContext();
+        try {
+            BasicForm form = new BasicForm("form");
+            form.add(form);
+            Assert.assertFalse("Cannot add container to itself", true);
+        } catch (RuntimeException expected) {
+            Assert.assertTrue(true);
         }
     }
 }
