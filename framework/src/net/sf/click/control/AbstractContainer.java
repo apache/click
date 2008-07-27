@@ -109,7 +109,9 @@ public abstract class AbstractContainer extends AbstractControl implements
         if (control == null) {
             throw new IllegalArgumentException("Null control parameter");
         }
-
+        if (control == this) {
+            throw new IllegalArgumentException("Cannot add container to itself");
+        }
         int size = getControls().size();
         if (index > size || index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
