@@ -453,6 +453,9 @@ public abstract class AbstractControl implements Control {
      * @param parent the parent of the Control
      */
     public void setParent(Object parent) {
+        if (parent == this) {
+            throw new IllegalArgumentException("Cannot set parent to itself");
+        }
         this.parent = parent;
     }
 
