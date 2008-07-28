@@ -766,9 +766,14 @@ public class Select extends Field {
                         throw new RuntimeException(msg);
                     }
 
-                    Option firstOption = (Option) getOptionList().get(0);
+                    String firstValue = "";
+                    Object firstEntry = getOptionList().get(0);
+                    if (firstEntry instanceof Option) {
+                        Option option = (Option) firstEntry;
+                        firstValue = option.getValue();
 
-                    if (firstOption.getValue().equals(getValue())) {
+                    }
+                    if (firstValue.equals(getValue())) {
                         setErrorMessage("select-error");
                     }
                 }
