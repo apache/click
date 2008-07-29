@@ -1570,7 +1570,7 @@ public class Form extends BasicForm {
      * @param columns the number of form layout table columns
      */
     protected void renderControls(HtmlStringBuffer buffer,
-        AbstractContainer container, List controls, Map fieldWidths, int columns) {
+        Container container, List controls, Map fieldWidths, int columns) {
 
         buffer.append("<table class=\"fields\"");
         String containerId = container.getId();
