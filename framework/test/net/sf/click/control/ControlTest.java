@@ -12,6 +12,11 @@ import net.sf.click.MockContext;
 public class ControlTest extends TestCase {
 
     /**
+     * TODO this test is commented because of backward compatibility issues.
+     * There are use cases where a Control's name can change for example using
+     * the Fly pattern. Perhaps look at introducing
+     * Container#changeName(Control control, String newName);
+     *
      * Description: A Control cannot change its name after it was added to a 
      * container. The reason is that when a control is added to a container, its
      * name is used as the hash in the container's HashMap. If a controls name 
@@ -27,6 +32,7 @@ public class ControlTest extends TestCase {
      * is not returning the Control.
      */
     public void testChangingControlNameAfterParentIsSet() {
+        /*
         BasicForm form = new BasicForm("form");
 
         // Run test with a Control having a name 
@@ -67,6 +73,7 @@ public class ControlTest extends TestCase {
         } catch (IllegalStateException expected) {
             //success
         }
+        */
     }
 
     /**
