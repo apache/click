@@ -9,8 +9,8 @@ public class HtmlStringBufferTest extends TestCase {
         
         buffer.elementStart("input");
         buffer.appendAttribute("type", "text");
-        buffer.appendAttribute("value", "bl'ah\"s");
-        buffer.elementEnd();      
+        buffer.appendAttributeEscaped("value", "bl'ah\"s");
+        buffer.elementEnd();
         assertEquals("<input type=\"text\" value=\"bl'ah&quot;s\"/>", buffer.toString());
         
         buffer = new HtmlStringBuffer();
@@ -24,7 +24,7 @@ public class HtmlStringBufferTest extends TestCase {
         assertEquals(value, buffer.toString());
         
         buffer = new HtmlStringBuffer();
-        buffer.appendAttribute("test", "if (i < 3) alert('too small');");
+        buffer.appendAttributeEscaped("test", "if (i < 3) alert('too small');");
         value = " test=\"if (i &lt; 3) alert('too small');\"";
         assertEquals(value, buffer.toString());
         
