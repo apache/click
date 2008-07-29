@@ -29,6 +29,7 @@ public class TableTest extends TestCase {
         foos.add(new Foo("foo2"));
 
         Table table = new Table();
+        table.setRenderId(true);
         table.setName("Foos");
         table.setRowList(foos);
         Column column = new Column("Name");
