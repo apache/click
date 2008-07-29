@@ -44,8 +44,8 @@ import java.io.Serializable;
  * </pre>
  *
  * To test for the existence of a flash attribute and then render it, you should
- * set it as a Velocity variable, because once it has been accessed from the
- * session it is removed. For example:
+ * set it as a variable in your template, because once it has been accessed from
+ * the session it is removed. Using Velocity as an example:
  *
  * <pre class="codeHtml">
  * <span class="kw">#set</span> (<span class="st">$message</span> = <span class="st">$session.message</span>)

@@ -47,7 +47,7 @@ import org.apache.commons.lang.StringUtils;
  * </tr>
  * </table>
  *
- * The Panel class uses a Velocity template for rendering any model data or
+ * The Panel class uses a template for rendering any model data or
  * controls you have added to the Page.
  * <p/>
  * Panel is a very powerful component and provides the same capability as a
@@ -103,7 +103,7 @@ import org.apache.commons.lang.StringUtils;
  * <h3>Template Model</h3>
  *
  * To render the panel's template, a model is created which is merged with
- * the Velocity template.  This model will include the pages model values,
+ * the template.  This model will include the pages model values,
  * plus any Panel defined model values, with the Panels values overriding any
  * Page defined values. In addition a number of values are automatically added
  * model. These values include:
@@ -142,7 +142,7 @@ public class Panel extends AbstractContainer {
     /** The list of sub panels. */
     protected List panels;
 
-    /** The path of the Velocity template to render. */
+    /** The path of the template to render. */
     protected String template;
 
     // ----------------------------------------------------------- Constructors
@@ -160,7 +160,7 @@ public class Panel extends AbstractContainer {
      * Create a Panel with the given name and template path.
      *
      * @param name the name of the panel
-     * @param template the Velocity template
+     * @param template the template path
      */
     public Panel(String name, String template) {
         setName(name);
@@ -171,7 +171,7 @@ public class Panel extends AbstractContainer {
      * Create a Panel with the given name, id attribute and template path.
      *
      * @param name the name of the panel
-     * @param template the Velocity template path
+     * @param template the template path
      * @param id the id HTML attribute value
      */
     public Panel(String name, String id, String template) {
@@ -487,7 +487,7 @@ public class Panel extends AbstractContainer {
 
     /**
      * Return the panels model map. The model is used populate the
-     * Velocity Context with is merged with the panel template before rendering.
+     * Template Context with is merged with the panel template before rendering.
      *
      * @return the Page's model map
      */
@@ -512,18 +512,18 @@ public class Panel extends AbstractContainer {
     }
 
     /**
-     * Return the path of the Velocity template to render.
+     * Return the path of the template to render.
      *
-     * @return the path of the Velocity template to render
+     * @return the path of the template to render
      */
     public String getTemplate() {
         return template;
     }
 
     /**
-     * Set the path of the Velocity template to render.
+     * Set the path of the template to render.
      *
-     * @param template the path of the Velocity template to render
+     * @param template the path of the template to render
      */
     public void setTemplate(String template) {
         this.template = template;
@@ -533,7 +533,7 @@ public class Panel extends AbstractContainer {
 
     /**
      * Render the HTML string representation of the Panel. The panel will be
-     * rendered by merging the Velocity {@link #template} with the template
+     * rendered by merging the {@link #template} with the template
      * model. The template model is created using {@link #createTemplateModel()}.
      * <p/>
      * If a Panel template is not defined, a template based on the classes
@@ -557,7 +557,7 @@ public class Panel extends AbstractContainer {
     // ------------------------------------------------------ Protected Methods
 
     /**
-     * Create a model to merge with the Velocity template. The model will
+     * Create a model to merge with the template. The model will
      * include the pages model values, plus any Panel defined model values, and
      * a number of automatically added model values. Note panel model values
      * will override any page defined model values.
@@ -574,7 +574,7 @@ public class Panel extends AbstractContainer {
      * <li>session - the {@link SessionMap} adaptor for the users HttpSession</li>
      * </ul>
      *
-     * @return a new model to merge with the Velocity template.
+     * @return a new model to merge with the template.
      */
     protected Map createTemplateModel() {
 
