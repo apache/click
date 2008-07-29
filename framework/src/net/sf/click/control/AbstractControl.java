@@ -323,20 +323,7 @@ public abstract class AbstractControl implements Control {
         if (name == null) {
             throw new IllegalArgumentException("Null name parameter");
         }
-        //If control has a parent control, it cannot change its name.
-        //To change a control name, it must be removed from its parent first,
-        //and reattached. The reason is that controls added to parents
-        //are added to a hashMap keyed on their name. So changing the control's
-        //name while its inside the map, will make it irretrievable.
-        if (getParent() == null) {
-            this.name = name;
-        } else {
-            throw new IllegalStateException("You cannot change the name of "
-                + "a control that is already attached to its parent control. "
-                + "To change the name of an attached control, first remove "
-                + "the control from its parent, change its name, then re-add it "
-                + "again.");
-        }
+        this.name = name;
     }
 
     /**
