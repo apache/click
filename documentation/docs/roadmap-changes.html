@@ -106,9 +106,20 @@ new features including Module support, bug fixes, documentation and example upda
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-374">374</a>].
       </li>
       <li class="change">
-        Fixed Page serialization issues with non serializable Format and PageImport objects. 
+        Fixed Page serialization issues with non serializable Format and PageImport objects.
         This issue was identifier by Alexei Sokolov
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-416">416</a>].
+      </li>
+      <li class="change">
+        Updated AbstractContainerField control moving it to Click Core.
+      </li>
+      <li class="change">
+        Updated <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>
+        to extend <a href="click-api/net/sf/click/control/AbstractContainerField.html">AbstractContainerField</a>,
+        meaning FieldSet is both a <a href="click-api/net/sf/click/control/Field.html">Field</a> and 
+        <a href="click-api/net/sf/click/control/Container.html">Container</a>.
+        This provide better backward compatibility for users upgrading from 
+        previous releases.
       </li>
     </ul>
   </dd>
@@ -493,14 +504,17 @@ public class HtmlTable extends AbstractControl {
        method.
       </li>
       <li class="upgrade">
-       Certain controls were retrofitted as containers including <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>.
-       Unfortunately this change breaks backwards compatibility because FieldSet does not extend from Field anymore.
+       Certain controls were retrofitted as containers. These include the new
+       <a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>,
+       <a href="click-api/net/sf/click/control/Form.html">Form</a>, <a href="click-api/net/sf/click/control/FieldSet.html">FieldSet</a>
+       and <a href="click-api/net/sf/click/control/Panel.html">Panel</a>.
        <p/>
-       If FieldSet is added to a Form, that Form will render the FieldSet fields.
-       This allows the Form to apply its properties to the FieldSet fields. For example the Form's column
-       count will be applied to the FieldSet fields as well.
+       Please note that when FieldSet is added to a Form, that Form will render
+       the FieldSet and its fields. This allows the Form to apply its properties to
+       the FieldSet. For example the Form's column count will be set as the column
+       count of the FieldSet as well.
        <p/>
-       If FieldSet is added to a BasicForm however, FieldSet will layout its own child controls.
+       However if FieldSet is added to a BasicForm, FieldSet will layout its own child controls.
       </li>
       <li class="upgrade">
        Click 1.5 M1 introduces two new properties: <span style="color:navy;">file-size-limit-exceeded-error</span>
