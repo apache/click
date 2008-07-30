@@ -223,7 +223,7 @@ public interface Control extends Serializable {
      * Set the name of the Control. Each control name must be unique in the
      * containing Page model or the parent container.
      * <p/>
-     * <b>Please note:</b> changing the name of a Control after it has been 
+     * <b>Please note:</b> changing the name of a Control after it has been
      * added to its parent container is undefined. Thus it is  best <b>not</b>
      * to change the name of a Control once its been set.
      *
