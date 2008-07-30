@@ -15,6 +15,7 @@
  */
 package net.sf.click.util;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -73,7 +74,9 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class Format {
+public class Format implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The request context locale. */
     protected Locale locale;
