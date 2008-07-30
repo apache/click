@@ -173,7 +173,7 @@ public class Page {
     protected Map model = new HashMap();
 
     /** The Page header imports. */
-    protected PageImports pageImports;
+    protected transient PageImports pageImports;
 
     /** The path of the page template to render. */
     protected String path;
