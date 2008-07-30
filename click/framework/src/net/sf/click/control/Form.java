@@ -647,7 +647,7 @@ public class Form extends BasicForm {
         if (control instanceof Field) {
             Field field = (Field) control;
             if (StringUtils.isBlank(field.getName())) {
-               String msg = "Field name not defined: " + field.getClass().getName();
+                String msg = "Field name not defined: " + field.getClass().getName();
                 throw new IllegalArgumentException(msg);
             }
 
@@ -693,6 +693,11 @@ public class Form extends BasicForm {
                     ((TextArea) field).setCols(getDefaultFieldSize());
                 }
             }
+
+        } else if (control instanceof FieldSet) {
+            FieldSet fieldSet = (FieldSet) control;
+            super.insert(fieldSet, getControls().size());
+            fieldSet.setForm(this);
 
         } else {
             String msg = "Only Fields and FieldSets can be added to the Form "
@@ -756,6 +761,33 @@ public class Form extends BasicForm {
     }
 
     /**
+     * Add the fieldSet to the form and specify the fieldSet's width in columns.
+     * <p/>
+     *
+     * @param fieldSet the fieldSet to add to the form
+     * @param width the width of the fieldSet in table columns
+     * @return the fieldSet added to this form
+     * @throws IllegalArgumentException if the fieldSet is null, the form
+     * already contains a control with the same name, if the fieldSet's parent
+     * is a Page or the width &lt; 1
+     */
+    public FieldSet add(FieldSet fieldSet, int width) {
+        if (fieldSet == null) {
+            throw new IllegalArgumentException("FieldSet parameter cannot be null");
+        }
+        if (width < 1) {
+            throw new IllegalArgumentException("Invalid field width: " + width);
+        }
+
+        add(fieldSet);
+
+        if (fieldSet.getName() != null) {
+            getFieldWidths().put(fieldSet.getName(), new Integer(width));
+        }
+        return fieldSet;
+    }
+
+    /**
      * @see Container#remove(net.sf.click.Control)
      *
      * @param control the control to remove from the container
@@ -787,6 +819,14 @@ public class Form extends BasicForm {
                     contains = getControls().remove(field);
                 }
             }
+
+            return contains;
+
+        } else if (control instanceof FieldSet) {
+            FieldSet fieldSet = (FieldSet) control;
+            boolean contains = super.remove(fieldSet);
+
+            fieldSet.setForm(null);
 
             return contains;
 

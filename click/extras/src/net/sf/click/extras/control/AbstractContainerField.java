@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.sf.click.control;
+package net.sf.click.extras.control;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +21,9 @@ import java.util.Map;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
+import net.sf.click.control.AbstractContainer;
+import net.sf.click.control.Container;
+import net.sf.click.control.Field;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**

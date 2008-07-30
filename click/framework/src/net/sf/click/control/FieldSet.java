@@ -109,7 +109,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class FieldSet extends AbstractContainerField {
+public class FieldSet extends AbstractContainer {
 
     // -------------------------------------------------------------- Constants
 
