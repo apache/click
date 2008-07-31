@@ -32,6 +32,7 @@ Release Procedures
 8. upload web site
 9. add sourceforge release notes
 10. email release announcement to click, velocity and cayenne
+11. update documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties, examples/src/click-page_cs.properties to the next version
 
 Maven Artifact Upload Procedures
 --------------------------------
