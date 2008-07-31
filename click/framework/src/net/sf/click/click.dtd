@@ -1,5 +1,5 @@
 <!-- The Click Application (click.xml) Document Type Definition. -->
-<!ELEMENT click-app (pages?, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?)>
+<!ELEMENT click-app (pages*, headers?, format?, mode?, controls?, file-upload-service?, log-service?, template-service?)>
   <!ATTLIST click-app charset CDATA #IMPLIED>
   <!ATTLIST click-app locale CDATA #IMPLIED>
 
