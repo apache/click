@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License inputStream distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
  * under the applications <tt>WEB-INF</tt> directory, and if not found
  * attempt to load the configuration file from the classpath root.
  * <p/>
- * Configuring Click through the <tt>click.xml</tt> file inputStream the most common
+ * Configuring Click through the <tt>click.xml</tt> file is the most common
  * technique.
  * <p/>
  * However you can instruct Click to use a different service implementation.
@@ -152,13 +152,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The map of ClickApp.PageElm keyed on class. */
     final Map pageByClassMap = new HashMap();
 
-    /** The pages package prefix. */
-    String pagesPackage;
+    /** The list of page packages. */
+    final List pagePackages = new ArrayList();
 
     // -------------------------------------------------------- Private Members
 
     /** The automatically bind controls, request parameters and models flag. */
-    private boolean autobinding = true;
+    private Boolean autobinding;
 
     /** The Commons FileUpload service class. */
     private FileUploadService fileUploadService;
@@ -351,13 +351,17 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * page fields
      */
     public boolean isPagesAutoBinding() {
-        return autobinding;
+        if (autobinding != null) {
+            return autobinding.booleanValue();
+        } else {
+            return true;
+        }
     }
 
     /**
      * @see ConfigService#isProductionMode()
      *
-     * @return true if the application inputStream in "production" mode
+     * @return true if the application is in "production" mode
      */
     public boolean isProductionMode() {
         return (mode == PRODUCTION);
@@ -366,7 +370,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * @see ConfigService#isProfileMode()
      *
-     * @return true if the application inputStream in "profile" mode
+     * @return true if the application is in "profile" mode
      */
     public boolean isProfileMode() {
         return (mode == PROFILE);
@@ -387,7 +391,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @see ConfigService#getPageClass(String)
      *
      * @param path the page path
-     * @return the page class for the given path or null if no class inputStream found
+     * @return the page class for the given path or null if no class is found
      */
     public Class getPageClass(String path) {
 
@@ -424,16 +428,22 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 try {
                     URL resource = servletContext.getResource(path);
                     if (resource != null) {
-                        pageClass = getPageClass(path, pagesPackage);
+                        for (int i = 0; i < pagePackages.size(); i++) {
+                            String pagesPackage = pagePackages.get(i).toString();
 
-                        if (pageClass != null) {
-                            page = new PageElm(path, pageClass, commonHeaders);
+                            pageClass = getPageClass(path, pagesPackage);
 
-                            pageByPathMap.put(page.getPath(), page);
+                            if (pageClass != null) {
+                                page = new PageElm(path, pageClass, commonHeaders);
 
-                            if (logService.isDebugEnabled()) {
-                                String msg = path + " -> " + pageClass.getName();
-                                logService.debug(msg);
+                                pageByPathMap.put(page.getPath(), page);
+
+                                if (logService.isDebugEnabled()) {
+                                    String msg = path + " -> " + pageClass.getName();
+                                    logService.debug(msg);
+                                }
+
+                                break;
                             }
                         }
                     }
@@ -450,7 +460,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @param pageClass the page class
      * @return path the page path
-     * @throws IllegalArgumentException if the Page Class inputStream not configured
+     * @throws IllegalArgumentException if the Page Class is not configured
      * with a unique path
      */
     public String getPagePath(Class pageClass) {
@@ -633,58 +643,71 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * not be found on the classpath
      */
     void loadPages(Element rootElm) throws ClassNotFoundException {
-        Element pagesElm = ClickUtils.getChild(rootElm, "pages");
+        List pagesList = ClickUtils.getChildren(rootElm, "pages");
 
-        if (pagesElm == null) {
+        if (pagesList.isEmpty()) {
             String msg = "required configuration 'pages' element missing.";
             throw new RuntimeException(msg);
         }
 
-        pagesPackage = pagesElm.getAttribute("package");
-        if (StringUtils.isBlank(pagesPackage)) {
-            pagesPackage = "";
+        for (int i = 0; i < pagesList.size(); i++) {
+
+            Element pagesElm = (Element) pagesList.get(i);
+
+            // Deterime whether to use automapping
+            boolean automap = true;
+            String automapStr = pagesElm.getAttribute("automapping");
+            if (StringUtils.isBlank(automapStr)) {
+                automapStr = "true";
+            }
+
+            if ("true".equalsIgnoreCase(automapStr)) {
+                automap = true;
+            } else if ("false".equalsIgnoreCase(automapStr)) {
+                automap = false;
+            } else {
+                String msg = "Invalid pages automapping attribute: " + automapStr;
+                throw new RuntimeException(msg);
+            }
+
+            // Determine whether to use autobinding.
+            String autobindingStr = pagesElm.getAttribute("autobinding");
+            if (StringUtils.isBlank(autobindingStr)) {
+                autobindingStr = "true";
+            }
+
+            if ("true".equalsIgnoreCase(autobindingStr)) {
+                autobinding = Boolean.TRUE;
+            } else if ("false".equalsIgnoreCase(autobindingStr)) {
+                autobinding = Boolean.FALSE;
+            } else {
+                String msg = "Invalid pages autobinding attribute: " + autobindingStr;
+                throw new RuntimeException(msg);
+            }
+
+            // TODO: if autobinding is set to false an there are multiple pages how should this be handled
+
+            String pagesPackage = pagesElm.getAttribute("package");
+            if (StringUtils.isBlank(pagesPackage)) {
+                pagesPackage = "";
+            }
+
+            pagesPackage = pagesPackage.trim();
+            if (pagesPackage.endsWith(".")) {
+                pagesPackage =
+                    pagesPackage.substring(0, pagesPackage.length() - 2);
+            }
+
+            // Add the pages package to the list of page packages
+            pagePackages.add(pagesPackage);
+
+            buildManualPageMapping(pagesElm, pagesPackage);
+
+            if (automap) {
+                buildAutoPageMapping(pagesElm, pagesPackage);
+            }
         }
 
-        pagesPackage = pagesPackage.trim();
-        if (pagesPackage.endsWith(".")) {
-            pagesPackage =
-                pagesPackage.substring(0, pagesPackage.length() - 2);
-        }
-
-        boolean automap = true;
-        String automapStr = pagesElm.getAttribute("automapping");
-        if (StringUtils.isBlank(automapStr)) {
-            automapStr = "true";
-        }
-
-        if ("true".equalsIgnoreCase(automapStr)) {
-            automap = true;
-        } else if ("false".equalsIgnoreCase(automapStr)) {
-            automap = false;
-        } else {
-            String msg = "Invalid pages automapping attribute: " + automapStr;
-            throw new RuntimeException(msg);
-        }
-
-        String autobindingStr = pagesElm.getAttribute("autobinding");
-        if (StringUtils.isBlank(autobindingStr)) {
-            autobindingStr = "true";
-        }
-
-        if ("true".equalsIgnoreCase(autobindingStr)) {
-            autobinding = true;
-        } else if ("false".equalsIgnoreCase(autobindingStr)) {
-            autobinding = false;
-        } else {
-            String msg = "Invalid pages autobinding attribute: " + autobindingStr;
-            throw new RuntimeException(msg);
-        }
-
-        buildManualPageMapping(pagesElm);
-
-        if (automap) {
-            buildAutoPageMapping(pagesElm);
-        }
         buildClassMap();
     }
 
@@ -695,7 +718,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @throws java.lang.ClassNotFoundException if the specified Page class can
      * not be found on the classpath
      */
-    void buildManualPageMapping(Element pagesElm) throws ClassNotFoundException {
+    void buildManualPageMapping(Element pagesElm, String pagesPackage) throws ClassNotFoundException {
 
         List pageList = ClickUtils.getChildren(pagesElm, "page");
 
@@ -728,7 +751,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @param pagesElm the xml element containing the excluded URL paths
      */
-    void buildAutoPageMapping(Element pagesElm) throws ClassNotFoundException {
+    void buildAutoPageMapping(Element pagesElm, String pagesPackage) throws ClassNotFoundException {
 
         // Build list of automap path page class overrides
         excludesList.clear();
@@ -769,8 +792,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Build the {@link #pageByClassMap} where key inputStream the Page class, and
-     * value inputStream the {@link PageElm}.
+     * Build the {@link #pageByClassMap} where key is the Page class, and
+     * value is the {@link PageElm}.
      */
     void buildClassMap() {
 
@@ -842,11 +865,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * Find and return the page class for the specified pagePath and
      * pagesPackage.
      * <p/>
-     * For example if the pagePath inputStream <tt>'/edit-customer.htm'</tt> and
-     * package inputStream <tt>'com.mycorp'</tt>, the matching page class will be:
+     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
+     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
      * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
      * <p/>
-     * If the page path inputStream <tt>'/admin/add-customer.htm'</tt> and package inputStream
+     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
      * <tt>'com.mycorp'</tt>, the matching page class will be:
      * <tt>com.mycorp.admin.AddCustomer</tt> or
      * <tt>com.mycorp.admin.AddCustomerPage</tt>.
@@ -857,7 +880,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     Class getPageClass(String pagePath, String pagesPackage) {
         // To understand this method lets walk through an example as the
-        // code plays out. Imagine this method inputStream called with the arguments:
+        // code plays out. Imagine this method is called with the arguments:
         // pagePath='/pages/edit-customer.htm'
         // pagesPackage='net.sf.click'
 
@@ -870,7 +893,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         // path = '/pages/edit-customer'
         String path = pagePath.substring(0, pagePath.lastIndexOf("."));
 
-        // If page inputStream excluded return the excluded class
+        // If page is excluded return the excluded class
         Class excludePageClass = getExcludesPageClass(path);
         if (excludePageClass != null) {
             return excludePageClass;
@@ -1124,7 +1147,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             jarInputStream = new JarInputStream(inputStream);
             JarEntry jarEntry = null;
 
-            // indicates whether feedback should be logged about the files deployed
+            // Indicates whether feedback should be logged about the files deployed
             // from jar
             boolean logFeedback = true;
             while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
@@ -1138,7 +1161,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                         logService.trace("deploy files from jar -> " +
                             jarLocation);
 
-                        // only provide feedback once per jar
+                        // Only provide feedback once per jar
                         logFeedback = false;
                     }
                     pathIndex += "META-INF/web/".length();
@@ -1632,7 +1655,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * Provide an Excluded Page class.
      * <p/>
-     * <b>PLEASE NOTE</b> this class inputStream <b>not</b> for public use.
+     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use.
      *
      * @author Malcolm Edgar
      */
