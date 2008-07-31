@@ -26,8 +26,9 @@ import net.sf.click.control.HiddenField;
 import net.sf.click.control.TextArea;
 import net.sf.click.control.TextField;
 import net.sf.click.util.ClickUtils;
-
+import net.sf.click.util.ContainerUtils;
 import net.sf.click.util.HtmlStringBuffer;
+
 import org.apache.cayenne.DataObject;
 import org.apache.cayenne.DataObjectUtils;
 import org.apache.cayenne.PersistenceState;
@@ -249,6 +250,26 @@ public class CayenneForm extends Form {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Clear all the form field values setting them to null. This method will
+     * not clear the Form Object Class ("FO_CLASS") hidden field value.
+     *
+     * @see net.sf.click.control.BasicForm#clearValues()
+     */
+    public void clearValues() {
+        List fields = ContainerUtils.getFields(this);
+        Field field = null;
+        for (int i = 0, size = fields.size(); i < size; i++) {
+            field = (Field) fields.get(i);
+
+            if (!field.getName().equals(FORM_NAME)
+                && !field.getName().startsWith(SUBMIT_CHECK)
+                && !field.getName().startsWith(FO_CLASS)) {
+                field.setValue(null);
+            }
+        }
+    }
 
     /**
      * Return the thread local <tt>DataContext</tt> obtained via
