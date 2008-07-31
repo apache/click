@@ -1,4 +1,4 @@
-Click 1.5-M2 Release
+Click 1.5-M3 Release
 --------------------
 BUGS
 * 
@@ -20,7 +20,7 @@ BUILD
 
 Release Procedures
 ------------------
-1. ensure documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties, examples/src/click-page_cs.properties has correct version
+1. ensure documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties has correct version
 1.1 ensure third-party library versions are correct: build/build.xml, examples/build.xml, documentation/docs/building.html.
 1.2 add upgraded libraries to documentation/docs/roadmap-changes.html
 2. finalize Roadmap and Changes
@@ -32,7 +32,7 @@ Release Procedures
 8. upload web site
 9. add sourceforge release notes
 10. email release announcement to click, velocity and cayenne
-11. update documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties, examples/src/click-page_cs.properties to the next version
+11. update documentation/header.html, framework/src/click-control.properties, build/build.properties, examples/src/click-page.properties to the next version
 
 Maven Artifact Upload Procedures
 --------------------------------
