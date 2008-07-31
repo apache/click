@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License inputStream distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -60,7 +60,7 @@ import org.xml.sax.SAXException;
  * under the applications <tt>WEB-INF</tt> directory, and if not found
  * attempt to load the configuration file from the classpath root.
  * <p/>
- * Configuring Click through the <tt>click.xml</tt> file is the most common
+ * Configuring Click through the <tt>click.xml</tt> file inputStream the most common
  * technique.
  * <p/>
  * However you can instruct Click to use a different service implementation.
@@ -357,7 +357,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * @see ConfigService#isProductionMode()
      *
-     * @return true if the application is in "production" mode
+     * @return true if the application inputStream in "production" mode
      */
     public boolean isProductionMode() {
         return (mode == PRODUCTION);
@@ -366,7 +366,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * @see ConfigService#isProfileMode()
      *
-     * @return true if the application is in "profile" mode
+     * @return true if the application inputStream in "profile" mode
      */
     public boolean isProfileMode() {
         return (mode == PROFILE);
@@ -387,7 +387,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * @see ConfigService#getPageClass(String)
      *
      * @param path the page path
-     * @return the page class for the given path or null if no class is found
+     * @return the page class for the given path or null if no class inputStream found
      */
     public Class getPageClass(String path) {
 
@@ -450,7 +450,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      *
      * @param pageClass the page class
      * @return path the page path
-     * @throws IllegalArgumentException if the Page Class is not configured
+     * @throws IllegalArgumentException if the Page Class inputStream not configured
      * with a unique path
      */
     public String getPagePath(Class pageClass) {
@@ -769,8 +769,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Build the {@link #pageByClassMap} where key is the Page class, and
-     * value is the {@link PageElm}.
+     * Build the {@link #pageByClassMap} where key inputStream the Page class, and
+     * value inputStream the {@link PageElm}.
      */
     void buildClassMap() {
 
@@ -842,11 +842,11 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * Find and return the page class for the specified pagePath and
      * pagesPackage.
      * <p/>
-     * For example if the pagePath is <tt>'/edit-customer.htm'</tt> and
-     * package is <tt>'com.mycorp'</tt>, the matching page class will be:
+     * For example if the pagePath inputStream <tt>'/edit-customer.htm'</tt> and
+     * package inputStream <tt>'com.mycorp'</tt>, the matching page class will be:
      * <tt>com.mycorp.EditCustomer</tt> or <tt>com.mycorp.EditCustomerPage</tt>.
      * <p/>
-     * If the page path is <tt>'/admin/add-customer.htm'</tt> and package is
+     * If the page path inputStream <tt>'/admin/add-customer.htm'</tt> and package inputStream
      * <tt>'com.mycorp'</tt>, the matching page class will be:
      * <tt>com.mycorp.admin.AddCustomer</tt> or
      * <tt>com.mycorp.admin.AddCustomerPage</tt>.
@@ -857,7 +857,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     Class getPageClass(String pagePath, String pagesPackage) {
         // To understand this method lets walk through an example as the
-        // code plays out. Imagine this method is called with the arguments:
+        // code plays out. Imagine this method inputStream called with the arguments:
         // pagePath='/pages/edit-customer.htm'
         // pagesPackage='net.sf.click'
 
@@ -870,7 +870,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         // path = '/pages/edit-customer'
         String path = pagePath.substring(0, pagePath.lastIndexOf("."));
 
-        // If page is excluded return the excluded class
+        // If page inputStream excluded return the excluded class
         Class excludePageClass = getExcludesPageClass(path);
         if (excludePageClass != null) {
             return excludePageClass;
@@ -1107,54 +1107,63 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             throw new IllegalArgumentException("Jar location cannot be null");
         }
 
-        InputStream is = servletContext.getResourceAsStream(jarLocation);
-        if (is == null) {
-            is = new FileInputStream(jarLocation);
-        }
+        InputStream inputStream = null;
+        JarInputStream jarInputStream = null;
 
-        if (is == null) {
-            throw new IllegalArgumentException("Jar location, '" + jarLocation
-                + "', cannot be converted into an InputStream");
-        }
-
-        JarInputStream jarInputStream = new JarInputStream(is);
-        JarEntry jarEntry = null;
-
-        // indicates whether feedback should be logged about the files deployed
-        // from jar
-        boolean logFeedback = true;
-        while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
-            // jarEntryName example -> META-INF/web/click/table.css
-            String jarEntryName = jarEntry.getName();
-
-            // Deploy all resources under "META-INF/web/"
-            int pathIndex = jarEntryName.indexOf("META-INF/web/");
-            if (pathIndex == 0) {
-                if (logFeedback && logService.isTraceEnabled()) {
-                    logService.trace("deploy files from jar -> " + jarLocation);
-
-                    // only provide feedback once per jar
-                    logFeedback = false;
-                }
-                pathIndex += "META-INF/web/".length();
-
-                // By default deploy to the web root dir
-                String targetDir = "";
-
-                // resourceName example -> click/table.css
-                String resourceName = jarEntryName.substring(pathIndex);
-                int index = resourceName.lastIndexOf('/');
-
-                if (index != -1) {
-                    // targetDir example -> click
-                    targetDir = resourceName.substring(0, index);
-                }
-
-                // Copy resources to web folder
-                ClickUtils.deployFile(servletContext,
-                    jarEntryName,
-                    targetDir);
+        try {
+            inputStream = servletContext.getResourceAsStream(jarLocation);
+            if (inputStream == null) {
+                inputStream = new FileInputStream(jarLocation);
             }
+
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Jar location, '" +
+                    jarLocation + "', cannot be converted into an InputStream");
+            }
+
+            jarInputStream = new JarInputStream(inputStream);
+            JarEntry jarEntry = null;
+
+            // indicates whether feedback should be logged about the files deployed
+            // from jar
+            boolean logFeedback = true;
+            while ((jarEntry = jarInputStream.getNextJarEntry()) != null) {
+                // jarEntryName example -> META-INF/web/click/table.css
+                String jarEntryName = jarEntry.getName();
+
+                // Deploy all resources under "META-INF/web/"
+                int pathIndex = jarEntryName.indexOf("META-INF/web/");
+                if (pathIndex == 0) {
+                    if (logFeedback && logService.isTraceEnabled()) {
+                        logService.trace("deploy files from jar -> " +
+                            jarLocation);
+
+                        // only provide feedback once per jar
+                        logFeedback = false;
+                    }
+                    pathIndex += "META-INF/web/".length();
+
+                    // By default deploy to the web root dir
+                    String targetDir = "";
+
+                    // resourceName example -> click/table.css
+                    String resourceName = jarEntryName.substring(pathIndex);
+                    int index = resourceName.lastIndexOf('/');
+
+                    if (index != -1) {
+                        // targetDir example -> click
+                        targetDir = resourceName.substring(0, index);
+                    }
+
+                    // Copy resources to web folder
+                    ClickUtils.deployFile(servletContext,
+                        jarEntryName,
+                        targetDir);
+                }
+            }
+        } finally {
+            ClickUtils.close(jarInputStream);
+            ClickUtils.close(inputStream);
         }
     }
 
@@ -1623,7 +1632,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * Provide an Excluded Page class.
      * <p/>
-     * <b>PLEASE NOTE</b> this class is <b>not</b> for public use.
+     * <b>PLEASE NOTE</b> this class inputStream <b>not</b> for public use.
      *
      * @author Malcolm Edgar
      */
