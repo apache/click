@@ -1,8 +1,7 @@
 <Context
    path="/click-examples" 
    reloadable="true"
-   antiJARLocking="true"
-   antiResourceLocking="true">
+   antiJARLocking="true">
 
    <ResourceLink 
       name="users" 
