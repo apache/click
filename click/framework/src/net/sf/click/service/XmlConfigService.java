@@ -651,6 +651,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             throw new RuntimeException(msg);
         }
 
+        List templates = getTemplateFiles();
+
         for (int i = 0; i < pagesList.size(); i++) {
 
             Element pagesElm = (Element) pagesList.get(i);
@@ -687,6 +689,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             // TODO: if autobinding is set to false an there are multiple pages how should this be handled
+            // Perhaps autobinding should be moved to <click-app> and be a application wide setting? 
+            // However the way its implemented above is probably fine for backward compatibility 
+            // purposes, meaning the last defined autobinding wins
 
             String pagesPackage = pagesElm.getAttribute("package");
             if (StringUtils.isBlank(pagesPackage)) {
@@ -705,7 +710,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             buildManualPageMapping(pagesElm, pagesPackage);
 
             if (automap) {
-                buildAutoPageMapping(pagesElm, pagesPackage);
+                buildAutoPageMapping(pagesElm, pagesPackage, templates);
             }
         }
 
@@ -716,6 +721,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * Add manually defined Pages to the {@link #pageByPathMap}.
      *
      * @param pagesElm the xml element containing manually defined Pages
+     * @param pagesPackage the pages package prefix
+     *
      * @throws java.lang.ClassNotFoundException if the specified Page class can
      * not be found on the classpath
      */
@@ -751,8 +758,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      * URL paths that should not be auto-mapped.
      *
      * @param pagesElm the xml element containing the excluded URL paths
+     * @param pagesPackage the pages package prefix
+     * @param templates the list of templates to map to Page classes
      */
-    void buildAutoPageMapping(Element pagesElm, String pagesPackage) throws ClassNotFoundException {
+    void buildAutoPageMapping(Element pagesElm, String pagesPackage, List templates) throws ClassNotFoundException {
 
         // Build list of automap path page class overrides
         excludesList.clear();
@@ -765,8 +774,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         if (logService.isDebugEnabled()) {
             logService.debug("automapped pages:");
         }
-
-        List templates = getTemplateFiles();
 
         for (int i = 0; i < templates.size(); i++) {
             String pagePath = (String) templates.get(i);
