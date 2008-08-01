@@ -15,7 +15,7 @@
 Pages are the heart of web applications. In Click, Pages encapsulate the processing of 
 HTML requests and the rendering of HTML responses. The section discusses Click pages 
 and covers to following topics:
-<ul>
+<ol>
   <li><a href="#page-class">Classes</a> - page Java classes
   </li>
   <li><a href="#page-execution">Execution</a> - page execution sequence
@@ -38,7 +38,7 @@ and covers to following topics:
   </li>
   <li><a href="#page-messages">Message Properties</a> - pages message properties
   </li> 
-</ul>
+</ol>
 
 <p>&nbsp;</p>
 
@@ -61,7 +61,7 @@ Alternatively you can also configure Click to use JSP pages for rendering.
 &lt;page path="<span class="blue">search.jsp</span>" classname="<span class="red">com.mycorp.page.Search</span>"/&gt; 
 </pre>
 
-<a name="page-class" class="heading"><h2>Classes</h2></a>
+<a name="page-class" class="heading"></a><h2>1.&nbsp; Classes</h2>
 
 All custom Click pages must subclass the
 <a target="topic" href="click-api/net/sf/click/Page.html">Page</a> base class.
@@ -100,8 +100,6 @@ provide functionality:
 The ClickServlet relies on instantiating Pages using a public no arguments constructor, 
 so when you create Page subclasses you must ensure you don't add an incompatible
 constructor.
-
-<a name="page-execution" class="heading"><h2>Execution</h2></a>
 
 The GET request execution sequence for Pages is summarized below in the Figure 2.
 
@@ -208,7 +206,7 @@ Another view on the execution flow of Pages is illustrated in the Activity diagr
 </p>
 
 
-<a name="page-param-auto-binding" class="heading"><h2>Request Param Auto Binding</h2></a>
+<a name="page-param-auto-binding" class="heading"></a><h2>3.&nbsp; Request Param Auto Binding</h2>
 
 Click will automatically bind any request parameter values to public Page fields 
 with the same name. When binding these values it will also attempt to convert them 
@@ -262,7 +260,7 @@ After processing the request our page would be rendered as:
 </table>
 
 
-<h4>Customizing Auto Binding</h4>
+<h3>3.1&nbsp; Customizing Auto Binding</h3>
 
 Auto binding supports the conversion of request string parameters into the Java 
 classes: Integer, Double, Boolean, Byte, Character, Short, Long, Float, BigInteger, 
@@ -332,7 +330,7 @@ To make your custom type converter available you will need to subclass ClickServ
 } </pre>
 
 
-<a name="page-security" class="heading"><h2>Security</h2></a>
+<a name="page-security" class="heading"></a><h2>4.&nbsp; Security</h2>
 
 Pages provide an 
 <a target="topic" href="click-api/net/sf/click/Page.html#onSecurityCheck()">onSecurityCheck</a> 
@@ -343,7 +341,7 @@ Please note you generally don't need to use this capability, and where possible
 you should use the declarative JEE security model. See the Best Practices 
 <a href="best-practices.html#security">Security</a> topic for more details.
 
-<h4>Application Authentication</h4>
+<h3>4.1&nbsp; Application Authentication</h3>
 Applications can use the <tt>onSecurityCheck()</tt> method to implement their own security model. The example 
 class below provides a base Secure page class which other pages can extend
 to ensure the user is logged in. In this example the login page creates a session 
@@ -369,7 +367,7 @@ the user has a session, otherwise the request is redirected to the login page.
 } 
 </pre>
 
-<h4>Container Authentication</h4>
+<h3>4.2&nbsp; Container Authentication</h3>
 Alternatively you can also use the security services provided by the JEE Servlet 
 Container. For instance to ensure users have been authenticated by the Serlvet Container
 you could use a Secure page of:
@@ -393,7 +391,7 @@ you could use a Secure page of:
 }
 </pre>
 
-<h4>Container Access Control</h4>
+<h3>4.3&nbsp; Container Access Control</h3>
 The Servlet Container also provides facilities to enforce role based access control 
 (authorization). The example below is a base page to ensure only users
 in the "admin" role can access the page, otherwise users are redirected to the login page.
@@ -418,7 +416,7 @@ Application Admin pages would extend this secure page to provide their functiona
 }
 </pre>
 
-<h4>Logging Out</h4>
+<h3>4.4&nbsp; Logging Out</h3>
 To logout using the application or container based security models you would simply 
 invalidate the session.
 
@@ -435,12 +433,12 @@ invalidate the session.
 </pre>
 
 
-<a name="page-navigation" class="heading"><h2>Navigation</h2></a>
+<a name="page-navigation" class="heading"></a><h2>5.&nbsp; Navigation</h2>
 
 Navigation between pages is achieved by using forwards, redirects and by setting the 
 page template path.
 
-<a name="page-foward" class="heading"><h3>Forward</h3></a>
+<a name="page-foward" class="heading"></a><h3>5.1&nbsp; Forward</h3>
 
 To forward to another page using the servlet 
 <a target="topic" href="servlet-api/javax/servlet/RequestDispatcher.html">RequestDispatcher</a>,
@@ -466,7 +464,7 @@ This will invoke a new Page class instance mapped to the path
 the controls on the second page will not be processed. This prevents confusion and bugs,
 like a form on the second page trying to process a POST request from the first page.
 
-<h4>Forward Parameter Passing</h4>
+<h4>5.1.1&nbsp; Forward Parameter Passing</h4>
 
 When you forward to another page the request parameters are maintained. This is a handy way
 of passing through state information with the request. For example you could
@@ -507,7 +505,7 @@ The snippet above forwards to the page template <span class="html">view-customer
 Request attributes are automatically added to the Velocity Context object so are  
 available in the page template.
 
-<a name="page-forwarding" class="heading"><h4>Page Forwarding</h4></a>
+<a name="page-forwarding" class="heading"></a><h4>5.1.2&nbsp; Page Forwarding</h4>
 
 Page forwarding is another way of passing information between pages. In this case
 you create the page to be forwarded to using the Context
@@ -559,7 +557,7 @@ alleviates you from having to specify page paths in your code.
 Please always use the Context <tt>createPage()</tt> methods to allow Click to 
 inject Page dependencies.
 
-<a name="page-template-path" class="heading"><h3>Template Path</h3></a>
+<a name="page-template-path" class="heading"></a><h3>5.2&nbsp; Template Path</h3>
 
 An alternative method of forwarding to a new page is to simply set the current Page's path
 to the new page template to render. With this approach the page template being rendered
@@ -586,7 +584,7 @@ the first Page object is
 "<a target="topic" href="click-api/net/sf/click/Page.html#onDestroy()">destroyed</a>"
 before the second Page object is created and any model values would be lost.
 
-<a name="page-redirect" class="heading"><h3>Redirect</h3></a>
+<a name="page-redirect" class="heading"></a><h3>5.3&nbsp; Redirect</h3>
 
 Redirects are another very useful way to navigate between pages. See 
 HttpServletResponse.<a target="topic" href="servlet-api/javax/servlet/http/HttpServletResponse.html#sendRedirect(java.lang.String)">sendRedirect</a>(location)
@@ -640,7 +638,7 @@ the redirect method. For example:
 } 
 </pre>
 
-<h4>Redirect Parameter Passing</h4>
+<h4>5.3.1&nbsp; Redirect Parameter Passing</h4>
 
 You can pass information between redirected pages using URL request parameters. 
 The ClickServlet will encode the URL for you using
@@ -698,13 +696,13 @@ then get the transaction id through the request parameter
 } 
 </pre>
 
-<h4>Post Redirect</h4>
+<h4>5.3.2&nbsp; Post Redirect</h4>
 The parameter passing example above is also an example of a Post Redirect. The Post
 Redirect technique is a very useful method of preventing users from submitting a form 
 twice by hitting the refresh button.
 
 
-<a name="page-templating" class="heading"><h2>Page Templating</h2></a>
+<a name="page-templating" class="heading"></a><h2>6.&nbsp; Page Templating</h2>
 
 Click supports page templating (a.k.a. <i>Tiles</i> in Struts) enabling you to
 create a standardized look and feel for your web application and greatly reducing
@@ -809,7 +807,7 @@ Templating with JSP pages is also supported using the same pattern. Please
 see the Click Examples application for a demonstration.
 
 
-<a name="page-direct-rendering" class="heading"><h2>Direct Rendering</h2></a>
+<a name="page-direct-rendering" class="heading"></a><h2>7.&nbsp; Direct Rendering</h2>
 
 Pages support a direct rendering mode where you can render directly to the
 servlet response and bypass the page template rendering. This is useful for 
@@ -870,7 +868,7 @@ A direct rendering example is provided below.
     } </pre>
 
 
-<a name="page-stateful" class="heading"><h2>Stateful Pages</h2></a>
+<a name="page-stateful" class="heading"></a><h2>8.&nbsp; Stateful Pages</h2>
 
 Click supports stateful pages where the state of the page is saved between the 
 users requests. Stateful pages are useful in a number of scenarios including:
@@ -910,7 +908,7 @@ Stateful page instances are stored in the user's
 using the pages class name as the key. In the example above the page would be stored in 
 the users session using the class name: <tt>com.mycorp.page.SearchPage</tt>
 
-<h4>Page Creation</h4>
+<h3>8.1&nbsp; Page Creation</h3>
 
 With stateful pages they are only created once, after which they are retrieved from the session.
 However page event handlers are invoked for each request, including the <tt>onInit()</tt> method.
@@ -922,7 +920,7 @@ constructor so it is invoked only once. It is important not to place control cre
 If you have dynamic control creation code you would typically place this in the <tt>onInit()</tt> method,
 but you will need to take care that controls and or models are not already present in the page.
 
-<h4>Page Execution</h4>
+<h3>8.2&nbsp; Page Execution</h3>
 
 The default Click page execution model is thread safe as a new Page instance is created
 for each request and thread. With stateful pages a user will have a single page instance which is
@@ -930,7 +928,7 @@ reused in multiple requests and threads. To ensure page execution is thread safe
 page instances are synchronized so only one request thread can execute a page instance at 
 any one time. 
 
-<h4>Page Destruction</h4>
+<h3>8.3&nbsp; Page Destruction</h3>
 
 After normal page instances have been executed, they are de-referenced and garbage 
 collected by the JVM. However with stateful pages they are stored in the users 
@@ -944,7 +942,7 @@ control by default de-references its rowList in its
 <a target="topic" href="click-api/net/sf/click/control/Table.html#onDestroy()">onDestory()</a>
 method.
 
-<a name="page-error-handling" class="heading"><h2>Error Handling</h2></a>
+<a name="page-error-handling" class="heading"></a><h2>9.&nbsp; Error Handling</h2>
 
 If an Exception occurs processing a Page object or rendering a template the error
 is delegated to the registered handler. The default Click error handler is the
@@ -980,7 +978,7 @@ for details on how to set the application mode.
 Please also see the <a href="examples.html">Examples</a> web app Exception Demo for demonstrations of Clicks error 
 handling.
 
-<a name="page-not-found" class="heading"><h2>Page Not Found</h2></a>
+<a name="page-not-found" class="heading"></a><h2>10.&nbsp; Page Not Found</h2>
 
 If the ClickServlet cannot find a requested page in the <tt>click.xml</tt> config file
 it will use the registered <a href="not-found.html">not-found.htm</a> page. 
@@ -999,7 +997,7 @@ When the ClickSevlet starts up it checks to see whether the <span class="html">n
 You can tailor the <span class="html">click/not-found.htm</span> template to suite you own needs. This page template
 has access to the usual Click objects.
 
-<a name="page-messages" class="heading"><h2>Message Properties</h2></a>
+<a name="page-messages" class="heading"></a><h2>11.&nbsp; Message Properties</h2>
 
 The Page class provides a 
 <a href="click-api/net/sf/click/Page.html#messages">messages</a> property which
