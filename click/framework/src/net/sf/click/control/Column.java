@@ -218,8 +218,8 @@ public class Column implements Serializable {
     /** The column row decorator. */
     protected Decorator decorator;
 
-    /** The escape HTML characters flag. The default value is false. */
-    protected boolean escapeHtml = false;
+    /** The escape HTML characters flag. The default value is true. */
+    protected boolean escapeHtml = true;
 
     /** The column message format pattern. */
     protected String format;
@@ -510,7 +510,7 @@ public class Column implements Serializable {
 
     /**
      * Return true if the HTML characters will be escaped when rendering the
-     * column data. By default this method returns false.
+     * column data. By default this method returns true.
      *
      * @return true if the HTML characters will be escaped when rendered
      */
