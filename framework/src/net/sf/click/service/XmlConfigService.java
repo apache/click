@@ -1149,8 +1149,9 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             if (inputStream == null) {
-                throw new IllegalArgumentException("Jar location, '" +
-                    jarLocation + "', cannot be converted into an InputStream");
+                String msg = "Jar location, '" + jarLocation
+                    + "', cannot be converted into an InputStream";
+                throw new IllegalArgumentException(msg);
             }
 
             jarInputStream = new JarInputStream(inputStream);
@@ -1167,8 +1168,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 int pathIndex = jarEntryName.indexOf("META-INF/web/");
                 if (pathIndex == 0) {
                     if (logFeedback && logService.isTraceEnabled()) {
-                        logService.trace("deploy files from jar -> " +
-                            jarLocation);
+                        logService.trace("deploy files from jar -> "
+                                         + jarLocation);
 
                         // Only provide feedback once per jar
                         logFeedback = false;
