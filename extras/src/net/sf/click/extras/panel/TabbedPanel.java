@@ -440,7 +440,10 @@ public class TabbedPanel extends Panel {
         for (int i = 0; i < getPanels().size(); i++) {
             Panel panel = (Panel) getPanels().get(i);
 
-            if (tabLink.getValue().equals(panel.getName()) && !panel.isDisabled()) {
+            if (tabLink.getValue().equals(panel.getName())
+                && !panel.isDisabled()
+                && panel != getActivePanel()) {
+
                 setActivePanel(panel);
                 panel.onInit();
             }
