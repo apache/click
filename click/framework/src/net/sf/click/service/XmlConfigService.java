@@ -437,6 +437,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                                 page = new PageElm(path, pageClass, commonHeaders);
 
                                 pageByPathMap.put(page.getPath(), page);
+                                addToClassMap(page);
 
                                 if (logService.isDebugEnabled()) {
                                     String msg = path + " -> " + pageClass.getName();
@@ -792,32 +793,40 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Build the {@link #pageByClassMap} where key is the Page class, and
-     * value is the {@link PageElm}.
+     * Build the {@link #pageByClassMap} from the {@link #pageByPathMap} and
+     * delegate to {@link #buildClassMap(PageElm)}.
      */
     void buildClassMap() {
-
         // Build pages by class map
         for (Iterator i = pageByPathMap.values().iterator(); i.hasNext();) {
             XmlConfigService.PageElm page = (XmlConfigService.PageElm) i.next();
-            Object value = pageByClassMap.get(page.pageClass);
+            addToClassMap(page);
+        }
+    }
 
-            if (value == null) {
-                pageByClassMap.put(page.pageClass, page);
+    /**
+     * Add the specified page to the {@link #pageByClassMap} where the Map's key
+     * holds the Page class and value holds the {@link PageElm}.
+     *
+     * @param page the PageElm containing metadata about a specific page
+     */
+    void addToClassMap(PageElm page) {
+        Object value = pageByClassMap.get(page.pageClass);
+        if (value == null) {
+            pageByClassMap.put(page.pageClass, page);
 
-            } else if (value instanceof List) {
-                ((List) value).add(value);
+        } else if (value instanceof List) {
+            ((List) value).add(value);
 
-            } else if (value instanceof XmlConfigService.PageElm) {
-                List list = new ArrayList();
-                list.add(value);
-                list.add(page);
-                pageByClassMap.put(page.pageClass, list);
+        } else if (value instanceof XmlConfigService.PageElm) {
+            List list = new ArrayList();
+            list.add(value);
+            list.add(page);
+            pageByClassMap.put(page.pageClass, list);
 
-            } else {
-                // should never occur
-                throw new IllegalStateException();
-            }
+        } else {
+            // should never occur
+            throw new IllegalStateException();
         }
     }
 
