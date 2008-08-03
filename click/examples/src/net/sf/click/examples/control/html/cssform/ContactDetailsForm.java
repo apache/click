@@ -1,15 +1,15 @@
 package net.sf.click.examples.control.html.cssform;
 
 import net.sf.click.examples.control.html.FeedbackBorder;
-import net.sf.click.control.BasicForm;
 import net.sf.click.control.Field;
-import net.sf.click.control.FieldSet;
 import net.sf.click.control.Submit;
 import net.sf.click.control.TextField;
 import net.sf.click.examples.control.html.FieldLabel;
 import net.sf.click.examples.control.html.list.HtmlList;
 import net.sf.click.examples.control.html.list.ListItem;
 import net.sf.click.extras.control.DoubleField;
+import net.sf.click.extras.control.HtmlFieldSet;
+import net.sf.click.extras.control.HtmlForm;
 import net.sf.click.extras.control.IntegerField;
 import net.sf.click.util.ClickUtils;
 
@@ -21,7 +21,7 @@ import net.sf.click.util.ClickUtils;
  *
  * @author Bob Schellink
  */
-public class ContactDetailsForm extends BasicForm {
+public class ContactDetailsForm extends HtmlForm {
 
     private HtmlList htmlList;
 
@@ -35,7 +35,7 @@ public class ContactDetailsForm extends BasicForm {
     }
 
     public void buildForm() {
-        FieldSet fieldset = new FieldSet();
+        HtmlFieldSet fieldset = new HtmlFieldSet();
         fieldset.setLegend("Contact Details");
         htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
@@ -48,7 +48,7 @@ public class ContactDetailsForm extends BasicForm {
         fieldset.add(htmlList);
         add(fieldset);
 
-        fieldset = new FieldSet();
+        fieldset = new HtmlFieldSet();
         fieldset.setLegend("Delivery Address");
         htmlList = new HtmlList(HtmlList.ORDERED_LIST);
 
@@ -65,7 +65,7 @@ public class ContactDetailsForm extends BasicForm {
         fieldset.add(htmlList);
         add(fieldset);
 
-        fieldset = new FieldSet();
+        fieldset = new HtmlFieldSet();
         fieldset.setAttribute("class", "submit");
         Submit submit = new Submit("submit", "Begin download");
         fieldset.add(submit);
