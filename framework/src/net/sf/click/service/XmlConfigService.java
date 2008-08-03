@@ -689,8 +689,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             }
 
             // TODO: if autobinding is set to false an there are multiple pages how should this be handled
-            // Perhaps autobinding should be moved to <click-app> and be a application wide setting? 
-            // However the way its implemented above is probably fine for backward compatibility 
+            // Perhaps autobinding should be moved to <click-app> and be a application wide setting?
+            // However the way its implemented above is probably fine for backward compatibility
             // purposes, meaning the last defined autobinding wins
 
             String pagesPackage = pagesElm.getAttribute("package");
