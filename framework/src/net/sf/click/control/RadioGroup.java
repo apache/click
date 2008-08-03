@@ -322,9 +322,9 @@ public class RadioGroup extends Field {
     }
 
     /**
-     * @see Field#setForm(BasicForm)
+     * @see Field#setForm(Form)
      *
-     * @param form Field's parent <tt>BasicForm</tt>
+     * @param form Field's parent <tt>Form</tt>
      */
     public void setForm(Form form) {
         super.setForm(form);

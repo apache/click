@@ -178,8 +178,8 @@ public abstract class Field extends AbstractControl {
     /** The request focus flag. */
     protected boolean focus;
 
-    /** The parent BasicForm. */
-    protected BasicForm form;
+    /** The parent Form. */
+    protected Form form;
 
     /** The Field help text. */
     protected String help;
@@ -238,17 +238,18 @@ public abstract class Field extends AbstractControl {
     // ------------------------------------------------------ Public Attributes
 
     /**
-     * Return true if the Field is a disabled. The Field will also be disabled
+     * Return true if the Field is disabled. The Field will also be disabled
      * if the parent Form is disabled.
      * <p/>
      * <b>Important Note</b>: disabled fields will not submit their values in
      * a HTML form POST. This may cause validation issues in a form submission.
      * Please note this is a HTML limitation and is not due to Click.
      *
-     * @return true if the Field is a disabled
+     * @return true if the Field is disabled
      */
     public boolean isDisabled() {
-        if (getForm() != null && getForm().isDisabled()) {
+        Form form = getForm();
+        if (form != null && form.isDisabled()) {
             return true;
         } else {
             return disabled;
@@ -327,7 +328,7 @@ public abstract class Field extends AbstractControl {
      *
      * @return the parent Form containing the Field
      */
-    public BasicForm getForm() {
+    public Form getForm() {
         if (form != null) {
             return form;
         } else {
@@ -341,7 +342,7 @@ public abstract class Field extends AbstractControl {
      *
      * @param form Field's parent <tt>Form</tt>
      */
-    public void setForm(BasicForm form) {
+    public void setForm(Form form) {
         this.form = form;
     }
 
@@ -435,7 +436,7 @@ public abstract class Field extends AbstractControl {
                 return null;
             }
 
-            BasicForm parentForm = getForm();
+            Form parentForm = getForm();
             String formId = (parentForm != null) ? parentForm.getId() + "_" : "";
             String id = formId + fieldName;
 
@@ -543,7 +544,8 @@ public abstract class Field extends AbstractControl {
      * @return true if the Field is a readonly
      */
     public boolean isReadonly() {
-        if (getForm() != null && getForm().isReadonly()) {
+        Form form = getForm();
+        if (form != null && form.isReadonly()) {
             return true;
         } else {
             return readonly;

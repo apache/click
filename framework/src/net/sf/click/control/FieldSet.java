@@ -53,24 +53,6 @@ import org.apache.commons.lang.StringUtils;
  * </table>
  *
  * FieldSet provides a container for laying out form <tt>Field</tt> controls.
- * <p/>
- * One can use FieldSet with both {@link Form} and {@link BasicForm}, however
- * the behavior of FieldSet differs for each.
- * <p/>
- * <ul>
- *  <li>BasicForm - when adding FieldSet to a BasicForm, it will behave exactly
- *   like a normal container. The fields will be rendered next to each other in
- *   the order they were added to the fieldset.
- *  </li>
- *  <li>Form - When adding FieldSet to a Form, FieldSet will delegate rendering to
- *   {@link Form#renderFieldSet(net.sf.click.util.HtmlStringBuffer, net.sf.click.control.FieldSet)}
- *   thus using the properties of its parent Form for laying out and rendering of
- *   its fields.
- *   <p/>
- *   A FieldSet can contain any Control, <tt>however</tt> when used in conjuction
- *   with {@link Form}, it is recommended to only add fields since Form's
- *   auto-layout is geared towards the layout of fields.
- * </ul>
  *
  * <h3>FieldSet Example</h3>
  *
@@ -120,8 +102,8 @@ public class FieldSet extends AbstractContainer {
     /** The map of field width values. */
     protected Map fieldWidths;
 
-    /** The parent BasicForm. */
-    protected BasicForm form;
+    /** The parent Form. */
+    protected Form form;
 
     /** The FieldSet label. */
     protected String label;
@@ -142,6 +124,12 @@ public class FieldSet extends AbstractContainer {
      * Currently only {@link Form} acts upon this property.
      */
     protected Integer columns;
+
+    /** The Field disabled value. */
+    protected boolean disabled;
+
+    /** The Field is readonly flag. */
+    protected boolean readonly;
 
     // ------------------------------------------------------ Constructorrs
 
@@ -211,23 +199,20 @@ public class FieldSet extends AbstractContainer {
 
             getControlMap().put(field.getName(), field);
 
-            BasicForm basicForm = getForm();
-            field.setForm(basicForm);
+            Form form = getForm();
+            field.setForm(form);
 
             field.setParent(this);
 
-            if (basicForm instanceof Form) {
-                Form form = (Form) basicForm;
-                if (form != null && form.getDefaultFieldSize() > 0) {
-                    if (field instanceof TextField) {
-                        ((TextField) field).setSize(form.getDefaultFieldSize());
+            if (form != null && form.getDefaultFieldSize() > 0) {
+                if (field instanceof TextField) {
+                    ((TextField) field).setSize(form.getDefaultFieldSize());
 
-                    } else if (field instanceof FileField) {
-                        ((FileField) field).setSize(form.getDefaultFieldSize());
+                } else if (field instanceof FileField) {
+                    ((FileField) field).setSize(form.getDefaultFieldSize());
 
-                    } else if (field instanceof TextArea) {
-                        ((TextArea) field).setCols(form.getDefaultFieldSize());
-                    }
+                } else if (field instanceof TextArea) {
+                    ((TextArea) field).setCols(form.getDefaultFieldSize());
                 }
             }
 
@@ -345,6 +330,64 @@ public class FieldSet extends AbstractContainer {
     }
 
     /**
+     * Return true if the FieldSet is disabled. The FieldSet will also be
+     * disabled if the parent Form is disabled.
+     * <p/>
+     * <b>Important Note</b>: disabled fieldset also disables all its fields
+     * which will not submit their values in a HTML form POST. This may cause
+     * validation issues in a form submission. Please note this is a HTML
+     * limitation and is not due to Click.
+     *
+     * @return true if the Field is disabled
+     */
+    public boolean isDisabled() {
+        Form form = getForm();
+        if (form != null && form.isDisabled()) {
+            return true;
+        } else {
+            return disabled;
+        }
+    }
+
+    /**
+     * Set the FieldSet disabled flag which in turn will disable all its fields.
+     * <p/>
+     * <b>Important Note</b>: disabled fields will not submit their values in
+     * a HTML form POST. This may cause validation issues in a form submission.
+     * Please note this is a HTML limitation and is not due to Click.
+     *
+     * @param disabled the Field disabled flag
+     */
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    /**
+     * Return true if the FieldSet is readonly. The FieldSet will also be
+     * readonly if the parent Form is readonly.
+     *
+     * @return true if the FieldSet is a readonly
+     */
+    public boolean isReadonly() {
+        Form form = getForm();
+        if (form != null && form.isReadonly()) {
+            return true;
+        } else {
+            return readonly;
+        }
+    }
+ 
+    /**
+     * Set the FieldSet readonly flag which in turn will set all its fields
+     * to readonly.
+     *
+     * @param readonly the FieldSet readonly flag
+     */
+    public void setReadonly(boolean readonly) {
+        this.readonly = readonly;
+    }
+
+    /**
      * Return the number of fieldset layout table columns. This property supplies
      * a hint to the number of table columns the fieldset should be rendered with.
      * <p/>
@@ -359,12 +402,7 @@ public class FieldSet extends AbstractContainer {
         if (columns != null) {
             return columns.intValue();
         } else {
-            BasicForm parentForm = getForm();
-            if (parentForm instanceof Form) {
-                return ((Form) parentForm).getColumns();
-            }
-            // Defaults to 1
-            return 1;
+            return getForm().getColumns();
         }
     }
 
@@ -436,7 +474,7 @@ public class FieldSet extends AbstractContainer {
      *
      * @return the parent Form containing the FieldSet
      */
-    public BasicForm getForm() {
+    public Form getForm() {
         if (form != null) {
             return form;
 
@@ -451,7 +489,7 @@ public class FieldSet extends AbstractContainer {
      *
      * @param form FieldSet's parent <tt>Form</tt>
      */
-    public void setForm(BasicForm form) {
+    public void setForm(Form form) {
         if (form == null) {
             throw new IllegalArgumentException("Cannot set the FieldSet's form to null");
         }
@@ -669,24 +707,51 @@ public class FieldSet extends AbstractContainer {
      * @param buffer the specified buffer to render the control's output to
      */
     public void render(HtmlStringBuffer buffer) {
-        BasicForm form = getForm();
 
-        if (form instanceof Form) {
-            ((Form) form).renderFieldSet(buffer, this);
-        } else {
-            if (getShowBorder()) {
-                renderTagBegin(getTag(), buffer);
-                buffer.closeTag();
-                if (hasControls()) {
-                    buffer.append("\n");
-                }
+        if (getShowBorder()) {
+            buffer.elementStart(getTag());
 
-                renderContent(buffer);
+            buffer.appendAttribute("id", getId());
 
-                renderTagEnd(getTag(), buffer);
-            } else {
-                renderChildren(buffer);
+            appendAttributes(buffer);
+
+            if (isDisabled()) {
+                buffer.appendAttributeDisabled();
             }
+
+            buffer.closeTag();
+            buffer.append("\n");
+
+            String legend = getLegend();
+            if (legend != null && legend.length() > 0) {
+                buffer.elementStart("legend");
+                if (hasLegendAttributes()) {
+                    Object legendId = getLegendAttributes().get("id");
+                    if (legendId != null) {
+                        buffer.appendAttribute("id", legendId);
+                    } else {
+                        buffer.appendAttribute("id", getId() + "-legend");
+                    }
+                    buffer.appendAttributes(getLegendAttributes());
+                } else {
+                    buffer.appendAttribute("id", getId() + "-legend");
+                }
+                buffer.closeTag();
+                buffer.append(getLegend());
+                buffer.elementEnd("legend");
+                buffer.append("\n");
+            }
+        }
+
+        // Render Controls
+        renderFields(buffer);
+
+        // Render Buttons
+        renderButtons(buffer);
+
+        if (getShowBorder()) {
+            buffer.elementEnd(getTag());
+            buffer.append("\n");
         }
     }
 
@@ -708,47 +773,223 @@ public class FieldSet extends AbstractContainer {
     //-------------------------------------------- protected methods
 
     /**
-     * @see AbstractControl#renderTagBegin(java.lang.String, net.sf.click.util.HtmlStringBuffer)
+     * Render the fieldsets form fields to the string buffer. This method will
+     * apply the parent Forms properties to the layout and rendering of fields.
      *
-     * @param tagName the name of the tag to render
-     * @param buffer the buffer to append the output to
+     * @param buffer the StringBuffer to render to
      */
-    protected void renderTagBegin(String tagName, HtmlStringBuffer buffer) {
-        if (tagName == null) {
-            throw new IllegalStateException("Tag cannot be null");
+    protected void renderFields(HtmlStringBuffer buffer) {
+        if (getFieldList().isEmpty()) {
+            return;
         }
 
-        buffer.elementStart(tagName);
+        buffer.elementStart("table");
+        buffer.appendAttribute("class", "fields");
+        buffer.appendAttribute("id", getId() + "-fields");
+        buffer.closeTag();
+        buffer.append("\n");
 
-        String id = getId();
-        if (id != null) {
-            buffer.appendAttribute("id", id);
+        int column = 1;
+        boolean openTableRow = false;
+
+        if (!hasControls()) {
+            return;
         }
 
-        appendAttributes(buffer);
+        List controls = getControls();
+
+        for (int i = 0; i < controls.size(); i++) {
+            Control control = (Control) controls.get(i);
+
+            // Buttons are rendered separately
+            if (control instanceof Button) {
+                continue;
+            }
+
+            if (!isHidden(control)) {
+
+                // Field width
+                Integer width = (Integer) getFieldWidths().get(control.getName());
+
+                if (column == 1) {
+                    buffer.append("<tr class=\"fields\">\n");
+                    openTableRow = true;
+                }
+
+                if (control instanceof Label) {
+                    Label label = (Label) control;
+                    buffer.append("<td class=\"fields\" align=\"");
+                    buffer.append(getForm().getLabelAlign());
+                    buffer.append("\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+
+                    if (label.hasAttributes()) {
+                        //Temporarily remove the style attribute
+                        String tempStyle = null;
+                        if (label.hasAttribute("style")) {
+                            tempStyle = label.getAttribute("style");
+                            label.setAttribute("style", null);
+                        }
+                        buffer.appendAttributes(label.getAttributes());
+
+                        //Put style back in attribute map
+                        if (tempStyle != null) {
+                            label.setAttribute("style", tempStyle);
+                        }
+                    }
+                    buffer.append(">");
+                    label.render(buffer);
+                    buffer.append("</td>\n");
+
+                } else if (control instanceof Field) {
+                    Field field = (Field) control;
+                    Form form = getForm();
+                    // Write out label
+                    if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
+                        buffer.append("<td class=\"fields\"");
+                        buffer.appendAttribute("align", form.getLabelAlign());
+                        buffer.appendAttribute("style", form.getLabelStyle());
+                        buffer.append(">");
+                    } else {
+                        buffer.append("<td class=\"fields\" valign=\"top\"");
+                        buffer.appendAttribute("style", form.getLabelStyle());
+                        buffer.append(">");
+                    }
+
+                    if (field.isRequired()) {
+                        buffer.append(form.getMessage("label-required-prefix"));
+                    } else {
+                        buffer.append(form.getMessage("label-not-required-prefix"));
+                    }
+                    buffer.elementStart("label");
+                    buffer.appendAttribute("for", field.getId());
+                    if (field.isDisabled()) {
+                        buffer.appendAttributeDisabled();
+                    }
+                    if (field.getError() != null) {
+                        buffer.appendAttribute("class", "error");
+                    }
+                    buffer.closeTag();
+                    buffer.append(field.getLabel());
+                    buffer.elementEnd("label");
+                    if (field.isRequired()) {
+                        buffer.append(form.getMessage("label-required-suffix"));
+                    } else {
+                        buffer.append(form.getMessage("label-not-required-suffix"));
+                    }
+
+                    if (Form.POSITION_LEFT.equals(form.getLabelsPosition())) {
+                        buffer.append("</td>\n");
+                        buffer.append("<td align=\"left\"");
+                        buffer.appendAttribute("style", form.getFieldStyle());
+
+                        if (width != null) {
+                            int colspan = (width.intValue() * 2) - 1;
+                            buffer.appendAttribute("colspan", colspan);
+                        }
+
+                        buffer.append(">");
+                    } else {
+                        buffer.append("<br/>");
+                    }
+
+                    // Write out field
+                    field.render(buffer);
+                    buffer.append("</td>\n");
+                } else {
+                    buffer.append("<td class=\"fields\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+                    buffer.append(">\n");
+                    control.render(buffer);
+
+                    buffer.append("</td>\n");
+                }
+
+                if (width != null) {
+                    if (control instanceof Label || !(control instanceof Field)) {
+                        column += width.intValue();
+
+                    } else {
+                        column += (width.intValue() - 1);
+                    }
+                }
+
+                if (column >= getColumns()) {
+                    buffer.append("</tr>\n");
+                    openTableRow = false;
+                    column = 1;
+                } else {
+                    column++;
+                }
+
+            }
+        }
+
+        if (openTableRow) {
+            buffer.append("</tr>\n");
+        }
+
+        buffer.elementEnd("table");
+        buffer.append("\n");
     }
 
     /**
-     * @see AbstractContainer#renderContent(net.sf.click.util.HtmlStringBuffer)
+     * Render the fieldset buttons to the string buffer.
      *
-     * @param buffer the buffer to append the output to
+     * @param buffer the StringBuffer to render to
      */
-    protected void renderContent(HtmlStringBuffer buffer) {
-        String fsLegend = getLegend();
-        if (fsLegend != null && fsLegend.length() > 0) {
-            buffer.elementStart("legend");
-            if (hasLegendAttributes()) {
-                Object legendId = getLegendAttributes().get("id");
-                if (legendId != null) {
-                    buffer.appendAttribute("id", legendId);
-                }
-                buffer.appendAttributes(getLegendAttributes());
+    protected void renderButtons(HtmlStringBuffer buffer) {
+        List buttons = ContainerUtils.getButtons(this);
+
+        if (!buttons.isEmpty()) {
+            buffer.append("<table class=\"buttons\" id=\"");
+            buffer.append(getId());
+            buffer.append("-buttons\">\n");
+            buffer.append("<tr class=\"buttons\">");
+
+            Form form = getForm();
+            for (int i = 0, size = buttons.size(); i < size; i++) {
+                buffer.append("<td class=\"buttons\"");
+                buffer.appendAttribute("style", form.getButtonStyle());
+                buffer.closeTag();
+
+                Button button = (Button) buttons.get(i);
+                button.render(buffer);
+
+                buffer.append("</td>");
             }
-            buffer.closeTag();
-            buffer.append(fsLegend);
-            buffer.elementEnd("legend");
-            buffer.append("\n");
+
+            buffer.append("</tr>\n");
+            buffer.append("</table>\n");
         }
-        super.renderContent(buffer);
+    }
+
+    // -------------------------------------------------------- Private Methods
+
+    /**
+     * Return true if the control is hidden, false otherwise.
+     *
+     * @param control control to check hidden status
+     * @return true if the control is hidden, false otherwise
+     */
+    private boolean isHidden(Control control) {
+        if (!(control instanceof Field)) {
+            // Non-Field Controls can not be hidden
+            return false;
+        } else {
+            return ((Field) control).isHidden();
+        }
     }
 }

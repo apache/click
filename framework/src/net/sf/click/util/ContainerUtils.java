@@ -25,9 +25,9 @@ import java.util.Set;
 import net.sf.click.control.Container;
 import net.sf.click.Control;
 import net.sf.click.Page;
-import net.sf.click.control.BasicForm;
 import net.sf.click.control.Button;
 import net.sf.click.control.Field;
+import net.sf.click.control.Form;
 import net.sf.click.control.Label;
 import net.sf.click.service.LogService;
 import org.apache.commons.lang.ClassUtils;
@@ -132,18 +132,17 @@ public class ContainerUtils {
     }
 
     /**
-     * Find and return the specified controls parent BasicForm or null
-     * if no BasicForm is present.
+     * Find and return the specified controls parent Form or null
+     * if no Form is present.
      *
-     * @param control the control to check for BasicForm
-     * @return the controls parent BasicForm or null if no parent is a
-     * BasicForm
+     * @param control the control to check for Form
+     * @return the controls parent Form or null if no parent is a Form
      */
-    public static BasicForm findForm(Control control) {
+    public static Form findForm(Control control) {
         while (control.getParent() != null && !(control.getParent() instanceof Page)) {
             control = (Control) control.getParent();
-            if (control instanceof BasicForm) {
-                return (BasicForm) control;
+            if (control instanceof Form) {
+                return (Form) control;
             }
         }
         return null;
