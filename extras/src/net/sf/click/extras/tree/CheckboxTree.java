@@ -57,11 +57,11 @@ import org.apache.commons.lang.ArrayUtils;
  *
  *     <span class="kw">protected</span> Submit okSubmit;
  *     <span class="kw">protected</span> Submit cancelSubmit;
- *     <span class="kw">protected</span> BasicForm form;
+ *     <span class="kw">protected</span> Form form;
  *
  *     <span class="kw">public</span> PlainTreePage() {
  *         Tree tree = buildTree();
- *         form = <span class="kw">new</span> BasicForm(<span class="st">"form"</span>);
+ *         form = <span class="kw">new</span> Form(<span class="st">"form"</span>);
  *         form.add(tree);
  *         addControl(form);
  *         okSubmit = <span class="kw">new</span> Submit(<span class="st">"okSubmit"</span>, <span class="st">"Select"</span>, <span class="kw">this</span>, <span class="st">"onSubmitClick"</span>);
@@ -221,7 +221,7 @@ public class CheckboxTree extends Tree {
      * <pre class="prettyprint">
      * public void onInit() {
      *   Tree tree = new Tree("tree");
-     *   BasicForm form = new BasicForm("form");
+     *   Form form = new Form("form");
      *   form.add(tree);
      *   Submit submit = new Submit("submit");
      *   form.add(submit);

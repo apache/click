@@ -179,7 +179,11 @@ public abstract class AbstractContainerField extends Field implements Container 
      * @return true to continue Page event processing or false otherwise
      */
     public boolean onProcess() {
-        return container.onProcess();
+        boolean continueProcessing = super.onProcess();
+        if (!container.onProcess()) {
+            continueProcessing = false;
+        }
+        return continueProcessing;
     }
 
     /**
@@ -219,7 +223,8 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * Render the container and all its child controls to the specified buffer.
+     * By default render the container and all its child controls to the
+     * specified buffer.
      * <p/>
      * If {@link net.sf.click.control.AbstractControl#getTag()} returns null,
      * this method will render only its child controls.
