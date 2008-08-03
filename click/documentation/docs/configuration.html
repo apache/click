@@ -423,7 +423,7 @@ You can turn this behaviour off by setting the autobinding attribute to false, f
 
 
 
-<a name="application-headers" class="heading"></a><h3>2.3&nbsp; Headers</h3>
+<a name="application-headers" class="heading"></a><h3>2.4&nbsp; Headers</h3>
 
 The optional <tt>headers</tt> element defines a list of <tt>header</tt> elements
 which are applied to all pages.
@@ -449,7 +449,7 @@ Pages can then modify their
 the <a href="click-api/net/sf/click/Page.html#setHeader(java.lang.String, java.lang.Object)">setHeader()</a>
 method.
 
-<h4>2.3.1&nbsp; Browser Caching</h4>
+<h4>2.4.1&nbsp; Browser Caching</h4>
 
 Headers are typically used to switch off browser caching. By default Click will
 use the following no caching header values if you don't define a <tt>headers</tt>
@@ -506,7 +506,7 @@ To apply header values globally define header values in the headers element. For
 </pre>
 
 
-<a name="application-format" class="heading"></a><h3>2.4&nbsp; Format</h3>
+<a name="application-format" class="heading"></a><h3>2.5&nbsp; Format</h3>
 
 The optional <tt>format</tt> element defines the Format object classname which
 is applied to all pages.
@@ -532,7 +532,7 @@ descriptor. For example:
 </pre>
 
 
-<a name="application-mode" class="heading"></a><h3>2.5&nbsp; Mode</h3>
+<a name="application-mode" class="heading"></a><h3>2.6&nbsp; Mode</h3>
 
 The optional <tt>mode</tt> element defines the application logging and caching mode.
 
@@ -613,7 +613,7 @@ template caching and logging levels are:
 </table>
 
 
-<a name="page-auto-loading" class="heading"></a><h4>2.5.1&nbsp; Page Auto Loading</h4>
+<a name="page-auto-loading" class="heading"></a><h4>2.6.1&nbsp; Page Auto Loading</h4>
 
 When Page Auto Loading is enabled any new page templates and classes will
 be automatically loaded at runtime. These pages are loaded using the 
@@ -623,7 +623,7 @@ Page auto loading is a very handy feature for rapid development
 as you do not have to restart you application server to pick up new pages.
 
 
-<a name="click-logging" class="heading"></a><h4>2.5.2&nbsp; Click and Velocity Logging</h4>
+<a name="click-logging" class="heading"></a><h4>2.6.2&nbsp; Click and Velocity Logging</h4>
 
 The Click and Velocity runtimes use 
 <a target="topic" href="click-api/net/sf/click/service/LogService.html">LogService</a>
@@ -656,7 +656,7 @@ This behaviour can be changed by modifying the deployed
 <span class="blue"><tt>click/error.htm</tt></span> page template.
 
 
-<a name="application-controls" class="heading"></a><h3>2.6&nbsp; Controls</h3>
+<a name="application-controls" class="heading"></a><h3>2.7&nbsp; Controls</h3>
 
 The optional <tt>controls</tt> element defines a list of <tt>control</tt> elements
 which will be deployed on application startup.
@@ -731,7 +731,8 @@ stylesheets, JavaScript etc.) from a Jar to a web applications.
     </li>
 </ol>
 
-As option #1 was already discussed above, lets look at option #2.
+As option #1 was already discussed above in section <a href="#application-controls">2.7 Controls</a>,
+lets look at option #2.
 <p/>
 
 When Click starts up, it scans each Jar in web lib (WEB-INF/lib) for specially
