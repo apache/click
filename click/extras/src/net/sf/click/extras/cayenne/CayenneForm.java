@@ -255,7 +255,7 @@ public class CayenneForm extends Form {
      * Clear all the form field values setting them to null. This method will
      * not clear the Form Object Class ("FO_CLASS") hidden field value.
      *
-     * @see net.sf.click.control.BasicForm#clearValues()
+     * @see net.sf.click.control.Form#clearValues()
      */
     public void clearValues() {
         List fields = ContainerUtils.getFields(this);
