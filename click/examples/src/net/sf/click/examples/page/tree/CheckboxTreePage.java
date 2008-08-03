@@ -7,7 +7,6 @@ import java.util.List;
 import net.sf.click.ActionListener;
 import net.sf.click.Context;
 import net.sf.click.Control;
-import net.sf.click.control.BasicForm;
 import net.sf.click.control.Checkbox;
 import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
@@ -29,7 +28,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     public static final String TREE_NODES_SESSION_KEY = "checkboxTreeNodes";
 
     private CheckboxTree tree;
-    private BasicForm form;
+    private Form form;
     private Submit okSubmit;
     private Reset resetBtn;
 
@@ -159,7 +158,7 @@ public class CheckboxTreePage extends BorderPage implements TreeListener {
     }
 
     // Custom form that handles the processing of the tree
-    class CheckboxTreeForm extends BasicForm {
+    class CheckboxTreeForm extends Form {
 
         public CheckboxTreeForm(String name) {
             super(name);
