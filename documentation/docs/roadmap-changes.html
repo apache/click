@@ -93,6 +93,12 @@ and new Table paginator support.
     </div>
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
+        Major refactoring to improve backward compatibility and upgrade path.
+        This includes removing BasicForm which was included in 1.5-M1 and adding
+        new Controls <a href="extras-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
+        and <a href="extras-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
+      </li>
+      <li class="change">
         Added support for multiple page package definitions in click.xml configuration.
         See the configuration topic <a href="configration.html#application-multi-packages">Multiple Pages Packages</a>
         for more details.

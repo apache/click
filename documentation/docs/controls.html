@@ -352,11 +352,8 @@ Container enables components to add, remove and retrieve other controls.
 <p/>
 Listed below are example Containers:
 <ul style="margin-top:0.5em;">
-   <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a>
-   - a form which allows any Control to be added.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Form.html">Form</a>
-   - a form which only allows Field and FieldSet Controls to be added. This restriction allows
-   Form to automatically layout its content.</li>
+   - an HTML form which provides default layout of fields and error feedback.</li>
    <li class="item"><a href="click-api/net/sf/click/control/Panel.html">Panel</a> - similar to
    <a href="click-api/net/sf/click/Page.html">Page</a>, this Container provides
    its own template and model.</li>
@@ -374,11 +371,10 @@ These Containers are depicted below in Figure 4.
 
 </p>
 
-The following convenient classes form the basis to create custom Containers:
+The following classes provides convenient extension points for creating custom Containers:
 <ul style="margin-top:0.5em;">
   <li class="item"><a href="click-api/net/sf/click/control/AbstractContainer.html">AbstractContainer</a></li>
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a></li>
-  <li class="item"><a href="click-api/net/sf/click/control/AbstractContainerField.html">AbstractContainerField</a></li>
+  <li class="item"><a href="click-api/net/sf/click/extras/control/AbstractContainerField.html">AbstractContainerField</a></li>
 </ul>
 
 Lets cover each of them here.
@@ -428,46 +424,17 @@ Executing the above example results in the following output:
     &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
 &lt;/div&gt; </pre>
 
-
-<h3>5.2&nbsp; BasicForm</h3>
-
-As mentioned earlier Form only allow Field and FieldSet controls to be added. Having this
-restriction enables the Form to layout its contents automatically and in a predictable way.
-
-<p/>
-Form also provides automatic error handling, which when combined with auto-layout, allows
-for the quick assembling of input screens.
-
-<p/>
-<a href="click-api/net/sf/click/control/BasicForm.html">BasicForm</a> on the other hand allows you to
-manually layout its child Controls and errors. Any control can be added including tables, trees, panels and lists.
-
-<p/>
-BasicForm provides everything you need to work with html forms, including the following
-helpful methods:
-
-<ul style="margin-top:0.5em;">
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#getFieldList()">getFieldList()</a> - return all fields found inside BasicForm, even if those fields are inside other containers.</li>
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#getErrorFields()">getErrorFields()</a> - return all invalid fields found inside BasicForm, even if those fields are inside other containers.</li>
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#isValid()">isValid()</a> - checks if the form or any fields contain any error.</li>
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#isFormSubmission()">isFormSubmission()</a> - useful when Page contains multiple forms.</li>
-  <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#onSubmitCheck(net.sf.click.Page, java.lang.Class)">onSubmitCheck(Page page, Class pageClass)</a> - protects against duplicate form submissions.</li>
-</ul>
-
-
-<h3>5.3&nbsp; AbstractContainerField</h3>
+<h3>5.2&nbsp; AbstractContainerField</h3>
 
 AbstractContainerField extends Field and implements the Container interface. This provides
-a convenient base class for those cases where you need both a Field and Container.
-
+a convenient base class in case you run into a situation where you need both a Field and Container.
 <p/>
-Since Form only works with Fields, AbstractContainerField is useful when you want to adapt
-a container to a field. For example:
+Below is an example of how AbstractContainerField might be used:
 
 <pre class="prettyprint">
-public class FieldContainer extends AbstractContainerField {
+public class FieldAndContainer extends AbstractContainerField {
 
-    public FieldContainer(String name) {
+    public FieldAndContainer(String name) {
         super(name);
     }
 
@@ -476,15 +443,6 @@ public class FieldContainer extends AbstractContainerField {
         return "div";
     }
 } </pre>
-
-FieldContainer can safely be used with Form, since FieldContainer <em>is a</em> field.
-
-<p/>
-Please note that FieldContainer is just a normal container and any control can be added 
-to it including tables, trees and panels. This circumvents the restriction placed on Form
-which can only accept fields as children. Its up to you to decide whether its a good idea
-to add non-field controls inside a Form. Normally it would be better to resort to BasicForm
-for these situations as you will have full control over the form layout.
 
 <p/>
 To test the new class we use the following snippet:
@@ -497,13 +455,13 @@ public class Test {
 
         // Create a FieldContainer instance called "field_container"
         String containerName = "field_container";
-        FieldContainer fieldContainer = new FieldContainer(containerName);
+        FieldAndContainer fieldAndContainer = new FieldAndContainer(containerName);
         
         // Add a couple of fields to the container
-        fieldContainer.add(new TextField("myfield"));
-        fieldContainer.add(new TextArea("myarea"));
+        fieldAndContainer.add(new TextField("myfield"));
+        fieldAndContainer.add(new TextArea("myarea"));
 
-        System.out.println(fieldContainer);
+        System.out.println(fieldAndContainer);
     }
 } </pre>
 
@@ -523,9 +481,9 @@ takes care of layout and error reporting automatically, and for many use cases
 auto-layout is good enough.
 
 <p/>
-However for custom or complex layouts, Form is not well suited.
+However for custom or complex layouts, Form is not always the best choice.
 
-<p/>There are two approaches for creating manual layouts.
+<p/>There are two approaches for creating custom layouts.
 <ul style="margin-top:0.5em;">
   <li class="item">
     Template approach - use a template engine such as Velocity, Freemarker or JSP to
@@ -629,24 +587,17 @@ is an example of a generic form layout using Velocity.
 To combat the redundancy introduced by the Template approach, you can take a
 programmatic approach and use normal Java and some Click classes to build custom
 layouts.
-
 <p/>
-Components such as Div, Span, List, HorizontalPanel and VerticalPanel are ideal
-for layout purposes.
-
+Click extras provides two useful classes in this situation namely,
+<a href="click-api/net/sf/click/extras/control/HtmlForm.html">HtmlForm</a>
+and <a href="click-api/net/sf/click/extras/control/HtmlFieldSet.html">HtmlFieldSet</a>.
 <p/>
-Since Click does not provide these components out of the box, lets create some
-of them as shown below:
-
-<pre class="prettyprint">
-// Div.java
-// Create a html &lt;div&gt; element
-public class Div extends AbstractContainer {
-
-    public String getTag() {
-        return "div";
-    }
-} </pre>
+Unlike Form and FieldSet which renders its controls using a Table layout, HtmlForm
+and HtmlFieldSet renders its controls in the order they were added and does not add
+any extra markup. HtmlForm will be shown in the example below.
+<p/>
+When creating custom layouts, the HTML construct List &lt;ul&gt; is pretty useful.
+Since Click does not provide this component, lets create it as shown here:
 
 <pre class="prettyprint">
 // HtmlList.java
@@ -676,23 +627,68 @@ public class ListItem extends AbstractContainer {
     }
 } </pre>
 
-After creating some components needed for the layout, the Form and Fields can
-be assembled.
+Another component that will be used in the example below is a FieldLabel which renders
+an HTML label element for a specified Field.
+
+<pre class="prettyprint">
+// FieldLabel.java
+// Create an html &lt;label&gt; element for a specified Field
+public class FieldLabel extends AbstractControl {
+
+    private Field target;
+
+    private String label;
+
+    public FieldLabel(Field target, String label) {
+        this.target = target;
+        this.label = label;
+    }
+
+    public String getTag() {
+        return "label";
+    }
+
+    // Override render to produce an html label which produces:
+    // <label for="firstname">Firstname:</label>
+    public void render(HtmlStringBuffer buffer) {
+        // Open tag: &lt;label
+        buffer.elementStart(getTag());
+
+        // Set attribute to target field's id
+        setAttribute("for", target.getId());
+
+        // Render the labels attributes
+        appendAttributes(buffer);
+
+        // Close tag: &lt;label for="firstname"&gt;
+        buffer.closeTag();
+
+        // Add label text: &lt;label for="firstname">Firstname:
+        buffer.append(label);
+
+        // Close tag: &lt;label for="firstname"&gt;Firstname:&lt;/label&gt;
+        buffer.elementEnd(getTag());
+    }
+
+} </pre>
+
+Now the form can be assembled.
 
 <p/>
 Continuing with the employee example from the <a href="#template-layout">template approach</a>,
-we again create an EmployeePage:
+we again create an EmployeePage, but this time an HtmlForm and HtmlList is used to create
+a custom layout:
 
 <pre class="prettyprint">
 // EmployeePage.java
 public class EmployeePage extends Page {
     // A form instance variable
-    private BasicForm form;
+    private HtmlForm form;
 
     // Build the form when the page is initialized
     public void onInit() {
-        // Create a BasicForm for manual layout
-        form = new BasicForm("form");
+        // Create an HtmlForm which is ideal for composing manual layouts
+        form = new HtmlForm("form");
         
         // Create a list and add it to the form. 
         HtmlList list = new HtmlList();
@@ -724,7 +720,7 @@ public class EmployeePage extends Page {
         // label.toString would output: &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
         FieldLabel label = new FieldLabel(field, labelStr);
 
-        // Add the label and field to the list item.
+        // Next add the label and field to the list item.
         // item.toString would then produce:
         // &lt;li&gt;
         //   &lt;label for="firstname"&gt;Firstname:&lt;/name&gt;
@@ -750,26 +746,24 @@ which produces the following markup:
 &lt;!-- employee.htm --&gt;
 &lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
 &lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
-    &lt;div style="margin: 1em;"&gt;
-        &lt;ol&gt;
-            &lt;li&gt;
-                &lt;label for="firstname"&gt;Firstname:&lt;/label>
-                &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
-            &lt;/li&gt;
-            &lt;li&gt;
-                &lt;label for="lastname"&gt;Lastname:&lt;/label>
-                &lt;input type="text" name="lastname" id="form_lastname" value="" size="20"/&gt;
-            &lt;/li&gt;
-            &lt;li&gt;
-                &lt;label for="age"&gt;Age:&lt;/label&gt;
-                &lt;input type="text" name="age" id="form_age" value="" size="20"/&gt;
-            &lt;/li&gt;
-            &lt;li&gt;
-                &lt;label for="salary"&gt;Salary:&lt;/label&gt;
-                &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
-            &lt;/li&gt;
-        &lt;/ol&gt;
-    &lt;/div&gt;
+    &lt;ol&gt;
+        &lt;li&gt;
+            &lt;label for="firstname"&gt;Firstname:&lt;/label>
+            &lt;input type="text" name="firstname" id="form_firstname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="lastname"&gt;Lastname:&lt;/label>
+            &lt;input type="text" name="lastname" id="form_lastname" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="age"&gt;Age:&lt;/label&gt;
+            &lt;input type="text" name="age" id="form_age" value="" size="20"/&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;label for="salary"&gt;Salary:&lt;/label&gt;
+            &lt;input type="text" name="salary" id="form_salary" value="" size="20"/&gt;
+        &lt;/li&gt;
+    &lt;/ol&gt;
     &lt;input type="submit" name="submit" id="form_submit" value="Add Employee"/&gt;
 &lt;/form&gt; </pre>
 
