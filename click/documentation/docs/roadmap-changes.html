@@ -45,8 +45,11 @@
 <h1>Road Map and Changes</h1>
 
 <h2>Road Map</h2>
-The next scheduled Click Framework release (version 1.5 M3) will include 
-new features including Module support, bug fixes, documentation and example updates.
+The next scheduled Click Framework release (version 1.5 RC1) which will be
+a feature freeze and include only bug fixes and documentation updates. 
+<p/>
+The following Click Framework release 1.6 will include new features such as module support
+and new Table paginator support.
 
 <p>&nbsp;</p>
 
@@ -91,6 +94,8 @@ new features including Module support, bug fixes, documentation and example upda
     <ul style="padding: 0em; margin-left:0em;">
       <li class="change">
         Added support for multiple page package definitions in click.xml configuration.
+        See the configuration topic <a href="configration.html#application-multi-packages">Multiple Pages Packages</a>
+        for more details.
         This issue was raised by Ricardo R. Lecheta
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-328">328</a>].
       </li>
@@ -103,30 +108,6 @@ new features including Module support, bug fixes, documentation and example upda
         Improved Table rendering performance in the order of 25-45%.
       </li>
       <li class="change">
-        Fixed bug where Select validation can throw ClassCastException 
-        when option list contains an OptionGroup. This issue was identifier by Christophe Foiret
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-374">374</a>].
-      </li>
-      <li class="change">
-        Fixed bug where Container can be added to itself. This issue was identifier by Harry Wissiak
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-414">414</a>].
-      </li>
-      <li class="change">
-        Fixed Page serialization issues with non serializable Format and PageImport objects.
-        This issue was identifier by Alexei Sokolov
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-416">416</a>].
-      </li>
-      <li class="change">
-        Fixed bug where CayenneForm clearValues() was hidden data object classname.
-        This issue was identifier by Wisking Ju Yu Wu
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-417">417</a>].
-      </li>
-      <li class="change">
-        Fixed bug where TabbedPanel was invoking the activePanel's onInit() method twice.
-        This issue was identifier by Wisking Ju Yu Wu
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-420">420</a>].
-      </li>
-      <li class="change">
         Updated AbstractContainerField control moving it to Click Core.
       </li>
       <li class="change">
@@ -136,6 +117,30 @@ new features including Module support, bug fixes, documentation and example upda
         <a href="click-api/net/sf/click/control/Container.html">Container</a>.
         This provide better backward compatibility for users upgrading from 
         previous releases.
+      </li>
+      <li class="change">
+        Fixed issue where Select validation can throw ClassCastException 
+        when option list contains an OptionGroup. This issue was identifier by Christophe Foiret
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-374">374</a>].
+      </li>
+      <li class="change">
+        Fixed issue where Container can be added to itself. This issue was identifier by Harry Wissiak
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-414">414</a>].
+      </li>
+      <li class="change">
+        Fixed Page serialization issues with non serializable Format and PageImport objects.
+        This issue was identifier by Alexei Sokolov
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-416">416</a>].
+      </li>
+      <li class="change">
+        Fixed issue where CayenneForm clearValues() was hidden data object classname.
+        This issue was identifier by Wisking Ju Yu Wu
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-417">417</a>].
+      </li>
+      <li class="change">
+        Fixed issue where TabbedPanel was invoking the activePanel's onInit() method twice.
+        This issue was identifier by Wisking Ju Yu Wu
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-420">420</a>].
       </li>
     </ul>
   </dd>

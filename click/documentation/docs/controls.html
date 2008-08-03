@@ -26,7 +26,7 @@ dt {
 <p/>
 Click provides a rich set of Controls which support client side rendering and
 server side processing. This section covers the following topics:
-<ul>
+<ol>
   <li><a href="#control-interface">Control Interface</a> - describes the Control interface
   </li> 
   <li><a href="#control-callback">Control Callback</a> - control event callback pattern
@@ -41,7 +41,7 @@ server side processing. This section covers the following topics:
   <li><a href="#layout">Layouts</a> - describes layout options and how to create
   custom layouts.
   </li>
-</ul>
+</ol>
 <p>&nbsp;</p>
 
 
@@ -49,7 +49,7 @@ While this section provides an overview how Controls work please see the
 <a target="topic" href="click-api/net/sf/click/control/package-summary.html">Javadoc</a>,
 which provides extensive information and examples.
 
-<a name="control-interface" class="heading"><h2>Control Interface</h2></a>
+<a name="control-interface" class="heading"></a><h2>1.&nbsp; Control Interface</h2>
 Controls provide the server side components that process user input, and render their
 display to the user. Controls are equivalent to Visual Basic Controls or Delphi Components.
 <p/>
@@ -117,7 +117,7 @@ Methods on the Control interface include:
   </li>
 </ul>
 
-<a name="control-callback" class="heading"><h2>Control Callback</h2></a>
+<a name="control-callback" class="heading"></a><h2>2.&nbsp; Control Callback</h2>
 
 Click Controls provide an event callback mechanism similar to a java.awt.ActionListener callback.
 <p/>
@@ -175,7 +175,7 @@ Pages onRender() method may perform an expensive database operation. By returnin
 false in an event handler you can skip this step and render the template or forward to the
 next page.
 
-<a name="control-class" class="heading"><h2>Control Classes</h2></a>
+<a name="control-class" class="heading"></a><h2>3.&nbsp; Control Classes</h2>
 
 Core control classes are defined in the package 
 <a target="topic" href="click-api/net/sf/click/control/package-summary.html">net.sf.click.control</a>.
@@ -223,19 +223,19 @@ You can also aggregate controls to build more complex controls. For example the
 uses a <a href="click-api/net/sf/click/control/Select.html">Select</a>
 control to render the different credit card types. 
 
-<a name="message-properties" class="heading"><h2>Message Properties</h2></a>
+<a name="message-properties" class="heading"></a><h2>4.&nbsp; Message Properties</h2>
 
 Control strings for field validation messages and HTML formatting strings are
 externalized in the properties file. By using these properties files you can
 localize a Click application for your particular language and dialect.
 
-<h3>Message Resolution</h3>
+<h3>4.1&nbsp; Message Resolution</h3>
 
 Messages are looked up in a particular order enabling taylor specific messages,
 for your controls, individual pages or across your entire application.
 The order in which localized messages are resolved is:
 <dl>
- <dt style="font-weight:bold">Page scope messages</dt>
+ <dt style="font-weight:bold">4.1.1&nbsp; Page scope messages</dt>
  <dd>Message lookups are first resolved to the Page classes message bundle if it
  exists. For example a <tt>Login</tt> page may define the message properties:
  
@@ -246,7 +246,7 @@ The order in which localized messages are resolved is:
  them.
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global page scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.2&nbsp; Global page scope messages</dt>
  <dd>Next message lookups are resolved to the global pages message bundle if it
  exists.
  
@@ -257,7 +257,7 @@ The order in which localized messages are resolved is:
  to place them.
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Control scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.3&nbsp; Control scope messages</dt>
  <dd>Next message lookups are resolved to the Control classes message bundle if 
  it exists. For example a <tt>CustomTextField</tt> control may define the 
  message properties:
@@ -266,7 +266,7 @@ The order in which localized messages are resolved is:
  /com/mycorp/control/CustomTextField.properties </pre>
  </dd>
  
- <dt style="font-weight:bold;margin-top:1em;">Global control scope messages</dt>
+ <dt style="font-weight:bold;margin-top:1em;">4.1.4&nbsp; Global control scope messages</dt>
  <dd>Finally message lookups are resolved to the global application control 
  message bundle if the message has not already been found. The global control
  properties file is:
@@ -276,7 +276,7 @@ The order in which localized messages are resolved is:
  </dd>
  </dl>
 
-<h3>Control Properties</h3>
+<h3>4.2&nbsp; Control Properties</h3>
 
 To customize the <tt>click-control.properties</tt> simply add this file to your 
 classpath and tailor the specific values.
@@ -325,7 +325,7 @@ production-error-message=
   &lt;/div&gt; </pre>
 
 
-<h3>Accessing Messages</h3>
+<h3>4.3&nbsp; Accessing Messages</h3>
 
 Field classes support a hierarchy of resource bundles for displaying 
 validation error messages and display messages. These localized messages can be 
@@ -343,7 +343,8 @@ accessed through the Field methods:
 These methods use the <tt>Locale</tt> of the request to lookup the string resource
 bundle, and use <tt>MessageFormat</tt> for any string formatting.
 
-<a name="container" class="heading"></a><h2>Container</h2>
+
+<a name="container" class="heading"></a><h2>5.&nbsp; Container</h2>
 The Container is a Control that can contain other Controls, thus forming a
 hierarchy of components.
 <p/>
@@ -381,11 +382,9 @@ The following convenient classes form the basis to create custom Containers:
 </ul>
 
 Lets cover each of them here.
-<p/>
 
-<b>AbstractContainer</b>
+<h3>5.1&nbsp; AbstractContainer</h3>
 
-<p/>
 Enables easy creation of custom Containers, for example an html <em>div</em> or <em>span</em> element:
 
 <pre class="prettyprint">
@@ -429,11 +428,9 @@ Executing the above example results in the following output:
     &lt;input type="text" name="myfield" id="myfield" value="" size="20" /&gt;
 &lt;/div&gt; </pre>
 
-<br/>
 
-<b>BasicForm</b>
+<h3>5.2&nbsp; BasicForm</h3>
 
-<p/>
 As mentioned earlier Form only allow Field and FieldSet controls to be added. Having this
 restriction enables the Form to layout its contents automatically and in a predictable way.
 
@@ -457,11 +454,9 @@ helpful methods:
   <li class="item"><a href="click-api/net/sf/click/control/BasicForm.html#onSubmitCheck(net.sf.click.Page, java.lang.Class)">onSubmitCheck(Page page, Class pageClass)</a> - protects against duplicate form submissions.</li>
 </ul>
 
-<br/>
 
-<b>AbstractContainerField</b>
+<h3>5.3&nbsp; AbstractContainerField</h3>
 
-<p/>
 AbstractContainerField extends Field and implements the Container interface. This provides
 a convenient base class for those cases where you need both a Field and Container.
 
@@ -521,7 +516,7 @@ Executing the snippet produces the output:
 &lt;/div&gt; </pre>
 
 
-<a name="layout" class="heading"></a><h2>Layout</h2>
+<a name="layout" class="heading"></a><h2>6.&nbsp; Layouts</h2>
 
 Controls such as <a href="click-api/net/sf/click/control/Form.html">Form</a>
 takes care of layout and error reporting automatically, and for many use cases
@@ -541,15 +536,13 @@ However for custom or complex layouts, Form is not well suited.
     is very similar to building components using Swing.
   </li>
 </ul>
-<br/>
 
-<a name="template-layout" class="heading"></a>
-<b>Template layouts</b>
-<p/>
+<a name="template-layout" class="heading"></a><h3>6.1&nbsp; Template layouts</h3>
+
 Taking the <a href="click-api/net/sf/click/control/Form.html#manual-layout">Template</a>
 approach works well and it separates the Page and layout logic. For example:
 <pre class="prettyprint">
-//EmployeePage.java
+// EmployeePage.java
 public EmployeePage extends Page {
 
     private Form form;
@@ -579,7 +572,7 @@ We could provide the markup for the <span class="st">employee.htm</span> templat
 using a template engine such as Velocity:
 
 <pre class="prettyprint">
-&lt;!--employee.htm--&gt;
+&lt;!-- employee.htm --&gt;
 ${form.startTag()}
     &lt;div style="margin: 1em;"&gt;
         &lt;ol&gt;
@@ -631,12 +624,8 @@ It is also possible to "generify" the layout using template engines.
 <a href="click-api/net/sf/click/control/Form.html#velocity-macros">Macro.vm</a>
 is an example of a generic form layout using Velocity.
 
-<p/><br>
-<a name="programmatic-layout" class="heading"></a>
+<a name="programmatic-layout" class="heading"></a><h3>6.2&nbsp; Programmatic layouts</h3>
 
-<b>Programmatic layouts</b>
-
-<p/>
 To combat the redundancy introduced by the Template approach, you can take a
 programmatic approach and use normal Java and some Click classes to build custom
 layouts.
@@ -758,7 +747,7 @@ ${form}
 which produces the following markup:
     
 <pre class="prettyprint">
-&lt;!--employee.htm--&gt;
+&lt;!-- employee.htm --&gt;
 &lt;form method="post" id="form" action="/myapp/employee.htm"&gt;
 &lt;input type="hidden" name="form_name" id="form_form_name" value="form"/&gt;
     &lt;div style="margin: 1em;"&gt;
