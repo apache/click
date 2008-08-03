@@ -33,7 +33,7 @@ public class ControlTest extends TestCase {
      */
     public void testChangingControlNameAfterParentIsSet() {
         /*
-        BasicForm form = new BasicForm("form");
+        Form form = new Form("form");
 
         // Run test with a Control having a name 
         String fieldName = "field";
@@ -55,7 +55,7 @@ public class ControlTest extends TestCase {
         }
 
 
-        form = new BasicForm("form");
+        form = new Form("form");
 
         // Run test with a Control without having a name 
         field = new TextField();
@@ -82,7 +82,7 @@ public class ControlTest extends TestCase {
     public void testAddContainerToItself() {
         MockContext context = MockContext.initContext();
         try {
-            BasicForm form = new BasicForm("form");
+            Form form = new Form("form");
             form.add(form);
             Assert.assertFalse("Cannot add container to itself", true);
         } catch (RuntimeException expected) {
