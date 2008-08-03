@@ -54,12 +54,12 @@ import net.sf.click.util.HtmlStringBuffer;
  */
 public abstract class AbstractContainerField extends Field implements Container {
 
-    // -------------------------------------------------------- Instance Variables
+    // ----------------------------------------------------- Instance Variables
 
     /** Internal container instance. */
     protected AbstractContainer container = new InnerContainerField();
 
-    // ------------------------------------------------------ Constructorrs
+    // ---------------------------------------------------------- Constructorrs
 
     /**
      * Create a ContainerField with no name defined.
