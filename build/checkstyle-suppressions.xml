@@ -58,8 +58,7 @@
               files="ErrorReport.java"/>  
               
     <suppress checks="LineLength"
-              files="FieldSet.java"
-              lines="559,571,599"/>  
+              files="FieldSet.java"/>  
               
     <suppress checks="LineLength"
               files="Form.java"/>
@@ -91,7 +90,11 @@
 
     <suppress checks="MethodLength"
               files="Form.java"
-              lines="1572"/>
+              lines="1572, 2342"/>
+
+    <suppress checks="MethodLength"
+              files="FieldSet.java"
+              lines="781"/>
 
 	<!-- Static Variable Name -->              
 
