@@ -15,6 +15,8 @@
  */
 package net.sf.click.control;
 
+import net.sf.click.Control;
+import net.sf.click.Page;
 import org.apache.commons.lang.StringUtils;
 
 import net.sf.click.util.ClickUtils;
@@ -239,7 +241,7 @@ public abstract class Field extends AbstractControl {
 
     /**
      * Return true if the Field is disabled. The Field will also be disabled
-     * if the parent Form is disabled.
+     * if the parent FieldSet or Form is disabled.
      * <p/>
      * <b>Important Note</b>: disabled fields will not submit their values in
      * a HTML form POST. This may cause validation issues in a form submission.
@@ -248,12 +250,28 @@ public abstract class Field extends AbstractControl {
      * @return true if the Field is disabled
      */
     public boolean isDisabled() {
-        Form form = getForm();
-        if (form != null && form.isDisabled()) {
-            return true;
-        } else {
-            return disabled;
+        Control control = this;
+
+        // Check parents for instances of either FieldSet or Form
+        while (control.getParent() != null && !(control.getParent() instanceof Page)) {
+            control = (Control) control.getParent();
+            if (control instanceof FieldSet) {
+                FieldSet fieldSet = (FieldSet) control;
+                if (fieldSet.isDisabled()) {
+                    return true;
+                } else {
+                    return disabled;
+                }
+            } else if (control instanceof Form) {
+                Form form = (Form) control;
+                if (form.isDisabled()) {
+                    return true;
+                } else {
+                    return disabled;
+                }
+            }
         }
+        return disabled;
     }
 
     /**
@@ -539,17 +557,33 @@ public abstract class Field extends AbstractControl {
 
     /**
      * Return true if the Field is a readonly. The Field will also be readonly
-     * if the parent Form is readonly.
+     * if the parent FieldSet or Form is readonly.
      *
      * @return true if the Field is a readonly
      */
     public boolean isReadonly() {
-        Form form = getForm();
-        if (form != null && form.isReadonly()) {
-            return true;
-        } else {
-            return readonly;
+        Control control = this;
+
+        // Check parents for instances of either FieldSet or Form
+        while (control.getParent() != null && !(control.getParent() instanceof Page)) {
+            control = (Control) control.getParent();
+            if (control instanceof FieldSet) {
+                FieldSet fieldSet = (FieldSet) control;
+                if (fieldSet.isReadonly()) {
+                    return true;
+                } else {
+                    return readonly;
+                }
+            } else if (control instanceof Form) {
+                Form form = (Form) control;
+                if (form.isReadonly()) {
+                    return true;
+                } else {
+                    return readonly;
+                }
+            }
         }
+        return readonly;
     }
  
     /**
