@@ -20,7 +20,7 @@ the basic pieces you need to get a Click application running.
 A Quick Start application is also included in the <a href="examples.html">Examples</a>.
 <p/>
 The following topics are covered:
-<ul>
+<ol>
   <li><a href="#web">Web Application Structure</a>
   </li>
   <li><a href="#jars">JAR Files</a>
@@ -37,12 +37,12 @@ The following topics are covered:
   </li>
   <li><a href="#ant">Quick Start Project Builder</a>
   </li>
-</ul>
+</ol>
 
 <p>&nbsp;</p>
 
 
-<a name="web" class="heading"><h2>Web Application Structure</h2></a>
+<a name="web" class="heading"></a><h2>1.&nbsp; Web Application Structure</h2>
 
 First up add a <tt>click.xml</tt> and <tt>web.xml</tt> configuration file to 
 your applications <tt>WEB-INF</tt> directory:
@@ -106,7 +106,7 @@ Your <tt>web.xml</tt> file should contain:
 </blockquote>
 
 
-<a name="jars" class="heading"><h2>JAR Files</h2></a>
+<a name="jars" class="heading"></a><h2>2.&nbsp; JAR Files</h2>
 
 Add the following JAR files to your application <tt>WEB-INF/lib</tt>:
 
@@ -117,7 +117,7 @@ Add the following JAR files to your application <tt>WEB-INF/lib</tt>:
 
 You can obtain these files from the Click distribution <tt>dist</tt> directory.
 
-<a name="welcome" class="heading"><h2>Welcome File</h2></a>
+<a name="welcome" class="heading"></a><h2>3.&nbsp; Welcome File</h2>
 
 To ensure default application requests 
 (e.g. <span class="blue">http://localhost:8080/quickstart/</span>)
@@ -136,7 +136,7 @@ When the browser processes the <tt>redirect.html</tt> it will redirect to the
 applications <span class="blue">home.htm</span> page.
 
 
-<a name="home" class="heading"><h2>Home Page</h2></a>
+<a name="home" class="heading"></a><h2>4.&nbsp; Home Page</h2>
 
 Now we are ready to add our first Click page which will be our applications home page.
 <p/>
@@ -243,7 +243,7 @@ In this example the Click automatically maps the <tt>home.htm</tt> request to
 our <tt>HomePage</tt> class and uses this class to process the request.
 
 
-<a name="border" class="heading"><h2>Border Template</h2></a>
+<a name="border" class="heading"></a><h2>5.&nbsp; Border Template</h2>
 
 Now we want to create a page border template so application pages will have 
 a common look and feel.
@@ -339,7 +339,7 @@ HTML content being rendered.
 </table>
 
 
-<a name="logging" class="heading"><h2>Logging</h2></a>
+<a name="logging" class="heading"></a><h2>6.&nbsp; Logging</h2>
 
 Click has some handy logging features which will show you how your page
 templates are being automatically mapped to you page classes. To enable debug
@@ -408,7 +408,7 @@ form posts.
 
 
 <br/>
-<a name="where" class="heading"><h2>Whats Next ?</h2></a>
+<a name="where" class="heading"></a><h2>7.&nbsp; Whats Next ?</h2>
 
 After you have the Quick Start application up and running you might be wondering,
 where do I go from here? At this point you are recommended to:
@@ -429,7 +429,7 @@ where do I go from here? At this point you are recommended to:
 </ol>
 
 <br/>
-<a name="ant" class="heading"><h2>Quick Start Project Builder</h2></a>
+<a name="ant" class="heading"></a><h2>8.&nbsp; Quick Start Project Builder</h2>
 
 The fastest way to get a Click web application up and running is to use the
 Ant task <tt>project-quick-start</tt>. This ant task will build you a functional
@@ -440,7 +440,7 @@ application which includes:
 <li>Border Template</li>
 </ul>
 
-<h4>Prerequisites</h4>
+<h3>8.1&nbsp; Prerequisites</h3>
 To run the <tt>project-quick-start</tt> ant task please ensure the following 
 requirements are met:
 <ol>
@@ -457,7 +457,7 @@ requirements are met:
   </li>
 </ol>
 
-<h4>Running Quickstart</h4>
+<h3>8.2&nbsp; Running Quickstart</h3>
 
 To run the quick start application builder simply follow the example below:
 
@@ -526,7 +526,7 @@ like the one below.
 </tr>
 </table>
 
-<h4>Deploying to Tomcat</h4>
+<h3>8.3&nbsp; Deploying to Tomcat</h3>
 
 To run the quickstart application on Tomcat you need to configure
 <tt>user</tt> and <tt>admin</tt> security roles and add some users. To do this add a 
