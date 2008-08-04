@@ -15,7 +15,7 @@
 
 This section discusses Best Practices for designing and building Click application.
 The following topics are covered:
-<ul>
+<ol>
   <li><a href="#security">Security</a> - use JEE role based security
   </li>
   <li><a href="#packages-classes">Packages and Classes</a> - project package structures and page classes
@@ -32,11 +32,11 @@ The following topics are covered:
   </li>
   <li><a href="#error-handling">Error Handling</a> - use custom error page
   </li>
-</ul>
+</ol>
 
 <p>&nbsp;</p>
 
-<a name="security" class="heading"><h2>Security</h2></a>
+<a name="security" class="heading"></a><h2>1.&nbsp; Security</h2>
 
 For application security it is highly recommended that you use the declarative 
 JEE Servlet path role based security model. While Click pages provide an 
@@ -256,7 +256,7 @@ For more information on using security see the resources below:
 </ul>
 
 
-<a name="packages-classes" class="heading"><h2>Packages and Classes</h2></a>
+<a name="packages-classes" class="heading"></a><h2>2.&nbsp; Packages and Classes</h2>
 
 An excellent way to design your project package structure is the classify packages 
 initially by technology. So in a Click application all of our pages would be contained
@@ -376,7 +376,7 @@ their class name. For example the <tt>BorderPage</tt> class above will not be
 auto mapped to <span class="st">border-template.htm</span>.
 
 
-<a name="automapping" class="heading"><h2>Page Auto Mapping</h2></a>
+<a name="automapping" class="heading"></a><h2>3.&nbsp; Page Auto Mapping</h2>
 
 You should use the Click page automapping configuration feature. See
 the <a href="configuration.html#application-automapping">Page Automapping</a> 
@@ -410,7 +410,7 @@ provided below:
 [Click] [debug] /user-list.htm -&gt; com.mycorp.dashboard.page.UserList  </pre>
 
 
-<a name="navigation" class="heading"><h2>Navigation</h2></a>
+<a name="navigation" class="heading"></a><h2>4.&nbsp; Navigation</h2>
 
 When navigating between Pages using forwards and redirects, you should refer 
 to the target page using the Page class rather than using path. 
@@ -475,7 +475,7 @@ them to the applications home page.
     }
 </pre>
 
-<a name="templating" class="heading"><h2>Templating</h2></a>
+<a name="templating" class="heading"></a><h2>5.&nbsp; Templating</h2>
 
 Use Page templating it is highly recommended. Page templates provide numerous 
 advantages including:
@@ -489,7 +489,7 @@ To see how to use templates see the <a href="pages.html#page-templating">Page Te
 Also see the Click <a href="examples.html">Examples</a> use of page templating.
 
 
-<a name="menus" class="heading"><h2>Menus</h2></a>
+<a name="menus" class="heading"></a><h2>6.&nbsp; Menus</h2>
 
 For many applications using the <a href="extras-api/net/sf/click/extras/control/Menu.html">Menu</a>
 control to centralize application navigation is very useful. 
@@ -521,7 +521,7 @@ You can also use JavaScript to add dynamic behaviour such as drop down menus,
 for example see the Menu page in Click <a href="examples.html">Examples</a>.
 
 
-<a name="logging" class="heading"><h2>Logging</h2></a>
+<a name="logging" class="heading"></a><h2>7.&nbsp; Logging</h2>
 
 For page logging you should use <a href="http://logging.apache.org/log4j/docs/">Log4j</a>
 library. An alternative library is the 
@@ -585,7 +585,7 @@ Please note the Click logging facility is not designed for application use, and 
 for Click internal use only. When Click is running in <tt>production</tt> mode
 it will not produce any logging output.
 
-<a name="error-handling" class="heading"><h2>Error Handling</h2></a>
+<a name="error-handling" class="heading"></a><h2>8.&nbsp; Error Handling</h2>
 
 In Click unhandled errors are directed to the <a href="click-api/net/sf/click/util/ErrorPage.html">ErrorPage</a>
 for display. If applications require additional error handling they can create and
