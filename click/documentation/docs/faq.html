@@ -16,7 +16,7 @@
 <body>
   
 <h1>Frequently Asked Questions</h1>
-<ul>
+<ol>
   <li><a href="#getting-help">How to get help?</a>
   </li>
   <li><a href="#commercial-support">What about Commercial Support?</a>
@@ -57,13 +57,13 @@
   </li>  
   <li><a href="#why-click">Why develop a new Web Application Framework?</a>
   </li> 
-</ul>
+</ol>
 <p>&nbsp;</p>
 
 <dl>
 
   <a name="getting-help" class="heading"></a>
-  <dt><b>How to get help?</b></dt>
+  <dt><b>1.&nbsp; How to get help?</b></dt>
   <dd>
     OK you have read the documentation and reviewed the 
     <a href="examples.html">Examples</a> applications, but there is still something 
@@ -87,7 +87,7 @@
   
 
   <a name="commercial-support" class="heading"></a>
-  <dt><b>What about Commercial Support?</b></dt>
+  <dt><b>2.&nbsp; What about Commercial Support?</b></dt>
   <dd>
   	If you want commercial support or training for Click, you can obtain this 
   	from
@@ -98,7 +98,7 @@
 
   
   <a name="tool-support" class="heading"></a>
-  <dt><b>What development tools are there?</b></dt>
+  <dt><b>3.&nbsp; What development tools are there?</b></dt>
   <dd>
    Recommended Click development tools include:
    <p/>
@@ -144,7 +144,7 @@
 
   
   <a name="html-control" class="heading"></a>
-  <dt><b>How can the GUI designer define the HTML if Click Controls generates everything?</b></dt>
+  <dt><b>4.&nbsp; How can the GUI designer define the HTML if Click Controls generates everything?</b></dt>
   <dd>
   In Click there is nothing preventing you from laying out HTML forms by hand. 
   It just provides the option of doing it automatically for you.
@@ -217,7 +217,7 @@
 
   
   <a name="shared-template" class="heading"></a>
-  <dt><b>How can I have many Pages using the same HTML template?</b></dt>
+  <dt><b>5.&nbsp; How can I have many Pages using the same HTML template?</b></dt>
   <dd>
    To do this use the Page templating technique detailed in the 
    <a href="pages.html#page-templating">Page Templating</a> topic. 
@@ -236,7 +236,7 @@
 
     
   <a name="listener-returns" class="heading"></a>
-  <dt><b>Why do control listeners methods have to return a boolean value?</b></dt>
+  <dt><b>6.&nbsp; Why do control listeners methods have to return a boolean value?</b></dt>
   <dd>
   Control listener methods have to return a boolean value to state whether the
   Pages controls and methods should continue to be processed. To continue
@@ -261,7 +261,7 @@
 
 
   <a name="exclude-fields" class="heading"></a>
-  <dt><b>Can you exclude some fields from a Form?</b></dt>
+  <dt><b>7.&nbsp; Can you exclude some fields from a Form?</b></dt>
   <dd>
    To exclude some fields from being displayed in a shared Form class use the
    <a href="click-api/net/sf/click/control/Form.html#removeFields(java.util.List)">Form.removeFields()</a>
@@ -279,7 +279,7 @@
 
   
   <a name="localization" class="heading"></a>
-  <dt><b>How do you internationalize Pages and Controls?</b></dt>
+  <dt><b>8.&nbsp; How do you internationalize Pages and Controls?</b></dt>
   <dd>
    Click provides good support for application localization and 
    internationalization (I18N) requirements.
@@ -345,7 +345,7 @@
 
 
   <a name="utf8-encoding" class="heading"></a>
-  <dt><b>How do you encode Pages in the UTF-8 character set?</b></dt>
+  <dt><b>9.&nbsp; How do you encode Pages in the UTF-8 character set?</b></dt>
   <dd>
   To encode pages in the UTF-8 character set you need to create a
   <tt>WEB-INF/velocity.properties</tt> file with the properties:
@@ -372,7 +372,7 @@
 
 
   <a name="charset" class="heading"></a>
-  <dt><b>How do you specify the character set which is used in your application?</b></dt>
+  <dt><b>10.&nbsp; How do you specify the character set which is used in your application?</b></dt>
   <dd>
   
   You can specify your application character set in <tt>WEB-INF/click.xml</tt>:
@@ -394,7 +394,7 @@
   
       
   <a name="multiple-posts" class="heading"></a>
-  <dt><b>How can you prevent multiple form posts?</b></dt>
+  <dt><b>11.&nbsp; How can you prevent multiple form posts?</b></dt>
   <dd>
   You can prevent multiple form posts by using the Post Redirect pattern. With 
   this pattern once the user has posted a form you redirect to another page. 
@@ -425,7 +425,7 @@
 
 
   <a name="html-pages"></a>
-  <dt><b>How can I use *.html Click pages?</b></dt>
+  <dt><b>12.&nbsp; How can I use *.html Click pages?</b></dt>
   <dd>
   Click does not support *.html files as Click pages. These files are not
   processed by the ClickServlet and are intended for use as static content.
@@ -434,7 +434,7 @@
 
 
   <a name="cayenne-integration" class="heading"></a>
-  <dt><b>What JARs should I use with Click and Cayenne?</b></dt>
+  <dt><b>13.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
   <dd>
    To get Click and Cayenne to work happily with each other you will need to 
    include the following JAR files in your WEB-INF/lib directory:
@@ -455,7 +455,7 @@
 
 
   <a name="spring-integration" class="heading"></a>
-  <dt><b>How can you integrate Click into Spring?</b></dt>
+  <dt><b>14.&nbsp; How can you integrate Click into Spring?</b></dt>
   <dd>
    To integrate Spring with Click configure the
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
@@ -483,7 +483,7 @@ public interface Controller {
 
 
   <a name="jsp-support" class="heading"></a>
-  <dt><b>Does Click support JSP?</b></dt>
+  <dt><b>15.&nbsp; Does Click support JSP?</b></dt>
   <dd>
    Click fully supports JSP pages. 
    <p/>
@@ -523,7 +523,7 @@ public interface Controller {
 
     
   <a name="performance" class="heading"></a>
-  <dt><b>What is the performance of Click?</b></dt>
+  <dt><b>16.&nbsp; What is the performance of Click?</b></dt>
   <dd>
   Click is fast. 
   <p/>
@@ -565,7 +565,7 @@ public interface Controller {
 
 
   <a name="unit-testing"></a>
-  <dt><b>How do I unit test Click pages?</b></dt>
+  <dt><b>17.&nbsp; How do I unit test Click pages?</b></dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
   tests for Click pages as the cost to benefit ratio is quite poor.
@@ -581,39 +581,32 @@ public interface Controller {
 
 
   <a name="logging" class="heading"></a>
-  <dt><b>Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dt><b>18.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
-   Click initially did not use Log4J with Velocity because of an appender closing
-   memory leak  associated with garbage collecting VelocityEngines. This issue 
-   has been resolved with the latest Velocity 1.5 development stream. 
+   Click by default does not use Commons Logging / Log4J to avoid the class 
+   loader and configuration issues which often occur with these framework, and
+   instead default to System.out using the <tt>ConsoleLogger</tt>.
    <p/>
-   Commons Logging is not used because of class loader issues which occur
-   on versions of IBM's WebSphere application server.
+   Click provides support for configurable <tt>LogService</tt>s and provides
+   <tt>JdkLogService</tt> and <tt>Log4JLogService</tt> classes in Click Extras.
   </dd>
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
+  <dt><b>19.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
    features Velocity lacks, Velocity was chosen as the default engine because 
    it is easier to learn and doesn't use an XML style markup syntax.
    <p/>
-   One of FreeMarker's strong points compared to Velocity is error reporting.
-   This issue is addressed in Click by using the new enhanced error reporting
-   feature of Velocity 1.5.
-   <p/>
-   Click will render the source code with the error. For example:
-   <ul>
-      <li><a href="error-parsing.html">Page Parsing Error</a></li>
-      <li><a href="error-npe.html">Null Pointer Error</a></li>
-   </ul>
+   Please note however that Click provides support for FreeMarker with the 
+   <tt>FreemarkerTemplateService</tt> in Click Extras.
   </dd>
 
 
   <a name="why-click" class="heading"></a>
-  <dt><b>Why develop a new Web Application Framework?</b></dt>
+  <dt><b>20.&nbsp; Why develop a new Web Application Framework?</b></dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
   while Tapestry is too complicated. 
