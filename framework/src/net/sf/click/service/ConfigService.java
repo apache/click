@@ -289,6 +289,21 @@ public interface ConfigService {
     public Class getNotFoundPageClass();
 
     /**
+     * Return true if click resources are deployable to the file system.
+     *
+     * @return true if click resources are deployable to the file system
+     */
+    public boolean isResourcesDeployable();
+
+    /**
+     * Return a Map of deployed click resources, which is keyed on deployed file
+     * name path and contains a byte array of the deployed resources.
+     *
+     * @return a Map of deployed resources
+     */
+    public Map getResourcesDeployed();
+
+    /**
      * Return the application servlet context.
      *
      * @return the application servlet context

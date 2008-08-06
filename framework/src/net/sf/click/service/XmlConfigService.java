@@ -138,7 +138,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         DEFAULT_HEADERS.put("Expires", new Date(1L));
     }
 
-    // -------------------------------------------------------- Package Private Members
+    // ------------------------------------------------ Package Private Members
 
     /** The Map of global page headers. */
     Map commonHeaders;
@@ -184,6 +184,15 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /** The ServletContext instance. */
     private ServletContext servletContext;
 
+    /** The flag whether click resources can be deployed to the file system. */
+    private boolean resourcesDeployable;
+
+    /**
+     * The map of click resources deployed, containing a byte array of the
+     * resource file data and keyed on the resource path.
+     */
+    private Map resourcesDeployed = new HashMap();
+
     /** The application TemplateService. */
     private TemplateService templateService;
 
@@ -217,17 +226,8 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             // Load the application mode and set the logger levels
             loadMode(rootElm);
 
-            // Deploy application files if they are not already present.
-            // Only deploy if servletContext.getRealPath() returns a valid path.
-            if (servletContext.getRealPath("/") != null) {
-                deployFiles(rootElm);
-
-            } else {
-                String msg = "Could not auto deploy files to 'click' web folder."
-                    + " You may need to manually include click resources in your"
-                    + " web application.";
-                getLogService().warn(msg);
-            }
+            // Deploy click resources
+            deployFiles(rootElm);
 
             // Load the format class
             loadFormatClass(rootElm);
@@ -599,6 +599,25 @@ public class XmlConfigService implements ConfigService, EntityResolver {
             return Collections.EMPTY_MAP;
         }
     }
+
+    /**
+     * @see ConfigService#isResourcesDeployable()
+     *
+     * @return true if click resources are deployable to the file system
+     */
+    public boolean isResourcesDeployable() {
+        return resourcesDeployable;
+    }
+
+    /**
+     * @see ConfigService#getResourcesDeployed()
+     *
+     * @return a Map of deployed resources
+     */
+    public Map getResourcesDeployed() {
+        return resourcesDeployed;
+    }
+
 
     /**
      * @see ConfigService#getServletContext()
@@ -1081,6 +1100,17 @@ public class XmlConfigService implements ConfigService, EntityResolver {
      */
     private void deployFiles(Element rootElm) throws Exception {
 
+        // Deploy application files if they are not already present.
+        // Only deploy if servletContext.getRealPath() returns a valid path.
+        resourcesDeployable = (servletContext.getRealPath("/") != null);
+
+        if (!resourcesDeployable) {
+            String msg = "Could not auto deploy files to 'click' web folder."
+                + " You may need to manually include click resources in your"
+                + " web application.";
+            getLogService().warn(msg);
+        }
+
         String[] resources = {
                 "/net/sf/click/control/control.css",
                 "/net/sf/click/control/control.js",
@@ -1097,6 +1127,13 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         deployControlSets(rootElm);
 
         deployFilesInJars();
+
+        Iterator i = getResourcesDeployed().keySet().iterator();
+        while (i.hasNext()) {
+            String path = i.next().toString();
+            byte[] data = (byte[]) getResourcesDeployed().get(path);
+            System.out.println(path + " - length=" + data.length);
+        }
     }
 
     /**
