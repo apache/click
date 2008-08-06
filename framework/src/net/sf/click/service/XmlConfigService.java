@@ -1127,13 +1127,6 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         deployControlSets(rootElm);
 
         deployFilesInJars();
-
-        Iterator i = getResourcesDeployed().keySet().iterator();
-        while (i.hasNext()) {
-            String path = i.next().toString();
-            byte[] data = (byte[]) getResourcesDeployed().get(path);
-            System.out.println(path + " - length=" + data.length);
-        }
     }
 
     /**
