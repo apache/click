@@ -83,7 +83,7 @@ import org.apache.commons.lang.StringUtils;
 public class PageImports {
 
     /** The page imports initialized flag. */
-    protected boolean initialize = false;
+    protected boolean initialized = false;
 
     /** The list of CSS import lines. */
     protected List cssImports = new ArrayList();
@@ -109,6 +109,58 @@ public class PageImports {
     }
 
     // --------------------------------------------------------- Public Methods
+
+    /**
+     * Process the given control HTML import line.
+     *
+     * @param value the HTML import line to process
+     */
+    public void addImport(String value) {
+        if (value == null || value.length() == 0) {
+            return;
+        }
+
+        String[] lines = StringUtils.split(value, '\n');
+
+        for (int i = 0; i  < lines.length; i++) {
+            String line = lines[i].trim().toLowerCase();
+            if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
+                addToList(lines[i], cssImports);
+
+            } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
+                addToList(lines[i], cssImports);
+
+            } else if (line.startsWith("<script")) {
+                if (line.indexOf(" src=") != -1) {
+                    addToList(lines[i], jsImports);
+
+                } else {
+                    addToList(lines[i], jsScripts);
+
+                }
+            } else {
+                throw new IllegalArgumentException("Unknown include type: " + lines[i]);
+            }
+        }
+    }
+
+    /**
+     * Return true if the page imports have been initialized.
+     *
+     * @return true if the page imports have been initialized
+     */
+    public boolean isInitialized() {
+        return initialized;
+    }
+
+    /**
+     * Set whether the page imports have been initialized.
+     *
+     * @param initialized the page imports have been initialized flag
+     */
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
+    }
 
     /**
      * Populate the specified model with html import keys.
@@ -269,55 +321,21 @@ public class PageImports {
      * Process the Page's set of control HTML head imports.
      */
     protected void processPageControls() {
-        if (initialize) {
+        if (isInitialized()) {
             return;
         }
 
-        initialize = true;
+        setInitialized(true);
 
         if (page.hasControls()) {
             for (int i = 0; i < page.getControls().size(); i++) {
                 Control control = (Control) page.getControls().get(i);
 
-                processLine(control.getHtmlImports());
+                addImport(control.getHtmlImports());
             }
         }
 
-        processLine(page.getHtmlImports());
-    }
-
-    /**
-     * Process the given control HTML import line.
-     *
-     * @param value the HTML import line to process
-     */
-    protected void processLine(String value) {
-        if (value == null || value.length() == 0) {
-            return;
-        }
-
-        String[] lines = StringUtils.split(value, '\n');
-
-        for (int i = 0; i  < lines.length; i++) {
-            String line = lines[i].trim().toLowerCase();
-            if (line.startsWith("<link") && line.indexOf("text/css") != -1) {
-                addToList(lines[i], cssImports);
-
-            } else if (line.startsWith("<style") && line.indexOf("text/css") != -1) {
-                addToList(lines[i], cssImports);
-
-            } else if (line.startsWith("<script")) {
-                if (line.indexOf(" src=") != -1) {
-                    addToList(lines[i], jsImports);
-
-                } else {
-                    addToList(lines[i], jsScripts);
-
-                }
-            } else {
-                throw new IllegalArgumentException("Unknown include type: " + lines[i]);
-            }
-        }
+        addImport(page.getHtmlImports());
     }
 
     /**
