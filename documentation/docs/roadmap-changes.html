@@ -106,17 +106,22 @@ and new Table paginator support.
         [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-328">328</a>].
       </li>
       <li class="change">
-        Improved rendering performance by caching the ClickUtils 
-        <a href="click-api/net/sf/click/util/ClickUtils.html#getResourceVersionIndicator(net.sf.click.Context)">resource version indicator</a>
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-412">412</a>].
+        Added readonly and disabled support to FieldSet. If enabled Fields contained
+        in FieldSet will be disabled or made readonly.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-423">423</a>].
       </li>
       <li class="change">
         Improved Table rendering performance in the order of 25-45%.
       </li>
       <li class="change">
-        Added readonly and disabled support to FieldSet. If enabled Fields contained
-        in FieldSet will be disabled or made readonly.
-        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-423">423</a>].
+        Improved rendering performance by caching the ClickUtils 
+        <a href="click-api/net/sf/click/util/ClickUtils.html#getResourceVersionIndicator(net.sf.click.Context)">resource version indicator</a>
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-412">412</a>].
+      </li>
+      <li class="change">
+        Improved Page and PageImports to allow a Pages to optimize their HTML imports.
+        Please see Click Examples for a demonstration.
+        [<a target='blank' href="http://www.avoka.com/jira/browse/CLK-363">363</a>].
       </li>
       <li class="change">
         Fixed issue where Select validation can throw ClassCastException 
@@ -154,7 +159,7 @@ and new Table paginator support.
         <li>Recompile your application with the 1.5 Click libraries.</li>
         <li>Retrofit the new Control 
         <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
-        method to any on your custom controls.</li>
+        method to any on your custom control rendering.</li>
         <li>Replace any Control <tt>toString()</tt> methods with an equivalent <a href="click-api/net/sf/click/Control.html#render(net.sf.click.util.HtmlStringBuffer)">render()</a>
         method. For further details see the example below.</li>
         <li>FieldSet has been refactored as a <a href="click-api/net/sf/click/Container.html">Container</a>,
