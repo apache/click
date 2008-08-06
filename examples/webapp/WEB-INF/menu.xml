@@ -26,6 +26,7 @@
 		<menu label="Excel Export Page" path="general/excel-export.htm"/>
 		<menu label="Exception Demo" path="general/exception.htm"/>
 		<menu label="Flash Attribute" path="general/flash.htm"/>
+		<menu label="Page Imports" path="general/page-imports-example.htm"/>
 		<menu label="Page Security" path="security/secure.htm"/>
 		<menu separator="true"/>
 		<menu label="AJAX Accordian" path="ajax/ajax-accordian.htm"/>
