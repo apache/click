@@ -986,11 +986,63 @@ public class ClickUtils {
             realTargetDir = realTargetDir + targetDir;
         }
 
+        ConfigService configService = getConfigService(servletContext);
+        LogService logger = configService.getLogService();
 
-        LogService logger = getConfigService(servletContext).getLogService();
+        String targetFilename = resource;
+        int index = resource.lastIndexOf('/');
+        if (index != -1) {
+            targetFilename = resource.substring(index + 1);
+        }
+
+        // Determine whether resource exists
+        String webResource = "/" + targetDir + "/" + targetFilename;
+        if (!webResource.startsWith("/")) {
+            webResource = "/" + webResource;
+        }
+        webResource = webResource.replace('\\', '/');
+        Set resources = servletContext.getResourcePaths(webResource);
+        boolean resourceExists = (resources != null) ? !resources.isEmpty() : false;
+
+        if (resourceExists) {
+            // TODO: if resources not deployable then check whether deployed
+            // resource is contained resources deployed map, if not then
+            // load into the map
+            return;
+        }
+
+        // Load the resource data byte array
+        byte[] resourceBytes = null;
+        InputStream inputStream =
+            getResourceAsStream(resource, ClickUtils.class);
+
+        if (inputStream != null) {
+            try {
+                resourceBytes = IOUtils.toByteArray(inputStream);
+
+            } catch (IOException ioe) {
+                String msg = "error occured deploying resource "
+                    + resource + ", error " + ioe;
+                logger.warn(msg);
+
+            } finally {
+                close(inputStream);
+            }
+
+        } else {
+            String msg = "could not locate classpath resource: " + resource;
+            logger.warn(msg);
+        }
+
+        configService.getResourcesDeployed().put(webResource, resourceBytes);
+
+        // If resources can't be deployed then cache them in the resources
+        // deployed map
+        if (!configService.isResourcesDeployable()) {
+            return;
+        }
 
         try {
-
             // Create files deployment directory
             File directory = new File(realTargetDir);
             if (!directory.exists()) {
@@ -1001,53 +1053,32 @@ public class ClickUtils {
                 }
             }
 
-            String destination = resource;
-            int index = resource.lastIndexOf('/');
-            if (index != -1) {
-                destination = resource.substring(index + 1);
-            }
-
-            destination = realTargetDir + File.separator + destination;
+            String destination = realTargetDir + File.separator + targetFilename;
 
             File destinationFile = new File(destination);
 
             if (!destinationFile.exists()) {
-                InputStream inputStream =
-                    getResourceAsStream(resource, ClickUtils.class);
 
-                if (inputStream != null) {
-                    FileOutputStream fos = null;
-                    try {
-                        fos = new FileOutputStream(destinationFile);
-                        byte[] buffer = new byte[1024];
-                        while (true) {
-                            int length = inputStream.read(buffer);
-                            if (length <  0) {
-                                break;
-                            }
-                            fos.write(buffer, 0, length);
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(destinationFile);
+
+                    IOUtils.write(resourceBytes, fos);
+
+                    if (logger.isTraceEnabled()) {
+                        int lastIndex =
+                            destination.lastIndexOf(File.separatorChar);
+                        if (lastIndex != -1) {
+                            destination =
+                                destination.substring(lastIndex + 1);
                         }
-
-                        if (logger.isTraceEnabled()) {
-                            int lastIndex =
-                                destination.lastIndexOf(File.separatorChar);
-                            if (lastIndex != -1) {
-                                destination =
-                                    destination.substring(lastIndex + 1);
-                            }
-                            String msg =
-                                "deployed " + targetDir + "/" + destination;
-                            logger.trace(msg);
-                        }
-
-                    } finally {
-                        close(fos);
-                        close(inputStream);
+                        String msg =
+                            "deployed " + targetDir + "/" + destination;
+                        logger.trace(msg);
                     }
-                } else {
-                    String msg =
-                        "could not locate classpath resource: " + resource;
-                    throw new IOException(msg);
+
+                } finally {
+                    close(fos);
                 }
             }
 
@@ -1100,7 +1131,7 @@ public class ClickUtils {
      * In your Control simply use the code below, and everything should work automatically.
      * <pre class="codeJava">
      * public void onDeploy(ServletContext servletContext) {
-     *    ClickUtils.deployFileList(servletContext, HeavyControl.class,"click");
+     *    ClickUtils.deployFileList(servletContext, HeavyControl.class, "click");
      * }
      * </pre>
      *
