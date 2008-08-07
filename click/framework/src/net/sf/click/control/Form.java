@@ -524,6 +524,9 @@ public class Form extends AbstractContainer {
     /** The form level error message. */
     protected String error;
 
+    /** The ordered list of field and fieldsets, excluding buttons. */
+    protected final List fieldList = new ArrayList();
+
     /**
      * The form method <tt>["post, "get"]</tt>, default value: &nbsp;
      * <tt>post</tt>.
@@ -656,6 +659,9 @@ public class Form extends AbstractContainer {
         int size = getControls().size();
         if (control instanceof Button) {
             size = getButtonList().size();
+
+        } else if (control instanceof Field) {
+            size = getFieldList().size();
         }
 
         return insert(control, size);
@@ -681,6 +687,9 @@ public class Form extends AbstractContainer {
         int size = getControls().size();
         if (control instanceof Button) {
             size = getButtonList().size();
+
+        } else if (control instanceof Field) {
+            size = getFieldList().size();
         }
 
         if (index > size || index < 0) {
@@ -705,21 +714,23 @@ public class Form extends AbstractContainer {
                 getButtonList().add(index, field);
 
             } else if (field instanceof HiddenField) {
-                getControls().add(index, field);
+                getFieldList().add(index, field);
 
             } else {
                 // Step over hidden fields, incrementing in the insert index
                 int visualIndex = index;
                 for (int i = 0; i < index; i++) {
-                    Control peek = (Control) getControls().get(i);
+                    Control peek = (Control) getFieldList().get(i);
                     if (peek instanceof HiddenField) {
                         visualIndex++;
                     }
                 }
-                visualIndex = Math.min(visualIndex, getControls().size());
-                getControls().add(visualIndex, field);
+                visualIndex = Math.min(visualIndex, getFieldList().size());
+                getFieldList().add(index, field);
             }
 
+            // TODO: consider visual index
+            getControls().add(index, field);
             getControlMap().put(field.getName(), field);
 
             field.setForm(this);
@@ -742,6 +753,17 @@ public class Form extends AbstractContainer {
             FieldSet fieldSet = (FieldSet) control;
             super.insert(fieldSet, getControls().size());
             fieldSet.setForm(this);
+
+            // Step over hidden fields, incrementing in the insert index
+            int visualIndex = index;
+            for (int i = 0; i < index; i++) {
+                Control peek = (Control) getFieldList().get(i);
+                if (peek instanceof HiddenField) {
+                    visualIndex++;
+                }
+            }
+            visualIndex = Math.min(visualIndex, getFieldList().size());
+            getFieldList().add(index, fieldSet);
 
         } else {
             super.insert(control, getControls().size());
@@ -859,9 +881,12 @@ public class Form extends AbstractContainer {
 
                 if (field instanceof Button) {
                     contains = getButtonList().remove(field);
-                } else {
-                    contains = getControls().remove(field);
+
+                } else if (field instanceof Field) {
+                    contains = getFieldList().remove(field);
                 }
+
+                getControls().remove(field);
             }
 
             return contains;
@@ -1217,23 +1242,37 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Return the ordered list of form {@link Field}s.
+     * Return the ordered list of form fields and fieldsets, excluding buttons.
      * <p/>
      * The order of the fields is the same order they were added to the form.
      *
-     * @return the ordered List of form fields
+     * @return the ordered List of form fields and fieldsets, excluding buttons
      */
     public List getFieldList() {
-        return ContainerUtils.getFieldsAndLabels(this);
+        return fieldList;
     }
 
     /**
-     * Return the Map of form fields, keyed on field name.
+     * Return the Map of form fields and fieldsets (including buttons), keyed
+     * on field name.
      *
-     * @return the Map of form fields, keyed on field name
+     * @return the Map of form fields and fieldsets (including buttons), keyed
+     * on field name
      */
     public Map getFields() {
-        return ContainerUtils.getFieldMap(this);
+        final Map fields = new HashMap();
+
+        for (int i = 0, size = getControls().size(); i < size; i++) {
+            Control control = (Control) getControls().get(i);
+
+            // To support behavioural compatiblity with Click 1.4 we add both
+            // the Field and FieldSet instances to map.
+            if (control instanceof Field || control instanceof FieldSet) {
+                fields.put(control.getName(), control);
+            }
+        }
+
+        return fields;
     }
 
     /**
@@ -1745,12 +1784,12 @@ public class Form extends AbstractContainer {
                 }
             }
 
-            for (int i = 0, size = getButtonList().size(); i < size; i++) {
-                Button button = (Button) getButtonList().get(i);
-                if (!button.onProcess()) {
-                    continueProcessing = false;
-                }
-            }
+//            for (int i = 0, size = getButtonList().size(); i < size; i++) {
+//                Button button = (Button) getButtonList().get(i);
+//                if (!button.onProcess()) {
+//                    continueProcessing = false;
+//                }
+//            }
 
             registerActionEvent();
         }
@@ -1758,33 +1797,33 @@ public class Form extends AbstractContainer {
         return continueProcessing;
     }
 
-    /**
-     * Initialize the controls contained in the Form.
-     *
-     * @see net.sf.click.Control#onInit()
-     */
-    public void onInit() {
-        super.onInit();
-
-        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-            Button button = (Button) getButtonList().get(i);
-            button.onInit();
-        }
-    }
-
-    /**
-     * Perform any pre rendering logic.
-     *
-     * @see net.sf.click.Control#onRender()
-     */
-    public void onRender() {
-        super.onRender();
-
-        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-            Button button = (Button) getButtonList().get(i);
-            button.onRender();
-        }
-    }
+//    /**
+//     * Initialize the controls contained in the Form.
+//     *
+//     * @see net.sf.click.Control#onInit()
+//     */
+//    public void onInit() {
+//        super.onInit();
+//
+//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+//            Button button = (Button) getButtonList().get(i);
+//            button.onInit();
+//        }
+//    }
+//
+//    /**
+//     * Perform any pre rendering logic.
+//     *
+//     * @see net.sf.click.Control#onRender()
+//     */
+//    public void onRender() {
+//        super.onRender();
+//
+//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+//            Button button = (Button) getButtonList().get(i);
+//            button.onRender();
+//        }
+//    }
 
     /**
      * Destroy the controls contained in the Form and clear any form
@@ -1795,14 +1834,14 @@ public class Form extends AbstractContainer {
     public void onDestroy() {
         super.onDestroy();
 
-        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-            Button button = (Button) getButtonList().get(i);
-            try {
-                button.onDestroy();
-            } catch (Throwable t) {
-                ClickUtils.getLogService().error("onDestroy error", t);
-            }
-        }
+//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
+//            Button button = (Button) getButtonList().get(i);
+//            try {
+//                button.onDestroy();
+//            } catch (Throwable t) {
+//                ClickUtils.getLogService().error("onDestroy error", t);
+//            }
+//        }
 
         setError(null);
     }
@@ -2275,7 +2314,7 @@ public class Form extends AbstractContainer {
         }
 
         buffer.append("<tr><td>\n");
-        renderControls(buffer, this, getControls(), getFieldWidths(), getColumns());
+        renderControls(buffer, this, getFieldList(), getFieldWidths(), getColumns());
         buffer.append("</td></tr>\n");
     }
 
