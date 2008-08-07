@@ -893,6 +893,7 @@ public class Form extends AbstractContainer {
 
         } else if (control instanceof FieldSet) {
             FieldSet fieldSet = (FieldSet) control;
+            getFieldList().remove(control);
             boolean contains = super.remove(fieldSet);
 
             fieldSet.setForm(null);
