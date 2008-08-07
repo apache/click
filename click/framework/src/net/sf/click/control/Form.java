@@ -1774,8 +1774,8 @@ public class Form extends AbstractContainer {
         boolean continueProcessing = true;
         if (isFormSubmission()) {
 
-            for (Iterator it = getControls().iterator(); it.hasNext();) {
-                Control control = (Control) it.next();
+            for (int i = 0, size = getControls().size(); i < size; i++) {
+                Control control = (Control) getControls().get(i);
                 if (control.getName() != null
                     && !control.getName().startsWith(SUBMIT_CHECK)) {
 
@@ -1785,46 +1785,11 @@ public class Form extends AbstractContainer {
                 }
             }
 
-//            for (int i = 0, size = getButtonList().size(); i < size; i++) {
-//                Button button = (Button) getButtonList().get(i);
-//                if (!button.onProcess()) {
-//                    continueProcessing = false;
-//                }
-//            }
-
             registerActionEvent();
         }
 
         return continueProcessing;
     }
-
-//    /**
-//     * Initialize the controls contained in the Form.
-//     *
-//     * @see net.sf.click.Control#onInit()
-//     */
-//    public void onInit() {
-//        super.onInit();
-//
-//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-//            Button button = (Button) getButtonList().get(i);
-//            button.onInit();
-//        }
-//    }
-//
-//    /**
-//     * Perform any pre rendering logic.
-//     *
-//     * @see net.sf.click.Control#onRender()
-//     */
-//    public void onRender() {
-//        super.onRender();
-//
-//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-//            Button button = (Button) getButtonList().get(i);
-//            button.onRender();
-//        }
-//    }
 
     /**
      * Destroy the controls contained in the Form and clear any form
@@ -1834,15 +1799,6 @@ public class Form extends AbstractContainer {
      */
     public void onDestroy() {
         super.onDestroy();
-
-//        for (int i = 0, size = getButtonList().size(); i < size; i++) {
-//            Button button = (Button) getButtonList().get(i);
-//            try {
-//                button.onDestroy();
-//            } catch (Throwable t) {
-//                ClickUtils.getLogService().error("onDestroy error", t);
-//            }
-//        }
 
         setError(null);
     }
