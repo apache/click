@@ -57,7 +57,7 @@ public abstract class AbstractContainerField extends Field implements Container 
     // ----------------------------------------------------- Instance Variables
 
     /** Internal container instance. */
-    protected AbstractContainer container = new InnerContainerField();
+    private AbstractContainer container = new InnerContainerField();
 
     // ---------------------------------------------------------- Constructorrs
 
@@ -258,15 +258,6 @@ public abstract class AbstractContainerField extends Field implements Container 
     //-------------------------------------------- protected methods
 
     /**
-     * Return the container instance for this field.
-     *
-     * @return the container instance
-     */
-    protected AbstractContainer getContainer() {
-        return container;
-    }
-
-    /**
      * @see net.sf.click.control.AbstractControl#renderTagEnd(java.lang.String, net.sf.click.util.HtmlStringBuffer)
      *
      * @param tagName the name of the tag to close
@@ -298,7 +289,7 @@ public abstract class AbstractContainerField extends Field implements Container 
         if (hasControls()) {
             for (int i = 0; i < getControls().size(); i++) {
                 Control control = (Control) getControls().get(i);
-
+        
                 int before = buffer.length();
                 control.render(buffer);
                 int after = buffer.length();
