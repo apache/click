@@ -238,7 +238,24 @@ public class FieldSet extends AbstractContainer {
      * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        insert(field, getControls().size());
+        int position = getControls().size();
+
+        // Ensure hidden fields at end of list
+        position = getFieldList().size();
+
+        if (!field.isHidden()) {
+            position = 0;
+            for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                Field peek = (Field) getFieldList().get(i);
+                if (!peek.isHidden()) {
+                    position++;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        insert(field, position);
         return field;
     }
 
