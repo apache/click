@@ -656,15 +656,29 @@ public class Form extends AbstractContainer {
             throw new IllegalArgumentException("Field parameter cannot be null");
         }
 
-        int size = getControls().size();
+        int position = getControls().size();
         if (control instanceof Button) {
-            size = getButtonList().size();
+            position = getButtonList().size();
 
         } else if (control instanceof Field) {
-            size = getFieldList().size();
+            // Ensure hidden fields at end of list
+            Field field = (Field) control;
+            position = getFieldList().size();
+
+            if (!field.isHidden()) {
+                position = 0;
+                for (int i = 0, size = getFieldList().size(); i < size; i++) {
+                    Field peek = (Field) getFieldList().get(i);
+                    if (!peek.isHidden()) {
+                        position++;
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
 
-        return insert(control, size);
+        return insert(control, position);
     }
 
     /**
@@ -713,28 +727,11 @@ public class Form extends AbstractContainer {
             if (field instanceof Button) {
                 getButtonList().add(index, field);
 
-            } else if (field instanceof HiddenField) {
-                getFieldList().add(index, field);
-
             } else {
-                // Step over hidden fields, incrementing in the insert index
-                int visualIndex = index;
-                for (int i = 0; i < index; i++) {
-                    Control peek = (Control) getFieldList().get(i);
-                    if (peek instanceof HiddenField) {
-                        visualIndex++;
-                    }
-                }
-                visualIndex = Math.min(visualIndex, getFieldList().size());
                 getFieldList().add(index, field);
             }
 
-            // TODO: consider visual index
-            getControls().add(index, field);
-            getControlMap().put(field.getName(), field);
-
             field.setForm(this);
-
             field.setParent(this);
 
             if (getDefaultFieldSize() > 0) {
@@ -750,24 +747,10 @@ public class Form extends AbstractContainer {
             }
 
         } else if (control instanceof FieldSet) {
-            FieldSet fieldSet = (FieldSet) control;
-            super.insert(fieldSet, getControls().size());
-            fieldSet.setForm(this);
-
-            // Step over hidden fields, incrementing in the insert index
-            int visualIndex = index;
-            for (int i = 0; i < index; i++) {
-                Control peek = (Control) getFieldList().get(i);
-                if (peek instanceof HiddenField) {
-                    visualIndex++;
-                }
-            }
-            visualIndex = Math.min(visualIndex, getFieldList().size());
-            getFieldList().add(index, fieldSet);
-
-        } else {
-            super.insert(control, getControls().size());
+            getFieldList().add(index, control);
         }
+
+        super.insert(control, getControls().size());
 
         return control;
     }
