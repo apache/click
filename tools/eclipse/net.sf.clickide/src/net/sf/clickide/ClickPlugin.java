@@ -7,10 +7,14 @@ import java.util.ResourceBundle;
 
 import net.sf.clickide.core.config.DefaultClickConfigurationProvider;
 import net.sf.clickide.core.config.IClickConfigurationProvider;
-import net.sf.clickide.core.config.S2ClickConfigurationProvider;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -79,9 +83,30 @@ public class ClickPlugin extends AbstractUIPlugin {
 		plugin = this;
 		resource = ResourceBundle.getBundle("net.sf.clickide.ClickPlugin");
 		
-		configProviders.add(new S2ClickConfigurationProvider());
+		configProviders.addAll(loadContributedClasses(
+				"configurationProvider", "configurationProvider"));
 		configProviders.add(new DefaultClickConfigurationProvider());
 	}
+	
+	private static List loadContributedClasses(String extPointId, String elementName){
+		List result = new ArrayList();
+		try {
+			IExtensionRegistry registry = Platform.getExtensionRegistry();
+			IExtensionPoint point = registry.getExtensionPoint(PLUGIN_ID + "." + extPointId);
+			IExtension[] extensions = point.getExtensions();
+			for (int i = 0; i < extensions.length; i++) {
+				IConfigurationElement[] elements = extensions[i].getConfigurationElements();
+				for (int j = 0; j < elements.length; j++) {
+					if (elementName.equals(elements[j].getName())) {
+						result.add(elements[j].createExecutableExtension("class"));
+					}
+				}
+			}
+		} catch (Exception ex) {
+			log(ex);
+		}
+		return result;
+	}	
 	
 	public ColorManager getColorManager(){
 		if(this.colorManager==null){
