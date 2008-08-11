@@ -1159,8 +1159,8 @@ public class FieldSet extends Field implements Container {
                         getName();
                     throw new IllegalArgumentException(msg);
                 }
-                if (getControlMap().containsKey(field.getName()) &&
-                    !(field instanceof Label)) {
+                if (getControlMap().containsKey(field.getName())
+                    && !(field instanceof Label)) {
 
                     throw new IllegalArgumentException(
                         "FieldSet already contains field named: " + field.
