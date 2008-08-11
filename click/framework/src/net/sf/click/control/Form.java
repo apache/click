@@ -524,7 +524,7 @@ public class Form extends AbstractContainer {
     /** The form level error message. */
     protected String error;
 
-    /** The ordered list of field and fieldsets, excluding buttons. */
+    /** The ordered list of fields, excluding buttons. */
     protected final List fieldList = new ArrayList();
 
     /**
@@ -697,6 +697,9 @@ public class Form extends AbstractContainer {
         if (control == null) {
             throw new IllegalArgumentException("Control parameter cannot be null");
         }
+        if (control == this) {
+            throw new IllegalArgumentException("Cannot add container to itself");
+        }
 
         int size = getControls().size();
         if (control instanceof Button) {
@@ -732,7 +735,6 @@ public class Form extends AbstractContainer {
             }
 
             field.setForm(this);
-            field.setParent(this);
 
             if (getDefaultFieldSize() > 0) {
                 if (field instanceof TextField) {
@@ -746,8 +748,6 @@ public class Form extends AbstractContainer {
                 }
             }
 
-        } else if (control instanceof FieldSet) {
-            getFieldList().add(index, control);
         }
 
         super.insert(control, getControls().size());
@@ -871,15 +871,6 @@ public class Form extends AbstractContainer {
 
                 getControls().remove(field);
             }
-
-            return contains;
-
-        } else if (control instanceof FieldSet) {
-            FieldSet fieldSet = (FieldSet) control;
-            getFieldList().remove(control);
-            boolean contains = super.remove(fieldSet);
-
-            fieldSet.setForm(null);
 
             return contains;
 
@@ -1226,21 +1217,21 @@ public class Form extends AbstractContainer {
     }
 
     /**
-     * Return the ordered list of form fields and fieldsets, excluding buttons.
+     * Return the ordered list of form fields, excluding buttons.
      * <p/>
      * The order of the fields is the same order they were added to the form.
      *
-     * @return the ordered List of form fields and fieldsets, excluding buttons
+     * @return the ordered List of form fields, excluding buttons
      */
     public List getFieldList() {
         return fieldList;
     }
 
     /**
-     * Return the Map of form fields and fieldsets (including buttons), keyed
+     * Return the Map of form fields (including buttons), keyed
      * on field name.
      *
-     * @return the Map of form fields and fieldsets (including buttons), keyed
+     * @return the Map of form fields (including buttons), keyed
      * on field name
      */
     public Map getFields() {
@@ -1249,9 +1240,7 @@ public class Form extends AbstractContainer {
         for (int i = 0, size = getControls().size(); i < size; i++) {
             Control control = (Control) getControls().get(i);
 
-            // To support behavioural compatiblity with Click 1.4 we add both
-            // the Field and FieldSet instances to map.
-            if (control instanceof Field || control instanceof FieldSet) {
+            if (control instanceof Field) {
                 fields.put(control.getName(), control);
             }
         }

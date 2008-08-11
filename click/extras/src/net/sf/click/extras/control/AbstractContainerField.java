@@ -208,21 +208,6 @@ public abstract class AbstractContainerField extends Field implements Container 
     }
 
     /**
-     * Returns the HTML representation of this control.
-     * <p/>
-     * This method delegates the rendering to the method
-     * {@link #render(net.sf.click.util.HtmlStringBuffer)}. The size of buffer
-     * is determined by {@link #getControlSizeEst()}.
-     *
-     * @return the HTML representation of this control
-     */
-    public String toString() {
-        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
-        render(buffer);
-        return buffer.toString();
-    }
-
-    /**
      * By default render the container and all its child controls to the
      * specified buffer.
      * <p/>
@@ -253,6 +238,21 @@ public abstract class AbstractContainerField extends Field implements Container 
                 renderContent(buffer);
             }
         }
+    }
+
+    /**
+     * Returns the HTML representation of this control.
+     * <p/>
+     * This method delegates the rendering to the method
+     * {@link #render(net.sf.click.util.HtmlStringBuffer)}. The size of buffer
+     * is determined by {@link #getControlSizeEst()}.
+     *
+     * @return the HTML representation of this control
+     */
+    public String toString() {
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
+        return buffer.toString();
     }
 
     //-------------------------------------------- protected methods
@@ -328,7 +328,7 @@ public abstract class AbstractContainerField extends Field implements Container 
      * AbstractContainerField.
      * <p/>
      * Note this class delegates certain methods to AbstractContainerField, so
-     * that the Container implementation manipulates certain state on the
+     * that the Container implementation can manipulate state of the
      * AbstractContainerField instance.
      */
     class InnerContainerField extends AbstractContainer {
