@@ -15,6 +15,7 @@
  */
 package net.sf.click.service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1132,7 +1134,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     /**
      * Deploy from jars, files that are specified in the folder 'META-INF/web'.
      * <p/>
-     * Only jars under the web folder 'WEB-INF/lib' are scanned.
+     * Only jars available on the classpath are scanned.
      *
      * @throws java.lang.Exception if the files cannot be deployed
      */
@@ -1141,20 +1143,33 @@ public class XmlConfigService implements ConfigService, EntityResolver {
         // Find all jars under WEB-INF/lib and deploy all resources from these jars
         long startTime = System.currentTimeMillis();
 
-        Set jars = servletContext.getResourcePaths("/WEB-INF/lib");
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-        if (jars == null) {
-            // exit early
-            return;
-        }
+        Enumeration en = classLoader.getResources("META-INF/web");
+        while (en.hasMoreElements()) {
+            URL url = (URL) en.nextElement();
+            String path = url.getFile();
 
-        for (Iterator it = jars.iterator(); it.hasNext();) {
-            String resourceLocation = (String) it.next();
-            if (resourceLocation != null) {
-                if (resourceLocation.endsWith(".jar")) {
-                    deployFilesInJar(resourceLocation);
-                }
+            // Strip file prefix
+            if (path.startsWith("file:")) {
+                path = path.substring(5);
             }
+
+            String jarPath = null;
+
+            // Extract the jar name from the entry
+            if (path.indexOf('!') > 0) {
+                jarPath = path.substring(0, path.indexOf('!'));
+            }
+
+            // If jar name cannot be extracted, skip the resource
+            if (jarPath == null) {
+                logService.error("Cannot extract Jar from url '" + jarPath + "'");
+                continue;
+            }
+
+            File jar = new File(jarPath);
+            deployFilesInJar(jar);
         }
 
         if (logService.isTraceEnabled()) {
@@ -1164,33 +1179,25 @@ public class XmlConfigService implements ConfigService, EntityResolver {
     }
 
     /**
-     * Deploy files from the jar specified by the jarLocation.
+     * Deploy files from the specified jar.
      * <p/>
      * Only files specified in the folder 'META-INF/web' will be deployed.
      *
+     * @param jar the jar which resources will be deployed
      * @throws java.lang.Exception if for some reason the files cannot be
      * deployed
      */
-    private void deployFilesInJar(String jarLocation) throws Exception {
-        if (jarLocation == null) {
-            throw new IllegalArgumentException("Jar location cannot be null");
+    private void deployFilesInJar(File jar) throws Exception {
+        if (jar == null) {
+            throw new IllegalArgumentException("Jar cannot be null");
         }
 
         InputStream inputStream = null;
         JarInputStream jarInputStream = null;
 
         try {
-            inputStream = servletContext.getResourceAsStream(jarLocation);
-            if (inputStream == null) {
-                inputStream = new FileInputStream(jarLocation);
-            }
 
-            if (inputStream == null) {
-                String msg = "Jar location, '" + jarLocation
-                    + "', cannot be converted into an InputStream";
-                throw new IllegalArgumentException(msg);
-            }
-
+            inputStream = new FileInputStream(jar);
             jarInputStream = new JarInputStream(inputStream);
             JarEntry jarEntry = null;
 
@@ -1206,7 +1213,7 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 if (pathIndex == 0) {
                     if (logFeedback && logService.isTraceEnabled()) {
                         logService.trace("deploy files from jar -> "
-                                         + jarLocation);
+                                         + jar.getCanonicalPath());
 
                         // Only provide feedback once per jar
                         logFeedback = false;
