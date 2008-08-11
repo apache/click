@@ -41,6 +41,8 @@
   </li>
   <li><a href="#html-pages">How can I use *.html Click pages?</a>
   </li>
+  <li><a href="#alternative-extension">Can Click be mapped to an extension other than *.htm?</a>
+  </li>
   <li><a href="#cayenne-integration">What JARs should I use with Click and Cayenne?</a>
   </li>
   <li><a href="#spring-integration">How can you integrate Click into Spring?</a>
@@ -433,8 +435,16 @@
 
 
 
+  <a name="alternative-extension"></a>
+  <dt><b>13.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
+  <dd>
+  No, currently Click only works when mapped to *.htm.
+  </dd>
+
+
+
   <a name="cayenne-integration" class="heading"></a>
-  <dt><b>13.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
+  <dt><b>14.&nbsp; What JARs should I use with Click and Cayenne?</b></dt>
   <dd>
    To get Click and Cayenne to work happily with each other you will need to 
    include the following JAR files in your WEB-INF/lib directory:
@@ -455,7 +465,7 @@
 
 
   <a name="spring-integration" class="heading"></a>
-  <dt><b>14.&nbsp; How can you integrate Click into Spring?</b></dt>
+  <dt><b>15.&nbsp; How can you integrate Click into Spring?</b></dt>
   <dd>
    To integrate Spring with Click configure the
    <a href="extras-api/net/sf/click/extras/spring/SpringClickServlet.html">SpringClickServlet</a>
@@ -483,7 +493,7 @@ public interface Controller {
 
 
   <a name="jsp-support" class="heading"></a>
-  <dt><b>15.&nbsp; Does Click support JSP?</b></dt>
+  <dt><b>16.&nbsp; Does Click support JSP?</b></dt>
   <dd>
    Click fully supports JSP pages. 
    <p/>
@@ -523,7 +533,7 @@ public interface Controller {
 
     
   <a name="performance" class="heading"></a>
-  <dt><b>16.&nbsp; What is the performance of Click?</b></dt>
+  <dt><b>17.&nbsp; What is the performance of Click?</b></dt>
   <dd>
   Click is fast. 
   <p/>
@@ -565,7 +575,7 @@ public interface Controller {
 
 
   <a name="unit-testing"></a>
-  <dt><b>17.&nbsp; How do I unit test Click pages?</b></dt>
+  <dt><b>18.&nbsp; How do I unit test Click pages?</b></dt>
   <dd>
   It is generally recommended that you don't write JUnit style automated unit 
   tests for Click pages as the cost to benefit ratio is quite poor.
@@ -581,7 +591,7 @@ public interface Controller {
 
 
   <a name="logging" class="heading"></a>
-  <dt><b>18.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
+  <dt><b>19.&nbsp; Why doesn't Click use Commons Logging / Log4J for logging?</b></dt>
   <dd>
    Click by default does not use Commons Logging / Log4J to avoid the class 
    loader and configuration issues which often occur with these framework, and
@@ -593,7 +603,7 @@ public interface Controller {
     
 
   <a name="why-velocity" class="heading"></a>
-  <dt><b>19.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
+  <dt><b>20.&nbsp; Why doesn't Click use FreeMarker instead of Velocity as the default template engine?</b></dt>
   <dd>
    FreeMarker is a powerful templating engine which was evaluated along side 
    Velocity for use in Click. While FreeMarker has many sophisticated
@@ -606,7 +616,7 @@ public interface Controller {
 
 
   <a name="why-click" class="heading"></a>
-  <dt><b>20.&nbsp; Why develop a new Web Application Framework?</b></dt>
+  <dt><b>21.&nbsp; Why develop a new Web Application Framework?</b></dt>
   <dd>
   Because the existing frameworks did not meet my needs. Struts doesn't really do much, 
   while Tapestry is too complicated. 
