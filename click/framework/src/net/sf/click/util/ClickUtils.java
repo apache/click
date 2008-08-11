@@ -1005,9 +1005,6 @@ public class ClickUtils {
         boolean resourceExists = (resources != null) ? !resources.isEmpty() : false;
 
         if (resourceExists) {
-            // TODO: if resources not deployable then check whether deployed
-            // resource is contained resources deployed map, if not then
-            // load into the map
             return;
         }
 
@@ -1034,10 +1031,12 @@ public class ClickUtils {
             logger.warn(msg);
         }
 
-        configService.getResourcesDeployed().put(webResource, resourceBytes);
+        // Cache resources in resources deployed map
+        if (!configService.getResourcesDeployed().containsKey(webResource)) {
+        	configService.getResourcesDeployed().put(webResource, resourceBytes);
+        }
 
-        // If resources can't be deployed then cache them in the resources
-        // deployed map
+        // If resources can't be deployed then exit now
         if (!configService.isResourcesDeployable()) {
             return;
         }
