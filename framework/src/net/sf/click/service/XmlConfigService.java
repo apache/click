@@ -46,6 +46,7 @@ import net.sf.click.util.Format;
 import net.sf.click.util.HtmlStringBuffer;
 import ognl.Ognl;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.w3c.dom.Document;
@@ -1111,6 +1112,10 @@ public class XmlConfigService implements ConfigService, EntityResolver {
                 + " You may need to manually include click resources in your"
                 + " web application.";
             getLogService().warn(msg);
+            
+            // Load any 'click' resources into the resouces deployed map
+            Map clickResources = getClickResourcesMap();
+            getResourcesDeployed().putAll(clickResources);
         }
 
         String[] resources = {
@@ -1523,6 +1528,68 @@ public class XmlConfigService implements ConfigService, EntityResolver {
 
                 } else if (resource.endsWith("/")) {
                     processDirectory(resource, fileList);
+                }
+            }
+        }
+    }
+    
+    private Map getClickResourcesMap() {
+    	Map clickMap = new HashMap();
+    	
+    	List resources = getClickFiles();
+    	
+    	for (int i = 0; i < resources.size(); i++) {
+    		String resourcePath = (String) resources.get(i);
+    		
+    		InputStream inputStream = null;
+    		try {
+    			inputStream = servletContext.getResourceAsStream(resourcePath);
+    			
+    			byte[] resourceBytes = IOUtils.toByteArray(inputStream);
+    			
+    			clickMap.put(resourcePath, resourceBytes);
+    			
+    		} catch (IOException ioe) {
+    			throw new RuntimeException(ioe);
+    			
+    		} finally {
+    			ClickUtils.close(inputStream);
+    		}
+    	}
+    	
+    	return clickMap;
+    }
+
+    private List getClickFiles() {
+        List fileList = new ArrayList();
+
+        Set resources = servletContext.getResourcePaths("/");
+
+        for (Iterator i = resources.iterator(); i.hasNext();) {
+            String resource = (String) i.next();
+
+            if (resource.equalsIgnoreCase("/click/")) {
+            	processClickDirectory(resource, fileList);
+            }
+        }
+
+        Collections.sort(fileList);
+
+        return fileList;
+    }
+
+    private void processClickDirectory(String dirPath, List fileList) {
+        Set resources = servletContext.getResourcePaths(dirPath);
+
+        if (resources != null) {
+            for (Iterator i = resources.iterator(); i.hasNext();) {
+                String resource = (String) i.next();
+
+                if (resource.endsWith("/")) {
+                	processClickDirectory(resource, fileList);
+                	
+                } else {
+                	fileList.add(resource);
                 }
             }
         }
