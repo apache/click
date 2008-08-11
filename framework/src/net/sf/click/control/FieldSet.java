@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.sf.click.ActionListener;
+import net.sf.click.Context;
 import net.sf.click.Control;
 import net.sf.click.util.ClickUtils;
 import net.sf.click.util.ContainerUtils;
@@ -91,7 +93,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Malcolm Edgar
  */
-public class FieldSet extends AbstractContainer {
+public class FieldSet extends Field implements Container {
 
     // -------------------------------------------------------------- Constants
 
@@ -130,6 +132,9 @@ public class FieldSet extends AbstractContainer {
 
     /** The Field is readonly flag. */
     protected boolean readonly;
+
+    /** Internal container instance. */
+    private AbstractContainer container = new InnerContainerField();
 
     // ------------------------------------------------------ Constructorrs
 
@@ -180,47 +185,17 @@ public class FieldSet extends AbstractContainer {
      * Field nor FieldSet
      */
     public Control insert(Control control, int index) {
-         if (control == null) {
-            throw new IllegalArgumentException("Field parameter cannot be null");
-        }
-        if (control instanceof Field) {
-            Field field = (Field) control;
-            if (StringUtils.isBlank(field.getName())) {
-               String msg = "Field name not defined: " + field.getClass().getName();
-                throw new IllegalArgumentException(msg);
-            }
-            if (getControlMap().containsKey(field.getName())
-                && !(field instanceof Label)) {
+        return container.insert(control, index);
+    }
 
-                throw new IllegalArgumentException(
-                    "FieldSet already contains field named: " + field.getName());
-            }
-            getControls().add(field);
-
-            getControlMap().put(field.getName(), field);
-
-            Form form = getForm();
-            field.setForm(form);
-
-            field.setParent(this);
-
-            if (form != null && form.getDefaultFieldSize() > 0) {
-                if (field instanceof TextField) {
-                    ((TextField) field).setSize(form.getDefaultFieldSize());
-
-                } else if (field instanceof FileField) {
-                    ((FileField) field).setSize(form.getDefaultFieldSize());
-
-                } else if (field instanceof TextArea) {
-                    ((TextArea) field).setCols(form.getDefaultFieldSize());
-                }
-            }
-
-        } else {
-            super.insert(control, index);
-        }
-
-        return control;
+    /**
+     * @see net.sf.click.control.Container#add(net.sf.click.Control).
+     *
+     * @param control the control to add to the container and return
+     * @return the control that was added to the container
+     */
+    public Control add(Control control) {
+        return container.add(control);
     }
 
     /**
@@ -238,24 +213,7 @@ public class FieldSet extends AbstractContainer {
      * or if the field's parent is a Page
      */
     public Field add(Field field) {
-        int position = getControls().size();
-
-        // Ensure hidden fields at end of list
-        position = getFieldList().size();
-
-        if (!field.isHidden()) {
-            position = 0;
-            for (int i = 0, size = getFieldList().size(); i < size; i++) {
-                Field peek = (Field) getFieldList().get(i);
-                if (!peek.isHidden()) {
-                    position++;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        insert(field, position);
+        add((Control) field);
         return field;
     }
 
@@ -272,13 +230,6 @@ public class FieldSet extends AbstractContainer {
      * the same name, if the field's parent is a Page or the width &lt; 1
      */
     public Field add(Field field, int width) {
-        if (field == null) {
-            throw new IllegalArgumentException("Field parameter cannot be null");
-        }
-        if (field instanceof HiddenField) {
-            String msg = "Not valid a valid field type: " + field.getClass().getName();
-            throw new IllegalArgumentException(msg);
-        }
         if (width < 1) {
             throw new IllegalArgumentException("Invalid field width: " + width);
         }
@@ -296,7 +247,7 @@ public class FieldSet extends AbstractContainer {
      * @throws IllegalArgumentException if the control is null
      */
     public boolean remove(Control control) {
-        boolean removed = super.remove(control);
+        boolean removed = container.remove(control);
 
         if (control instanceof Field) {
             Field field = (Field) control;
@@ -333,6 +284,46 @@ public class FieldSet extends AbstractContainer {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @see net.sf.click.control.Container#getControls()
+     *
+     * @return the sequential list of controls held by the container
+     */
+    public List getControls() {
+        return container.getControls();
+    }
+
+    /**
+     * @see net.sf.click.control.Container#getControl(java.lang.String)
+     *
+     * @param controlName the name of the control to get from the container
+     * @return the named control from the container if found or null otherwise
+     */
+    public Control getControl(String controlName) {
+        return container.getControl(controlName);
+    }
+
+    /**
+     * @see net.sf.click.control.Container#contains(net.sf.click.Control)
+     *
+     * @param control the control whose presence in this container is to be tested
+     * @return true if the container contains the specified control
+     */
+    public boolean contains(Control control) {
+        return container.contains(control);
+    }
+
+    /**
+     * Returns true if this container has existing controls, false otherwise.
+     *
+     * @see AbstractContainer#hasControls()
+     *
+     * @return true if the container has existing controls, false otherwise.
+     */
+    public boolean hasControls() {
+        return container.hasControls();
     }
 
     /**
@@ -701,6 +692,27 @@ public class FieldSet extends AbstractContainer {
     }
 
     /**
+     * @see net.sf.click.Control#onDestroy()
+     */
+    public void onDestroy() {
+        container.onDestroy();
+    }
+
+    /**
+     * @see net.sf.click.Control#onInit()
+     */
+    public void onInit() {
+        container.onInit();
+    }
+
+    /**
+     * @see net.sf.click.Control#onRender()
+     */
+    public void onRender() {
+        container.onRender();
+    }
+
+    /**
      * This method is not supported and will throw a
      * <tt>UnsupportedOperationException</tt>.
      *
@@ -710,6 +722,18 @@ public class FieldSet extends AbstractContainer {
      * @param method the name of the method to invoke
      */
     public void setListener(Object listener, String method) {
+        throw new UnsupportedOperationException("setListener not supported");
+    }
+
+    /**
+     * This method is not supported and will throw a
+     * <tt>UnsupportedOperationException</tt>.
+     *
+     * @see net.sf.click.Control#setListener(ActionListener)
+     *
+     * @param actionListener the control's action listener
+     */
+    public void setActionListener(ActionListener actionListener) {
         throw new UnsupportedOperationException("setListener not supported");
     }
 
@@ -760,6 +784,19 @@ public class FieldSet extends AbstractContainer {
             }
         }
 
+        // Render hidden fields
+//        List controls = getControls();
+//        for (int i = 0, size = controls.size(); i < size; i++) {
+//            Control control = (Control) controls.get(i);
+//            if (control instanceof Field) {
+//                Field field = (Field) control;
+//                if (field.isHidden()) {
+//                    field.render(buffer);
+//                    buffer.append("\n");
+//                }
+//            }
+//        }
+
         // Render Controls
         renderFields(buffer);
 
@@ -784,10 +821,33 @@ public class FieldSet extends AbstractContainer {
      * @return the HTML representation of this control
      */
     public String toString() {
-        return super.toString();
+        HtmlStringBuffer buffer = new HtmlStringBuffer(getControlSizeEst());
+        render(buffer);
+        return buffer.toString();
     }
 
-    //-------------------------------------------- protected methods
+    //------------------------------------------------------- protected methods
+
+    /**
+     * Return the map of controls where each map's key / value pair will consist
+     * of the control name and instance.
+     *
+     * @see net.sf.click.control.AbstractContainer#getControlMap()
+     *
+     * @return the map of controls
+     */
+    protected Map getControlMap() {
+        return container.getControlMap();
+    }
+
+    /**
+     * @see net.sf.click.control.AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
+     */
+    protected int getControlSizeEst() {
+        return container.getControlSizeEst();
+    }
 
     /**
      * Render the fieldsets form fields to the string buffer. This method will
@@ -796,7 +856,7 @@ public class FieldSet extends AbstractContainer {
      * @param buffer the StringBuffer to render to
      */
     protected void renderFields(HtmlStringBuffer buffer) {
-        if (getFieldList().isEmpty()) {
+        if (getControls().isEmpty()) {
             return;
         }
 
@@ -1007,6 +1067,235 @@ public class FieldSet extends AbstractContainer {
             return false;
         } else {
             return ((Field) control).isHidden();
+        }
+    }
+
+    // -------------------------------------------------------- Inner Class
+
+    /**
+     * Inner class providing the container implementation for
+     * FieldSet.
+     * <p/>
+     * Note this class delegates certain methods to FieldSet, so
+     * that the Container implementation can manipulate state of the
+     * FieldSet instance.
+     */
+    private class InnerContainerField extends AbstractContainer {
+
+        // -------------------------------------------------------- Constants
+
+        private static final long serialVersionUID = 1L;
+
+        // -------------------------------------------------------- Public Methods
+
+        /**
+         * @see net.sf.click.control.Container#add(net.sf.click.Control).
+         *
+         * @param control the control to add to the container and return
+         * @return the control that was added to the container
+         */
+        public Control add(Control control) {
+            int position = getControls().size();
+
+            // TODO: should we check for position here as FieldSet does not accept
+            // hidden fields
+            if (control instanceof Field) {
+                Field newField = (Field) control;
+
+                if (!newField.isHidden()) {
+                    for (int i = position - 1; i >= 0; i--) {
+                        // Ensure hidden fields at end of list
+                        Object peek = getControls().get(i);
+                        if (peek instanceof Field) {
+                            Field field = (Field) peek;
+                            if (field.isHidden()) {
+                                position--;
+                            } else {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return insert(control, position);
+        }
+
+        /**
+         * Add a Field to the FieldSet and return the added instance.
+         * <p/>
+         * <b>Please note</b> if the FieldSet's parent is a {@link Form}, the
+         * Fields inside the FieldSet will be laid out by the Form.
+         *
+         * @see Container#add(net.sf.click.Control)
+         *
+         * @param control the control to add to the FieldSet and return
+         * @param index the index at which the control is to be inserted
+         * @return the control that was added to the FieldSet
+         * @throws IllegalArgumentException if the control is null, the Field's name
+         * is not defined, the container already contains a control with the same
+         * name, if the control's parent is a Page or if the control is neither a
+         * Field nor FieldSet
+         */
+        public Control insert(Control control, int index) {
+            if (control == null) {
+                throw new IllegalArgumentException(
+                    "Field parameter cannot be null");
+            }
+            if (control == this) {
+                throw new IllegalArgumentException(
+                    "Cannot add container to itself");
+            }
+            if (control instanceof HiddenField) {
+                String msg = "Not valid a valid field type: " + control.getClass().getName();
+                throw new IllegalArgumentException(msg);
+            }
+            if (control instanceof Field) {
+                Field field = (Field) control;
+                if (StringUtils.isBlank(field.getName())) {
+                    String msg = "Field name not defined: " + field.getClass().
+                        getName();
+                    throw new IllegalArgumentException(msg);
+                }
+                if (getControlMap().containsKey(field.getName()) &&
+                    !(field instanceof Label)) {
+
+                    throw new IllegalArgumentException(
+                        "FieldSet already contains field named: " + field.
+                        getName());
+                }
+                getControls().add(index, field);
+
+                getControlMap().put(field.getName(), field);
+
+                Form form = getForm();
+                field.setForm(form);
+
+                field.setParent(this);
+
+                if (form != null && form.getDefaultFieldSize() > 0) {
+                    if (field instanceof TextField) {
+                        ((TextField) field).setSize(form.getDefaultFieldSize());
+
+                    } else if (field instanceof FileField) {
+                        ((FileField) field).setSize(form.getDefaultFieldSize());
+
+                    } else if (field instanceof TextArea) {
+                        ((TextArea) field).setCols(form.getDefaultFieldSize());
+                    }
+                }
+
+            } else {
+                super.insert(control, index);
+            }
+
+            return control;
+        }
+
+        public boolean remove(Control control) {
+            return super.remove(control);
+        }
+
+        /**
+         * Return the FieldSet html tag.
+         *
+         * @return the FieldSet html tag
+         */
+        public String getTag() {
+            return FieldSet.this.getTag();
+        }
+
+        /**
+         * Sets the FieldSet parent.
+         *
+         * @param parent the parent of the FieldSet
+         */
+        public void setParent(Object parent) {
+            FieldSet.this.setParent(parent);
+        }
+
+        /**
+         * Sets the FieldSet name.
+         *
+         * @param name the name of the FieldSet
+         */
+        public void setName(String name) {
+            FieldSet.this.setName(name);
+        }
+
+        /**
+         * Sets the action listener of the FieldSet.
+         *
+         * @param actionListener the action listener object to invoke
+         */
+        public void setActionListener(ActionListener actionListener) {
+            FieldSet.this.setActionListener(actionListener);
+        }
+
+        /**
+         * Sets the listener of the FieldSet.
+         *
+         * @param listener the listener object with the named method to invoke
+         * @param method the name of the method to invoke
+         */
+        public void setListener(Object listener, String method) {
+            FieldSet.this.setListener(listener, method);
+        }
+
+        /**
+         * Return the parent of the FieldSet.
+         *
+         * @return the parent of the FieldSet
+         */
+        public Object getParent() {
+            return FieldSet.this.getParent();
+        }
+
+        /**
+         * Return the name of the FieldSet.
+         *
+         * @return the name of the FieldSet
+         */
+        public String getName() {
+            return FieldSet.this.getName();
+        }
+
+        /**
+         * Return the messages of the FieldSet.
+         *
+         * @return the message of the FieldSet
+         */
+        public Map getMessages() {
+            return FieldSet.this.getMessages();
+        }
+
+        /**
+         * Return the id of the FieldSet.
+         *
+         * @return the id of the FieldSet
+         */
+        public String getId() {
+            return FieldSet.this.getId();
+        }
+
+        /**
+         * Return the html imports of the FieldSet.
+         *
+         * @return the html imports of the FieldSet
+         */
+        public String getHtmlImports() {
+            return FieldSet.this.getHtmlImports();
+        }
+
+        /**
+         * Return the Context of the FieldSet.
+         *
+         * @return the Context of the FieldSet
+         */
+        public Context getContext() {
+            return FieldSet.this.getContext();
         }
     }
 }
