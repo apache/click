@@ -21,7 +21,6 @@ import net.sf.click.Control;
 import net.sf.click.Page;
 import net.sf.click.control.Container;
 import net.sf.click.control.Field;
-import net.sf.click.control.FieldSet;
 import net.sf.click.control.Form;
 import net.sf.click.service.FileUploadService;
 import net.sf.click.util.ContainerUtils;
@@ -140,9 +139,6 @@ public class HtmlForm extends Form {
             ((Field) control).setForm(this);
         }
 
-        if (control instanceof FieldSet) {
-            ((FieldSet) control).setForm(this);
-        }
         return control;
     }
 
@@ -199,11 +195,30 @@ public class HtmlForm extends Form {
         if (control instanceof Field) {
             ((Field) control).setForm(null);
         }
-        if (control instanceof FieldSet) {
-            ((FieldSet) control).setForm(null);
-        }
 
         return contains;
+    }
+
+    /**
+     * Return the ordered list of form fields, excluding buttons.
+     * <p/>
+     * The order of the fields is the same order they were added to the form.
+     *
+     * @return the ordered List of form fields, excluding buttons
+     */
+    public List getFieldList() {
+        return ContainerUtils.getFieldsAndLabels(this);
+    }
+
+    /**
+     * Return the ordered list of {@link Button}s.
+     * <p/>
+     * The order of the buttons is the same order they were added to the form.
+     *
+     * @return the ordered list of {@link Button}s.
+     */
+    public List getButtonList() {
+        return ContainerUtils.getButtons(this);
     }
 
     /**
@@ -343,5 +358,14 @@ public class HtmlForm extends Form {
                 }
             }
         }
+    }
+
+    /**
+     * @see AbstractControl#getControlSizeEst()
+     *
+     * @return the estimated rendered control size in characters
+     */
+    protected int getFormSizeEst(List formFields) {
+        return 400 + (getControls().size() * 350);
     }
 }

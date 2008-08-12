@@ -15,7 +15,11 @@
  */
 package net.sf.click.extras.control;
 
+import net.sf.click.Control;
+import net.sf.click.control.AbstractContainer;
+import net.sf.click.control.AbstractControl;
 import net.sf.click.control.FieldSet;
+import net.sf.click.control.Form;
 import net.sf.click.util.HtmlStringBuffer;
 
 /**
@@ -127,7 +131,29 @@ public class HtmlFieldSet extends FieldSet {
             buffer.elementEnd("legend");
             buffer.append("\n");
         }
-        super.renderContent(buffer);
+        renderChildren(buffer);
     }
 
+    /**
+     * Render this fieldset children to the specified buffer.
+     *
+     * @see #getControls()
+     *
+     * @param buffer the buffer to append the output to
+     */
+    protected void renderChildren(HtmlStringBuffer buffer) {
+        if (hasControls()) {
+            for (int i = 0; i < getControls().size(); i++) {
+                Control control = (Control) getControls().get(i);
+
+                int before = buffer.length();
+                control.render(buffer);
+
+                int after = buffer.length();
+                if (before != after) {
+                    buffer.append("\n");
+                }
+            }
+        }
+    }
 }
