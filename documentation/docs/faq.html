@@ -438,7 +438,16 @@
   <a name="alternative-extension"></a>
   <dt><b>13.&nbsp; Can Click be mapped to an extension other than *.htm?</b></dt>
   <dd>
-  No, currently Click only works when mapped to *.htm.
+  Currently Click only supports *.htm extension. You cannot create templates
+  with a different extension for example '.xml'.
+  <p/>
+  However you can map URLs to different extensions using
+  <a href="http://tuckey.org/urlrewrite/">Url Rewrite Filter</a>. It is even
+  possible to rewrite to REST like URLs:
+  <ul>
+    <li>rewrite URL from <span style="color:red;font-style:italic">http://www.mycorp.com/book.htm?id=324</span> to <span style="color:blue;font-style:italic">http://www.mycorp.com/book/324</span> (which will retrieve the book where id=324)</li> 
+    <li>rewrite URL from <span style="color:red;font-style:italic">http://www.mycorp.com/books.htm</span> to <span style="color:blue;font-style:italic">http://www.mycorp.com/books</span> (which will retrieve the list of books)</li>
+  </ul>
   </dd>
 
 
