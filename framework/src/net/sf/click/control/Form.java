@@ -2212,12 +2212,11 @@ public class Form extends AbstractContainer {
         buffer.append("\n");
 
         // Render hidden fields
-        for (int i = 0, size = formFields.size(); i < size; i++) {
-            Field field = (Field) formFields.get(i);
-            if (field.isHidden()) {
-                field.render(buffer);
-                buffer.append("\n");
-            }
+        List hiddenFields = ContainerUtils.getHiddenFields(this);
+        for (int i = 0, size = hiddenFields.size(); i < size; i++) {
+            Field field = (Field) hiddenFields.get(i);
+            field.render(buffer);
+            buffer.append("\n");
         }
     }
 
@@ -2286,7 +2285,21 @@ public class Form extends AbstractContainer {
                     openTableRow = true;
                 }
 
-                if (control instanceof Label) {
+                if (control instanceof FieldSet) {
+                    buffer.append("<td class=\"fields\"");
+
+                    if (width != null) {
+                        int colspan = (width.intValue() * 2);
+                        buffer.appendAttribute("colspan", colspan);
+                    } else {
+                        buffer.appendAttribute("colspan", 2);
+                    }
+
+                    buffer.append(">\n");
+                    control.render(buffer);
+                    buffer.append("</td>\n");
+
+                } else if (control instanceof Label) {
                     Label label = (Label) control;
                     buffer.append("<td class=\"fields\" align=\"");
                     buffer.append(getLabelAlign());
@@ -2371,6 +2384,7 @@ public class Form extends AbstractContainer {
                     // Write out field
                     field.render(buffer);
                     buffer.append("</td>\n");
+
                 } else {
                     buffer.append("<td class=\"fields\"");
 
